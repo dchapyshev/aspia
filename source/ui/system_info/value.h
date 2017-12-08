@@ -8,6 +8,8 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__VALUE_H
 #define _ASPIA_UI__SYSTEM_INFO__VALUE_H
 
+#include "base/macros.h"
+
 #include <cstdint>
 #include <string>
 
@@ -46,6 +48,8 @@ private:
 
     std::string string_;
     std::string unit_;
+
+    DISALLOW_COPY_AND_ASSIGN(Value);
 };
 
 } // namespace aspia

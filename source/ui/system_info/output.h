@@ -49,6 +49,7 @@
 
 #include "base/macros.h"
 #include "protocol/category.h"
+#include "ui/system_info/column_list.h"
 #include "ui/system_info/value.h"
 
 namespace aspia {
@@ -69,17 +70,6 @@ public:
     private:
         Output* output_;
         DISALLOW_COPY_AND_ASSIGN(Table);
-    };
-
-    class TableHeader
-    {
-    public:
-        TableHeader(Output* output);
-        ~TableHeader();
-
-    private:
-        Output* output_;
-        DISALLOW_COPY_AND_ASSIGN(TableHeader);
     };
 
     class Group
@@ -115,9 +105,7 @@ public:
     virtual void StartTable(std::string_view name, TableType table_type) = 0;
     virtual void EndTable() = 0;
 
-    virtual void StartTableHeader() = 0;
-    virtual void EndTableHeader() = 0;
-    virtual void AddHeaderItem(std::string_view name, int width) = 0;
+    virtual void Add(const ColumnList& column_list) = 0;
 
     virtual void StartGroup(std::string_view name, Category::IconId icon_id) = 0;
     virtual void EndGroup() = 0;

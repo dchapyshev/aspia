@@ -75,19 +75,12 @@ void OutputJsonFile::EndTable()
     column_list_.clear();
 }
 
-void OutputJsonFile::StartTableHeader()
+void OutputJsonFile::Add(const ColumnList& column_list)
 {
-    // Nothing
-}
-
-void OutputJsonFile::EndTableHeader()
-{
-    // Nothing
-}
-
-void OutputJsonFile::AddHeaderItem(std::string_view name, int /* width */)
-{
-    column_list_.emplace_back(name);
+    for (const auto& column : column_list)
+    {
+        column_list_.emplace_back(column.first);
+    }
 }
 
 void OutputJsonFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)

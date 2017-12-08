@@ -92,23 +92,20 @@ void InfoListCtrl::EndTable()
     // Nothing
 }
 
-void InfoListCtrl::StartTableHeader()
+void InfoListCtrl::Add(const ColumnList& column_list)
 {
     current_column_ = 0;
     column_count_ = 0;
-}
 
-void InfoListCtrl::EndTableHeader()
-{
+    for (const auto& column : column_list)
+    {
+        const int column_index = AddColumn(UNICODEfromUTF8(column.first).c_str(), current_column_);
+        SetColumnWidth(column_index, column.second);
+        ++current_column_;
+    }
+
     column_count_ = current_column_ + 1;
     current_column_ = 0;
-}
-
-void InfoListCtrl::AddHeaderItem(std::string_view name, int width)
-{
-    const int column_index = AddColumn(UNICODEfromUTF8(name.data()).c_str(), current_column_);
-    SetColumnWidth(column_index, width);
-    ++current_column_;
 }
 
 void InfoListCtrl::StartGroup(std::string_view name, Category::IconId icon_id)

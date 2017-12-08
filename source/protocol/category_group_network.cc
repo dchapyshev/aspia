@@ -44,11 +44,9 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -254,16 +252,14 @@ void CategoryOpenConnections::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Process Name", 150);
-        output->AddHeaderItem("Protocol", 60);
-        output->AddHeaderItem("Local Address", 90);
-        output->AddHeaderItem("Local Port", 80);
-        output->AddHeaderItem("Remote Address", 90);
-        output->AddHeaderItem("Remote Port", 80);
-        output->AddHeaderItem("State", 100);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Process Name", 150)
+                .AddColumn("Protocol", 60)
+                .AddColumn("Local Address", 90)
+                .AddColumn("Local Port", 80)
+                .AddColumn("Remote Address", 90)
+                .AddColumn("Remote Port", 80)
+                .AddColumn("State", 100));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -359,15 +355,13 @@ void CategorySharedResources::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Name", 120);
-        output->AddHeaderItem("Type", 70);
-        output->AddHeaderItem("Description", 100);
-        output->AddHeaderItem("Local Path", 150);
-        output->AddHeaderItem("Current Uses", 100);
-        output->AddHeaderItem("Maximum Uses", 100);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Name", 120)
+                .AddColumn("Type", 70)
+                .AddColumn("Description", 100)
+                .AddColumn("Local Path", 150)
+                .AddColumn("Current Uses", 100)
+                .AddColumn("Maximum Uses", 100));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -519,13 +513,11 @@ void CategoryRoutes::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Destonation", 150);
-        output->AddHeaderItem("Mask", 150);
-        output->AddHeaderItem("Gateway", 150);
-        output->AddHeaderItem("Metric", 100);
-    }
+    output->Add(ColumnList::Create().
+                    AddColumn("Destonation", 150).
+                    AddColumn("Mask", 150).
+                    AddColumn("Gateway", 150).
+                    AddColumn("Metric", 100));
 
     for (int index = 0; index < message.item_size(); ++index)
     {

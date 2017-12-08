@@ -33,9 +33,7 @@ protected:
     void EndTableGroup() final;
     void StartTable(std::string_view name, TableType table_type) final;
     void EndTable() final;
-    void StartTableHeader() final;
-    void EndTableHeader() final;
-    void AddHeaderItem(std::string_view name, int width) final;
+    void Add(const ColumnList& column_list) final;
     void StartGroup(std::string_view name, Category::IconId icon_id) final;
     void EndGroup() final;
     void AddParam(Category::IconId icon_id,

@@ -149,29 +149,20 @@ void OutputHtmlFile::EndTable()
     table_ = nullptr;
 }
 
-void OutputHtmlFile::StartTableHeader()
+void OutputHtmlFile::Add(const ColumnList& column_list)
 {
     DCHECK(table_);
     tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
-}
 
-void OutputHtmlFile::EndTableHeader()
-{
-    DCHECK(table_);
-    DCHECK(tr_);
+    for (const auto& column : column_list)
+    {
+        rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
+        th->value(doc_.allocate_string(column.first.data()));
+        tr_->append_node(th);
+    }
 
     table_->append_node(tr_);
     tr_ = nullptr;
-}
-
-void OutputHtmlFile::AddHeaderItem(std::string_view name, int /* width */)
-{
-    DCHECK(table_);
-    DCHECK(tr_);
-
-    rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
-    th->value(doc_.allocate_string(name.data()));
-    tr_->append_node(th);
 }
 
 void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)

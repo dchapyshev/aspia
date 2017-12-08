@@ -42,14 +42,12 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Name", 200);
-        output->AddHeaderItem("Version", 100);
-        output->AddHeaderItem("Publisher", 100);
-        output->AddHeaderItem("Install Date", 80);
-        output->AddHeaderItem("Install Location", 150);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Name", 200)
+                .AddColumn("Version", 100)
+                .AddColumn("Publisher", 100)
+                .AddColumn("Install Date", 80)
+                .AddColumn("Install Location", 150));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -141,16 +139,14 @@ void CategoryServices::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Display Name", 200);
-        output->AddHeaderItem("Name", 200);
-        output->AddHeaderItem("Description", 200);
-        output->AddHeaderItem("Status", 200);
-        output->AddHeaderItem("Startup Type", 200);
-        output->AddHeaderItem("Account", 200);
-        output->AddHeaderItem("Executable File", 200);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Display Name", 200)
+                .AddColumn("Name", 200)
+                .AddColumn("Description", 200)
+                .AddColumn("Status", 200)
+                .AddColumn("Startup Type", 200)
+                .AddColumn("Account", 200)
+                .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -336,15 +332,13 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Display Name", 200);
-        output->AddHeaderItem("Name", 200);
-        output->AddHeaderItem("Description", 200);
-        output->AddHeaderItem("Status", 200);
-        output->AddHeaderItem("Startup Type", 200);
-        output->AddHeaderItem("Executable File", 200);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Display Name", 200)
+                .AddColumn("Name", 200)
+                .AddColumn("Description", 200)
+                .AddColumn("Status", 200)
+                .AddColumn("Startup Type", 200)
+                .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -472,14 +466,12 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Process Name", 150);
-        output->AddHeaderItem("File Path", 200);
-        output->AddHeaderItem("Used Memory", 80);
-        output->AddHeaderItem("Used Swap", 80);
-        output->AddHeaderItem("Description", 150);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Process Name", 150)
+                .AddColumn("File Path", 200)
+                .AddColumn("Used Memory", 80)
+                .AddColumn("Used Swap", 80)
+                .AddColumn("Description", 150));
 
     for (int index = 0; index < message.item_size(); ++index)
     {

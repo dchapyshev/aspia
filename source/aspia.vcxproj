@@ -211,6 +211,7 @@
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\system_info\category_select_dialog.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
+    <ClCompile Include="ui\system_info\column_list.cc" />
     <ClCompile Include="ui\system_info\info_list_ctrl.cc" />
     <ClCompile Include="ui\system_info\output.cc" />
     <ClCompile Include="ui\system_info\output_html_file.cc" />
@@ -452,6 +453,7 @@
     <ClInclude Include="ui\status_dialog.h" />
     <ClInclude Include="ui\system_info\category_select_dialog.h" />
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
+    <ClInclude Include="ui\system_info\column_list.h" />
     <ClInclude Include="ui\system_info\info_list_ctrl.h" />
     <ClInclude Include="ui\system_info\output.h" />
     <ClInclude Include="ui\system_info\output_html_file.h" />

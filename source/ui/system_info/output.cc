@@ -20,17 +20,6 @@ Output::Table::~Table()
     output_->EndTable();
 }
 
-Output::TableHeader::TableHeader(Output* output)
-    : output_(output)
-{
-    output_->StartTableHeader();
-}
-
-Output::TableHeader::~TableHeader()
-{
-    output_->EndTableHeader();
-}
-
 Output::Group::Group(Output* output, std::string_view name, Category::IconId icon_id)
     : output_(std::move(output))
 {

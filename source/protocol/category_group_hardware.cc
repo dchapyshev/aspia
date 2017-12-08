@@ -48,11 +48,9 @@ void CategoryDmiBios::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     if (!message.manufacturer().empty())
         output->AddParam(IDI_BIOS, "Manufacturer", Value::String(message.manufacturer()));
@@ -155,11 +153,9 @@ void CategoryDmiSystem::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     if (!message.manufacturer().empty())
         output->AddParam(IDI_COMPUTER, "Manufacturer", Value::String(message.manufacturer()));
@@ -239,11 +235,9 @@ void CategoryDmiBaseboard::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -356,11 +350,9 @@ void CategoryDmiChassis::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -464,11 +456,9 @@ void CategoryDmiCaches::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -593,11 +583,9 @@ void CategoryDmiProcessors::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -742,11 +730,9 @@ void CategoryDmiMemoryDevices::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -848,11 +834,9 @@ void CategoryDmiSystemSlots::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -930,11 +914,9 @@ void CategoryDmiPortConnectors::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1012,11 +994,9 @@ void CategoryDmiOnboardDevices::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1089,11 +1069,9 @@ void CategoryDmiBuildinPointing::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1163,11 +1141,9 @@ void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1303,11 +1279,9 @@ void CategoryCPU::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     output->AddParam(IDI_PROCESSOR, "Brand String", Value::String(message.brand_string()));
     output->AddParam(IDI_PROCESSOR, "Vendor", Value::String(message.vendor()));
@@ -1597,11 +1571,9 @@ void CategoryATA::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1775,11 +1747,9 @@ void CategoryVideoAdapters::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -1849,11 +1819,9 @@ void CategoryMonitor::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -2204,11 +2172,9 @@ void CategoryPrinters::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -2335,11 +2301,9 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     const char* power_source;
     switch (message.power_source())
@@ -2618,14 +2582,12 @@ void CategoryWindowsDevices::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Device Name", 200);
-        output->AddHeaderItem("Driver Version", 90);
-        output->AddHeaderItem("Driver Date", 80);
-        output->AddHeaderItem("Driver Vendor", 90);
-        output->AddHeaderItem("Device ID", 200);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Device Name", 200)
+                .AddColumn("Driver Version", 90)
+                .AddColumn("Driver Date", 80)
+                .AddColumn("Driver Vendor", 90)
+                .AddColumn("Device ID", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
     {

@@ -238,11 +238,9 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Parameter", 250);
-        output->AddHeaderItem("Value", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Parameter", 250)
+                .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -341,11 +339,9 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("Group Name", 250);
-        output->AddHeaderItem("Description", 250);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("Group Name", 250)
+                .AddColumn("Description", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
@@ -401,15 +397,13 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
 
     Output::Table table(output, Name(), Output::TableType::LIST);
 
-    {
-        Output::TableHeader header(output);
-        output->AddHeaderItem("User Name", 150);
-        output->AddHeaderItem("Domain", 100);
-        output->AddHeaderItem("ID", 50);
-        output->AddHeaderItem("State", 80);
-        output->AddHeaderItem("Client Name", 100);
-        output->AddHeaderItem("Logon Type", 100);
-    }
+    output->Add(ColumnList::Create()
+                .AddColumn("User Name", 150)
+                .AddColumn("Domain", 100)
+                .AddColumn("ID", 50)
+                .AddColumn("State", 80)
+                .AddColumn("Client Name", 100)
+                .AddColumn("Logon Type", 100));
 
     for (int index = 0; index < message.item_size(); ++index)
     {

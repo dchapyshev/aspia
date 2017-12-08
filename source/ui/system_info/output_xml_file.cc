@@ -107,21 +107,14 @@ void OutputXmlFile::EndTable()
     column_list_.clear();
 }
 
-void OutputXmlFile::StartTableHeader()
-{
-    // Nothing
-}
-
-void OutputXmlFile::EndTableHeader()
-{
-    // Nothing
-}
-
-void OutputXmlFile::AddHeaderItem(std::string_view name, int /* width */)
+void OutputXmlFile::Add(const ColumnList& column_list)
 {
     DCHECK(category_);
 
-    column_list_.emplace_back(name);
+    for (const auto& column : column_list)
+    {
+        column_list_.emplace_back(column.first);
+    }
 }
 
 void OutputXmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
