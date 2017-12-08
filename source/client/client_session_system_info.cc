@@ -59,7 +59,14 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
         const std::string& guid = message.guid();
 
         if (guid.length() == kGuidLength)
+        {
             report_creator_->Parse(message.data());
+            return;
+        }
+        else
+        {
+            DLOG(ERROR) << "Invalid GUID length: " << guid.length();
+        }
     }
 
     channel_proxy_->Disconnect();
