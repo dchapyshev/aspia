@@ -30,15 +30,13 @@ protected:
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(std::string_view name, TableType table_type) final;
+    void StartTable(Category* category, TableType table_type) final;
     void EndTable() final;
     void Add(const ColumnList& column_list) final;
-    void StartGroup(std::string_view name, Category::IconId icon_id) final;
+    void StartGroup(std::string_view name) final;
     void EndGroup() final;
-    void AddParam(Category::IconId icon_id,
-                  std::string_view param,
-                  const Value& value) final;
-    void StartRow(Category::IconId icon_id) final;
+    void AddParam(std::string_view param, const Value& value) final;
+    void StartRow() final;
     void EndRow() final;
     void AddValue(const Value& value) final;
 

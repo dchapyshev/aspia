@@ -12,6 +12,7 @@
 
 #include <cstdint>
 #include <string>
+#include <variant>
 
 namespace aspia {
 
@@ -24,7 +25,6 @@ public:
     static Value Empty();
     static Value String(const std::string_view value);
     static Value String(const char* format, ...);
-    static Value Bool(bool value, std::string_view if_true, std::string_view if_false);
     static Value Bool(bool value);
     static Value Number(uint32_t value, std::string_view unit);
     static Value Number(uint32_t value);
@@ -37,16 +37,44 @@ public:
     static Value Number(double value, std::string_view unit);
     static Value Number(double value);
 
-    const std::string& ToString() const;
+    enum class Type
+    {
+        EMPTY  = 0,
+        STRING = 1,
+        BOOL   = 2,
+        UINT32 = 3,
+        INT32  = 4,
+        UINT64 = 5,
+        INT64  = 6,
+        DOUBLE = 7
+    };
+
+    Type type() const;
+    std::string ToString() const;
+    bool ToBool() const;
+    uint32_t ToUint32() const;
+    int32_t ToInt32() const;
+    uint64_t ToUint64() const;
+    int64_t ToInt64() const;
+    double ToDouble() const;
     const std::string& Unit() const;
-    bool IsEmpty() const;
     bool HasUnit() const;
 
 private:
     Value();
-    Value(std::string_view value, std::string_view unit);
+    Value(std::string&& value, std::string&& unit);
+    Value(bool value);
+    Value(uint32_t value, std::string_view unit);
+    Value(int32_t value, std::string_view unit);
+    Value(uint64_t value, std::string_view unit);
+    Value(int64_t value, std::string_view unit);
+    Value(double value, std::string_view unit);
 
-    std::string string_;
+    using ValueType =
+        std::variant<std::string, bool, uint32_t, int32_t, uint64_t, int64_t, double>;
+
+    const Type type_ = Type::EMPTY;
+    ValueType value_;
     std::string unit_;
 
     DISALLOW_COPY_AND_ASSIGN(Value);

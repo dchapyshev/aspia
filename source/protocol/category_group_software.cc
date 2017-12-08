@@ -40,7 +40,7 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Name", 200)
@@ -53,7 +53,7 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
     {
         const proto::Programs::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.name()));
         output->AddValue(Value::String(item.version()));
@@ -137,7 +137,7 @@ void CategoryServices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Display Name", 200)
@@ -152,7 +152,7 @@ void CategoryServices::Parse(Output* output, const std::string& data)
     {
         const proto::Services::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.display_name()));
         output->AddValue(Value::String(item.name()));
@@ -330,7 +330,7 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Display Name", 200)
@@ -344,7 +344,7 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
     {
         const proto::Services::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.display_name()));
         output->AddValue(Value::String(item.name()));
@@ -464,7 +464,7 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Process Name", 150)
@@ -477,7 +477,7 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
     {
         const proto::Processes::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.process_name()));
         output->AddValue(Value::String(item.file_path()));

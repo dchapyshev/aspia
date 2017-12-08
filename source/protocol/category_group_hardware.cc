@@ -46,47 +46,44 @@ void CategoryDmiBios::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
                 .AddColumn("Value", 250));
 
     if (!message.manufacturer().empty())
-        output->AddParam(IDI_BIOS, "Manufacturer", Value::String(message.manufacturer()));
+        output->AddParam("Manufacturer", Value::String(message.manufacturer()));
 
     if (!message.version().empty())
-        output->AddParam(IDI_BIOS, "Version", Value::String(message.version()));
+        output->AddParam("Version", Value::String(message.version()));
 
     if (!message.date().empty())
-        output->AddParam(IDI_BIOS, "Date", Value::String(message.date()));
+        output->AddParam("Date", Value::String(message.date()));
 
     if (message.size() != 0)
-        output->AddParam(IDI_BIOS, "Size", Value::Number(message.size(), "kB"));
+        output->AddParam("Size", Value::Number(message.size(), "kB"));
 
     if (!message.bios_revision().empty())
-        output->AddParam(IDI_BIOS, "BIOS Revision", Value::String(message.bios_revision()));
+        output->AddParam("BIOS Revision", Value::String(message.bios_revision()));
 
     if (!message.firmware_revision().empty())
-        output->AddParam(IDI_BIOS, "Firmware Revision", Value::String(message.firmware_revision()));
+        output->AddParam("Firmware Revision", Value::String(message.firmware_revision()));
 
     if (!message.address().empty())
-        output->AddParam(IDI_BIOS, "Address", Value::String(message.address()));
+        output->AddParam("Address", Value::String(message.address()));
 
     if (message.runtime_size() != 0)
-        output->AddParam(IDI_BIOS, "Runtime Size", Value::Number(message.runtime_size(), "Bytes"));
+        output->AddParam("Runtime Size", Value::Number(message.runtime_size(), "Bytes"));
 
     if (message.feature_size() > 0)
     {
-        Output::Group group(output, "Supported Features", IDI_BIOS);
+        Output::Group group(output, "Supported Features");
 
         for (int index = 0; index < message.feature_size(); ++index)
         {
             const proto::DmiBios::Feature& feature = message.feature(index);
-
-            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             feature.name(),
-                             Value::Bool(feature.supported()));
+            output->AddParam(feature.name(), Value::Bool(feature.supported()));
         }
     }
 }
@@ -151,35 +148,35 @@ void CategoryDmiSystem::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
                 .AddColumn("Value", 250));
 
     if (!message.manufacturer().empty())
-        output->AddParam(IDI_COMPUTER, "Manufacturer", Value::String(message.manufacturer()));
+        output->AddParam("Manufacturer", Value::String(message.manufacturer()));
 
     if (!message.product_name().empty())
-        output->AddParam(IDI_COMPUTER, "Product Name", Value::String(message.product_name()));
+        output->AddParam("Product Name", Value::String(message.product_name()));
 
     if (!message.version().empty())
-        output->AddParam(IDI_COMPUTER, "Version", Value::String(message.version()));
+        output->AddParam("Version", Value::String(message.version()));
 
     if (!message.serial_number().empty())
-        output->AddParam(IDI_COMPUTER, "Serial Number", Value::String(message.serial_number()));
+        output->AddParam("Serial Number", Value::String(message.serial_number()));
 
     if (!message.uuid().empty())
-        output->AddParam(IDI_COMPUTER, "UUID", Value::String(message.uuid()));
+        output->AddParam("UUID", Value::String(message.uuid()));
 
     if (!message.wakeup_type().empty())
-        output->AddParam(IDI_COMPUTER, "Wakeup Type", Value::String(message.wakeup_type()));
+        output->AddParam("Wakeup Type", Value::String(message.wakeup_type()));
 
     if (!message.sku_number().empty())
-        output->AddParam(IDI_COMPUTER, "SKU Number", Value::String(message.sku_number()));
+        output->AddParam("SKU Number", Value::String(message.sku_number()));
 
     if (!message.family().empty())
-        output->AddParam(IDI_COMPUTER, "Family", Value::String(message.family()));
+        output->AddParam("Family", Value::String(message.family()));
 }
 
 std::string CategoryDmiSystem::Serialize()
@@ -233,7 +230,7 @@ void CategoryDmiBaseboard::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -243,45 +240,40 @@ void CategoryDmiBaseboard::Parse(Output* output, const std::string& data)
     {
         const proto::DmiBaseboard::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Baseboard #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Baseboard #%d", index + 1));
 
         if (!item.type().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.manufacturer().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Manufacturer", Value::String(item.manufacturer()));
+            output->AddParam("Manufacturer", Value::String(item.manufacturer()));
 
         if (!item.product_name().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Product Name", Value::String(item.product_name()));
+            output->AddParam("Product Name", Value::String(item.product_name()));
 
         if (!item.version().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Version", Value::String(item.version()));
+            output->AddParam("Version", Value::String(item.version()));
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (!item.asset_tag().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Asset Tag", Value::String(item.asset_tag()));
+            output->AddParam("Asset Tag", Value::String(item.asset_tag()));
 
         if (item.feature_size() > 0)
         {
-            Output::Group features_group(output, "Supported Features", IDI_MOTHERBOARD);
+            Output::Group features_group(output, "Supported Features");
 
             for (int i = 0; i < item.feature_size(); ++i)
             {
                 const proto::DmiBaseboard::Item::Feature& feature = item.feature(i);
-
-                output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                                 feature.name(),
-                                 Value::Bool(feature.supported()));
+                output->AddParam(feature.name(), Value::Bool(feature.supported()));
             }
         }
 
         if (!item.location_in_chassis().empty())
         {
-            output->AddParam(IDI_MOTHERBOARD,
-                             "Location in chassis",
-                             Value::String(item.location_in_chassis()));
+            output->AddParam("Location in chassis", Value::String(item.location_in_chassis()));
         }
     }
 }
@@ -348,7 +340,7 @@ void CategoryDmiChassis::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -358,43 +350,41 @@ void CategoryDmiChassis::Parse(Output* output, const std::string& data)
     {
         const proto::DmiChassis::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Chassis #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Chassis #%d", index + 1));
 
         if (!item.manufacturer().empty())
-            output->AddParam(IDI_SERVER, "Manufacturer", Value::String(item.manufacturer()));
+            output->AddParam("Manufacturer", Value::String(item.manufacturer()));
 
         if (!item.version().empty())
-            output->AddParam(IDI_SERVER, "Version", Value::String(item.version()));
+            output->AddParam("Version", Value::String(item.version()));
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_SERVER, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (!item.asset_tag().empty())
-            output->AddParam(IDI_SERVER, "Asset Tag", Value::String(item.asset_tag()));
+            output->AddParam("Asset Tag", Value::String(item.asset_tag()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_SERVER, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.os_load_status().empty())
-            output->AddParam(IDI_SERVER, "OS Load Status", Value::String(item.os_load_status()));
+            output->AddParam("OS Load Status", Value::String(item.os_load_status()));
 
         if (!item.power_source_status().empty())
-            output->AddParam(IDI_SERVER, "Power Source Status", Value::String(item.power_source_status()));
+            output->AddParam("Power Source Status", Value::String(item.power_source_status()));
 
         if (!item.temparature_status().empty())
-            output->AddParam(IDI_SERVER, "Temperature Status", Value::String(item.temparature_status()));
+            output->AddParam("Temperature Status", Value::String(item.temparature_status()));
 
         if (!item.security_status().empty())
-            output->AddParam(IDI_SERVER, "Security Status", Value::String(item.security_status()));
+            output->AddParam("Security Status", Value::String(item.security_status()));
 
         if (item.height() != 0)
-            output->AddParam(IDI_SERVER, "Height", Value::Number(item.height(), "U"));
+            output->AddParam("Height", Value::Number(item.height(), "U"));
 
         if (item.number_of_power_cords() != 0)
         {
-            output->AddParam(IDI_SERVER,
-                             "Number Of Power Cords",
-                             Value::Number(item.number_of_power_cords()));
+            output->AddParam("Number Of Power Cords", Value::Number(item.number_of_power_cords()));
         }
     }
 }
@@ -454,7 +444,7 @@ void CategoryDmiCaches::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -464,54 +454,53 @@ void CategoryDmiCaches::Parse(Output* output, const std::string& data)
     {
         const proto::DmiCaches::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Cache #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Cache #%d", index + 1));
 
         if (!item.name().empty())
-            output->AddParam(IDI_CHIP, "Name", Value::String(item.name()));
+            output->AddParam("Name", Value::String(item.name()));
 
         if (!item.location().empty())
-            output->AddParam(IDI_CHIP, "Location", Value::String(item.location()));
+            output->AddParam("Location", Value::String(item.location()));
 
-        output->AddParam(IDI_CHIP, "Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
+        output->AddParam("Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
 
         if (!item.mode().empty())
-            output->AddParam(IDI_CHIP, "Mode", Value::String(item.mode()));
+            output->AddParam("Mode", Value::String(item.mode()));
 
         if (item.level() != 0)
-            output->AddParam(IDI_CHIP, "Level", Value::String("L%d", item.level()));
+            output->AddParam("Level", Value::String("L%d", item.level()));
 
         if (item.maximum_size() != 0)
-            output->AddParam(IDI_CHIP, "Maximum Size", Value::Number(item.maximum_size(), "kB"));
+            output->AddParam("Maximum Size", Value::Number(item.maximum_size(), "kB"));
 
         if (item.current_size() != 0)
-            output->AddParam(IDI_CHIP, "Current Size", Value::Number(item.current_size(), "kB"));
+            output->AddParam("Current Size", Value::Number(item.current_size(), "kB"));
 
         if (item.supported_sram_type_size())
         {
-            Output::Group types_group(output, "Supported SRAM Types", Icon());
+            Output::Group types_group(output, "Supported SRAM Types");
 
             for (int i = 0; i < item.supported_sram_type_size(); ++i)
             {
-                output->AddParam(item.supported_sram_type(i).supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                                 item.supported_sram_type(i).name(),
+                output->AddParam(item.supported_sram_type(i).name(),
                                  Value::Bool(item.supported_sram_type(i).supported()));
             }
         }
 
         if (!item.current_sram_type().empty())
-            output->AddParam(IDI_CHIP, "Current SRAM Type", Value::String(item.current_sram_type()));
+            output->AddParam("Current SRAM Type", Value::String(item.current_sram_type()));
 
         if (item.speed() != 0)
-            output->AddParam(IDI_CHIP, "Speed", Value::Number(item.speed(), "ns"));
+            output->AddParam("Speed", Value::Number(item.speed(), "ns"));
 
         if (!item.error_correction_type().empty())
-            output->AddParam(IDI_CHIP, "Error Correction Type", Value::String(item.error_correction_type()));
+            output->AddParam("Error Correction Type", Value::String(item.error_correction_type()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_CHIP, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.associativity().empty())
-            output->AddParam(IDI_CHIP, "Associativity", Value::String(item.associativity()));
+            output->AddParam("Associativity", Value::String(item.associativity()));
     }
 }
 
@@ -581,7 +570,7 @@ void CategoryDmiProcessors::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -591,68 +580,66 @@ void CategoryDmiProcessors::Parse(Output* output, const std::string& data)
     {
         const proto::DmiProcessors::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Processor #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Processor #%d", index + 1));
 
         if (!item.manufacturer().empty())
-            output->AddParam(IDI_PROCESSOR, "Manufacturer", Value::String(item.manufacturer()));
+            output->AddParam("Manufacturer", Value::String(item.manufacturer()));
 
         if (!item.version().empty())
-            output->AddParam(IDI_PROCESSOR, "Version", Value::String(item.version()));
+            output->AddParam("Version", Value::String(item.version()));
 
         if (!item.family().empty())
-            output->AddParam(IDI_PROCESSOR, "Family", Value::String(item.family()));
+            output->AddParam("Family", Value::String(item.family()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_PROCESSOR, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.status().empty())
-            output->AddParam(IDI_PROCESSOR, "Status", Value::String(item.status()));
+            output->AddParam("Status", Value::String(item.status()));
 
         if (!item.socket().empty())
-            output->AddParam(IDI_PROCESSOR, "Socket", Value::String(item.socket()));
+            output->AddParam("Socket", Value::String(item.socket()));
 
         if (!item.upgrade().empty())
-            output->AddParam(IDI_PROCESSOR, "Upgrade", Value::String(item.upgrade()));
+            output->AddParam("Upgrade", Value::String(item.upgrade()));
 
         if (item.external_clock() != 0)
-            output->AddParam(IDI_PROCESSOR, "External Clock", Value::Number(item.external_clock(), "MHz"));
+            output->AddParam("External Clock", Value::Number(item.external_clock(), "MHz"));
 
         if (item.current_speed() != 0)
-            output->AddParam(IDI_PROCESSOR, "Current Speed", Value::Number(item.current_speed(), "MHz"));
+            output->AddParam("Current Speed", Value::Number(item.current_speed(), "MHz"));
 
         if (item.maximum_speed() != 0)
-            output->AddParam(IDI_PROCESSOR, "Maximum Speed", Value::Number(item.maximum_speed(), "MHz"));
+            output->AddParam("Maximum Speed", Value::Number(item.maximum_speed(), "MHz"));
 
         if (item.voltage() != 0.0)
-            output->AddParam(IDI_PROCESSOR, "Voltage", Value::Number(item.voltage(), "V"));
+            output->AddParam("Voltage", Value::Number(item.voltage(), "V"));
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_PROCESSOR, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (!item.asset_tag().empty())
-            output->AddParam(IDI_PROCESSOR, "Asset Tag", Value::String(item.asset_tag()));
+            output->AddParam("Asset Tag", Value::String(item.asset_tag()));
 
         if (!item.part_number().empty())
-            output->AddParam(IDI_PROCESSOR, "Part Number", Value::String(item.part_number()));
+            output->AddParam("Part Number", Value::String(item.part_number()));
 
         if (item.core_count() != 0)
-            output->AddParam(IDI_PROCESSOR, "Core Count", Value::Number(item.core_count()));
+            output->AddParam("Core Count", Value::Number(item.core_count()));
 
         if (item.core_enabled() != 0)
-            output->AddParam(IDI_PROCESSOR, "Core Enabled", Value::Number(item.core_enabled()));
+            output->AddParam("Core Enabled", Value::Number(item.core_enabled()));
 
         if (item.thread_count() != 0)
-            output->AddParam(IDI_PROCESSOR, "Thread Count", Value::Number(item.thread_count()));
+            output->AddParam("Thread Count", Value::Number(item.thread_count()));
 
         if (item.feature_size())
         {
-            Output::Group features_group(output, "Features", IDI_PROCESSOR);
+            Output::Group features_group(output, "Features");
 
             for (int i = 0; i < item.feature_size(); ++i)
             {
-                output->AddParam(item.feature(i).supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                                 item.feature(i).name(),
-                                 Value::Bool(item.feature(i).supported()));
+                output->AddParam(item.feature(i).name(), Value::Bool(item.feature(i).supported()));
             }
         }
     }
@@ -728,7 +715,7 @@ void CategoryDmiMemoryDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -738,40 +725,40 @@ void CategoryDmiMemoryDevices::Parse(Output* output, const std::string& data)
     {
         const proto::DmiMemoryDevices::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Memory Device #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Memory Device #%d", index + 1));
 
         if (!item.device_locator().empty())
-            output->AddParam(IDI_MEMORY, "Device Locator", Value::String(item.device_locator()));
+            output->AddParam("Device Locator", Value::String(item.device_locator()));
 
         if (item.size() != 0)
-            output->AddParam(IDI_MEMORY, "Size", Value::Number(item.size(), "MB"));
+            output->AddParam("Size", Value::Number(item.size(), "MB"));
 
         if (!item.type().empty())
-            output->AddParam(IDI_MEMORY, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (item.speed() != 0)
-            output->AddParam(IDI_MEMORY, "Speed", Value::Number(item.speed(), "MHz"));
+            output->AddParam("Speed", Value::Number(item.speed(), "MHz"));
 
         if (!item.form_factor().empty())
-            output->AddParam(IDI_MEMORY, "Form Factor", Value::String(item.form_factor()));
+            output->AddParam("Form Factor", Value::String(item.form_factor()));
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_MEMORY, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (!item.part_number().empty())
-            output->AddParam(IDI_MEMORY, "Part Number", Value::String(item.part_number()));
+            output->AddParam("Part Number", Value::String(item.part_number()));
 
         if (!item.manufactorer().empty())
-            output->AddParam(IDI_MEMORY, "Manufacturer", Value::String(item.manufactorer()));
+            output->AddParam("Manufacturer", Value::String(item.manufactorer()));
 
         if (!item.bank().empty())
-            output->AddParam(IDI_MEMORY, "Bank", Value::String(item.bank()));
+            output->AddParam("Bank", Value::String(item.bank()));
 
         if (item.total_width() != 0)
-            output->AddParam(IDI_MEMORY, "Total Width", Value::Number(item.total_width(), "Bit"));
+            output->AddParam("Total Width", Value::Number(item.total_width(), "Bit"));
 
         if (item.data_width() != 0)
-            output->AddParam(IDI_MEMORY, "Data Width", Value::Number(item.data_width(), "Bit"));
+            output->AddParam("Data Width", Value::Number(item.data_width(), "Bit"));
     }
 }
 
@@ -832,7 +819,7 @@ void CategoryDmiSystemSlots::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -842,22 +829,22 @@ void CategoryDmiSystemSlots::Parse(Output* output, const std::string& data)
     {
         const proto::DmiSystemSlots::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("System Slot #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("System Slot #%d", index + 1));
 
         if (!item.slot_designation().empty())
-            output->AddParam(IDI_PORT, "Slot Designation", Value::String(item.slot_designation()));
+            output->AddParam("Slot Designation", Value::String(item.slot_designation()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_PORT, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.usage().empty())
-            output->AddParam(IDI_PORT, "Usage", Value::String(item.usage()));
+            output->AddParam("Usage", Value::String(item.usage()));
 
         if (!item.bus_width().empty())
-            output->AddParam(IDI_PORT, "Bus Width", Value::String(item.bus_width()));
+            output->AddParam("Bus Width", Value::String(item.bus_width()));
 
         if (!item.length().empty())
-            output->AddParam(IDI_PORT, "Length", Value::String(item.length()));
+            output->AddParam("Length", Value::String(item.length()));
     }
 }
 
@@ -912,7 +899,7 @@ void CategoryDmiPortConnectors::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -922,22 +909,22 @@ void CategoryDmiPortConnectors::Parse(Output* output, const std::string& data)
     {
         const proto::DmiPortConnectors::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Port Connector #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Port Connector #%d", index + 1));
 
         if (!item.internal_designation().empty())
-            output->AddParam(IDI_PORT, "Internal Designation", Value::String(item.internal_designation()));
+            output->AddParam("Internal Designation", Value::String(item.internal_designation()));
 
         if (!item.external_designation().empty())
-            output->AddParam(IDI_PORT, "External Designation", Value::String(item.external_designation()));
+            output->AddParam("External Designation", Value::String(item.external_designation()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_PORT, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
         if (!item.internal_connector_type().empty())
-            output->AddParam(IDI_PORT, "Internal Connector Type", Value::String(item.internal_connector_type()));
+            output->AddParam("Internal Connector Type", Value::String(item.internal_connector_type()));
 
         if (!item.external_connector_type().empty())
-            output->AddParam(IDI_PORT, "External Connector Type", Value::String(item.external_connector_type()));
+            output->AddParam("External Connector Type", Value::String(item.external_connector_type()));
     }
 }
 
@@ -992,7 +979,7 @@ void CategoryDmiOnboardDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1002,15 +989,15 @@ void CategoryDmiOnboardDevices::Parse(Output* output, const std::string& data)
     {
         const proto::DmiOnBoardDevices::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("OnBoard Device #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("OnBoard Device #%d", index + 1));
 
         if (!item.description().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Description", Value::String(item.description()));
+            output->AddParam("Description", Value::String(item.description()));
 
         if (!item.type().empty())
-            output->AddParam(IDI_MOTHERBOARD, "Type", Value::String(item.type()));
+            output->AddParam("Type", Value::String(item.type()));
 
-        output->AddParam(IDI_MOTHERBOARD, "Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
+        output->AddParam("Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
     }
 }
 
@@ -1067,7 +1054,7 @@ void CategoryDmiBuildinPointing::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1077,16 +1064,16 @@ void CategoryDmiBuildinPointing::Parse(Output* output, const std::string& data)
     {
         const proto::DmiBuildinPointing::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Build-in Pointing Device #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Build-in Pointing Device #%d", index + 1));
 
         if (!item.device_type().empty())
-            output->AddParam(IDI_MOUSE, "Device Type", Value::String(item.device_type()));
+            output->AddParam("Device Type", Value::String(item.device_type()));
 
         if (!item.device_interface().empty())
-            output->AddParam(IDI_MOUSE, "Device Interface", Value::String(item.device_interface()));
+            output->AddParam("Device Interface", Value::String(item.device_interface()));
 
         if (item.button_count() != 0)
-            output->AddParam(IDI_MOUSE, "Buttons Count", Value::Number(item.button_count()));
+            output->AddParam("Buttons Count", Value::Number(item.button_count()));
     }
 }
 
@@ -1139,7 +1126,7 @@ void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1149,58 +1136,53 @@ void CategoryDmiPortableBattery::Parse(Output* output, const std::string& data)
     {
         const proto::DmiPortableBattery::Item& item = message.item(index);
 
-        Output::Group group(output, StringPrintf("Portable Battery #%d", index + 1), Icon());
+        Output::Group group(output, StringPrintf("Portable Battery #%d", index + 1));
 
         if (!item.location().empty())
-            output->AddParam(IDI_BATTERY, "Location", Value::String(item.location()));
+            output->AddParam("Location", Value::String(item.location()));
 
         if (!item.manufacturer().empty())
-            output->AddParam(IDI_BATTERY, "Manufacturer", Value::String(item.manufacturer()));
+            output->AddParam("Manufacturer", Value::String(item.manufacturer()));
 
         if (!item.manufacture_date().empty())
-            output->AddParam(IDI_BATTERY, "Manufacture Date", Value::String(item.manufacture_date()));
+            output->AddParam("Manufacture Date", Value::String(item.manufacture_date()));
 
         if (!item.sbds_serial_number().empty())
-            output->AddParam(IDI_BATTERY, "Serial Number", Value::String(item.sbds_serial_number()));
+            output->AddParam("Serial Number", Value::String(item.sbds_serial_number()));
 
         if (!item.device_name().empty())
-            output->AddParam(IDI_BATTERY, "Device Name", Value::String(item.device_name()));
+            output->AddParam("Device Name", Value::String(item.device_name()));
 
         if (!item.chemistry().empty())
-            output->AddParam(IDI_BATTERY, "Chemistry", Value::String(item.chemistry()));
+            output->AddParam("Chemistry", Value::String(item.chemistry()));
 
         if (item.design_capacity() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Design Capacity",
-                             Value::Number(item.design_capacity(), "mWh"));
+            output->AddParam("Design Capacity", Value::Number(item.design_capacity(), "mWh"));
         }
 
         if (item.design_voltage() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Design Voltage",
-                             Value::Number(item.design_voltage(), "mV"));
+            output->AddParam("Design Voltage", Value::Number(item.design_voltage(), "mV"));
         }
 
         if (item.max_error_in_battery_data() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Max. Error in Battery Data",
+            output->AddParam("Max. Error in Battery Data",
                              Value::Number(item.max_error_in_battery_data(), "%"));
         }
 
         if (!item.sbds_version_number().empty())
-            output->AddParam(IDI_BATTERY, "SBDS Version Number", Value::String(item.sbds_version_number()));
+            output->AddParam("SBDS Version Number", Value::String(item.sbds_version_number()));
 
         if (!item.sbds_serial_number().empty())
-            output->AddParam(IDI_BATTERY, "SBDS Serial Number", Value::String(item.sbds_serial_number()));
+            output->AddParam("SBDS Serial Number", Value::String(item.sbds_serial_number()));
 
         if (!item.sbds_manufacture_date().empty())
-            output->AddParam(IDI_BATTERY, "SBDS Manufacture Date", Value::String(item.sbds_manufacture_date()));
+            output->AddParam("SBDS Manufacture Date", Value::String(item.sbds_manufacture_date()));
 
         if (!item.sbds_device_chemistry().empty())
-            output->AddParam(IDI_BATTERY, "SBDS Device Chemistry", Value::String(item.sbds_device_chemistry()));
+            output->AddParam("SBDS Device Chemistry", Value::String(item.sbds_device_chemistry()));
     }
 }
 
@@ -1277,48 +1259,41 @@ void CategoryCPU::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
                 .AddColumn("Value", 250));
 
-    output->AddParam(IDI_PROCESSOR, "Brand String", Value::String(message.brand_string()));
-    output->AddParam(IDI_PROCESSOR, "Vendor", Value::String(message.vendor()));
-    output->AddParam(IDI_PROCESSOR, "Stepping", Value::String("%02Xh", message.stepping()));
-    output->AddParam(IDI_PROCESSOR, "Model", Value::String("%02Xh", message.model()));
-    output->AddParam(IDI_PROCESSOR, "Family", Value::String("%02Xh", message.family()));
+    output->AddParam("Brand String", Value::String(message.brand_string()));
+    output->AddParam("Vendor", Value::String(message.vendor()));
+    output->AddParam("Stepping", Value::String("%02Xh", message.stepping()));
+    output->AddParam("Model", Value::String("%02Xh", message.model()));
+    output->AddParam("Family", Value::String("%02Xh", message.family()));
 
     if (message.extended_model())
     {
-        output->AddParam(IDI_PROCESSOR,
-                         "Extended Model",
-                         Value::String("%02Xh", message.extended_model()));
+        output->AddParam("Extended Model", Value::String("%02Xh", message.extended_model()));
     }
 
     if (message.extended_family())
     {
-        output->AddParam(IDI_PROCESSOR,
-                         "Extended Family",
-                         Value::String("%02Xh", message.extended_family()));
+        output->AddParam("Extended Family", Value::String("%02Xh", message.extended_family()));
     }
 
-    output->AddParam(IDI_PROCESSOR, "Brand ID", Value::String("%02Xh", message.brand_id()));
-    output->AddParam(IDI_PROCESSOR, "Packages", Value::Number(message.packages()));
-    output->AddParam(IDI_PROCESSOR, "Physical Cores", Value::Number(message.physical_cores()));
-    output->AddParam(IDI_PROCESSOR, "Logical Cores", Value::Number(message.logical_cores()));
+    output->AddParam("Brand ID", Value::String("%02Xh", message.brand_id()));
+    output->AddParam("Packages", Value::Number(message.packages()));
+    output->AddParam("Physical Cores", Value::Number(message.physical_cores()));
+    output->AddParam("Logical Cores", Value::Number(message.logical_cores()));
 
     if (message.feature_size())
     {
-        Output::Group group(output, "Features", Icon());
+        Output::Group group(output, "Features");
 
         for (int i = 0; i < message.feature_size(); ++i)
         {
             const proto::CentralProcessor::Feature& feature = message.feature(i);
-
-            output->AddParam(feature.supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             feature.name(),
-                             Value::Bool(feature.supported()));
+            output->AddParam(feature.name(), Value::Bool(feature.supported()));
         }
     }
 }
@@ -1569,7 +1544,7 @@ void CategoryATA::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1579,61 +1554,59 @@ void CategoryATA::Parse(Output* output, const std::string& data)
     {
         const proto::AtaDrives::Item& item = message.item(index);
 
-        Output::Group group(output, item.model_number(), Icon());
+        Output::Group group(output, item.model_number());
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_DRIVE, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (!item.firmware_revision().empty())
-            output->AddParam(IDI_DRIVE, "Firmware Revision", Value::String(item.firmware_revision()));
+            output->AddParam("Firmware Revision", Value::String(item.firmware_revision()));
 
         if (!item.bus_type().empty())
-            output->AddParam(IDI_DRIVE, "Bus Type", Value::String(item.bus_type()));
+            output->AddParam("Bus Type", Value::String(item.bus_type()));
 
         if (!item.transfer_mode().empty())
-            output->AddParam(IDI_DRIVE, "Transfer Mode", Value::String(item.transfer_mode()));
+            output->AddParam("Transfer Mode", Value::String(item.transfer_mode()));
 
         if (item.rotation_rate())
-            output->AddParam(IDI_DRIVE, "Rotation Rate", Value::Number(item.rotation_rate(), "RPM"));
+            output->AddParam("Rotation Rate", Value::Number(item.rotation_rate(), "RPM"));
 
         if (item.drive_size())
-            output->AddParam(IDI_DRIVE, "Drive Size", Value::Number(item.drive_size(), "Bytes"));
+            output->AddParam("Drive Size", Value::Number(item.drive_size(), "Bytes"));
 
         if (item.buffer_size())
-            output->AddParam(IDI_DRIVE, "Buffer Size", Value::Number(item.buffer_size(), "Bytes"));
+            output->AddParam("Buffer Size", Value::Number(item.buffer_size(), "Bytes"));
 
         if (item.multisectors())
-            output->AddParam(IDI_DRIVE, "Multisectors", Value::Number(item.multisectors()));
+            output->AddParam("Multisectors", Value::Number(item.multisectors()));
 
         if (item.ecc_size())
-            output->AddParam(IDI_DRIVE, "ECC Size", Value::Number(item.ecc_size()));
+            output->AddParam("ECC Size", Value::Number(item.ecc_size()));
 
-        output->AddParam(IDI_DRIVE, "Removable", Value::Bool(item.is_removable()));
+        output->AddParam("Removable", Value::Bool(item.is_removable()));
 
         if (item.heads_number())
-            output->AddParam(IDI_DRIVE, "Heads Count", Value::Number(item.heads_number()));
+            output->AddParam("Heads Count", Value::Number(item.heads_number()));
 
         if (item.cylinders_number())
-            output->AddParam(IDI_DRIVE, "Cylinders Count", Value::Number(item.cylinders_number()));
+            output->AddParam("Cylinders Count", Value::Number(item.cylinders_number()));
 
         if (item.tracks_per_cylinder())
-            output->AddParam(IDI_DRIVE, "Tracks per Cylinder", Value::Number(item.tracks_per_cylinder()));
+            output->AddParam("Tracks per Cylinder", Value::Number(item.tracks_per_cylinder()));
 
         if (item.sectors_per_track())
-            output->AddParam(IDI_DRIVE, "Sectors per Track", Value::Number(item.sectors_per_track()));
+            output->AddParam("Sectors per Track", Value::Number(item.sectors_per_track()));
 
         if (item.bytes_per_sector())
-            output->AddParam(IDI_DRIVE, "Bytes per Sector", Value::Number(item.bytes_per_sector()));
+            output->AddParam("Bytes per Sector", Value::Number(item.bytes_per_sector()));
 
         if (item.feature_size())
         {
-            Output::Group features_group(output, "Features", Icon());
+            Output::Group features_group(output, "Features");
 
             for (int i = 0; i < item.feature_size(); ++i)
             {
-                output->AddParam(item.feature(i).enabled() ? IDI_CHECKED : IDI_UNCHECKED,
-                                 item.feature(i).name(),
-                                 Value::Bool(item.feature(i).enabled()));
+                output->AddParam(item.feature(i).name(), Value::Bool(item.feature(i).enabled()));
             }
         }
     }
@@ -1745,7 +1718,7 @@ void CategoryVideoAdapters::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1755,17 +1728,17 @@ void CategoryVideoAdapters::Parse(Output* output, const std::string& data)
     {
         const proto::VideoAdapters::Item& item = message.item(index);
 
-        Output::Group group(output, item.description(), Icon());
+        Output::Group group(output, item.description());
 
-        output->AddParam(IDI_MONITOR, "Description", Value::String(item.description()));
-        output->AddParam(IDI_MONITOR, "Adapter String", Value::String(item.adapter_string()));
-        output->AddParam(IDI_MONITOR, "BIOS String", Value::String(item.bios_string()));
-        output->AddParam(IDI_MONITOR, "Chip Type", Value::String(item.chip_type()));
-        output->AddParam(IDI_MONITOR, "DAC Type", Value::String(item.dac_type()));
-        output->AddParam(IDI_MONITOR, "Memory Size", Value::Number(item.memory_size(), "Bytes"));
-        output->AddParam(IDI_MONITOR, "Driver Date", Value::String(item.driver_date()));
-        output->AddParam(IDI_MONITOR, "Driver Version", Value::String(item.driver_version()));
-        output->AddParam(IDI_MONITOR, "Driver Provider", Value::String(item.driver_provider()));
+        output->AddParam("Description", Value::String(item.description()));
+        output->AddParam("Adapter String", Value::String(item.adapter_string()));
+        output->AddParam("BIOS String", Value::String(item.bios_string()));
+        output->AddParam("Chip Type", Value::String(item.chip_type()));
+        output->AddParam("DAC Type", Value::String(item.dac_type()));
+        output->AddParam("Memory Size", Value::Number(item.memory_size(), "Bytes"));
+        output->AddParam("Driver Date", Value::String(item.driver_date()));
+        output->AddParam("Driver Version", Value::String(item.driver_version()));
+        output->AddParam("Driver Provider", Value::String(item.driver_provider()));
     }
 }
 
@@ -1817,7 +1790,7 @@ void CategoryMonitor::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -1827,54 +1800,48 @@ void CategoryMonitor::Parse(Output* output, const std::string& data)
     {
         const proto::Monitors::Item& item = message.item(index);
 
-        Output::Group group(output, item.system_name(), Icon());
+        Output::Group group(output, item.system_name());
 
         if (!item.monitor_name().empty())
-            output->AddParam(IDI_MONITOR, "Monitor Name", Value::String(item.monitor_name()));
+            output->AddParam("Monitor Name", Value::String(item.monitor_name()));
 
         if (!item.manufacturer_name().empty())
-            output->AddParam(IDI_MONITOR, "Manufacturer Name", Value::String(item.manufacturer_name()));
+            output->AddParam("Manufacturer Name", Value::String(item.manufacturer_name()));
 
         if (!item.monitor_id().empty())
-            output->AddParam(IDI_MONITOR, "Monitor ID", Value::String(item.monitor_id()));
+            output->AddParam("Monitor ID", Value::String(item.monitor_id()));
 
         if (!item.serial_number().empty())
-            output->AddParam(IDI_MONITOR, "Serial Number", Value::String(item.serial_number()));
+            output->AddParam("Serial Number", Value::String(item.serial_number()));
 
         if (item.edid_version() != 0)
-            output->AddParam(IDI_MONITOR, "EDID Version", Value::Number(item.edid_version()));
+            output->AddParam("EDID Version", Value::Number(item.edid_version()));
 
         if (item.edid_revision() != 0)
-            output->AddParam(IDI_MONITOR, "EDID Revision", Value::Number(item.edid_revision()));
+            output->AddParam("EDID Revision", Value::Number(item.edid_revision()));
 
         if (item.week_of_manufacture() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Week Of Manufacture",
-                             Value::Number(item.week_of_manufacture()));
+            output->AddParam("Week Of Manufacture", Value::Number(item.week_of_manufacture()));
         }
 
         if (item.year_of_manufacture() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Year Of Manufacture",
-                             Value::Number(item.year_of_manufacture()));
+            output->AddParam("Year Of Manufacture", Value::Number(item.year_of_manufacture()));
         }
 
         if (item.gamma() != 0.0)
-            output->AddParam(IDI_MONITOR, "Gamma", Value::String("%.2f", item.gamma()));
+            output->AddParam("Gamma", Value::String("%.2f", item.gamma()));
 
         if (item.max_horizontal_image_size() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Horizontal Image Size",
+            output->AddParam("Horizontal Image Size",
                              Value::Number(item.max_horizontal_image_size(), "cm"));
         }
 
         if (item.max_vertical_image_size() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Vertical Image Size",
+            output->AddParam("Vertical Image Size",
                              Value::Number(item.max_vertical_image_size(), "cm"));
         }
         if (item.max_horizontal_image_size() != 0 && item.max_vertical_image_size() != 0)
@@ -1885,108 +1852,80 @@ void CategoryMonitor::Parse(Output* output, const std::string& data)
                 sqrt((item.max_horizontal_image_size() * item.max_horizontal_image_size()) +
                 (item.max_vertical_image_size() * item.max_vertical_image_size())) / 2.54;
 
-            output->AddParam(IDI_MONITOR,
-                             "Diagonal Size",
-                             Value::Number(diagonal_size, "\""));
+            output->AddParam("Diagonal Size", Value::Number(diagonal_size, "\""));
         }
 
         if (item.horizontal_resolution() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Horizontal Resolution",
+            output->AddParam("Horizontal Resolution",
                              Value::Number(item.horizontal_resolution(), "px"));
         }
 
         if (item.vertical_resoulution() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Vertical Resolution",
+            output->AddParam("Vertical Resolution",
                              Value::Number(item.vertical_resoulution(), "px"));
         }
 
         if (item.min_horizontal_rate() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Minimum Horizontal Frequency",
+            output->AddParam("Minimum Horizontal Frequency",
                              Value::Number(item.min_horizontal_rate(), "kHz"));
         }
 
         if (item.max_horizontal_rate() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Maximum Horizontal Frequency",
+            output->AddParam("Maximum Horizontal Frequency",
                              Value::Number(item.max_horizontal_rate(), "kHz"));
         }
 
         if (item.min_vertical_rate() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Minimum Vertical Frequency",
+            output->AddParam("Minimum Vertical Frequency",
                              Value::Number(item.min_vertical_rate(), "Hz"));
         }
 
         if (item.max_vertical_rate() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Maximum Vertical Frequency",
+            output->AddParam("Maximum Vertical Frequency",
                              Value::Number(item.max_vertical_rate(), "Hz"));
         }
 
         if (item.pixel_clock() != 0.0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Pixel Clock",
+            output->AddParam("Pixel Clock",
                              Value::Number(item.pixel_clock(), "MHz"));
         }
 
         if (item.max_pixel_clock() != 0)
         {
-            output->AddParam(IDI_MONITOR,
-                             "Maximum Pixel Clock",
+            output->AddParam("Maximum Pixel Clock",
                              Value::Number(item.max_pixel_clock(), "MHz"));
         }
 
         if (!item.input_signal_type().empty())
-            output->AddParam(IDI_MONITOR, "Input Signal Type", Value::String(item.input_signal_type()));
+            output->AddParam("Input Signal Type", Value::String(item.input_signal_type()));
 
         {
-            Output::Group features_group(output, "Supported Features", Icon());
+            Output::Group features_group(output, "Supported Features");
 
-            output->AddParam(item.default_gtf_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Default GTF",
-                             Value::Bool(item.default_gtf_supported()));
-
-            output->AddParam(item.suspend_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Suspend",
-                             Value::Bool(item.suspend_supported()));
-
-            output->AddParam(item.standby_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Standby",
-                             Value::Bool(item.standby_supported()));
-
-            output->AddParam(item.active_off_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Active Off",
-                             Value::Bool(item.active_off_supported()));
-
-            output->AddParam(item.preferred_timing_mode_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "Preferred Timing Mode",
-                             Value::Bool(item.preferred_timing_mode_supported()));
-
-            output->AddParam(item.srgb_supported() ? IDI_CHECKED : IDI_UNCHECKED,
-                             "sRGB",
-                             Value::Bool(item.srgb_supported()));
+            output->AddParam("Default GTF", Value::Bool(item.default_gtf_supported()));
+            output->AddParam("Suspend", Value::Bool(item.suspend_supported()));
+            output->AddParam("Standby", Value::Bool(item.standby_supported()));
+            output->AddParam("Active Off", Value::Bool(item.active_off_supported()));
+            output->AddParam("Preferred Timing Mode", Value::Bool(item.preferred_timing_mode_supported()));
+            output->AddParam("sRGB", Value::Bool(item.srgb_supported()));
         }
 
         if (item.timings_size() > 0)
         {
-            Output::Group features_group(output, "Supported Video Modes", Icon());
+            Output::Group features_group(output, "Supported Video Modes");
 
             for (int mode = 0; mode < item.timings_size(); ++mode)
             {
                 const proto::Monitors::Item::Timing& timing = item.timings(mode);
 
-                output->AddParam(IDI_CHECKED,
-                                 StringPrintf("%dx%d", timing.width(), timing.height()),
+                output->AddParam(StringPrintf("%dx%d", timing.width(), timing.height()),
                                  Value::Number(timing.frequency(), "Hz"));
             }
         }
@@ -2170,7 +2109,7 @@ void CategoryPrinters::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -2180,50 +2119,44 @@ void CategoryPrinters::Parse(Output* output, const std::string& data)
     {
         const proto::Printers::Item& item = message.item(index);
 
-        Output::Group group(output, item.name(), Icon());
+        Output::Group group(output, item.name());
 
-        output->AddParam(IDI_PRINTER, "Default Printer", Value::Bool(item.is_default()));
-        output->AddParam(IDI_PRINTER_SHARE, "Shared Printer", Value::Bool(item.is_shared()));
-        output->AddParam(IDI_PORT, "Port", Value::String(item.port_name()));
-        output->AddParam(IDI_PCI, "Driver", Value::String(item.driver_name()));
-        output->AddParam(IDI_PCI, "Device Name", Value::String(item.device_name()));
-        output->AddParam(IDI_PRINTER, "Print Processor", Value::String(item.print_processor()));
-        output->AddParam(IDI_PRINTER, "Data Type", Value::String(item.data_type()));
-        output->AddParam(IDI_PRINTER, "Print Jobs Queued", Value::Number(item.jobs_count()));
+        output->AddParam("Default Printer", Value::Bool(item.is_default()));
+        output->AddParam("Shared Printer", Value::Bool(item.is_shared()));
+        output->AddParam("Port", Value::String(item.port_name()));
+        output->AddParam("Driver", Value::String(item.driver_name()));
+        output->AddParam("Device Name", Value::String(item.device_name()));
+        output->AddParam("Print Processor", Value::String(item.print_processor()));
+        output->AddParam("Data Type", Value::String(item.data_type()));
+        output->AddParam("Print Jobs Queued", Value::Number(item.jobs_count()));
 
         if (item.paper_width())
         {
-            output->AddParam(IDI_DOCUMENT_TEXT,
-                             "Paper Width",
-                             Value::Number(item.paper_width(), "mm"));
+            output->AddParam("Paper Width", Value::Number(item.paper_width(), "mm"));
         }
 
         if (item.paper_length())
         {
-            output->AddParam(IDI_DOCUMENT_TEXT,
-                             "Paper Length",
-                             Value::Number(item.paper_length(), "mm"));
+            output->AddParam("Paper Length", Value::Number(item.paper_length(), "mm"));
         }
 
         if (item.print_quality())
         {
-            output->AddParam(IDI_DOCUMENT_TEXT,
-                             "Print Quality",
-                             Value::Number(item.print_quality(), "dpi"));
+            output->AddParam("Print Quality", Value::Number(item.print_quality(), "dpi"));
         }
 
         switch (item.orientation())
         {
             case proto::Printers::Item::ORIENTATION_LANDSCAPE:
-                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", Value::String("Landscape"));
+                output->AddParam("Orientation", Value::String("Landscape"));
                 break;
 
             case proto::Printers::Item::ORIENTATION_PORTRAIT:
-                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", Value::String("Portrait"));
+                output->AddParam("Orientation", Value::String("Portrait"));
                 break;
 
             default:
-                output->AddParam(IDI_DOCUMENT_TEXT, "Orientation", Value::String("Unknown"));
+                output->AddParam("Orientation", Value::String("Unknown"));
                 break;
         }
     }
@@ -2299,7 +2232,7 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -2321,7 +2254,7 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
             break;
     }
 
-    output->AddParam(IDI_POWER_SUPPLY, "Power Source", Value::String(power_source));
+    output->AddParam("Power Source", Value::String(power_source));
 
     const char* battery_status;
     switch (message.battery_status())
@@ -2351,21 +2284,18 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
             break;
     }
 
-    output->AddParam(IDI_BATTERY, "Battery Status", Value::String(battery_status));
+    output->AddParam("Battery Status", Value::String(battery_status));
 
     if (message.battery_status() != proto::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
         message.battery_status() != proto::PowerOptions::BATTERY_STATUS_UNKNOWN)
     {
-        output->AddParam(IDI_BATTERY,
-                         "Battery Life Percent",
+        output->AddParam("Battery Life Percent",
                          Value::Number(message.battery_life_percent(), "%"));
 
-        output->AddParam(IDI_BATTERY,
-                         "Full Battery Life Time",
+        output->AddParam("Full Battery Life Time",
                          Value::Number(message.full_battery_life_time(), "s"));
 
-        output->AddParam(IDI_BATTERY,
-                         "Remaining Battery Life Time",
+        output->AddParam("Remaining Battery Life Time",
                          Value::Number(message.remaining_battery_life_time(), "s"));
     }
 
@@ -2373,75 +2303,71 @@ void CategoryPowerOptions::Parse(Output* output, const std::string& data)
     {
         const proto::PowerOptions::Battery& battery = message.battery(index);
 
-        Output::Group group(output, StringPrintf("Battery #%d", index + 1), IDI_BATTERY);
+        Output::Group group(output, StringPrintf("Battery #%d", index + 1));
 
         if (!battery.device_name().empty())
-            output->AddParam(IDI_BATTERY, "Device Name", Value::String(battery.device_name()));
+            output->AddParam("Device Name", Value::String(battery.device_name()));
 
         if (!battery.manufacturer().empty())
-            output->AddParam(IDI_BATTERY, "Manufacturer", Value::String(battery.manufacturer()));
+            output->AddParam("Manufacturer", Value::String(battery.manufacturer()));
 
         if (!battery.manufacture_date().empty())
-            output->AddParam(IDI_BATTERY, "Manufacture Date", Value::String(battery.manufacture_date()));
+            output->AddParam("Manufacture Date", Value::String(battery.manufacture_date()));
 
         if (!battery.unique_id().empty())
-            output->AddParam(IDI_BATTERY, "Unique Id", Value::String(battery.unique_id()));
+            output->AddParam("Unique Id", Value::String(battery.unique_id()));
 
         if (!battery.serial_number().empty())
-            output->AddParam(IDI_BATTERY, "Serial Number", Value::String(battery.serial_number()));
+            output->AddParam("Serial Number", Value::String(battery.serial_number()));
 
         if (!battery.temperature().empty())
-            output->AddParam(IDI_BATTERY, "Tempareture", Value::String(battery.temperature()));
+            output->AddParam("Tempareture", Value::String(battery.temperature()));
 
         if (battery.design_capacity() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Design Capacity",
+            output->AddParam("Design Capacity",
                              Value::Number(battery.design_capacity(), "mWh"));
         }
 
         if (!battery.type().empty())
-            output->AddParam(IDI_BATTERY, "Type", Value::String(battery.type()));
+            output->AddParam("Type", Value::String(battery.type()));
 
         if (battery.full_charged_capacity() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Full Charged Capacity",
+            output->AddParam("Full Charged Capacity",
                              Value::Number(battery.full_charged_capacity(), "mWh"));
         }
 
         if (battery.depreciation() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Depreciation",
+            output->AddParam("Depreciation",
                              Value::Number(battery.depreciation(), "%"));
         }
 
         if (battery.current_capacity() != 0)
         {
-            output->AddParam(IDI_BATTERY,
-                             "Current Capacity",
+            output->AddParam("Current Capacity",
                              Value::Number(battery.current_capacity(), "mWh"));
         }
 
         if (battery.voltage() != 0)
-            output->AddParam(IDI_BATTERY, "Voltage", Value::Number(battery.voltage(), "mV"));
+            output->AddParam("Voltage", Value::Number(battery.voltage(), "mV"));
 
         if (battery.state() != 0)
         {
-            Output::Group state_group(output, "State", IDI_BATTERY);
+            Output::Group state_group(output, "State");
 
             if (battery.state() & proto::PowerOptions::Battery::STATE_CHARGING)
-                output->AddParam(IDI_CHECKED, "Charging", Value::String("Yes"));
+                output->AddParam("Charging", Value::String("Yes"));
 
             if (battery.state() & proto::PowerOptions::Battery::STATE_CRITICAL)
-                output->AddParam(IDI_CHECKED, "Critical", Value::String("Yes"));
+                output->AddParam("Critical", Value::String("Yes"));
 
             if (battery.state() & proto::PowerOptions::Battery::STATE_DISCHARGING)
-                output->AddParam(IDI_CHECKED, "Discharging", Value::String("Yes"));
+                output->AddParam("Discharging", Value::String("Yes"));
 
             if (battery.state() & proto::PowerOptions::Battery::STATE_POWER_ONLINE)
-                output->AddParam(IDI_CHECKED, "Power OnLine", Value::String("Yes"));
+                output->AddParam("Power OnLine", Value::String("Yes"));
         }
     }
 }
@@ -2580,7 +2506,7 @@ void CategoryWindowsDevices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Device Name", 200)
@@ -2593,7 +2519,7 @@ void CategoryWindowsDevices::Parse(Output* output, const std::string& data)
     {
         const proto::WindowsDevices::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         if (!item.friendly_name().empty())
             output->AddValue(Value::String(item.friendly_name()));

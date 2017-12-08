@@ -42,7 +42,7 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -52,89 +52,77 @@ void CategoryNetworkCards::Parse(Output* output, const std::string& data)
     {
         const proto::NetworkCards::Item& item = message.item(index);
 
-        Output::Group group(output, item.adapter_name(), Icon());
+        Output::Group group(output, item.adapter_name());
 
-        output->AddParam(IDI_NETWORK_ADAPTER, "Connection Name", Value::String(item.connection_name()));
-        output->AddParam(IDI_NETWORK_ADAPTER, "Interface Type", Value::String(item.interface_type()));
-        output->AddParam(IDI_NETWORK_ADAPTER, "MTU", Value::Number(item.mtu(), "byte"));
+        output->AddParam("Connection Name", Value::String(item.connection_name()));
+        output->AddParam("Interface Type", Value::String(item.interface_type()));
+        output->AddParam("MTU", Value::Number(item.mtu(), "byte"));
 
-        output->AddParam(IDI_NETWORK_ADAPTER,
-                         "Connection Speed",
+        output->AddParam("Connection Speed",
                          Value::Number(item.speed() / (1000 * 1000), "Mbps"));
 
-        output->AddParam(IDI_NETWORK_ADAPTER, "MAC Address", Value::String(item.mac_address()));
+        output->AddParam("MAC Address", Value::String(item.mac_address()));
 
         if (item.ip_address_size())
         {
-            Output::Group addr_group(output, "IP Addresses", IDI_NETWORK_IP);
+            Output::Group addr_group(output, "IP Addresses");
 
             for (int addr_index = 0; addr_index < item.ip_address_size(); ++addr_index)
             {
                 const proto::NetworkCards::Item::IpAddress& address =
                     item.ip_address(addr_index);
 
-                output->AddParam(IDI_NETWORK_IP,
-                                 StringPrintf("Address #%d", addr_index + 1),
+                output->AddParam(StringPrintf("Address #%d", addr_index + 1),
                                  Value::String(address.address()));
 
-                output->AddParam(IDI_NETWORK_IP,
-                                 StringPrintf("Mask #%d", addr_index + 1),
+                output->AddParam(StringPrintf("Mask #%d", addr_index + 1),
                                  Value::String(address.mask()));
             }
         }
 
         if (item.gateway_address_size())
         {
-            Output::Group addr_group(output, "Gateway", IDI_NETWORK_IP);
+            Output::Group addr_group(output, "Gateway");
 
             for (int addr_index = 0; addr_index < item.gateway_address_size(); ++addr_index)
             {
-                output->AddParam(IDI_NETWORK_IP,
-                                 StringPrintf("Address #%d", addr_index + 1),
+                output->AddParam(StringPrintf("Address #%d", addr_index + 1),
                                  Value::String(item.gateway_address(addr_index)));
             }
         }
 
-        output->AddParam(IDI_NETWORK_ADAPTER,
-                         "DHCP Enabled",
-                         Value::Bool(item.is_dhcp_enabled()));
+        output->AddParam("DHCP Enabled", Value::Bool(item.is_dhcp_enabled()));
 
         if (item.is_dhcp_enabled() && item.dhcp_server_address_size())
         {
-            Output::Group addr_group(output, "DHCP Server", IDI_NETWORK_IP);
+            Output::Group addr_group(output, "DHCP Server");
 
             for (int addr_index = 0; addr_index < item.dhcp_server_address_size(); ++addr_index)
             {
-                output->AddParam(IDI_NETWORK_IP,
-                                 StringPrintf("Address #%d", addr_index + 1),
+                output->AddParam(StringPrintf("Address #%d", addr_index + 1),
                                  Value::String(item.dhcp_server_address(addr_index)));
             }
         }
 
         if (item.dns_server_address_size())
         {
-            Output::Group addr_group(output, "DNS Server", IDI_NETWORK_IP);
+            Output::Group addr_group(output, "DNS Server");
 
             for (int addr_index = 0; addr_index < item.dns_server_address_size(); ++addr_index)
             {
-                output->AddParam(IDI_NETWORK_IP,
-                                 StringPrintf("Address #%d", addr_index + 1),
+                output->AddParam(StringPrintf("Address #%d", addr_index + 1),
                                  Value::String(item.dns_server_address(addr_index)));
             }
         }
 
-        output->AddParam(IDI_NETWORK_ADAPTER,
-                         "WINS Enabled",
-                         Value::Bool(item.is_wins_enabled()));
+        output->AddParam("WINS Enabled", Value::Bool(item.is_wins_enabled()));
 
         if (item.is_wins_enabled())
         {
-            output->AddParam(IDI_NETWORK_IP,
-                             "Primary WINS Server",
+            output->AddParam("Primary WINS Server",
                              Value::String(item.primary_wins_server()));
 
-            output->AddParam(IDI_NETWORK_IP,
-                             "Secondary WINS Server",
+            output->AddParam("Secondary WINS Server",
                              Value::String(item.secondary_wins_server()));
         }
     }
@@ -250,7 +238,7 @@ void CategoryOpenConnections::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Process Name", 150)
@@ -265,7 +253,7 @@ void CategoryOpenConnections::Parse(Output* output, const std::string& data)
     {
         const proto::OpenConnections::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.process_name()));
 
@@ -353,7 +341,7 @@ void CategorySharedResources::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Name", 120)
@@ -367,7 +355,7 @@ void CategorySharedResources::Parse(Output* output, const std::string& data)
     {
         const proto::SharedResources::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.name()));
         output->AddValue(Value::String(TypeToString(item.type())));
@@ -511,7 +499,7 @@ void CategoryRoutes::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create().
                     AddColumn("Destonation", 150).
@@ -523,7 +511,7 @@ void CategoryRoutes::Parse(Output* output, const std::string& data)
     {
         const proto::Routes::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.destonation()));
         output->AddValue(Value::String(item.mask()));

@@ -83,11 +83,11 @@ void OutputXmlFile::EndTableGroup()
     }
 }
 
-void OutputXmlFile::StartTable(std::string_view name, TableType /* table_type */)
+void OutputXmlFile::StartTable(Category* category, TableType /* table_type */)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(
-        doc_.allocate_attribute("name", doc_.allocate_string(name.data())));
+        doc_.allocate_attribute("name", doc_.allocate_string(category->Name())));
 }
 
 void OutputXmlFile::EndTable()
@@ -117,7 +117,7 @@ void OutputXmlFile::Add(const ColumnList& column_list)
     }
 }
 
-void OutputXmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
+void OutputXmlFile::StartGroup(std::string_view name)
 {
     DCHECK(category_);
 
@@ -145,9 +145,7 @@ void OutputXmlFile::EndGroup()
     }
 }
 
-void OutputXmlFile::AddParam(Category::IconId /* icon_id */,
-                             std::string_view param,
-                             const Value& value)
+void OutputXmlFile::AddParam(std::string_view param, const Value& value)
 {
     DCHECK(category_);
 
@@ -175,7 +173,7 @@ void OutputXmlFile::AddParam(Category::IconId /* icon_id */,
     }
 }
 
-void OutputXmlFile::StartRow(Category::IconId /* icon_id */)
+void OutputXmlFile::StartRow()
 {
     DCHECK(category_);
     DCHECK(!row_);

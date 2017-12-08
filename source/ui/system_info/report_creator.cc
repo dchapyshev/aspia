@@ -40,8 +40,8 @@ void ReportCreator::ProcessNextItem()
 {
     if (iterator_stack_.empty())
     {
-        output_->StartDocument();
         iterator_stack_.emplace(list_, list_->begin());
+        output_->StartDocument();
     }
 
     CategoryList* list = iterator_stack_.top().first;

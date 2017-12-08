@@ -64,7 +64,7 @@ public:
     class Table
     {
     public:
-        Table(Output* output, std::string_view name, TableType table_type);
+        Table(Output* output, Category* category, TableType table_type);
         ~Table();
 
     private:
@@ -75,9 +75,7 @@ public:
     class Group
     {
     public:
-        Group(Output* output,
-              std::string_view name,
-              Category::IconId icon_id);
+        Group(Output* output, std::string_view name);
         ~Group();
 
     private:
@@ -88,7 +86,7 @@ public:
     class Row
     {
     public:
-        Row(Output* output, Category::IconId icon_id);
+        Row(Output* output);
         ~Row();
 
     private:
@@ -102,18 +100,16 @@ public:
     virtual void StartTableGroup(std::string_view name) = 0;
     virtual void EndTableGroup() = 0;
 
-    virtual void StartTable(std::string_view name, TableType table_type) = 0;
+    virtual void StartTable(Category* category, TableType table_type) = 0;
     virtual void EndTable() = 0;
 
     virtual void Add(const ColumnList& column_list) = 0;
 
-    virtual void StartGroup(std::string_view name, Category::IconId icon_id) = 0;
+    virtual void StartGroup(std::string_view name) = 0;
     virtual void EndGroup() = 0;
-    virtual void AddParam(Category::IconId icon_id,
-                          std::string_view param,
-                          const Value& value) = 0;
+    virtual void AddParam(std::string_view param, const Value& value) = 0;
 
-    virtual void StartRow(Category::IconId icon_id) = 0;
+    virtual void StartRow() = 0;
     virtual void EndRow() = 0;
     virtual void AddValue(const Value& value) = 0;
 };

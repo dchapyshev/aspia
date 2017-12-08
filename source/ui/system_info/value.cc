@@ -14,15 +14,63 @@ namespace aspia {
 
 Value::Value() = default;
 
-Value::Value(std::string_view value, std::string_view unit)
-    : string_(value),
+Value::Value(std::string&& value, std::string&& unit)
+    : type_(Type::STRING),
+      value_(std::move(value)),
+      unit_(std::move(unit))
+{
+    // Nothing
+}
+
+Value::Value(bool value)
+    : type_(Type::BOOL),
+      value_(value)
+{
+    // Nothing
+}
+
+Value::Value(uint32_t value, std::string_view unit)
+    : type_(Type::UINT32),
+      value_(value),
+      unit_(unit)
+{
+    // Nothing
+}
+
+Value::Value(int32_t value, std::string_view unit)
+    : type_(Type::INT32),
+      value_(value),
+      unit_(unit)
+{
+    // Nothing
+}
+
+Value::Value(uint64_t value, std::string_view unit)
+    : type_(Type::UINT64),
+      value_(value),
+      unit_(unit)
+{
+    // Nothing
+}
+
+Value::Value(int64_t value, std::string_view unit)
+    : type_(Type::INT64),
+      value_(value),
+      unit_(unit)
+{
+    // Nothing
+}
+
+Value::Value(double value, std::string_view unit)
+    : type_(Type::DOUBLE),
+      value_(value),
       unit_(unit)
 {
     // Nothing
 }
 
 Value::Value(Value&& other)
-    : string_(std::move(other.string_)),
+    : value_(std::move(other.value_)),
       unit_(std::move(other.unit_))
 {
     // Nothing
@@ -30,7 +78,7 @@ Value::Value(Value&& other)
 
 Value& Value::operator=(Value&& other)
 {
-    string_ = std::move(other.string_);
+    value_ = std::move(other.value_);
     unit_ = std::move(other.unit_);
     return *this;
 }
@@ -42,9 +90,9 @@ Value Value::Empty()
 }
 
 // static
-Value Value::String(const std::string_view value)
+Value Value::String(std::string_view value)
 {
-    return Value(value, std::string());
+    return Value(std::string(value), std::string());
 }
 
 // static
@@ -64,25 +112,19 @@ Value Value::String(const char* format, ...)
 
     va_end(args);
 
-    return Value(out, std::string());
-}
-
-// static
-Value Value::Bool(bool value, std::string_view if_true, std::string_view if_false)
-{
-    return Value(value ? if_true : if_false, std::string());
+    return Value(std::move(out), std::string());
 }
 
 // static
 Value Value::Bool(bool value)
 {
-    return Bool(value, "Yes", "No");
+    return Value(value);
 }
 
 // static
 Value Value::Number(uint32_t value, std::string_view unit)
 {
-    return Value(std::to_string(value), unit);
+    return Value(value, unit);
 }
 
 // static
@@ -94,7 +136,7 @@ Value Value::Number(uint32_t value)
 // static
 Value Value::Number(int32_t value, std::string_view unit)
 {
-    return Value(std::to_string(value), unit);
+    return Value(value, unit);
 }
 
 // static
@@ -106,7 +148,7 @@ Value Value::Number(int32_t value)
 // static
 Value Value::Number(uint64_t value, std::string_view unit)
 {
-    return Value(std::to_string(value), unit);
+    return Value(value, unit);
 }
 
 // static
@@ -118,7 +160,7 @@ Value Value::Number(uint64_t value)
 // static
 Value Value::Number(int64_t value, std::string_view unit)
 {
-    return Value(std::to_string(value), unit);
+    return Value(value, unit);
 }
 
 // static
@@ -130,7 +172,7 @@ Value Value::Number(int64_t value)
 // static
 Value Value::Number(double value, std::string_view unit)
 {
-    return Value(std::to_string(value), unit);
+    return Value(value, unit);
 }
 
 // static
@@ -139,18 +181,84 @@ Value Value::Number(double value)
     return Number(value, std::string());
 }
 
-const std::string& Value::ToString() const
+Value::Type Value::type() const
 {
-    return string_;
+    return type_;
 }
+
+std::string Value::ToString() const
+{
+    switch (type())
+    {
+        case Type::STRING:
+            return std::get<std::string>(value_);
+
+        case Type::BOOL:
+            return ToBool() ? "Yes" : "No";
+
+        case Type::UINT32:
+            return std::to_string(ToUint32());
+
+        case Type::INT32:
+            return std::to_string(ToInt32());
+
+        case Type::UINT64:
+            return std::to_string(ToUint64());
+
+        case Type::INT64:
+            return std::to_string(ToInt64());
+
+        case Type::DOUBLE:
+            return std::to_string(ToDouble());
+
+        case Type::EMPTY:
+            return std::string();
+
+        default:
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(type());
+            return std::string();
+    }
+}
+
+bool Value::ToBool() const
+{
+    DCHECK(type() == Type::BOOL);
+    return std::get<bool>(value_);
+}
+
+uint32_t Value::ToUint32() const
+{
+    DCHECK(type() == Type::UINT32);
+    return std::get<uint32_t>(value_);
+}
+
+int32_t Value::ToInt32() const
+{
+    DCHECK(type() == Type::INT32);
+    return std::get<int32_t>(value_);
+}
+
+uint64_t Value::ToUint64() const
+{
+    DCHECK(type() == Type::UINT64);
+    return std::get<uint64_t>(value_);
+}
+
+int64_t Value::ToInt64() const
+{
+    DCHECK(type() == Type::INT64);
+    return std::get<int64_t>(value_);
+}
+
+double Value::ToDouble() const
+{
+    DCHECK(type() == Type::DOUBLE);
+    return std::get<double>(value_);
+}
+
 const std::string& Value::Unit() const
 {
     return unit_;
-}
-
-bool Value::IsEmpty() const
-{
-    return string_.empty() && unit_.empty();
 }
 
 bool Value::HasUnit() const

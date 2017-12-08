@@ -125,7 +125,7 @@ void OutputHtmlFile::EndTableGroup()
         --h_level_;
 }
 
-void OutputHtmlFile::StartTable(std::string_view name, TableType /* table_type */)
+void OutputHtmlFile::StartTable(Category* category, TableType /* table_type */)
 {
     DCHECK(body_);
     DCHECK(!table_);
@@ -134,7 +134,7 @@ void OutputHtmlFile::StartTable(std::string_view name, TableType /* table_type *
         doc_.allocate_node(rapidxml::node_element,
                            doc_.allocate_string(StringPrintf("h%d", h_level_).data()));
 
-    h1->value(doc_.allocate_string(name.data()));
+    h1->value(doc_.allocate_string(category->Name()));
     body_->append_node(h1);
 
     table_ = doc_.allocate_node(rapidxml::node_element, "table");
@@ -165,7 +165,7 @@ void OutputHtmlFile::Add(const ColumnList& column_list)
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
+void OutputHtmlFile::StartGroup(std::string_view name)
 {
     DCHECK(table_);
 
@@ -193,9 +193,7 @@ void OutputHtmlFile::EndGroup()
     padding_ -= 12;
 }
 
-void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
-                              std::string_view param,
-                              const Value& value)
+void OutputHtmlFile::AddParam(std::string_view param, const Value& value)
 {
     DCHECK(table_);
 
@@ -224,7 +222,7 @@ void OutputHtmlFile::AddParam(Category::IconId /* icon_id */,
     table_->append_node(tr);
 }
 
-void OutputHtmlFile::StartRow(Category::IconId /* icon_id */)
+void OutputHtmlFile::StartRow()
 {
     DCHECK(table_);
     DCHECK(!tr_);

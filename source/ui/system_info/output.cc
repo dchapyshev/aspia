@@ -9,10 +9,12 @@
 
 namespace aspia {
 
-Output::Table::Table(Output* output, std::string_view name, TableType table_type)
+Output::Table::Table(Output* output,
+                     Category* category,
+                     TableType table_type)
     : output_(output)
 {
-    output_->StartTable(name, table_type);
+    output_->StartTable(category, table_type);
 }
 
 Output::Table::~Table()
@@ -20,10 +22,10 @@ Output::Table::~Table()
     output_->EndTable();
 }
 
-Output::Group::Group(Output* output, std::string_view name, Category::IconId icon_id)
-    : output_(std::move(output))
+Output::Group::Group(Output* output, std::string_view name)
+    : output_(output)
 {
-    output_->StartGroup(name, icon_id);
+    output_->StartGroup(name);
 }
 
 Output::Group::~Group()
@@ -31,10 +33,10 @@ Output::Group::~Group()
     output_->EndGroup();
 }
 
-Output::Row::Row(Output* output, Category::IconId icon_id)
+Output::Row::Row(Output* output)
     : output_(output)
 {
-    output_->StartRow(icon_id);
+    output_->StartRow();
 }
 
 Output::Row::~Row()

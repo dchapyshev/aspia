@@ -55,11 +55,11 @@ void OutputJsonFile::EndTableGroup()
     writer_.EndObject();
 }
 
-void OutputJsonFile::StartTable(std::string_view name, TableType table_type)
+void OutputJsonFile::StartTable(Category* category, TableType table_type)
 {
     table_type_ = table_type;
 
-    writer_.String(name.data());
+    writer_.String(category->Name());
     writer_.StartObject();
 
     if (table_type_ == TableType::LIST)
@@ -83,7 +83,7 @@ void OutputJsonFile::Add(const ColumnList& column_list)
     }
 }
 
-void OutputJsonFile::StartGroup(std::string_view name, Category::IconId /* icon_id */)
+void OutputJsonFile::StartGroup(std::string_view name)
 {
     writer_.String(name.data());
     writer_.StartObject();
@@ -94,9 +94,7 @@ void OutputJsonFile::EndGroup()
     writer_.EndObject();
 }
 
-void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
-                              std::string_view param,
-                              const Value& value)
+void OutputJsonFile::AddParam(std::string_view param, const Value& value)
 {
     if (!value.HasUnit())
     {
@@ -118,7 +116,7 @@ void OutputJsonFile::AddParam(Category::IconId /* icon_id */,
     }
 }
 
-void OutputJsonFile::StartRow(Category::IconId /* icon_id */)
+void OutputJsonFile::StartRow()
 {
     writer_.StartObject();
     column_index_ = 0;

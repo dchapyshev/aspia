@@ -236,7 +236,7 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::PARAM_VALUE);
+    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Parameter", 250)
@@ -246,44 +246,26 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
     {
         const proto::Users::Item& item = message.item(index);
 
-        Output::Group group(output, item.name(), Icon());
+        Output::Group group(output, item.name());
 
         if (!item.full_name().empty())
         {
-            output->AddParam(IDI_USER, "Full Name", Value::String(item.full_name()));
+            output->AddParam("Full Name", Value::String(item.full_name()));
         }
 
         if (!item.comment().empty())
         {
-            output->AddParam(IDI_DOCUMENT_TEXT, "Description", Value::String(item.comment()));
+            output->AddParam("Description", Value::String(item.comment()));
         }
 
-        output->AddParam(item.is_disabled() ? IDI_CHECKED : IDI_UNCHECKED,
-                         "Disabled",
-                         Value::Bool(item.is_disabled()));
-
-        output->AddParam(item.is_password_cant_change() ? IDI_CHECKED : IDI_UNCHECKED,
-                         "Password Can't Change",
-                         Value::Bool(item.is_password_cant_change()));
-
-        output->AddParam(item.is_password_expired() ? IDI_CHECKED : IDI_UNCHECKED,
-                         "Password Expired",
-                         Value::Bool(item.is_password_expired()));
-
-        output->AddParam(item.is_dont_expire_password() ? IDI_CHECKED : IDI_UNCHECKED,
-                         "Don't Expire Password",
-                         Value::Bool(item.is_dont_expire_password()));
-
-        output->AddParam(item.is_lockout() ? IDI_CHECKED : IDI_UNCHECKED,
-                         "Lockout",
-                         Value::Bool(item.is_lockout()));
-
-        output->AddParam(IDI_CLOCK, "Last Logon", Value::String(TimeToString(item.last_logon_time())));
-        output->AddParam(IDI_USER, "Number Logons", Value::Number(item.number_logons()));
-
-        output->AddParam(IDI_USER,
-                         "Bad Password Count",
-                         Value::Number(item.bad_password_count()));
+        output->AddParam("Disabled", Value::Bool(item.is_disabled()));
+        output->AddParam("Password Can't Change", Value::Bool(item.is_password_cant_change()));
+        output->AddParam("Password Expired", Value::Bool(item.is_password_expired()));
+        output->AddParam("Don't Expire Password", Value::Bool(item.is_dont_expire_password()));
+        output->AddParam("Lockout", Value::Bool(item.is_lockout()));
+        output->AddParam("Last Logon", Value::String(TimeToString(item.last_logon_time())));
+        output->AddParam("Number Logons", Value::Number(item.number_logons()));
+        output->AddParam("Bad Password Count", Value::Number(item.bad_password_count()));
     }
 }
 
@@ -337,7 +319,7 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("Group Name", 250)
@@ -347,7 +329,7 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
     {
         const proto::UserGroups::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.name()));
         output->AddValue(Value::String(item.comment()));
@@ -395,7 +377,7 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, Name(), Output::TableType::LIST);
+    Output::Table table(output, this, Output::TableType::LIST);
 
     output->Add(ColumnList::Create()
                 .AddColumn("User Name", 150)
@@ -409,7 +391,7 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
     {
         const proto::Sessions::Item& item = message.item(index);
 
-        Output::Row row(output, Icon());
+        Output::Row row(output);
 
         output->AddValue(Value::String(item.user_name()));
         output->AddValue(Value::String(item.domain_name()));
