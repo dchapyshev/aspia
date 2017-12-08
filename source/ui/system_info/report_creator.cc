@@ -65,7 +65,8 @@ void ReportCreator::ProcessNextItem()
         Category* category = iterator->get();
         DCHECK(category);
 
-        if (category->type() == Category::Type::INFO)
+        if (category->type() == Category::Type::INFO_LIST ||
+            category->type() == Category::Type::INFO_PARAM_VALUE)
         {
             CategoryInfo* category_info = category->category_info();
 
@@ -108,7 +109,8 @@ bool ReportCreator::HasCheckedItems(CategoryGroup* parent_group)
     {
         Category* category = iter->get();
 
-        if (category->type() == Category::Type::INFO)
+        if (category->type() == Category::Type::INFO_LIST ||
+            category->type() == Category::Type::INFO_PARAM_VALUE)
         {
             if (category->category_info()->IsChecked())
                 return true;
@@ -131,12 +133,16 @@ void ReportCreator::Parse(const std::string& data)
 
     Category* category = iterator->get();
     DCHECK(category);
-    DCHECK(category->type() == Category::Type::INFO);
+    DCHECK(category->type() == Category::Type::INFO_LIST ||
+           category->type() == Category::Type::INFO_PARAM_VALUE);
 
     state_change_callback_(category->category_info()->Name(), State::OUTPUT);
 
-    category->category_info()->Parse(output_, data);
-    category->category_info()->SetChecked(false);
+    {
+        Table table = Table::Create(output_, category);
+        category->category_info()->Parse(table, data);
+        category->category_info()->SetChecked(false);
+    }
 
     ++iterator;
 

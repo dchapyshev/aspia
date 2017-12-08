@@ -35,7 +35,7 @@ protected:
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(Category* category, Table::Type table_type) final;
+    void StartTable(Category* category) final;
     void EndTable() final;
     void AddColumns(const ColumnList& column_list) final;
     void StartGroup(std::string_view name) final;

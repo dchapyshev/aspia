@@ -20,17 +20,10 @@ class Category;
 class Table
 {
 public:
-    enum class Type
-    {
-        LIST        = 0,
-        PARAM_VALUE = 1
-    };
-
     Table(Table&& other);
     ~Table();
 
-    static Table List(Output* output, Category* category);
-    static Table ParamValue(Output* output, Category* category);
+    static Table Create(Output* output, Category* category);
 
     void AddColumns(const ColumnList& column_list);
 
@@ -41,7 +34,7 @@ public:
     Table& operator=(Table&& other);
 
 private:
-    Table(Output* output, Category* category, Type type);
+    Table(Output* output, Category* category);
 
     Output* output_;
 

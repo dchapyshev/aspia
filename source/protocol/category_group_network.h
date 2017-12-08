@@ -17,13 +17,13 @@ namespace aspia {
 class CategoryNetworkCards : public CategoryInfo
 {
 public:
-    CategoryNetworkCards() = default;
+    CategoryNetworkCards() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -33,13 +33,13 @@ private:
 class CategoryRasConnections : public CategoryInfo
 {
 public:
-    CategoryRasConnections() = default;
+    CategoryRasConnections() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -49,13 +49,13 @@ private:
 class CategoryOpenConnections : public CategoryInfo
 {
 public:
-    CategoryOpenConnections() = default;
+    CategoryOpenConnections() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -65,13 +65,13 @@ private:
 class CategorySharedResources : public CategoryInfo
 {
 public:
-    CategorySharedResources() = default;
+    CategorySharedResources() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -83,13 +83,13 @@ private:
 class CategoryOpenFiles : public CategoryInfo
 {
 public:
-    CategoryOpenFiles() = default;
+    CategoryOpenFiles() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -99,13 +99,13 @@ private:
 class CategoryRoutes : public CategoryInfo
 {
 public:
-    CategoryRoutes() = default;
+    CategoryRoutes() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:

@@ -16,13 +16,13 @@ namespace aspia {
 class CategoryRegistrationInformation : public CategoryInfo
 {
 public:
-    CategoryRegistrationInformation() = default;
+    CategoryRegistrationInformation() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -32,13 +32,13 @@ private:
 class CategoryTaskScheduler : public CategoryInfo
 {
 public:
-    CategoryTaskScheduler() = default;
+    CategoryTaskScheduler() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -48,13 +48,13 @@ private:
 class CategoryEnvironmentVariables : public CategoryInfo
 {
 public:
-    CategoryEnvironmentVariables() = default;
+    CategoryEnvironmentVariables() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -64,13 +64,13 @@ private:
 class CategoryEventLogsApplications : public CategoryInfo
 {
 public:
-    CategoryEventLogsApplications() = default;
+    CategoryEventLogsApplications() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -80,13 +80,13 @@ private:
 class CategoryEventLogsSecurity : public CategoryInfo
 {
 public:
-    CategoryEventLogsSecurity() = default;
+    CategoryEventLogsSecurity() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -96,13 +96,13 @@ private:
 class CategoryEventLogsSystem : public CategoryInfo
 {
 public:
-    CategoryEventLogsSystem() = default;
+    CategoryEventLogsSystem() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -124,13 +124,13 @@ private:
 class CategoryUsers : public CategoryInfo
 {
 public:
-    CategoryUsers() = default;
+    CategoryUsers() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -140,13 +140,13 @@ private:
 class CategoryUserGroups : public CategoryInfo
 {
 public:
-    CategoryUserGroups() = default;
+    CategoryUserGroups() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -156,13 +156,13 @@ private:
 class CategoryActiveSessions : public CategoryInfo
 {
 public:
-    CategoryActiveSessions() = default;
+    CategoryActiveSessions() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:

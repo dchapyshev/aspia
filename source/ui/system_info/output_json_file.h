@@ -33,7 +33,7 @@ protected:
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
     void EndTableGroup() final;
-    void StartTable(Category* category, Table::Type table_type) final;
+    void StartTable(Category* category) final;
     void EndTable() final;
     void AddColumns(const ColumnList& column_list) final;
     void StartGroup(std::string_view name) final;
@@ -52,7 +52,7 @@ private:
 
     std::vector<std::string> column_list_;
     int column_index_ = 0;
-    Table::Type table_type_;
+    Category::Type type_;
 
     DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);
 };

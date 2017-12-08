@@ -33,14 +33,12 @@ const char* CategoryPrograms::Guid() const
     return "606C70BE-0C6C-4CB6-90E6-D374760FC5EE";
 }
 
-void CategoryPrograms::Parse(Output* output, const std::string& data)
+void CategoryPrograms::Parse(Table& table, const std::string& data)
 {
     proto::Programs message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Name", 200)
@@ -99,7 +97,7 @@ const char* CategoryUpdates::Guid() const
     return "3E160E27-BE2E-45DB-8292-C3786C9533AB";
 }
 
-void CategoryUpdates::Parse(Output* /* output */, const std::string& /* data */)
+void CategoryUpdates::Parse(Table& /* table */, const std::string& /* data */)
 {
     // TODO
 }
@@ -129,14 +127,12 @@ const char* CategoryServices::Guid() const
     return "BE3143AB-67C3-4EFE-97F5-FA0C84F338C3";
 }
 
-void CategoryServices::Parse(Output* output, const std::string& data)
+void CategoryServices::Parse(Table& table, const std::string& data)
 {
     proto::Services message;
 
     if (!message.ParseFromString(data))
         return;
-
-   Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Display Name", 200)
@@ -321,14 +317,12 @@ const char* CategoryDrivers::Guid() const
     return "8278DA10-227F-4484-9D5D-9A66C294CA82";
 }
 
-void CategoryDrivers::Parse(Output* output, const std::string& data)
+void CategoryDrivers::Parse(Table& table, const std::string& data)
 {
     proto::Services message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Display Name", 200)
@@ -454,14 +448,12 @@ const char* CategoryProcesses::Guid() const
     return "14BB101B-EE61-49E6-B5B9-874C4DBEA03C";
 }
 
-void CategoryProcesses::Parse(Output* output, const std::string& data)
+void CategoryProcesses::Parse(Table& table, const std::string& data)
 {
     proto::Processes message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Process Name", 150)
@@ -530,7 +522,7 @@ const char* CategoryLicenses::Guid() const
     return "6BD88575-9D23-44BC-8A49-64D94CC3EE48";
 }
 
-void CategoryLicenses::Parse(Output* /* output */, const std::string& /* data */)
+void CategoryLicenses::Parse(Table& /* table */, const std::string& /* data */)
 {
     // TODO
 }

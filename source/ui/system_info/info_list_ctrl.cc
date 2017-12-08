@@ -81,7 +81,7 @@ void InfoListCtrl::EndTableGroup()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(Category* category, Table::Type /* table_type */)
+void InfoListCtrl::StartTable(Category* category)
 {
     CIcon icon = AtlLoadIconImage(category->Icon(),
                                   LR_CREATEDIBSECTION,

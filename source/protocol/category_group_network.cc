@@ -35,14 +35,12 @@ const char* CategoryNetworkCards::Guid() const
     return "98D665E9-0F78-4054-BDF3-A51E950A8618";
 }
 
-void CategoryNetworkCards::Parse(Output* output, const std::string& data)
+void CategoryNetworkCards::Parse(Table& table, const std::string& data)
 {
     proto::NetworkCards message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::ParamValue(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Parameter", 250)
@@ -195,7 +193,7 @@ const char* CategoryRasConnections::Guid() const
     return "E0A43CFD-3A97-4577-B3FB-3B542C0729F7";
 }
 
-void CategoryRasConnections::Parse(Output* /* output */, const std::string& /* data */)
+void CategoryRasConnections::Parse(Table& /* table */, const std::string& /* data */)
 {
     // TODO
 }
@@ -225,14 +223,12 @@ const char* CategoryOpenConnections::Guid() const
     return "1A9CBCBD-5623-4CEC-B58C-BD7BD8FAE622";
 }
 
-void CategoryOpenConnections::Parse(Output* output, const std::string& data)
+void CategoryOpenConnections::Parse(Table& table, const std::string& data)
 {
     proto::OpenConnections message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Process Name", 150)
@@ -328,14 +324,12 @@ const char* CategorySharedResources::Guid() const
     return "9219D538-E1B8-453C-9298-61D5B80C4130";
 }
 
-void CategorySharedResources::Parse(Output* output, const std::string& data)
+void CategorySharedResources::Parse(Table& table, const std::string& data)
 {
     proto::SharedResources message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Name", 120)
@@ -456,7 +450,7 @@ const char* CategoryOpenFiles::Guid() const
     return "EAE638B9-CCF6-442C-84A1-B0901A64DA3D";
 }
 
-void CategoryOpenFiles::Parse(Output* /* output */, const std::string& /* data */)
+void CategoryOpenFiles::Parse(Table& /* table */, const std::string& /* data */)
 {
     // TODO
 }
@@ -486,14 +480,12 @@ const char* CategoryRoutes::Guid() const
     return "84184CEB-E232-4CA7-BCAC-E156F1E6DDCB";
 }
 
-void CategoryRoutes::Parse(Output* output, const std::string& data)
+void CategoryRoutes::Parse(Table& table, const std::string& data)
 {
     proto::Routes message;
 
     if (!message.ParseFromString(data))
         return;
-
-    Table table = Table::List(output, this);
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Destonation", 150)

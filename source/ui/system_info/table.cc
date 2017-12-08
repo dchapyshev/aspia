@@ -12,11 +12,12 @@
 
 namespace aspia {
 
-Table::Table(Output* output, Category* category, Type type)
+Table::Table(Output* output, Category* category)
     : output_(output)
 {
     DCHECK(output_);
-    output_->StartTable(category, type);
+    DCHECK(category);
+    output_->StartTable(category);
 }
 
 Table::Table(Table&& other)
@@ -40,15 +41,9 @@ Table& Table::operator=(Table&& other)
 }
 
 // static
-Table Table::List(Output* output, Category* category)
+Table Table::Create(Output* output, Category* category)
 {
-    return Table(output, category, Type::LIST);
-}
-
-// static
-Table Table::ParamValue(Output* output, Category* category)
-{
-    return Table(output, category, Type::PARAM_VALUE);
+    return Table(output, category);
 }
 
 void Table::AddColumns(const ColumnList& column_list)

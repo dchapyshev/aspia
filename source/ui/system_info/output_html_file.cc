@@ -125,7 +125,7 @@ void OutputHtmlFile::EndTableGroup()
         --h_level_;
 }
 
-void OutputHtmlFile::StartTable(Category* category, Table::Type /* table_type */)
+void OutputHtmlFile::StartTable(Category* category)
 {
     DCHECK(body_);
     DCHECK(!table_);

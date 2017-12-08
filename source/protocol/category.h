@@ -8,6 +8,8 @@
 #ifndef _ASPIA_PROTOCOL__CATEGORY_H
 #define _ASPIA_PROTOCOL__CATEGORY_H
 
+#include "ui/system_info/table.h"
+
 #include <list>
 #include <map>
 #include <memory>
@@ -25,7 +27,7 @@ using CategoryMap = std::map<std::string, std::unique_ptr<CategoryInfo>>;
 class Category
 {
 public:
-    enum class Type { GROUP, INFO };
+    enum class Type { GROUP, INFO_LIST, INFO_PARAM_VALUE };
     using IconId = int;
 
     virtual ~Category() = default;
@@ -65,14 +67,14 @@ public:
     virtual ~CategoryInfo() = default;
 
     virtual const char* Guid() const = 0;
-    virtual void Parse(Output* output, const std::string& data) = 0;
+    virtual void Parse(Table& table, const std::string& data) = 0;
     virtual std::string Serialize() = 0;
 
     bool IsChecked() const { return checked_; }
     void SetChecked(bool value) { checked_ = value; }
 
 protected:
-    CategoryInfo();
+    CategoryInfo(Type type);
 
 private:
     bool checked_ = false;

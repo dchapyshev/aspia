@@ -17,13 +17,13 @@ namespace aspia {
 class CategoryPrograms : public CategoryInfo
 {
 public:
-    CategoryPrograms() = default;
+    CategoryPrograms() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -33,13 +33,13 @@ private:
 class CategoryUpdates : public CategoryInfo
 {
 public:
-    CategoryUpdates() = default;
+    CategoryUpdates() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -49,13 +49,13 @@ private:
 class CategoryServices : public CategoryInfo
 {
 public:
-    CategoryServices() = default;
+    CategoryServices() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
     static const char* StatusToString(proto::Services::Item::Status status);
@@ -68,13 +68,13 @@ private:
 class CategoryDrivers : public CategoryInfo
 {
 public:
-    CategoryDrivers() = default;
+    CategoryDrivers() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -84,13 +84,13 @@ private:
 class CategoryProcesses : public CategoryInfo
 {
 public:
-    CategoryProcesses() = default;
+    CategoryProcesses() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -100,13 +100,13 @@ private:
 class CategoryLicenses : public CategoryInfo
 {
 public:
-    CategoryLicenses() = default;
+    CategoryLicenses() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:

@@ -183,7 +183,8 @@ void CategorySelectDialog::SetCheckStateForItem(
     {
         treeview.SetCheckState(item, state);
 
-        if (category->type() == Category::Type::INFO)
+        if (category->type() == Category::Type::INFO_LIST ||
+            category->type() == Category::Type::INFO_PARAM_VALUE)
         {
             category->category_info()->SetChecked(!!state);
         }

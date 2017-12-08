@@ -30,7 +30,7 @@ CategoryGroup* Category::category_group()
 
 CategoryInfo* Category::category_info()
 {
-    DCHECK(type() == Type::INFO);
+    DCHECK(type() == Type::INFO_LIST || type() == Type::INFO_PARAM_VALUE);
     return reinterpret_cast<CategoryInfo*>(this);
 }
 
@@ -59,9 +59,9 @@ CategoryList* CategoryGroup::mutable_child_list()
 // CategoryInfo
 //
 
-CategoryInfo::CategoryInfo() : Category(Type::INFO)
+CategoryInfo::CategoryInfo(Type type) : Category(type)
 {
-    // Nothing
+    DCHECK(type == Type::INFO_LIST || type == Type::INFO_PARAM_VALUE);
 }
 
 //

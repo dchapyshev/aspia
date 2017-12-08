@@ -47,7 +47,6 @@
 // EndDocument()
 //
 
-#include "base/macros.h"
 #include "protocol/category.h"
 #include "ui/system_info/column_list.h"
 #include "ui/system_info/group.h"
@@ -74,7 +73,7 @@ private:
     virtual void StartTableGroup(std::string_view name) = 0;
     virtual void EndTableGroup() = 0;
 
-    virtual void StartTable(Category* category, Table::Type table_type) = 0;
+    virtual void StartTable(Category* category) = 0;
     virtual void EndTable() = 0;
 
     virtual void AddColumns(const ColumnList& column_list) = 0;

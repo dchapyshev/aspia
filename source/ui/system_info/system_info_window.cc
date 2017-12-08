@@ -279,7 +279,8 @@ LRESULT SystemInfoWindow::OnSaveSelectedButton(
     {
         for (auto& category : category_list)
         {
-            if (category->type() == Category::Type::INFO)
+            if (category->type() == Category::Type::INFO_LIST ||
+                category->type() == Category::Type::INFO_PARAM_VALUE)
             {
                 category->category_info()->SetChecked(checked);
             }
@@ -302,7 +303,8 @@ LRESULT SystemInfoWindow::OnSaveAllButton(
     {
         for (auto& category : category_list)
         {
-            if (category->type() == Category::Type::INFO)
+            if (category->type() == Category::Type::INFO_LIST ||
+                category->type() == Category::Type::INFO_PARAM_VALUE)
             {
                 category->category_info()->SetChecked(checked);
             }
@@ -324,7 +326,11 @@ LRESULT SystemInfoWindow::OnSaveCurrentButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     Category* category = tree_.GetItemCategory(tree_.GetSelectedItem());
-    if (category && category->type() == Category::Type::INFO)
+    if (!category)
+        return 0;
+
+    if (category->type() == Category::Type::INFO_LIST ||
+        category->type() == Category::Type::INFO_PARAM_VALUE)
     {
         category->category_info()->SetChecked(true);
         Save(&category_list_);
@@ -556,7 +562,8 @@ void SystemInfoWindow::Refresh(Category* category)
     statusbar_.SetText(0, UNICODEfromUTF8(category->Name()).c_str());
     statusbar_.SetIcon(0, statusbar_icon_);
 
-    if (category->type() == Category::Type::INFO)
+    if (category->type() == Category::Type::INFO_LIST ||
+        category->type() == Category::Type::INFO_PARAM_VALUE)
     {
         CategoryInfo* category_info = category->category_info();
 

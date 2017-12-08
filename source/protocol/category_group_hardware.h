@@ -16,13 +16,13 @@ namespace aspia {
 class CategoryDmiBios : public CategoryInfo
 {
 public:
-    CategoryDmiBios() = default;
+    CategoryDmiBios() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -32,13 +32,13 @@ private:
 class CategoryDmiSystem : public CategoryInfo
 {
 public:
-    CategoryDmiSystem() = default;
+    CategoryDmiSystem() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -48,13 +48,13 @@ private:
 class CategoryDmiBaseboard : public CategoryInfo
 {
 public:
-    CategoryDmiBaseboard() = default;
+    CategoryDmiBaseboard() : CategoryInfo((Type::INFO_PARAM_VALUE)) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -64,13 +64,13 @@ private:
 class CategoryDmiChassis : public CategoryInfo
 {
 public:
-    CategoryDmiChassis() = default;
+    CategoryDmiChassis() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -80,13 +80,13 @@ private:
 class CategoryDmiCaches : public CategoryInfo
 {
 public:
-    CategoryDmiCaches() = default;
+    CategoryDmiCaches() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -96,13 +96,13 @@ private:
 class CategoryDmiProcessors : public CategoryInfo
 {
 public:
-    CategoryDmiProcessors() = default;
+    CategoryDmiProcessors() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -112,13 +112,13 @@ private:
 class CategoryDmiMemoryDevices : public CategoryInfo
 {
 public:
-    CategoryDmiMemoryDevices() = default;
+    CategoryDmiMemoryDevices() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -128,13 +128,13 @@ private:
 class CategoryDmiSystemSlots : public CategoryInfo
 {
 public:
-    CategoryDmiSystemSlots() = default;
+    CategoryDmiSystemSlots() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -144,13 +144,13 @@ private:
 class CategoryDmiPortConnectors : public CategoryInfo
 {
 public:
-    CategoryDmiPortConnectors() = default;
+    CategoryDmiPortConnectors() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -160,13 +160,13 @@ private:
 class CategoryDmiOnboardDevices : public CategoryInfo
 {
 public:
-    CategoryDmiOnboardDevices() = default;
+    CategoryDmiOnboardDevices() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -176,13 +176,13 @@ private:
 class CategoryDmiBuildinPointing : public CategoryInfo
 {
 public:
-    CategoryDmiBuildinPointing() = default;
+    CategoryDmiBuildinPointing() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -192,13 +192,13 @@ private:
 class CategoryDmiPortableBattery : public CategoryInfo
 {
 public:
-    CategoryDmiPortableBattery() = default;
+    CategoryDmiPortableBattery() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -220,13 +220,13 @@ private:
 class CategoryCPU : public CategoryInfo
 {
 public:
-    CategoryCPU() = default;
+    CategoryCPU() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -236,13 +236,13 @@ private:
 class CategoryOpticalDrives : public CategoryInfo
 {
 public:
-    CategoryOpticalDrives() = default;
+    CategoryOpticalDrives() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -252,13 +252,13 @@ private:
 class CategoryATA : public CategoryInfo
 {
 public:
-    CategoryATA() = default;
+    CategoryATA() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -268,13 +268,13 @@ private:
 class CategorySMART : public CategoryInfo
 {
 public:
-    CategorySMART() = default;
+    CategorySMART() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -296,13 +296,13 @@ private:
 class CategoryVideoAdapters : public CategoryInfo
 {
 public:
-    CategoryVideoAdapters() = default;
+    CategoryVideoAdapters() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -312,13 +312,13 @@ private:
 class CategoryMonitor : public CategoryInfo
 {
 public:
-    CategoryMonitor() = default;
+    CategoryMonitor() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -340,13 +340,13 @@ private:
 class CategoryPrinters : public CategoryInfo
 {
 public:
-    CategoryPrinters() = default;
+    CategoryPrinters() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -356,13 +356,13 @@ private:
 class CategoryPowerOptions : public CategoryInfo
 {
 public:
-    CategoryPowerOptions() = default;
+    CategoryPowerOptions() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:
@@ -372,13 +372,13 @@ private:
 class CategoryWindowsDevices : public CategoryInfo
 {
 public:
-    CategoryWindowsDevices() = default;
+    CategoryWindowsDevices() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
 
     const char* Guid() const final;
-    void Parse(Output* output, const std::string& data) final;
+    void Parse(Table& table, const std::string& data) final;
     std::string Serialize() final;
 
 private:

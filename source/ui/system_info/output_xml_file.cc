@@ -83,7 +83,7 @@ void OutputXmlFile::EndTableGroup()
     }
 }
 
-void OutputXmlFile::StartTable(Category* category, Table::Type /* table_type */)
+void OutputXmlFile::StartTable(Category* category)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(
