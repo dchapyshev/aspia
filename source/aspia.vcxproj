@@ -212,6 +212,7 @@
     <ClCompile Include="ui\system_info\category_select_dialog.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
     <ClCompile Include="ui\system_info\column_list.cc" />
+    <ClCompile Include="ui\system_info\group.cc" />
     <ClCompile Include="ui\system_info\info_list_ctrl.cc" />
     <ClCompile Include="ui\system_info\output.cc" />
     <ClCompile Include="ui\system_info\output_html_file.cc" />
@@ -220,8 +221,10 @@
     <ClCompile Include="ui\system_info\report_creator.cc" />
     <ClCompile Include="ui\system_info\report_creator_proxy.cc" />
     <ClCompile Include="ui\system_info\report_progress_dialog.cc" />
+    <ClCompile Include="ui\system_info\row.cc" />
     <ClCompile Include="ui\system_info\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info\system_info_window.cc" />
+    <ClCompile Include="ui\system_info\table.cc" />
     <ClCompile Include="ui\system_info\value.cc" />
     <ClCompile Include="ui\ui_main.cc" />
     <ClCompile Include="ui\users_dialog.cc" />
@@ -454,6 +457,7 @@
     <ClInclude Include="ui\system_info\category_select_dialog.h" />
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
     <ClInclude Include="ui\system_info\column_list.h" />
+    <ClInclude Include="ui\system_info\group.h" />
     <ClInclude Include="ui\system_info\info_list_ctrl.h" />
     <ClInclude Include="ui\system_info\output.h" />
     <ClInclude Include="ui\system_info\output_html_file.h" />
@@ -462,8 +466,10 @@
     <ClInclude Include="ui\system_info\report_creator.h" />
     <ClInclude Include="ui\system_info\report_creator_proxy.h" />
     <ClInclude Include="ui\system_info\report_progress_dialog.h" />
+    <ClInclude Include="ui\system_info\row.h" />
     <ClInclude Include="ui\system_info\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info\system_info_window.h" />
+    <ClInclude Include="ui\system_info\table.h" />
     <ClInclude Include="ui\system_info\value.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\users_dialog.h" />

@@ -83,7 +83,7 @@ void OutputXmlFile::EndTableGroup()
     }
 }
 
-void OutputXmlFile::StartTable(Category* category, TableType /* table_type */)
+void OutputXmlFile::StartTable(Category* category, Table::Type /* table_type */)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(
@@ -107,7 +107,7 @@ void OutputXmlFile::EndTable()
     column_list_.clear();
 }
 
-void OutputXmlFile::Add(const ColumnList& column_list)
+void OutputXmlFile::AddColumns(const ColumnList& column_list)
 {
     DCHECK(category_);
 

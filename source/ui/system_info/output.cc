@@ -9,39 +9,6 @@
 
 namespace aspia {
 
-Output::Table::Table(Output* output,
-                     Category* category,
-                     TableType table_type)
-    : output_(output)
-{
-    output_->StartTable(category, table_type);
-}
 
-Output::Table::~Table()
-{
-    output_->EndTable();
-}
-
-Output::Group::Group(Output* output, std::string_view name)
-    : output_(output)
-{
-    output_->StartGroup(name);
-}
-
-Output::Group::~Group()
-{
-    output_->EndGroup();
-}
-
-Output::Row::Row(Output* output)
-    : output_(output)
-{
-    output_->StartRow();
-}
-
-Output::Row::~Row()
-{
-    output_->EndRow();
-}
 
 } // namespace aspia

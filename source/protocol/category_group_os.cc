@@ -236,36 +236,32 @@ void CategoryUsers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::PARAM_VALUE);
+    Table table = Table::ParamValue(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Parameter", 250)
-                .AddColumn("Value", 250));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Parameter", 250)
+                     .AddColumn("Value", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Users::Item& item = message.item(index);
 
-        Output::Group group(output, item.name());
+        Group group = table.AddGroup(item.name());
 
         if (!item.full_name().empty())
-        {
-            output->AddParam("Full Name", Value::String(item.full_name()));
-        }
+            group.AddParam("Full Name", Value::String(item.full_name()));
 
         if (!item.comment().empty())
-        {
-            output->AddParam("Description", Value::String(item.comment()));
-        }
+            group.AddParam("Description", Value::String(item.comment()));
 
-        output->AddParam("Disabled", Value::Bool(item.is_disabled()));
-        output->AddParam("Password Can't Change", Value::Bool(item.is_password_cant_change()));
-        output->AddParam("Password Expired", Value::Bool(item.is_password_expired()));
-        output->AddParam("Don't Expire Password", Value::Bool(item.is_dont_expire_password()));
-        output->AddParam("Lockout", Value::Bool(item.is_lockout()));
-        output->AddParam("Last Logon", Value::String(TimeToString(item.last_logon_time())));
-        output->AddParam("Number Logons", Value::Number(item.number_logons()));
-        output->AddParam("Bad Password Count", Value::Number(item.bad_password_count()));
+        group.AddParam("Disabled", Value::Bool(item.is_disabled()));
+        group.AddParam("Password Can't Change", Value::Bool(item.is_password_cant_change()));
+        group.AddParam("Password Expired", Value::Bool(item.is_password_expired()));
+        group.AddParam("Don't Expire Password", Value::Bool(item.is_dont_expire_password()));
+        group.AddParam("Lockout", Value::Bool(item.is_lockout()));
+        group.AddParam("Last Logon", Value::String(TimeToString(item.last_logon_time())));
+        group.AddParam("Number Logons", Value::Number(item.number_logons()));
+        group.AddParam("Bad Password Count", Value::Number(item.bad_password_count()));
     }
 }
 
@@ -319,20 +315,19 @@ void CategoryUserGroups::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+    Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Group Name", 250)
-                .AddColumn("Description", 250));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Group Name", 250)
+                     .AddColumn("Description", 250));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::UserGroups::Item& item = message.item(index);
 
-        Output::Row row(output);
-
-        output->AddValue(Value::String(item.name()));
-        output->AddValue(Value::String(item.comment()));
+        Row row = table.AddRow();
+        row.AddValue(Value::String(item.name()));
+        row.AddValue(Value::String(item.comment()));
     }
 }
 
@@ -377,28 +372,27 @@ void CategoryActiveSessions::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+    Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("User Name", 150)
-                .AddColumn("Domain", 100)
-                .AddColumn("ID", 50)
-                .AddColumn("State", 80)
-                .AddColumn("Client Name", 100)
-                .AddColumn("Logon Type", 100));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("User Name", 150)
+                     .AddColumn("Domain", 100)
+                     .AddColumn("ID", 50)
+                     .AddColumn("State", 80)
+                     .AddColumn("Client Name", 100)
+                     .AddColumn("Logon Type", 100));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Sessions::Item& item = message.item(index);
 
-        Output::Row row(output);
-
-        output->AddValue(Value::String(item.user_name()));
-        output->AddValue(Value::String(item.domain_name()));
-        output->AddValue(Value::Number(item.session_id()));
-        output->AddValue(Value::String(item.connect_state()));
-        output->AddValue(Value::String(item.client_name()));
-        output->AddValue(Value::String(item.winstation_name()));
+        Row row = table.AddRow();
+        row.AddValue(Value::String(item.user_name()));
+        row.AddValue(Value::String(item.domain_name()));
+        row.AddValue(Value::Number(item.session_id()));
+        row.AddValue(Value::String(item.connect_state()));
+        row.AddValue(Value::String(item.client_name()));
+        row.AddValue(Value::String(item.winstation_name()));
     }
 }
 

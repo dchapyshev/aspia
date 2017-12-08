@@ -55,27 +55,27 @@ void OutputJsonFile::EndTableGroup()
     writer_.EndObject();
 }
 
-void OutputJsonFile::StartTable(Category* category, TableType table_type)
+void OutputJsonFile::StartTable(Category* category, Table::Type table_type)
 {
     table_type_ = table_type;
 
     writer_.String(category->Name());
     writer_.StartObject();
 
-    if (table_type_ == TableType::LIST)
+    if (table_type_ == Table::Type::LIST)
         writer_.StartArray();
 }
 
 void OutputJsonFile::EndTable()
 {
-    if (table_type_ == TableType::LIST)
+    if (table_type_ == Table::Type::LIST)
         writer_.EndArray();
 
     writer_.EndObject();
     column_list_.clear();
 }
 
-void OutputJsonFile::Add(const ColumnList& column_list)
+void OutputJsonFile::AddColumns(const ColumnList& column_list)
 {
     for (const auto& column : column_list)
     {

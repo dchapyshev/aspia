@@ -81,7 +81,7 @@ void InfoListCtrl::EndTableGroup()
     // Nothing
 }
 
-void InfoListCtrl::StartTable(Category* category, TableType /* table_type */)
+void InfoListCtrl::StartTable(Category* category, Table::Type /* table_type */)
 {
     CIcon icon = AtlLoadIconImage(category->Icon(),
                                   LR_CREATEDIBSECTION,
@@ -118,7 +118,7 @@ void InfoListCtrl::EndTable()
     // Nothing
 }
 
-void InfoListCtrl::Add(const ColumnList& column_list)
+void InfoListCtrl::AddColumns(const ColumnList& column_list)
 {
     current_column_ = 0;
     column_count_ = 0;

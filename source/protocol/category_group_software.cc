@@ -40,26 +40,25 @@ void CategoryPrograms::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+    Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Name", 200)
-                .AddColumn("Version", 100)
-                .AddColumn("Publisher", 100)
-                .AddColumn("Install Date", 80)
-                .AddColumn("Install Location", 150));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Name", 200)
+                     .AddColumn("Version", 100)
+                     .AddColumn("Publisher", 100)
+                     .AddColumn("Install Date", 80)
+                     .AddColumn("Install Location", 150));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Programs::Item& item = message.item(index);
 
-        Output::Row row(output);
-
-        output->AddValue(Value::String(item.name()));
-        output->AddValue(Value::String(item.version()));
-        output->AddValue(Value::String(item.publisher()));
-        output->AddValue(Value::String(item.install_date()));
-        output->AddValue(Value::String(item.install_location()));
+        Row row = table.AddRow();
+        row.AddValue(Value::String(item.name()));
+        row.AddValue(Value::String(item.version()));
+        row.AddValue(Value::String(item.publisher()));
+        row.AddValue(Value::String(item.install_date()));
+        row.AddValue(Value::String(item.install_location()));
     }
 }
 
@@ -137,30 +136,29 @@ void CategoryServices::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+   Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Display Name", 200)
-                .AddColumn("Name", 200)
-                .AddColumn("Description", 200)
-                .AddColumn("Status", 200)
-                .AddColumn("Startup Type", 200)
-                .AddColumn("Account", 200)
-                .AddColumn("Executable File", 200));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Display Name", 200)
+                     .AddColumn("Name", 200)
+                     .AddColumn("Description", 200)
+                     .AddColumn("Status", 200)
+                     .AddColumn("Startup Type", 200)
+                     .AddColumn("Account", 200)
+                     .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Services::Item& item = message.item(index);
 
-        Output::Row row(output);
-
-        output->AddValue(Value::String(item.display_name()));
-        output->AddValue(Value::String(item.name()));
-        output->AddValue(Value::String(item.description()));
-        output->AddValue(Value::String(StatusToString(item.status())));
-        output->AddValue(Value::String(StartupTypeToString(item.startup_type())));
-        output->AddValue(Value::String(item.start_name()));
-        output->AddValue(Value::String(item.binary_path()));
+        Row row = table.AddRow();
+        row.AddValue(Value::String(item.display_name()));
+        row.AddValue(Value::String(item.name()));
+        row.AddValue(Value::String(item.description()));
+        row.AddValue(Value::String(StatusToString(item.status())));
+        row.AddValue(Value::String(StartupTypeToString(item.startup_type())));
+        row.AddValue(Value::String(item.start_name()));
+        row.AddValue(Value::String(item.binary_path()));
     }
 }
 
@@ -330,28 +328,27 @@ void CategoryDrivers::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+    Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Display Name", 200)
-                .AddColumn("Name", 200)
-                .AddColumn("Description", 200)
-                .AddColumn("Status", 200)
-                .AddColumn("Startup Type", 200)
-                .AddColumn("Executable File", 200));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Display Name", 200)
+                     .AddColumn("Name", 200)
+                     .AddColumn("Description", 200)
+                     .AddColumn("Status", 200)
+                     .AddColumn("Startup Type", 200)
+                     .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Services::Item& item = message.item(index);
 
-        Output::Row row(output);
-
-        output->AddValue(Value::String(item.display_name()));
-        output->AddValue(Value::String(item.name()));
-        output->AddValue(Value::String(item.description()));
-        output->AddValue(Value::String(CategoryServices::StatusToString(item.status())));
-        output->AddValue(Value::String(CategoryServices::StartupTypeToString(item.startup_type())));
-        output->AddValue(Value::String(item.binary_path()));
+        Row row = table.AddRow();
+        row.AddValue(Value::String(item.display_name()));
+        row.AddValue(Value::String(item.name()));
+        row.AddValue(Value::String(item.description()));
+        row.AddValue(Value::String(CategoryServices::StatusToString(item.status())));
+        row.AddValue(Value::String(CategoryServices::StartupTypeToString(item.startup_type())));
+        row.AddValue(Value::String(item.binary_path()));
     }
 }
 
@@ -464,43 +461,35 @@ void CategoryProcesses::Parse(Output* output, const std::string& data)
     if (!message.ParseFromString(data))
         return;
 
-    Output::Table table(output, this, Output::TableType::LIST);
+    Table table = Table::List(output, this);
 
-    output->Add(ColumnList::Create()
-                .AddColumn("Process Name", 150)
-                .AddColumn("File Path", 200)
-                .AddColumn("Used Memory", 80)
-                .AddColumn("Used Swap", 80)
-                .AddColumn("Description", 150));
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Process Name", 150)
+                     .AddColumn("File Path", 200)
+                     .AddColumn("Used Memory", 80)
+                     .AddColumn("Used Swap", 80)
+                     .AddColumn("Description", 150));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
         const proto::Processes::Item& item = message.item(index);
 
-        Output::Row row(output);
+        Row row = table.AddRow();
 
-        output->AddValue(Value::String(item.process_name()));
-        output->AddValue(Value::String(item.file_path()));
+        row.AddValue(Value::String(item.process_name()));
+        row.AddValue(Value::String(item.file_path()));
 
         if (item.used_memory() != 0)
-        {
-            output->AddValue(Value::Number(item.used_memory() / 1024, "kB"));
-        }
+            row.AddValue(Value::Number(item.used_memory() / 1024, "kB"));
         else
-        {
-            output->AddValue(Value::Empty());
-        }
+            row.AddValue(Value::Empty());
 
         if (item.used_swap() != 0)
-        {
-            output->AddValue(Value::Number(item.used_swap() / 1024, "kB"));
-        }
+            row.AddValue(Value::Number(item.used_swap() / 1024, "kB"));
         else
-        {
-            output->AddValue(Value::Empty());
-        }
+            row.AddValue(Value::Empty());
 
-        output->AddValue(Value::String(item.description()));
+        row.AddValue(Value::String(item.description()));
     }
 }
 

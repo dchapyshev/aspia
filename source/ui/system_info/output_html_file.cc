@@ -125,7 +125,7 @@ void OutputHtmlFile::EndTableGroup()
         --h_level_;
 }
 
-void OutputHtmlFile::StartTable(Category* category, TableType /* table_type */)
+void OutputHtmlFile::StartTable(Category* category, Table::Type /* table_type */)
 {
     DCHECK(body_);
     DCHECK(!table_);
@@ -149,7 +149,7 @@ void OutputHtmlFile::EndTable()
     table_ = nullptr;
 }
 
-void OutputHtmlFile::Add(const ColumnList& column_list)
+void OutputHtmlFile::AddColumns(const ColumnList& column_list)
 {
     DCHECK(table_);
     tr_ = doc_.allocate_node(rapidxml::node_element, "tr");

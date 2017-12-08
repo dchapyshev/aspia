@@ -673,6 +673,15 @@
     <ClCompile Include="ui\system_info\column_list.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="ui\system_info\group.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\table.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\row.cc">
+      <Filter>ui\system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1389,6 +1398,15 @@
       <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\column_list.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\group.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\table.h">
+      <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\row.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>

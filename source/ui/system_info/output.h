@@ -50,7 +50,10 @@
 #include "base/macros.h"
 #include "protocol/category.h"
 #include "ui/system_info/column_list.h"
+#include "ui/system_info/group.h"
+#include "ui/system_info/table.h"
 #include "ui/system_info/value.h"
+#include "ui/system_info/row.h"
 
 namespace aspia {
 
@@ -59,40 +62,11 @@ class Output
 public:
     virtual ~Output() = default;
 
-    enum class TableType { LIST, PARAM_VALUE };
-
-    class Table
-    {
-    public:
-        Table(Output* output, Category* category, TableType table_type);
-        ~Table();
-
-    private:
-        Output* output_;
-        DISALLOW_COPY_AND_ASSIGN(Table);
-    };
-
-    class Group
-    {
-    public:
-        Group(Output* output, std::string_view name);
-        ~Group();
-
-    private:
-        Output* output_;
-        DISALLOW_COPY_AND_ASSIGN(Group);
-    };
-
-    class Row
-    {
-    public:
-        Row(Output* output);
-        ~Row();
-
-    private:
-        Output* output_;
-        DISALLOW_COPY_AND_ASSIGN(Row);
-    };
+private:
+    friend class ReportCreator;
+    friend class Table;
+    friend class Group;
+    friend class Row;
 
     virtual void StartDocument() = 0;
     virtual void EndDocument() = 0;
@@ -100,10 +74,10 @@ public:
     virtual void StartTableGroup(std::string_view name) = 0;
     virtual void EndTableGroup() = 0;
 
-    virtual void StartTable(Category* category, TableType table_type) = 0;
+    virtual void StartTable(Category* category, Table::Type table_type) = 0;
     virtual void EndTable() = 0;
 
-    virtual void Add(const ColumnList& column_list) = 0;
+    virtual void AddColumns(const ColumnList& column_list) = 0;
 
     virtual void StartGroup(std::string_view name) = 0;
     virtual void EndGroup() = 0;
