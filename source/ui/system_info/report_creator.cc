@@ -140,7 +140,10 @@ void ReportCreator::Parse(const std::string& data)
 
     {
         Table table = Table::Create(output_, category);
-        category_info->Parse(table, data);
+
+        if (!data.empty())
+            category_info->Parse(table, data);
+
         category_info->SetChecked(false);
     }
 
