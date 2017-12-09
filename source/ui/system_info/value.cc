@@ -12,8 +12,6 @@
 
 namespace aspia {
 
-Value::Value() = default;
-
 Value::Value(std::string&& value, std::string&& unit)
     : type_(Type::STRING),
       value_(std::move(value)),
@@ -70,7 +68,8 @@ Value::Value(double value, std::string_view unit)
 }
 
 Value::Value(Value&& other)
-    : value_(std::move(other.value_)),
+    : type_(other.type_),
+      value_(std::move(other.value_)),
       unit_(std::move(other.unit_))
 {
     // Nothing
@@ -78,15 +77,16 @@ Value::Value(Value&& other)
 
 Value& Value::operator=(Value&& other)
 {
+    type_ = other.type_;
     value_ = std::move(other.value_);
     unit_ = std::move(other.unit_);
     return *this;
 }
 
 // static
-Value Value::Empty()
+Value Value::EmptyString()
 {
-    return Value();
+    return Value(std::string(), std::string());
 }
 
 // static
@@ -210,9 +210,6 @@ std::string Value::ToString() const
 
         case Type::DOUBLE:
             return std::to_string(ToDouble());
-
-        case Type::EMPTY:
-            return std::string();
 
         default:
             DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(type());

@@ -22,7 +22,7 @@ public:
     Value(Value&& other);
     Value& operator=(Value&& other);
 
-    static Value Empty();
+    static Value EmptyString();
     static Value String(const std::string_view value);
     static Value String(const char* format, ...);
     static Value Bool(bool value);
@@ -39,14 +39,13 @@ public:
 
     enum class Type
     {
-        EMPTY  = 0,
-        STRING = 1,
-        BOOL   = 2,
-        UINT32 = 3,
-        INT32  = 4,
-        UINT64 = 5,
-        INT64  = 6,
-        DOUBLE = 7
+        STRING = 0,
+        BOOL   = 1,
+        UINT32 = 2,
+        INT32  = 3,
+        UINT64 = 4,
+        INT64  = 5,
+        DOUBLE = 6
     };
 
     Type type() const;
@@ -61,7 +60,6 @@ public:
     bool HasUnit() const;
 
 private:
-    Value();
     Value(std::string&& value, std::string&& unit);
     Value(bool value);
     Value(uint32_t value, std::string_view unit);
@@ -73,7 +71,7 @@ private:
     using ValueType =
         std::variant<std::string, bool, uint32_t, int32_t, uint64_t, int64_t, double>;
 
-    const Type type_ = Type::EMPTY;
+    Type type_;
     ValueType value_;
     std::string unit_;
 

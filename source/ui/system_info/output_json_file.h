@@ -46,6 +46,8 @@ protected:
 private:
     OutputJsonFile(std::ofstream file);
 
+    void WriteValue(const Value& value);
+
     std::ofstream file_;
     rapidjson::StringBuffer buffer_;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_;

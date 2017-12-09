@@ -467,20 +467,10 @@ void CategoryProcesses::Parse(Table& table, const std::string& data)
         const proto::Processes::Item& item = message.item(index);
 
         Row row = table.AddRow();
-
         row.AddValue(Value::String(item.process_name()));
         row.AddValue(Value::String(item.file_path()));
-
-        if (item.used_memory() != 0)
-            row.AddValue(Value::Number(item.used_memory() / 1024, "kB"));
-        else
-            row.AddValue(Value::Empty());
-
-        if (item.used_swap() != 0)
-            row.AddValue(Value::Number(item.used_swap() / 1024, "kB"));
-        else
-            row.AddValue(Value::Empty());
-
+        row.AddValue(Value::Number(item.used_memory() / 1024, "kB"));
+        row.AddValue(Value::Number(item.used_swap() / 1024, "kB"));
         row.AddValue(Value::String(item.description()));
     }
 }

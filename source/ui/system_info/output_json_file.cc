@@ -105,7 +105,7 @@ void OutputJsonFile::AddParam(std::string_view param, const Value& value)
     if (!value.HasUnit())
     {
         writer_.Key(param.data());
-        writer_.String(value.ToString());
+        WriteValue(value);
     }
     else
     {
@@ -113,7 +113,7 @@ void OutputJsonFile::AddParam(std::string_view param, const Value& value)
         writer_.StartObject();
 
         writer_.Key("value");
-        writer_.String(value.ToString());
+        WriteValue(value);
 
         writer_.Key("unit");
         writer_.String(value.Unit());
@@ -138,7 +138,7 @@ void OutputJsonFile::AddValue(const Value& value)
     if (!value.HasUnit())
     {
         writer_.Key(column_list_[column_index_].data());
-        writer_.String(value.ToString());
+        WriteValue(value);
     }
     else
     {
@@ -146,7 +146,7 @@ void OutputJsonFile::AddValue(const Value& value)
         writer_.StartObject();
 
         writer_.Key("value");
-        writer_.String(value.ToString());
+        WriteValue(value);
 
         writer_.Key("unit");
         writer_.String(value.Unit());
@@ -155,6 +155,44 @@ void OutputJsonFile::AddValue(const Value& value)
     }
 
     ++column_index_;
+}
+
+void OutputJsonFile::WriteValue(const Value& value)
+{
+    switch (value.type())
+    {
+        case Value::Type::STRING:
+            writer_.String(value.ToString());
+            break;
+
+        case Value::Type::BOOL:
+            writer_.Bool(value.ToBool());
+            break;
+
+        case Value::Type::UINT32:
+            writer_.Uint(value.ToUint32());
+            break;
+
+        case Value::Type::INT32:
+            writer_.Int(value.ToInt32());
+            break;
+
+        case Value::Type::UINT64:
+            writer_.Uint64(value.ToUint64());
+            break;
+
+        case Value::Type::INT64:
+            writer_.Int64(value.ToInt64());
+            break;
+
+        case Value::Type::DOUBLE:
+            writer_.Double(value.ToDouble());
+            break;
+
+        default:
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            break;
+    }
 }
 
 } // namespace aspia
