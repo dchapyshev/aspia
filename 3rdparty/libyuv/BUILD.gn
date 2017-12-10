@@ -152,7 +152,6 @@ static_library("libyuv_internal") {
   # crbug.com/538243).
   if (!is_debug || is_nacl) {
     configs -= [ "//build/config/compiler:default_optimization" ]
-
     # Enable optimize for speed (-O2) over size (-Os).
     configs += [ "//build/config/compiler:optimize_max" ]
   }

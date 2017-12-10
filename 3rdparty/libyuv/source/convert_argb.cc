@@ -478,6 +478,14 @@ static int H010ToAR30Matrix(const uint16* src_y,
     }
   }
 #endif
+#if defined(HAS_ARGBTOAR30ROW_SSE2)
+  if (TestCpuFlag(kCpuHasSSE2)) {
+    ARGBToAR30Row = ARGBToAR30Row_Any_SSE2;
+    if (IS_ALIGNED(width, 4)) {
+      ARGBToAR30Row = ARGBToAR30Row_SSE2;
+    }
+  }
+#endif
 #if defined(HAS_ARGBTOAR30ROW_AVX2)
   if (TestCpuFlag(kCpuHasAVX2)) {
     ARGBToAR30Row = ARGBToAR30Row_Any_AVX2;
@@ -519,31 +527,40 @@ static int H010ToAR30Matrix(const uint16* src_y,
   }
 #endif
 
-  align_buffer_64(row_y, width);
-  align_buffer_64(row_u, halfwidth);
-  align_buffer_64(row_v, halfwidth);
-  align_buffer_64(row_argb, width * 4);
+  {
+    // Row buffers for 8 bit YUV and RGB.
+    align_buffer_64(row_buf, width + halfwidth * 2 + width * 4);
+    uint8* row_y = row_buf;
+    uint8* row_u = row_buf + width;
+    uint8* row_v = row_buf + width + halfwidth;
+    uint8* row_argb = row_buf + width + halfwidth * 2;
 
-  for (y = 0; y < height; ++y) {
-    Convert16To8Row(src_y, row_y, scale, width);
-    Convert16To8Row(src_u, row_u, scale, halfwidth);
-    Convert16To8Row(src_v, row_v, scale, halfwidth);
+    for (y = 0; y < height - 1; y += 2) {
+      Convert16To8Row(src_y, row_y, scale, width);
+      Convert16To8Row(src_u, row_u, scale, halfwidth);
+      Convert16To8Row(src_v, row_v, scale, halfwidth);
+      I422ToARGBRow(row_y, row_u, row_v, row_argb, yuvconstants, width);
+      ARGBToAR30Row(row_argb, dst_ar30, width);
 
-    I422ToARGBRow(row_y, row_u, row_v, row_argb, yuvconstants, width);
-
-    ARGBToAR30Row(row_argb, dst_ar30, width);
-
-    dst_ar30 += dst_stride_ar30;
-    src_y += src_stride_y;
-    if (y & 1) {
+      Convert16To8Row(src_y + src_stride_y, row_y, scale, width);
+      I422ToARGBRow(row_y, row_u, row_v, row_argb, yuvconstants, width);
+      ARGBToAR30Row(row_argb, dst_ar30 + dst_stride_ar30, width);
+      dst_ar30 += dst_stride_ar30 * 2;
+      src_y += src_stride_y * 2;
       src_u += src_stride_u;
       src_v += src_stride_v;
     }
+
+    if (height & 1) {
+      Convert16To8Row(src_y, row_y, scale, width);
+      Convert16To8Row(src_u, row_u, scale, halfwidth);
+      Convert16To8Row(src_v, row_v, scale, halfwidth);
+      I422ToARGBRow(row_y, row_u, row_v, row_argb, yuvconstants, width);
+      ARGBToAR30Row(row_argb, dst_ar30, width);
+    }
+
+    free_aligned_buffer_64(row_buf);
   }
-  free_aligned_buffer_64(row_y);
-  free_aligned_buffer_64(row_u);
-  free_aligned_buffer_64(row_v);
-  free_aligned_buffer_64(row_argb);
   return 0;
 }
 
@@ -561,6 +578,137 @@ int H010ToAR30(const uint16* src_y,
                int height) {
   return H010ToAR30Matrix(src_y, src_stride_y, src_u, src_stride_u, src_v,
                           src_stride_v, dst_ar30, dst_stride_ar30,
+                          &kYuvH709Constants, 16384, width, height);
+}
+
+// Convert 10 bit YUV to ARGB with matrix
+static int H010ToARGBMatrix(const uint16* src_y,
+                            int src_stride_y,
+                            const uint16* src_u,
+                            int src_stride_u,
+                            const uint16* src_v,
+                            int src_stride_v,
+                            uint8* dst_argb,
+                            int dst_stride_argb,
+                            const struct YuvConstants* yuvconstants,
+                            int scale,  // 16384 for 10 bits
+                            int width,
+                            int height) {
+  int y;
+  int halfwidth = (width + 1) >> 1;
+  void (*Convert16To8Row)(const uint16* src_y, uint8* dst_y, int scale,
+                          int width) = Convert16To8Row_C;
+  void (*I422ToARGBRow)(const uint8* y_buf, const uint8* u_buf,
+                        const uint8* v_buf, uint8* rgb_buf,
+                        const struct YuvConstants* yuvconstants, int width) =
+      I422ToARGBRow_C;
+
+  if (!src_y || !src_u || !src_v || !dst_argb || width <= 0 || height == 0) {
+    return -1;
+  }
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_argb = dst_argb + (height - 1) * dst_stride_argb;
+    dst_stride_argb = -dst_stride_argb;
+  }
+
+#if defined(HAS_CONVERT16TO8ROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    Convert16To8Row = Convert16To8Row_Any_SSSE3;
+    if (IS_ALIGNED(width, 16)) {
+      Convert16To8Row = Convert16To8Row_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_CONVERT16TO8ROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    Convert16To8Row = Convert16To8Row_Any_AVX2;
+    if (IS_ALIGNED(width, 32)) {
+      Convert16To8Row = Convert16To8Row_AVX2;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    I422ToARGBRow = I422ToARGBRow_Any_SSSE3;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    I422ToARGBRow = I422ToARGBRow_Any_AVX2;
+    if (IS_ALIGNED(width, 16)) {
+      I422ToARGBRow = I422ToARGBRow_AVX2;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_NEON)
+  if (TestCpuFlag(kCpuHasNEON)) {
+    I422ToARGBRow = I422ToARGBRow_Any_NEON;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_NEON;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    I422ToARGBRow = I422ToARGBRow_Any_MSA;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_MSA;
+    }
+  }
+#endif
+
+  {
+    // Row buffers for 8 bit YUV.
+    align_buffer_64(row_buf, width + halfwidth * 2);
+    uint8* row_y = row_buf;
+    uint8* row_u = row_buf + width;
+    uint8* row_v = row_buf + width + halfwidth;
+
+    for (y = 0; y < height - 1; y += 2) {
+      Convert16To8Row(src_y, row_y, scale, width);
+      Convert16To8Row(src_u, row_u, scale, halfwidth);
+      Convert16To8Row(src_v, row_v, scale, halfwidth);
+      I422ToARGBRow(row_y, row_u, row_v, dst_argb, yuvconstants, width);
+
+      Convert16To8Row(src_y + src_stride_y, row_y, scale, width);
+      I422ToARGBRow(row_y, row_u, row_v, dst_argb + dst_stride_argb,
+                    yuvconstants, width);
+      dst_argb += dst_stride_argb * 2;
+      src_y += src_stride_y * 2;
+      src_u += src_stride_u;
+      src_v += src_stride_v;
+    }
+
+    if (height & 1) {
+      Convert16To8Row(src_y, row_y, scale, width);
+      Convert16To8Row(src_u, row_u, scale, halfwidth);
+      Convert16To8Row(src_v, row_v, scale, halfwidth);
+      I422ToARGBRow(row_y, row_u, row_v, dst_argb, yuvconstants, width);
+    }
+    free_aligned_buffer_64(row_buf);
+  }
+  return 0;
+}
+
+// Convert H010 to ARGB.
+LIBYUV_API
+int H010ToARGB(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height) {
+  return H010ToARGBMatrix(src_y, src_stride_y, src_u, src_stride_u, src_v,
+                          src_stride_v, dst_argb, dst_stride_argb,
                           &kYuvH709Constants, 16384, width, height);
 }
 

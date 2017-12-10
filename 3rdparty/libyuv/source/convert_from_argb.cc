@@ -1333,6 +1333,14 @@ int ARGBToAR30(const uint8* src_argb,
     height = 1;
     src_stride_argb = dst_stride_ar30 = 0;
   }
+#if defined(HAS_ARGBTOAR30ROW_SSE2)
+  if (TestCpuFlag(kCpuHasSSE2)) {
+    ARGBToAR30Row = ARGBToAR30Row_Any_SSE2;
+    if (IS_ALIGNED(width, 4)) {
+      ARGBToAR30Row = ARGBToAR30Row_SSE2;
+    }
+  }
+#endif
 #if defined(HAS_ARGBTOAR30ROW_AVX2)
   if (TestCpuFlag(kCpuHasAVX2)) {
     ARGBToAR30Row = ARGBToAR30Row_Any_AVX2;

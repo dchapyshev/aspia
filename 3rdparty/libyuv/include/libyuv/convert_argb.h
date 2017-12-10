@@ -342,6 +342,19 @@ int H422ToABGR(const uint8* src_y,
                int width,
                int height);
 
+// Convert H010 to ARGB.
+LIBYUV_API
+int H010ToARGB(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height);
+
 // Convert H010 to AR30.
 LIBYUV_API
 int H010ToAR30(const uint16* src_y,

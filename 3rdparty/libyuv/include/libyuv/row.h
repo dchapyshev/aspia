@@ -268,6 +268,7 @@ extern "C" {
 // TODO(fbarchard): Port to Visual C
 #if !defined(LIBYUV_DISABLE_X86) && \
     (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
+#define HAS_ARGBTOAR30ROW_SSE2
 #define HAS_CONVERT16TO8ROW_SSSE3
 #define HAS_MERGERGBROW_SSSE3
 #define HAS_SPLITRGBROW_SSSE3
@@ -1795,6 +1796,7 @@ void ARGBToRAWRow_SSSE3(const uint8* src_argb, uint8* dst_rgb, int width);
 void ARGBToRGB565Row_SSE2(const uint8* src_argb, uint8* dst_rgb, int width);
 void ARGBToARGB1555Row_SSE2(const uint8* src_argb, uint8* dst_rgb, int width);
 void ARGBToARGB4444Row_SSE2(const uint8* src_argb, uint8* dst_rgb, int width);
+void ARGBToAR30Row_SSE2(const uint8* src_argb, uint8* dst_rgb, int width);
 
 void ARGBToRGB565DitherRow_C(const uint8* src_argb,
                              uint8* dst_rgb,
@@ -2422,6 +2424,7 @@ void ARGBToARGB1555Row_Any_SSE2(const uint8* src_argb,
 void ARGBToARGB4444Row_Any_SSE2(const uint8* src_argb,
                                 uint8* dst_rgb,
                                 int width);
+void ARGBToAR30Row_Any_SSE2(const uint8* src_argb, uint8* dst_rgb, int width);
 
 void ARGBToRGB565DitherRow_Any_SSE2(const uint8* src_argb,
                                     uint8* dst_rgb,

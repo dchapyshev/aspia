@@ -700,6 +700,59 @@ void ARGBToARGB4444Row_SSE2(const uint8* src, uint8* dst, int width) {
 }
 #endif  // HAS_RGB24TOARGBROW_SSSE3
 
+void ARGBToAR30Row_SSE2(const uint8* src, uint8* dst, int width) {
+  asm volatile(
+      "pcmpeqb   %%xmm4,%%xmm4                   \n"  // 0x000000ff mask
+      "psrld     $0x18,%%xmm4                    \n"
+      "pcmpeqb   %%xmm5,%%xmm5                   \n"  // 0xc0000000 mask
+      "pslld     $30,%%xmm5                      \n"
+
+      LABELALIGN
+      "1:                                        \n"
+      "movdqu    (%0),%%xmm0                     \n"
+      // alpha
+      "movdqa    %%xmm0,%%xmm3                   \n"
+      "pand      %%xmm5,%%xmm3                   \n"
+      // red
+      "movdqa    %%xmm0,%%xmm1                   \n"
+      "psrld     $0x10,%%xmm1                    \n"
+      "pand      %%xmm4,%%xmm1                   \n"
+      "movdqa    %%xmm1,%%xmm2                   \n"
+      "psrld     $0x6,%%xmm2                     \n"
+      "pslld     $22,%%xmm1                      \n"
+      "pslld     $20,%%xmm2                      \n"
+      "por       %%xmm1,%%xmm3                   \n"
+      "por       %%xmm2,%%xmm3                   \n"
+      // green
+      "movdqa    %%xmm0,%%xmm1                   \n"
+      "psrld     $0x08,%%xmm1                    \n"
+      "pand      %%xmm4,%%xmm1                   \n"
+      "movdqa    %%xmm1,%%xmm2                   \n"
+      "psrld     $0x6,%%xmm2                     \n"
+      "pslld     $12,%%xmm1                      \n"
+      "pslld     $10,%%xmm2                      \n"
+      "por       %%xmm1,%%xmm3                   \n"
+      "por       %%xmm2,%%xmm3                   \n"
+      // blue
+      "pand      %%xmm4,%%xmm0                   \n"
+      "movdqa    %%xmm0,%%xmm1                   \n"
+      "psrld     $0x6,%%xmm1                     \n"
+      "pslld     $2,%%xmm0                       \n"
+      "por       %%xmm0,%%xmm3                   \n"
+      "por       %%xmm1,%%xmm3                   \n"
+
+      "movdqu    %%xmm3,(%1)                     \n"
+      "add       $0x10,%0                        \n"
+      "add       $0x10,%1                        \n"
+      "sub       $0x4,%2                         \n"
+      "jg        1b                              \n"
+      : "+r"(src),   // %0
+        "+r"(dst),   // %1
+        "+r"(width)  // %2
+        ::"memory",
+        "cc", "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5");
+}
+
 #ifdef HAS_ARGBTOAR30ROW_AVX2
 void ARGBToAR30Row_AVX2(const uint8* src, uint8* dst, int width) {
   asm volatile(

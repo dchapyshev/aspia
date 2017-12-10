@@ -147,6 +147,8 @@ static int FileExists(const char* file_name) {
 
 TEST_F(LibYUVBaseTest, TestLinuxNeon) {
   if (FileExists("../../unit_test/testdata/arm_v7.txt")) {
+    printf("Note: testing to load \"../../unit_test/testdata/arm_v7.txt\"\n");
+
     EXPECT_EQ(0, ArmCpuCaps("../../unit_test/testdata/arm_v7.txt"));
     EXPECT_EQ(kCpuHasNEON, ArmCpuCaps("../../unit_test/testdata/tegra3.txt"));
     EXPECT_EQ(kCpuHasNEON, ArmCpuCaps("../../unit_test/testdata/juno.txt"));
