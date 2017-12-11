@@ -227,15 +227,15 @@ public:
 
         std::string GetInternalDesignation() const;
         std::string GetExternalDesignation() const;
-        std::string GetType() const;
-        std::string GetInternalConnectorType() const;
-        std::string GetExternalConnectorType() const;
+        proto::DmiPortConnectors::Type GetType() const;
+        proto::DmiPortConnectors::ConnectorType GetInternalConnectorType() const;
+        proto::DmiPortConnectors::ConnectorType GetExternalConnectorType() const;
 
     private:
         friend class TableEnumerator<PortConnectorTable>;
         explicit PortConnectorTable(const TableReader& reader);
 
-        static std::string ConnectorTypeToString(uint8_t type);
+        static proto::DmiPortConnectors::ConnectorType ConnectorType(uint8_t type);
 
         TableReader reader_;
     };

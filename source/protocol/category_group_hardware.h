@@ -178,6 +178,9 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiPortConnectors::Type value);
+    static const char* ConnectorTypeToString(proto::DmiPortConnectors::ConnectorType value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortConnectors);
 };
 

@@ -1027,23 +1027,17 @@ void CategoryDmiProcessors::Parse(Table& table, const std::string& data)
         {
             Group features_group = group.AddGroup("Features");
 
-            features_group.AddParam("64-bit Capable",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_64BIT_CAPABLE));
+            auto add_feature = [&](const char* name, uint32_t flag)
+            {
+                features_group.AddParam(name, Value::Bool(item.characteristics() & flag));
+            };
 
-            features_group.AddParam("Multi-Core",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_MULTI_CORE));
-
-            features_group.AddParam("Hardware Thread",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_HARDWARE_THREAD));
-
-            features_group.AddParam("Execute Protection",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_EXECUTE_PROTECTION));
-
-            features_group.AddParam("Enhanced Virtualization",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_ENHANCED_VIRTUALIZATION));
-
-            features_group.AddParam("Power/Perfomance Control",
-                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_POWER_CONTROL));
+            add_feature("64-bit Capable", proto::DmiProcessors::CHARACTERISTIC_64BIT_CAPABLE);
+            add_feature("Multi-Core", proto::DmiProcessors::CHARACTERISTIC_MULTI_CORE);
+            add_feature("Hardware Thread", proto::DmiProcessors::CHARACTERISTIC_HARDWARE_THREAD);
+            add_feature("Execute Protection",proto::DmiProcessors::CHARACTERISTIC_EXECUTE_PROTECTION);
+            add_feature("Enhanced Virtualization", proto::DmiProcessors::CHARACTERISTIC_ENHANCED_VIRTUALIZATION);
+            add_feature("Power/Perfomance Control", proto::DmiProcessors::CHARACTERISTIC_POWER_CONTROL);
         }
     }
 }
@@ -1794,14 +1788,12 @@ void CategoryDmiPortConnectors::Parse(Table& table, const std::string& data)
         if (!item.external_designation().empty())
             group.AddParam("External Designation", Value::String(item.external_designation()));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
 
-        if (!item.internal_connector_type().empty())
-            group.AddParam("Internal Connector Type", Value::String(item.internal_connector_type()));
-
-        if (!item.external_connector_type().empty())
-            group.AddParam("External Connector Type", Value::String(item.external_connector_type()));
+        group.AddParam("Internal Connector Type",
+                       Value::String(ConnectorTypeToString(item.internal_connector_type())));
+        group.AddParam("External Connector Type",
+                       Value::String(ConnectorTypeToString(item.external_connector_type())));
     }
 }
 
@@ -1828,6 +1820,258 @@ std::string CategoryDmiPortConnectors::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiPortConnectors::TypeToString(proto::DmiPortConnectors::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiPortConnectors::TYPE_NONE:
+            return "None";
+
+        case proto::DmiPortConnectors::TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE:
+            return "Parallel Port XT/AT Compatible";
+
+        case proto::DmiPortConnectors::TYPE_PARALLEL_PORT_PS_2:
+            return "Parallel Port PS/2";
+
+        case proto::DmiPortConnectors::TYPE_PARALLEL_PORT_ECP:
+            return "Parallel Port ECP";
+
+        case proto::DmiPortConnectors::TYPE_PARALLEL_PORT_EPP:
+            return "Parallel Port EPP";
+
+        case proto::DmiPortConnectors::TYPE_PARALLEL_PORT_ECP_EPP:
+            return "Parallel Port ECP/EPP";
+
+        case proto::DmiPortConnectors::TYPE_SERIAL_PORT_XT_AT_COMPATIBLE:
+            return "Serial Port XT/AT Compatible";
+
+        case proto::DmiPortConnectors::TYPE_SERIAL_PORT_16450_COMPATIBLE:
+            return "Serial Port 16450 Compatible";
+
+        case proto::DmiPortConnectors::TYPE_SERIAL_PORT_16550_COMPATIBLE:
+            return "Serial Port 16550 Compatible";
+
+        case proto::DmiPortConnectors::TYPE_SERIAL_PORT_16550A_COMPATIBLE:
+            return "Serial Port 16550A Compatible";
+
+        case proto::DmiPortConnectors::TYPE_SCSI_PORT:
+            return "SCSI Port";
+
+        case proto::DmiPortConnectors::TYPE_MIDI_PORT:
+            return "MIDI Port";
+
+        case proto::DmiPortConnectors::TYPE_JOYSTICK_PORT:
+            return "Joystick Port";
+
+        case proto::DmiPortConnectors::TYPE_KEYBOARD_PORT:
+            return "Keyboard Port";
+
+        case proto::DmiPortConnectors::TYPE_MOUSE_PORT:
+            return "Mouse Port";
+
+        case proto::DmiPortConnectors::TYPE_SSA_SCSI:
+            return "SSA SCSI";
+
+        case proto::DmiPortConnectors::TYPE_USB:
+            return "USB";
+
+        case proto::DmiPortConnectors::TYPE_FIREWIRE:
+            return "Firewire (IEEE 1394)";
+
+        case proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_I:
+            return "PCMCIA Type I";
+
+        case proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_II:
+            return "PCMCIA Type II";
+
+        case proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_III:
+            return "PCMCIA Type III";
+
+        case proto::DmiPortConnectors::TYPE_CARDBUS:
+            return "Cardbus";
+
+        case proto::DmiPortConnectors::TYPE_ACCESS_BUS_PORT:
+            return "Access Bus Port";
+
+        case proto::DmiPortConnectors::TYPE_SCSI_II:
+            return "SCSI II";
+
+        case proto::DmiPortConnectors::TYPE_SCSI_WIDE:
+            return "SCSI Wide";
+
+        case proto::DmiPortConnectors::TYPE_PC_98:
+            return "PC-98";
+
+        case proto::DmiPortConnectors::TYPE_PC_98_HIRESO:
+            return "PC-98 Hireso";
+
+        case proto::DmiPortConnectors::TYPE_PC_H98:
+            return "PC-H98";
+
+        case proto::DmiPortConnectors::TYPE_VIDEO_PORT:
+            return "Video Port";
+
+        case proto::DmiPortConnectors::TYPE_AUDIO_PORT:
+            return "Audio Port";
+
+        case proto::DmiPortConnectors::TYPE_MODEM_PORT:
+            return "Modem Port";
+
+        case proto::DmiPortConnectors::TYPE_NETWORK_PORT:
+            return "Network Port";
+
+        case proto::DmiPortConnectors::TYPE_SATA:
+            return "SATA";
+
+        case proto::DmiPortConnectors::TYPE_SAS:
+            return "SAS";
+
+        case proto::DmiPortConnectors::TYPE_8251_COMPATIBLE:
+            return "8251 Compatible";
+
+        case proto::DmiPortConnectors::TYPE_8251_FIFO_COMPATIBLE:
+            return "8251 FIFO Compatible";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiPortConnectors::ConnectorTypeToString(
+    proto::DmiPortConnectors::ConnectorType value)
+{
+    switch (value)
+    {
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_NONE:
+            return "None";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_CENTRONICS:
+            return "Centronics";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS:
+            return "Mini Centronics";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PROPRIETARY:
+            return "Proprietary";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_25_MALE:
+            return "DB-25 male";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_25_FEMALE:
+            return "DB-25 female";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_15_MALE:
+            return "DB-15 male";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_15_FEMALE:
+            return "DB-15 female";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_9_MALE:
+            return "DB-9 male";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_DB_9_FEMALE:
+            return "DB-9 female";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_RJ_11:
+            return "RJ-11";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_RJ_45:
+            return "RJ-45";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_50_PIN_MINISCSI:
+            return "50 Pin MiniSCSI";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_DIN:
+            return "Mini DIN";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MICRO_DIN:
+            return "Micro DIN";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PS_2:
+            return "PS/2";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_INFRARED:
+            return "Infrared";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_HP_HIL:
+            return "HP-HIL";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_ACCESS_BUS_USB:
+            return "Access Bus (USB)";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_SSA_SCSI:
+            return "SSA SCSI";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE:
+            return "Circular DIN-8 male";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE:
+            return "Circular DIN-8 female";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_IDE:
+            return "On Board IDE";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_FLOPPY:
+            return "On Board Floppy";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_9_PIN_DUAL_INLINE:
+            return "9 Pin Dual Inline (pin 10 cut)";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_25_PIN_DUAL_INLINE:
+            return "25 Pin Dual Inline (pin 26 cut)";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_50_PIN_DUAL_INLINE:
+            return "50 Pin Dual Inline";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_68_PIN_DUAL_INLINE:
+            return "68 Pin Dual Inline";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM:
+            return "On Board Sound Input From CD-ROM";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14:
+            return "Mini Centronics Type-14";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26:
+            return "Mini Centronics Type-26";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_JACK:
+            return "Mini Jack (headphones)";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_BNC:
+            return "BNC";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_IEEE_1394:
+            return "IEEE 1394";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE:
+            return "SAS/SATA Plug Receptacle";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98:
+            return "PC-98";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_HIRESO:
+            return "PC-98 Hireso";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PC_H98:
+            return "PC-H98";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_NOTE:
+            return "PC-98 Note";
+
+        case proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_FULL:
+            return "PC-98 Full";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

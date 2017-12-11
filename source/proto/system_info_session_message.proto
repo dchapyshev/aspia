@@ -548,13 +548,100 @@ message DmiSystemSlots
 
 message DmiPortConnectors
 {
+    enum Type
+    {
+        TYPE_UNKNOWN                        = 0;
+        TYPE_NONE                           = 1;
+        TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE = 2;
+        TYPE_PARALLEL_PORT_PS_2             = 3;
+        TYPE_PARALLEL_PORT_ECP              = 4;
+        TYPE_PARALLEL_PORT_EPP              = 5;
+        TYPE_PARALLEL_PORT_ECP_EPP          = 6;
+        TYPE_SERIAL_PORT_XT_AT_COMPATIBLE   = 7;
+        TYPE_SERIAL_PORT_16450_COMPATIBLE   = 8;
+        TYPE_SERIAL_PORT_16550_COMPATIBLE   = 9;
+        TYPE_SERIAL_PORT_16550A_COMPATIBLE  = 10;
+        TYPE_SCSI_PORT                      = 11;
+        TYPE_MIDI_PORT                      = 12;
+        TYPE_JOYSTICK_PORT                  = 13;
+        TYPE_KEYBOARD_PORT                  = 14;
+        TYPE_MOUSE_PORT                     = 15;
+        TYPE_SSA_SCSI                       = 16;
+        TYPE_USB                            = 17;
+        TYPE_FIREWIRE                       = 18;
+        TYPE_PCMCIA_TYPE_I                  = 19;
+        TYPE_PCMCIA_TYPE_II                 = 20;
+        TYPE_PCMCIA_TYPE_III                = 21;
+        TYPE_CARDBUS                        = 22;
+        TYPE_ACCESS_BUS_PORT                = 23;
+        TYPE_SCSI_II                        = 24;
+        TYPE_SCSI_WIDE                      = 25;
+        TYPE_PC_98                          = 26;
+        TYPE_PC_98_HIRESO                   = 27;
+        TYPE_PC_H98                         = 28;
+        TYPE_VIDEO_PORT                     = 29;
+        TYPE_AUDIO_PORT                     = 30;
+        TYPE_MODEM_PORT                     = 31;
+        TYPE_NETWORK_PORT                   = 32;
+        TYPE_SATA                           = 33;
+        TYPE_SAS                            = 34;
+        TYPE_8251_COMPATIBLE                = 35;
+        TYPE_8251_FIFO_COMPATIBLE           = 36;
+    }
+
+    enum ConnectorType
+    {
+        CONNECTOR_TYPE_UNKNOWN                        = 0;
+        CONNECTOR_TYPE_NONE                           = 1;
+        CONNECTOR_TYPE_OTHER                          = 2;
+        CONNECTOR_TYPE_CENTRONICS                     = 3;
+        CONNECTOR_TYPE_MINI_CENTRONICS                = 4;
+        CONNECTOR_TYPE_PROPRIETARY                    = 5;
+        CONNECTOR_TYPE_DB_25_MALE                     = 6;
+        CONNECTOR_TYPE_DB_25_FEMALE                   = 7;
+        CONNECTOR_TYPE_DB_15_MALE                     = 8;
+        CONNECTOR_TYPE_DB_15_FEMALE                   = 9;
+        CONNECTOR_TYPE_DB_9_MALE                      = 10;
+        CONNECTOR_TYPE_DB_9_FEMALE                    = 11;
+        CONNECTOR_TYPE_RJ_11                          = 12;
+        CONNECTOR_TYPE_RJ_45                          = 13;
+        CONNECTOR_TYPE_50_PIN_MINISCSI                = 14;
+        CONNECTOR_TYPE_MINI_DIN                       = 15;
+        CONNECTOR_TYPE_MICRO_DIN                      = 16;
+        CONNECTOR_TYPE_PS_2                           = 17;
+        CONNECTOR_TYPE_INFRARED                       = 18;
+        CONNECTOR_TYPE_HP_HIL                         = 19;
+        CONNECTOR_TYPE_ACCESS_BUS_USB                 = 20;
+        CONNECTOR_TYPE_SSA_SCSI                       = 21;
+        CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE            = 22;
+        CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE          = 23;
+        CONNECTOR_TYPE_ONBOARD_IDE                    = 24;
+        CONNECTOR_TYPE_ONBOARD_FLOPPY                 = 25;
+        CONNECTOR_TYPE_9_PIN_DUAL_INLINE              = 26;
+        CONNECTOR_TYPE_25_PIN_DUAL_INLINE             = 27;
+        CONNECTOR_TYPE_50_PIN_DUAL_INLINE             = 28;
+        CONNECTOR_TYPE_68_PIN_DUAL_INLINE             = 29;
+        CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM = 30;
+        CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14        = 31;
+        CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26        = 32;
+        CONNECTOR_TYPE_MINI_JACK                      = 33;
+        CONNECTOR_TYPE_BNC                            = 34;
+        CONNECTOR_TYPE_IEEE_1394                      = 35;
+        CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE       = 36;
+        CONNECTOR_TYPE_PC_98                          = 37;
+        CONNECTOR_TYPE_PC_98_HIRESO                   = 38;
+        CONNECTOR_TYPE_PC_H98                         = 39;
+        CONNECTOR_TYPE_PC_98_NOTE                     = 40;
+        CONNECTOR_TYPE_PC_98_FULL                     = 41;
+    }
+
     message Item
     {
-        string internal_designation    = 1;
-        string external_designation    = 2;
-        string type                    = 3;
-        string internal_connector_type = 4;
-        string external_connector_type = 5;
+        string internal_designation           = 1;
+        string external_designation           = 2;
+        Type type                             = 3;
+        ConnectorType internal_connector_type = 4;
+        ConnectorType external_connector_type = 5;
     }
 
     repeated Item item = 1;

@@ -2462,6 +2462,190 @@ const DmiSystemSlots_Length DmiSystemSlots::Length_MIN;
 const DmiSystemSlots_Length DmiSystemSlots::Length_MAX;
 const int DmiSystemSlots::Length_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiPortConnectors_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_UNKNOWN;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_NONE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PARALLEL_PORT_PS_2;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PARALLEL_PORT_ECP;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PARALLEL_PORT_EPP;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PARALLEL_PORT_ECP_EPP;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SERIAL_PORT_XT_AT_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SERIAL_PORT_16450_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SERIAL_PORT_16550_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SERIAL_PORT_16550A_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SCSI_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_MIDI_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_JOYSTICK_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_KEYBOARD_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_MOUSE_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SSA_SCSI;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_USB;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_FIREWIRE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PCMCIA_TYPE_I;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PCMCIA_TYPE_II;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PCMCIA_TYPE_III;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_CARDBUS;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_ACCESS_BUS_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SCSI_II;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SCSI_WIDE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PC_98;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PC_98_HIRESO;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_PC_H98;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_VIDEO_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_AUDIO_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_MODEM_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_NETWORK_PORT;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SATA;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_SAS;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_8251_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::TYPE_8251_FIFO_COMPATIBLE;
+const DmiPortConnectors_Type DmiPortConnectors::Type_MIN;
+const DmiPortConnectors_Type DmiPortConnectors::Type_MAX;
+const int DmiPortConnectors::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiPortConnectors_ConnectorType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
+    case 38:
+    case 39:
+    case 40:
+    case 41:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_UNKNOWN;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_NONE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_OTHER;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_CENTRONICS;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PROPRIETARY;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_25_MALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_25_FEMALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_15_MALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_15_FEMALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_9_MALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_DB_9_FEMALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_RJ_11;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_RJ_45;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_50_PIN_MINISCSI;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MINI_DIN;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MICRO_DIN;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PS_2;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_INFRARED;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_HP_HIL;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_ACCESS_BUS_USB;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_SSA_SCSI;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_IDE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_FLOPPY;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_9_PIN_DUAL_INLINE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_25_PIN_DUAL_INLINE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_50_PIN_DUAL_INLINE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_68_PIN_DUAL_INLINE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_MINI_JACK;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_BNC;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_IEEE_1394;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_98;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_98_HIRESO;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_H98;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_98_NOTE;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_98_FULL;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::ConnectorType_MIN;
+const DmiPortConnectors_ConnectorType DmiPortConnectors::ConnectorType_MAX;
+const int DmiPortConnectors::ConnectorType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool AtaDrives_BusType_IsValid(int value) {
   switch (value) {
     case 0:
@@ -8863,27 +9047,18 @@ DmiPortConnectors_Item::DmiPortConnectors_Item(const DmiPortConnectors_Item& fro
   if (from.external_designation().size() > 0) {
     external_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_designation_);
   }
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.type().size() > 0) {
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
-  internal_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.internal_connector_type().size() > 0) {
-    internal_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_connector_type_);
-  }
-  external_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.external_connector_type().size() > 0) {
-    external_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_connector_type_);
-  }
+  ::memcpy(&type_, &from.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&external_connector_type_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(external_connector_type_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortConnectors.Item)
 }
 
 void DmiPortConnectors_Item::SharedCtor() {
   internal_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   external_designation_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  internal_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  external_connector_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&external_connector_type_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(external_connector_type_));
   _cached_size_ = 0;
 }
 
@@ -8895,9 +9070,6 @@ DmiPortConnectors_Item::~DmiPortConnectors_Item() {
 void DmiPortConnectors_Item::SharedDtor() {
   internal_designation_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   external_designation_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  internal_connector_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  external_connector_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiPortConnectors_Item::SetCachedSize(int size) const {
@@ -8926,9 +9098,9 @@ void DmiPortConnectors_Item::Clear() {
 
   internal_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   external_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  internal_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  external_connector_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&external_connector_type_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(external_connector_type_));
   _internal_metadata_.Clear();
 }
 
@@ -8980,48 +9152,45 @@ bool DmiPortConnectors_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string type = 3;
+      // .aspia.proto.DmiPortConnectors.Type type = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->type().data(), static_cast<int>(this->type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiPortConnectors.Item.type"));
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::DmiPortConnectors_Type >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string internal_connector_type = 4;
+      // .aspia.proto.DmiPortConnectors.ConnectorType internal_connector_type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_internal_connector_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiPortConnectors.Item.internal_connector_type"));
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_internal_connector_type(static_cast< ::aspia::proto::DmiPortConnectors_ConnectorType >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string external_connector_type = 5;
+      // .aspia.proto.DmiPortConnectors.ConnectorType external_connector_type = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_external_connector_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiPortConnectors.Item.external_connector_type"));
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_external_connector_type(static_cast< ::aspia::proto::DmiPortConnectors_ConnectorType >(value));
         } else {
           goto handle_unusual;
         }
@@ -9074,33 +9243,21 @@ void DmiPortConnectors_Item::SerializeWithCachedSizes(
       2, this->external_designation(), output);
   }
 
-  // string type = 3;
-  if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), static_cast<int>(this->type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiPortConnectors.Item.type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiPortConnectors.Type type = 3;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->type(), output);
   }
 
-  // string internal_connector_type = 4;
-  if (this->internal_connector_type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->internal_connector_type().data(), static_cast<int>(this->internal_connector_type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiPortConnectors.Item.internal_connector_type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiPortConnectors.ConnectorType internal_connector_type = 4;
+  if (this->internal_connector_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->internal_connector_type(), output);
   }
 
-  // string external_connector_type = 5;
-  if (this->external_connector_type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->external_connector_type().data(), static_cast<int>(this->external_connector_type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiPortConnectors.Item.external_connector_type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiPortConnectors.ConnectorType external_connector_type = 5;
+  if (this->external_connector_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->external_connector_type(), output);
   }
 
@@ -9129,25 +9286,22 @@ size_t DmiPortConnectors_Item::ByteSizeLong() const {
         this->external_designation());
   }
 
-  // string type = 3;
-  if (this->type().size() > 0) {
+  // .aspia.proto.DmiPortConnectors.Type type = 3;
+  if (this->type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->type());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
   }
 
-  // string internal_connector_type = 4;
-  if (this->internal_connector_type().size() > 0) {
+  // .aspia.proto.DmiPortConnectors.ConnectorType internal_connector_type = 4;
+  if (this->internal_connector_type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->internal_connector_type());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->internal_connector_type());
   }
 
-  // string external_connector_type = 5;
-  if (this->external_connector_type().size() > 0) {
+  // .aspia.proto.DmiPortConnectors.ConnectorType external_connector_type = 5;
+  if (this->external_connector_type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->external_connector_type());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->external_connector_type());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -9177,17 +9331,14 @@ void DmiPortConnectors_Item::MergeFrom(const DmiPortConnectors_Item& from) {
 
     external_designation_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_designation_);
   }
-  if (from.type().size() > 0) {
-
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  if (from.type() != 0) {
+    set_type(from.type());
   }
-  if (from.internal_connector_type().size() > 0) {
-
-    internal_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.internal_connector_type_);
+  if (from.internal_connector_type() != 0) {
+    set_internal_connector_type(from.internal_connector_type());
   }
-  if (from.external_connector_type().size() > 0) {
-
-    external_connector_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.external_connector_type_);
+  if (from.external_connector_type() != 0) {
+    set_external_connector_type(from.external_connector_type());
   }
 }
 
@@ -9210,9 +9361,9 @@ void DmiPortConnectors_Item::InternalSwap(DmiPortConnectors_Item* other) {
   using std::swap;
   internal_designation_.Swap(&other->internal_designation_);
   external_designation_.Swap(&other->external_designation_);
-  type_.Swap(&other->type_);
-  internal_connector_type_.Swap(&other->internal_connector_type_);
-  external_connector_type_.Swap(&other->external_connector_type_);
+  swap(type_, other->type_);
+  swap(internal_connector_type_, other->internal_connector_type_);
+  swap(external_connector_type_, other->external_connector_type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

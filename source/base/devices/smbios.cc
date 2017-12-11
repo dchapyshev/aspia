@@ -1493,140 +1493,124 @@ std::string SMBios::PortConnectorTable::GetExternalDesignation() const
     return reader_.GetString(0x06);
 }
 
-std::string SMBios::PortConnectorTable::GetType() const
+proto::DmiPortConnectors::Type SMBios::PortConnectorTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x09)
-        return std::string();
+        return proto::DmiPortConnectors::TYPE_UNKNOWN;
 
-    struct PortType
+    switch (reader_.GetByte(0x08))
     {
-        uint16_t type;
-        const char* name;
-    } const list[] =
-    {
-        { 0x01, "Parallel Port XT/AT Compatible" },
-        { 0x02, "Parallel Port PS/2" },
-        { 0x03, "Parallel Port ECP" },
-        { 0x04, "Parallel Port EPP" },
-        { 0x05, "Parallel Port ECP/EPP" },
-        { 0x06, "Serial Port XT/AT Compatible" },
-        { 0x07, "Serial Port 16450 Compatible" },
-        { 0x08, "Serial Port 16550 Compatible" },
-        { 0x09, "Serial Port 16550A Compatible" },
-        { 0x0A, "SCSI Port" },
-        { 0x0B, "MIDI Port" },
-        { 0x0C, "Joy Stick Port" },
-        { 0x0D, "Keyboard Port" },
-        { 0x0E, "Mouse Port" },
-        { 0x0F, "SSA SCSI" },
-        { 0x10, "USB" },
-        { 0x11, "FireWire (IEEE P1394)" },
-        { 0x12, "PCMCIA Type I" },
-        { 0x13, "PCMCIA Type II" },
-        { 0x14, "PCMCIA Type III" },
-        { 0x15, "Cardbus" },
-        { 0x16, "Access Bus Port" },
-        { 0x17, "SCSI II" },
-        { 0x18, "SCSI Wide" },
-        { 0x19, "PC-98" },
-        { 0x1A, "PC-98-Hireso" },
-        { 0x1B, "PC-H98" },
-        { 0x1C, "Video Port" },
-        { 0x1D, "Audio Port" },
-        { 0x1E, "Modem Port" },
-        { 0x1F, "Network Port" },
-        { 0x20, "SATA" },
-        { 0x21, "SAS" },
-        { 0xA0, "8251 Compatible" },
-        { 0xA1, "8251 FIFO Compatible" },
-        { 0x0FF, "Other" }
-    };
+        case 0x00: return proto::DmiPortConnectors::TYPE_NONE;
+        case 0x01: return proto::DmiPortConnectors::TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE;
+        case 0x02: return proto::DmiPortConnectors::TYPE_PARALLEL_PORT_PS_2;
+        case 0x03: return proto::DmiPortConnectors::TYPE_PARALLEL_PORT_ECP;
+        case 0x04: return proto::DmiPortConnectors::TYPE_PARALLEL_PORT_EPP;
+        case 0x05: return proto::DmiPortConnectors::TYPE_PARALLEL_PORT_ECP_EPP;
+        case 0x06: return proto::DmiPortConnectors::TYPE_SERIAL_PORT_XT_AT_COMPATIBLE;
+        case 0x07: return proto::DmiPortConnectors::TYPE_SERIAL_PORT_16450_COMPATIBLE;
+        case 0x08: return proto::DmiPortConnectors::TYPE_SERIAL_PORT_16550_COMPATIBLE;
+        case 0x09: return proto::DmiPortConnectors::TYPE_SERIAL_PORT_16550A_COMPATIBLE;
+        case 0x0A: return proto::DmiPortConnectors::TYPE_SCSI_PORT;
+        case 0x0B: return proto::DmiPortConnectors::TYPE_MIDI_PORT;
+        case 0x0C: return proto::DmiPortConnectors::TYPE_JOYSTICK_PORT;
+        case 0x0D: return proto::DmiPortConnectors::TYPE_KEYBOARD_PORT;
+        case 0x0E: return proto::DmiPortConnectors::TYPE_MOUSE_PORT;
+        case 0x0F: return proto::DmiPortConnectors::TYPE_SSA_SCSI;
+        case 0x10: return proto::DmiPortConnectors::TYPE_USB;
+        case 0x11: return proto::DmiPortConnectors::TYPE_FIREWIRE;
+        case 0x12: return proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_I;
+        case 0x13: return proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_II;
+        case 0x14: return proto::DmiPortConnectors::TYPE_PCMCIA_TYPE_III;
+        case 0x15: return proto::DmiPortConnectors::TYPE_CARDBUS;
+        case 0x16: return proto::DmiPortConnectors::TYPE_ACCESS_BUS_PORT;
+        case 0x17: return proto::DmiPortConnectors::TYPE_SCSI_II;
+        case 0x18: return proto::DmiPortConnectors::TYPE_SCSI_WIDE;
+        case 0x19: return proto::DmiPortConnectors::TYPE_PC_98;
+        case 0x1A: return proto::DmiPortConnectors::TYPE_PC_98_HIRESO;
+        case 0x1B: return proto::DmiPortConnectors::TYPE_PC_H98;
+        case 0x1C: return proto::DmiPortConnectors::TYPE_VIDEO_PORT;
+        case 0x1D: return proto::DmiPortConnectors::TYPE_AUDIO_PORT;
+        case 0x1E: return proto::DmiPortConnectors::TYPE_MODEM_PORT;
+        case 0x1F: return proto::DmiPortConnectors::TYPE_NETWORK_PORT;
+        case 0x20: return proto::DmiPortConnectors::TYPE_SATA;
+        case 0x21: return proto::DmiPortConnectors::TYPE_SAS;
 
-    const uint8_t type = reader_.GetByte(0x08);
+        case 0xA0: return proto::DmiPortConnectors::TYPE_8251_COMPATIBLE;
+        case 0xA1: return proto::DmiPortConnectors::TYPE_8251_FIFO_COMPATIBLE;
 
-    for (size_t i = 0; i < _countof(list); ++i)
-    {
-        if (list[i].type == type)
-            return list[i].name;
+        default: return proto::DmiPortConnectors::TYPE_UNKNOWN;
     }
-
-    return std::string();
 }
 
 // static
-std::string SMBios::PortConnectorTable::ConnectorTypeToString(uint8_t type)
+proto::DmiPortConnectors::ConnectorType SMBios::PortConnectorTable::ConnectorType(uint8_t type)
 {
-    struct PortConnectors
+    switch (type)
     {
-        uint8_t type;
-        const char* name;
-    } const list[] =
-    {
-        { 0x01, "Centronics" },
-        { 0x02, "Mini Centronics" },
-        { 0x03, "Proprietary" },
-        { 0x04, "DB-25 pin male" },
-        { 0x05, "DB-25 pin female" },
-        { 0x06, "DB-15 pin male" },
-        { 0x07, "DB-15 pin female" },
-        { 0x08, "DB-9 pin male" },
-        { 0x09, "DB-9 pin female" },
-        { 0x0A, "RJ-11" },
-        { 0x0B, "RJ-45" },
-        { 0x0C, "50-pin MiniSCSI" },
-        { 0x0D, "Mini-DIN" },
-        { 0x0E, "Micro-DIN" },
-        { 0x0F, "PS/2" },
-        { 0x10, "Infrared" },
-        { 0x11, "HP-HIL" },
-        { 0x12, "Access Bus (USB)" },
-        { 0x13, "SSA SCSI" },
-        { 0x14, "Circular DIN-8 male" },
-        { 0x15, "Circular DIN-8 female" },
-        { 0x16, "On Board IDE" },
-        { 0x17, "On Board Floppy" },
-        { 0x18, "9-pin Dual Inline (pin 10 cut)" },
-        { 0x19, "25-pin Dual Inline (pin 26 cut)" },
-        { 0x1A, "50-pin Dual Inline" },
-        { 0x1B, "68-pin Dual Inline" },
-        { 0x1C, "On Board Sound Input from CD-ROM" },
-        { 0x1D, "Mini-Centronics Type-14" },
-        { 0x1E, "Mini-Centronics Type-26" },
-        { 0x1F, "Mini-jack (headphones)" },
-        { 0x20, "BNC" },
-        { 0x21, "IEEE 1394" },
-        { 0x22, "SAS/SATA Plug Receptacle" },
-        { 0xA0, "PC-98" },
-        { 0xA1, "PC-98 Hireso" },
-        { 0xA2, "PC-H98" },
-        { 0xA3, "PC-98 Note" },
-        { 0xA4, "PC-98 Full" },
-        { 0xFF, "Other" }
-    };
+        case 0x00: return proto::DmiPortConnectors::CONNECTOR_TYPE_NONE;
+        case 0x01: return proto::DmiPortConnectors::CONNECTOR_TYPE_CENTRONICS;
+        case 0x02: return proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS;
+        case 0x03: return proto::DmiPortConnectors::CONNECTOR_TYPE_PROPRIETARY;
+        case 0x04: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_25_MALE;
+        case 0x05: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_25_FEMALE;
+        case 0x06: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_15_MALE;
+        case 0x07: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_15_FEMALE;
+        case 0x08: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_9_MALE;
+        case 0x09: return proto::DmiPortConnectors::CONNECTOR_TYPE_DB_9_FEMALE;
+        case 0x0A: return proto::DmiPortConnectors::CONNECTOR_TYPE_RJ_11;
+        case 0x0B: return proto::DmiPortConnectors::CONNECTOR_TYPE_RJ_45;
+        case 0x0C: return proto::DmiPortConnectors::CONNECTOR_TYPE_50_PIN_MINISCSI;
+        case 0x0D: return proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_DIN;
+        case 0x0E: return proto::DmiPortConnectors::CONNECTOR_TYPE_MICRO_DIN;
+        case 0x0F: return proto::DmiPortConnectors::CONNECTOR_TYPE_PS_2;
+        case 0x10: return proto::DmiPortConnectors::CONNECTOR_TYPE_INFRARED;
+        case 0x11: return proto::DmiPortConnectors::CONNECTOR_TYPE_HP_HIL;
+        case 0x12: return proto::DmiPortConnectors::CONNECTOR_TYPE_ACCESS_BUS_USB;
+        case 0x13: return proto::DmiPortConnectors::CONNECTOR_TYPE_SSA_SCSI;
+        case 0x14: return proto::DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE;
+        case 0x15: return proto::DmiPortConnectors::CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE;
+        case 0x16: return proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_IDE;
+        case 0x17: return proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_FLOPPY;
+        case 0x18: return proto::DmiPortConnectors::CONNECTOR_TYPE_9_PIN_DUAL_INLINE;
+        case 0x19: return proto::DmiPortConnectors::CONNECTOR_TYPE_25_PIN_DUAL_INLINE;
+        case 0x1A: return proto::DmiPortConnectors::CONNECTOR_TYPE_50_PIN_DUAL_INLINE;
+        case 0x1B: return proto::DmiPortConnectors::CONNECTOR_TYPE_68_PIN_DUAL_INLINE;
+        case 0x1C: return proto::DmiPortConnectors::CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM;
+        case 0x1D: return proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14;
+        case 0x1E: return proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26;
+        case 0x1F: return proto::DmiPortConnectors::CONNECTOR_TYPE_MINI_JACK;
+        case 0x20: return proto::DmiPortConnectors::CONNECTOR_TYPE_BNC;
+        case 0x21: return proto::DmiPortConnectors::CONNECTOR_TYPE_IEEE_1394;
+        case 0x22: return proto::DmiPortConnectors::CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE;
 
-    for (size_t i = 0; i < _countof(list); ++i)
-    {
-        if (list[i].type == type)
-            return list[i].name;
+        case 0xA0: return proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98;
+        case 0xA1: return proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_HIRESO;
+        case 0xA2: return proto::DmiPortConnectors::CONNECTOR_TYPE_PC_H98;
+        case 0xA3: return proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_NOTE;
+        case 0xA4: return proto::DmiPortConnectors::CONNECTOR_TYPE_PC_98_FULL;
+
+        case 0xFF: return proto::DmiPortConnectors::CONNECTOR_TYPE_OTHER;
+
+        default: return proto::DmiPortConnectors::CONNECTOR_TYPE_UNKNOWN;
     }
-
-    return std::string();
 }
 
-std::string SMBios::PortConnectorTable::GetInternalConnectorType() const
+proto::DmiPortConnectors::ConnectorType
+    SMBios::PortConnectorTable::GetInternalConnectorType() const
 {
     if (reader_.GetTableLength() < 0x09)
-        return std::string();
+        return proto::DmiPortConnectors::CONNECTOR_TYPE_UNKNOWN;
 
-    return ConnectorTypeToString(reader_.GetByte(0x05));
+    return ConnectorType(reader_.GetByte(0x05));
 }
 
-std::string SMBios::PortConnectorTable::GetExternalConnectorType() const
+proto::DmiPortConnectors::ConnectorType
+    SMBios::PortConnectorTable::GetExternalConnectorType() const
 {
     if (reader_.GetTableLength() < 0x09)
-        return std::string();
+        return proto::DmiPortConnectors::CONNECTOR_TYPE_UNKNOWN;
 
-    return ConnectorTypeToString(reader_.GetByte(0x07));
+    return ConnectorType(reader_.GetByte(0x07));
 }
 
 //
