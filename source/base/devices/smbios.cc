@@ -1800,35 +1800,30 @@ std::string SMBios::OnBoardDeviceTable::GetDescription(int index) const
     return output;
 }
 
-std::string SMBios::OnBoardDeviceTable::GetType(int index) const
+proto::DmiOnBoardDevices::Type SMBios::OnBoardDeviceTable::GetType(int index) const
 {
     DCHECK(index < count_);
-    const uint8_t type = ptr_[2 * index] & 0x7F;
 
-    static const char* names[] =
+    switch (BitSet<uint8_t>(ptr_[2 * index]).Range(0, 6))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Video",
-        "SCSI Controller",
-        "Ethernet",
-        "Token Ring",
-        "Sound",
-        "PATA Controller",
-        "SATA Controller",
-        "SAS Controller" // 0x0A
-    };
-
-    if (type >= 0x01 && type <= 0x0A)
-        return names[type - 0x01];
-
-    return std::string();
+        case 0x01: return proto::DmiOnBoardDevices::TYPE_OTHER;
+        case 0x02: return proto::DmiOnBoardDevices::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiOnBoardDevices::TYPE_VIDEO;
+        case 0x04: return proto::DmiOnBoardDevices::TYPE_SCSI_CONTROLLER;
+        case 0x05: return proto::DmiOnBoardDevices::TYPE_ETHERNET;
+        case 0x06: return proto::DmiOnBoardDevices::TYPE_TOKEN_RING;
+        case 0x07: return proto::DmiOnBoardDevices::TYPE_SOUND;
+        case 0x08: return proto::DmiOnBoardDevices::TYPE_PATA_CONTROLLER;
+        case 0x09: return proto::DmiOnBoardDevices::TYPE_SATA_CONTROLLER;
+        case 0x0A: return proto::DmiOnBoardDevices::TYPE_SAS_CONTROLLER;
+        default: return proto::DmiOnBoardDevices::TYPE_UNKNOWN;
+    }
 }
 
 bool SMBios::OnBoardDeviceTable::IsEnabled(int index) const
 {
     DCHECK(index < count_);
-    return !!(ptr_[2 * index] & 0x80);
+    return BitSet<uint8_t>(ptr_[2 * index]).Test(7);
 }
 
 //
@@ -1857,58 +1852,44 @@ int SMBios::MemoryDeviceTable::GetSize() const
     return reader_.GetWord(0x0C) & 0x07FFF;
 }
 
-std::string SMBios::MemoryDeviceTable::GetType() const
+proto::DmiMemoryDevices::Type SMBios::MemoryDeviceTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x15)
-        return std::string();
+        return proto::DmiMemoryDevices::TYPE_UNKNOWN;
 
-    const uint8_t type = reader_.GetByte(0x12);
-    if (type == 0x02)
-        return std::string();
+    switch (reader_.GetByte(0x12))
+    {
+        case 0x01: return proto::DmiMemoryDevices::TYPE_OTHER;
+        case 0x02: return proto::DmiMemoryDevices::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiMemoryDevices::TYPE_DRAM;
+        case 0x04: return proto::DmiMemoryDevices::TYPE_EDRAM;
+        case 0x05: return proto::DmiMemoryDevices::TYPE_VRAM;
+        case 0x06: return proto::DmiMemoryDevices::TYPE_SRAM;
+        case 0x07: return proto::DmiMemoryDevices::TYPE_RAM;
+        case 0x08: return proto::DmiMemoryDevices::TYPE_ROM;
+        case 0x09: return proto::DmiMemoryDevices::TYPE_FLASH;
+        case 0x0A: return proto::DmiMemoryDevices::TYPE_EEPROM;
+        case 0x0B: return proto::DmiMemoryDevices::TYPE_FEPROM;
+        case 0x0C: return proto::DmiMemoryDevices::TYPE_EPROM;
+        case 0x0D: return proto::DmiMemoryDevices::TYPE_CDRAM;
+        case 0x0E: return proto::DmiMemoryDevices::TYPE_3DRAM;
+        case 0x0F: return proto::DmiMemoryDevices::TYPE_SDRAM;
+        case 0x10: return proto::DmiMemoryDevices::TYPE_SGRAM;
+        case 0x11: return proto::DmiMemoryDevices::TYPE_RDRAM;
+        case 0x12: return proto::DmiMemoryDevices::TYPE_DDR;
+        case 0x13: return proto::DmiMemoryDevices::TYPE_DDR2;
+        case 0x14: return proto::DmiMemoryDevices::TYPE_DDR2_FB_DIMM;
 
-    struct TypeList
-    {
-        uint8_t type;
-        const char* name;
-    } const list[] =
-    {
-        { 0x01, "Other" },
-        { 0x02, "Unknown" },
-        { 0x03, "DRAM" },
-        { 0x04, "EDRAM" },
-        { 0x05, "VRAM" },
-        { 0x06, "SRAM" },
-        { 0x07, "RAM" },
-        { 0x08, "ROM" },
-        { 0x09, "Flash" },
-        { 0x0A, "EEPROM" },
-        { 0x0B, "FEPROM" },
-        { 0x0C, "EPROM" },
-        { 0x0D, "CDRAM" },
-        { 0x0E, "3DRAM" },
-        { 0x0F, "SDRAM" },
-        { 0x10, "SGRAM" },
-        { 0x11, "RDRAM" },
-        { 0x12, "DDR" },
-        { 0x13, "DDR2" },
-        { 0x14, "DDR2 FB-DIMM" },
-        // 0x15 - 0x17 Reserved.
-        { 0x18, "DDR3" },
-        { 0x19, "FBD2" },
-        { 0x1A, "DDR4" },
-        { 0x1B, "LPDDR" },
-        { 0x1C, "LPDDR2" },
-        { 0x1D, "LPDDR3" },
-        { 0x1E, "LPDDR4" }
-    };
+        case 0x18: return proto::DmiMemoryDevices::TYPE_DDR3;
+        case 0x19: return proto::DmiMemoryDevices::TYPE_FBD2;
+        case 0x1A: return proto::DmiMemoryDevices::TYPE_DDR4;
+        case 0x1B: return proto::DmiMemoryDevices::TYPE_LPDDR;
+        case 0x1C: return proto::DmiMemoryDevices::TYPE_LPDDR2;
+        case 0x1D: return proto::DmiMemoryDevices::TYPE_LPDDR3;
+        case 0x1E: return proto::DmiMemoryDevices::TYPE_LPDDR4;
 
-    for (size_t i = 0; i < _countof(list); ++i)
-    {
-        if (list[i].type == type)
-            return list[i].name;
+        default: return proto::DmiMemoryDevices::TYPE_UNKNOWN;
     }
-
-    return std::string();
 }
 
 int SMBios::MemoryDeviceTable::GetSpeed() const
@@ -1919,43 +1900,30 @@ int SMBios::MemoryDeviceTable::GetSpeed() const
     return reader_.GetWord(0x15);
 }
 
-std::string SMBios::MemoryDeviceTable::GetFormFactor() const
+proto::DmiMemoryDevices::FormFactor SMBios::MemoryDeviceTable::GetFormFactor() const
 {
     if (reader_.GetTableLength() < 0x15)
-        return std::string();
+        return proto::DmiMemoryDevices::FORM_FACTOR_UNKNOWN;
 
-    const uint8_t form_factor = reader_.GetByte(0x0E);
-
-    struct FormFactor
+    switch (reader_.GetByte(0x0E))
     {
-        uint8_t form_factor;
-        const char* name;
-    } const list[] =
-    {
-        { 0x01, "Other" },
-        { 0x02, "Unknown" },
-        { 0x03, "SIMM" },
-        { 0x04, "SIP" },
-        { 0x05, "Chip" },
-        { 0x06, "DIP" },
-        { 0x07, "ZIP" },
-        { 0x08, "Proprietary Card" },
-        { 0x09, "DIMM" },
-        { 0x0A, "TSOP" },
-        { 0x0B, "Row of chips" },
-        { 0x0C, "RIMM" },
-        { 0x0D, "SODIMM" },
-        { 0x0E, "SRIMM" },
-        { 0x0F, "FB-DIMM" }
-    };
-
-    for (size_t i = 0; i < _countof(list); ++i)
-    {
-        if (list[i].form_factor == form_factor)
-            return list[i].name;
+        case 0x01: return proto::DmiMemoryDevices::FORM_FACTOR_OTHER;
+        case 0x02: return proto::DmiMemoryDevices::FORM_FACTOR_UNKNOWN;
+        case 0x03: return proto::DmiMemoryDevices::FORM_FACTOR_SIMM;
+        case 0x04: return proto::DmiMemoryDevices::FORM_FACTOR_SIP;
+        case 0x05: return proto::DmiMemoryDevices::FORM_FACTOR_CHIP;
+        case 0x06: return proto::DmiMemoryDevices::FORM_FACTOR_DIP;
+        case 0x07: return proto::DmiMemoryDevices::FORM_FACTOR_ZIP;
+        case 0x08: return proto::DmiMemoryDevices::FORM_FACTOR_PROPRIETARY_CARD;
+        case 0x09: return proto::DmiMemoryDevices::FORM_FACTOR_DIMM;
+        case 0x0A: return proto::DmiMemoryDevices::FORM_FACTOR_TSOP;
+        case 0x0B: return proto::DmiMemoryDevices::FORM_FACTOR_ROW_OF_CHIPS;
+        case 0x0C: return proto::DmiMemoryDevices::FORM_FACTOR_RIMM;
+        case 0x0D: return proto::DmiMemoryDevices::FORM_FACTOR_SODIMM;
+        case 0x0E: return proto::DmiMemoryDevices::FORM_FACTOR_SRIMM;
+        case 0x0F: return proto::DmiMemoryDevices::FORM_FACTOR_FB_DIMM;
+        default: return proto::DmiMemoryDevices::FORM_FACTOR_UNKNOWN;
     }
-
-    return std::string();
 }
 
 std::string SMBios::MemoryDeviceTable::GetSerialNumber() const

@@ -1347,14 +1347,12 @@ void CategoryDmiMemoryDevices::Parse(Table& table, const std::string& data)
         if (item.size() != 0)
             group.AddParam("Size", Value::Number(item.size(), "MB"));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
 
         if (item.speed() != 0)
             group.AddParam("Speed", Value::Number(item.speed(), "MHz"));
 
-        if (!item.form_factor().empty())
-            group.AddParam("Form Factor", Value::String(item.form_factor()));
+        group.AddParam("Form Factor", Value::String(FormFactorToString(item.form_factor())));
 
         if (!item.serial_number().empty())
             group.AddParam("Serial Number", Value::String(item.serial_number()));
@@ -1405,6 +1403,147 @@ std::string CategoryDmiMemoryDevices::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiMemoryDevices::TypeToString(proto::DmiMemoryDevices::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiMemoryDevices::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiMemoryDevices::TYPE_DRAM:
+            return "DRAM";
+
+        case proto::DmiMemoryDevices::TYPE_EDRAM:
+            return "EDRAM";
+
+        case proto::DmiMemoryDevices::TYPE_VRAM:
+            return "VRAM";
+
+        case proto::DmiMemoryDevices::TYPE_SRAM:
+            return "SRAM";
+
+        case proto::DmiMemoryDevices::TYPE_RAM:
+            return "RAM";
+
+        case proto::DmiMemoryDevices::TYPE_ROM:
+            return "ROM";
+
+        case proto::DmiMemoryDevices::TYPE_FLASH:
+            return "Flash";
+
+        case proto::DmiMemoryDevices::TYPE_EEPROM:
+            return "EEPROM";
+
+        case proto::DmiMemoryDevices::TYPE_FEPROM:
+            return "FEPROM";
+
+        case proto::DmiMemoryDevices::TYPE_EPROM:
+            return "EPROM";
+
+        case proto::DmiMemoryDevices::TYPE_CDRAM:
+            return "CDRAM";
+
+        case proto::DmiMemoryDevices::TYPE_3DRAM:
+            return "3DRAM";
+
+        case proto::DmiMemoryDevices::TYPE_SDRAM:
+            return "SDRAM";
+
+        case proto::DmiMemoryDevices::TYPE_SGRAM:
+            return "SGRAM";
+
+        case proto::DmiMemoryDevices::TYPE_RDRAM:
+            return "RDRAM";
+
+        case proto::DmiMemoryDevices::TYPE_DDR:
+            return "DDR";
+
+        case proto::DmiMemoryDevices::TYPE_DDR2:
+            return "DDR2";
+
+        case proto::DmiMemoryDevices::TYPE_DDR2_FB_DIMM:
+            return "DDR2 FB-DIMM";
+
+        case proto::DmiMemoryDevices::TYPE_DDR3:
+            return "DDR3";
+
+        case proto::DmiMemoryDevices::TYPE_FBD2:
+            return "FBD2";
+
+        case proto::DmiMemoryDevices::TYPE_DDR4:
+            return "DDR4";
+
+        case proto::DmiMemoryDevices::TYPE_LPDDR:
+            return "LPDDR";
+
+        case proto::DmiMemoryDevices::TYPE_LPDDR2:
+            return "LPDDR2";
+
+        case proto::DmiMemoryDevices::TYPE_LPDDR3:
+            return "LPDDR3";
+
+        case proto::DmiMemoryDevices::TYPE_LPDDR4:
+            return "LPDDR4";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiMemoryDevices::FormFactorToString(
+    proto::DmiMemoryDevices::FormFactor value)
+{
+    switch (value)
+    {
+        case proto::DmiMemoryDevices::FORM_FACTOR_OTHER:
+            return "Other";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_SIMM:
+            return "SIMM";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_SIP:
+            return "SIP";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_CHIP:
+            return "Chip";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_DIP:
+            return "DIP";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_ZIP:
+            return "ZIP";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_PROPRIETARY_CARD:
+            return "Proprietary Card";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_DIMM:
+            return "DIMM";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_TSOP:
+            return "TSOP";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_ROW_OF_CHIPS:
+            return "Row Of Chips";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_RIMM:
+            return "RIMM";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_SODIMM:
+            return "SODIMM";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_SRIMM:
+            return "SRIMM";
+
+        case proto::DmiMemoryDevices::FORM_FACTOR_FB_DIMM:
+            return "FB-DIMM";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -2113,9 +2252,7 @@ void CategoryDmiOnboardDevices::Parse(Table& table, const std::string& data)
         if (!item.description().empty())
             group.AddParam("Description", Value::String(item.description()));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
-
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
         group.AddParam("Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
     }
 }
@@ -2145,6 +2282,43 @@ std::string CategoryDmiOnboardDevices::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiOnboardDevices::TypeToString(proto::DmiOnBoardDevices::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiOnBoardDevices::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiOnBoardDevices::TYPE_VIDEO:
+            return "Video";
+
+        case proto::DmiOnBoardDevices::TYPE_SCSI_CONTROLLER:
+            return "SCSI Controller";
+
+        case proto::DmiOnBoardDevices::TYPE_ETHERNET:
+            return "Ethernet";
+
+        case proto::DmiOnBoardDevices::TYPE_TOKEN_RING:
+            return "Token Ring";
+
+        case proto::DmiOnBoardDevices::TYPE_SOUND:
+            return "Sound";
+
+        case proto::DmiOnBoardDevices::TYPE_PATA_CONTROLLER:
+            return "PATA Controller";
+
+        case proto::DmiOnBoardDevices::TYPE_SATA_CONTROLLER:
+            return "SATA Controller";
+
+        case proto::DmiOnBoardDevices::TYPE_SAS_CONTROLLER:
+            return "SAS Controller";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

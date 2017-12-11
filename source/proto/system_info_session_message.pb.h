@@ -781,6 +781,66 @@ const DmiProcessors_Characteristics DmiProcessors_Characteristics_Characteristic
 const DmiProcessors_Characteristics DmiProcessors_Characteristics_Characteristics_MAX = DmiProcessors_Characteristics_CHARACTERISTIC_POWER_CONTROL;
 const int DmiProcessors_Characteristics_Characteristics_ARRAYSIZE = DmiProcessors_Characteristics_Characteristics_MAX + 1;
 
+enum DmiMemoryDevices_Type {
+  DmiMemoryDevices_Type_TYPE_UNKNOWN = 0,
+  DmiMemoryDevices_Type_TYPE_OTHER = 1,
+  DmiMemoryDevices_Type_TYPE_DRAM = 2,
+  DmiMemoryDevices_Type_TYPE_EDRAM = 3,
+  DmiMemoryDevices_Type_TYPE_VRAM = 4,
+  DmiMemoryDevices_Type_TYPE_SRAM = 5,
+  DmiMemoryDevices_Type_TYPE_RAM = 6,
+  DmiMemoryDevices_Type_TYPE_ROM = 7,
+  DmiMemoryDevices_Type_TYPE_FLASH = 8,
+  DmiMemoryDevices_Type_TYPE_EEPROM = 9,
+  DmiMemoryDevices_Type_TYPE_FEPROM = 10,
+  DmiMemoryDevices_Type_TYPE_EPROM = 11,
+  DmiMemoryDevices_Type_TYPE_CDRAM = 12,
+  DmiMemoryDevices_Type_TYPE_3DRAM = 13,
+  DmiMemoryDevices_Type_TYPE_SDRAM = 14,
+  DmiMemoryDevices_Type_TYPE_SGRAM = 15,
+  DmiMemoryDevices_Type_TYPE_RDRAM = 16,
+  DmiMemoryDevices_Type_TYPE_DDR = 17,
+  DmiMemoryDevices_Type_TYPE_DDR2 = 18,
+  DmiMemoryDevices_Type_TYPE_DDR2_FB_DIMM = 19,
+  DmiMemoryDevices_Type_TYPE_DDR3 = 20,
+  DmiMemoryDevices_Type_TYPE_FBD2 = 21,
+  DmiMemoryDevices_Type_TYPE_DDR4 = 22,
+  DmiMemoryDevices_Type_TYPE_LPDDR = 23,
+  DmiMemoryDevices_Type_TYPE_LPDDR2 = 24,
+  DmiMemoryDevices_Type_TYPE_LPDDR3 = 25,
+  DmiMemoryDevices_Type_TYPE_LPDDR4 = 26,
+  DmiMemoryDevices_Type_DmiMemoryDevices_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiMemoryDevices_Type_DmiMemoryDevices_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiMemoryDevices_Type_IsValid(int value);
+const DmiMemoryDevices_Type DmiMemoryDevices_Type_Type_MIN = DmiMemoryDevices_Type_TYPE_UNKNOWN;
+const DmiMemoryDevices_Type DmiMemoryDevices_Type_Type_MAX = DmiMemoryDevices_Type_TYPE_LPDDR4;
+const int DmiMemoryDevices_Type_Type_ARRAYSIZE = DmiMemoryDevices_Type_Type_MAX + 1;
+
+enum DmiMemoryDevices_FormFactor {
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_UNKNOWN = 0,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_OTHER = 1,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_SIMM = 2,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_SIP = 3,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_CHIP = 4,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_DIP = 5,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_ZIP = 6,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_PROPRIETARY_CARD = 7,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_DIMM = 8,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_TSOP = 9,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_ROW_OF_CHIPS = 10,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_RIMM = 11,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_SODIMM = 12,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_SRIMM = 13,
+  DmiMemoryDevices_FormFactor_FORM_FACTOR_FB_DIMM = 14,
+  DmiMemoryDevices_FormFactor_DmiMemoryDevices_FormFactor_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiMemoryDevices_FormFactor_DmiMemoryDevices_FormFactor_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiMemoryDevices_FormFactor_IsValid(int value);
+const DmiMemoryDevices_FormFactor DmiMemoryDevices_FormFactor_FormFactor_MIN = DmiMemoryDevices_FormFactor_FORM_FACTOR_UNKNOWN;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices_FormFactor_FormFactor_MAX = DmiMemoryDevices_FormFactor_FORM_FACTOR_FB_DIMM;
+const int DmiMemoryDevices_FormFactor_FormFactor_ARRAYSIZE = DmiMemoryDevices_FormFactor_FormFactor_MAX + 1;
+
 enum DmiSystemSlots_Type {
   DmiSystemSlots_Type_TYPE_UNKNOWN = 0,
   DmiSystemSlots_Type_TYPE_OTHER = 1,
@@ -993,6 +1053,25 @@ bool DmiPortConnectors_ConnectorType_IsValid(int value);
 const DmiPortConnectors_ConnectorType DmiPortConnectors_ConnectorType_ConnectorType_MIN = DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_UNKNOWN;
 const DmiPortConnectors_ConnectorType DmiPortConnectors_ConnectorType_ConnectorType_MAX = DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_FULL;
 const int DmiPortConnectors_ConnectorType_ConnectorType_ARRAYSIZE = DmiPortConnectors_ConnectorType_ConnectorType_MAX + 1;
+
+enum DmiOnBoardDevices_Type {
+  DmiOnBoardDevices_Type_TYPE_UNKNOWN = 0,
+  DmiOnBoardDevices_Type_TYPE_OTHER = 1,
+  DmiOnBoardDevices_Type_TYPE_VIDEO = 2,
+  DmiOnBoardDevices_Type_TYPE_SCSI_CONTROLLER = 3,
+  DmiOnBoardDevices_Type_TYPE_ETHERNET = 4,
+  DmiOnBoardDevices_Type_TYPE_TOKEN_RING = 5,
+  DmiOnBoardDevices_Type_TYPE_SOUND = 6,
+  DmiOnBoardDevices_Type_TYPE_PATA_CONTROLLER = 7,
+  DmiOnBoardDevices_Type_TYPE_SATA_CONTROLLER = 8,
+  DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER = 9,
+  DmiOnBoardDevices_Type_DmiOnBoardDevices_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiOnBoardDevices_Type_DmiOnBoardDevices_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiOnBoardDevices_Type_IsValid(int value);
+const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MIN = DmiOnBoardDevices_Type_TYPE_UNKNOWN;
+const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MAX = DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER;
+const int DmiOnBoardDevices_Type_Type_ARRAYSIZE = DmiOnBoardDevices_Type_Type_MAX + 1;
 
 enum AtaDrives_BusType {
   AtaDrives_BusType_BUS_TYPE_UNKNOWN = 0,
@@ -3736,34 +3815,6 @@ class DmiMemoryDevices_Item : public ::google::protobuf::MessageLite /* @@protoc
   ::std::string* release_device_locator();
   void set_allocated_device_locator(::std::string* device_locator);
 
-  // string type = 3;
-  void clear_type();
-  static const int kTypeFieldNumber = 3;
-  const ::std::string& type() const;
-  void set_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_type(::std::string&& value);
-  #endif
-  void set_type(const char* value);
-  void set_type(const char* value, size_t size);
-  ::std::string* mutable_type();
-  ::std::string* release_type();
-  void set_allocated_type(::std::string* type);
-
-  // string form_factor = 5;
-  void clear_form_factor();
-  static const int kFormFactorFieldNumber = 5;
-  const ::std::string& form_factor() const;
-  void set_form_factor(const ::std::string& value);
-  #if LANG_CXX11
-  void set_form_factor(::std::string&& value);
-  #endif
-  void set_form_factor(const char* value);
-  void set_form_factor(const char* value, size_t size);
-  ::std::string* mutable_form_factor();
-  ::std::string* release_form_factor();
-  void set_allocated_form_factor(::std::string* form_factor);
-
   // string serial_number = 6;
   void clear_serial_number();
   static const int kSerialNumberFieldNumber = 6;
@@ -3826,11 +3877,23 @@ class DmiMemoryDevices_Item : public ::google::protobuf::MessageLite /* @@protoc
   ::google::protobuf::int32 size() const;
   void set_size(::google::protobuf::int32 value);
 
+  // .aspia.proto.DmiMemoryDevices.Type type = 3;
+  void clear_type();
+  static const int kTypeFieldNumber = 3;
+  ::aspia::proto::DmiMemoryDevices_Type type() const;
+  void set_type(::aspia::proto::DmiMemoryDevices_Type value);
+
   // int32 speed = 4;
   void clear_speed();
   static const int kSpeedFieldNumber = 4;
   ::google::protobuf::int32 speed() const;
   void set_speed(::google::protobuf::int32 value);
+
+  // .aspia.proto.DmiMemoryDevices.FormFactor form_factor = 5;
+  void clear_form_factor();
+  static const int kFormFactorFieldNumber = 5;
+  ::aspia::proto::DmiMemoryDevices_FormFactor form_factor() const;
+  void set_form_factor(::aspia::proto::DmiMemoryDevices_FormFactor value);
 
   // int32 total_width = 10;
   void clear_total_width();
@@ -3849,14 +3912,14 @@ class DmiMemoryDevices_Item : public ::google::protobuf::MessageLite /* @@protoc
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr device_locator_;
-  ::google::protobuf::internal::ArenaStringPtr type_;
-  ::google::protobuf::internal::ArenaStringPtr form_factor_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr part_number_;
   ::google::protobuf::internal::ArenaStringPtr manufactorer_;
   ::google::protobuf::internal::ArenaStringPtr bank_;
   ::google::protobuf::int32 size_;
+  int type_;
   ::google::protobuf::int32 speed_;
+  int form_factor_;
   ::google::protobuf::int32 total_width_;
   ::google::protobuf::int32 data_width_;
   mutable int _cached_size_;
@@ -3944,6 +4007,112 @@ class DmiMemoryDevices : public ::google::protobuf::MessageLite /* @@protoc_inse
   // nested types ----------------------------------------------------
 
   typedef DmiMemoryDevices_Item Item;
+
+  typedef DmiMemoryDevices_Type Type;
+  static const Type TYPE_UNKNOWN =
+    DmiMemoryDevices_Type_TYPE_UNKNOWN;
+  static const Type TYPE_OTHER =
+    DmiMemoryDevices_Type_TYPE_OTHER;
+  static const Type TYPE_DRAM =
+    DmiMemoryDevices_Type_TYPE_DRAM;
+  static const Type TYPE_EDRAM =
+    DmiMemoryDevices_Type_TYPE_EDRAM;
+  static const Type TYPE_VRAM =
+    DmiMemoryDevices_Type_TYPE_VRAM;
+  static const Type TYPE_SRAM =
+    DmiMemoryDevices_Type_TYPE_SRAM;
+  static const Type TYPE_RAM =
+    DmiMemoryDevices_Type_TYPE_RAM;
+  static const Type TYPE_ROM =
+    DmiMemoryDevices_Type_TYPE_ROM;
+  static const Type TYPE_FLASH =
+    DmiMemoryDevices_Type_TYPE_FLASH;
+  static const Type TYPE_EEPROM =
+    DmiMemoryDevices_Type_TYPE_EEPROM;
+  static const Type TYPE_FEPROM =
+    DmiMemoryDevices_Type_TYPE_FEPROM;
+  static const Type TYPE_EPROM =
+    DmiMemoryDevices_Type_TYPE_EPROM;
+  static const Type TYPE_CDRAM =
+    DmiMemoryDevices_Type_TYPE_CDRAM;
+  static const Type TYPE_3DRAM =
+    DmiMemoryDevices_Type_TYPE_3DRAM;
+  static const Type TYPE_SDRAM =
+    DmiMemoryDevices_Type_TYPE_SDRAM;
+  static const Type TYPE_SGRAM =
+    DmiMemoryDevices_Type_TYPE_SGRAM;
+  static const Type TYPE_RDRAM =
+    DmiMemoryDevices_Type_TYPE_RDRAM;
+  static const Type TYPE_DDR =
+    DmiMemoryDevices_Type_TYPE_DDR;
+  static const Type TYPE_DDR2 =
+    DmiMemoryDevices_Type_TYPE_DDR2;
+  static const Type TYPE_DDR2_FB_DIMM =
+    DmiMemoryDevices_Type_TYPE_DDR2_FB_DIMM;
+  static const Type TYPE_DDR3 =
+    DmiMemoryDevices_Type_TYPE_DDR3;
+  static const Type TYPE_FBD2 =
+    DmiMemoryDevices_Type_TYPE_FBD2;
+  static const Type TYPE_DDR4 =
+    DmiMemoryDevices_Type_TYPE_DDR4;
+  static const Type TYPE_LPDDR =
+    DmiMemoryDevices_Type_TYPE_LPDDR;
+  static const Type TYPE_LPDDR2 =
+    DmiMemoryDevices_Type_TYPE_LPDDR2;
+  static const Type TYPE_LPDDR3 =
+    DmiMemoryDevices_Type_TYPE_LPDDR3;
+  static const Type TYPE_LPDDR4 =
+    DmiMemoryDevices_Type_TYPE_LPDDR4;
+  static inline bool Type_IsValid(int value) {
+    return DmiMemoryDevices_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    DmiMemoryDevices_Type_Type_MIN;
+  static const Type Type_MAX =
+    DmiMemoryDevices_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    DmiMemoryDevices_Type_Type_ARRAYSIZE;
+
+  typedef DmiMemoryDevices_FormFactor FormFactor;
+  static const FormFactor FORM_FACTOR_UNKNOWN =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_UNKNOWN;
+  static const FormFactor FORM_FACTOR_OTHER =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_OTHER;
+  static const FormFactor FORM_FACTOR_SIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_SIMM;
+  static const FormFactor FORM_FACTOR_SIP =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_SIP;
+  static const FormFactor FORM_FACTOR_CHIP =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_CHIP;
+  static const FormFactor FORM_FACTOR_DIP =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_DIP;
+  static const FormFactor FORM_FACTOR_ZIP =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_ZIP;
+  static const FormFactor FORM_FACTOR_PROPRIETARY_CARD =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_PROPRIETARY_CARD;
+  static const FormFactor FORM_FACTOR_DIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_DIMM;
+  static const FormFactor FORM_FACTOR_TSOP =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_TSOP;
+  static const FormFactor FORM_FACTOR_ROW_OF_CHIPS =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_ROW_OF_CHIPS;
+  static const FormFactor FORM_FACTOR_RIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_RIMM;
+  static const FormFactor FORM_FACTOR_SODIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_SODIMM;
+  static const FormFactor FORM_FACTOR_SRIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_SRIMM;
+  static const FormFactor FORM_FACTOR_FB_DIMM =
+    DmiMemoryDevices_FormFactor_FORM_FACTOR_FB_DIMM;
+  static inline bool FormFactor_IsValid(int value) {
+    return DmiMemoryDevices_FormFactor_IsValid(value);
+  }
+  static const FormFactor FormFactor_MIN =
+    DmiMemoryDevices_FormFactor_FormFactor_MIN;
+  static const FormFactor FormFactor_MAX =
+    DmiMemoryDevices_FormFactor_FormFactor_MAX;
+  static const int FormFactor_ARRAYSIZE =
+    DmiMemoryDevices_FormFactor_FormFactor_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -4932,19 +5101,11 @@ class DmiOnBoardDevices_Item : public ::google::protobuf::MessageLite /* @@proto
   ::std::string* release_description();
   void set_allocated_description(::std::string* description);
 
-  // string type = 2;
+  // .aspia.proto.DmiOnBoardDevices.Type type = 2;
   void clear_type();
   static const int kTypeFieldNumber = 2;
-  const ::std::string& type() const;
-  void set_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_type(::std::string&& value);
-  #endif
-  void set_type(const char* value);
-  void set_type(const char* value, size_t size);
-  ::std::string* mutable_type();
-  ::std::string* release_type();
-  void set_allocated_type(::std::string* type);
+  ::aspia::proto::DmiOnBoardDevices_Type type() const;
+  void set_type(::aspia::proto::DmiOnBoardDevices_Type value);
 
   // bool enabled = 3;
   void clear_enabled();
@@ -4957,7 +5118,7 @@ class DmiOnBoardDevices_Item : public ::google::protobuf::MessageLite /* @@proto
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr description_;
-  ::google::protobuf::internal::ArenaStringPtr type_;
+  int type_;
   bool enabled_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
@@ -5044,6 +5205,37 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
   // nested types ----------------------------------------------------
 
   typedef DmiOnBoardDevices_Item Item;
+
+  typedef DmiOnBoardDevices_Type Type;
+  static const Type TYPE_UNKNOWN =
+    DmiOnBoardDevices_Type_TYPE_UNKNOWN;
+  static const Type TYPE_OTHER =
+    DmiOnBoardDevices_Type_TYPE_OTHER;
+  static const Type TYPE_VIDEO =
+    DmiOnBoardDevices_Type_TYPE_VIDEO;
+  static const Type TYPE_SCSI_CONTROLLER =
+    DmiOnBoardDevices_Type_TYPE_SCSI_CONTROLLER;
+  static const Type TYPE_ETHERNET =
+    DmiOnBoardDevices_Type_TYPE_ETHERNET;
+  static const Type TYPE_TOKEN_RING =
+    DmiOnBoardDevices_Type_TYPE_TOKEN_RING;
+  static const Type TYPE_SOUND =
+    DmiOnBoardDevices_Type_TYPE_SOUND;
+  static const Type TYPE_PATA_CONTROLLER =
+    DmiOnBoardDevices_Type_TYPE_PATA_CONTROLLER;
+  static const Type TYPE_SATA_CONTROLLER =
+    DmiOnBoardDevices_Type_TYPE_SATA_CONTROLLER;
+  static const Type TYPE_SAS_CONTROLLER =
+    DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER;
+  static inline bool Type_IsValid(int value) {
+    return DmiOnBoardDevices_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    DmiOnBoardDevices_Type_Type_MIN;
+  static const Type Type_MAX =
+    DmiOnBoardDevices_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    DmiOnBoardDevices_Type_Type_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -14012,57 +14204,18 @@ inline void DmiMemoryDevices_Item::set_size(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.DmiMemoryDevices.Item.size)
 }
 
-// string type = 3;
+// .aspia.proto.DmiMemoryDevices.Type type = 3;
 inline void DmiMemoryDevices_Item::clear_type() {
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_ = 0;
 }
-inline const ::std::string& DmiMemoryDevices_Item::type() const {
+inline ::aspia::proto::DmiMemoryDevices_Type DmiMemoryDevices_Item::type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiMemoryDevices.Item.type)
-  return type_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiMemoryDevices_Type >(type_);
 }
-inline void DmiMemoryDevices_Item::set_type(const ::std::string& value) {
+inline void DmiMemoryDevices_Item::set_type(::aspia::proto::DmiMemoryDevices_Type value) {
   
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiMemoryDevices.Item.type)
-}
-#if LANG_CXX11
-inline void DmiMemoryDevices_Item::set_type(::std::string&& value) {
-  
-  type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiMemoryDevices.Item.type)
-}
-#endif
-inline void DmiMemoryDevices_Item::set_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiMemoryDevices.Item.type)
-}
-inline void DmiMemoryDevices_Item::set_type(const char* value, size_t size) {
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiMemoryDevices.Item.type)
-}
-inline ::std::string* DmiMemoryDevices_Item::mutable_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiMemoryDevices.Item.type)
-  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiMemoryDevices_Item::release_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiMemoryDevices.Item.type)
-  
-  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiMemoryDevices_Item::set_allocated_type(::std::string* type) {
-  if (type != NULL) {
-    
-  } else {
-    
-  }
-  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiMemoryDevices.Item.type)
 }
 
 // int32 speed = 4;
@@ -14079,57 +14232,18 @@ inline void DmiMemoryDevices_Item::set_speed(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.DmiMemoryDevices.Item.speed)
 }
 
-// string form_factor = 5;
+// .aspia.proto.DmiMemoryDevices.FormFactor form_factor = 5;
 inline void DmiMemoryDevices_Item::clear_form_factor() {
-  form_factor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  form_factor_ = 0;
 }
-inline const ::std::string& DmiMemoryDevices_Item::form_factor() const {
+inline ::aspia::proto::DmiMemoryDevices_FormFactor DmiMemoryDevices_Item::form_factor() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiMemoryDevices.Item.form_factor)
-  return form_factor_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiMemoryDevices_FormFactor >(form_factor_);
 }
-inline void DmiMemoryDevices_Item::set_form_factor(const ::std::string& value) {
+inline void DmiMemoryDevices_Item::set_form_factor(::aspia::proto::DmiMemoryDevices_FormFactor value) {
   
-  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  form_factor_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiMemoryDevices.Item.form_factor)
-}
-#if LANG_CXX11
-inline void DmiMemoryDevices_Item::set_form_factor(::std::string&& value) {
-  
-  form_factor_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiMemoryDevices.Item.form_factor)
-}
-#endif
-inline void DmiMemoryDevices_Item::set_form_factor(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiMemoryDevices.Item.form_factor)
-}
-inline void DmiMemoryDevices_Item::set_form_factor(const char* value, size_t size) {
-  
-  form_factor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiMemoryDevices.Item.form_factor)
-}
-inline ::std::string* DmiMemoryDevices_Item::mutable_form_factor() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiMemoryDevices.Item.form_factor)
-  return form_factor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiMemoryDevices_Item::release_form_factor() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiMemoryDevices.Item.form_factor)
-  
-  return form_factor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiMemoryDevices_Item::set_allocated_form_factor(::std::string* form_factor) {
-  if (form_factor != NULL) {
-    
-  } else {
-    
-  }
-  form_factor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), form_factor);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiMemoryDevices.Item.form_factor)
 }
 
 // string serial_number = 6;
@@ -14796,57 +14910,18 @@ inline void DmiOnBoardDevices_Item::set_allocated_description(::std::string* des
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiOnBoardDevices.Item.description)
 }
 
-// string type = 2;
+// .aspia.proto.DmiOnBoardDevices.Type type = 2;
 inline void DmiOnBoardDevices_Item::clear_type() {
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_ = 0;
 }
-inline const ::std::string& DmiOnBoardDevices_Item::type() const {
+inline ::aspia::proto::DmiOnBoardDevices_Type DmiOnBoardDevices_Item::type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiOnBoardDevices.Item.type)
-  return type_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiOnBoardDevices_Type >(type_);
 }
-inline void DmiOnBoardDevices_Item::set_type(const ::std::string& value) {
+inline void DmiOnBoardDevices_Item::set_type(::aspia::proto::DmiOnBoardDevices_Type value) {
   
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiOnBoardDevices.Item.type)
-}
-#if LANG_CXX11
-inline void DmiOnBoardDevices_Item::set_type(::std::string&& value) {
-  
-  type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiOnBoardDevices.Item.type)
-}
-#endif
-inline void DmiOnBoardDevices_Item::set_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiOnBoardDevices.Item.type)
-}
-inline void DmiOnBoardDevices_Item::set_type(const char* value, size_t size) {
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiOnBoardDevices.Item.type)
-}
-inline ::std::string* DmiOnBoardDevices_Item::mutable_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiOnBoardDevices.Item.type)
-  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiOnBoardDevices_Item::release_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiOnBoardDevices.Item.type)
-  
-  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiOnBoardDevices_Item::set_allocated_type(::std::string* type) {
-  if (type != NULL) {
-    
-  } else {
-    
-  }
-  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiOnBoardDevices.Item.type)
 }
 
 // bool enabled = 3;
@@ -22433,12 +22508,15 @@ template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Type> : ::google
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Upgrade> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Characteristics> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiMemoryDevices_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiMemoryDevices_FormFactor> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Usage> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_BusWidth> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Length> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_Features> : ::google::protobuf::internal::true_type {};

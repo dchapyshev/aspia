@@ -2250,6 +2250,116 @@ const DmiProcessors_Characteristics DmiProcessors::Characteristics_MIN;
 const DmiProcessors_Characteristics DmiProcessors::Characteristics_MAX;
 const int DmiProcessors::Characteristics_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiMemoryDevices_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_UNKNOWN;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_OTHER;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_EDRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_VRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_SRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_RAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_ROM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_FLASH;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_EEPROM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_FEPROM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_EPROM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_CDRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_3DRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_SDRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_SGRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_RDRAM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DDR;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DDR2;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DDR2_FB_DIMM;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DDR3;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_FBD2;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_DDR4;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_LPDDR;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_LPDDR2;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_LPDDR3;
+const DmiMemoryDevices_Type DmiMemoryDevices::TYPE_LPDDR4;
+const DmiMemoryDevices_Type DmiMemoryDevices::Type_MIN;
+const DmiMemoryDevices_Type DmiMemoryDevices::Type_MAX;
+const int DmiMemoryDevices::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiMemoryDevices_FormFactor_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_UNKNOWN;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_OTHER;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_SIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_SIP;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_CHIP;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_DIP;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_ZIP;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_PROPRIETARY_CARD;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_DIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_TSOP;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_ROW_OF_CHIPS;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_RIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_SODIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_SRIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FORM_FACTOR_FB_DIMM;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FormFactor_MIN;
+const DmiMemoryDevices_FormFactor DmiMemoryDevices::FormFactor_MAX;
+const int DmiMemoryDevices::FormFactor_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool DmiSystemSlots_Type_IsValid(int value) {
   switch (value) {
     case 0:
@@ -2645,6 +2755,39 @@ const DmiPortConnectors_ConnectorType DmiPortConnectors::CONNECTOR_TYPE_PC_98_FU
 const DmiPortConnectors_ConnectorType DmiPortConnectors::ConnectorType_MIN;
 const DmiPortConnectors_ConnectorType DmiPortConnectors::ConnectorType_MAX;
 const int DmiPortConnectors::ConnectorType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiOnBoardDevices_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_UNKNOWN;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_OTHER;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_VIDEO;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_SCSI_CONTROLLER;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_ETHERNET;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_TOKEN_RING;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_SOUND;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_PATA_CONTROLLER;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_SATA_CONTROLLER;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::TYPE_SAS_CONTROLLER;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MIN;
+const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MAX;
+const int DmiOnBoardDevices::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool AtaDrives_BusType_IsValid(int value) {
   switch (value) {
@@ -7695,14 +7838,6 @@ DmiMemoryDevices_Item::DmiMemoryDevices_Item(const DmiMemoryDevices_Item& from)
   if (from.device_locator().size() > 0) {
     device_locator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_locator_);
   }
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.type().size() > 0) {
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
-  form_factor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.form_factor().size() > 0) {
-    form_factor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.form_factor_);
-  }
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.serial_number().size() > 0) {
     serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
@@ -7727,8 +7862,6 @@ DmiMemoryDevices_Item::DmiMemoryDevices_Item(const DmiMemoryDevices_Item& from)
 
 void DmiMemoryDevices_Item::SharedCtor() {
   device_locator_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  form_factor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   part_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   manufactorer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -7746,8 +7879,6 @@ DmiMemoryDevices_Item::~DmiMemoryDevices_Item() {
 
 void DmiMemoryDevices_Item::SharedDtor() {
   device_locator_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  form_factor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   part_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   manufactorer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -7779,8 +7910,6 @@ void DmiMemoryDevices_Item::Clear() {
   (void) cached_has_bits;
 
   device_locator_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  form_factor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   part_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   manufactorer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -7837,16 +7966,15 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string type = 3;
+      // .aspia.proto.DmiMemoryDevices.Type type = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->type().data(), static_cast<int>(this->type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiMemoryDevices.Item.type"));
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::DmiMemoryDevices_Type >(value));
         } else {
           goto handle_unusual;
         }
@@ -7867,16 +7995,15 @@ bool DmiMemoryDevices_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string form_factor = 5;
+      // .aspia.proto.DmiMemoryDevices.FormFactor form_factor = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_form_factor()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->form_factor().data(), static_cast<int>(this->form_factor().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiMemoryDevices.Item.form_factor"));
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_form_factor(static_cast< ::aspia::proto::DmiMemoryDevices_FormFactor >(value));
         } else {
           goto handle_unusual;
         }
@@ -8016,13 +8143,9 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->size(), output);
   }
 
-  // string type = 3;
-  if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), static_cast<int>(this->type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiMemoryDevices.Item.type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiMemoryDevices.Type type = 3;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->type(), output);
   }
 
@@ -8031,13 +8154,9 @@ void DmiMemoryDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->speed(), output);
   }
 
-  // string form_factor = 5;
-  if (this->form_factor().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->form_factor().data(), static_cast<int>(this->form_factor().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiMemoryDevices.Item.form_factor");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiMemoryDevices.FormFactor form_factor = 5;
+  if (this->form_factor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->form_factor(), output);
   }
 
@@ -8109,20 +8228,6 @@ size_t DmiMemoryDevices_Item::ByteSizeLong() const {
         this->device_locator());
   }
 
-  // string type = 3;
-  if (this->type().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->type());
-  }
-
-  // string form_factor = 5;
-  if (this->form_factor().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->form_factor());
-  }
-
   // string serial_number = 6;
   if (this->serial_number().size() > 0) {
     total_size += 1 +
@@ -8158,11 +8263,23 @@ size_t DmiMemoryDevices_Item::ByteSizeLong() const {
         this->size());
   }
 
+  // .aspia.proto.DmiMemoryDevices.Type type = 3;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
   // int32 speed = 4;
   if (this->speed() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->speed());
+  }
+
+  // .aspia.proto.DmiMemoryDevices.FormFactor form_factor = 5;
+  if (this->form_factor() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->form_factor());
   }
 
   // int32 total_width = 10;
@@ -8202,14 +8319,6 @@ void DmiMemoryDevices_Item::MergeFrom(const DmiMemoryDevices_Item& from) {
 
     device_locator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_locator_);
   }
-  if (from.type().size() > 0) {
-
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
-  if (from.form_factor().size() > 0) {
-
-    form_factor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.form_factor_);
-  }
   if (from.serial_number().size() > 0) {
 
     serial_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.serial_number_);
@@ -8229,8 +8338,14 @@ void DmiMemoryDevices_Item::MergeFrom(const DmiMemoryDevices_Item& from) {
   if (from.size() != 0) {
     set_size(from.size());
   }
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
   if (from.speed() != 0) {
     set_speed(from.speed());
+  }
+  if (from.form_factor() != 0) {
+    set_form_factor(from.form_factor());
   }
   if (from.total_width() != 0) {
     set_total_width(from.total_width());
@@ -8258,14 +8373,14 @@ void DmiMemoryDevices_Item::Swap(DmiMemoryDevices_Item* other) {
 void DmiMemoryDevices_Item::InternalSwap(DmiMemoryDevices_Item* other) {
   using std::swap;
   device_locator_.Swap(&other->device_locator_);
-  type_.Swap(&other->type_);
-  form_factor_.Swap(&other->form_factor_);
   serial_number_.Swap(&other->serial_number_);
   part_number_.Swap(&other->part_number_);
   manufactorer_.Swap(&other->manufactorer_);
   bank_.Swap(&other->bank_);
   swap(size_, other->size_);
+  swap(type_, other->type_);
   swap(speed_, other->speed_);
+  swap(form_factor_, other->form_factor_);
   swap(total_width_, other->total_width_);
   swap(data_width_, other->data_width_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -9596,18 +9711,17 @@ DmiOnBoardDevices_Item::DmiOnBoardDevices_Item(const DmiOnBoardDevices_Item& fro
   if (from.description().size() > 0) {
     description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
   }
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.type().size() > 0) {
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
-  enabled_ = from.enabled_;
+  ::memcpy(&type_, &from.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&enabled_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(enabled_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiOnBoardDevices.Item)
 }
 
 void DmiOnBoardDevices_Item::SharedCtor() {
   description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  enabled_ = false;
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&enabled_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(enabled_));
   _cached_size_ = 0;
 }
 
@@ -9618,7 +9732,6 @@ DmiOnBoardDevices_Item::~DmiOnBoardDevices_Item() {
 
 void DmiOnBoardDevices_Item::SharedDtor() {
   description_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiOnBoardDevices_Item::SetCachedSize(int size) const {
@@ -9646,8 +9759,9 @@ void DmiOnBoardDevices_Item::Clear() {
   (void) cached_has_bits;
 
   description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  enabled_ = false;
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&enabled_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(enabled_));
   _internal_metadata_.Clear();
 }
 
@@ -9683,16 +9797,15 @@ bool DmiOnBoardDevices_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string type = 2;
+      // .aspia.proto.DmiOnBoardDevices.Type type = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->type().data(), static_cast<int>(this->type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiOnBoardDevices.Item.type"));
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::DmiOnBoardDevices_Type >(value));
         } else {
           goto handle_unusual;
         }
@@ -9749,13 +9862,9 @@ void DmiOnBoardDevices_Item::SerializeWithCachedSizes(
       1, this->description(), output);
   }
 
-  // string type = 2;
-  if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), static_cast<int>(this->type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiOnBoardDevices.Item.type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiOnBoardDevices.Type type = 2;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->type(), output);
   }
 
@@ -9782,11 +9891,10 @@ size_t DmiOnBoardDevices_Item::ByteSizeLong() const {
         this->description());
   }
 
-  // string type = 2;
-  if (this->type().size() > 0) {
+  // .aspia.proto.DmiOnBoardDevices.Type type = 2;
+  if (this->type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->type());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
   }
 
   // bool enabled = 3;
@@ -9817,9 +9925,8 @@ void DmiOnBoardDevices_Item::MergeFrom(const DmiOnBoardDevices_Item& from) {
 
     description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
   }
-  if (from.type().size() > 0) {
-
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
+  if (from.type() != 0) {
+    set_type(from.type());
   }
   if (from.enabled() != 0) {
     set_enabled(from.enabled());
@@ -9844,7 +9951,7 @@ void DmiOnBoardDevices_Item::Swap(DmiOnBoardDevices_Item* other) {
 void DmiOnBoardDevices_Item::InternalSwap(DmiOnBoardDevices_Item* other) {
   using std::swap;
   description_.Swap(&other->description_);
-  type_.Swap(&other->type_);
+  swap(type_, other->type_);
   swap(enabled_, other->enabled_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);

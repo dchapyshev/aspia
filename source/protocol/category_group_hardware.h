@@ -141,6 +141,9 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiMemoryDevices::Type value);
+    static const char* FormFactorToString(proto::DmiMemoryDevices::FormFactor value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiMemoryDevices);
 };
 
@@ -197,6 +200,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiOnBoardDevices::Type value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
 };
 

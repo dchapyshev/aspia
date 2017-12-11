@@ -265,7 +265,7 @@ public:
 
         int GetDeviceCount() const;
         std::string GetDescription(int index) const;
-        std::string GetType(int index) const;
+        proto::DmiOnBoardDevices::Type GetType(int index) const;
         bool IsEnabled(int index) const;
 
     private:
@@ -284,9 +284,9 @@ public:
 
         std::string GetDeviceLocator() const;
         int GetSize() const;
-        std::string GetType() const;
+        proto::DmiMemoryDevices::Type GetType() const;
         int GetSpeed() const;
-        std::string GetFormFactor() const;
+        proto::DmiMemoryDevices::FormFactor GetFormFactor() const;
         std::string GetSerialNumber() const;
         std::string GetPartNumber() const;
         std::string GetManufacturer() const;
