@@ -1560,6 +1560,24 @@ public:
 			pT->CenterOnLogicalPoint(pt);
 	}
 
+	void ZoomIn(bool bCenter = true)
+	{
+		T* pT = static_cast<T*>(this);
+		pT->Zoom(m_fZoomScale + m_fZoomDelta, bCenter);
+	}
+
+	void ZoomOut(bool bCenter = true)
+	{
+		T* pT = static_cast<T*>(this);
+		pT->Zoom(m_fZoomScale - m_fZoomDelta, bCenter);
+	}
+
+	void ZoomDefault(bool bCenter = true)
+	{
+		T* pT = static_cast<T*>(this);
+		pT->Zoom(1.0f, bCenter);
+	}
+
 	// Helper functions
 	void PrepareDC(CDCHandle dc)
 	{
@@ -1594,8 +1612,8 @@ public:
 
 	void ClientToDevice(POINT &pt)
 	{
-		pt.x += m_ptOffset.x;
-		pt.y += m_ptOffset.y;
+		pt.x += this->m_ptOffset.x;
+		pt.y += this->m_ptOffset.y;
 	}	 
 
 	void DeviceToClient(POINT &pt)
@@ -1691,11 +1709,19 @@ public:
 		::SendMessage(pT->GetParent(), WM_NOTIFY, (WPARAM)nId, (LPARAM)&nmhdr);
 	}
 
+	void DoWheelZoom(int zDelta)
+	{
+		float fZoomScale = m_fZoomScale + ((zDelta > 0) ? m_fZoomDelta : -m_fZoomDelta);
+		T* pT = static_cast<T*>(this);
+		pT->Zoom(fZoomScale);
+		pT->NotifyParentZoomChanged();
+	}
+
 	BEGIN_MSG_MAP(CZoomScrollImpl)
 		MESSAGE_HANDLER(WM_SETCURSOR, OnSetCursor)
 		MESSAGE_HANDLER(WM_VSCROLL, CScrollImpl< T >::OnVScroll)
 		MESSAGE_HANDLER(WM_HSCROLL, CScrollImpl< T >::OnHScroll)
-		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
+		MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
 		MESSAGE_HANDLER(WM_MOUSEHWHEEL, CScrollImpl< T >::OnMouseHWheel)
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, CScrollImpl< T >::OnSize)
@@ -1719,6 +1745,44 @@ public:
 		COMMAND_ID_HANDLER(ID_SCROLL_ALL_LEFT, CScrollImpl< T >::OnScrollAllLeft)
 		COMMAND_ID_HANDLER(ID_SCROLL_ALL_RIGHT, CScrollImpl< T >::OnScrollAllRight)
 	END_MSG_MAP()
+
+	LRESULT OnSetCursor(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	{
+		if((LOWORD(lParam) == HTCLIENT) && (m_nZoomMode != ZOOMMODE_OFF))
+		{
+			T* pT = static_cast<T*>(this);
+			if((HWND)wParam == pT->m_hWnd)
+			{
+				DWORD dwPos = ::GetMessagePos();
+				POINT pt = { GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos) };
+				pT->ScreenToClient(&pt);
+				if(pT->PtInDevRect(pt))
+				{
+					::SetCursor(::LoadCursor(NULL, IDC_CROSS));
+					return 1;
+				}
+			}
+		}
+
+		bHandled = FALSE;
+		return 0;
+	}
+
+	LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	{
+		if((GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL) != 0)   // handle zoom if Ctrl is pressed
+		{
+			int zDelta = (int)GET_WHEEL_DELTA_WPARAM(wParam);
+			T* pT = static_cast<T*>(this);
+			pT->DoWheelZoom(zDelta);
+		}
+		else
+		{
+			CScrollImpl< T >::OnMouseWheel(uMsg, wParam, lParam, bHandled);
+		}
+
+		return 0;
+	}
 
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
@@ -1822,28 +1886,6 @@ public:
 		bHandled = FALSE;
 		return 0;
 	}	
-
-	LRESULT OnSetCursor(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		if((LOWORD(lParam) == HTCLIENT) && (m_nZoomMode != ZOOMMODE_OFF))
-		{
-			T* pT = static_cast<T*>(this);
-			if((HWND)wParam == pT->m_hWnd)
-			{
-				DWORD dwPos = ::GetMessagePos();
-				POINT pt = { GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos) };
-				pT->ScreenToClient(&pt);
-				if(pT->PtInDevRect(pt))
-				{
-					::SetCursor(::LoadCursor(NULL, IDC_CROSS));
-					return 1;
-				}
-			}
-		}
-
-		bHandled = FALSE;
-		return 0;
-	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1873,7 +1915,7 @@ public:
 		MESSAGE_HANDLER(WM_SETCURSOR, CZoomScrollImpl< T >::OnSetCursor)
 		MESSAGE_HANDLER(WM_VSCROLL, CScrollImpl< T >::OnVScroll)
 		MESSAGE_HANDLER(WM_HSCROLL, CScrollImpl< T >::OnHScroll)
-		MESSAGE_HANDLER(WM_MOUSEWHEEL, CScrollImpl< T >::OnMouseWheel)
+		MESSAGE_HANDLER(WM_MOUSEWHEEL, CZoomScrollImpl< T >::OnMouseWheel)
 		MESSAGE_HANDLER(WM_MOUSEHWHEEL, CScrollImpl< T >::OnMouseHWheel)
 		MESSAGE_HANDLER(WM_SETTINGCHANGE, CScrollImpl< T >::OnSettingChange)
 		MESSAGE_HANDLER(WM_SIZE, CScrollImpl< T >::OnSize)

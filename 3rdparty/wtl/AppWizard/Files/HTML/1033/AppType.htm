@@ -223,10 +223,10 @@
 																	Tab <U>V</U>iew Application</LABEL>
 															</DIV>
 															<BR>
-															<INPUT TYPE="radio" CLASS="Radio" NAME="apptype" ID="WTL_APPTYPE_EXPLORER" ACCESSKEY="X" TITLE="Create an Explorer-like application." VALUE="ON" onClick="OnAppType();">
+															<INPUT TYPE="radio" CLASS="Radio" NAME="apptype" ID="WTL_APPTYPE_EXPLORER" ACCESSKEY="E" TITLE="Create an Explorer-like application." VALUE="ON" onClick="OnAppType();">
 															<DIV CLASS="itemTextRadioB" TITLE="Create an Explorer-like application." ID="WTL_APPTYPE_EXPLORER_DIV">
 																<LABEL FOR="WTL_APPTYPE_EXPLORER" TITLE="Create an Explorer-like application." ID="WTL_APPTYPE_EXPLORER_LABEL">
-																	E<U>x</U>plorer Application</LABEL>
+																	<U>E</U>xplorer Application</LABEL>
 															</DIV>
 															<BR>
 															<INPUT TYPE="radio" CLASS="Radio" NAME="apptype" ID="WTL_APPTYPE_DLG" ACCESSKEY="D" TITLE="Create a dialog-based application." VALUE="ON" onClick="OnAppType();">
@@ -250,10 +250,10 @@
 														&nbsp;
 														<SPAN CLASS="itemText">Select project options:
 															<P CLASS="Spacer">&nbsp;</P>
-															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_ENABLE_AX" ACCESSKEY="E" TITLE="Add support for hosting ActiveX controls." value="ON" NAME="WTL_ENABLE_AX">
+															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_ENABLE_AX" ACCESSKEY="H" TITLE="Add support for hosting ActiveX controls." value="ON" NAME="WTL_ENABLE_AX">
 															<DIV CLASS="itemTextCheckboxB" ID="WTL_ENABLE_AX_DIV" TITLE="Add support for hosting ActiveX controls.">
 																<LABEL FOR="WTL_ENABLE_AX" TITLE="Add support for hosting ActiveX controls." ID="WTL_ENABLE_AX_LABEL">
-																	<U>E</U>nable ActiveX Control Hosting</LABEL>
+																	Enable ActiveX Control <U>H</U>osting</LABEL>
 															</DIV>
 															<BR>
 															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_COM_SERVER" ACCESSKEY="C" TITLE="Create a COM server application." value="ON" NAME="WTL_COM_SERVER">
@@ -268,16 +268,10 @@
 																	Generate .CPP <U>F</U>iles</LABEL>
 															</DIV>
 															<BR>
-															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_USE_MANIFEST" ACCESSKEY="A" TITLE="Add a manifest to enable Common Controls 6." value="ON" NAME="WTL_USE_MANIFEST">
-															<DIV CLASS="itemTextCheckboxB" ID="WTL_USE_MANIFEST_DIV" TITLE="Add a manifest to enable Common Controls 6.">
-																<LABEL FOR="WTL_USE_MANIFEST" TITLE="Add a manifest to enable Common Controls 6." ID="WTL_USE_MANIFEST_LABEL">
-																	<U>A</U>dd Common Controls Manifest</LABEL>
-															</DIV>
-															<BR>
-															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_USE_UNICODE" ACCESSKEY="U" TITLE="Use Unicode character set." value="ON" NAME="WTL_USE_UNICODE">
-															<DIV CLASS="itemTextCheckboxB" ID="WTL_USE_UNICODE_DIV" TITLE="Use Unicode character set.">
-																<LABEL FOR="WTL_USE_UNICODE" TITLE="Use Unicode character set." ID="WTL_USE_UNICODE_LABEL">
-																	<U>U</U>nicode Character Set</LABEL>
+															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_SUPPORT_WINXP" ACCESSKEY="X" TITLE="Support running on Windows XP." value="ON" NAME="WTL_SUPPORT_WINXP">
+															<DIV CLASS="itemTextCheckboxB" ID="WTL_SUPPORT_WINXP_DIV" TITLE="Support running on Windows XP.">
+																<LABEL FOR="WTL_SUPPORT_WINXP" TITLE="Support running on Windows XP." ID="WTL_SUPPORT_WINXP_LABEL">
+																	Support Windows <U>X</U>P</LABEL>
 															</DIV>
 														</SPAN>
 													</TD>
@@ -396,22 +390,11 @@ function Next(document, linkto)
 
 function OnFinish(document)
 {
-	WTL_USE_UNICODE.disabled = false;
 	OnWizFinish(document);
 }
 
 function OnInit() 
 {
-	if (window.external.FindSymbol("WTL_USE_RIBBON")) 
-	{
-		WTL_USE_UNICODE.checked = true;
-		WTL_USE_UNICODE.disabled = true;
-	}
-	else
-	{
-		WTL_USE_UNICODE.disabled = false;
-	}
-
 	OnAppType();
 }
 

@@ -110,17 +110,6 @@ inline int AtlMessageBox(HWND hWndOwner, ATL::_U_STRINGorID message, ATL::_U_STR
 ///////////////////////////////////////////////////////////////////////////////
 // CMenu
 
-  #ifndef MII_SIZEOF_STRUCT
-    #define MII_SIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
-  #endif
-  #define MENUITEMINFO_SIZE_VERSION_400A  MII_SIZEOF_STRUCT(MENUITEMINFOA, cch)
-  #define MENUITEMINFO_SIZE_VERSION_400W  MII_SIZEOF_STRUCT(MENUITEMINFOW, cch)
-  #ifdef _UNICODE
-    #define MENUITEMINFO_SIZE_VERSION_400  MENUITEMINFO_SIZE_VERSION_400W
-  #else
-    #define MENUITEMINFO_SIZE_VERSION_400  MENUITEMINFO_SIZE_VERSION_400A
-  #endif //
-
 class CMenuItemInfo : public MENUITEMINFO
 {
 public:
@@ -128,12 +117,6 @@ public:
 	{
 		memset(this, 0, sizeof(MENUITEMINFO));
 		cbSize = sizeof(MENUITEMINFO);
-		// adjust struct size if running on older version of Windows
-		if(AtlIsOldWindows())
-		{
-			ATLASSERT(cbSize > MENUITEMINFO_SIZE_VERSION_400);   // must be
-			cbSize = MENUITEMINFO_SIZE_VERSION_400;
-		}
 	}
 };
 

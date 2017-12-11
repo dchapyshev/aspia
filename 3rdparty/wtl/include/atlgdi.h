@@ -1000,14 +1000,14 @@ public:
 		return m_hRgn;
 	}
 
-	HRGN CreatePolygonRgn(LPPOINT lpPoints, int nCount, int nMode)
+	HRGN CreatePolygonRgn(const POINT* lpPoints, int nCount, int nMode)
 	{
 		ATLASSERT(m_hRgn == NULL);
 		m_hRgn = ::CreatePolygonRgn(lpPoints, nCount, nMode);
 		return m_hRgn;
 	}
 
-	HRGN CreatePolyPolygonRgn(LPPOINT lpPoints, LPINT lpPolyCounts, int nCount, int nPolyFillMode)
+	HRGN CreatePolyPolygonRgn(const POINT* lpPoints, const INT* lpPolyCounts, int nCount, int nPolyFillMode)
 	{
 		ATLASSERT(m_hRgn == NULL);
 		m_hRgn = ::CreatePolyPolygonRgn(lpPoints, lpPolyCounts, nCount, nPolyFillMode);

@@ -14,17 +14,6 @@ function OnFinish(selProj, selObj)
 		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
 
-		var WizardVersion = wizard.FindSymbol('WIZARD_VERSION');
-		if(WizardVersion >= 8.0)
-		{
-			// Use embedded manifest for VS2005
-			if(wizard.FindSymbol("WTL_USE_MANIFEST"))
-			{
-				wizard.AddSymbol("WTL_USE_EMBEDDED_MANIFEST", true);
-				wizard.AddSymbol("WTL_USE_MANIFEST", false);
-			}
-		}
-
 		// Create symbols based on the project name
 		var strSafeProjectName = CreateSafeName(strProjectName);
 		wizard.AddSymbol("SAFE_PROJECT_NAME", strSafeProjectName);
@@ -48,6 +37,11 @@ function OnFinish(selProj, selObj)
 			strGuid = wizard.CreateGuid();
 			strVal = wizard.FormatGuid(strGuid, 0);
 			wizard.AddSymbol("WTL_LIBID", strVal);
+		}
+
+		if(wizard.FindSymbol("WTL_SUPPORT_WINXP"))
+		{
+			wizard.AddSymbol("WTL_USE_RIBBON", false);
 		}
 
 		// Set app type symbols
@@ -288,10 +282,7 @@ function AddConfigurations(proj, strProjectName)
 			var bDebug = (config.ConfigurationName.search("Debug") != -1);
 
 			// General settings
-			if(wizard.FindSymbol("WTL_USE_UNICODE"))
-				config.CharacterSet = charSetUnicode;
-			else
-				config.CharacterSet = charSetMBCS;
+			config.CharacterSet = charSetUnicode;
 
 			var WizardVersion = wizard.FindSymbol('WIZARD_VERSION');
 			if(bDebug)

@@ -150,7 +150,7 @@ static WTL::CFrameWndClassInfo& GetWndClassInfo() \
 { \
 	static WTL::CFrameWndClassInfo wc = \
 	{ \
-		{ sizeof(WNDCLASSEX), 0, ATL::CWindowImplBase::StartWindowProc, \
+		{ sizeof(WNDCLASSEX), 0, StartWindowProc, \
 		  0, 0, NULL, NULL, NULL, (HBRUSH)(COLOR_WINDOW + 1), NULL, WndClassName, NULL }, \
 		NULL, NULL, IDC_ARROW, TRUE, 0, _T(""), uCommonResourceID \
 	}; \
@@ -162,7 +162,7 @@ static WTL::CFrameWndClassInfo& GetWndClassInfo() \
 { \
 	static WTL::CFrameWndClassInfo wc = \
 	{ \
-		{ sizeof(WNDCLASSEX), style, ATL::CWindowImplBase::StartWindowProc, \
+		{ sizeof(WNDCLASSEX), style, StartWindowProc, \
 		  0, 0, NULL, NULL, NULL, (HBRUSH)(bkgnd + 1), NULL, WndClassName, NULL }, \
 		NULL, NULL, IDC_ARROW, TRUE, 0, _T(""), uCommonResourceID \
 	}; \
@@ -174,7 +174,7 @@ static WTL::CFrameWndClassInfo& GetWndClassInfo() \
 { \
 	static WTL::CFrameWndClassInfo wc = \
 	{ \
-		{ sizeof(WNDCLASSEX), 0, ATL::CWindowImplBase::StartWindowProc, \
+		{ sizeof(WNDCLASSEX), 0, StartWindowProc, \
 		  0, 0, NULL, NULL, NULL, NULL, NULL, WndClassName, NULL }, \
 		OrigWndClassName, NULL, NULL, TRUE, 0, _T(""), uCommonResourceID \
 	}; \
@@ -229,7 +229,17 @@ template <class TBase = ATL::CWindow, class TWinTraits = ATL::CFrameWinTraits>
 class ATL_NO_VTABLE CFrameWindowImplBase : public ATL::CWindowImplBaseT< TBase, TWinTraits >
 {
 public:
-	DECLARE_FRAME_WND_CLASS(NULL, 0)
+	// This is instead of DECLARE_FRAME_WND_CLASS(NULL, 0)
+	static CFrameWndClassInfo& GetWndClassInfo()
+	{
+		static CFrameWndClassInfo wc =
+		{
+			{ sizeof(WNDCLASSEX), 0, ATL::CWindowImplBaseT<TBase, TWinTraits >::StartWindowProc,
+			  0, 0, NULL, NULL, NULL, (HBRUSH)(COLOR_WINDOW + 1), NULL, NULL, NULL },
+			NULL, NULL, IDC_ARROW, TRUE, 0, _T(""), 0
+		};
+		return wc;
+	}
 
 	struct _ChevronMenuInfo
 	{
@@ -837,7 +847,7 @@ public:
 		RECT rc = cmi.lpnm->rc;
 		wndFrom.MapWindowPoints(NULL, &rc);
 		// set up flags and rect
-		UINT uMenuFlags = TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN | (!AtlIsOldWindows() ? TPM_VERPOSANIMATION : 0);
+		UINT uMenuFlags = TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN | TPM_VERPOSANIMATION;
 		TPMPARAMS TPMParams = { 0 };
 		TPMParams.cbSize = sizeof(TPMPARAMS);
 		TPMParams.rcExclude = rc;

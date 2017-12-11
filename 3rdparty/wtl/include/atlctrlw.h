@@ -131,7 +131,6 @@ public:
 	static CMsgHookMap* s_pmapMsgHook;
 
 	static HHOOK s_hCreateHook;
-	static bool s_bW2K;  // For animation flag
 	static CCommandBarCtrlBase* s_pCurrentBar;
 	static bool s_bStaticInit;
 
@@ -159,8 +158,6 @@ public:
 			{
 				// Just in case...
 				AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);
-				// Animation on Win2000 only
-				s_bW2K = !AtlIsOldWindows();
 				// done
 				s_bStaticInit = true;
 			}
@@ -175,7 +172,6 @@ public:
 __declspec(selectany) CCommandBarCtrlBase::CMsgHookMap* CCommandBarCtrlBase::s_pmapMsgHook = NULL;
 __declspec(selectany) HHOOK CCommandBarCtrlBase::s_hCreateHook = NULL;
 __declspec(selectany) CCommandBarCtrlBase* CCommandBarCtrlBase::s_pCurrentBar = NULL;
-__declspec(selectany) bool CCommandBarCtrlBase::s_bW2K = false;
 __declspec(selectany) bool CCommandBarCtrlBase::s_bStaticInit = false;
 
 
@@ -2704,7 +2700,7 @@ public:
 		this->PressButton(nCmdID, TRUE);
 		this->SetHotItem(nCmdID);
 		pT->DoTrackPopupMenu(hMenuPopup, TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN |
-			(this->s_bW2K ? (bAnimate ? TPM_VERPOSANIMATION : TPM_NOANIMATION) : 0), pt.x, pt.y, &TPMParams);
+			(bAnimate ? TPM_VERPOSANIMATION : TPM_NOANIMATION), pt.x, pt.y, &TPMParams);
 		this->PressButton(nCmdID, FALSE);
 		if(::GetFocus() != this->m_hWnd)
 			this->SetHotItem(-1);
@@ -3493,7 +3489,7 @@ public:
 #endif
 			CMenuHandle menu = ::GetSystemMenu(m_hWndChildMaximized, FALSE);
 			UINT uRet = (UINT)menu.TrackPopupMenu(TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD |  
-				(this->s_bW2K ? TPM_VERPOSANIMATION : 0), this->m_bLayoutRTL ? rect.right : rect.left, rect.bottom, m_hWndChildMaximized);
+				TPM_VERPOSANIMATION, this->m_bLayoutRTL ? rect.right : rect.left, rect.bottom, m_hWndChildMaximized);
 
 			// eat next message if click is on the same button
 			::OffsetRect(&rcIcon, rect.left, rect.top);

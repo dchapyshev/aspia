@@ -32,7 +32,7 @@
 //
 // CFileDialogImpl<T>
 // CFileDialog
-// CFileDialogEx
+// CSimpleFileDialog
 // CMultiFileDialogImpl<T>
 // CMultiFileDialog
 // CShellFileDialogImpl<T>
@@ -115,23 +115,10 @@ public:
 			LPCTSTR lpszFileName = NULL,
 			DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 			LPCTSTR lpszFilter = NULL,
-			HWND hWndParent = NULL)
+			HWND hWndParent = NULL) : m_bOpenFileDialog(bOpenFileDialog)
 	{
 		memset(&m_ofn, 0, sizeof(m_ofn)); // initialize structure to 0/NULL
-		m_szFileName[0] = _T('\0');
-		m_szFileTitle[0] = _T('\0');
-
-		m_bOpenFileDialog = bOpenFileDialog;
-
 		m_ofn.lStructSize = sizeof(m_ofn);
-
-		// adjust struct size if running on older version of Windows
-		if(AtlIsOldWindows())
-		{
-			ATLASSERT(sizeof(m_ofn) > OPENFILENAME_SIZE_VERSION_400);   // must be
-			m_ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-		}
-
 		m_ofn.lpstrFile = m_szFileName;
 		m_ofn.nMaxFile = _MAX_PATH;
 		m_ofn.lpstrDefExt = lpszDefExt;
@@ -143,9 +130,12 @@ public:
 		m_ofn.lpfnHook = (LPOFNHOOKPROC)T::StartDialogProc;
 		m_ofn.hwndOwner = hWndParent;
 
+		m_szFileName[0] = _T('\0');
+		m_szFileTitle[0] = _T('\0');
+
 		// setup initial file name
 		if(lpszFileName != NULL)
-		ATL::Checked::tcsncpy_s(m_szFileName, _countof(m_szFileName), lpszFileName, _TRUNCATE);
+			ATL::Checked::tcsncpy_s(m_szFileName, _countof(m_szFileName), lpszFileName, _TRUNCATE);
 	}
 
 	INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow())
@@ -170,15 +160,11 @@ public:
 
 		ModuleHelper::AddCreateWndData(&m_thunk.cd, (ATL::CDialogImplBase*)this);
 
-		BOOL bRet;
-		if(m_bOpenFileDialog)
-			bRet = ::GetOpenFileName(&m_ofn);
-		else
-			bRet = ::GetSaveFileName(&m_ofn);
+		BOOL bRet = (m_bOpenFileDialog != FALSE) ? ::GetOpenFileName(&m_ofn) : ::GetSaveFileName(&m_ofn);
 
 		m_hWnd = NULL;
 
-		return bRet ? IDOK : IDCANCEL;
+		return (bRet != FALSE) ? IDOK : IDCANCEL;
 	}
 
 // Attributes
@@ -382,6 +368,58 @@ public:
 
 	// override base class map and references to handlers
 	DECLARE_EMPTY_MSG_MAP()
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// CSimpleFileDialog - simple class for non-customized Open/SaveAs dialogs
+
+class CSimpleFileDialog
+{
+public:
+	OPENFILENAME m_ofn;
+	BOOL m_bOpenFileDialog;            // TRUE for file open, FALSE for file save
+	TCHAR m_szFileTitle[_MAX_FNAME];   // contains file title after return
+	TCHAR m_szFileName[_MAX_PATH];     // contains full path name after return
+
+	CSimpleFileDialog(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+			LPCTSTR lpszDefExt = NULL,
+			LPCTSTR lpszFileName = NULL,
+			DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+			LPCTSTR lpszFilter = NULL,
+			HWND hWndParent = NULL) : m_bOpenFileDialog(bOpenFileDialog)
+	{
+		memset(&m_ofn, 0, sizeof(m_ofn)); // initialize structure to 0/NULL
+		m_ofn.lStructSize = sizeof(m_ofn);
+		m_ofn.lpstrFile = m_szFileName;
+		m_ofn.nMaxFile = _MAX_PATH;
+		m_ofn.lpstrDefExt = lpszDefExt;
+		m_ofn.lpstrFileTitle = (LPTSTR)m_szFileTitle;
+		m_ofn.nMaxFileTitle = _MAX_FNAME;
+		m_ofn.Flags = dwFlags | OFN_EXPLORER | OFN_ENABLESIZING;
+		m_ofn.lpstrFilter = lpszFilter;
+		m_ofn.hInstance = ModuleHelper::GetResourceInstance();
+		m_ofn.hwndOwner = hWndParent;
+
+		m_szFileName[0] = _T('\0');
+		m_szFileTitle[0] = _T('\0');
+
+		// setup initial file name
+		if(lpszFileName != NULL)
+			ATL::Checked::tcsncpy_s(m_szFileName, _countof(m_szFileName), lpszFileName, _TRUNCATE);
+	}
+
+	INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow())
+	{
+		ATLASSERT((m_ofn.Flags & OFN_EXPLORER) != 0);
+
+		if(m_ofn.hwndOwner == NULL)   // set only if not specified before
+			m_ofn.hwndOwner = hWndParent;
+
+		BOOL bRet = (m_bOpenFileDialog != FALSE) ? ::GetOpenFileName(&m_ofn) : ::GetSaveFileName(&m_ofn);
+
+		return (bRet != FALSE) ? IDOK : IDCANCEL;
+	}
 };
 
 
@@ -1049,7 +1087,7 @@ public:
 	}
 
 // Implementation - IFileDialogEvents interface
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnFileOk(IFileDialog* pfd)
+	virtual HRESULT STDMETHODCALLTYPE OnFileOk(IFileDialog* pfd)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1057,7 +1095,7 @@ public:
 		return pT->OnFileOk();
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnFolderChanging(IFileDialog* pfd, IShellItem* psiFolder)
+	virtual HRESULT STDMETHODCALLTYPE OnFolderChanging(IFileDialog* pfd, IShellItem* psiFolder)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1065,7 +1103,7 @@ public:
 		return pT->OnFolderChanging(psiFolder);
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnFolderChange(IFileDialog* pfd)
+	virtual HRESULT STDMETHODCALLTYPE OnFolderChange(IFileDialog* pfd)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1073,7 +1111,7 @@ public:
 		return pT->OnFolderChange();
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnSelectionChange(IFileDialog* pfd)
+	virtual HRESULT STDMETHODCALLTYPE OnSelectionChange(IFileDialog* pfd)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1081,7 +1119,7 @@ public:
 		return pT->OnSelectionChange();
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnShareViolation(IFileDialog* pfd, IShellItem* psi, FDE_SHAREVIOLATION_RESPONSE* pResponse)
+	virtual HRESULT STDMETHODCALLTYPE OnShareViolation(IFileDialog* pfd, IShellItem* psi, FDE_SHAREVIOLATION_RESPONSE* pResponse)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1089,7 +1127,7 @@ public:
 		return pT->OnShareViolation(psi, pResponse);
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnTypeChange(IFileDialog* pfd)
+	virtual HRESULT STDMETHODCALLTYPE OnTypeChange(IFileDialog* pfd)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));
@@ -1097,7 +1135,7 @@ public:
 		return pT->OnTypeChange();
 	}
 
-	virtual HRESULT STDMETHODCALLTYPE IFileDialogEvents::OnOverwrite(IFileDialog* pfd, IShellItem* psi, FDE_OVERWRITE_RESPONSE* pResponse)
+	virtual HRESULT STDMETHODCALLTYPE OnOverwrite(IFileDialog* pfd, IShellItem* psi, FDE_OVERWRITE_RESPONSE* pResponse)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(pT->m_spFileDlg.IsEqualObject(pfd));

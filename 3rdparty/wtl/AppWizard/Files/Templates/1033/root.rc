@@ -49,9 +49,6 @@ BEGIN
 [!if WTL_COM_SERVER]
     "1 TYPELIB ""[!output PROJECT_NAME].tlb""\r\n"
 [!endif]
-[!if WTL_USE_MANIFEST]
-    "CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST ""res\\\\[!output PROJECT_NAME].exe.manifest""\r\n"
-[!endif]
 [!if WTL_USE_RIBBON]
     "#include ""Ribbon.rc""\r\n"
 [!endif]
@@ -249,7 +246,11 @@ IDR_MDICHILD            ICON                    "res\\[!output PROJECT_NAME]Doc.
 IDD_ABOUTBOX DIALOG  0, 0, 187, 102
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
+[!if WTL_SUPPORT_WINXP]
 FONT 8, "MS Shell Dlg"
+[!else]
+FONT 9, "Segoe UI"
+[!endif]
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,130,81,50,14
     CTEXT           "[!output PROJECT_NAME] Application v1.0\n\n(c) Copyright [!output WTL_CURRENT_YEAR]",IDC_STATIC,25,57,78,
@@ -262,7 +263,11 @@ END
 IDD_MAINDLG DIALOG  0, 0, 187, 98
 STYLE WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
 CAPTION "[!output PROJECT_NAME]"
+[!if WTL_SUPPORT_WINXP]
 FONT 8, "MS Shell Dlg"
+[!else]
+FONT 9, "Segoe UI"
+[!endif]
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,130,7,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,130,24,50,14
@@ -274,7 +279,11 @@ END
 IDD_[!output UPPERCASE_SAFE_PROJECT_NAME]_FORM DIALOGEX 0, 0, 185, 93
 STYLE WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_CLIENTEDGE
+[!if WTL_SUPPORT_WINXP]
 FONT 8, "MS Shell Dlg"
+[!else]
+FONT 9, "Segoe UI"
+[!endif]
 BEGIN
 	LTEXT	"TODO: Place form controls on this dialog.",IDC_STATIC,24,42,
 		136,8
@@ -514,16 +523,13 @@ IDR_[!output UPPERCASE_SAFE_PROJECT_NAME] REGISTRY "[!output PROJECT_NAME].rgs"
 [!endif]
 
 #ifndef APSTUDIO_INVOKED
-[!if WTL_COM_SERVER || WTL_USE_MANIFEST || WTL_USE_RIBBON]
+[!if WTL_COM_SERVER || WTL_USE_RIBBON]
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
 [!if WTL_COM_SERVER]
 1 TYPELIB "[!output PROJECT_NAME].tlb"
-[!endif]
-[!if WTL_USE_MANIFEST]
-CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "res\\[!output PROJECT_NAME].exe.manifest"
 [!endif]
 [!if WTL_USE_RIBBON]
 #include "Ribbon.rc"

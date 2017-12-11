@@ -201,7 +201,7 @@
 
 														<SPAN CLASS="itemText">Select application features:
 															<P CLASS="Spacer">&nbsp;</P>
-															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_USE_RIBBON" ACCESSKEY="B" TITLE="Application uses a ribbon." value="OFF" NAME="WTL_USE_RIBBON" onClick="OnUseRibbon();">
+															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="WTL_USE_RIBBON" ACCESSKEY="B" TITLE="Application uses a ribbon." value="OFF" NAME="WTL_USE_RIBBON">
 															<DIV CLASS="itemTextCheckboxB" ID="WTL_USE_RIBBON_DIV" TITLE="Application uses a ribbon.">
 																<LABEL FOR="WTL_USE_RIBBON" TITLE="Requires Windows 7 SDK." ID="WTL_USE_RIBBON_LABEL">
 																	R<U>i</U>bbon</LABEL>
@@ -430,13 +430,14 @@ function OnInit()
 			WTL_USE_VIEW.checked = window.external.FindSymbol("WTL_USE_VIEW");
 		}
 
-		WTL_USE_RIBBON_LABEL.disabled = WTL_USE_RIBBON.disabled = window.external.FindSymbol("WTL_APPTYPE_MDI");
+		var bMDIorXP = window.external.FindSymbol("WTL_APPTYPE_MDI") || window.external.FindSymbol("WTL_SUPPORT_WINXP");
+		WTL_USE_RIBBON_LABEL.disabled = WTL_USE_RIBBON.disabled = bMDIorXP;
 		WTL_USE_TOOLBAR.disabled = false;
 		WTL_USE_REBAR.disabled = false;
 		WTL_USE_CMDBAR.disabled = false;
 		WTL_USE_STATUSBAR.disabled = false;
 
-		WTL_USE_RIBBON.checked = window.external.FindSymbol("WTL_USE_RIBBON") && !window.external.FindSymbol("WTL_APPTYPE_MDI");
+		WTL_USE_RIBBON.checked = window.external.FindSymbol("WTL_USE_RIBBON") && !bMDIorXP;
 		WTL_USE_TOOLBAR.checked = window.external.FindSymbol("WTL_USE_TOOLBAR");
 		WTL_USE_REBAR.checked = window.external.FindSymbol("WTL_USE_REBAR");
 		WTL_USE_CMDBAR.checked = window.external.FindSymbol("WTL_USE_CMDBAR");
@@ -464,12 +465,6 @@ function OnUseToolbar()
 	OnUseRebar();
 }
 
-function OnUseRibbon() 
-{
-	if (WTL_USE_RIBBON.checked) 
-		window.external.AddSymbol("WTL_USE_UNICODE", true)
-}
-
 function OnUseRebar() 
 {
 	if(WTL_USE_REBAR.checked)
@@ -484,8 +479,6 @@ function OnUseRebar()
 		WTL_USE_CMDBAR.disabled = true;
 		WTL_USE_CMDBAR_LABEL.disabled = true;
 	}
-
-	OnUseRibbon();
 }
 
 function OnUseView()

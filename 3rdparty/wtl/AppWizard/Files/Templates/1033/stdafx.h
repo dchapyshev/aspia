@@ -6,16 +6,17 @@
 #pragma once
 
 // Change these values to use different versions
-[!if WTL_USE_RIBBON]
-#define WINVER		0x0601
-#define _WIN32_WINNT	0x0601
-#define _WIN32_IE	0x0700
-[!else]
+[!if WTL_SUPPORT_WINXP]
 #define WINVER		0x0501
 #define _WIN32_WINNT	0x0501
 #define _WIN32_IE	0x0600
-[!endif]
+#define _RICHEDIT_VER	0x0300
+[!else]
+#define WINVER		0x0601
+#define _WIN32_WINNT	0x0601
+#define _WIN32_IE	0x0700
 #define _RICHEDIT_VER	0x0500
+[!endif]
 
 [!if WTL_COM_SERVER]
 #define _ATL_APARTMENT_THREADED
@@ -71,7 +72,6 @@ extern CAppModule _Module;
 #include <atlribbon.h>
 [!endif]
 [!endif]
-[!if WTL_USE_EMBEDDED_MANIFEST]
 
 #if defined _M_IX86
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -82,4 +82,3 @@ extern CAppModule _Module;
 #else
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
-[!endif]

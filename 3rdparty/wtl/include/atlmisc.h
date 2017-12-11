@@ -41,6 +41,38 @@ namespace WTL
 {
 
 ///////////////////////////////////////////////////////////////////////////////
+// CSize scalar operators 
+
+#if !defined(_WTL_NO_SIZE_SCALAR) && defined(__ATLTYPES_H__)
+
+template <class Num>
+inline CSize operator *(SIZE s, Num n) 
+{
+	return CSize((int)(s.cx * n), (int)(s.cy * n));
+};
+
+template <class Num>
+inline void operator *=(SIZE & s, Num n)
+{
+	s = s * n;
+};	
+
+template <class Num>
+inline CSize operator /(SIZE s, Num n) 
+{
+	return CSize((int)(s.cx / n), (int)(s.cy / n));
+};
+
+template <class Num>
+inline void operator /=(SIZE & s, Num n)
+{
+	s = s / n;
+};	
+
+#endif // !defined(_WTL_NO_SIZE_SCALAR) && defined(__ATLTYPES_H__)
+
+
+///////////////////////////////////////////////////////////////////////////////
 // CRecentDocumentList - MRU List Support
 
 #ifndef _WTL_MRUEMPTY_TEXT
