@@ -8,6 +8,7 @@
 #include "base/devices/edid.h"
 #include "base/strings/string_util.h"
 #include "base/byte_order.h"
+#include "base/bitset.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -237,15 +238,15 @@ uint8_t Edid::GetFeatureSupport() const
 
 std::string Edid::GetManufacturerSignature() const
 {
-    const uint16_t id = ByteSwap(edid_->id_manufacturer_name);
+    BitSet<uint16_t> id = ByteSwap(edid_->id_manufacturer_name);
 
     // Bits 14:10 : first letter (01h = 'A', 02h = 'B', etc.).
     // Bits 9:5 : second letter.
     // Bits 4:0 : third letter.
     char signature[4];
-    signature[0] = ((id >> 10) & 0x1F) + 'A' - 1;
-    signature[1] = ((id >> 5) & 0x1F) + 'A' - 1;
-    signature[2] = ((id >> 0) & 0x1F) + 'A' - 1;
+    signature[0] = static_cast<char>(id.Range(10, 14)) + 'A' - 1;
+    signature[1] = static_cast<char>(id.Range(5, 9)) + 'A' - 1;
+    signature[2] = static_cast<char>(id.Range(0, 4)) + 'A' - 1;
     signature[3] = 0;
 
     return signature;
@@ -403,12 +404,12 @@ double Edid::GetPixelClock() const
     return double(descriptor->pixel_clock) / 100.0;
 }
 
-std::string Edid::GetInputSignalType() const
+Edid::InputSignalType Edid::GetInputSignalType() const
 {
     if (edid_->video_input_definition & 0x80)
-        return "Digital";
+        return INPUT_SIGNAL_TYPE_DIGITAL;
 
-    return "Analog";
+    return INPUT_SIGNAL_TYPE_ANALOG;
 }
 
 uint8_t Edid::GetEstabilishedTimings1() const

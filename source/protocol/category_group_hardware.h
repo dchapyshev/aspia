@@ -9,6 +9,7 @@
 #define _ASPIA_PROTOCOL__CATEGORY_GROUP_HARDWARE_H
 
 #include "base/macros.h"
+#include "proto/system_info_session_message.pb.h"
 #include "protocol/category.h"
 
 namespace aspia {
@@ -58,6 +59,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* BoardTypeToString(proto::DmiBaseboard::BoardType type);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiBaseboard);
 };
 
@@ -74,6 +77,10 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiChassis:: Type type);
+    static const char* StatusToString(proto::DmiChassis::Status status);
+    static const char* SecurityStatusToString(proto::DmiChassis::SecurityStatus status);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiChassis);
 };
 
@@ -90,6 +97,14 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* LocationToString(proto::DmiCaches::Location value);
+    static const char* StatusToString(proto::DmiCaches::Status value);
+    static const char* ModeToString(proto::DmiCaches::Mode value);
+    static const char* SRAMTypeToString(proto::DmiCaches::SRAMType value);
+    static const char* ErrorCorrectionTypeToString(proto::DmiCaches::ErrorCorrectionType value);
+    static const char* TypeToString(proto::DmiCaches::Type value);
+    static const char* AssociativityToString(proto::DmiCaches::Associativity value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiCaches);
 };
 
@@ -106,6 +121,10 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiProcessors::Type value);
+    static const char* StatusToString(proto::DmiProcessors::Status value);
+    static const char* UpgradeToString(proto::DmiProcessors::Upgrade value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiProcessors);
 };
 
@@ -138,6 +157,11 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiSystemSlots::Type value);
+    static const char* UsageToString(proto::DmiSystemSlots::Usage value);
+    static const char* BusWidthToString(proto::DmiSystemSlots::BusWidth value);
+    static const char* LengthToString(proto::DmiSystemSlots::Length value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystemSlots);
 };
 
@@ -262,6 +286,9 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* BusTypeToString(proto::AtaDrives::BusType value);
+    static const char* TransferModeToString(proto::AtaDrives::TransferMode value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryATA);
 };
 
@@ -322,6 +349,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* InputSignalTypeToString(proto::Monitors::InputSignalType value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
 };
 

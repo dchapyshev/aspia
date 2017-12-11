@@ -96,7 +96,7 @@ Value Value::String(std::string_view value)
 }
 
 // static
-Value Value::String(const char* format, ...)
+Value Value::FormattedString(const char* format, ...)
 {
     va_list args;
 

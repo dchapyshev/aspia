@@ -14,7 +14,6 @@
 #include "base/strings/string_util.h"
 #include "base/cpu_info.h"
 #include "protocol/category_group_hardware.h"
-#include "proto/system_info_session_message.pb.h"
 #include "ui/system_info/output.h"
 #include "ui/resource.h"
 
@@ -74,15 +73,72 @@ void CategoryDmiBios::Parse(Table& table, const std::string& data)
     if (message.runtime_size() != 0)
         table.AddParam("Runtime Size", Value::Number(message.runtime_size(), "Bytes"));
 
-    if (message.feature_size() > 0)
-    {
-        Group group = table.AddGroup("Supported Features");
+    std::vector<std::pair<std::string, bool>> features;
 
-        for (int index = 0; index < message.feature_size(); ++index)
-        {
-            const proto::DmiBios::Feature& feature = message.feature(index);
-            group.AddParam(feature.name(), Value::Bool(feature.supported()));
-        }
+    auto add_characteristic = [&](const char* name, uint64_t flag)
+    {
+        features.emplace_back(name, message.characteristics() & flag);
+    };
+
+    add_characteristic("ISA", proto::DmiBios::CHARACTERISTIC_ISA);
+    add_characteristic("MCA", proto::DmiBios::CHARACTERISTIC_MCA);
+    add_characteristic("EISA", proto::DmiBios::CHARACTERISTIC_EISA);
+    add_characteristic("PCI", proto::DmiBios::CHARACTERISTIC_PCI);
+    add_characteristic("PC Card (PCMCIA)", proto::DmiBios::CHARACTERISTIC_PC_CARD);
+    add_characteristic("Plug-and-Play", proto::DmiBios::CHARACTERISTIC_PLUG_AND_PLAY);
+    add_characteristic("APM", proto::DmiBios::CHARACTERISTIC_APM);
+    add_characteristic("BIOS is Upgradeable", proto::DmiBios::CHARACTERISTIC_BIOS_IS_UPGRADEABLE);
+    add_characteristic("BIOS Shadowing", proto::DmiBios::CHARACTERISTIC_BIOS_SHADOWING);
+    add_characteristic("VLB", proto::DmiBios::CHARACTERISTIC_VLB);
+    add_characteristic("ESCD", proto::DmiBios::CHARACTERISTIC_ESCD);
+    add_characteristic("Boot from CD", proto::DmiBios::CHARACTERISTIC_BOOT_FROM_CD);
+    add_characteristic("Selectable Boot", proto::DmiBios::CHARACTERISTIC_SELECTABLE_BOOT);
+    add_characteristic("BIOS ROM is socketed", proto::DmiBios::CHARACTERISTIC_BOOT_ROM_IS_SOCKETED);
+    add_characteristic("Boot from PC Card (PCMCIA)", proto::DmiBios::CHARACTERISTIC_BOOT_FROM_PC_CARD);
+    add_characteristic("EDD", proto::DmiBios::CHARACTERISTIC_EDD);
+    add_characteristic("Japanese Floppy for NEC 9800 1.2 MB (int 13h)", proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_NEC9800);
+    add_characteristic("Japanese Floppy for Toshiba 1.2 MB (int 13h)", proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_TOSHIBA);
+    add_characteristic("5.25\"/360 kB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_525_360KB_FLOPPY);
+    add_characteristic("5.25\"/1.2 MB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_525_12MB_FLOPPY);
+    add_characteristic("3.5\"/720 kB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_35_720KB_FLOPPY);
+    add_characteristic("3.5\"/2.88 MB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_35_288MB_FLOPPY);
+    add_characteristic("Print Screen (int 5h)", proto::DmiBios::CHARACTERISTIC_PRINT_SCREEN);
+    add_characteristic("8042 Keyboard (int 9h)", proto::DmiBios::CHARACTERISTIC_8042_KEYBOARD);
+    add_characteristic("Serial (int 14h)", proto::DmiBios::CHARACTERISTIC_SERIAL);
+    add_characteristic("Printer (int 17h)", proto::DmiBios::CHARACTERISTIC_PRINTER);
+    add_characteristic("CGA/Mono video (int 10h)", proto::DmiBios::CHARACTERISTIC_CGA_VIDEO);
+    add_characteristic("NEC PC-98", proto::DmiBios::CHARACTERISTIC_NEC_PC98);
+
+    auto add_characteristic1 = [&](const char* name, uint32_t flag)
+    {
+        features.emplace_back(name, message.characteristics1() & flag);
+    };
+
+    add_characteristic1("ACPI", proto::DmiBios::CHARACTERISTIC1_ACPI);
+    add_characteristic1("USB Legacy", proto::DmiBios::CHARACTERISTIC1_USB_LEGACY);
+    add_characteristic1("AGP", proto::DmiBios::CHARACTERISTIC1_AGP);
+    add_characteristic1("I2O Boot", proto::DmiBios::CHARACTERISTIC1_I2O_BOOT);
+    add_characteristic1("LS-120 Boot", proto::DmiBios::CHARACTERISTIC1_LS120_BOOT);
+    add_characteristic1("ATAPI Zip Drive Boot", proto::DmiBios::CHARACTERISTIC1_ATAPI_ZIP_DRIVE_BOOT);
+    add_characteristic1("IEEE 1394 Boot", proto::DmiBios::CHARACTERISTIC1_IEEE1394_BOOT);
+    add_characteristic1("Smart Battery", proto::DmiBios::CHARACTERISTIC1_SMART_BATTERY);
+
+    auto add_characteristic2 = [&](const char* name, uint32_t flag)
+    {
+        features.emplace_back(name, message.characteristics2() & flag);
+    };
+
+    add_characteristic2("BIOS Boot Specification", proto::DmiBios::CHARACTERISTIC2_BIOS_BOOT_SPECIFICATION);
+    add_characteristic2("Function Key-initiated Network Boot", proto::DmiBios::CHARACTERISTIC2_KEY_INITIALIZED_NETWORK_BOOT);
+    add_characteristic2("Targeted Content Distribution", proto::DmiBios::CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION);
+
+    Group group = table.AddGroup("Supported Features");
+
+    std::sort(features.begin(), features.end());
+
+    for (const auto& feature : features)
+    {
+        group.AddParam(feature.first, Value::Bool(feature.second));
     }
 }
 
@@ -107,15 +163,9 @@ std::string CategoryDmiBios::Serialize()
     message.set_firmware_revision(table.GetFirmwareRevision());
     message.set_address(table.GetAddress());
     message.set_runtime_size(table.GetRuntimeSize());
-
-    SMBios::BiosTable::FeatureList feature_list = table.GetCharacteristics();
-
-    for (const auto& feature : feature_list)
-    {
-        proto::DmiBios::Feature* item = message.add_feature();
-        item->set_name(feature.first);
-        item->set_supported(feature.second);
-    }
+    message.set_characteristics(table.GetCharacteristics());
+    message.set_characteristics1(table.GetCharacteristics1());
+    message.set_characteristics2(table.GetCharacteristics2());
 
     return message.SerializeAsString();
 }
@@ -236,8 +286,7 @@ void CategoryDmiBaseboard::Parse(Table& table, const std::string& data)
 
         Group group = table.AddGroup(StringPrintf("Baseboard #%d", index + 1));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
+        group.AddParam("Type", Value::String(BoardTypeToString(item.type())));
 
         if (!item.manufacturer().empty())
             group.AddParam("Manufacturer", Value::String(item.manufacturer()));
@@ -308,6 +357,52 @@ std::string CategoryDmiBaseboard::Serialize()
     return message.SerializeAsString();
 }
 
+// static
+const char* CategoryDmiBaseboard::BoardTypeToString(proto::DmiBaseboard::BoardType type)
+{
+    switch (type)
+    {
+        case proto::DmiBaseboard::BOARD_TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiBaseboard::BOARD_TYPE_SERVER_BLADE:
+            return "Server Blade";
+
+        case proto::DmiBaseboard::BOARD_TYPE_CONNECTIVITY_SWITCH:
+            return "Connectivity Switch";
+
+        case proto::DmiBaseboard::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE:
+            return "System Management Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_MODULE:
+            return "Processor Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_IO_MODULE:
+            return "I/O Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_MEMORY_MODULE:
+            return "Memory Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_DAUGHTER_BOARD:
+            return "Daughter Board";
+
+        case proto::DmiBaseboard::BOARD_TYPE_MOTHERBOARD:
+            return "Motherboard";
+
+        case proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE:
+            return "Processor + Memory Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE:
+            return "Processor + I/O Module";
+
+        case proto::DmiBaseboard::BOARD_TYPE_INTERCONNECT_BOARD:
+            return "Interconnect Board";
+
+        default:
+            return "Unknown";
+    }
+}
+
 //
 // CategoryDmiChassis
 //
@@ -356,20 +451,11 @@ void CategoryDmiChassis::Parse(Table& table, const std::string& data)
         if (!item.asset_tag().empty())
             group.AddParam("Asset Tag", Value::String(item.asset_tag()));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
-
-        if (!item.os_load_status().empty())
-            group.AddParam("OS Load Status", Value::String(item.os_load_status()));
-
-        if (!item.power_source_status().empty())
-            group.AddParam("Power Source Status", Value::String(item.power_source_status()));
-
-        if (!item.temparature_status().empty())
-            group.AddParam("Temperature Status", Value::String(item.temparature_status()));
-
-        if (!item.security_status().empty())
-            group.AddParam("Security Status", Value::String(item.security_status()));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
+        group.AddParam("OS Load Status", Value::String(StatusToString(item.os_load_status())));
+        group.AddParam("Power Source Status", Value::String(StatusToString(item.power_source_status())));
+        group.AddParam("Temperature Status", Value::String(StatusToString(item.temparature_status())));
+        group.AddParam("Security Status", Value::String(SecurityStatusToString(item.security_status())));
 
         if (item.height() != 0)
             group.AddParam("Height", Value::Number(item.height(), "U"));
@@ -408,6 +494,147 @@ std::string CategoryDmiChassis::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiChassis::TypeToString(proto::DmiChassis::Type type)
+{
+    switch (type)
+    {
+        case proto::DmiChassis::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiChassis::TYPE_DESKTOP:
+            return "Desktop";
+
+        case proto::DmiChassis::TYPE_LOW_PROFILE_DESKTOP:
+            return "Low Profile Desktop";
+
+        case proto::DmiChassis::TYPE_PIZZA_BOX:
+            return "Pizza Box";
+
+        case proto::DmiChassis::TYPE_MINI_TOWER:
+            return "Mini Tower";
+
+        case proto::DmiChassis::TYPE_TOWER:
+            return "Tower";
+
+        case proto::DmiChassis::TYPE_PORTABLE:
+            return "Portable";
+
+        case proto::DmiChassis::TYPE_LAPTOP:
+            return "Laptop";
+
+        case proto::DmiChassis::TYPE_NOTEBOOK:
+            return "Notebook";
+
+        case proto::DmiChassis::TYPE_HAND_HELD:
+            return "Hand Held";
+
+        case proto::DmiChassis::TYPE_DOCKING_STATION:
+            return "Docking Station";
+
+        case proto::DmiChassis::TYPE_ALL_IN_ONE:
+            return "All In One";
+
+        case proto::DmiChassis::TYPE_SUB_NOTEBOOK:
+            return "Sub Notebook";
+
+        case proto::DmiChassis::TYPE_SPACE_SAVING:
+            return "Space Saving";
+
+        case proto::DmiChassis::TYPE_LUNCH_BOX:
+            return "Lunch Box";
+
+        case proto::DmiChassis::TYPE_MAIN_SERVER_CHASSIS:
+            return "Main Server Chassis";
+
+        case proto::DmiChassis::TYPE_EXPANSION_CHASSIS:
+            return "Expansion Chassis";
+
+        case proto::DmiChassis::TYPE_SUB_CHASSIS:
+            return "Sub Chassis";
+
+        case proto::DmiChassis::TYPE_BUS_EXPANSION_CHASSIS:
+            return "Bus Expansion Chassis";
+
+        case proto::DmiChassis::TYPE_PERIPHERIAL_CHASSIS:
+            return "Peripherial Chassis";
+
+        case proto::DmiChassis::TYPE_RAID_CHASSIS:
+            return "RAID Chassis";
+
+        case proto::DmiChassis::TYPE_RACK_MOUNT_CHASSIS:
+            return "Rack Mount Chassis";
+
+        case proto::DmiChassis::TYPE_SEALED_CASE_PC:
+            return "Sealed Case PC";
+
+        case proto::DmiChassis::TYPE_MULTI_SYSTEM_CHASSIS:
+            return "Multi System Chassis";
+
+        case proto::DmiChassis::TYPE_COMPACT_PCI:
+            return "Compact PCI";
+
+        case proto::DmiChassis::TYPE_ADVANCED_TCA:
+            return "Advanced TCA";
+
+        case proto::DmiChassis::TYPE_BLADE:
+            return "Blade";
+
+        case proto::DmiChassis::TYPE_BLADE_ENCLOSURE:
+            return "Blade Enclosure";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiChassis::StatusToString(proto::DmiChassis::Status status)
+{
+    switch (status)
+    {
+        case proto::DmiChassis::STATUS_OTHER:
+            return "Other";
+
+        case proto::DmiChassis::STATUS_SAFE:
+            return "Safe";
+
+        case proto::DmiChassis::STATUS_WARNING:
+            return "Warning";
+
+        case proto::DmiChassis::STATUS_CRITICAL:
+            return "Critical";
+
+        case proto::DmiChassis::STATUS_NON_RECOVERABLE:
+            return "Non Recoverable";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiChassis::SecurityStatusToString(proto::DmiChassis::SecurityStatus status)
+{
+    switch (status)
+    {
+        case proto::DmiChassis::SECURITY_STATUS_OTHER:
+            return "Other";
+
+        case proto::DmiChassis::SECURITY_STATUS_NONE:
+            return "None";
+
+        case proto::DmiChassis::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT:
+            return "External Interface Locked Out";
+
+        case proto::DmiChassis::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED:
+            return "External Interface Enabled";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -449,16 +676,12 @@ void CategoryDmiCaches::Parse(Table& table, const std::string& data)
         if (!item.name().empty())
             group.AddParam("Name", Value::String(item.name()));
 
-        if (!item.location().empty())
-            group.AddParam("Location", Value::String(item.location()));
-
-        group.AddParam("Status", Value::String(item.enabled() ? "Enabled" : "Disabled"));
-
-        if (!item.mode().empty())
-            group.AddParam("Mode", Value::String(item.mode()));
+        group.AddParam("Location", Value::String(LocationToString(item.location())));
+        group.AddParam("Status", Value::String(StatusToString(item.status())));
+        group.AddParam("Mode", Value::String(ModeToString(item.mode())));
 
         if (item.level() != 0)
-            group.AddParam("Level", Value::String("L%d", item.level()));
+            group.AddParam("Level", Value::FormattedString("L%d", item.level()));
 
         if (item.maximum_size() != 0)
             group.AddParam("Maximum Size", Value::Number(item.maximum_size(), "kB"));
@@ -466,31 +689,39 @@ void CategoryDmiCaches::Parse(Table& table, const std::string& data)
         if (item.current_size() != 0)
             group.AddParam("Current Size", Value::Number(item.current_size(), "kB"));
 
-        if (item.supported_sram_type_size())
+        if (item.supported_sram_types())
         {
             Group types_group = group.AddGroup("Supported SRAM Types");
 
-            for (int i = 0; i < item.supported_sram_type_size(); ++i)
-            {
-                types_group.AddParam(item.supported_sram_type(i).name(),
-                                      Value::Bool(item.supported_sram_type(i).supported()));
-            }
+            types_group.AddParam("Non-burst",
+                                 Value::Bool(item.supported_sram_types() &
+                                                 proto::DmiCaches::SRAM_TYPE_NON_BURST));
+
+            types_group.AddParam("Burst",
+                                 Value::Bool(item.supported_sram_types() &
+                                             proto::DmiCaches::SRAM_TYPE_BURST));
+
+            types_group.AddParam("Pipeline Burst",
+                                 Value::Bool(item.supported_sram_types() &
+                                             proto::DmiCaches::SRAM_TYPE_PIPELINE_BURST));
+
+            types_group.AddParam("Synchronous",
+                                 Value::Bool(item.supported_sram_types() &
+                                             proto::DmiCaches::SRAM_TYPE_SYNCHRONOUS));
+
+            types_group.AddParam("Asynchronous",
+                                 Value::Bool(item.supported_sram_types() &
+                                             proto::DmiCaches::SRAM_TYPE_ASYNCHRONOUS));
         }
 
-        if (!item.current_sram_type().empty())
-            group.AddParam("Current SRAM Type", Value::String(item.current_sram_type()));
+        group.AddParam("Current SRAM Type", Value::String(SRAMTypeToString(item.current_sram_type())));
 
         if (item.speed() != 0)
             group.AddParam("Speed", Value::Number(item.speed(), "ns"));
 
-        if (!item.error_correction_type().empty())
-            group.AddParam("Error Correction Type", Value::String(item.error_correction_type()));
-
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
-
-        if (!item.associativity().empty())
-            group.AddParam("Associativity", Value::String(item.associativity()));
+        group.AddParam("Error Correction Type", Value::String(ErrorCorrectionTypeToString(item.error_correction_type())));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
+        group.AddParam("Associativity", Value::String(AssociativityToString(item.associativity())));
     }
 }
 
@@ -511,19 +742,12 @@ std::string CategoryDmiCaches::Serialize()
 
         item->set_name(table.GetName());
         item->set_location(table.GetLocation());
-        item->set_enabled(table.IsEnabled());
+        item->set_status(table.GetStatus());
         item->set_mode(table.GetMode());
         item->set_level(table.GetLevel());
         item->set_maximum_size(table.GetMaximumSize());
         item->set_current_size(table.GetCurrentSize());
-
-        for (const auto& sram_type : table.GetSupportedSRAMTypes())
-        {
-            auto sram_type_item = item->add_supported_sram_type();
-            sram_type_item->set_name(sram_type.first);
-            sram_type_item->set_supported(sram_type.second);
-        }
-
+        item->set_supported_sram_types(table.GetSupportedSRAMTypes());
         item->set_current_sram_type(table.GetCurrentSRAMType());
         item->set_speed(table.GetSpeed());
         item->set_error_correction_type(table.GetErrorCorrectionType());
@@ -532,6 +756,188 @@ std::string CategoryDmiCaches::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiCaches::LocationToString(proto::DmiCaches::Location value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::LOCATION_INTERNAL:
+            return "Internal";
+
+        case proto::DmiCaches::LOCATION_EXTERNAL:
+            return "External";
+
+        case proto::DmiCaches::LOCATION_RESERVED:
+            return "Reserved";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::StatusToString(proto::DmiCaches::Status value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::STATUS_ENABLED:
+            return "Enabled";
+
+        case proto::DmiCaches::STATUS_DISABLED:
+            return "Disabled";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::ModeToString(proto::DmiCaches::Mode value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::MODE_WRITE_THRU:
+            return "Write Thru";
+
+        case proto::DmiCaches::MODE_WRITE_BACK:
+            return "Write Back";
+
+        case proto::DmiCaches::MODE_WRITE_WITH_MEMORY_ADDRESS:
+            return "Write with memory address";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::SRAMTypeToString(proto::DmiCaches::SRAMType value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::SRAM_TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiCaches::SRAM_TYPE_UNKNOWN:
+            return "Unknown";
+
+        case proto::DmiCaches::SRAM_TYPE_NON_BURST:
+            return "Non-burst";
+
+        case proto::DmiCaches::SRAM_TYPE_BURST:
+            return "Burst";
+
+        case proto::DmiCaches::SRAM_TYPE_PIPELINE_BURST:
+            return "Pipeline Burst";
+
+        case proto::DmiCaches::SRAM_TYPE_SYNCHRONOUS:
+            return "Synchronous";
+
+        case proto::DmiCaches::SRAM_TYPE_ASYNCHRONOUS:
+            return "Asynchronous";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::ErrorCorrectionTypeToString(
+    proto::DmiCaches::ErrorCorrectionType value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::ERROR_CORRECTION_TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiCaches::ERROR_CORRECTION_TYPE_NONE:
+            return "None";
+
+        case proto::DmiCaches::ERROR_CORRECTION_TYPE_PARITY:
+            return "Parity";
+
+        case proto::DmiCaches::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC:
+            return "Single bit ECC";
+
+        case proto::DmiCaches::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC:
+            return "Multi bit ECC";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::TypeToString(proto::DmiCaches::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiCaches::TYPE_INSTRUCTION:
+            return "Instruction";
+
+        case proto::DmiCaches::TYPE_DATA:
+            return "Data";
+
+        case proto::DmiCaches::TYPE_UNIFIED:
+            return "Unified";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiCaches::AssociativityToString(proto::DmiCaches::Associativity value)
+{
+    switch (value)
+    {
+        case proto::DmiCaches::ASSOCIATIVITY_OTHER:
+            return "Other";
+
+        case proto::DmiCaches::ASSOCIATIVITY_DIRECT_MAPPED:
+            return "Direct Mapped";
+
+        case proto::DmiCaches::ASSOCIATIVITY_2_WAY:
+            return "2-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_4_WAY:
+            return "4-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_FULLY:
+            return "Fully Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_8_WAY:
+            return "8-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_16_WAY:
+            return "16-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_12_WAY:
+            return "12-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_24_WAY:
+            return "24-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_32_WAY:
+            return "32-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_48_WAY:
+            return "48-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_64_WAY:
+            return "64-way Set-Associative";
+
+        case proto::DmiCaches::ASSOCIATIVITY_20_WAY:
+            return "20-way Set-Associative";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -579,17 +985,13 @@ void CategoryDmiProcessors::Parse(Table& table, const std::string& data)
         if (!item.family().empty())
             group.AddParam("Family", Value::String(item.family()));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
-
-        if (!item.status().empty())
-            group.AddParam("Status", Value::String(item.status()));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
+        group.AddParam("Status", Value::String(StatusToString(item.status())));
 
         if (!item.socket().empty())
             group.AddParam("Socket", Value::String(item.socket()));
 
-        if (!item.upgrade().empty())
-            group.AddParam("Upgrade", Value::String(item.upgrade()));
+        group.AddParam("Upgrade", Value::String(UpgradeToString(item.upgrade())));
 
         if (item.external_clock() != 0)
             group.AddParam("External Clock", Value::Number(item.external_clock(), "MHz"));
@@ -621,15 +1023,27 @@ void CategoryDmiProcessors::Parse(Table& table, const std::string& data)
         if (item.thread_count() != 0)
             group.AddParam("Thread Count", Value::Number(item.thread_count()));
 
-        if (item.feature_size())
+        if (item.characteristics())
         {
             Group features_group = group.AddGroup("Features");
 
-            for (int i = 0; i < item.feature_size(); ++i)
-            {
-                features_group.AddParam(item.feature(i).name(),
-                                        Value::Bool(item.feature(i).supported()));
-            }
+            features_group.AddParam("64-bit Capable",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_64BIT_CAPABLE));
+
+            features_group.AddParam("Multi-Core",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_MULTI_CORE));
+
+            features_group.AddParam("Hardware Thread",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_HARDWARE_THREAD));
+
+            features_group.AddParam("Execute Protection",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_EXECUTE_PROTECTION));
+
+            features_group.AddParam("Enhanced Virtualization",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_ENHANCED_VIRTUALIZATION));
+
+            features_group.AddParam("Power/Perfomance Control",
+                Value::Bool(item.characteristics() & proto::DmiProcessors::CHARACTERISTIC_POWER_CONTROL));
         }
     }
 }
@@ -666,16 +1080,235 @@ std::string CategoryDmiProcessors::Serialize()
         item->set_core_count(table.GetCoreCount());
         item->set_core_enabled(table.GetCoreEnabled());
         item->set_thread_count(table.GetThreadCount());
-
-        for (const auto& feature : table.GetFeatures())
-        {
-            auto feature_item = item->add_feature();
-            feature_item->set_name(feature.first);
-            feature_item->set_supported(feature.second);
-        }
+        item->set_characteristics(table.GetCharacteristics());
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiProcessors::TypeToString(proto::DmiProcessors::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiProcessors::TYPE_CENTRAL_PROCESSOR:
+            return "Central Processor";
+
+        case proto::DmiProcessors::TYPE_MATH_PROCESSOR:
+            return "Math Processor";
+
+        case proto::DmiProcessors::TYPE_DSP_PROCESSOR:
+            return "DSP Processor";
+
+        case proto::DmiProcessors::TYPE_VIDEO_PROCESSOR:
+            return "Video Processor";
+
+        case proto::DmiProcessors::TYPE_OTHER:
+            return "Other Processor";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiProcessors::StatusToString(proto::DmiProcessors::Status value)
+{
+    switch (value)
+    {
+        case proto::DmiProcessors::STATUS_ENABLED:
+            return "Enabled";
+
+        case proto::DmiProcessors::STATUS_DISABLED_BY_USER:
+            return "Disabled by User";
+
+        case proto::DmiProcessors::STATUS_DISABLED_BY_BIOS:
+            return "Disabled by BIOS";
+
+        case proto::DmiProcessors::STATUS_IDLE:
+            return "Idle";
+
+        case proto::DmiProcessors::STATUS_OTHER:
+            return "Other";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiProcessors::UpgradeToString(proto::DmiProcessors::Upgrade value)
+{
+    switch (value)
+    {
+        case proto::DmiProcessors::UPGRADE_OTHER:
+            return "Other";
+
+        case proto::DmiProcessors::UPGRADE_DAUGHTER_BOARD:
+            return "Daughter Board";
+
+        case proto::DmiProcessors::UPGRADE_ZIF_SOCKET:
+            return "ZIF Socket";
+
+        case proto::DmiProcessors::UPGRADE_REPLACEABLE_PIGGY_BACK:
+            return "Replaceable Piggy Back";
+
+        case proto::DmiProcessors::UPGRADE_NONE:
+            return "None";
+
+        case proto::DmiProcessors::UPGRADE_LIF_SOCKET:
+            return "LIF Socket";
+
+        case proto::DmiProcessors::UPGRADE_SLOT_1:
+            return "Slot 1";
+
+        case proto::DmiProcessors::UPGRADE_SLOT_2:
+            return "Slot 2";
+
+        case proto::DmiProcessors::UPGRADE_370_PIN_SOCKET:
+            return "370-pin Socket";
+
+        case proto::DmiProcessors::UPGRADE_SLOT_A:
+            return "Slot A";
+
+        case proto::DmiProcessors::UPGRADE_SLOT_M:
+            return "Slot M";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_423:
+            return "Socket 423";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_462:
+            return "Socket A (Socket 462)";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_478:
+            return "Socket 478";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_754:
+            return "Socket 754";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_940:
+            return "Socket 940";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_939:
+            return "Socket 939";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_MPGA604:
+            return "Socket mPGA604";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA771:
+            return "Socket LGA771";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA775:
+            return "Socket LGA775";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_S1:
+            return "Socket S1";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_AM2:
+            return "Socket AM2";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_F:
+            return "Socket F (1207)";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1366:
+            return "Socket LGA1366";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_G34:
+            return "Socket G34";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_AM3:
+            return "Socket AM3";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_C32:
+            return "Socket C32";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1156:
+            return "Socket LGA1156";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1567:
+            return "Socket LGA1567";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_PGA988A:
+            return "Socket PGA988A";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1288:
+            return "Socket BGA1288";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_RPGA988B:
+            return "Socket rPGA988B";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1023:
+            return "Socket BGA1023";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1224:
+            return "Socket BGA1224";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1155:
+            return "Socket BGA1155";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1356:
+            return "Socket LGA1356";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA2011:
+            return "Socket LGA2011";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_FS1:
+            return "Socket FS1";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_FS2:
+            return "Socket FS2";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_FM1:
+            return "Socket FM1";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_FM2:
+            return "Socket FM2";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA2011_3:
+            return "Socket LGA2011-3";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1356_3:
+            return "Socket LGA1356-3";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1150:
+            return "Socket LGA1150";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1168:
+            return "Socket BGA1168";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1234:
+            return "Socket BGA1234";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1364:
+            return "Socket BGA1364";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_AM4:
+            return "Socket AM4";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA1151:
+            return "Socket LGA1151";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1356:
+            return "Socket BGA1356";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1440:
+            return "Socket BGA1440";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_BGA1515:
+            return "Socket BGA1515";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_LGA3647_1:
+            return "Socket LGA3647-1";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_SP3:
+            return "Socket SP3";
+
+        case proto::DmiProcessors::UPGRADE_SOCKET_SP3_R2:
+            return "Socket SP3r2";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -819,17 +1452,10 @@ void CategoryDmiSystemSlots::Parse(Table& table, const std::string& data)
         if (!item.slot_designation().empty())
             group.AddParam("Slot Designation", Value::String(item.slot_designation()));
 
-        if (!item.type().empty())
-            group.AddParam("Type", Value::String(item.type()));
-
-        if (!item.usage().empty())
-            group.AddParam("Usage", Value::String(item.usage()));
-
-        if (!item.bus_width().empty())
-            group.AddParam("Bus Width", Value::String(item.bus_width()));
-
-        if (!item.length().empty())
-            group.AddParam("Length", Value::String(item.length()));
+        group.AddParam("Type", Value::String(TypeToString(item.type())));
+        group.AddParam("Usage", Value::String(UsageToString(item.usage())));
+        group.AddParam("Bus Width", Value::String(BusWidthToString(item.bus_width())));
+        group.AddParam("Length", Value::String(LengthToString(item.length())));
     }
 }
 
@@ -856,6 +1482,274 @@ std::string CategoryDmiSystemSlots::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiSystemSlots::TypeToString(proto::DmiSystemSlots::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiSystemSlots::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiSystemSlots::TYPE_ISA:
+            return "ISA";
+
+        case proto::DmiSystemSlots::TYPE_MCA:
+            return "MCA";
+
+        case proto::DmiSystemSlots::TYPE_EISA:
+            return "EISA";
+
+        case proto::DmiSystemSlots::TYPE_PCI:
+            return "PCI";
+
+        case proto::DmiSystemSlots::TYPE_PC_CARD:
+            return "PC Card (PCMCIA)";
+
+        case proto::DmiSystemSlots::TYPE_VLB:
+            return "VLB";
+
+        case proto::DmiSystemSlots::TYPE_PROPRIETARY:
+            return "Proprietary";
+
+        case proto::DmiSystemSlots::TYPE_PROCESSOR_CARD:
+            return "Processor Card";
+
+        case proto::DmiSystemSlots::TYPE_PROPRIETARY_MEMORY_CARD:
+            return "Proprietary Memory Card";
+
+        case proto::DmiSystemSlots::TYPE_IO_RISER_CARD:
+            return "I/O Riser Card";
+
+        case proto::DmiSystemSlots::TYPE_NUBUS:
+            return "NuBus";
+
+        case proto::DmiSystemSlots::TYPE_PCI_66:
+            return "PCI-66";
+
+        case proto::DmiSystemSlots::TYPE_AGP:
+            return "AGP";
+
+        case proto::DmiSystemSlots::TYPE_AGP_2X:
+            return "AGP 2x";
+
+        case proto::DmiSystemSlots::TYPE_AGP_4X:
+            return "AGP 4x";
+
+        case proto::DmiSystemSlots::TYPE_PCI_X:
+            return "PCI-X";
+
+        case proto::DmiSystemSlots::TYPE_AGP_8X:
+            return "AGP 8x";
+
+        case proto::DmiSystemSlots::TYPE_M2_SOCKET_1DP:
+            return "M.2 Socket 1-DP";
+
+        case proto::DmiSystemSlots::TYPE_M2_SOCKET_1SD:
+            return "M.2 Socket 1-SD";
+
+        case proto::DmiSystemSlots::TYPE_M2_SOCKET_2:
+            return "M.2 Socket 2";
+
+        case proto::DmiSystemSlots::TYPE_M2_SOCKET_3:
+            return "M.2 Socket 3";
+
+        case proto::DmiSystemSlots::TYPE_MXM_TYPE_I:
+            return "MXM Type I";
+
+        case proto::DmiSystemSlots::TYPE_MXM_TYPE_II:
+            return "MXM Type II";
+
+        case proto::DmiSystemSlots::TYPE_MXM_TYPE_III:
+            return "MXM Type III";
+
+        case proto::DmiSystemSlots::TYPE_MXM_TYPE_III_HE:
+            return "MXM Type III-HE";
+
+        case proto::DmiSystemSlots::TYPE_MXM_TYPE_IV:
+            return "MXM Type IV";
+
+        case proto::DmiSystemSlots::TYPE_MXM_30_TYPE_A:
+            return "MXM 3.0 Type A";
+
+        case proto::DmiSystemSlots::TYPE_MXM_30_TYPE_B:
+            return "MXM 3.0 Type B";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_SFF_8639:
+            return "PCI Express 2 SFF-8639";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_SFF_8639:
+            return "PCI Express 3 SFF-8639";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE:
+            return "PCI Express Mini 52-pin with bottom-side keep-outs";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_52PIN:
+            return "PCI Express Mini 52-pin without bottom-side keep-outs";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_76PIN:
+            return "PCI Express Mini 76-pin";
+
+        case proto::DmiSystemSlots::TYPE_PC98_C20:
+            return "PC-98/C20";
+
+        case proto::DmiSystemSlots::TYPE_PC98_C24:
+            return "PC-98/C24";
+
+        case proto::DmiSystemSlots::TYPE_PC98_E:
+            return "PC-98/E";
+
+        case proto::DmiSystemSlots::TYPE_PC98_LOCAL_BUS:
+            return "PC-98/Local Bus";
+
+        case proto::DmiSystemSlots::TYPE_PC98_CARD:
+            return "PC-98/Card";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS:
+            return "PCI Express";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X1:
+            return "PCI Express x1";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X2:
+            return "PCI Express x2";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X4:
+            return "PCI Express x4";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X8:
+            return "PCI Express x8";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X16:
+            return "PCI Express x16";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2:
+            return "PCI Express 2";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X1:
+            return "PCI Express 2 x1";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X2:
+            return "PCI Express 2 x2";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X4:
+            return "PCI Express 2 x4";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X8:
+            return "PCI Express 2 x8";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X16:
+            return "PCI Express 2 x16";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3:
+            return "PCI Express 3";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X1:
+            return "PCI Express 3 x1";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X2:
+            return "PCI Express 3 x2";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X4:
+            return "PCI Express 3 x4";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X8:
+            return "PCI Express 3 x8";
+
+        case proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X16:
+            return "PCI Express 3 x16";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiSystemSlots::UsageToString(proto::DmiSystemSlots::Usage value)
+{
+    switch (value)
+    {
+        case proto::DmiSystemSlots::USAGE_OTHER:
+            return "Other";
+
+        case proto::DmiSystemSlots::USAGE_AVAILABLE:
+            return "Available";
+
+        case proto::DmiSystemSlots::USAGE_IN_USE:
+            return "In Use";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiSystemSlots::BusWidthToString(proto::DmiSystemSlots::BusWidth value)
+{
+    switch (value)
+    {
+        case proto::DmiSystemSlots::BUS_WIDTH_OTHER:
+            return "Other";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_8_BIT:
+            return "8-bit";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_16_BIT:
+            return "16-bit";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_32_BIT:
+            return "32-bit";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_64_BIT:
+            return "64-bit";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_128_BIT:
+            return "128-bit";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X1:
+            return "x1";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X2:
+            return "x2";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X4:
+            return "x4";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X8:
+            return "x8";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X12:
+            return "x12";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X16:
+            return "x16";
+
+        case proto::DmiSystemSlots::BUS_WIDTH_X32:
+            return "x32";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiSystemSlots::LengthToString(proto::DmiSystemSlots::Length value)
+{
+    switch (value)
+    {
+        case proto::DmiSystemSlots::LENGTH_OTHER:
+            return "Other";
+
+        case proto::DmiSystemSlots::LENGTH_SHORT:
+            return "Short";
+
+        case proto::DmiSystemSlots::LENGTH_LONG:
+            return "Long";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -1242,21 +2136,21 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
 
     table.AddParam("Brand String", Value::String(message.brand_string()));
     table.AddParam("Vendor", Value::String(message.vendor()));
-    table.AddParam("Stepping", Value::String("%02Xh", message.stepping()));
-    table.AddParam("Model", Value::String("%02Xh", message.model()));
-    table.AddParam("Family", Value::String("%02Xh", message.family()));
+    table.AddParam("Stepping", Value::FormattedString("%02Xh", message.stepping()));
+    table.AddParam("Model", Value::FormattedString("%02Xh", message.model()));
+    table.AddParam("Family", Value::FormattedString("%02Xh", message.family()));
 
     if (message.extended_model())
     {
-        table.AddParam("Extended Model", Value::String("%02Xh", message.extended_model()));
+        table.AddParam("Extended Model", Value::FormattedString("%02Xh", message.extended_model()));
     }
 
     if (message.extended_family())
     {
-        table.AddParam("Extended Family", Value::String("%02Xh", message.extended_family()));
+        table.AddParam("Extended Family", Value::FormattedString("%02Xh", message.extended_family()));
     }
 
-    table.AddParam("Brand ID", Value::String("%02Xh", message.brand_id()));
+    table.AddParam("Brand ID", Value::FormattedString("%02Xh", message.brand_id()));
     table.AddParam("Packages", Value::Number(message.packages()));
     table.AddParam("Physical Cores", Value::Number(message.physical_cores()));
     table.AddParam("Logical Cores", Value::Number(message.logical_cores()));
@@ -1535,11 +2429,8 @@ void CategoryATA::Parse(Table& table, const std::string& data)
         if (!item.firmware_revision().empty())
             group.AddParam("Firmware Revision", Value::String(item.firmware_revision()));
 
-        if (!item.bus_type().empty())
-            group.AddParam("Bus Type", Value::String(item.bus_type()));
-
-        if (!item.transfer_mode().empty())
-            group.AddParam("Transfer Mode", Value::String(item.transfer_mode()));
+        group.AddParam("Bus Type", Value::String(BusTypeToString(item.bus_type())));
+        group.AddParam("Transfer Mode", Value::String(TransferModeToString(item.transfer_mode())));
 
         if (item.rotation_rate())
             group.AddParam("Rotation Rate", Value::Number(item.rotation_rate(), "RPM"));
@@ -1573,15 +2464,35 @@ void CategoryATA::Parse(Table& table, const std::string& data)
         if (item.bytes_per_sector())
             group.AddParam("Bytes per Sector", Value::Number(item.bytes_per_sector()));
 
-        if (item.feature_size())
+        if (item.supported_features())
         {
             Group features_group = group.AddGroup("Features");
 
-            for (int i = 0; i < item.feature_size(); ++i)
+            auto add_feature = [&](const char* name, uint64_t flag)
             {
-                features_group.AddParam(item.feature(i).name(),
-                                        Value::Bool(item.feature(i).enabled()));
-            }
+                if (item.supported_features() & flag)
+                    features_group.AddParam(name, Value::Bool(item.enabled_features() & flag));
+            };
+
+            add_feature("48-bit LBA", proto::AtaDrives::FEATURE_48BIT_LBA);
+            add_feature("Advanced Power Management", proto::AtaDrives::FEATURE_ADVANCED_POWER_MANAGEMENT);
+            add_feature("Automatic Acoustic Management", proto::AtaDrives::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT);
+            add_feature("Device Configuration Overlay", proto::AtaDrives::FEATURE_DEVICE_CONFIGURATION_OVERLAY);
+            add_feature("General Purpose Logging", proto::AtaDrives::FEATURE_GENERAL_PURPOSE_LOGGING);
+            add_feature("Host Protected Area", proto::AtaDrives::FEATURE_HOST_PROTECTED_AREA);
+            add_feature("Read Lock Ahead", proto::AtaDrives::FEATURE_READ_LOCK_AHEAD);
+            add_feature("Write Cache", proto::AtaDrives::FEATURE_WRITE_CACHE);
+            add_feature("Native Command Queuing", proto::AtaDrives::FEATURE_NATIVE_COMMAND_QUEUING);
+            add_feature("Power Management", proto::AtaDrives::FEATURE_POWER_MANAGEMENT);
+            add_feature("Power Up In Standby", proto::AtaDrives::FEATURE_POWER_UP_IN_STANDBY);
+            add_feature("Release Interrupt", proto::AtaDrives::FEATURE_RELEASE_INTERRUPT);
+            add_feature("Service Interrupt", proto::AtaDrives::FEATURE_SERVICE_INTERRUPT);
+            add_feature("Security Mode", proto::AtaDrives::FEATURE_SECURITY_MODE);
+            add_feature("Streaming", proto::AtaDrives::FEATURE_STREAMING);
+            add_feature("SMART", proto::AtaDrives::FEATURE_SMART);
+            add_feature("SMART Error Logging", proto::AtaDrives::FEATURE_SMART_ERROR_LOGGING);
+            add_feature("SMART Self Test", proto::AtaDrives::FEATURE_SMART_SELF_TEST);
+            add_feature("TRIM", proto::AtaDrives::FEATURE_TRIM);
         }
     }
 }
@@ -1610,16 +2521,112 @@ std::string CategoryATA::Serialize()
         item->set_sectors_per_track(enumerator.GetSectorsPerTrack());
         item->set_bytes_per_sector(enumerator.GetBytesPerSector());
         item->set_heads_number(enumerator.GetHeadsNumber());
-
-        for (const auto& feature : enumerator.GetFeatures())
-        {
-            auto feature_item = item->add_feature();
-            feature_item->set_name(feature.first);
-            feature_item->set_enabled(feature.second);
-        }
+        item->set_supported_features(enumerator.GetSupportedFeatures());
+        item->set_enabled_features(enumerator.GetEnabledFeatures());
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryATA::BusTypeToString(proto::AtaDrives::BusType value)
+{
+    switch (value)
+    {
+        case proto::AtaDrives::BUS_TYPE_SCSI:
+            return "SCSI";
+
+        case proto::AtaDrives::BUS_TYPE_ATAPI:
+            return "ATAPI";
+
+        case proto::AtaDrives::BUS_TYPE_ATA:
+            return "ATA";
+
+        case proto::AtaDrives::BUS_TYPE_IEEE1394:
+            return "IEEE 1394";
+
+        case proto::AtaDrives::BUS_TYPE_SSA:
+            return "SSA";
+
+        case proto::AtaDrives::BUS_TYPE_FIBRE:
+            return "Fibre";
+
+        case proto::AtaDrives::BUS_TYPE_USB:
+            return "USB";
+
+        case proto::AtaDrives::BUS_TYPE_RAID:
+            return "RAID";
+
+        case proto::AtaDrives::BUS_TYPE_ISCSI:
+            return "iSCSI";
+
+        case proto::AtaDrives::BUS_TYPE_SAS:
+            return "SAS";
+
+        case proto::AtaDrives::BUS_TYPE_SATA:
+            return "SATA";
+
+        case proto::AtaDrives::BUS_TYPE_SD:
+            return "SD";
+
+        case proto::AtaDrives::BUS_TYPE_MMC:
+            return "MMC";
+
+        case proto::AtaDrives::BUS_TYPE_VIRTUAL:
+            return "Virtual";
+
+        case proto::AtaDrives::BUS_TYPE_FILE_BACKED_VIRTUAL:
+            return "File Backed Virtual";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryATA::TransferModeToString(proto::AtaDrives::TransferMode value)
+{
+    switch (value)
+    {
+        case proto::AtaDrives::TRANSFER_MODE_PIO:
+            return "PIO";
+
+        case proto::AtaDrives::TRANSFER_MODE_PIO_DMA:
+            return "PIO / DMA";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_133:
+            return "UltraDMA/133 (133 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_100:
+            return "UltraDMA/100 (100 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_66:
+            return "UltraDMA/66 (66 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_44:
+            return "UltraDMA/44 (44 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_33:
+            return "UltraDMA/33 (33 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_25:
+            return "UltraDMA/25 (25 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_16:
+            return "UltraDMA/16 (16 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_SATA_600:
+            return "SATA/600 (600 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_SATA_300:
+            return "SATA/300 (300 MB/s)";
+
+        case proto::AtaDrives::TRANSFER_MODE_SATA_150:
+            return "SATA/150 (150 MB/s)";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -1818,7 +2825,7 @@ void CategoryMonitor::Parse(Table& table, const std::string& data)
         }
 
         if (item.gamma() != 0.0)
-            group.AddParam("Gamma", Value::String("%.2f", item.gamma()));
+            group.AddParam("Gamma", Value::FormattedString("%.2f", item.gamma()));
 
         if (item.max_horizontal_image_size() != 0)
         {
@@ -1890,8 +2897,8 @@ void CategoryMonitor::Parse(Table& table, const std::string& data)
                            Value::Number(item.max_pixel_clock(), "MHz"));
         }
 
-        if (!item.input_signal_type().empty())
-            group.AddParam("Input Signal Type", Value::String(item.input_signal_type()));
+        group.AddParam("Input Signal Type",
+                       Value::String(InputSignalTypeToString(item.input_signal_type())));
 
         {
             Group features_group = group.AddGroup("Supported Features");
@@ -1910,7 +2917,7 @@ void CategoryMonitor::Parse(Table& table, const std::string& data)
 
             for (int mode = 0; mode < item.timings_size(); ++mode)
             {
-                const proto::Monitors::Item::Timing& timing = item.timings(mode);
+                const proto::Monitors::Timing& timing = item.timings(mode);
 
                 modes_group.AddParam(StringPrintf("%dx%d", timing.width(), timing.height()),
                                  Value::Number(timing.frequency(), "Hz"));
@@ -1956,7 +2963,20 @@ std::string CategoryMonitor::Serialize()
         item->set_min_vertical_rate(edid->GetMinVerticalRate());
         item->set_pixel_clock(edid->GetPixelClock());
         item->set_max_pixel_clock(edid->GetMaxSupportedPixelClock());
-        item->set_input_signal_type(edid->GetInputSignalType());
+
+        switch (edid->GetInputSignalType())
+        {
+            case Edid::INPUT_SIGNAL_TYPE_DIGITAL:
+                item->set_input_signal_type(proto::Monitors::INPUT_SIGNAL_TYPE_DIGITAL);
+                break;
+
+            case Edid::INPUT_SIGNAL_TYPE_ANALOG:
+                item->set_input_signal_type(proto::Monitors::INPUT_SIGNAL_TYPE_ANALOG);
+                break;
+
+            default:
+                break;
+        }
 
         uint8_t supported_features = edid->GetFeatureSupport();
 
@@ -1980,7 +3000,7 @@ std::string CategoryMonitor::Serialize()
 
         auto add_timing = [&](int width, int height, int freq)
         {
-            proto::Monitors::Item::Timing* timing = item->add_timings();
+            proto::Monitors::Timing* timing = item->add_timings();
 
             timing->set_width(width);
             timing->set_height(height);
@@ -2054,6 +3074,22 @@ std::string CategoryMonitor::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryMonitor::InputSignalTypeToString(proto::Monitors::InputSignalType value)
+{
+    switch (value)
+    {
+        case proto::Monitors::INPUT_SIGNAL_TYPE_DIGITAL:
+            return "Digital";
+
+        case proto::Monitors::INPUT_SIGNAL_TYPE_ANALOG:
+            return "Analog";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

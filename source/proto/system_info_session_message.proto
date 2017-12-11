@@ -13,10 +13,58 @@ package aspia.proto;
 
 message DmiBios
 {
-    message Feature
+    enum Characteristics
     {
-        string name    = 1;
-        bool supported = 2;
+        CHARACTERISTIC_NONE                          = 0;
+        CHARACTERISTIC_ISA                           = 1;
+        CHARACTERISTIC_MCA                           = 2;
+        CHARACTERISTIC_EISA                          = 4;
+        CHARACTERISTIC_PCI                           = 8;
+        CHARACTERISTIC_PC_CARD                       = 16;
+        CHARACTERISTIC_PLUG_AND_PLAY                 = 32;
+        CHARACTERISTIC_APM                           = 64;
+        CHARACTERISTIC_BIOS_IS_UPGRADEABLE           = 128;
+        CHARACTERISTIC_BIOS_SHADOWING                = 256;
+        CHARACTERISTIC_VLB                           = 512;
+        CHARACTERISTIC_ESCD                          = 1024;
+        CHARACTERISTIC_BOOT_FROM_CD                  = 2048;
+        CHARACTERISTIC_SELECTABLE_BOOT               = 4096;
+        CHARACTERISTIC_BOOT_ROM_IS_SOCKETED          = 8192;
+        CHARACTERISTIC_BOOT_FROM_PC_CARD             = 16384;
+        CHARACTERISTIC_EDD                           = 32768;
+        CHARACTERISTIC_JAPANESE_FLOPPY_FOR_NEC9800   = 65536;
+        CHARACTERISTIC_JAPANESE_FLOPPY_FOR_TOSHIBA   = 131072;
+        CHARACTERISTIC_525_360KB_FLOPPY              = 262144;
+        CHARACTERISTIC_525_12MB_FLOPPY               = 524288;
+        CHARACTERISTIC_35_720KB_FLOPPY               = 1048576;
+        CHARACTERISTIC_35_288MB_FLOPPY               = 2097152;
+        CHARACTERISTIC_PRINT_SCREEN                  = 4194304;
+        CHARACTERISTIC_8042_KEYBOARD                 = 8388608;
+        CHARACTERISTIC_SERIAL                        = 16777216;
+        CHARACTERISTIC_PRINTER                       = 33554432;
+        CHARACTERISTIC_CGA_VIDEO                     = 67108864;
+        CHARACTERISTIC_NEC_PC98                      = 134217728;
+    }
+
+    enum Characteristics1
+    {
+        CHARACTERISTIC1_NONE                 = 0;
+        CHARACTERISTIC1_ACPI                 = 1;
+        CHARACTERISTIC1_USB_LEGACY           = 2;
+        CHARACTERISTIC1_AGP                  = 4;
+        CHARACTERISTIC1_I2O_BOOT             = 8;
+        CHARACTERISTIC1_LS120_BOOT           = 16;
+        CHARACTERISTIC1_ATAPI_ZIP_DRIVE_BOOT = 32;
+        CHARACTERISTIC1_IEEE1394_BOOT        = 64;
+        CHARACTERISTIC1_SMART_BATTERY        = 128;
+    }
+
+    enum Characteristics2
+    {
+        CHARACTERISTIC2_NONE                          = 0;
+        CHARACTERISTIC2_BIOS_BOOT_SPECIFICATION       = 1;
+        CHARACTERISTIC2_KEY_INITIALIZED_NETWORK_BOOT  = 2;
+        CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION = 4;
     }
 
     string manufacturer      = 1;
@@ -27,7 +75,9 @@ message DmiBios
     string firmware_revision = 6;
     string address           = 7;
     int32 runtime_size       = 8;
-    repeated Feature feature = 9;
+    uint64 characteristics   = 9;
+    uint32 characteristics1  = 10;
+    uint32 characteristics2  = 11;
 }
 
 message DmiSystem
@@ -44,6 +94,23 @@ message DmiSystem
 
 message DmiBaseboard
 {
+    enum BoardType
+    {
+        BOARD_TYPE_UNKNOWN                      = 0;
+        BOARD_TYPE_OTHER                        = 1;
+        BOARD_TYPE_SERVER_BLADE                 = 2;
+        BOARD_TYPE_CONNECTIVITY_SWITCH          = 3;
+        BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE     = 4;
+        BOARD_TYPE_PROCESSOR_MODULE             = 5;
+        BOARD_TYPE_IO_MODULE                    = 6;
+        BOARD_TYPE_MEMORY_MODULE                = 7;
+        BOARD_TYPE_DAUGHTER_BOARD               = 8;
+        BOARD_TYPE_MOTHERBOARD                  = 9;
+        BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE = 10;
+        BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE     = 11;
+        BOARD_TYPE_INTERCONNECT_BOARD           = 12;
+    }
+
     message Item
     {
         message Feature
@@ -59,7 +126,7 @@ message DmiBaseboard
         string asset_tag           = 5;
         repeated Feature feature   = 6;
         string location_in_chassis = 7;
-        string type                = 8;
+        BoardType type             = 8;
     }
 
     repeated Item item = 1;
@@ -67,19 +134,71 @@ message DmiBaseboard
 
 message DmiChassis
 {
+    enum Type
+    {
+        TYPE_UNKNOWN               = 0;
+        TYPE_OTHER                 = 1;
+        TYPE_DESKTOP               = 2;
+        TYPE_LOW_PROFILE_DESKTOP   = 3;
+        TYPE_PIZZA_BOX             = 4;
+        TYPE_MINI_TOWER            = 5;
+        TYPE_TOWER                 = 6;
+        TYPE_PORTABLE              = 7;
+        TYPE_LAPTOP                = 8;
+        TYPE_NOTEBOOK              = 9;
+        TYPE_HAND_HELD             = 10;
+        TYPE_DOCKING_STATION       = 11;
+        TYPE_ALL_IN_ONE            = 12;
+        TYPE_SUB_NOTEBOOK          = 13;
+        TYPE_SPACE_SAVING          = 14;
+        TYPE_LUNCH_BOX             = 15;
+        TYPE_MAIN_SERVER_CHASSIS   = 16;
+        TYPE_EXPANSION_CHASSIS     = 17;
+        TYPE_SUB_CHASSIS           = 18;
+        TYPE_BUS_EXPANSION_CHASSIS = 19;
+        TYPE_PERIPHERIAL_CHASSIS   = 20;
+        TYPE_RAID_CHASSIS          = 21;
+        TYPE_RACK_MOUNT_CHASSIS    = 22;
+        TYPE_SEALED_CASE_PC        = 23;
+        TYPE_MULTI_SYSTEM_CHASSIS  = 24;
+        TYPE_COMPACT_PCI           = 25;
+        TYPE_ADVANCED_TCA          = 26;
+        TYPE_BLADE                 = 27;
+        TYPE_BLADE_ENCLOSURE       = 28;
+    }
+
+    enum Status
+    {
+        STATUS_UNKNOWN         = 0;
+        STATUS_OTHER           = 1;
+        STATUS_SAFE            = 2;
+        STATUS_WARNING         = 3;
+        STATUS_CRITICAL        = 4;
+        STATUS_NON_RECOVERABLE = 5;
+    }
+
+    enum SecurityStatus
+    {
+        SECURITY_STATUS_UNKNOWN                       = 0;
+        SECURITY_STATUS_OTHER                         = 1;
+        SECURITY_STATUS_NONE                          = 2;
+        SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT = 3;
+        SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED    = 4;
+    }
+
     message Item
     {
-        string manufacturer         = 1;
-        string version              = 2;
-        string serial_number        = 3;
-        string asset_tag            = 4;
-        string type                 = 5;
-        string os_load_status       = 6;
-        string power_source_status  = 7;
-        string temparature_status   = 8;
-        string security_status      = 9;
-        int32 height                = 10;
-        int32 number_of_power_cords = 11;
+        string manufacturer            = 1;
+        string version                 = 2;
+        string serial_number           = 3;
+        string asset_tag               = 4;
+        Type type                      = 5;
+        Status os_load_status          = 6;
+        Status power_source_status     = 7;
+        Status temparature_status      = 8;
+        SecurityStatus security_status = 9;
+        int32 height                   = 10;
+        int32 number_of_power_cords    = 11;
     }
 
     repeated Item item = 1;
@@ -87,27 +206,93 @@ message DmiChassis
 
 message DmiCaches
 {
+    enum Location
+    {
+        LOCATION_UNKNOWN  = 0;
+        LOCATION_INTERNAL = 1;
+        LOCATION_EXTERNAL = 2;
+        LOCATION_RESERVED = 3;
+    }
+
+    enum Status
+    {
+        STATUS_UNKNOWN  = 0;
+        STATUS_ENABLED  = 1;
+        STATUS_DISABLED = 2;
+    }
+
+    enum Mode
+    {
+        MODE_UNKNOWN                   = 0;
+        MODE_WRITE_THRU                = 1;
+        MODE_WRITE_BACK                = 2;
+        MODE_WRITE_WITH_MEMORY_ADDRESS = 3;
+    }
+
+    enum SRAMType
+    {
+        SRAM_TYPE_BAD            = 0;
+        SRAM_TYPE_OTHER          = 1;
+        SRAM_TYPE_UNKNOWN        = 2;
+        SRAM_TYPE_NON_BURST      = 4;
+        SRAM_TYPE_BURST          = 8;
+        SRAM_TYPE_PIPELINE_BURST = 16;
+        SRAM_TYPE_SYNCHRONOUS    = 32;
+        SRAM_TYPE_ASYNCHRONOUS   = 64;
+    }
+
+    enum ErrorCorrectionType
+    {
+        ERROR_CORRECTION_TYPE_UNKNOWN        = 0;
+        ERROR_CORRECTION_TYPE_OTHER          = 1;
+        ERROR_CORRECTION_TYPE_NONE           = 2;
+        ERROR_CORRECTION_TYPE_PARITY         = 3;
+        ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC = 4;
+        ERROR_CORRECTION_TYPE_MULTI_BIT_ECC  = 5;
+    }
+
+    enum Type
+    {
+        TYPE_UNKNOWN     = 0;
+        TYPE_OTHER       = 1;
+        TYPE_INSTRUCTION = 2;
+        TYPE_DATA        = 3;
+        TYPE_UNIFIED     = 4;
+    }
+
+    enum Associativity
+    {
+        ASSOCIATIVITY_UNKNOWN       = 0;
+        ASSOCIATIVITY_OTHER         = 1;
+        ASSOCIATIVITY_DIRECT_MAPPED = 2;
+        ASSOCIATIVITY_2_WAY         = 3;
+        ASSOCIATIVITY_4_WAY         = 4;
+        ASSOCIATIVITY_FULLY         = 5;
+        ASSOCIATIVITY_8_WAY         = 6;
+        ASSOCIATIVITY_16_WAY        = 7;
+        ASSOCIATIVITY_12_WAY        = 8;
+        ASSOCIATIVITY_24_WAY        = 9;
+        ASSOCIATIVITY_32_WAY        = 10;
+        ASSOCIATIVITY_48_WAY        = 11;
+        ASSOCIATIVITY_64_WAY        = 12;
+        ASSOCIATIVITY_20_WAY        = 13;
+    }
+
     message Item
     {
-        message SRAMType
-        {
-            string name    = 1;
-            bool supported = 2;
-        }
-
-        string name                           = 1;
-        string location                       = 2;
-        bool enabled                          = 3;
-        string mode                           = 4;
-        int32 level                           = 5;
-        int32 maximum_size                    = 6;
-        int32 current_size                    = 7;
-        repeated SRAMType supported_sram_type = 8;
-        string current_sram_type              = 9;
-        int32 speed                           = 10;
-        string error_correction_type          = 11;
-        string type                           = 12;
-        string associativity                  = 13;
+        string name                               = 1;
+        Location location                         = 2;
+        Status status                             = 3;
+        Mode mode                                 = 4;
+        int32 level                               = 5;
+        int32 maximum_size                        = 6;
+        int32 current_size                        = 7;
+        uint32 supported_sram_types               = 8;
+        SRAMType current_sram_type                = 9;
+        int32 speed                               = 10;
+        ErrorCorrectionType error_correction_type = 11;
+        Type type                                 = 12;
+        Associativity associativity               = 13;
     }
 
     repeated Item item = 1;
@@ -115,21 +300,106 @@ message DmiCaches
 
 message DmiProcessors
 {
+    enum Type
+    {
+        TYPE_UNKNOWN           = 0;
+        TYPE_OTHER             = 1;
+        TYPE_CENTRAL_PROCESSOR = 2;
+        TYPE_MATH_PROCESSOR    = 3;
+        TYPE_DSP_PROCESSOR     = 4;
+        TYPE_VIDEO_PROCESSOR   = 5;
+    }
+
+    enum Status
+    {
+        STATUS_UNKNOWN          = 0;
+        STATUS_ENABLED          = 1;
+        STATUS_DISABLED_BY_USER = 2;
+        STATUS_DISABLED_BY_BIOS = 3;
+        STATUS_IDLE             = 4;
+        STATUS_OTHER            = 5;
+    }
+
+    enum Upgrade
+    {
+        UPGRADE_UNKNOWN                = 0;
+        UPGRADE_OTHER                  = 1;
+        UPGRADE_DAUGHTER_BOARD         = 2;
+        UPGRADE_ZIF_SOCKET             = 3;
+        UPGRADE_REPLACEABLE_PIGGY_BACK = 4;
+        UPGRADE_NONE                   = 5;
+        UPGRADE_LIF_SOCKET             = 6;
+        UPGRADE_SLOT_1                 = 7;
+        UPGRADE_SLOT_2                 = 8;
+        UPGRADE_370_PIN_SOCKET         = 9;
+        UPGRADE_SLOT_A                 = 10;
+        UPGRADE_SLOT_M                 = 11;
+        UPGRADE_SOCKET_423             = 12;
+        UPGRADE_SOCKET_462             = 13;
+        UPGRADE_SOCKET_478             = 14;
+        UPGRADE_SOCKET_754             = 15;
+        UPGRADE_SOCKET_940             = 16;
+        UPGRADE_SOCKET_939             = 17;
+        UPGRADE_SOCKET_MPGA604         = 18;
+        UPGRADE_SOCKET_LGA771          = 19;
+        UPGRADE_SOCKET_LGA775          = 20;
+        UPGRADE_SOCKET_S1              = 21;
+        UPGRADE_SOCKET_AM2             = 22;
+        UPGRADE_SOCKET_F               = 23;
+        UPGRADE_SOCKET_LGA1366         = 24;
+        UPGRADE_SOCKET_G34             = 25;
+        UPGRADE_SOCKET_AM3             = 26;
+        UPGRADE_SOCKET_C32             = 27;
+        UPGRADE_SOCKET_LGA1156         = 28;
+        UPGRADE_SOCKET_LGA1567         = 29;
+        UPGRADE_SOCKET_PGA988A         = 30;
+        UPGRADE_SOCKET_BGA1288         = 31;
+        UPGRADE_SOCKET_RPGA988B        = 32;
+        UPGRADE_SOCKET_BGA1023         = 33;
+        UPGRADE_SOCKET_BGA1224         = 34;
+        UPGRADE_SOCKET_BGA1155         = 35;
+        UPGRADE_SOCKET_LGA1356         = 36;
+        UPGRADE_SOCKET_LGA2011         = 37;
+        UPGRADE_SOCKET_FS1             = 38;
+        UPGRADE_SOCKET_FS2             = 39;
+        UPGRADE_SOCKET_FM1             = 40;
+        UPGRADE_SOCKET_FM2             = 41;
+        UPGRADE_SOCKET_LGA2011_3       = 42;
+        UPGRADE_SOCKET_LGA1356_3       = 43;
+        UPGRADE_SOCKET_LGA1150         = 44;
+        UPGRADE_SOCKET_BGA1168         = 45;
+        UPGRADE_SOCKET_BGA1234         = 46;
+        UPGRADE_SOCKET_BGA1364         = 47;
+        UPGRADE_SOCKET_AM4             = 48;
+        UPGRADE_SOCKET_LGA1151         = 49;
+        UPGRADE_SOCKET_BGA1356         = 50;
+        UPGRADE_SOCKET_BGA1440         = 51;
+        UPGRADE_SOCKET_BGA1515         = 52;
+        UPGRADE_SOCKET_LGA3647_1       = 53;
+        UPGRADE_SOCKET_SP3             = 54;
+        UPGRADE_SOCKET_SP3_R2          = 55;
+    }
+
+    enum Characteristics
+    {
+        CHARACTERISTIC_NONE                    = 0;
+        CHARACTERISTIC_64BIT_CAPABLE           = 1;
+        CHARACTERISTIC_MULTI_CORE              = 2;
+        CHARACTERISTIC_HARDWARE_THREAD         = 4;
+        CHARACTERISTIC_EXECUTE_PROTECTION      = 8;
+        CHARACTERISTIC_ENHANCED_VIRTUALIZATION = 16;
+        CHARACTERISTIC_POWER_CONTROL           = 32;
+    }
+
     message Item
     {
-        message Feature
-        {
-            string name = 1;
-            bool supported = 2;
-        }
-
         string manufacturer      = 1;
         string version           = 2;
         string family            = 3;
-        string type              = 4;
-        string status            = 5;
+        Type type                = 4;
+        Status status            = 5;
         string socket            = 6;
-        string upgrade           = 7;
+        Upgrade upgrade          = 7;
         int32 external_clock     = 8;
         int32 current_speed      = 9;
         int32 maximum_speed      = 10;
@@ -140,7 +410,7 @@ message DmiProcessors
         int32 core_count         = 15;
         int32 core_enabled       = 16;
         int32 thread_count       = 17;
-        repeated Feature feature = 18;
+        uint32 characteristics   = 18;
     }
 
     repeated Item item = 1;
@@ -168,13 +438,109 @@ message DmiMemoryDevices
 
 message DmiSystemSlots
 {
+    enum Type
+    {
+        TYPE_UNKNOWN                                 = 0;
+        TYPE_OTHER                                   = 1;
+        TYPE_ISA                                     = 2;
+        TYPE_MCA                                     = 3;
+        TYPE_EISA                                    = 4;
+        TYPE_PCI                                     = 5;
+        TYPE_PC_CARD                                 = 6;
+        TYPE_VLB                                     = 7;
+        TYPE_PROPRIETARY                             = 8;
+        TYPE_PROCESSOR_CARD                          = 9;
+        TYPE_PROPRIETARY_MEMORY_CARD                 = 10;
+        TYPE_IO_RISER_CARD                           = 11;
+        TYPE_NUBUS                                   = 12;
+        TYPE_PCI_66                                  = 13;
+        TYPE_AGP                                     = 14;
+        TYPE_AGP_2X                                  = 15;
+        TYPE_AGP_4X                                  = 16;
+        TYPE_PCI_X                                   = 17;
+        TYPE_AGP_8X                                  = 18;
+        TYPE_M2_SOCKET_1DP                           = 19;
+        TYPE_M2_SOCKET_1SD                           = 20;
+        TYPE_M2_SOCKET_2                             = 21;
+        TYPE_M2_SOCKET_3                             = 22;
+        TYPE_MXM_TYPE_I                              = 23;
+        TYPE_MXM_TYPE_II                             = 24;
+        TYPE_MXM_TYPE_III                            = 25;
+        TYPE_MXM_TYPE_III_HE                         = 26;
+        TYPE_MXM_TYPE_IV                             = 27;
+        TYPE_MXM_30_TYPE_A                           = 28;
+        TYPE_MXM_30_TYPE_B                           = 29;
+        TYPE_PCI_EXPRESS_2_SFF_8639                  = 30;
+        TYPE_PCI_EXPRESS_3_SFF_8639                  = 31;
+        TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE = 32;
+        TYPE_PCI_EXPRESS_MINI_52PIN                  = 33;
+        TYPE_PCI_EXPRESS_MINI_76PIN                  = 34;
+        TYPE_PC98_C20                                = 35;
+        TYPE_PC98_C24                                = 36;
+        TYPE_PC98_E                                  = 37;
+        TYPE_PC98_LOCAL_BUS                          = 38;
+        TYPE_PC98_CARD                               = 39;
+        TYPE_PCI_EXPRESS                             = 40;
+        TYPE_PCI_EXPRESS_X1                          = 41;
+        TYPE_PCI_EXPRESS_X2                          = 42;
+        TYPE_PCI_EXPRESS_X4                          = 43;
+        TYPE_PCI_EXPRESS_X8                          = 44;
+        TYPE_PCI_EXPRESS_X16                         = 45;
+        TYPE_PCI_EXPRESS_2                           = 46;
+        TYPE_PCI_EXPRESS_2_X1                        = 47;
+        TYPE_PCI_EXPRESS_2_X2                        = 48;
+        TYPE_PCI_EXPRESS_2_X4                        = 49;
+        TYPE_PCI_EXPRESS_2_X8                        = 50;
+        TYPE_PCI_EXPRESS_2_X16                       = 51;
+        TYPE_PCI_EXPRESS_3                           = 52;
+        TYPE_PCI_EXPRESS_3_X1                        = 53;
+        TYPE_PCI_EXPRESS_3_X2                        = 54;
+        TYPE_PCI_EXPRESS_3_X4                        = 55;
+        TYPE_PCI_EXPRESS_3_X8                        = 56;
+        TYPE_PCI_EXPRESS_3_X16                       = 57;
+    }
+
+    enum Usage
+    {
+        USAGE_UNKNOWN   = 0;
+        USAGE_OTHER     = 1;
+        USAGE_AVAILABLE = 2;
+        USAGE_IN_USE    = 3;
+    }
+
+    enum BusWidth
+    {
+        BUS_WIDTH_UNKNOWN = 0;
+        BUS_WIDTH_OTHER   = 1;
+        BUS_WIDTH_8_BIT   = 2;
+        BUS_WIDTH_16_BIT  = 3;
+        BUS_WIDTH_32_BIT  = 4;
+        BUS_WIDTH_64_BIT  = 5;
+        BUS_WIDTH_128_BIT = 6;
+        BUS_WIDTH_X1      = 7;
+        BUS_WIDTH_X2      = 8;
+        BUS_WIDTH_X4      = 9;
+        BUS_WIDTH_X8      = 10;
+        BUS_WIDTH_X12     = 11;
+        BUS_WIDTH_X16     = 12;
+        BUS_WIDTH_X32     = 13;
+    }
+
+    enum Length
+    {
+        LENGTH_UNKNOWN = 0;
+        LENGTH_OTHER   = 1;
+        LENGTH_SHORT   = 2;
+        LENGTH_LONG    = 3;
+    }
+
     message Item
     {
         string slot_designation = 1;
-        string type             = 2;
-        string usage            = 3;
-        string bus_width        = 4;
-        string length           = 5;
+        Type type               = 2;
+        Usage usage             = 3;
+        BusWidth bus_width      = 4;
+        Length length           = 5;
     }
 
     repeated Item item = 1;
@@ -264,19 +630,74 @@ message CentralProcessor
 
 message AtaDrives
 {
+    enum BusType
+    {
+        BUS_TYPE_UNKNOWN             = 0;
+        BUS_TYPE_SCSI                = 1;
+        BUS_TYPE_ATAPI               = 2;
+        BUS_TYPE_ATA                 = 3;
+        BUS_TYPE_IEEE1394            = 4;
+        BUS_TYPE_SSA                 = 5;
+        BUS_TYPE_FIBRE               = 6;
+        BUS_TYPE_USB                 = 7;
+        BUS_TYPE_RAID                = 8;
+        BUS_TYPE_ISCSI               = 9;
+        BUS_TYPE_SAS                 = 10;
+        BUS_TYPE_SATA                = 11;
+        BUS_TYPE_SD                  = 12;
+        BUS_TYPE_MMC                 = 13;
+        BUS_TYPE_VIRTUAL             = 14;
+        BUS_TYPE_FILE_BACKED_VIRTUAL = 15;
+    }
+
+    enum TransferMode
+    {
+        TRANSFER_MODE_UNKNOWN       = 0;
+        TRANSFER_MODE_PIO           = 1;
+        TRANSFER_MODE_PIO_DMA       = 2;
+        TRANSFER_MODE_ULTRA_DMA_133 = 3;
+        TRANSFER_MODE_ULTRA_DMA_100 = 4;
+        TRANSFER_MODE_ULTRA_DMA_66  = 5;
+        TRANSFER_MODE_ULTRA_DMA_44  = 6;
+        TRANSFER_MODE_ULTRA_DMA_33  = 7;
+        TRANSFER_MODE_ULTRA_DMA_25  = 8;
+        TRANSFER_MODE_ULTRA_DMA_16  = 9;
+        TRANSFER_MODE_SATA_600      = 10;
+        TRANSFER_MODE_SATA_300      = 11;
+        TRANSFER_MODE_SATA_150      = 12;
+    }
+
+    enum Features
+    {
+        FEATURE_UNKNOWN                       = 0;
+        FEATURE_48BIT_LBA                     = 1;
+        FEATURE_ADVANCED_POWER_MANAGEMENT     = 2;
+        FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT = 4;
+        FEATURE_SMART                         = 8;
+        FEATURE_SMART_ERROR_LOGGING           = 16;
+        FEATURE_SMART_SELF_TEST               = 32;
+        FEATURE_STREAMING                     = 64;
+        FEATURE_GENERAL_PURPOSE_LOGGING       = 128;
+        FEATURE_SECURITY_MODE                 = 256;
+        FEATURE_POWER_MANAGEMENT              = 512;
+        FEATURE_WRITE_CACHE                   = 1024;
+        FEATURE_READ_LOCK_AHEAD               = 2048;
+        FEATURE_HOST_PROTECTED_AREA           = 4096;
+        FEATURE_RELEASE_INTERRUPT             = 8192;
+        FEATURE_POWER_UP_IN_STANDBY           = 16384;
+        FEATURE_DEVICE_CONFIGURATION_OVERLAY  = 32768;
+        FEATURE_SERVICE_INTERRUPT             = 65536;
+        FEATURE_NATIVE_COMMAND_QUEUING        = 131072;
+        FEATURE_TRIM                          = 262144;
+    }
+
     message Item
     {
-        message Feature
-        {
-            string name  = 1;
-            bool enabled = 2;
-        }
-
         string model_number        = 1;
         string serial_number       = 2;
         string firmware_revision   = 3;
-        string bus_type            = 4;
-        string transfer_mode       = 5;
+        BusType bus_type           = 4;
+        TransferMode transfer_mode = 5;
         uint32 rotation_rate       = 6;
         uint64 drive_size          = 7;
         uint32 buffer_size         = 8;
@@ -288,7 +709,8 @@ message AtaDrives
         uint32 sectors_per_track   = 14;
         uint32 bytes_per_sector    = 15;
         uint32 heads_number        = 16;
-        repeated Feature feature   = 17;
+        uint64 supported_features  = 17;
+        uint64 enabled_features    = 18;
     }
 
     repeated Item item = 1;
@@ -314,15 +736,22 @@ message VideoAdapters
 
 message Monitors
 {
+    enum InputSignalType
+    {
+        INPUT_SIGNAL_TYPE_UNKNOWN = 0;
+        INPUT_SIGNAL_TYPE_ANALOG  = 1;
+        INPUT_SIGNAL_TYPE_DIGITAL = 2;
+    }
+
+    message Timing
+    {
+        int32 width     = 1;
+        int32 height    = 2;
+        int32 frequency = 3;
+    }
+
     message Item
     {
-        message Timing
-        {
-            int32 width     = 1;
-            int32 height    = 2;
-            int32 frequency = 3;
-        }
-
         string system_name                   = 1;
         string monitor_name                  = 2;
         string manufacturer_name             = 3;
@@ -343,7 +772,7 @@ message Monitors
         int32 max_vertical_rate              = 18;
         double pixel_clock                   = 19;
         int32 max_pixel_clock                = 20;
-        string input_signal_type             = 21;
+        InputSignalType input_signal_type    = 21;
         bool default_gtf_supported           = 22;
         bool suspend_supported               = 23;
         bool standby_supported               = 24;

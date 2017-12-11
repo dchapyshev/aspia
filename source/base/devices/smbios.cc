@@ -328,97 +328,79 @@ int SMBios::BiosTable::GetRuntimeSize() const
     return (code >> 10) * 1024;
 }
 
-SMBios::BiosTable::FeatureList SMBios::BiosTable::GetCharacteristics() const
+uint64_t SMBios::BiosTable::GetCharacteristics() const
 {
-    FeatureList feature_list;
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return proto::DmiBios::CHARACTERISTIC_NONE;
 
-    static const char* characteristics_names[] =
-    {
-        "BIOS characteristics not supported", // 3
-        "ISA", // 4
-        "MCA",
-        "EISA",
-        "PCI",
-        "PC Card (PCMCIA)",
-        "PNP",
-        "APM",
-        "BIOS is upgradeable",
-        "BIOS shadowing",
-        "VLB",
-        "ESCD",
-        "Boot from CD",
-        "Selectable boot",
-        "BIOS ROM is socketed",
-        "Boot from PC Card (PCMCIA)",
-        "EDD",
-        "Japanese floppy for NEC 9800 1.2 MB (int 13h)",
-        "Japanese floppy for Toshiba 1.2 MB (int 13h)",
-        "5.25\"/360 kB floppy (int 13h)",
-        "5.25\"/1.2 MB floppy (int 13h)",
-        "3.5\"/720 kB floppy (int 13h)",
-        "3.5\"/2.88 MB floppy (int 13h)",
-        "Print screen (int 5h)",
-        "8042 keyboard (int 9h)",
-        "Serial (int 14h)",
-        "Printer (int 17h)",
-        "CGA/mono video (int 10h)",
-        "NEC PC-98" // 31
-    };
+    uint64_t ret = proto::DmiBios::CHARACTERISTIC_NONE;
 
-    const uint64_t characteristics = reader_.GetQword(0x0A);
-    if (!(characteristics & (1 << 3)))
-    {
-        for (int i = 4; i <= 31; ++i)
-        {
-            bool is_supported = (characteristics & (1ULL << i)) ? true : false;
-            feature_list.emplace_back(characteristics_names[i - 3], is_supported);
-        }
-    }
+    if (characteristics.Test(4)) ret |= proto::DmiBios::CHARACTERISTIC_ISA;
+    if (characteristics.Test(5)) ret |= proto::DmiBios::CHARACTERISTIC_MCA;
+    if (characteristics.Test(6)) ret |= proto::DmiBios::CHARACTERISTIC_EISA;
+    if (characteristics.Test(7)) ret |= proto::DmiBios::CHARACTERISTIC_PCI;
+    if (characteristics.Test(8)) ret |= proto::DmiBios::CHARACTERISTIC_PC_CARD;
+    if (characteristics.Test(9)) ret |= proto::DmiBios::CHARACTERISTIC_PLUG_AND_PLAY;
+    if (characteristics.Test(10)) ret |= proto::DmiBios::CHARACTERISTIC_APM;
+    if (characteristics.Test(11)) ret |= proto::DmiBios::CHARACTERISTIC_BIOS_IS_UPGRADEABLE;
+    if (characteristics.Test(12)) ret |= proto::DmiBios::CHARACTERISTIC_BIOS_SHADOWING;
+    if (characteristics.Test(13)) ret |= proto::DmiBios::CHARACTERISTIC_VLB;
+    if (characteristics.Test(14)) ret |= proto::DmiBios::CHARACTERISTIC_ESCD;
+    if (characteristics.Test(15)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_FROM_CD;
+    if (characteristics.Test(16)) ret |= proto::DmiBios::CHARACTERISTIC_SELECTABLE_BOOT;
+    if (characteristics.Test(17)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_ROM_IS_SOCKETED;
+    if (characteristics.Test(18)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_FROM_PC_CARD;
+    if (characteristics.Test(19)) ret |= proto::DmiBios::CHARACTERISTIC_EDD;
+    if (characteristics.Test(20)) ret |= proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_NEC9800;
+    if (characteristics.Test(21)) ret |= proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_TOSHIBA;
+    if (characteristics.Test(22)) ret |= proto::DmiBios::CHARACTERISTIC_525_360KB_FLOPPY;
+    if (characteristics.Test(23)) ret |= proto::DmiBios::CHARACTERISTIC_525_12MB_FLOPPY;
+    if (characteristics.Test(24)) ret |= proto::DmiBios::CHARACTERISTIC_35_720KB_FLOPPY;
+    if (characteristics.Test(25)) ret |= proto::DmiBios::CHARACTERISTIC_35_288MB_FLOPPY;
+    if (characteristics.Test(26)) ret |= proto::DmiBios::CHARACTERISTIC_PRINT_SCREEN;
+    if (characteristics.Test(27)) ret |= proto::DmiBios::CHARACTERISTIC_8042_KEYBOARD;
+    if (characteristics.Test(28)) ret |= proto::DmiBios::CHARACTERISTIC_SERIAL;
+    if (characteristics.Test(29)) ret |= proto::DmiBios::CHARACTERISTIC_PRINTER;
+    if (characteristics.Test(30)) ret |= proto::DmiBios::CHARACTERISTIC_CGA_VIDEO;
+    if (characteristics.Test(31)) ret |= proto::DmiBios::CHARACTERISTIC_NEC_PC98;
 
-    const uint8_t table_length = reader_.GetTableLength();
+    return ret;
+}
 
-    if (table_length >= 0x13)
-    {
-        const uint8_t characteristics1 = reader_.GetByte(0x12);
+uint32_t SMBios::BiosTable::GetCharacteristics1() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return 0;
 
-        static const char* characteristics1_names[] =
-        {
-            "ACPI", // 0
-            "USB legacy",
-            "AGP",
-            "I2O boot",
-            "LS-120 boot",
-            "ATAPI Zip drive boot",
-            "IEEE 1394 boot",
-            "Smart battery" // 7
-        };
+    BitSet<uint8_t> characteristics1 = reader_.GetByte(0x12);
+    uint32_t ret = 0;
 
-        for (int i = 0; i <= 7; ++i)
-        {
-            bool is_supported = (characteristics1 & (1 << i)) ? true : false;
-            feature_list.emplace_back(characteristics1_names[i], is_supported);
-        }
-    }
+    if (characteristics1.Test(0)) ret |= proto::DmiBios::CHARACTERISTIC1_ACPI;
+    if (characteristics1.Test(1)) ret |= proto::DmiBios::CHARACTERISTIC1_USB_LEGACY;
+    if (characteristics1.Test(2)) ret |= proto::DmiBios::CHARACTERISTIC1_AGP;
+    if (characteristics1.Test(3)) ret |= proto::DmiBios::CHARACTERISTIC1_I2O_BOOT;
+    if (characteristics1.Test(4)) ret |= proto::DmiBios::CHARACTERISTIC1_LS120_BOOT;
+    if (characteristics1.Test(5)) ret |= proto::DmiBios::CHARACTERISTIC1_ATAPI_ZIP_DRIVE_BOOT;
+    if (characteristics1.Test(6)) ret |= proto::DmiBios::CHARACTERISTIC1_IEEE1394_BOOT;
+    if (characteristics1.Test(7)) ret |= proto::DmiBios::CHARACTERISTIC1_SMART_BATTERY;
 
-    if (table_length >= 0x14)
-    {
-        const uint8_t characteristics2 = reader_.GetByte(0x13);
+    return ret;
+}
 
-        static const char* characteristics2_names[] =
-        {
-            "BIOS boot specification", // 0
-            "Function key-initiated network boot",
-            "Targeted content distribution" // 2
-        };
+uint32_t SMBios::BiosTable::GetCharacteristics2() const
+{
+    if (reader_.GetTableLength() < 0x14)
+        return 0;
 
-        for (int i = 0; i <= 2; ++i)
-        {
-            bool is_supported = (characteristics2 & (1 << i)) ? true : false;
-            feature_list.emplace_back(characteristics2_names[i], is_supported);
-        }
-    }
+    BitSet<uint8_t> characteristics2 = reader_.GetByte(0x13);
+    uint32_t ret = 0;
 
-    return feature_list;
+    if (characteristics2.Test(0)) ret |= proto::DmiBios::CHARACTERISTIC2_BIOS_BOOT_SPECIFICATION;
+    if (characteristics2.Test(1)) ret |= proto::DmiBios::CHARACTERISTIC2_KEY_INITIALIZED_NETWORK_BOOT;
+    if (characteristics2.Test(2)) ret |= proto::DmiBios::CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION;
+
+    return ret;
 }
 
 //
@@ -609,34 +591,27 @@ std::string SMBios::BaseboardTable::GetLocationInChassis() const
     return reader_.GetString(0x0A);
 }
 
-std::string SMBios::BaseboardTable::GetBoardType() const
+proto::DmiBaseboard::BoardType SMBios::BaseboardTable::GetBoardType() const
 {
     if (reader_.GetTableLength() < 0x0E)
-        return std::string();
+        return proto::DmiBaseboard::BOARD_TYPE_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x0D))
     {
-        "Unknown", // 0x01
-        "Other",
-        "Server Blade",
-        "Connectivity Switch",
-        "System Management Module",
-        "Processor Module",
-        "I/O Module",
-        "Memory Module",
-        "Daughter Board",
-        "Motherboard",
-        "Processor+Memory Module",
-        "Processor+I/O Module",
-        "Interconnect Board" // 0x0D
-    };
-
-    const uint8_t type = reader_.GetByte(0x0D);
-
-    if (type >= 0x01 && type <= 0x0D)
-        return text[type - 1];
-
-    return std::string();
+        case 0x02: return proto::DmiBaseboard::BOARD_TYPE_OTHER;
+        case 0x03: return proto::DmiBaseboard::BOARD_TYPE_SERVER_BLADE;
+        case 0x04: return proto::DmiBaseboard::BOARD_TYPE_CONNECTIVITY_SWITCH;
+        case 0x05: return proto::DmiBaseboard::BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE;
+        case 0x06: return proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_MODULE;
+        case 0x07: return proto::DmiBaseboard::BOARD_TYPE_IO_MODULE;
+        case 0x08: return proto::DmiBaseboard::BOARD_TYPE_MEMORY_MODULE;
+        case 0x09: return proto::DmiBaseboard::BOARD_TYPE_DAUGHTER_BOARD;
+        case 0x0A: return proto::DmiBaseboard::BOARD_TYPE_MOTHERBOARD;
+        case 0x0B: return proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE;
+        case 0x0C: return proto::DmiBaseboard::BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE;
+        case 0x0D: return proto::DmiBaseboard::BOARD_TYPE_INTERCONNECT_BOARD;
+        default: return proto::DmiBaseboard::BOARD_TYPE_UNKNOWN;
+    }
 }
 
 //
@@ -681,122 +656,105 @@ std::string SMBios::ChassisTable::GetAssetTag() const
     return reader_.GetString(0x08);
 }
 
-std::string SMBios::ChassisTable::GetType() const
+proto::DmiChassis::Type SMBios::ChassisTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x09)
-        return std::string();
+        return proto::DmiChassis::TYPE_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x05) & 0x7F)
     {
-        "Other", // 0x01
-        "Unknown",
-        "Desktop",
-        "Low Profile Desktop",
-        "Pizza Box",
-        "Mini Tower",
-        "Tower",
-        "Portable",
-        "Laptop",
-        "Notebook",
-        "Hand Held",
-        "Docking Station",
-        "All In One",
-        "Sub Notebook",
-        "Space-saving",
-        "Lunch Box",
-        "Main Server Chassis",
-        "Expansion Chassis",
-        "Sub Chassis",
-        "Bus Expansion Chassis",
-        "Peripheral Chassis",
-        "RAID Chassis",
-        "Rack Mount Chassis",
-        "Sealed-case PC",
-        "Multi-system",
-        "CompactPCI",
-        "AdvancedTCA",
-        "Blade",
-        "Blade Enclosing",
-        "Tablet",
-        "Convertible",
-        "Detachable",
-        "IoT Gateway",
-        "Embedded PC",
-        "Mini PC",
-        "Stick PC" // 0x24
-    };
-
-    const uint8_t type = reader_.GetByte(0x05) & 0x7F;
-
-    if (type >= 0x01 && type <= 0x24)
-        return text[type - 1];
-
-    return std::string();
+        case 0x03: return proto::DmiChassis::TYPE_DESKTOP;
+        case 0x04: return proto::DmiChassis::TYPE_LOW_PROFILE_DESKTOP;
+        case 0x05: return proto::DmiChassis::TYPE_PIZZA_BOX;
+        case 0x06: return proto::DmiChassis::TYPE_MINI_TOWER;
+        case 0x07: return proto::DmiChassis::TYPE_TOWER;
+        case 0x08: return proto::DmiChassis::TYPE_PORTABLE;
+        case 0x09: return proto::DmiChassis::TYPE_LAPTOP;
+        case 0x0A: return proto::DmiChassis::TYPE_NOTEBOOK;
+        case 0x0B: return proto::DmiChassis::TYPE_HAND_HELD;
+        case 0x0C: return proto::DmiChassis::TYPE_DOCKING_STATION;
+        case 0x0D: return proto::DmiChassis::TYPE_ALL_IN_ONE;
+        case 0x0E: return proto::DmiChassis::TYPE_SUB_NOTEBOOK;
+        case 0x0F: return proto::DmiChassis::TYPE_SPACE_SAVING;
+        case 0x10: return proto::DmiChassis::TYPE_LUNCH_BOX;
+        case 0x11: return proto::DmiChassis::TYPE_MAIN_SERVER_CHASSIS;
+        case 0x12: return proto::DmiChassis::TYPE_EXPANSION_CHASSIS;
+        case 0x13: return proto::DmiChassis::TYPE_SUB_CHASSIS;
+        case 0x14: return proto::DmiChassis::TYPE_BUS_EXPANSION_CHASSIS;
+        case 0x15: return proto::DmiChassis::TYPE_PERIPHERIAL_CHASSIS;
+        case 0x16: return proto::DmiChassis::TYPE_RAID_CHASSIS;
+        case 0x17: return proto::DmiChassis::TYPE_RACK_MOUNT_CHASSIS;
+        case 0x18: return proto::DmiChassis::TYPE_SEALED_CASE_PC;
+        case 0x19: return proto::DmiChassis::TYPE_MULTI_SYSTEM_CHASSIS;
+        case 0x1A: return proto::DmiChassis::TYPE_COMPACT_PCI;
+        case 0x1B: return proto::DmiChassis::TYPE_ADVANCED_TCA;
+        case 0x1C: return proto::DmiChassis::TYPE_BLADE;
+        case 0x1D: return proto::DmiChassis::TYPE_BLADE_ENCLOSURE;
+        default: return proto::DmiChassis::TYPE_UNKNOWN;
+    }
 }
 
-// static
-std::string SMBios::ChassisTable::StatusToString(uint8_t status)
+proto::DmiChassis::Status SMBios::ChassisTable::GetOSLoadStatus() const
 {
-    static const char* text[] =
+    if (reader_.GetTableLength() < 0x0D)
+        return proto::DmiChassis::STATUS_UNKNOWN;
+
+    switch (reader_.GetByte(0x09))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Safe",
-        "Warning",
-        "Critical",
-        "Non-recoverable" // 0x06
-    };
-
-    if (status >= 0x01 && status <= 0x06)
-        return text[status - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiChassis::STATUS_OTHER;
+        case 0x03: return proto::DmiChassis::STATUS_SAFE;
+        case 0x04: return proto::DmiChassis::STATUS_WARNING;
+        case 0x05: return proto::DmiChassis::STATUS_CRITICAL;
+        case 0x06: return proto::DmiChassis::STATUS_NON_RECOVERABLE;
+        default: return proto::DmiChassis::STATUS_UNKNOWN;
+    }
 }
 
-std::string SMBios::ChassisTable::GetOSLoadStatus() const
+proto::DmiChassis::Status SMBios::ChassisTable::GetPowerSourceStatus() const
 {
     if (reader_.GetTableLength() < 0x0D)
-        return std::string();
+        return proto::DmiChassis::STATUS_UNKNOWN;
 
-    return StatusToString(reader_.GetByte(0x09));
-}
-
-std::string SMBios::ChassisTable::GetPowerSourceStatus() const
-{
-    if (reader_.GetTableLength() < 0x0D)
-        return std::string();
-
-    return StatusToString(reader_.GetByte(0x0A));
-}
-
-std::string SMBios::ChassisTable::GetTemperatureStatus() const
-{
-    if (reader_.GetTableLength() < 0x0D)
-        return std::string();
-
-    return StatusToString(reader_.GetByte(0x0B));
-}
-
-std::string SMBios::ChassisTable::GetSecurityStatus() const
-{
-    if (reader_.GetTableLength() < 0x0D)
-        return std::string();
-
-    static const char* text[] =
+    switch (reader_.GetByte(0x0A))
     {
-        "Other", // 0x01
-        "Unknown",
-        "None",
-        "External Interface Locked Out",
-        "External Interface Enabled" // 0x05
-    };
+        case 0x01: return proto::DmiChassis::STATUS_OTHER;
+        case 0x03: return proto::DmiChassis::STATUS_SAFE;
+        case 0x04: return proto::DmiChassis::STATUS_WARNING;
+        case 0x05: return proto::DmiChassis::STATUS_CRITICAL;
+        case 0x06: return proto::DmiChassis::STATUS_NON_RECOVERABLE;
+        default: return proto::DmiChassis::STATUS_UNKNOWN;
+    }
+}
 
-    const uint8_t status = reader_.GetByte(0x0C);
+proto::DmiChassis::Status SMBios::ChassisTable::GetTemperatureStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return proto::DmiChassis::STATUS_UNKNOWN;
 
-    if (status >= 0x01 && status <= 0x05)
-        return text[status - 1];
+    switch (reader_.GetByte(0x0B))
+    {
+        case 0x01: return proto::DmiChassis::STATUS_OTHER;
+        case 0x03: return proto::DmiChassis::STATUS_SAFE;
+        case 0x04: return proto::DmiChassis::STATUS_WARNING;
+        case 0x05: return proto::DmiChassis::STATUS_CRITICAL;
+        case 0x06: return proto::DmiChassis::STATUS_NON_RECOVERABLE;
+        default: return proto::DmiChassis::STATUS_UNKNOWN;
+    }
+}
 
-    return std::string();
+proto::DmiChassis::SecurityStatus SMBios::ChassisTable::GetSecurityStatus() const
+{
+    if (reader_.GetTableLength() < 0x0D)
+        return proto::DmiChassis::SECURITY_STATUS_UNKNOWN;
+
+    switch (reader_.GetByte(0x0C))
+    {
+        case 0x01: return proto::DmiChassis::SECURITY_STATUS_OTHER;
+        case 0x03: return proto::DmiChassis::SECURITY_STATUS_NONE;
+        case 0x04: return proto::DmiChassis::SECURITY_STATUS_EXTERNAL_INTERFACE_LOCKED_OUT;
+        case 0x05: return proto::DmiChassis::SECURITY_STATUS_EXTERNAL_INTERFACE_ENABLED;
+        default: return proto::DmiChassis::SECURITY_STATUS_UNKNOWN;
+    }
 }
 
 int SMBios::ChassisTable::GetHeight() const
@@ -894,7 +852,10 @@ std::string SMBios::ProcessorTable::GetFamily() const
         { 0x29, "Intel Core Duo Mobile" },
         { 0x2A, "Intel Core Solo Mobile" },
         { 0x2B, "Intel Atom" },
-        // 0x2C - 0x2F Available for assignment.
+        { 0x2C, "Core M" },
+        { 0x2D, "Core m3" },
+        { 0x2E, "Core m5" },
+        { 0x2F, "Core m7" },
         { 0x30, "Alpha" },
         { 0x31, "Alpha 21064" },
         { 0x32, "Alpha 21066" },
@@ -910,7 +871,7 @@ std::string SMBios::ProcessorTable::GetFamily() const
         { 0x3C, "AMD Opteron 4100 Series" },
         { 0x3D, "AMD Opteron 6200 Series" },
         { 0x3E, "AMD Opteron 4200 Series" },
-        // 0x3F Available for assignment.
+        { 0x3F, "FX" },
         { 0x40, "MIPS" },
         { 0x41, "MIPS R4000" },
         { 0x42, "MIPS R4200" },
@@ -921,7 +882,12 @@ std::string SMBios::ProcessorTable::GetFamily() const
         { 0x47, "AMD E-Series" },
         { 0x48, "AMD S-Series" },
         { 0x49, "AMD G-Series" },
-        // 0x4A - 0x4F Available for assignment.
+        { 0x4A, "AMD Z-Series" },
+        { 0x4B, "AMD R-Series" },
+        { 0x4C, "Opteron 4300" },
+        { 0x4D, "Opteron 6300" },
+        { 0x4E, "Opteron 3300" },
+        { 0x4F, "FirePro" },
         { 0x50, "SPARC" },
         { 0x51, "SuperSPARC" },
         { 0x52, "microSPARC 2" },
@@ -938,7 +904,13 @@ std::string SMBios::ProcessorTable::GetFamily() const
         { 0x63, "68010" },
         { 0x64, "68020" },
         { 0x65, "68030" },
-        // 0x66 - 0x6F Available for assignment.
+        { 0x66, "Athlon X4" },
+        { 0x67, "Opteron X1000" },
+        { 0x68, "Opteron X2000" },
+        { 0x69, "Opteron A-Series" },
+        { 0x6A, "Opteron X3000" },
+        { 0x6B, "Zen" },
+        // 0x6C - 0x6F Available for assignment.
         { 0x70, "Hobbit" },
         // 0x71 - 0x77 Available for assignment.
         { 0x78, "Crusoe TM5000" },
@@ -1032,7 +1004,9 @@ std::string SMBios::ProcessorTable::GetFamily() const
         { 0xDE, "Intel Xeon Quad-Core 7xxx" },
         { 0xDF, "Intel Xeon Multi-Core 7xxx" },
         { 0xE0, "Intel Xeon Multi-Core 3400" },
-        // 0xE1 - 0xE5 Available for assignment.
+        // 0xE1 - 0xE3 Available for assignment.
+        { 0xE4, "Opteron 3000" },
+        { 0xE5, "Sempron II" },
         { 0xE6, "AMD Opteron Quad-Core Embedded" },
         { 0xE7, "AMD Phenom Triple-Core" },
         { 0xE8, "AMD Turion Ultra Dual-Core Mobile" },
@@ -1075,53 +1049,38 @@ std::string SMBios::ProcessorTable::GetFamily() const
     return std::string();
 }
 
-std::string SMBios::ProcessorTable::GetType() const
+proto::DmiProcessors::Type SMBios::ProcessorTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return std::string();
+        return proto::DmiProcessors::TYPE_UNKNOWN;
 
-    static const char* names[] =
+    switch (reader_.GetByte(0x05))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Central Processor",
-        "Math Processor",
-        "DSP Processor",
-        "Video Processor" // 0x06
-    };
-
-    const uint8_t type = reader_.GetByte(0x05);
-
-    if (type >= 0x01 && type <= 0x06)
-        return names[type - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiProcessors::TYPE_OTHER;
+        case 0x02: return proto::DmiProcessors::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiProcessors::TYPE_CENTRAL_PROCESSOR;
+        case 0x04: return proto::DmiProcessors::TYPE_MATH_PROCESSOR;
+        case 0x05: return proto::DmiProcessors::TYPE_DSP_PROCESSOR;
+        case 0x06: return proto::DmiProcessors::TYPE_VIDEO_PROCESSOR;
+        default: return proto::DmiProcessors::TYPE_UNKNOWN;
+    }
 }
 
-std::string SMBios::ProcessorTable::GetStatus() const
+proto::DmiProcessors::Status SMBios::ProcessorTable::GetStatus() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return std::string();
+        return proto::DmiProcessors::STATUS_UNKNOWN;
 
-    static const char* text[] =
+    switch (BitSet<uint8_t>(reader_.GetByte(0x18)).Range(0, 2))
     {
-        "Unknown", // 0x00
-        "Enabled",
-        "Disabled By User",
-        "Disabled By BIOS",
-        "Idle", // 0x04
-        nullptr,
-        nullptr,
-        "Other" // 0x07
-    };
-
-    const uint8_t status =
-        BitSet<uint8_t>(reader_.GetByte(0x18)).Range(0, 2);
-
-    if (!text[status])
-        return std::string();
-
-    return text[status];
+        case 0x00: return proto::DmiProcessors::STATUS_UNKNOWN;
+        case 0x01: return proto::DmiProcessors::STATUS_ENABLED;
+        case 0x02: return proto::DmiProcessors::STATUS_DISABLED_BY_USER;
+        case 0x03: return proto::DmiProcessors::STATUS_DISABLED_BY_BIOS;
+        case 0x04: return proto::DmiProcessors::STATUS_IDLE;
+        case 0x07: return proto::DmiProcessors::STATUS_OTHER;
+        default: return proto::DmiProcessors::STATUS_UNKNOWN;
+    }
 }
 
 std::string SMBios::ProcessorTable::GetSocket() const
@@ -1132,52 +1091,71 @@ std::string SMBios::ProcessorTable::GetSocket() const
     return reader_.GetString(0x04);
 }
 
-std::string SMBios::ProcessorTable::GetUpgrade() const
+proto::DmiProcessors::Upgrade SMBios::ProcessorTable::GetUpgrade() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return std::string();
+        return proto::DmiProcessors::UPGRADE_UNKNOWN;
 
-    static const char* names[] =
+    switch (reader_.GetByte(0x19))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Daughter Board",
-        "ZIF Socket",
-        "Replaceable Piggy Back",
-        "None",
-        "LIF Socket",
-        "Slot 1",
-        "Slot 2",
-        "370-pin Socket",
-        "Slot A",
-        "Slot M",
-        "Socket 423",
-        "Socket A (Socket 462)",
-        "Socket 478",
-        "Socket 754",
-        "Socket 940",
-        "Socket 939",
-        "Socket mPGA604",
-        "Socket LGA771",
-        "Socket LGA775",
-        "Socket S1",
-        "Socket AM2",
-        "Socket F (1207)",
-        "Socket LGA1366",
-        "Socket G34",
-        "Socket AM3",
-        "Socket C32",
-        "Socket LGA1156",
-        "Socket LGA1567",
-        "Socket PGA988A",
-        "Socket BGA1288" // 0x20
-    };
-
-    const uint8_t upgrade = reader_.GetByte(0x19);
-    if (upgrade >= 0x01 && upgrade <= 0x20)
-        return names[upgrade - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiProcessors::UPGRADE_OTHER;
+        case 0x02: return proto::DmiProcessors::UPGRADE_UNKNOWN;
+        case 0x03: return proto::DmiProcessors::UPGRADE_DAUGHTER_BOARD;
+        case 0x04: return proto::DmiProcessors::UPGRADE_ZIF_SOCKET;
+        case 0x05: return proto::DmiProcessors::UPGRADE_REPLACEABLE_PIGGY_BACK;
+        case 0x06: return proto::DmiProcessors::UPGRADE_NONE;
+        case 0x07: return proto::DmiProcessors::UPGRADE_LIF_SOCKET;
+        case 0x08: return proto::DmiProcessors::UPGRADE_SLOT_1;
+        case 0x09: return proto::DmiProcessors::UPGRADE_SLOT_2;
+        case 0x0A: return proto::DmiProcessors::UPGRADE_370_PIN_SOCKET;
+        case 0x0B: return proto::DmiProcessors::UPGRADE_SLOT_A;
+        case 0x0C: return proto::DmiProcessors::UPGRADE_SLOT_M;
+        case 0x0D: return proto::DmiProcessors::UPGRADE_SOCKET_423;
+        case 0x0E: return proto::DmiProcessors::UPGRADE_SOCKET_462;
+        case 0x0F: return proto::DmiProcessors::UPGRADE_SOCKET_478;
+        case 0x10: return proto::DmiProcessors::UPGRADE_SOCKET_754;
+        case 0x11: return proto::DmiProcessors::UPGRADE_SOCKET_940;
+        case 0x12: return proto::DmiProcessors::UPGRADE_SOCKET_939;
+        case 0x13: return proto::DmiProcessors::UPGRADE_SOCKET_MPGA604;
+        case 0x14: return proto::DmiProcessors::UPGRADE_SOCKET_LGA771;
+        case 0x15: return proto::DmiProcessors::UPGRADE_SOCKET_LGA775;
+        case 0x16: return proto::DmiProcessors::UPGRADE_SOCKET_S1;
+        case 0x17: return proto::DmiProcessors::UPGRADE_SOCKET_AM2;
+        case 0x18: return proto::DmiProcessors::UPGRADE_SOCKET_F;
+        case 0x19: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1366;
+        case 0x1A: return proto::DmiProcessors::UPGRADE_SOCKET_G34;
+        case 0x1B: return proto::DmiProcessors::UPGRADE_SOCKET_AM3;
+        case 0x1C: return proto::DmiProcessors::UPGRADE_SOCKET_C32;
+        case 0x1D: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1156;
+        case 0x1E: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1567;
+        case 0x1F: return proto::DmiProcessors::UPGRADE_SOCKET_PGA988A;
+        case 0x20: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1288;
+        case 0x21: return proto::DmiProcessors::UPGRADE_SOCKET_RPGA988B;
+        case 0x22: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1023;
+        case 0x23: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1224;
+        case 0x24: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1155;
+        case 0x25: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1356;
+        case 0x26: return proto::DmiProcessors::UPGRADE_SOCKET_LGA2011;
+        case 0x27: return proto::DmiProcessors::UPGRADE_SOCKET_FS1;
+        case 0x28: return proto::DmiProcessors::UPGRADE_SOCKET_FS2;
+        case 0x29: return proto::DmiProcessors::UPGRADE_SOCKET_FM1;
+        case 0x2A: return proto::DmiProcessors::UPGRADE_SOCKET_FM2;
+        case 0x2B: return proto::DmiProcessors::UPGRADE_SOCKET_LGA2011_3;
+        case 0x2C: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1356_3;
+        case 0x2D: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1150;
+        case 0x2E: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1168;
+        case 0x2F: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1234;
+        case 0x30: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1364;
+        case 0x31: return proto::DmiProcessors::UPGRADE_SOCKET_AM4;
+        case 0x32: return proto::DmiProcessors::UPGRADE_SOCKET_LGA1151;
+        case 0x33: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1356;
+        case 0x34: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1440;
+        case 0x35: return proto::DmiProcessors::UPGRADE_SOCKET_BGA1515;
+        case 0x36: return proto::DmiProcessors::UPGRADE_SOCKET_LGA3647_1;
+        case 0x37: return proto::DmiProcessors::UPGRADE_SOCKET_SP3;
+        case 0x38: return proto::DmiProcessors::UPGRADE_SOCKET_SP3_R2;
+        default: return proto::DmiProcessors::UPGRADE_UNKNOWN;
+    }
 }
 
 int SMBios::ProcessorTable::GetExternalClock() const
@@ -1276,22 +1254,33 @@ int SMBios::ProcessorTable::GetThreadCount() const
     return reader_.GetByte(0x25);
 }
 
-SMBios::ProcessorTable::FeatureList SMBios::ProcessorTable::GetFeatures() const
+uint32_t SMBios::ProcessorTable::GetCharacteristics() const
 {
     if (reader_.GetTableLength() < 0x28)
-        return FeatureList();
+        return 0;
 
     BitSet<uint16_t> bitfield(reader_.GetWord(0x26));
-    FeatureList list;
+    uint32_t characteristics = 0;
 
-    list.emplace_back("64-bit Capable", bitfield.Test(2));
-    list.emplace_back("Multi-Core", bitfield.Test(3));
-    list.emplace_back("Hardware Thread", bitfield.Test(4));
-    list.emplace_back("Execute Protection", bitfield.Test(5));
-    list.emplace_back("Enhanced Virtualization", bitfield.Test(6));
-    list.emplace_back("Power/Perfomance Control", bitfield.Test(7));
+    if (bitfield.Test(2))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_64BIT_CAPABLE;
 
-    return list;
+    if (bitfield.Test(3))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_MULTI_CORE;
+
+    if (bitfield.Test(4))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_HARDWARE_THREAD;
+
+    if (bitfield.Test(5))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_EXECUTE_PROTECTION;
+
+    if (bitfield.Test(6))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_ENHANCED_VIRTUALIZATION;
+
+    if (bitfield.Test(7))
+        characteristics |= proto::DmiProcessors::CHARACTERISTIC_POWER_CONTROL;
+
+    return characteristics;
 }
 
 //
@@ -1309,44 +1298,34 @@ std::string SMBios::CacheTable::GetName() const
     return reader_.GetString(0x04);
 }
 
-std::string SMBios::CacheTable::GetLocation() const
+proto::DmiCaches::Location SMBios::CacheTable::GetLocation() const
 {
-    static const char* text[4] =
+    switch (BitSet<uint16_t>(reader_.GetWord(0x05)).Range(5, 6))
     {
-        "Internal", // 0x00
-        "External",
-        nullptr, // 0x02
-        "Unknown" // 0x03
-    };
-
-    const uint16_t value =
-        BitSet<uint16_t>(reader_.GetWord(0x05)).Range(5, 6);
-
-    if (!text[value])
-        return std::string();
-
-    return text[value];
+        case 0x00: return proto::DmiCaches::LOCATION_INTERNAL;
+        case 0x01: return proto::DmiCaches::LOCATION_EXTERNAL;
+        case 0x02: return proto::DmiCaches::LOCATION_RESERVED;
+        default: return proto::DmiCaches::LOCATION_UNKNOWN;
+    }
 }
 
-bool SMBios::CacheTable::IsEnabled() const
+proto::DmiCaches::Status SMBios::CacheTable::GetStatus() const
 {
-    return BitSet<uint16_t>(reader_.GetWord(0x05) & 0x0080).Test(7);
+    if (BitSet<uint16_t>(reader_.GetWord(0x05) & 0x0080).Test(7))
+        return proto::DmiCaches::STATUS_ENABLED;
+
+    return proto::DmiCaches::STATUS_DISABLED;
 }
 
-std::string SMBios::CacheTable::GetMode() const
+proto::DmiCaches::Mode SMBios::CacheTable::GetMode() const
 {
-    static const char* text[] =
+    switch (BitSet<uint16_t>(reader_.GetWord(0x05)).Range(8, 9))
     {
-        "Write Through", // 0x00
-        "Write Back",
-        "Varies with Memory Address",
-        "Unknown" // 0x03
-    };
-
-    const uint16_t mode =
-        BitSet<uint16_t>(reader_.GetWord(0x05)).Range(8, 9);
-
-    return text[mode];
+        case 0x00: return proto::DmiCaches::MODE_WRITE_THRU;
+        case 0x01: return proto::DmiCaches::MODE_WRITE_BACK;
+        case 0x02: return proto::DmiCaches::MODE_WRITE_WITH_MEMORY_ADDRESS;
+        default: return proto::DmiCaches::MODE_UNKNOWN;
+    }
 }
 
 int SMBios::CacheTable::GetLevel() const
@@ -1364,56 +1343,65 @@ int SMBios::CacheTable::GetCurrentSize() const
     return BitSet<uint16_t>(reader_.GetWord(0x09)).Range(0, 14);
 }
 
-SMBios::CacheTable::SRAMTypeList SMBios::CacheTable::GetSupportedSRAMTypes() const
+uint32_t SMBios::CacheTable::GetSupportedSRAMTypes() const
 {
-    static const char* text[] =
-    {
-        "Other", // 0
-        "Unknown",
-        "Non-burst",
-        "Burst",
-        "Pipeline Burst",
-        "Synchronous",
-        "Asynchronous" // 6
-    };
-
-    const BitSet<uint16_t> bitfield(reader_.GetWord(0x0B));
+    BitSet<uint16_t> bitfield(reader_.GetWord(0x0B));
 
     if (bitfield.None())
-        return SRAMTypeList();
+        return proto::DmiCaches::SRAM_TYPE_BAD;
 
-    SRAMTypeList list;
+    uint32_t types = 0;
 
-    for (int i = 0; i <= 6; ++i)
-    {
-        list.emplace_back(text[i], bitfield.Test(i));
-    }
+    if (bitfield.Test(0))
+        types |= proto::DmiCaches::SRAM_TYPE_OTHER;
 
-    return list;
+    if (bitfield.Test(1))
+        types |= proto::DmiCaches::SRAM_TYPE_UNKNOWN;
+
+    if (bitfield.Test(2))
+        types |= proto::DmiCaches::SRAM_TYPE_NON_BURST;
+
+    if (bitfield.Test(3))
+        types |= proto::DmiCaches::SRAM_TYPE_BURST;
+
+    if (bitfield.Test(4))
+        types |= proto::DmiCaches::SRAM_TYPE_PIPELINE_BURST;
+
+    if (bitfield.Test(5))
+        types |= proto::DmiCaches::SRAM_TYPE_SYNCHRONOUS;
+
+    if (bitfield.Test(6))
+        types |= proto::DmiCaches::SRAM_TYPE_ASYNCHRONOUS;
+
+    return types;
 }
 
-std::string SMBios::CacheTable::GetCurrentSRAMType() const
+proto::DmiCaches::SRAMType SMBios::CacheTable::GetCurrentSRAMType() const
 {
-    static const char* text[] =
-    {
-        "Other", // 0
-        "Unknown",
-        "Non-burst",
-        "Burst",
-        "Pipeline Burst",
-        "Synchronous",
-        "Asynchronous" // 6
-    };
-
     BitSet<uint16_t> type(reader_.GetWord(0x0D));
 
-    for (int i = 0; i <= 6; ++i)
-    {
-        if (type.Test(i))
-            return text[i];
-    }
+    if (type.Test(0))
+        return proto::DmiCaches::SRAM_TYPE_OTHER;
 
-    return std::string();
+    if (type.Test(1))
+        return proto::DmiCaches::SRAM_TYPE_UNKNOWN;
+
+    if (type.Test(2))
+        return proto::DmiCaches::SRAM_TYPE_NON_BURST;
+
+    if (type.Test(3))
+        return proto::DmiCaches::SRAM_TYPE_BURST;
+
+    if (type.Test(4))
+        return proto::DmiCaches::SRAM_TYPE_PIPELINE_BURST;
+
+    if (type.Test(5))
+        return proto::DmiCaches::SRAM_TYPE_SYNCHRONOUS;
+
+    if (type.Test(6))
+        return proto::DmiCaches::SRAM_TYPE_ASYNCHRONOUS;
+
+    return proto::DmiCaches::SRAM_TYPE_BAD;
 }
 
 int SMBios::CacheTable::GetSpeed() const
@@ -1424,80 +1412,59 @@ int SMBios::CacheTable::GetSpeed() const
     return reader_.GetByte(0x0F);
 }
 
-std::string SMBios::CacheTable::GetErrorCorrectionType() const
+proto::DmiCaches::ErrorCorrectionType SMBios::CacheTable::GetErrorCorrectionType() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return std::string();
+        return proto::DmiCaches::ERROR_CORRECTION_TYPE_UNKNOWN;
 
-    const uint8_t type = reader_.GetByte(0x10);
-
-    static const char* text[] =
+    switch (reader_.GetByte(0x10))
     {
-        "Other", // 0x01
-        "Unknown",
-        "None",
-        "Parity",
-        "Single-bit ECC",
-        "Multi-bit ECC" // 0x06
-    };
-
-    if (type >= 0x01 && type <= 0x06)
-        return text[type - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiCaches::ERROR_CORRECTION_TYPE_OTHER;
+        case 0x03: return proto::DmiCaches::ERROR_CORRECTION_TYPE_NONE;
+        case 0x04: return proto::DmiCaches::ERROR_CORRECTION_TYPE_PARITY;
+        case 0x05: return proto::DmiCaches::ERROR_CORRECTION_TYPE_SINGLE_BIT_ECC;
+        case 0x06: return proto::DmiCaches::ERROR_CORRECTION_TYPE_MULTI_BIT_ECC;
+        default: return proto::DmiCaches::ERROR_CORRECTION_TYPE_UNKNOWN;
+    }
 }
 
-std::string SMBios::CacheTable::GetType() const
+proto::DmiCaches::Type SMBios::CacheTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return std::string();
+        return proto::DmiCaches::TYPE_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x11))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Instruction",
-        "Data",
-        "Unified" // 0x05
-    };
-
-    const uint8_t type = reader_.GetByte(0x11);
-
-    if (type >= 0x01 && type <= 0x05)
-        return text[type - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiCaches::TYPE_OTHER;
+        case 0x03: return proto::DmiCaches::TYPE_INSTRUCTION;
+        case 0x04: return proto::DmiCaches::TYPE_DATA;
+        case 0x05: return proto::DmiCaches::TYPE_UNIFIED;
+        default: return proto::DmiCaches::TYPE_UNKNOWN;
+    }
 }
 
-std::string SMBios::CacheTable::GetAssociativity() const
+proto::DmiCaches::Associativity SMBios::CacheTable::GetAssociativity() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return std::string();
+        return proto::DmiCaches::ASSOCIATIVITY_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x12))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Direct Mapped",
-        "2-way Set-associative",
-        "4-way Set-associative",
-        "Fully Associative",
-        "8-way Set-associative",
-        "16-way Set-associative",
-        "12-way Set-associative",
-        "24-way Set-associative",
-        "32-way Set-associative",
-        "48-way Set-associative",
-        "64-way Set-associative",
-        "20-way Set-associative" // 0x0E
-    };
-
-    const uint8_t value = reader_.GetByte(0x12);
-
-    if (value >= 0x01 && value <= 0x0E)
-        return text[value - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiCaches::ASSOCIATIVITY_OTHER;
+        case 0x03: return proto::DmiCaches::ASSOCIATIVITY_DIRECT_MAPPED;
+        case 0x04: return proto::DmiCaches::ASSOCIATIVITY_2_WAY;
+        case 0x05: return proto::DmiCaches::ASSOCIATIVITY_4_WAY;
+        case 0x06: return proto::DmiCaches::ASSOCIATIVITY_FULLY;
+        case 0x07: return proto::DmiCaches::ASSOCIATIVITY_8_WAY;
+        case 0x08: return proto::DmiCaches::ASSOCIATIVITY_16_WAY;
+        case 0x09: return proto::DmiCaches::ASSOCIATIVITY_12_WAY;
+        case 0x0A: return proto::DmiCaches::ASSOCIATIVITY_24_WAY;
+        case 0x0B: return proto::DmiCaches::ASSOCIATIVITY_32_WAY;
+        case 0x0C: return proto::DmiCaches::ASSOCIATIVITY_48_WAY;
+        case 0x0D: return proto::DmiCaches::ASSOCIATIVITY_64_WAY;
+        case 0x0E: return proto::DmiCaches::ASSOCIATIVITY_20_WAY;
+        default: return proto::DmiCaches::ASSOCIATIVITY_UNKNOWN;
+    }
 }
 
 //
@@ -1627,13 +1594,13 @@ std::string SMBios::PortConnectorTable::ConnectorTypeToString(uint8_t type)
         { 0x1E, "Mini-Centronics Type-26" },
         { 0x1F, "Mini-jack (headphones)" },
         { 0x20, "BNC" },
-        { 0x21, "1394" },
+        { 0x21, "IEEE 1394" },
         { 0x22, "SAS/SATA Plug Receptacle" },
         { 0xA0, "PC-98" },
-        { 0xA1, "PC-98Hireso" },
+        { 0xA1, "PC-98 Hireso" },
         { 0xA2, "PC-H98" },
-        { 0xA3, "PC-98Note" },
-        { 0xA4, "PC-98Full" },
+        { 0xA3, "PC-98 Note" },
+        { 0xA4, "PC-98 Full" },
         { 0xFF, "Other" }
     };
 
@@ -1680,137 +1647,130 @@ std::string SMBios::SystemSlotTable::GetSlotDesignation() const
     return reader_.GetString(0x04);
 }
 
-std::string SMBios::SystemSlotTable::GetType() const
+proto::DmiSystemSlots::Type SMBios::SystemSlotTable::GetType() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return std::string();
+        return proto::DmiSystemSlots::TYPE_UNKNOWN;
 
-    const uint8_t type = reader_.GetByte(0x05);
-
-    static const char* names[] =
+    switch (reader_.GetByte(0x05))
     {
-        "Other", // 0x01
-        "Unknown",
-        "ISA",
-        "MCA",
-        "EISA",
-        "PCI",
-        "PC Card (PCMCIA)",
-        "VLB",
-        "Proprietary",
-        "Processor Card",
-        "Proprietary Memory Card",
-        "I/O Riser Card",
-        "NuBus",
-        "PCI-66",
-        "AGP",
-        "AGP 2x",
-        "AGP 4x",
-        "PCI-X",
-        "AGP 8x" // 0x13
-    };
+        case 0x01: return proto::DmiSystemSlots::TYPE_OTHER;
+        case 0x02: return proto::DmiSystemSlots::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiSystemSlots::TYPE_ISA;
+        case 0x04: return proto::DmiSystemSlots::TYPE_MCA;
+        case 0x05: return proto::DmiSystemSlots::TYPE_EISA;
+        case 0x06: return proto::DmiSystemSlots::TYPE_PCI;
+        case 0x07: return proto::DmiSystemSlots::TYPE_PC_CARD;
+        case 0x08: return proto::DmiSystemSlots::TYPE_VLB;
+        case 0x09: return proto::DmiSystemSlots::TYPE_PROPRIETARY;
+        case 0x0A: return proto::DmiSystemSlots::TYPE_PROCESSOR_CARD;
+        case 0x0B: return proto::DmiSystemSlots::TYPE_PROPRIETARY_MEMORY_CARD;
+        case 0x0C: return proto::DmiSystemSlots::TYPE_IO_RISER_CARD;
+        case 0x0D: return proto::DmiSystemSlots::TYPE_NUBUS;
+        case 0x0E: return proto::DmiSystemSlots::TYPE_PCI_66;
+        case 0x0F: return proto::DmiSystemSlots::TYPE_AGP;
+        case 0x10: return proto::DmiSystemSlots::TYPE_AGP_2X;
+        case 0x11: return proto::DmiSystemSlots::TYPE_AGP_4X;
+        case 0x12: return proto::DmiSystemSlots::TYPE_PCI_X;
+        case 0x13: return proto::DmiSystemSlots::TYPE_AGP_8X;
+        case 0x14: return proto::DmiSystemSlots::TYPE_M2_SOCKET_1DP;
+        case 0x15: return proto::DmiSystemSlots::TYPE_M2_SOCKET_1SD;
+        case 0x16: return proto::DmiSystemSlots::TYPE_M2_SOCKET_2;
+        case 0x17: return proto::DmiSystemSlots::TYPE_M2_SOCKET_3;
+        case 0x18: return proto::DmiSystemSlots::TYPE_MXM_TYPE_I;
+        case 0x19: return proto::DmiSystemSlots::TYPE_MXM_TYPE_II;
+        case 0x1A: return proto::DmiSystemSlots::TYPE_MXM_TYPE_III;
+        case 0x1B: return proto::DmiSystemSlots::TYPE_MXM_TYPE_III_HE;
+        case 0x1C: return proto::DmiSystemSlots::TYPE_MXM_TYPE_IV;
+        case 0x1D: return proto::DmiSystemSlots::TYPE_MXM_30_TYPE_A;
+        case 0x1E: return proto::DmiSystemSlots::TYPE_MXM_30_TYPE_B;
+        case 0x1F: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_SFF_8639;
+        case 0x20: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_SFF_8639;
+        case 0x21: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE;
+        case 0x22: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_52PIN;
+        case 0x23: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_MINI_76PIN;
 
-    if (type >= 0x01 && type <= 0x13)
-        return names[type - 0x01];
+        case 0xA0: return proto::DmiSystemSlots::TYPE_PC98_C20;
+        case 0xA1: return proto::DmiSystemSlots::TYPE_PC98_C24;
+        case 0xA2: return proto::DmiSystemSlots::TYPE_PC98_E;
+        case 0xA3: return proto::DmiSystemSlots::TYPE_PC98_LOCAL_BUS;
+        case 0xA4: return proto::DmiSystemSlots::TYPE_PC98_CARD;
+        case 0xA5: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS;
+        case 0xA6: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X1;
+        case 0xA7: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X2;
+        case 0xA8: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X4;
+        case 0xA9: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X8;
+        case 0xAA: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_X16;
+        case 0xAB: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2;
+        case 0xAC: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X1;
+        case 0xAD: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X2;
+        case 0xAE: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X4;
+        case 0xAF: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X8;
+        case 0xB0: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_2_X16;
+        case 0xB1: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3;
+        case 0xB2: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X1;
+        case 0xB3: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X2;
+        case 0xB4: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X4;
+        case 0xB5: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X8;
+        case 0xB6: return proto::DmiSystemSlots::TYPE_PCI_EXPRESS_3_X16;
 
-    static const char* names_0xA0[] =
-    {
-        "PC-98/C20", // 0xA0
-        "PC-98/C24",
-        "PC-98/E",
-        "PC-98/Local Bus",
-        "PC-98/Card",
-        "PCI Express",
-        "PCI Express x1",
-        "PCI Express x2",
-        "PCI Express x4",
-        "PCI Express x8",
-        "PCI Express x16",
-        "PCI Express 2",
-        "PCI Express 2 x1",
-        "PCI Express 2 x2",
-        "PCI Express 2 x4",
-        "PCI Express 2 x8",
-        "PCI Express 2 x16" // 0xB0
-    };
-
-    if (type >= 0xA0 && type <= 0xB0)
-        return names_0xA0[type - 0xA0];
-
-    return std::string();
+        default: return proto::DmiSystemSlots::TYPE_UNKNOWN;
+    }
 }
 
-std::string SMBios::SystemSlotTable::GetUsage() const
+proto::DmiSystemSlots::Usage SMBios::SystemSlotTable::GetUsage() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return std::string();
+        return proto::DmiSystemSlots::USAGE_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x07))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Available",
-        "In Use" // 0x04
-    };
-
-    const uint8_t value = reader_.GetByte(0x07);
-
-    if (value >= 0x01 && value <= 0x04)
-        return text[value - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiSystemSlots::USAGE_OTHER;
+        case 0x02: return proto::DmiSystemSlots::USAGE_UNKNOWN;
+        case 0x03: return proto::DmiSystemSlots::USAGE_AVAILABLE;
+        case 0x04: return proto::DmiSystemSlots::USAGE_IN_USE;
+        default: return proto::DmiSystemSlots::USAGE_UNKNOWN;
+    }
 }
 
-std::string SMBios::SystemSlotTable::GetBusWidth() const
+proto::DmiSystemSlots::BusWidth SMBios::SystemSlotTable::GetBusWidth() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return std::string();
+        return proto::DmiSystemSlots::BUS_WIDTH_UNKNOWN;
 
-    static const char* names[] =
+    switch (reader_.GetByte(0x06))
     {
-        "Other", // 0x01, Other
-        nullptr, // Unknown
-        "8-bit",
-        "16-bit",
-        "32-bit",
-        "64-bit",
-        "128-bit",
-        "x1",
-        "x2",
-        "x4",
-        "x8",
-        "x12",
-        "x16",
-        "x32" // 0x0E
-    };
-
-    const uint8_t width = reader_.GetByte(0x06);
-
-    if (width >= 0x01 && width <= 0x0E && names[width - 0x01])
-        return names[width - 0x01];
-
-    return std::string();
+        case 0x01: return proto::DmiSystemSlots::BUS_WIDTH_OTHER;
+        case 0x02: return proto::DmiSystemSlots::BUS_WIDTH_UNKNOWN;
+        case 0x03: return proto::DmiSystemSlots::BUS_WIDTH_8_BIT;
+        case 0x04: return proto::DmiSystemSlots::BUS_WIDTH_16_BIT;
+        case 0x05: return proto::DmiSystemSlots::BUS_WIDTH_32_BIT;
+        case 0x06: return proto::DmiSystemSlots::BUS_WIDTH_64_BIT;
+        case 0x07: return proto::DmiSystemSlots::BUS_WIDTH_128_BIT;
+        case 0x08: return proto::DmiSystemSlots::BUS_WIDTH_X1;
+        case 0x09: return proto::DmiSystemSlots::BUS_WIDTH_X2;
+        case 0x0A: return proto::DmiSystemSlots::BUS_WIDTH_X4;
+        case 0x0B: return proto::DmiSystemSlots::BUS_WIDTH_X8;
+        case 0x0C: return proto::DmiSystemSlots::BUS_WIDTH_X12;
+        case 0x0D: return proto::DmiSystemSlots::BUS_WIDTH_X16;
+        case 0x0E: return proto::DmiSystemSlots::BUS_WIDTH_X32;
+        default: return proto::DmiSystemSlots::BUS_WIDTH_OTHER;
+    }
 }
 
-std::string SMBios::SystemSlotTable::GetLength() const
+proto::DmiSystemSlots::Length SMBios::SystemSlotTable::GetLength() const
 {
     if (reader_.GetTableLength() < 0x0C)
-        return std::string();
+        return proto::DmiSystemSlots::LENGTH_UNKNOWN;
 
-    static const char* text[] =
+    switch (reader_.GetByte(0x08))
     {
-        "Other", // 0x01
-        "Unknown",
-        "Short",
-        "Long" // 0x04
-    };
-
-    const uint8_t value = reader_.GetByte(0x08);
-
-    if (value >= 0x01 && value <= 0x04)
-        return text[value - 1];
-
-    return std::string();
+        case 0x01: return proto::DmiSystemSlots::LENGTH_OTHER;
+        case 0x02: return proto::DmiSystemSlots::LENGTH_UNKNOWN;
+        case 0x03: return proto::DmiSystemSlots::LENGTH_SHORT;
+        case 0x04: return proto::DmiSystemSlots::LENGTH_LONG;
+        default: return proto::DmiSystemSlots::LENGTH_UNKNOWN;
+    }
 }
 
 //

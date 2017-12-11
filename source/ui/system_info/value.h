@@ -24,7 +24,7 @@ public:
 
     static Value EmptyString();
     static Value String(const std::string_view value);
-    static Value String(const char* format, ...);
+    static Value FormattedString(const char* format, ...);
     static Value Bool(bool value);
     static Value Number(uint32_t value, std::string_view unit);
     static Value Number(uint32_t value);

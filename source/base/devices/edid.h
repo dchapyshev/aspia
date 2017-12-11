@@ -23,6 +23,12 @@ public:
 
     ~Edid() = default;
 
+    enum InputSignalType
+    {
+        INPUT_SIGNAL_TYPE_ANALOG  = 0,
+        INPUT_SIGNAL_TYPE_DIGITAL = 1
+    };
+
     enum DataTypeTag : uint8_t
     {
         // 0Fh - 00h: Descriptor defined by manufacturer.
@@ -211,7 +217,7 @@ public:
     double GetPixelClock() const; // MHz
     int GetMaxSupportedPixelClock() const; // MHz
 
-    std::string GetInputSignalType() const;
+    InputSignalType GetInputSignalType() const;
     uint8_t GetEstabilishedTimings1() const;
     uint8_t GetEstabilishedTimings2() const;
     uint8_t GetManufacturersTimings() const;

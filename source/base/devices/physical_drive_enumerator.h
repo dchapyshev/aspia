@@ -9,6 +9,7 @@
 #define _ASPIA_BASE__DEVICES__PHYSICAL_DRIVE_ENUMERATOR_H
 
 #include "base/devices/device.h"
+#include "proto/system_info_session_message.pb.h"
 
 #include <setupapi.h>
 #include <winioctl.h>
@@ -24,14 +25,11 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    using Feature = std::pair<std::string, bool>;
-    using FeatureList = std::list<Feature>;
-
     std::string GetModelNumber() const;
     std::string GetSerialNumber() const;
     std::string GetFirmwareRevision() const;
-    std::string GetBusType() const;
-    std::string GetCurrentTransferMode() const;
+    proto::AtaDrives::BusType GetBusType() const;
+    proto::AtaDrives::TransferMode GetCurrentTransferMode() const;
     int GetRotationRate() const; // in RPM.
     uint64_t GetDriveSize() const;
     uint32_t GetBufferSize() const; // in bytes.
@@ -43,7 +41,8 @@ public:
     uint32_t GetSectorsPerTrack() const;
     uint32_t GetBytesPerSector() const;
     uint16_t GetHeadsNumber() const;
-    FeatureList GetFeatures() const;
+    uint64_t GetSupportedFeatures() const;
+    uint64_t GetEnabledFeatures() const;
 
 private:
 #pragma pack (push, id_data, 1)

@@ -8,6 +8,7 @@
 #ifndef _ASPIA_BASE__DEVICES__SMBIOS_H
 #define _ASPIA_BASE__DEVICES__SMBIOS_H
 
+#include "proto/system_info_session_message.pb.h"
 #include "base/macros.h"
 
 #include <memory>
@@ -74,9 +75,6 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x00 };
 
-        using Feature = std::pair<std::string, bool>;
-        using FeatureList = std::list<Feature>;
-
         std::string GetManufacturer() const;
         std::string GetVersion() const;
         std::string GetDate() const;
@@ -85,7 +83,9 @@ public:
         std::string GetFirmwareRevision() const;
         std::string GetAddress() const;
         int GetRuntimeSize() const; // In bytes.
-        FeatureList GetCharacteristics() const;
+        uint64_t GetCharacteristics() const;
+        uint32_t GetCharacteristics1() const;
+        uint32_t GetCharacteristics2() const;
 
     private:
         friend class TableEnumerator<BiosTable>;
@@ -130,7 +130,7 @@ public:
         std::string GetAssetTag() const;
         FeatureList GetFeatures() const;
         std::string GetLocationInChassis() const;
-        std::string GetBoardType() const;
+        proto::DmiBaseboard::BoardType GetBoardType() const;
 
     private:
         friend class TableEnumerator<BaseboardTable>;
@@ -148,19 +148,17 @@ public:
         std::string GetVersion() const;
         std::string GetSerialNumber() const;
         std::string GetAssetTag() const;
-        std::string GetType() const;
-        std::string GetOSLoadStatus() const;
-        std::string GetPowerSourceStatus() const;
-        std::string GetTemperatureStatus() const;
-        std::string GetSecurityStatus() const;
+        proto::DmiChassis::Type GetType() const;
+        proto::DmiChassis::Status GetOSLoadStatus() const;
+        proto::DmiChassis::Status GetPowerSourceStatus() const;
+        proto::DmiChassis::Status GetTemperatureStatus() const;
+        proto::DmiChassis::SecurityStatus GetSecurityStatus() const;
         int GetHeight() const; // In Units.
         int GetNumberOfPowerCords() const;
 
     private:
         friend class TableEnumerator<ChassisTable>;
         explicit ChassisTable(const TableReader& reader);
-
-        static std::string StatusToString(uint8_t status);
 
         TableReader reader_;
     };
@@ -170,16 +168,13 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x04 };
 
-        using Feature = std::pair<std::string, bool>;
-        using FeatureList = std::list<Feature>;
-
         std::string GetManufacturer() const;
         std::string GetVersion() const;
         std::string GetFamily() const;
-        std::string GetType() const;
-        std::string GetStatus() const;
+        proto::DmiProcessors::Type GetType() const;
+        proto::DmiProcessors::Status GetStatus() const;
         std::string GetSocket() const;
-        std::string GetUpgrade() const;
+        proto::DmiProcessors::Upgrade GetUpgrade() const;
         int GetExternalClock() const;
         int GetCurrentSpeed() const;
         int GetMaximumSpeed() const;
@@ -190,7 +185,7 @@ public:
         int GetCoreCount() const;
         int GetCoreEnabled() const;
         int GetThreadCount() const;
-        FeatureList GetFeatures() const;
+        uint32_t GetCharacteristics() const;
 
     private:
         friend class TableEnumerator<ProcessorTable>;
@@ -204,22 +199,19 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x07 };
 
-        using SRAMType = std::pair<std::string, bool>;
-        using SRAMTypeList = std::list<SRAMType>;
-
         std::string GetName() const;
-        std::string GetLocation() const;
-        bool IsEnabled() const;
-        std::string GetMode() const;
+        proto::DmiCaches::Location GetLocation() const;
+        proto::DmiCaches::Status GetStatus() const;
+        proto::DmiCaches::Mode GetMode() const;
         int GetLevel() const;
         int GetMaximumSize() const;
         int GetCurrentSize() const;
-        SRAMTypeList GetSupportedSRAMTypes() const;
-        std::string GetCurrentSRAMType() const;
+        uint32_t GetSupportedSRAMTypes() const;
+        proto::DmiCaches::SRAMType GetCurrentSRAMType() const;
         int GetSpeed() const;
-        std::string GetErrorCorrectionType() const;
-        std::string GetType() const;
-        std::string GetAssociativity() const;
+        proto::DmiCaches::ErrorCorrectionType GetErrorCorrectionType() const;
+        proto::DmiCaches::Type GetType() const;
+        proto::DmiCaches::Associativity GetAssociativity() const;
 
     private:
         friend class TableEnumerator<CacheTable>;
@@ -254,10 +246,10 @@ public:
         enum : uint8_t { TABLE_TYPE = 0x09 };
 
         std::string GetSlotDesignation() const;
-        std::string GetType() const;
-        std::string GetUsage() const;
-        std::string GetBusWidth() const;
-        std::string GetLength() const;
+        proto::DmiSystemSlots::Type GetType() const;
+        proto::DmiSystemSlots::Usage GetUsage() const;
+        proto::DmiSystemSlots::BusWidth GetBusWidth() const;
+        proto::DmiSystemSlots::Length GetLength() const;
 
     private:
         friend class TableEnumerator<SystemSlotTable>;

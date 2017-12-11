@@ -190,7 +190,7 @@ std::string PhysicalDriveEnumerator::GetFirmwareRevision() const
     return output;
 }
 
-std::string PhysicalDriveEnumerator::GetBusType() const
+proto::AtaDrives::BusType PhysicalDriveEnumerator::GetBusType() const
 {
     STORAGE_DEVICE_DESCRIPTOR device_descriptor;
     memset(&device_descriptor, 0, sizeof(device_descriptor));
@@ -205,66 +205,63 @@ std::string PhysicalDriveEnumerator::GetBusType() const
                            &device_descriptor, sizeof(device_descriptor),
                            &bytes_returned))
     {
-        return std::string();
+        return proto::AtaDrives::BUS_TYPE_UNKNOWN;
     }
 
     switch (device_descriptor.BusType)
     {
-        case BusTypeScsi: return "SCSI";
-        case BusTypeAtapi: return "ATAPI";
-        case BusTypeAta: return "ATA";
-        case BusType1394: return "IEEE 1394";
-        case BusTypeSsa: return "SSA";
-        case BusTypeFibre: return "Fibre";
-        case BusTypeUsb: return "USB";
-        case BusTypeRAID: return "RAID";
-        case BusTypeiScsi: return "iSCSI";
-        case BusTypeSas: return "SAS";
-        case BusTypeSata: return "SATA";
-        case BusTypeSd: return "SD";
-        case BusTypeMmc: return "MMC";
-        case BusTypeVirtual: return "Virtual";
-        case BusTypeFileBackedVirtual: return "File Backed Virtual";
-        default: return std::string();
+        case BusTypeScsi: return proto::AtaDrives::BUS_TYPE_SCSI;
+        case BusTypeAtapi: return proto::AtaDrives::BUS_TYPE_ATAPI;
+        case BusTypeAta: return proto::AtaDrives::BUS_TYPE_ATA;
+        case BusType1394: return proto::AtaDrives::BUS_TYPE_IEEE1394;
+        case BusTypeSsa: return proto::AtaDrives::BUS_TYPE_SSA;
+        case BusTypeFibre: return proto::AtaDrives::BUS_TYPE_FIBRE;
+        case BusTypeUsb: return proto::AtaDrives::BUS_TYPE_USB;
+        case BusTypeRAID: return proto::AtaDrives::BUS_TYPE_RAID;
+        case BusTypeiScsi: return proto::AtaDrives::BUS_TYPE_ISCSI;
+        case BusTypeSas: return proto::AtaDrives::BUS_TYPE_SAS;
+        case BusTypeSata: return proto::AtaDrives::BUS_TYPE_SATA;
+        case BusTypeSd: return proto::AtaDrives::BUS_TYPE_SD;
+        case BusTypeMmc: return proto::AtaDrives::BUS_TYPE_MMC;
+        case BusTypeVirtual: return proto::AtaDrives::BUS_TYPE_VIRTUAL;
+        case BusTypeFileBackedVirtual: return proto::AtaDrives::BUS_TYPE_FILE_BACKED_VIRTUAL;
+        default: return proto::AtaDrives::BUS_TYPE_UNKNOWN;
     }
 }
 
-std::string PhysicalDriveEnumerator::GetCurrentTransferMode() const
+proto::AtaDrives::TransferMode PhysicalDriveEnumerator::GetCurrentTransferMode() const
 {
-    const char* mode = "PIO";
+    proto::AtaDrives::TransferMode mode = proto::AtaDrives::TRANSFER_MODE_PIO;
 
     if (id_data_.multi_word_dma & 0x700)
-        mode = "PIO / DMA";
+        mode = proto::AtaDrives::TRANSFER_MODE_PIO_DMA;
 
     if (id_data_.ultra_dma_mode & 0x4000)
-        mode = "UltraDMA/133 (133 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_133;
     else if (id_data_.ultra_dma_mode & 0x2000)
-        mode = "UltraDMA/100 (100 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_100;
     else if (id_data_.ultra_dma_mode & 0x1000)
-        mode = "UltraDMA/66 (66 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_66;
     else if (id_data_.ultra_dma_mode & 0x800)
-        mode = "UltraDMA/44 (44 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_44;
     else if (id_data_.ultra_dma_mode & 0x400)
-        mode = "UltraDMA/33 (33 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_33;
     else if (id_data_.ultra_dma_mode & 0x200)
-        mode = "UltraDMA/25 (25 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_25;
     else if (id_data_.ultra_dma_mode & 0x100)
-        mode = "UltraDMA/16 (16 MB/s)";
+        mode = proto::AtaDrives::TRANSFER_MODE_ULTRA_DMA_16;
 
     if (id_data_.sata_capabilities != 0x0000 && id_data_.sata_capabilities != 0xFFFF)
     {
         if (id_data_.sata_capabilities & 0x10)
-            mode = nullptr;
+            mode = proto::AtaDrives::TRANSFER_MODE_UNKNOWN;
         else if (id_data_.sata_capabilities & 0x8)
-            mode = "SATA/600 (600 MB/s)";
+            mode = proto::AtaDrives::TRANSFER_MODE_SATA_600;
         else if (id_data_.sata_capabilities & 0x4)
-            mode = "SATA/300 (300 MB/s)";
+            mode = proto::AtaDrives::TRANSFER_MODE_SATA_300;
         else if (id_data_.sata_capabilities & 0x2)
-            mode = "SATA/150 (150 MB/s)";
+            mode = proto::AtaDrives::TRANSFER_MODE_SATA_150;
     }
-
-    if (!mode)
-        return std::string();
 
     return mode;
 }
@@ -330,88 +327,160 @@ uint16_t PhysicalDriveEnumerator::GetHeadsNumber() const
     return id_data_.number_of_heads;
 }
 
-PhysicalDriveEnumerator::FeatureList PhysicalDriveEnumerator::GetFeatures() const
+uint64_t PhysicalDriveEnumerator::GetSupportedFeatures() const
 {
     const uint16_t major_version = GetMajorVersion();
 
-    FeatureList list;
+    uint64_t features = 0;
 
     if (major_version >= 3)
     {
         if (id_data_.command_set_support2 & (1 << 3))
-        {
-            list.emplace_back("Advanced Power Management",
-                              id_data_.command_set_enabled2 & (1 << 3));
-        }
+            features |= proto::AtaDrives::FEATURE_ADVANCED_POWER_MANAGEMENT;
 
         if (id_data_.command_set_support1 & (1 << 0))
-            list.emplace_back("SMART", id_data_.command_set_enabled1 & (1 << 0));
+            features |= proto::AtaDrives::FEATURE_SMART;
 
         if (major_version >= 5)
         {
             if (id_data_.command_set_support2 & (1 << 10))
-                list.emplace_back("48-Bit LBA", id_data_.command_set_enabled2 & (1 << 10));
+                features |= proto::AtaDrives::FEATURE_48BIT_LBA;
 
             if (id_data_.command_set_support2 & (1 << 9))
-            {
-                list.emplace_back("Automatic Acoustic Management",
-                                  id_data_.command_set_enabled2 & (1 << 9));
-            }
+                features |= proto::AtaDrives::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
 
             if (major_version >= 6)
             {
                 if (id_data_.sata_capabilities & (1 << 8))
-                    list.emplace_back("Native Command Queuing", true);
+                    features |= proto::AtaDrives::FEATURE_NATIVE_COMMAND_QUEUING;
 
                 if (major_version >= 7)
                 {
                     if (id_data_.data_set_management & (1 << 0))
-                        list.emplace_back("TRIM", true);
+                        features |= proto::AtaDrives::FEATURE_TRIM;
                 }
             }
         }
     }
 
     if (id_data_.command_set_support3 & (1 << 0))
-        list.emplace_back("SMART Error Logging", true);
+        features |= proto::AtaDrives::FEATURE_SMART_ERROR_LOGGING;
 
     if (id_data_.command_set_support3 & (1 << 1))
-        list.emplace_back("SMART Self Test", true);
+        features |= proto::AtaDrives::FEATURE_SMART_SELF_TEST;
 
     if (id_data_.command_set_support3 & (1 << 4))
-        list.emplace_back("Streaming", true);
+        features |= proto::AtaDrives::FEATURE_STREAMING;
 
     if (id_data_.command_set_support3 & (1 << 5))
-        list.emplace_back("General Purpose Logging", true);
+        features |= proto::AtaDrives::FEATURE_GENERAL_PURPOSE_LOGGING;
 
     if (id_data_.command_set_support1 & (1 << 1))
-        list.emplace_back("Security Mode", id_data_.command_set_enabled1 & (1 << 1));
+        features |= proto::AtaDrives::FEATURE_SECURITY_MODE;
 
     if (id_data_.command_set_support1 & (1 << 3))
-        list.emplace_back("Power Management", id_data_.command_set_enabled1 & (1 << 3));
+        features |= proto::AtaDrives::FEATURE_POWER_MANAGEMENT;
 
     if (id_data_.command_set_support1 & (1 << 5))
-        list.emplace_back("Write Cache", id_data_.command_set_enabled1 & (1 << 5));
+        features |= proto::AtaDrives::FEATURE_WRITE_CACHE;
 
     if (id_data_.command_set_support1 & (1 << 6))
-        list.emplace_back("Read Lock Ahead", id_data_.command_set_enabled1 & (1 << 6));
+        features |= proto::AtaDrives::FEATURE_READ_LOCK_AHEAD;
 
     if (id_data_.command_set_support1 & (1 << 7))
-        list.emplace_back("Release Interrupt", id_data_.command_set_enabled1 & (1 << 7));
+        features |= proto::AtaDrives::FEATURE_RELEASE_INTERRUPT;
 
     if (id_data_.command_set_support1 & (1 << 8))
-        list.emplace_back("Service Interrupt", id_data_.command_set_enabled1 & (1 << 8));
+        features |= proto::AtaDrives::FEATURE_SERVICE_INTERRUPT;
 
     if (id_data_.command_set_support1 & (1 << 10))
-        list.emplace_back("Host Protected Area", id_data_.command_set_enabled1 & (1 << 10));
+        features |= proto::AtaDrives::FEATURE_HOST_PROTECTED_AREA;
 
     if (id_data_.command_set_support2 & (1 << 5))
-        list.emplace_back("Power Up in Standby", id_data_.command_set_enabled2 & (1 << 5));
+        features |= proto::AtaDrives::FEATURE_POWER_UP_IN_STANDBY;
 
     if (id_data_.command_set_support2 & (1 << 11))
-        list.emplace_back("Device Configuration Overlay", id_data_.command_set_enabled2 & (1 << 11));
+        features |= proto::AtaDrives::FEATURE_DEVICE_CONFIGURATION_OVERLAY;
 
-    return list;
+    return features;
+}
+
+uint64_t PhysicalDriveEnumerator::GetEnabledFeatures() const
+{
+    const uint16_t major_version = GetMajorVersion();
+
+    uint64_t features = 0;
+
+    if (major_version >= 3)
+    {
+        if (id_data_.command_set_support2 & (1 << 3) && id_data_.command_set_enabled2 & (1 << 3))
+            features |= proto::AtaDrives::FEATURE_ADVANCED_POWER_MANAGEMENT;
+
+        if (id_data_.command_set_support1 & (1 << 0) && id_data_.command_set_enabled1 & (1 << 0))
+            features |= proto::AtaDrives::FEATURE_SMART;
+
+        if (major_version >= 5)
+        {
+            if (id_data_.command_set_support2 & (1 << 10) && id_data_.command_set_enabled2 & (1 << 10))
+                features |= proto::AtaDrives::FEATURE_48BIT_LBA;
+
+            if (id_data_.command_set_support2 & (1 << 9) && id_data_.command_set_enabled2 & (1 << 9))
+                features |= proto::AtaDrives::FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
+
+            if (major_version >= 6)
+            {
+                if (id_data_.sata_capabilities & (1 << 8))
+                    features |= proto::AtaDrives::FEATURE_NATIVE_COMMAND_QUEUING;
+
+                if (major_version >= 7)
+                {
+                    if (id_data_.data_set_management & (1 << 0))
+                        features |= proto::AtaDrives::FEATURE_TRIM;
+                }
+            }
+        }
+    }
+
+    if (id_data_.command_set_support3 & (1 << 0))
+        features |= proto::AtaDrives::FEATURE_SMART_ERROR_LOGGING;
+
+    if (id_data_.command_set_support3 & (1 << 1))
+        features |= proto::AtaDrives::FEATURE_SMART_SELF_TEST;
+
+    if (id_data_.command_set_support3 & (1 << 4))
+        features |= proto::AtaDrives::FEATURE_STREAMING;
+
+    if (id_data_.command_set_support3 & (1 << 5))
+        features |= proto::AtaDrives::FEATURE_GENERAL_PURPOSE_LOGGING;
+
+    if (id_data_.command_set_support1 & (1 << 1) && id_data_.command_set_enabled1 & (1 << 1))
+        features |= proto::AtaDrives::FEATURE_SECURITY_MODE;
+
+    if (id_data_.command_set_support1 & (1 << 3) && id_data_.command_set_enabled1 & (1 << 3))
+        features |= proto::AtaDrives::FEATURE_POWER_MANAGEMENT;
+
+    if (id_data_.command_set_support1 & (1 << 5) && id_data_.command_set_enabled1 & (1 << 5))
+        features |= proto::AtaDrives::FEATURE_WRITE_CACHE;
+
+    if (id_data_.command_set_support1 & (1 << 6) && id_data_.command_set_enabled1 & (1 << 6))
+        features |= proto::AtaDrives::FEATURE_READ_LOCK_AHEAD;
+
+    if (id_data_.command_set_support1 & (1 << 7) && id_data_.command_set_enabled1 & (1 << 7))
+        features |= proto::AtaDrives::FEATURE_RELEASE_INTERRUPT;
+
+    if (id_data_.command_set_support1 & (1 << 8) && id_data_.command_set_enabled1 & (1 << 8))
+        features |= proto::AtaDrives::FEATURE_SERVICE_INTERRUPT;
+
+    if (id_data_.command_set_support1 & (1 << 10) && id_data_.command_set_enabled1 & (1 << 10))
+        features |= proto::AtaDrives::FEATURE_HOST_PROTECTED_AREA;
+
+    if (id_data_.command_set_support2 & (1 << 5) && id_data_.command_set_enabled2 & (1 << 5))
+        features |= proto::AtaDrives::FEATURE_POWER_UP_IN_STANDBY;
+
+    if (id_data_.command_set_support2 & (1 << 11) && id_data_.command_set_enabled2 & (1 << 11))
+        features |= proto::AtaDrives::FEATURE_DEVICE_CONFIGURATION_OVERLAY;
+
+    return features;
 }
 
 bool PhysicalDriveEnumerator::GetDriveInfo(DWORD device_number) const
