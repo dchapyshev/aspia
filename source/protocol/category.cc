@@ -138,7 +138,6 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> os = std::make_unique<CategoryGroupOS>();
 
-    os->mutable_child_list()->emplace_back(std::make_unique<CategoryRegistrationInformation>());
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryTaskScheduler>());
     os->mutable_child_list()->emplace_back(std::move(users_and_groups));
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryEnvironmentVariables>());
@@ -212,7 +211,6 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryEventLogsSecurity>());
     emplace_back(std::make_unique<CategoryEventLogsSystem>());
 
-    emplace_back(std::make_unique<CategoryRegistrationInformation>());
     emplace_back(std::make_unique<CategoryTaskScheduler>());
     emplace_back(std::make_unique<CategoryEnvironmentVariables>());
 

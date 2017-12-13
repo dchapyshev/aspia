@@ -17,36 +17,6 @@
 namespace aspia {
 
 //
-// CategoryRegistrationInformation
-//
-
-const char* CategoryRegistrationInformation::Name() const
-{
-    return "Registration Information";
-}
-
-Category::IconId CategoryRegistrationInformation::Icon() const
-{
-    return IDI_COMPUTER;
-}
-
-const char* CategoryRegistrationInformation::Guid() const
-{
-    return "2DDA7127-6ECF-49E1-9C6A-549AEF4B9E87";
-}
-
-void CategoryRegistrationInformation::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryRegistrationInformation::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
 // CategoryTaskScheduler
 //
 
