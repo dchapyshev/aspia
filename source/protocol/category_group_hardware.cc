@@ -215,8 +215,7 @@ void CategoryDmiSystem::Parse(Table& table, const std::string& data)
     if (!message.uuid().empty())
         table.AddParam("UUID", Value::String(message.uuid()));
 
-    if (!message.wakeup_type().empty())
-        table.AddParam("Wakeup Type", Value::String(message.wakeup_type()));
+    table.AddParam("Wakeup Type", Value::String(WakeupTypeToString(message.wakeup_type())));
 
     if (!message.sku_number().empty())
         table.AddParam("SKU Number", Value::String(message.sku_number()));
@@ -248,6 +247,37 @@ std::string CategoryDmiSystem::Serialize()
     message.set_family(table.GetFamily());
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiSystem::WakeupTypeToString(proto::DmiSystem::WakeupType value)
+{
+    switch (value)
+    {
+        case proto::DmiSystem::WAKEUP_TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiSystem::WAKEUP_TYPE_APM_TIMER:
+            return "APM Timer";
+
+        case proto::DmiSystem::WAKEUP_TYPE_MODEM_RING:
+            return "Modem Ring";
+
+        case proto::DmiSystem::WAKEUP_TYPE_LAN_REMOTE:
+            return "LAN Remote";
+
+        case proto::DmiSystem::WAKEUP_TYPE_POWER_SWITCH:
+            return "Power Switch";
+
+        case proto::DmiSystem::WAKEUP_TYPE_PCI_PME:
+            return "PCI PME#";
+
+        case proto::DmiSystem::WAKEUP_TYPE_AC_POWER_RESTORED:
+            return "AC Power Restored";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -303,21 +333,25 @@ void CategoryDmiBaseboard::Parse(Table& table, const std::string& data)
         if (!item.asset_tag().empty())
             group.AddParam("Asset Tag", Value::String(item.asset_tag()));
 
-        if (item.feature_size() > 0)
+        if (item.has_features())
         {
             Group features_group = group.AddGroup("Supported Features");
+            const proto::DmiBaseboard::Features& features = item.features();
 
-            for (int i = 0; i < item.feature_size(); ++i)
-            {
-                const proto::DmiBaseboard::Item::Feature& feature = item.feature(i);
-                features_group.AddParam(feature.name(), Value::Bool(feature.supported()));
-            }
+            features_group.AddParam("Board is a hosting board",
+                                    Value::Bool(features.is_hosting_board()));
+            features_group.AddParam("Board requires at least one daughter board",
+                                    Value::Bool(features.is_requires_at_least_one_daughter_board()));
+            features_group.AddParam("Board is removable",
+                                    Value::Bool(features.is_removable()));
+            features_group.AddParam("Board is replaceable",
+                                    Value::Bool(features.is_replaceable()));
+            features_group.AddParam("Board is hot swappable",
+                                    Value::Bool(features.is_hot_swappable()));
         }
 
         if (!item.location_in_chassis().empty())
-        {
             group.AddParam("Location in chassis", Value::String(item.location_in_chassis()));
-        }
     }
 }
 
@@ -344,14 +378,14 @@ std::string CategoryDmiBaseboard::Serialize()
         item->set_location_in_chassis(table.GetLocationInChassis());
         item->set_type(table.GetBoardType());
 
-        SMBios::BaseboardTable::FeatureList feature_list = table.GetFeatures();
+        proto::DmiBaseboard::Features* features = item->mutable_features();
 
-        for (const auto& feature : feature_list)
-        {
-            auto feature_item = item->add_feature();
-            feature_item->set_name(feature.first);
-            feature_item->set_supported(feature.second);
-        }
+        features->set_is_hosting_board(table.IsHostingBoard());
+        features->set_is_requires_at_least_one_daughter_board(
+            table.IsRequiresAtLeastOneDaughterBoard());
+        features->set_is_removable(table.IsRemovable());
+        features->set_is_replaceable(table.IsReplaceable());
+        features->set_is_hot_swappable(table.IsHotSwappable());
     }
 
     return message.SerializeAsString();
@@ -3001,14 +3035,9 @@ void CategoryDmiBuildinPointing::Parse(Table& table, const std::string& data)
 
         Group group = table.AddGroup(StringPrintf("Build-in Pointing Device #%d", index + 1));
 
-        if (!item.device_type().empty())
-            group.AddParam("Device Type", Value::String(item.device_type()));
-
-        if (!item.device_interface().empty())
-            group.AddParam("Device Interface", Value::String(item.device_interface()));
-
-        if (item.button_count() != 0)
-            group.AddParam("Buttons Count", Value::Number(item.button_count()));
+        group.AddParam("Device Type", Value::String(TypeToString(item.device_type())));
+        group.AddParam("Device Interface", Value::String(InterfaceToString(item.device_interface())));
+        group.AddParam("Buttons Count", Value::Number(item.button_count()));
     }
 }
 
@@ -3033,6 +3062,81 @@ std::string CategoryDmiBuildinPointing::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiBuildinPointing::TypeToString(proto::DmiBuildinPointing::Type value)
+{
+    switch (value)
+    {
+        case proto::DmiBuildinPointing::TYPE_OTHER:
+            return "Other";
+
+        case proto::DmiBuildinPointing::TYPE_MOUSE:
+            return "Mouse";
+
+        case proto::DmiBuildinPointing::TYPE_TRACK_BALL:
+            return "Track Ball";
+
+        case proto::DmiBuildinPointing::TYPE_TRACK_POINT:
+            return "Track Point";
+
+        case proto::DmiBuildinPointing::TYPE_GLIDE_POINT:
+            return "Glide Point";
+
+        case proto::DmiBuildinPointing::TYPE_TOUCH_PAD:
+            return "Touch Pad";
+
+        case proto::DmiBuildinPointing::TYPE_TOUCH_SCREEN:
+            return "Touch Screen";
+
+        case proto::DmiBuildinPointing::TYPE_OPTICAL_SENSOR:
+            return "Optical Sensor";
+
+        default:
+            return "Unknown";
+    }
+}
+
+// static
+const char* CategoryDmiBuildinPointing::InterfaceToString(
+    proto::DmiBuildinPointing::Interface value)
+{
+    switch (value)
+    {
+        case proto::DmiBuildinPointing::INTERFACE_OTHER:
+            return "Other";
+
+        case proto::DmiBuildinPointing::INTERFACE_SERIAL:
+            return "Serial";
+
+        case proto::DmiBuildinPointing::INTERFACE_PS_2:
+            return "PS/2";
+
+        case proto::DmiBuildinPointing::INTERFACE_INFRARED:
+            return "Infrared";
+
+        case proto::DmiBuildinPointing::INTERFACE_HP_HIL:
+            return "HP-HIL";
+
+        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE:
+            return "Bus mouse";
+
+        case proto::DmiBuildinPointing::INTERFACE_ADB:
+            return "ADB (Apple Desktop Bus)";
+
+        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9:
+            return "Bus mouse DB-9";
+
+        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN:
+            return "Bus mouse micro-DIN";
+
+        case proto::DmiBuildinPointing::INTERFACE_USB:
+            return "USB";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //
@@ -3086,8 +3190,7 @@ void CategoryDmiPortableBattery::Parse(Table& table, const std::string& data)
         if (!item.device_name().empty())
             group.AddParam("Device Name", Value::String(item.device_name()));
 
-        if (!item.chemistry().empty())
-            group.AddParam("Chemistry", Value::String(item.chemistry()));
+        group.AddParam("Chemistry", Value::String(ChemistryToString(item.chemistry())));
 
         if (item.design_capacity() != 0)
         {
@@ -3150,6 +3253,38 @@ std::string CategoryDmiPortableBattery::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiPortableBattery::ChemistryToString(
+    proto::DmiPortableBattery::Chemistry value)
+{
+    switch (value)
+    {
+        case proto::DmiPortableBattery::CHEMISTRY_OTHER:
+            return "Other";
+
+        case proto::DmiPortableBattery::CHEMISTRY_LEAD_ACID:
+            return "Lead Acid";
+
+        case proto::DmiPortableBattery::CHEMISTRY_NICKEL_CADMIUM:
+            return "Nickel Cadmium";
+
+        case proto::DmiPortableBattery::CHEMISTRY_NICKEL_METAL_HYDRIDE:
+            return "Nickel Metal Hydride";
+
+        case proto::DmiPortableBattery::CHEMISTRY_LITHIUM_ION:
+            return "Lithium-ion";
+
+        case proto::DmiPortableBattery::CHEMISTRY_ZINC_AIR:
+            return "Zinc Air";
+
+        case proto::DmiPortableBattery::CHEMISTRY_LITHIUM_POLYMER:
+            return "Lithium Polymer";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

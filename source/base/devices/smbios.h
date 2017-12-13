@@ -104,7 +104,7 @@ public:
         std::string GetVersion() const;
         std::string GetSerialNumber() const;
         std::string GetUUID() const;
-        std::string GetWakeupType() const;
+        proto::DmiSystem::WakeupType GetWakeupType() const;
         std::string GetSKUNumber() const;
         std::string GetFamily() const;
 
@@ -120,17 +120,19 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x02 };
 
-        using Feature = std::pair<std::string, bool>;
-        using FeatureList = std::list<Feature>;
-
         std::string GetManufacturer() const;
         std::string GetProductName() const;
         std::string GetVersion() const;
         std::string GetSerialNumber() const;
         std::string GetAssetTag() const;
-        FeatureList GetFeatures() const;
         std::string GetLocationInChassis() const;
         proto::DmiBaseboard::BoardType GetBoardType() const;
+
+        bool IsHostingBoard() const;
+        bool IsRequiresAtLeastOneDaughterBoard() const;
+        bool IsRemovable() const;
+        bool IsReplaceable() const;
+        bool IsHotSwappable() const;
 
     private:
         friend class TableEnumerator<BaseboardTable>;
@@ -306,8 +308,8 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x15 };
 
-        std::string GetDeviceType() const;
-        std::string GetInterface() const;
+        proto::DmiBuildinPointing::Type GetDeviceType() const;
+        proto::DmiBuildinPointing::Interface GetInterface() const;
         int GetButtonCount() const;
 
     private:
@@ -327,7 +329,7 @@ public:
         std::string GetManufactureDate() const;
         std::string GetSerialNumber() const;
         std::string GetDeviceName() const;
-        std::string GetChemistry() const;
+        proto::DmiPortableBattery::Chemistry GetChemistry() const;
         int GetDesignCapacity() const;
         int GetDesignVoltage() const;
         std::string GetSBDSVersionNumber() const;

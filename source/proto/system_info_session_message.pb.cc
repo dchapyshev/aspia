@@ -28,11 +28,11 @@ class DmiSystemDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiSystem>
       _instance;
 } _DmiSystem_default_instance_;
-class DmiBaseboard_Item_FeatureDefaultTypeInternal {
+class DmiBaseboard_FeaturesDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiBaseboard_Item_Feature>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiBaseboard_Features>
       _instance;
-} _DmiBaseboard_Item_Feature_default_instance_;
+} _DmiBaseboard_Features_default_instance_;
 class DmiBaseboard_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiBaseboard_Item>
@@ -358,7 +358,7 @@ void InitDefaultsDmiSystem() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiSystemImpl);
 }
 
-void InitDefaultsDmiBaseboard_Item_FeatureImpl() {
+void InitDefaultsDmiBaseboard_FeaturesImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -367,16 +367,16 @@ void InitDefaultsDmiBaseboard_Item_FeatureImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_DmiBaseboard_Item_Feature_default_instance_;
-    new (ptr) ::aspia::proto::DmiBaseboard_Item_Feature();
+    void* ptr = &::aspia::proto::_DmiBaseboard_Features_default_instance_;
+    new (ptr) ::aspia::proto::DmiBaseboard_Features();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiBaseboard_Item_Feature::InitAsDefaultInstance();
+  ::aspia::proto::DmiBaseboard_Features::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiBaseboard_Item_Feature() {
+void InitDefaultsDmiBaseboard_Features() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiBaseboard_Item_FeatureImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiBaseboard_FeaturesImpl);
 }
 
 void InitDefaultsDmiBaseboard_ItemImpl() {
@@ -387,7 +387,7 @@ void InitDefaultsDmiBaseboard_ItemImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_Feature();
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Features();
   {
     void* ptr = &::aspia::proto::_DmiBaseboard_Item_default_instance_;
     new (ptr) ::aspia::proto::DmiBaseboard_Item();
@@ -1710,6 +1710,35 @@ const DmiBios_Characteristics2 DmiBios::CHARACTERISTIC2_TARGETED_CONTENT_DISTRIB
 const DmiBios_Characteristics2 DmiBios::Characteristics2_MIN;
 const DmiBios_Characteristics2 DmiBios::Characteristics2_MAX;
 const int DmiBios::Characteristics2_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiSystem_WakeupType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_UNKNOWN;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_OTHER;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_APM_TIMER;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_MODEM_RING;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_LAN_REMOTE;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_POWER_SWITCH;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_PCI_PME;
+const DmiSystem_WakeupType DmiSystem::WAKEUP_TYPE_AC_POWER_RESTORED;
+const DmiSystem_WakeupType DmiSystem::WakeupType_MIN;
+const DmiSystem_WakeupType DmiSystem::WakeupType_MAX;
+const int DmiSystem::WakeupType_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool DmiBaseboard_BoardType_IsValid(int value) {
   switch (value) {
@@ -3228,6 +3257,101 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MIN;
 const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MAX;
 const int DmiOnBoardDevices::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiBuildinPointing_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_UNKNOWN;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_OTHER;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_MOUSE;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TRACK_BALL;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TRACK_POINT;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_GLIDE_POINT;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TOUCH_PAD;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TOUCH_SCREEN;
+const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_OPTICAL_SENSOR;
+const DmiBuildinPointing_Type DmiBuildinPointing::Type_MIN;
+const DmiBuildinPointing_Type DmiBuildinPointing::Type_MAX;
+const int DmiBuildinPointing::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiBuildinPointing_Interface_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_UNKNOWN;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_OTHER;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_SERIAL;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_PS_2;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_INFRARED;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_HP_HIL;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_ADB;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN;
+const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_USB;
+const DmiBuildinPointing_Interface DmiBuildinPointing::Interface_MIN;
+const DmiBuildinPointing_Interface DmiBuildinPointing::Interface_MAX;
+const int DmiBuildinPointing::Interface_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool DmiPortableBattery_Chemistry_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_UNKNOWN;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_OTHER;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_LEAD_ACID;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_NICKEL_CADMIUM;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_NICKEL_METAL_HYDRIDE;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_LITHIUM_ION;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_ZINC_AIR;
+const DmiPortableBattery_Chemistry DmiPortableBattery::CHEMISTRY_LITHIUM_POLYMER;
+const DmiPortableBattery_Chemistry DmiPortableBattery::Chemistry_MIN;
+const DmiPortableBattery_Chemistry DmiPortableBattery::Chemistry_MAX;
+const int DmiPortableBattery::Chemistry_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool AtaDrives_BusType_IsValid(int value) {
   switch (value) {
     case 0:
@@ -4221,10 +4345,6 @@ DmiSystem::DmiSystem(const DmiSystem& from)
   if (from.uuid().size() > 0) {
     uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
   }
-  wakeup_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.wakeup_type().size() > 0) {
-    wakeup_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.wakeup_type_);
-  }
   sku_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.sku_number().size() > 0) {
     sku_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sku_number_);
@@ -4233,6 +4353,7 @@ DmiSystem::DmiSystem(const DmiSystem& from)
   if (from.family().size() > 0) {
     family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
   }
+  wakeup_type_ = from.wakeup_type_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiSystem)
 }
 
@@ -4242,9 +4363,9 @@ void DmiSystem::SharedCtor() {
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  wakeup_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sku_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  wakeup_type_ = 0;
   _cached_size_ = 0;
 }
 
@@ -4259,7 +4380,6 @@ void DmiSystem::SharedDtor() {
   version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  wakeup_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sku_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -4293,9 +4413,9 @@ void DmiSystem::Clear() {
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  wakeup_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sku_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   family_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  wakeup_type_ = 0;
   _internal_metadata_.Clear();
 }
 
@@ -4395,16 +4515,15 @@ bool DmiSystem::MergePartialFromCodedStream(
         break;
       }
 
-      // string wakeup_type = 6;
+      // .aspia.proto.DmiSystem.WakeupType wakeup_type = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_wakeup_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->wakeup_type().data(), static_cast<int>(this->wakeup_type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiSystem.wakeup_type"));
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_wakeup_type(static_cast< ::aspia::proto::DmiSystem_WakeupType >(value));
         } else {
           goto handle_unusual;
         }
@@ -4519,13 +4638,9 @@ void DmiSystem::SerializeWithCachedSizes(
       5, this->uuid(), output);
   }
 
-  // string wakeup_type = 6;
-  if (this->wakeup_type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->wakeup_type().data(), static_cast<int>(this->wakeup_type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiSystem.wakeup_type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiSystem.WakeupType wakeup_type = 6;
+  if (this->wakeup_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       6, this->wakeup_type(), output);
   }
 
@@ -4595,13 +4710,6 @@ size_t DmiSystem::ByteSizeLong() const {
         this->uuid());
   }
 
-  // string wakeup_type = 6;
-  if (this->wakeup_type().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->wakeup_type());
-  }
-
   // string sku_number = 7;
   if (this->sku_number().size() > 0) {
     total_size += 1 +
@@ -4614,6 +4722,12 @@ size_t DmiSystem::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->family());
+  }
+
+  // .aspia.proto.DmiSystem.WakeupType wakeup_type = 6;
+  if (this->wakeup_type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->wakeup_type());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -4655,10 +4769,6 @@ void DmiSystem::MergeFrom(const DmiSystem& from) {
 
     uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
   }
-  if (from.wakeup_type().size() > 0) {
-
-    wakeup_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.wakeup_type_);
-  }
   if (from.sku_number().size() > 0) {
 
     sku_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sku_number_);
@@ -4666,6 +4776,9 @@ void DmiSystem::MergeFrom(const DmiSystem& from) {
   if (from.family().size() > 0) {
 
     family_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.family_);
+  }
+  if (from.wakeup_type() != 0) {
+    set_wakeup_type(from.wakeup_type());
   }
 }
 
@@ -4691,9 +4804,9 @@ void DmiSystem::InternalSwap(DmiSystem* other) {
   version_.Swap(&other->version_);
   serial_number_.Swap(&other->serial_number_);
   uuid_.Swap(&other->uuid_);
-  wakeup_type_.Swap(&other->wakeup_type_);
   sku_number_.Swap(&other->sku_number_);
   family_.Swap(&other->family_);
+  swap(wakeup_type_, other->wakeup_type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -4705,79 +4818,81 @@ void DmiSystem::InternalSwap(DmiSystem* other) {
 
 // ===================================================================
 
-void DmiBaseboard_Item_Feature::InitAsDefaultInstance() {
+void DmiBaseboard_Features::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiBaseboard_Item_Feature::kNameFieldNumber;
-const int DmiBaseboard_Item_Feature::kSupportedFieldNumber;
+const int DmiBaseboard_Features::kIsHostingBoardFieldNumber;
+const int DmiBaseboard_Features::kIsRequiresAtLeastOneDaughterBoardFieldNumber;
+const int DmiBaseboard_Features::kIsRemovableFieldNumber;
+const int DmiBaseboard_Features::kIsReplaceableFieldNumber;
+const int DmiBaseboard_Features::kIsHotSwappableFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiBaseboard_Item_Feature::DmiBaseboard_Item_Feature()
+DmiBaseboard_Features::DmiBaseboard_Features()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_Feature();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Features();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiBaseboard.Features)
 }
-DmiBaseboard_Item_Feature::DmiBaseboard_Item_Feature(const DmiBaseboard_Item_Feature& from)
+DmiBaseboard_Features::DmiBaseboard_Features(const DmiBaseboard_Features& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  supported_ = from.supported_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard.Item.Feature)
+  ::memcpy(&is_hosting_board_, &from.is_hosting_board_,
+    static_cast<size_t>(reinterpret_cast<char*>(&is_hot_swappable_) -
+    reinterpret_cast<char*>(&is_hosting_board_)) + sizeof(is_hot_swappable_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard.Features)
 }
 
-void DmiBaseboard_Item_Feature::SharedCtor() {
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  supported_ = false;
+void DmiBaseboard_Features::SharedCtor() {
+  ::memset(&is_hosting_board_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&is_hot_swappable_) -
+      reinterpret_cast<char*>(&is_hosting_board_)) + sizeof(is_hot_swappable_));
   _cached_size_ = 0;
 }
 
-DmiBaseboard_Item_Feature::~DmiBaseboard_Item_Feature() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiBaseboard.Item.Feature)
+DmiBaseboard_Features::~DmiBaseboard_Features() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiBaseboard.Features)
   SharedDtor();
 }
 
-void DmiBaseboard_Item_Feature::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+void DmiBaseboard_Features::SharedDtor() {
 }
 
-void DmiBaseboard_Item_Feature::SetCachedSize(int size) const {
+void DmiBaseboard_Features::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiBaseboard_Item_Feature& DmiBaseboard_Item_Feature::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_Feature();
+const DmiBaseboard_Features& DmiBaseboard_Features::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Features();
   return *internal_default_instance();
 }
 
-DmiBaseboard_Item_Feature* DmiBaseboard_Item_Feature::New(::google::protobuf::Arena* arena) const {
-  DmiBaseboard_Item_Feature* n = new DmiBaseboard_Item_Feature;
+DmiBaseboard_Features* DmiBaseboard_Features::New(::google::protobuf::Arena* arena) const {
+  DmiBaseboard_Features* n = new DmiBaseboard_Features;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiBaseboard_Item_Feature::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBaseboard.Item.Feature)
+void DmiBaseboard_Features::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBaseboard.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  supported_ = false;
+  ::memset(&is_hosting_board_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&is_hot_swappable_) -
+      reinterpret_cast<char*>(&is_hosting_board_)) + sizeof(is_hot_swappable_));
   _internal_metadata_.Clear();
 }
 
-bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
+bool DmiBaseboard_Features::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -4787,36 +4902,76 @@ bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBaseboard.Features)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
+      // bool is_hosting_board = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiBaseboard.Item.Feature.name"));
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &is_hosting_board_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool supported = 2;
+      // bool is_requires_at_least_one_daughter_board = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &supported_)));
+                 input, &is_requires_at_least_one_daughter_board_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool is_removable = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &is_removable_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool is_replaceable = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &is_replaceable_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool is_hot_swappable = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &is_hot_swappable_)));
         } else {
           goto handle_unusual;
         }
@@ -4835,55 +4990,78 @@ bool DmiBaseboard_Item_Feature::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBaseboard.Features)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBaseboard.Features)
   return false;
 #undef DO_
 }
 
-void DmiBaseboard_Item_Feature::SerializeWithCachedSizes(
+void DmiBaseboard_Features::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBaseboard.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiBaseboard.Item.Feature.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
+  // bool is_hosting_board = 1;
+  if (this->is_hosting_board() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->is_hosting_board(), output);
   }
 
-  // bool supported = 2;
-  if (this->supported() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supported(), output);
+  // bool is_requires_at_least_one_daughter_board = 2;
+  if (this->is_requires_at_least_one_daughter_board() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->is_requires_at_least_one_daughter_board(), output);
+  }
+
+  // bool is_removable = 3;
+  if (this->is_removable() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->is_removable(), output);
+  }
+
+  // bool is_replaceable = 4;
+  if (this->is_replaceable() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->is_replaceable(), output);
+  }
+
+  // bool is_hot_swappable = 5;
+  if (this->is_hot_swappable() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->is_hot_swappable(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBaseboard.Item.Feature)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBaseboard.Features)
 }
 
-size_t DmiBaseboard_Item_Feature::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBaseboard.Item.Feature)
+size_t DmiBaseboard_Features::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBaseboard.Features)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string name = 1;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
+  // bool is_hosting_board = 1;
+  if (this->is_hosting_board() != 0) {
+    total_size += 1 + 1;
   }
 
-  // bool supported = 2;
-  if (this->supported() != 0) {
+  // bool is_requires_at_least_one_daughter_board = 2;
+  if (this->is_requires_at_least_one_daughter_board() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool is_removable = 3;
+  if (this->is_removable() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool is_replaceable = 4;
+  if (this->is_replaceable() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool is_hot_swappable = 5;
+  if (this->is_hot_swappable() != 0) {
     total_size += 1 + 1;
   }
 
@@ -4894,58 +5072,71 @@ size_t DmiBaseboard_Item_Feature::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiBaseboard_Item_Feature::CheckTypeAndMergeFrom(
+void DmiBaseboard_Features::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiBaseboard_Item_Feature*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiBaseboard_Features*>(&from));
 }
 
-void DmiBaseboard_Item_Feature::MergeFrom(const DmiBaseboard_Item_Feature& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBaseboard.Item.Feature)
+void DmiBaseboard_Features::MergeFrom(const DmiBaseboard_Features& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBaseboard.Features)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  if (from.is_hosting_board() != 0) {
+    set_is_hosting_board(from.is_hosting_board());
   }
-  if (from.supported() != 0) {
-    set_supported(from.supported());
+  if (from.is_requires_at_least_one_daughter_board() != 0) {
+    set_is_requires_at_least_one_daughter_board(from.is_requires_at_least_one_daughter_board());
+  }
+  if (from.is_removable() != 0) {
+    set_is_removable(from.is_removable());
+  }
+  if (from.is_replaceable() != 0) {
+    set_is_replaceable(from.is_replaceable());
+  }
+  if (from.is_hot_swappable() != 0) {
+    set_is_hot_swappable(from.is_hot_swappable());
   }
 }
 
-void DmiBaseboard_Item_Feature::CopyFrom(const DmiBaseboard_Item_Feature& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBaseboard.Item.Feature)
+void DmiBaseboard_Features::CopyFrom(const DmiBaseboard_Features& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBaseboard.Features)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiBaseboard_Item_Feature::IsInitialized() const {
+bool DmiBaseboard_Features::IsInitialized() const {
   return true;
 }
 
-void DmiBaseboard_Item_Feature::Swap(DmiBaseboard_Item_Feature* other) {
+void DmiBaseboard_Features::Swap(DmiBaseboard_Features* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiBaseboard_Item_Feature::InternalSwap(DmiBaseboard_Item_Feature* other) {
+void DmiBaseboard_Features::InternalSwap(DmiBaseboard_Features* other) {
   using std::swap;
-  name_.Swap(&other->name_);
-  swap(supported_, other->supported_);
+  swap(is_hosting_board_, other->is_hosting_board_);
+  swap(is_requires_at_least_one_daughter_board_, other->is_requires_at_least_one_daughter_board_);
+  swap(is_removable_, other->is_removable_);
+  swap(is_replaceable_, other->is_replaceable_);
+  swap(is_hot_swappable_, other->is_hot_swappable_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiBaseboard_Item_Feature::GetTypeName() const {
-  return "aspia.proto.DmiBaseboard.Item.Feature";
+::std::string DmiBaseboard_Features::GetTypeName() const {
+  return "aspia.proto.DmiBaseboard.Features";
 }
 
 
 // ===================================================================
 
 void DmiBaseboard_Item::InitAsDefaultInstance() {
+  ::aspia::proto::_DmiBaseboard_Item_default_instance_._instance.get_mutable()->features_ = const_cast< ::aspia::proto::DmiBaseboard_Features*>(
+      ::aspia::proto::DmiBaseboard_Features::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DmiBaseboard_Item::kManufacturerFieldNumber;
@@ -4953,7 +5144,7 @@ const int DmiBaseboard_Item::kProductNameFieldNumber;
 const int DmiBaseboard_Item::kVersionFieldNumber;
 const int DmiBaseboard_Item::kSerialNumberFieldNumber;
 const int DmiBaseboard_Item::kAssetTagFieldNumber;
-const int DmiBaseboard_Item::kFeatureFieldNumber;
+const int DmiBaseboard_Item::kFeaturesFieldNumber;
 const int DmiBaseboard_Item::kLocationInChassisFieldNumber;
 const int DmiBaseboard_Item::kTypeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -4969,7 +5160,6 @@ DmiBaseboard_Item::DmiBaseboard_Item()
 DmiBaseboard_Item::DmiBaseboard_Item(const DmiBaseboard_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -4996,6 +5186,11 @@ DmiBaseboard_Item::DmiBaseboard_Item(const DmiBaseboard_Item& from)
   if (from.location_in_chassis().size() > 0) {
     location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
   }
+  if (from.has_features()) {
+    features_ = new ::aspia::proto::DmiBaseboard_Features(*from.features_);
+  } else {
+    features_ = NULL;
+  }
   type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBaseboard.Item)
 }
@@ -5007,7 +5202,9 @@ void DmiBaseboard_Item::SharedCtor() {
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  ::memset(&features_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&features_)) + sizeof(type_));
   _cached_size_ = 0;
 }
 
@@ -5023,6 +5220,7 @@ void DmiBaseboard_Item::SharedDtor() {
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete features_;
 }
 
 void DmiBaseboard_Item::SetCachedSize(int size) const {
@@ -5049,13 +5247,16 @@ void DmiBaseboard_Item::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  feature_.Clear();
   manufacturer_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   asset_tag_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   location_in_chassis_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && features_ != NULL) {
+    delete features_;
+  }
+  features_ = NULL;
   type_ = 0;
   _internal_metadata_.Clear();
 }
@@ -5156,11 +5357,12 @@ bool DmiBaseboard_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
+      // .aspia.proto.DmiBaseboard.Features features = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_feature()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_features()));
         } else {
           goto handle_unusual;
         }
@@ -5274,11 +5476,10 @@ void DmiBaseboard_Item::SerializeWithCachedSizes(
       5, this->asset_tag(), output);
   }
 
-  // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
+  // .aspia.proto.DmiBaseboard.Features features = 6;
+  if (this->has_features()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, this->feature(static_cast<int>(i)), output);
+      6, *this->features_, output);
   }
 
   // string location_in_chassis = 7;
@@ -5307,17 +5508,6 @@ size_t DmiBaseboard_Item::ByteSizeLong() const {
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
-
-  // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
-  {
-    unsigned int count = static_cast<unsigned int>(this->feature_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->feature(static_cast<int>(i)));
-    }
-  }
 
   // string manufacturer = 1;
   if (this->manufacturer().size() > 0) {
@@ -5361,6 +5551,13 @@ size_t DmiBaseboard_Item::ByteSizeLong() const {
         this->location_in_chassis());
   }
 
+  // .aspia.proto.DmiBaseboard.Features features = 6;
+  if (this->has_features()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->features_);
+  }
+
   // .aspia.proto.DmiBaseboard.BoardType type = 8;
   if (this->type() != 0) {
     total_size += 1 +
@@ -5386,7 +5583,6 @@ void DmiBaseboard_Item::MergeFrom(const DmiBaseboard_Item& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  feature_.MergeFrom(from.feature_);
   if (from.manufacturer().size() > 0) {
 
     manufacturer_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.manufacturer_);
@@ -5411,6 +5607,9 @@ void DmiBaseboard_Item::MergeFrom(const DmiBaseboard_Item& from) {
 
     location_in_chassis_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.location_in_chassis_);
   }
+  if (from.has_features()) {
+    mutable_features()->::aspia::proto::DmiBaseboard_Features::MergeFrom(from.features());
+  }
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -5433,13 +5632,13 @@ void DmiBaseboard_Item::Swap(DmiBaseboard_Item* other) {
 }
 void DmiBaseboard_Item::InternalSwap(DmiBaseboard_Item* other) {
   using std::swap;
-  feature_.InternalSwap(&other->feature_);
   manufacturer_.Swap(&other->manufacturer_);
   product_name_.Swap(&other->product_name_);
   version_.Swap(&other->version_);
   serial_number_.Swap(&other->serial_number_);
   asset_tag_.Swap(&other->asset_tag_);
   location_in_chassis_.Swap(&other->location_in_chassis_);
+  swap(features_, other->features_);
   swap(type_, other->type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
@@ -10606,22 +10805,16 @@ DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& 
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  device_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.device_type().size() > 0) {
-    device_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_type_);
-  }
-  device_interface_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.device_interface().size() > 0) {
-    device_interface_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_interface_);
-  }
-  button_count_ = from.button_count_;
+  ::memcpy(&device_type_, &from.device_type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&button_count_) -
+    reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBuildinPointing.Item)
 }
 
 void DmiBuildinPointing_Item::SharedCtor() {
-  device_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  device_interface_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  button_count_ = 0;
+  ::memset(&device_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&button_count_) -
+      reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
   _cached_size_ = 0;
 }
 
@@ -10631,8 +10824,6 @@ DmiBuildinPointing_Item::~DmiBuildinPointing_Item() {
 }
 
 void DmiBuildinPointing_Item::SharedDtor() {
-  device_type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  device_interface_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DmiBuildinPointing_Item::SetCachedSize(int size) const {
@@ -10659,9 +10850,9 @@ void DmiBuildinPointing_Item::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  device_interface_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  button_count_ = 0;
+  ::memset(&device_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&button_count_) -
+      reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
   _internal_metadata_.Clear();
 }
 
@@ -10681,32 +10872,30 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string device_type = 1;
+      // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_device_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->device_type().data(), static_cast<int>(this->device_type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiBuildinPointing.Item.device_type"));
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_device_type(static_cast< ::aspia::proto::DmiBuildinPointing_Type >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string device_interface = 2;
+      // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_device_interface()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->device_interface().data(), static_cast<int>(this->device_interface().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiBuildinPointing.Item.device_interface"));
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_device_interface(static_cast< ::aspia::proto::DmiBuildinPointing_Interface >(value));
         } else {
           goto handle_unusual;
         }
@@ -10753,23 +10942,15 @@ void DmiBuildinPointing_Item::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string device_type = 1;
-  if (this->device_type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->device_type().data(), static_cast<int>(this->device_type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiBuildinPointing.Item.device_type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+  if (this->device_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->device_type(), output);
   }
 
-  // string device_interface = 2;
-  if (this->device_interface().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->device_interface().data(), static_cast<int>(this->device_interface().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiBuildinPointing.Item.device_interface");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+  if (this->device_interface() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->device_interface(), output);
   }
 
@@ -10789,18 +10970,16 @@ size_t DmiBuildinPointing_Item::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string device_type = 1;
-  if (this->device_type().size() > 0) {
+  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+  if (this->device_type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->device_type());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_type());
   }
 
-  // string device_interface = 2;
-  if (this->device_interface().size() > 0) {
+  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+  if (this->device_interface() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->device_interface());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_interface());
   }
 
   // int32 button_count = 3;
@@ -10829,13 +11008,11 @@ void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.device_type().size() > 0) {
-
-    device_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_type_);
+  if (from.device_type() != 0) {
+    set_device_type(from.device_type());
   }
-  if (from.device_interface().size() > 0) {
-
-    device_interface_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_interface_);
+  if (from.device_interface() != 0) {
+    set_device_interface(from.device_interface());
   }
   if (from.button_count() != 0) {
     set_button_count(from.button_count());
@@ -10859,8 +11036,8 @@ void DmiBuildinPointing_Item::Swap(DmiBuildinPointing_Item* other) {
 }
 void DmiBuildinPointing_Item::InternalSwap(DmiBuildinPointing_Item* other) {
   using std::swap;
-  device_type_.Swap(&other->device_type_);
-  device_interface_.Swap(&other->device_interface_);
+  swap(device_type_, other->device_type_);
+  swap(device_interface_, other->device_interface_);
   swap(button_count_, other->button_count_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
@@ -11120,10 +11297,6 @@ DmiPortableBattery_Item::DmiPortableBattery_Item(const DmiPortableBattery_Item& 
   if (from.device_name().size() > 0) {
     device_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_name_);
   }
-  chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.chemistry().size() > 0) {
-    chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chemistry_);
-  }
   sbds_version_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.sbds_version_number().size() > 0) {
     sbds_version_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_version_number_);
@@ -11140,9 +11313,9 @@ DmiPortableBattery_Item::DmiPortableBattery_Item(const DmiPortableBattery_Item& 
   if (from.sbds_device_chemistry().size() > 0) {
     sbds_device_chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_device_chemistry_);
   }
-  ::memcpy(&design_capacity_, &from.design_capacity_,
+  ::memcpy(&chemistry_, &from.chemistry_,
     static_cast<size_t>(reinterpret_cast<char*>(&max_error_in_battery_data_) -
-    reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+    reinterpret_cast<char*>(&chemistry_)) + sizeof(max_error_in_battery_data_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPortableBattery.Item)
 }
 
@@ -11152,14 +11325,13 @@ void DmiPortableBattery_Item::SharedCtor() {
   manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   device_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_version_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_manufacture_date_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_device_chemistry_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&design_capacity_, 0, static_cast<size_t>(
+  ::memset(&chemistry_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&max_error_in_battery_data_) -
-      reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+      reinterpret_cast<char*>(&chemistry_)) + sizeof(max_error_in_battery_data_));
   _cached_size_ = 0;
 }
 
@@ -11174,7 +11346,6 @@ void DmiPortableBattery_Item::SharedDtor() {
   manufacture_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   device_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  chemistry_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_version_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_manufacture_date_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -11210,14 +11381,13 @@ void DmiPortableBattery_Item::Clear() {
   manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_version_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_manufacture_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   sbds_device_chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&design_capacity_, 0, static_cast<size_t>(
+  ::memset(&chemistry_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&max_error_in_battery_data_) -
-      reinterpret_cast<char*>(&design_capacity_)) + sizeof(max_error_in_battery_data_));
+      reinterpret_cast<char*>(&chemistry_)) + sizeof(max_error_in_battery_data_));
   _internal_metadata_.Clear();
 }
 
@@ -11317,16 +11487,15 @@ bool DmiPortableBattery_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string chemistry = 6;
+      // .aspia.proto.DmiPortableBattery.Chemistry chemistry = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_chemistry()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->chemistry().data(), static_cast<int>(this->chemistry().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiPortableBattery.Item.chemistry"));
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_chemistry(static_cast< ::aspia::proto::DmiPortableBattery_Chemistry >(value));
         } else {
           goto handle_unusual;
         }
@@ -11515,13 +11684,9 @@ void DmiPortableBattery_Item::SerializeWithCachedSizes(
       5, this->device_name(), output);
   }
 
-  // string chemistry = 6;
-  if (this->chemistry().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->chemistry().data(), static_cast<int>(this->chemistry().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiPortableBattery.Item.chemistry");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.DmiPortableBattery.Chemistry chemistry = 6;
+  if (this->chemistry() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       6, this->chemistry(), output);
   }
 
@@ -11626,13 +11791,6 @@ size_t DmiPortableBattery_Item::ByteSizeLong() const {
         this->device_name());
   }
 
-  // string chemistry = 6;
-  if (this->chemistry().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->chemistry());
-  }
-
   // string sbds_version_number = 9;
   if (this->sbds_version_number().size() > 0) {
     total_size += 1 +
@@ -11659,6 +11817,12 @@ size_t DmiPortableBattery_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->sbds_device_chemistry());
+  }
+
+  // .aspia.proto.DmiPortableBattery.Chemistry chemistry = 6;
+  if (this->chemistry() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->chemistry());
   }
 
   // int32 design_capacity = 7;
@@ -11721,10 +11885,6 @@ void DmiPortableBattery_Item::MergeFrom(const DmiPortableBattery_Item& from) {
 
     device_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.device_name_);
   }
-  if (from.chemistry().size() > 0) {
-
-    chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.chemistry_);
-  }
   if (from.sbds_version_number().size() > 0) {
 
     sbds_version_number_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_version_number_);
@@ -11740,6 +11900,9 @@ void DmiPortableBattery_Item::MergeFrom(const DmiPortableBattery_Item& from) {
   if (from.sbds_device_chemistry().size() > 0) {
 
     sbds_device_chemistry_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sbds_device_chemistry_);
+  }
+  if (from.chemistry() != 0) {
+    set_chemistry(from.chemistry());
   }
   if (from.design_capacity() != 0) {
     set_design_capacity(from.design_capacity());
@@ -11774,11 +11937,11 @@ void DmiPortableBattery_Item::InternalSwap(DmiPortableBattery_Item* other) {
   manufacture_date_.Swap(&other->manufacture_date_);
   serial_number_.Swap(&other->serial_number_);
   device_name_.Swap(&other->device_name_);
-  chemistry_.Swap(&other->chemistry_);
   sbds_version_number_.Swap(&other->sbds_version_number_);
   sbds_serial_number_.Swap(&other->sbds_serial_number_);
   sbds_manufacture_date_.Swap(&other->sbds_manufacture_date_);
   sbds_device_chemistry_.Swap(&other->sbds_device_chemistry_);
+  swap(chemistry_, other->chemistry_);
   swap(design_capacity_, other->design_capacity_);
   swap(design_voltage_, other->design_voltage_);
   swap(max_error_in_battery_data_, other->max_error_in_battery_data_);

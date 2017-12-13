@@ -45,8 +45,8 @@ void InitDefaultsDmiBiosImpl();
 void InitDefaultsDmiBios();
 void InitDefaultsDmiSystemImpl();
 void InitDefaultsDmiSystem();
-void InitDefaultsDmiBaseboard_Item_FeatureImpl();
-void InitDefaultsDmiBaseboard_Item_Feature();
+void InitDefaultsDmiBaseboard_FeaturesImpl();
+void InitDefaultsDmiBaseboard_Features();
 void InitDefaultsDmiBaseboard_ItemImpl();
 void InitDefaultsDmiBaseboard_Item();
 void InitDefaultsDmiBaseboardImpl();
@@ -162,7 +162,7 @@ void InitDefaultsSessions();
 inline void InitDefaults() {
   InitDefaultsDmiBios();
   InitDefaultsDmiSystem();
-  InitDefaultsDmiBaseboard_Item_Feature();
+  InitDefaultsDmiBaseboard_Features();
   InitDefaultsDmiBaseboard_Item();
   InitDefaultsDmiBaseboard();
   InitDefaultsDmiChassis_Item();
@@ -238,12 +238,12 @@ extern CentralProcessor_FeatureDefaultTypeInternal _CentralProcessor_Feature_def
 class DmiBaseboard;
 class DmiBaseboardDefaultTypeInternal;
 extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
+class DmiBaseboard_Features;
+class DmiBaseboard_FeaturesDefaultTypeInternal;
+extern DmiBaseboard_FeaturesDefaultTypeInternal _DmiBaseboard_Features_default_instance_;
 class DmiBaseboard_Item;
 class DmiBaseboard_ItemDefaultTypeInternal;
 extern DmiBaseboard_ItemDefaultTypeInternal _DmiBaseboard_Item_default_instance_;
-class DmiBaseboard_Item_Feature;
-class DmiBaseboard_Item_FeatureDefaultTypeInternal;
-extern DmiBaseboard_Item_FeatureDefaultTypeInternal _DmiBaseboard_Item_Feature_default_instance_;
 class DmiBios;
 class DmiBiosDefaultTypeInternal;
 extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
@@ -473,6 +473,23 @@ bool DmiBios_Characteristics2_IsValid(int value);
 const DmiBios_Characteristics2 DmiBios_Characteristics2_Characteristics2_MIN = DmiBios_Characteristics2_CHARACTERISTIC2_NONE;
 const DmiBios_Characteristics2 DmiBios_Characteristics2_Characteristics2_MAX = DmiBios_Characteristics2_CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION;
 const int DmiBios_Characteristics2_Characteristics2_ARRAYSIZE = DmiBios_Characteristics2_Characteristics2_MAX + 1;
+
+enum DmiSystem_WakeupType {
+  DmiSystem_WakeupType_WAKEUP_TYPE_UNKNOWN = 0,
+  DmiSystem_WakeupType_WAKEUP_TYPE_OTHER = 1,
+  DmiSystem_WakeupType_WAKEUP_TYPE_APM_TIMER = 2,
+  DmiSystem_WakeupType_WAKEUP_TYPE_MODEM_RING = 3,
+  DmiSystem_WakeupType_WAKEUP_TYPE_LAN_REMOTE = 4,
+  DmiSystem_WakeupType_WAKEUP_TYPE_POWER_SWITCH = 5,
+  DmiSystem_WakeupType_WAKEUP_TYPE_PCI_PME = 6,
+  DmiSystem_WakeupType_WAKEUP_TYPE_AC_POWER_RESTORED = 7,
+  DmiSystem_WakeupType_DmiSystem_WakeupType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiSystem_WakeupType_DmiSystem_WakeupType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiSystem_WakeupType_IsValid(int value);
+const DmiSystem_WakeupType DmiSystem_WakeupType_WakeupType_MIN = DmiSystem_WakeupType_WAKEUP_TYPE_UNKNOWN;
+const DmiSystem_WakeupType DmiSystem_WakeupType_WakeupType_MAX = DmiSystem_WakeupType_WAKEUP_TYPE_AC_POWER_RESTORED;
+const int DmiSystem_WakeupType_WakeupType_ARRAYSIZE = DmiSystem_WakeupType_WakeupType_MAX + 1;
 
 enum DmiBaseboard_BoardType {
   DmiBaseboard_BoardType_BOARD_TYPE_UNKNOWN = 0,
@@ -1295,6 +1312,61 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MIN = DmiOnBoardDevices
 const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MAX = DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER;
 const int DmiOnBoardDevices_Type_Type_ARRAYSIZE = DmiOnBoardDevices_Type_Type_MAX + 1;
 
+enum DmiBuildinPointing_Type {
+  DmiBuildinPointing_Type_TYPE_UNKNOWN = 0,
+  DmiBuildinPointing_Type_TYPE_OTHER = 1,
+  DmiBuildinPointing_Type_TYPE_MOUSE = 2,
+  DmiBuildinPointing_Type_TYPE_TRACK_BALL = 3,
+  DmiBuildinPointing_Type_TYPE_TRACK_POINT = 4,
+  DmiBuildinPointing_Type_TYPE_GLIDE_POINT = 5,
+  DmiBuildinPointing_Type_TYPE_TOUCH_PAD = 6,
+  DmiBuildinPointing_Type_TYPE_TOUCH_SCREEN = 7,
+  DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR = 8,
+  DmiBuildinPointing_Type_DmiBuildinPointing_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiBuildinPointing_Type_DmiBuildinPointing_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiBuildinPointing_Type_IsValid(int value);
+const DmiBuildinPointing_Type DmiBuildinPointing_Type_Type_MIN = DmiBuildinPointing_Type_TYPE_UNKNOWN;
+const DmiBuildinPointing_Type DmiBuildinPointing_Type_Type_MAX = DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR;
+const int DmiBuildinPointing_Type_Type_ARRAYSIZE = DmiBuildinPointing_Type_Type_MAX + 1;
+
+enum DmiBuildinPointing_Interface {
+  DmiBuildinPointing_Interface_INTERFACE_UNKNOWN = 0,
+  DmiBuildinPointing_Interface_INTERFACE_OTHER = 1,
+  DmiBuildinPointing_Interface_INTERFACE_SERIAL = 2,
+  DmiBuildinPointing_Interface_INTERFACE_PS_2 = 3,
+  DmiBuildinPointing_Interface_INTERFACE_INFRARED = 4,
+  DmiBuildinPointing_Interface_INTERFACE_HP_HIL = 5,
+  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE = 6,
+  DmiBuildinPointing_Interface_INTERFACE_ADB = 7,
+  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
+  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
+  DmiBuildinPointing_Interface_INTERFACE_USB = 10,
+  DmiBuildinPointing_Interface_DmiBuildinPointing_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiBuildinPointing_Interface_DmiBuildinPointing_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiBuildinPointing_Interface_IsValid(int value);
+const DmiBuildinPointing_Interface DmiBuildinPointing_Interface_Interface_MIN = DmiBuildinPointing_Interface_INTERFACE_UNKNOWN;
+const DmiBuildinPointing_Interface DmiBuildinPointing_Interface_Interface_MAX = DmiBuildinPointing_Interface_INTERFACE_USB;
+const int DmiBuildinPointing_Interface_Interface_ARRAYSIZE = DmiBuildinPointing_Interface_Interface_MAX + 1;
+
+enum DmiPortableBattery_Chemistry {
+  DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN = 0,
+  DmiPortableBattery_Chemistry_CHEMISTRY_OTHER = 1,
+  DmiPortableBattery_Chemistry_CHEMISTRY_LEAD_ACID = 2,
+  DmiPortableBattery_Chemistry_CHEMISTRY_NICKEL_CADMIUM = 3,
+  DmiPortableBattery_Chemistry_CHEMISTRY_NICKEL_METAL_HYDRIDE = 4,
+  DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_ION = 5,
+  DmiPortableBattery_Chemistry_CHEMISTRY_ZINC_AIR = 6,
+  DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_POLYMER = 7,
+  DmiPortableBattery_Chemistry_DmiPortableBattery_Chemistry_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiPortableBattery_Chemistry_DmiPortableBattery_Chemistry_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiPortableBattery_Chemistry_IsValid(int value);
+const DmiPortableBattery_Chemistry DmiPortableBattery_Chemistry_Chemistry_MIN = DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN;
+const DmiPortableBattery_Chemistry DmiPortableBattery_Chemistry_Chemistry_MAX = DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_POLYMER;
+const int DmiPortableBattery_Chemistry_Chemistry_ARRAYSIZE = DmiPortableBattery_Chemistry_Chemistry_MAX + 1;
+
 enum AtaDrives_BusType {
   AtaDrives_BusType_BUS_TYPE_UNKNOWN = 0,
   AtaDrives_BusType_BUS_TYPE_SCSI = 1,
@@ -1908,6 +1980,33 @@ class DmiSystem : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 
   // nested types ----------------------------------------------------
 
+  typedef DmiSystem_WakeupType WakeupType;
+  static const WakeupType WAKEUP_TYPE_UNKNOWN =
+    DmiSystem_WakeupType_WAKEUP_TYPE_UNKNOWN;
+  static const WakeupType WAKEUP_TYPE_OTHER =
+    DmiSystem_WakeupType_WAKEUP_TYPE_OTHER;
+  static const WakeupType WAKEUP_TYPE_APM_TIMER =
+    DmiSystem_WakeupType_WAKEUP_TYPE_APM_TIMER;
+  static const WakeupType WAKEUP_TYPE_MODEM_RING =
+    DmiSystem_WakeupType_WAKEUP_TYPE_MODEM_RING;
+  static const WakeupType WAKEUP_TYPE_LAN_REMOTE =
+    DmiSystem_WakeupType_WAKEUP_TYPE_LAN_REMOTE;
+  static const WakeupType WAKEUP_TYPE_POWER_SWITCH =
+    DmiSystem_WakeupType_WAKEUP_TYPE_POWER_SWITCH;
+  static const WakeupType WAKEUP_TYPE_PCI_PME =
+    DmiSystem_WakeupType_WAKEUP_TYPE_PCI_PME;
+  static const WakeupType WAKEUP_TYPE_AC_POWER_RESTORED =
+    DmiSystem_WakeupType_WAKEUP_TYPE_AC_POWER_RESTORED;
+  static inline bool WakeupType_IsValid(int value) {
+    return DmiSystem_WakeupType_IsValid(value);
+  }
+  static const WakeupType WakeupType_MIN =
+    DmiSystem_WakeupType_WakeupType_MIN;
+  static const WakeupType WakeupType_MAX =
+    DmiSystem_WakeupType_WakeupType_MAX;
+  static const int WakeupType_ARRAYSIZE =
+    DmiSystem_WakeupType_WakeupType_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
   // string manufacturer = 1;
@@ -1980,20 +2079,6 @@ class DmiSystem : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::std::string* release_uuid();
   void set_allocated_uuid(::std::string* uuid);
 
-  // string wakeup_type = 6;
-  void clear_wakeup_type();
-  static const int kWakeupTypeFieldNumber = 6;
-  const ::std::string& wakeup_type() const;
-  void set_wakeup_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_wakeup_type(::std::string&& value);
-  #endif
-  void set_wakeup_type(const char* value);
-  void set_wakeup_type(const char* value, size_t size);
-  ::std::string* mutable_wakeup_type();
-  ::std::string* release_wakeup_type();
-  void set_allocated_wakeup_type(::std::string* wakeup_type);
-
   // string sku_number = 7;
   void clear_sku_number();
   static const int kSkuNumberFieldNumber = 7;
@@ -2022,6 +2107,12 @@ class DmiSystem : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::std::string* release_family();
   void set_allocated_family(::std::string* family);
 
+  // .aspia.proto.DmiSystem.WakeupType wakeup_type = 6;
+  void clear_wakeup_type();
+  static const int kWakeupTypeFieldNumber = 6;
+  ::aspia::proto::DmiSystem_WakeupType wakeup_type() const;
+  void set_wakeup_type(::aspia::proto::DmiSystem_WakeupType value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.DmiSystem)
  private:
 
@@ -2031,33 +2122,33 @@ class DmiSystem : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
   ::google::protobuf::internal::ArenaStringPtr version_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr uuid_;
-  ::google::protobuf::internal::ArenaStringPtr wakeup_type_;
   ::google::protobuf::internal::ArenaStringPtr sku_number_;
   ::google::protobuf::internal::ArenaStringPtr family_;
+  int wakeup_type_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemImpl();
 };
 // -------------------------------------------------------------------
 
-class DmiBaseboard_Item_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiBaseboard.Item.Feature) */ {
+class DmiBaseboard_Features : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiBaseboard.Features) */ {
  public:
-  DmiBaseboard_Item_Feature();
-  virtual ~DmiBaseboard_Item_Feature();
+  DmiBaseboard_Features();
+  virtual ~DmiBaseboard_Features();
 
-  DmiBaseboard_Item_Feature(const DmiBaseboard_Item_Feature& from);
+  DmiBaseboard_Features(const DmiBaseboard_Features& from);
 
-  inline DmiBaseboard_Item_Feature& operator=(const DmiBaseboard_Item_Feature& from) {
+  inline DmiBaseboard_Features& operator=(const DmiBaseboard_Features& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiBaseboard_Item_Feature(DmiBaseboard_Item_Feature&& from) noexcept
-    : DmiBaseboard_Item_Feature() {
+  DmiBaseboard_Features(DmiBaseboard_Features&& from) noexcept
+    : DmiBaseboard_Features() {
     *this = ::std::move(from);
   }
 
-  inline DmiBaseboard_Item_Feature& operator=(DmiBaseboard_Item_Feature&& from) noexcept {
+  inline DmiBaseboard_Features& operator=(DmiBaseboard_Features&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -2066,30 +2157,30 @@ class DmiBaseboard_Item_Feature : public ::google::protobuf::MessageLite /* @@pr
     return *this;
   }
   #endif
-  static const DmiBaseboard_Item_Feature& default_instance();
+  static const DmiBaseboard_Features& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiBaseboard_Item_Feature* internal_default_instance() {
-    return reinterpret_cast<const DmiBaseboard_Item_Feature*>(
-               &_DmiBaseboard_Item_Feature_default_instance_);
+  static inline const DmiBaseboard_Features* internal_default_instance() {
+    return reinterpret_cast<const DmiBaseboard_Features*>(
+               &_DmiBaseboard_Features_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     2;
 
-  void Swap(DmiBaseboard_Item_Feature* other);
-  friend void swap(DmiBaseboard_Item_Feature& a, DmiBaseboard_Item_Feature& b) {
+  void Swap(DmiBaseboard_Features* other);
+  friend void swap(DmiBaseboard_Features& a, DmiBaseboard_Features& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiBaseboard_Item_Feature* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiBaseboard_Features* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiBaseboard_Item_Feature* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiBaseboard_Features* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiBaseboard_Item_Feature& from);
-  void MergeFrom(const DmiBaseboard_Item_Feature& from);
+  void CopyFrom(const DmiBaseboard_Features& from);
+  void MergeFrom(const DmiBaseboard_Features& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -2104,7 +2195,7 @@ class DmiBaseboard_Item_Feature : public ::google::protobuf::MessageLite /* @@pr
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiBaseboard_Item_Feature* other);
+  void InternalSwap(DmiBaseboard_Features* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -2120,35 +2211,48 @@ class DmiBaseboard_Item_Feature : public ::google::protobuf::MessageLite /* @@pr
 
   // accessors -------------------------------------------------------
 
-  // string name = 1;
-  void clear_name();
-  static const int kNameFieldNumber = 1;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
+  // bool is_hosting_board = 1;
+  void clear_is_hosting_board();
+  static const int kIsHostingBoardFieldNumber = 1;
+  bool is_hosting_board() const;
+  void set_is_hosting_board(bool value);
 
-  // bool supported = 2;
-  void clear_supported();
-  static const int kSupportedFieldNumber = 2;
-  bool supported() const;
-  void set_supported(bool value);
+  // bool is_requires_at_least_one_daughter_board = 2;
+  void clear_is_requires_at_least_one_daughter_board();
+  static const int kIsRequiresAtLeastOneDaughterBoardFieldNumber = 2;
+  bool is_requires_at_least_one_daughter_board() const;
+  void set_is_requires_at_least_one_daughter_board(bool value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiBaseboard.Item.Feature)
+  // bool is_removable = 3;
+  void clear_is_removable();
+  static const int kIsRemovableFieldNumber = 3;
+  bool is_removable() const;
+  void set_is_removable(bool value);
+
+  // bool is_replaceable = 4;
+  void clear_is_replaceable();
+  static const int kIsReplaceableFieldNumber = 4;
+  bool is_replaceable() const;
+  void set_is_replaceable(bool value);
+
+  // bool is_hot_swappable = 5;
+  void clear_is_hot_swappable();
+  static const int kIsHotSwappableFieldNumber = 5;
+  bool is_hot_swappable() const;
+  void set_is_hot_swappable(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.DmiBaseboard.Features)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  bool supported_;
+  bool is_hosting_board_;
+  bool is_requires_at_least_one_daughter_board_;
+  bool is_removable_;
+  bool is_replaceable_;
+  bool is_hot_swappable_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_Item_FeatureImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBaseboard_FeaturesImpl();
 };
 // -------------------------------------------------------------------
 
@@ -2230,21 +2334,7 @@ class DmiBaseboard_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // nested types ----------------------------------------------------
 
-  typedef DmiBaseboard_Item_Feature Feature;
-
   // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
-  int feature_size() const;
-  void clear_feature();
-  static const int kFeatureFieldNumber = 6;
-  const ::aspia::proto::DmiBaseboard_Item_Feature& feature(int index) const;
-  ::aspia::proto::DmiBaseboard_Item_Feature* mutable_feature(int index);
-  ::aspia::proto::DmiBaseboard_Item_Feature* add_feature();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBaseboard_Item_Feature >*
-      mutable_feature();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBaseboard_Item_Feature >&
-      feature() const;
 
   // string manufacturer = 1;
   void clear_manufacturer();
@@ -2330,6 +2420,15 @@ class DmiBaseboard_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::std::string* release_location_in_chassis();
   void set_allocated_location_in_chassis(::std::string* location_in_chassis);
 
+  // .aspia.proto.DmiBaseboard.Features features = 6;
+  bool has_features() const;
+  void clear_features();
+  static const int kFeaturesFieldNumber = 6;
+  const ::aspia::proto::DmiBaseboard_Features& features() const;
+  ::aspia::proto::DmiBaseboard_Features* release_features();
+  ::aspia::proto::DmiBaseboard_Features* mutable_features();
+  void set_allocated_features(::aspia::proto::DmiBaseboard_Features* features);
+
   // .aspia.proto.DmiBaseboard.BoardType type = 8;
   void clear_type();
   static const int kTypeFieldNumber = 8;
@@ -2340,13 +2439,13 @@ class DmiBaseboard_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBaseboard_Item_Feature > feature_;
   ::google::protobuf::internal::ArenaStringPtr manufacturer_;
   ::google::protobuf::internal::ArenaStringPtr product_name_;
   ::google::protobuf::internal::ArenaStringPtr version_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr asset_tag_;
   ::google::protobuf::internal::ArenaStringPtr location_in_chassis_;
+  ::aspia::proto::DmiBaseboard_Features* features_;
   int type_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
@@ -2432,6 +2531,7 @@ class DmiBaseboard : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // nested types ----------------------------------------------------
 
+  typedef DmiBaseboard_Features Features;
   typedef DmiBaseboard_Item Item;
 
   typedef DmiBaseboard_BoardType BoardType;
@@ -5993,33 +6093,17 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
 
   // accessors -------------------------------------------------------
 
-  // string device_type = 1;
+  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
   void clear_device_type();
   static const int kDeviceTypeFieldNumber = 1;
-  const ::std::string& device_type() const;
-  void set_device_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_device_type(::std::string&& value);
-  #endif
-  void set_device_type(const char* value);
-  void set_device_type(const char* value, size_t size);
-  ::std::string* mutable_device_type();
-  ::std::string* release_device_type();
-  void set_allocated_device_type(::std::string* device_type);
+  ::aspia::proto::DmiBuildinPointing_Type device_type() const;
+  void set_device_type(::aspia::proto::DmiBuildinPointing_Type value);
 
-  // string device_interface = 2;
+  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
   void clear_device_interface();
   static const int kDeviceInterfaceFieldNumber = 2;
-  const ::std::string& device_interface() const;
-  void set_device_interface(const ::std::string& value);
-  #if LANG_CXX11
-  void set_device_interface(::std::string&& value);
-  #endif
-  void set_device_interface(const char* value);
-  void set_device_interface(const char* value, size_t size);
-  ::std::string* mutable_device_interface();
-  ::std::string* release_device_interface();
-  void set_allocated_device_interface(::std::string* device_interface);
+  ::aspia::proto::DmiBuildinPointing_Interface device_interface() const;
+  void set_device_interface(::aspia::proto::DmiBuildinPointing_Interface value);
 
   // int32 button_count = 3;
   void clear_button_count();
@@ -6031,8 +6115,8 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr device_type_;
-  ::google::protobuf::internal::ArenaStringPtr device_interface_;
+  int device_type_;
+  int device_interface_;
   ::google::protobuf::int32 button_count_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
@@ -6119,6 +6203,68 @@ class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_in
   // nested types ----------------------------------------------------
 
   typedef DmiBuildinPointing_Item Item;
+
+  typedef DmiBuildinPointing_Type Type;
+  static const Type TYPE_UNKNOWN =
+    DmiBuildinPointing_Type_TYPE_UNKNOWN;
+  static const Type TYPE_OTHER =
+    DmiBuildinPointing_Type_TYPE_OTHER;
+  static const Type TYPE_MOUSE =
+    DmiBuildinPointing_Type_TYPE_MOUSE;
+  static const Type TYPE_TRACK_BALL =
+    DmiBuildinPointing_Type_TYPE_TRACK_BALL;
+  static const Type TYPE_TRACK_POINT =
+    DmiBuildinPointing_Type_TYPE_TRACK_POINT;
+  static const Type TYPE_GLIDE_POINT =
+    DmiBuildinPointing_Type_TYPE_GLIDE_POINT;
+  static const Type TYPE_TOUCH_PAD =
+    DmiBuildinPointing_Type_TYPE_TOUCH_PAD;
+  static const Type TYPE_TOUCH_SCREEN =
+    DmiBuildinPointing_Type_TYPE_TOUCH_SCREEN;
+  static const Type TYPE_OPTICAL_SENSOR =
+    DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR;
+  static inline bool Type_IsValid(int value) {
+    return DmiBuildinPointing_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    DmiBuildinPointing_Type_Type_MIN;
+  static const Type Type_MAX =
+    DmiBuildinPointing_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    DmiBuildinPointing_Type_Type_ARRAYSIZE;
+
+  typedef DmiBuildinPointing_Interface Interface;
+  static const Interface INTERFACE_UNKNOWN =
+    DmiBuildinPointing_Interface_INTERFACE_UNKNOWN;
+  static const Interface INTERFACE_OTHER =
+    DmiBuildinPointing_Interface_INTERFACE_OTHER;
+  static const Interface INTERFACE_SERIAL =
+    DmiBuildinPointing_Interface_INTERFACE_SERIAL;
+  static const Interface INTERFACE_PS_2 =
+    DmiBuildinPointing_Interface_INTERFACE_PS_2;
+  static const Interface INTERFACE_INFRARED =
+    DmiBuildinPointing_Interface_INTERFACE_INFRARED;
+  static const Interface INTERFACE_HP_HIL =
+    DmiBuildinPointing_Interface_INTERFACE_HP_HIL;
+  static const Interface INTERFACE_BUS_MOUSE =
+    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE;
+  static const Interface INTERFACE_ADB =
+    DmiBuildinPointing_Interface_INTERFACE_ADB;
+  static const Interface INTERFACE_BUS_MOUSE_DB_9 =
+    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_DB_9;
+  static const Interface INTERFACE_BUS_MOUSE_MICRO_DIN =
+    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
+  static const Interface INTERFACE_USB =
+    DmiBuildinPointing_Interface_INTERFACE_USB;
+  static inline bool Interface_IsValid(int value) {
+    return DmiBuildinPointing_Interface_IsValid(value);
+  }
+  static const Interface Interface_MIN =
+    DmiBuildinPointing_Interface_Interface_MIN;
+  static const Interface Interface_MAX =
+    DmiBuildinPointing_Interface_Interface_MAX;
+  static const int Interface_ARRAYSIZE =
+    DmiBuildinPointing_Interface_Interface_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -6295,20 +6441,6 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
   ::std::string* release_device_name();
   void set_allocated_device_name(::std::string* device_name);
 
-  // string chemistry = 6;
-  void clear_chemistry();
-  static const int kChemistryFieldNumber = 6;
-  const ::std::string& chemistry() const;
-  void set_chemistry(const ::std::string& value);
-  #if LANG_CXX11
-  void set_chemistry(::std::string&& value);
-  #endif
-  void set_chemistry(const char* value);
-  void set_chemistry(const char* value, size_t size);
-  ::std::string* mutable_chemistry();
-  ::std::string* release_chemistry();
-  void set_allocated_chemistry(::std::string* chemistry);
-
   // string sbds_version_number = 9;
   void clear_sbds_version_number();
   static const int kSbdsVersionNumberFieldNumber = 9;
@@ -6365,6 +6497,12 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
   ::std::string* release_sbds_device_chemistry();
   void set_allocated_sbds_device_chemistry(::std::string* sbds_device_chemistry);
 
+  // .aspia.proto.DmiPortableBattery.Chemistry chemistry = 6;
+  void clear_chemistry();
+  static const int kChemistryFieldNumber = 6;
+  ::aspia::proto::DmiPortableBattery_Chemistry chemistry() const;
+  void set_chemistry(::aspia::proto::DmiPortableBattery_Chemistry value);
+
   // int32 design_capacity = 7;
   void clear_design_capacity();
   static const int kDesignCapacityFieldNumber = 7;
@@ -6392,11 +6530,11 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
   ::google::protobuf::internal::ArenaStringPtr manufacture_date_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr device_name_;
-  ::google::protobuf::internal::ArenaStringPtr chemistry_;
   ::google::protobuf::internal::ArenaStringPtr sbds_version_number_;
   ::google::protobuf::internal::ArenaStringPtr sbds_serial_number_;
   ::google::protobuf::internal::ArenaStringPtr sbds_manufacture_date_;
   ::google::protobuf::internal::ArenaStringPtr sbds_device_chemistry_;
+  int chemistry_;
   ::google::protobuf::int32 design_capacity_;
   ::google::protobuf::int32 design_voltage_;
   ::google::protobuf::int32 max_error_in_battery_data_;
@@ -6485,6 +6623,33 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
   // nested types ----------------------------------------------------
 
   typedef DmiPortableBattery_Item Item;
+
+  typedef DmiPortableBattery_Chemistry Chemistry;
+  static const Chemistry CHEMISTRY_UNKNOWN =
+    DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN;
+  static const Chemistry CHEMISTRY_OTHER =
+    DmiPortableBattery_Chemistry_CHEMISTRY_OTHER;
+  static const Chemistry CHEMISTRY_LEAD_ACID =
+    DmiPortableBattery_Chemistry_CHEMISTRY_LEAD_ACID;
+  static const Chemistry CHEMISTRY_NICKEL_CADMIUM =
+    DmiPortableBattery_Chemistry_CHEMISTRY_NICKEL_CADMIUM;
+  static const Chemistry CHEMISTRY_NICKEL_METAL_HYDRIDE =
+    DmiPortableBattery_Chemistry_CHEMISTRY_NICKEL_METAL_HYDRIDE;
+  static const Chemistry CHEMISTRY_LITHIUM_ION =
+    DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_ION;
+  static const Chemistry CHEMISTRY_ZINC_AIR =
+    DmiPortableBattery_Chemistry_CHEMISTRY_ZINC_AIR;
+  static const Chemistry CHEMISTRY_LITHIUM_POLYMER =
+    DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_POLYMER;
+  static inline bool Chemistry_IsValid(int value) {
+    return DmiPortableBattery_Chemistry_IsValid(value);
+  }
+  static const Chemistry Chemistry_MIN =
+    DmiPortableBattery_Chemistry_Chemistry_MIN;
+  static const Chemistry Chemistry_MAX =
+    DmiPortableBattery_Chemistry_Chemistry_MAX;
+  static const int Chemistry_ARRAYSIZE =
+    DmiPortableBattery_Chemistry_Chemistry_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -12984,57 +13149,18 @@ inline void DmiSystem::set_allocated_uuid(::std::string* uuid) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiSystem.uuid)
 }
 
-// string wakeup_type = 6;
+// .aspia.proto.DmiSystem.WakeupType wakeup_type = 6;
 inline void DmiSystem::clear_wakeup_type() {
-  wakeup_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  wakeup_type_ = 0;
 }
-inline const ::std::string& DmiSystem::wakeup_type() const {
+inline ::aspia::proto::DmiSystem_WakeupType DmiSystem::wakeup_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiSystem.wakeup_type)
-  return wakeup_type_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiSystem_WakeupType >(wakeup_type_);
 }
-inline void DmiSystem::set_wakeup_type(const ::std::string& value) {
+inline void DmiSystem::set_wakeup_type(::aspia::proto::DmiSystem_WakeupType value) {
   
-  wakeup_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  wakeup_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiSystem.wakeup_type)
-}
-#if LANG_CXX11
-inline void DmiSystem::set_wakeup_type(::std::string&& value) {
-  
-  wakeup_type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiSystem.wakeup_type)
-}
-#endif
-inline void DmiSystem::set_wakeup_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  wakeup_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiSystem.wakeup_type)
-}
-inline void DmiSystem::set_wakeup_type(const char* value, size_t size) {
-  
-  wakeup_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiSystem.wakeup_type)
-}
-inline ::std::string* DmiSystem::mutable_wakeup_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiSystem.wakeup_type)
-  return wakeup_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiSystem::release_wakeup_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiSystem.wakeup_type)
-  
-  return wakeup_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiSystem::set_allocated_wakeup_type(::std::string* wakeup_type) {
-  if (wakeup_type != NULL) {
-    
-  } else {
-    
-  }
-  wakeup_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), wakeup_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiSystem.wakeup_type)
 }
 
 // string sku_number = 7;
@@ -13145,73 +13271,76 @@ inline void DmiSystem::set_allocated_family(::std::string* family) {
 
 // -------------------------------------------------------------------
 
-// DmiBaseboard_Item_Feature
+// DmiBaseboard_Features
 
-// string name = 1;
-inline void DmiBaseboard_Item_Feature::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// bool is_hosting_board = 1;
+inline void DmiBaseboard_Features::clear_is_hosting_board() {
+  is_hosting_board_ = false;
 }
-inline const ::std::string& DmiBaseboard_Item_Feature::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Item.Feature.name)
-  return name_.GetNoArena();
+inline bool DmiBaseboard_Features::is_hosting_board() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Features.is_hosting_board)
+  return is_hosting_board_;
 }
-inline void DmiBaseboard_Item_Feature::set_name(const ::std::string& value) {
+inline void DmiBaseboard_Features::set_is_hosting_board(bool value) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Item.Feature.name)
-}
-#if LANG_CXX11
-inline void DmiBaseboard_Item_Feature::set_name(::std::string&& value) {
-  
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiBaseboard.Item.Feature.name)
-}
-#endif
-inline void DmiBaseboard_Item_Feature::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiBaseboard.Item.Feature.name)
-}
-inline void DmiBaseboard_Item_Feature::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiBaseboard.Item.Feature.name)
-}
-inline ::std::string* DmiBaseboard_Item_Feature::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBaseboard.Item.Feature.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiBaseboard_Item_Feature::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiBaseboard.Item.Feature.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiBaseboard_Item_Feature::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
-    
-  } else {
-    
-  }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBaseboard.Item.Feature.name)
+  is_hosting_board_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Features.is_hosting_board)
 }
 
-// bool supported = 2;
-inline void DmiBaseboard_Item_Feature::clear_supported() {
-  supported_ = false;
+// bool is_requires_at_least_one_daughter_board = 2;
+inline void DmiBaseboard_Features::clear_is_requires_at_least_one_daughter_board() {
+  is_requires_at_least_one_daughter_board_ = false;
 }
-inline bool DmiBaseboard_Item_Feature::supported() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Item.Feature.supported)
-  return supported_;
+inline bool DmiBaseboard_Features::is_requires_at_least_one_daughter_board() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Features.is_requires_at_least_one_daughter_board)
+  return is_requires_at_least_one_daughter_board_;
 }
-inline void DmiBaseboard_Item_Feature::set_supported(bool value) {
+inline void DmiBaseboard_Features::set_is_requires_at_least_one_daughter_board(bool value) {
   
-  supported_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Item.Feature.supported)
+  is_requires_at_least_one_daughter_board_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Features.is_requires_at_least_one_daughter_board)
+}
+
+// bool is_removable = 3;
+inline void DmiBaseboard_Features::clear_is_removable() {
+  is_removable_ = false;
+}
+inline bool DmiBaseboard_Features::is_removable() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Features.is_removable)
+  return is_removable_;
+}
+inline void DmiBaseboard_Features::set_is_removable(bool value) {
+  
+  is_removable_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Features.is_removable)
+}
+
+// bool is_replaceable = 4;
+inline void DmiBaseboard_Features::clear_is_replaceable() {
+  is_replaceable_ = false;
+}
+inline bool DmiBaseboard_Features::is_replaceable() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Features.is_replaceable)
+  return is_replaceable_;
+}
+inline void DmiBaseboard_Features::set_is_replaceable(bool value) {
+  
+  is_replaceable_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Features.is_replaceable)
+}
+
+// bool is_hot_swappable = 5;
+inline void DmiBaseboard_Features::clear_is_hot_swappable() {
+  is_hot_swappable_ = false;
+}
+inline bool DmiBaseboard_Features::is_hot_swappable() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Features.is_hot_swappable)
+  return is_hot_swappable_;
+}
+inline void DmiBaseboard_Features::set_is_hot_swappable(bool value) {
+  
+  is_hot_swappable_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiBaseboard.Features.is_hot_swappable)
 }
 
 // -------------------------------------------------------------------
@@ -13483,34 +13612,54 @@ inline void DmiBaseboard_Item::set_allocated_asset_tag(::std::string* asset_tag)
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBaseboard.Item.asset_tag)
 }
 
-// repeated .aspia.proto.DmiBaseboard.Item.Feature feature = 6;
-inline int DmiBaseboard_Item::feature_size() const {
-  return feature_.size();
+// .aspia.proto.DmiBaseboard.Features features = 6;
+inline bool DmiBaseboard_Item::has_features() const {
+  return this != internal_default_instance() && features_ != NULL;
 }
-inline void DmiBaseboard_Item::clear_feature() {
-  feature_.Clear();
+inline void DmiBaseboard_Item::clear_features() {
+  if (GetArenaNoVirtual() == NULL && features_ != NULL) {
+    delete features_;
+  }
+  features_ = NULL;
 }
-inline const ::aspia::proto::DmiBaseboard_Item_Feature& DmiBaseboard_Item::feature(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Item.feature)
-  return feature_.Get(index);
+inline const ::aspia::proto::DmiBaseboard_Features& DmiBaseboard_Item::features() const {
+  const ::aspia::proto::DmiBaseboard_Features* p = features_;
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiBaseboard.Item.features)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::DmiBaseboard_Features*>(
+      &::aspia::proto::_DmiBaseboard_Features_default_instance_);
 }
-inline ::aspia::proto::DmiBaseboard_Item_Feature* DmiBaseboard_Item::mutable_feature(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBaseboard.Item.feature)
-  return feature_.Mutable(index);
+inline ::aspia::proto::DmiBaseboard_Features* DmiBaseboard_Item::release_features() {
+  // @@protoc_insertion_point(field_release:aspia.proto.DmiBaseboard.Item.features)
+  
+  ::aspia::proto::DmiBaseboard_Features* temp = features_;
+  features_ = NULL;
+  return temp;
 }
-inline ::aspia::proto::DmiBaseboard_Item_Feature* DmiBaseboard_Item::add_feature() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiBaseboard.Item.feature)
-  return feature_.Add();
+inline ::aspia::proto::DmiBaseboard_Features* DmiBaseboard_Item::mutable_features() {
+  
+  if (features_ == NULL) {
+    features_ = new ::aspia::proto::DmiBaseboard_Features;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBaseboard.Item.features)
+  return features_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBaseboard_Item_Feature >*
-DmiBaseboard_Item::mutable_feature() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiBaseboard.Item.feature)
-  return &feature_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBaseboard_Item_Feature >&
-DmiBaseboard_Item::feature() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiBaseboard.Item.feature)
-  return feature_;
+inline void DmiBaseboard_Item::set_allocated_features(::aspia::proto::DmiBaseboard_Features* features) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete features_;
+  }
+  if (features) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      features = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, features, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  features_ = features;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBaseboard.Item.features)
 }
 
 // string location_in_chassis = 7;
@@ -15588,110 +15737,32 @@ DmiOnBoardDevices::item() const {
 
 // DmiBuildinPointing_Item
 
-// string device_type = 1;
+// .aspia.proto.DmiBuildinPointing.Type device_type = 1;
 inline void DmiBuildinPointing_Item::clear_device_type() {
-  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_type_ = 0;
 }
-inline const ::std::string& DmiBuildinPointing_Item::device_type() const {
+inline ::aspia::proto::DmiBuildinPointing_Type DmiBuildinPointing_Item::device_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.Item.device_type)
-  return device_type_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiBuildinPointing_Type >(device_type_);
 }
-inline void DmiBuildinPointing_Item::set_device_type(const ::std::string& value) {
+inline void DmiBuildinPointing_Item::set_device_type(::aspia::proto::DmiBuildinPointing_Type value) {
   
-  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  device_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiBuildinPointing.Item.device_type)
 }
-#if LANG_CXX11
-inline void DmiBuildinPointing_Item::set_device_type(::std::string&& value) {
-  
-  device_type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiBuildinPointing.Item.device_type)
-}
-#endif
-inline void DmiBuildinPointing_Item::set_device_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiBuildinPointing.Item.device_type)
-}
-inline void DmiBuildinPointing_Item::set_device_type(const char* value, size_t size) {
-  
-  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiBuildinPointing.Item.device_type)
-}
-inline ::std::string* DmiBuildinPointing_Item::mutable_device_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBuildinPointing.Item.device_type)
-  return device_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiBuildinPointing_Item::release_device_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiBuildinPointing.Item.device_type)
-  
-  return device_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiBuildinPointing_Item::set_allocated_device_type(::std::string* device_type) {
-  if (device_type != NULL) {
-    
-  } else {
-    
-  }
-  device_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBuildinPointing.Item.device_type)
-}
 
-// string device_interface = 2;
+// .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
 inline void DmiBuildinPointing_Item::clear_device_interface() {
-  device_interface_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  device_interface_ = 0;
 }
-inline const ::std::string& DmiBuildinPointing_Item::device_interface() const {
+inline ::aspia::proto::DmiBuildinPointing_Interface DmiBuildinPointing_Item::device_interface() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.Item.device_interface)
-  return device_interface_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiBuildinPointing_Interface >(device_interface_);
 }
-inline void DmiBuildinPointing_Item::set_device_interface(const ::std::string& value) {
+inline void DmiBuildinPointing_Item::set_device_interface(::aspia::proto::DmiBuildinPointing_Interface value) {
   
-  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  device_interface_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiBuildinPointing.Item.device_interface)
-}
-#if LANG_CXX11
-inline void DmiBuildinPointing_Item::set_device_interface(::std::string&& value) {
-  
-  device_interface_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiBuildinPointing.Item.device_interface)
-}
-#endif
-inline void DmiBuildinPointing_Item::set_device_interface(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiBuildinPointing.Item.device_interface)
-}
-inline void DmiBuildinPointing_Item::set_device_interface(const char* value, size_t size) {
-  
-  device_interface_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiBuildinPointing.Item.device_interface)
-}
-inline ::std::string* DmiBuildinPointing_Item::mutable_device_interface() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBuildinPointing.Item.device_interface)
-  return device_interface_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiBuildinPointing_Item::release_device_interface() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiBuildinPointing.Item.device_interface)
-  
-  return device_interface_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiBuildinPointing_Item::set_allocated_device_interface(::std::string* device_interface) {
-  if (device_interface != NULL) {
-    
-  } else {
-    
-  }
-  device_interface_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_interface);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiBuildinPointing.Item.device_interface)
 }
 
 // int32 button_count = 3;
@@ -16011,57 +16082,18 @@ inline void DmiPortableBattery_Item::set_allocated_device_name(::std::string* de
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiPortableBattery.Item.device_name)
 }
 
-// string chemistry = 6;
+// .aspia.proto.DmiPortableBattery.Chemistry chemistry = 6;
 inline void DmiPortableBattery_Item::clear_chemistry() {
-  chemistry_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  chemistry_ = 0;
 }
-inline const ::std::string& DmiPortableBattery_Item::chemistry() const {
+inline ::aspia::proto::DmiPortableBattery_Chemistry DmiPortableBattery_Item::chemistry() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiPortableBattery.Item.chemistry)
-  return chemistry_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiPortableBattery_Chemistry >(chemistry_);
 }
-inline void DmiPortableBattery_Item::set_chemistry(const ::std::string& value) {
+inline void DmiPortableBattery_Item::set_chemistry(::aspia::proto::DmiPortableBattery_Chemistry value) {
   
-  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  chemistry_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiPortableBattery.Item.chemistry)
-}
-#if LANG_CXX11
-inline void DmiPortableBattery_Item::set_chemistry(::std::string&& value) {
-  
-  chemistry_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiPortableBattery.Item.chemistry)
-}
-#endif
-inline void DmiPortableBattery_Item::set_chemistry(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiPortableBattery.Item.chemistry)
-}
-inline void DmiPortableBattery_Item::set_chemistry(const char* value, size_t size) {
-  
-  chemistry_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiPortableBattery.Item.chemistry)
-}
-inline ::std::string* DmiPortableBattery_Item::mutable_chemistry() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPortableBattery.Item.chemistry)
-  return chemistry_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiPortableBattery_Item::release_chemistry() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiPortableBattery.Item.chemistry)
-  
-  return chemistry_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiPortableBattery_Item::set_allocated_chemistry(::std::string* chemistry) {
-  if (chemistry != NULL) {
-    
-  } else {
-    
-  }
-  chemistry_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), chemistry);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiPortableBattery.Item.chemistry)
 }
 
 // int32 design_capacity = 7;
@@ -23105,6 +23137,7 @@ namespace protobuf {
 template <> struct is_proto_enum< ::aspia::proto::DmiBios_Characteristics> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiBios_Characteristics1> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiBios_Characteristics2> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiSystem_WakeupType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiBaseboard_BoardType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiChassis_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiChassis_Status> : ::google::protobuf::internal::true_type {};
@@ -23130,6 +23163,9 @@ template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Length> : ::goo
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiBuildinPointing_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiBuildinPointing_Interface> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_Features> : ::google::protobuf::internal::true_type {};

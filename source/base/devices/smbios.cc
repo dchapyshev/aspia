@@ -464,39 +464,22 @@ std::string SMBios::SystemTable::GetUUID() const
                         ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
-std::string SMBios::SystemTable::GetWakeupType() const
+proto::DmiSystem::WakeupType SMBios::SystemTable::GetWakeupType() const
 {
     if (reader_.GetTableLength() < 0x19)
-        return std::string();
+        return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
 
     switch (reader_.GetByte(0x18))
     {
-        case 0x01:
-            return "Other";
-
-        case 0x02:
-            return "Unknown";
-
-        case 0x03:
-            return "APM Timer";
-
-        case 0x04:
-            return "Modem Ring";
-
-        case 0x05:
-            return "LAN Remote";
-
-        case 0x06:
-            return "Power Switch";
-
-        case 0x07:
-            return "PCI PME#";
-
-        case 0x08:
-            return "AC Power Restored";
-
-        default:
-            return std::string();
+        case 0x01: return proto::DmiSystem::WAKEUP_TYPE_OTHER;
+        case 0x02: return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
+        case 0x03: return proto::DmiSystem::WAKEUP_TYPE_APM_TIMER;
+        case 0x04: return proto::DmiSystem::WAKEUP_TYPE_MODEM_RING;
+        case 0x05: return proto::DmiSystem::WAKEUP_TYPE_LAN_REMOTE;
+        case 0x06: return proto::DmiSystem::WAKEUP_TYPE_POWER_SWITCH;
+        case 0x07: return proto::DmiSystem::WAKEUP_TYPE_PCI_PME;
+        case 0x08: return proto::DmiSystem::WAKEUP_TYPE_AC_POWER_RESTORED;
+        default: return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
     }
 }
 
@@ -554,33 +537,44 @@ std::string SMBios::BaseboardTable::GetAssetTag() const
     return reader_.GetString(0x08);
 }
 
-SMBios::BaseboardTable::FeatureList SMBios::BaseboardTable::GetFeatures() const
+bool SMBios::BaseboardTable::IsHostingBoard() const
 {
     if (reader_.GetTableLength() < 0x0A)
-        return FeatureList();
+        return false;
 
-    const uint8_t features = reader_.GetByte(0x09);
-    if ((features & 0x1F) == 0)
-        return FeatureList();
+    return BitSet<uint8_t>(reader_.GetByte(0x09)).Test(0);
+}
 
-    static const char* feature_names[] =
-    {
-        "Board is a hosting board", // 0
-        "Board requires at least one daughter board",
-        "Board is removable",
-        "Board is replaceable",
-        "Board is hot swappable" // 4
-    };
+bool SMBios::BaseboardTable::IsRequiresAtLeastOneDaughterBoard() const
+{
+    if (reader_.GetTableLength() < 0x0A)
+        return false;
 
-    FeatureList list;
+    return BitSet<uint8_t>(reader_.GetByte(0x09)).Test(1);
+}
 
-    for (int i = 0; i <= 4; ++i)
-    {
-        bool is_supported = (features & (1 << i)) ? true : false;
-        list.emplace_back(feature_names[i], is_supported);
-    }
+bool SMBios::BaseboardTable::IsRemovable() const
+{
+    if (reader_.GetTableLength() < 0x0A)
+        return false;
 
-    return list;
+    return BitSet<uint8_t>(reader_.GetByte(0x09)).Test(2);
+}
+
+bool SMBios::BaseboardTable::IsReplaceable() const
+{
+    if (reader_.GetTableLength() < 0x0A)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x09)).Test(3);
+}
+
+bool SMBios::BaseboardTable::IsHotSwappable() const
+{
+    if (reader_.GetTableLength() < 0x0A)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x09)).Test(4);
 }
 
 std::string SMBios::BaseboardTable::GetLocationInChassis() const
@@ -1995,65 +1989,46 @@ SMBios::BuildinPointingTable::BuildinPointingTable(const TableReader& reader)
     // Nothing
 }
 
-std::string SMBios::BuildinPointingTable::GetDeviceType() const
+proto::DmiBuildinPointing::Type SMBios::BuildinPointingTable::GetDeviceType() const
 {
     if (reader_.GetTableLength() < 0x07)
-        return std::string();
+        return proto::DmiBuildinPointing::TYPE_UNKNOWN;
 
-    static const char* names[] =
+    switch (reader_.GetByte(0x04))
     {
-        "Other", // 0x01
-        nullptr,
-        "Mouse",
-        "Track Ball",
-        "Track Point",
-        "Glide Point",
-        "Touch Pad",
-        "Touch Screen",
-        "Optical Sensor" // 0x09
-    };
-
-    const uint8_t type = reader_.GetByte(0x04);
-
-    if (type >= 0x01 && type <= 0x09 && names[type - 0x01])
-        return names[type - 0x01];
-
-    return std::string();
+        case 0x01: return proto::DmiBuildinPointing::TYPE_OTHER;
+        case 0x02: return proto::DmiBuildinPointing::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiBuildinPointing::TYPE_MOUSE;
+        case 0x04: return proto::DmiBuildinPointing::TYPE_TRACK_BALL;
+        case 0x05: return proto::DmiBuildinPointing::TYPE_TRACK_POINT;
+        case 0x06: return proto::DmiBuildinPointing::TYPE_GLIDE_POINT;
+        case 0x07: return proto::DmiBuildinPointing::TYPE_TOUCH_PAD;
+        case 0x08: return proto::DmiBuildinPointing::TYPE_TOUCH_SCREEN;
+        case 0x09: return proto::DmiBuildinPointing::TYPE_OPTICAL_SENSOR;
+        default: return proto::DmiBuildinPointing::TYPE_UNKNOWN;
+    }
 }
 
-std::string SMBios::BuildinPointingTable::GetInterface() const
+proto::DmiBuildinPointing::Interface SMBios::BuildinPointingTable::GetInterface() const
 {
     if (reader_.GetTableLength() < 0x07)
-        return std::string();
+        return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
 
-    const uint8_t type = reader_.GetByte(0x05);
-
-    static const char* names[] =
+    switch (reader_.GetByte(0x05))
     {
-        "Other", // 0x01
-        nullptr,
-        "Serial",
-        "PS/2",
-        "Infrared",
-        "HIP-HIL",
-        "Bus Mouse",
-        "ADB (Apple Desktop Bus)" // 0x08
-    };
-
-    if (type >= 0x01 && type <= 0x08 && names[type - 0x01])
-        return names[type - 0x01];
-
-    static const char* names_0xA0[] =
-    {
-        "Bus Mouse DB-9", // 0xA0
-        "Bus Mouse Micro DIN",
-        "USB" // 0xA2
-    };
-
-    if (type >= 0xA0 && type <= 0xA2)
-        return names_0xA0[type - 0xA0];
-
-    return std::string();
+        case 0x01: return proto::DmiBuildinPointing::INTERFACE_OTHER;
+        case 0x02: return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
+        case 0x03: return proto::DmiBuildinPointing::INTERFACE_SERIAL;
+        case 0x04: return proto::DmiBuildinPointing::INTERFACE_PS_2;
+        case 0x05: return proto::DmiBuildinPointing::INTERFACE_INFRARED;
+        case 0x06: return proto::DmiBuildinPointing::INTERFACE_HP_HIL;
+        case 0x07: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE;
+        case 0x08: return proto::DmiBuildinPointing::INTERFACE_ADB;
+        case 0xA0: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9;
+        case 0xA1: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN;
+        case 0xA2: return proto::DmiBuildinPointing::INTERFACE_USB;
+        default: return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
+    }
 }
 
 int SMBios::BuildinPointingTable::GetButtonCount() const
@@ -2114,30 +2089,23 @@ std::string SMBios::PortableBatteryTable::GetDeviceName() const
     return reader_.GetString(0x08);
 }
 
-std::string SMBios::PortableBatteryTable::GetChemistry() const
+proto::DmiPortableBattery::Chemistry SMBios::PortableBatteryTable::GetChemistry() const
 {
     if (reader_.GetTableLength() < 0x10)
-        return std::string();
+        return proto::DmiPortableBattery::CHEMISTRY_UNKNOWN;
 
-    static const char* names[] =
+    switch (reader_.GetByte(0x09))
     {
-        "Other", // 0x01
-        nullptr,
-        "Mouse",
-        "Track Ball",
-        "Track Point",
-        "Glide Point",
-        "Touch Pad",
-        "Touch Screen",
-        "Optical Sensor" // 0x09
-    };
-
-    const uint8_t value = reader_.GetByte(0x09);
-
-    if (value >= 0x01 && value <= 0x09 && names[value - 0x01])
-        return names[value - 0x01];
-
-    return std::string();
+        case 0x01: return proto::DmiPortableBattery::CHEMISTRY_OTHER;
+        case 0x02: return proto::DmiPortableBattery::CHEMISTRY_UNKNOWN;
+        case 0x03: return proto::DmiPortableBattery::CHEMISTRY_LEAD_ACID;
+        case 0x04: return proto::DmiPortableBattery::CHEMISTRY_NICKEL_CADMIUM;
+        case 0x05: return proto::DmiPortableBattery::CHEMISTRY_NICKEL_METAL_HYDRIDE;
+        case 0x06: return proto::DmiPortableBattery::CHEMISTRY_LITHIUM_ION;
+        case 0x07: return proto::DmiPortableBattery::CHEMISTRY_ZINC_AIR;
+        case 0x08: return proto::DmiPortableBattery::CHEMISTRY_LITHIUM_POLYMER;
+        default: return proto::DmiPortableBattery::CHEMISTRY_UNKNOWN;
+    }
 }
 
 int SMBios::PortableBatteryTable::GetDesignCapacity() const

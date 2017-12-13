@@ -43,6 +43,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* WakeupTypeToString(proto::DmiSystem::WakeupType value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystem);
 };
 
@@ -219,6 +221,9 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* TypeToString(proto::DmiBuildinPointing::Type value);
+    static const char* InterfaceToString(proto::DmiBuildinPointing::Interface value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiBuildinPointing);
 };
 
@@ -235,6 +240,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* ChemistryToString(proto::DmiPortableBattery::Chemistry value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortableBattery);
 };
 
