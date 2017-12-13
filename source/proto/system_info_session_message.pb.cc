@@ -133,11 +133,11 @@ class DmiPortableBatteryDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery>
       _instance;
 } _DmiPortableBattery_default_instance_;
-class CentralProcessor_FeatureDefaultTypeInternal {
+class CentralProcessor_FeaturesDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<CentralProcessor_Feature>
+  ::google::protobuf::internal::ExplicitlyConstructed<CentralProcessor_Features>
       _instance;
-} _CentralProcessor_Feature_default_instance_;
+} _CentralProcessor_Features_default_instance_;
 class CentralProcessorDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<CentralProcessor>
@@ -810,7 +810,7 @@ void InitDefaultsDmiPortableBattery() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPortableBatteryImpl);
 }
 
-void InitDefaultsCentralProcessor_FeatureImpl() {
+void InitDefaultsCentralProcessor_FeaturesImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -819,16 +819,16 @@ void InitDefaultsCentralProcessor_FeatureImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_CentralProcessor_Feature_default_instance_;
-    new (ptr) ::aspia::proto::CentralProcessor_Feature();
+    void* ptr = &::aspia::proto::_CentralProcessor_Features_default_instance_;
+    new (ptr) ::aspia::proto::CentralProcessor_Features();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::CentralProcessor_Feature::InitAsDefaultInstance();
+  ::aspia::proto::CentralProcessor_Features::InitAsDefaultInstance();
 }
 
-void InitDefaultsCentralProcessor_Feature() {
+void InitDefaultsCentralProcessor_Features() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCentralProcessor_FeatureImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCentralProcessor_FeaturesImpl);
 }
 
 void InitDefaultsCentralProcessorImpl() {
@@ -839,7 +839,7 @@ void InitDefaultsCentralProcessorImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Feature();
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
   {
     void* ptr = &::aspia::proto::_CentralProcessor_default_instance_;
     new (ptr) ::aspia::proto::CentralProcessor();
@@ -12152,79 +12152,212 @@ void DmiPortableBattery::InternalSwap(DmiPortableBattery* other) {
 
 // ===================================================================
 
-void CentralProcessor_Feature::InitAsDefaultInstance() {
+void CentralProcessor_Features::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CentralProcessor_Feature::kNameFieldNumber;
-const int CentralProcessor_Feature::kSupportedFieldNumber;
+const int CentralProcessor_Features::kHasFpuFieldNumber;
+const int CentralProcessor_Features::kHasVmeFieldNumber;
+const int CentralProcessor_Features::kHasDeFieldNumber;
+const int CentralProcessor_Features::kHasPseFieldNumber;
+const int CentralProcessor_Features::kHasTscFieldNumber;
+const int CentralProcessor_Features::kHasMsrFieldNumber;
+const int CentralProcessor_Features::kHasPaeFieldNumber;
+const int CentralProcessor_Features::kHasMceFieldNumber;
+const int CentralProcessor_Features::kHasCx8FieldNumber;
+const int CentralProcessor_Features::kHasApicFieldNumber;
+const int CentralProcessor_Features::kHasSepFieldNumber;
+const int CentralProcessor_Features::kHasMtrrFieldNumber;
+const int CentralProcessor_Features::kHasPgeFieldNumber;
+const int CentralProcessor_Features::kHasMcaFieldNumber;
+const int CentralProcessor_Features::kHasCmovFieldNumber;
+const int CentralProcessor_Features::kHasPatFieldNumber;
+const int CentralProcessor_Features::kHasPse36FieldNumber;
+const int CentralProcessor_Features::kHasPsnFieldNumber;
+const int CentralProcessor_Features::kHasClfshFieldNumber;
+const int CentralProcessor_Features::kHasDsFieldNumber;
+const int CentralProcessor_Features::kHasAcpuFieldNumber;
+const int CentralProcessor_Features::kHasMmxFieldNumber;
+const int CentralProcessor_Features::kHasFxsrFieldNumber;
+const int CentralProcessor_Features::kHasSseFieldNumber;
+const int CentralProcessor_Features::kHasSse2FieldNumber;
+const int CentralProcessor_Features::kHasSsFieldNumber;
+const int CentralProcessor_Features::kHasHttFieldNumber;
+const int CentralProcessor_Features::kHasTmFieldNumber;
+const int CentralProcessor_Features::kHasIa64FieldNumber;
+const int CentralProcessor_Features::kHasPbeFieldNumber;
+const int CentralProcessor_Features::kHasSse3FieldNumber;
+const int CentralProcessor_Features::kHasPclmuldqFieldNumber;
+const int CentralProcessor_Features::kHasDtes64FieldNumber;
+const int CentralProcessor_Features::kHasMonitorFieldNumber;
+const int CentralProcessor_Features::kHasDsCplFieldNumber;
+const int CentralProcessor_Features::kHasVmxFieldNumber;
+const int CentralProcessor_Features::kHasSmxFieldNumber;
+const int CentralProcessor_Features::kHasEstFieldNumber;
+const int CentralProcessor_Features::kHasTm2FieldNumber;
+const int CentralProcessor_Features::kHasSsse3FieldNumber;
+const int CentralProcessor_Features::kHasCnxtIdFieldNumber;
+const int CentralProcessor_Features::kHasSdbgFieldNumber;
+const int CentralProcessor_Features::kHasFmaFieldNumber;
+const int CentralProcessor_Features::kHasCx16FieldNumber;
+const int CentralProcessor_Features::kHasXtprFieldNumber;
+const int CentralProcessor_Features::kHasPdcmFieldNumber;
+const int CentralProcessor_Features::kHasPcidFieldNumber;
+const int CentralProcessor_Features::kHasDcaFieldNumber;
+const int CentralProcessor_Features::kHasSse41FieldNumber;
+const int CentralProcessor_Features::kHasSse42FieldNumber;
+const int CentralProcessor_Features::kHasX2ApicFieldNumber;
+const int CentralProcessor_Features::kHasMovbeFieldNumber;
+const int CentralProcessor_Features::kHasPopcntFieldNumber;
+const int CentralProcessor_Features::kHasTscDeadlineFieldNumber;
+const int CentralProcessor_Features::kHasAesFieldNumber;
+const int CentralProcessor_Features::kHasXsaveFieldNumber;
+const int CentralProcessor_Features::kHasOsxsaveFieldNumber;
+const int CentralProcessor_Features::kHasAvxFieldNumber;
+const int CentralProcessor_Features::kHasF16CFieldNumber;
+const int CentralProcessor_Features::kHasRdrandFieldNumber;
+const int CentralProcessor_Features::kHasHypervisorFieldNumber;
+const int CentralProcessor_Features::kHasSyscallFieldNumber;
+const int CentralProcessor_Features::kHasXdBitFieldNumber;
+const int CentralProcessor_Features::kHasMmxextFieldNumber;
+const int CentralProcessor_Features::kHas1GbPagesFieldNumber;
+const int CentralProcessor_Features::kHasRdtscpFieldNumber;
+const int CentralProcessor_Features::kHasIntel64FieldNumber;
+const int CentralProcessor_Features::kHas3DnowextFieldNumber;
+const int CentralProcessor_Features::kHas3DnowFieldNumber;
+const int CentralProcessor_Features::kHasLahfFieldNumber;
+const int CentralProcessor_Features::kHasSvmFieldNumber;
+const int CentralProcessor_Features::kHasLzcntFieldNumber;
+const int CentralProcessor_Features::kHasSse4AFieldNumber;
+const int CentralProcessor_Features::kHasMisalignsseFieldNumber;
+const int CentralProcessor_Features::kHas3DnowPrefetchFieldNumber;
+const int CentralProcessor_Features::kHasXopFieldNumber;
+const int CentralProcessor_Features::kHasWdtFieldNumber;
+const int CentralProcessor_Features::kHasFma4FieldNumber;
+const int CentralProcessor_Features::kHasFsgsbaseFieldNumber;
+const int CentralProcessor_Features::kHasSgxFieldNumber;
+const int CentralProcessor_Features::kHasBmi1FieldNumber;
+const int CentralProcessor_Features::kHasHleFieldNumber;
+const int CentralProcessor_Features::kHasAvx2FieldNumber;
+const int CentralProcessor_Features::kHasSmepFieldNumber;
+const int CentralProcessor_Features::kHasBmi2FieldNumber;
+const int CentralProcessor_Features::kHasErmsFieldNumber;
+const int CentralProcessor_Features::kHasInvpcidFieldNumber;
+const int CentralProcessor_Features::kHasRtmFieldNumber;
+const int CentralProcessor_Features::kHasPqmFieldNumber;
+const int CentralProcessor_Features::kHasMpxFieldNumber;
+const int CentralProcessor_Features::kHasPqeFieldNumber;
+const int CentralProcessor_Features::kHasAvx512FFieldNumber;
+const int CentralProcessor_Features::kHasAvx512DqFieldNumber;
+const int CentralProcessor_Features::kHasRdseedFieldNumber;
+const int CentralProcessor_Features::kHasAdxFieldNumber;
+const int CentralProcessor_Features::kHasSmapFieldNumber;
+const int CentralProcessor_Features::kHasAvx512IfmaFieldNumber;
+const int CentralProcessor_Features::kHasPcommitFieldNumber;
+const int CentralProcessor_Features::kHasClflushoptFieldNumber;
+const int CentralProcessor_Features::kHasClwbFieldNumber;
+const int CentralProcessor_Features::kHasIntelPtFieldNumber;
+const int CentralProcessor_Features::kHasAvx512PfFieldNumber;
+const int CentralProcessor_Features::kHasAvx512ErFieldNumber;
+const int CentralProcessor_Features::kHasAvx512CdFieldNumber;
+const int CentralProcessor_Features::kHasShaFieldNumber;
+const int CentralProcessor_Features::kHasAvx512BwFieldNumber;
+const int CentralProcessor_Features::kHasAvx512VlFieldNumber;
+const int CentralProcessor_Features::kHasPrefetchwt1FieldNumber;
+const int CentralProcessor_Features::kHasAvx512VbmiFieldNumber;
+const int CentralProcessor_Features::kHasUmipFieldNumber;
+const int CentralProcessor_Features::kHasPkuFieldNumber;
+const int CentralProcessor_Features::kHasOspkeFieldNumber;
+const int CentralProcessor_Features::kHasAvx512Vbmi2FieldNumber;
+const int CentralProcessor_Features::kHasGfniFieldNumber;
+const int CentralProcessor_Features::kHasVaesFieldNumber;
+const int CentralProcessor_Features::kHasVpclmulqdqFieldNumber;
+const int CentralProcessor_Features::kHasAvx512VnniFieldNumber;
+const int CentralProcessor_Features::kHasAvx512BitalgFieldNumber;
+const int CentralProcessor_Features::kHasAvx512VpopcntdqFieldNumber;
+const int CentralProcessor_Features::kHasRdpidFieldNumber;
+const int CentralProcessor_Features::kHasSgxLcFieldNumber;
+const int CentralProcessor_Features::kHasAvx5124VnniwFieldNumber;
+const int CentralProcessor_Features::kHasAvx5124FmapsFieldNumber;
+const int CentralProcessor_Features::kHasAisFieldNumber;
+const int CentralProcessor_Features::kHasRngFieldNumber;
+const int CentralProcessor_Features::kHasLhFieldNumber;
+const int CentralProcessor_Features::kHasFemmsFieldNumber;
+const int CentralProcessor_Features::kHasAceFieldNumber;
+const int CentralProcessor_Features::kHasAce2FieldNumber;
+const int CentralProcessor_Features::kHasPheFieldNumber;
+const int CentralProcessor_Features::kHasPmmFieldNumber;
+const int CentralProcessor_Features::kHasParallaxFieldNumber;
+const int CentralProcessor_Features::kHasOverstressFieldNumber;
+const int CentralProcessor_Features::kHasTm3FieldNumber;
+const int CentralProcessor_Features::kHasRng2FieldNumber;
+const int CentralProcessor_Features::kHasPhe2FieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-CentralProcessor_Feature::CentralProcessor_Feature()
+CentralProcessor_Features::CentralProcessor_Features()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Feature();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(constructor:aspia.proto.CentralProcessor.Features)
 }
-CentralProcessor_Feature::CentralProcessor_Feature(const CentralProcessor_Feature& from)
+CentralProcessor_Features::CentralProcessor_Features(const CentralProcessor_Features& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  supported_ = from.supported_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.CentralProcessor.Feature)
+  ::memcpy(&has_fpu_, &from.has_fpu_,
+    static_cast<size_t>(reinterpret_cast<char*>(&has_phe2_) -
+    reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.CentralProcessor.Features)
 }
 
-void CentralProcessor_Feature::SharedCtor() {
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  supported_ = false;
+void CentralProcessor_Features::SharedCtor() {
+  ::memset(&has_fpu_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&has_phe2_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
   _cached_size_ = 0;
 }
 
-CentralProcessor_Feature::~CentralProcessor_Feature() {
-  // @@protoc_insertion_point(destructor:aspia.proto.CentralProcessor.Feature)
+CentralProcessor_Features::~CentralProcessor_Features() {
+  // @@protoc_insertion_point(destructor:aspia.proto.CentralProcessor.Features)
   SharedDtor();
 }
 
-void CentralProcessor_Feature::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+void CentralProcessor_Features::SharedDtor() {
 }
 
-void CentralProcessor_Feature::SetCachedSize(int size) const {
+void CentralProcessor_Features::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const CentralProcessor_Feature& CentralProcessor_Feature::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Feature();
+const CentralProcessor_Features& CentralProcessor_Features::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
   return *internal_default_instance();
 }
 
-CentralProcessor_Feature* CentralProcessor_Feature::New(::google::protobuf::Arena* arena) const {
-  CentralProcessor_Feature* n = new CentralProcessor_Feature;
+CentralProcessor_Features* CentralProcessor_Features::New(::google::protobuf::Arena* arena) const {
+  CentralProcessor_Features* n = new CentralProcessor_Features;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void CentralProcessor_Feature::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.CentralProcessor.Feature)
+void CentralProcessor_Features::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.CentralProcessor.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  supported_ = false;
+  ::memset(&has_fpu_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&has_phe2_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
   _internal_metadata_.Clear();
 }
 
-bool CentralProcessor_Feature::MergePartialFromCodedStream(
+bool CentralProcessor_Features::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -12234,36 +12367,1910 @@ bool CentralProcessor_Feature::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(parse_start:aspia.proto.CentralProcessor.Features)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
+      // bool has_fpu = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.CentralProcessor.Feature.name"));
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_fpu_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool supported = 2;
+      // bool has_vme = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &supported_)));
+                 input, &has_vme_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_de = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_de_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pse = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pse_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tsc = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tsc_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_msr = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_msr_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pae = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pae_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mce = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mce_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_cx8 = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_cx8_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_apic = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_apic_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sep = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sep_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mtrr = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 96 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mtrr_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pge = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pge_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mca = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 112 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mca_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_cmov = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_cmov_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pat = 16;
+      case 16: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pat_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pse36 = 17;
+      case 17: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pse36_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_psn = 18;
+      case 18: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_psn_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_clfsh = 19;
+      case 19: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(152u /* 152 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_clfsh_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ds = 20;
+      case 20: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 160 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ds_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_acpu = 21;
+      case 21: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_acpu_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mmx = 22;
+      case 22: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 176 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mmx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_fxsr = 23;
+      case 23: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 184 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_fxsr_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse = 24;
+      case 24: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 192 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse2 = 25;
+      case 25: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 200 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ss = 26;
+      case 26: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 208 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ss_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_htt = 27;
+      case 27: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 216 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_htt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tm = 28;
+      case 28: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(224u /* 224 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ia64 = 29;
+      case 29: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(232u /* 232 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ia64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pbe = 30;
+      case 30: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 240 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pbe_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse3 = 31;
+      case 31: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(248u /* 248 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse3_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pclmuldq = 32;
+      case 32: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(0u /* 256 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pclmuldq_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_dtes64 = 33;
+      case 33: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 264 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_dtes64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_monitor = 34;
+      case 34: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 272 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_monitor_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ds_cpl = 35;
+      case 35: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 280 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ds_cpl_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_vmx = 36;
+      case 36: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 288 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_vmx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_smx = 37;
+      case 37: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 296 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_smx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_est = 38;
+      case 38: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 304 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_est_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tm2 = 39;
+      case 39: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 312 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tm2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ssse3 = 40;
+      case 40: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 320 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ssse3_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_cnxt_id = 41;
+      case 41: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 328 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_cnxt_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sdbg = 42;
+      case 42: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 336 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sdbg_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_fma = 43;
+      case 43: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 344 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_fma_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_cx16 = 44;
+      case 44: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 352 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_cx16_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_xtpr = 45;
+      case 45: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 360 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_xtpr_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pdcm = 46;
+      case 46: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 368 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pdcm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pcid = 47;
+      case 47: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 376 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pcid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_dca = 48;
+      case 48: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 384 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_dca_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse41 = 49;
+      case 49: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 392 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse41_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse42 = 50;
+      case 50: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 400 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse42_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_x2apic = 51;
+      case 51: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(152u /* 408 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_x2apic_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_movbe = 52;
+      case 52: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 416 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_movbe_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_popcnt = 53;
+      case 53: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(168u /* 424 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_popcnt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tsc_deadline = 54;
+      case 54: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 432 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tsc_deadline_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_aes = 55;
+      case 55: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 440 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_aes_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_xsave = 56;
+      case 56: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 448 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_xsave_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_osxsave = 57;
+      case 57: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 456 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_osxsave_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx = 58;
+      case 58: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 464 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_f16c = 59;
+      case 59: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 472 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_f16c_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rdrand = 60;
+      case 60: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(224u /* 480 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rdrand_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_hypervisor = 61;
+      case 61: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(232u /* 488 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_hypervisor_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_syscall = 62;
+      case 62: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 496 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_syscall_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_xd_bit = 63;
+      case 63: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(248u /* 504 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_xd_bit_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mmxext = 64;
+      case 64: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(0u /* 512 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mmxext_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_1gb_pages = 65;
+      case 65: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 520 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_1gb_pages_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rdtscp = 66;
+      case 66: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 528 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rdtscp_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_intel64 = 67;
+      case 67: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 536 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_intel64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_3dnowext = 68;
+      case 68: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 544 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_3dnowext_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_3dnow = 69;
+      case 69: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 552 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_3dnow_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lahf = 70;
+      case 70: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 560 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_lahf_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_svm = 71;
+      case 71: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 568 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_svm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lzcnt = 72;
+      case 72: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 576 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_lzcnt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sse4a = 73;
+      case 73: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 584 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sse4a_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_misalignsse = 74;
+      case 74: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 592 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_misalignsse_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_3dnow_prefetch = 75;
+      case 75: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 600 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_3dnow_prefetch_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_xop = 76;
+      case 76: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 608 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_xop_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_wdt = 77;
+      case 77: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 616 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_wdt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_fma4 = 78;
+      case 78: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 624 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_fma4_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_fsgsbase = 79;
+      case 79: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 632 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_fsgsbase_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sgx = 80;
+      case 80: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 640 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sgx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_bmi1 = 81;
+      case 81: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 648 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_bmi1_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_hle = 82;
+      case 82: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 656 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_hle_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx2 = 83;
+      case 83: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(152u /* 664 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_smep = 84;
+      case 84: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 672 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_smep_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_bmi2 = 85;
+      case 85: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(168u /* 680 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_bmi2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_erms = 86;
+      case 86: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 688 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_erms_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_invpcid = 87;
+      case 87: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 696 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_invpcid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rtm = 88;
+      case 88: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 704 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rtm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pqm = 89;
+      case 89: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 712 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pqm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mpx = 90;
+      case 90: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 720 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mpx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pqe = 91;
+      case 91: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 728 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pqe_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512f = 92;
+      case 92: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(224u /* 736 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512f_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512dq = 93;
+      case 93: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(232u /* 744 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512dq_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rdseed = 94;
+      case 94: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 752 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rdseed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_adx = 95;
+      case 95: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(248u /* 760 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_adx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_smap = 96;
+      case 96: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(0u /* 768 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_smap_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512ifma = 97;
+      case 97: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 776 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512ifma_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pcommit = 98;
+      case 98: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 784 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pcommit_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_clflushopt = 99;
+      case 99: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 792 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_clflushopt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_clwb = 100;
+      case 100: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 800 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_clwb_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_intel_pt = 101;
+      case 101: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 808 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_intel_pt_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512pf = 102;
+      case 102: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 816 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512pf_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512er = 103;
+      case 103: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 824 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512er_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512cd = 104;
+      case 104: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 832 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512cd_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sha = 105;
+      case 105: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 840 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sha_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512bw = 106;
+      case 106: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 848 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512bw_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512vl = 107;
+      case 107: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 856 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512vl_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_prefetchwt1 = 108;
+      case 108: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 864 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_prefetchwt1_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512vbmi = 109;
+      case 109: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 872 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512vbmi_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_umip = 110;
+      case 110: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 880 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_umip_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pku = 111;
+      case 111: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 888 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pku_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ospke = 112;
+      case 112: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 896 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ospke_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512vbmi2 = 113;
+      case 113: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(136u /* 904 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512vbmi2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_gfni = 114;
+      case 114: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 912 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_gfni_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_vaes = 115;
+      case 115: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(152u /* 920 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_vaes_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_vpclmulqdq = 116;
+      case 116: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 928 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_vpclmulqdq_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512vnni = 117;
+      case 117: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(168u /* 936 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512vnni_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512bitalg = 118;
+      case 118: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 944 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512bitalg_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512vpopcntdq = 119;
+      case 119: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 952 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512vpopcntdq_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rdpid = 120;
+      case 120: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 960 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rdpid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_sgx_lc = 121;
+      case 121: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 968 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_sgx_lc_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512_4vnniw = 122;
+      case 122: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 976 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512_4vnniw_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_avx512_4fmaps = 123;
+      case 123: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 984 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_avx512_4fmaps_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ais = 124;
+      case 124: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(224u /* 992 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ais_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rng = 125;
+      case 125: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(232u /* 1000 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rng_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lh = 126;
+      case 126: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 1008 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_lh_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_femms = 127;
+      case 127: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(248u /* 1016 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_femms_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ace = 128;
+      case 128: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(0u /* 1024 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ace_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ace2 = 129;
+      case 129: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 1032 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ace2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_phe = 130;
+      case 130: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 1040 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_phe_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pmm = 131;
+      case 131: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 1048 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pmm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_parallax = 132;
+      case 132: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 1056 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_parallax_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_overstress = 133;
+      case 133: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 1064 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_overstress_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tm3 = 134;
+      case 134: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 1072 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tm3_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rng2 = 135;
+      case 135: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 1080 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rng2_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_phe2 = 136;
+      case 136: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 1088 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_phe2_)));
         } else {
           goto handle_unusual;
         }
@@ -12282,56 +14289,1389 @@ bool CentralProcessor_Feature::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(parse_success:aspia.proto.CentralProcessor.Features)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.CentralProcessor.Features)
   return false;
 #undef DO_
 }
 
-void CentralProcessor_Feature::SerializeWithCachedSizes(
+void CentralProcessor_Features::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.CentralProcessor.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.CentralProcessor.Feature.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
+  // bool has_fpu = 1;
+  if (this->has_fpu() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->has_fpu(), output);
   }
 
-  // bool supported = 2;
-  if (this->supported() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supported(), output);
+  // bool has_vme = 2;
+  if (this->has_vme() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->has_vme(), output);
+  }
+
+  // bool has_de = 3;
+  if (this->has_de() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->has_de(), output);
+  }
+
+  // bool has_pse = 4;
+  if (this->has_pse() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->has_pse(), output);
+  }
+
+  // bool has_tsc = 5;
+  if (this->has_tsc() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->has_tsc(), output);
+  }
+
+  // bool has_msr = 6;
+  if (this->has_msr() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->has_msr(), output);
+  }
+
+  // bool has_pae = 7;
+  if (this->has_pae() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->has_pae(), output);
+  }
+
+  // bool has_mce = 8;
+  if (this->has_mce() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->has_mce(), output);
+  }
+
+  // bool has_cx8 = 9;
+  if (this->has_cx8() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(9, this->has_cx8(), output);
+  }
+
+  // bool has_apic = 10;
+  if (this->has_apic() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->has_apic(), output);
+  }
+
+  // bool has_sep = 11;
+  if (this->has_sep() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(11, this->has_sep(), output);
+  }
+
+  // bool has_mtrr = 12;
+  if (this->has_mtrr() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->has_mtrr(), output);
+  }
+
+  // bool has_pge = 13;
+  if (this->has_pge() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->has_pge(), output);
+  }
+
+  // bool has_mca = 14;
+  if (this->has_mca() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(14, this->has_mca(), output);
+  }
+
+  // bool has_cmov = 15;
+  if (this->has_cmov() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->has_cmov(), output);
+  }
+
+  // bool has_pat = 16;
+  if (this->has_pat() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->has_pat(), output);
+  }
+
+  // bool has_pse36 = 17;
+  if (this->has_pse36() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(17, this->has_pse36(), output);
+  }
+
+  // bool has_psn = 18;
+  if (this->has_psn() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(18, this->has_psn(), output);
+  }
+
+  // bool has_clfsh = 19;
+  if (this->has_clfsh() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->has_clfsh(), output);
+  }
+
+  // bool has_ds = 20;
+  if (this->has_ds() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(20, this->has_ds(), output);
+  }
+
+  // bool has_acpu = 21;
+  if (this->has_acpu() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(21, this->has_acpu(), output);
+  }
+
+  // bool has_mmx = 22;
+  if (this->has_mmx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(22, this->has_mmx(), output);
+  }
+
+  // bool has_fxsr = 23;
+  if (this->has_fxsr() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(23, this->has_fxsr(), output);
+  }
+
+  // bool has_sse = 24;
+  if (this->has_sse() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(24, this->has_sse(), output);
+  }
+
+  // bool has_sse2 = 25;
+  if (this->has_sse2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->has_sse2(), output);
+  }
+
+  // bool has_ss = 26;
+  if (this->has_ss() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(26, this->has_ss(), output);
+  }
+
+  // bool has_htt = 27;
+  if (this->has_htt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(27, this->has_htt(), output);
+  }
+
+  // bool has_tm = 28;
+  if (this->has_tm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(28, this->has_tm(), output);
+  }
+
+  // bool has_ia64 = 29;
+  if (this->has_ia64() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(29, this->has_ia64(), output);
+  }
+
+  // bool has_pbe = 30;
+  if (this->has_pbe() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(30, this->has_pbe(), output);
+  }
+
+  // bool has_sse3 = 31;
+  if (this->has_sse3() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(31, this->has_sse3(), output);
+  }
+
+  // bool has_pclmuldq = 32;
+  if (this->has_pclmuldq() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(32, this->has_pclmuldq(), output);
+  }
+
+  // bool has_dtes64 = 33;
+  if (this->has_dtes64() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(33, this->has_dtes64(), output);
+  }
+
+  // bool has_monitor = 34;
+  if (this->has_monitor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(34, this->has_monitor(), output);
+  }
+
+  // bool has_ds_cpl = 35;
+  if (this->has_ds_cpl() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(35, this->has_ds_cpl(), output);
+  }
+
+  // bool has_vmx = 36;
+  if (this->has_vmx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(36, this->has_vmx(), output);
+  }
+
+  // bool has_smx = 37;
+  if (this->has_smx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(37, this->has_smx(), output);
+  }
+
+  // bool has_est = 38;
+  if (this->has_est() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(38, this->has_est(), output);
+  }
+
+  // bool has_tm2 = 39;
+  if (this->has_tm2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(39, this->has_tm2(), output);
+  }
+
+  // bool has_ssse3 = 40;
+  if (this->has_ssse3() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(40, this->has_ssse3(), output);
+  }
+
+  // bool has_cnxt_id = 41;
+  if (this->has_cnxt_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(41, this->has_cnxt_id(), output);
+  }
+
+  // bool has_sdbg = 42;
+  if (this->has_sdbg() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(42, this->has_sdbg(), output);
+  }
+
+  // bool has_fma = 43;
+  if (this->has_fma() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(43, this->has_fma(), output);
+  }
+
+  // bool has_cx16 = 44;
+  if (this->has_cx16() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(44, this->has_cx16(), output);
+  }
+
+  // bool has_xtpr = 45;
+  if (this->has_xtpr() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(45, this->has_xtpr(), output);
+  }
+
+  // bool has_pdcm = 46;
+  if (this->has_pdcm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(46, this->has_pdcm(), output);
+  }
+
+  // bool has_pcid = 47;
+  if (this->has_pcid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(47, this->has_pcid(), output);
+  }
+
+  // bool has_dca = 48;
+  if (this->has_dca() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(48, this->has_dca(), output);
+  }
+
+  // bool has_sse41 = 49;
+  if (this->has_sse41() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(49, this->has_sse41(), output);
+  }
+
+  // bool has_sse42 = 50;
+  if (this->has_sse42() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(50, this->has_sse42(), output);
+  }
+
+  // bool has_x2apic = 51;
+  if (this->has_x2apic() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(51, this->has_x2apic(), output);
+  }
+
+  // bool has_movbe = 52;
+  if (this->has_movbe() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(52, this->has_movbe(), output);
+  }
+
+  // bool has_popcnt = 53;
+  if (this->has_popcnt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(53, this->has_popcnt(), output);
+  }
+
+  // bool has_tsc_deadline = 54;
+  if (this->has_tsc_deadline() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(54, this->has_tsc_deadline(), output);
+  }
+
+  // bool has_aes = 55;
+  if (this->has_aes() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(55, this->has_aes(), output);
+  }
+
+  // bool has_xsave = 56;
+  if (this->has_xsave() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(56, this->has_xsave(), output);
+  }
+
+  // bool has_osxsave = 57;
+  if (this->has_osxsave() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(57, this->has_osxsave(), output);
+  }
+
+  // bool has_avx = 58;
+  if (this->has_avx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(58, this->has_avx(), output);
+  }
+
+  // bool has_f16c = 59;
+  if (this->has_f16c() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(59, this->has_f16c(), output);
+  }
+
+  // bool has_rdrand = 60;
+  if (this->has_rdrand() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(60, this->has_rdrand(), output);
+  }
+
+  // bool has_hypervisor = 61;
+  if (this->has_hypervisor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(61, this->has_hypervisor(), output);
+  }
+
+  // bool has_syscall = 62;
+  if (this->has_syscall() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(62, this->has_syscall(), output);
+  }
+
+  // bool has_xd_bit = 63;
+  if (this->has_xd_bit() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(63, this->has_xd_bit(), output);
+  }
+
+  // bool has_mmxext = 64;
+  if (this->has_mmxext() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(64, this->has_mmxext(), output);
+  }
+
+  // bool has_1gb_pages = 65;
+  if (this->has_1gb_pages() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(65, this->has_1gb_pages(), output);
+  }
+
+  // bool has_rdtscp = 66;
+  if (this->has_rdtscp() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(66, this->has_rdtscp(), output);
+  }
+
+  // bool has_intel64 = 67;
+  if (this->has_intel64() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(67, this->has_intel64(), output);
+  }
+
+  // bool has_3dnowext = 68;
+  if (this->has_3dnowext() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(68, this->has_3dnowext(), output);
+  }
+
+  // bool has_3dnow = 69;
+  if (this->has_3dnow() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(69, this->has_3dnow(), output);
+  }
+
+  // bool has_lahf = 70;
+  if (this->has_lahf() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(70, this->has_lahf(), output);
+  }
+
+  // bool has_svm = 71;
+  if (this->has_svm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(71, this->has_svm(), output);
+  }
+
+  // bool has_lzcnt = 72;
+  if (this->has_lzcnt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(72, this->has_lzcnt(), output);
+  }
+
+  // bool has_sse4a = 73;
+  if (this->has_sse4a() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(73, this->has_sse4a(), output);
+  }
+
+  // bool has_misalignsse = 74;
+  if (this->has_misalignsse() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(74, this->has_misalignsse(), output);
+  }
+
+  // bool has_3dnow_prefetch = 75;
+  if (this->has_3dnow_prefetch() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(75, this->has_3dnow_prefetch(), output);
+  }
+
+  // bool has_xop = 76;
+  if (this->has_xop() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(76, this->has_xop(), output);
+  }
+
+  // bool has_wdt = 77;
+  if (this->has_wdt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(77, this->has_wdt(), output);
+  }
+
+  // bool has_fma4 = 78;
+  if (this->has_fma4() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(78, this->has_fma4(), output);
+  }
+
+  // bool has_fsgsbase = 79;
+  if (this->has_fsgsbase() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(79, this->has_fsgsbase(), output);
+  }
+
+  // bool has_sgx = 80;
+  if (this->has_sgx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(80, this->has_sgx(), output);
+  }
+
+  // bool has_bmi1 = 81;
+  if (this->has_bmi1() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(81, this->has_bmi1(), output);
+  }
+
+  // bool has_hle = 82;
+  if (this->has_hle() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(82, this->has_hle(), output);
+  }
+
+  // bool has_avx2 = 83;
+  if (this->has_avx2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(83, this->has_avx2(), output);
+  }
+
+  // bool has_smep = 84;
+  if (this->has_smep() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(84, this->has_smep(), output);
+  }
+
+  // bool has_bmi2 = 85;
+  if (this->has_bmi2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(85, this->has_bmi2(), output);
+  }
+
+  // bool has_erms = 86;
+  if (this->has_erms() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(86, this->has_erms(), output);
+  }
+
+  // bool has_invpcid = 87;
+  if (this->has_invpcid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(87, this->has_invpcid(), output);
+  }
+
+  // bool has_rtm = 88;
+  if (this->has_rtm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(88, this->has_rtm(), output);
+  }
+
+  // bool has_pqm = 89;
+  if (this->has_pqm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(89, this->has_pqm(), output);
+  }
+
+  // bool has_mpx = 90;
+  if (this->has_mpx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(90, this->has_mpx(), output);
+  }
+
+  // bool has_pqe = 91;
+  if (this->has_pqe() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(91, this->has_pqe(), output);
+  }
+
+  // bool has_avx512f = 92;
+  if (this->has_avx512f() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(92, this->has_avx512f(), output);
+  }
+
+  // bool has_avx512dq = 93;
+  if (this->has_avx512dq() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(93, this->has_avx512dq(), output);
+  }
+
+  // bool has_rdseed = 94;
+  if (this->has_rdseed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(94, this->has_rdseed(), output);
+  }
+
+  // bool has_adx = 95;
+  if (this->has_adx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(95, this->has_adx(), output);
+  }
+
+  // bool has_smap = 96;
+  if (this->has_smap() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(96, this->has_smap(), output);
+  }
+
+  // bool has_avx512ifma = 97;
+  if (this->has_avx512ifma() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(97, this->has_avx512ifma(), output);
+  }
+
+  // bool has_pcommit = 98;
+  if (this->has_pcommit() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(98, this->has_pcommit(), output);
+  }
+
+  // bool has_clflushopt = 99;
+  if (this->has_clflushopt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(99, this->has_clflushopt(), output);
+  }
+
+  // bool has_clwb = 100;
+  if (this->has_clwb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(100, this->has_clwb(), output);
+  }
+
+  // bool has_intel_pt = 101;
+  if (this->has_intel_pt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(101, this->has_intel_pt(), output);
+  }
+
+  // bool has_avx512pf = 102;
+  if (this->has_avx512pf() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(102, this->has_avx512pf(), output);
+  }
+
+  // bool has_avx512er = 103;
+  if (this->has_avx512er() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(103, this->has_avx512er(), output);
+  }
+
+  // bool has_avx512cd = 104;
+  if (this->has_avx512cd() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(104, this->has_avx512cd(), output);
+  }
+
+  // bool has_sha = 105;
+  if (this->has_sha() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(105, this->has_sha(), output);
+  }
+
+  // bool has_avx512bw = 106;
+  if (this->has_avx512bw() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(106, this->has_avx512bw(), output);
+  }
+
+  // bool has_avx512vl = 107;
+  if (this->has_avx512vl() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(107, this->has_avx512vl(), output);
+  }
+
+  // bool has_prefetchwt1 = 108;
+  if (this->has_prefetchwt1() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(108, this->has_prefetchwt1(), output);
+  }
+
+  // bool has_avx512vbmi = 109;
+  if (this->has_avx512vbmi() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(109, this->has_avx512vbmi(), output);
+  }
+
+  // bool has_umip = 110;
+  if (this->has_umip() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(110, this->has_umip(), output);
+  }
+
+  // bool has_pku = 111;
+  if (this->has_pku() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(111, this->has_pku(), output);
+  }
+
+  // bool has_ospke = 112;
+  if (this->has_ospke() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(112, this->has_ospke(), output);
+  }
+
+  // bool has_avx512vbmi2 = 113;
+  if (this->has_avx512vbmi2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(113, this->has_avx512vbmi2(), output);
+  }
+
+  // bool has_gfni = 114;
+  if (this->has_gfni() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(114, this->has_gfni(), output);
+  }
+
+  // bool has_vaes = 115;
+  if (this->has_vaes() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(115, this->has_vaes(), output);
+  }
+
+  // bool has_vpclmulqdq = 116;
+  if (this->has_vpclmulqdq() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(116, this->has_vpclmulqdq(), output);
+  }
+
+  // bool has_avx512vnni = 117;
+  if (this->has_avx512vnni() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(117, this->has_avx512vnni(), output);
+  }
+
+  // bool has_avx512bitalg = 118;
+  if (this->has_avx512bitalg() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(118, this->has_avx512bitalg(), output);
+  }
+
+  // bool has_avx512vpopcntdq = 119;
+  if (this->has_avx512vpopcntdq() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(119, this->has_avx512vpopcntdq(), output);
+  }
+
+  // bool has_rdpid = 120;
+  if (this->has_rdpid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(120, this->has_rdpid(), output);
+  }
+
+  // bool has_sgx_lc = 121;
+  if (this->has_sgx_lc() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(121, this->has_sgx_lc(), output);
+  }
+
+  // bool has_avx512_4vnniw = 122;
+  if (this->has_avx512_4vnniw() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(122, this->has_avx512_4vnniw(), output);
+  }
+
+  // bool has_avx512_4fmaps = 123;
+  if (this->has_avx512_4fmaps() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(123, this->has_avx512_4fmaps(), output);
+  }
+
+  // bool has_ais = 124;
+  if (this->has_ais() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(124, this->has_ais(), output);
+  }
+
+  // bool has_rng = 125;
+  if (this->has_rng() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(125, this->has_rng(), output);
+  }
+
+  // bool has_lh = 126;
+  if (this->has_lh() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(126, this->has_lh(), output);
+  }
+
+  // bool has_femms = 127;
+  if (this->has_femms() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(127, this->has_femms(), output);
+  }
+
+  // bool has_ace = 128;
+  if (this->has_ace() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(128, this->has_ace(), output);
+  }
+
+  // bool has_ace2 = 129;
+  if (this->has_ace2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(129, this->has_ace2(), output);
+  }
+
+  // bool has_phe = 130;
+  if (this->has_phe() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(130, this->has_phe(), output);
+  }
+
+  // bool has_pmm = 131;
+  if (this->has_pmm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(131, this->has_pmm(), output);
+  }
+
+  // bool has_parallax = 132;
+  if (this->has_parallax() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(132, this->has_parallax(), output);
+  }
+
+  // bool has_overstress = 133;
+  if (this->has_overstress() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(133, this->has_overstress(), output);
+  }
+
+  // bool has_tm3 = 134;
+  if (this->has_tm3() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(134, this->has_tm3(), output);
+  }
+
+  // bool has_rng2 = 135;
+  if (this->has_rng2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(135, this->has_rng2(), output);
+  }
+
+  // bool has_phe2 = 136;
+  if (this->has_phe2() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(136, this->has_phe2(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.CentralProcessor.Feature)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.CentralProcessor.Features)
 }
 
-size_t CentralProcessor_Feature::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CentralProcessor.Feature)
+size_t CentralProcessor_Features::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CentralProcessor.Features)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string name = 1;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
+  // bool has_fpu = 1;
+  if (this->has_fpu() != 0) {
+    total_size += 1 + 1;
   }
 
-  // bool supported = 2;
-  if (this->supported() != 0) {
+  // bool has_vme = 2;
+  if (this->has_vme() != 0) {
     total_size += 1 + 1;
+  }
+
+  // bool has_de = 3;
+  if (this->has_de() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_pse = 4;
+  if (this->has_pse() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_tsc = 5;
+  if (this->has_tsc() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_msr = 6;
+  if (this->has_msr() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_pae = 7;
+  if (this->has_pae() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_mce = 8;
+  if (this->has_mce() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_cx8 = 9;
+  if (this->has_cx8() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_apic = 10;
+  if (this->has_apic() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_sep = 11;
+  if (this->has_sep() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_mtrr = 12;
+  if (this->has_mtrr() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_pge = 13;
+  if (this->has_pge() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_mca = 14;
+  if (this->has_mca() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_cmov = 15;
+  if (this->has_cmov() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_pat = 16;
+  if (this->has_pat() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pse36 = 17;
+  if (this->has_pse36() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_psn = 18;
+  if (this->has_psn() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_clfsh = 19;
+  if (this->has_clfsh() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ds = 20;
+  if (this->has_ds() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_acpu = 21;
+  if (this->has_acpu() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_mmx = 22;
+  if (this->has_mmx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_fxsr = 23;
+  if (this->has_fxsr() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse = 24;
+  if (this->has_sse() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse2 = 25;
+  if (this->has_sse2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ss = 26;
+  if (this->has_ss() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_htt = 27;
+  if (this->has_htt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tm = 28;
+  if (this->has_tm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ia64 = 29;
+  if (this->has_ia64() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pbe = 30;
+  if (this->has_pbe() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse3 = 31;
+  if (this->has_sse3() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pclmuldq = 32;
+  if (this->has_pclmuldq() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_dtes64 = 33;
+  if (this->has_dtes64() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_monitor = 34;
+  if (this->has_monitor() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ds_cpl = 35;
+  if (this->has_ds_cpl() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_vmx = 36;
+  if (this->has_vmx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_smx = 37;
+  if (this->has_smx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_est = 38;
+  if (this->has_est() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tm2 = 39;
+  if (this->has_tm2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ssse3 = 40;
+  if (this->has_ssse3() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_cnxt_id = 41;
+  if (this->has_cnxt_id() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sdbg = 42;
+  if (this->has_sdbg() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_fma = 43;
+  if (this->has_fma() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_cx16 = 44;
+  if (this->has_cx16() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_xtpr = 45;
+  if (this->has_xtpr() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pdcm = 46;
+  if (this->has_pdcm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pcid = 47;
+  if (this->has_pcid() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_dca = 48;
+  if (this->has_dca() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse41 = 49;
+  if (this->has_sse41() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse42 = 50;
+  if (this->has_sse42() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_x2apic = 51;
+  if (this->has_x2apic() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_movbe = 52;
+  if (this->has_movbe() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_popcnt = 53;
+  if (this->has_popcnt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tsc_deadline = 54;
+  if (this->has_tsc_deadline() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_aes = 55;
+  if (this->has_aes() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_xsave = 56;
+  if (this->has_xsave() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_osxsave = 57;
+  if (this->has_osxsave() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx = 58;
+  if (this->has_avx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_f16c = 59;
+  if (this->has_f16c() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rdrand = 60;
+  if (this->has_rdrand() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_hypervisor = 61;
+  if (this->has_hypervisor() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_syscall = 62;
+  if (this->has_syscall() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_xd_bit = 63;
+  if (this->has_xd_bit() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_mmxext = 64;
+  if (this->has_mmxext() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_1gb_pages = 65;
+  if (this->has_1gb_pages() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rdtscp = 66;
+  if (this->has_rdtscp() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_intel64 = 67;
+  if (this->has_intel64() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_3dnowext = 68;
+  if (this->has_3dnowext() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_3dnow = 69;
+  if (this->has_3dnow() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lahf = 70;
+  if (this->has_lahf() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_svm = 71;
+  if (this->has_svm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lzcnt = 72;
+  if (this->has_lzcnt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sse4a = 73;
+  if (this->has_sse4a() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_misalignsse = 74;
+  if (this->has_misalignsse() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_3dnow_prefetch = 75;
+  if (this->has_3dnow_prefetch() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_xop = 76;
+  if (this->has_xop() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_wdt = 77;
+  if (this->has_wdt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_fma4 = 78;
+  if (this->has_fma4() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_fsgsbase = 79;
+  if (this->has_fsgsbase() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sgx = 80;
+  if (this->has_sgx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_bmi1 = 81;
+  if (this->has_bmi1() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_hle = 82;
+  if (this->has_hle() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx2 = 83;
+  if (this->has_avx2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_smep = 84;
+  if (this->has_smep() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_bmi2 = 85;
+  if (this->has_bmi2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_erms = 86;
+  if (this->has_erms() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_invpcid = 87;
+  if (this->has_invpcid() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rtm = 88;
+  if (this->has_rtm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pqm = 89;
+  if (this->has_pqm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_mpx = 90;
+  if (this->has_mpx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pqe = 91;
+  if (this->has_pqe() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512f = 92;
+  if (this->has_avx512f() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512dq = 93;
+  if (this->has_avx512dq() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rdseed = 94;
+  if (this->has_rdseed() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_adx = 95;
+  if (this->has_adx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_smap = 96;
+  if (this->has_smap() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512ifma = 97;
+  if (this->has_avx512ifma() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pcommit = 98;
+  if (this->has_pcommit() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_clflushopt = 99;
+  if (this->has_clflushopt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_clwb = 100;
+  if (this->has_clwb() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_intel_pt = 101;
+  if (this->has_intel_pt() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512pf = 102;
+  if (this->has_avx512pf() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512er = 103;
+  if (this->has_avx512er() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512cd = 104;
+  if (this->has_avx512cd() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sha = 105;
+  if (this->has_sha() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512bw = 106;
+  if (this->has_avx512bw() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512vl = 107;
+  if (this->has_avx512vl() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_prefetchwt1 = 108;
+  if (this->has_prefetchwt1() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512vbmi = 109;
+  if (this->has_avx512vbmi() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_umip = 110;
+  if (this->has_umip() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pku = 111;
+  if (this->has_pku() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ospke = 112;
+  if (this->has_ospke() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512vbmi2 = 113;
+  if (this->has_avx512vbmi2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_gfni = 114;
+  if (this->has_gfni() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_vaes = 115;
+  if (this->has_vaes() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_vpclmulqdq = 116;
+  if (this->has_vpclmulqdq() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512vnni = 117;
+  if (this->has_avx512vnni() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512bitalg = 118;
+  if (this->has_avx512bitalg() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512vpopcntdq = 119;
+  if (this->has_avx512vpopcntdq() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rdpid = 120;
+  if (this->has_rdpid() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_sgx_lc = 121;
+  if (this->has_sgx_lc() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512_4vnniw = 122;
+  if (this->has_avx512_4vnniw() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_avx512_4fmaps = 123;
+  if (this->has_avx512_4fmaps() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ais = 124;
+  if (this->has_ais() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rng = 125;
+  if (this->has_rng() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lh = 126;
+  if (this->has_lh() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_femms = 127;
+  if (this->has_femms() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ace = 128;
+  if (this->has_ace() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ace2 = 129;
+  if (this->has_ace2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_phe = 130;
+  if (this->has_phe() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pmm = 131;
+  if (this->has_pmm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_parallax = 132;
+  if (this->has_parallax() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_overstress = 133;
+  if (this->has_overstress() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tm3 = 134;
+  if (this->has_tm3() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rng2 = 135;
+  if (this->has_rng2() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_phe2 = 136;
+  if (this->has_phe2() != 0) {
+    total_size += 2 + 1;
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -12341,58 +15681,595 @@ size_t CentralProcessor_Feature::ByteSizeLong() const {
   return total_size;
 }
 
-void CentralProcessor_Feature::CheckTypeAndMergeFrom(
+void CentralProcessor_Features::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CentralProcessor_Feature*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const CentralProcessor_Features*>(&from));
 }
 
-void CentralProcessor_Feature::MergeFrom(const CentralProcessor_Feature& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CentralProcessor.Feature)
+void CentralProcessor_Features::MergeFrom(const CentralProcessor_Features& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CentralProcessor.Features)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  if (from.has_fpu() != 0) {
+    set_has_fpu(from.has_fpu());
   }
-  if (from.supported() != 0) {
-    set_supported(from.supported());
+  if (from.has_vme() != 0) {
+    set_has_vme(from.has_vme());
+  }
+  if (from.has_de() != 0) {
+    set_has_de(from.has_de());
+  }
+  if (from.has_pse() != 0) {
+    set_has_pse(from.has_pse());
+  }
+  if (from.has_tsc() != 0) {
+    set_has_tsc(from.has_tsc());
+  }
+  if (from.has_msr() != 0) {
+    set_has_msr(from.has_msr());
+  }
+  if (from.has_pae() != 0) {
+    set_has_pae(from.has_pae());
+  }
+  if (from.has_mce() != 0) {
+    set_has_mce(from.has_mce());
+  }
+  if (from.has_cx8() != 0) {
+    set_has_cx8(from.has_cx8());
+  }
+  if (from.has_apic() != 0) {
+    set_has_apic(from.has_apic());
+  }
+  if (from.has_sep() != 0) {
+    set_has_sep(from.has_sep());
+  }
+  if (from.has_mtrr() != 0) {
+    set_has_mtrr(from.has_mtrr());
+  }
+  if (from.has_pge() != 0) {
+    set_has_pge(from.has_pge());
+  }
+  if (from.has_mca() != 0) {
+    set_has_mca(from.has_mca());
+  }
+  if (from.has_cmov() != 0) {
+    set_has_cmov(from.has_cmov());
+  }
+  if (from.has_pat() != 0) {
+    set_has_pat(from.has_pat());
+  }
+  if (from.has_pse36() != 0) {
+    set_has_pse36(from.has_pse36());
+  }
+  if (from.has_psn() != 0) {
+    set_has_psn(from.has_psn());
+  }
+  if (from.has_clfsh() != 0) {
+    set_has_clfsh(from.has_clfsh());
+  }
+  if (from.has_ds() != 0) {
+    set_has_ds(from.has_ds());
+  }
+  if (from.has_acpu() != 0) {
+    set_has_acpu(from.has_acpu());
+  }
+  if (from.has_mmx() != 0) {
+    set_has_mmx(from.has_mmx());
+  }
+  if (from.has_fxsr() != 0) {
+    set_has_fxsr(from.has_fxsr());
+  }
+  if (from.has_sse() != 0) {
+    set_has_sse(from.has_sse());
+  }
+  if (from.has_sse2() != 0) {
+    set_has_sse2(from.has_sse2());
+  }
+  if (from.has_ss() != 0) {
+    set_has_ss(from.has_ss());
+  }
+  if (from.has_htt() != 0) {
+    set_has_htt(from.has_htt());
+  }
+  if (from.has_tm() != 0) {
+    set_has_tm(from.has_tm());
+  }
+  if (from.has_ia64() != 0) {
+    set_has_ia64(from.has_ia64());
+  }
+  if (from.has_pbe() != 0) {
+    set_has_pbe(from.has_pbe());
+  }
+  if (from.has_sse3() != 0) {
+    set_has_sse3(from.has_sse3());
+  }
+  if (from.has_pclmuldq() != 0) {
+    set_has_pclmuldq(from.has_pclmuldq());
+  }
+  if (from.has_dtes64() != 0) {
+    set_has_dtes64(from.has_dtes64());
+  }
+  if (from.has_monitor() != 0) {
+    set_has_monitor(from.has_monitor());
+  }
+  if (from.has_ds_cpl() != 0) {
+    set_has_ds_cpl(from.has_ds_cpl());
+  }
+  if (from.has_vmx() != 0) {
+    set_has_vmx(from.has_vmx());
+  }
+  if (from.has_smx() != 0) {
+    set_has_smx(from.has_smx());
+  }
+  if (from.has_est() != 0) {
+    set_has_est(from.has_est());
+  }
+  if (from.has_tm2() != 0) {
+    set_has_tm2(from.has_tm2());
+  }
+  if (from.has_ssse3() != 0) {
+    set_has_ssse3(from.has_ssse3());
+  }
+  if (from.has_cnxt_id() != 0) {
+    set_has_cnxt_id(from.has_cnxt_id());
+  }
+  if (from.has_sdbg() != 0) {
+    set_has_sdbg(from.has_sdbg());
+  }
+  if (from.has_fma() != 0) {
+    set_has_fma(from.has_fma());
+  }
+  if (from.has_cx16() != 0) {
+    set_has_cx16(from.has_cx16());
+  }
+  if (from.has_xtpr() != 0) {
+    set_has_xtpr(from.has_xtpr());
+  }
+  if (from.has_pdcm() != 0) {
+    set_has_pdcm(from.has_pdcm());
+  }
+  if (from.has_pcid() != 0) {
+    set_has_pcid(from.has_pcid());
+  }
+  if (from.has_dca() != 0) {
+    set_has_dca(from.has_dca());
+  }
+  if (from.has_sse41() != 0) {
+    set_has_sse41(from.has_sse41());
+  }
+  if (from.has_sse42() != 0) {
+    set_has_sse42(from.has_sse42());
+  }
+  if (from.has_x2apic() != 0) {
+    set_has_x2apic(from.has_x2apic());
+  }
+  if (from.has_movbe() != 0) {
+    set_has_movbe(from.has_movbe());
+  }
+  if (from.has_popcnt() != 0) {
+    set_has_popcnt(from.has_popcnt());
+  }
+  if (from.has_tsc_deadline() != 0) {
+    set_has_tsc_deadline(from.has_tsc_deadline());
+  }
+  if (from.has_aes() != 0) {
+    set_has_aes(from.has_aes());
+  }
+  if (from.has_xsave() != 0) {
+    set_has_xsave(from.has_xsave());
+  }
+  if (from.has_osxsave() != 0) {
+    set_has_osxsave(from.has_osxsave());
+  }
+  if (from.has_avx() != 0) {
+    set_has_avx(from.has_avx());
+  }
+  if (from.has_f16c() != 0) {
+    set_has_f16c(from.has_f16c());
+  }
+  if (from.has_rdrand() != 0) {
+    set_has_rdrand(from.has_rdrand());
+  }
+  if (from.has_hypervisor() != 0) {
+    set_has_hypervisor(from.has_hypervisor());
+  }
+  if (from.has_syscall() != 0) {
+    set_has_syscall(from.has_syscall());
+  }
+  if (from.has_xd_bit() != 0) {
+    set_has_xd_bit(from.has_xd_bit());
+  }
+  if (from.has_mmxext() != 0) {
+    set_has_mmxext(from.has_mmxext());
+  }
+  if (from.has_1gb_pages() != 0) {
+    set_has_1gb_pages(from.has_1gb_pages());
+  }
+  if (from.has_rdtscp() != 0) {
+    set_has_rdtscp(from.has_rdtscp());
+  }
+  if (from.has_intel64() != 0) {
+    set_has_intel64(from.has_intel64());
+  }
+  if (from.has_3dnowext() != 0) {
+    set_has_3dnowext(from.has_3dnowext());
+  }
+  if (from.has_3dnow() != 0) {
+    set_has_3dnow(from.has_3dnow());
+  }
+  if (from.has_lahf() != 0) {
+    set_has_lahf(from.has_lahf());
+  }
+  if (from.has_svm() != 0) {
+    set_has_svm(from.has_svm());
+  }
+  if (from.has_lzcnt() != 0) {
+    set_has_lzcnt(from.has_lzcnt());
+  }
+  if (from.has_sse4a() != 0) {
+    set_has_sse4a(from.has_sse4a());
+  }
+  if (from.has_misalignsse() != 0) {
+    set_has_misalignsse(from.has_misalignsse());
+  }
+  if (from.has_3dnow_prefetch() != 0) {
+    set_has_3dnow_prefetch(from.has_3dnow_prefetch());
+  }
+  if (from.has_xop() != 0) {
+    set_has_xop(from.has_xop());
+  }
+  if (from.has_wdt() != 0) {
+    set_has_wdt(from.has_wdt());
+  }
+  if (from.has_fma4() != 0) {
+    set_has_fma4(from.has_fma4());
+  }
+  if (from.has_fsgsbase() != 0) {
+    set_has_fsgsbase(from.has_fsgsbase());
+  }
+  if (from.has_sgx() != 0) {
+    set_has_sgx(from.has_sgx());
+  }
+  if (from.has_bmi1() != 0) {
+    set_has_bmi1(from.has_bmi1());
+  }
+  if (from.has_hle() != 0) {
+    set_has_hle(from.has_hle());
+  }
+  if (from.has_avx2() != 0) {
+    set_has_avx2(from.has_avx2());
+  }
+  if (from.has_smep() != 0) {
+    set_has_smep(from.has_smep());
+  }
+  if (from.has_bmi2() != 0) {
+    set_has_bmi2(from.has_bmi2());
+  }
+  if (from.has_erms() != 0) {
+    set_has_erms(from.has_erms());
+  }
+  if (from.has_invpcid() != 0) {
+    set_has_invpcid(from.has_invpcid());
+  }
+  if (from.has_rtm() != 0) {
+    set_has_rtm(from.has_rtm());
+  }
+  if (from.has_pqm() != 0) {
+    set_has_pqm(from.has_pqm());
+  }
+  if (from.has_mpx() != 0) {
+    set_has_mpx(from.has_mpx());
+  }
+  if (from.has_pqe() != 0) {
+    set_has_pqe(from.has_pqe());
+  }
+  if (from.has_avx512f() != 0) {
+    set_has_avx512f(from.has_avx512f());
+  }
+  if (from.has_avx512dq() != 0) {
+    set_has_avx512dq(from.has_avx512dq());
+  }
+  if (from.has_rdseed() != 0) {
+    set_has_rdseed(from.has_rdseed());
+  }
+  if (from.has_adx() != 0) {
+    set_has_adx(from.has_adx());
+  }
+  if (from.has_smap() != 0) {
+    set_has_smap(from.has_smap());
+  }
+  if (from.has_avx512ifma() != 0) {
+    set_has_avx512ifma(from.has_avx512ifma());
+  }
+  if (from.has_pcommit() != 0) {
+    set_has_pcommit(from.has_pcommit());
+  }
+  if (from.has_clflushopt() != 0) {
+    set_has_clflushopt(from.has_clflushopt());
+  }
+  if (from.has_clwb() != 0) {
+    set_has_clwb(from.has_clwb());
+  }
+  if (from.has_intel_pt() != 0) {
+    set_has_intel_pt(from.has_intel_pt());
+  }
+  if (from.has_avx512pf() != 0) {
+    set_has_avx512pf(from.has_avx512pf());
+  }
+  if (from.has_avx512er() != 0) {
+    set_has_avx512er(from.has_avx512er());
+  }
+  if (from.has_avx512cd() != 0) {
+    set_has_avx512cd(from.has_avx512cd());
+  }
+  if (from.has_sha() != 0) {
+    set_has_sha(from.has_sha());
+  }
+  if (from.has_avx512bw() != 0) {
+    set_has_avx512bw(from.has_avx512bw());
+  }
+  if (from.has_avx512vl() != 0) {
+    set_has_avx512vl(from.has_avx512vl());
+  }
+  if (from.has_prefetchwt1() != 0) {
+    set_has_prefetchwt1(from.has_prefetchwt1());
+  }
+  if (from.has_avx512vbmi() != 0) {
+    set_has_avx512vbmi(from.has_avx512vbmi());
+  }
+  if (from.has_umip() != 0) {
+    set_has_umip(from.has_umip());
+  }
+  if (from.has_pku() != 0) {
+    set_has_pku(from.has_pku());
+  }
+  if (from.has_ospke() != 0) {
+    set_has_ospke(from.has_ospke());
+  }
+  if (from.has_avx512vbmi2() != 0) {
+    set_has_avx512vbmi2(from.has_avx512vbmi2());
+  }
+  if (from.has_gfni() != 0) {
+    set_has_gfni(from.has_gfni());
+  }
+  if (from.has_vaes() != 0) {
+    set_has_vaes(from.has_vaes());
+  }
+  if (from.has_vpclmulqdq() != 0) {
+    set_has_vpclmulqdq(from.has_vpclmulqdq());
+  }
+  if (from.has_avx512vnni() != 0) {
+    set_has_avx512vnni(from.has_avx512vnni());
+  }
+  if (from.has_avx512bitalg() != 0) {
+    set_has_avx512bitalg(from.has_avx512bitalg());
+  }
+  if (from.has_avx512vpopcntdq() != 0) {
+    set_has_avx512vpopcntdq(from.has_avx512vpopcntdq());
+  }
+  if (from.has_rdpid() != 0) {
+    set_has_rdpid(from.has_rdpid());
+  }
+  if (from.has_sgx_lc() != 0) {
+    set_has_sgx_lc(from.has_sgx_lc());
+  }
+  if (from.has_avx512_4vnniw() != 0) {
+    set_has_avx512_4vnniw(from.has_avx512_4vnniw());
+  }
+  if (from.has_avx512_4fmaps() != 0) {
+    set_has_avx512_4fmaps(from.has_avx512_4fmaps());
+  }
+  if (from.has_ais() != 0) {
+    set_has_ais(from.has_ais());
+  }
+  if (from.has_rng() != 0) {
+    set_has_rng(from.has_rng());
+  }
+  if (from.has_lh() != 0) {
+    set_has_lh(from.has_lh());
+  }
+  if (from.has_femms() != 0) {
+    set_has_femms(from.has_femms());
+  }
+  if (from.has_ace() != 0) {
+    set_has_ace(from.has_ace());
+  }
+  if (from.has_ace2() != 0) {
+    set_has_ace2(from.has_ace2());
+  }
+  if (from.has_phe() != 0) {
+    set_has_phe(from.has_phe());
+  }
+  if (from.has_pmm() != 0) {
+    set_has_pmm(from.has_pmm());
+  }
+  if (from.has_parallax() != 0) {
+    set_has_parallax(from.has_parallax());
+  }
+  if (from.has_overstress() != 0) {
+    set_has_overstress(from.has_overstress());
+  }
+  if (from.has_tm3() != 0) {
+    set_has_tm3(from.has_tm3());
+  }
+  if (from.has_rng2() != 0) {
+    set_has_rng2(from.has_rng2());
+  }
+  if (from.has_phe2() != 0) {
+    set_has_phe2(from.has_phe2());
   }
 }
 
-void CentralProcessor_Feature::CopyFrom(const CentralProcessor_Feature& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CentralProcessor.Feature)
+void CentralProcessor_Features::CopyFrom(const CentralProcessor_Features& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CentralProcessor.Features)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CentralProcessor_Feature::IsInitialized() const {
+bool CentralProcessor_Features::IsInitialized() const {
   return true;
 }
 
-void CentralProcessor_Feature::Swap(CentralProcessor_Feature* other) {
+void CentralProcessor_Features::Swap(CentralProcessor_Features* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void CentralProcessor_Feature::InternalSwap(CentralProcessor_Feature* other) {
+void CentralProcessor_Features::InternalSwap(CentralProcessor_Features* other) {
   using std::swap;
-  name_.Swap(&other->name_);
-  swap(supported_, other->supported_);
+  swap(has_fpu_, other->has_fpu_);
+  swap(has_vme_, other->has_vme_);
+  swap(has_de_, other->has_de_);
+  swap(has_pse_, other->has_pse_);
+  swap(has_tsc_, other->has_tsc_);
+  swap(has_msr_, other->has_msr_);
+  swap(has_pae_, other->has_pae_);
+  swap(has_mce_, other->has_mce_);
+  swap(has_cx8_, other->has_cx8_);
+  swap(has_apic_, other->has_apic_);
+  swap(has_sep_, other->has_sep_);
+  swap(has_mtrr_, other->has_mtrr_);
+  swap(has_pge_, other->has_pge_);
+  swap(has_mca_, other->has_mca_);
+  swap(has_cmov_, other->has_cmov_);
+  swap(has_pat_, other->has_pat_);
+  swap(has_pse36_, other->has_pse36_);
+  swap(has_psn_, other->has_psn_);
+  swap(has_clfsh_, other->has_clfsh_);
+  swap(has_ds_, other->has_ds_);
+  swap(has_acpu_, other->has_acpu_);
+  swap(has_mmx_, other->has_mmx_);
+  swap(has_fxsr_, other->has_fxsr_);
+  swap(has_sse_, other->has_sse_);
+  swap(has_sse2_, other->has_sse2_);
+  swap(has_ss_, other->has_ss_);
+  swap(has_htt_, other->has_htt_);
+  swap(has_tm_, other->has_tm_);
+  swap(has_ia64_, other->has_ia64_);
+  swap(has_pbe_, other->has_pbe_);
+  swap(has_sse3_, other->has_sse3_);
+  swap(has_pclmuldq_, other->has_pclmuldq_);
+  swap(has_dtes64_, other->has_dtes64_);
+  swap(has_monitor_, other->has_monitor_);
+  swap(has_ds_cpl_, other->has_ds_cpl_);
+  swap(has_vmx_, other->has_vmx_);
+  swap(has_smx_, other->has_smx_);
+  swap(has_est_, other->has_est_);
+  swap(has_tm2_, other->has_tm2_);
+  swap(has_ssse3_, other->has_ssse3_);
+  swap(has_cnxt_id_, other->has_cnxt_id_);
+  swap(has_sdbg_, other->has_sdbg_);
+  swap(has_fma_, other->has_fma_);
+  swap(has_cx16_, other->has_cx16_);
+  swap(has_xtpr_, other->has_xtpr_);
+  swap(has_pdcm_, other->has_pdcm_);
+  swap(has_pcid_, other->has_pcid_);
+  swap(has_dca_, other->has_dca_);
+  swap(has_sse41_, other->has_sse41_);
+  swap(has_sse42_, other->has_sse42_);
+  swap(has_x2apic_, other->has_x2apic_);
+  swap(has_movbe_, other->has_movbe_);
+  swap(has_popcnt_, other->has_popcnt_);
+  swap(has_tsc_deadline_, other->has_tsc_deadline_);
+  swap(has_aes_, other->has_aes_);
+  swap(has_xsave_, other->has_xsave_);
+  swap(has_osxsave_, other->has_osxsave_);
+  swap(has_avx_, other->has_avx_);
+  swap(has_f16c_, other->has_f16c_);
+  swap(has_rdrand_, other->has_rdrand_);
+  swap(has_hypervisor_, other->has_hypervisor_);
+  swap(has_syscall_, other->has_syscall_);
+  swap(has_xd_bit_, other->has_xd_bit_);
+  swap(has_mmxext_, other->has_mmxext_);
+  swap(has_1gb_pages_, other->has_1gb_pages_);
+  swap(has_rdtscp_, other->has_rdtscp_);
+  swap(has_intel64_, other->has_intel64_);
+  swap(has_3dnowext_, other->has_3dnowext_);
+  swap(has_3dnow_, other->has_3dnow_);
+  swap(has_lahf_, other->has_lahf_);
+  swap(has_svm_, other->has_svm_);
+  swap(has_lzcnt_, other->has_lzcnt_);
+  swap(has_sse4a_, other->has_sse4a_);
+  swap(has_misalignsse_, other->has_misalignsse_);
+  swap(has_3dnow_prefetch_, other->has_3dnow_prefetch_);
+  swap(has_xop_, other->has_xop_);
+  swap(has_wdt_, other->has_wdt_);
+  swap(has_fma4_, other->has_fma4_);
+  swap(has_fsgsbase_, other->has_fsgsbase_);
+  swap(has_sgx_, other->has_sgx_);
+  swap(has_bmi1_, other->has_bmi1_);
+  swap(has_hle_, other->has_hle_);
+  swap(has_avx2_, other->has_avx2_);
+  swap(has_smep_, other->has_smep_);
+  swap(has_bmi2_, other->has_bmi2_);
+  swap(has_erms_, other->has_erms_);
+  swap(has_invpcid_, other->has_invpcid_);
+  swap(has_rtm_, other->has_rtm_);
+  swap(has_pqm_, other->has_pqm_);
+  swap(has_mpx_, other->has_mpx_);
+  swap(has_pqe_, other->has_pqe_);
+  swap(has_avx512f_, other->has_avx512f_);
+  swap(has_avx512dq_, other->has_avx512dq_);
+  swap(has_rdseed_, other->has_rdseed_);
+  swap(has_adx_, other->has_adx_);
+  swap(has_smap_, other->has_smap_);
+  swap(has_avx512ifma_, other->has_avx512ifma_);
+  swap(has_pcommit_, other->has_pcommit_);
+  swap(has_clflushopt_, other->has_clflushopt_);
+  swap(has_clwb_, other->has_clwb_);
+  swap(has_intel_pt_, other->has_intel_pt_);
+  swap(has_avx512pf_, other->has_avx512pf_);
+  swap(has_avx512er_, other->has_avx512er_);
+  swap(has_avx512cd_, other->has_avx512cd_);
+  swap(has_sha_, other->has_sha_);
+  swap(has_avx512bw_, other->has_avx512bw_);
+  swap(has_avx512vl_, other->has_avx512vl_);
+  swap(has_prefetchwt1_, other->has_prefetchwt1_);
+  swap(has_avx512vbmi_, other->has_avx512vbmi_);
+  swap(has_umip_, other->has_umip_);
+  swap(has_pku_, other->has_pku_);
+  swap(has_ospke_, other->has_ospke_);
+  swap(has_avx512vbmi2_, other->has_avx512vbmi2_);
+  swap(has_gfni_, other->has_gfni_);
+  swap(has_vaes_, other->has_vaes_);
+  swap(has_vpclmulqdq_, other->has_vpclmulqdq_);
+  swap(has_avx512vnni_, other->has_avx512vnni_);
+  swap(has_avx512bitalg_, other->has_avx512bitalg_);
+  swap(has_avx512vpopcntdq_, other->has_avx512vpopcntdq_);
+  swap(has_rdpid_, other->has_rdpid_);
+  swap(has_sgx_lc_, other->has_sgx_lc_);
+  swap(has_avx512_4vnniw_, other->has_avx512_4vnniw_);
+  swap(has_avx512_4fmaps_, other->has_avx512_4fmaps_);
+  swap(has_ais_, other->has_ais_);
+  swap(has_rng_, other->has_rng_);
+  swap(has_lh_, other->has_lh_);
+  swap(has_femms_, other->has_femms_);
+  swap(has_ace_, other->has_ace_);
+  swap(has_ace2_, other->has_ace2_);
+  swap(has_phe_, other->has_phe_);
+  swap(has_pmm_, other->has_pmm_);
+  swap(has_parallax_, other->has_parallax_);
+  swap(has_overstress_, other->has_overstress_);
+  swap(has_tm3_, other->has_tm3_);
+  swap(has_rng2_, other->has_rng2_);
+  swap(has_phe2_, other->has_phe2_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string CentralProcessor_Feature::GetTypeName() const {
-  return "aspia.proto.CentralProcessor.Feature";
+::std::string CentralProcessor_Features::GetTypeName() const {
+  return "aspia.proto.CentralProcessor.Features";
 }
 
 
 // ===================================================================
 
 void CentralProcessor::InitAsDefaultInstance() {
+  ::aspia::proto::_CentralProcessor_default_instance_._instance.get_mutable()->features_ = const_cast< ::aspia::proto::CentralProcessor_Features*>(
+      ::aspia::proto::CentralProcessor_Features::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int CentralProcessor::kBrandStringFieldNumber;
@@ -12406,7 +16283,7 @@ const int CentralProcessor::kBrandIdFieldNumber;
 const int CentralProcessor::kPackagesFieldNumber;
 const int CentralProcessor::kPhysicalCoresFieldNumber;
 const int CentralProcessor::kLogicalCoresFieldNumber;
-const int CentralProcessor::kFeatureFieldNumber;
+const int CentralProcessor::kFeaturesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CentralProcessor::CentralProcessor()
@@ -12420,7 +16297,6 @@ CentralProcessor::CentralProcessor()
 CentralProcessor::CentralProcessor(const CentralProcessor& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      feature_(from.feature_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   brand_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -12431,6 +16307,11 @@ CentralProcessor::CentralProcessor(const CentralProcessor& from)
   if (from.vendor().size() > 0) {
     vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
   }
+  if (from.has_features()) {
+    features_ = new ::aspia::proto::CentralProcessor_Features(*from.features_);
+  } else {
+    features_ = NULL;
+  }
   ::memcpy(&stepping_, &from.stepping_,
     static_cast<size_t>(reinterpret_cast<char*>(&logical_cores_) -
     reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
@@ -12440,9 +16321,9 @@ CentralProcessor::CentralProcessor(const CentralProcessor& from)
 void CentralProcessor::SharedCtor() {
   brand_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&stepping_, 0, static_cast<size_t>(
+  ::memset(&features_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&logical_cores_) -
-      reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
+      reinterpret_cast<char*>(&features_)) + sizeof(logical_cores_));
   _cached_size_ = 0;
 }
 
@@ -12454,6 +16335,7 @@ CentralProcessor::~CentralProcessor() {
 void CentralProcessor::SharedDtor() {
   brand_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   vendor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete features_;
 }
 
 void CentralProcessor::SetCachedSize(int size) const {
@@ -12480,9 +16362,12 @@ void CentralProcessor::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  feature_.Clear();
   brand_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && features_ != NULL) {
+    delete features_;
+  }
+  features_ = NULL;
   ::memset(&stepping_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&logical_cores_) -
       reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
@@ -12663,11 +16548,12 @@ bool CentralProcessor::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
+      // .aspia.proto.CentralProcessor.Features features = 12;
       case 12: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_feature()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_features()));
         } else {
           goto handle_unusual;
         }
@@ -12765,11 +16651,10 @@ void CentralProcessor::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(11, this->logical_cores(), output);
   }
 
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->feature_size()); i < n; i++) {
+  // .aspia.proto.CentralProcessor.Features features = 12;
+  if (this->has_features()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      12, this->feature(static_cast<int>(i)), output);
+      12, *this->features_, output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -12783,17 +16668,6 @@ size_t CentralProcessor::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
-  {
-    unsigned int count = static_cast<unsigned int>(this->feature_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->feature(static_cast<int>(i)));
-    }
-  }
-
   // string brand_string = 1;
   if (this->brand_string().size() > 0) {
     total_size += 1 +
@@ -12806,6 +16680,13 @@ size_t CentralProcessor::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->vendor());
+  }
+
+  // .aspia.proto.CentralProcessor.Features features = 12;
+  if (this->has_features()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->features_);
   }
 
   // uint32 stepping = 3;
@@ -12890,7 +16771,6 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  feature_.MergeFrom(from.feature_);
   if (from.brand_string().size() > 0) {
 
     brand_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.brand_string_);
@@ -12898,6 +16778,9 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
   if (from.vendor().size() > 0) {
 
     vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
+  }
+  if (from.has_features()) {
+    mutable_features()->::aspia::proto::CentralProcessor_Features::MergeFrom(from.features());
   }
   if (from.stepping() != 0) {
     set_stepping(from.stepping());
@@ -12945,9 +16828,9 @@ void CentralProcessor::Swap(CentralProcessor* other) {
 }
 void CentralProcessor::InternalSwap(CentralProcessor* other) {
   using std::swap;
-  feature_.InternalSwap(&other->feature_);
   brand_string_.Swap(&other->brand_string_);
   vendor_.Swap(&other->vendor_);
+  swap(features_, other->features_);
   swap(stepping_, other->stepping_);
   swap(model_, other->model_);
   swap(family_, other->family_);

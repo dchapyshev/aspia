@@ -3352,14 +3352,161 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
     table.AddParam("Physical Cores", Value::Number(message.physical_cores()));
     table.AddParam("Logical Cores", Value::Number(message.logical_cores()));
 
-    if (message.feature_size())
+    if (message.has_features())
     {
+        std::vector<std::pair<std::string, bool>> list;
+
+        auto add = [&](bool is_supported, const char* name)
+        {
+            list.emplace_back(name, is_supported);
+        };
+
+        const proto::CentralProcessor::Features& features = message.features();
+
+        add(features.has_fpu(), "Floating-point Unit On-Chip (FPU)");
+        add(features.has_vme(), "Virtual Mode Extension (VME)");
+        add(features.has_de(), "Debug Extension (DE)");
+        add(features.has_pse(), "Page Size Extension (PSE)");
+        add(features.has_tsc(), "Time Stamp Extension (TSC)");
+        add(features.has_msr(), "Model Specific Registers (MSR)");
+        add(features.has_pae(), "Physical Address Extension (PAE)");
+        add(features.has_mce(), "Machine-Check Exception (MCE)");
+        add(features.has_cx8(), "CMPXCHG8 Instruction (CX8)");
+        add(features.has_apic(), "On-cpip APIC Hardware (APIC)");
+        add(features.has_sep(), "Fast System Call (SEP)");
+        add(features.has_mtrr(), "Memory Type Range Registers (MTRR)");
+        add(features.has_pge(), "Page Global Enable (PGE)");
+        add(features.has_mca(), "Machine-Check Architecture (MCA)");
+        add(features.has_cmov(), "Conditional Move Instruction (CMOV)");
+        add(features.has_pat(), "Page Attribute Table (PAT)");
+        add(features.has_pse36(), "36-bit Page Size Extension (PSE36)");
+        add(features.has_psn(), "Processor Serial Number (PSN)");
+        add(features.has_clfsh(), "CLFLUSH Instruction");
+        add(features.has_ds(), "Debug Store (DS)");
+        add(features.has_acpu(), "Thermal Monitor and Software Controlled Clock Facilities (ACPU)");
+        add(features.has_mmx(), "MMX Technology (MMX)");
+        add(features.has_fxsr(), "FXSAVE and FXSTOR Instructions (FXSR)");
+        add(features.has_sse(), "Streaming SIMD Extension (SSE)");
+        add(features.has_sse2(), "Streaming SIMD Extension 2 (SSE2)");
+        add(features.has_ss(), "Self-Snoop (SS)");
+        add(features.has_htt(), "Multi-Threading (HTT)");
+        add(features.has_tm(), "Thermal Monitor (TM)");
+        add(features.has_ia64(), "IA64 Processor Emulating x86");
+        add(features.has_pbe(), "Pending Break Enable (PBE)");
+        add(features.has_sse3(), "Streaming SIMD Extension 3 (SSE3)");
+        add(features.has_pclmuldq(), "PCLMULDQ Instruction");
+        add(features.has_dtes64(), "64-Bit Debug Store (DTES64)");
+        add(features.has_monitor(), "MONITOR/MWAIT Instructions");
+        add(features.has_ds_cpl(), "CPL Qualified Debug Store");
+        add(features.has_vmx(), "Virtual Machine Extensions (VMX, Vanderpool)");
+        add(features.has_smx(), "Safe Mode Extensions (SMX)");
+        add(features.has_est(), "Enhanced SpeedStep Technology (EIST, ESS)");
+        add(features.has_tm2(), "Thermal Monitor 2 (TM2)");
+        add(features.has_ssse3(), "Supplemental Streaming SIMD Extension 3 (SSSE3)");
+        add(features.has_cnxt_id(), "L1 Context ID");
+        add(features.has_sdbg(), "Silicon Debug Interface");
+        add(features.has_fma(), "Fused Multiply Add (FMA)");
+        add(features.has_cx16(), "CMPXCHG16B Instruction");
+        add(features.has_xtpr(), "xTPR Update Control");
+        add(features.has_pdcm(), "Perfmon and Debug Capability");
+        add(features.has_pcid(), "Process Context Identifiers");
+        add(features.has_dca(), "Direct Cache Access (DCA)");
+        add(features.has_sse41(), "Streaming SIMD Extension 4.1 (SSE4.1)");
+        add(features.has_sse42(), "Streaming SIMD Extension 4.2 (SSE4.2)");
+        add(features.has_x2apic(), "Extended xAPIC Support");
+        add(features.has_movbe(), "MOVBE Instruction");
+        add(features.has_popcnt(), "POPCNT Instruction");
+        add(features.has_tsc_deadline(), "Time Stamp Counter Deadline");
+        add(features.has_aes(), "AES Instruction (AES)");
+        add(features.has_xsave(), "XSAVE/XSTOR States");
+        add(features.has_osxsave(), "OS-Enabled Extended State Management");
+        add(features.has_avx(), "Advanced Vector Extension (AVX)");
+        add(features.has_f16c(), "Float-16-bit Convertsion Instructions (F16C)");
+        add(features.has_rdrand(), "RDRAND Instruction");
+        add(features.has_hypervisor(), "Hypervisor");
+        add(features.has_syscall(), "SYSCALL / SYSRET Instructions");
+        add(features.has_xd_bit(), "Execution Disable Bit");
+        add(features.has_mmxext(), "AMD Extended MMX");
+        add(features.has_1gb_pages(), "1 GB Page Size");
+        add(features.has_rdtscp(), "RDTSCP Instruction");
+        add(features.has_intel64(), "64-bit x86 Extension (AMD64, Intel64)");
+        add(features.has_3dnowext(), "AMD Extended 3DNow!");
+        add(features.has_3dnow(), "AMD 3DNow!");
+        add(features.has_lahf(), "LAHF/SAHF Instructions");
+        add(features.has_svm(), "Secure Virtual Machine (SVM, Pacifica)");
+        add(features.has_lzcnt(), "LZCNT Instruction");
+        add(features.has_sse4a(), "AMD SSE4A");
+        add(features.has_misalignsse(), "AMD MisAligned SSE");
+        add(features.has_3dnow_prefetch(), "AMD 3DNowPrefetch");
+        add(features.has_xop(), "AMD XOP");
+        add(features.has_wdt(), "Watchdog Timer");
+        add(features.has_fma4(), "AMD FMA4");
+        add(features.has_fsgsbase(), "RDFSBASE / RDGSBASE / WRFSBASE / WRGSBASE Instruction");
+        add(features.has_sgx(), "Software Guard Extensions (SGE)");
+        add(features.has_bmi1(), "Bit Manipulation Instruction Set 1 (BMI1)");
+        add(features.has_hle(), "Transactional Synchronization Extensions");
+        add(features.has_avx2(), "Advanced Vector Extensions 2 (AVX2)");
+        add(features.has_smep(), "Supervisor-Mode Execution Prevention");
+        add(features.has_bmi2(), "Bit Manipulation Instruction Set 2 (BMI2)");
+        add(features.has_erms(), "Enhanced REP MOVSB/STOSB");
+        add(features.has_invpcid(), "INVPCID Instruction");
+        add(features.has_rtm(), "Transactional Synchronization Extensions (RTM)");
+        add(features.has_pqm(), "Platform Quality of Service Monitoring (PQM)");
+        add(features.has_mpx(), "Memory Protection Extensions (MPX)");
+        add(features.has_pqe(), "Platform Quality of Service Enforcement (PQE)");
+        add(features.has_avx512f(), "AVX-512 Foundation (AVX512F)");
+        add(features.has_avx512dq(), "AVX-512 Doubleword and Quadword Instructions (AVX512DQ)");
+        add(features.has_rdseed(), "RDSEED Instruction");
+        add(features.has_adx(), "Multi-Precision Add-Carry Instruction Extensions (ADX)");
+        add(features.has_smap(), "Supervisor Mode Access Prevention (SMAP)");
+        add(features.has_avx512ifma(), "AVX-512 Integer Fused Multiply-Add Instructions");
+        add(features.has_pcommit(), "PCOMMIT Instruction");
+        add(features.has_clflushopt(), "CLFLUSHOPT Instruction");
+        add(features.has_clwb(), "CLWB Instruction");
+        add(features.has_intel_pt(), "Intel Processor Trace");
+        add(features.has_avx512pf(), "AVX-512 Prefetch Instructions (AVX512PF)");
+        add(features.has_avx512er(), "AVX-512 Exponential and Reciprocal Instructions (AVX512ER)");
+        add(features.has_avx512cd(), "AVX-512 Conflict Detection Instructions (AVX512CD)");
+        add(features.has_sha(), "Intel SHA Extensions (SHA)");
+        add(features.has_avx512bw(), "AVX-512 Byte and Word Instructions (AVX512BW)");
+        add(features.has_avx512vl(), "AVX-512 Vector Length Extensions (AVX512VL)");
+        add(features.has_prefetchwt1(), "PREFETCHWT1 Instruction");
+        add(features.has_avx512vbmi(), "AVX-512 Vector Bit Manipulation Instructions (AVX512VBMI)");
+        add(features.has_umip(), "User-mode Instruction Prevention (UMIP)");
+        add(features.has_pku(), "Memory Protection Keys for User-mode pages (PKU)");
+        add(features.has_ospke(), "PKU enabled by OS (OSPKE)");
+        add(features.has_avx512vbmi2(), "AVX-512 Vector Bit Manipulation Instructions 2 (AVX512VBMI2)");
+        add(features.has_gfni(), "Galois Field Instructions (GFNI)");
+        add(features.has_vaes(), "AES Instruction Set (VEX-256/EVEX)");
+        add(features.has_vpclmulqdq(), "CLMUL Instruction Set (VEX-256/EVEX)");
+        add(features.has_avx512vnni(), "AVX-512 Vector Neural Network Instructions (AVX512VNNI)");
+        add(features.has_avx512bitalg(), "AVX-512 BITALG Instructions (AVX512BITALG)");
+        add(features.has_avx512vpopcntdq(), "AVX-512 Vector Population Count D/Q (AVX512VPOPCNTDQ)");
+        add(features.has_rdpid(), "Read Processor ID (RDPID)");
+        add(features.has_sgx_lc(), "SGX Launch Configuration");
+        add(features.has_avx512_4vnniw(), "AVX-512 4-register Neural Network Instructions (AVX5124VNNIW)");
+        add(features.has_avx512_4fmaps(), "AVX-512 4-register Multiply Accumulation Single precision (AVX5124FMAPS)");
+        add(features.has_ais(), "VIA Alternate Instruction Set");
+        add(features.has_rng(), "Hardware Random Number Generator (RNG)");
+        add(features.has_lh(), "LongHaul MSR 0000_110Ah");
+        add(features.has_femms(), "VIA FEMMS Instruction");
+        add(features.has_ace(), "Advanced Cryptography Engine (ACE)");
+        add(features.has_ace2(), "Advanced Cryptography Engine 2 (ACE2)");
+        add(features.has_phe(), "PadLock Hash Engine (PHE)");
+        add(features.has_pmm(), "PadLock Montgomery Multiplier (PMM)");
+        add(features.has_parallax(), "Parallax");
+        add(features.has_overstress(), "Overstress");
+        add(features.has_tm3(), "Thermal Monitor 3 (TM3)");
+        add(features.has_rng2(), "Hardware Random Number Generator 2 (RNG2)");
+        add(features.has_phe2(), "PadLock Hash Engine 2 (PHE2)");
+
+        std::sort(list.begin(), list.end());
+
         Group group = table.AddGroup("Features");
 
-        for (int i = 0; i < message.feature_size(); ++i)
+        for (const auto& list_item : list)
         {
-            const proto::CentralProcessor::Feature& feature = message.feature(i);
-            group.AddParam(feature.name(), Value::Bool(feature.supported()));
+            group.AddParam(list_item.first, Value::Bool(list_item.second));
         }
     }
 }
@@ -3383,173 +3530,159 @@ std::string CategoryCPU::Serialize()
     message.set_physical_cores(cpu.physical_core_count);
     message.set_logical_cores(cpu.logical_core_count);
 
-    std::vector<std::pair<std::string, bool>> features;
-
-    auto add = [&](uint8_t flag, const char* name)
-    {
-        features.emplace_back(name, flag ? true : false);
-    };
+    proto::CentralProcessor::Features* features = message.mutable_features();
 
     // Function 1 EDX
-    add(cpu.fn_1_edx.has_fpu, "Floating-point Unit On-Chip (FPU)");
-    add(cpu.fn_1_edx.has_vme, "Virtual Mode Extension (VME)");
-    add(cpu.fn_1_edx.has_de, "Debug Extension (DE)");
-    add(cpu.fn_1_edx.has_pse, "Page Size Extension (PSE)");
-    add(cpu.fn_1_edx.has_tsc, "Time Stamp Extension (TSC)");
-    add(cpu.fn_1_edx.has_msr, "Model Specific Registers (MSR)");
-    add(cpu.fn_1_edx.has_pae, "Physical Address Extension (PAE)");
-    add(cpu.fn_1_edx.has_mce, "Machine-Check Exception (MCE)");
-    add(cpu.fn_1_edx.has_cx8, "CMPXCHG8 Instruction (CX8)");
-    add(cpu.fn_1_edx.has_apic, "On-cpip APIC Hardware (APIC)");
-    add(cpu.fn_1_edx.has_sep, "Fast System Call (SEP)");
-    add(cpu.fn_1_edx.has_mtrr, "Memory Type Range Registers (MTRR)");
-    add(cpu.fn_1_edx.has_pge, "Page Global Enable (PGE)");
-    add(cpu.fn_1_edx.has_mca, "Machine-Check Architecture (MCA)");
-    add(cpu.fn_1_edx.has_cmov, "Conditional Move Instruction (CMOV)");
-    add(cpu.fn_1_edx.has_pat, "Page Attribute Table (PAT)");
-    add(cpu.fn_1_edx.has_pse36, "36-bit Page Size Extension (PSE36)");
-    add(cpu.fn_1_edx.has_psn, "Processor Serial Number (PSN)");
-    add(cpu.fn_1_edx.has_clfsh, "CLFLUSH Instruction");
-    add(cpu.fn_1_edx.has_ds, "Debug Store (DS)");
-    add(cpu.fn_1_edx.has_acpu, "Thermal Monitor and Software Controlled Clock Facilities (ACPU)");
-    add(cpu.fn_1_edx.has_mmx, "MMX Technology (MMX)");
-    add(cpu.fn_1_edx.has_fxsr, "FXSAVE and FXSTOR Instructions (FXSR)");
-    add(cpu.fn_1_edx.has_sse, "Streaming SIMD Extension (SSE)");
-    add(cpu.fn_1_edx.has_sse2, "Streaming SIMD Extension 2 (SSE2)");
-    add(cpu.fn_1_edx.has_ss, "Self-Snoop (SS)");
-    add(cpu.fn_1_edx.has_htt, "Multi-Threading (HTT)");
-    add(cpu.fn_1_edx.has_tm, "Thermal Monitor (TM)");
-    add(cpu.fn_1_edx.has_ia64, "IA64 Processor Emulating x86");
-    add(cpu.fn_1_edx.has_pbe, "Pending Break Enable (PBE)");
+    features->set_has_fpu(cpu.fn_1_edx.has_fpu);
+    features->set_has_vme(cpu.fn_1_edx.has_vme);
+    features->set_has_de(cpu.fn_1_edx.has_de);
+    features->set_has_pse(cpu.fn_1_edx.has_pse);
+    features->set_has_tsc(cpu.fn_1_edx.has_tsc);
+    features->set_has_msr(cpu.fn_1_edx.has_msr);
+    features->set_has_pae(cpu.fn_1_edx.has_pae);
+    features->set_has_mce(cpu.fn_1_edx.has_mce);
+    features->set_has_cx8(cpu.fn_1_edx.has_cx8);
+    features->set_has_apic(cpu.fn_1_edx.has_apic);
+    features->set_has_sep(cpu.fn_1_edx.has_sep);
+    features->set_has_mtrr(cpu.fn_1_edx.has_mtrr);
+    features->set_has_pge(cpu.fn_1_edx.has_pge);
+    features->set_has_mca(cpu.fn_1_edx.has_mca);
+    features->set_has_cmov(cpu.fn_1_edx.has_cmov);
+    features->set_has_pat(cpu.fn_1_edx.has_pat);
+    features->set_has_pse36(cpu.fn_1_edx.has_pse36);
+    features->set_has_psn(cpu.fn_1_edx.has_psn);
+    features->set_has_clfsh(cpu.fn_1_edx.has_clfsh);
+    features->set_has_ds(cpu.fn_1_edx.has_ds);
+    features->set_has_acpu(cpu.fn_1_edx.has_acpu);
+    features->set_has_mmx(cpu.fn_1_edx.has_mmx);
+    features->set_has_fxsr(cpu.fn_1_edx.has_fxsr);
+    features->set_has_sse(cpu.fn_1_edx.has_sse);
+    features->set_has_sse2(cpu.fn_1_edx.has_sse2);
+    features->set_has_ss(cpu.fn_1_edx.has_ss);
+    features->set_has_htt(cpu.fn_1_edx.has_htt);
+    features->set_has_tm(cpu.fn_1_edx.has_tm);
+    features->set_has_ia64(cpu.fn_1_edx.has_ia64);
+    features->set_has_pbe(cpu.fn_1_edx.has_pbe);
 
     // Function 1 ECX
-    add(cpu.fn_1_ecx.has_sse3, "Streaming SIMD Extension 3 (SSE3)");
-    add(cpu.fn_1_ecx.has_pclmuldq, "PCLMULDQ Instruction");
-    add(cpu.fn_1_ecx.has_dtes64, "64-Bit Debug Store (DTES64)");
-    add(cpu.fn_1_ecx.has_monitor, "MONITOR/MWAIT Instructions");
-    add(cpu.fn_1_ecx.has_ds_cpl, "CPL Qualified Debug Store");
-    add(cpu.fn_1_ecx.has_vmx, "Virtual Machine Extensions (VMX, Vanderpool)");
-    add(cpu.fn_1_ecx.has_smx, "Safe Mode Extensions (SMX)");
-    add(cpu.fn_1_ecx.has_est, "Enhanced SpeedStep Technology (EIST, ESS)");
-    add(cpu.fn_1_ecx.has_tm2, "Thermal Monitor 2 (TM2)");
-    add(cpu.fn_1_ecx.has_ssse3, "Supplemental Streaming SIMD Extension 3 (SSSE3)");
-    add(cpu.fn_1_ecx.has_cnxt_id, "L1 Context ID");
-    add(cpu.fn_1_ecx.has_sdbg, "Silicon Debug Interface");
-    add(cpu.fn_1_ecx.has_fma, "Fused Multiply Add (FMA)");
-    add(cpu.fn_1_ecx.has_cx16, "CMPXCHG16B Instruction");
-    add(cpu.fn_1_ecx.has_xtpr, "xTPR Update Control");
-    add(cpu.fn_1_ecx.has_pdcm, "Perfmon and Debug Capability");
-    add(cpu.fn_1_ecx.has_pcid, "Process Context Identifiers");
-    add(cpu.fn_1_ecx.has_dca, "Direct Cache Access (DCA)");
-    add(cpu.fn_1_ecx.has_sse41, "Streaming SIMD Extension 4.1 (SSE4.1)");
-    add(cpu.fn_1_ecx.has_sse42, "Streaming SIMD Extension 4.2 (SSE4.2)");
-    add(cpu.fn_1_ecx.has_x2apic, "Extended xAPIC Support");
-    add(cpu.fn_1_ecx.has_movbe, "MOVBE Instruction");
-    add(cpu.fn_1_ecx.has_popcnt, "POPCNT Instruction");
-    add(cpu.fn_1_ecx.has_tsc_deadline, "Time Stamp Counter Deadline");
-    add(cpu.fn_1_ecx.has_aes, "AES Instruction (AES)");
-    add(cpu.fn_1_ecx.has_xsave, "XSAVE/XSTOR States");
-    add(cpu.fn_1_ecx.has_osxsave, "OS-Enabled Extended State Management");
-    add(cpu.fn_1_ecx.has_avx, "Advanced Vector Extension (AVX)");
-    add(cpu.fn_1_ecx.has_f16c, "Float-16-bit Convertsion Instructions (F16C)");
-    add(cpu.fn_1_ecx.has_rdrand, "RDRAND Instruction");
-    add(cpu.fn_1_ecx.has_hypervisor, "Hypervisor");
+    features->set_has_sse3(cpu.fn_1_ecx.has_sse3);
+    features->set_has_pclmuldq(cpu.fn_1_ecx.has_pclmuldq);
+    features->set_has_dtes64(cpu.fn_1_ecx.has_dtes64);
+    features->set_has_monitor(cpu.fn_1_ecx.has_monitor);
+    features->set_has_ds_cpl(cpu.fn_1_ecx.has_ds_cpl);
+    features->set_has_vmx(cpu.fn_1_ecx.has_vmx);
+    features->set_has_smx(cpu.fn_1_ecx.has_smx);
+    features->set_has_est(cpu.fn_1_ecx.has_est);
+    features->set_has_tm2(cpu.fn_1_ecx.has_tm2);
+    features->set_has_ssse3(cpu.fn_1_ecx.has_ssse3);
+    features->set_has_cnxt_id(cpu.fn_1_ecx.has_cnxt_id);
+    features->set_has_sdbg(cpu.fn_1_ecx.has_sdbg);
+    features->set_has_fma(cpu.fn_1_ecx.has_fma);
+    features->set_has_cx16(cpu.fn_1_ecx.has_cx16);
+    features->set_has_xtpr(cpu.fn_1_ecx.has_xtpr);
+    features->set_has_pdcm(cpu.fn_1_ecx.has_pdcm);
+    features->set_has_pcid(cpu.fn_1_ecx.has_pcid);
+    features->set_has_dca(cpu.fn_1_ecx.has_dca);
+    features->set_has_sse41(cpu.fn_1_ecx.has_sse41);
+    features->set_has_sse42(cpu.fn_1_ecx.has_sse42);
+    features->set_has_x2apic(cpu.fn_1_ecx.has_x2apic);
+    features->set_has_movbe(cpu.fn_1_ecx.has_movbe);
+    features->set_has_popcnt(cpu.fn_1_ecx.has_popcnt);
+    features->set_has_tsc_deadline(cpu.fn_1_ecx.has_tsc_deadline);
+    features->set_has_aes(cpu.fn_1_ecx.has_aes);
+    features->set_has_xsave(cpu.fn_1_ecx.has_xsave);
+    features->set_has_osxsave(cpu.fn_1_ecx.has_osxsave);
+    features->set_has_avx(cpu.fn_1_ecx.has_avx);
+    features->set_has_f16c(cpu.fn_1_ecx.has_f16c);
+    features->set_has_rdrand(cpu.fn_1_ecx.has_rdrand);
+    features->set_has_hypervisor(cpu.fn_1_ecx.has_hypervisor);
 
     // Function 0x80000001 EDX
-    add(cpu.fn_81_edx.has_syscall, "SYSCALL / SYSRET Instructions");
-    add(cpu.fn_81_edx.has_xd_bit, "Execution Disable Bit");
-    add(cpu.fn_81_edx.has_mmxext, "AMD Extended MMX");
-    add(cpu.fn_81_edx.has_1gb_pages, "1 GB Page Size");
-    add(cpu.fn_81_edx.has_rdtscp, "RDTSCP Instruction");
-    add(cpu.fn_81_edx.has_intel64, "64-bit x86 Extension (AMD64, Intel64)");
-    add(cpu.fn_81_edx.has_3dnowext, "AMD Extended 3DNow!");
-    add(cpu.fn_81_edx.has_3dnow, "AMD 3DNow!");
+    features->set_has_syscall(cpu.fn_81_edx.has_syscall);
+    features->set_has_xd_bit(cpu.fn_81_edx.has_xd_bit);
+    features->set_has_mmxext(cpu.fn_81_edx.has_mmxext);
+    features->set_has_1gb_pages(cpu.fn_81_edx.has_1gb_pages);
+    features->set_has_rdtscp(cpu.fn_81_edx.has_rdtscp);
+    features->set_has_intel64(cpu.fn_81_edx.has_intel64);
+    features->set_has_3dnowext(cpu.fn_81_edx.has_3dnowext);
+    features->set_has_3dnow(cpu.fn_81_edx.has_3dnow);
 
     // Function 0x80000001 ECX
-    add(cpu.fn_81_ecx.has_lahf, "LAHF/SAHF Instructions");
-    add(cpu.fn_81_ecx.has_svm, "Secure Virtual Machine (SVM, Pacifica)");
-    add(cpu.fn_81_ecx.has_lzcnt, "LZCNT Instruction");
-    add(cpu.fn_81_ecx.has_sse4a, "AMD SSE4A");
-    add(cpu.fn_81_ecx.has_misalignsse, "AMD MisAligned SSE");
-    add(cpu.fn_81_ecx.has_3dnow_prefetch, "AMD 3DNowPrefetch");
-    add(cpu.fn_81_ecx.has_xop, "AMD XOP");
-    add(cpu.fn_81_ecx.has_wdt, "Watchdog Timer");
-    add(cpu.fn_81_ecx.has_fma4, "AMD FMA4");
+    features->set_has_lahf(cpu.fn_81_ecx.has_lahf);
+    features->set_has_svm(cpu.fn_81_ecx.has_svm);
+    features->set_has_lzcnt(cpu.fn_81_ecx.has_lzcnt);
+    features->set_has_sse4a(cpu.fn_81_ecx.has_sse4a);
+    features->set_has_misalignsse(cpu.fn_81_ecx.has_misalignsse);
+    features->set_has_3dnow_prefetch(cpu.fn_81_ecx.has_3dnow_prefetch);
+    features->set_has_xop(cpu.fn_81_ecx.has_xop);
+    features->set_has_wdt(cpu.fn_81_ecx.has_wdt);
+    features->set_has_fma4(cpu.fn_81_ecx.has_fma4);
 
     // Function 7 EBX
-    add(cpu.fn_7_0_ebx.has_fsgsbase, "RDFSBASE / RDGSBASE / WRFSBASE / WRGSBASE Instruction");
-    add(cpu.fn_7_0_ebx.has_sgx, "Software Guard Extensions (SGE)");
-    add(cpu.fn_7_0_ebx.has_bmi1, "Bit Manipulation Instruction Set 1 (BMI1)");
-    add(cpu.fn_7_0_ebx.has_hle, "Transactional Synchronization Extensions");
-    add(cpu.fn_7_0_ebx.has_avx2, "Advanced Vector Extensions 2 (AVX2)");
-    add(cpu.fn_7_0_ebx.has_smep, "Supervisor-Mode Execution Prevention");
-    add(cpu.fn_7_0_ebx.has_bmi2, "Bit Manipulation Instruction Set 2 (BMI2)");
-    add(cpu.fn_7_0_ebx.has_erms, "Enhanced REP MOVSB/STOSB");
-    add(cpu.fn_7_0_ebx.has_invpcid, "INVPCID Instruction");
-    add(cpu.fn_7_0_ebx.has_rtm, "Transactional Synchronization Extensions (RTM)");
-    add(cpu.fn_7_0_ebx.has_pqm, "Platform Quality of Service Monitoring (PQM)");
-    add(cpu.fn_7_0_ebx.has_mpx, "Memory Protection Extensions (MPX)");
-    add(cpu.fn_7_0_ebx.has_pqe, "Platform Quality of Service Enforcement (PQE)");
-    add(cpu.fn_7_0_ebx.has_avx512f, "AVX-512 Foundation (AVX512F)");
-    add(cpu.fn_7_0_ebx.has_avx512dq, "AVX-512 Doubleword and Quadword Instructions (AVX512DQ)");
-    add(cpu.fn_7_0_ebx.has_rdseed, "RDSEED Instruction");
-    add(cpu.fn_7_0_ebx.has_adx, "Multi-Precision Add-Carry Instruction Extensions (ADX)");
-    add(cpu.fn_7_0_ebx.has_smap, "Supervisor Mode Access Prevention (SMAP)");
-    add(cpu.fn_7_0_ebx.has_avx512ifma, "AVX-512 Integer Fused Multiply-Add Instructions");
-    add(cpu.fn_7_0_ebx.has_pcommit, "PCOMMIT Instruction");
-    add(cpu.fn_7_0_ebx.has_clflushopt, "CLFLUSHOPT Instruction");
-    add(cpu.fn_7_0_ebx.has_clwb, "CLWB Instruction");
-    add(cpu.fn_7_0_ebx.has_intel_pt, "Intel Processor Trace");
-    add(cpu.fn_7_0_ebx.has_avx512pf, "AVX-512 Prefetch Instructions (AVX512PF)");
-    add(cpu.fn_7_0_ebx.has_avx512er, "AVX-512 Exponential and Reciprocal Instructions (AVX512ER)");
-    add(cpu.fn_7_0_ebx.has_avx512cd, "AVX-512 Conflict Detection Instructions (AVX512CD)");
-    add(cpu.fn_7_0_ebx.has_sha, "Intel SHA Extensions (SHA)");
-    add(cpu.fn_7_0_ebx.has_avx512bw, "AVX-512 Byte and Word Instructions (AVX512BW)");
-    add(cpu.fn_7_0_ebx.has_avx512vl, "AVX-512 Vector Length Extensions (AVX512VL)");
+    features->set_has_fsgsbase(cpu.fn_7_0_ebx.has_fsgsbase);
+    features->set_has_sgx(cpu.fn_7_0_ebx.has_sgx);
+    features->set_has_bmi1(cpu.fn_7_0_ebx.has_bmi1);
+    features->set_has_hle(cpu.fn_7_0_ebx.has_hle);
+    features->set_has_avx2(cpu.fn_7_0_ebx.has_avx2);
+    features->set_has_smep(cpu.fn_7_0_ebx.has_smep);
+    features->set_has_bmi2(cpu.fn_7_0_ebx.has_bmi2);
+    features->set_has_erms(cpu.fn_7_0_ebx.has_erms);
+    features->set_has_invpcid(cpu.fn_7_0_ebx.has_invpcid);
+    features->set_has_rtm(cpu.fn_7_0_ebx.has_rtm);
+    features->set_has_pqm(cpu.fn_7_0_ebx.has_pqm);
+    features->set_has_mpx(cpu.fn_7_0_ebx.has_mpx);
+    features->set_has_pqe(cpu.fn_7_0_ebx.has_pqe);
+    features->set_has_avx512f(cpu.fn_7_0_ebx.has_avx512f);
+    features->set_has_avx512dq(cpu.fn_7_0_ebx.has_avx512dq);
+    features->set_has_rdseed(cpu.fn_7_0_ebx.has_rdseed);
+    features->set_has_adx(cpu.fn_7_0_ebx.has_adx);
+    features->set_has_smap(cpu.fn_7_0_ebx.has_smap);
+    features->set_has_avx512ifma(cpu.fn_7_0_ebx.has_avx512ifma);
+    features->set_has_pcommit(cpu.fn_7_0_ebx.has_pcommit);
+    features->set_has_clflushopt(cpu.fn_7_0_ebx.has_clflushopt);
+    features->set_has_clwb(cpu.fn_7_0_ebx.has_clwb);
+    features->set_has_intel_pt(cpu.fn_7_0_ebx.has_intel_pt);
+    features->set_has_avx512pf(cpu.fn_7_0_ebx.has_avx512pf);
+    features->set_has_avx512er(cpu.fn_7_0_ebx.has_avx512er);
+    features->set_has_avx512cd(cpu.fn_7_0_ebx.has_avx512cd);
+    features->set_has_sha(cpu.fn_7_0_ebx.has_sha);
+    features->set_has_avx512bw(cpu.fn_7_0_ebx.has_avx512bw);
+    features->set_has_avx512vl(cpu.fn_7_0_ebx.has_avx512vl);
 
     // Function 7 ECX
-    add(cpu.fn_7_0_ecx.has_prefetchwt1, "PREFETCHWT1 Instruction");
-    add(cpu.fn_7_0_ecx.has_avx512vbmi, "AVX-512 Vector Bit Manipulation Instructions (AVX512VBMI)");
-    add(cpu.fn_7_0_ecx.has_umip, "User-mode Instruction Prevention (UMIP)");
-    add(cpu.fn_7_0_ecx.has_pku, "Memory Protection Keys for User-mode pages (PKU)");
-    add(cpu.fn_7_0_ecx.has_ospke, "PKU enabled by OS (OSPKE)");
-    add(cpu.fn_7_0_ecx.has_avx512vbmi2, "AVX-512 Vector Bit Manipulation Instructions 2 (AVX512VBMI2)");
-    add(cpu.fn_7_0_ecx.has_gfni, "Galois Field Instructions (GFNI)");
-    add(cpu.fn_7_0_ecx.has_vaes, "AES Instruction Set (VEX-256/EVEX)");
-    add(cpu.fn_7_0_ecx.has_vpclmulqdq, "CLMUL Instruction Set (VEX-256/EVEX)");
-    add(cpu.fn_7_0_ecx.has_avx512vnni, "AVX-512 Vector Neural Network Instructions (AVX512VNNI)");
-    add(cpu.fn_7_0_ecx.has_avx512bitalg, "AVX-512 BITALG Instructions (AVX512BITALG)");
-    add(cpu.fn_7_0_ecx.has_avx512vpopcntdq, "AVX-512 Vector Population Count D/Q (AVX512VPOPCNTDQ)");
-    add(cpu.fn_7_0_ecx.has_rdpid, "Read Processor ID (RDPID)");
-    add(cpu.fn_7_0_ecx.has_sgx_lc, "SGX Launch Configuration");
+    features->set_has_prefetchwt1(cpu.fn_7_0_ecx.has_prefetchwt1);
+    features->set_has_avx512vbmi(cpu.fn_7_0_ecx.has_avx512vbmi);
+    features->set_has_umip(cpu.fn_7_0_ecx.has_umip);
+    features->set_has_pku(cpu.fn_7_0_ecx.has_pku);
+    features->set_has_ospke(cpu.fn_7_0_ecx.has_ospke);
+    features->set_has_avx512vbmi2(cpu.fn_7_0_ecx.has_avx512vbmi2);
+    features->set_has_gfni(cpu.fn_7_0_ecx.has_gfni);
+    features->set_has_vaes(cpu.fn_7_0_ecx.has_vaes);
+    features->set_has_vpclmulqdq(cpu.fn_7_0_ecx.has_vpclmulqdq);
+    features->set_has_avx512vnni(cpu.fn_7_0_ecx.has_avx512vnni);
+    features->set_has_avx512bitalg(cpu.fn_7_0_ecx.has_avx512bitalg);
+    features->set_has_avx512vpopcntdq(cpu.fn_7_0_ecx.has_avx512vpopcntdq);
+    features->set_has_rdpid(cpu.fn_7_0_ecx.has_rdpid);
+    features->set_has_sgx_lc(cpu.fn_7_0_ecx.has_sgx_lc);
 
     // Function 7 EDX
-    add(cpu.fn_7_0_edx.has_avx512_4vnniw, "AVX-512 4-register Neural Network Instructions (AVX5124VNNIW)");
-    add(cpu.fn_7_0_edx.has_avx512_4fmaps, "AVX-512 4-register Multiply Accumulation Single precision (AVX5124FMAPS)");
+    features->set_has_avx512_4vnniw(cpu.fn_7_0_edx.has_avx512_4vnniw);
+    features->set_has_avx512_4fmaps(cpu.fn_7_0_edx.has_avx512_4fmaps);
 
     // Function 0xC0000001 EDX
-    add(cpu.fn_c1_edx.has_ais, "VIA Alternate Instruction Set");
-    add(cpu.fn_c1_edx.has_rng, "Hardware Random Number Generator (RNG)");
-    add(cpu.fn_c1_edx.has_lh, "LongHaul MSR 0000_110Ah");
-    add(cpu.fn_c1_edx.has_femms, "VIA FEMMS Instruction");
-    add(cpu.fn_c1_edx.has_ace, "Advanced Cryptography Engine (ACE)");
-    add(cpu.fn_c1_edx.has_ace2, "Advanced Cryptography Engine 2 (ACE2)");
-    add(cpu.fn_c1_edx.has_phe, "PadLock Hash Engine (PHE)");
-    add(cpu.fn_c1_edx.has_pmm, "PadLock Montgomery Multiplier (PMM)");
-    add(cpu.fn_c1_edx.has_parallax, "Parallax");
-    add(cpu.fn_c1_edx.has_overstress, "Overstress");
-    add(cpu.fn_c1_edx.has_tm3, "Thermal Monitor 3 (TM3)");
-    add(cpu.fn_c1_edx.has_rng2, "Hardware Random Number Generator 2 (RNG2)");
-    add(cpu.fn_c1_edx.has_phe2, "PadLock Hash Engine 2 (PHE2)");
-
-    std::sort(features.begin(), features.end());
-
-    for (const auto& feature : features)
-    {
-        proto::CentralProcessor::Feature* item = message.add_feature();
-        item->set_name(feature.first);
-        item->set_supported(feature.second);
-    }
+    features->set_has_ais(cpu.fn_c1_edx.has_ais);
+    features->set_has_rng(cpu.fn_c1_edx.has_rng);
+    features->set_has_lh(cpu.fn_c1_edx.has_lh);
+    features->set_has_femms(cpu.fn_c1_edx.has_femms);
+    features->set_has_ace(cpu.fn_c1_edx.has_ace);
+    features->set_has_ace2(cpu.fn_c1_edx.has_ace2);
+    features->set_has_phe(cpu.fn_c1_edx.has_phe);
+    features->set_has_pmm(cpu.fn_c1_edx.has_pmm);
+    features->set_has_parallax(cpu.fn_c1_edx.has_parallax);
+    features->set_has_overstress(cpu.fn_c1_edx.has_overstress);
+    features->set_has_tm3(cpu.fn_c1_edx.has_tm3);
+    features->set_has_rng2(cpu.fn_c1_edx.has_rng2);
+    features->set_has_phe2(cpu.fn_c1_edx.has_phe2);
 
     return message.SerializeAsString();
 }

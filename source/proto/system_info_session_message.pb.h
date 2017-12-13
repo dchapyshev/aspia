@@ -87,8 +87,8 @@ void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
 void InitDefaultsDmiPortableBattery();
-void InitDefaultsCentralProcessor_FeatureImpl();
-void InitDefaultsCentralProcessor_Feature();
+void InitDefaultsCentralProcessor_FeaturesImpl();
+void InitDefaultsCentralProcessor_Features();
 void InitDefaultsCentralProcessorImpl();
 void InitDefaultsCentralProcessor();
 void InitDefaultsAtaDrives_ItemImpl();
@@ -183,7 +183,7 @@ inline void InitDefaults() {
   InitDefaultsDmiBuildinPointing();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
-  InitDefaultsCentralProcessor_Feature();
+  InitDefaultsCentralProcessor_Features();
   InitDefaultsCentralProcessor();
   InitDefaultsAtaDrives_Item();
   InitDefaultsAtaDrives();
@@ -232,9 +232,9 @@ extern AtaDrives_ItemDefaultTypeInternal _AtaDrives_Item_default_instance_;
 class CentralProcessor;
 class CentralProcessorDefaultTypeInternal;
 extern CentralProcessorDefaultTypeInternal _CentralProcessor_default_instance_;
-class CentralProcessor_Feature;
-class CentralProcessor_FeatureDefaultTypeInternal;
-extern CentralProcessor_FeatureDefaultTypeInternal _CentralProcessor_Feature_default_instance_;
+class CentralProcessor_Features;
+class CentralProcessor_FeaturesDefaultTypeInternal;
+extern CentralProcessor_FeaturesDefaultTypeInternal _CentralProcessor_Features_default_instance_;
 class DmiBaseboard;
 class DmiBaseboardDefaultTypeInternal;
 extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
@@ -6676,24 +6676,24 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
-class CentralProcessor_Feature : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor.Feature) */ {
+class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor.Features) */ {
  public:
-  CentralProcessor_Feature();
-  virtual ~CentralProcessor_Feature();
+  CentralProcessor_Features();
+  virtual ~CentralProcessor_Features();
 
-  CentralProcessor_Feature(const CentralProcessor_Feature& from);
+  CentralProcessor_Features(const CentralProcessor_Features& from);
 
-  inline CentralProcessor_Feature& operator=(const CentralProcessor_Feature& from) {
+  inline CentralProcessor_Features& operator=(const CentralProcessor_Features& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  CentralProcessor_Feature(CentralProcessor_Feature&& from) noexcept
-    : CentralProcessor_Feature() {
+  CentralProcessor_Features(CentralProcessor_Features&& from) noexcept
+    : CentralProcessor_Features() {
     *this = ::std::move(from);
   }
 
-  inline CentralProcessor_Feature& operator=(CentralProcessor_Feature&& from) noexcept {
+  inline CentralProcessor_Features& operator=(CentralProcessor_Features&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6702,30 +6702,30 @@ class CentralProcessor_Feature : public ::google::protobuf::MessageLite /* @@pro
     return *this;
   }
   #endif
-  static const CentralProcessor_Feature& default_instance();
+  static const CentralProcessor_Features& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CentralProcessor_Feature* internal_default_instance() {
-    return reinterpret_cast<const CentralProcessor_Feature*>(
-               &_CentralProcessor_Feature_default_instance_);
+  static inline const CentralProcessor_Features* internal_default_instance() {
+    return reinterpret_cast<const CentralProcessor_Features*>(
+               &_CentralProcessor_Features_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     23;
 
-  void Swap(CentralProcessor_Feature* other);
-  friend void swap(CentralProcessor_Feature& a, CentralProcessor_Feature& b) {
+  void Swap(CentralProcessor_Features* other);
+  friend void swap(CentralProcessor_Features& a, CentralProcessor_Features& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline CentralProcessor_Feature* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline CentralProcessor_Features* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  CentralProcessor_Feature* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  CentralProcessor_Features* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const CentralProcessor_Feature& from);
-  void MergeFrom(const CentralProcessor_Feature& from);
+  void CopyFrom(const CentralProcessor_Features& from);
+  void MergeFrom(const CentralProcessor_Features& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6740,7 +6740,7 @@ class CentralProcessor_Feature : public ::google::protobuf::MessageLite /* @@pro
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(CentralProcessor_Feature* other);
+  void InternalSwap(CentralProcessor_Features* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6756,35 +6756,965 @@ class CentralProcessor_Feature : public ::google::protobuf::MessageLite /* @@pro
 
   // accessors -------------------------------------------------------
 
-  // string name = 1;
-  void clear_name();
-  static const int kNameFieldNumber = 1;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
+  // bool has_fpu = 1;
+  void clear_has_fpu();
+  static const int kHasFpuFieldNumber = 1;
+  bool has_fpu() const;
+  void set_has_fpu(bool value);
 
-  // bool supported = 2;
-  void clear_supported();
-  static const int kSupportedFieldNumber = 2;
-  bool supported() const;
-  void set_supported(bool value);
+  // bool has_vme = 2;
+  void clear_has_vme();
+  static const int kHasVmeFieldNumber = 2;
+  bool has_vme() const;
+  void set_has_vme(bool value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor.Feature)
+  // bool has_de = 3;
+  void clear_has_de();
+  static const int kHasDeFieldNumber = 3;
+  bool has_de() const;
+  void set_has_de(bool value);
+
+  // bool has_pse = 4;
+  void clear_has_pse();
+  static const int kHasPseFieldNumber = 4;
+  bool has_pse() const;
+  void set_has_pse(bool value);
+
+  // bool has_tsc = 5;
+  void clear_has_tsc();
+  static const int kHasTscFieldNumber = 5;
+  bool has_tsc() const;
+  void set_has_tsc(bool value);
+
+  // bool has_msr = 6;
+  void clear_has_msr();
+  static const int kHasMsrFieldNumber = 6;
+  bool has_msr() const;
+  void set_has_msr(bool value);
+
+  // bool has_pae = 7;
+  void clear_has_pae();
+  static const int kHasPaeFieldNumber = 7;
+  bool has_pae() const;
+  void set_has_pae(bool value);
+
+  // bool has_mce = 8;
+  void clear_has_mce();
+  static const int kHasMceFieldNumber = 8;
+  bool has_mce() const;
+  void set_has_mce(bool value);
+
+  // bool has_cx8 = 9;
+  void clear_has_cx8();
+  static const int kHasCx8FieldNumber = 9;
+  bool has_cx8() const;
+  void set_has_cx8(bool value);
+
+  // bool has_apic = 10;
+  void clear_has_apic();
+  static const int kHasApicFieldNumber = 10;
+  bool has_apic() const;
+  void set_has_apic(bool value);
+
+  // bool has_sep = 11;
+  void clear_has_sep();
+  static const int kHasSepFieldNumber = 11;
+  bool has_sep() const;
+  void set_has_sep(bool value);
+
+  // bool has_mtrr = 12;
+  void clear_has_mtrr();
+  static const int kHasMtrrFieldNumber = 12;
+  bool has_mtrr() const;
+  void set_has_mtrr(bool value);
+
+  // bool has_pge = 13;
+  void clear_has_pge();
+  static const int kHasPgeFieldNumber = 13;
+  bool has_pge() const;
+  void set_has_pge(bool value);
+
+  // bool has_mca = 14;
+  void clear_has_mca();
+  static const int kHasMcaFieldNumber = 14;
+  bool has_mca() const;
+  void set_has_mca(bool value);
+
+  // bool has_cmov = 15;
+  void clear_has_cmov();
+  static const int kHasCmovFieldNumber = 15;
+  bool has_cmov() const;
+  void set_has_cmov(bool value);
+
+  // bool has_pat = 16;
+  void clear_has_pat();
+  static const int kHasPatFieldNumber = 16;
+  bool has_pat() const;
+  void set_has_pat(bool value);
+
+  // bool has_pse36 = 17;
+  void clear_has_pse36();
+  static const int kHasPse36FieldNumber = 17;
+  bool has_pse36() const;
+  void set_has_pse36(bool value);
+
+  // bool has_psn = 18;
+  void clear_has_psn();
+  static const int kHasPsnFieldNumber = 18;
+  bool has_psn() const;
+  void set_has_psn(bool value);
+
+  // bool has_clfsh = 19;
+  void clear_has_clfsh();
+  static const int kHasClfshFieldNumber = 19;
+  bool has_clfsh() const;
+  void set_has_clfsh(bool value);
+
+  // bool has_ds = 20;
+  void clear_has_ds();
+  static const int kHasDsFieldNumber = 20;
+  bool has_ds() const;
+  void set_has_ds(bool value);
+
+  // bool has_acpu = 21;
+  void clear_has_acpu();
+  static const int kHasAcpuFieldNumber = 21;
+  bool has_acpu() const;
+  void set_has_acpu(bool value);
+
+  // bool has_mmx = 22;
+  void clear_has_mmx();
+  static const int kHasMmxFieldNumber = 22;
+  bool has_mmx() const;
+  void set_has_mmx(bool value);
+
+  // bool has_fxsr = 23;
+  void clear_has_fxsr();
+  static const int kHasFxsrFieldNumber = 23;
+  bool has_fxsr() const;
+  void set_has_fxsr(bool value);
+
+  // bool has_sse = 24;
+  void clear_has_sse();
+  static const int kHasSseFieldNumber = 24;
+  bool has_sse() const;
+  void set_has_sse(bool value);
+
+  // bool has_sse2 = 25;
+  void clear_has_sse2();
+  static const int kHasSse2FieldNumber = 25;
+  bool has_sse2() const;
+  void set_has_sse2(bool value);
+
+  // bool has_ss = 26;
+  void clear_has_ss();
+  static const int kHasSsFieldNumber = 26;
+  bool has_ss() const;
+  void set_has_ss(bool value);
+
+  // bool has_htt = 27;
+  void clear_has_htt();
+  static const int kHasHttFieldNumber = 27;
+  bool has_htt() const;
+  void set_has_htt(bool value);
+
+  // bool has_tm = 28;
+  void clear_has_tm();
+  static const int kHasTmFieldNumber = 28;
+  bool has_tm() const;
+  void set_has_tm(bool value);
+
+  // bool has_ia64 = 29;
+  void clear_has_ia64();
+  static const int kHasIa64FieldNumber = 29;
+  bool has_ia64() const;
+  void set_has_ia64(bool value);
+
+  // bool has_pbe = 30;
+  void clear_has_pbe();
+  static const int kHasPbeFieldNumber = 30;
+  bool has_pbe() const;
+  void set_has_pbe(bool value);
+
+  // bool has_sse3 = 31;
+  void clear_has_sse3();
+  static const int kHasSse3FieldNumber = 31;
+  bool has_sse3() const;
+  void set_has_sse3(bool value);
+
+  // bool has_pclmuldq = 32;
+  void clear_has_pclmuldq();
+  static const int kHasPclmuldqFieldNumber = 32;
+  bool has_pclmuldq() const;
+  void set_has_pclmuldq(bool value);
+
+  // bool has_dtes64 = 33;
+  void clear_has_dtes64();
+  static const int kHasDtes64FieldNumber = 33;
+  bool has_dtes64() const;
+  void set_has_dtes64(bool value);
+
+  // bool has_monitor = 34;
+  void clear_has_monitor();
+  static const int kHasMonitorFieldNumber = 34;
+  bool has_monitor() const;
+  void set_has_monitor(bool value);
+
+  // bool has_ds_cpl = 35;
+  void clear_has_ds_cpl();
+  static const int kHasDsCplFieldNumber = 35;
+  bool has_ds_cpl() const;
+  void set_has_ds_cpl(bool value);
+
+  // bool has_vmx = 36;
+  void clear_has_vmx();
+  static const int kHasVmxFieldNumber = 36;
+  bool has_vmx() const;
+  void set_has_vmx(bool value);
+
+  // bool has_smx = 37;
+  void clear_has_smx();
+  static const int kHasSmxFieldNumber = 37;
+  bool has_smx() const;
+  void set_has_smx(bool value);
+
+  // bool has_est = 38;
+  void clear_has_est();
+  static const int kHasEstFieldNumber = 38;
+  bool has_est() const;
+  void set_has_est(bool value);
+
+  // bool has_tm2 = 39;
+  void clear_has_tm2();
+  static const int kHasTm2FieldNumber = 39;
+  bool has_tm2() const;
+  void set_has_tm2(bool value);
+
+  // bool has_ssse3 = 40;
+  void clear_has_ssse3();
+  static const int kHasSsse3FieldNumber = 40;
+  bool has_ssse3() const;
+  void set_has_ssse3(bool value);
+
+  // bool has_cnxt_id = 41;
+  void clear_has_cnxt_id();
+  static const int kHasCnxtIdFieldNumber = 41;
+  bool has_cnxt_id() const;
+  void set_has_cnxt_id(bool value);
+
+  // bool has_sdbg = 42;
+  void clear_has_sdbg();
+  static const int kHasSdbgFieldNumber = 42;
+  bool has_sdbg() const;
+  void set_has_sdbg(bool value);
+
+  // bool has_fma = 43;
+  void clear_has_fma();
+  static const int kHasFmaFieldNumber = 43;
+  bool has_fma() const;
+  void set_has_fma(bool value);
+
+  // bool has_cx16 = 44;
+  void clear_has_cx16();
+  static const int kHasCx16FieldNumber = 44;
+  bool has_cx16() const;
+  void set_has_cx16(bool value);
+
+  // bool has_xtpr = 45;
+  void clear_has_xtpr();
+  static const int kHasXtprFieldNumber = 45;
+  bool has_xtpr() const;
+  void set_has_xtpr(bool value);
+
+  // bool has_pdcm = 46;
+  void clear_has_pdcm();
+  static const int kHasPdcmFieldNumber = 46;
+  bool has_pdcm() const;
+  void set_has_pdcm(bool value);
+
+  // bool has_pcid = 47;
+  void clear_has_pcid();
+  static const int kHasPcidFieldNumber = 47;
+  bool has_pcid() const;
+  void set_has_pcid(bool value);
+
+  // bool has_dca = 48;
+  void clear_has_dca();
+  static const int kHasDcaFieldNumber = 48;
+  bool has_dca() const;
+  void set_has_dca(bool value);
+
+  // bool has_sse41 = 49;
+  void clear_has_sse41();
+  static const int kHasSse41FieldNumber = 49;
+  bool has_sse41() const;
+  void set_has_sse41(bool value);
+
+  // bool has_sse42 = 50;
+  void clear_has_sse42();
+  static const int kHasSse42FieldNumber = 50;
+  bool has_sse42() const;
+  void set_has_sse42(bool value);
+
+  // bool has_x2apic = 51;
+  void clear_has_x2apic();
+  static const int kHasX2ApicFieldNumber = 51;
+  bool has_x2apic() const;
+  void set_has_x2apic(bool value);
+
+  // bool has_movbe = 52;
+  void clear_has_movbe();
+  static const int kHasMovbeFieldNumber = 52;
+  bool has_movbe() const;
+  void set_has_movbe(bool value);
+
+  // bool has_popcnt = 53;
+  void clear_has_popcnt();
+  static const int kHasPopcntFieldNumber = 53;
+  bool has_popcnt() const;
+  void set_has_popcnt(bool value);
+
+  // bool has_tsc_deadline = 54;
+  void clear_has_tsc_deadline();
+  static const int kHasTscDeadlineFieldNumber = 54;
+  bool has_tsc_deadline() const;
+  void set_has_tsc_deadline(bool value);
+
+  // bool has_aes = 55;
+  void clear_has_aes();
+  static const int kHasAesFieldNumber = 55;
+  bool has_aes() const;
+  void set_has_aes(bool value);
+
+  // bool has_xsave = 56;
+  void clear_has_xsave();
+  static const int kHasXsaveFieldNumber = 56;
+  bool has_xsave() const;
+  void set_has_xsave(bool value);
+
+  // bool has_osxsave = 57;
+  void clear_has_osxsave();
+  static const int kHasOsxsaveFieldNumber = 57;
+  bool has_osxsave() const;
+  void set_has_osxsave(bool value);
+
+  // bool has_avx = 58;
+  void clear_has_avx();
+  static const int kHasAvxFieldNumber = 58;
+  bool has_avx() const;
+  void set_has_avx(bool value);
+
+  // bool has_f16c = 59;
+  void clear_has_f16c();
+  static const int kHasF16CFieldNumber = 59;
+  bool has_f16c() const;
+  void set_has_f16c(bool value);
+
+  // bool has_rdrand = 60;
+  void clear_has_rdrand();
+  static const int kHasRdrandFieldNumber = 60;
+  bool has_rdrand() const;
+  void set_has_rdrand(bool value);
+
+  // bool has_hypervisor = 61;
+  void clear_has_hypervisor();
+  static const int kHasHypervisorFieldNumber = 61;
+  bool has_hypervisor() const;
+  void set_has_hypervisor(bool value);
+
+  // bool has_syscall = 62;
+  void clear_has_syscall();
+  static const int kHasSyscallFieldNumber = 62;
+  bool has_syscall() const;
+  void set_has_syscall(bool value);
+
+  // bool has_xd_bit = 63;
+  void clear_has_xd_bit();
+  static const int kHasXdBitFieldNumber = 63;
+  bool has_xd_bit() const;
+  void set_has_xd_bit(bool value);
+
+  // bool has_mmxext = 64;
+  void clear_has_mmxext();
+  static const int kHasMmxextFieldNumber = 64;
+  bool has_mmxext() const;
+  void set_has_mmxext(bool value);
+
+  // bool has_1gb_pages = 65;
+  void clear_has_1gb_pages();
+  static const int kHas1GbPagesFieldNumber = 65;
+  bool has_1gb_pages() const;
+  void set_has_1gb_pages(bool value);
+
+  // bool has_rdtscp = 66;
+  void clear_has_rdtscp();
+  static const int kHasRdtscpFieldNumber = 66;
+  bool has_rdtscp() const;
+  void set_has_rdtscp(bool value);
+
+  // bool has_intel64 = 67;
+  void clear_has_intel64();
+  static const int kHasIntel64FieldNumber = 67;
+  bool has_intel64() const;
+  void set_has_intel64(bool value);
+
+  // bool has_3dnowext = 68;
+  void clear_has_3dnowext();
+  static const int kHas3DnowextFieldNumber = 68;
+  bool has_3dnowext() const;
+  void set_has_3dnowext(bool value);
+
+  // bool has_3dnow = 69;
+  void clear_has_3dnow();
+  static const int kHas3DnowFieldNumber = 69;
+  bool has_3dnow() const;
+  void set_has_3dnow(bool value);
+
+  // bool has_lahf = 70;
+  void clear_has_lahf();
+  static const int kHasLahfFieldNumber = 70;
+  bool has_lahf() const;
+  void set_has_lahf(bool value);
+
+  // bool has_svm = 71;
+  void clear_has_svm();
+  static const int kHasSvmFieldNumber = 71;
+  bool has_svm() const;
+  void set_has_svm(bool value);
+
+  // bool has_lzcnt = 72;
+  void clear_has_lzcnt();
+  static const int kHasLzcntFieldNumber = 72;
+  bool has_lzcnt() const;
+  void set_has_lzcnt(bool value);
+
+  // bool has_sse4a = 73;
+  void clear_has_sse4a();
+  static const int kHasSse4AFieldNumber = 73;
+  bool has_sse4a() const;
+  void set_has_sse4a(bool value);
+
+  // bool has_misalignsse = 74;
+  void clear_has_misalignsse();
+  static const int kHasMisalignsseFieldNumber = 74;
+  bool has_misalignsse() const;
+  void set_has_misalignsse(bool value);
+
+  // bool has_3dnow_prefetch = 75;
+  void clear_has_3dnow_prefetch();
+  static const int kHas3DnowPrefetchFieldNumber = 75;
+  bool has_3dnow_prefetch() const;
+  void set_has_3dnow_prefetch(bool value);
+
+  // bool has_xop = 76;
+  void clear_has_xop();
+  static const int kHasXopFieldNumber = 76;
+  bool has_xop() const;
+  void set_has_xop(bool value);
+
+  // bool has_wdt = 77;
+  void clear_has_wdt();
+  static const int kHasWdtFieldNumber = 77;
+  bool has_wdt() const;
+  void set_has_wdt(bool value);
+
+  // bool has_fma4 = 78;
+  void clear_has_fma4();
+  static const int kHasFma4FieldNumber = 78;
+  bool has_fma4() const;
+  void set_has_fma4(bool value);
+
+  // bool has_fsgsbase = 79;
+  void clear_has_fsgsbase();
+  static const int kHasFsgsbaseFieldNumber = 79;
+  bool has_fsgsbase() const;
+  void set_has_fsgsbase(bool value);
+
+  // bool has_sgx = 80;
+  void clear_has_sgx();
+  static const int kHasSgxFieldNumber = 80;
+  bool has_sgx() const;
+  void set_has_sgx(bool value);
+
+  // bool has_bmi1 = 81;
+  void clear_has_bmi1();
+  static const int kHasBmi1FieldNumber = 81;
+  bool has_bmi1() const;
+  void set_has_bmi1(bool value);
+
+  // bool has_hle = 82;
+  void clear_has_hle();
+  static const int kHasHleFieldNumber = 82;
+  bool has_hle() const;
+  void set_has_hle(bool value);
+
+  // bool has_avx2 = 83;
+  void clear_has_avx2();
+  static const int kHasAvx2FieldNumber = 83;
+  bool has_avx2() const;
+  void set_has_avx2(bool value);
+
+  // bool has_smep = 84;
+  void clear_has_smep();
+  static const int kHasSmepFieldNumber = 84;
+  bool has_smep() const;
+  void set_has_smep(bool value);
+
+  // bool has_bmi2 = 85;
+  void clear_has_bmi2();
+  static const int kHasBmi2FieldNumber = 85;
+  bool has_bmi2() const;
+  void set_has_bmi2(bool value);
+
+  // bool has_erms = 86;
+  void clear_has_erms();
+  static const int kHasErmsFieldNumber = 86;
+  bool has_erms() const;
+  void set_has_erms(bool value);
+
+  // bool has_invpcid = 87;
+  void clear_has_invpcid();
+  static const int kHasInvpcidFieldNumber = 87;
+  bool has_invpcid() const;
+  void set_has_invpcid(bool value);
+
+  // bool has_rtm = 88;
+  void clear_has_rtm();
+  static const int kHasRtmFieldNumber = 88;
+  bool has_rtm() const;
+  void set_has_rtm(bool value);
+
+  // bool has_pqm = 89;
+  void clear_has_pqm();
+  static const int kHasPqmFieldNumber = 89;
+  bool has_pqm() const;
+  void set_has_pqm(bool value);
+
+  // bool has_mpx = 90;
+  void clear_has_mpx();
+  static const int kHasMpxFieldNumber = 90;
+  bool has_mpx() const;
+  void set_has_mpx(bool value);
+
+  // bool has_pqe = 91;
+  void clear_has_pqe();
+  static const int kHasPqeFieldNumber = 91;
+  bool has_pqe() const;
+  void set_has_pqe(bool value);
+
+  // bool has_avx512f = 92;
+  void clear_has_avx512f();
+  static const int kHasAvx512FFieldNumber = 92;
+  bool has_avx512f() const;
+  void set_has_avx512f(bool value);
+
+  // bool has_avx512dq = 93;
+  void clear_has_avx512dq();
+  static const int kHasAvx512DqFieldNumber = 93;
+  bool has_avx512dq() const;
+  void set_has_avx512dq(bool value);
+
+  // bool has_rdseed = 94;
+  void clear_has_rdseed();
+  static const int kHasRdseedFieldNumber = 94;
+  bool has_rdseed() const;
+  void set_has_rdseed(bool value);
+
+  // bool has_adx = 95;
+  void clear_has_adx();
+  static const int kHasAdxFieldNumber = 95;
+  bool has_adx() const;
+  void set_has_adx(bool value);
+
+  // bool has_smap = 96;
+  void clear_has_smap();
+  static const int kHasSmapFieldNumber = 96;
+  bool has_smap() const;
+  void set_has_smap(bool value);
+
+  // bool has_avx512ifma = 97;
+  void clear_has_avx512ifma();
+  static const int kHasAvx512IfmaFieldNumber = 97;
+  bool has_avx512ifma() const;
+  void set_has_avx512ifma(bool value);
+
+  // bool has_pcommit = 98;
+  void clear_has_pcommit();
+  static const int kHasPcommitFieldNumber = 98;
+  bool has_pcommit() const;
+  void set_has_pcommit(bool value);
+
+  // bool has_clflushopt = 99;
+  void clear_has_clflushopt();
+  static const int kHasClflushoptFieldNumber = 99;
+  bool has_clflushopt() const;
+  void set_has_clflushopt(bool value);
+
+  // bool has_clwb = 100;
+  void clear_has_clwb();
+  static const int kHasClwbFieldNumber = 100;
+  bool has_clwb() const;
+  void set_has_clwb(bool value);
+
+  // bool has_intel_pt = 101;
+  void clear_has_intel_pt();
+  static const int kHasIntelPtFieldNumber = 101;
+  bool has_intel_pt() const;
+  void set_has_intel_pt(bool value);
+
+  // bool has_avx512pf = 102;
+  void clear_has_avx512pf();
+  static const int kHasAvx512PfFieldNumber = 102;
+  bool has_avx512pf() const;
+  void set_has_avx512pf(bool value);
+
+  // bool has_avx512er = 103;
+  void clear_has_avx512er();
+  static const int kHasAvx512ErFieldNumber = 103;
+  bool has_avx512er() const;
+  void set_has_avx512er(bool value);
+
+  // bool has_avx512cd = 104;
+  void clear_has_avx512cd();
+  static const int kHasAvx512CdFieldNumber = 104;
+  bool has_avx512cd() const;
+  void set_has_avx512cd(bool value);
+
+  // bool has_sha = 105;
+  void clear_has_sha();
+  static const int kHasShaFieldNumber = 105;
+  bool has_sha() const;
+  void set_has_sha(bool value);
+
+  // bool has_avx512bw = 106;
+  void clear_has_avx512bw();
+  static const int kHasAvx512BwFieldNumber = 106;
+  bool has_avx512bw() const;
+  void set_has_avx512bw(bool value);
+
+  // bool has_avx512vl = 107;
+  void clear_has_avx512vl();
+  static const int kHasAvx512VlFieldNumber = 107;
+  bool has_avx512vl() const;
+  void set_has_avx512vl(bool value);
+
+  // bool has_prefetchwt1 = 108;
+  void clear_has_prefetchwt1();
+  static const int kHasPrefetchwt1FieldNumber = 108;
+  bool has_prefetchwt1() const;
+  void set_has_prefetchwt1(bool value);
+
+  // bool has_avx512vbmi = 109;
+  void clear_has_avx512vbmi();
+  static const int kHasAvx512VbmiFieldNumber = 109;
+  bool has_avx512vbmi() const;
+  void set_has_avx512vbmi(bool value);
+
+  // bool has_umip = 110;
+  void clear_has_umip();
+  static const int kHasUmipFieldNumber = 110;
+  bool has_umip() const;
+  void set_has_umip(bool value);
+
+  // bool has_pku = 111;
+  void clear_has_pku();
+  static const int kHasPkuFieldNumber = 111;
+  bool has_pku() const;
+  void set_has_pku(bool value);
+
+  // bool has_ospke = 112;
+  void clear_has_ospke();
+  static const int kHasOspkeFieldNumber = 112;
+  bool has_ospke() const;
+  void set_has_ospke(bool value);
+
+  // bool has_avx512vbmi2 = 113;
+  void clear_has_avx512vbmi2();
+  static const int kHasAvx512Vbmi2FieldNumber = 113;
+  bool has_avx512vbmi2() const;
+  void set_has_avx512vbmi2(bool value);
+
+  // bool has_gfni = 114;
+  void clear_has_gfni();
+  static const int kHasGfniFieldNumber = 114;
+  bool has_gfni() const;
+  void set_has_gfni(bool value);
+
+  // bool has_vaes = 115;
+  void clear_has_vaes();
+  static const int kHasVaesFieldNumber = 115;
+  bool has_vaes() const;
+  void set_has_vaes(bool value);
+
+  // bool has_vpclmulqdq = 116;
+  void clear_has_vpclmulqdq();
+  static const int kHasVpclmulqdqFieldNumber = 116;
+  bool has_vpclmulqdq() const;
+  void set_has_vpclmulqdq(bool value);
+
+  // bool has_avx512vnni = 117;
+  void clear_has_avx512vnni();
+  static const int kHasAvx512VnniFieldNumber = 117;
+  bool has_avx512vnni() const;
+  void set_has_avx512vnni(bool value);
+
+  // bool has_avx512bitalg = 118;
+  void clear_has_avx512bitalg();
+  static const int kHasAvx512BitalgFieldNumber = 118;
+  bool has_avx512bitalg() const;
+  void set_has_avx512bitalg(bool value);
+
+  // bool has_avx512vpopcntdq = 119;
+  void clear_has_avx512vpopcntdq();
+  static const int kHasAvx512VpopcntdqFieldNumber = 119;
+  bool has_avx512vpopcntdq() const;
+  void set_has_avx512vpopcntdq(bool value);
+
+  // bool has_rdpid = 120;
+  void clear_has_rdpid();
+  static const int kHasRdpidFieldNumber = 120;
+  bool has_rdpid() const;
+  void set_has_rdpid(bool value);
+
+  // bool has_sgx_lc = 121;
+  void clear_has_sgx_lc();
+  static const int kHasSgxLcFieldNumber = 121;
+  bool has_sgx_lc() const;
+  void set_has_sgx_lc(bool value);
+
+  // bool has_avx512_4vnniw = 122;
+  void clear_has_avx512_4vnniw();
+  static const int kHasAvx5124VnniwFieldNumber = 122;
+  bool has_avx512_4vnniw() const;
+  void set_has_avx512_4vnniw(bool value);
+
+  // bool has_avx512_4fmaps = 123;
+  void clear_has_avx512_4fmaps();
+  static const int kHasAvx5124FmapsFieldNumber = 123;
+  bool has_avx512_4fmaps() const;
+  void set_has_avx512_4fmaps(bool value);
+
+  // bool has_ais = 124;
+  void clear_has_ais();
+  static const int kHasAisFieldNumber = 124;
+  bool has_ais() const;
+  void set_has_ais(bool value);
+
+  // bool has_rng = 125;
+  void clear_has_rng();
+  static const int kHasRngFieldNumber = 125;
+  bool has_rng() const;
+  void set_has_rng(bool value);
+
+  // bool has_lh = 126;
+  void clear_has_lh();
+  static const int kHasLhFieldNumber = 126;
+  bool has_lh() const;
+  void set_has_lh(bool value);
+
+  // bool has_femms = 127;
+  void clear_has_femms();
+  static const int kHasFemmsFieldNumber = 127;
+  bool has_femms() const;
+  void set_has_femms(bool value);
+
+  // bool has_ace = 128;
+  void clear_has_ace();
+  static const int kHasAceFieldNumber = 128;
+  bool has_ace() const;
+  void set_has_ace(bool value);
+
+  // bool has_ace2 = 129;
+  void clear_has_ace2();
+  static const int kHasAce2FieldNumber = 129;
+  bool has_ace2() const;
+  void set_has_ace2(bool value);
+
+  // bool has_phe = 130;
+  void clear_has_phe();
+  static const int kHasPheFieldNumber = 130;
+  bool has_phe() const;
+  void set_has_phe(bool value);
+
+  // bool has_pmm = 131;
+  void clear_has_pmm();
+  static const int kHasPmmFieldNumber = 131;
+  bool has_pmm() const;
+  void set_has_pmm(bool value);
+
+  // bool has_parallax = 132;
+  void clear_has_parallax();
+  static const int kHasParallaxFieldNumber = 132;
+  bool has_parallax() const;
+  void set_has_parallax(bool value);
+
+  // bool has_overstress = 133;
+  void clear_has_overstress();
+  static const int kHasOverstressFieldNumber = 133;
+  bool has_overstress() const;
+  void set_has_overstress(bool value);
+
+  // bool has_tm3 = 134;
+  void clear_has_tm3();
+  static const int kHasTm3FieldNumber = 134;
+  bool has_tm3() const;
+  void set_has_tm3(bool value);
+
+  // bool has_rng2 = 135;
+  void clear_has_rng2();
+  static const int kHasRng2FieldNumber = 135;
+  bool has_rng2() const;
+  void set_has_rng2(bool value);
+
+  // bool has_phe2 = 136;
+  void clear_has_phe2();
+  static const int kHasPhe2FieldNumber = 136;
+  bool has_phe2() const;
+  void set_has_phe2(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor.Features)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  bool supported_;
+  bool has_fpu_;
+  bool has_vme_;
+  bool has_de_;
+  bool has_pse_;
+  bool has_tsc_;
+  bool has_msr_;
+  bool has_pae_;
+  bool has_mce_;
+  bool has_cx8_;
+  bool has_apic_;
+  bool has_sep_;
+  bool has_mtrr_;
+  bool has_pge_;
+  bool has_mca_;
+  bool has_cmov_;
+  bool has_pat_;
+  bool has_pse36_;
+  bool has_psn_;
+  bool has_clfsh_;
+  bool has_ds_;
+  bool has_acpu_;
+  bool has_mmx_;
+  bool has_fxsr_;
+  bool has_sse_;
+  bool has_sse2_;
+  bool has_ss_;
+  bool has_htt_;
+  bool has_tm_;
+  bool has_ia64_;
+  bool has_pbe_;
+  bool has_sse3_;
+  bool has_pclmuldq_;
+  bool has_dtes64_;
+  bool has_monitor_;
+  bool has_ds_cpl_;
+  bool has_vmx_;
+  bool has_smx_;
+  bool has_est_;
+  bool has_tm2_;
+  bool has_ssse3_;
+  bool has_cnxt_id_;
+  bool has_sdbg_;
+  bool has_fma_;
+  bool has_cx16_;
+  bool has_xtpr_;
+  bool has_pdcm_;
+  bool has_pcid_;
+  bool has_dca_;
+  bool has_sse41_;
+  bool has_sse42_;
+  bool has_x2apic_;
+  bool has_movbe_;
+  bool has_popcnt_;
+  bool has_tsc_deadline_;
+  bool has_aes_;
+  bool has_xsave_;
+  bool has_osxsave_;
+  bool has_avx_;
+  bool has_f16c_;
+  bool has_rdrand_;
+  bool has_hypervisor_;
+  bool has_syscall_;
+  bool has_xd_bit_;
+  bool has_mmxext_;
+  bool has_1gb_pages_;
+  bool has_rdtscp_;
+  bool has_intel64_;
+  bool has_3dnowext_;
+  bool has_3dnow_;
+  bool has_lahf_;
+  bool has_svm_;
+  bool has_lzcnt_;
+  bool has_sse4a_;
+  bool has_misalignsse_;
+  bool has_3dnow_prefetch_;
+  bool has_xop_;
+  bool has_wdt_;
+  bool has_fma4_;
+  bool has_fsgsbase_;
+  bool has_sgx_;
+  bool has_bmi1_;
+  bool has_hle_;
+  bool has_avx2_;
+  bool has_smep_;
+  bool has_bmi2_;
+  bool has_erms_;
+  bool has_invpcid_;
+  bool has_rtm_;
+  bool has_pqm_;
+  bool has_mpx_;
+  bool has_pqe_;
+  bool has_avx512f_;
+  bool has_avx512dq_;
+  bool has_rdseed_;
+  bool has_adx_;
+  bool has_smap_;
+  bool has_avx512ifma_;
+  bool has_pcommit_;
+  bool has_clflushopt_;
+  bool has_clwb_;
+  bool has_intel_pt_;
+  bool has_avx512pf_;
+  bool has_avx512er_;
+  bool has_avx512cd_;
+  bool has_sha_;
+  bool has_avx512bw_;
+  bool has_avx512vl_;
+  bool has_prefetchwt1_;
+  bool has_avx512vbmi_;
+  bool has_umip_;
+  bool has_pku_;
+  bool has_ospke_;
+  bool has_avx512vbmi2_;
+  bool has_gfni_;
+  bool has_vaes_;
+  bool has_vpclmulqdq_;
+  bool has_avx512vnni_;
+  bool has_avx512bitalg_;
+  bool has_avx512vpopcntdq_;
+  bool has_rdpid_;
+  bool has_sgx_lc_;
+  bool has_avx512_4vnniw_;
+  bool has_avx512_4fmaps_;
+  bool has_ais_;
+  bool has_rng_;
+  bool has_lh_;
+  bool has_femms_;
+  bool has_ace_;
+  bool has_ace2_;
+  bool has_phe_;
+  bool has_pmm_;
+  bool has_parallax_;
+  bool has_overstress_;
+  bool has_tm3_;
+  bool has_rng2_;
+  bool has_phe2_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_FeatureImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_FeaturesImpl();
 };
 // -------------------------------------------------------------------
 
@@ -6866,21 +7796,9 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
 
   // nested types ----------------------------------------------------
 
-  typedef CentralProcessor_Feature Feature;
+  typedef CentralProcessor_Features Features;
 
   // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.CentralProcessor.Feature feature = 12;
-  int feature_size() const;
-  void clear_feature();
-  static const int kFeatureFieldNumber = 12;
-  const ::aspia::proto::CentralProcessor_Feature& feature(int index) const;
-  ::aspia::proto::CentralProcessor_Feature* mutable_feature(int index);
-  ::aspia::proto::CentralProcessor_Feature* add_feature();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >*
-      mutable_feature();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >&
-      feature() const;
 
   // string brand_string = 1;
   void clear_brand_string();
@@ -6909,6 +7827,15 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::std::string* mutable_vendor();
   ::std::string* release_vendor();
   void set_allocated_vendor(::std::string* vendor);
+
+  // .aspia.proto.CentralProcessor.Features features = 12;
+  bool has_features() const;
+  void clear_features();
+  static const int kFeaturesFieldNumber = 12;
+  const ::aspia::proto::CentralProcessor_Features& features() const;
+  ::aspia::proto::CentralProcessor_Features* release_features();
+  ::aspia::proto::CentralProcessor_Features* mutable_features();
+  void set_allocated_features(::aspia::proto::CentralProcessor_Features* features);
 
   // uint32 stepping = 3;
   void clear_stepping();
@@ -6968,9 +7895,9 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature > feature_;
   ::google::protobuf::internal::ArenaStringPtr brand_string_;
   ::google::protobuf::internal::ArenaStringPtr vendor_;
+  ::aspia::proto::CentralProcessor_Features* features_;
   ::google::protobuf::uint32 stepping_;
   ::google::protobuf::uint32 model_;
   ::google::protobuf::uint32 family_;
@@ -16386,73 +17313,1910 @@ DmiPortableBattery::item() const {
 
 // -------------------------------------------------------------------
 
-// CentralProcessor_Feature
+// CentralProcessor_Features
 
-// string name = 1;
-inline void CentralProcessor_Feature::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// bool has_fpu = 1;
+inline void CentralProcessor_Features::clear_has_fpu() {
+  has_fpu_ = false;
 }
-inline const ::std::string& CentralProcessor_Feature::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Feature.name)
-  return name_.GetNoArena();
+inline bool CentralProcessor_Features::has_fpu() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fpu)
+  return has_fpu_;
 }
-inline void CentralProcessor_Feature::set_name(const ::std::string& value) {
+inline void CentralProcessor_Features::set_has_fpu(bool value) {
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Feature.name)
-}
-#if LANG_CXX11
-inline void CentralProcessor_Feature::set_name(::std::string&& value) {
-  
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.Feature.name)
-}
-#endif
-inline void CentralProcessor_Feature::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.Feature.name)
-}
-inline void CentralProcessor_Feature::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.Feature.name)
-}
-inline ::std::string* CentralProcessor_Feature::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.Feature.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CentralProcessor_Feature::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.Feature.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CentralProcessor_Feature::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
-    
-  } else {
-    
-  }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.Feature.name)
+  has_fpu_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fpu)
 }
 
-// bool supported = 2;
-inline void CentralProcessor_Feature::clear_supported() {
-  supported_ = false;
+// bool has_vme = 2;
+inline void CentralProcessor_Features::clear_has_vme() {
+  has_vme_ = false;
 }
-inline bool CentralProcessor_Feature::supported() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Feature.supported)
-  return supported_;
+inline bool CentralProcessor_Features::has_vme() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vme)
+  return has_vme_;
 }
-inline void CentralProcessor_Feature::set_supported(bool value) {
+inline void CentralProcessor_Features::set_has_vme(bool value) {
   
-  supported_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Feature.supported)
+  has_vme_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vme)
+}
+
+// bool has_de = 3;
+inline void CentralProcessor_Features::clear_has_de() {
+  has_de_ = false;
+}
+inline bool CentralProcessor_Features::has_de() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_de)
+  return has_de_;
+}
+inline void CentralProcessor_Features::set_has_de(bool value) {
+  
+  has_de_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_de)
+}
+
+// bool has_pse = 4;
+inline void CentralProcessor_Features::clear_has_pse() {
+  has_pse_ = false;
+}
+inline bool CentralProcessor_Features::has_pse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pse)
+  return has_pse_;
+}
+inline void CentralProcessor_Features::set_has_pse(bool value) {
+  
+  has_pse_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pse)
+}
+
+// bool has_tsc = 5;
+inline void CentralProcessor_Features::clear_has_tsc() {
+  has_tsc_ = false;
+}
+inline bool CentralProcessor_Features::has_tsc() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tsc)
+  return has_tsc_;
+}
+inline void CentralProcessor_Features::set_has_tsc(bool value) {
+  
+  has_tsc_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tsc)
+}
+
+// bool has_msr = 6;
+inline void CentralProcessor_Features::clear_has_msr() {
+  has_msr_ = false;
+}
+inline bool CentralProcessor_Features::has_msr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_msr)
+  return has_msr_;
+}
+inline void CentralProcessor_Features::set_has_msr(bool value) {
+  
+  has_msr_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_msr)
+}
+
+// bool has_pae = 7;
+inline void CentralProcessor_Features::clear_has_pae() {
+  has_pae_ = false;
+}
+inline bool CentralProcessor_Features::has_pae() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pae)
+  return has_pae_;
+}
+inline void CentralProcessor_Features::set_has_pae(bool value) {
+  
+  has_pae_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pae)
+}
+
+// bool has_mce = 8;
+inline void CentralProcessor_Features::clear_has_mce() {
+  has_mce_ = false;
+}
+inline bool CentralProcessor_Features::has_mce() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mce)
+  return has_mce_;
+}
+inline void CentralProcessor_Features::set_has_mce(bool value) {
+  
+  has_mce_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mce)
+}
+
+// bool has_cx8 = 9;
+inline void CentralProcessor_Features::clear_has_cx8() {
+  has_cx8_ = false;
+}
+inline bool CentralProcessor_Features::has_cx8() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cx8)
+  return has_cx8_;
+}
+inline void CentralProcessor_Features::set_has_cx8(bool value) {
+  
+  has_cx8_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cx8)
+}
+
+// bool has_apic = 10;
+inline void CentralProcessor_Features::clear_has_apic() {
+  has_apic_ = false;
+}
+inline bool CentralProcessor_Features::has_apic() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_apic)
+  return has_apic_;
+}
+inline void CentralProcessor_Features::set_has_apic(bool value) {
+  
+  has_apic_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_apic)
+}
+
+// bool has_sep = 11;
+inline void CentralProcessor_Features::clear_has_sep() {
+  has_sep_ = false;
+}
+inline bool CentralProcessor_Features::has_sep() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sep)
+  return has_sep_;
+}
+inline void CentralProcessor_Features::set_has_sep(bool value) {
+  
+  has_sep_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sep)
+}
+
+// bool has_mtrr = 12;
+inline void CentralProcessor_Features::clear_has_mtrr() {
+  has_mtrr_ = false;
+}
+inline bool CentralProcessor_Features::has_mtrr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mtrr)
+  return has_mtrr_;
+}
+inline void CentralProcessor_Features::set_has_mtrr(bool value) {
+  
+  has_mtrr_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mtrr)
+}
+
+// bool has_pge = 13;
+inline void CentralProcessor_Features::clear_has_pge() {
+  has_pge_ = false;
+}
+inline bool CentralProcessor_Features::has_pge() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pge)
+  return has_pge_;
+}
+inline void CentralProcessor_Features::set_has_pge(bool value) {
+  
+  has_pge_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pge)
+}
+
+// bool has_mca = 14;
+inline void CentralProcessor_Features::clear_has_mca() {
+  has_mca_ = false;
+}
+inline bool CentralProcessor_Features::has_mca() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mca)
+  return has_mca_;
+}
+inline void CentralProcessor_Features::set_has_mca(bool value) {
+  
+  has_mca_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mca)
+}
+
+// bool has_cmov = 15;
+inline void CentralProcessor_Features::clear_has_cmov() {
+  has_cmov_ = false;
+}
+inline bool CentralProcessor_Features::has_cmov() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cmov)
+  return has_cmov_;
+}
+inline void CentralProcessor_Features::set_has_cmov(bool value) {
+  
+  has_cmov_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cmov)
+}
+
+// bool has_pat = 16;
+inline void CentralProcessor_Features::clear_has_pat() {
+  has_pat_ = false;
+}
+inline bool CentralProcessor_Features::has_pat() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pat)
+  return has_pat_;
+}
+inline void CentralProcessor_Features::set_has_pat(bool value) {
+  
+  has_pat_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pat)
+}
+
+// bool has_pse36 = 17;
+inline void CentralProcessor_Features::clear_has_pse36() {
+  has_pse36_ = false;
+}
+inline bool CentralProcessor_Features::has_pse36() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pse36)
+  return has_pse36_;
+}
+inline void CentralProcessor_Features::set_has_pse36(bool value) {
+  
+  has_pse36_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pse36)
+}
+
+// bool has_psn = 18;
+inline void CentralProcessor_Features::clear_has_psn() {
+  has_psn_ = false;
+}
+inline bool CentralProcessor_Features::has_psn() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_psn)
+  return has_psn_;
+}
+inline void CentralProcessor_Features::set_has_psn(bool value) {
+  
+  has_psn_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_psn)
+}
+
+// bool has_clfsh = 19;
+inline void CentralProcessor_Features::clear_has_clfsh() {
+  has_clfsh_ = false;
+}
+inline bool CentralProcessor_Features::has_clfsh() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clfsh)
+  return has_clfsh_;
+}
+inline void CentralProcessor_Features::set_has_clfsh(bool value) {
+  
+  has_clfsh_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clfsh)
+}
+
+// bool has_ds = 20;
+inline void CentralProcessor_Features::clear_has_ds() {
+  has_ds_ = false;
+}
+inline bool CentralProcessor_Features::has_ds() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ds)
+  return has_ds_;
+}
+inline void CentralProcessor_Features::set_has_ds(bool value) {
+  
+  has_ds_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ds)
+}
+
+// bool has_acpu = 21;
+inline void CentralProcessor_Features::clear_has_acpu() {
+  has_acpu_ = false;
+}
+inline bool CentralProcessor_Features::has_acpu() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_acpu)
+  return has_acpu_;
+}
+inline void CentralProcessor_Features::set_has_acpu(bool value) {
+  
+  has_acpu_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_acpu)
+}
+
+// bool has_mmx = 22;
+inline void CentralProcessor_Features::clear_has_mmx() {
+  has_mmx_ = false;
+}
+inline bool CentralProcessor_Features::has_mmx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mmx)
+  return has_mmx_;
+}
+inline void CentralProcessor_Features::set_has_mmx(bool value) {
+  
+  has_mmx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mmx)
+}
+
+// bool has_fxsr = 23;
+inline void CentralProcessor_Features::clear_has_fxsr() {
+  has_fxsr_ = false;
+}
+inline bool CentralProcessor_Features::has_fxsr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fxsr)
+  return has_fxsr_;
+}
+inline void CentralProcessor_Features::set_has_fxsr(bool value) {
+  
+  has_fxsr_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fxsr)
+}
+
+// bool has_sse = 24;
+inline void CentralProcessor_Features::clear_has_sse() {
+  has_sse_ = false;
+}
+inline bool CentralProcessor_Features::has_sse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse)
+  return has_sse_;
+}
+inline void CentralProcessor_Features::set_has_sse(bool value) {
+  
+  has_sse_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse)
+}
+
+// bool has_sse2 = 25;
+inline void CentralProcessor_Features::clear_has_sse2() {
+  has_sse2_ = false;
+}
+inline bool CentralProcessor_Features::has_sse2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse2)
+  return has_sse2_;
+}
+inline void CentralProcessor_Features::set_has_sse2(bool value) {
+  
+  has_sse2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse2)
+}
+
+// bool has_ss = 26;
+inline void CentralProcessor_Features::clear_has_ss() {
+  has_ss_ = false;
+}
+inline bool CentralProcessor_Features::has_ss() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ss)
+  return has_ss_;
+}
+inline void CentralProcessor_Features::set_has_ss(bool value) {
+  
+  has_ss_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ss)
+}
+
+// bool has_htt = 27;
+inline void CentralProcessor_Features::clear_has_htt() {
+  has_htt_ = false;
+}
+inline bool CentralProcessor_Features::has_htt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_htt)
+  return has_htt_;
+}
+inline void CentralProcessor_Features::set_has_htt(bool value) {
+  
+  has_htt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_htt)
+}
+
+// bool has_tm = 28;
+inline void CentralProcessor_Features::clear_has_tm() {
+  has_tm_ = false;
+}
+inline bool CentralProcessor_Features::has_tm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm)
+  return has_tm_;
+}
+inline void CentralProcessor_Features::set_has_tm(bool value) {
+  
+  has_tm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm)
+}
+
+// bool has_ia64 = 29;
+inline void CentralProcessor_Features::clear_has_ia64() {
+  has_ia64_ = false;
+}
+inline bool CentralProcessor_Features::has_ia64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ia64)
+  return has_ia64_;
+}
+inline void CentralProcessor_Features::set_has_ia64(bool value) {
+  
+  has_ia64_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ia64)
+}
+
+// bool has_pbe = 30;
+inline void CentralProcessor_Features::clear_has_pbe() {
+  has_pbe_ = false;
+}
+inline bool CentralProcessor_Features::has_pbe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pbe)
+  return has_pbe_;
+}
+inline void CentralProcessor_Features::set_has_pbe(bool value) {
+  
+  has_pbe_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pbe)
+}
+
+// bool has_sse3 = 31;
+inline void CentralProcessor_Features::clear_has_sse3() {
+  has_sse3_ = false;
+}
+inline bool CentralProcessor_Features::has_sse3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse3)
+  return has_sse3_;
+}
+inline void CentralProcessor_Features::set_has_sse3(bool value) {
+  
+  has_sse3_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse3)
+}
+
+// bool has_pclmuldq = 32;
+inline void CentralProcessor_Features::clear_has_pclmuldq() {
+  has_pclmuldq_ = false;
+}
+inline bool CentralProcessor_Features::has_pclmuldq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pclmuldq)
+  return has_pclmuldq_;
+}
+inline void CentralProcessor_Features::set_has_pclmuldq(bool value) {
+  
+  has_pclmuldq_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pclmuldq)
+}
+
+// bool has_dtes64 = 33;
+inline void CentralProcessor_Features::clear_has_dtes64() {
+  has_dtes64_ = false;
+}
+inline bool CentralProcessor_Features::has_dtes64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_dtes64)
+  return has_dtes64_;
+}
+inline void CentralProcessor_Features::set_has_dtes64(bool value) {
+  
+  has_dtes64_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_dtes64)
+}
+
+// bool has_monitor = 34;
+inline void CentralProcessor_Features::clear_has_monitor() {
+  has_monitor_ = false;
+}
+inline bool CentralProcessor_Features::has_monitor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_monitor)
+  return has_monitor_;
+}
+inline void CentralProcessor_Features::set_has_monitor(bool value) {
+  
+  has_monitor_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_monitor)
+}
+
+// bool has_ds_cpl = 35;
+inline void CentralProcessor_Features::clear_has_ds_cpl() {
+  has_ds_cpl_ = false;
+}
+inline bool CentralProcessor_Features::has_ds_cpl() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ds_cpl)
+  return has_ds_cpl_;
+}
+inline void CentralProcessor_Features::set_has_ds_cpl(bool value) {
+  
+  has_ds_cpl_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ds_cpl)
+}
+
+// bool has_vmx = 36;
+inline void CentralProcessor_Features::clear_has_vmx() {
+  has_vmx_ = false;
+}
+inline bool CentralProcessor_Features::has_vmx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vmx)
+  return has_vmx_;
+}
+inline void CentralProcessor_Features::set_has_vmx(bool value) {
+  
+  has_vmx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vmx)
+}
+
+// bool has_smx = 37;
+inline void CentralProcessor_Features::clear_has_smx() {
+  has_smx_ = false;
+}
+inline bool CentralProcessor_Features::has_smx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smx)
+  return has_smx_;
+}
+inline void CentralProcessor_Features::set_has_smx(bool value) {
+  
+  has_smx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smx)
+}
+
+// bool has_est = 38;
+inline void CentralProcessor_Features::clear_has_est() {
+  has_est_ = false;
+}
+inline bool CentralProcessor_Features::has_est() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_est)
+  return has_est_;
+}
+inline void CentralProcessor_Features::set_has_est(bool value) {
+  
+  has_est_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_est)
+}
+
+// bool has_tm2 = 39;
+inline void CentralProcessor_Features::clear_has_tm2() {
+  has_tm2_ = false;
+}
+inline bool CentralProcessor_Features::has_tm2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm2)
+  return has_tm2_;
+}
+inline void CentralProcessor_Features::set_has_tm2(bool value) {
+  
+  has_tm2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm2)
+}
+
+// bool has_ssse3 = 40;
+inline void CentralProcessor_Features::clear_has_ssse3() {
+  has_ssse3_ = false;
+}
+inline bool CentralProcessor_Features::has_ssse3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ssse3)
+  return has_ssse3_;
+}
+inline void CentralProcessor_Features::set_has_ssse3(bool value) {
+  
+  has_ssse3_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ssse3)
+}
+
+// bool has_cnxt_id = 41;
+inline void CentralProcessor_Features::clear_has_cnxt_id() {
+  has_cnxt_id_ = false;
+}
+inline bool CentralProcessor_Features::has_cnxt_id() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cnxt_id)
+  return has_cnxt_id_;
+}
+inline void CentralProcessor_Features::set_has_cnxt_id(bool value) {
+  
+  has_cnxt_id_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cnxt_id)
+}
+
+// bool has_sdbg = 42;
+inline void CentralProcessor_Features::clear_has_sdbg() {
+  has_sdbg_ = false;
+}
+inline bool CentralProcessor_Features::has_sdbg() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sdbg)
+  return has_sdbg_;
+}
+inline void CentralProcessor_Features::set_has_sdbg(bool value) {
+  
+  has_sdbg_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sdbg)
+}
+
+// bool has_fma = 43;
+inline void CentralProcessor_Features::clear_has_fma() {
+  has_fma_ = false;
+}
+inline bool CentralProcessor_Features::has_fma() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fma)
+  return has_fma_;
+}
+inline void CentralProcessor_Features::set_has_fma(bool value) {
+  
+  has_fma_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fma)
+}
+
+// bool has_cx16 = 44;
+inline void CentralProcessor_Features::clear_has_cx16() {
+  has_cx16_ = false;
+}
+inline bool CentralProcessor_Features::has_cx16() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cx16)
+  return has_cx16_;
+}
+inline void CentralProcessor_Features::set_has_cx16(bool value) {
+  
+  has_cx16_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cx16)
+}
+
+// bool has_xtpr = 45;
+inline void CentralProcessor_Features::clear_has_xtpr() {
+  has_xtpr_ = false;
+}
+inline bool CentralProcessor_Features::has_xtpr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xtpr)
+  return has_xtpr_;
+}
+inline void CentralProcessor_Features::set_has_xtpr(bool value) {
+  
+  has_xtpr_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xtpr)
+}
+
+// bool has_pdcm = 46;
+inline void CentralProcessor_Features::clear_has_pdcm() {
+  has_pdcm_ = false;
+}
+inline bool CentralProcessor_Features::has_pdcm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pdcm)
+  return has_pdcm_;
+}
+inline void CentralProcessor_Features::set_has_pdcm(bool value) {
+  
+  has_pdcm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pdcm)
+}
+
+// bool has_pcid = 47;
+inline void CentralProcessor_Features::clear_has_pcid() {
+  has_pcid_ = false;
+}
+inline bool CentralProcessor_Features::has_pcid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pcid)
+  return has_pcid_;
+}
+inline void CentralProcessor_Features::set_has_pcid(bool value) {
+  
+  has_pcid_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pcid)
+}
+
+// bool has_dca = 48;
+inline void CentralProcessor_Features::clear_has_dca() {
+  has_dca_ = false;
+}
+inline bool CentralProcessor_Features::has_dca() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_dca)
+  return has_dca_;
+}
+inline void CentralProcessor_Features::set_has_dca(bool value) {
+  
+  has_dca_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_dca)
+}
+
+// bool has_sse41 = 49;
+inline void CentralProcessor_Features::clear_has_sse41() {
+  has_sse41_ = false;
+}
+inline bool CentralProcessor_Features::has_sse41() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse41)
+  return has_sse41_;
+}
+inline void CentralProcessor_Features::set_has_sse41(bool value) {
+  
+  has_sse41_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse41)
+}
+
+// bool has_sse42 = 50;
+inline void CentralProcessor_Features::clear_has_sse42() {
+  has_sse42_ = false;
+}
+inline bool CentralProcessor_Features::has_sse42() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse42)
+  return has_sse42_;
+}
+inline void CentralProcessor_Features::set_has_sse42(bool value) {
+  
+  has_sse42_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse42)
+}
+
+// bool has_x2apic = 51;
+inline void CentralProcessor_Features::clear_has_x2apic() {
+  has_x2apic_ = false;
+}
+inline bool CentralProcessor_Features::has_x2apic() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_x2apic)
+  return has_x2apic_;
+}
+inline void CentralProcessor_Features::set_has_x2apic(bool value) {
+  
+  has_x2apic_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_x2apic)
+}
+
+// bool has_movbe = 52;
+inline void CentralProcessor_Features::clear_has_movbe() {
+  has_movbe_ = false;
+}
+inline bool CentralProcessor_Features::has_movbe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_movbe)
+  return has_movbe_;
+}
+inline void CentralProcessor_Features::set_has_movbe(bool value) {
+  
+  has_movbe_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_movbe)
+}
+
+// bool has_popcnt = 53;
+inline void CentralProcessor_Features::clear_has_popcnt() {
+  has_popcnt_ = false;
+}
+inline bool CentralProcessor_Features::has_popcnt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_popcnt)
+  return has_popcnt_;
+}
+inline void CentralProcessor_Features::set_has_popcnt(bool value) {
+  
+  has_popcnt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_popcnt)
+}
+
+// bool has_tsc_deadline = 54;
+inline void CentralProcessor_Features::clear_has_tsc_deadline() {
+  has_tsc_deadline_ = false;
+}
+inline bool CentralProcessor_Features::has_tsc_deadline() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tsc_deadline)
+  return has_tsc_deadline_;
+}
+inline void CentralProcessor_Features::set_has_tsc_deadline(bool value) {
+  
+  has_tsc_deadline_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tsc_deadline)
+}
+
+// bool has_aes = 55;
+inline void CentralProcessor_Features::clear_has_aes() {
+  has_aes_ = false;
+}
+inline bool CentralProcessor_Features::has_aes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_aes)
+  return has_aes_;
+}
+inline void CentralProcessor_Features::set_has_aes(bool value) {
+  
+  has_aes_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_aes)
+}
+
+// bool has_xsave = 56;
+inline void CentralProcessor_Features::clear_has_xsave() {
+  has_xsave_ = false;
+}
+inline bool CentralProcessor_Features::has_xsave() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xsave)
+  return has_xsave_;
+}
+inline void CentralProcessor_Features::set_has_xsave(bool value) {
+  
+  has_xsave_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xsave)
+}
+
+// bool has_osxsave = 57;
+inline void CentralProcessor_Features::clear_has_osxsave() {
+  has_osxsave_ = false;
+}
+inline bool CentralProcessor_Features::has_osxsave() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_osxsave)
+  return has_osxsave_;
+}
+inline void CentralProcessor_Features::set_has_osxsave(bool value) {
+  
+  has_osxsave_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_osxsave)
+}
+
+// bool has_avx = 58;
+inline void CentralProcessor_Features::clear_has_avx() {
+  has_avx_ = false;
+}
+inline bool CentralProcessor_Features::has_avx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx)
+  return has_avx_;
+}
+inline void CentralProcessor_Features::set_has_avx(bool value) {
+  
+  has_avx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx)
+}
+
+// bool has_f16c = 59;
+inline void CentralProcessor_Features::clear_has_f16c() {
+  has_f16c_ = false;
+}
+inline bool CentralProcessor_Features::has_f16c() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_f16c)
+  return has_f16c_;
+}
+inline void CentralProcessor_Features::set_has_f16c(bool value) {
+  
+  has_f16c_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_f16c)
+}
+
+// bool has_rdrand = 60;
+inline void CentralProcessor_Features::clear_has_rdrand() {
+  has_rdrand_ = false;
+}
+inline bool CentralProcessor_Features::has_rdrand() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdrand)
+  return has_rdrand_;
+}
+inline void CentralProcessor_Features::set_has_rdrand(bool value) {
+  
+  has_rdrand_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdrand)
+}
+
+// bool has_hypervisor = 61;
+inline void CentralProcessor_Features::clear_has_hypervisor() {
+  has_hypervisor_ = false;
+}
+inline bool CentralProcessor_Features::has_hypervisor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_hypervisor)
+  return has_hypervisor_;
+}
+inline void CentralProcessor_Features::set_has_hypervisor(bool value) {
+  
+  has_hypervisor_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_hypervisor)
+}
+
+// bool has_syscall = 62;
+inline void CentralProcessor_Features::clear_has_syscall() {
+  has_syscall_ = false;
+}
+inline bool CentralProcessor_Features::has_syscall() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_syscall)
+  return has_syscall_;
+}
+inline void CentralProcessor_Features::set_has_syscall(bool value) {
+  
+  has_syscall_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_syscall)
+}
+
+// bool has_xd_bit = 63;
+inline void CentralProcessor_Features::clear_has_xd_bit() {
+  has_xd_bit_ = false;
+}
+inline bool CentralProcessor_Features::has_xd_bit() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xd_bit)
+  return has_xd_bit_;
+}
+inline void CentralProcessor_Features::set_has_xd_bit(bool value) {
+  
+  has_xd_bit_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xd_bit)
+}
+
+// bool has_mmxext = 64;
+inline void CentralProcessor_Features::clear_has_mmxext() {
+  has_mmxext_ = false;
+}
+inline bool CentralProcessor_Features::has_mmxext() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mmxext)
+  return has_mmxext_;
+}
+inline void CentralProcessor_Features::set_has_mmxext(bool value) {
+  
+  has_mmxext_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mmxext)
+}
+
+// bool has_1gb_pages = 65;
+inline void CentralProcessor_Features::clear_has_1gb_pages() {
+  has_1gb_pages_ = false;
+}
+inline bool CentralProcessor_Features::has_1gb_pages() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_1gb_pages)
+  return has_1gb_pages_;
+}
+inline void CentralProcessor_Features::set_has_1gb_pages(bool value) {
+  
+  has_1gb_pages_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_1gb_pages)
+}
+
+// bool has_rdtscp = 66;
+inline void CentralProcessor_Features::clear_has_rdtscp() {
+  has_rdtscp_ = false;
+}
+inline bool CentralProcessor_Features::has_rdtscp() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdtscp)
+  return has_rdtscp_;
+}
+inline void CentralProcessor_Features::set_has_rdtscp(bool value) {
+  
+  has_rdtscp_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdtscp)
+}
+
+// bool has_intel64 = 67;
+inline void CentralProcessor_Features::clear_has_intel64() {
+  has_intel64_ = false;
+}
+inline bool CentralProcessor_Features::has_intel64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_intel64)
+  return has_intel64_;
+}
+inline void CentralProcessor_Features::set_has_intel64(bool value) {
+  
+  has_intel64_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_intel64)
+}
+
+// bool has_3dnowext = 68;
+inline void CentralProcessor_Features::clear_has_3dnowext() {
+  has_3dnowext_ = false;
+}
+inline bool CentralProcessor_Features::has_3dnowext() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnowext)
+  return has_3dnowext_;
+}
+inline void CentralProcessor_Features::set_has_3dnowext(bool value) {
+  
+  has_3dnowext_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnowext)
+}
+
+// bool has_3dnow = 69;
+inline void CentralProcessor_Features::clear_has_3dnow() {
+  has_3dnow_ = false;
+}
+inline bool CentralProcessor_Features::has_3dnow() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnow)
+  return has_3dnow_;
+}
+inline void CentralProcessor_Features::set_has_3dnow(bool value) {
+  
+  has_3dnow_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnow)
+}
+
+// bool has_lahf = 70;
+inline void CentralProcessor_Features::clear_has_lahf() {
+  has_lahf_ = false;
+}
+inline bool CentralProcessor_Features::has_lahf() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lahf)
+  return has_lahf_;
+}
+inline void CentralProcessor_Features::set_has_lahf(bool value) {
+  
+  has_lahf_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lahf)
+}
+
+// bool has_svm = 71;
+inline void CentralProcessor_Features::clear_has_svm() {
+  has_svm_ = false;
+}
+inline bool CentralProcessor_Features::has_svm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_svm)
+  return has_svm_;
+}
+inline void CentralProcessor_Features::set_has_svm(bool value) {
+  
+  has_svm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_svm)
+}
+
+// bool has_lzcnt = 72;
+inline void CentralProcessor_Features::clear_has_lzcnt() {
+  has_lzcnt_ = false;
+}
+inline bool CentralProcessor_Features::has_lzcnt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lzcnt)
+  return has_lzcnt_;
+}
+inline void CentralProcessor_Features::set_has_lzcnt(bool value) {
+  
+  has_lzcnt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lzcnt)
+}
+
+// bool has_sse4a = 73;
+inline void CentralProcessor_Features::clear_has_sse4a() {
+  has_sse4a_ = false;
+}
+inline bool CentralProcessor_Features::has_sse4a() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse4a)
+  return has_sse4a_;
+}
+inline void CentralProcessor_Features::set_has_sse4a(bool value) {
+  
+  has_sse4a_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse4a)
+}
+
+// bool has_misalignsse = 74;
+inline void CentralProcessor_Features::clear_has_misalignsse() {
+  has_misalignsse_ = false;
+}
+inline bool CentralProcessor_Features::has_misalignsse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_misalignsse)
+  return has_misalignsse_;
+}
+inline void CentralProcessor_Features::set_has_misalignsse(bool value) {
+  
+  has_misalignsse_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_misalignsse)
+}
+
+// bool has_3dnow_prefetch = 75;
+inline void CentralProcessor_Features::clear_has_3dnow_prefetch() {
+  has_3dnow_prefetch_ = false;
+}
+inline bool CentralProcessor_Features::has_3dnow_prefetch() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnow_prefetch)
+  return has_3dnow_prefetch_;
+}
+inline void CentralProcessor_Features::set_has_3dnow_prefetch(bool value) {
+  
+  has_3dnow_prefetch_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnow_prefetch)
+}
+
+// bool has_xop = 76;
+inline void CentralProcessor_Features::clear_has_xop() {
+  has_xop_ = false;
+}
+inline bool CentralProcessor_Features::has_xop() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xop)
+  return has_xop_;
+}
+inline void CentralProcessor_Features::set_has_xop(bool value) {
+  
+  has_xop_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xop)
+}
+
+// bool has_wdt = 77;
+inline void CentralProcessor_Features::clear_has_wdt() {
+  has_wdt_ = false;
+}
+inline bool CentralProcessor_Features::has_wdt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_wdt)
+  return has_wdt_;
+}
+inline void CentralProcessor_Features::set_has_wdt(bool value) {
+  
+  has_wdt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_wdt)
+}
+
+// bool has_fma4 = 78;
+inline void CentralProcessor_Features::clear_has_fma4() {
+  has_fma4_ = false;
+}
+inline bool CentralProcessor_Features::has_fma4() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fma4)
+  return has_fma4_;
+}
+inline void CentralProcessor_Features::set_has_fma4(bool value) {
+  
+  has_fma4_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fma4)
+}
+
+// bool has_fsgsbase = 79;
+inline void CentralProcessor_Features::clear_has_fsgsbase() {
+  has_fsgsbase_ = false;
+}
+inline bool CentralProcessor_Features::has_fsgsbase() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fsgsbase)
+  return has_fsgsbase_;
+}
+inline void CentralProcessor_Features::set_has_fsgsbase(bool value) {
+  
+  has_fsgsbase_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fsgsbase)
+}
+
+// bool has_sgx = 80;
+inline void CentralProcessor_Features::clear_has_sgx() {
+  has_sgx_ = false;
+}
+inline bool CentralProcessor_Features::has_sgx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sgx)
+  return has_sgx_;
+}
+inline void CentralProcessor_Features::set_has_sgx(bool value) {
+  
+  has_sgx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sgx)
+}
+
+// bool has_bmi1 = 81;
+inline void CentralProcessor_Features::clear_has_bmi1() {
+  has_bmi1_ = false;
+}
+inline bool CentralProcessor_Features::has_bmi1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_bmi1)
+  return has_bmi1_;
+}
+inline void CentralProcessor_Features::set_has_bmi1(bool value) {
+  
+  has_bmi1_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_bmi1)
+}
+
+// bool has_hle = 82;
+inline void CentralProcessor_Features::clear_has_hle() {
+  has_hle_ = false;
+}
+inline bool CentralProcessor_Features::has_hle() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_hle)
+  return has_hle_;
+}
+inline void CentralProcessor_Features::set_has_hle(bool value) {
+  
+  has_hle_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_hle)
+}
+
+// bool has_avx2 = 83;
+inline void CentralProcessor_Features::clear_has_avx2() {
+  has_avx2_ = false;
+}
+inline bool CentralProcessor_Features::has_avx2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx2)
+  return has_avx2_;
+}
+inline void CentralProcessor_Features::set_has_avx2(bool value) {
+  
+  has_avx2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx2)
+}
+
+// bool has_smep = 84;
+inline void CentralProcessor_Features::clear_has_smep() {
+  has_smep_ = false;
+}
+inline bool CentralProcessor_Features::has_smep() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smep)
+  return has_smep_;
+}
+inline void CentralProcessor_Features::set_has_smep(bool value) {
+  
+  has_smep_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smep)
+}
+
+// bool has_bmi2 = 85;
+inline void CentralProcessor_Features::clear_has_bmi2() {
+  has_bmi2_ = false;
+}
+inline bool CentralProcessor_Features::has_bmi2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_bmi2)
+  return has_bmi2_;
+}
+inline void CentralProcessor_Features::set_has_bmi2(bool value) {
+  
+  has_bmi2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_bmi2)
+}
+
+// bool has_erms = 86;
+inline void CentralProcessor_Features::clear_has_erms() {
+  has_erms_ = false;
+}
+inline bool CentralProcessor_Features::has_erms() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_erms)
+  return has_erms_;
+}
+inline void CentralProcessor_Features::set_has_erms(bool value) {
+  
+  has_erms_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_erms)
+}
+
+// bool has_invpcid = 87;
+inline void CentralProcessor_Features::clear_has_invpcid() {
+  has_invpcid_ = false;
+}
+inline bool CentralProcessor_Features::has_invpcid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_invpcid)
+  return has_invpcid_;
+}
+inline void CentralProcessor_Features::set_has_invpcid(bool value) {
+  
+  has_invpcid_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_invpcid)
+}
+
+// bool has_rtm = 88;
+inline void CentralProcessor_Features::clear_has_rtm() {
+  has_rtm_ = false;
+}
+inline bool CentralProcessor_Features::has_rtm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rtm)
+  return has_rtm_;
+}
+inline void CentralProcessor_Features::set_has_rtm(bool value) {
+  
+  has_rtm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rtm)
+}
+
+// bool has_pqm = 89;
+inline void CentralProcessor_Features::clear_has_pqm() {
+  has_pqm_ = false;
+}
+inline bool CentralProcessor_Features::has_pqm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pqm)
+  return has_pqm_;
+}
+inline void CentralProcessor_Features::set_has_pqm(bool value) {
+  
+  has_pqm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pqm)
+}
+
+// bool has_mpx = 90;
+inline void CentralProcessor_Features::clear_has_mpx() {
+  has_mpx_ = false;
+}
+inline bool CentralProcessor_Features::has_mpx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mpx)
+  return has_mpx_;
+}
+inline void CentralProcessor_Features::set_has_mpx(bool value) {
+  
+  has_mpx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mpx)
+}
+
+// bool has_pqe = 91;
+inline void CentralProcessor_Features::clear_has_pqe() {
+  has_pqe_ = false;
+}
+inline bool CentralProcessor_Features::has_pqe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pqe)
+  return has_pqe_;
+}
+inline void CentralProcessor_Features::set_has_pqe(bool value) {
+  
+  has_pqe_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pqe)
+}
+
+// bool has_avx512f = 92;
+inline void CentralProcessor_Features::clear_has_avx512f() {
+  has_avx512f_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512f() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512f)
+  return has_avx512f_;
+}
+inline void CentralProcessor_Features::set_has_avx512f(bool value) {
+  
+  has_avx512f_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512f)
+}
+
+// bool has_avx512dq = 93;
+inline void CentralProcessor_Features::clear_has_avx512dq() {
+  has_avx512dq_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512dq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512dq)
+  return has_avx512dq_;
+}
+inline void CentralProcessor_Features::set_has_avx512dq(bool value) {
+  
+  has_avx512dq_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512dq)
+}
+
+// bool has_rdseed = 94;
+inline void CentralProcessor_Features::clear_has_rdseed() {
+  has_rdseed_ = false;
+}
+inline bool CentralProcessor_Features::has_rdseed() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdseed)
+  return has_rdseed_;
+}
+inline void CentralProcessor_Features::set_has_rdseed(bool value) {
+  
+  has_rdseed_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdseed)
+}
+
+// bool has_adx = 95;
+inline void CentralProcessor_Features::clear_has_adx() {
+  has_adx_ = false;
+}
+inline bool CentralProcessor_Features::has_adx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_adx)
+  return has_adx_;
+}
+inline void CentralProcessor_Features::set_has_adx(bool value) {
+  
+  has_adx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_adx)
+}
+
+// bool has_smap = 96;
+inline void CentralProcessor_Features::clear_has_smap() {
+  has_smap_ = false;
+}
+inline bool CentralProcessor_Features::has_smap() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smap)
+  return has_smap_;
+}
+inline void CentralProcessor_Features::set_has_smap(bool value) {
+  
+  has_smap_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smap)
+}
+
+// bool has_avx512ifma = 97;
+inline void CentralProcessor_Features::clear_has_avx512ifma() {
+  has_avx512ifma_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512ifma() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512ifma)
+  return has_avx512ifma_;
+}
+inline void CentralProcessor_Features::set_has_avx512ifma(bool value) {
+  
+  has_avx512ifma_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512ifma)
+}
+
+// bool has_pcommit = 98;
+inline void CentralProcessor_Features::clear_has_pcommit() {
+  has_pcommit_ = false;
+}
+inline bool CentralProcessor_Features::has_pcommit() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pcommit)
+  return has_pcommit_;
+}
+inline void CentralProcessor_Features::set_has_pcommit(bool value) {
+  
+  has_pcommit_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pcommit)
+}
+
+// bool has_clflushopt = 99;
+inline void CentralProcessor_Features::clear_has_clflushopt() {
+  has_clflushopt_ = false;
+}
+inline bool CentralProcessor_Features::has_clflushopt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clflushopt)
+  return has_clflushopt_;
+}
+inline void CentralProcessor_Features::set_has_clflushopt(bool value) {
+  
+  has_clflushopt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clflushopt)
+}
+
+// bool has_clwb = 100;
+inline void CentralProcessor_Features::clear_has_clwb() {
+  has_clwb_ = false;
+}
+inline bool CentralProcessor_Features::has_clwb() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clwb)
+  return has_clwb_;
+}
+inline void CentralProcessor_Features::set_has_clwb(bool value) {
+  
+  has_clwb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clwb)
+}
+
+// bool has_intel_pt = 101;
+inline void CentralProcessor_Features::clear_has_intel_pt() {
+  has_intel_pt_ = false;
+}
+inline bool CentralProcessor_Features::has_intel_pt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_intel_pt)
+  return has_intel_pt_;
+}
+inline void CentralProcessor_Features::set_has_intel_pt(bool value) {
+  
+  has_intel_pt_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_intel_pt)
+}
+
+// bool has_avx512pf = 102;
+inline void CentralProcessor_Features::clear_has_avx512pf() {
+  has_avx512pf_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512pf() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512pf)
+  return has_avx512pf_;
+}
+inline void CentralProcessor_Features::set_has_avx512pf(bool value) {
+  
+  has_avx512pf_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512pf)
+}
+
+// bool has_avx512er = 103;
+inline void CentralProcessor_Features::clear_has_avx512er() {
+  has_avx512er_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512er() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512er)
+  return has_avx512er_;
+}
+inline void CentralProcessor_Features::set_has_avx512er(bool value) {
+  
+  has_avx512er_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512er)
+}
+
+// bool has_avx512cd = 104;
+inline void CentralProcessor_Features::clear_has_avx512cd() {
+  has_avx512cd_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512cd() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512cd)
+  return has_avx512cd_;
+}
+inline void CentralProcessor_Features::set_has_avx512cd(bool value) {
+  
+  has_avx512cd_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512cd)
+}
+
+// bool has_sha = 105;
+inline void CentralProcessor_Features::clear_has_sha() {
+  has_sha_ = false;
+}
+inline bool CentralProcessor_Features::has_sha() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sha)
+  return has_sha_;
+}
+inline void CentralProcessor_Features::set_has_sha(bool value) {
+  
+  has_sha_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sha)
+}
+
+// bool has_avx512bw = 106;
+inline void CentralProcessor_Features::clear_has_avx512bw() {
+  has_avx512bw_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512bw() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512bw)
+  return has_avx512bw_;
+}
+inline void CentralProcessor_Features::set_has_avx512bw(bool value) {
+  
+  has_avx512bw_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512bw)
+}
+
+// bool has_avx512vl = 107;
+inline void CentralProcessor_Features::clear_has_avx512vl() {
+  has_avx512vl_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512vl() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vl)
+  return has_avx512vl_;
+}
+inline void CentralProcessor_Features::set_has_avx512vl(bool value) {
+  
+  has_avx512vl_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vl)
+}
+
+// bool has_prefetchwt1 = 108;
+inline void CentralProcessor_Features::clear_has_prefetchwt1() {
+  has_prefetchwt1_ = false;
+}
+inline bool CentralProcessor_Features::has_prefetchwt1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_prefetchwt1)
+  return has_prefetchwt1_;
+}
+inline void CentralProcessor_Features::set_has_prefetchwt1(bool value) {
+  
+  has_prefetchwt1_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_prefetchwt1)
+}
+
+// bool has_avx512vbmi = 109;
+inline void CentralProcessor_Features::clear_has_avx512vbmi() {
+  has_avx512vbmi_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512vbmi() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vbmi)
+  return has_avx512vbmi_;
+}
+inline void CentralProcessor_Features::set_has_avx512vbmi(bool value) {
+  
+  has_avx512vbmi_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vbmi)
+}
+
+// bool has_umip = 110;
+inline void CentralProcessor_Features::clear_has_umip() {
+  has_umip_ = false;
+}
+inline bool CentralProcessor_Features::has_umip() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_umip)
+  return has_umip_;
+}
+inline void CentralProcessor_Features::set_has_umip(bool value) {
+  
+  has_umip_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_umip)
+}
+
+// bool has_pku = 111;
+inline void CentralProcessor_Features::clear_has_pku() {
+  has_pku_ = false;
+}
+inline bool CentralProcessor_Features::has_pku() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pku)
+  return has_pku_;
+}
+inline void CentralProcessor_Features::set_has_pku(bool value) {
+  
+  has_pku_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pku)
+}
+
+// bool has_ospke = 112;
+inline void CentralProcessor_Features::clear_has_ospke() {
+  has_ospke_ = false;
+}
+inline bool CentralProcessor_Features::has_ospke() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ospke)
+  return has_ospke_;
+}
+inline void CentralProcessor_Features::set_has_ospke(bool value) {
+  
+  has_ospke_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ospke)
+}
+
+// bool has_avx512vbmi2 = 113;
+inline void CentralProcessor_Features::clear_has_avx512vbmi2() {
+  has_avx512vbmi2_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512vbmi2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vbmi2)
+  return has_avx512vbmi2_;
+}
+inline void CentralProcessor_Features::set_has_avx512vbmi2(bool value) {
+  
+  has_avx512vbmi2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vbmi2)
+}
+
+// bool has_gfni = 114;
+inline void CentralProcessor_Features::clear_has_gfni() {
+  has_gfni_ = false;
+}
+inline bool CentralProcessor_Features::has_gfni() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_gfni)
+  return has_gfni_;
+}
+inline void CentralProcessor_Features::set_has_gfni(bool value) {
+  
+  has_gfni_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_gfni)
+}
+
+// bool has_vaes = 115;
+inline void CentralProcessor_Features::clear_has_vaes() {
+  has_vaes_ = false;
+}
+inline bool CentralProcessor_Features::has_vaes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vaes)
+  return has_vaes_;
+}
+inline void CentralProcessor_Features::set_has_vaes(bool value) {
+  
+  has_vaes_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vaes)
+}
+
+// bool has_vpclmulqdq = 116;
+inline void CentralProcessor_Features::clear_has_vpclmulqdq() {
+  has_vpclmulqdq_ = false;
+}
+inline bool CentralProcessor_Features::has_vpclmulqdq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vpclmulqdq)
+  return has_vpclmulqdq_;
+}
+inline void CentralProcessor_Features::set_has_vpclmulqdq(bool value) {
+  
+  has_vpclmulqdq_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vpclmulqdq)
+}
+
+// bool has_avx512vnni = 117;
+inline void CentralProcessor_Features::clear_has_avx512vnni() {
+  has_avx512vnni_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512vnni() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vnni)
+  return has_avx512vnni_;
+}
+inline void CentralProcessor_Features::set_has_avx512vnni(bool value) {
+  
+  has_avx512vnni_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vnni)
+}
+
+// bool has_avx512bitalg = 118;
+inline void CentralProcessor_Features::clear_has_avx512bitalg() {
+  has_avx512bitalg_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512bitalg() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512bitalg)
+  return has_avx512bitalg_;
+}
+inline void CentralProcessor_Features::set_has_avx512bitalg(bool value) {
+  
+  has_avx512bitalg_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512bitalg)
+}
+
+// bool has_avx512vpopcntdq = 119;
+inline void CentralProcessor_Features::clear_has_avx512vpopcntdq() {
+  has_avx512vpopcntdq_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512vpopcntdq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vpopcntdq)
+  return has_avx512vpopcntdq_;
+}
+inline void CentralProcessor_Features::set_has_avx512vpopcntdq(bool value) {
+  
+  has_avx512vpopcntdq_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vpopcntdq)
+}
+
+// bool has_rdpid = 120;
+inline void CentralProcessor_Features::clear_has_rdpid() {
+  has_rdpid_ = false;
+}
+inline bool CentralProcessor_Features::has_rdpid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdpid)
+  return has_rdpid_;
+}
+inline void CentralProcessor_Features::set_has_rdpid(bool value) {
+  
+  has_rdpid_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdpid)
+}
+
+// bool has_sgx_lc = 121;
+inline void CentralProcessor_Features::clear_has_sgx_lc() {
+  has_sgx_lc_ = false;
+}
+inline bool CentralProcessor_Features::has_sgx_lc() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sgx_lc)
+  return has_sgx_lc_;
+}
+inline void CentralProcessor_Features::set_has_sgx_lc(bool value) {
+  
+  has_sgx_lc_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sgx_lc)
+}
+
+// bool has_avx512_4vnniw = 122;
+inline void CentralProcessor_Features::clear_has_avx512_4vnniw() {
+  has_avx512_4vnniw_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512_4vnniw() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512_4vnniw)
+  return has_avx512_4vnniw_;
+}
+inline void CentralProcessor_Features::set_has_avx512_4vnniw(bool value) {
+  
+  has_avx512_4vnniw_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512_4vnniw)
+}
+
+// bool has_avx512_4fmaps = 123;
+inline void CentralProcessor_Features::clear_has_avx512_4fmaps() {
+  has_avx512_4fmaps_ = false;
+}
+inline bool CentralProcessor_Features::has_avx512_4fmaps() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512_4fmaps)
+  return has_avx512_4fmaps_;
+}
+inline void CentralProcessor_Features::set_has_avx512_4fmaps(bool value) {
+  
+  has_avx512_4fmaps_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512_4fmaps)
+}
+
+// bool has_ais = 124;
+inline void CentralProcessor_Features::clear_has_ais() {
+  has_ais_ = false;
+}
+inline bool CentralProcessor_Features::has_ais() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ais)
+  return has_ais_;
+}
+inline void CentralProcessor_Features::set_has_ais(bool value) {
+  
+  has_ais_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ais)
+}
+
+// bool has_rng = 125;
+inline void CentralProcessor_Features::clear_has_rng() {
+  has_rng_ = false;
+}
+inline bool CentralProcessor_Features::has_rng() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rng)
+  return has_rng_;
+}
+inline void CentralProcessor_Features::set_has_rng(bool value) {
+  
+  has_rng_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rng)
+}
+
+// bool has_lh = 126;
+inline void CentralProcessor_Features::clear_has_lh() {
+  has_lh_ = false;
+}
+inline bool CentralProcessor_Features::has_lh() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lh)
+  return has_lh_;
+}
+inline void CentralProcessor_Features::set_has_lh(bool value) {
+  
+  has_lh_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lh)
+}
+
+// bool has_femms = 127;
+inline void CentralProcessor_Features::clear_has_femms() {
+  has_femms_ = false;
+}
+inline bool CentralProcessor_Features::has_femms() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_femms)
+  return has_femms_;
+}
+inline void CentralProcessor_Features::set_has_femms(bool value) {
+  
+  has_femms_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_femms)
+}
+
+// bool has_ace = 128;
+inline void CentralProcessor_Features::clear_has_ace() {
+  has_ace_ = false;
+}
+inline bool CentralProcessor_Features::has_ace() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ace)
+  return has_ace_;
+}
+inline void CentralProcessor_Features::set_has_ace(bool value) {
+  
+  has_ace_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ace)
+}
+
+// bool has_ace2 = 129;
+inline void CentralProcessor_Features::clear_has_ace2() {
+  has_ace2_ = false;
+}
+inline bool CentralProcessor_Features::has_ace2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ace2)
+  return has_ace2_;
+}
+inline void CentralProcessor_Features::set_has_ace2(bool value) {
+  
+  has_ace2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ace2)
+}
+
+// bool has_phe = 130;
+inline void CentralProcessor_Features::clear_has_phe() {
+  has_phe_ = false;
+}
+inline bool CentralProcessor_Features::has_phe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_phe)
+  return has_phe_;
+}
+inline void CentralProcessor_Features::set_has_phe(bool value) {
+  
+  has_phe_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_phe)
+}
+
+// bool has_pmm = 131;
+inline void CentralProcessor_Features::clear_has_pmm() {
+  has_pmm_ = false;
+}
+inline bool CentralProcessor_Features::has_pmm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pmm)
+  return has_pmm_;
+}
+inline void CentralProcessor_Features::set_has_pmm(bool value) {
+  
+  has_pmm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pmm)
+}
+
+// bool has_parallax = 132;
+inline void CentralProcessor_Features::clear_has_parallax() {
+  has_parallax_ = false;
+}
+inline bool CentralProcessor_Features::has_parallax() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_parallax)
+  return has_parallax_;
+}
+inline void CentralProcessor_Features::set_has_parallax(bool value) {
+  
+  has_parallax_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_parallax)
+}
+
+// bool has_overstress = 133;
+inline void CentralProcessor_Features::clear_has_overstress() {
+  has_overstress_ = false;
+}
+inline bool CentralProcessor_Features::has_overstress() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_overstress)
+  return has_overstress_;
+}
+inline void CentralProcessor_Features::set_has_overstress(bool value) {
+  
+  has_overstress_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_overstress)
+}
+
+// bool has_tm3 = 134;
+inline void CentralProcessor_Features::clear_has_tm3() {
+  has_tm3_ = false;
+}
+inline bool CentralProcessor_Features::has_tm3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm3)
+  return has_tm3_;
+}
+inline void CentralProcessor_Features::set_has_tm3(bool value) {
+  
+  has_tm3_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm3)
+}
+
+// bool has_rng2 = 135;
+inline void CentralProcessor_Features::clear_has_rng2() {
+  has_rng2_ = false;
+}
+inline bool CentralProcessor_Features::has_rng2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rng2)
+  return has_rng2_;
+}
+inline void CentralProcessor_Features::set_has_rng2(bool value) {
+  
+  has_rng2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rng2)
+}
+
+// bool has_phe2 = 136;
+inline void CentralProcessor_Features::clear_has_phe2() {
+  has_phe2_ = false;
+}
+inline bool CentralProcessor_Features::has_phe2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_phe2)
+  return has_phe2_;
+}
+inline void CentralProcessor_Features::set_has_phe2(bool value) {
+  
+  has_phe2_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_phe2)
 }
 
 // -------------------------------------------------------------------
@@ -16691,34 +19455,54 @@ inline void CentralProcessor::set_logical_cores(::google::protobuf::uint32 value
   // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.logical_cores)
 }
 
-// repeated .aspia.proto.CentralProcessor.Feature feature = 12;
-inline int CentralProcessor::feature_size() const {
-  return feature_.size();
+// .aspia.proto.CentralProcessor.Features features = 12;
+inline bool CentralProcessor::has_features() const {
+  return this != internal_default_instance() && features_ != NULL;
 }
-inline void CentralProcessor::clear_feature() {
-  feature_.Clear();
+inline void CentralProcessor::clear_features() {
+  if (GetArenaNoVirtual() == NULL && features_ != NULL) {
+    delete features_;
+  }
+  features_ = NULL;
 }
-inline const ::aspia::proto::CentralProcessor_Feature& CentralProcessor::feature(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.feature)
-  return feature_.Get(index);
+inline const ::aspia::proto::CentralProcessor_Features& CentralProcessor::features() const {
+  const ::aspia::proto::CentralProcessor_Features* p = features_;
+  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.features)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::CentralProcessor_Features*>(
+      &::aspia::proto::_CentralProcessor_Features_default_instance_);
 }
-inline ::aspia::proto::CentralProcessor_Feature* CentralProcessor::mutable_feature(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.feature)
-  return feature_.Mutable(index);
+inline ::aspia::proto::CentralProcessor_Features* CentralProcessor::release_features() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.features)
+  
+  ::aspia::proto::CentralProcessor_Features* temp = features_;
+  features_ = NULL;
+  return temp;
 }
-inline ::aspia::proto::CentralProcessor_Feature* CentralProcessor::add_feature() {
-  // @@protoc_insertion_point(field_add:aspia.proto.CentralProcessor.feature)
-  return feature_.Add();
+inline ::aspia::proto::CentralProcessor_Features* CentralProcessor::mutable_features() {
+  
+  if (features_ == NULL) {
+    features_ = new ::aspia::proto::CentralProcessor_Features;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.features)
+  return features_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >*
-CentralProcessor::mutable_feature() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.CentralProcessor.feature)
-  return &feature_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::CentralProcessor_Feature >&
-CentralProcessor::feature() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.CentralProcessor.feature)
-  return feature_;
+inline void CentralProcessor::set_allocated_features(::aspia::proto::CentralProcessor_Features* features) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete features_;
+  }
+  if (features) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      features = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, features, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  features_ = features;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.features)
 }
 
 // -------------------------------------------------------------------
