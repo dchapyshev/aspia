@@ -121,6 +121,7 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* FamilyToString(proto::DmiProcessors::Family value);
     static const char* TypeToString(proto::DmiProcessors::Type value);
     static const char* StatusToString(proto::DmiProcessors::Status value);
     static const char* UpgradeToString(proto::DmiProcessors::Upgrade value);

@@ -799,254 +799,265 @@ std::string SMBios::ProcessorTable::GetVersion() const
     return reader_.GetString(0x10);
 }
 
-std::string SMBios::ProcessorTable::GetFamily() const
+proto::DmiProcessors::Family SMBios::ProcessorTable::GetFamily() const
 {
     if (reader_.GetTableLength() < 0x1A)
-        return std::string();
+        return proto::DmiProcessors::FAMILY_UNKNOWN;
 
-    struct FamilyList
-    {
-        uint16_t family;
-        const char* name;
-    } const list[] =
-    {
-        { 0x01, "Other" },
-        { 0x02, "Unknown" },
-        { 0x03, "Intel 8086" },
-        { 0x04, "Intel 80286" },
-        { 0x05, "Intel386" },
-        { 0x06, "Intel486" },
-        { 0x07, "Intel 8087" },
-        { 0x08, "Intel 80287" },
-        { 0x09, "Intel 80387" },
-        { 0x0A, "Intel 80487" },
-        { 0x0B, "Intel Pentium" },
-        { 0x0C, "Intel Pentium Pro" },
-        { 0x0D, "Intel Pentium 2" },
-        { 0x0E, "Pentium with MMX technology" },
-        { 0x0F, "Intel Celeron" },
-        { 0x10, "Intel Pentium 2 Xeon" },
-        { 0x11, "Intel Pentium 3" },
-        { 0x12, "M1 Family" },
-        { 0x13, "M2 Family" },
-        { 0x14, "Intel Celeron M" },
-        { 0x15, "Intel Pentium 4 HT" },
-        // 0x16 - 0x17 Available for assignment.
-        { 0x18, "AMD Duron" },
-        { 0x19, "AMD K5 Family" },
-        { 0x1A, "AMD K6 Family" },
-        { 0x1B, "AMD K6-2" },
-        { 0x1C, "AMD K6-3" },
-        { 0x1D, "AMD Athlon" },
-        { 0x1E, "AMD 29000" },
-        { 0x1F, "AMD K6-2+" },
-        { 0x20, "Power PC" },
-        { 0x21, "Power PC 601" },
-        { 0x22, "Power PC 603" },
-        { 0x23, "Power PC 603+" },
-        { 0x24, "Power PC 604" },
-        { 0x25, "Power PC 620" },
-        { 0x26, "Power PC x704" },
-        { 0x27, "Power PC 750" },
-        { 0x28, "Intel Core Duo" },
-        { 0x29, "Intel Core Duo Mobile" },
-        { 0x2A, "Intel Core Solo Mobile" },
-        { 0x2B, "Intel Atom" },
-        { 0x2C, "Core M" },
-        { 0x2D, "Core m3" },
-        { 0x2E, "Core m5" },
-        { 0x2F, "Core m7" },
-        { 0x30, "Alpha" },
-        { 0x31, "Alpha 21064" },
-        { 0x32, "Alpha 21066" },
-        { 0x33, "Alpha 21164" },
-        { 0x34, "Alpha 21164PC" },
-        { 0x35, "Alpha 21164a" },
-        { 0x36, "Alpha 21264" },
-        { 0x37, "Alpha 21364" },
-        { 0x38, "AMD Turion 2 Ultra Dual-Core Mobile M" },
-        { 0x39, "AMD Turion 2 Dual-Core Mobile M" },
-        { 0x3A, "AMD Athlon 2 Dual-Core M" },
-        { 0x3B, "AMD Opteron 6100 Series" },
-        { 0x3C, "AMD Opteron 4100 Series" },
-        { 0x3D, "AMD Opteron 6200 Series" },
-        { 0x3E, "AMD Opteron 4200 Series" },
-        { 0x3F, "FX" },
-        { 0x40, "MIPS" },
-        { 0x41, "MIPS R4000" },
-        { 0x42, "MIPS R4200" },
-        { 0x43, "MIPS R4400" },
-        { 0x44, "MIPS R4600" },
-        { 0x45, "MIPS R10000" },
-        { 0x46, "AMD C-Series" },
-        { 0x47, "AMD E-Series" },
-        { 0x48, "AMD S-Series" },
-        { 0x49, "AMD G-Series" },
-        { 0x4A, "AMD Z-Series" },
-        { 0x4B, "AMD R-Series" },
-        { 0x4C, "Opteron 4300" },
-        { 0x4D, "Opteron 6300" },
-        { 0x4E, "Opteron 3300" },
-        { 0x4F, "FirePro" },
-        { 0x50, "SPARC" },
-        { 0x51, "SuperSPARC" },
-        { 0x52, "microSPARC 2" },
-        { 0x53, "microSPARC 2ep" },
-        { 0x54, "UltraSPARC" },
-        { 0x55, "UltraSPARC 2" },
-        { 0x56, "UltraSPARC 2i" },
-        { 0x57, "UltraSPARC 3" },
-        { 0x58, "UltraSPARC 3i" },
-        // 0x59 - 0x5F Available for assignment.
-        { 0x60, "68040" },
-        { 0x61, "68xxx" },
-        { 0x62, "68000" },
-        { 0x63, "68010" },
-        { 0x64, "68020" },
-        { 0x65, "68030" },
-        { 0x66, "Athlon X4" },
-        { 0x67, "Opteron X1000" },
-        { 0x68, "Opteron X2000" },
-        { 0x69, "Opteron A-Series" },
-        { 0x6A, "Opteron X3000" },
-        { 0x6B, "Zen" },
-        // 0x6C - 0x6F Available for assignment.
-        { 0x70, "Hobbit" },
-        // 0x71 - 0x77 Available for assignment.
-        { 0x78, "Crusoe TM5000" },
-        { 0x79, "Crusoe TM3000" },
-        { 0x7A, "Efficeon TM8000" },
-        // 0x7B - 0x7F Available for assignment.
-        { 0x80, "Weitek" },
-        // 0x81 Available for assignment.
-        { 0x82, "Itanium" },
-        { 0x83, "AMD Athlon 64" },
-        { 0x84, "AMD Opteron" },
-        { 0x85, "AMD Sempron" },
-        { 0x86, "AMD Turion 64 Mobile" },
-        { 0x87, "AMD Opteron Dual-Core" },
-        { 0x88, "AMD Athlon 64 X2 Dual-Core" },
-        { 0x89, "AMD Turion 64 X2 Mobile" },
-        { 0x8A, "AMD Opteron Quad-Core" },
-        { 0x8B, "Third-Generation AMD Opteron" },
-        { 0x8C, "AMD Phenom FX Quad-Core" },
-        { 0x8D, "AMD Phenom X4 Quad-Core" },
-        { 0x8E, "AMD Phenom X2 Dual-Core" },
-        { 0x8F, "AMD Athlon X2 Dual-Core" },
-        { 0x90, "PA-RISC" },
-        { 0x91, "PA-RISC 8500" },
-        { 0x92, "PA-RISC 8000" },
-        { 0x93, "PA-RISC 7300LC" },
-        { 0x94, "PA-RISC 7200" },
-        { 0x95, "PA-RISC 7100LC" },
-        { 0x96, "PA-RISC 7100" },
-        // 0x97 - 0x9F Available for assignment.
-        { 0xA0, "V30" },
-        { 0xA1, "Intel Xeon Quad-Core 3200" },
-        { 0xA2, "Intel Xeon Dual-Core 3000" },
-        { 0xA3, "Intel Xeon Quad-Core 5300" },
-        { 0xA4, "Intel Xeon Dual-Core 5100" },
-        { 0xA5, "Intel Xeon Dual-Core 5000" },
-        { 0xA6, "Intel Xeon Dual-Core LV" },
-        { 0xA7, "Intel Xeon Dual-Core ULV" },
-        { 0xA8, "Intel Xeon Dual-Core 7100" },
-        { 0xA9, "Intel Xeon Quad-Core 5400" },
-        { 0xAA, "Intel Xeon Quad-Core" },
-        { 0xAB, "Intel Xeon Dual-Core 5200" },
-        { 0xAC, "Intel Xeon Dual-Core 7200" },
-        { 0xAD, "Intel Xeon Quad-Core 7300" },
-        { 0xAE, "Intel Xeon Quad-Core 7400" },
-        { 0xAF, "Intel Xeon Multi-Core 7400" },
-        { 0xB0, "Intel Pentium 3 Xeon" },
-        { 0xB1, "Intel Pentium 3 with SpeedStep Technology" },
-        { 0xB2, "Intel Pentium 4" },
-        { 0xB3, "Intel Xeon" },
-        { 0xB4, "AS400" },
-        { 0xB5, "Intel Xeon MP" },
-        { 0xB6, "AMD Athlon XP" },
-        { 0xB7, "AMD Athlon MP" },
-        { 0xB8, "Intel Itanium 2" },
-        { 0xB9, "Intel Pentium M" },
-        { 0xBA, "Intel Celeron D" },
-        { 0xBB, "Intel Pentium D" },
-        { 0xBC, "Intel Pentium Extreme Edition" },
-        { 0xBD, "Intel Core Solo" },
-        // 0xBE - Reserved.
-        { 0xBF, "Intel Core 2 Duo" },
-        { 0xC0, "Intel Core 2 Solo" },
-        { 0xC1, "Intel Core 2 Extreme" },
-        { 0xC2, "Intel Core 2 Quad" },
-        { 0xC3, "Intel Core 2 Extreme Mobile" },
-        { 0xC4, "Intel Core 2 Duo Mobile" },
-        { 0xC5, "Intel Core 2 Solo Mobile" },
-        { 0xC6, "Intel Core i7" },
-        { 0xC7, "Intel Celeron Dual-Core" },
-        { 0xC8, "IBM390" },
-        { 0xC9, "G4" },
-        { 0xCA, "G5" },
-        { 0xCB, "ESA/390 G6" },
-        { 0xCC, "z/Architectur base" },
-        { 0xCD, "Intel Core i5" },
-        { 0xCE, "Intel Core i3" },
-        // 0xCF - 0xD1 Available for assignment.
-        { 0xD2, "VIA C7-M" },
-        { 0xD3, "VIA C7-D" },
-        { 0xD4, "VIA C7" },
-        { 0xD5, "VIA Eden" },
-        { 0xD6, "Intel Xeon Multi-Core" },
-        { 0xD7, "Intel Xeon Dual-Core 3xxx" },
-        { 0xD8, "Intel Xeon Quad-Core 3xxx" },
-        { 0xD9, "VIA Nano" },
-        { 0xDA, "Intel Xeon Dual-Core 5xxx" },
-        { 0xDB, "Intel Xeon Quad-Core 5xxx" },
-        // 0xDC Available for assignment.
-        { 0xDD, "Intel Xeon Dual-Core 7xxx" },
-        { 0xDE, "Intel Xeon Quad-Core 7xxx" },
-        { 0xDF, "Intel Xeon Multi-Core 7xxx" },
-        { 0xE0, "Intel Xeon Multi-Core 3400" },
-        // 0xE1 - 0xE3 Available for assignment.
-        { 0xE4, "Opteron 3000" },
-        { 0xE5, "Sempron II" },
-        { 0xE6, "AMD Opteron Quad-Core Embedded" },
-        { 0xE7, "AMD Phenom Triple-Core" },
-        { 0xE8, "AMD Turion Ultra Dual-Core Mobile" },
-        { 0xE9, "AMD Turion Dual-Core Mobile" },
-        { 0xEA, "AMD Athlon Dual-Core" },
-        { 0xEB, "AMD Sempron SI" },
-        { 0xEC, "AMD Phenom 2" },
-        { 0xED, "AMD Athlon 2" },
-        { 0xEE, "AMD Opteron Six-Core" },
-        { 0xEF, "AMD Sempron M" },
-        // 0xF0 - 0xF9 Available for assignment.
-        { 0xFA, "i860" },
-        { 0xFB, "i960" },
-        // 0xFC - 0xFD Available for assignment.
-        // 0xFE - Indicator to obtain the processor family from the Processor Family 2 field.
-        // 0xFF Reserved */
-        // 0x100 - 0x1FF These values are available for assignment, except for the following:
-        { 0x104, "SH-3" },
-        { 0x105, "SH-4" },
-        { 0x118, "ARM" },
-        { 0x119, "StrongARM" },
-        { 0x12C, "6x86" },
-        { 0x12D, "MediaGX" },
-        { 0x12E, "MII" },
-        { 0x140, "WinChip" },
-        { 0x15E, "DSP" },
-        { 0x1F4, "Video Processor" }
-        // 0x200 - 0xFFFD Available for assignment.
-        // 0xFFFE - 0xFFFF - Reserved.
-    };
+    uint8_t length = reader_.GetTableLength();
+    uint16_t value = reader_.GetByte(0x06);
 
-    const uint8_t family = reader_.GetByte(0x06);
-
-    for (size_t i = 0; i < _countof(list); ++i)
+    if (reader_.GetMajorVersion() == 2 && reader_.GetMinorVersion() == 0 && value == 0x30)
     {
-        if (list[i].family == family)
-            return list[i].name;
+        std::string manufacturer = GetManufacturer();
+
+        if (manufacturer.find("Intel") != std::string::npos)
+            return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
     }
 
-    return std::string();
+    if (value == 0xFE && length >= 0x2A)
+        value = reader_.GetWord(0x28);
+
+    if (value == 0xBE)
+    {
+        std::string manufacturer = GetManufacturer();
+
+        if (manufacturer.find("Intel") != std::string::npos)
+            return proto::DmiProcessors::FAMILY_INTEL_CORE_2_FAMILY;
+
+        if (manufacturer.find("AMD") != std::string::npos)
+            return proto::DmiProcessors::FAMILY_AMD_K7_FAMILY;
+
+        return proto::DmiProcessors::FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY;
+    }
+
+    switch (value)
+    {
+        case 0x01: return proto::DmiProcessors::FAMILY_OTHER;
+        case 0x02: return proto::DmiProcessors::FAMILY_UNKNOWN;
+        case 0x03: return proto::DmiProcessors::FAMILY_8086;
+        case 0x04: return proto::DmiProcessors::FAMILY_80286;
+        case 0x05: return proto::DmiProcessors::FAMILY_INTEL_386_PROCESSOR;
+        case 0x06: return proto::DmiProcessors::FAMILY_INTEL_486_PROCESSOR;
+        case 0x07: return proto::DmiProcessors::FAMILY_8087;
+        case 0x08: return proto::DmiProcessors::FAMILY_80287;
+        case 0x09: return proto::DmiProcessors::FAMILY_80387;
+        case 0x0A: return proto::DmiProcessors::FAMILY_80487;
+        case 0x0B: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR;
+        case 0x0C: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
+        case 0x0D: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_2_PROCESSOR;
+        case 0x0E: return proto::DmiProcessors::FAMILY_PENTIUM_PROCESSOR_WITH_MMX;
+        case 0x0F: return proto::DmiProcessors::FAMILY_INTEL_CELERON_PROCESSOR;
+        case 0x10: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR;
+        case 0x11: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR;
+        case 0x12: return proto::DmiProcessors::FAMILY_M1_FAMILY;
+        case 0x13: return proto::DmiProcessors::FAMILY_M2_FAMILY;
+        case 0x14: return proto::DmiProcessors::FAMILY_INTEL_CELEROM_M_PROCESSOR;
+        case 0x15: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR;
+
+        case 0x18: return proto::DmiProcessors::FAMILY_AMD_DURON_PROCESSOR_FAMILY;
+        case 0x19: return proto::DmiProcessors::FAMILY_AMD_K5_FAMILY;
+        case 0x1A: return proto::DmiProcessors::FAMILY_AMD_K6_FAMILY;
+        case 0x1B: return proto::DmiProcessors::FAMILY_AMD_K6_2;
+        case 0x1C: return proto::DmiProcessors::FAMILY_AMD_K6_3;
+        case 0x1D: return proto::DmiProcessors::FAMILY_AMD_ATHLON_PROCESSOR_FAMILY;
+        case 0x1E: return proto::DmiProcessors::FAMILY_AMD_29000_FAMILY;
+        case 0x1F: return proto::DmiProcessors::FAMILY_AMD_K6_2_PLUS;
+        case 0x20: return proto::DmiProcessors::FAMILY_POWER_PC_FAMILY;
+        case 0x21: return proto::DmiProcessors::FAMILY_POWER_PC_601;
+        case 0x22: return proto::DmiProcessors::FAMILY_POWER_PC_603;
+        case 0x23: return proto::DmiProcessors::FAMILY_POWER_PC_603_PLUS;
+        case 0x24: return proto::DmiProcessors::FAMILY_POWER_PC_604;
+        case 0x25: return proto::DmiProcessors::FAMILY_POWER_PC_620;
+        case 0x26: return proto::DmiProcessors::FAMILY_POWER_PC_X704;
+        case 0x27: return proto::DmiProcessors::FAMILY_POWER_PC_750;
+        case 0x28: return proto::DmiProcessors::FAMILY_INTEL_CORE_DUO_PROCESSOR;
+        case 0x29: return proto::DmiProcessors::FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR;
+        case 0x2A: return proto::DmiProcessors::FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR;
+        case 0x2B: return proto::DmiProcessors::FAMILY_INTEL_ATOM_PROCESSOR;
+        case 0x2C: return proto::DmiProcessors::FAMILY_INTEL_CORE_M_PROCESSOR;
+        case 0x2D: return proto::DmiProcessors::FAMILY_INTEL_CORE_M3_PROCESSOR;
+        case 0x2E: return proto::DmiProcessors::FAMILY_INTEL_CORE_M5_PROCESSOR;
+        case 0x2F: return proto::DmiProcessors::FAMILY_INTEL_CORE_M7_PROCESSOR;
+        case 0x30: return proto::DmiProcessors::FAMILY_ALPHA_FAMILY;
+        case 0x31: return proto::DmiProcessors::FAMILY_ALPHA_21064;
+        case 0x32: return proto::DmiProcessors::FAMILY_ALPHA_21066;
+        case 0x33: return proto::DmiProcessors::FAMILY_ALPHA_21164;
+        case 0x34: return proto::DmiProcessors::FAMILY_ALPHA_21164PC;
+        case 0x35: return proto::DmiProcessors::FAMILY_ALPHA_21164A;
+        case 0x36: return proto::DmiProcessors::FAMILY_ALPHA_21264;
+        case 0x37: return proto::DmiProcessors::FAMILY_ALPHA_21364;
+        case 0x38: return proto::DmiProcessors::FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY;
+        case 0x39: return proto::DmiProcessors::FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY;
+        case 0x3A: return proto::DmiProcessors::FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY;
+        case 0x3B: return proto::DmiProcessors::FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR;
+        case 0x3C: return proto::DmiProcessors::FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR;
+        case 0x3D: return proto::DmiProcessors::FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR;
+        case 0x3E: return proto::DmiProcessors::FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR;
+        case 0x3F: return proto::DmiProcessors::FAMILY_AMD_FX_SERIES_PROCESSOR;
+        case 0x40: return proto::DmiProcessors::FAMILY_MIPS_FAMILY;
+        case 0x41: return proto::DmiProcessors::FAMILY_MIPS_R4000;
+        case 0x42: return proto::DmiProcessors::FAMILY_MIPS_R4200;
+        case 0x43: return proto::DmiProcessors::FAMILY_MIPS_R4400;
+        case 0x44: return proto::DmiProcessors::FAMILY_MIPS_R4600;
+        case 0x45: return proto::DmiProcessors::FAMILY_MIPS_R10000;
+        case 0x46: return proto::DmiProcessors::FAMILY_AMD_C_SERIES_PROCESSOR;
+        case 0x47: return proto::DmiProcessors::FAMILY_AMD_E_SERIES_PROCESSOR;
+        case 0x48: return proto::DmiProcessors::FAMILY_AMD_A_SERIES_PROCESSOR;
+        case 0x49: return proto::DmiProcessors::FAMILY_AMD_G_SERIES_PROCESSOR;
+        case 0x4A: return proto::DmiProcessors::FAMILY_AMD_Z_SERIES_PROCESSOR;
+        case 0x4B: return proto::DmiProcessors::FAMILY_AMD_R_SERIES_PROCESSOR;
+        case 0x4C: return proto::DmiProcessors::FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR;
+        case 0x4D: return proto::DmiProcessors::FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR;
+        case 0x4E: return proto::DmiProcessors::FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR;
+        case 0x4F: return proto::DmiProcessors::FAMILY_AMD_FIREPRO_SERIES_PROCESSOR;
+        case 0x50: return proto::DmiProcessors::FAMILY_SPARC_FAMILY;
+        case 0x51: return proto::DmiProcessors::FAMILY_SUPER_SPARC;
+        case 0x52: return proto::DmiProcessors::FAMILY_MICRO_SPARC_2;
+        case 0x53: return proto::DmiProcessors::FAMILY_MICRO_SPARC_2EP;
+        case 0x54: return proto::DmiProcessors::FAMILY_ULTRA_SPARC;
+        case 0x55: return proto::DmiProcessors::FAMILY_ULTRA_SPARC_2;
+        case 0x56: return proto::DmiProcessors::FAMILY_ULTRA_SPARC_2I;
+        case 0x57: return proto::DmiProcessors::FAMILY_ULTRA_SPARC_3;
+        case 0x58: return proto::DmiProcessors::FAMILY_ULTRA_SPARC_3I;
+
+        case 0x60: return proto::DmiProcessors::FAMILY_68040_FAMILY;
+        case 0x61: return proto::DmiProcessors::FAMILY_68XXX;
+        case 0x62: return proto::DmiProcessors::FAMILY_68000;
+        case 0x63: return proto::DmiProcessors::FAMILY_68010;
+        case 0x64: return proto::DmiProcessors::FAMILY_68020;
+        case 0x65: return proto::DmiProcessors::FAMILY_68030;
+        case 0x66: return proto::DmiProcessors::FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY;
+        case 0x67: return proto::DmiProcessors::FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR;
+        case 0x68: return proto::DmiProcessors::FAMILY_AMD_OPTERON_X2000_SERIES_APU;
+        case 0x69: return proto::DmiProcessors::FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR;
+        case 0x6A: return proto::DmiProcessors::FAMILY_AMD_OPTERON_X3000_SERIES_APU;
+        case 0x6B: return proto::DmiProcessors::FAMILY_AMD_ZEN_PROCESSOR_FAMILY;
+
+        case 0x70: return proto::DmiProcessors::FAMILY_HOBBIT_FAMILY;
+
+        case 0x78: return proto::DmiProcessors::FAMILY_CRUSOE_TM5000_FAMILY;
+        case 0x79: return proto::DmiProcessors::FAMILY_CRUSOE_TM3000_FAMILY;
+        case 0x7A: return proto::DmiProcessors::FAMILY_EFFICEON_TM8000_FAMILY;
+
+        case 0x80: return proto::DmiProcessors::FAMILY_WEITEK;
+
+        case 0x82: return proto::DmiProcessors::FAMILY_INTEL_ITANIUM_PROCESSOR;
+        case 0x83: return proto::DmiProcessors::FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY;
+        case 0x84: return proto::DmiProcessors::FAMILY_AMD_OPTERON_PROCESSOR_FAMILY;
+        case 0x85: return proto::DmiProcessors::FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY;
+        case 0x86: return proto::DmiProcessors::FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY;
+        case 0x87: return proto::DmiProcessors::FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY;
+        case 0x88: return proto::DmiProcessors::FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY;
+        case 0x89: return proto::DmiProcessors::FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY;
+        case 0x8A: return proto::DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY;
+        case 0x8B: return proto::DmiProcessors::FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY;
+        case 0x8C: return proto::DmiProcessors::FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY;
+        case 0x8D: return proto::DmiProcessors::FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY;
+        case 0x8E: return proto::DmiProcessors::FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY;
+        case 0x8F: return proto::DmiProcessors::FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY;
+        case 0x90: return proto::DmiProcessors::FAMILY_PA_RISC_FAMILY;
+        case 0x91: return proto::DmiProcessors::FAMILY_PA_RISC_8500;
+        case 0x92: return proto::DmiProcessors::FAMILY_PA_RISC_8000;
+        case 0x93: return proto::DmiProcessors::FAMILY_PA_RISC_7300LC;
+        case 0x94: return proto::DmiProcessors::FAMILY_PA_RISC_7200;
+        case 0x95: return proto::DmiProcessors::FAMILY_PA_RISC_7100LC;
+        case 0x96: return proto::DmiProcessors::FAMILY_PA_RISC_7100;
+
+        case 0xA0: return proto::DmiProcessors::FAMILY_V30_FAMILY;
+        case 0xA1: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES;
+        case 0xA2: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES;
+        case 0xA3: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES;
+        case 0xA4: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES;
+        case 0xA5: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES;
+        case 0xA6: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR;
+        case 0xA7: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR;
+        case 0xA8: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES;
+        case 0xA9: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES;
+        case 0xAA: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR;
+        case 0xAB: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES;
+        case 0xAC: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES;
+        case 0xAD: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES;
+        case 0xAE: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES;
+        case 0xAF: return proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES;
+        case 0xB0: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR;
+        case 0xB1: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP;
+        case 0xB2: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_4_PROCESSOR;
+        case 0xB3: return proto::DmiProcessors::FAMILY_INTEL_XEON_PROCESSOR;
+        case 0xB4: return proto::DmiProcessors::FAMILY_AS400_FAMILY;
+        case 0xB5: return proto::DmiProcessors::FAMILY_INTEL_XEON_MP_PROCESSOR;
+        case 0xB6: return proto::DmiProcessors::FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY;
+        case 0xB7: return proto::DmiProcessors::FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY;
+        case 0xB8: return proto::DmiProcessors::FAMILY_INTEL_ITANIUM_2_PROCESSOR;
+        case 0xB9: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_M_PROCESSOR;
+        case 0xBA: return proto::DmiProcessors::FAMILY_INTEL_CELERON_D_PROCESSOR;
+        case 0xBB: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_D_PROCESSOR;
+        case 0xBC: return proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION;
+
+        case 0xBF: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_DUO_PROCESSOR;
+        case 0xC0: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_PROCESSOR;
+        case 0xC1: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR;
+        case 0xC2: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_QUAD_PROCESSOR;
+        case 0xC3: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR;
+        case 0xC4: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR;
+        case 0xC5: return proto::DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR;
+        case 0xC6: return proto::DmiProcessors::FAMILY_INTEL_CORE_I7_PROCESSOR;
+        case 0xC7: return proto::DmiProcessors::FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR;
+        case 0xC8: return proto::DmiProcessors::FAMILY_IBM390_FAMILY;
+        case 0xC9: return proto::DmiProcessors::FAMILY_G4;
+        case 0xCA: return proto::DmiProcessors::FAMILY_G5;
+        case 0xCB: return proto::DmiProcessors::FAMILY_ESA_390_G6;
+        case 0xCC: return proto::DmiProcessors::FAMILY_Z_ARCHITECTURE_BASE;
+        case 0xCD: return proto::DmiProcessors::FAMILY_INTEL_CORE_I5_PROCESSOR;
+        case 0xCE: return proto::DmiProcessors::FAMILY_INTEL_CORE_I3_PROCESSOR;
+
+        case 0xD2: return proto::DmiProcessors::FAMILY_VIA_C7_M_PROCESSOR_FAMILY;
+        case 0xD3: return proto::DmiProcessors::FAMILY_VIA_C7_D_PROCESSOR_FAMILY;
+        case 0xD4: return proto::DmiProcessors::FAMILY_VIA_C7_PROCESSOR_FAMILY;
+        case 0xD5: return proto::DmiProcessors::FAMILY_VIA_EDEN_PROCESSOR_FAMILY;
+        case 0xD6: return proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR;
+        case 0xD7: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES;
+        case 0xD8: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES;
+        case 0xD9: return proto::DmiProcessors::FAMILY_VIA_NANO_PROCESSOR_FAMILY;
+        case 0xDA: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES;
+        case 0xDB: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES;
+
+        case 0xDD: return proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES;
+        case 0xDE: return proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES;
+        case 0xDF: return proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES;
+        case 0xE0: return proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES;
+
+        case 0xE4: return proto::DmiProcessors::FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES;
+        case 0xE5: return proto::DmiProcessors::FAMILY_AMD_SEMPRON_II_PROCESSOR;
+        case 0xE6: return proto::DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY;
+        case 0xE7: return proto::DmiProcessors::FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY;
+        case 0xE8: return proto::DmiProcessors::FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+        case 0xE9: return proto::DmiProcessors::FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+        case 0xEA: return proto::DmiProcessors::FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY;
+        case 0xEB: return proto::DmiProcessors::FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY;
+        case 0xEC: return proto::DmiProcessors::FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY;
+        case 0xED: return proto::DmiProcessors::FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY;
+        case 0xEE: return proto::DmiProcessors::FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY;
+        case 0xEF: return proto::DmiProcessors::FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY;
+
+        case 0xFA: return proto::DmiProcessors::FAMILY_I860;
+        case 0xFB: return proto::DmiProcessors::FAMILY_I960;
+
+        case 0x100: return proto::DmiProcessors::FAMILY_ARM_V7;
+        case 0x101: return proto::DmiProcessors::FAMILY_ARM_V8;
+        case 0x104: return proto::DmiProcessors::FAMILY_SH_3;
+        case 0x105: return proto::DmiProcessors::FAMILY_SH_4;
+        case 0x118: return proto::DmiProcessors::FAMILY_ARM;
+        case 0x119: return proto::DmiProcessors::FAMILY_STRONG_ARM;
+        case 0x12C: return proto::DmiProcessors::FAMILY_6X86;
+        case 0x12D: return proto::DmiProcessors::FAMILY_MEDIA_GX;
+        case 0x12E: return proto::DmiProcessors::FAMILY_MII;
+        case 0x140: return proto::DmiProcessors::FAMILY_WIN_CHIP;
+        case 0x15E: return proto::DmiProcessors::FAMILY_DSP;
+        case 0x1F4: return proto::DmiProcessors::FAMILY_VIDEO_PROCESSOR;
+
+        default:  return proto::DmiProcessors::FAMILY_UNKNOWN;
+    }
 }
 
 proto::DmiProcessors::Type SMBios::ProcessorTable::GetType() const

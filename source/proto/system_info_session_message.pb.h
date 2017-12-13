@@ -670,6 +670,228 @@ const DmiCaches_Associativity DmiCaches_Associativity_Associativity_MIN = DmiCac
 const DmiCaches_Associativity DmiCaches_Associativity_Associativity_MAX = DmiCaches_Associativity_ASSOCIATIVITY_20_WAY;
 const int DmiCaches_Associativity_Associativity_ARRAYSIZE = DmiCaches_Associativity_Associativity_MAX + 1;
 
+enum DmiProcessors_Family {
+  DmiProcessors_Family_FAMILY_UNKNOWN = 0,
+  DmiProcessors_Family_FAMILY_OTHER = 1,
+  DmiProcessors_Family_FAMILY_8086 = 2,
+  DmiProcessors_Family_FAMILY_80286 = 3,
+  DmiProcessors_Family_FAMILY_INTEL_386_PROCESSOR = 4,
+  DmiProcessors_Family_FAMILY_INTEL_486_PROCESSOR = 5,
+  DmiProcessors_Family_FAMILY_8087 = 6,
+  DmiProcessors_Family_FAMILY_80287 = 7,
+  DmiProcessors_Family_FAMILY_80387 = 8,
+  DmiProcessors_Family_FAMILY_80487 = 9,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PROCESSOR = 10,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PRO_PROCESSOR = 11,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_2_PROCESSOR = 12,
+  DmiProcessors_Family_FAMILY_PENTIUM_PROCESSOR_WITH_MMX = 13,
+  DmiProcessors_Family_FAMILY_INTEL_CELERON_PROCESSOR = 14,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR = 15,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_PROCESSOR = 16,
+  DmiProcessors_Family_FAMILY_M1_FAMILY = 17,
+  DmiProcessors_Family_FAMILY_M2_FAMILY = 18,
+  DmiProcessors_Family_FAMILY_INTEL_CELEROM_M_PROCESSOR = 19,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR = 20,
+  DmiProcessors_Family_FAMILY_AMD_DURON_PROCESSOR_FAMILY = 21,
+  DmiProcessors_Family_FAMILY_AMD_K5_FAMILY = 22,
+  DmiProcessors_Family_FAMILY_AMD_K6_FAMILY = 23,
+  DmiProcessors_Family_FAMILY_AMD_K6_2 = 24,
+  DmiProcessors_Family_FAMILY_AMD_K6_3 = 25,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_PROCESSOR_FAMILY = 26,
+  DmiProcessors_Family_FAMILY_AMD_29000_FAMILY = 27,
+  DmiProcessors_Family_FAMILY_AMD_K6_2_PLUS = 28,
+  DmiProcessors_Family_FAMILY_POWER_PC_FAMILY = 29,
+  DmiProcessors_Family_FAMILY_POWER_PC_601 = 30,
+  DmiProcessors_Family_FAMILY_POWER_PC_603 = 31,
+  DmiProcessors_Family_FAMILY_POWER_PC_603_PLUS = 32,
+  DmiProcessors_Family_FAMILY_POWER_PC_604 = 33,
+  DmiProcessors_Family_FAMILY_POWER_PC_620 = 34,
+  DmiProcessors_Family_FAMILY_POWER_PC_X704 = 35,
+  DmiProcessors_Family_FAMILY_POWER_PC_750 = 36,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_DUO_PROCESSOR = 37,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR = 38,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR = 39,
+  DmiProcessors_Family_FAMILY_INTEL_ATOM_PROCESSOR = 40,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_M_PROCESSOR = 41,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_M3_PROCESSOR = 42,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_M5_PROCESSOR = 43,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_M7_PROCESSOR = 44,
+  DmiProcessors_Family_FAMILY_ALPHA_FAMILY = 45,
+  DmiProcessors_Family_FAMILY_ALPHA_21064 = 46,
+  DmiProcessors_Family_FAMILY_ALPHA_21066 = 47,
+  DmiProcessors_Family_FAMILY_ALPHA_21164 = 48,
+  DmiProcessors_Family_FAMILY_ALPHA_21164PC = 49,
+  DmiProcessors_Family_FAMILY_ALPHA_21164A = 50,
+  DmiProcessors_Family_FAMILY_ALPHA_21264 = 51,
+  DmiProcessors_Family_FAMILY_ALPHA_21364 = 52,
+  DmiProcessors_Family_FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY = 53,
+  DmiProcessors_Family_FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY = 54,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY = 55,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR = 56,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR = 57,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR = 58,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR = 59,
+  DmiProcessors_Family_FAMILY_AMD_FX_SERIES_PROCESSOR = 60,
+  DmiProcessors_Family_FAMILY_MIPS_FAMILY = 61,
+  DmiProcessors_Family_FAMILY_MIPS_R4000 = 62,
+  DmiProcessors_Family_FAMILY_MIPS_R4200 = 63,
+  DmiProcessors_Family_FAMILY_MIPS_R4400 = 64,
+  DmiProcessors_Family_FAMILY_MIPS_R4600 = 65,
+  DmiProcessors_Family_FAMILY_MIPS_R10000 = 66,
+  DmiProcessors_Family_FAMILY_AMD_C_SERIES_PROCESSOR = 67,
+  DmiProcessors_Family_FAMILY_AMD_E_SERIES_PROCESSOR = 68,
+  DmiProcessors_Family_FAMILY_AMD_A_SERIES_PROCESSOR = 69,
+  DmiProcessors_Family_FAMILY_AMD_G_SERIES_PROCESSOR = 70,
+  DmiProcessors_Family_FAMILY_AMD_Z_SERIES_PROCESSOR = 71,
+  DmiProcessors_Family_FAMILY_AMD_R_SERIES_PROCESSOR = 72,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR = 73,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR = 74,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR = 75,
+  DmiProcessors_Family_FAMILY_AMD_FIREPRO_SERIES_PROCESSOR = 76,
+  DmiProcessors_Family_FAMILY_SPARC_FAMILY = 77,
+  DmiProcessors_Family_FAMILY_SUPER_SPARC = 78,
+  DmiProcessors_Family_FAMILY_MICRO_SPARC_2 = 79,
+  DmiProcessors_Family_FAMILY_MICRO_SPARC_2EP = 80,
+  DmiProcessors_Family_FAMILY_ULTRA_SPARC = 81,
+  DmiProcessors_Family_FAMILY_ULTRA_SPARC_2 = 82,
+  DmiProcessors_Family_FAMILY_ULTRA_SPARC_2I = 83,
+  DmiProcessors_Family_FAMILY_ULTRA_SPARC_3 = 84,
+  DmiProcessors_Family_FAMILY_ULTRA_SPARC_3I = 85,
+  DmiProcessors_Family_FAMILY_68040_FAMILY = 86,
+  DmiProcessors_Family_FAMILY_68XXX = 87,
+  DmiProcessors_Family_FAMILY_68000 = 88,
+  DmiProcessors_Family_FAMILY_68010 = 89,
+  DmiProcessors_Family_FAMILY_68020 = 90,
+  DmiProcessors_Family_FAMILY_68030 = 91,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY = 92,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR = 93,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_X2000_SERIES_APU = 94,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR = 95,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_X3000_SERIES_APU = 96,
+  DmiProcessors_Family_FAMILY_AMD_ZEN_PROCESSOR_FAMILY = 97,
+  DmiProcessors_Family_FAMILY_HOBBIT_FAMILY = 98,
+  DmiProcessors_Family_FAMILY_CRUSOE_TM5000_FAMILY = 99,
+  DmiProcessors_Family_FAMILY_CRUSOE_TM3000_FAMILY = 100,
+  DmiProcessors_Family_FAMILY_EFFICEON_TM8000_FAMILY = 101,
+  DmiProcessors_Family_FAMILY_WEITEK = 102,
+  DmiProcessors_Family_FAMILY_INTEL_ITANIUM_PROCESSOR = 103,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY = 104,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_PROCESSOR_FAMILY = 105,
+  DmiProcessors_Family_FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY = 106,
+  DmiProcessors_Family_FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY = 107,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY = 108,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY = 109,
+  DmiProcessors_Family_FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY = 110,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY = 111,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY = 112,
+  DmiProcessors_Family_FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY = 113,
+  DmiProcessors_Family_FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY = 114,
+  DmiProcessors_Family_FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY = 115,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY = 116,
+  DmiProcessors_Family_FAMILY_PA_RISC_FAMILY = 117,
+  DmiProcessors_Family_FAMILY_PA_RISC_8500 = 118,
+  DmiProcessors_Family_FAMILY_PA_RISC_8000 = 119,
+  DmiProcessors_Family_FAMILY_PA_RISC_7300LC = 120,
+  DmiProcessors_Family_FAMILY_PA_RISC_7200 = 121,
+  DmiProcessors_Family_FAMILY_PA_RISC_7100LC = 122,
+  DmiProcessors_Family_FAMILY_PA_RISC_7100 = 123,
+  DmiProcessors_Family_FAMILY_V30_FAMILY = 124,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES = 125,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES = 126,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES = 127,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES = 128,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES = 129,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR = 130,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR = 131,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES = 132,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES = 133,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR = 134,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES = 135,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES = 136,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES = 137,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES = 138,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES = 139,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR = 140,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP = 141,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_4_PROCESSOR = 142,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_PROCESSOR = 143,
+  DmiProcessors_Family_FAMILY_AS400_FAMILY = 144,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_MP_PROCESSOR = 145,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY = 146,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY = 147,
+  DmiProcessors_Family_FAMILY_INTEL_ITANIUM_2_PROCESSOR = 148,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_M_PROCESSOR = 149,
+  DmiProcessors_Family_FAMILY_INTEL_CELERON_D_PROCESSOR = 150,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_D_PROCESSOR = 151,
+  DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION = 152,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_SOLO_PROCESSOR = 153,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_DUO_PROCESSOR = 154,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_SOLO_PROCESSOR = 155,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR = 156,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_QUAD_PROCESSOR = 157,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR = 158,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR = 159,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR = 160,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_I7_PROCESSOR = 161,
+  DmiProcessors_Family_FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR = 162,
+  DmiProcessors_Family_FAMILY_IBM390_FAMILY = 163,
+  DmiProcessors_Family_FAMILY_G4 = 164,
+  DmiProcessors_Family_FAMILY_G5 = 165,
+  DmiProcessors_Family_FAMILY_ESA_390_G6 = 166,
+  DmiProcessors_Family_FAMILY_Z_ARCHITECTURE_BASE = 167,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_I5_PROCESSOR = 168,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_I3_PROCESSOR = 169,
+  DmiProcessors_Family_FAMILY_VIA_C7_M_PROCESSOR_FAMILY = 170,
+  DmiProcessors_Family_FAMILY_VIA_C7_D_PROCESSOR_FAMILY = 171,
+  DmiProcessors_Family_FAMILY_VIA_C7_PROCESSOR_FAMILY = 172,
+  DmiProcessors_Family_FAMILY_VIA_EDEN_PROCESSOR_FAMILY = 173,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR = 174,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES = 175,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES = 176,
+  DmiProcessors_Family_FAMILY_VIA_NANO_PROCESSOR_FAMILY = 177,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES = 178,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES = 179,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES = 180,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES = 181,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES = 182,
+  DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES = 183,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES = 184,
+  DmiProcessors_Family_FAMILY_AMD_SEMPRON_II_PROCESSOR = 185,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY = 186,
+  DmiProcessors_Family_FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY = 187,
+  DmiProcessors_Family_FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY = 188,
+  DmiProcessors_Family_FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY = 189,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY = 190,
+  DmiProcessors_Family_FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY = 191,
+  DmiProcessors_Family_FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY = 192,
+  DmiProcessors_Family_FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY = 193,
+  DmiProcessors_Family_FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY = 194,
+  DmiProcessors_Family_FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY = 195,
+  DmiProcessors_Family_FAMILY_I860 = 196,
+  DmiProcessors_Family_FAMILY_I960 = 197,
+  DmiProcessors_Family_FAMILY_ARM_V7 = 198,
+  DmiProcessors_Family_FAMILY_ARM_V8 = 199,
+  DmiProcessors_Family_FAMILY_SH_3 = 200,
+  DmiProcessors_Family_FAMILY_SH_4 = 201,
+  DmiProcessors_Family_FAMILY_ARM = 202,
+  DmiProcessors_Family_FAMILY_STRONG_ARM = 203,
+  DmiProcessors_Family_FAMILY_6X86 = 204,
+  DmiProcessors_Family_FAMILY_MEDIA_GX = 205,
+  DmiProcessors_Family_FAMILY_MII = 206,
+  DmiProcessors_Family_FAMILY_WIN_CHIP = 207,
+  DmiProcessors_Family_FAMILY_DSP = 208,
+  DmiProcessors_Family_FAMILY_VIDEO_PROCESSOR = 209,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_FAMILY = 210,
+  DmiProcessors_Family_FAMILY_AMD_K7_FAMILY = 211,
+  DmiProcessors_Family_FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY = 212,
+  DmiProcessors_Family_DmiProcessors_Family_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiProcessors_Family_DmiProcessors_Family_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool DmiProcessors_Family_IsValid(int value);
+const DmiProcessors_Family DmiProcessors_Family_Family_MIN = DmiProcessors_Family_FAMILY_UNKNOWN;
+const DmiProcessors_Family DmiProcessors_Family_Family_MAX = DmiProcessors_Family_FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY;
+const int DmiProcessors_Family_Family_ARRAYSIZE = DmiProcessors_Family_Family_MAX + 1;
+
 enum DmiProcessors_Type {
   DmiProcessors_Type_TYPE_UNKNOWN = 0,
   DmiProcessors_Type_TYPE_OTHER = 1,
@@ -3258,20 +3480,6 @@ class DmiProcessors_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::std::string* release_version();
   void set_allocated_version(::std::string* version);
 
-  // string family = 3;
-  void clear_family();
-  static const int kFamilyFieldNumber = 3;
-  const ::std::string& family() const;
-  void set_family(const ::std::string& value);
-  #if LANG_CXX11
-  void set_family(::std::string&& value);
-  #endif
-  void set_family(const char* value);
-  void set_family(const char* value, size_t size);
-  ::std::string* mutable_family();
-  ::std::string* release_family();
-  void set_allocated_family(::std::string* family);
-
   // string socket = 6;
   void clear_socket();
   static const int kSocketFieldNumber = 6;
@@ -3328,6 +3536,12 @@ class DmiProcessors_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::std::string* release_part_number();
   void set_allocated_part_number(::std::string* part_number);
 
+  // .aspia.proto.DmiProcessors.Family family = 3;
+  void clear_family();
+  static const int kFamilyFieldNumber = 3;
+  ::aspia::proto::DmiProcessors_Family family() const;
+  void set_family(::aspia::proto::DmiProcessors_Family value);
+
   // .aspia.proto.DmiProcessors.Type type = 4;
   void clear_type();
   static const int kTypeFieldNumber = 4;
@@ -3358,17 +3572,17 @@ class DmiProcessors_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::google::protobuf::int32 current_speed() const;
   void set_current_speed(::google::protobuf::int32 value);
 
-  // int32 maximum_speed = 10;
-  void clear_maximum_speed();
-  static const int kMaximumSpeedFieldNumber = 10;
-  ::google::protobuf::int32 maximum_speed() const;
-  void set_maximum_speed(::google::protobuf::int32 value);
-
   // double voltage = 11;
   void clear_voltage();
   static const int kVoltageFieldNumber = 11;
   double voltage() const;
   void set_voltage(double value);
+
+  // int32 maximum_speed = 10;
+  void clear_maximum_speed();
+  static const int kMaximumSpeedFieldNumber = 10;
+  ::google::protobuf::int32 maximum_speed() const;
+  void set_maximum_speed(::google::protobuf::int32 value);
 
   // int32 core_count = 15;
   void clear_core_count();
@@ -3400,18 +3614,18 @@ class DmiProcessors_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr manufacturer_;
   ::google::protobuf::internal::ArenaStringPtr version_;
-  ::google::protobuf::internal::ArenaStringPtr family_;
   ::google::protobuf::internal::ArenaStringPtr socket_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr asset_tag_;
   ::google::protobuf::internal::ArenaStringPtr part_number_;
+  int family_;
   int type_;
   int status_;
   int upgrade_;
   ::google::protobuf::int32 external_clock_;
   ::google::protobuf::int32 current_speed_;
-  ::google::protobuf::int32 maximum_speed_;
   double voltage_;
+  ::google::protobuf::int32 maximum_speed_;
   ::google::protobuf::int32 core_count_;
   ::google::protobuf::int32 core_enabled_;
   ::google::protobuf::int32 thread_count_;
@@ -3501,6 +3715,443 @@ class DmiProcessors : public ::google::protobuf::MessageLite /* @@protoc_inserti
   // nested types ----------------------------------------------------
 
   typedef DmiProcessors_Item Item;
+
+  typedef DmiProcessors_Family Family;
+  static const Family FAMILY_UNKNOWN =
+    DmiProcessors_Family_FAMILY_UNKNOWN;
+  static const Family FAMILY_OTHER =
+    DmiProcessors_Family_FAMILY_OTHER;
+  static const Family FAMILY_8086 =
+    DmiProcessors_Family_FAMILY_8086;
+  static const Family FAMILY_80286 =
+    DmiProcessors_Family_FAMILY_80286;
+  static const Family FAMILY_INTEL_386_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_386_PROCESSOR;
+  static const Family FAMILY_INTEL_486_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_486_PROCESSOR;
+  static const Family FAMILY_8087 =
+    DmiProcessors_Family_FAMILY_8087;
+  static const Family FAMILY_80287 =
+    DmiProcessors_Family_FAMILY_80287;
+  static const Family FAMILY_80387 =
+    DmiProcessors_Family_FAMILY_80387;
+  static const Family FAMILY_80487 =
+    DmiProcessors_Family_FAMILY_80487;
+  static const Family FAMILY_INTEL_PENTIUM_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_PRO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_2_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_2_PROCESSOR;
+  static const Family FAMILY_PENTIUM_PROCESSOR_WITH_MMX =
+    DmiProcessors_Family_FAMILY_PENTIUM_PROCESSOR_WITH_MMX;
+  static const Family FAMILY_INTEL_CELERON_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CELERON_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_3_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_PROCESSOR;
+  static const Family FAMILY_M1_FAMILY =
+    DmiProcessors_Family_FAMILY_M1_FAMILY;
+  static const Family FAMILY_M2_FAMILY =
+    DmiProcessors_Family_FAMILY_M2_FAMILY;
+  static const Family FAMILY_INTEL_CELEROM_M_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CELEROM_M_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR;
+  static const Family FAMILY_AMD_DURON_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_DURON_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_K5_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_K5_FAMILY;
+  static const Family FAMILY_AMD_K6_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_K6_FAMILY;
+  static const Family FAMILY_AMD_K6_2 =
+    DmiProcessors_Family_FAMILY_AMD_K6_2;
+  static const Family FAMILY_AMD_K6_3 =
+    DmiProcessors_Family_FAMILY_AMD_K6_3;
+  static const Family FAMILY_AMD_ATHLON_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_29000_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_29000_FAMILY;
+  static const Family FAMILY_AMD_K6_2_PLUS =
+    DmiProcessors_Family_FAMILY_AMD_K6_2_PLUS;
+  static const Family FAMILY_POWER_PC_FAMILY =
+    DmiProcessors_Family_FAMILY_POWER_PC_FAMILY;
+  static const Family FAMILY_POWER_PC_601 =
+    DmiProcessors_Family_FAMILY_POWER_PC_601;
+  static const Family FAMILY_POWER_PC_603 =
+    DmiProcessors_Family_FAMILY_POWER_PC_603;
+  static const Family FAMILY_POWER_PC_603_PLUS =
+    DmiProcessors_Family_FAMILY_POWER_PC_603_PLUS;
+  static const Family FAMILY_POWER_PC_604 =
+    DmiProcessors_Family_FAMILY_POWER_PC_604;
+  static const Family FAMILY_POWER_PC_620 =
+    DmiProcessors_Family_FAMILY_POWER_PC_620;
+  static const Family FAMILY_POWER_PC_X704 =
+    DmiProcessors_Family_FAMILY_POWER_PC_X704;
+  static const Family FAMILY_POWER_PC_750 =
+    DmiProcessors_Family_FAMILY_POWER_PC_750;
+  static const Family FAMILY_INTEL_CORE_DUO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_DUO_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR;
+  static const Family FAMILY_INTEL_ATOM_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_ATOM_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_M_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_M_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_M3_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_M3_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_M5_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_M5_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_M7_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_M7_PROCESSOR;
+  static const Family FAMILY_ALPHA_FAMILY =
+    DmiProcessors_Family_FAMILY_ALPHA_FAMILY;
+  static const Family FAMILY_ALPHA_21064 =
+    DmiProcessors_Family_FAMILY_ALPHA_21064;
+  static const Family FAMILY_ALPHA_21066 =
+    DmiProcessors_Family_FAMILY_ALPHA_21066;
+  static const Family FAMILY_ALPHA_21164 =
+    DmiProcessors_Family_FAMILY_ALPHA_21164;
+  static const Family FAMILY_ALPHA_21164PC =
+    DmiProcessors_Family_FAMILY_ALPHA_21164PC;
+  static const Family FAMILY_ALPHA_21164A =
+    DmiProcessors_Family_FAMILY_ALPHA_21164A;
+  static const Family FAMILY_ALPHA_21264 =
+    DmiProcessors_Family_FAMILY_ALPHA_21264;
+  static const Family FAMILY_ALPHA_21364 =
+    DmiProcessors_Family_FAMILY_ALPHA_21364;
+  static const Family FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY;
+  static const Family FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY;
+  static const Family FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_FX_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_FX_SERIES_PROCESSOR;
+  static const Family FAMILY_MIPS_FAMILY =
+    DmiProcessors_Family_FAMILY_MIPS_FAMILY;
+  static const Family FAMILY_MIPS_R4000 =
+    DmiProcessors_Family_FAMILY_MIPS_R4000;
+  static const Family FAMILY_MIPS_R4200 =
+    DmiProcessors_Family_FAMILY_MIPS_R4200;
+  static const Family FAMILY_MIPS_R4400 =
+    DmiProcessors_Family_FAMILY_MIPS_R4400;
+  static const Family FAMILY_MIPS_R4600 =
+    DmiProcessors_Family_FAMILY_MIPS_R4600;
+  static const Family FAMILY_MIPS_R10000 =
+    DmiProcessors_Family_FAMILY_MIPS_R10000;
+  static const Family FAMILY_AMD_C_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_C_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_E_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_E_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_A_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_A_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_G_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_G_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_Z_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_Z_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_R_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_R_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_FIREPRO_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_FIREPRO_SERIES_PROCESSOR;
+  static const Family FAMILY_SPARC_FAMILY =
+    DmiProcessors_Family_FAMILY_SPARC_FAMILY;
+  static const Family FAMILY_SUPER_SPARC =
+    DmiProcessors_Family_FAMILY_SUPER_SPARC;
+  static const Family FAMILY_MICRO_SPARC_2 =
+    DmiProcessors_Family_FAMILY_MICRO_SPARC_2;
+  static const Family FAMILY_MICRO_SPARC_2EP =
+    DmiProcessors_Family_FAMILY_MICRO_SPARC_2EP;
+  static const Family FAMILY_ULTRA_SPARC =
+    DmiProcessors_Family_FAMILY_ULTRA_SPARC;
+  static const Family FAMILY_ULTRA_SPARC_2 =
+    DmiProcessors_Family_FAMILY_ULTRA_SPARC_2;
+  static const Family FAMILY_ULTRA_SPARC_2I =
+    DmiProcessors_Family_FAMILY_ULTRA_SPARC_2I;
+  static const Family FAMILY_ULTRA_SPARC_3 =
+    DmiProcessors_Family_FAMILY_ULTRA_SPARC_3;
+  static const Family FAMILY_ULTRA_SPARC_3I =
+    DmiProcessors_Family_FAMILY_ULTRA_SPARC_3I;
+  static const Family FAMILY_68040_FAMILY =
+    DmiProcessors_Family_FAMILY_68040_FAMILY;
+  static const Family FAMILY_68XXX =
+    DmiProcessors_Family_FAMILY_68XXX;
+  static const Family FAMILY_68000 =
+    DmiProcessors_Family_FAMILY_68000;
+  static const Family FAMILY_68010 =
+    DmiProcessors_Family_FAMILY_68010;
+  static const Family FAMILY_68020 =
+    DmiProcessors_Family_FAMILY_68020;
+  static const Family FAMILY_68030 =
+    DmiProcessors_Family_FAMILY_68030;
+  static const Family FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_X2000_SERIES_APU =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_X2000_SERIES_APU;
+  static const Family FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_X3000_SERIES_APU =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_X3000_SERIES_APU;
+  static const Family FAMILY_AMD_ZEN_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ZEN_PROCESSOR_FAMILY;
+  static const Family FAMILY_HOBBIT_FAMILY =
+    DmiProcessors_Family_FAMILY_HOBBIT_FAMILY;
+  static const Family FAMILY_CRUSOE_TM5000_FAMILY =
+    DmiProcessors_Family_FAMILY_CRUSOE_TM5000_FAMILY;
+  static const Family FAMILY_CRUSOE_TM3000_FAMILY =
+    DmiProcessors_Family_FAMILY_CRUSOE_TM3000_FAMILY;
+  static const Family FAMILY_EFFICEON_TM8000_FAMILY =
+    DmiProcessors_Family_FAMILY_EFFICEON_TM8000_FAMILY;
+  static const Family FAMILY_WEITEK =
+    DmiProcessors_Family_FAMILY_WEITEK;
+  static const Family FAMILY_INTEL_ITANIUM_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_ITANIUM_PROCESSOR;
+  static const Family FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_OPTERON_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY;
+  static const Family FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY;
+  static const Family FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_PA_RISC_FAMILY =
+    DmiProcessors_Family_FAMILY_PA_RISC_FAMILY;
+  static const Family FAMILY_PA_RISC_8500 =
+    DmiProcessors_Family_FAMILY_PA_RISC_8500;
+  static const Family FAMILY_PA_RISC_8000 =
+    DmiProcessors_Family_FAMILY_PA_RISC_8000;
+  static const Family FAMILY_PA_RISC_7300LC =
+    DmiProcessors_Family_FAMILY_PA_RISC_7300LC;
+  static const Family FAMILY_PA_RISC_7200 =
+    DmiProcessors_Family_FAMILY_PA_RISC_7200;
+  static const Family FAMILY_PA_RISC_7100LC =
+    DmiProcessors_Family_FAMILY_PA_RISC_7100LC;
+  static const Family FAMILY_PA_RISC_7100 =
+    DmiProcessors_Family_FAMILY_PA_RISC_7100;
+  static const Family FAMILY_V30_FAMILY =
+    DmiProcessors_Family_FAMILY_V30_FAMILY;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP;
+  static const Family FAMILY_INTEL_PENTIUM_4_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_4_PROCESSOR;
+  static const Family FAMILY_INTEL_XEON_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_PROCESSOR;
+  static const Family FAMILY_AS400_FAMILY =
+    DmiProcessors_Family_FAMILY_AS400_FAMILY;
+  static const Family FAMILY_INTEL_XEON_MP_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_MP_PROCESSOR;
+  static const Family FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY;
+  static const Family FAMILY_INTEL_ITANIUM_2_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_ITANIUM_2_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_M_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_M_PROCESSOR;
+  static const Family FAMILY_INTEL_CELERON_D_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CELERON_D_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_D_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_D_PROCESSOR;
+  static const Family FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION =
+    DmiProcessors_Family_FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION;
+  static const Family FAMILY_INTEL_CORE_SOLO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_SOLO_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_DUO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_DUO_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_SOLO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_SOLO_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_QUAD_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_QUAD_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_I7_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_I7_PROCESSOR;
+  static const Family FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR;
+  static const Family FAMILY_IBM390_FAMILY =
+    DmiProcessors_Family_FAMILY_IBM390_FAMILY;
+  static const Family FAMILY_G4 =
+    DmiProcessors_Family_FAMILY_G4;
+  static const Family FAMILY_G5 =
+    DmiProcessors_Family_FAMILY_G5;
+  static const Family FAMILY_ESA_390_G6 =
+    DmiProcessors_Family_FAMILY_ESA_390_G6;
+  static const Family FAMILY_Z_ARCHITECTURE_BASE =
+    DmiProcessors_Family_FAMILY_Z_ARCHITECTURE_BASE;
+  static const Family FAMILY_INTEL_CORE_I5_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_I5_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_I3_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_I3_PROCESSOR;
+  static const Family FAMILY_VIA_C7_M_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_VIA_C7_M_PROCESSOR_FAMILY;
+  static const Family FAMILY_VIA_C7_D_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_VIA_C7_D_PROCESSOR_FAMILY;
+  static const Family FAMILY_VIA_C7_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_VIA_C7_PROCESSOR_FAMILY;
+  static const Family FAMILY_VIA_EDEN_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_VIA_EDEN_PROCESSOR_FAMILY;
+  static const Family FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_VIA_NANO_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_VIA_NANO_PROCESSOR_FAMILY;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES;
+  static const Family FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES;
+  static const Family FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES;
+  static const Family FAMILY_AMD_SEMPRON_II_PROCESSOR =
+    DmiProcessors_Family_FAMILY_AMD_SEMPRON_II_PROCESSOR;
+  static const Family FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY;
+  static const Family FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY;
+  static const Family FAMILY_I860 =
+    DmiProcessors_Family_FAMILY_I860;
+  static const Family FAMILY_I960 =
+    DmiProcessors_Family_FAMILY_I960;
+  static const Family FAMILY_ARM_V7 =
+    DmiProcessors_Family_FAMILY_ARM_V7;
+  static const Family FAMILY_ARM_V8 =
+    DmiProcessors_Family_FAMILY_ARM_V8;
+  static const Family FAMILY_SH_3 =
+    DmiProcessors_Family_FAMILY_SH_3;
+  static const Family FAMILY_SH_4 =
+    DmiProcessors_Family_FAMILY_SH_4;
+  static const Family FAMILY_ARM =
+    DmiProcessors_Family_FAMILY_ARM;
+  static const Family FAMILY_STRONG_ARM =
+    DmiProcessors_Family_FAMILY_STRONG_ARM;
+  static const Family FAMILY_6X86 =
+    DmiProcessors_Family_FAMILY_6X86;
+  static const Family FAMILY_MEDIA_GX =
+    DmiProcessors_Family_FAMILY_MEDIA_GX;
+  static const Family FAMILY_MII =
+    DmiProcessors_Family_FAMILY_MII;
+  static const Family FAMILY_WIN_CHIP =
+    DmiProcessors_Family_FAMILY_WIN_CHIP;
+  static const Family FAMILY_DSP =
+    DmiProcessors_Family_FAMILY_DSP;
+  static const Family FAMILY_VIDEO_PROCESSOR =
+    DmiProcessors_Family_FAMILY_VIDEO_PROCESSOR;
+  static const Family FAMILY_INTEL_CORE_2_FAMILY =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_FAMILY;
+  static const Family FAMILY_AMD_K7_FAMILY =
+    DmiProcessors_Family_FAMILY_AMD_K7_FAMILY;
+  static const Family FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY =
+    DmiProcessors_Family_FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY;
+  static inline bool Family_IsValid(int value) {
+    return DmiProcessors_Family_IsValid(value);
+  }
+  static const Family Family_MIN =
+    DmiProcessors_Family_Family_MIN;
+  static const Family Family_MAX =
+    DmiProcessors_Family_Family_MAX;
+  static const int Family_ARRAYSIZE =
+    DmiProcessors_Family_Family_ARRAYSIZE;
 
   typedef DmiProcessors_Type Type;
   static const Type TYPE_UNKNOWN =
@@ -13680,57 +14331,18 @@ inline void DmiProcessors_Item::set_allocated_version(::std::string* version) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiProcessors.Item.version)
 }
 
-// string family = 3;
+// .aspia.proto.DmiProcessors.Family family = 3;
 inline void DmiProcessors_Item::clear_family() {
-  family_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  family_ = 0;
 }
-inline const ::std::string& DmiProcessors_Item::family() const {
+inline ::aspia::proto::DmiProcessors_Family DmiProcessors_Item::family() const {
   // @@protoc_insertion_point(field_get:aspia.proto.DmiProcessors.Item.family)
-  return family_.GetNoArena();
+  return static_cast< ::aspia::proto::DmiProcessors_Family >(family_);
 }
-inline void DmiProcessors_Item::set_family(const ::std::string& value) {
+inline void DmiProcessors_Item::set_family(::aspia::proto::DmiProcessors_Family value) {
   
-  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  family_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.DmiProcessors.Item.family)
-}
-#if LANG_CXX11
-inline void DmiProcessors_Item::set_family(::std::string&& value) {
-  
-  family_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiProcessors.Item.family)
-}
-#endif
-inline void DmiProcessors_Item::set_family(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiProcessors.Item.family)
-}
-inline void DmiProcessors_Item::set_family(const char* value, size_t size) {
-  
-  family_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiProcessors.Item.family)
-}
-inline ::std::string* DmiProcessors_Item::mutable_family() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiProcessors.Item.family)
-  return family_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiProcessors_Item::release_family() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiProcessors.Item.family)
-  
-  return family_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiProcessors_Item::set_allocated_family(::std::string* family) {
-  if (family != NULL) {
-    
-  } else {
-    
-  }
-  family_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), family);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiProcessors.Item.family)
 }
 
 // .aspia.proto.DmiProcessors.Type type = 4;
@@ -22504,6 +23116,7 @@ template <> struct is_proto_enum< ::aspia::proto::DmiCaches_SRAMType> : ::google
 template <> struct is_proto_enum< ::aspia::proto::DmiCaches_ErrorCorrectionType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiCaches_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiCaches_Associativity> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Family> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiProcessors_Upgrade> : ::google::protobuf::internal::true_type {};

@@ -170,7 +170,7 @@ public:
 
         std::string GetManufacturer() const;
         std::string GetVersion() const;
-        std::string GetFamily() const;
+        proto::DmiProcessors::Family GetFamily() const;
         proto::DmiProcessors::Type GetType() const;
         proto::DmiProcessors::Status GetStatus() const;
         std::string GetSocket() const;

@@ -982,9 +982,7 @@ void CategoryDmiProcessors::Parse(Table& table, const std::string& data)
         if (!item.version().empty())
             group.AddParam("Version", Value::String(item.version()));
 
-        if (!item.family().empty())
-            group.AddParam("Family", Value::String(item.family()));
-
+        group.AddParam("Family", Value::String(FamilyToString(item.family())));
         group.AddParam("Type", Value::String(TypeToString(item.type())));
         group.AddParam("Status", Value::String(StatusToString(item.status())));
 
@@ -1078,6 +1076,652 @@ std::string CategoryDmiProcessors::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryDmiProcessors::FamilyToString(proto::DmiProcessors::Family value)
+{
+    switch (value)
+    {
+        case proto::DmiProcessors::FAMILY_OTHER:
+            return "Other";
+
+        case proto::DmiProcessors::FAMILY_8086:
+            return "8086";
+
+        case proto::DmiProcessors::FAMILY_80286:
+            return "80286";
+
+        case proto::DmiProcessors::FAMILY_INTEL_386_PROCESSOR:
+            return "Intel386 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_486_PROCESSOR:
+            return "Intel486 Processor";
+
+        case proto::DmiProcessors::FAMILY_8087:
+            return "8087";
+
+        case proto::DmiProcessors::FAMILY_80287:
+            return "80287";
+
+        case proto::DmiProcessors::FAMILY_80387:
+            return "80387";
+
+        case proto::DmiProcessors::FAMILY_80487:
+            return "80487";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR:
+            return "Intel Pentium Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR:
+            return "Intel Pentium Pro Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_2_PROCESSOR:
+            return "Intel Pentium II Processor";
+
+        case proto::DmiProcessors::FAMILY_PENTIUM_PROCESSOR_WITH_MMX:
+            return "Intel Pentium Processor with MMX Technology";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CELERON_PROCESSOR:
+            return "Intel Celeron Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR:
+            return "Intel Pentium II Xeon Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR:
+            return "Intel Pentium III Processor";
+
+        case proto::DmiProcessors::FAMILY_M1_FAMILY:
+            return "M1 Family";
+
+        case proto::DmiProcessors::FAMILY_M2_FAMILY:
+            return "M2 Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CELEROM_M_PROCESSOR:
+            return "Intel Celeron M Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR:
+            return "Intel Pentium 4 HT Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_DURON_PROCESSOR_FAMILY:
+            return "AMD Duron Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_K5_FAMILY:
+            return "AMD K5 Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_K6_FAMILY:
+            return "AMD K6 Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_K6_2:
+            return "AMD K6-2";
+
+        case proto::DmiProcessors::FAMILY_AMD_K6_3:
+            return "AMD K6-3";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_PROCESSOR_FAMILY:
+            return "AMD Athlon Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_29000_FAMILY:
+            return "AMD 29000 Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_K6_2_PLUS:
+            return "AMD K6-2+";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_FAMILY:
+            return "Power PC Family";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_601:
+            return "Power PC 601";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_603:
+            return "Power PC 603";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_603_PLUS:
+            return "Power PC 603+";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_604:
+            return "Power PC 604";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_620:
+            return "Power PC 620";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_X704:
+            return "Power PC x704";
+
+        case proto::DmiProcessors::FAMILY_POWER_PC_750:
+            return "Power PC 750";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_DUO_PROCESSOR:
+            return "Intel Core Duo Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR:
+            return "Intel Core Duo Mobile Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR:
+            return "Intel Core Solo Mobile Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_ATOM_PROCESSOR:
+            return "Intel Atom Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_M_PROCESSOR:
+            return "Intel Core M Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_M3_PROCESSOR:
+            return "Intel Core m3 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_M5_PROCESSOR:
+            return "Intel Core m5 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_M7_PROCESSOR:
+            return "Intel Core m7 Processor";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_FAMILY:
+            return "Alpha Family";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21064:
+            return "Alpha 21064";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21066:
+            return "Alpha 21066";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21164:
+            return "Alpha 21164";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21164PC:
+            return "Alpha 21164PC";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21164A:
+            return "Alpha 21164a";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21264:
+            return "Alpha 21264";
+
+        case proto::DmiProcessors::FAMILY_ALPHA_21364:
+            return "Alpha 21364";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY:
+            return "AMD Turion II Ultra Dual-Core Mobile M Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY:
+            return "AMD Turion II Dual-Core Mobile M Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY:
+            return "AMD Athlon II Dual-Core M Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR:
+            return "AMD Opteron 6100 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR:
+            return "AMD Opteron 4100 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR:
+            return "AMD Opteron 6200 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR:
+            return "AMD Opteron 4200 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_FX_SERIES_PROCESSOR:
+            return "AMD FX Series Processor";
+
+        case proto::DmiProcessors::FAMILY_MIPS_FAMILY:
+            return "MIPS Family";
+
+        case proto::DmiProcessors::FAMILY_MIPS_R4000:
+            return "MIPS R4000";
+
+        case proto::DmiProcessors::FAMILY_MIPS_R4200:
+            return "MIPS R4200";
+
+        case proto::DmiProcessors::FAMILY_MIPS_R4400:
+            return "MIPS R4400";
+
+        case proto::DmiProcessors::FAMILY_MIPS_R4600:
+            return "MIPS R4600";
+
+        case proto::DmiProcessors::FAMILY_MIPS_R10000:
+            return "MIPS R10000";
+
+        case proto::DmiProcessors::FAMILY_AMD_C_SERIES_PROCESSOR:
+            return "AMD C-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_E_SERIES_PROCESSOR:
+            return "AMD E-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_A_SERIES_PROCESSOR:
+            return "AMD A-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_G_SERIES_PROCESSOR:
+            return "AMD G-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_Z_SERIES_PROCESSOR:
+            return "AMD Z-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_R_SERIES_PROCESSOR:
+            return "AMD R-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR:
+            return "AMD Opteron 4300 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR:
+            return "AMD Opteron 6300 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR:
+            return "AMD Opteron 3300 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_FIREPRO_SERIES_PROCESSOR:
+            return "AMD FirePro Series Processor";
+
+        case proto::DmiProcessors::FAMILY_SPARC_FAMILY:
+            return "SPARC Family";
+
+        case proto::DmiProcessors::FAMILY_SUPER_SPARC:
+            return "SuperSPARC";
+
+        case proto::DmiProcessors::FAMILY_MICRO_SPARC_2:
+            return "microSPARC II";
+
+        case proto::DmiProcessors::FAMILY_MICRO_SPARC_2EP:
+            return "microSPARC IIep";
+
+        case proto::DmiProcessors::FAMILY_ULTRA_SPARC:
+            return "UltraSPARC";
+
+        case proto::DmiProcessors::FAMILY_ULTRA_SPARC_2:
+            return "UltraSPARC II";
+
+        case proto::DmiProcessors::FAMILY_ULTRA_SPARC_2I:
+            return "UltraSPARC IIi";
+
+        case proto::DmiProcessors::FAMILY_ULTRA_SPARC_3:
+            return "UltraSPARC III";
+
+        case proto::DmiProcessors::FAMILY_ULTRA_SPARC_3I:
+            return "UltraSPARC IIIi";
+
+        case proto::DmiProcessors::FAMILY_68040_FAMILY:
+            return "68040 Family";
+
+        case proto::DmiProcessors::FAMILY_68XXX:
+            return "68xxx";
+
+        case proto::DmiProcessors::FAMILY_68000:
+            return "68000";
+
+        case proto::DmiProcessors::FAMILY_68010:
+            return "68010";
+
+        case proto::DmiProcessors::FAMILY_68020:
+            return "68020";
+
+        case proto::DmiProcessors::FAMILY_68030:
+            return "68030";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY:
+            return "AMD Athlon X4 Quad-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR:
+            return "AMD Opteron X1000 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_X2000_SERIES_APU:
+            return "AMD Opteron X2000 Series APU";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR:
+            return "AMD Opteron A-Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_X3000_SERIES_APU:
+            return "AMD Opteron X3000 Series APU";
+
+        case proto::DmiProcessors::FAMILY_AMD_ZEN_PROCESSOR_FAMILY:
+            return "AMD Zen Processor Family";
+
+        case proto::DmiProcessors::FAMILY_HOBBIT_FAMILY:
+            return "Hobbit Family";
+
+        case proto::DmiProcessors::FAMILY_CRUSOE_TM5000_FAMILY:
+            return "Crusoe TM5000 Family";
+
+        case proto::DmiProcessors::FAMILY_CRUSOE_TM3000_FAMILY:
+            return "Crusoe TM3000 Family";
+
+        case proto::DmiProcessors::FAMILY_EFFICEON_TM8000_FAMILY:
+            return "Efficeon TM8000 Family";
+
+        case proto::DmiProcessors::FAMILY_WEITEK:
+            return "Weitek";
+
+        case proto::DmiProcessors::FAMILY_INTEL_ITANIUM_PROCESSOR:
+            return "Intel Itanium Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY:
+            return "AMD Athlon 64 Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_PROCESSOR_FAMILY:
+            return "AMD Opteron Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY:
+            return "AMD Sempron Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY:
+            return "AMD Turion 64 Mobile Technology";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY:
+            return "AMD Opteron Dual-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY:
+            return "AMD Athlon 64 X2 Dual-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY:
+            return "AMD Turion 64 X2 Mobile Technology";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY:
+            return "AMD Opteron Quad-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY:
+            return "AMD Opteron Third-Generation Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY:
+            return "AMD Phenom FX Quad-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY:
+            return "AMD Phenom X4 Quad-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY:
+            return "AMD Phenom X2 Dual-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY:
+            return "AMD Athlon X2 Dual-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_FAMILY:
+            return "PA-RISC Family";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_8500:
+            return "PA-RISC 8500";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_8000:
+            return "PA-RISC 8000";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_7300LC:
+            return "PA-RISC 7300LC";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_7200:
+            return "PA-RISC 7200";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_7100LC:
+            return "PA-RISC 7100LC";
+
+        case proto::DmiProcessors::FAMILY_PA_RISC_7100:
+            return "PA-RISC 7100";
+
+        case proto::DmiProcessors::FAMILY_V30_FAMILY:
+            return "V30 Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 3200 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 3000 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 5300 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 5100 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 5000 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR:
+            return "Intel Xeon Dual-Core LV Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR:
+            return "Intel Xeon Dual-Core ULV Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 7100 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 5400 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR:
+            return "Intel Xeon Quad-Core Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 5200 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 7200 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 7300 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 7400 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES:
+            return "Intel Xeon Multi-Core 7400 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR:
+            return "Intel Pentium III Xeon Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP:
+            return "Intel Pentium III Processor with SpeedStep Technology";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_4_PROCESSOR:
+            return "Intel Pentium 4 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_PROCESSOR:
+            return "Intel Xeon Processor";
+
+        case proto::DmiProcessors::FAMILY_AS400_FAMILY:
+            return "AS400 Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_MP_PROCESSOR:
+            return "Intel Xeon MP Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY:
+            return "AMD Athlon XP Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY:
+            return "AMD Athlon MP Processor Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_ITANIUM_2_PROCESSOR:
+            return "Intel Itanium 2 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_M_PROCESSOR:
+            return "Intel Pentium M Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CELERON_D_PROCESSOR:
+            return "Intel Celeron D Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_D_PROCESSOR:
+            return "Intel Pentium D Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION:
+            return "Intel Pentium Processor Extreme Edition";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_SOLO_PROCESSOR:
+            return "Intel Core Solo Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_DUO_PROCESSOR:
+            return "Intel Core 2 Duo Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_PROCESSOR:
+            return "Intel Core 2 Solo Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR:
+            return "Intel Core 2 Extreme Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_QUAD_PROCESSOR:
+            return "Intel Core 2 Quad Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR:
+            return "Intel Core 2 Extreme Mobile Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR:
+            return "Intel Core 2 Duo Mobile Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR:
+            return "Intel Core 2 Solo Mobile Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_I7_PROCESSOR:
+            return "Intel Core i7 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR:
+            return "Intel Celeron Dual-Core Processor";
+
+        case proto::DmiProcessors::FAMILY_IBM390_FAMILY:
+            return "IBM390 Family";
+
+        case proto::DmiProcessors::FAMILY_G4:
+            return "G4";
+
+        case proto::DmiProcessors::FAMILY_G5:
+            return "G5";
+
+        case proto::DmiProcessors::FAMILY_ESA_390_G6:
+            return "ESA/390 G6";
+
+        case proto::DmiProcessors::FAMILY_Z_ARCHITECTURE_BASE:
+            return "z/Architecture Base";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_I5_PROCESSOR:
+            return "Intel Core i5 Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_I3_PROCESSOR:
+            return "Intel Core i3 Processor";
+
+        case proto::DmiProcessors::FAMILY_VIA_C7_M_PROCESSOR_FAMILY:
+            return "VIA C7-M Processor Family";
+
+        case proto::DmiProcessors::FAMILY_VIA_C7_D_PROCESSOR_FAMILY:
+            return "VIA C7-D Processor Family";
+
+        case proto::DmiProcessors::FAMILY_VIA_C7_PROCESSOR_FAMILY:
+            return "VIA C7 Processor Family";
+
+        case proto::DmiProcessors::FAMILY_VIA_EDEN_PROCESSOR_FAMILY:
+            return "VIA Eden Processor Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR:
+            return "Intel Xeon Multi-Core Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 3xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 3xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_VIA_NANO_PROCESSOR_FAMILY:
+            return "VIA Nano Processor Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 5xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 5xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Dual-Core 7xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Quad-Core 7xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES:
+            return "Intel Xeon Multi-Core 7xxx Processor Series";
+
+        case proto::DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES:
+            return "Intel Xeon Multi-Core 3400 Processor Series";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES:
+            return "AMD Opteron 3000 Series Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_SEMPRON_II_PROCESSOR:
+            return "AMD Sempron II Processor";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY:
+            return "AMD Opteron Quad-Core Embedded Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY:
+            return "AMD Phenom Triple-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY:
+            return "AMD Turion Ultra Dual-Core Mobile Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY:
+            return "AMD Turion Dual-Core Mobile Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY:
+            return "AMD Athlon Dual-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY:
+            return "AMD Sempron SI Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY:
+            return "AMD Phenom II Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY:
+            return "AMD Athlon II Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY:
+            return "AMD Opteron Six-Core Processor Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY:
+            return "AMD Sempron M Processor Family";
+
+        case proto::DmiProcessors::FAMILY_I860:
+            return "i860";
+
+        case proto::DmiProcessors::FAMILY_I960:
+            return "i960";
+
+        case proto::DmiProcessors::FAMILY_ARM_V7:
+            return "ARMv7";
+
+        case proto::DmiProcessors::FAMILY_ARM_V8:
+            return "ARMv8";
+
+        case proto::DmiProcessors::FAMILY_SH_3:
+            return "SH-3";
+
+        case proto::DmiProcessors::FAMILY_SH_4:
+            return "SH-4";
+
+        case proto::DmiProcessors::FAMILY_ARM:
+            return "ARM";
+
+        case proto::DmiProcessors::FAMILY_STRONG_ARM:
+            return "StrongARM";
+
+        case proto::DmiProcessors::FAMILY_6X86:
+            return "6x86";
+
+        case proto::DmiProcessors::FAMILY_MEDIA_GX:
+            return "MediaGX";
+
+        case proto::DmiProcessors::FAMILY_MII:
+            return "MII";
+
+        case proto::DmiProcessors::FAMILY_WIN_CHIP:
+            return "WinChip";
+
+        case proto::DmiProcessors::FAMILY_DSP:
+            return "DSP";
+
+        case proto::DmiProcessors::FAMILY_VIDEO_PROCESSOR:
+            return "Video Processor";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_FAMILY:
+            return "Intel Core 2 Family";
+
+        case proto::DmiProcessors::FAMILY_AMD_K7_FAMILY:
+            return "AMD K7 Family";
+
+        case proto::DmiProcessors::FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY:
+            return "Intel Core 2 or AMD K7 Family";
+
+        default:
+            return "Unknown";
+    }
 }
 
 // static
