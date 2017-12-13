@@ -955,7 +955,7 @@ message DmiOnBoardDevices
     repeated Item item = 1;
 }
 
-message DmiBuildinPointing
+message DmiPointingDevice
 {
     enum Type
     {
@@ -1029,7 +1029,7 @@ message DmiPortableBattery
     repeated Item item = 1;
 }
 
-message CentralProcessor
+message CPU
 {
     message Features
     {

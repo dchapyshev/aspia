@@ -1980,58 +1980,58 @@ int SMBios::MemoryDeviceTable::GetDataWidth() const
 }
 
 //
-// BuildinPointingTable
+// PointingDeviceTable
 //
 
-SMBios::BuildinPointingTable::BuildinPointingTable(const TableReader& reader)
+SMBios::PointingDeviceTable::PointingDeviceTable(const TableReader& reader)
     : reader_(reader)
 {
     // Nothing
 }
 
-proto::DmiBuildinPointing::Type SMBios::BuildinPointingTable::GetDeviceType() const
+proto::DmiPointingDevice::Type SMBios::PointingDeviceTable::GetDeviceType() const
 {
     if (reader_.GetTableLength() < 0x07)
-        return proto::DmiBuildinPointing::TYPE_UNKNOWN;
+        return proto::DmiPointingDevice::TYPE_UNKNOWN;
 
     switch (reader_.GetByte(0x04))
     {
-        case 0x01: return proto::DmiBuildinPointing::TYPE_OTHER;
-        case 0x02: return proto::DmiBuildinPointing::TYPE_UNKNOWN;
-        case 0x03: return proto::DmiBuildinPointing::TYPE_MOUSE;
-        case 0x04: return proto::DmiBuildinPointing::TYPE_TRACK_BALL;
-        case 0x05: return proto::DmiBuildinPointing::TYPE_TRACK_POINT;
-        case 0x06: return proto::DmiBuildinPointing::TYPE_GLIDE_POINT;
-        case 0x07: return proto::DmiBuildinPointing::TYPE_TOUCH_PAD;
-        case 0x08: return proto::DmiBuildinPointing::TYPE_TOUCH_SCREEN;
-        case 0x09: return proto::DmiBuildinPointing::TYPE_OPTICAL_SENSOR;
-        default: return proto::DmiBuildinPointing::TYPE_UNKNOWN;
+        case 0x01: return proto::DmiPointingDevice::TYPE_OTHER;
+        case 0x02: return proto::DmiPointingDevice::TYPE_UNKNOWN;
+        case 0x03: return proto::DmiPointingDevice::TYPE_MOUSE;
+        case 0x04: return proto::DmiPointingDevice::TYPE_TRACK_BALL;
+        case 0x05: return proto::DmiPointingDevice::TYPE_TRACK_POINT;
+        case 0x06: return proto::DmiPointingDevice::TYPE_GLIDE_POINT;
+        case 0x07: return proto::DmiPointingDevice::TYPE_TOUCH_PAD;
+        case 0x08: return proto::DmiPointingDevice::TYPE_TOUCH_SCREEN;
+        case 0x09: return proto::DmiPointingDevice::TYPE_OPTICAL_SENSOR;
+        default: return proto::DmiPointingDevice::TYPE_UNKNOWN;
     }
 }
 
-proto::DmiBuildinPointing::Interface SMBios::BuildinPointingTable::GetInterface() const
+proto::DmiPointingDevice::Interface SMBios::PointingDeviceTable::GetInterface() const
 {
     if (reader_.GetTableLength() < 0x07)
-        return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
+        return proto::DmiPointingDevice::INTERFACE_UNKNOWN;
 
     switch (reader_.GetByte(0x05))
     {
-        case 0x01: return proto::DmiBuildinPointing::INTERFACE_OTHER;
-        case 0x02: return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
-        case 0x03: return proto::DmiBuildinPointing::INTERFACE_SERIAL;
-        case 0x04: return proto::DmiBuildinPointing::INTERFACE_PS_2;
-        case 0x05: return proto::DmiBuildinPointing::INTERFACE_INFRARED;
-        case 0x06: return proto::DmiBuildinPointing::INTERFACE_HP_HIL;
-        case 0x07: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE;
-        case 0x08: return proto::DmiBuildinPointing::INTERFACE_ADB;
-        case 0xA0: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9;
-        case 0xA1: return proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN;
-        case 0xA2: return proto::DmiBuildinPointing::INTERFACE_USB;
-        default: return proto::DmiBuildinPointing::INTERFACE_UNKNOWN;
+        case 0x01: return proto::DmiPointingDevice::INTERFACE_OTHER;
+        case 0x02: return proto::DmiPointingDevice::INTERFACE_UNKNOWN;
+        case 0x03: return proto::DmiPointingDevice::INTERFACE_SERIAL;
+        case 0x04: return proto::DmiPointingDevice::INTERFACE_PS_2;
+        case 0x05: return proto::DmiPointingDevice::INTERFACE_INFRARED;
+        case 0x06: return proto::DmiPointingDevice::INTERFACE_HP_HIL;
+        case 0x07: return proto::DmiPointingDevice::INTERFACE_BUS_MOUSE;
+        case 0x08: return proto::DmiPointingDevice::INTERFACE_ADB;
+        case 0xA0: return proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_DB_9;
+        case 0xA1: return proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_MICRO_DIN;
+        case 0xA2: return proto::DmiPointingDevice::INTERFACE_USB;
+        default: return proto::DmiPointingDevice::INTERFACE_UNKNOWN;
     }
 }
 
-int SMBios::BuildinPointingTable::GetButtonCount() const
+int SMBios::PointingDeviceTable::GetButtonCount() const
 {
     if (reader_.GetTableLength() < 0x07)
         return 0;

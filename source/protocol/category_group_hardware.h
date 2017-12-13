@@ -208,10 +208,10 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
 };
 
-class CategoryDmiBuildinPointing : public CategoryInfo
+class CategoryDmiPointingDevices : public CategoryInfo
 {
 public:
-    CategoryDmiBuildinPointing() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
+    CategoryDmiPointingDevices() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -221,10 +221,10 @@ public:
     std::string Serialize() final;
 
 private:
-    static const char* TypeToString(proto::DmiBuildinPointing::Type value);
-    static const char* InterfaceToString(proto::DmiBuildinPointing::Interface value);
+    static const char* TypeToString(proto::DmiPointingDevice::Type value);
+    static const char* InterfaceToString(proto::DmiPointingDevice::Interface value);
 
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiBuildinPointing);
+    DISALLOW_COPY_AND_ASSIGN(CategoryDmiPointingDevices);
 };
 
 class CategoryDmiPortableBattery : public CategoryInfo

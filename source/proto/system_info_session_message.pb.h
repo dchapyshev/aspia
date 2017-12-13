@@ -79,18 +79,18 @@ void InitDefaultsDmiOnBoardDevices_ItemImpl();
 void InitDefaultsDmiOnBoardDevices_Item();
 void InitDefaultsDmiOnBoardDevicesImpl();
 void InitDefaultsDmiOnBoardDevices();
-void InitDefaultsDmiBuildinPointing_ItemImpl();
-void InitDefaultsDmiBuildinPointing_Item();
-void InitDefaultsDmiBuildinPointingImpl();
-void InitDefaultsDmiBuildinPointing();
+void InitDefaultsDmiPointingDevice_ItemImpl();
+void InitDefaultsDmiPointingDevice_Item();
+void InitDefaultsDmiPointingDeviceImpl();
+void InitDefaultsDmiPointingDevice();
 void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
 void InitDefaultsDmiPortableBattery();
-void InitDefaultsCentralProcessor_FeaturesImpl();
-void InitDefaultsCentralProcessor_Features();
-void InitDefaultsCentralProcessorImpl();
-void InitDefaultsCentralProcessor();
+void InitDefaultsCPU_FeaturesImpl();
+void InitDefaultsCPU_Features();
+void InitDefaultsCPUImpl();
+void InitDefaultsCPU();
 void InitDefaultsAtaDrives_ItemImpl();
 void InitDefaultsAtaDrives_Item();
 void InitDefaultsAtaDrivesImpl();
@@ -179,12 +179,12 @@ inline void InitDefaults() {
   InitDefaultsDmiPortConnectors();
   InitDefaultsDmiOnBoardDevices_Item();
   InitDefaultsDmiOnBoardDevices();
-  InitDefaultsDmiBuildinPointing_Item();
-  InitDefaultsDmiBuildinPointing();
+  InitDefaultsDmiPointingDevice_Item();
+  InitDefaultsDmiPointingDevice();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
-  InitDefaultsCentralProcessor_Features();
-  InitDefaultsCentralProcessor();
+  InitDefaultsCPU_Features();
+  InitDefaultsCPU();
   InitDefaultsAtaDrives_Item();
   InitDefaultsAtaDrives();
   InitDefaultsVideoAdapters_Item();
@@ -229,12 +229,12 @@ extern AtaDrivesDefaultTypeInternal _AtaDrives_default_instance_;
 class AtaDrives_Item;
 class AtaDrives_ItemDefaultTypeInternal;
 extern AtaDrives_ItemDefaultTypeInternal _AtaDrives_Item_default_instance_;
-class CentralProcessor;
-class CentralProcessorDefaultTypeInternal;
-extern CentralProcessorDefaultTypeInternal _CentralProcessor_default_instance_;
-class CentralProcessor_Features;
-class CentralProcessor_FeaturesDefaultTypeInternal;
-extern CentralProcessor_FeaturesDefaultTypeInternal _CentralProcessor_Features_default_instance_;
+class CPU;
+class CPUDefaultTypeInternal;
+extern CPUDefaultTypeInternal _CPU_default_instance_;
+class CPU_Features;
+class CPU_FeaturesDefaultTypeInternal;
+extern CPU_FeaturesDefaultTypeInternal _CPU_Features_default_instance_;
 class DmiBaseboard;
 class DmiBaseboardDefaultTypeInternal;
 extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
@@ -247,12 +247,6 @@ extern DmiBaseboard_ItemDefaultTypeInternal _DmiBaseboard_Item_default_instance_
 class DmiBios;
 class DmiBiosDefaultTypeInternal;
 extern DmiBiosDefaultTypeInternal _DmiBios_default_instance_;
-class DmiBuildinPointing;
-class DmiBuildinPointingDefaultTypeInternal;
-extern DmiBuildinPointingDefaultTypeInternal _DmiBuildinPointing_default_instance_;
-class DmiBuildinPointing_Item;
-class DmiBuildinPointing_ItemDefaultTypeInternal;
-extern DmiBuildinPointing_ItemDefaultTypeInternal _DmiBuildinPointing_Item_default_instance_;
 class DmiCaches;
 class DmiCachesDefaultTypeInternal;
 extern DmiCachesDefaultTypeInternal _DmiCaches_default_instance_;
@@ -277,6 +271,12 @@ extern DmiOnBoardDevicesDefaultTypeInternal _DmiOnBoardDevices_default_instance_
 class DmiOnBoardDevices_Item;
 class DmiOnBoardDevices_ItemDefaultTypeInternal;
 extern DmiOnBoardDevices_ItemDefaultTypeInternal _DmiOnBoardDevices_Item_default_instance_;
+class DmiPointingDevice;
+class DmiPointingDeviceDefaultTypeInternal;
+extern DmiPointingDeviceDefaultTypeInternal _DmiPointingDevice_default_instance_;
+class DmiPointingDevice_Item;
+class DmiPointingDevice_ItemDefaultTypeInternal;
+extern DmiPointingDevice_ItemDefaultTypeInternal _DmiPointingDevice_Item_default_instance_;
 class DmiPortConnectors;
 class DmiPortConnectorsDefaultTypeInternal;
 extern DmiPortConnectorsDefaultTypeInternal _DmiPortConnectors_default_instance_;
@@ -1312,43 +1312,43 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MIN = DmiOnBoardDevices
 const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MAX = DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER;
 const int DmiOnBoardDevices_Type_Type_ARRAYSIZE = DmiOnBoardDevices_Type_Type_MAX + 1;
 
-enum DmiBuildinPointing_Type {
-  DmiBuildinPointing_Type_TYPE_UNKNOWN = 0,
-  DmiBuildinPointing_Type_TYPE_OTHER = 1,
-  DmiBuildinPointing_Type_TYPE_MOUSE = 2,
-  DmiBuildinPointing_Type_TYPE_TRACK_BALL = 3,
-  DmiBuildinPointing_Type_TYPE_TRACK_POINT = 4,
-  DmiBuildinPointing_Type_TYPE_GLIDE_POINT = 5,
-  DmiBuildinPointing_Type_TYPE_TOUCH_PAD = 6,
-  DmiBuildinPointing_Type_TYPE_TOUCH_SCREEN = 7,
-  DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR = 8,
-  DmiBuildinPointing_Type_DmiBuildinPointing_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiBuildinPointing_Type_DmiBuildinPointing_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum DmiPointingDevice_Type {
+  DmiPointingDevice_Type_TYPE_UNKNOWN = 0,
+  DmiPointingDevice_Type_TYPE_OTHER = 1,
+  DmiPointingDevice_Type_TYPE_MOUSE = 2,
+  DmiPointingDevice_Type_TYPE_TRACK_BALL = 3,
+  DmiPointingDevice_Type_TYPE_TRACK_POINT = 4,
+  DmiPointingDevice_Type_TYPE_GLIDE_POINT = 5,
+  DmiPointingDevice_Type_TYPE_TOUCH_PAD = 6,
+  DmiPointingDevice_Type_TYPE_TOUCH_SCREEN = 7,
+  DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR = 8,
+  DmiPointingDevice_Type_DmiPointingDevice_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiPointingDevice_Type_DmiPointingDevice_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool DmiBuildinPointing_Type_IsValid(int value);
-const DmiBuildinPointing_Type DmiBuildinPointing_Type_Type_MIN = DmiBuildinPointing_Type_TYPE_UNKNOWN;
-const DmiBuildinPointing_Type DmiBuildinPointing_Type_Type_MAX = DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR;
-const int DmiBuildinPointing_Type_Type_ARRAYSIZE = DmiBuildinPointing_Type_Type_MAX + 1;
+bool DmiPointingDevice_Type_IsValid(int value);
+const DmiPointingDevice_Type DmiPointingDevice_Type_Type_MIN = DmiPointingDevice_Type_TYPE_UNKNOWN;
+const DmiPointingDevice_Type DmiPointingDevice_Type_Type_MAX = DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR;
+const int DmiPointingDevice_Type_Type_ARRAYSIZE = DmiPointingDevice_Type_Type_MAX + 1;
 
-enum DmiBuildinPointing_Interface {
-  DmiBuildinPointing_Interface_INTERFACE_UNKNOWN = 0,
-  DmiBuildinPointing_Interface_INTERFACE_OTHER = 1,
-  DmiBuildinPointing_Interface_INTERFACE_SERIAL = 2,
-  DmiBuildinPointing_Interface_INTERFACE_PS_2 = 3,
-  DmiBuildinPointing_Interface_INTERFACE_INFRARED = 4,
-  DmiBuildinPointing_Interface_INTERFACE_HP_HIL = 5,
-  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE = 6,
-  DmiBuildinPointing_Interface_INTERFACE_ADB = 7,
-  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
-  DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
-  DmiBuildinPointing_Interface_INTERFACE_USB = 10,
-  DmiBuildinPointing_Interface_DmiBuildinPointing_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiBuildinPointing_Interface_DmiBuildinPointing_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum DmiPointingDevice_Interface {
+  DmiPointingDevice_Interface_INTERFACE_UNKNOWN = 0,
+  DmiPointingDevice_Interface_INTERFACE_OTHER = 1,
+  DmiPointingDevice_Interface_INTERFACE_SERIAL = 2,
+  DmiPointingDevice_Interface_INTERFACE_PS_2 = 3,
+  DmiPointingDevice_Interface_INTERFACE_INFRARED = 4,
+  DmiPointingDevice_Interface_INTERFACE_HP_HIL = 5,
+  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE = 6,
+  DmiPointingDevice_Interface_INTERFACE_ADB = 7,
+  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
+  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
+  DmiPointingDevice_Interface_INTERFACE_USB = 10,
+  DmiPointingDevice_Interface_DmiPointingDevice_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiPointingDevice_Interface_DmiPointingDevice_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool DmiBuildinPointing_Interface_IsValid(int value);
-const DmiBuildinPointing_Interface DmiBuildinPointing_Interface_Interface_MIN = DmiBuildinPointing_Interface_INTERFACE_UNKNOWN;
-const DmiBuildinPointing_Interface DmiBuildinPointing_Interface_Interface_MAX = DmiBuildinPointing_Interface_INTERFACE_USB;
-const int DmiBuildinPointing_Interface_Interface_ARRAYSIZE = DmiBuildinPointing_Interface_Interface_MAX + 1;
+bool DmiPointingDevice_Interface_IsValid(int value);
+const DmiPointingDevice_Interface DmiPointingDevice_Interface_Interface_MIN = DmiPointingDevice_Interface_INTERFACE_UNKNOWN;
+const DmiPointingDevice_Interface DmiPointingDevice_Interface_Interface_MAX = DmiPointingDevice_Interface_INTERFACE_USB;
+const int DmiPointingDevice_Interface_Interface_ARRAYSIZE = DmiPointingDevice_Interface_Interface_MAX + 1;
 
 enum DmiPortableBattery_Chemistry {
   DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN = 0,
@@ -6013,24 +6013,24 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
 };
 // -------------------------------------------------------------------
 
-class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiBuildinPointing.Item) */ {
+class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevice.Item) */ {
  public:
-  DmiBuildinPointing_Item();
-  virtual ~DmiBuildinPointing_Item();
+  DmiPointingDevice_Item();
+  virtual ~DmiPointingDevice_Item();
 
-  DmiBuildinPointing_Item(const DmiBuildinPointing_Item& from);
+  DmiPointingDevice_Item(const DmiPointingDevice_Item& from);
 
-  inline DmiBuildinPointing_Item& operator=(const DmiBuildinPointing_Item& from) {
+  inline DmiPointingDevice_Item& operator=(const DmiPointingDevice_Item& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiBuildinPointing_Item(DmiBuildinPointing_Item&& from) noexcept
-    : DmiBuildinPointing_Item() {
+  DmiPointingDevice_Item(DmiPointingDevice_Item&& from) noexcept
+    : DmiPointingDevice_Item() {
     *this = ::std::move(from);
   }
 
-  inline DmiBuildinPointing_Item& operator=(DmiBuildinPointing_Item&& from) noexcept {
+  inline DmiPointingDevice_Item& operator=(DmiPointingDevice_Item&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6039,30 +6039,30 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
     return *this;
   }
   #endif
-  static const DmiBuildinPointing_Item& default_instance();
+  static const DmiPointingDevice_Item& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiBuildinPointing_Item* internal_default_instance() {
-    return reinterpret_cast<const DmiBuildinPointing_Item*>(
-               &_DmiBuildinPointing_Item_default_instance_);
+  static inline const DmiPointingDevice_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiPointingDevice_Item*>(
+               &_DmiPointingDevice_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     19;
 
-  void Swap(DmiBuildinPointing_Item* other);
-  friend void swap(DmiBuildinPointing_Item& a, DmiBuildinPointing_Item& b) {
+  void Swap(DmiPointingDevice_Item* other);
+  friend void swap(DmiPointingDevice_Item& a, DmiPointingDevice_Item& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiBuildinPointing_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiPointingDevice_Item* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiBuildinPointing_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiPointingDevice_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiBuildinPointing_Item& from);
-  void MergeFrom(const DmiBuildinPointing_Item& from);
+  void CopyFrom(const DmiPointingDevice_Item& from);
+  void MergeFrom(const DmiPointingDevice_Item& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6077,7 +6077,7 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiBuildinPointing_Item* other);
+  void InternalSwap(DmiPointingDevice_Item* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6093,17 +6093,17 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
   void clear_device_type();
   static const int kDeviceTypeFieldNumber = 1;
-  ::aspia::proto::DmiBuildinPointing_Type device_type() const;
-  void set_device_type(::aspia::proto::DmiBuildinPointing_Type value);
+  ::aspia::proto::DmiPointingDevice_Type device_type() const;
+  void set_device_type(::aspia::proto::DmiPointingDevice_Type value);
 
-  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
   void clear_device_interface();
   static const int kDeviceInterfaceFieldNumber = 2;
-  ::aspia::proto::DmiBuildinPointing_Interface device_interface() const;
-  void set_device_interface(::aspia::proto::DmiBuildinPointing_Interface value);
+  ::aspia::proto::DmiPointingDevice_Interface device_interface() const;
+  void set_device_interface(::aspia::proto::DmiPointingDevice_Interface value);
 
   // int32 button_count = 3;
   void clear_button_count();
@@ -6111,7 +6111,7 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
   ::google::protobuf::int32 button_count() const;
   void set_button_count(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevice.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -6120,28 +6120,28 @@ class DmiBuildinPointing_Item : public ::google::protobuf::MessageLite /* @@prot
   ::google::protobuf::int32 button_count_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_ItemImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_ItemImpl();
 };
 // -------------------------------------------------------------------
 
-class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiBuildinPointing) */ {
+class DmiPointingDevice : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevice) */ {
  public:
-  DmiBuildinPointing();
-  virtual ~DmiBuildinPointing();
+  DmiPointingDevice();
+  virtual ~DmiPointingDevice();
 
-  DmiBuildinPointing(const DmiBuildinPointing& from);
+  DmiPointingDevice(const DmiPointingDevice& from);
 
-  inline DmiBuildinPointing& operator=(const DmiBuildinPointing& from) {
+  inline DmiPointingDevice& operator=(const DmiPointingDevice& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiBuildinPointing(DmiBuildinPointing&& from) noexcept
-    : DmiBuildinPointing() {
+  DmiPointingDevice(DmiPointingDevice&& from) noexcept
+    : DmiPointingDevice() {
     *this = ::std::move(from);
   }
 
-  inline DmiBuildinPointing& operator=(DmiBuildinPointing&& from) noexcept {
+  inline DmiPointingDevice& operator=(DmiPointingDevice&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6150,30 +6150,30 @@ class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_in
     return *this;
   }
   #endif
-  static const DmiBuildinPointing& default_instance();
+  static const DmiPointingDevice& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiBuildinPointing* internal_default_instance() {
-    return reinterpret_cast<const DmiBuildinPointing*>(
-               &_DmiBuildinPointing_default_instance_);
+  static inline const DmiPointingDevice* internal_default_instance() {
+    return reinterpret_cast<const DmiPointingDevice*>(
+               &_DmiPointingDevice_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     20;
 
-  void Swap(DmiBuildinPointing* other);
-  friend void swap(DmiBuildinPointing& a, DmiBuildinPointing& b) {
+  void Swap(DmiPointingDevice* other);
+  friend void swap(DmiPointingDevice& a, DmiPointingDevice& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiBuildinPointing* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiPointingDevice* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiBuildinPointing* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiPointingDevice* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiBuildinPointing& from);
-  void MergeFrom(const DmiBuildinPointing& from);
+  void CopyFrom(const DmiPointingDevice& from);
+  void MergeFrom(const DmiPointingDevice& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6188,7 +6188,7 @@ class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_in
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiBuildinPointing* other);
+  void InternalSwap(DmiPointingDevice* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6202,92 +6202,92 @@ class DmiBuildinPointing : public ::google::protobuf::MessageLite /* @@protoc_in
 
   // nested types ----------------------------------------------------
 
-  typedef DmiBuildinPointing_Item Item;
+  typedef DmiPointingDevice_Item Item;
 
-  typedef DmiBuildinPointing_Type Type;
+  typedef DmiPointingDevice_Type Type;
   static const Type TYPE_UNKNOWN =
-    DmiBuildinPointing_Type_TYPE_UNKNOWN;
+    DmiPointingDevice_Type_TYPE_UNKNOWN;
   static const Type TYPE_OTHER =
-    DmiBuildinPointing_Type_TYPE_OTHER;
+    DmiPointingDevice_Type_TYPE_OTHER;
   static const Type TYPE_MOUSE =
-    DmiBuildinPointing_Type_TYPE_MOUSE;
+    DmiPointingDevice_Type_TYPE_MOUSE;
   static const Type TYPE_TRACK_BALL =
-    DmiBuildinPointing_Type_TYPE_TRACK_BALL;
+    DmiPointingDevice_Type_TYPE_TRACK_BALL;
   static const Type TYPE_TRACK_POINT =
-    DmiBuildinPointing_Type_TYPE_TRACK_POINT;
+    DmiPointingDevice_Type_TYPE_TRACK_POINT;
   static const Type TYPE_GLIDE_POINT =
-    DmiBuildinPointing_Type_TYPE_GLIDE_POINT;
+    DmiPointingDevice_Type_TYPE_GLIDE_POINT;
   static const Type TYPE_TOUCH_PAD =
-    DmiBuildinPointing_Type_TYPE_TOUCH_PAD;
+    DmiPointingDevice_Type_TYPE_TOUCH_PAD;
   static const Type TYPE_TOUCH_SCREEN =
-    DmiBuildinPointing_Type_TYPE_TOUCH_SCREEN;
+    DmiPointingDevice_Type_TYPE_TOUCH_SCREEN;
   static const Type TYPE_OPTICAL_SENSOR =
-    DmiBuildinPointing_Type_TYPE_OPTICAL_SENSOR;
+    DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR;
   static inline bool Type_IsValid(int value) {
-    return DmiBuildinPointing_Type_IsValid(value);
+    return DmiPointingDevice_Type_IsValid(value);
   }
   static const Type Type_MIN =
-    DmiBuildinPointing_Type_Type_MIN;
+    DmiPointingDevice_Type_Type_MIN;
   static const Type Type_MAX =
-    DmiBuildinPointing_Type_Type_MAX;
+    DmiPointingDevice_Type_Type_MAX;
   static const int Type_ARRAYSIZE =
-    DmiBuildinPointing_Type_Type_ARRAYSIZE;
+    DmiPointingDevice_Type_Type_ARRAYSIZE;
 
-  typedef DmiBuildinPointing_Interface Interface;
+  typedef DmiPointingDevice_Interface Interface;
   static const Interface INTERFACE_UNKNOWN =
-    DmiBuildinPointing_Interface_INTERFACE_UNKNOWN;
+    DmiPointingDevice_Interface_INTERFACE_UNKNOWN;
   static const Interface INTERFACE_OTHER =
-    DmiBuildinPointing_Interface_INTERFACE_OTHER;
+    DmiPointingDevice_Interface_INTERFACE_OTHER;
   static const Interface INTERFACE_SERIAL =
-    DmiBuildinPointing_Interface_INTERFACE_SERIAL;
+    DmiPointingDevice_Interface_INTERFACE_SERIAL;
   static const Interface INTERFACE_PS_2 =
-    DmiBuildinPointing_Interface_INTERFACE_PS_2;
+    DmiPointingDevice_Interface_INTERFACE_PS_2;
   static const Interface INTERFACE_INFRARED =
-    DmiBuildinPointing_Interface_INTERFACE_INFRARED;
+    DmiPointingDevice_Interface_INTERFACE_INFRARED;
   static const Interface INTERFACE_HP_HIL =
-    DmiBuildinPointing_Interface_INTERFACE_HP_HIL;
+    DmiPointingDevice_Interface_INTERFACE_HP_HIL;
   static const Interface INTERFACE_BUS_MOUSE =
-    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE;
+    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE;
   static const Interface INTERFACE_ADB =
-    DmiBuildinPointing_Interface_INTERFACE_ADB;
+    DmiPointingDevice_Interface_INTERFACE_ADB;
   static const Interface INTERFACE_BUS_MOUSE_DB_9 =
-    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_DB_9;
+    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_DB_9;
   static const Interface INTERFACE_BUS_MOUSE_MICRO_DIN =
-    DmiBuildinPointing_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
+    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
   static const Interface INTERFACE_USB =
-    DmiBuildinPointing_Interface_INTERFACE_USB;
+    DmiPointingDevice_Interface_INTERFACE_USB;
   static inline bool Interface_IsValid(int value) {
-    return DmiBuildinPointing_Interface_IsValid(value);
+    return DmiPointingDevice_Interface_IsValid(value);
   }
   static const Interface Interface_MIN =
-    DmiBuildinPointing_Interface_Interface_MIN;
+    DmiPointingDevice_Interface_Interface_MIN;
   static const Interface Interface_MAX =
-    DmiBuildinPointing_Interface_Interface_MAX;
+    DmiPointingDevice_Interface_Interface_MAX;
   static const int Interface_ARRAYSIZE =
-    DmiBuildinPointing_Interface_Interface_ARRAYSIZE;
+    DmiPointingDevice_Interface_Interface_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
   int item_size() const;
   void clear_item();
   static const int kItemFieldNumber = 1;
-  const ::aspia::proto::DmiBuildinPointing_Item& item(int index) const;
-  ::aspia::proto::DmiBuildinPointing_Item* mutable_item(int index);
-  ::aspia::proto::DmiBuildinPointing_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBuildinPointing_Item >*
+  const ::aspia::proto::DmiPointingDevice_Item& item(int index) const;
+  ::aspia::proto::DmiPointingDevice_Item* mutable_item(int index);
+  ::aspia::proto::DmiPointingDevice_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >*
       mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBuildinPointing_Item >&
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >&
       item() const;
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevice)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBuildinPointing_Item > item_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item > item_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointingImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDeviceImpl();
 };
 // -------------------------------------------------------------------
 
@@ -6676,24 +6676,24 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
-class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor.Features) */ {
+class CPU_Features : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CPU.Features) */ {
  public:
-  CentralProcessor_Features();
-  virtual ~CentralProcessor_Features();
+  CPU_Features();
+  virtual ~CPU_Features();
 
-  CentralProcessor_Features(const CentralProcessor_Features& from);
+  CPU_Features(const CPU_Features& from);
 
-  inline CentralProcessor_Features& operator=(const CentralProcessor_Features& from) {
+  inline CPU_Features& operator=(const CPU_Features& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  CentralProcessor_Features(CentralProcessor_Features&& from) noexcept
-    : CentralProcessor_Features() {
+  CPU_Features(CPU_Features&& from) noexcept
+    : CPU_Features() {
     *this = ::std::move(from);
   }
 
-  inline CentralProcessor_Features& operator=(CentralProcessor_Features&& from) noexcept {
+  inline CPU_Features& operator=(CPU_Features&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6702,30 +6702,30 @@ class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@pr
     return *this;
   }
   #endif
-  static const CentralProcessor_Features& default_instance();
+  static const CPU_Features& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CentralProcessor_Features* internal_default_instance() {
-    return reinterpret_cast<const CentralProcessor_Features*>(
-               &_CentralProcessor_Features_default_instance_);
+  static inline const CPU_Features* internal_default_instance() {
+    return reinterpret_cast<const CPU_Features*>(
+               &_CPU_Features_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     23;
 
-  void Swap(CentralProcessor_Features* other);
-  friend void swap(CentralProcessor_Features& a, CentralProcessor_Features& b) {
+  void Swap(CPU_Features* other);
+  friend void swap(CPU_Features& a, CPU_Features& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline CentralProcessor_Features* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline CPU_Features* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  CentralProcessor_Features* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  CPU_Features* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const CentralProcessor_Features& from);
-  void MergeFrom(const CentralProcessor_Features& from);
+  void CopyFrom(const CPU_Features& from);
+  void MergeFrom(const CPU_Features& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6740,7 +6740,7 @@ class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@pr
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(CentralProcessor_Features* other);
+  void InternalSwap(CPU_Features* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -7572,7 +7572,7 @@ class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@pr
   bool has_phe2() const;
   void set_has_phe2(bool value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(class_scope:aspia.proto.CPU.Features)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -7714,28 +7714,28 @@ class CentralProcessor_Features : public ::google::protobuf::MessageLite /* @@pr
   bool has_phe2_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_FeaturesImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_FeaturesImpl();
 };
 // -------------------------------------------------------------------
 
-class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CentralProcessor) */ {
+class CPU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.CPU) */ {
  public:
-  CentralProcessor();
-  virtual ~CentralProcessor();
+  CPU();
+  virtual ~CPU();
 
-  CentralProcessor(const CentralProcessor& from);
+  CPU(const CPU& from);
 
-  inline CentralProcessor& operator=(const CentralProcessor& from) {
+  inline CPU& operator=(const CPU& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  CentralProcessor(CentralProcessor&& from) noexcept
-    : CentralProcessor() {
+  CPU(CPU&& from) noexcept
+    : CPU() {
     *this = ::std::move(from);
   }
 
-  inline CentralProcessor& operator=(CentralProcessor&& from) noexcept {
+  inline CPU& operator=(CPU&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -7744,30 +7744,30 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
     return *this;
   }
   #endif
-  static const CentralProcessor& default_instance();
+  static const CPU& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CentralProcessor* internal_default_instance() {
-    return reinterpret_cast<const CentralProcessor*>(
-               &_CentralProcessor_default_instance_);
+  static inline const CPU* internal_default_instance() {
+    return reinterpret_cast<const CPU*>(
+               &_CPU_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     24;
 
-  void Swap(CentralProcessor* other);
-  friend void swap(CentralProcessor& a, CentralProcessor& b) {
+  void Swap(CPU* other);
+  friend void swap(CPU& a, CPU& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline CentralProcessor* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline CPU* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  CentralProcessor* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  CPU* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const CentralProcessor& from);
-  void MergeFrom(const CentralProcessor& from);
+  void CopyFrom(const CPU& from);
+  void MergeFrom(const CPU& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -7782,7 +7782,7 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(CentralProcessor* other);
+  void InternalSwap(CPU* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -7796,7 +7796,7 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
 
   // nested types ----------------------------------------------------
 
-  typedef CentralProcessor_Features Features;
+  typedef CPU_Features Features;
 
   // accessors -------------------------------------------------------
 
@@ -7828,14 +7828,14 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::std::string* release_vendor();
   void set_allocated_vendor(::std::string* vendor);
 
-  // .aspia.proto.CentralProcessor.Features features = 12;
+  // .aspia.proto.CPU.Features features = 12;
   bool has_features() const;
   void clear_features();
   static const int kFeaturesFieldNumber = 12;
-  const ::aspia::proto::CentralProcessor_Features& features() const;
-  ::aspia::proto::CentralProcessor_Features* release_features();
-  ::aspia::proto::CentralProcessor_Features* mutable_features();
-  void set_allocated_features(::aspia::proto::CentralProcessor_Features* features);
+  const ::aspia::proto::CPU_Features& features() const;
+  ::aspia::proto::CPU_Features* release_features();
+  ::aspia::proto::CPU_Features* mutable_features();
+  void set_allocated_features(::aspia::proto::CPU_Features* features);
 
   // uint32 stepping = 3;
   void clear_stepping();
@@ -7891,13 +7891,13 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::uint32 logical_cores() const;
   void set_logical_cores(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(class_scope:aspia.proto.CPU)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr brand_string_;
   ::google::protobuf::internal::ArenaStringPtr vendor_;
-  ::aspia::proto::CentralProcessor_Features* features_;
+  ::aspia::proto::CPU_Features* features_;
   ::google::protobuf::uint32 stepping_;
   ::google::protobuf::uint32 model_;
   ::google::protobuf::uint32 family_;
@@ -7909,7 +7909,7 @@ class CentralProcessor : public ::google::protobuf::MessageLite /* @@protoc_inse
   ::google::protobuf::uint32 logical_cores_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessorImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPUImpl();
 };
 // -------------------------------------------------------------------
 
@@ -16662,81 +16662,81 @@ DmiOnBoardDevices::item() const {
 
 // -------------------------------------------------------------------
 
-// DmiBuildinPointing_Item
+// DmiPointingDevice_Item
 
-// .aspia.proto.DmiBuildinPointing.Type device_type = 1;
-inline void DmiBuildinPointing_Item::clear_device_type() {
+// .aspia.proto.DmiPointingDevice.Type device_type = 1;
+inline void DmiPointingDevice_Item::clear_device_type() {
   device_type_ = 0;
 }
-inline ::aspia::proto::DmiBuildinPointing_Type DmiBuildinPointing_Item::device_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.Item.device_type)
-  return static_cast< ::aspia::proto::DmiBuildinPointing_Type >(device_type_);
+inline ::aspia::proto::DmiPointingDevice_Type DmiPointingDevice_Item::device_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.device_type)
+  return static_cast< ::aspia::proto::DmiPointingDevice_Type >(device_type_);
 }
-inline void DmiBuildinPointing_Item::set_device_type(::aspia::proto::DmiBuildinPointing_Type value) {
+inline void DmiPointingDevice_Item::set_device_type(::aspia::proto::DmiPointingDevice_Type value) {
   
   device_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiBuildinPointing.Item.device_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.device_type)
 }
 
-// .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
-inline void DmiBuildinPointing_Item::clear_device_interface() {
+// .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
+inline void DmiPointingDevice_Item::clear_device_interface() {
   device_interface_ = 0;
 }
-inline ::aspia::proto::DmiBuildinPointing_Interface DmiBuildinPointing_Item::device_interface() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.Item.device_interface)
-  return static_cast< ::aspia::proto::DmiBuildinPointing_Interface >(device_interface_);
+inline ::aspia::proto::DmiPointingDevice_Interface DmiPointingDevice_Item::device_interface() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.device_interface)
+  return static_cast< ::aspia::proto::DmiPointingDevice_Interface >(device_interface_);
 }
-inline void DmiBuildinPointing_Item::set_device_interface(::aspia::proto::DmiBuildinPointing_Interface value) {
+inline void DmiPointingDevice_Item::set_device_interface(::aspia::proto::DmiPointingDevice_Interface value) {
   
   device_interface_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiBuildinPointing.Item.device_interface)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.device_interface)
 }
 
 // int32 button_count = 3;
-inline void DmiBuildinPointing_Item::clear_button_count() {
+inline void DmiPointingDevice_Item::clear_button_count() {
   button_count_ = 0;
 }
-inline ::google::protobuf::int32 DmiBuildinPointing_Item::button_count() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.Item.button_count)
+inline ::google::protobuf::int32 DmiPointingDevice_Item::button_count() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.button_count)
   return button_count_;
 }
-inline void DmiBuildinPointing_Item::set_button_count(::google::protobuf::int32 value) {
+inline void DmiPointingDevice_Item::set_button_count(::google::protobuf::int32 value) {
   
   button_count_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiBuildinPointing.Item.button_count)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.button_count)
 }
 
 // -------------------------------------------------------------------
 
-// DmiBuildinPointing
+// DmiPointingDevice
 
-// repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
-inline int DmiBuildinPointing::item_size() const {
+// repeated .aspia.proto.DmiPointingDevice.Item item = 1;
+inline int DmiPointingDevice::item_size() const {
   return item_.size();
 }
-inline void DmiBuildinPointing::clear_item() {
+inline void DmiPointingDevice::clear_item() {
   item_.Clear();
 }
-inline const ::aspia::proto::DmiBuildinPointing_Item& DmiBuildinPointing::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiBuildinPointing.item)
+inline const ::aspia::proto::DmiPointingDevice_Item& DmiPointingDevice::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.item)
   return item_.Get(index);
 }
-inline ::aspia::proto::DmiBuildinPointing_Item* DmiBuildinPointing::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiBuildinPointing.item)
+inline ::aspia::proto::DmiPointingDevice_Item* DmiPointingDevice::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPointingDevice.item)
   return item_.Mutable(index);
 }
-inline ::aspia::proto::DmiBuildinPointing_Item* DmiBuildinPointing::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiBuildinPointing.item)
+inline ::aspia::proto::DmiPointingDevice_Item* DmiPointingDevice::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.DmiPointingDevice.item)
   return item_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBuildinPointing_Item >*
-DmiBuildinPointing::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiBuildinPointing.item)
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >*
+DmiPointingDevice::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiPointingDevice.item)
   return &item_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiBuildinPointing_Item >&
-DmiBuildinPointing::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiBuildinPointing.item)
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >&
+DmiPointingDevice::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.DmiPointingDevice.item)
   return item_;
 }
 
@@ -17313,2180 +17313,2180 @@ DmiPortableBattery::item() const {
 
 // -------------------------------------------------------------------
 
-// CentralProcessor_Features
+// CPU_Features
 
 // bool has_fpu = 1;
-inline void CentralProcessor_Features::clear_has_fpu() {
+inline void CPU_Features::clear_has_fpu() {
   has_fpu_ = false;
 }
-inline bool CentralProcessor_Features::has_fpu() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fpu)
+inline bool CPU_Features::has_fpu() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_fpu)
   return has_fpu_;
 }
-inline void CentralProcessor_Features::set_has_fpu(bool value) {
+inline void CPU_Features::set_has_fpu(bool value) {
   
   has_fpu_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fpu)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_fpu)
 }
 
 // bool has_vme = 2;
-inline void CentralProcessor_Features::clear_has_vme() {
+inline void CPU_Features::clear_has_vme() {
   has_vme_ = false;
 }
-inline bool CentralProcessor_Features::has_vme() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vme)
+inline bool CPU_Features::has_vme() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_vme)
   return has_vme_;
 }
-inline void CentralProcessor_Features::set_has_vme(bool value) {
+inline void CPU_Features::set_has_vme(bool value) {
   
   has_vme_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vme)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_vme)
 }
 
 // bool has_de = 3;
-inline void CentralProcessor_Features::clear_has_de() {
+inline void CPU_Features::clear_has_de() {
   has_de_ = false;
 }
-inline bool CentralProcessor_Features::has_de() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_de)
+inline bool CPU_Features::has_de() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_de)
   return has_de_;
 }
-inline void CentralProcessor_Features::set_has_de(bool value) {
+inline void CPU_Features::set_has_de(bool value) {
   
   has_de_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_de)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_de)
 }
 
 // bool has_pse = 4;
-inline void CentralProcessor_Features::clear_has_pse() {
+inline void CPU_Features::clear_has_pse() {
   has_pse_ = false;
 }
-inline bool CentralProcessor_Features::has_pse() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pse)
+inline bool CPU_Features::has_pse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pse)
   return has_pse_;
 }
-inline void CentralProcessor_Features::set_has_pse(bool value) {
+inline void CPU_Features::set_has_pse(bool value) {
   
   has_pse_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pse)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pse)
 }
 
 // bool has_tsc = 5;
-inline void CentralProcessor_Features::clear_has_tsc() {
+inline void CPU_Features::clear_has_tsc() {
   has_tsc_ = false;
 }
-inline bool CentralProcessor_Features::has_tsc() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tsc)
+inline bool CPU_Features::has_tsc() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tsc)
   return has_tsc_;
 }
-inline void CentralProcessor_Features::set_has_tsc(bool value) {
+inline void CPU_Features::set_has_tsc(bool value) {
   
   has_tsc_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tsc)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tsc)
 }
 
 // bool has_msr = 6;
-inline void CentralProcessor_Features::clear_has_msr() {
+inline void CPU_Features::clear_has_msr() {
   has_msr_ = false;
 }
-inline bool CentralProcessor_Features::has_msr() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_msr)
+inline bool CPU_Features::has_msr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_msr)
   return has_msr_;
 }
-inline void CentralProcessor_Features::set_has_msr(bool value) {
+inline void CPU_Features::set_has_msr(bool value) {
   
   has_msr_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_msr)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_msr)
 }
 
 // bool has_pae = 7;
-inline void CentralProcessor_Features::clear_has_pae() {
+inline void CPU_Features::clear_has_pae() {
   has_pae_ = false;
 }
-inline bool CentralProcessor_Features::has_pae() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pae)
+inline bool CPU_Features::has_pae() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pae)
   return has_pae_;
 }
-inline void CentralProcessor_Features::set_has_pae(bool value) {
+inline void CPU_Features::set_has_pae(bool value) {
   
   has_pae_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pae)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pae)
 }
 
 // bool has_mce = 8;
-inline void CentralProcessor_Features::clear_has_mce() {
+inline void CPU_Features::clear_has_mce() {
   has_mce_ = false;
 }
-inline bool CentralProcessor_Features::has_mce() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mce)
+inline bool CPU_Features::has_mce() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mce)
   return has_mce_;
 }
-inline void CentralProcessor_Features::set_has_mce(bool value) {
+inline void CPU_Features::set_has_mce(bool value) {
   
   has_mce_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mce)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mce)
 }
 
 // bool has_cx8 = 9;
-inline void CentralProcessor_Features::clear_has_cx8() {
+inline void CPU_Features::clear_has_cx8() {
   has_cx8_ = false;
 }
-inline bool CentralProcessor_Features::has_cx8() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cx8)
+inline bool CPU_Features::has_cx8() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_cx8)
   return has_cx8_;
 }
-inline void CentralProcessor_Features::set_has_cx8(bool value) {
+inline void CPU_Features::set_has_cx8(bool value) {
   
   has_cx8_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cx8)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_cx8)
 }
 
 // bool has_apic = 10;
-inline void CentralProcessor_Features::clear_has_apic() {
+inline void CPU_Features::clear_has_apic() {
   has_apic_ = false;
 }
-inline bool CentralProcessor_Features::has_apic() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_apic)
+inline bool CPU_Features::has_apic() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_apic)
   return has_apic_;
 }
-inline void CentralProcessor_Features::set_has_apic(bool value) {
+inline void CPU_Features::set_has_apic(bool value) {
   
   has_apic_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_apic)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_apic)
 }
 
 // bool has_sep = 11;
-inline void CentralProcessor_Features::clear_has_sep() {
+inline void CPU_Features::clear_has_sep() {
   has_sep_ = false;
 }
-inline bool CentralProcessor_Features::has_sep() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sep)
+inline bool CPU_Features::has_sep() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sep)
   return has_sep_;
 }
-inline void CentralProcessor_Features::set_has_sep(bool value) {
+inline void CPU_Features::set_has_sep(bool value) {
   
   has_sep_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sep)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sep)
 }
 
 // bool has_mtrr = 12;
-inline void CentralProcessor_Features::clear_has_mtrr() {
+inline void CPU_Features::clear_has_mtrr() {
   has_mtrr_ = false;
 }
-inline bool CentralProcessor_Features::has_mtrr() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mtrr)
+inline bool CPU_Features::has_mtrr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mtrr)
   return has_mtrr_;
 }
-inline void CentralProcessor_Features::set_has_mtrr(bool value) {
+inline void CPU_Features::set_has_mtrr(bool value) {
   
   has_mtrr_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mtrr)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mtrr)
 }
 
 // bool has_pge = 13;
-inline void CentralProcessor_Features::clear_has_pge() {
+inline void CPU_Features::clear_has_pge() {
   has_pge_ = false;
 }
-inline bool CentralProcessor_Features::has_pge() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pge)
+inline bool CPU_Features::has_pge() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pge)
   return has_pge_;
 }
-inline void CentralProcessor_Features::set_has_pge(bool value) {
+inline void CPU_Features::set_has_pge(bool value) {
   
   has_pge_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pge)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pge)
 }
 
 // bool has_mca = 14;
-inline void CentralProcessor_Features::clear_has_mca() {
+inline void CPU_Features::clear_has_mca() {
   has_mca_ = false;
 }
-inline bool CentralProcessor_Features::has_mca() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mca)
+inline bool CPU_Features::has_mca() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mca)
   return has_mca_;
 }
-inline void CentralProcessor_Features::set_has_mca(bool value) {
+inline void CPU_Features::set_has_mca(bool value) {
   
   has_mca_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mca)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mca)
 }
 
 // bool has_cmov = 15;
-inline void CentralProcessor_Features::clear_has_cmov() {
+inline void CPU_Features::clear_has_cmov() {
   has_cmov_ = false;
 }
-inline bool CentralProcessor_Features::has_cmov() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cmov)
+inline bool CPU_Features::has_cmov() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_cmov)
   return has_cmov_;
 }
-inline void CentralProcessor_Features::set_has_cmov(bool value) {
+inline void CPU_Features::set_has_cmov(bool value) {
   
   has_cmov_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cmov)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_cmov)
 }
 
 // bool has_pat = 16;
-inline void CentralProcessor_Features::clear_has_pat() {
+inline void CPU_Features::clear_has_pat() {
   has_pat_ = false;
 }
-inline bool CentralProcessor_Features::has_pat() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pat)
+inline bool CPU_Features::has_pat() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pat)
   return has_pat_;
 }
-inline void CentralProcessor_Features::set_has_pat(bool value) {
+inline void CPU_Features::set_has_pat(bool value) {
   
   has_pat_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pat)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pat)
 }
 
 // bool has_pse36 = 17;
-inline void CentralProcessor_Features::clear_has_pse36() {
+inline void CPU_Features::clear_has_pse36() {
   has_pse36_ = false;
 }
-inline bool CentralProcessor_Features::has_pse36() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pse36)
+inline bool CPU_Features::has_pse36() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pse36)
   return has_pse36_;
 }
-inline void CentralProcessor_Features::set_has_pse36(bool value) {
+inline void CPU_Features::set_has_pse36(bool value) {
   
   has_pse36_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pse36)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pse36)
 }
 
 // bool has_psn = 18;
-inline void CentralProcessor_Features::clear_has_psn() {
+inline void CPU_Features::clear_has_psn() {
   has_psn_ = false;
 }
-inline bool CentralProcessor_Features::has_psn() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_psn)
+inline bool CPU_Features::has_psn() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_psn)
   return has_psn_;
 }
-inline void CentralProcessor_Features::set_has_psn(bool value) {
+inline void CPU_Features::set_has_psn(bool value) {
   
   has_psn_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_psn)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_psn)
 }
 
 // bool has_clfsh = 19;
-inline void CentralProcessor_Features::clear_has_clfsh() {
+inline void CPU_Features::clear_has_clfsh() {
   has_clfsh_ = false;
 }
-inline bool CentralProcessor_Features::has_clfsh() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clfsh)
+inline bool CPU_Features::has_clfsh() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_clfsh)
   return has_clfsh_;
 }
-inline void CentralProcessor_Features::set_has_clfsh(bool value) {
+inline void CPU_Features::set_has_clfsh(bool value) {
   
   has_clfsh_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clfsh)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_clfsh)
 }
 
 // bool has_ds = 20;
-inline void CentralProcessor_Features::clear_has_ds() {
+inline void CPU_Features::clear_has_ds() {
   has_ds_ = false;
 }
-inline bool CentralProcessor_Features::has_ds() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ds)
+inline bool CPU_Features::has_ds() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ds)
   return has_ds_;
 }
-inline void CentralProcessor_Features::set_has_ds(bool value) {
+inline void CPU_Features::set_has_ds(bool value) {
   
   has_ds_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ds)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ds)
 }
 
 // bool has_acpu = 21;
-inline void CentralProcessor_Features::clear_has_acpu() {
+inline void CPU_Features::clear_has_acpu() {
   has_acpu_ = false;
 }
-inline bool CentralProcessor_Features::has_acpu() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_acpu)
+inline bool CPU_Features::has_acpu() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_acpu)
   return has_acpu_;
 }
-inline void CentralProcessor_Features::set_has_acpu(bool value) {
+inline void CPU_Features::set_has_acpu(bool value) {
   
   has_acpu_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_acpu)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_acpu)
 }
 
 // bool has_mmx = 22;
-inline void CentralProcessor_Features::clear_has_mmx() {
+inline void CPU_Features::clear_has_mmx() {
   has_mmx_ = false;
 }
-inline bool CentralProcessor_Features::has_mmx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mmx)
+inline bool CPU_Features::has_mmx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mmx)
   return has_mmx_;
 }
-inline void CentralProcessor_Features::set_has_mmx(bool value) {
+inline void CPU_Features::set_has_mmx(bool value) {
   
   has_mmx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mmx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mmx)
 }
 
 // bool has_fxsr = 23;
-inline void CentralProcessor_Features::clear_has_fxsr() {
+inline void CPU_Features::clear_has_fxsr() {
   has_fxsr_ = false;
 }
-inline bool CentralProcessor_Features::has_fxsr() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fxsr)
+inline bool CPU_Features::has_fxsr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_fxsr)
   return has_fxsr_;
 }
-inline void CentralProcessor_Features::set_has_fxsr(bool value) {
+inline void CPU_Features::set_has_fxsr(bool value) {
   
   has_fxsr_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fxsr)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_fxsr)
 }
 
 // bool has_sse = 24;
-inline void CentralProcessor_Features::clear_has_sse() {
+inline void CPU_Features::clear_has_sse() {
   has_sse_ = false;
 }
-inline bool CentralProcessor_Features::has_sse() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse)
+inline bool CPU_Features::has_sse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse)
   return has_sse_;
 }
-inline void CentralProcessor_Features::set_has_sse(bool value) {
+inline void CPU_Features::set_has_sse(bool value) {
   
   has_sse_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse)
 }
 
 // bool has_sse2 = 25;
-inline void CentralProcessor_Features::clear_has_sse2() {
+inline void CPU_Features::clear_has_sse2() {
   has_sse2_ = false;
 }
-inline bool CentralProcessor_Features::has_sse2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse2)
+inline bool CPU_Features::has_sse2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse2)
   return has_sse2_;
 }
-inline void CentralProcessor_Features::set_has_sse2(bool value) {
+inline void CPU_Features::set_has_sse2(bool value) {
   
   has_sse2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse2)
 }
 
 // bool has_ss = 26;
-inline void CentralProcessor_Features::clear_has_ss() {
+inline void CPU_Features::clear_has_ss() {
   has_ss_ = false;
 }
-inline bool CentralProcessor_Features::has_ss() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ss)
+inline bool CPU_Features::has_ss() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ss)
   return has_ss_;
 }
-inline void CentralProcessor_Features::set_has_ss(bool value) {
+inline void CPU_Features::set_has_ss(bool value) {
   
   has_ss_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ss)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ss)
 }
 
 // bool has_htt = 27;
-inline void CentralProcessor_Features::clear_has_htt() {
+inline void CPU_Features::clear_has_htt() {
   has_htt_ = false;
 }
-inline bool CentralProcessor_Features::has_htt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_htt)
+inline bool CPU_Features::has_htt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_htt)
   return has_htt_;
 }
-inline void CentralProcessor_Features::set_has_htt(bool value) {
+inline void CPU_Features::set_has_htt(bool value) {
   
   has_htt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_htt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_htt)
 }
 
 // bool has_tm = 28;
-inline void CentralProcessor_Features::clear_has_tm() {
+inline void CPU_Features::clear_has_tm() {
   has_tm_ = false;
 }
-inline bool CentralProcessor_Features::has_tm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm)
+inline bool CPU_Features::has_tm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tm)
   return has_tm_;
 }
-inline void CentralProcessor_Features::set_has_tm(bool value) {
+inline void CPU_Features::set_has_tm(bool value) {
   
   has_tm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tm)
 }
 
 // bool has_ia64 = 29;
-inline void CentralProcessor_Features::clear_has_ia64() {
+inline void CPU_Features::clear_has_ia64() {
   has_ia64_ = false;
 }
-inline bool CentralProcessor_Features::has_ia64() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ia64)
+inline bool CPU_Features::has_ia64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ia64)
   return has_ia64_;
 }
-inline void CentralProcessor_Features::set_has_ia64(bool value) {
+inline void CPU_Features::set_has_ia64(bool value) {
   
   has_ia64_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ia64)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ia64)
 }
 
 // bool has_pbe = 30;
-inline void CentralProcessor_Features::clear_has_pbe() {
+inline void CPU_Features::clear_has_pbe() {
   has_pbe_ = false;
 }
-inline bool CentralProcessor_Features::has_pbe() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pbe)
+inline bool CPU_Features::has_pbe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pbe)
   return has_pbe_;
 }
-inline void CentralProcessor_Features::set_has_pbe(bool value) {
+inline void CPU_Features::set_has_pbe(bool value) {
   
   has_pbe_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pbe)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pbe)
 }
 
 // bool has_sse3 = 31;
-inline void CentralProcessor_Features::clear_has_sse3() {
+inline void CPU_Features::clear_has_sse3() {
   has_sse3_ = false;
 }
-inline bool CentralProcessor_Features::has_sse3() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse3)
+inline bool CPU_Features::has_sse3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse3)
   return has_sse3_;
 }
-inline void CentralProcessor_Features::set_has_sse3(bool value) {
+inline void CPU_Features::set_has_sse3(bool value) {
   
   has_sse3_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse3)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse3)
 }
 
 // bool has_pclmuldq = 32;
-inline void CentralProcessor_Features::clear_has_pclmuldq() {
+inline void CPU_Features::clear_has_pclmuldq() {
   has_pclmuldq_ = false;
 }
-inline bool CentralProcessor_Features::has_pclmuldq() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pclmuldq)
+inline bool CPU_Features::has_pclmuldq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pclmuldq)
   return has_pclmuldq_;
 }
-inline void CentralProcessor_Features::set_has_pclmuldq(bool value) {
+inline void CPU_Features::set_has_pclmuldq(bool value) {
   
   has_pclmuldq_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pclmuldq)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pclmuldq)
 }
 
 // bool has_dtes64 = 33;
-inline void CentralProcessor_Features::clear_has_dtes64() {
+inline void CPU_Features::clear_has_dtes64() {
   has_dtes64_ = false;
 }
-inline bool CentralProcessor_Features::has_dtes64() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_dtes64)
+inline bool CPU_Features::has_dtes64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_dtes64)
   return has_dtes64_;
 }
-inline void CentralProcessor_Features::set_has_dtes64(bool value) {
+inline void CPU_Features::set_has_dtes64(bool value) {
   
   has_dtes64_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_dtes64)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_dtes64)
 }
 
 // bool has_monitor = 34;
-inline void CentralProcessor_Features::clear_has_monitor() {
+inline void CPU_Features::clear_has_monitor() {
   has_monitor_ = false;
 }
-inline bool CentralProcessor_Features::has_monitor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_monitor)
+inline bool CPU_Features::has_monitor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_monitor)
   return has_monitor_;
 }
-inline void CentralProcessor_Features::set_has_monitor(bool value) {
+inline void CPU_Features::set_has_monitor(bool value) {
   
   has_monitor_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_monitor)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_monitor)
 }
 
 // bool has_ds_cpl = 35;
-inline void CentralProcessor_Features::clear_has_ds_cpl() {
+inline void CPU_Features::clear_has_ds_cpl() {
   has_ds_cpl_ = false;
 }
-inline bool CentralProcessor_Features::has_ds_cpl() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ds_cpl)
+inline bool CPU_Features::has_ds_cpl() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ds_cpl)
   return has_ds_cpl_;
 }
-inline void CentralProcessor_Features::set_has_ds_cpl(bool value) {
+inline void CPU_Features::set_has_ds_cpl(bool value) {
   
   has_ds_cpl_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ds_cpl)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ds_cpl)
 }
 
 // bool has_vmx = 36;
-inline void CentralProcessor_Features::clear_has_vmx() {
+inline void CPU_Features::clear_has_vmx() {
   has_vmx_ = false;
 }
-inline bool CentralProcessor_Features::has_vmx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vmx)
+inline bool CPU_Features::has_vmx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_vmx)
   return has_vmx_;
 }
-inline void CentralProcessor_Features::set_has_vmx(bool value) {
+inline void CPU_Features::set_has_vmx(bool value) {
   
   has_vmx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vmx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_vmx)
 }
 
 // bool has_smx = 37;
-inline void CentralProcessor_Features::clear_has_smx() {
+inline void CPU_Features::clear_has_smx() {
   has_smx_ = false;
 }
-inline bool CentralProcessor_Features::has_smx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smx)
+inline bool CPU_Features::has_smx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_smx)
   return has_smx_;
 }
-inline void CentralProcessor_Features::set_has_smx(bool value) {
+inline void CPU_Features::set_has_smx(bool value) {
   
   has_smx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_smx)
 }
 
 // bool has_est = 38;
-inline void CentralProcessor_Features::clear_has_est() {
+inline void CPU_Features::clear_has_est() {
   has_est_ = false;
 }
-inline bool CentralProcessor_Features::has_est() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_est)
+inline bool CPU_Features::has_est() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_est)
   return has_est_;
 }
-inline void CentralProcessor_Features::set_has_est(bool value) {
+inline void CPU_Features::set_has_est(bool value) {
   
   has_est_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_est)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_est)
 }
 
 // bool has_tm2 = 39;
-inline void CentralProcessor_Features::clear_has_tm2() {
+inline void CPU_Features::clear_has_tm2() {
   has_tm2_ = false;
 }
-inline bool CentralProcessor_Features::has_tm2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm2)
+inline bool CPU_Features::has_tm2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tm2)
   return has_tm2_;
 }
-inline void CentralProcessor_Features::set_has_tm2(bool value) {
+inline void CPU_Features::set_has_tm2(bool value) {
   
   has_tm2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tm2)
 }
 
 // bool has_ssse3 = 40;
-inline void CentralProcessor_Features::clear_has_ssse3() {
+inline void CPU_Features::clear_has_ssse3() {
   has_ssse3_ = false;
 }
-inline bool CentralProcessor_Features::has_ssse3() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ssse3)
+inline bool CPU_Features::has_ssse3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ssse3)
   return has_ssse3_;
 }
-inline void CentralProcessor_Features::set_has_ssse3(bool value) {
+inline void CPU_Features::set_has_ssse3(bool value) {
   
   has_ssse3_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ssse3)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ssse3)
 }
 
 // bool has_cnxt_id = 41;
-inline void CentralProcessor_Features::clear_has_cnxt_id() {
+inline void CPU_Features::clear_has_cnxt_id() {
   has_cnxt_id_ = false;
 }
-inline bool CentralProcessor_Features::has_cnxt_id() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cnxt_id)
+inline bool CPU_Features::has_cnxt_id() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_cnxt_id)
   return has_cnxt_id_;
 }
-inline void CentralProcessor_Features::set_has_cnxt_id(bool value) {
+inline void CPU_Features::set_has_cnxt_id(bool value) {
   
   has_cnxt_id_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cnxt_id)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_cnxt_id)
 }
 
 // bool has_sdbg = 42;
-inline void CentralProcessor_Features::clear_has_sdbg() {
+inline void CPU_Features::clear_has_sdbg() {
   has_sdbg_ = false;
 }
-inline bool CentralProcessor_Features::has_sdbg() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sdbg)
+inline bool CPU_Features::has_sdbg() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sdbg)
   return has_sdbg_;
 }
-inline void CentralProcessor_Features::set_has_sdbg(bool value) {
+inline void CPU_Features::set_has_sdbg(bool value) {
   
   has_sdbg_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sdbg)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sdbg)
 }
 
 // bool has_fma = 43;
-inline void CentralProcessor_Features::clear_has_fma() {
+inline void CPU_Features::clear_has_fma() {
   has_fma_ = false;
 }
-inline bool CentralProcessor_Features::has_fma() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fma)
+inline bool CPU_Features::has_fma() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_fma)
   return has_fma_;
 }
-inline void CentralProcessor_Features::set_has_fma(bool value) {
+inline void CPU_Features::set_has_fma(bool value) {
   
   has_fma_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fma)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_fma)
 }
 
 // bool has_cx16 = 44;
-inline void CentralProcessor_Features::clear_has_cx16() {
+inline void CPU_Features::clear_has_cx16() {
   has_cx16_ = false;
 }
-inline bool CentralProcessor_Features::has_cx16() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_cx16)
+inline bool CPU_Features::has_cx16() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_cx16)
   return has_cx16_;
 }
-inline void CentralProcessor_Features::set_has_cx16(bool value) {
+inline void CPU_Features::set_has_cx16(bool value) {
   
   has_cx16_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_cx16)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_cx16)
 }
 
 // bool has_xtpr = 45;
-inline void CentralProcessor_Features::clear_has_xtpr() {
+inline void CPU_Features::clear_has_xtpr() {
   has_xtpr_ = false;
 }
-inline bool CentralProcessor_Features::has_xtpr() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xtpr)
+inline bool CPU_Features::has_xtpr() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_xtpr)
   return has_xtpr_;
 }
-inline void CentralProcessor_Features::set_has_xtpr(bool value) {
+inline void CPU_Features::set_has_xtpr(bool value) {
   
   has_xtpr_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xtpr)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_xtpr)
 }
 
 // bool has_pdcm = 46;
-inline void CentralProcessor_Features::clear_has_pdcm() {
+inline void CPU_Features::clear_has_pdcm() {
   has_pdcm_ = false;
 }
-inline bool CentralProcessor_Features::has_pdcm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pdcm)
+inline bool CPU_Features::has_pdcm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pdcm)
   return has_pdcm_;
 }
-inline void CentralProcessor_Features::set_has_pdcm(bool value) {
+inline void CPU_Features::set_has_pdcm(bool value) {
   
   has_pdcm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pdcm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pdcm)
 }
 
 // bool has_pcid = 47;
-inline void CentralProcessor_Features::clear_has_pcid() {
+inline void CPU_Features::clear_has_pcid() {
   has_pcid_ = false;
 }
-inline bool CentralProcessor_Features::has_pcid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pcid)
+inline bool CPU_Features::has_pcid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pcid)
   return has_pcid_;
 }
-inline void CentralProcessor_Features::set_has_pcid(bool value) {
+inline void CPU_Features::set_has_pcid(bool value) {
   
   has_pcid_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pcid)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pcid)
 }
 
 // bool has_dca = 48;
-inline void CentralProcessor_Features::clear_has_dca() {
+inline void CPU_Features::clear_has_dca() {
   has_dca_ = false;
 }
-inline bool CentralProcessor_Features::has_dca() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_dca)
+inline bool CPU_Features::has_dca() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_dca)
   return has_dca_;
 }
-inline void CentralProcessor_Features::set_has_dca(bool value) {
+inline void CPU_Features::set_has_dca(bool value) {
   
   has_dca_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_dca)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_dca)
 }
 
 // bool has_sse41 = 49;
-inline void CentralProcessor_Features::clear_has_sse41() {
+inline void CPU_Features::clear_has_sse41() {
   has_sse41_ = false;
 }
-inline bool CentralProcessor_Features::has_sse41() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse41)
+inline bool CPU_Features::has_sse41() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse41)
   return has_sse41_;
 }
-inline void CentralProcessor_Features::set_has_sse41(bool value) {
+inline void CPU_Features::set_has_sse41(bool value) {
   
   has_sse41_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse41)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse41)
 }
 
 // bool has_sse42 = 50;
-inline void CentralProcessor_Features::clear_has_sse42() {
+inline void CPU_Features::clear_has_sse42() {
   has_sse42_ = false;
 }
-inline bool CentralProcessor_Features::has_sse42() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse42)
+inline bool CPU_Features::has_sse42() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse42)
   return has_sse42_;
 }
-inline void CentralProcessor_Features::set_has_sse42(bool value) {
+inline void CPU_Features::set_has_sse42(bool value) {
   
   has_sse42_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse42)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse42)
 }
 
 // bool has_x2apic = 51;
-inline void CentralProcessor_Features::clear_has_x2apic() {
+inline void CPU_Features::clear_has_x2apic() {
   has_x2apic_ = false;
 }
-inline bool CentralProcessor_Features::has_x2apic() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_x2apic)
+inline bool CPU_Features::has_x2apic() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_x2apic)
   return has_x2apic_;
 }
-inline void CentralProcessor_Features::set_has_x2apic(bool value) {
+inline void CPU_Features::set_has_x2apic(bool value) {
   
   has_x2apic_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_x2apic)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_x2apic)
 }
 
 // bool has_movbe = 52;
-inline void CentralProcessor_Features::clear_has_movbe() {
+inline void CPU_Features::clear_has_movbe() {
   has_movbe_ = false;
 }
-inline bool CentralProcessor_Features::has_movbe() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_movbe)
+inline bool CPU_Features::has_movbe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_movbe)
   return has_movbe_;
 }
-inline void CentralProcessor_Features::set_has_movbe(bool value) {
+inline void CPU_Features::set_has_movbe(bool value) {
   
   has_movbe_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_movbe)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_movbe)
 }
 
 // bool has_popcnt = 53;
-inline void CentralProcessor_Features::clear_has_popcnt() {
+inline void CPU_Features::clear_has_popcnt() {
   has_popcnt_ = false;
 }
-inline bool CentralProcessor_Features::has_popcnt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_popcnt)
+inline bool CPU_Features::has_popcnt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_popcnt)
   return has_popcnt_;
 }
-inline void CentralProcessor_Features::set_has_popcnt(bool value) {
+inline void CPU_Features::set_has_popcnt(bool value) {
   
   has_popcnt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_popcnt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_popcnt)
 }
 
 // bool has_tsc_deadline = 54;
-inline void CentralProcessor_Features::clear_has_tsc_deadline() {
+inline void CPU_Features::clear_has_tsc_deadline() {
   has_tsc_deadline_ = false;
 }
-inline bool CentralProcessor_Features::has_tsc_deadline() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tsc_deadline)
+inline bool CPU_Features::has_tsc_deadline() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tsc_deadline)
   return has_tsc_deadline_;
 }
-inline void CentralProcessor_Features::set_has_tsc_deadline(bool value) {
+inline void CPU_Features::set_has_tsc_deadline(bool value) {
   
   has_tsc_deadline_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tsc_deadline)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tsc_deadline)
 }
 
 // bool has_aes = 55;
-inline void CentralProcessor_Features::clear_has_aes() {
+inline void CPU_Features::clear_has_aes() {
   has_aes_ = false;
 }
-inline bool CentralProcessor_Features::has_aes() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_aes)
+inline bool CPU_Features::has_aes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_aes)
   return has_aes_;
 }
-inline void CentralProcessor_Features::set_has_aes(bool value) {
+inline void CPU_Features::set_has_aes(bool value) {
   
   has_aes_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_aes)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_aes)
 }
 
 // bool has_xsave = 56;
-inline void CentralProcessor_Features::clear_has_xsave() {
+inline void CPU_Features::clear_has_xsave() {
   has_xsave_ = false;
 }
-inline bool CentralProcessor_Features::has_xsave() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xsave)
+inline bool CPU_Features::has_xsave() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_xsave)
   return has_xsave_;
 }
-inline void CentralProcessor_Features::set_has_xsave(bool value) {
+inline void CPU_Features::set_has_xsave(bool value) {
   
   has_xsave_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xsave)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_xsave)
 }
 
 // bool has_osxsave = 57;
-inline void CentralProcessor_Features::clear_has_osxsave() {
+inline void CPU_Features::clear_has_osxsave() {
   has_osxsave_ = false;
 }
-inline bool CentralProcessor_Features::has_osxsave() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_osxsave)
+inline bool CPU_Features::has_osxsave() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_osxsave)
   return has_osxsave_;
 }
-inline void CentralProcessor_Features::set_has_osxsave(bool value) {
+inline void CPU_Features::set_has_osxsave(bool value) {
   
   has_osxsave_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_osxsave)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_osxsave)
 }
 
 // bool has_avx = 58;
-inline void CentralProcessor_Features::clear_has_avx() {
+inline void CPU_Features::clear_has_avx() {
   has_avx_ = false;
 }
-inline bool CentralProcessor_Features::has_avx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx)
+inline bool CPU_Features::has_avx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx)
   return has_avx_;
 }
-inline void CentralProcessor_Features::set_has_avx(bool value) {
+inline void CPU_Features::set_has_avx(bool value) {
   
   has_avx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx)
 }
 
 // bool has_f16c = 59;
-inline void CentralProcessor_Features::clear_has_f16c() {
+inline void CPU_Features::clear_has_f16c() {
   has_f16c_ = false;
 }
-inline bool CentralProcessor_Features::has_f16c() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_f16c)
+inline bool CPU_Features::has_f16c() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_f16c)
   return has_f16c_;
 }
-inline void CentralProcessor_Features::set_has_f16c(bool value) {
+inline void CPU_Features::set_has_f16c(bool value) {
   
   has_f16c_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_f16c)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_f16c)
 }
 
 // bool has_rdrand = 60;
-inline void CentralProcessor_Features::clear_has_rdrand() {
+inline void CPU_Features::clear_has_rdrand() {
   has_rdrand_ = false;
 }
-inline bool CentralProcessor_Features::has_rdrand() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdrand)
+inline bool CPU_Features::has_rdrand() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rdrand)
   return has_rdrand_;
 }
-inline void CentralProcessor_Features::set_has_rdrand(bool value) {
+inline void CPU_Features::set_has_rdrand(bool value) {
   
   has_rdrand_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdrand)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rdrand)
 }
 
 // bool has_hypervisor = 61;
-inline void CentralProcessor_Features::clear_has_hypervisor() {
+inline void CPU_Features::clear_has_hypervisor() {
   has_hypervisor_ = false;
 }
-inline bool CentralProcessor_Features::has_hypervisor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_hypervisor)
+inline bool CPU_Features::has_hypervisor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_hypervisor)
   return has_hypervisor_;
 }
-inline void CentralProcessor_Features::set_has_hypervisor(bool value) {
+inline void CPU_Features::set_has_hypervisor(bool value) {
   
   has_hypervisor_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_hypervisor)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_hypervisor)
 }
 
 // bool has_syscall = 62;
-inline void CentralProcessor_Features::clear_has_syscall() {
+inline void CPU_Features::clear_has_syscall() {
   has_syscall_ = false;
 }
-inline bool CentralProcessor_Features::has_syscall() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_syscall)
+inline bool CPU_Features::has_syscall() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_syscall)
   return has_syscall_;
 }
-inline void CentralProcessor_Features::set_has_syscall(bool value) {
+inline void CPU_Features::set_has_syscall(bool value) {
   
   has_syscall_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_syscall)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_syscall)
 }
 
 // bool has_xd_bit = 63;
-inline void CentralProcessor_Features::clear_has_xd_bit() {
+inline void CPU_Features::clear_has_xd_bit() {
   has_xd_bit_ = false;
 }
-inline bool CentralProcessor_Features::has_xd_bit() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xd_bit)
+inline bool CPU_Features::has_xd_bit() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_xd_bit)
   return has_xd_bit_;
 }
-inline void CentralProcessor_Features::set_has_xd_bit(bool value) {
+inline void CPU_Features::set_has_xd_bit(bool value) {
   
   has_xd_bit_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xd_bit)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_xd_bit)
 }
 
 // bool has_mmxext = 64;
-inline void CentralProcessor_Features::clear_has_mmxext() {
+inline void CPU_Features::clear_has_mmxext() {
   has_mmxext_ = false;
 }
-inline bool CentralProcessor_Features::has_mmxext() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mmxext)
+inline bool CPU_Features::has_mmxext() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mmxext)
   return has_mmxext_;
 }
-inline void CentralProcessor_Features::set_has_mmxext(bool value) {
+inline void CPU_Features::set_has_mmxext(bool value) {
   
   has_mmxext_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mmxext)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mmxext)
 }
 
 // bool has_1gb_pages = 65;
-inline void CentralProcessor_Features::clear_has_1gb_pages() {
+inline void CPU_Features::clear_has_1gb_pages() {
   has_1gb_pages_ = false;
 }
-inline bool CentralProcessor_Features::has_1gb_pages() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_1gb_pages)
+inline bool CPU_Features::has_1gb_pages() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_1gb_pages)
   return has_1gb_pages_;
 }
-inline void CentralProcessor_Features::set_has_1gb_pages(bool value) {
+inline void CPU_Features::set_has_1gb_pages(bool value) {
   
   has_1gb_pages_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_1gb_pages)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_1gb_pages)
 }
 
 // bool has_rdtscp = 66;
-inline void CentralProcessor_Features::clear_has_rdtscp() {
+inline void CPU_Features::clear_has_rdtscp() {
   has_rdtscp_ = false;
 }
-inline bool CentralProcessor_Features::has_rdtscp() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdtscp)
+inline bool CPU_Features::has_rdtscp() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rdtscp)
   return has_rdtscp_;
 }
-inline void CentralProcessor_Features::set_has_rdtscp(bool value) {
+inline void CPU_Features::set_has_rdtscp(bool value) {
   
   has_rdtscp_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdtscp)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rdtscp)
 }
 
 // bool has_intel64 = 67;
-inline void CentralProcessor_Features::clear_has_intel64() {
+inline void CPU_Features::clear_has_intel64() {
   has_intel64_ = false;
 }
-inline bool CentralProcessor_Features::has_intel64() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_intel64)
+inline bool CPU_Features::has_intel64() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_intel64)
   return has_intel64_;
 }
-inline void CentralProcessor_Features::set_has_intel64(bool value) {
+inline void CPU_Features::set_has_intel64(bool value) {
   
   has_intel64_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_intel64)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_intel64)
 }
 
 // bool has_3dnowext = 68;
-inline void CentralProcessor_Features::clear_has_3dnowext() {
+inline void CPU_Features::clear_has_3dnowext() {
   has_3dnowext_ = false;
 }
-inline bool CentralProcessor_Features::has_3dnowext() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnowext)
+inline bool CPU_Features::has_3dnowext() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_3dnowext)
   return has_3dnowext_;
 }
-inline void CentralProcessor_Features::set_has_3dnowext(bool value) {
+inline void CPU_Features::set_has_3dnowext(bool value) {
   
   has_3dnowext_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnowext)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_3dnowext)
 }
 
 // bool has_3dnow = 69;
-inline void CentralProcessor_Features::clear_has_3dnow() {
+inline void CPU_Features::clear_has_3dnow() {
   has_3dnow_ = false;
 }
-inline bool CentralProcessor_Features::has_3dnow() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnow)
+inline bool CPU_Features::has_3dnow() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_3dnow)
   return has_3dnow_;
 }
-inline void CentralProcessor_Features::set_has_3dnow(bool value) {
+inline void CPU_Features::set_has_3dnow(bool value) {
   
   has_3dnow_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnow)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_3dnow)
 }
 
 // bool has_lahf = 70;
-inline void CentralProcessor_Features::clear_has_lahf() {
+inline void CPU_Features::clear_has_lahf() {
   has_lahf_ = false;
 }
-inline bool CentralProcessor_Features::has_lahf() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lahf)
+inline bool CPU_Features::has_lahf() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_lahf)
   return has_lahf_;
 }
-inline void CentralProcessor_Features::set_has_lahf(bool value) {
+inline void CPU_Features::set_has_lahf(bool value) {
   
   has_lahf_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lahf)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lahf)
 }
 
 // bool has_svm = 71;
-inline void CentralProcessor_Features::clear_has_svm() {
+inline void CPU_Features::clear_has_svm() {
   has_svm_ = false;
 }
-inline bool CentralProcessor_Features::has_svm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_svm)
+inline bool CPU_Features::has_svm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_svm)
   return has_svm_;
 }
-inline void CentralProcessor_Features::set_has_svm(bool value) {
+inline void CPU_Features::set_has_svm(bool value) {
   
   has_svm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_svm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_svm)
 }
 
 // bool has_lzcnt = 72;
-inline void CentralProcessor_Features::clear_has_lzcnt() {
+inline void CPU_Features::clear_has_lzcnt() {
   has_lzcnt_ = false;
 }
-inline bool CentralProcessor_Features::has_lzcnt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lzcnt)
+inline bool CPU_Features::has_lzcnt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_lzcnt)
   return has_lzcnt_;
 }
-inline void CentralProcessor_Features::set_has_lzcnt(bool value) {
+inline void CPU_Features::set_has_lzcnt(bool value) {
   
   has_lzcnt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lzcnt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lzcnt)
 }
 
 // bool has_sse4a = 73;
-inline void CentralProcessor_Features::clear_has_sse4a() {
+inline void CPU_Features::clear_has_sse4a() {
   has_sse4a_ = false;
 }
-inline bool CentralProcessor_Features::has_sse4a() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sse4a)
+inline bool CPU_Features::has_sse4a() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sse4a)
   return has_sse4a_;
 }
-inline void CentralProcessor_Features::set_has_sse4a(bool value) {
+inline void CPU_Features::set_has_sse4a(bool value) {
   
   has_sse4a_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sse4a)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sse4a)
 }
 
 // bool has_misalignsse = 74;
-inline void CentralProcessor_Features::clear_has_misalignsse() {
+inline void CPU_Features::clear_has_misalignsse() {
   has_misalignsse_ = false;
 }
-inline bool CentralProcessor_Features::has_misalignsse() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_misalignsse)
+inline bool CPU_Features::has_misalignsse() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_misalignsse)
   return has_misalignsse_;
 }
-inline void CentralProcessor_Features::set_has_misalignsse(bool value) {
+inline void CPU_Features::set_has_misalignsse(bool value) {
   
   has_misalignsse_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_misalignsse)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_misalignsse)
 }
 
 // bool has_3dnow_prefetch = 75;
-inline void CentralProcessor_Features::clear_has_3dnow_prefetch() {
+inline void CPU_Features::clear_has_3dnow_prefetch() {
   has_3dnow_prefetch_ = false;
 }
-inline bool CentralProcessor_Features::has_3dnow_prefetch() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_3dnow_prefetch)
+inline bool CPU_Features::has_3dnow_prefetch() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_3dnow_prefetch)
   return has_3dnow_prefetch_;
 }
-inline void CentralProcessor_Features::set_has_3dnow_prefetch(bool value) {
+inline void CPU_Features::set_has_3dnow_prefetch(bool value) {
   
   has_3dnow_prefetch_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_3dnow_prefetch)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_3dnow_prefetch)
 }
 
 // bool has_xop = 76;
-inline void CentralProcessor_Features::clear_has_xop() {
+inline void CPU_Features::clear_has_xop() {
   has_xop_ = false;
 }
-inline bool CentralProcessor_Features::has_xop() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_xop)
+inline bool CPU_Features::has_xop() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_xop)
   return has_xop_;
 }
-inline void CentralProcessor_Features::set_has_xop(bool value) {
+inline void CPU_Features::set_has_xop(bool value) {
   
   has_xop_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_xop)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_xop)
 }
 
 // bool has_wdt = 77;
-inline void CentralProcessor_Features::clear_has_wdt() {
+inline void CPU_Features::clear_has_wdt() {
   has_wdt_ = false;
 }
-inline bool CentralProcessor_Features::has_wdt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_wdt)
+inline bool CPU_Features::has_wdt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_wdt)
   return has_wdt_;
 }
-inline void CentralProcessor_Features::set_has_wdt(bool value) {
+inline void CPU_Features::set_has_wdt(bool value) {
   
   has_wdt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_wdt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_wdt)
 }
 
 // bool has_fma4 = 78;
-inline void CentralProcessor_Features::clear_has_fma4() {
+inline void CPU_Features::clear_has_fma4() {
   has_fma4_ = false;
 }
-inline bool CentralProcessor_Features::has_fma4() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fma4)
+inline bool CPU_Features::has_fma4() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_fma4)
   return has_fma4_;
 }
-inline void CentralProcessor_Features::set_has_fma4(bool value) {
+inline void CPU_Features::set_has_fma4(bool value) {
   
   has_fma4_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fma4)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_fma4)
 }
 
 // bool has_fsgsbase = 79;
-inline void CentralProcessor_Features::clear_has_fsgsbase() {
+inline void CPU_Features::clear_has_fsgsbase() {
   has_fsgsbase_ = false;
 }
-inline bool CentralProcessor_Features::has_fsgsbase() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_fsgsbase)
+inline bool CPU_Features::has_fsgsbase() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_fsgsbase)
   return has_fsgsbase_;
 }
-inline void CentralProcessor_Features::set_has_fsgsbase(bool value) {
+inline void CPU_Features::set_has_fsgsbase(bool value) {
   
   has_fsgsbase_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_fsgsbase)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_fsgsbase)
 }
 
 // bool has_sgx = 80;
-inline void CentralProcessor_Features::clear_has_sgx() {
+inline void CPU_Features::clear_has_sgx() {
   has_sgx_ = false;
 }
-inline bool CentralProcessor_Features::has_sgx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sgx)
+inline bool CPU_Features::has_sgx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sgx)
   return has_sgx_;
 }
-inline void CentralProcessor_Features::set_has_sgx(bool value) {
+inline void CPU_Features::set_has_sgx(bool value) {
   
   has_sgx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sgx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sgx)
 }
 
 // bool has_bmi1 = 81;
-inline void CentralProcessor_Features::clear_has_bmi1() {
+inline void CPU_Features::clear_has_bmi1() {
   has_bmi1_ = false;
 }
-inline bool CentralProcessor_Features::has_bmi1() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_bmi1)
+inline bool CPU_Features::has_bmi1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_bmi1)
   return has_bmi1_;
 }
-inline void CentralProcessor_Features::set_has_bmi1(bool value) {
+inline void CPU_Features::set_has_bmi1(bool value) {
   
   has_bmi1_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_bmi1)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_bmi1)
 }
 
 // bool has_hle = 82;
-inline void CentralProcessor_Features::clear_has_hle() {
+inline void CPU_Features::clear_has_hle() {
   has_hle_ = false;
 }
-inline bool CentralProcessor_Features::has_hle() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_hle)
+inline bool CPU_Features::has_hle() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_hle)
   return has_hle_;
 }
-inline void CentralProcessor_Features::set_has_hle(bool value) {
+inline void CPU_Features::set_has_hle(bool value) {
   
   has_hle_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_hle)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_hle)
 }
 
 // bool has_avx2 = 83;
-inline void CentralProcessor_Features::clear_has_avx2() {
+inline void CPU_Features::clear_has_avx2() {
   has_avx2_ = false;
 }
-inline bool CentralProcessor_Features::has_avx2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx2)
+inline bool CPU_Features::has_avx2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx2)
   return has_avx2_;
 }
-inline void CentralProcessor_Features::set_has_avx2(bool value) {
+inline void CPU_Features::set_has_avx2(bool value) {
   
   has_avx2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx2)
 }
 
 // bool has_smep = 84;
-inline void CentralProcessor_Features::clear_has_smep() {
+inline void CPU_Features::clear_has_smep() {
   has_smep_ = false;
 }
-inline bool CentralProcessor_Features::has_smep() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smep)
+inline bool CPU_Features::has_smep() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_smep)
   return has_smep_;
 }
-inline void CentralProcessor_Features::set_has_smep(bool value) {
+inline void CPU_Features::set_has_smep(bool value) {
   
   has_smep_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smep)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_smep)
 }
 
 // bool has_bmi2 = 85;
-inline void CentralProcessor_Features::clear_has_bmi2() {
+inline void CPU_Features::clear_has_bmi2() {
   has_bmi2_ = false;
 }
-inline bool CentralProcessor_Features::has_bmi2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_bmi2)
+inline bool CPU_Features::has_bmi2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_bmi2)
   return has_bmi2_;
 }
-inline void CentralProcessor_Features::set_has_bmi2(bool value) {
+inline void CPU_Features::set_has_bmi2(bool value) {
   
   has_bmi2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_bmi2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_bmi2)
 }
 
 // bool has_erms = 86;
-inline void CentralProcessor_Features::clear_has_erms() {
+inline void CPU_Features::clear_has_erms() {
   has_erms_ = false;
 }
-inline bool CentralProcessor_Features::has_erms() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_erms)
+inline bool CPU_Features::has_erms() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_erms)
   return has_erms_;
 }
-inline void CentralProcessor_Features::set_has_erms(bool value) {
+inline void CPU_Features::set_has_erms(bool value) {
   
   has_erms_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_erms)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_erms)
 }
 
 // bool has_invpcid = 87;
-inline void CentralProcessor_Features::clear_has_invpcid() {
+inline void CPU_Features::clear_has_invpcid() {
   has_invpcid_ = false;
 }
-inline bool CentralProcessor_Features::has_invpcid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_invpcid)
+inline bool CPU_Features::has_invpcid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_invpcid)
   return has_invpcid_;
 }
-inline void CentralProcessor_Features::set_has_invpcid(bool value) {
+inline void CPU_Features::set_has_invpcid(bool value) {
   
   has_invpcid_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_invpcid)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_invpcid)
 }
 
 // bool has_rtm = 88;
-inline void CentralProcessor_Features::clear_has_rtm() {
+inline void CPU_Features::clear_has_rtm() {
   has_rtm_ = false;
 }
-inline bool CentralProcessor_Features::has_rtm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rtm)
+inline bool CPU_Features::has_rtm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rtm)
   return has_rtm_;
 }
-inline void CentralProcessor_Features::set_has_rtm(bool value) {
+inline void CPU_Features::set_has_rtm(bool value) {
   
   has_rtm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rtm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rtm)
 }
 
 // bool has_pqm = 89;
-inline void CentralProcessor_Features::clear_has_pqm() {
+inline void CPU_Features::clear_has_pqm() {
   has_pqm_ = false;
 }
-inline bool CentralProcessor_Features::has_pqm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pqm)
+inline bool CPU_Features::has_pqm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pqm)
   return has_pqm_;
 }
-inline void CentralProcessor_Features::set_has_pqm(bool value) {
+inline void CPU_Features::set_has_pqm(bool value) {
   
   has_pqm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pqm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pqm)
 }
 
 // bool has_mpx = 90;
-inline void CentralProcessor_Features::clear_has_mpx() {
+inline void CPU_Features::clear_has_mpx() {
   has_mpx_ = false;
 }
-inline bool CentralProcessor_Features::has_mpx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_mpx)
+inline bool CPU_Features::has_mpx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mpx)
   return has_mpx_;
 }
-inline void CentralProcessor_Features::set_has_mpx(bool value) {
+inline void CPU_Features::set_has_mpx(bool value) {
   
   has_mpx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_mpx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mpx)
 }
 
 // bool has_pqe = 91;
-inline void CentralProcessor_Features::clear_has_pqe() {
+inline void CPU_Features::clear_has_pqe() {
   has_pqe_ = false;
 }
-inline bool CentralProcessor_Features::has_pqe() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pqe)
+inline bool CPU_Features::has_pqe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pqe)
   return has_pqe_;
 }
-inline void CentralProcessor_Features::set_has_pqe(bool value) {
+inline void CPU_Features::set_has_pqe(bool value) {
   
   has_pqe_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pqe)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pqe)
 }
 
 // bool has_avx512f = 92;
-inline void CentralProcessor_Features::clear_has_avx512f() {
+inline void CPU_Features::clear_has_avx512f() {
   has_avx512f_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512f() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512f)
+inline bool CPU_Features::has_avx512f() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512f)
   return has_avx512f_;
 }
-inline void CentralProcessor_Features::set_has_avx512f(bool value) {
+inline void CPU_Features::set_has_avx512f(bool value) {
   
   has_avx512f_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512f)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512f)
 }
 
 // bool has_avx512dq = 93;
-inline void CentralProcessor_Features::clear_has_avx512dq() {
+inline void CPU_Features::clear_has_avx512dq() {
   has_avx512dq_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512dq() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512dq)
+inline bool CPU_Features::has_avx512dq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512dq)
   return has_avx512dq_;
 }
-inline void CentralProcessor_Features::set_has_avx512dq(bool value) {
+inline void CPU_Features::set_has_avx512dq(bool value) {
   
   has_avx512dq_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512dq)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512dq)
 }
 
 // bool has_rdseed = 94;
-inline void CentralProcessor_Features::clear_has_rdseed() {
+inline void CPU_Features::clear_has_rdseed() {
   has_rdseed_ = false;
 }
-inline bool CentralProcessor_Features::has_rdseed() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdseed)
+inline bool CPU_Features::has_rdseed() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rdseed)
   return has_rdseed_;
 }
-inline void CentralProcessor_Features::set_has_rdseed(bool value) {
+inline void CPU_Features::set_has_rdseed(bool value) {
   
   has_rdseed_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdseed)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rdseed)
 }
 
 // bool has_adx = 95;
-inline void CentralProcessor_Features::clear_has_adx() {
+inline void CPU_Features::clear_has_adx() {
   has_adx_ = false;
 }
-inline bool CentralProcessor_Features::has_adx() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_adx)
+inline bool CPU_Features::has_adx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_adx)
   return has_adx_;
 }
-inline void CentralProcessor_Features::set_has_adx(bool value) {
+inline void CPU_Features::set_has_adx(bool value) {
   
   has_adx_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_adx)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_adx)
 }
 
 // bool has_smap = 96;
-inline void CentralProcessor_Features::clear_has_smap() {
+inline void CPU_Features::clear_has_smap() {
   has_smap_ = false;
 }
-inline bool CentralProcessor_Features::has_smap() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_smap)
+inline bool CPU_Features::has_smap() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_smap)
   return has_smap_;
 }
-inline void CentralProcessor_Features::set_has_smap(bool value) {
+inline void CPU_Features::set_has_smap(bool value) {
   
   has_smap_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_smap)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_smap)
 }
 
 // bool has_avx512ifma = 97;
-inline void CentralProcessor_Features::clear_has_avx512ifma() {
+inline void CPU_Features::clear_has_avx512ifma() {
   has_avx512ifma_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512ifma() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512ifma)
+inline bool CPU_Features::has_avx512ifma() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512ifma)
   return has_avx512ifma_;
 }
-inline void CentralProcessor_Features::set_has_avx512ifma(bool value) {
+inline void CPU_Features::set_has_avx512ifma(bool value) {
   
   has_avx512ifma_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512ifma)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512ifma)
 }
 
 // bool has_pcommit = 98;
-inline void CentralProcessor_Features::clear_has_pcommit() {
+inline void CPU_Features::clear_has_pcommit() {
   has_pcommit_ = false;
 }
-inline bool CentralProcessor_Features::has_pcommit() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pcommit)
+inline bool CPU_Features::has_pcommit() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pcommit)
   return has_pcommit_;
 }
-inline void CentralProcessor_Features::set_has_pcommit(bool value) {
+inline void CPU_Features::set_has_pcommit(bool value) {
   
   has_pcommit_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pcommit)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pcommit)
 }
 
 // bool has_clflushopt = 99;
-inline void CentralProcessor_Features::clear_has_clflushopt() {
+inline void CPU_Features::clear_has_clflushopt() {
   has_clflushopt_ = false;
 }
-inline bool CentralProcessor_Features::has_clflushopt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clflushopt)
+inline bool CPU_Features::has_clflushopt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_clflushopt)
   return has_clflushopt_;
 }
-inline void CentralProcessor_Features::set_has_clflushopt(bool value) {
+inline void CPU_Features::set_has_clflushopt(bool value) {
   
   has_clflushopt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clflushopt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_clflushopt)
 }
 
 // bool has_clwb = 100;
-inline void CentralProcessor_Features::clear_has_clwb() {
+inline void CPU_Features::clear_has_clwb() {
   has_clwb_ = false;
 }
-inline bool CentralProcessor_Features::has_clwb() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_clwb)
+inline bool CPU_Features::has_clwb() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_clwb)
   return has_clwb_;
 }
-inline void CentralProcessor_Features::set_has_clwb(bool value) {
+inline void CPU_Features::set_has_clwb(bool value) {
   
   has_clwb_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_clwb)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_clwb)
 }
 
 // bool has_intel_pt = 101;
-inline void CentralProcessor_Features::clear_has_intel_pt() {
+inline void CPU_Features::clear_has_intel_pt() {
   has_intel_pt_ = false;
 }
-inline bool CentralProcessor_Features::has_intel_pt() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_intel_pt)
+inline bool CPU_Features::has_intel_pt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_intel_pt)
   return has_intel_pt_;
 }
-inline void CentralProcessor_Features::set_has_intel_pt(bool value) {
+inline void CPU_Features::set_has_intel_pt(bool value) {
   
   has_intel_pt_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_intel_pt)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_intel_pt)
 }
 
 // bool has_avx512pf = 102;
-inline void CentralProcessor_Features::clear_has_avx512pf() {
+inline void CPU_Features::clear_has_avx512pf() {
   has_avx512pf_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512pf() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512pf)
+inline bool CPU_Features::has_avx512pf() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512pf)
   return has_avx512pf_;
 }
-inline void CentralProcessor_Features::set_has_avx512pf(bool value) {
+inline void CPU_Features::set_has_avx512pf(bool value) {
   
   has_avx512pf_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512pf)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512pf)
 }
 
 // bool has_avx512er = 103;
-inline void CentralProcessor_Features::clear_has_avx512er() {
+inline void CPU_Features::clear_has_avx512er() {
   has_avx512er_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512er() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512er)
+inline bool CPU_Features::has_avx512er() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512er)
   return has_avx512er_;
 }
-inline void CentralProcessor_Features::set_has_avx512er(bool value) {
+inline void CPU_Features::set_has_avx512er(bool value) {
   
   has_avx512er_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512er)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512er)
 }
 
 // bool has_avx512cd = 104;
-inline void CentralProcessor_Features::clear_has_avx512cd() {
+inline void CPU_Features::clear_has_avx512cd() {
   has_avx512cd_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512cd() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512cd)
+inline bool CPU_Features::has_avx512cd() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512cd)
   return has_avx512cd_;
 }
-inline void CentralProcessor_Features::set_has_avx512cd(bool value) {
+inline void CPU_Features::set_has_avx512cd(bool value) {
   
   has_avx512cd_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512cd)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512cd)
 }
 
 // bool has_sha = 105;
-inline void CentralProcessor_Features::clear_has_sha() {
+inline void CPU_Features::clear_has_sha() {
   has_sha_ = false;
 }
-inline bool CentralProcessor_Features::has_sha() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sha)
+inline bool CPU_Features::has_sha() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sha)
   return has_sha_;
 }
-inline void CentralProcessor_Features::set_has_sha(bool value) {
+inline void CPU_Features::set_has_sha(bool value) {
   
   has_sha_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sha)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sha)
 }
 
 // bool has_avx512bw = 106;
-inline void CentralProcessor_Features::clear_has_avx512bw() {
+inline void CPU_Features::clear_has_avx512bw() {
   has_avx512bw_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512bw() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512bw)
+inline bool CPU_Features::has_avx512bw() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512bw)
   return has_avx512bw_;
 }
-inline void CentralProcessor_Features::set_has_avx512bw(bool value) {
+inline void CPU_Features::set_has_avx512bw(bool value) {
   
   has_avx512bw_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512bw)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512bw)
 }
 
 // bool has_avx512vl = 107;
-inline void CentralProcessor_Features::clear_has_avx512vl() {
+inline void CPU_Features::clear_has_avx512vl() {
   has_avx512vl_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512vl() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vl)
+inline bool CPU_Features::has_avx512vl() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512vl)
   return has_avx512vl_;
 }
-inline void CentralProcessor_Features::set_has_avx512vl(bool value) {
+inline void CPU_Features::set_has_avx512vl(bool value) {
   
   has_avx512vl_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vl)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512vl)
 }
 
 // bool has_prefetchwt1 = 108;
-inline void CentralProcessor_Features::clear_has_prefetchwt1() {
+inline void CPU_Features::clear_has_prefetchwt1() {
   has_prefetchwt1_ = false;
 }
-inline bool CentralProcessor_Features::has_prefetchwt1() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_prefetchwt1)
+inline bool CPU_Features::has_prefetchwt1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_prefetchwt1)
   return has_prefetchwt1_;
 }
-inline void CentralProcessor_Features::set_has_prefetchwt1(bool value) {
+inline void CPU_Features::set_has_prefetchwt1(bool value) {
   
   has_prefetchwt1_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_prefetchwt1)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_prefetchwt1)
 }
 
 // bool has_avx512vbmi = 109;
-inline void CentralProcessor_Features::clear_has_avx512vbmi() {
+inline void CPU_Features::clear_has_avx512vbmi() {
   has_avx512vbmi_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512vbmi() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vbmi)
+inline bool CPU_Features::has_avx512vbmi() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512vbmi)
   return has_avx512vbmi_;
 }
-inline void CentralProcessor_Features::set_has_avx512vbmi(bool value) {
+inline void CPU_Features::set_has_avx512vbmi(bool value) {
   
   has_avx512vbmi_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vbmi)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512vbmi)
 }
 
 // bool has_umip = 110;
-inline void CentralProcessor_Features::clear_has_umip() {
+inline void CPU_Features::clear_has_umip() {
   has_umip_ = false;
 }
-inline bool CentralProcessor_Features::has_umip() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_umip)
+inline bool CPU_Features::has_umip() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_umip)
   return has_umip_;
 }
-inline void CentralProcessor_Features::set_has_umip(bool value) {
+inline void CPU_Features::set_has_umip(bool value) {
   
   has_umip_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_umip)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_umip)
 }
 
 // bool has_pku = 111;
-inline void CentralProcessor_Features::clear_has_pku() {
+inline void CPU_Features::clear_has_pku() {
   has_pku_ = false;
 }
-inline bool CentralProcessor_Features::has_pku() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pku)
+inline bool CPU_Features::has_pku() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pku)
   return has_pku_;
 }
-inline void CentralProcessor_Features::set_has_pku(bool value) {
+inline void CPU_Features::set_has_pku(bool value) {
   
   has_pku_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pku)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pku)
 }
 
 // bool has_ospke = 112;
-inline void CentralProcessor_Features::clear_has_ospke() {
+inline void CPU_Features::clear_has_ospke() {
   has_ospke_ = false;
 }
-inline bool CentralProcessor_Features::has_ospke() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ospke)
+inline bool CPU_Features::has_ospke() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ospke)
   return has_ospke_;
 }
-inline void CentralProcessor_Features::set_has_ospke(bool value) {
+inline void CPU_Features::set_has_ospke(bool value) {
   
   has_ospke_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ospke)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ospke)
 }
 
 // bool has_avx512vbmi2 = 113;
-inline void CentralProcessor_Features::clear_has_avx512vbmi2() {
+inline void CPU_Features::clear_has_avx512vbmi2() {
   has_avx512vbmi2_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512vbmi2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vbmi2)
+inline bool CPU_Features::has_avx512vbmi2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512vbmi2)
   return has_avx512vbmi2_;
 }
-inline void CentralProcessor_Features::set_has_avx512vbmi2(bool value) {
+inline void CPU_Features::set_has_avx512vbmi2(bool value) {
   
   has_avx512vbmi2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vbmi2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512vbmi2)
 }
 
 // bool has_gfni = 114;
-inline void CentralProcessor_Features::clear_has_gfni() {
+inline void CPU_Features::clear_has_gfni() {
   has_gfni_ = false;
 }
-inline bool CentralProcessor_Features::has_gfni() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_gfni)
+inline bool CPU_Features::has_gfni() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_gfni)
   return has_gfni_;
 }
-inline void CentralProcessor_Features::set_has_gfni(bool value) {
+inline void CPU_Features::set_has_gfni(bool value) {
   
   has_gfni_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_gfni)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_gfni)
 }
 
 // bool has_vaes = 115;
-inline void CentralProcessor_Features::clear_has_vaes() {
+inline void CPU_Features::clear_has_vaes() {
   has_vaes_ = false;
 }
-inline bool CentralProcessor_Features::has_vaes() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vaes)
+inline bool CPU_Features::has_vaes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_vaes)
   return has_vaes_;
 }
-inline void CentralProcessor_Features::set_has_vaes(bool value) {
+inline void CPU_Features::set_has_vaes(bool value) {
   
   has_vaes_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vaes)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_vaes)
 }
 
 // bool has_vpclmulqdq = 116;
-inline void CentralProcessor_Features::clear_has_vpclmulqdq() {
+inline void CPU_Features::clear_has_vpclmulqdq() {
   has_vpclmulqdq_ = false;
 }
-inline bool CentralProcessor_Features::has_vpclmulqdq() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_vpclmulqdq)
+inline bool CPU_Features::has_vpclmulqdq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_vpclmulqdq)
   return has_vpclmulqdq_;
 }
-inline void CentralProcessor_Features::set_has_vpclmulqdq(bool value) {
+inline void CPU_Features::set_has_vpclmulqdq(bool value) {
   
   has_vpclmulqdq_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_vpclmulqdq)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_vpclmulqdq)
 }
 
 // bool has_avx512vnni = 117;
-inline void CentralProcessor_Features::clear_has_avx512vnni() {
+inline void CPU_Features::clear_has_avx512vnni() {
   has_avx512vnni_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512vnni() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vnni)
+inline bool CPU_Features::has_avx512vnni() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512vnni)
   return has_avx512vnni_;
 }
-inline void CentralProcessor_Features::set_has_avx512vnni(bool value) {
+inline void CPU_Features::set_has_avx512vnni(bool value) {
   
   has_avx512vnni_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vnni)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512vnni)
 }
 
 // bool has_avx512bitalg = 118;
-inline void CentralProcessor_Features::clear_has_avx512bitalg() {
+inline void CPU_Features::clear_has_avx512bitalg() {
   has_avx512bitalg_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512bitalg() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512bitalg)
+inline bool CPU_Features::has_avx512bitalg() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512bitalg)
   return has_avx512bitalg_;
 }
-inline void CentralProcessor_Features::set_has_avx512bitalg(bool value) {
+inline void CPU_Features::set_has_avx512bitalg(bool value) {
   
   has_avx512bitalg_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512bitalg)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512bitalg)
 }
 
 // bool has_avx512vpopcntdq = 119;
-inline void CentralProcessor_Features::clear_has_avx512vpopcntdq() {
+inline void CPU_Features::clear_has_avx512vpopcntdq() {
   has_avx512vpopcntdq_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512vpopcntdq() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512vpopcntdq)
+inline bool CPU_Features::has_avx512vpopcntdq() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512vpopcntdq)
   return has_avx512vpopcntdq_;
 }
-inline void CentralProcessor_Features::set_has_avx512vpopcntdq(bool value) {
+inline void CPU_Features::set_has_avx512vpopcntdq(bool value) {
   
   has_avx512vpopcntdq_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512vpopcntdq)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512vpopcntdq)
 }
 
 // bool has_rdpid = 120;
-inline void CentralProcessor_Features::clear_has_rdpid() {
+inline void CPU_Features::clear_has_rdpid() {
   has_rdpid_ = false;
 }
-inline bool CentralProcessor_Features::has_rdpid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rdpid)
+inline bool CPU_Features::has_rdpid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rdpid)
   return has_rdpid_;
 }
-inline void CentralProcessor_Features::set_has_rdpid(bool value) {
+inline void CPU_Features::set_has_rdpid(bool value) {
   
   has_rdpid_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rdpid)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rdpid)
 }
 
 // bool has_sgx_lc = 121;
-inline void CentralProcessor_Features::clear_has_sgx_lc() {
+inline void CPU_Features::clear_has_sgx_lc() {
   has_sgx_lc_ = false;
 }
-inline bool CentralProcessor_Features::has_sgx_lc() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_sgx_lc)
+inline bool CPU_Features::has_sgx_lc() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_sgx_lc)
   return has_sgx_lc_;
 }
-inline void CentralProcessor_Features::set_has_sgx_lc(bool value) {
+inline void CPU_Features::set_has_sgx_lc(bool value) {
   
   has_sgx_lc_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_sgx_lc)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_sgx_lc)
 }
 
 // bool has_avx512_4vnniw = 122;
-inline void CentralProcessor_Features::clear_has_avx512_4vnniw() {
+inline void CPU_Features::clear_has_avx512_4vnniw() {
   has_avx512_4vnniw_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512_4vnniw() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512_4vnniw)
+inline bool CPU_Features::has_avx512_4vnniw() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512_4vnniw)
   return has_avx512_4vnniw_;
 }
-inline void CentralProcessor_Features::set_has_avx512_4vnniw(bool value) {
+inline void CPU_Features::set_has_avx512_4vnniw(bool value) {
   
   has_avx512_4vnniw_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512_4vnniw)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512_4vnniw)
 }
 
 // bool has_avx512_4fmaps = 123;
-inline void CentralProcessor_Features::clear_has_avx512_4fmaps() {
+inline void CPU_Features::clear_has_avx512_4fmaps() {
   has_avx512_4fmaps_ = false;
 }
-inline bool CentralProcessor_Features::has_avx512_4fmaps() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_avx512_4fmaps)
+inline bool CPU_Features::has_avx512_4fmaps() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_avx512_4fmaps)
   return has_avx512_4fmaps_;
 }
-inline void CentralProcessor_Features::set_has_avx512_4fmaps(bool value) {
+inline void CPU_Features::set_has_avx512_4fmaps(bool value) {
   
   has_avx512_4fmaps_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_avx512_4fmaps)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_avx512_4fmaps)
 }
 
 // bool has_ais = 124;
-inline void CentralProcessor_Features::clear_has_ais() {
+inline void CPU_Features::clear_has_ais() {
   has_ais_ = false;
 }
-inline bool CentralProcessor_Features::has_ais() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ais)
+inline bool CPU_Features::has_ais() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ais)
   return has_ais_;
 }
-inline void CentralProcessor_Features::set_has_ais(bool value) {
+inline void CPU_Features::set_has_ais(bool value) {
   
   has_ais_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ais)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ais)
 }
 
 // bool has_rng = 125;
-inline void CentralProcessor_Features::clear_has_rng() {
+inline void CPU_Features::clear_has_rng() {
   has_rng_ = false;
 }
-inline bool CentralProcessor_Features::has_rng() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rng)
+inline bool CPU_Features::has_rng() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rng)
   return has_rng_;
 }
-inline void CentralProcessor_Features::set_has_rng(bool value) {
+inline void CPU_Features::set_has_rng(bool value) {
   
   has_rng_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rng)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng)
 }
 
 // bool has_lh = 126;
-inline void CentralProcessor_Features::clear_has_lh() {
+inline void CPU_Features::clear_has_lh() {
   has_lh_ = false;
 }
-inline bool CentralProcessor_Features::has_lh() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_lh)
+inline bool CPU_Features::has_lh() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_lh)
   return has_lh_;
 }
-inline void CentralProcessor_Features::set_has_lh(bool value) {
+inline void CPU_Features::set_has_lh(bool value) {
   
   has_lh_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_lh)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lh)
 }
 
 // bool has_femms = 127;
-inline void CentralProcessor_Features::clear_has_femms() {
+inline void CPU_Features::clear_has_femms() {
   has_femms_ = false;
 }
-inline bool CentralProcessor_Features::has_femms() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_femms)
+inline bool CPU_Features::has_femms() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_femms)
   return has_femms_;
 }
-inline void CentralProcessor_Features::set_has_femms(bool value) {
+inline void CPU_Features::set_has_femms(bool value) {
   
   has_femms_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_femms)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_femms)
 }
 
 // bool has_ace = 128;
-inline void CentralProcessor_Features::clear_has_ace() {
+inline void CPU_Features::clear_has_ace() {
   has_ace_ = false;
 }
-inline bool CentralProcessor_Features::has_ace() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ace)
+inline bool CPU_Features::has_ace() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ace)
   return has_ace_;
 }
-inline void CentralProcessor_Features::set_has_ace(bool value) {
+inline void CPU_Features::set_has_ace(bool value) {
   
   has_ace_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ace)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace)
 }
 
 // bool has_ace2 = 129;
-inline void CentralProcessor_Features::clear_has_ace2() {
+inline void CPU_Features::clear_has_ace2() {
   has_ace2_ = false;
 }
-inline bool CentralProcessor_Features::has_ace2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_ace2)
+inline bool CPU_Features::has_ace2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ace2)
   return has_ace2_;
 }
-inline void CentralProcessor_Features::set_has_ace2(bool value) {
+inline void CPU_Features::set_has_ace2(bool value) {
   
   has_ace2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_ace2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace2)
 }
 
 // bool has_phe = 130;
-inline void CentralProcessor_Features::clear_has_phe() {
+inline void CPU_Features::clear_has_phe() {
   has_phe_ = false;
 }
-inline bool CentralProcessor_Features::has_phe() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_phe)
+inline bool CPU_Features::has_phe() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_phe)
   return has_phe_;
 }
-inline void CentralProcessor_Features::set_has_phe(bool value) {
+inline void CPU_Features::set_has_phe(bool value) {
   
   has_phe_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_phe)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe)
 }
 
 // bool has_pmm = 131;
-inline void CentralProcessor_Features::clear_has_pmm() {
+inline void CPU_Features::clear_has_pmm() {
   has_pmm_ = false;
 }
-inline bool CentralProcessor_Features::has_pmm() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_pmm)
+inline bool CPU_Features::has_pmm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pmm)
   return has_pmm_;
 }
-inline void CentralProcessor_Features::set_has_pmm(bool value) {
+inline void CPU_Features::set_has_pmm(bool value) {
   
   has_pmm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_pmm)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pmm)
 }
 
 // bool has_parallax = 132;
-inline void CentralProcessor_Features::clear_has_parallax() {
+inline void CPU_Features::clear_has_parallax() {
   has_parallax_ = false;
 }
-inline bool CentralProcessor_Features::has_parallax() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_parallax)
+inline bool CPU_Features::has_parallax() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_parallax)
   return has_parallax_;
 }
-inline void CentralProcessor_Features::set_has_parallax(bool value) {
+inline void CPU_Features::set_has_parallax(bool value) {
   
   has_parallax_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_parallax)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_parallax)
 }
 
 // bool has_overstress = 133;
-inline void CentralProcessor_Features::clear_has_overstress() {
+inline void CPU_Features::clear_has_overstress() {
   has_overstress_ = false;
 }
-inline bool CentralProcessor_Features::has_overstress() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_overstress)
+inline bool CPU_Features::has_overstress() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_overstress)
   return has_overstress_;
 }
-inline void CentralProcessor_Features::set_has_overstress(bool value) {
+inline void CPU_Features::set_has_overstress(bool value) {
   
   has_overstress_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_overstress)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_overstress)
 }
 
 // bool has_tm3 = 134;
-inline void CentralProcessor_Features::clear_has_tm3() {
+inline void CPU_Features::clear_has_tm3() {
   has_tm3_ = false;
 }
-inline bool CentralProcessor_Features::has_tm3() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_tm3)
+inline bool CPU_Features::has_tm3() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tm3)
   return has_tm3_;
 }
-inline void CentralProcessor_Features::set_has_tm3(bool value) {
+inline void CPU_Features::set_has_tm3(bool value) {
   
   has_tm3_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_tm3)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tm3)
 }
 
 // bool has_rng2 = 135;
-inline void CentralProcessor_Features::clear_has_rng2() {
+inline void CPU_Features::clear_has_rng2() {
   has_rng2_ = false;
 }
-inline bool CentralProcessor_Features::has_rng2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_rng2)
+inline bool CPU_Features::has_rng2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rng2)
   return has_rng2_;
 }
-inline void CentralProcessor_Features::set_has_rng2(bool value) {
+inline void CPU_Features::set_has_rng2(bool value) {
   
   has_rng2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_rng2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng2)
 }
 
 // bool has_phe2 = 136;
-inline void CentralProcessor_Features::clear_has_phe2() {
+inline void CPU_Features::clear_has_phe2() {
   has_phe2_ = false;
 }
-inline bool CentralProcessor_Features::has_phe2() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.Features.has_phe2)
+inline bool CPU_Features::has_phe2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_phe2)
   return has_phe2_;
 }
-inline void CentralProcessor_Features::set_has_phe2(bool value) {
+inline void CPU_Features::set_has_phe2(bool value) {
   
   has_phe2_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.Features.has_phe2)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe2)
 }
 
 // -------------------------------------------------------------------
 
-// CentralProcessor
+// CPU
 
 // string brand_string = 1;
-inline void CentralProcessor::clear_brand_string() {
+inline void CPU::clear_brand_string() {
   brand_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CentralProcessor::brand_string() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.brand_string)
+inline const ::std::string& CPU::brand_string() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.brand_string)
   return brand_string_.GetNoArena();
 }
-inline void CentralProcessor::set_brand_string(const ::std::string& value) {
+inline void CPU::set_brand_string(const ::std::string& value) {
   
   brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.brand_string)
 }
 #if LANG_CXX11
-inline void CentralProcessor::set_brand_string(::std::string&& value) {
+inline void CPU::set_brand_string(::std::string&& value) {
   
   brand_string_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CPU.brand_string)
 }
 #endif
-inline void CentralProcessor::set_brand_string(const char* value) {
+inline void CPU::set_brand_string(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CPU.brand_string)
 }
-inline void CentralProcessor::set_brand_string(const char* value, size_t size) {
+inline void CPU::set_brand_string(const char* value, size_t size) {
   
   brand_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CPU.brand_string)
 }
-inline ::std::string* CentralProcessor::mutable_brand_string() {
+inline ::std::string* CPU::mutable_brand_string() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CPU.brand_string)
   return brand_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CentralProcessor::release_brand_string() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.brand_string)
+inline ::std::string* CPU::release_brand_string() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CPU.brand_string)
   
   return brand_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CentralProcessor::set_allocated_brand_string(::std::string* brand_string) {
+inline void CPU::set_allocated_brand_string(::std::string* brand_string) {
   if (brand_string != NULL) {
     
   } else {
     
   }
   brand_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), brand_string);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.brand_string)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CPU.brand_string)
 }
 
 // string vendor = 2;
-inline void CentralProcessor::clear_vendor() {
+inline void CPU::clear_vendor() {
   vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CentralProcessor::vendor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.vendor)
+inline const ::std::string& CPU::vendor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.vendor)
   return vendor_.GetNoArena();
 }
-inline void CentralProcessor::set_vendor(const ::std::string& value) {
+inline void CPU::set_vendor(const ::std::string& value) {
   
   vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.vendor)
 }
 #if LANG_CXX11
-inline void CentralProcessor::set_vendor(::std::string&& value) {
+inline void CPU::set_vendor(::std::string&& value) {
   
   vendor_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.CPU.vendor)
 }
 #endif
-inline void CentralProcessor::set_vendor(const char* value) {
+inline void CPU::set_vendor(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.CPU.vendor)
 }
-inline void CentralProcessor::set_vendor(const char* value, size_t size) {
+inline void CPU::set_vendor(const char* value, size_t size) {
   
   vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.CPU.vendor)
 }
-inline ::std::string* CentralProcessor::mutable_vendor() {
+inline ::std::string* CPU::mutable_vendor() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CPU.vendor)
   return vendor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CentralProcessor::release_vendor() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.vendor)
+inline ::std::string* CPU::release_vendor() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CPU.vendor)
   
   return vendor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CentralProcessor::set_allocated_vendor(::std::string* vendor) {
+inline void CPU::set_allocated_vendor(::std::string* vendor) {
   if (vendor != NULL) {
     
   } else {
     
   }
   vendor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), vendor);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.vendor)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CPU.vendor)
 }
 
 // uint32 stepping = 3;
-inline void CentralProcessor::clear_stepping() {
+inline void CPU::clear_stepping() {
   stepping_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::stepping() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.stepping)
+inline ::google::protobuf::uint32 CPU::stepping() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.stepping)
   return stepping_;
 }
-inline void CentralProcessor::set_stepping(::google::protobuf::uint32 value) {
+inline void CPU::set_stepping(::google::protobuf::uint32 value) {
   
   stepping_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.stepping)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.stepping)
 }
 
 // uint32 model = 4;
-inline void CentralProcessor::clear_model() {
+inline void CPU::clear_model() {
   model_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::model() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.model)
+inline ::google::protobuf::uint32 CPU::model() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.model)
   return model_;
 }
-inline void CentralProcessor::set_model(::google::protobuf::uint32 value) {
+inline void CPU::set_model(::google::protobuf::uint32 value) {
   
   model_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.model)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.model)
 }
 
 // uint32 family = 5;
-inline void CentralProcessor::clear_family() {
+inline void CPU::clear_family() {
   family_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::family() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.family)
+inline ::google::protobuf::uint32 CPU::family() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.family)
   return family_;
 }
-inline void CentralProcessor::set_family(::google::protobuf::uint32 value) {
+inline void CPU::set_family(::google::protobuf::uint32 value) {
   
   family_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.family)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.family)
 }
 
 // uint32 extended_model = 6;
-inline void CentralProcessor::clear_extended_model() {
+inline void CPU::clear_extended_model() {
   extended_model_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::extended_model() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.extended_model)
+inline ::google::protobuf::uint32 CPU::extended_model() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.extended_model)
   return extended_model_;
 }
-inline void CentralProcessor::set_extended_model(::google::protobuf::uint32 value) {
+inline void CPU::set_extended_model(::google::protobuf::uint32 value) {
   
   extended_model_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.extended_model)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.extended_model)
 }
 
 // uint32 extended_family = 7;
-inline void CentralProcessor::clear_extended_family() {
+inline void CPU::clear_extended_family() {
   extended_family_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::extended_family() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.extended_family)
+inline ::google::protobuf::uint32 CPU::extended_family() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.extended_family)
   return extended_family_;
 }
-inline void CentralProcessor::set_extended_family(::google::protobuf::uint32 value) {
+inline void CPU::set_extended_family(::google::protobuf::uint32 value) {
   
   extended_family_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.extended_family)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.extended_family)
 }
 
 // uint32 brand_id = 8;
-inline void CentralProcessor::clear_brand_id() {
+inline void CPU::clear_brand_id() {
   brand_id_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::brand_id() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.brand_id)
+inline ::google::protobuf::uint32 CPU::brand_id() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.brand_id)
   return brand_id_;
 }
-inline void CentralProcessor::set_brand_id(::google::protobuf::uint32 value) {
+inline void CPU::set_brand_id(::google::protobuf::uint32 value) {
   
   brand_id_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.brand_id)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.brand_id)
 }
 
 // uint32 packages = 9;
-inline void CentralProcessor::clear_packages() {
+inline void CPU::clear_packages() {
   packages_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::packages() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.packages)
+inline ::google::protobuf::uint32 CPU::packages() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.packages)
   return packages_;
 }
-inline void CentralProcessor::set_packages(::google::protobuf::uint32 value) {
+inline void CPU::set_packages(::google::protobuf::uint32 value) {
   
   packages_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.packages)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.packages)
 }
 
 // uint32 physical_cores = 10;
-inline void CentralProcessor::clear_physical_cores() {
+inline void CPU::clear_physical_cores() {
   physical_cores_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::physical_cores() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.physical_cores)
+inline ::google::protobuf::uint32 CPU::physical_cores() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.physical_cores)
   return physical_cores_;
 }
-inline void CentralProcessor::set_physical_cores(::google::protobuf::uint32 value) {
+inline void CPU::set_physical_cores(::google::protobuf::uint32 value) {
   
   physical_cores_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.physical_cores)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.physical_cores)
 }
 
 // uint32 logical_cores = 11;
-inline void CentralProcessor::clear_logical_cores() {
+inline void CPU::clear_logical_cores() {
   logical_cores_ = 0u;
 }
-inline ::google::protobuf::uint32 CentralProcessor::logical_cores() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.logical_cores)
+inline ::google::protobuf::uint32 CPU::logical_cores() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.logical_cores)
   return logical_cores_;
 }
-inline void CentralProcessor::set_logical_cores(::google::protobuf::uint32 value) {
+inline void CPU::set_logical_cores(::google::protobuf::uint32 value) {
   
   logical_cores_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.CentralProcessor.logical_cores)
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.logical_cores)
 }
 
-// .aspia.proto.CentralProcessor.Features features = 12;
-inline bool CentralProcessor::has_features() const {
+// .aspia.proto.CPU.Features features = 12;
+inline bool CPU::has_features() const {
   return this != internal_default_instance() && features_ != NULL;
 }
-inline void CentralProcessor::clear_features() {
+inline void CPU::clear_features() {
   if (GetArenaNoVirtual() == NULL && features_ != NULL) {
     delete features_;
   }
   features_ = NULL;
 }
-inline const ::aspia::proto::CentralProcessor_Features& CentralProcessor::features() const {
-  const ::aspia::proto::CentralProcessor_Features* p = features_;
-  // @@protoc_insertion_point(field_get:aspia.proto.CentralProcessor.features)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::CentralProcessor_Features*>(
-      &::aspia::proto::_CentralProcessor_Features_default_instance_);
+inline const ::aspia::proto::CPU_Features& CPU::features() const {
+  const ::aspia::proto::CPU_Features* p = features_;
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.features)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::CPU_Features*>(
+      &::aspia::proto::_CPU_Features_default_instance_);
 }
-inline ::aspia::proto::CentralProcessor_Features* CentralProcessor::release_features() {
-  // @@protoc_insertion_point(field_release:aspia.proto.CentralProcessor.features)
+inline ::aspia::proto::CPU_Features* CPU::release_features() {
+  // @@protoc_insertion_point(field_release:aspia.proto.CPU.features)
   
-  ::aspia::proto::CentralProcessor_Features* temp = features_;
+  ::aspia::proto::CPU_Features* temp = features_;
   features_ = NULL;
   return temp;
 }
-inline ::aspia::proto::CentralProcessor_Features* CentralProcessor::mutable_features() {
+inline ::aspia::proto::CPU_Features* CPU::mutable_features() {
   
   if (features_ == NULL) {
-    features_ = new ::aspia::proto::CentralProcessor_Features;
+    features_ = new ::aspia::proto::CPU_Features;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.CentralProcessor.features)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.CPU.features)
   return features_;
 }
-inline void CentralProcessor::set_allocated_features(::aspia::proto::CentralProcessor_Features* features) {
+inline void CPU::set_allocated_features(::aspia::proto::CPU_Features* features) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete features_;
@@ -19502,7 +19502,7 @@ inline void CentralProcessor::set_allocated_features(::aspia::proto::CentralProc
     
   }
   features_ = features;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CentralProcessor.features)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.CPU.features)
 }
 
 // -------------------------------------------------------------------
@@ -25947,8 +25947,8 @@ template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Length> : ::goo
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiBuildinPointing_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiBuildinPointing_Interface> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevice_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevice_Interface> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};

@@ -303,18 +303,18 @@ public:
         TableReader reader_;
     };
 
-    class BuildinPointingTable
+    class PointingDeviceTable
     {
     public:
         enum : uint8_t { TABLE_TYPE = 0x15 };
 
-        proto::DmiBuildinPointing::Type GetDeviceType() const;
-        proto::DmiBuildinPointing::Interface GetInterface() const;
+        proto::DmiPointingDevice::Type GetDeviceType() const;
+        proto::DmiPointingDevice::Interface GetInterface() const;
         int GetButtonCount() const;
 
     private:
-        friend class TableEnumerator<BuildinPointingTable>;
-        explicit BuildinPointingTable(const TableReader& reader);
+        friend class TableEnumerator<PointingDeviceTable>;
+        explicit PointingDeviceTable(const TableReader& reader);
 
         TableReader reader_;
     };

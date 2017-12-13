@@ -113,16 +113,16 @@ class DmiOnBoardDevicesDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiOnBoardDevices>
       _instance;
 } _DmiOnBoardDevices_default_instance_;
-class DmiBuildinPointing_ItemDefaultTypeInternal {
+class DmiPointingDevice_ItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiBuildinPointing_Item>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevice_Item>
       _instance;
-} _DmiBuildinPointing_Item_default_instance_;
-class DmiBuildinPointingDefaultTypeInternal {
+} _DmiPointingDevice_Item_default_instance_;
+class DmiPointingDeviceDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiBuildinPointing>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevice>
       _instance;
-} _DmiBuildinPointing_default_instance_;
+} _DmiPointingDevice_default_instance_;
 class DmiPortableBattery_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery_Item>
@@ -133,16 +133,16 @@ class DmiPortableBatteryDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery>
       _instance;
 } _DmiPortableBattery_default_instance_;
-class CentralProcessor_FeaturesDefaultTypeInternal {
+class CPU_FeaturesDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<CentralProcessor_Features>
+  ::google::protobuf::internal::ExplicitlyConstructed<CPU_Features>
       _instance;
-} _CentralProcessor_Features_default_instance_;
-class CentralProcessorDefaultTypeInternal {
+} _CPU_Features_default_instance_;
+class CPUDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<CentralProcessor>
+  ::google::protobuf::internal::ExplicitlyConstructed<CPU>
       _instance;
-} _CentralProcessor_default_instance_;
+} _CPU_default_instance_;
 class AtaDrives_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<AtaDrives_Item>
@@ -724,7 +724,7 @@ void InitDefaultsDmiOnBoardDevices() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiOnBoardDevicesImpl);
 }
 
-void InitDefaultsDmiBuildinPointing_ItemImpl() {
+void InitDefaultsDmiPointingDevice_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -733,19 +733,19 @@ void InitDefaultsDmiBuildinPointing_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_DmiBuildinPointing_Item_default_instance_;
-    new (ptr) ::aspia::proto::DmiBuildinPointing_Item();
+    void* ptr = &::aspia::proto::_DmiPointingDevice_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiPointingDevice_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiBuildinPointing_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiPointingDevice_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiBuildinPointing_Item() {
+void InitDefaultsDmiPointingDevice_Item() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiBuildinPointing_ItemImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDevice_ItemImpl);
 }
 
-void InitDefaultsDmiBuildinPointingImpl() {
+void InitDefaultsDmiPointingDeviceImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -753,18 +753,18 @@ void InitDefaultsDmiBuildinPointingImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_Item();
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
   {
-    void* ptr = &::aspia::proto::_DmiBuildinPointing_default_instance_;
-    new (ptr) ::aspia::proto::DmiBuildinPointing();
+    void* ptr = &::aspia::proto::_DmiPointingDevice_default_instance_;
+    new (ptr) ::aspia::proto::DmiPointingDevice();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiBuildinPointing::InitAsDefaultInstance();
+  ::aspia::proto::DmiPointingDevice::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiBuildinPointing() {
+void InitDefaultsDmiPointingDevice() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiBuildinPointingImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDeviceImpl);
 }
 
 void InitDefaultsDmiPortableBattery_ItemImpl() {
@@ -810,7 +810,7 @@ void InitDefaultsDmiPortableBattery() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPortableBatteryImpl);
 }
 
-void InitDefaultsCentralProcessor_FeaturesImpl() {
+void InitDefaultsCPU_FeaturesImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -819,19 +819,19 @@ void InitDefaultsCentralProcessor_FeaturesImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_CentralProcessor_Features_default_instance_;
-    new (ptr) ::aspia::proto::CentralProcessor_Features();
+    void* ptr = &::aspia::proto::_CPU_Features_default_instance_;
+    new (ptr) ::aspia::proto::CPU_Features();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::CentralProcessor_Features::InitAsDefaultInstance();
+  ::aspia::proto::CPU_Features::InitAsDefaultInstance();
 }
 
-void InitDefaultsCentralProcessor_Features() {
+void InitDefaultsCPU_Features() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCentralProcessor_FeaturesImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCPU_FeaturesImpl);
 }
 
-void InitDefaultsCentralProcessorImpl() {
+void InitDefaultsCPUImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -839,18 +839,18 @@ void InitDefaultsCentralProcessorImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_Features();
   {
-    void* ptr = &::aspia::proto::_CentralProcessor_default_instance_;
-    new (ptr) ::aspia::proto::CentralProcessor();
+    void* ptr = &::aspia::proto::_CPU_default_instance_;
+    new (ptr) ::aspia::proto::CPU();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::CentralProcessor::InitAsDefaultInstance();
+  ::aspia::proto::CPU::InitAsDefaultInstance();
 }
 
-void InitDefaultsCentralProcessor() {
+void InitDefaultsCPU() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCentralProcessorImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCPUImpl);
 }
 
 void InitDefaultsAtaDrives_ItemImpl() {
@@ -3257,7 +3257,7 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MIN;
 const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MAX;
 const int DmiOnBoardDevices::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiBuildinPointing_Type_IsValid(int value) {
+bool DmiPointingDevice_Type_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -3275,20 +3275,20 @@ bool DmiBuildinPointing_Type_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_UNKNOWN;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_OTHER;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_MOUSE;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TRACK_BALL;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TRACK_POINT;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_GLIDE_POINT;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TOUCH_PAD;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_TOUCH_SCREEN;
-const DmiBuildinPointing_Type DmiBuildinPointing::TYPE_OPTICAL_SENSOR;
-const DmiBuildinPointing_Type DmiBuildinPointing::Type_MIN;
-const DmiBuildinPointing_Type DmiBuildinPointing::Type_MAX;
-const int DmiBuildinPointing::Type_ARRAYSIZE;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_UNKNOWN;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_OTHER;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_MOUSE;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_TRACK_BALL;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_TRACK_POINT;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_GLIDE_POINT;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_TOUCH_PAD;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_TOUCH_SCREEN;
+const DmiPointingDevice_Type DmiPointingDevice::TYPE_OPTICAL_SENSOR;
+const DmiPointingDevice_Type DmiPointingDevice::Type_MIN;
+const DmiPointingDevice_Type DmiPointingDevice::Type_MAX;
+const int DmiPointingDevice::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiBuildinPointing_Interface_IsValid(int value) {
+bool DmiPointingDevice_Interface_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -3308,20 +3308,20 @@ bool DmiBuildinPointing_Interface_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_UNKNOWN;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_OTHER;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_SERIAL;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_PS_2;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_INFRARED;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_HP_HIL;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_ADB;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN;
-const DmiBuildinPointing_Interface DmiBuildinPointing::INTERFACE_USB;
-const DmiBuildinPointing_Interface DmiBuildinPointing::Interface_MIN;
-const DmiBuildinPointing_Interface DmiBuildinPointing::Interface_MAX;
-const int DmiBuildinPointing::Interface_ARRAYSIZE;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_UNKNOWN;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_OTHER;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_SERIAL;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_PS_2;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_INFRARED;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_HP_HIL;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_ADB;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE_DB_9;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE_MICRO_DIN;
+const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_USB;
+const DmiPointingDevice_Interface DmiPointingDevice::Interface_MIN;
+const DmiPointingDevice_Interface DmiPointingDevice::Interface_MAX;
+const int DmiPointingDevice::Interface_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool DmiPortableBattery_Chemistry_IsValid(int value) {
   switch (value) {
@@ -10784,23 +10784,23 @@ void DmiOnBoardDevices::InternalSwap(DmiOnBoardDevices* other) {
 
 // ===================================================================
 
-void DmiBuildinPointing_Item::InitAsDefaultInstance() {
+void DmiPointingDevice_Item::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiBuildinPointing_Item::kDeviceTypeFieldNumber;
-const int DmiBuildinPointing_Item::kDeviceInterfaceFieldNumber;
-const int DmiBuildinPointing_Item::kButtonCountFieldNumber;
+const int DmiPointingDevice_Item::kDeviceTypeFieldNumber;
+const int DmiPointingDevice_Item::kDeviceInterfaceFieldNumber;
+const int DmiPointingDevice_Item::kButtonCountFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiBuildinPointing_Item::DmiBuildinPointing_Item()
+DmiPointingDevice_Item::DmiPointingDevice_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_Item();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevice.Item)
 }
-DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& from)
+DmiPointingDevice_Item::DmiPointingDevice_Item(const DmiPointingDevice_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -10808,44 +10808,44 @@ DmiBuildinPointing_Item::DmiBuildinPointing_Item(const DmiBuildinPointing_Item& 
   ::memcpy(&device_type_, &from.device_type_,
     static_cast<size_t>(reinterpret_cast<char*>(&button_count_) -
     reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevice.Item)
 }
 
-void DmiBuildinPointing_Item::SharedCtor() {
+void DmiPointingDevice_Item::SharedCtor() {
   ::memset(&device_type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&button_count_) -
       reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
   _cached_size_ = 0;
 }
 
-DmiBuildinPointing_Item::~DmiBuildinPointing_Item() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiBuildinPointing.Item)
+DmiPointingDevice_Item::~DmiPointingDevice_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevice.Item)
   SharedDtor();
 }
 
-void DmiBuildinPointing_Item::SharedDtor() {
+void DmiPointingDevice_Item::SharedDtor() {
 }
 
-void DmiBuildinPointing_Item::SetCachedSize(int size) const {
+void DmiPointingDevice_Item::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiBuildinPointing_Item& DmiBuildinPointing_Item::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing_Item();
+const DmiPointingDevice_Item& DmiPointingDevice_Item::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
   return *internal_default_instance();
 }
 
-DmiBuildinPointing_Item* DmiBuildinPointing_Item::New(::google::protobuf::Arena* arena) const {
-  DmiBuildinPointing_Item* n = new DmiBuildinPointing_Item;
+DmiPointingDevice_Item* DmiPointingDevice_Item::New(::google::protobuf::Arena* arena) const {
+  DmiPointingDevice_Item* n = new DmiPointingDevice_Item;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiBuildinPointing_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBuildinPointing.Item)
+void DmiPointingDevice_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevice.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -10856,7 +10856,7 @@ void DmiBuildinPointing_Item::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
+bool DmiPointingDevice_Item::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -10866,13 +10866,13 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevice.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+      // .aspia.proto.DmiPointingDevice.Type device_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -10880,14 +10880,14 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_device_type(static_cast< ::aspia::proto::DmiBuildinPointing_Type >(value));
+          set_device_type(static_cast< ::aspia::proto::DmiPointingDevice_Type >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+      // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -10895,7 +10895,7 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_device_interface(static_cast< ::aspia::proto::DmiBuildinPointing_Interface >(value));
+          set_device_interface(static_cast< ::aspia::proto::DmiPointingDevice_Interface >(value));
         } else {
           goto handle_unusual;
         }
@@ -10928,27 +10928,27 @@ bool DmiBuildinPointing_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevice.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevice.Item)
   return false;
 #undef DO_
 }
 
-void DmiBuildinPointing_Item::SerializeWithCachedSizes(
+void DmiPointingDevice_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevice.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
   if (this->device_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->device_type(), output);
   }
 
-  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
   if (this->device_interface() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->device_interface(), output);
@@ -10961,22 +10961,22 @@ void DmiBuildinPointing_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBuildinPointing.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevice.Item)
 }
 
-size_t DmiBuildinPointing_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBuildinPointing.Item)
+size_t DmiPointingDevice_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevice.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.DmiBuildinPointing.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
   if (this->device_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_type());
   }
 
-  // .aspia.proto.DmiBuildinPointing.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
   if (this->device_interface() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_interface());
@@ -10996,13 +10996,13 @@ size_t DmiBuildinPointing_Item::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiBuildinPointing_Item::CheckTypeAndMergeFrom(
+void DmiPointingDevice_Item::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiBuildinPointing_Item*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevice_Item*>(&from));
 }
 
-void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBuildinPointing.Item)
+void DmiPointingDevice_Item::MergeFrom(const DmiPointingDevice_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevice.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11019,22 +11019,22 @@ void DmiBuildinPointing_Item::MergeFrom(const DmiBuildinPointing_Item& from) {
   }
 }
 
-void DmiBuildinPointing_Item::CopyFrom(const DmiBuildinPointing_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBuildinPointing.Item)
+void DmiPointingDevice_Item::CopyFrom(const DmiPointingDevice_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevice.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiBuildinPointing_Item::IsInitialized() const {
+bool DmiPointingDevice_Item::IsInitialized() const {
   return true;
 }
 
-void DmiBuildinPointing_Item::Swap(DmiBuildinPointing_Item* other) {
+void DmiPointingDevice_Item::Swap(DmiPointingDevice_Item* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiBuildinPointing_Item::InternalSwap(DmiBuildinPointing_Item* other) {
+void DmiPointingDevice_Item::InternalSwap(DmiPointingDevice_Item* other) {
   using std::swap;
   swap(device_type_, other->device_type_);
   swap(device_interface_, other->device_interface_);
@@ -11043,68 +11043,68 @@ void DmiBuildinPointing_Item::InternalSwap(DmiBuildinPointing_Item* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiBuildinPointing_Item::GetTypeName() const {
-  return "aspia.proto.DmiBuildinPointing.Item";
+::std::string DmiPointingDevice_Item::GetTypeName() const {
+  return "aspia.proto.DmiPointingDevice.Item";
 }
 
 
 // ===================================================================
 
-void DmiBuildinPointing::InitAsDefaultInstance() {
+void DmiPointingDevice::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiBuildinPointing::kItemFieldNumber;
+const int DmiPointingDevice::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiBuildinPointing::DmiBuildinPointing()
+DmiPointingDevice::DmiPointingDevice()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevice)
 }
-DmiBuildinPointing::DmiBuildinPointing(const DmiBuildinPointing& from)
+DmiPointingDevice::DmiPointingDevice(const DmiPointingDevice& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevice)
 }
 
-void DmiBuildinPointing::SharedCtor() {
+void DmiPointingDevice::SharedCtor() {
   _cached_size_ = 0;
 }
 
-DmiBuildinPointing::~DmiBuildinPointing() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiBuildinPointing)
+DmiPointingDevice::~DmiPointingDevice() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevice)
   SharedDtor();
 }
 
-void DmiBuildinPointing::SharedDtor() {
+void DmiPointingDevice::SharedDtor() {
 }
 
-void DmiBuildinPointing::SetCachedSize(int size) const {
+void DmiPointingDevice::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiBuildinPointing& DmiBuildinPointing::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiBuildinPointing();
+const DmiPointingDevice& DmiPointingDevice::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice();
   return *internal_default_instance();
 }
 
-DmiBuildinPointing* DmiBuildinPointing::New(::google::protobuf::Arena* arena) const {
-  DmiBuildinPointing* n = new DmiBuildinPointing;
+DmiPointingDevice* DmiPointingDevice::New(::google::protobuf::Arena* arena) const {
+  DmiPointingDevice* n = new DmiPointingDevice;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiBuildinPointing::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiBuildinPointing)
+void DmiPointingDevice::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevice)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -11113,7 +11113,7 @@ void DmiBuildinPointing::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiBuildinPointing::MergePartialFromCodedStream(
+bool DmiPointingDevice::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -11123,13 +11123,13 @@ bool DmiBuildinPointing::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevice)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
+      // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -11152,21 +11152,21 @@ bool DmiBuildinPointing::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevice)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevice)
   return false;
 #undef DO_
 }
 
-void DmiBuildinPointing::SerializeWithCachedSizes(
+void DmiPointingDevice::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevice)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -11175,16 +11175,16 @@ void DmiBuildinPointing::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiBuildinPointing)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevice)
 }
 
-size_t DmiBuildinPointing::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiBuildinPointing)
+size_t DmiPointingDevice::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevice)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.DmiBuildinPointing.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -11202,13 +11202,13 @@ size_t DmiBuildinPointing::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiBuildinPointing::CheckTypeAndMergeFrom(
+void DmiPointingDevice::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiBuildinPointing*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevice*>(&from));
 }
 
-void DmiBuildinPointing::MergeFrom(const DmiBuildinPointing& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiBuildinPointing)
+void DmiPointingDevice::MergeFrom(const DmiPointingDevice& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevice)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11217,30 +11217,30 @@ void DmiBuildinPointing::MergeFrom(const DmiBuildinPointing& from) {
   item_.MergeFrom(from.item_);
 }
 
-void DmiBuildinPointing::CopyFrom(const DmiBuildinPointing& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiBuildinPointing)
+void DmiPointingDevice::CopyFrom(const DmiPointingDevice& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevice)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiBuildinPointing::IsInitialized() const {
+bool DmiPointingDevice::IsInitialized() const {
   return true;
 }
 
-void DmiBuildinPointing::Swap(DmiBuildinPointing* other) {
+void DmiPointingDevice::Swap(DmiPointingDevice* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiBuildinPointing::InternalSwap(DmiBuildinPointing* other) {
+void DmiPointingDevice::InternalSwap(DmiPointingDevice* other) {
   using std::swap;
   item_.InternalSwap(&other->item_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiBuildinPointing::GetTypeName() const {
-  return "aspia.proto.DmiBuildinPointing";
+::std::string DmiPointingDevice::GetTypeName() const {
+  return "aspia.proto.DmiPointingDevice";
 }
 
 
@@ -12152,156 +12152,156 @@ void DmiPortableBattery::InternalSwap(DmiPortableBattery* other) {
 
 // ===================================================================
 
-void CentralProcessor_Features::InitAsDefaultInstance() {
+void CPU_Features::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CentralProcessor_Features::kHasFpuFieldNumber;
-const int CentralProcessor_Features::kHasVmeFieldNumber;
-const int CentralProcessor_Features::kHasDeFieldNumber;
-const int CentralProcessor_Features::kHasPseFieldNumber;
-const int CentralProcessor_Features::kHasTscFieldNumber;
-const int CentralProcessor_Features::kHasMsrFieldNumber;
-const int CentralProcessor_Features::kHasPaeFieldNumber;
-const int CentralProcessor_Features::kHasMceFieldNumber;
-const int CentralProcessor_Features::kHasCx8FieldNumber;
-const int CentralProcessor_Features::kHasApicFieldNumber;
-const int CentralProcessor_Features::kHasSepFieldNumber;
-const int CentralProcessor_Features::kHasMtrrFieldNumber;
-const int CentralProcessor_Features::kHasPgeFieldNumber;
-const int CentralProcessor_Features::kHasMcaFieldNumber;
-const int CentralProcessor_Features::kHasCmovFieldNumber;
-const int CentralProcessor_Features::kHasPatFieldNumber;
-const int CentralProcessor_Features::kHasPse36FieldNumber;
-const int CentralProcessor_Features::kHasPsnFieldNumber;
-const int CentralProcessor_Features::kHasClfshFieldNumber;
-const int CentralProcessor_Features::kHasDsFieldNumber;
-const int CentralProcessor_Features::kHasAcpuFieldNumber;
-const int CentralProcessor_Features::kHasMmxFieldNumber;
-const int CentralProcessor_Features::kHasFxsrFieldNumber;
-const int CentralProcessor_Features::kHasSseFieldNumber;
-const int CentralProcessor_Features::kHasSse2FieldNumber;
-const int CentralProcessor_Features::kHasSsFieldNumber;
-const int CentralProcessor_Features::kHasHttFieldNumber;
-const int CentralProcessor_Features::kHasTmFieldNumber;
-const int CentralProcessor_Features::kHasIa64FieldNumber;
-const int CentralProcessor_Features::kHasPbeFieldNumber;
-const int CentralProcessor_Features::kHasSse3FieldNumber;
-const int CentralProcessor_Features::kHasPclmuldqFieldNumber;
-const int CentralProcessor_Features::kHasDtes64FieldNumber;
-const int CentralProcessor_Features::kHasMonitorFieldNumber;
-const int CentralProcessor_Features::kHasDsCplFieldNumber;
-const int CentralProcessor_Features::kHasVmxFieldNumber;
-const int CentralProcessor_Features::kHasSmxFieldNumber;
-const int CentralProcessor_Features::kHasEstFieldNumber;
-const int CentralProcessor_Features::kHasTm2FieldNumber;
-const int CentralProcessor_Features::kHasSsse3FieldNumber;
-const int CentralProcessor_Features::kHasCnxtIdFieldNumber;
-const int CentralProcessor_Features::kHasSdbgFieldNumber;
-const int CentralProcessor_Features::kHasFmaFieldNumber;
-const int CentralProcessor_Features::kHasCx16FieldNumber;
-const int CentralProcessor_Features::kHasXtprFieldNumber;
-const int CentralProcessor_Features::kHasPdcmFieldNumber;
-const int CentralProcessor_Features::kHasPcidFieldNumber;
-const int CentralProcessor_Features::kHasDcaFieldNumber;
-const int CentralProcessor_Features::kHasSse41FieldNumber;
-const int CentralProcessor_Features::kHasSse42FieldNumber;
-const int CentralProcessor_Features::kHasX2ApicFieldNumber;
-const int CentralProcessor_Features::kHasMovbeFieldNumber;
-const int CentralProcessor_Features::kHasPopcntFieldNumber;
-const int CentralProcessor_Features::kHasTscDeadlineFieldNumber;
-const int CentralProcessor_Features::kHasAesFieldNumber;
-const int CentralProcessor_Features::kHasXsaveFieldNumber;
-const int CentralProcessor_Features::kHasOsxsaveFieldNumber;
-const int CentralProcessor_Features::kHasAvxFieldNumber;
-const int CentralProcessor_Features::kHasF16CFieldNumber;
-const int CentralProcessor_Features::kHasRdrandFieldNumber;
-const int CentralProcessor_Features::kHasHypervisorFieldNumber;
-const int CentralProcessor_Features::kHasSyscallFieldNumber;
-const int CentralProcessor_Features::kHasXdBitFieldNumber;
-const int CentralProcessor_Features::kHasMmxextFieldNumber;
-const int CentralProcessor_Features::kHas1GbPagesFieldNumber;
-const int CentralProcessor_Features::kHasRdtscpFieldNumber;
-const int CentralProcessor_Features::kHasIntel64FieldNumber;
-const int CentralProcessor_Features::kHas3DnowextFieldNumber;
-const int CentralProcessor_Features::kHas3DnowFieldNumber;
-const int CentralProcessor_Features::kHasLahfFieldNumber;
-const int CentralProcessor_Features::kHasSvmFieldNumber;
-const int CentralProcessor_Features::kHasLzcntFieldNumber;
-const int CentralProcessor_Features::kHasSse4AFieldNumber;
-const int CentralProcessor_Features::kHasMisalignsseFieldNumber;
-const int CentralProcessor_Features::kHas3DnowPrefetchFieldNumber;
-const int CentralProcessor_Features::kHasXopFieldNumber;
-const int CentralProcessor_Features::kHasWdtFieldNumber;
-const int CentralProcessor_Features::kHasFma4FieldNumber;
-const int CentralProcessor_Features::kHasFsgsbaseFieldNumber;
-const int CentralProcessor_Features::kHasSgxFieldNumber;
-const int CentralProcessor_Features::kHasBmi1FieldNumber;
-const int CentralProcessor_Features::kHasHleFieldNumber;
-const int CentralProcessor_Features::kHasAvx2FieldNumber;
-const int CentralProcessor_Features::kHasSmepFieldNumber;
-const int CentralProcessor_Features::kHasBmi2FieldNumber;
-const int CentralProcessor_Features::kHasErmsFieldNumber;
-const int CentralProcessor_Features::kHasInvpcidFieldNumber;
-const int CentralProcessor_Features::kHasRtmFieldNumber;
-const int CentralProcessor_Features::kHasPqmFieldNumber;
-const int CentralProcessor_Features::kHasMpxFieldNumber;
-const int CentralProcessor_Features::kHasPqeFieldNumber;
-const int CentralProcessor_Features::kHasAvx512FFieldNumber;
-const int CentralProcessor_Features::kHasAvx512DqFieldNumber;
-const int CentralProcessor_Features::kHasRdseedFieldNumber;
-const int CentralProcessor_Features::kHasAdxFieldNumber;
-const int CentralProcessor_Features::kHasSmapFieldNumber;
-const int CentralProcessor_Features::kHasAvx512IfmaFieldNumber;
-const int CentralProcessor_Features::kHasPcommitFieldNumber;
-const int CentralProcessor_Features::kHasClflushoptFieldNumber;
-const int CentralProcessor_Features::kHasClwbFieldNumber;
-const int CentralProcessor_Features::kHasIntelPtFieldNumber;
-const int CentralProcessor_Features::kHasAvx512PfFieldNumber;
-const int CentralProcessor_Features::kHasAvx512ErFieldNumber;
-const int CentralProcessor_Features::kHasAvx512CdFieldNumber;
-const int CentralProcessor_Features::kHasShaFieldNumber;
-const int CentralProcessor_Features::kHasAvx512BwFieldNumber;
-const int CentralProcessor_Features::kHasAvx512VlFieldNumber;
-const int CentralProcessor_Features::kHasPrefetchwt1FieldNumber;
-const int CentralProcessor_Features::kHasAvx512VbmiFieldNumber;
-const int CentralProcessor_Features::kHasUmipFieldNumber;
-const int CentralProcessor_Features::kHasPkuFieldNumber;
-const int CentralProcessor_Features::kHasOspkeFieldNumber;
-const int CentralProcessor_Features::kHasAvx512Vbmi2FieldNumber;
-const int CentralProcessor_Features::kHasGfniFieldNumber;
-const int CentralProcessor_Features::kHasVaesFieldNumber;
-const int CentralProcessor_Features::kHasVpclmulqdqFieldNumber;
-const int CentralProcessor_Features::kHasAvx512VnniFieldNumber;
-const int CentralProcessor_Features::kHasAvx512BitalgFieldNumber;
-const int CentralProcessor_Features::kHasAvx512VpopcntdqFieldNumber;
-const int CentralProcessor_Features::kHasRdpidFieldNumber;
-const int CentralProcessor_Features::kHasSgxLcFieldNumber;
-const int CentralProcessor_Features::kHasAvx5124VnniwFieldNumber;
-const int CentralProcessor_Features::kHasAvx5124FmapsFieldNumber;
-const int CentralProcessor_Features::kHasAisFieldNumber;
-const int CentralProcessor_Features::kHasRngFieldNumber;
-const int CentralProcessor_Features::kHasLhFieldNumber;
-const int CentralProcessor_Features::kHasFemmsFieldNumber;
-const int CentralProcessor_Features::kHasAceFieldNumber;
-const int CentralProcessor_Features::kHasAce2FieldNumber;
-const int CentralProcessor_Features::kHasPheFieldNumber;
-const int CentralProcessor_Features::kHasPmmFieldNumber;
-const int CentralProcessor_Features::kHasParallaxFieldNumber;
-const int CentralProcessor_Features::kHasOverstressFieldNumber;
-const int CentralProcessor_Features::kHasTm3FieldNumber;
-const int CentralProcessor_Features::kHasRng2FieldNumber;
-const int CentralProcessor_Features::kHasPhe2FieldNumber;
+const int CPU_Features::kHasFpuFieldNumber;
+const int CPU_Features::kHasVmeFieldNumber;
+const int CPU_Features::kHasDeFieldNumber;
+const int CPU_Features::kHasPseFieldNumber;
+const int CPU_Features::kHasTscFieldNumber;
+const int CPU_Features::kHasMsrFieldNumber;
+const int CPU_Features::kHasPaeFieldNumber;
+const int CPU_Features::kHasMceFieldNumber;
+const int CPU_Features::kHasCx8FieldNumber;
+const int CPU_Features::kHasApicFieldNumber;
+const int CPU_Features::kHasSepFieldNumber;
+const int CPU_Features::kHasMtrrFieldNumber;
+const int CPU_Features::kHasPgeFieldNumber;
+const int CPU_Features::kHasMcaFieldNumber;
+const int CPU_Features::kHasCmovFieldNumber;
+const int CPU_Features::kHasPatFieldNumber;
+const int CPU_Features::kHasPse36FieldNumber;
+const int CPU_Features::kHasPsnFieldNumber;
+const int CPU_Features::kHasClfshFieldNumber;
+const int CPU_Features::kHasDsFieldNumber;
+const int CPU_Features::kHasAcpuFieldNumber;
+const int CPU_Features::kHasMmxFieldNumber;
+const int CPU_Features::kHasFxsrFieldNumber;
+const int CPU_Features::kHasSseFieldNumber;
+const int CPU_Features::kHasSse2FieldNumber;
+const int CPU_Features::kHasSsFieldNumber;
+const int CPU_Features::kHasHttFieldNumber;
+const int CPU_Features::kHasTmFieldNumber;
+const int CPU_Features::kHasIa64FieldNumber;
+const int CPU_Features::kHasPbeFieldNumber;
+const int CPU_Features::kHasSse3FieldNumber;
+const int CPU_Features::kHasPclmuldqFieldNumber;
+const int CPU_Features::kHasDtes64FieldNumber;
+const int CPU_Features::kHasMonitorFieldNumber;
+const int CPU_Features::kHasDsCplFieldNumber;
+const int CPU_Features::kHasVmxFieldNumber;
+const int CPU_Features::kHasSmxFieldNumber;
+const int CPU_Features::kHasEstFieldNumber;
+const int CPU_Features::kHasTm2FieldNumber;
+const int CPU_Features::kHasSsse3FieldNumber;
+const int CPU_Features::kHasCnxtIdFieldNumber;
+const int CPU_Features::kHasSdbgFieldNumber;
+const int CPU_Features::kHasFmaFieldNumber;
+const int CPU_Features::kHasCx16FieldNumber;
+const int CPU_Features::kHasXtprFieldNumber;
+const int CPU_Features::kHasPdcmFieldNumber;
+const int CPU_Features::kHasPcidFieldNumber;
+const int CPU_Features::kHasDcaFieldNumber;
+const int CPU_Features::kHasSse41FieldNumber;
+const int CPU_Features::kHasSse42FieldNumber;
+const int CPU_Features::kHasX2ApicFieldNumber;
+const int CPU_Features::kHasMovbeFieldNumber;
+const int CPU_Features::kHasPopcntFieldNumber;
+const int CPU_Features::kHasTscDeadlineFieldNumber;
+const int CPU_Features::kHasAesFieldNumber;
+const int CPU_Features::kHasXsaveFieldNumber;
+const int CPU_Features::kHasOsxsaveFieldNumber;
+const int CPU_Features::kHasAvxFieldNumber;
+const int CPU_Features::kHasF16CFieldNumber;
+const int CPU_Features::kHasRdrandFieldNumber;
+const int CPU_Features::kHasHypervisorFieldNumber;
+const int CPU_Features::kHasSyscallFieldNumber;
+const int CPU_Features::kHasXdBitFieldNumber;
+const int CPU_Features::kHasMmxextFieldNumber;
+const int CPU_Features::kHas1GbPagesFieldNumber;
+const int CPU_Features::kHasRdtscpFieldNumber;
+const int CPU_Features::kHasIntel64FieldNumber;
+const int CPU_Features::kHas3DnowextFieldNumber;
+const int CPU_Features::kHas3DnowFieldNumber;
+const int CPU_Features::kHasLahfFieldNumber;
+const int CPU_Features::kHasSvmFieldNumber;
+const int CPU_Features::kHasLzcntFieldNumber;
+const int CPU_Features::kHasSse4AFieldNumber;
+const int CPU_Features::kHasMisalignsseFieldNumber;
+const int CPU_Features::kHas3DnowPrefetchFieldNumber;
+const int CPU_Features::kHasXopFieldNumber;
+const int CPU_Features::kHasWdtFieldNumber;
+const int CPU_Features::kHasFma4FieldNumber;
+const int CPU_Features::kHasFsgsbaseFieldNumber;
+const int CPU_Features::kHasSgxFieldNumber;
+const int CPU_Features::kHasBmi1FieldNumber;
+const int CPU_Features::kHasHleFieldNumber;
+const int CPU_Features::kHasAvx2FieldNumber;
+const int CPU_Features::kHasSmepFieldNumber;
+const int CPU_Features::kHasBmi2FieldNumber;
+const int CPU_Features::kHasErmsFieldNumber;
+const int CPU_Features::kHasInvpcidFieldNumber;
+const int CPU_Features::kHasRtmFieldNumber;
+const int CPU_Features::kHasPqmFieldNumber;
+const int CPU_Features::kHasMpxFieldNumber;
+const int CPU_Features::kHasPqeFieldNumber;
+const int CPU_Features::kHasAvx512FFieldNumber;
+const int CPU_Features::kHasAvx512DqFieldNumber;
+const int CPU_Features::kHasRdseedFieldNumber;
+const int CPU_Features::kHasAdxFieldNumber;
+const int CPU_Features::kHasSmapFieldNumber;
+const int CPU_Features::kHasAvx512IfmaFieldNumber;
+const int CPU_Features::kHasPcommitFieldNumber;
+const int CPU_Features::kHasClflushoptFieldNumber;
+const int CPU_Features::kHasClwbFieldNumber;
+const int CPU_Features::kHasIntelPtFieldNumber;
+const int CPU_Features::kHasAvx512PfFieldNumber;
+const int CPU_Features::kHasAvx512ErFieldNumber;
+const int CPU_Features::kHasAvx512CdFieldNumber;
+const int CPU_Features::kHasShaFieldNumber;
+const int CPU_Features::kHasAvx512BwFieldNumber;
+const int CPU_Features::kHasAvx512VlFieldNumber;
+const int CPU_Features::kHasPrefetchwt1FieldNumber;
+const int CPU_Features::kHasAvx512VbmiFieldNumber;
+const int CPU_Features::kHasUmipFieldNumber;
+const int CPU_Features::kHasPkuFieldNumber;
+const int CPU_Features::kHasOspkeFieldNumber;
+const int CPU_Features::kHasAvx512Vbmi2FieldNumber;
+const int CPU_Features::kHasGfniFieldNumber;
+const int CPU_Features::kHasVaesFieldNumber;
+const int CPU_Features::kHasVpclmulqdqFieldNumber;
+const int CPU_Features::kHasAvx512VnniFieldNumber;
+const int CPU_Features::kHasAvx512BitalgFieldNumber;
+const int CPU_Features::kHasAvx512VpopcntdqFieldNumber;
+const int CPU_Features::kHasRdpidFieldNumber;
+const int CPU_Features::kHasSgxLcFieldNumber;
+const int CPU_Features::kHasAvx5124VnniwFieldNumber;
+const int CPU_Features::kHasAvx5124FmapsFieldNumber;
+const int CPU_Features::kHasAisFieldNumber;
+const int CPU_Features::kHasRngFieldNumber;
+const int CPU_Features::kHasLhFieldNumber;
+const int CPU_Features::kHasFemmsFieldNumber;
+const int CPU_Features::kHasAceFieldNumber;
+const int CPU_Features::kHasAce2FieldNumber;
+const int CPU_Features::kHasPheFieldNumber;
+const int CPU_Features::kHasPmmFieldNumber;
+const int CPU_Features::kHasParallaxFieldNumber;
+const int CPU_Features::kHasOverstressFieldNumber;
+const int CPU_Features::kHasTm3FieldNumber;
+const int CPU_Features::kHasRng2FieldNumber;
+const int CPU_Features::kHasPhe2FieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-CentralProcessor_Features::CentralProcessor_Features()
+CPU_Features::CPU_Features()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_Features();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(constructor:aspia.proto.CPU.Features)
 }
-CentralProcessor_Features::CentralProcessor_Features(const CentralProcessor_Features& from)
+CPU_Features::CPU_Features(const CPU_Features& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -12309,44 +12309,44 @@ CentralProcessor_Features::CentralProcessor_Features(const CentralProcessor_Feat
   ::memcpy(&has_fpu_, &from.has_fpu_,
     static_cast<size_t>(reinterpret_cast<char*>(&has_phe2_) -
     reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.CPU.Features)
 }
 
-void CentralProcessor_Features::SharedCtor() {
+void CPU_Features::SharedCtor() {
   ::memset(&has_fpu_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&has_phe2_) -
       reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
   _cached_size_ = 0;
 }
 
-CentralProcessor_Features::~CentralProcessor_Features() {
-  // @@protoc_insertion_point(destructor:aspia.proto.CentralProcessor.Features)
+CPU_Features::~CPU_Features() {
+  // @@protoc_insertion_point(destructor:aspia.proto.CPU.Features)
   SharedDtor();
 }
 
-void CentralProcessor_Features::SharedDtor() {
+void CPU_Features::SharedDtor() {
 }
 
-void CentralProcessor_Features::SetCachedSize(int size) const {
+void CPU_Features::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const CentralProcessor_Features& CentralProcessor_Features::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor_Features();
+const CPU_Features& CPU_Features::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_Features();
   return *internal_default_instance();
 }
 
-CentralProcessor_Features* CentralProcessor_Features::New(::google::protobuf::Arena* arena) const {
-  CentralProcessor_Features* n = new CentralProcessor_Features;
+CPU_Features* CPU_Features::New(::google::protobuf::Arena* arena) const {
+  CPU_Features* n = new CPU_Features;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void CentralProcessor_Features::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.CentralProcessor.Features)
+void CPU_Features::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.CPU.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -12357,7 +12357,7 @@ void CentralProcessor_Features::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool CentralProcessor_Features::MergePartialFromCodedStream(
+bool CPU_Features::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -12367,7 +12367,7 @@ bool CentralProcessor_Features::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(parse_start:aspia.proto.CPU.Features)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -14289,17 +14289,17 @@ bool CentralProcessor_Features::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(parse_success:aspia.proto.CPU.Features)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.CPU.Features)
   return false;
 #undef DO_
 }
 
-void CentralProcessor_Features::SerializeWithCachedSizes(
+void CPU_Features::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.CPU.Features)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -14985,11 +14985,11 @@ void CentralProcessor_Features::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.CentralProcessor.Features)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.CPU.Features)
 }
 
-size_t CentralProcessor_Features::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CentralProcessor.Features)
+size_t CPU_Features::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CPU.Features)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -15681,13 +15681,13 @@ size_t CentralProcessor_Features::ByteSizeLong() const {
   return total_size;
 }
 
-void CentralProcessor_Features::CheckTypeAndMergeFrom(
+void CPU_Features::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CentralProcessor_Features*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const CPU_Features*>(&from));
 }
 
-void CentralProcessor_Features::MergeFrom(const CentralProcessor_Features& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CentralProcessor.Features)
+void CPU_Features::MergeFrom(const CPU_Features& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CPU.Features)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16103,22 +16103,22 @@ void CentralProcessor_Features::MergeFrom(const CentralProcessor_Features& from)
   }
 }
 
-void CentralProcessor_Features::CopyFrom(const CentralProcessor_Features& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CentralProcessor.Features)
+void CPU_Features::CopyFrom(const CPU_Features& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CPU.Features)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CentralProcessor_Features::IsInitialized() const {
+bool CPU_Features::IsInitialized() const {
   return true;
 }
 
-void CentralProcessor_Features::Swap(CentralProcessor_Features* other) {
+void CPU_Features::Swap(CPU_Features* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void CentralProcessor_Features::InternalSwap(CentralProcessor_Features* other) {
+void CPU_Features::InternalSwap(CPU_Features* other) {
   using std::swap;
   swap(has_fpu_, other->has_fpu_);
   swap(has_vme_, other->has_vme_);
@@ -16260,41 +16260,41 @@ void CentralProcessor_Features::InternalSwap(CentralProcessor_Features* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string CentralProcessor_Features::GetTypeName() const {
-  return "aspia.proto.CentralProcessor.Features";
+::std::string CPU_Features::GetTypeName() const {
+  return "aspia.proto.CPU.Features";
 }
 
 
 // ===================================================================
 
-void CentralProcessor::InitAsDefaultInstance() {
-  ::aspia::proto::_CentralProcessor_default_instance_._instance.get_mutable()->features_ = const_cast< ::aspia::proto::CentralProcessor_Features*>(
-      ::aspia::proto::CentralProcessor_Features::internal_default_instance());
+void CPU::InitAsDefaultInstance() {
+  ::aspia::proto::_CPU_default_instance_._instance.get_mutable()->features_ = const_cast< ::aspia::proto::CPU_Features*>(
+      ::aspia::proto::CPU_Features::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CentralProcessor::kBrandStringFieldNumber;
-const int CentralProcessor::kVendorFieldNumber;
-const int CentralProcessor::kSteppingFieldNumber;
-const int CentralProcessor::kModelFieldNumber;
-const int CentralProcessor::kFamilyFieldNumber;
-const int CentralProcessor::kExtendedModelFieldNumber;
-const int CentralProcessor::kExtendedFamilyFieldNumber;
-const int CentralProcessor::kBrandIdFieldNumber;
-const int CentralProcessor::kPackagesFieldNumber;
-const int CentralProcessor::kPhysicalCoresFieldNumber;
-const int CentralProcessor::kLogicalCoresFieldNumber;
-const int CentralProcessor::kFeaturesFieldNumber;
+const int CPU::kBrandStringFieldNumber;
+const int CPU::kVendorFieldNumber;
+const int CPU::kSteppingFieldNumber;
+const int CPU::kModelFieldNumber;
+const int CPU::kFamilyFieldNumber;
+const int CPU::kExtendedModelFieldNumber;
+const int CPU::kExtendedFamilyFieldNumber;
+const int CPU::kBrandIdFieldNumber;
+const int CPU::kPackagesFieldNumber;
+const int CPU::kPhysicalCoresFieldNumber;
+const int CPU::kLogicalCoresFieldNumber;
+const int CPU::kFeaturesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-CentralProcessor::CentralProcessor()
+CPU::CPU()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(constructor:aspia.proto.CPU)
 }
-CentralProcessor::CentralProcessor(const CentralProcessor& from)
+CPU::CPU(const CPU& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -16308,17 +16308,17 @@ CentralProcessor::CentralProcessor(const CentralProcessor& from)
     vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
   }
   if (from.has_features()) {
-    features_ = new ::aspia::proto::CentralProcessor_Features(*from.features_);
+    features_ = new ::aspia::proto::CPU_Features(*from.features_);
   } else {
     features_ = NULL;
   }
   ::memcpy(&stepping_, &from.stepping_,
     static_cast<size_t>(reinterpret_cast<char*>(&logical_cores_) -
     reinterpret_cast<char*>(&stepping_)) + sizeof(logical_cores_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.CPU)
 }
 
-void CentralProcessor::SharedCtor() {
+void CPU::SharedCtor() {
   brand_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   vendor_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&features_, 0, static_cast<size_t>(
@@ -16327,37 +16327,37 @@ void CentralProcessor::SharedCtor() {
   _cached_size_ = 0;
 }
 
-CentralProcessor::~CentralProcessor() {
-  // @@protoc_insertion_point(destructor:aspia.proto.CentralProcessor)
+CPU::~CPU() {
+  // @@protoc_insertion_point(destructor:aspia.proto.CPU)
   SharedDtor();
 }
 
-void CentralProcessor::SharedDtor() {
+void CPU::SharedDtor() {
   brand_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   vendor_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete features_;
 }
 
-void CentralProcessor::SetCachedSize(int size) const {
+void CPU::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const CentralProcessor& CentralProcessor::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCentralProcessor();
+const CPU& CPU::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU();
   return *internal_default_instance();
 }
 
-CentralProcessor* CentralProcessor::New(::google::protobuf::Arena* arena) const {
-  CentralProcessor* n = new CentralProcessor;
+CPU* CPU::New(::google::protobuf::Arena* arena) const {
+  CPU* n = new CPU;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void CentralProcessor::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.CentralProcessor)
+void CPU::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.CPU)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -16374,7 +16374,7 @@ void CentralProcessor::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool CentralProcessor::MergePartialFromCodedStream(
+bool CPU::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -16384,7 +16384,7 @@ bool CentralProcessor::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(parse_start:aspia.proto.CPU)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -16399,7 +16399,7 @@ bool CentralProcessor::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->brand_string().data(), static_cast<int>(this->brand_string().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.CentralProcessor.brand_string"));
+            "aspia.proto.CPU.brand_string"));
         } else {
           goto handle_unusual;
         }
@@ -16415,7 +16415,7 @@ bool CentralProcessor::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->vendor().data(), static_cast<int>(this->vendor().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.CentralProcessor.vendor"));
+            "aspia.proto.CPU.vendor"));
         } else {
           goto handle_unusual;
         }
@@ -16548,7 +16548,7 @@ bool CentralProcessor::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.CentralProcessor.Features features = 12;
+      // .aspia.proto.CPU.Features features = 12;
       case 12: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
@@ -16572,17 +16572,17 @@ bool CentralProcessor::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(parse_success:aspia.proto.CPU)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.CPU)
   return false;
 #undef DO_
 }
 
-void CentralProcessor::SerializeWithCachedSizes(
+void CPU::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.CPU)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -16591,7 +16591,7 @@ void CentralProcessor::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->brand_string().data(), static_cast<int>(this->brand_string().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.CentralProcessor.brand_string");
+      "aspia.proto.CPU.brand_string");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->brand_string(), output);
   }
@@ -16601,7 +16601,7 @@ void CentralProcessor::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->vendor().data(), static_cast<int>(this->vendor().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.CentralProcessor.vendor");
+      "aspia.proto.CPU.vendor");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->vendor(), output);
   }
@@ -16651,7 +16651,7 @@ void CentralProcessor::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(11, this->logical_cores(), output);
   }
 
-  // .aspia.proto.CentralProcessor.Features features = 12;
+  // .aspia.proto.CPU.Features features = 12;
   if (this->has_features()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       12, *this->features_, output);
@@ -16659,11 +16659,11 @@ void CentralProcessor::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.CentralProcessor)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.CPU)
 }
 
-size_t CentralProcessor::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CentralProcessor)
+size_t CPU::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.CPU)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -16682,7 +16682,7 @@ size_t CentralProcessor::ByteSizeLong() const {
         this->vendor());
   }
 
-  // .aspia.proto.CentralProcessor.Features features = 12;
+  // .aspia.proto.CPU.Features features = 12;
   if (this->has_features()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -16759,13 +16759,13 @@ size_t CentralProcessor::ByteSizeLong() const {
   return total_size;
 }
 
-void CentralProcessor::CheckTypeAndMergeFrom(
+void CPU::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CentralProcessor*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const CPU*>(&from));
 }
 
-void CentralProcessor::MergeFrom(const CentralProcessor& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CentralProcessor)
+void CPU::MergeFrom(const CPU& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.CPU)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -16780,7 +16780,7 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
     vendor_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vendor_);
   }
   if (from.has_features()) {
-    mutable_features()->::aspia::proto::CentralProcessor_Features::MergeFrom(from.features());
+    mutable_features()->::aspia::proto::CPU_Features::MergeFrom(from.features());
   }
   if (from.stepping() != 0) {
     set_stepping(from.stepping());
@@ -16811,22 +16811,22 @@ void CentralProcessor::MergeFrom(const CentralProcessor& from) {
   }
 }
 
-void CentralProcessor::CopyFrom(const CentralProcessor& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CentralProcessor)
+void CPU::CopyFrom(const CPU& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.CPU)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CentralProcessor::IsInitialized() const {
+bool CPU::IsInitialized() const {
   return true;
 }
 
-void CentralProcessor::Swap(CentralProcessor* other) {
+void CPU::Swap(CPU* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void CentralProcessor::InternalSwap(CentralProcessor* other) {
+void CPU::InternalSwap(CPU* other) {
   using std::swap;
   brand_string_.Swap(&other->brand_string_);
   vendor_.Swap(&other->vendor_);
@@ -16844,8 +16844,8 @@ void CentralProcessor::InternalSwap(CentralProcessor* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string CentralProcessor::GetTypeName() const {
-  return "aspia.proto.CentralProcessor";
+::std::string CPU::GetTypeName() const {
+  return "aspia.proto.CPU";
 }
 
 

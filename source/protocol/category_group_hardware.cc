@@ -3000,27 +3000,27 @@ const char* CategoryDmiOnboardDevices::TypeToString(proto::DmiOnBoardDevices::Ty
 }
 
 //
-// CategoryDmiBuildinPointing
+// CategoryDmiPointingDevice
 //
 
-const char* CategoryDmiBuildinPointing::Name() const
+const char* CategoryDmiPointingDevices::Name() const
 {
-    return "Build-in Pointing";
+    return "Pointing Devices";
 }
 
-Category::IconId CategoryDmiBuildinPointing::Icon() const
+Category::IconId CategoryDmiPointingDevices::Icon() const
 {
     return IDI_MOUSE;
 }
 
-const char* CategoryDmiBuildinPointing::Guid() const
+const char* CategoryDmiPointingDevices::Guid() const
 {
     return "6883684B-3CEC-451B-A2E3-34C16348BA1B";
 }
 
-void CategoryDmiBuildinPointing::Parse(Table& table, const std::string& data)
+void CategoryDmiPointingDevices::Parse(Table& table, const std::string& data)
 {
-    proto::DmiBuildinPointing message;
+    proto::DmiPointingDevice message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3031,7 +3031,7 @@ void CategoryDmiBuildinPointing::Parse(Table& table, const std::string& data)
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const proto::DmiBuildinPointing::Item& item = message.item(index);
+        const proto::DmiPointingDevice::Item& item = message.item(index);
 
         Group group = table.AddGroup(StringPrintf("Build-in Pointing Device #%d", index + 1));
 
@@ -3041,20 +3041,20 @@ void CategoryDmiBuildinPointing::Parse(Table& table, const std::string& data)
     }
 }
 
-std::string CategoryDmiBuildinPointing::Serialize()
+std::string CategoryDmiPointingDevices::Serialize()
 {
     std::unique_ptr<SMBios> smbios = ReadSMBios();
     if (!smbios)
         return std::string();
 
-    proto::DmiBuildinPointing message;
+    proto::DmiPointingDevice message;
 
-    for (SMBios::TableEnumerator<SMBios::BuildinPointingTable> table_enumerator(*smbios);
+    for (SMBios::TableEnumerator<SMBios::PointingDeviceTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::BuildinPointingTable table = table_enumerator.GetTable();
-        proto::DmiBuildinPointing::Item* item = message.add_item();
+        SMBios::PointingDeviceTable table = table_enumerator.GetTable();
+        proto::DmiPointingDevice::Item* item = message.add_item();
 
         item->set_device_type(table.GetDeviceType());
         item->set_device_interface(table.GetInterface());
@@ -3065,32 +3065,32 @@ std::string CategoryDmiBuildinPointing::Serialize()
 }
 
 // static
-const char* CategoryDmiBuildinPointing::TypeToString(proto::DmiBuildinPointing::Type value)
+const char* CategoryDmiPointingDevices::TypeToString(proto::DmiPointingDevice::Type value)
 {
     switch (value)
     {
-        case proto::DmiBuildinPointing::TYPE_OTHER:
+        case proto::DmiPointingDevice::TYPE_OTHER:
             return "Other";
 
-        case proto::DmiBuildinPointing::TYPE_MOUSE:
+        case proto::DmiPointingDevice::TYPE_MOUSE:
             return "Mouse";
 
-        case proto::DmiBuildinPointing::TYPE_TRACK_BALL:
+        case proto::DmiPointingDevice::TYPE_TRACK_BALL:
             return "Track Ball";
 
-        case proto::DmiBuildinPointing::TYPE_TRACK_POINT:
+        case proto::DmiPointingDevice::TYPE_TRACK_POINT:
             return "Track Point";
 
-        case proto::DmiBuildinPointing::TYPE_GLIDE_POINT:
+        case proto::DmiPointingDevice::TYPE_GLIDE_POINT:
             return "Glide Point";
 
-        case proto::DmiBuildinPointing::TYPE_TOUCH_PAD:
+        case proto::DmiPointingDevice::TYPE_TOUCH_PAD:
             return "Touch Pad";
 
-        case proto::DmiBuildinPointing::TYPE_TOUCH_SCREEN:
+        case proto::DmiPointingDevice::TYPE_TOUCH_SCREEN:
             return "Touch Screen";
 
-        case proto::DmiBuildinPointing::TYPE_OPTICAL_SENSOR:
+        case proto::DmiPointingDevice::TYPE_OPTICAL_SENSOR:
             return "Optical Sensor";
 
         default:
@@ -3099,39 +3099,39 @@ const char* CategoryDmiBuildinPointing::TypeToString(proto::DmiBuildinPointing::
 }
 
 // static
-const char* CategoryDmiBuildinPointing::InterfaceToString(
-    proto::DmiBuildinPointing::Interface value)
+const char* CategoryDmiPointingDevices::InterfaceToString(
+    proto::DmiPointingDevice::Interface value)
 {
     switch (value)
     {
-        case proto::DmiBuildinPointing::INTERFACE_OTHER:
+        case proto::DmiPointingDevice::INTERFACE_OTHER:
             return "Other";
 
-        case proto::DmiBuildinPointing::INTERFACE_SERIAL:
+        case proto::DmiPointingDevice::INTERFACE_SERIAL:
             return "Serial";
 
-        case proto::DmiBuildinPointing::INTERFACE_PS_2:
+        case proto::DmiPointingDevice::INTERFACE_PS_2:
             return "PS/2";
 
-        case proto::DmiBuildinPointing::INTERFACE_INFRARED:
+        case proto::DmiPointingDevice::INTERFACE_INFRARED:
             return "Infrared";
 
-        case proto::DmiBuildinPointing::INTERFACE_HP_HIL:
+        case proto::DmiPointingDevice::INTERFACE_HP_HIL:
             return "HP-HIL";
 
-        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE:
+        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE:
             return "Bus mouse";
 
-        case proto::DmiBuildinPointing::INTERFACE_ADB:
+        case proto::DmiPointingDevice::INTERFACE_ADB:
             return "ADB (Apple Desktop Bus)";
 
-        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_DB_9:
+        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_DB_9:
             return "Bus mouse DB-9";
 
-        case proto::DmiBuildinPointing::INTERFACE_BUS_MOUSE_MICRO_DIN:
+        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_MICRO_DIN:
             return "Bus mouse micro-DIN";
 
-        case proto::DmiBuildinPointing::INTERFACE_USB:
+        case proto::DmiPointingDevice::INTERFACE_USB:
             return "USB";
 
         default:
@@ -3322,7 +3322,7 @@ const char* CategoryCPU::Guid() const
 
 void CategoryCPU::Parse(Table& table, const std::string& data)
 {
-    proto::CentralProcessor message;
+    proto::CPU message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3361,7 +3361,7 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
             list.emplace_back(name, is_supported);
         };
 
-        const proto::CentralProcessor::Features& features = message.features();
+        const proto::CPU::Features& features = message.features();
 
         add(features.has_fpu(), "Floating-point Unit On-Chip (FPU)");
         add(features.has_vme(), "Virtual Mode Extension (VME)");
@@ -3513,7 +3513,7 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
 
 std::string CategoryCPU::Serialize()
 {
-    proto::CentralProcessor message;
+    proto::CPU message;
 
     CPUInfo cpu;
     GetCPUInformation(cpu);
@@ -3530,7 +3530,7 @@ std::string CategoryCPU::Serialize()
     message.set_physical_cores(cpu.physical_core_count);
     message.set_logical_cores(cpu.logical_core_count);
 
-    proto::CentralProcessor::Features* features = message.mutable_features();
+    proto::CPU::Features* features = message.mutable_features();
 
     // Function 1 EDX
     features->set_has_fpu(cpu.fn_1_edx.has_fpu);

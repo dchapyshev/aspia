@@ -82,7 +82,7 @@ CategoryList CreateCategoryTree()
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiSystemSlots>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPortConnectors>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiOnboardDevices>());
-    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiBuildinPointing>());
+    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 
     std::unique_ptr<CategoryGroup> storage = std::make_unique<CategoryGroupStorage>();
@@ -175,7 +175,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryDmiSystemSlots>());
     emplace_back(std::make_unique<CategoryDmiPortConnectors>());
     emplace_back(std::make_unique<CategoryDmiOnboardDevices>());
-    emplace_back(std::make_unique<CategoryDmiBuildinPointing>());
+    emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 
     emplace_back(std::make_unique<CategoryOpticalDrives>());
