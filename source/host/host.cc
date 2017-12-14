@@ -7,7 +7,7 @@
 
 #include "host/host.h"
 #include "host/host_user_list.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
 
@@ -80,10 +80,10 @@ static proto::Status DoBasicAuthorization(const std::string& username,
 
         SecureString<std::string> password_hash;
 
-        if (!HostUserList::CreatePasswordHash(password, password_hash))
+        if (!HostUserList::CreatePasswordHash(password, password_hash.mutable_string()))
             return proto::STATUS_ACCESS_DENIED;
 
-        if (user.password_hash() != password_hash)
+        if (user.password_hash() != password_hash.string())
             return proto::STATUS_ACCESS_DENIED;
 
         if (!(user.session_types() & session_type))
@@ -121,8 +121,7 @@ void Host::DoAuthorize(IOBuffer& buffer)
             break;
     }
 
-    SecureClearString(*request.mutable_username());
-    SecureClearString(*request.mutable_password());
+    SecureMemZero(*request.mutable_password());
 
     channel_proxy_->Send(
         SerializeMessage<IOBuffer>(result),

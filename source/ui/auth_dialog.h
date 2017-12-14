@@ -8,7 +8,7 @@
 #ifndef _ASPIA_UI__AUTH_DIALOG_H
 #define _ASPIA_UI__AUTH_DIALOG_H
 
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -18,19 +18,18 @@
 
 namespace aspia {
 
-class UiAuthDialog : public CDialogImpl<UiAuthDialog>
+class AuthDialog : public CDialogImpl<AuthDialog>
 {
 public:
     enum { IDD = IDD_AUTH };
 
-    UiAuthDialog() = default;
-    ~UiAuthDialog() = default;
+    AuthDialog() = default;
 
     const std::string& UserName() const;
     const std::string& Password() const;
 
 private:
-    BEGIN_MSG_MAP(UiAuthDialog)
+    BEGIN_MSG_MAP(AuthDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
@@ -44,10 +43,10 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
 private:
-    SecureString<std::string> username_;
+    std::string username_;
     SecureString<std::string> password_;
 
-    DISALLOW_COPY_AND_ASSIGN(UiAuthDialog);
+    DISALLOW_COPY_AND_ASSIGN(AuthDialog);
 };
 
 } // namespace aspia

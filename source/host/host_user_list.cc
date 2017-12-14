@@ -9,7 +9,7 @@
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 #include "crypto/sha512.h"
 
 #include <filesystem>
@@ -30,14 +30,12 @@ static const size_t kPasswordHashIterCount = 100;
 
 HostUserList::~HostUserList()
 {
-    int size = list_.user_list_size();
-
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < list_.user_list_size(); ++i)
     {
         proto::HostUser* user = list_.mutable_user_list(i);
 
-        SecureClearString(*user->mutable_username());
-        SecureClearString(*user->mutable_password_hash());
+        SecureMemZero(*user->mutable_username());
+        SecureMemZero(*user->mutable_password_hash());
 
         user->set_session_types(0);
         user->set_enabled(false);
@@ -51,7 +49,7 @@ static bool IsValidPasswordHash(const std::string& password_hash)
 
 bool HostUserList::IsValidUser(const proto::HostUser& user)
 {
-    SecureString<std::wstring> username;
+    std::wstring username;
 
     if (!UTF8toUNICODE(user.username(), username))
         return false;
@@ -69,14 +67,19 @@ bool HostUserList::IsValidUser(const proto::HostUser& user)
 bool HostUserList::CreatePasswordHash(const std::string& password,
                                       std::string& password_hash)
 {
-    SecureString<std::wstring> password_unicode(UNICODEfromUTF8(password));
+    bool result = false;
 
-    if (!IsValidPassword(password_unicode))
-        return false;
+    std::wstring password_unicode = UNICODEfromUTF8(password);
+    if (IsValidPassword(password_unicode))
+    {
+        result = CreateSHA512(password,
+                              password_hash,
+                              kPasswordHashIterCount);
+    }
 
-    return CreateSHA512(password,
-                        password_hash,
-                        kPasswordHashIterCount);
+    SecureMemZero(password_unicode);
+
+    return result;
 }
 
 bool HostUserList::IsValidUserList()
@@ -140,7 +143,7 @@ bool HostUserList::LoadFromStorage()
         return false;
     }
 
-    SecureString<std::string> string;
+    std::string string;
     string.resize(static_cast<size_t>(size));
 
     file_stream.read(&string[0], size);
@@ -214,7 +217,7 @@ bool HostUserList::SaveToStorage()
         return false;
     }
 
-    SecureString<std::string> string(list_.SerializeAsString());
+    std::string string = list_.SerializeAsString();
 
     file_stream.write(string.c_str(), string.size());
     if (file_stream.fail())
@@ -301,7 +304,7 @@ bool HostUserList::IsValidPassword(const std::wstring& password)
 
 bool HostUserList::IsUniqueUserName(const std::wstring& username) const
 {
-    SecureString<std::string> username_utf8;
+    std::string username_utf8;
     CHECK(UNICODEtoUTF8(username, username_utf8));
 
     const int size = list_.user_list_size();

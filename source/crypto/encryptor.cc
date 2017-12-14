@@ -6,9 +6,17 @@
 //
 
 #include "crypto/encryptor.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 #include "proto/key_exchange.pb.h"
 #include "protocol/message_serialization.h"
+
+extern "C" {
+#define SODIUM_STATIC
+
+#pragma warning(push, 3)
+#include <sodium.h>
+#pragma warning(pop)
+} // extern "C"
 
 namespace aspia {
 
@@ -96,8 +104,8 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
         }
     }
 
-    SecureClearString(*message.mutable_public_key());
-    SecureClearString(*message.mutable_nonce());
+    SecureMemZero(*message.mutable_public_key());
+    SecureMemZero(*message.mutable_nonce());
 
     if (mode_ == Mode::CLIENT)
     {
@@ -128,8 +136,8 @@ IOBuffer Encryptor::HelloMessage()
 
     IOBuffer message_buffer = SerializeMessage<IOBuffer>(message);
 
-    SecureClearString(*message.mutable_public_key());
-    SecureClearString(*message.mutable_nonce());
+    SecureMemZero(*message.mutable_public_key());
+    SecureMemZero(*message.mutable_nonce());
 
     if (mode_ == Mode::SERVER)
     {

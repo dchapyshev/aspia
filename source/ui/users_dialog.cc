@@ -11,7 +11,7 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 
 #include <atlmisc.h>
 #include <uxtheme.h>
@@ -30,7 +30,7 @@ void UsersDialog::UpdateUserList()
     {
         const proto::HostUser& user = user_list_.host_user(i);
 
-        SecureString<std::wstring> username;
+        std::wstring username;
         CHECK(UTF8toUNICODE(user.username(), username));
 
         const int item_index = list.AddItem(list.GetItemCount(),
@@ -197,7 +197,7 @@ void UsersDialog::DeleteSelectedUser()
     if (user_index < 0 || user_index >= user_list_.size())
         return;
 
-    SecureString<std::wstring> username;
+    std::wstring username;
     CHECK(UTF8toUNICODE(user_list_.host_user(user_index).username(), username));
 
     CString title;

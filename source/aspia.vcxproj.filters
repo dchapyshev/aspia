@@ -682,6 +682,9 @@
     <ClCompile Include="ui\system_info\row.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
+    <ClCompile Include="crypto\secure_memory.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1016,23 +1019,14 @@
     <ClInclude Include="network\firewall_manager_legacy.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="crypto\secure_buffer.h">
-      <Filter>crypto</Filter>
-    </ClInclude>
     <ClInclude Include="crypto\encryptor.h">
       <Filter>crypto</Filter>
     </ClInclude>
     <ClInclude Include="proto\key_exchange.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="crypto\secure_string.h">
-      <Filter>crypto</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_user_list.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="crypto\secure_io_buffer.h">
-      <Filter>crypto</Filter>
     </ClInclude>
     <ClInclude Include="client\client_session_file_transfer.h">
       <Filter>client</Filter>
@@ -1408,6 +1402,9 @@
     </ClInclude>
     <ClInclude Include="ui\system_info\row.h">
       <Filter>ui\system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\secure_memory.h">
+      <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

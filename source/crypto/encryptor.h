@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CRYPTO__ENCRYPTOR_H
 #define _ASPIA_CRYPTO__ENCRYPTOR_H
 
-#include "crypto/secure_buffer.h"
+#include "crypto/secure_memory.h"
 #include "protocol/io_buffer.h"
 
 namespace aspia {

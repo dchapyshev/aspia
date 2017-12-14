@@ -10,7 +10,7 @@
 #include "client/client_session_file_transfer.h"
 #include "client/client_session_power_manage.h"
 #include "client/client_session_system_info.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
 
@@ -60,7 +60,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
     if (status == NetworkChannel::Status::CONNECTED)
     {
-        UiAuthDialog auth_dialog;
+        AuthDialog auth_dialog;
 
         if (auth_dialog.DoModal(nullptr) != IDOK)
         {
@@ -78,8 +78,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
                              std::bind(&Client::OnAuthRequestSended, this));
 
-        SecureClearString(*request.mutable_username());
-        SecureClearString(*request.mutable_password());
+        SecureMemZero(*request.mutable_password());
     }
     else
     {

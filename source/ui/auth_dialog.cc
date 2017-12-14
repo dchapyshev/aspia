@@ -7,10 +7,11 @@
 
 #include "ui/auth_dialog.h"
 #include "base/strings/unicode.h"
+#include "crypto/secure_memory.h"
 
 namespace aspia {
 
-LRESULT UiAuthDialog::OnInitDialog(
+LRESULT AuthDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
     CenterWindow();
@@ -28,45 +29,43 @@ LRESULT UiAuthDialog::OnInitDialog(
     return TRUE;
 }
 
-LRESULT UiAuthDialog::OnClose(
+LRESULT AuthDialog::OnClose(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
     EndDialog(IDCANCEL);
     return 0;
 }
 
-LRESULT UiAuthDialog::OnOkButton(
+LRESULT AuthDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    // TODO: Clear memory.
+    SecureArray<WCHAR, 128> buffer;
 
-    WCHAR buffer[128];
+    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), buffer.count());
+    UNICODEtoUTF8(buffer.get(), username_);
 
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer, _countof(buffer));
-    UNICODEtoUTF8(buffer, username_);
-
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer, _countof(buffer));
-    UNICODEtoUTF8(buffer, password_);
+    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), buffer.count());
+    UNICODEtoUTF8(buffer.get(), password_.mutable_string());
 
     EndDialog(IDOK);
     return 0;
 }
 
-LRESULT UiAuthDialog::OnCancelButton(
+LRESULT AuthDialog::OnCancelButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     PostMessageW(WM_CLOSE);
     return 0;
 }
 
-const std::string& UiAuthDialog::UserName() const
+const std::string& AuthDialog::UserName() const
 {
     return username_;
 }
 
-const std::string& UiAuthDialog::Password() const
+const std::string& AuthDialog::Password() const
 {
-    return password_;
+    return password_.string();
 }
 
 } // namespace aspia

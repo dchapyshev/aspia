@@ -10,7 +10,7 @@
 #include "base/version_helpers.h"
 #include "base/logging.h"
 #include "host/host_user_list.h"
-#include "crypto/secure_string.h"
+#include "crypto/secure_memory.h"
 
 #include <atlmisc.h>
 #include <uxtheme.h>
@@ -132,7 +132,7 @@ LRESULT UserPropDialog::OnInitDialog(
         CEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
         CEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
 
-        SecureString<std::wstring> username;
+        std::wstring username;
         CHECK(UTF8toUNICODE(user_->username(), username));
         username_edit.SetWindowTextW(username.c_str());
 
@@ -198,10 +198,10 @@ LRESULT UserPropDialog::OnOkButton(
 {
     // TODO: Clear memory.
 
-    WCHAR buffer[128];
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer, _countof(buffer));
+    SecureArray<WCHAR, 128> buffer;
+    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), buffer.count());
 
-    SecureString<std::wstring> username(buffer);
+    std::wstring username(buffer.get());
 
     if (!HostUserList::IsValidUserName(username))
     {
@@ -209,7 +209,7 @@ LRESULT UserPropDialog::OnOkButton(
         return 0;
     }
 
-    SecureString<std::wstring> prev_username;
+    std::wstring prev_username;
 
     if (!user_->username().empty())
     {
@@ -227,29 +227,30 @@ LRESULT UserPropDialog::OnOkButton(
 
     if (mode_ == Mode::ADD || password_changed_)
     {
-        GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer, _countof(buffer));
+        GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), buffer.count());
 
-        SecureString<std::wstring> password(buffer);
-        if (!HostUserList::IsValidPassword(password))
+        SecureString<std::wstring> password(buffer.get());
+
+        if (!HostUserList::IsValidPassword(password.string()))
         {
             ShowErrorMessage(IDS_INVALID_PASSWORD);
             return 0;
         }
 
-        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT, buffer, _countof(buffer));
+        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT, buffer.get(), buffer.count());
 
-        SecureString<std::wstring> password_retry(buffer);
+        SecureString<std::wstring> password_retry(buffer.get());
 
-        if (password != password_retry)
+        if (password.string() != password_retry.string())
         {
             ShowErrorMessage(IDS_PASSWORDS_NOT_MATCH);
             return 0;
         }
 
         SecureString<std::string> password_in_utf8;
-        CHECK(UNICODEtoUTF8(password, password_in_utf8));
+        CHECK(UNICODEtoUTF8(password.string(), password_in_utf8.mutable_string()));
 
-        bool ret = HostUserList::CreatePasswordHash(password_in_utf8,
+        bool ret = HostUserList::CreatePasswordHash(password_in_utf8.mutable_string(),
                                                     *user_->mutable_password_hash());
         DCHECK(ret);
     }
