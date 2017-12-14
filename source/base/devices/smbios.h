@@ -308,8 +308,8 @@ public:
     public:
         enum : uint8_t { TABLE_TYPE = 0x15 };
 
-        proto::DmiPointingDevice::Type GetDeviceType() const;
-        proto::DmiPointingDevice::Interface GetInterface() const;
+        proto::DmiPointingDevices::Type GetDeviceType() const;
+        proto::DmiPointingDevices::Interface GetInterface() const;
         int GetButtonCount() const;
 
     private:

@@ -150,6 +150,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* ConnectStateToString(proto::Sessions::ConnectState value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryActiveSessions);
 };
 

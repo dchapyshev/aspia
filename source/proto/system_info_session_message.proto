@@ -955,7 +955,7 @@ message DmiOnBoardDevices
     repeated Item item = 1;
 }
 
-message DmiPointingDevice
+message DmiPointingDevices
 {
     enum Type
     {
@@ -1544,22 +1544,39 @@ message NetworkCards
 
 message OpenConnections
 {
+    enum Protocol
+    {
+        PROTOCOL_UNKNOWN = 0;
+        PROTOCOL_TCP     = 1;
+        PROTOCOL_UDP     = 2;
+    }
+
+    enum State
+    {
+        STATE_UNKNOWN     = 0;
+        STATE_CLOSED      = 1;
+        STATE_LISTENING   = 2;
+        STATE_SYN_SENT    = 3;
+        STATE_SYN_RCVD    = 4;
+        STATE_ESTABLISHED = 5;
+        STATE_FIN_WAIT1   = 6;
+        STATE_FIN_WAIT2   = 7;
+        STATE_CLOSE_WAIT  = 8;
+        STATE_CLOSING     = 9;
+        STATE_LAST_ACK    = 10;
+        STATE_TIME_WAIT   = 11;
+        STATE_DELETE_TCB  = 12;
+    }
+
     message Item
     {
-        enum Protocol
-        {
-            PROTOCOL_UNKNOWN = 0;
-            PROTOCOL_TCP     = 1;
-            PROTOCOL_UDP     = 2;
-        }
-
         string process_name   = 1;
         Protocol protocol     = 2;
         string local_address  = 3;
         string remote_address = 4;
         uint32 local_port     = 5;
         uint32 remote_port    = 6;
-        string state          = 7;
+        State state           = 7;
     }
 
     repeated Item item = 1;
@@ -1638,14 +1655,29 @@ message UserGroups
 
 message Sessions
 {
+    enum ConnectState
+    {
+        CONNECT_STATE_UNKNOWN       = 0;
+        CONNECT_STATE_ACTIVE        = 1;
+        CONNECT_STATE_CONNECTED     = 2;
+        CONNECT_STATE_CONNECT_QUERY = 3;
+        CONNECT_STATE_SHADOW        = 4;
+        CONNECT_STATE_DISCONNECTED  = 5;
+        CONNECT_STATE_IDLE          = 6;
+        CONNECT_STATE_LISTEN        = 7;
+        CONNECT_STATE_RESET         = 8;
+        CONNECT_STATE_DOWN          = 9;
+        CONNECT_STATE_INIT          = 10;
+    }
+
     message Item
     {
-        string user_name       = 1;
-        string domain_name     = 2;
-        uint32 session_id      = 3;
-        string connect_state   = 4;
-        string client_name     = 5;
-        string winstation_name = 6;
+        string user_name           = 1;
+        string domain_name         = 2;
+        uint32 session_id          = 3;
+        ConnectState connect_state = 4;
+        string client_name         = 5;
+        string winstation_name     = 6;
     }
 
     repeated Item item = 1;

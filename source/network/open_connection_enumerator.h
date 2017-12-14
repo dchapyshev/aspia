@@ -9,6 +9,7 @@
 #define _ASPIA_NETWORK__OPEN_CONNECTION_ENUMERATOR_H
 
 #include "base/scoped_object.h"
+#include "proto/system_info_session_message.pb.h"
 
 #include <iphlpapi.h>
 #include <memory>
@@ -31,7 +32,7 @@ public:
     std::string GetRemoteAddress() const;
     uint16_t GetLocalPort() const;
     uint16_t GetRemotePort() const;
-    std::string GetState() const;
+    proto::OpenConnections::State GetState() const;
 
 private:
     void InitializeTcpTable();

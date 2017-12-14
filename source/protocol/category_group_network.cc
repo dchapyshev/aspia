@@ -247,11 +247,11 @@ void CategoryOpenConnections::Parse(Table& table, const std::string& data)
 
         row.AddValue(Value::String(item.process_name()));
 
-        if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_TCP)
+        if (item.protocol() == proto::OpenConnections::PROTOCOL_TCP)
         {
             row.AddValue(Value::String("TCP"));
         }
-        else if (item.protocol() == proto::OpenConnections::Item::PROTOCOL_UDP)
+        else if (item.protocol() == proto::OpenConnections::PROTOCOL_UDP)
         {
             row.AddValue(Value::String("UDP"));
         }
@@ -264,7 +264,7 @@ void CategoryOpenConnections::Parse(Table& table, const std::string& data)
         row.AddValue(Value::Number(item.local_port()));
         row.AddValue(Value::String(item.remote_address()));
         row.AddValue(Value::Number(item.remote_port()));
-        row.AddValue(Value::String(item.state()));
+        row.AddValue(Value::String(StateToString(item.state())));
     }
 }
 
@@ -279,7 +279,7 @@ std::string CategoryOpenConnections::Serialize()
         proto::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
-        item->set_protocol(proto::OpenConnections::Item::PROTOCOL_TCP);
+        item->set_protocol(proto::OpenConnections::PROTOCOL_TCP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());
@@ -294,7 +294,7 @@ std::string CategoryOpenConnections::Serialize()
         proto::OpenConnections::Item* item = message.add_item();
 
         item->set_process_name(enumerator.GetProcessName());
-        item->set_protocol(proto::OpenConnections::Item::PROTOCOL_UDP);
+        item->set_protocol(proto::OpenConnections::PROTOCOL_UDP);
         item->set_local_address(enumerator.GetLocalAddress());
         item->set_remote_address(enumerator.GetRemoteAddress());
         item->set_local_port(enumerator.GetLocalPort());
@@ -303,6 +303,52 @@ std::string CategoryOpenConnections::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryOpenConnections::StateToString(proto::OpenConnections::State value)
+{
+    switch (value)
+    {
+        case proto::OpenConnections::STATE_CLOSED:
+            return "CLOSED";
+
+        case proto::OpenConnections::STATE_LISTENING:
+            return "LISTENING";
+
+        case proto::OpenConnections::STATE_SYN_SENT:
+            return "SYN_SENT";
+
+        case proto::OpenConnections::STATE_SYN_RCVD:
+            return "SYN_RCVD";
+
+        case proto::OpenConnections::STATE_ESTABLISHED:
+            return "ESTABLISHED";
+
+        case proto::OpenConnections::STATE_FIN_WAIT1:
+            return "FIN_WAIT1";
+
+        case proto::OpenConnections::STATE_FIN_WAIT2:
+            return "FIN_WAIT2";
+
+        case proto::OpenConnections::STATE_CLOSE_WAIT:
+            return "CLOSE_WAIT";
+
+        case proto::OpenConnections::STATE_CLOSING:
+            return "CLOSING";
+
+        case proto::OpenConnections::STATE_LAST_ACK:
+            return "LAST_ACK";
+
+        case proto::OpenConnections::STATE_TIME_WAIT:
+            return "TIME_WAIT";
+
+        case proto::OpenConnections::STATE_DELETE_TCB:
+            return "DELETE_TCB";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

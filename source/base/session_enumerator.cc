@@ -89,7 +89,7 @@ uint32_t SessionEnumerator::GetSessionId() const
     return session_info_[current_]->SessionId;
 }
 
-std::string SessionEnumerator::GetConnectState() const
+proto::Sessions::ConnectState SessionEnumerator::GetConnectState() const
 {
     ScopedWtsMemory<int*> buffer;
     DWORD bytes_returned = 0;
@@ -101,43 +101,22 @@ std::string SessionEnumerator::GetConnectState() const
                                      &bytes_returned))
     {
         DLOG(WARNING) << "WTSQuerySessionInformationW() failed: " << GetLastSystemErrorString();
-        return std::string();
+        return proto::Sessions::CONNECT_STATE_UNKNOWN;
     }
 
     switch (*buffer)
     {
-        case WTSActive:
-            return "Active";
-
-        case WTSConnected:
-            return "Connected";
-
-        case WTSConnectQuery:
-            return "Connect Query";
-
-        case WTSShadow:
-            return "Shadow";
-
-        case WTSDisconnected:
-            return "Disconnected";
-
-        case WTSIdle:
-            return "Idle";
-
-        case WTSListen:
-            return "Listen";
-
-        case WTSReset:
-            return "Reset";
-
-        case WTSDown:
-            return "Down";
-
-        case WTSInit:
-            return "Init";
-
-        default:
-            return std::string();
+        case WTSActive: return proto::Sessions::CONNECT_STATE_ACTIVE;
+        case WTSConnected: return proto::Sessions::CONNECT_STATE_CONNECTED;
+        case WTSConnectQuery: return proto::Sessions::CONNECT_STATE_CONNECT_QUERY;
+        case WTSShadow: return proto::Sessions::CONNECT_STATE_SHADOW;
+        case WTSDisconnected: return proto::Sessions::CONNECT_STATE_DISCONNECTED;
+        case WTSIdle: return proto::Sessions::CONNECT_STATE_IDLE;
+        case WTSListen: return proto::Sessions::CONNECT_STATE_LISTEN;
+        case WTSReset: return proto::Sessions::CONNECT_STATE_RESET;
+        case WTSDown: return proto::Sessions::CONNECT_STATE_DOWN;
+        case WTSInit: return proto::Sessions::CONNECT_STATE_INIT;
+        default: return proto::Sessions::CONNECT_STATE_UNKNOWN;
     }
 }
 

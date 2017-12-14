@@ -79,10 +79,10 @@ void InitDefaultsDmiOnBoardDevices_ItemImpl();
 void InitDefaultsDmiOnBoardDevices_Item();
 void InitDefaultsDmiOnBoardDevicesImpl();
 void InitDefaultsDmiOnBoardDevices();
-void InitDefaultsDmiPointingDevice_ItemImpl();
-void InitDefaultsDmiPointingDevice_Item();
-void InitDefaultsDmiPointingDeviceImpl();
-void InitDefaultsDmiPointingDevice();
+void InitDefaultsDmiPointingDevices_ItemImpl();
+void InitDefaultsDmiPointingDevices_Item();
+void InitDefaultsDmiPointingDevicesImpl();
+void InitDefaultsDmiPointingDevices();
 void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
@@ -179,8 +179,8 @@ inline void InitDefaults() {
   InitDefaultsDmiPortConnectors();
   InitDefaultsDmiOnBoardDevices_Item();
   InitDefaultsDmiOnBoardDevices();
-  InitDefaultsDmiPointingDevice_Item();
-  InitDefaultsDmiPointingDevice();
+  InitDefaultsDmiPointingDevices_Item();
+  InitDefaultsDmiPointingDevices();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
   InitDefaultsCPU_Features();
@@ -271,12 +271,12 @@ extern DmiOnBoardDevicesDefaultTypeInternal _DmiOnBoardDevices_default_instance_
 class DmiOnBoardDevices_Item;
 class DmiOnBoardDevices_ItemDefaultTypeInternal;
 extern DmiOnBoardDevices_ItemDefaultTypeInternal _DmiOnBoardDevices_Item_default_instance_;
-class DmiPointingDevice;
-class DmiPointingDeviceDefaultTypeInternal;
-extern DmiPointingDeviceDefaultTypeInternal _DmiPointingDevice_default_instance_;
-class DmiPointingDevice_Item;
-class DmiPointingDevice_ItemDefaultTypeInternal;
-extern DmiPointingDevice_ItemDefaultTypeInternal _DmiPointingDevice_Item_default_instance_;
+class DmiPointingDevices;
+class DmiPointingDevicesDefaultTypeInternal;
+extern DmiPointingDevicesDefaultTypeInternal _DmiPointingDevices_default_instance_;
+class DmiPointingDevices_Item;
+class DmiPointingDevices_ItemDefaultTypeInternal;
+extern DmiPointingDevices_ItemDefaultTypeInternal _DmiPointingDevices_Item_default_instance_;
 class DmiPortConnectors;
 class DmiPortConnectorsDefaultTypeInternal;
 extern DmiPortConnectorsDefaultTypeInternal _DmiPortConnectors_default_instance_;
@@ -1312,43 +1312,43 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MIN = DmiOnBoardDevices
 const DmiOnBoardDevices_Type DmiOnBoardDevices_Type_Type_MAX = DmiOnBoardDevices_Type_TYPE_SAS_CONTROLLER;
 const int DmiOnBoardDevices_Type_Type_ARRAYSIZE = DmiOnBoardDevices_Type_Type_MAX + 1;
 
-enum DmiPointingDevice_Type {
-  DmiPointingDevice_Type_TYPE_UNKNOWN = 0,
-  DmiPointingDevice_Type_TYPE_OTHER = 1,
-  DmiPointingDevice_Type_TYPE_MOUSE = 2,
-  DmiPointingDevice_Type_TYPE_TRACK_BALL = 3,
-  DmiPointingDevice_Type_TYPE_TRACK_POINT = 4,
-  DmiPointingDevice_Type_TYPE_GLIDE_POINT = 5,
-  DmiPointingDevice_Type_TYPE_TOUCH_PAD = 6,
-  DmiPointingDevice_Type_TYPE_TOUCH_SCREEN = 7,
-  DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR = 8,
-  DmiPointingDevice_Type_DmiPointingDevice_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPointingDevice_Type_DmiPointingDevice_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum DmiPointingDevices_Type {
+  DmiPointingDevices_Type_TYPE_UNKNOWN = 0,
+  DmiPointingDevices_Type_TYPE_OTHER = 1,
+  DmiPointingDevices_Type_TYPE_MOUSE = 2,
+  DmiPointingDevices_Type_TYPE_TRACK_BALL = 3,
+  DmiPointingDevices_Type_TYPE_TRACK_POINT = 4,
+  DmiPointingDevices_Type_TYPE_GLIDE_POINT = 5,
+  DmiPointingDevices_Type_TYPE_TOUCH_PAD = 6,
+  DmiPointingDevices_Type_TYPE_TOUCH_SCREEN = 7,
+  DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR = 8,
+  DmiPointingDevices_Type_DmiPointingDevices_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiPointingDevices_Type_DmiPointingDevices_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool DmiPointingDevice_Type_IsValid(int value);
-const DmiPointingDevice_Type DmiPointingDevice_Type_Type_MIN = DmiPointingDevice_Type_TYPE_UNKNOWN;
-const DmiPointingDevice_Type DmiPointingDevice_Type_Type_MAX = DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR;
-const int DmiPointingDevice_Type_Type_ARRAYSIZE = DmiPointingDevice_Type_Type_MAX + 1;
+bool DmiPointingDevices_Type_IsValid(int value);
+const DmiPointingDevices_Type DmiPointingDevices_Type_Type_MIN = DmiPointingDevices_Type_TYPE_UNKNOWN;
+const DmiPointingDevices_Type DmiPointingDevices_Type_Type_MAX = DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR;
+const int DmiPointingDevices_Type_Type_ARRAYSIZE = DmiPointingDevices_Type_Type_MAX + 1;
 
-enum DmiPointingDevice_Interface {
-  DmiPointingDevice_Interface_INTERFACE_UNKNOWN = 0,
-  DmiPointingDevice_Interface_INTERFACE_OTHER = 1,
-  DmiPointingDevice_Interface_INTERFACE_SERIAL = 2,
-  DmiPointingDevice_Interface_INTERFACE_PS_2 = 3,
-  DmiPointingDevice_Interface_INTERFACE_INFRARED = 4,
-  DmiPointingDevice_Interface_INTERFACE_HP_HIL = 5,
-  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE = 6,
-  DmiPointingDevice_Interface_INTERFACE_ADB = 7,
-  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
-  DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
-  DmiPointingDevice_Interface_INTERFACE_USB = 10,
-  DmiPointingDevice_Interface_DmiPointingDevice_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPointingDevice_Interface_DmiPointingDevice_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum DmiPointingDevices_Interface {
+  DmiPointingDevices_Interface_INTERFACE_UNKNOWN = 0,
+  DmiPointingDevices_Interface_INTERFACE_OTHER = 1,
+  DmiPointingDevices_Interface_INTERFACE_SERIAL = 2,
+  DmiPointingDevices_Interface_INTERFACE_PS_2 = 3,
+  DmiPointingDevices_Interface_INTERFACE_INFRARED = 4,
+  DmiPointingDevices_Interface_INTERFACE_HP_HIL = 5,
+  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE = 6,
+  DmiPointingDevices_Interface_INTERFACE_ADB = 7,
+  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
+  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
+  DmiPointingDevices_Interface_INTERFACE_USB = 10,
+  DmiPointingDevices_Interface_DmiPointingDevices_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  DmiPointingDevices_Interface_DmiPointingDevices_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool DmiPointingDevice_Interface_IsValid(int value);
-const DmiPointingDevice_Interface DmiPointingDevice_Interface_Interface_MIN = DmiPointingDevice_Interface_INTERFACE_UNKNOWN;
-const DmiPointingDevice_Interface DmiPointingDevice_Interface_Interface_MAX = DmiPointingDevice_Interface_INTERFACE_USB;
-const int DmiPointingDevice_Interface_Interface_ARRAYSIZE = DmiPointingDevice_Interface_Interface_MAX + 1;
+bool DmiPointingDevices_Interface_IsValid(int value);
+const DmiPointingDevices_Interface DmiPointingDevices_Interface_Interface_MIN = DmiPointingDevices_Interface_INTERFACE_UNKNOWN;
+const DmiPointingDevices_Interface DmiPointingDevices_Interface_Interface_MAX = DmiPointingDevices_Interface_INTERFACE_USB;
+const int DmiPointingDevices_Interface_Interface_ARRAYSIZE = DmiPointingDevices_Interface_Interface_MAX + 1;
 
 enum DmiPortableBattery_Chemistry {
   DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN = 0,
@@ -1540,17 +1540,39 @@ const Services_Item_StartupType Services_Item_StartupType_StartupType_MIN = Serv
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MAX = Services_Item_StartupType_STARTUP_TYPE_SYSTEM_START;
 const int Services_Item_StartupType_StartupType_ARRAYSIZE = Services_Item_StartupType_StartupType_MAX + 1;
 
-enum OpenConnections_Item_Protocol {
-  OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN = 0,
-  OpenConnections_Item_Protocol_PROTOCOL_TCP = 1,
-  OpenConnections_Item_Protocol_PROTOCOL_UDP = 2,
-  OpenConnections_Item_Protocol_OpenConnections_Item_Protocol_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  OpenConnections_Item_Protocol_OpenConnections_Item_Protocol_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum OpenConnections_Protocol {
+  OpenConnections_Protocol_PROTOCOL_UNKNOWN = 0,
+  OpenConnections_Protocol_PROTOCOL_TCP = 1,
+  OpenConnections_Protocol_PROTOCOL_UDP = 2,
+  OpenConnections_Protocol_OpenConnections_Protocol_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  OpenConnections_Protocol_OpenConnections_Protocol_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool OpenConnections_Item_Protocol_IsValid(int value);
-const OpenConnections_Item_Protocol OpenConnections_Item_Protocol_Protocol_MIN = OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN;
-const OpenConnections_Item_Protocol OpenConnections_Item_Protocol_Protocol_MAX = OpenConnections_Item_Protocol_PROTOCOL_UDP;
-const int OpenConnections_Item_Protocol_Protocol_ARRAYSIZE = OpenConnections_Item_Protocol_Protocol_MAX + 1;
+bool OpenConnections_Protocol_IsValid(int value);
+const OpenConnections_Protocol OpenConnections_Protocol_Protocol_MIN = OpenConnections_Protocol_PROTOCOL_UNKNOWN;
+const OpenConnections_Protocol OpenConnections_Protocol_Protocol_MAX = OpenConnections_Protocol_PROTOCOL_UDP;
+const int OpenConnections_Protocol_Protocol_ARRAYSIZE = OpenConnections_Protocol_Protocol_MAX + 1;
+
+enum OpenConnections_State {
+  OpenConnections_State_STATE_UNKNOWN = 0,
+  OpenConnections_State_STATE_CLOSED = 1,
+  OpenConnections_State_STATE_LISTENING = 2,
+  OpenConnections_State_STATE_SYN_SENT = 3,
+  OpenConnections_State_STATE_SYN_RCVD = 4,
+  OpenConnections_State_STATE_ESTABLISHED = 5,
+  OpenConnections_State_STATE_FIN_WAIT1 = 6,
+  OpenConnections_State_STATE_FIN_WAIT2 = 7,
+  OpenConnections_State_STATE_CLOSE_WAIT = 8,
+  OpenConnections_State_STATE_CLOSING = 9,
+  OpenConnections_State_STATE_LAST_ACK = 10,
+  OpenConnections_State_STATE_TIME_WAIT = 11,
+  OpenConnections_State_STATE_DELETE_TCB = 12,
+  OpenConnections_State_OpenConnections_State_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  OpenConnections_State_OpenConnections_State_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool OpenConnections_State_IsValid(int value);
+const OpenConnections_State OpenConnections_State_State_MIN = OpenConnections_State_STATE_UNKNOWN;
+const OpenConnections_State OpenConnections_State_State_MAX = OpenConnections_State_STATE_DELETE_TCB;
+const int OpenConnections_State_State_ARRAYSIZE = OpenConnections_State_State_MAX + 1;
 
 enum SharedResources_Item_Type {
   SharedResources_Item_Type_TYPE_UNKNOWN = 0,
@@ -1567,6 +1589,26 @@ bool SharedResources_Item_Type_IsValid(int value);
 const SharedResources_Item_Type SharedResources_Item_Type_Type_MIN = SharedResources_Item_Type_TYPE_UNKNOWN;
 const SharedResources_Item_Type SharedResources_Item_Type_Type_MAX = SharedResources_Item_Type_TYPE_TEMPORARY;
 const int SharedResources_Item_Type_Type_ARRAYSIZE = SharedResources_Item_Type_Type_MAX + 1;
+
+enum Sessions_ConnectState {
+  Sessions_ConnectState_CONNECT_STATE_UNKNOWN = 0,
+  Sessions_ConnectState_CONNECT_STATE_ACTIVE = 1,
+  Sessions_ConnectState_CONNECT_STATE_CONNECTED = 2,
+  Sessions_ConnectState_CONNECT_STATE_CONNECT_QUERY = 3,
+  Sessions_ConnectState_CONNECT_STATE_SHADOW = 4,
+  Sessions_ConnectState_CONNECT_STATE_DISCONNECTED = 5,
+  Sessions_ConnectState_CONNECT_STATE_IDLE = 6,
+  Sessions_ConnectState_CONNECT_STATE_LISTEN = 7,
+  Sessions_ConnectState_CONNECT_STATE_RESET = 8,
+  Sessions_ConnectState_CONNECT_STATE_DOWN = 9,
+  Sessions_ConnectState_CONNECT_STATE_INIT = 10,
+  Sessions_ConnectState_Sessions_ConnectState_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Sessions_ConnectState_Sessions_ConnectState_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Sessions_ConnectState_IsValid(int value);
+const Sessions_ConnectState Sessions_ConnectState_ConnectState_MIN = Sessions_ConnectState_CONNECT_STATE_UNKNOWN;
+const Sessions_ConnectState Sessions_ConnectState_ConnectState_MAX = Sessions_ConnectState_CONNECT_STATE_INIT;
+const int Sessions_ConnectState_ConnectState_ARRAYSIZE = Sessions_ConnectState_ConnectState_MAX + 1;
 
 // ===================================================================
 
@@ -6013,24 +6055,24 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
 };
 // -------------------------------------------------------------------
 
-class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevice.Item) */ {
+class DmiPointingDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevices.Item) */ {
  public:
-  DmiPointingDevice_Item();
-  virtual ~DmiPointingDevice_Item();
+  DmiPointingDevices_Item();
+  virtual ~DmiPointingDevices_Item();
 
-  DmiPointingDevice_Item(const DmiPointingDevice_Item& from);
+  DmiPointingDevices_Item(const DmiPointingDevices_Item& from);
 
-  inline DmiPointingDevice_Item& operator=(const DmiPointingDevice_Item& from) {
+  inline DmiPointingDevices_Item& operator=(const DmiPointingDevices_Item& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiPointingDevice_Item(DmiPointingDevice_Item&& from) noexcept
-    : DmiPointingDevice_Item() {
+  DmiPointingDevices_Item(DmiPointingDevices_Item&& from) noexcept
+    : DmiPointingDevices_Item() {
     *this = ::std::move(from);
   }
 
-  inline DmiPointingDevice_Item& operator=(DmiPointingDevice_Item&& from) noexcept {
+  inline DmiPointingDevices_Item& operator=(DmiPointingDevices_Item&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6039,30 +6081,30 @@ class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@proto
     return *this;
   }
   #endif
-  static const DmiPointingDevice_Item& default_instance();
+  static const DmiPointingDevices_Item& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPointingDevice_Item* internal_default_instance() {
-    return reinterpret_cast<const DmiPointingDevice_Item*>(
-               &_DmiPointingDevice_Item_default_instance_);
+  static inline const DmiPointingDevices_Item* internal_default_instance() {
+    return reinterpret_cast<const DmiPointingDevices_Item*>(
+               &_DmiPointingDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     19;
 
-  void Swap(DmiPointingDevice_Item* other);
-  friend void swap(DmiPointingDevice_Item& a, DmiPointingDevice_Item& b) {
+  void Swap(DmiPointingDevices_Item* other);
+  friend void swap(DmiPointingDevices_Item& a, DmiPointingDevices_Item& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiPointingDevice_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiPointingDevices_Item* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiPointingDevice_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiPointingDevices_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiPointingDevice_Item& from);
-  void MergeFrom(const DmiPointingDevice_Item& from);
+  void CopyFrom(const DmiPointingDevices_Item& from);
+  void MergeFrom(const DmiPointingDevices_Item& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6077,7 +6119,7 @@ class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@proto
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiPointingDevice_Item* other);
+  void InternalSwap(DmiPointingDevices_Item* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6093,17 +6135,17 @@ class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@proto
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevices.Type device_type = 1;
   void clear_device_type();
   static const int kDeviceTypeFieldNumber = 1;
-  ::aspia::proto::DmiPointingDevice_Type device_type() const;
-  void set_device_type(::aspia::proto::DmiPointingDevice_Type value);
+  ::aspia::proto::DmiPointingDevices_Type device_type() const;
+  void set_device_type(::aspia::proto::DmiPointingDevices_Type value);
 
-  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
   void clear_device_interface();
   static const int kDeviceInterfaceFieldNumber = 2;
-  ::aspia::proto::DmiPointingDevice_Interface device_interface() const;
-  void set_device_interface(::aspia::proto::DmiPointingDevice_Interface value);
+  ::aspia::proto::DmiPointingDevices_Interface device_interface() const;
+  void set_device_interface(::aspia::proto::DmiPointingDevices_Interface value);
 
   // int32 button_count = 3;
   void clear_button_count();
@@ -6111,7 +6153,7 @@ class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@proto
   ::google::protobuf::int32 button_count() const;
   void set_button_count(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevices.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -6120,28 +6162,28 @@ class DmiPointingDevice_Item : public ::google::protobuf::MessageLite /* @@proto
   ::google::protobuf::int32 button_count_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_ItemImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices_ItemImpl();
 };
 // -------------------------------------------------------------------
 
-class DmiPointingDevice : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevice) */ {
+class DmiPointingDevices : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevices) */ {
  public:
-  DmiPointingDevice();
-  virtual ~DmiPointingDevice();
+  DmiPointingDevices();
+  virtual ~DmiPointingDevices();
 
-  DmiPointingDevice(const DmiPointingDevice& from);
+  DmiPointingDevices(const DmiPointingDevices& from);
 
-  inline DmiPointingDevice& operator=(const DmiPointingDevice& from) {
+  inline DmiPointingDevices& operator=(const DmiPointingDevices& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  DmiPointingDevice(DmiPointingDevice&& from) noexcept
-    : DmiPointingDevice() {
+  DmiPointingDevices(DmiPointingDevices&& from) noexcept
+    : DmiPointingDevices() {
     *this = ::std::move(from);
   }
 
-  inline DmiPointingDevice& operator=(DmiPointingDevice&& from) noexcept {
+  inline DmiPointingDevices& operator=(DmiPointingDevices&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6150,30 +6192,30 @@ class DmiPointingDevice : public ::google::protobuf::MessageLite /* @@protoc_ins
     return *this;
   }
   #endif
-  static const DmiPointingDevice& default_instance();
+  static const DmiPointingDevices& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPointingDevice* internal_default_instance() {
-    return reinterpret_cast<const DmiPointingDevice*>(
-               &_DmiPointingDevice_default_instance_);
+  static inline const DmiPointingDevices* internal_default_instance() {
+    return reinterpret_cast<const DmiPointingDevices*>(
+               &_DmiPointingDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     20;
 
-  void Swap(DmiPointingDevice* other);
-  friend void swap(DmiPointingDevice& a, DmiPointingDevice& b) {
+  void Swap(DmiPointingDevices* other);
+  friend void swap(DmiPointingDevices& a, DmiPointingDevices& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline DmiPointingDevice* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline DmiPointingDevices* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  DmiPointingDevice* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  DmiPointingDevices* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const DmiPointingDevice& from);
-  void MergeFrom(const DmiPointingDevice& from);
+  void CopyFrom(const DmiPointingDevices& from);
+  void MergeFrom(const DmiPointingDevices& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6188,7 +6230,7 @@ class DmiPointingDevice : public ::google::protobuf::MessageLite /* @@protoc_ins
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(DmiPointingDevice* other);
+  void InternalSwap(DmiPointingDevices* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6202,92 +6244,92 @@ class DmiPointingDevice : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // nested types ----------------------------------------------------
 
-  typedef DmiPointingDevice_Item Item;
+  typedef DmiPointingDevices_Item Item;
 
-  typedef DmiPointingDevice_Type Type;
+  typedef DmiPointingDevices_Type Type;
   static const Type TYPE_UNKNOWN =
-    DmiPointingDevice_Type_TYPE_UNKNOWN;
+    DmiPointingDevices_Type_TYPE_UNKNOWN;
   static const Type TYPE_OTHER =
-    DmiPointingDevice_Type_TYPE_OTHER;
+    DmiPointingDevices_Type_TYPE_OTHER;
   static const Type TYPE_MOUSE =
-    DmiPointingDevice_Type_TYPE_MOUSE;
+    DmiPointingDevices_Type_TYPE_MOUSE;
   static const Type TYPE_TRACK_BALL =
-    DmiPointingDevice_Type_TYPE_TRACK_BALL;
+    DmiPointingDevices_Type_TYPE_TRACK_BALL;
   static const Type TYPE_TRACK_POINT =
-    DmiPointingDevice_Type_TYPE_TRACK_POINT;
+    DmiPointingDevices_Type_TYPE_TRACK_POINT;
   static const Type TYPE_GLIDE_POINT =
-    DmiPointingDevice_Type_TYPE_GLIDE_POINT;
+    DmiPointingDevices_Type_TYPE_GLIDE_POINT;
   static const Type TYPE_TOUCH_PAD =
-    DmiPointingDevice_Type_TYPE_TOUCH_PAD;
+    DmiPointingDevices_Type_TYPE_TOUCH_PAD;
   static const Type TYPE_TOUCH_SCREEN =
-    DmiPointingDevice_Type_TYPE_TOUCH_SCREEN;
+    DmiPointingDevices_Type_TYPE_TOUCH_SCREEN;
   static const Type TYPE_OPTICAL_SENSOR =
-    DmiPointingDevice_Type_TYPE_OPTICAL_SENSOR;
+    DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR;
   static inline bool Type_IsValid(int value) {
-    return DmiPointingDevice_Type_IsValid(value);
+    return DmiPointingDevices_Type_IsValid(value);
   }
   static const Type Type_MIN =
-    DmiPointingDevice_Type_Type_MIN;
+    DmiPointingDevices_Type_Type_MIN;
   static const Type Type_MAX =
-    DmiPointingDevice_Type_Type_MAX;
+    DmiPointingDevices_Type_Type_MAX;
   static const int Type_ARRAYSIZE =
-    DmiPointingDevice_Type_Type_ARRAYSIZE;
+    DmiPointingDevices_Type_Type_ARRAYSIZE;
 
-  typedef DmiPointingDevice_Interface Interface;
+  typedef DmiPointingDevices_Interface Interface;
   static const Interface INTERFACE_UNKNOWN =
-    DmiPointingDevice_Interface_INTERFACE_UNKNOWN;
+    DmiPointingDevices_Interface_INTERFACE_UNKNOWN;
   static const Interface INTERFACE_OTHER =
-    DmiPointingDevice_Interface_INTERFACE_OTHER;
+    DmiPointingDevices_Interface_INTERFACE_OTHER;
   static const Interface INTERFACE_SERIAL =
-    DmiPointingDevice_Interface_INTERFACE_SERIAL;
+    DmiPointingDevices_Interface_INTERFACE_SERIAL;
   static const Interface INTERFACE_PS_2 =
-    DmiPointingDevice_Interface_INTERFACE_PS_2;
+    DmiPointingDevices_Interface_INTERFACE_PS_2;
   static const Interface INTERFACE_INFRARED =
-    DmiPointingDevice_Interface_INTERFACE_INFRARED;
+    DmiPointingDevices_Interface_INTERFACE_INFRARED;
   static const Interface INTERFACE_HP_HIL =
-    DmiPointingDevice_Interface_INTERFACE_HP_HIL;
+    DmiPointingDevices_Interface_INTERFACE_HP_HIL;
   static const Interface INTERFACE_BUS_MOUSE =
-    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE;
+    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE;
   static const Interface INTERFACE_ADB =
-    DmiPointingDevice_Interface_INTERFACE_ADB;
+    DmiPointingDevices_Interface_INTERFACE_ADB;
   static const Interface INTERFACE_BUS_MOUSE_DB_9 =
-    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_DB_9;
+    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_DB_9;
   static const Interface INTERFACE_BUS_MOUSE_MICRO_DIN =
-    DmiPointingDevice_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
+    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
   static const Interface INTERFACE_USB =
-    DmiPointingDevice_Interface_INTERFACE_USB;
+    DmiPointingDevices_Interface_INTERFACE_USB;
   static inline bool Interface_IsValid(int value) {
-    return DmiPointingDevice_Interface_IsValid(value);
+    return DmiPointingDevices_Interface_IsValid(value);
   }
   static const Interface Interface_MIN =
-    DmiPointingDevice_Interface_Interface_MIN;
+    DmiPointingDevices_Interface_Interface_MIN;
   static const Interface Interface_MAX =
-    DmiPointingDevice_Interface_Interface_MAX;
+    DmiPointingDevices_Interface_Interface_MAX;
   static const int Interface_ARRAYSIZE =
-    DmiPointingDevice_Interface_Interface_ARRAYSIZE;
+    DmiPointingDevices_Interface_Interface_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevices.Item item = 1;
   int item_size() const;
   void clear_item();
   static const int kItemFieldNumber = 1;
-  const ::aspia::proto::DmiPointingDevice_Item& item(int index) const;
-  ::aspia::proto::DmiPointingDevice_Item* mutable_item(int index);
-  ::aspia::proto::DmiPointingDevice_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >*
+  const ::aspia::proto::DmiPointingDevices_Item& item(int index) const;
+  ::aspia::proto::DmiPointingDevices_Item* mutable_item(int index);
+  ::aspia::proto::DmiPointingDevices_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >*
       mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >&
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >&
       item() const;
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevices)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item > item_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item > item_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDeviceImpl();
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevicesImpl();
 };
 // -------------------------------------------------------------------
 
@@ -11864,23 +11906,6 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
 
   // nested types ----------------------------------------------------
 
-  typedef OpenConnections_Item_Protocol Protocol;
-  static const Protocol PROTOCOL_UNKNOWN =
-    OpenConnections_Item_Protocol_PROTOCOL_UNKNOWN;
-  static const Protocol PROTOCOL_TCP =
-    OpenConnections_Item_Protocol_PROTOCOL_TCP;
-  static const Protocol PROTOCOL_UDP =
-    OpenConnections_Item_Protocol_PROTOCOL_UDP;
-  static inline bool Protocol_IsValid(int value) {
-    return OpenConnections_Item_Protocol_IsValid(value);
-  }
-  static const Protocol Protocol_MIN =
-    OpenConnections_Item_Protocol_Protocol_MIN;
-  static const Protocol Protocol_MAX =
-    OpenConnections_Item_Protocol_Protocol_MAX;
-  static const int Protocol_ARRAYSIZE =
-    OpenConnections_Item_Protocol_Protocol_ARRAYSIZE;
-
   // accessors -------------------------------------------------------
 
   // string process_name = 1;
@@ -11925,25 +11950,11 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_remote_address();
   void set_allocated_remote_address(::std::string* remote_address);
 
-  // string state = 7;
-  void clear_state();
-  static const int kStateFieldNumber = 7;
-  const ::std::string& state() const;
-  void set_state(const ::std::string& value);
-  #if LANG_CXX11
-  void set_state(::std::string&& value);
-  #endif
-  void set_state(const char* value);
-  void set_state(const char* value, size_t size);
-  ::std::string* mutable_state();
-  ::std::string* release_state();
-  void set_allocated_state(::std::string* state);
-
-  // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
+  // .aspia.proto.OpenConnections.Protocol protocol = 2;
   void clear_protocol();
   static const int kProtocolFieldNumber = 2;
-  ::aspia::proto::OpenConnections_Item_Protocol protocol() const;
-  void set_protocol(::aspia::proto::OpenConnections_Item_Protocol value);
+  ::aspia::proto::OpenConnections_Protocol protocol() const;
+  void set_protocol(::aspia::proto::OpenConnections_Protocol value);
 
   // uint32 local_port = 5;
   void clear_local_port();
@@ -11957,6 +11968,12 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::google::protobuf::uint32 remote_port() const;
   void set_remote_port(::google::protobuf::uint32 value);
 
+  // .aspia.proto.OpenConnections.State state = 7;
+  void clear_state();
+  static const int kStateFieldNumber = 7;
+  ::aspia::proto::OpenConnections_State state() const;
+  void set_state(::aspia::proto::OpenConnections_State value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.OpenConnections.Item)
  private:
 
@@ -11964,10 +11981,10 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
   ::google::protobuf::internal::ArenaStringPtr process_name_;
   ::google::protobuf::internal::ArenaStringPtr local_address_;
   ::google::protobuf::internal::ArenaStringPtr remote_address_;
-  ::google::protobuf::internal::ArenaStringPtr state_;
   int protocol_;
   ::google::protobuf::uint32 local_port_;
   ::google::protobuf::uint32 remote_port_;
+  int state_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnections_ItemImpl();
@@ -12053,6 +12070,60 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
   // nested types ----------------------------------------------------
 
   typedef OpenConnections_Item Item;
+
+  typedef OpenConnections_Protocol Protocol;
+  static const Protocol PROTOCOL_UNKNOWN =
+    OpenConnections_Protocol_PROTOCOL_UNKNOWN;
+  static const Protocol PROTOCOL_TCP =
+    OpenConnections_Protocol_PROTOCOL_TCP;
+  static const Protocol PROTOCOL_UDP =
+    OpenConnections_Protocol_PROTOCOL_UDP;
+  static inline bool Protocol_IsValid(int value) {
+    return OpenConnections_Protocol_IsValid(value);
+  }
+  static const Protocol Protocol_MIN =
+    OpenConnections_Protocol_Protocol_MIN;
+  static const Protocol Protocol_MAX =
+    OpenConnections_Protocol_Protocol_MAX;
+  static const int Protocol_ARRAYSIZE =
+    OpenConnections_Protocol_Protocol_ARRAYSIZE;
+
+  typedef OpenConnections_State State;
+  static const State STATE_UNKNOWN =
+    OpenConnections_State_STATE_UNKNOWN;
+  static const State STATE_CLOSED =
+    OpenConnections_State_STATE_CLOSED;
+  static const State STATE_LISTENING =
+    OpenConnections_State_STATE_LISTENING;
+  static const State STATE_SYN_SENT =
+    OpenConnections_State_STATE_SYN_SENT;
+  static const State STATE_SYN_RCVD =
+    OpenConnections_State_STATE_SYN_RCVD;
+  static const State STATE_ESTABLISHED =
+    OpenConnections_State_STATE_ESTABLISHED;
+  static const State STATE_FIN_WAIT1 =
+    OpenConnections_State_STATE_FIN_WAIT1;
+  static const State STATE_FIN_WAIT2 =
+    OpenConnections_State_STATE_FIN_WAIT2;
+  static const State STATE_CLOSE_WAIT =
+    OpenConnections_State_STATE_CLOSE_WAIT;
+  static const State STATE_CLOSING =
+    OpenConnections_State_STATE_CLOSING;
+  static const State STATE_LAST_ACK =
+    OpenConnections_State_STATE_LAST_ACK;
+  static const State STATE_TIME_WAIT =
+    OpenConnections_State_STATE_TIME_WAIT;
+  static const State STATE_DELETE_TCB =
+    OpenConnections_State_STATE_DELETE_TCB;
+  static inline bool State_IsValid(int value) {
+    return OpenConnections_State_IsValid(value);
+  }
+  static const State State_MIN =
+    OpenConnections_State_State_MIN;
+  static const State State_MAX =
+    OpenConnections_State_State_MAX;
+  static const int State_ARRAYSIZE =
+    OpenConnections_State_State_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -13241,20 +13312,6 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::std::string* release_domain_name();
   void set_allocated_domain_name(::std::string* domain_name);
 
-  // string connect_state = 4;
-  void clear_connect_state();
-  static const int kConnectStateFieldNumber = 4;
-  const ::std::string& connect_state() const;
-  void set_connect_state(const ::std::string& value);
-  #if LANG_CXX11
-  void set_connect_state(::std::string&& value);
-  #endif
-  void set_connect_state(const char* value);
-  void set_connect_state(const char* value, size_t size);
-  ::std::string* mutable_connect_state();
-  ::std::string* release_connect_state();
-  void set_allocated_connect_state(::std::string* connect_state);
-
   // string client_name = 5;
   void clear_client_name();
   static const int kClientNameFieldNumber = 5;
@@ -13289,16 +13346,22 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::uint32 session_id() const;
   void set_session_id(::google::protobuf::uint32 value);
 
+  // .aspia.proto.Sessions.ConnectState connect_state = 4;
+  void clear_connect_state();
+  static const int kConnectStateFieldNumber = 4;
+  ::aspia::proto::Sessions_ConnectState connect_state() const;
+  void set_connect_state(::aspia::proto::Sessions_ConnectState value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.Sessions.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr user_name_;
   ::google::protobuf::internal::ArenaStringPtr domain_name_;
-  ::google::protobuf::internal::ArenaStringPtr connect_state_;
   ::google::protobuf::internal::ArenaStringPtr client_name_;
   ::google::protobuf::internal::ArenaStringPtr winstation_name_;
   ::google::protobuf::uint32 session_id_;
+  int connect_state_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSessions_ItemImpl();
@@ -13384,6 +13447,39 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   // nested types ----------------------------------------------------
 
   typedef Sessions_Item Item;
+
+  typedef Sessions_ConnectState ConnectState;
+  static const ConnectState CONNECT_STATE_UNKNOWN =
+    Sessions_ConnectState_CONNECT_STATE_UNKNOWN;
+  static const ConnectState CONNECT_STATE_ACTIVE =
+    Sessions_ConnectState_CONNECT_STATE_ACTIVE;
+  static const ConnectState CONNECT_STATE_CONNECTED =
+    Sessions_ConnectState_CONNECT_STATE_CONNECTED;
+  static const ConnectState CONNECT_STATE_CONNECT_QUERY =
+    Sessions_ConnectState_CONNECT_STATE_CONNECT_QUERY;
+  static const ConnectState CONNECT_STATE_SHADOW =
+    Sessions_ConnectState_CONNECT_STATE_SHADOW;
+  static const ConnectState CONNECT_STATE_DISCONNECTED =
+    Sessions_ConnectState_CONNECT_STATE_DISCONNECTED;
+  static const ConnectState CONNECT_STATE_IDLE =
+    Sessions_ConnectState_CONNECT_STATE_IDLE;
+  static const ConnectState CONNECT_STATE_LISTEN =
+    Sessions_ConnectState_CONNECT_STATE_LISTEN;
+  static const ConnectState CONNECT_STATE_RESET =
+    Sessions_ConnectState_CONNECT_STATE_RESET;
+  static const ConnectState CONNECT_STATE_DOWN =
+    Sessions_ConnectState_CONNECT_STATE_DOWN;
+  static const ConnectState CONNECT_STATE_INIT =
+    Sessions_ConnectState_CONNECT_STATE_INIT;
+  static inline bool ConnectState_IsValid(int value) {
+    return Sessions_ConnectState_IsValid(value);
+  }
+  static const ConnectState ConnectState_MIN =
+    Sessions_ConnectState_ConnectState_MIN;
+  static const ConnectState ConnectState_MAX =
+    Sessions_ConnectState_ConnectState_MAX;
+  static const int ConnectState_ARRAYSIZE =
+    Sessions_ConnectState_ConnectState_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -16662,81 +16758,81 @@ DmiOnBoardDevices::item() const {
 
 // -------------------------------------------------------------------
 
-// DmiPointingDevice_Item
+// DmiPointingDevices_Item
 
-// .aspia.proto.DmiPointingDevice.Type device_type = 1;
-inline void DmiPointingDevice_Item::clear_device_type() {
+// .aspia.proto.DmiPointingDevices.Type device_type = 1;
+inline void DmiPointingDevices_Item::clear_device_type() {
   device_type_ = 0;
 }
-inline ::aspia::proto::DmiPointingDevice_Type DmiPointingDevice_Item::device_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.device_type)
-  return static_cast< ::aspia::proto::DmiPointingDevice_Type >(device_type_);
+inline ::aspia::proto::DmiPointingDevices_Type DmiPointingDevices_Item::device_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.device_type)
+  return static_cast< ::aspia::proto::DmiPointingDevices_Type >(device_type_);
 }
-inline void DmiPointingDevice_Item::set_device_type(::aspia::proto::DmiPointingDevice_Type value) {
+inline void DmiPointingDevices_Item::set_device_type(::aspia::proto::DmiPointingDevices_Type value) {
   
   device_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.device_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.device_type)
 }
 
-// .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
-inline void DmiPointingDevice_Item::clear_device_interface() {
+// .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
+inline void DmiPointingDevices_Item::clear_device_interface() {
   device_interface_ = 0;
 }
-inline ::aspia::proto::DmiPointingDevice_Interface DmiPointingDevice_Item::device_interface() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.device_interface)
-  return static_cast< ::aspia::proto::DmiPointingDevice_Interface >(device_interface_);
+inline ::aspia::proto::DmiPointingDevices_Interface DmiPointingDevices_Item::device_interface() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.device_interface)
+  return static_cast< ::aspia::proto::DmiPointingDevices_Interface >(device_interface_);
 }
-inline void DmiPointingDevice_Item::set_device_interface(::aspia::proto::DmiPointingDevice_Interface value) {
+inline void DmiPointingDevices_Item::set_device_interface(::aspia::proto::DmiPointingDevices_Interface value) {
   
   device_interface_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.device_interface)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.device_interface)
 }
 
 // int32 button_count = 3;
-inline void DmiPointingDevice_Item::clear_button_count() {
+inline void DmiPointingDevices_Item::clear_button_count() {
   button_count_ = 0;
 }
-inline ::google::protobuf::int32 DmiPointingDevice_Item::button_count() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.Item.button_count)
+inline ::google::protobuf::int32 DmiPointingDevices_Item::button_count() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.button_count)
   return button_count_;
 }
-inline void DmiPointingDevice_Item::set_button_count(::google::protobuf::int32 value) {
+inline void DmiPointingDevices_Item::set_button_count(::google::protobuf::int32 value) {
   
   button_count_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevice.Item.button_count)
+  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.button_count)
 }
 
 // -------------------------------------------------------------------
 
-// DmiPointingDevice
+// DmiPointingDevices
 
-// repeated .aspia.proto.DmiPointingDevice.Item item = 1;
-inline int DmiPointingDevice::item_size() const {
+// repeated .aspia.proto.DmiPointingDevices.Item item = 1;
+inline int DmiPointingDevices::item_size() const {
   return item_.size();
 }
-inline void DmiPointingDevice::clear_item() {
+inline void DmiPointingDevices::clear_item() {
   item_.Clear();
 }
-inline const ::aspia::proto::DmiPointingDevice_Item& DmiPointingDevice::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevice.item)
+inline const ::aspia::proto::DmiPointingDevices_Item& DmiPointingDevices::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.item)
   return item_.Get(index);
 }
-inline ::aspia::proto::DmiPointingDevice_Item* DmiPointingDevice::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPointingDevice.item)
+inline ::aspia::proto::DmiPointingDevices_Item* DmiPointingDevices::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPointingDevices.item)
   return item_.Mutable(index);
 }
-inline ::aspia::proto::DmiPointingDevice_Item* DmiPointingDevice::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiPointingDevice.item)
+inline ::aspia::proto::DmiPointingDevices_Item* DmiPointingDevices::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.DmiPointingDevices.item)
   return item_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >*
-DmiPointingDevice::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiPointingDevice.item)
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >*
+DmiPointingDevices::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiPointingDevices.item)
   return &item_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevice_Item >&
-DmiPointingDevice::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiPointingDevice.item)
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >&
+DmiPointingDevices::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.DmiPointingDevices.item)
   return item_;
 }
 
@@ -24335,15 +24431,15 @@ inline void OpenConnections_Item::set_allocated_process_name(::std::string* proc
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpenConnections.Item.process_name)
 }
 
-// .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
+// .aspia.proto.OpenConnections.Protocol protocol = 2;
 inline void OpenConnections_Item::clear_protocol() {
   protocol_ = 0;
 }
-inline ::aspia::proto::OpenConnections_Item_Protocol OpenConnections_Item::protocol() const {
+inline ::aspia::proto::OpenConnections_Protocol OpenConnections_Item::protocol() const {
   // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.protocol)
-  return static_cast< ::aspia::proto::OpenConnections_Item_Protocol >(protocol_);
+  return static_cast< ::aspia::proto::OpenConnections_Protocol >(protocol_);
 }
-inline void OpenConnections_Item::set_protocol(::aspia::proto::OpenConnections_Item_Protocol value) {
+inline void OpenConnections_Item::set_protocol(::aspia::proto::OpenConnections_Protocol value) {
   
   protocol_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.protocol)
@@ -24483,57 +24579,18 @@ inline void OpenConnections_Item::set_remote_port(::google::protobuf::uint32 val
   // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.remote_port)
 }
 
-// string state = 7;
+// .aspia.proto.OpenConnections.State state = 7;
 inline void OpenConnections_Item::clear_state() {
-  state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  state_ = 0;
 }
-inline const ::std::string& OpenConnections_Item::state() const {
+inline ::aspia::proto::OpenConnections_State OpenConnections_Item::state() const {
   // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.state)
-  return state_.GetNoArena();
+  return static_cast< ::aspia::proto::OpenConnections_State >(state_);
 }
-inline void OpenConnections_Item::set_state(const ::std::string& value) {
+inline void OpenConnections_Item::set_state(::aspia::proto::OpenConnections_State value) {
   
-  state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  state_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.state)
-}
-#if LANG_CXX11
-inline void OpenConnections_Item::set_state(::std::string&& value) {
-  
-  state_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpenConnections.Item.state)
-}
-#endif
-inline void OpenConnections_Item::set_state(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.OpenConnections.Item.state)
-}
-inline void OpenConnections_Item::set_state(const char* value, size_t size) {
-  
-  state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpenConnections.Item.state)
-}
-inline ::std::string* OpenConnections_Item::mutable_state() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.OpenConnections.Item.state)
-  return state_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* OpenConnections_Item::release_state() {
-  // @@protoc_insertion_point(field_release:aspia.proto.OpenConnections.Item.state)
-  
-  return state_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void OpenConnections_Item::set_allocated_state(::std::string* state) {
-  if (state != NULL) {
-    
-  } else {
-    
-  }
-  state_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), state);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpenConnections.Item.state)
 }
 
 // -------------------------------------------------------------------
@@ -25597,57 +25654,18 @@ inline void Sessions_Item::set_session_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.Sessions.Item.session_id)
 }
 
-// string connect_state = 4;
+// .aspia.proto.Sessions.ConnectState connect_state = 4;
 inline void Sessions_Item::clear_connect_state() {
-  connect_state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  connect_state_ = 0;
 }
-inline const ::std::string& Sessions_Item::connect_state() const {
+inline ::aspia::proto::Sessions_ConnectState Sessions_Item::connect_state() const {
   // @@protoc_insertion_point(field_get:aspia.proto.Sessions.Item.connect_state)
-  return connect_state_.GetNoArena();
+  return static_cast< ::aspia::proto::Sessions_ConnectState >(connect_state_);
 }
-inline void Sessions_Item::set_connect_state(const ::std::string& value) {
+inline void Sessions_Item::set_connect_state(::aspia::proto::Sessions_ConnectState value) {
   
-  connect_state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  connect_state_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.Sessions.Item.connect_state)
-}
-#if LANG_CXX11
-inline void Sessions_Item::set_connect_state(::std::string&& value) {
-  
-  connect_state_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Sessions.Item.connect_state)
-}
-#endif
-inline void Sessions_Item::set_connect_state(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  connect_state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Sessions.Item.connect_state)
-}
-inline void Sessions_Item::set_connect_state(const char* value, size_t size) {
-  
-  connect_state_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Sessions.Item.connect_state)
-}
-inline ::std::string* Sessions_Item::mutable_connect_state() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Sessions.Item.connect_state)
-  return connect_state_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Sessions_Item::release_connect_state() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Sessions.Item.connect_state)
-  
-  return connect_state_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Sessions_Item::set_allocated_connect_state(::std::string* connect_state) {
-  if (connect_state != NULL) {
-    
-  } else {
-    
-  }
-  connect_state_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), connect_state);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Sessions.Item.connect_state)
 }
 
 // string client_name = 5;
@@ -25947,8 +25965,8 @@ template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Length> : ::goo
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevice_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevice_Interface> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Interface> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};
@@ -25960,8 +25978,10 @@ template <> struct is_proto_enum< ::aspia::proto::PowerOptions_BatteryStatus> : 
 template <> struct is_proto_enum< ::aspia::proto::Printers_Item_Orientation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::OpenConnections_Item_Protocol> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::OpenConnections_Protocol> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::OpenConnections_State> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::SharedResources_Item_Type> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::Sessions_ConnectState> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

@@ -213,31 +213,28 @@ uint16_t OpenConnectionEnumerator::GetRemotePort() const
     return 0;
 }
 
-std::string OpenConnectionEnumerator::GetState() const
+proto::OpenConnections::State OpenConnectionEnumerator::GetState() const
 {
-    const char state_table[][32] =
-    {
-        "UNKNOWN",
-        "CLOSED",
-        "LISTENING",
-        "SYN_SENT",
-        "SYN_RCVD",
-        "ESTABLISHED",
-        "FIN_WAIT1",
-        "FIN_WAIT2",
-        "CLOSE_WAIT",
-        "CLOSING",
-        "LAST_ACK",
-        "TIME_WAIT",
-        "DELETE_TCB"
-    };
+    if (!tcp_table_)
+        return proto::OpenConnections::STATE_UNKNOWN;
 
-    if (tcp_table_)
+    switch (tcp_table_->table[index_].dwState)
     {
-        return state_table[tcp_table_->table[index_].dwState];
+        case 0: return proto::OpenConnections::STATE_UNKNOWN;
+        case 1: return proto::OpenConnections::STATE_CLOSED;
+        case 2: return proto::OpenConnections::STATE_LISTENING;
+        case 3: return proto::OpenConnections::STATE_SYN_SENT;
+        case 4: return proto::OpenConnections::STATE_SYN_RCVD;
+        case 5: return proto::OpenConnections::STATE_ESTABLISHED;
+        case 6: return proto::OpenConnections::STATE_FIN_WAIT1;
+        case 7: return proto::OpenConnections::STATE_FIN_WAIT2;
+        case 8: return proto::OpenConnections::STATE_CLOSE_WAIT;
+        case 9: return proto::OpenConnections::STATE_CLOSING;
+        case 10: return proto::OpenConnections::STATE_LAST_ACK;
+        case 11: return proto::OpenConnections::STATE_TIME_WAIT;
+        case 12: return proto::OpenConnections::STATE_DELETE_TCB;
+        default: return proto::OpenConnections::STATE_UNKNOWN;
     }
-
-    return std::string();
 }
 
 } // namespace aspia

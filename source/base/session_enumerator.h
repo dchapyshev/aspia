@@ -9,7 +9,7 @@
 #define _ASPIA_BASE__SESSION_ENUMERATOR_H
 
 #include "base/scoped_wts_memory.h"
-#include "base/macros.h"
+#include "proto/system_info_session_message.pb.h"
 
 #include <string>
 
@@ -27,7 +27,7 @@ public:
     std::string GetUserName() const;
     std::string GetDomainName() const;
     uint32_t GetSessionId() const;
-    std::string GetConnectState() const;
+    proto::Sessions::ConnectState GetConnectState() const;
     std::string GetClientName() const;
     std::string GetWinStationName() const;
 

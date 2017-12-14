@@ -3020,7 +3020,7 @@ const char* CategoryDmiPointingDevices::Guid() const
 
 void CategoryDmiPointingDevices::Parse(Table& table, const std::string& data)
 {
-    proto::DmiPointingDevice message;
+    proto::DmiPointingDevices message;
 
     if (!message.ParseFromString(data))
         return;
@@ -3031,7 +3031,7 @@ void CategoryDmiPointingDevices::Parse(Table& table, const std::string& data)
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const proto::DmiPointingDevice::Item& item = message.item(index);
+        const proto::DmiPointingDevices::Item& item = message.item(index);
 
         Group group = table.AddGroup(StringPrintf("Build-in Pointing Device #%d", index + 1));
 
@@ -3047,14 +3047,14 @@ std::string CategoryDmiPointingDevices::Serialize()
     if (!smbios)
         return std::string();
 
-    proto::DmiPointingDevice message;
+    proto::DmiPointingDevices message;
 
     for (SMBios::TableEnumerator<SMBios::PointingDeviceTable> table_enumerator(*smbios);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
         SMBios::PointingDeviceTable table = table_enumerator.GetTable();
-        proto::DmiPointingDevice::Item* item = message.add_item();
+        proto::DmiPointingDevices::Item* item = message.add_item();
 
         item->set_device_type(table.GetDeviceType());
         item->set_device_interface(table.GetInterface());
@@ -3065,32 +3065,32 @@ std::string CategoryDmiPointingDevices::Serialize()
 }
 
 // static
-const char* CategoryDmiPointingDevices::TypeToString(proto::DmiPointingDevice::Type value)
+const char* CategoryDmiPointingDevices::TypeToString(proto::DmiPointingDevices::Type value)
 {
     switch (value)
     {
-        case proto::DmiPointingDevice::TYPE_OTHER:
+        case proto::DmiPointingDevices::TYPE_OTHER:
             return "Other";
 
-        case proto::DmiPointingDevice::TYPE_MOUSE:
+        case proto::DmiPointingDevices::TYPE_MOUSE:
             return "Mouse";
 
-        case proto::DmiPointingDevice::TYPE_TRACK_BALL:
+        case proto::DmiPointingDevices::TYPE_TRACK_BALL:
             return "Track Ball";
 
-        case proto::DmiPointingDevice::TYPE_TRACK_POINT:
+        case proto::DmiPointingDevices::TYPE_TRACK_POINT:
             return "Track Point";
 
-        case proto::DmiPointingDevice::TYPE_GLIDE_POINT:
+        case proto::DmiPointingDevices::TYPE_GLIDE_POINT:
             return "Glide Point";
 
-        case proto::DmiPointingDevice::TYPE_TOUCH_PAD:
+        case proto::DmiPointingDevices::TYPE_TOUCH_PAD:
             return "Touch Pad";
 
-        case proto::DmiPointingDevice::TYPE_TOUCH_SCREEN:
+        case proto::DmiPointingDevices::TYPE_TOUCH_SCREEN:
             return "Touch Screen";
 
-        case proto::DmiPointingDevice::TYPE_OPTICAL_SENSOR:
+        case proto::DmiPointingDevices::TYPE_OPTICAL_SENSOR:
             return "Optical Sensor";
 
         default:
@@ -3100,38 +3100,38 @@ const char* CategoryDmiPointingDevices::TypeToString(proto::DmiPointingDevice::T
 
 // static
 const char* CategoryDmiPointingDevices::InterfaceToString(
-    proto::DmiPointingDevice::Interface value)
+    proto::DmiPointingDevices::Interface value)
 {
     switch (value)
     {
-        case proto::DmiPointingDevice::INTERFACE_OTHER:
+        case proto::DmiPointingDevices::INTERFACE_OTHER:
             return "Other";
 
-        case proto::DmiPointingDevice::INTERFACE_SERIAL:
+        case proto::DmiPointingDevices::INTERFACE_SERIAL:
             return "Serial";
 
-        case proto::DmiPointingDevice::INTERFACE_PS_2:
+        case proto::DmiPointingDevices::INTERFACE_PS_2:
             return "PS/2";
 
-        case proto::DmiPointingDevice::INTERFACE_INFRARED:
+        case proto::DmiPointingDevices::INTERFACE_INFRARED:
             return "Infrared";
 
-        case proto::DmiPointingDevice::INTERFACE_HP_HIL:
+        case proto::DmiPointingDevices::INTERFACE_HP_HIL:
             return "HP-HIL";
 
-        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE:
+        case proto::DmiPointingDevices::INTERFACE_BUS_MOUSE:
             return "Bus mouse";
 
-        case proto::DmiPointingDevice::INTERFACE_ADB:
+        case proto::DmiPointingDevices::INTERFACE_ADB:
             return "ADB (Apple Desktop Bus)";
 
-        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_DB_9:
+        case proto::DmiPointingDevices::INTERFACE_BUS_MOUSE_DB_9:
             return "Bus mouse DB-9";
 
-        case proto::DmiPointingDevice::INTERFACE_BUS_MOUSE_MICRO_DIN:
+        case proto::DmiPointingDevices::INTERFACE_BUS_MOUSE_MICRO_DIN:
             return "Bus mouse micro-DIN";
 
-        case proto::DmiPointingDevice::INTERFACE_USB:
+        case proto::DmiPointingDevices::INTERFACE_USB:
             return "USB";
 
         default:

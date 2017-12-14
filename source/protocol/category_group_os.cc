@@ -354,7 +354,7 @@ void CategoryActiveSessions::Parse(Table& table, const std::string& data)
         row.AddValue(Value::String(item.user_name()));
         row.AddValue(Value::String(item.domain_name()));
         row.AddValue(Value::Number(item.session_id()));
-        row.AddValue(Value::String(item.connect_state()));
+        row.AddValue(Value::String(ConnectStateToString(item.connect_state())));
         row.AddValue(Value::String(item.client_name()));
         row.AddValue(Value::String(item.winstation_name()));
     }
@@ -377,6 +377,46 @@ std::string CategoryActiveSessions::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategoryActiveSessions::ConnectStateToString(proto::Sessions::ConnectState value)
+{
+    switch (value)
+    {
+        case proto::Sessions::CONNECT_STATE_ACTIVE:
+            return "Active";
+
+        case proto::Sessions::CONNECT_STATE_CONNECTED:
+            return "Connected";
+
+        case proto::Sessions::CONNECT_STATE_CONNECT_QUERY:
+            return "Connect Query";
+
+        case proto::Sessions::CONNECT_STATE_SHADOW:
+            return "Shadow";
+
+        case proto::Sessions::CONNECT_STATE_DISCONNECTED:
+            return "Disconnected";
+
+        case proto::Sessions::CONNECT_STATE_IDLE:
+            return "Idle";
+
+        case proto::Sessions::CONNECT_STATE_LISTEN:
+            return "Listen";
+
+        case proto::Sessions::CONNECT_STATE_RESET:
+            return "Reset";
+
+        case proto::Sessions::CONNECT_STATE_DOWN:
+            return "Down";
+
+        case proto::Sessions::CONNECT_STATE_INIT:
+            return "Init";
+
+        default:
+            return "Unknown";
+    }
 }
 
 //

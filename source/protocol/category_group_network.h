@@ -59,6 +59,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* StateToString(proto::OpenConnections::State value);
+
     DISALLOW_COPY_AND_ASSIGN(CategoryOpenConnections);
 };
 

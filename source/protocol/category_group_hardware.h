@@ -221,8 +221,8 @@ public:
     std::string Serialize() final;
 
 private:
-    static const char* TypeToString(proto::DmiPointingDevice::Type value);
-    static const char* InterfaceToString(proto::DmiPointingDevice::Interface value);
+    static const char* TypeToString(proto::DmiPointingDevices::Type value);
+    static const char* InterfaceToString(proto::DmiPointingDevices::Interface value);
 
     DISALLOW_COPY_AND_ASSIGN(CategoryDmiPointingDevices);
 };

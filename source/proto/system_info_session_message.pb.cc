@@ -113,16 +113,16 @@ class DmiOnBoardDevicesDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<DmiOnBoardDevices>
       _instance;
 } _DmiOnBoardDevices_default_instance_;
-class DmiPointingDevice_ItemDefaultTypeInternal {
+class DmiPointingDevices_ItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevice_Item>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevices_Item>
       _instance;
-} _DmiPointingDevice_Item_default_instance_;
-class DmiPointingDeviceDefaultTypeInternal {
+} _DmiPointingDevices_Item_default_instance_;
+class DmiPointingDevicesDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevice>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiPointingDevices>
       _instance;
-} _DmiPointingDevice_default_instance_;
+} _DmiPointingDevices_default_instance_;
 class DmiPortableBattery_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<DmiPortableBattery_Item>
@@ -724,7 +724,7 @@ void InitDefaultsDmiOnBoardDevices() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiOnBoardDevicesImpl);
 }
 
-void InitDefaultsDmiPointingDevice_ItemImpl() {
+void InitDefaultsDmiPointingDevices_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -733,19 +733,19 @@ void InitDefaultsDmiPointingDevice_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_DmiPointingDevice_Item_default_instance_;
-    new (ptr) ::aspia::proto::DmiPointingDevice_Item();
+    void* ptr = &::aspia::proto::_DmiPointingDevices_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiPointingDevices_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiPointingDevice_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiPointingDevices_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiPointingDevice_Item() {
+void InitDefaultsDmiPointingDevices_Item() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDevice_ItemImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDevices_ItemImpl);
 }
 
-void InitDefaultsDmiPointingDeviceImpl() {
+void InitDefaultsDmiPointingDevicesImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -753,18 +753,18 @@ void InitDefaultsDmiPointingDeviceImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
+  protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices_Item();
   {
-    void* ptr = &::aspia::proto::_DmiPointingDevice_default_instance_;
-    new (ptr) ::aspia::proto::DmiPointingDevice();
+    void* ptr = &::aspia::proto::_DmiPointingDevices_default_instance_;
+    new (ptr) ::aspia::proto::DmiPointingDevices();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiPointingDevice::InitAsDefaultInstance();
+  ::aspia::proto::DmiPointingDevices::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiPointingDevice() {
+void InitDefaultsDmiPointingDevices() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDeviceImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiPointingDevicesImpl);
 }
 
 void InitDefaultsDmiPortableBattery_ItemImpl() {
@@ -3257,7 +3257,7 @@ const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MIN;
 const DmiOnBoardDevices_Type DmiOnBoardDevices::Type_MAX;
 const int DmiOnBoardDevices::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiPointingDevice_Type_IsValid(int value) {
+bool DmiPointingDevices_Type_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -3275,20 +3275,20 @@ bool DmiPointingDevice_Type_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_UNKNOWN;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_OTHER;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_MOUSE;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_TRACK_BALL;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_TRACK_POINT;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_GLIDE_POINT;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_TOUCH_PAD;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_TOUCH_SCREEN;
-const DmiPointingDevice_Type DmiPointingDevice::TYPE_OPTICAL_SENSOR;
-const DmiPointingDevice_Type DmiPointingDevice::Type_MIN;
-const DmiPointingDevice_Type DmiPointingDevice::Type_MAX;
-const int DmiPointingDevice::Type_ARRAYSIZE;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_UNKNOWN;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_OTHER;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_MOUSE;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_TRACK_BALL;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_TRACK_POINT;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_GLIDE_POINT;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_TOUCH_PAD;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_TOUCH_SCREEN;
+const DmiPointingDevices_Type DmiPointingDevices::TYPE_OPTICAL_SENSOR;
+const DmiPointingDevices_Type DmiPointingDevices::Type_MIN;
+const DmiPointingDevices_Type DmiPointingDevices::Type_MAX;
+const int DmiPointingDevices::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiPointingDevice_Interface_IsValid(int value) {
+bool DmiPointingDevices_Interface_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -3308,20 +3308,20 @@ bool DmiPointingDevice_Interface_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_UNKNOWN;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_OTHER;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_SERIAL;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_PS_2;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_INFRARED;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_HP_HIL;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_ADB;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE_DB_9;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_BUS_MOUSE_MICRO_DIN;
-const DmiPointingDevice_Interface DmiPointingDevice::INTERFACE_USB;
-const DmiPointingDevice_Interface DmiPointingDevice::Interface_MIN;
-const DmiPointingDevice_Interface DmiPointingDevice::Interface_MAX;
-const int DmiPointingDevice::Interface_ARRAYSIZE;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_UNKNOWN;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_OTHER;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_SERIAL;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_PS_2;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_INFRARED;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_HP_HIL;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_BUS_MOUSE;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_ADB;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_BUS_MOUSE_DB_9;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_BUS_MOUSE_MICRO_DIN;
+const DmiPointingDevices_Interface DmiPointingDevices::INTERFACE_USB;
+const DmiPointingDevices_Interface DmiPointingDevices::Interface_MIN;
+const DmiPointingDevices_Interface DmiPointingDevices::Interface_MAX;
+const int DmiPointingDevices::Interface_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool DmiPortableBattery_Chemistry_IsValid(int value) {
   switch (value) {
@@ -3648,7 +3648,7 @@ const Services_Item_StartupType Services_Item::StartupType_MIN;
 const Services_Item_StartupType Services_Item::StartupType_MAX;
 const int Services_Item::StartupType_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool OpenConnections_Item_Protocol_IsValid(int value) {
+bool OpenConnections_Protocol_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -3660,12 +3660,51 @@ bool OpenConnections_Item_Protocol_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_UNKNOWN;
-const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_TCP;
-const OpenConnections_Item_Protocol OpenConnections_Item::PROTOCOL_UDP;
-const OpenConnections_Item_Protocol OpenConnections_Item::Protocol_MIN;
-const OpenConnections_Item_Protocol OpenConnections_Item::Protocol_MAX;
-const int OpenConnections_Item::Protocol_ARRAYSIZE;
+const OpenConnections_Protocol OpenConnections::PROTOCOL_UNKNOWN;
+const OpenConnections_Protocol OpenConnections::PROTOCOL_TCP;
+const OpenConnections_Protocol OpenConnections::PROTOCOL_UDP;
+const OpenConnections_Protocol OpenConnections::Protocol_MIN;
+const OpenConnections_Protocol OpenConnections::Protocol_MAX;
+const int OpenConnections::Protocol_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool OpenConnections_State_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const OpenConnections_State OpenConnections::STATE_UNKNOWN;
+const OpenConnections_State OpenConnections::STATE_CLOSED;
+const OpenConnections_State OpenConnections::STATE_LISTENING;
+const OpenConnections_State OpenConnections::STATE_SYN_SENT;
+const OpenConnections_State OpenConnections::STATE_SYN_RCVD;
+const OpenConnections_State OpenConnections::STATE_ESTABLISHED;
+const OpenConnections_State OpenConnections::STATE_FIN_WAIT1;
+const OpenConnections_State OpenConnections::STATE_FIN_WAIT2;
+const OpenConnections_State OpenConnections::STATE_CLOSE_WAIT;
+const OpenConnections_State OpenConnections::STATE_CLOSING;
+const OpenConnections_State OpenConnections::STATE_LAST_ACK;
+const OpenConnections_State OpenConnections::STATE_TIME_WAIT;
+const OpenConnections_State OpenConnections::STATE_DELETE_TCB;
+const OpenConnections_State OpenConnections::State_MIN;
+const OpenConnections_State OpenConnections::State_MAX;
+const int OpenConnections::State_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool SharedResources_Item_Type_IsValid(int value) {
   switch (value) {
@@ -3693,6 +3732,41 @@ const SharedResources_Item_Type SharedResources_Item::TYPE_TEMPORARY;
 const SharedResources_Item_Type SharedResources_Item::Type_MIN;
 const SharedResources_Item_Type SharedResources_Item::Type_MAX;
 const int SharedResources_Item::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool Sessions_ConnectState_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const Sessions_ConnectState Sessions::CONNECT_STATE_UNKNOWN;
+const Sessions_ConnectState Sessions::CONNECT_STATE_ACTIVE;
+const Sessions_ConnectState Sessions::CONNECT_STATE_CONNECTED;
+const Sessions_ConnectState Sessions::CONNECT_STATE_CONNECT_QUERY;
+const Sessions_ConnectState Sessions::CONNECT_STATE_SHADOW;
+const Sessions_ConnectState Sessions::CONNECT_STATE_DISCONNECTED;
+const Sessions_ConnectState Sessions::CONNECT_STATE_IDLE;
+const Sessions_ConnectState Sessions::CONNECT_STATE_LISTEN;
+const Sessions_ConnectState Sessions::CONNECT_STATE_RESET;
+const Sessions_ConnectState Sessions::CONNECT_STATE_DOWN;
+const Sessions_ConnectState Sessions::CONNECT_STATE_INIT;
+const Sessions_ConnectState Sessions::ConnectState_MIN;
+const Sessions_ConnectState Sessions::ConnectState_MAX;
+const int Sessions::ConnectState_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
@@ -10784,23 +10858,23 @@ void DmiOnBoardDevices::InternalSwap(DmiOnBoardDevices* other) {
 
 // ===================================================================
 
-void DmiPointingDevice_Item::InitAsDefaultInstance() {
+void DmiPointingDevices_Item::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiPointingDevice_Item::kDeviceTypeFieldNumber;
-const int DmiPointingDevice_Item::kDeviceInterfaceFieldNumber;
-const int DmiPointingDevice_Item::kButtonCountFieldNumber;
+const int DmiPointingDevices_Item::kDeviceTypeFieldNumber;
+const int DmiPointingDevices_Item::kDeviceInterfaceFieldNumber;
+const int DmiPointingDevices_Item::kButtonCountFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiPointingDevice_Item::DmiPointingDevice_Item()
+DmiPointingDevices_Item::DmiPointingDevices_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevices.Item)
 }
-DmiPointingDevice_Item::DmiPointingDevice_Item(const DmiPointingDevice_Item& from)
+DmiPointingDevices_Item::DmiPointingDevices_Item(const DmiPointingDevices_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -10808,44 +10882,44 @@ DmiPointingDevice_Item::DmiPointingDevice_Item(const DmiPointingDevice_Item& fro
   ::memcpy(&device_type_, &from.device_type_,
     static_cast<size_t>(reinterpret_cast<char*>(&button_count_) -
     reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevices.Item)
 }
 
-void DmiPointingDevice_Item::SharedCtor() {
+void DmiPointingDevices_Item::SharedCtor() {
   ::memset(&device_type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&button_count_) -
       reinterpret_cast<char*>(&device_type_)) + sizeof(button_count_));
   _cached_size_ = 0;
 }
 
-DmiPointingDevice_Item::~DmiPointingDevice_Item() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevice.Item)
+DmiPointingDevices_Item::~DmiPointingDevices_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevices.Item)
   SharedDtor();
 }
 
-void DmiPointingDevice_Item::SharedDtor() {
+void DmiPointingDevices_Item::SharedDtor() {
 }
 
-void DmiPointingDevice_Item::SetCachedSize(int size) const {
+void DmiPointingDevices_Item::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiPointingDevice_Item& DmiPointingDevice_Item::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice_Item();
+const DmiPointingDevices_Item& DmiPointingDevices_Item::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices_Item();
   return *internal_default_instance();
 }
 
-DmiPointingDevice_Item* DmiPointingDevice_Item::New(::google::protobuf::Arena* arena) const {
-  DmiPointingDevice_Item* n = new DmiPointingDevice_Item;
+DmiPointingDevices_Item* DmiPointingDevices_Item::New(::google::protobuf::Arena* arena) const {
+  DmiPointingDevices_Item* n = new DmiPointingDevices_Item;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiPointingDevice_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevice.Item)
+void DmiPointingDevices_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -10856,7 +10930,7 @@ void DmiPointingDevice_Item::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiPointingDevice_Item::MergePartialFromCodedStream(
+bool DmiPointingDevices_Item::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -10866,13 +10940,13 @@ bool DmiPointingDevice_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevices.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.DmiPointingDevice.Type device_type = 1;
+      // .aspia.proto.DmiPointingDevices.Type device_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -10880,14 +10954,14 @@ bool DmiPointingDevice_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_device_type(static_cast< ::aspia::proto::DmiPointingDevice_Type >(value));
+          set_device_type(static_cast< ::aspia::proto::DmiPointingDevices_Type >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
+      // .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -10895,7 +10969,7 @@ bool DmiPointingDevice_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_device_interface(static_cast< ::aspia::proto::DmiPointingDevice_Interface >(value));
+          set_device_interface(static_cast< ::aspia::proto::DmiPointingDevices_Interface >(value));
         } else {
           goto handle_unusual;
         }
@@ -10928,27 +11002,27 @@ bool DmiPointingDevice_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevices.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevices.Item)
   return false;
 #undef DO_
 }
 
-void DmiPointingDevice_Item::SerializeWithCachedSizes(
+void DmiPointingDevices_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevices.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevices.Type device_type = 1;
   if (this->device_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->device_type(), output);
   }
 
-  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
   if (this->device_interface() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->device_interface(), output);
@@ -10961,22 +11035,22 @@ void DmiPointingDevice_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevice.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevices.Item)
 }
 
-size_t DmiPointingDevice_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevice.Item)
+size_t DmiPointingDevices_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevices.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.DmiPointingDevice.Type device_type = 1;
+  // .aspia.proto.DmiPointingDevices.Type device_type = 1;
   if (this->device_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_type());
   }
 
-  // .aspia.proto.DmiPointingDevice.Interface device_interface = 2;
+  // .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
   if (this->device_interface() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->device_interface());
@@ -10996,13 +11070,13 @@ size_t DmiPointingDevice_Item::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiPointingDevice_Item::CheckTypeAndMergeFrom(
+void DmiPointingDevices_Item::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevice_Item*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevices_Item*>(&from));
 }
 
-void DmiPointingDevice_Item::MergeFrom(const DmiPointingDevice_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevice.Item)
+void DmiPointingDevices_Item::MergeFrom(const DmiPointingDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevices.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11019,22 +11093,22 @@ void DmiPointingDevice_Item::MergeFrom(const DmiPointingDevice_Item& from) {
   }
 }
 
-void DmiPointingDevice_Item::CopyFrom(const DmiPointingDevice_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevice.Item)
+void DmiPointingDevices_Item::CopyFrom(const DmiPointingDevices_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevices.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiPointingDevice_Item::IsInitialized() const {
+bool DmiPointingDevices_Item::IsInitialized() const {
   return true;
 }
 
-void DmiPointingDevice_Item::Swap(DmiPointingDevice_Item* other) {
+void DmiPointingDevices_Item::Swap(DmiPointingDevices_Item* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiPointingDevice_Item::InternalSwap(DmiPointingDevice_Item* other) {
+void DmiPointingDevices_Item::InternalSwap(DmiPointingDevices_Item* other) {
   using std::swap;
   swap(device_type_, other->device_type_);
   swap(device_interface_, other->device_interface_);
@@ -11043,68 +11117,68 @@ void DmiPointingDevice_Item::InternalSwap(DmiPointingDevice_Item* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiPointingDevice_Item::GetTypeName() const {
-  return "aspia.proto.DmiPointingDevice.Item";
+::std::string DmiPointingDevices_Item::GetTypeName() const {
+  return "aspia.proto.DmiPointingDevices.Item";
 }
 
 
 // ===================================================================
 
-void DmiPointingDevice::InitAsDefaultInstance() {
+void DmiPointingDevices::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiPointingDevice::kItemFieldNumber;
+const int DmiPointingDevices::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiPointingDevice::DmiPointingDevice()
+DmiPointingDevices::DmiPointingDevices()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice();
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiPointingDevices)
 }
-DmiPointingDevice::DmiPointingDevice(const DmiPointingDevice& from)
+DmiPointingDevices::DmiPointingDevices(const DmiPointingDevices& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiPointingDevices)
 }
 
-void DmiPointingDevice::SharedCtor() {
+void DmiPointingDevices::SharedCtor() {
   _cached_size_ = 0;
 }
 
-DmiPointingDevice::~DmiPointingDevice() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevice)
+DmiPointingDevices::~DmiPointingDevices() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiPointingDevices)
   SharedDtor();
 }
 
-void DmiPointingDevice::SharedDtor() {
+void DmiPointingDevices::SharedDtor() {
 }
 
-void DmiPointingDevice::SetCachedSize(int size) const {
+void DmiPointingDevices::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiPointingDevice& DmiPointingDevice::default_instance() {
-  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevice();
+const DmiPointingDevices& DmiPointingDevices::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices();
   return *internal_default_instance();
 }
 
-DmiPointingDevice* DmiPointingDevice::New(::google::protobuf::Arena* arena) const {
-  DmiPointingDevice* n = new DmiPointingDevice;
+DmiPointingDevices* DmiPointingDevices::New(::google::protobuf::Arena* arena) const {
+  DmiPointingDevices* n = new DmiPointingDevices;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiPointingDevice::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevice)
+void DmiPointingDevices::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiPointingDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -11113,7 +11187,7 @@ void DmiPointingDevice::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiPointingDevice::MergePartialFromCodedStream(
+bool DmiPointingDevices::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -11123,13 +11197,13 @@ bool DmiPointingDevice::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiPointingDevices)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
+      // repeated .aspia.proto.DmiPointingDevices.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -11152,21 +11226,21 @@ bool DmiPointingDevice::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiPointingDevices)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiPointingDevices)
   return false;
 #undef DO_
 }
 
-void DmiPointingDevice::SerializeWithCachedSizes(
+void DmiPointingDevices::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiPointingDevices)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevices.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -11175,16 +11249,16 @@ void DmiPointingDevice::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevice)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiPointingDevices)
 }
 
-size_t DmiPointingDevice::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevice)
+size_t DmiPointingDevices::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiPointingDevices)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.DmiPointingDevice.Item item = 1;
+  // repeated .aspia.proto.DmiPointingDevices.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -11202,13 +11276,13 @@ size_t DmiPointingDevice::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiPointingDevice::CheckTypeAndMergeFrom(
+void DmiPointingDevices::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevice*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiPointingDevices*>(&from));
 }
 
-void DmiPointingDevice::MergeFrom(const DmiPointingDevice& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevice)
+void DmiPointingDevices::MergeFrom(const DmiPointingDevices& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiPointingDevices)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -11217,30 +11291,30 @@ void DmiPointingDevice::MergeFrom(const DmiPointingDevice& from) {
   item_.MergeFrom(from.item_);
 }
 
-void DmiPointingDevice::CopyFrom(const DmiPointingDevice& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevice)
+void DmiPointingDevices::CopyFrom(const DmiPointingDevices& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiPointingDevices)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiPointingDevice::IsInitialized() const {
+bool DmiPointingDevices::IsInitialized() const {
   return true;
 }
 
-void DmiPointingDevice::Swap(DmiPointingDevice* other) {
+void DmiPointingDevices::Swap(DmiPointingDevices* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiPointingDevice::InternalSwap(DmiPointingDevice* other) {
+void DmiPointingDevices::InternalSwap(DmiPointingDevices* other) {
   using std::swap;
   item_.InternalSwap(&other->item_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiPointingDevice::GetTypeName() const {
-  return "aspia.proto.DmiPointingDevice";
+::std::string DmiPointingDevices::GetTypeName() const {
+  return "aspia.proto.DmiPointingDevices";
 }
 
 
@@ -25883,13 +25957,9 @@ OpenConnections_Item::OpenConnections_Item(const OpenConnections_Item& from)
   if (from.remote_address().size() > 0) {
     remote_address_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.remote_address_);
   }
-  state_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.state().size() > 0) {
-    state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.state_);
-  }
   ::memcpy(&protocol_, &from.protocol_,
-    static_cast<size_t>(reinterpret_cast<char*>(&remote_port_) -
-    reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
+    static_cast<size_t>(reinterpret_cast<char*>(&state_) -
+    reinterpret_cast<char*>(&protocol_)) + sizeof(state_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.OpenConnections.Item)
 }
 
@@ -25897,10 +25967,9 @@ void OpenConnections_Item::SharedCtor() {
   process_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   local_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   remote_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  state_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&protocol_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&remote_port_) -
-      reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
+      reinterpret_cast<char*>(&state_) -
+      reinterpret_cast<char*>(&protocol_)) + sizeof(state_));
   _cached_size_ = 0;
 }
 
@@ -25913,7 +25982,6 @@ void OpenConnections_Item::SharedDtor() {
   process_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   local_address_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   remote_address_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  state_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void OpenConnections_Item::SetCachedSize(int size) const {
@@ -25943,10 +26011,9 @@ void OpenConnections_Item::Clear() {
   process_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   local_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   remote_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&protocol_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&remote_port_) -
-      reinterpret_cast<char*>(&protocol_)) + sizeof(remote_port_));
+      reinterpret_cast<char*>(&state_) -
+      reinterpret_cast<char*>(&protocol_)) + sizeof(state_));
   _internal_metadata_.Clear();
 }
 
@@ -25982,7 +26049,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
+      // .aspia.proto.OpenConnections.Protocol protocol = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -25990,7 +26057,7 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_protocol(static_cast< ::aspia::proto::OpenConnections_Item_Protocol >(value));
+          set_protocol(static_cast< ::aspia::proto::OpenConnections_Protocol >(value));
         } else {
           goto handle_unusual;
         }
@@ -26057,16 +26124,15 @@ bool OpenConnections_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string state = 7;
+      // .aspia.proto.OpenConnections.State state = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_state()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->state().data(), static_cast<int>(this->state().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.OpenConnections.Item.state"));
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_state(static_cast< ::aspia::proto::OpenConnections_State >(value));
         } else {
           goto handle_unusual;
         }
@@ -26109,7 +26175,7 @@ void OpenConnections_Item::SerializeWithCachedSizes(
       1, this->process_name(), output);
   }
 
-  // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
+  // .aspia.proto.OpenConnections.Protocol protocol = 2;
   if (this->protocol() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->protocol(), output);
@@ -26145,13 +26211,9 @@ void OpenConnections_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->remote_port(), output);
   }
 
-  // string state = 7;
-  if (this->state().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->state().data(), static_cast<int>(this->state().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.OpenConnections.Item.state");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.OpenConnections.State state = 7;
+  if (this->state() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       7, this->state(), output);
   }
 
@@ -26187,14 +26249,7 @@ size_t OpenConnections_Item::ByteSizeLong() const {
         this->remote_address());
   }
 
-  // string state = 7;
-  if (this->state().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->state());
-  }
-
-  // .aspia.proto.OpenConnections.Item.Protocol protocol = 2;
+  // .aspia.proto.OpenConnections.Protocol protocol = 2;
   if (this->protocol() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->protocol());
@@ -26212,6 +26267,12 @@ size_t OpenConnections_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->remote_port());
+  }
+
+  // .aspia.proto.OpenConnections.State state = 7;
+  if (this->state() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -26245,10 +26306,6 @@ void OpenConnections_Item::MergeFrom(const OpenConnections_Item& from) {
 
     remote_address_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.remote_address_);
   }
-  if (from.state().size() > 0) {
-
-    state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.state_);
-  }
   if (from.protocol() != 0) {
     set_protocol(from.protocol());
   }
@@ -26257,6 +26314,9 @@ void OpenConnections_Item::MergeFrom(const OpenConnections_Item& from) {
   }
   if (from.remote_port() != 0) {
     set_remote_port(from.remote_port());
+  }
+  if (from.state() != 0) {
+    set_state(from.state());
   }
 }
 
@@ -26280,10 +26340,10 @@ void OpenConnections_Item::InternalSwap(OpenConnections_Item* other) {
   process_name_.Swap(&other->process_name_);
   local_address_.Swap(&other->local_address_);
   remote_address_.Swap(&other->remote_address_);
-  state_.Swap(&other->state_);
   swap(protocol_, other->protocol_);
   swap(local_port_, other->local_port_);
   swap(remote_port_, other->remote_port_);
+  swap(state_, other->state_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -28845,10 +28905,6 @@ Sessions_Item::Sessions_Item(const Sessions_Item& from)
   if (from.domain_name().size() > 0) {
     domain_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.domain_name_);
   }
-  connect_state_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.connect_state().size() > 0) {
-    connect_state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.connect_state_);
-  }
   client_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.client_name().size() > 0) {
     client_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.client_name_);
@@ -28857,17 +28913,20 @@ Sessions_Item::Sessions_Item(const Sessions_Item& from)
   if (from.winstation_name().size() > 0) {
     winstation_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.winstation_name_);
   }
-  session_id_ = from.session_id_;
+  ::memcpy(&session_id_, &from.session_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&connect_state_) -
+    reinterpret_cast<char*>(&session_id_)) + sizeof(connect_state_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.Sessions.Item)
 }
 
 void Sessions_Item::SharedCtor() {
   user_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   domain_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  connect_state_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   client_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   winstation_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  session_id_ = 0u;
+  ::memset(&session_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&connect_state_) -
+      reinterpret_cast<char*>(&session_id_)) + sizeof(connect_state_));
   _cached_size_ = 0;
 }
 
@@ -28879,7 +28938,6 @@ Sessions_Item::~Sessions_Item() {
 void Sessions_Item::SharedDtor() {
   user_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   domain_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  connect_state_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   client_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   winstation_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -28910,10 +28968,11 @@ void Sessions_Item::Clear() {
 
   user_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   domain_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  connect_state_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   client_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   winstation_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  session_id_ = 0u;
+  ::memset(&session_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&connect_state_) -
+      reinterpret_cast<char*>(&session_id_)) + sizeof(connect_state_));
   _internal_metadata_.Clear();
 }
 
@@ -28979,16 +29038,15 @@ bool Sessions_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string connect_state = 4;
+      // .aspia.proto.Sessions.ConnectState connect_state = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_connect_state()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->connect_state().data(), static_cast<int>(this->connect_state().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.Sessions.Item.connect_state"));
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_connect_state(static_cast< ::aspia::proto::Sessions_ConnectState >(value));
         } else {
           goto handle_unusual;
         }
@@ -29078,13 +29136,9 @@ void Sessions_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->session_id(), output);
   }
 
-  // string connect_state = 4;
-  if (this->connect_state().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->connect_state().data(), static_cast<int>(this->connect_state().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.Sessions.Item.connect_state");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.Sessions.ConnectState connect_state = 4;
+  if (this->connect_state() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->connect_state(), output);
   }
 
@@ -29133,13 +29187,6 @@ size_t Sessions_Item::ByteSizeLong() const {
         this->domain_name());
   }
 
-  // string connect_state = 4;
-  if (this->connect_state().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->connect_state());
-  }
-
   // string client_name = 5;
   if (this->client_name().size() > 0) {
     total_size += 1 +
@@ -29159,6 +29206,12 @@ size_t Sessions_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->session_id());
+  }
+
+  // .aspia.proto.Sessions.ConnectState connect_state = 4;
+  if (this->connect_state() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->connect_state());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -29188,10 +29241,6 @@ void Sessions_Item::MergeFrom(const Sessions_Item& from) {
 
     domain_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.domain_name_);
   }
-  if (from.connect_state().size() > 0) {
-
-    connect_state_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.connect_state_);
-  }
   if (from.client_name().size() > 0) {
 
     client_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.client_name_);
@@ -29202,6 +29251,9 @@ void Sessions_Item::MergeFrom(const Sessions_Item& from) {
   }
   if (from.session_id() != 0) {
     set_session_id(from.session_id());
+  }
+  if (from.connect_state() != 0) {
+    set_connect_state(from.connect_state());
   }
 }
 
@@ -29224,10 +29276,10 @@ void Sessions_Item::InternalSwap(Sessions_Item* other) {
   using std::swap;
   user_name_.Swap(&other->user_name_);
   domain_name_.Swap(&other->domain_name_);
-  connect_state_.Swap(&other->connect_state_);
   client_name_.Swap(&other->client_name_);
   winstation_name_.Swap(&other->winstation_name_);
   swap(session_id_, other->session_id_);
+  swap(connect_state_, other->connect_state_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
