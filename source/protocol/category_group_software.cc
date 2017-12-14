@@ -136,11 +136,11 @@ void CategoryServices::Parse(Table& table, const std::string& data)
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Display Name", 200)
-                     .AddColumn("Name", 200)
+                     .AddColumn("Name", 150)
                      .AddColumn("Description", 200)
-                     .AddColumn("Status", 200)
-                     .AddColumn("Startup Type", 200)
-                     .AddColumn("Account", 200)
+                     .AddColumn("Status", 70)
+                     .AddColumn("Startup Type", 100)
+                     .AddColumn("Account", 150)
                      .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)
@@ -326,10 +326,10 @@ void CategoryDrivers::Parse(Table& table, const std::string& data)
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Display Name", 200)
-                     .AddColumn("Name", 200)
+                     .AddColumn("Name", 150)
                      .AddColumn("Description", 200)
-                     .AddColumn("Status", 200)
-                     .AddColumn("Startup Type", 200)
+                     .AddColumn("Status", 70)
+                     .AddColumn("Startup Type", 100)
                      .AddColumn("Executable File", 200));
 
     for (int index = 0; index < message.item_size(); ++index)

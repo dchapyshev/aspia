@@ -43,8 +43,8 @@ void CategoryNetworkCards::Parse(Table& table, const std::string& data)
         return;
 
     table.AddColumns(ColumnList::Create()
-                     .AddColumn("Parameter", 250)
-                     .AddColumn("Value", 250));
+                     .AddColumn("Parameter", 300)
+                     .AddColumn("Value", 260));
 
     for (int index = 0; index < message.item_size(); ++index)
     {
