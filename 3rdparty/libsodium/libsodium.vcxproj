@@ -1,12 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDLL|Win32">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugDLL|x64">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|Win32">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|x64">
+      <Configuration>ReleaseDLL</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -32,12 +48,26 @@
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v141_xp</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v141_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -46,12 +76,26 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141_xp</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -60,7 +104,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="msvc-scripts\sodium.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="msvc-scripts\sodium.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="msvc-scripts\sodium.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="msvc-scripts\sodium.props" />
   </ImportGroup>
@@ -68,7 +120,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="msvc-scripts\sodium.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="msvc-scripts\sodium.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="msvc-scripts\sodium.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="msvc-scripts\sodium.props" />
   </ImportGroup>
@@ -78,20 +138,40 @@
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\Intermediate\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\Intermediate\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\Intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,6 +195,22 @@
       <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>SODIUM_EXPORT=__declspec(dllexport);SODIUM_DLL_EXPORT;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)src\libsodium\include\sodium;$(SolutionDir)src\libsodium\include\sodium;$(SolutionDir)src\libsodium\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>
@@ -137,6 +233,21 @@
       <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>SODIUM_EXPORT=__declspec(dllexport);SODIUM_DLL_EXPORT;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -153,8 +264,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <StringPooling>true</StringPooling>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,15 +273,36 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
     <PreBuildEvent>
       <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
-    <Lib>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>SODIUM_EXPORT=__declspec(dllexport);SODIUM_DLL_EXPORT;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)src\libsodium\include\sodium;$(SolutionDir)src\libsodium\include\sodium;$(SolutionDir)src\libsodium\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -180,7 +312,7 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>SODIUM_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SODIUM_STATIC;SODIUM_EXPORT=;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4197;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libsodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include/sodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
@@ -194,7 +326,6 @@
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>false</OpenMPSupport>
-      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -208,6 +339,25 @@
     <PostBuildEvent>
       <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>SODIUM_EXPORT=__declspec(dllexport);SODIUM_DLL_EXPORT;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\libsodium\crypto_generichash\crypto_generichash.c" />
@@ -259,11 +409,11 @@
     <ClCompile Include="src\libsodium\crypto_shorthash\siphash24\ref\shorthash_siphashx24_ref.c" />
     <ClCompile Include="src\libsodium\crypto_shorthash\siphash24\ref\shorthash_siphash24_ref.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\crypto_scalarmult.c" />
+    <ClCompile Include="src\libsodium\crypto_scalarmult\ed25519\ref10\scalarmult_ed25519_ref10.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\scalarmult_curve25519.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\curve25519_sandy2x.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\fe_frombytes_sandy2x.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\fe51_invert.c" />
-    <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\donna_c64\curve25519_donna_c64.c" />
     <ClCompile Include="src\libsodium\crypto_scalarmult\curve25519\ref10\x25519_ref10.c" />
     <ClCompile Include="src\libsodium\crypto_onetimeauth\crypto_onetimeauth.c" />
     <ClCompile Include="src\libsodium\crypto_onetimeauth\poly1305\onetimeauth_poly1305.c" />
@@ -313,7 +463,8 @@
     <ClCompile Include="src\libsodium\crypto_core\hchacha20\core_hchacha20.c" />
     <ClCompile Include="src\libsodium\crypto_core\hsalsa20\core_hsalsa20.c" />
     <ClCompile Include="src\libsodium\crypto_core\hsalsa20\ref2\core_hsalsa20_ref2.c" />
-    <ClCompile Include="src\libsodium\crypto_core\curve25519\ref10\curve25519_ref10.c" />
+    <ClCompile Include="src\libsodium\crypto_core\ed25519\core_ed25519.c" />
+    <ClCompile Include="src\libsodium\crypto_core\ed25519\ref10\ed25519_ref10.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\libsodium\crypto_generichash\blake2b\ref\blake2b-load-sse2.h" />
@@ -323,7 +474,7 @@
     <ClInclude Include="src\libsodium\crypto_generichash\blake2b\ref\blake2b-load-sse41.h" />
     <ClInclude Include="src\libsodium\crypto_generichash\blake2b\ref\blake2b-compress-avx2.h" />
     <ClInclude Include="src\libsodium\crypto_generichash\blake2b\ref\blake2b-compress-sse41.h" />
-    <ClInclude Include="src\libsodium\crypto_sign\ed25519\ref10\ed25519_ref10.h" />
+    <ClInclude Include="src\libsodium\crypto_sign\ed25519\ref10\sign_ed25519_ref10.h" />
     <ClInclude Include="src\libsodium\include\sodium.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_stream_salsa2012.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_auth.h" />
@@ -331,7 +482,6 @@
     <ClInclude Include="src\libsodium\include\sodium\crypto_core_hchacha20.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_hash_sha512.h" />
     <ClInclude Include="src\libsodium\include\sodium\core.h" />
-    <ClInclude Include="src\libsodium\include\sodium\version.h" />
     <ClInclude Include="src\libsodium\include\sodium\export.h" />
     <ClInclude Include="src\libsodium\include\sodium\randombytes_salsa20_random.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_core_salsa20.h" />
@@ -377,14 +527,18 @@
     <ClInclude Include="src\libsodium\include\sodium\crypto_onetimeauth.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_verify_64.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_box_curve25519xchacha20poly1305.h" />
+    <ClInclude Include="src\libsodium\include\sodium\crypto_core_ed25519.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_pwhash_argon2i.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_generichash.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_secretbox_xsalsa20poly1305.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_secretbox.h" />
+    <ClInclude Include="src\libsodium\include\sodium\crypto_scalarmult_ed25519.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_box_curve25519xsalsa20poly1305.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_generichash_blake2b.h" />
     <ClInclude Include="src\libsodium\include\sodium\crypto_sign_edwards25519sha512batch.h" />
-    <ClInclude Include="src\libsodium\include\sodium\private\curve25519_ref10.h" />
+    <ClInclude Include="src\libsodium\include\sodium\private\ed25519_ref10.h" />
+    <ClInclude Include="src\libsodium\include\sodium\private\ed25519_ref10_fe_25_5.h" />
+    <ClInclude Include="src\libsodium\include\sodium\private\ed25519_ref10_fe_51.h" />
     <ClInclude Include="src\libsodium\include\sodium\private\sse2_64_32.h" />
     <ClInclude Include="src\libsodium\include\sodium\private\common.h" />
     <ClInclude Include="src\libsodium\include\sodium\private\mutex.h" />
@@ -410,7 +564,6 @@
     <ClInclude Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\curve25519_sandy2x.h" />
     <ClInclude Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\fe51_namespace.h" />
     <ClInclude Include="src\libsodium\crypto_scalarmult\curve25519\sandy2x\ladder_base.h" />
-    <ClInclude Include="src\libsodium\crypto_scalarmult\curve25519\donna_c64\curve25519_donna_c64.h" />
     <ClInclude Include="src\libsodium\crypto_scalarmult\curve25519\ref10\x25519_ref10.h" />
     <ClInclude Include="src\libsodium\crypto_onetimeauth\poly1305\onetimeauth_poly1305.h" />
     <ClInclude Include="src\libsodium\crypto_onetimeauth\poly1305\donna\poly1305_donna.h" />
@@ -434,8 +587,14 @@
     <ClInclude Include="src\libsodium\crypto_stream\salsa20\xmm6int\u8.h" />
     <ClInclude Include="src\libsodium\crypto_stream\salsa20\xmm6int\salsa20_xmm6int-sse2.h" />
     <ClInclude Include="src\libsodium\crypto_stream\salsa20\xmm6\salsa20_xmm6.h" />
-    <ClInclude Include="src\libsodium\crypto_core\curve25519\ref10\base2.h" />
-    <ClInclude Include="src\libsodium\crypto_core\curve25519\ref10\base.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_25_5\constants.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_25_5\fe.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_25_5\base2.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_25_5\base.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_51\constants.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_51\fe.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_51\base2.h" />
+    <ClInclude Include="src\libsodium\crypto_core\ed25519\ref10\fe_51\base.h" />
     <ClInclude Include="builds\msvc\resource.h" />
   </ItemGroup>
   <ItemGroup>

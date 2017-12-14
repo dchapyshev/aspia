@@ -32,7 +32,9 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
 endif()
 
 # static library option
-option(sodium_USE_STATIC_LIBS "enable to statically link against sodium")
+if (NOT DEFINED sodium_USE_STATIC_LIBS)
+    option(sodium_USE_STATIC_LIBS "enable to statically link against sodium" OFF)
+endif()
 if(NOT (sodium_USE_STATIC_LIBS EQUAL sodium_USE_STATIC_LIBS_LAST))
     unset(sodium_LIBRARY CACHE)
     unset(sodium_LIBRARY_DEBUG CACHE)
@@ -53,18 +55,35 @@ if (UNIX)
     endif()
 
     if(sodium_USE_STATIC_LIBS)
+        foreach(_libname ${sodium_PKG_STATIC_LIBRARIES})
+            if (NOT _libname MATCHES "^lib.*\\.a$") # ignore strings already ending with .a
+                list(INSERT sodium_PKG_STATIC_LIBRARIES 0 "lib${_libname}.a")
+            endif()
+        endforeach()
+        list(REMOVE_DUPLICATES sodium_PKG_STATIC_LIBRARIES)
+
+        # if pkgconfig for libsodium doesn't provide
+        # static lib info, then override PKG_STATIC here..
+        if (sodium_PKG_STATIC_LIBRARIES STREQUAL "")
+            set(sodium_PKG_STATIC_LIBRARIES libsodium.a)
+        endif()
+
         set(XPREFIX sodium_PKG_STATIC)
     else()
+        if (sodium_PKG_LIBRARIES STREQUAL "")
+            set(sodium_PKG_LIBRARIES sodium)
+        endif()
+
         set(XPREFIX sodium_PKG)
     endif()
 
     find_path(sodium_INCLUDE_DIR sodium.h
         HINTS ${${XPREFIX}_INCLUDE_DIRS}
     )
-    find_library(sodium_LIBRARY_DEBUG NAMES ${${XPREFIX}_LIBRARIES} sodium
+    find_library(sodium_LIBRARY_DEBUG NAMES ${${XPREFIX}_LIBRARIES}
         HINTS ${${XPREFIX}_LIBRARY_DIRS}
     )
-    find_library(sodium_LIBRARY_RELEASE NAMES ${${XPREFIX}_LIBRARIES} sodium
+    find_library(sodium_LIBRARY_RELEASE NAMES ${${XPREFIX}_LIBRARIES}
         HINTS ${${XPREFIX}_LIBRARY_DIRS}
     )
 
