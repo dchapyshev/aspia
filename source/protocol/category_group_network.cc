@@ -62,15 +62,15 @@ void CategoryNetworkCards::Parse(Table& table, const std::string& data)
         {
             Group addr_group = group.AddGroup("IP Addresses");
 
-            for (int addr_index = 0; addr_index < item.ip_address_size(); ++addr_index)
+            for (int i = 0; i < item.ip_address_size(); ++i)
             {
                 const proto::NetworkCards::Item::IpAddress& address =
-                    item.ip_address(addr_index);
+                    item.ip_address(i);
 
-                addr_group.AddParam(StringPrintf("Address #%d", addr_index + 1),
+                addr_group.AddParam(StringPrintf("Address #%d", i + 1),
                                     Value::String(address.address()));
 
-                addr_group.AddParam(StringPrintf("Mask #%d", addr_index + 1),
+                addr_group.AddParam(StringPrintf("Mask #%d", i + 1),
                                     Value::String(address.mask()));
             }
         }
@@ -79,10 +79,10 @@ void CategoryNetworkCards::Parse(Table& table, const std::string& data)
         {
             Group addr_group = group.AddGroup("Gateway");
 
-            for (int addr_index = 0; addr_index < item.gateway_address_size(); ++addr_index)
+            for (int i = 0; i < item.gateway_address_size(); ++i)
             {
-                addr_group.AddParam(StringPrintf("Address #%d", addr_index + 1),
-                                    Value::String(item.gateway_address(addr_index)));
+                addr_group.AddParam(StringPrintf("Address #%d", i + 1),
+                                    Value::String(item.gateway_address(i)));
             }
         }
 
@@ -92,10 +92,10 @@ void CategoryNetworkCards::Parse(Table& table, const std::string& data)
         {
             Group addr_group = group.AddGroup("DHCP Server");
 
-            for (int addr_index = 0; addr_index < item.dhcp_server_address_size(); ++addr_index)
+            for (int i = 0; i < item.dhcp_server_address_size(); ++i)
             {
-                addr_group.AddParam(StringPrintf("Address #%d", addr_index + 1),
-                                    Value::String(item.dhcp_server_address(addr_index)));
+                addr_group.AddParam(StringPrintf("Address #%d", i + 1),
+                                    Value::String(item.dhcp_server_address(i)));
             }
         }
 
@@ -103,10 +103,10 @@ void CategoryNetworkCards::Parse(Table& table, const std::string& data)
         {
             Group addr_group = group.AddGroup("DNS Server");
 
-            for (int addr_index = 0; addr_index < item.dns_server_address_size(); ++addr_index)
+            for (int i = 0; i < item.dns_server_address_size(); ++i)
             {
-                addr_group.AddParam(StringPrintf("Address #%d", addr_index + 1),
-                                    Value::String(item.dns_server_address(addr_index)));
+                addr_group.AddParam(StringPrintf("Address #%d", i + 1),
+                                    Value::String(item.dns_server_address(i)));
             }
         }
 
