@@ -328,79 +328,360 @@ int SMBios::BiosTable::GetRuntimeSize() const
     return (code >> 10) * 1024;
 }
 
-uint64_t SMBios::BiosTable::GetCharacteristics() const
+bool SMBios::BiosTable::HasISA() const
 {
     BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
     if (characteristics.Test(3))
-        return proto::DmiBios::CHARACTERISTIC_NONE;
+        return false;
 
-    uint64_t ret = proto::DmiBios::CHARACTERISTIC_NONE;
-
-    if (characteristics.Test(4)) ret |= proto::DmiBios::CHARACTERISTIC_ISA;
-    if (characteristics.Test(5)) ret |= proto::DmiBios::CHARACTERISTIC_MCA;
-    if (characteristics.Test(6)) ret |= proto::DmiBios::CHARACTERISTIC_EISA;
-    if (characteristics.Test(7)) ret |= proto::DmiBios::CHARACTERISTIC_PCI;
-    if (characteristics.Test(8)) ret |= proto::DmiBios::CHARACTERISTIC_PC_CARD;
-    if (characteristics.Test(9)) ret |= proto::DmiBios::CHARACTERISTIC_PLUG_AND_PLAY;
-    if (characteristics.Test(10)) ret |= proto::DmiBios::CHARACTERISTIC_APM;
-    if (characteristics.Test(11)) ret |= proto::DmiBios::CHARACTERISTIC_BIOS_IS_UPGRADEABLE;
-    if (characteristics.Test(12)) ret |= proto::DmiBios::CHARACTERISTIC_BIOS_SHADOWING;
-    if (characteristics.Test(13)) ret |= proto::DmiBios::CHARACTERISTIC_VLB;
-    if (characteristics.Test(14)) ret |= proto::DmiBios::CHARACTERISTIC_ESCD;
-    if (characteristics.Test(15)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_FROM_CD;
-    if (characteristics.Test(16)) ret |= proto::DmiBios::CHARACTERISTIC_SELECTABLE_BOOT;
-    if (characteristics.Test(17)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_ROM_IS_SOCKETED;
-    if (characteristics.Test(18)) ret |= proto::DmiBios::CHARACTERISTIC_BOOT_FROM_PC_CARD;
-    if (characteristics.Test(19)) ret |= proto::DmiBios::CHARACTERISTIC_EDD;
-    if (characteristics.Test(20)) ret |= proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_NEC9800;
-    if (characteristics.Test(21)) ret |= proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_TOSHIBA;
-    if (characteristics.Test(22)) ret |= proto::DmiBios::CHARACTERISTIC_525_360KB_FLOPPY;
-    if (characteristics.Test(23)) ret |= proto::DmiBios::CHARACTERISTIC_525_12MB_FLOPPY;
-    if (characteristics.Test(24)) ret |= proto::DmiBios::CHARACTERISTIC_35_720KB_FLOPPY;
-    if (characteristics.Test(25)) ret |= proto::DmiBios::CHARACTERISTIC_35_288MB_FLOPPY;
-    if (characteristics.Test(26)) ret |= proto::DmiBios::CHARACTERISTIC_PRINT_SCREEN;
-    if (characteristics.Test(27)) ret |= proto::DmiBios::CHARACTERISTIC_8042_KEYBOARD;
-    if (characteristics.Test(28)) ret |= proto::DmiBios::CHARACTERISTIC_SERIAL;
-    if (characteristics.Test(29)) ret |= proto::DmiBios::CHARACTERISTIC_PRINTER;
-    if (characteristics.Test(30)) ret |= proto::DmiBios::CHARACTERISTIC_CGA_VIDEO;
-    if (characteristics.Test(31)) ret |= proto::DmiBios::CHARACTERISTIC_NEC_PC98;
-
-    return ret;
+    return characteristics.Test(4);
 }
 
-uint32_t SMBios::BiosTable::GetCharacteristics1() const
+bool SMBios::BiosTable::HasMCA() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(5);
+}
+
+bool SMBios::BiosTable::HasEISA() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(6);
+}
+
+bool SMBios::BiosTable::HasPCI() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(7);
+}
+
+bool SMBios::BiosTable::HasPCCard() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(8);
+}
+
+bool SMBios::BiosTable::HasPNP() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(9);
+}
+
+bool SMBios::BiosTable::HasAPM() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(10);
+}
+
+bool SMBios::BiosTable::HasBiosUpgradeable() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(11);
+}
+
+bool SMBios::BiosTable::HasBiosShadowing() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(12);
+}
+
+bool SMBios::BiosTable::HasVLB() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(13);
+}
+
+bool SMBios::BiosTable::HasESCD() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(14);
+}
+
+bool SMBios::BiosTable::HasBootFromCD() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(15);
+}
+
+bool SMBios::BiosTable::HasSelectableBoot() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(16);
+}
+
+bool SMBios::BiosTable::HasSocketedBootROM() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(17);
+}
+
+bool SMBios::BiosTable::HasBootFromPCCard() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(18);
+}
+
+bool SMBios::BiosTable::HasEDD() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(19);
+}
+
+bool SMBios::BiosTable::HasJapaneseFloppyForNec9800() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(20);
+}
+
+bool SMBios::BiosTable::HasJapaneceFloppyForToshiba() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(21);
+}
+
+bool SMBios::BiosTable::Has525_360kbFloppy() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(22);
+}
+
+bool SMBios::BiosTable::Has525_12mbFloppy() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(23);
+}
+
+bool SMBios::BiosTable::Has35_720kbFloppy() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(24);
+}
+
+bool SMBios::BiosTable::Has35_288mbFloppy() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(25);
+}
+
+bool SMBios::BiosTable::HasPrintScreen() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(26);
+}
+
+bool SMBios::BiosTable::Has8042Keyboard() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(27);
+}
+
+bool SMBios::BiosTable::HasSerial() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(28);
+}
+
+bool SMBios::BiosTable::HasPrinter() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(29);
+}
+
+bool SMBios::BiosTable::HasCGAVideo() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(30);
+}
+
+bool SMBios::BiosTable::HasNecPC98() const
+{
+    BitSet<uint64_t> characteristics = reader_.GetQword(0x0A);
+    if (characteristics.Test(3))
+        return false;
+
+    return characteristics.Test(31);
+}
+
+bool SMBios::BiosTable::HasACPI() const
 {
     if (reader_.GetTableLength() < 0x13)
-        return 0;
+        return false;
 
-    BitSet<uint8_t> characteristics1 = reader_.GetByte(0x12);
-    uint32_t ret = 0;
-
-    if (characteristics1.Test(0)) ret |= proto::DmiBios::CHARACTERISTIC1_ACPI;
-    if (characteristics1.Test(1)) ret |= proto::DmiBios::CHARACTERISTIC1_USB_LEGACY;
-    if (characteristics1.Test(2)) ret |= proto::DmiBios::CHARACTERISTIC1_AGP;
-    if (characteristics1.Test(3)) ret |= proto::DmiBios::CHARACTERISTIC1_I2O_BOOT;
-    if (characteristics1.Test(4)) ret |= proto::DmiBios::CHARACTERISTIC1_LS120_BOOT;
-    if (characteristics1.Test(5)) ret |= proto::DmiBios::CHARACTERISTIC1_ATAPI_ZIP_DRIVE_BOOT;
-    if (characteristics1.Test(6)) ret |= proto::DmiBios::CHARACTERISTIC1_IEEE1394_BOOT;
-    if (characteristics1.Test(7)) ret |= proto::DmiBios::CHARACTERISTIC1_SMART_BATTERY;
-
-    return ret;
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(0);
 }
 
-uint32_t SMBios::BiosTable::GetCharacteristics2() const
+bool SMBios::BiosTable::HasUSBLegacy() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(1);
+}
+
+bool SMBios::BiosTable::HasAGP() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(2);
+}
+
+bool SMBios::BiosTable::HasI2OBoot() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(3);
+}
+
+bool SMBios::BiosTable::HasLS120Boot() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(4);
+}
+
+bool SMBios::BiosTable::HasAtapiZipDriveBoot() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(5);
+}
+
+bool SMBios::BiosTable::HasIeee1394Boot() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(6);
+}
+
+bool SMBios::BiosTable::HasSmartBattery() const
+{
+    if (reader_.GetTableLength() < 0x13)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x12)).Test(7);
+}
+
+bool SMBios::BiosTable::HasBiosBootSpecification() const
 {
     if (reader_.GetTableLength() < 0x14)
-        return 0;
+        return false;
 
-    BitSet<uint8_t> characteristics2 = reader_.GetByte(0x13);
-    uint32_t ret = 0;
+    return BitSet<uint8_t>(reader_.GetByte(0x13)).Test(0);
+}
 
-    if (characteristics2.Test(0)) ret |= proto::DmiBios::CHARACTERISTIC2_BIOS_BOOT_SPECIFICATION;
-    if (characteristics2.Test(1)) ret |= proto::DmiBios::CHARACTERISTIC2_KEY_INITIALIZED_NETWORK_BOOT;
-    if (characteristics2.Test(2)) ret |= proto::DmiBios::CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION;
+bool SMBios::BiosTable::HasKeyInitNetworkBoot() const
+{
+    if (reader_.GetTableLength() < 0x14)
+        return false;
 
-    return ret;
+    return BitSet<uint8_t>(reader_.GetByte(0x13)).Test(1);
+}
+
+bool SMBios::BiosTable::HasTargetedContentDistrib() const
+{
+    if (reader_.GetTableLength() < 0x14)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x13)).Test(2);
+}
+
+bool SMBios::BiosTable::HasUEFI() const
+{
+    if (reader_.GetTableLength() < 0x14)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x13)).Test(3);
+}
+
+bool SMBios::BiosTable::HasVirtualMachine() const
+{
+    if (reader_.GetTableLength() < 0x14)
+        return false;
+
+    return BitSet<uint8_t>(reader_.GetByte(0x13)).Test(4);
 }
 
 //

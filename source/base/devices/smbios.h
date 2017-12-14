@@ -13,7 +13,6 @@
 
 #include <memory>
 #include <string>
-#include <list>
 
 namespace aspia {
 
@@ -83,9 +82,48 @@ public:
         std::string GetFirmwareRevision() const;
         std::string GetAddress() const;
         int GetRuntimeSize() const; // In bytes.
-        uint64_t GetCharacteristics() const;
-        uint32_t GetCharacteristics1() const;
-        uint32_t GetCharacteristics2() const;
+
+        bool HasISA() const;
+        bool HasMCA() const;
+        bool HasEISA() const;
+        bool HasPCI() const;
+        bool HasPCCard() const;
+        bool HasPNP() const;
+        bool HasAPM() const;
+        bool HasBiosUpgradeable() const;
+        bool HasBiosShadowing() const;
+        bool HasVLB() const;
+        bool HasESCD() const;
+        bool HasBootFromCD() const;
+        bool HasSelectableBoot() const;
+        bool HasSocketedBootROM() const;
+        bool HasBootFromPCCard() const;
+        bool HasEDD() const;
+        bool HasJapaneseFloppyForNec9800() const;
+        bool HasJapaneceFloppyForToshiba() const;
+        bool Has525_360kbFloppy() const;
+        bool Has525_12mbFloppy() const;
+        bool Has35_720kbFloppy() const;
+        bool Has35_288mbFloppy() const;
+        bool HasPrintScreen() const;
+        bool Has8042Keyboard() const;
+        bool HasSerial() const;
+        bool HasPrinter() const;
+        bool HasCGAVideo() const;
+        bool HasNecPC98() const;
+        bool HasACPI() const;
+        bool HasUSBLegacy() const;
+        bool HasAGP() const;
+        bool HasI2OBoot() const;
+        bool HasLS120Boot() const;
+        bool HasAtapiZipDriveBoot() const;
+        bool HasIeee1394Boot() const;
+        bool HasSmartBattery() const;
+        bool HasBiosBootSpecification() const;
+        bool HasKeyInitNetworkBoot() const;
+        bool HasTargetedContentDistrib() const;
+        bool HasUEFI() const;
+        bool HasVirtualMachine() const;
 
     private:
         friend class TableEnumerator<BiosTable>;

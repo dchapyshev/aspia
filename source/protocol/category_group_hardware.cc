@@ -73,72 +73,69 @@ void CategoryDmiBios::Parse(Table& table, const std::string& data)
     if (message.runtime_size() != 0)
         table.AddParam("Runtime Size", Value::Number(message.runtime_size(), "Bytes"));
 
-    std::vector<std::pair<std::string, bool>> features;
-
-    auto add_characteristic = [&](const char* name, uint64_t flag)
+    if (message.has_characteristics())
     {
-        features.emplace_back(name, message.characteristics() & flag);
-    };
+        std::vector<std::pair<std::string, bool>> list;
 
-    add_characteristic("ISA", proto::DmiBios::CHARACTERISTIC_ISA);
-    add_characteristic("MCA", proto::DmiBios::CHARACTERISTIC_MCA);
-    add_characteristic("EISA", proto::DmiBios::CHARACTERISTIC_EISA);
-    add_characteristic("PCI", proto::DmiBios::CHARACTERISTIC_PCI);
-    add_characteristic("PC Card (PCMCIA)", proto::DmiBios::CHARACTERISTIC_PC_CARD);
-    add_characteristic("Plug-and-Play", proto::DmiBios::CHARACTERISTIC_PLUG_AND_PLAY);
-    add_characteristic("APM", proto::DmiBios::CHARACTERISTIC_APM);
-    add_characteristic("BIOS is Upgradeable", proto::DmiBios::CHARACTERISTIC_BIOS_IS_UPGRADEABLE);
-    add_characteristic("BIOS Shadowing", proto::DmiBios::CHARACTERISTIC_BIOS_SHADOWING);
-    add_characteristic("VLB", proto::DmiBios::CHARACTERISTIC_VLB);
-    add_characteristic("ESCD", proto::DmiBios::CHARACTERISTIC_ESCD);
-    add_characteristic("Boot from CD", proto::DmiBios::CHARACTERISTIC_BOOT_FROM_CD);
-    add_characteristic("Selectable Boot", proto::DmiBios::CHARACTERISTIC_SELECTABLE_BOOT);
-    add_characteristic("BIOS ROM is socketed", proto::DmiBios::CHARACTERISTIC_BOOT_ROM_IS_SOCKETED);
-    add_characteristic("Boot from PC Card (PCMCIA)", proto::DmiBios::CHARACTERISTIC_BOOT_FROM_PC_CARD);
-    add_characteristic("EDD", proto::DmiBios::CHARACTERISTIC_EDD);
-    add_characteristic("Japanese Floppy for NEC 9800 1.2 MB (int 13h)", proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_NEC9800);
-    add_characteristic("Japanese Floppy for Toshiba 1.2 MB (int 13h)", proto::DmiBios::CHARACTERISTIC_JAPANESE_FLOPPY_FOR_TOSHIBA);
-    add_characteristic("5.25\"/360 kB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_525_360KB_FLOPPY);
-    add_characteristic("5.25\"/1.2 MB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_525_12MB_FLOPPY);
-    add_characteristic("3.5\"/720 kB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_35_720KB_FLOPPY);
-    add_characteristic("3.5\"/2.88 MB Floppy (int 13h)", proto::DmiBios::CHARACTERISTIC_35_288MB_FLOPPY);
-    add_characteristic("Print Screen (int 5h)", proto::DmiBios::CHARACTERISTIC_PRINT_SCREEN);
-    add_characteristic("8042 Keyboard (int 9h)", proto::DmiBios::CHARACTERISTIC_8042_KEYBOARD);
-    add_characteristic("Serial (int 14h)", proto::DmiBios::CHARACTERISTIC_SERIAL);
-    add_characteristic("Printer (int 17h)", proto::DmiBios::CHARACTERISTIC_PRINTER);
-    add_characteristic("CGA/Mono video (int 10h)", proto::DmiBios::CHARACTERISTIC_CGA_VIDEO);
-    add_characteristic("NEC PC-98", proto::DmiBios::CHARACTERISTIC_NEC_PC98);
+        auto add = [&](const char* name, bool is_supported)
+        {
+            list.emplace_back(name, is_supported);
+        };
 
-    auto add_characteristic1 = [&](const char* name, uint32_t flag)
-    {
-        features.emplace_back(name, message.characteristics1() & flag);
-    };
+        const proto::DmiBios::Characteristics& ch = message.characteristics();
 
-    add_characteristic1("ACPI", proto::DmiBios::CHARACTERISTIC1_ACPI);
-    add_characteristic1("USB Legacy", proto::DmiBios::CHARACTERISTIC1_USB_LEGACY);
-    add_characteristic1("AGP", proto::DmiBios::CHARACTERISTIC1_AGP);
-    add_characteristic1("I2O Boot", proto::DmiBios::CHARACTERISTIC1_I2O_BOOT);
-    add_characteristic1("LS-120 Boot", proto::DmiBios::CHARACTERISTIC1_LS120_BOOT);
-    add_characteristic1("ATAPI Zip Drive Boot", proto::DmiBios::CHARACTERISTIC1_ATAPI_ZIP_DRIVE_BOOT);
-    add_characteristic1("IEEE 1394 Boot", proto::DmiBios::CHARACTERISTIC1_IEEE1394_BOOT);
-    add_characteristic1("Smart Battery", proto::DmiBios::CHARACTERISTIC1_SMART_BATTERY);
+        add("ISA is supported", ch.has_isa());
+        add("MCA is supported", ch.has_mca());
+        add("EISA is supported", ch.has_eisa());
+        add("PCI is supported", ch.has_pci());
+        add("PC card (PCMCIA) is supported", ch.has_pc_card());
+        add("Plug and Play is supported", ch.has_pnp());
+        add("APM is supported", ch.has_apm());
+        add("BIOS is upgradeable (Flash)", ch.has_bios_upgradeable());
+        add("BIOS shadowing is allowed", ch.has_bios_shadowing());
+        add("VL-VESA is supported", ch.has_vlb());
+        add("ESCD support is available", ch.has_escd());
+        add("Boot from CD is supported", ch.has_boot_from_cd());
+        add("Selectable boot is supported", ch.has_selectable_boot());
+        add("BIOS ROM is socketed", ch.has_socketed_boot_rom());
+        add("Boot from PC card (PCMCIA) is supported", ch.has_boot_from_pc_card());
+        add("EDD specification is supported", ch.has_edd());
+        add("Japanese Floppy for NEC 9800 1.2 MB (int 13h)", ch.has_japanese_floppy_for_nec9800());
+        add("Japanese Floppy for Toshiba 1.2 MB (int 13h)", ch.has_japanece_floppy_for_toshiba());
+        add("5.25\"/360 kB Floppy services are supported (int 13h)", ch.has_525_360kb_floppy());
+        add("5.25\"/1.2 MB Floppy services are supported (int 13h)", ch.has_525_12mb_floppy());
+        add("3.5\"/720 kB Floppy services are supported (int 13h)", ch.has_35_720kb_floppy());
+        add("3.5\"/2.88 MB Floppy services are supported (int 13h)", ch.has_35_288mb_floppy());
+        add("Print Screen services are supported (int 5h)", ch.has_print_screen());
+        add("8042 Keyboard services are supported (int 9h)", ch.has_8042_keyboard());
+        add("Serial services are supported (int 14h)", ch.has_serial());
+        add("Printer services are supported. (int 17h)", ch.has_printer());
+        add("CGA/Mono Video Services are supported (int 10h)", ch.has_cga_video());
+        add("NEC PC-98", ch.has_nec_pc98());
 
-    auto add_characteristic2 = [&](const char* name, uint32_t flag)
-    {
-        features.emplace_back(name, message.characteristics2() & flag);
-    };
+        add("ACPI is supported", ch.has_acpi());
+        add("USB Legacy is supported", ch.has_usb_legacy());
+        add("AGP is supported", ch.has_agp());
+        add("I2O boot is supported", ch.has_i2o_boot());
+        add("LS-120 SuperDisk boot is supported", ch.has_ls120_boot());
+        add("ATAPI ZIP drive boot is supported", ch.has_atapi_zip_drive_boot());
+        add("IEEE 1394 boot is supported", ch.has_ieee1394_boot());
+        add("Smart battery is supported", ch.has_smart_battery());
 
-    add_characteristic2("BIOS Boot Specification", proto::DmiBios::CHARACTERISTIC2_BIOS_BOOT_SPECIFICATION);
-    add_characteristic2("Function Key-initiated Network Boot", proto::DmiBios::CHARACTERISTIC2_KEY_INITIALIZED_NETWORK_BOOT);
-    add_characteristic2("Targeted Content Distribution", proto::DmiBios::CHARACTERISTIC2_TARGETED_CONTENT_DISTRIBUTION);
+        add("BIOS Boot Specification", ch.has_bios_boot_specification());
+        add("Function Key-initiated Network Boot", ch.has_key_init_network_boot());
+        add("Targeted Content Distribution", ch.has_targeted_content_distrib());
+        add("UEFI Specification is supported", ch.has_uefi());
+        add("Virtual Machine", ch.has_virtual_machine());
 
-    Group group = table.AddGroup("Supported Features");
+        std::sort(list.begin(), list.end());
 
-    std::sort(features.begin(), features.end());
+        Group group = table.AddGroup("Characteristics");
 
-    for (const auto& feature : features)
-    {
-        group.AddParam(feature.first, Value::Bool(feature.second));
+        for (const auto& list_item : list)
+        {
+            group.AddParam(list_item.first, Value::Bool(list_item.second));
+        }
     }
 }
 
@@ -163,9 +160,50 @@ std::string CategoryDmiBios::Serialize()
     message.set_firmware_revision(table.GetFirmwareRevision());
     message.set_address(table.GetAddress());
     message.set_runtime_size(table.GetRuntimeSize());
-    message.set_characteristics(table.GetCharacteristics());
-    message.set_characteristics1(table.GetCharacteristics1());
-    message.set_characteristics2(table.GetCharacteristics2());
+
+    proto::DmiBios::Characteristics* characteristics = message.mutable_characteristics();
+
+    characteristics->set_has_isa(table.HasISA());
+    characteristics->set_has_mca(table.HasMCA());
+    characteristics->set_has_eisa(table.HasEISA());
+    characteristics->set_has_pci(table.HasPCI());
+    characteristics->set_has_pc_card(table.HasPCCard());
+    characteristics->set_has_pnp(table.HasPNP());
+    characteristics->set_has_apm(table.HasAPM());
+    characteristics->set_has_bios_upgradeable(table.HasBiosUpgradeable());
+    characteristics->set_has_bios_shadowing(table.HasBiosShadowing());
+    characteristics->set_has_vlb(table.HasVLB());
+    characteristics->set_has_escd(table.HasESCD());
+    characteristics->set_has_boot_from_cd(table.HasBootFromCD());
+    characteristics->set_has_selectable_boot(table.HasSelectableBoot());
+    characteristics->set_has_socketed_boot_rom(table.HasSocketedBootROM());
+    characteristics->set_has_boot_from_pc_card(table.HasBootFromPCCard());
+    characteristics->set_has_edd(table.HasEDD());
+    characteristics->set_has_japanese_floppy_for_nec9800(table.HasJapaneseFloppyForNec9800());
+    characteristics->set_has_japanece_floppy_for_toshiba(table.HasJapaneceFloppyForToshiba());
+    characteristics->set_has_525_360kb_floppy(table.Has525_360kbFloppy());
+    characteristics->set_has_525_12mb_floppy(table.Has525_12mbFloppy());
+    characteristics->set_has_35_720kb_floppy(table.Has35_720kbFloppy());
+    characteristics->set_has_35_288mb_floppy(table.Has35_288mbFloppy());
+    characteristics->set_has_print_screen(table.HasPrintScreen());
+    characteristics->set_has_8042_keyboard(table.Has8042Keyboard());
+    characteristics->set_has_serial(table.HasSerial());
+    characteristics->set_has_printer(table.HasPrinter());
+    characteristics->set_has_cga_video(table.HasCGAVideo());
+    characteristics->set_has_nec_pc98(table.HasNecPC98());
+    characteristics->set_has_acpi(table.HasACPI());
+    characteristics->set_has_usb_legacy(table.HasUSBLegacy());
+    characteristics->set_has_agp(table.HasAGP());
+    characteristics->set_has_i2o_boot(table.HasI2OBoot());
+    characteristics->set_has_ls120_boot(table.HasLS120Boot());
+    characteristics->set_has_atapi_zip_drive_boot(table.HasAtapiZipDriveBoot());
+    characteristics->set_has_ieee1394_boot(table.HasIeee1394Boot());
+    characteristics->set_has_smart_battery(table.HasSmartBattery());
+    characteristics->set_has_bios_boot_specification(table.HasBiosBootSpecification());
+    characteristics->set_has_key_init_network_boot(table.HasKeyInitNetworkBoot());
+    characteristics->set_has_targeted_content_distrib(table.HasTargetedContentDistrib());
+    characteristics->set_has_uefi(table.HasUEFI());
+    characteristics->set_has_virtual_machine(table.HasVirtualMachine());
 
     return message.SerializeAsString();
 }
