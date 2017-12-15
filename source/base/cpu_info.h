@@ -147,12 +147,12 @@ struct FN_80000001_ECX
     uint8_t has_tbm : 1;            // Bit 21. Trailing Bit Manipulation Instructions
     uint8_t reserved16 : 1;         // Bit 22. Reserved
     uint8_t has_perfctr_core : 1;   // Bit 23. Core Performance Counters
-    uint8_t reserved18 : 1;         // Bit 24. Reserved
+    uint8_t has_perfctr_nb : 1;     // Bit 24. NB Performance Counters
     uint8_t reserved19 : 1;         // Bit 25. Reserved
-    uint8_t reserved20 : 1;         // Bit 26. Reserved
-    uint8_t reserved21 : 1;         // Bit 27. Reserved
+    uint8_t has_bpext : 1;          // Bit 26. Data Breakpoint Extension
+    uint8_t has_ptsc : 1;           // Bit 27. Performance Time Stamp Counter (PTSC)
     uint8_t reserved22 : 1;         // Bit 28. Reserved
-    uint8_t reserved23 : 1;         // Bit 29. Reserved
+    uint8_t has_mwaitx : 1;         // Bit 29. MONITORX / MWAITX Instruction
     uint8_t reserved24 : 1;         // Bit 30. Reserved
     uint8_t reserved25 : 1;         // Bit 31. Reserved
 };
@@ -297,6 +297,43 @@ struct FN_C0000001_EDX
     uint8_t reserved20 : 1;       // Bit 30. Reserved
     uint8_t reserved21 : 1;       // Bit 31. Reserved
 };
+
+// Transmeta Extensions
+struct FN_80860001_EDX
+{
+    uint8_t reserved0 : 1;   // Bit 0. Reserved
+    uint8_t has_longrun : 1; // Bit 1. LongRun
+    uint8_t reserved1 : 1;   // Bit 2. Reserved
+    uint8_t has_lrti : 1;    // Bit 3. LongRun Table Interface
+    uint8_t reserved2 : 1;   // Bit 4. Reserved
+    uint8_t reserved3 : 1;   // Bit 5. Reserved
+    uint8_t reserved4 : 1;   // Bit 6. Reserved
+    uint8_t reserved5 : 1;   // Bit 7. Reserved
+    uint8_t reserved6 : 1;   // Bit 8. Reserved
+    uint8_t reserved7 : 1;   // Bit 9. Reserved
+    uint8_t reserved8 : 1;   // Bit 10. Reserved
+    uint8_t reserved9 : 1;   // Bit 11. Reserved
+    uint8_t reserved10 : 1;  // Bit 12. Reserved
+    uint8_t reserved11 : 1;  // Bit 13. Reserved
+    uint8_t reserved12 : 1;  // Bit 14. Reserved
+    uint8_t reserved13 : 1;  // Bit 15. Reserved
+    uint8_t reserved14 : 1;  // Bit 16. Reserved
+    uint8_t reserved15 : 1;  // Bit 17. Reserved
+    uint8_t reserved16 : 1;  // Bit 18. Reserved
+    uint8_t reserved17 : 1;  // Bit 19. Reserved
+    uint8_t reserved18 : 1;  // Bit 20. Reserved
+    uint8_t reserved19 : 1;  // Bit 21. Reserved
+    uint8_t reserved20 : 1;  // Bit 22. Reserved
+    uint8_t reserved21 : 1;  // Bit 23. Reserved
+    uint8_t reserved22 : 1;  // Bit 24. Reserved
+    uint8_t reserved23 : 1;  // Bit 25. Reserved
+    uint8_t reserved24 : 1;  // Bit 26. Reserved
+    uint8_t reserved25 : 1;  // Bit 27. Reserved
+    uint8_t reserved26 : 1;  // Bit 28. Reserved
+    uint8_t reserved27 : 1;  // Bit 29. Reserved
+    uint8_t reserved28 : 1;  // Bit 30. Reserved
+    uint8_t reserved29 : 1;  // Bit 31. Reserved
+};
 #pragma pack(pop)
 
 struct CPUInfo
@@ -320,6 +357,7 @@ struct CPUInfo
     FN_7_0_ECX fn_7_0_ecx;
     FN_7_0_EDX fn_7_0_edx;
     FN_C0000001_EDX fn_c1_edx;
+    FN_80860001_EDX fn_80860001_edx;
 };
 
 void GetCPUInformation(CPUInfo& cpu_info);

@@ -7730,113 +7730,215 @@ class CPU_Features : public ::google::protobuf::MessageLite /* @@protoc_insertio
   bool has_ais() const;
   void set_has_ais(bool value);
 
-  // bool has_rng = 125;
+  // bool has_ais_e = 125;
+  void clear_has_ais_e();
+  static const int kHasAisEFieldNumber = 125;
+  bool has_ais_e() const;
+  void set_has_ais_e(bool value);
+
+  // bool has_rng = 126;
   void clear_has_rng();
-  static const int kHasRngFieldNumber = 125;
+  static const int kHasRngFieldNumber = 126;
   bool has_rng() const;
   void set_has_rng(bool value);
 
-  // bool has_lh = 126;
+  // bool has_rng_e = 127;
+  void clear_has_rng_e();
+  static const int kHasRngEFieldNumber = 127;
+  bool has_rng_e() const;
+  void set_has_rng_e(bool value);
+
+  // bool has_lh = 128;
   void clear_has_lh();
-  static const int kHasLhFieldNumber = 126;
+  static const int kHasLhFieldNumber = 128;
   bool has_lh() const;
   void set_has_lh(bool value);
 
-  // bool has_femms = 127;
+  // bool has_femms = 129;
   void clear_has_femms();
-  static const int kHasFemmsFieldNumber = 127;
+  static const int kHasFemmsFieldNumber = 129;
   bool has_femms() const;
   void set_has_femms(bool value);
 
-  // bool has_ace = 128;
+  // bool has_ace = 130;
   void clear_has_ace();
-  static const int kHasAceFieldNumber = 128;
+  static const int kHasAceFieldNumber = 130;
   bool has_ace() const;
   void set_has_ace(bool value);
 
-  // bool has_ace2 = 129;
+  // bool has_ace_e = 131;
+  void clear_has_ace_e();
+  static const int kHasAceEFieldNumber = 131;
+  bool has_ace_e() const;
+  void set_has_ace_e(bool value);
+
+  // bool has_ace2 = 132;
   void clear_has_ace2();
-  static const int kHasAce2FieldNumber = 129;
+  static const int kHasAce2FieldNumber = 132;
   bool has_ace2() const;
   void set_has_ace2(bool value);
 
-  // bool has_phe = 130;
+  // bool has_ace2_e = 133;
+  void clear_has_ace2_e();
+  static const int kHasAce2EFieldNumber = 133;
+  bool has_ace2_e() const;
+  void set_has_ace2_e(bool value);
+
+  // bool has_phe = 134;
   void clear_has_phe();
-  static const int kHasPheFieldNumber = 130;
+  static const int kHasPheFieldNumber = 134;
   bool has_phe() const;
   void set_has_phe(bool value);
 
-  // bool has_pmm = 131;
+  // bool has_phe_e = 135;
+  void clear_has_phe_e();
+  static const int kHasPheEFieldNumber = 135;
+  bool has_phe_e() const;
+  void set_has_phe_e(bool value);
+
+  // bool has_pmm = 136;
   void clear_has_pmm();
-  static const int kHasPmmFieldNumber = 131;
+  static const int kHasPmmFieldNumber = 136;
   bool has_pmm() const;
   void set_has_pmm(bool value);
 
-  // bool has_parallax = 132;
+  // bool has_pmm_e = 137;
+  void clear_has_pmm_e();
+  static const int kHasPmmEFieldNumber = 137;
+  bool has_pmm_e() const;
+  void set_has_pmm_e(bool value);
+
+  // bool has_parallax = 138;
   void clear_has_parallax();
-  static const int kHasParallaxFieldNumber = 132;
+  static const int kHasParallaxFieldNumber = 138;
   bool has_parallax() const;
   void set_has_parallax(bool value);
 
-  // bool has_overstress = 133;
+  // bool has_parallax_e = 139;
+  void clear_has_parallax_e();
+  static const int kHasParallaxEFieldNumber = 139;
+  bool has_parallax_e() const;
+  void set_has_parallax_e(bool value);
+
+  // bool has_overstress = 140;
   void clear_has_overstress();
-  static const int kHasOverstressFieldNumber = 133;
+  static const int kHasOverstressFieldNumber = 140;
   bool has_overstress() const;
   void set_has_overstress(bool value);
 
-  // bool has_tm3 = 134;
+  // bool has_overstress_e = 141;
+  void clear_has_overstress_e();
+  static const int kHasOverstressEFieldNumber = 141;
+  bool has_overstress_e() const;
+  void set_has_overstress_e(bool value);
+
+  // bool has_tm3 = 142;
   void clear_has_tm3();
-  static const int kHasTm3FieldNumber = 134;
+  static const int kHasTm3FieldNumber = 142;
   bool has_tm3() const;
   void set_has_tm3(bool value);
 
-  // bool has_rng2 = 135;
+  // bool has_tm3_e = 143;
+  void clear_has_tm3_e();
+  static const int kHasTm3EFieldNumber = 143;
+  bool has_tm3_e() const;
+  void set_has_tm3_e(bool value);
+
+  // bool has_rng2 = 144;
   void clear_has_rng2();
-  static const int kHasRng2FieldNumber = 135;
+  static const int kHasRng2FieldNumber = 144;
   bool has_rng2() const;
   void set_has_rng2(bool value);
 
-  // bool has_phe2 = 136;
+  // bool has_rng2_e = 145;
+  void clear_has_rng2_e();
+  static const int kHasRng2EFieldNumber = 145;
+  bool has_rng2_e() const;
+  void set_has_rng2_e(bool value);
+
+  // bool has_phe2 = 146;
   void clear_has_phe2();
-  static const int kHasPhe2FieldNumber = 136;
+  static const int kHasPhe2FieldNumber = 146;
   bool has_phe2() const;
   void set_has_phe2(bool value);
 
-  // bool has_ibs = 137;
+  // bool has_phe2_e = 147;
+  void clear_has_phe2_e();
+  static const int kHasPhe2EFieldNumber = 147;
+  bool has_phe2_e() const;
+  void set_has_phe2_e(bool value);
+
+  // bool has_ibs = 148;
   void clear_has_ibs();
-  static const int kHasIbsFieldNumber = 137;
+  static const int kHasIbsFieldNumber = 148;
   bool has_ibs() const;
   void set_has_ibs(bool value);
 
-  // bool has_skinit = 138;
+  // bool has_skinit = 149;
   void clear_has_skinit();
-  static const int kHasSkinitFieldNumber = 138;
+  static const int kHasSkinitFieldNumber = 149;
   bool has_skinit() const;
   void set_has_skinit(bool value);
 
-  // bool has_lwp = 139;
+  // bool has_lwp = 150;
   void clear_has_lwp();
-  static const int kHasLwpFieldNumber = 139;
+  static const int kHasLwpFieldNumber = 150;
   bool has_lwp() const;
   void set_has_lwp(bool value);
 
-  // bool has_tbm = 140;
+  // bool has_tbm = 151;
   void clear_has_tbm();
-  static const int kHasTbmFieldNumber = 140;
+  static const int kHasTbmFieldNumber = 151;
   bool has_tbm() const;
   void set_has_tbm(bool value);
 
-  // bool has_perfctr_core = 141;
+  // bool has_perfctr_core = 152;
   void clear_has_perfctr_core();
-  static const int kHasPerfctrCoreFieldNumber = 141;
+  static const int kHasPerfctrCoreFieldNumber = 152;
   bool has_perfctr_core() const;
   void set_has_perfctr_core(bool value);
 
-  // bool has_extapic = 142;
+  // bool has_perfctr_nb = 153;
+  void clear_has_perfctr_nb();
+  static const int kHasPerfctrNbFieldNumber = 153;
+  bool has_perfctr_nb() const;
+  void set_has_perfctr_nb(bool value);
+
+  // bool has_bpext = 154;
+  void clear_has_bpext();
+  static const int kHasBpextFieldNumber = 154;
+  bool has_bpext() const;
+  void set_has_bpext(bool value);
+
+  // bool has_ptsc = 155;
+  void clear_has_ptsc();
+  static const int kHasPtscFieldNumber = 155;
+  bool has_ptsc() const;
+  void set_has_ptsc(bool value);
+
+  // bool has_mwaitx = 156;
+  void clear_has_mwaitx();
+  static const int kHasMwaitxFieldNumber = 156;
+  bool has_mwaitx() const;
+  void set_has_mwaitx(bool value);
+
+  // bool has_extapic = 157;
   void clear_has_extapic();
-  static const int kHasExtapicFieldNumber = 142;
+  static const int kHasExtapicFieldNumber = 157;
   bool has_extapic() const;
   void set_has_extapic(bool value);
+
+  // bool has_longrun = 158;
+  void clear_has_longrun();
+  static const int kHasLongrunFieldNumber = 158;
+  bool has_longrun() const;
+  void set_has_longrun(bool value);
+
+  // bool has_lrti = 159;
+  void clear_has_lrti();
+  static const int kHasLrtiFieldNumber = 159;
+  bool has_lrti() const;
+  void set_has_lrti(bool value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.CPU.Features)
  private:
@@ -7966,24 +8068,41 @@ class CPU_Features : public ::google::protobuf::MessageLite /* @@protoc_insertio
   bool has_avx512_4vnniw_;
   bool has_avx512_4fmaps_;
   bool has_ais_;
+  bool has_ais_e_;
   bool has_rng_;
+  bool has_rng_e_;
   bool has_lh_;
   bool has_femms_;
   bool has_ace_;
+  bool has_ace_e_;
   bool has_ace2_;
+  bool has_ace2_e_;
   bool has_phe_;
+  bool has_phe_e_;
   bool has_pmm_;
+  bool has_pmm_e_;
   bool has_parallax_;
+  bool has_parallax_e_;
   bool has_overstress_;
+  bool has_overstress_e_;
   bool has_tm3_;
+  bool has_tm3_e_;
   bool has_rng2_;
+  bool has_rng2_e_;
   bool has_phe2_;
+  bool has_phe2_e_;
   bool has_ibs_;
   bool has_skinit_;
   bool has_lwp_;
   bool has_tbm_;
   bool has_perfctr_core_;
+  bool has_perfctr_nb_;
+  bool has_bpext_;
+  bool has_ptsc_;
+  bool has_mwaitx_;
   bool has_extapic_;
+  bool has_longrun_;
+  bool has_lrti_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_FeaturesImpl();
@@ -19963,7 +20082,21 @@ inline void CPU_Features::set_has_ais(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ais)
 }
 
-// bool has_rng = 125;
+// bool has_ais_e = 125;
+inline void CPU_Features::clear_has_ais_e() {
+  has_ais_e_ = false;
+}
+inline bool CPU_Features::has_ais_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ais_e)
+  return has_ais_e_;
+}
+inline void CPU_Features::set_has_ais_e(bool value) {
+  
+  has_ais_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ais_e)
+}
+
+// bool has_rng = 126;
 inline void CPU_Features::clear_has_rng() {
   has_rng_ = false;
 }
@@ -19977,7 +20110,21 @@ inline void CPU_Features::set_has_rng(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng)
 }
 
-// bool has_lh = 126;
+// bool has_rng_e = 127;
+inline void CPU_Features::clear_has_rng_e() {
+  has_rng_e_ = false;
+}
+inline bool CPU_Features::has_rng_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rng_e)
+  return has_rng_e_;
+}
+inline void CPU_Features::set_has_rng_e(bool value) {
+  
+  has_rng_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng_e)
+}
+
+// bool has_lh = 128;
 inline void CPU_Features::clear_has_lh() {
   has_lh_ = false;
 }
@@ -19991,7 +20138,7 @@ inline void CPU_Features::set_has_lh(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lh)
 }
 
-// bool has_femms = 127;
+// bool has_femms = 129;
 inline void CPU_Features::clear_has_femms() {
   has_femms_ = false;
 }
@@ -20005,7 +20152,7 @@ inline void CPU_Features::set_has_femms(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_femms)
 }
 
-// bool has_ace = 128;
+// bool has_ace = 130;
 inline void CPU_Features::clear_has_ace() {
   has_ace_ = false;
 }
@@ -20019,7 +20166,21 @@ inline void CPU_Features::set_has_ace(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace)
 }
 
-// bool has_ace2 = 129;
+// bool has_ace_e = 131;
+inline void CPU_Features::clear_has_ace_e() {
+  has_ace_e_ = false;
+}
+inline bool CPU_Features::has_ace_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ace_e)
+  return has_ace_e_;
+}
+inline void CPU_Features::set_has_ace_e(bool value) {
+  
+  has_ace_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace_e)
+}
+
+// bool has_ace2 = 132;
 inline void CPU_Features::clear_has_ace2() {
   has_ace2_ = false;
 }
@@ -20033,7 +20194,21 @@ inline void CPU_Features::set_has_ace2(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace2)
 }
 
-// bool has_phe = 130;
+// bool has_ace2_e = 133;
+inline void CPU_Features::clear_has_ace2_e() {
+  has_ace2_e_ = false;
+}
+inline bool CPU_Features::has_ace2_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ace2_e)
+  return has_ace2_e_;
+}
+inline void CPU_Features::set_has_ace2_e(bool value) {
+  
+  has_ace2_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ace2_e)
+}
+
+// bool has_phe = 134;
 inline void CPU_Features::clear_has_phe() {
   has_phe_ = false;
 }
@@ -20047,7 +20222,21 @@ inline void CPU_Features::set_has_phe(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe)
 }
 
-// bool has_pmm = 131;
+// bool has_phe_e = 135;
+inline void CPU_Features::clear_has_phe_e() {
+  has_phe_e_ = false;
+}
+inline bool CPU_Features::has_phe_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_phe_e)
+  return has_phe_e_;
+}
+inline void CPU_Features::set_has_phe_e(bool value) {
+  
+  has_phe_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe_e)
+}
+
+// bool has_pmm = 136;
 inline void CPU_Features::clear_has_pmm() {
   has_pmm_ = false;
 }
@@ -20061,7 +20250,21 @@ inline void CPU_Features::set_has_pmm(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pmm)
 }
 
-// bool has_parallax = 132;
+// bool has_pmm_e = 137;
+inline void CPU_Features::clear_has_pmm_e() {
+  has_pmm_e_ = false;
+}
+inline bool CPU_Features::has_pmm_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_pmm_e)
+  return has_pmm_e_;
+}
+inline void CPU_Features::set_has_pmm_e(bool value) {
+  
+  has_pmm_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_pmm_e)
+}
+
+// bool has_parallax = 138;
 inline void CPU_Features::clear_has_parallax() {
   has_parallax_ = false;
 }
@@ -20075,7 +20278,21 @@ inline void CPU_Features::set_has_parallax(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_parallax)
 }
 
-// bool has_overstress = 133;
+// bool has_parallax_e = 139;
+inline void CPU_Features::clear_has_parallax_e() {
+  has_parallax_e_ = false;
+}
+inline bool CPU_Features::has_parallax_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_parallax_e)
+  return has_parallax_e_;
+}
+inline void CPU_Features::set_has_parallax_e(bool value) {
+  
+  has_parallax_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_parallax_e)
+}
+
+// bool has_overstress = 140;
 inline void CPU_Features::clear_has_overstress() {
   has_overstress_ = false;
 }
@@ -20089,7 +20306,21 @@ inline void CPU_Features::set_has_overstress(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_overstress)
 }
 
-// bool has_tm3 = 134;
+// bool has_overstress_e = 141;
+inline void CPU_Features::clear_has_overstress_e() {
+  has_overstress_e_ = false;
+}
+inline bool CPU_Features::has_overstress_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_overstress_e)
+  return has_overstress_e_;
+}
+inline void CPU_Features::set_has_overstress_e(bool value) {
+  
+  has_overstress_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_overstress_e)
+}
+
+// bool has_tm3 = 142;
 inline void CPU_Features::clear_has_tm3() {
   has_tm3_ = false;
 }
@@ -20103,7 +20334,21 @@ inline void CPU_Features::set_has_tm3(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tm3)
 }
 
-// bool has_rng2 = 135;
+// bool has_tm3_e = 143;
+inline void CPU_Features::clear_has_tm3_e() {
+  has_tm3_e_ = false;
+}
+inline bool CPU_Features::has_tm3_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tm3_e)
+  return has_tm3_e_;
+}
+inline void CPU_Features::set_has_tm3_e(bool value) {
+  
+  has_tm3_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tm3_e)
+}
+
+// bool has_rng2 = 144;
 inline void CPU_Features::clear_has_rng2() {
   has_rng2_ = false;
 }
@@ -20117,7 +20362,21 @@ inline void CPU_Features::set_has_rng2(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng2)
 }
 
-// bool has_phe2 = 136;
+// bool has_rng2_e = 145;
+inline void CPU_Features::clear_has_rng2_e() {
+  has_rng2_e_ = false;
+}
+inline bool CPU_Features::has_rng2_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_rng2_e)
+  return has_rng2_e_;
+}
+inline void CPU_Features::set_has_rng2_e(bool value) {
+  
+  has_rng2_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_rng2_e)
+}
+
+// bool has_phe2 = 146;
 inline void CPU_Features::clear_has_phe2() {
   has_phe2_ = false;
 }
@@ -20131,7 +20390,21 @@ inline void CPU_Features::set_has_phe2(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe2)
 }
 
-// bool has_ibs = 137;
+// bool has_phe2_e = 147;
+inline void CPU_Features::clear_has_phe2_e() {
+  has_phe2_e_ = false;
+}
+inline bool CPU_Features::has_phe2_e() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_phe2_e)
+  return has_phe2_e_;
+}
+inline void CPU_Features::set_has_phe2_e(bool value) {
+  
+  has_phe2_e_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe2_e)
+}
+
+// bool has_ibs = 148;
 inline void CPU_Features::clear_has_ibs() {
   has_ibs_ = false;
 }
@@ -20145,7 +20418,7 @@ inline void CPU_Features::set_has_ibs(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ibs)
 }
 
-// bool has_skinit = 138;
+// bool has_skinit = 149;
 inline void CPU_Features::clear_has_skinit() {
   has_skinit_ = false;
 }
@@ -20159,7 +20432,7 @@ inline void CPU_Features::set_has_skinit(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_skinit)
 }
 
-// bool has_lwp = 139;
+// bool has_lwp = 150;
 inline void CPU_Features::clear_has_lwp() {
   has_lwp_ = false;
 }
@@ -20173,7 +20446,7 @@ inline void CPU_Features::set_has_lwp(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lwp)
 }
 
-// bool has_tbm = 140;
+// bool has_tbm = 151;
 inline void CPU_Features::clear_has_tbm() {
   has_tbm_ = false;
 }
@@ -20187,7 +20460,7 @@ inline void CPU_Features::set_has_tbm(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tbm)
 }
 
-// bool has_perfctr_core = 141;
+// bool has_perfctr_core = 152;
 inline void CPU_Features::clear_has_perfctr_core() {
   has_perfctr_core_ = false;
 }
@@ -20201,7 +20474,63 @@ inline void CPU_Features::set_has_perfctr_core(bool value) {
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_perfctr_core)
 }
 
-// bool has_extapic = 142;
+// bool has_perfctr_nb = 153;
+inline void CPU_Features::clear_has_perfctr_nb() {
+  has_perfctr_nb_ = false;
+}
+inline bool CPU_Features::has_perfctr_nb() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_perfctr_nb)
+  return has_perfctr_nb_;
+}
+inline void CPU_Features::set_has_perfctr_nb(bool value) {
+  
+  has_perfctr_nb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_perfctr_nb)
+}
+
+// bool has_bpext = 154;
+inline void CPU_Features::clear_has_bpext() {
+  has_bpext_ = false;
+}
+inline bool CPU_Features::has_bpext() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_bpext)
+  return has_bpext_;
+}
+inline void CPU_Features::set_has_bpext(bool value) {
+  
+  has_bpext_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_bpext)
+}
+
+// bool has_ptsc = 155;
+inline void CPU_Features::clear_has_ptsc() {
+  has_ptsc_ = false;
+}
+inline bool CPU_Features::has_ptsc() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ptsc)
+  return has_ptsc_;
+}
+inline void CPU_Features::set_has_ptsc(bool value) {
+  
+  has_ptsc_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ptsc)
+}
+
+// bool has_mwaitx = 156;
+inline void CPU_Features::clear_has_mwaitx() {
+  has_mwaitx_ = false;
+}
+inline bool CPU_Features::has_mwaitx() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_mwaitx)
+  return has_mwaitx_;
+}
+inline void CPU_Features::set_has_mwaitx(bool value) {
+  
+  has_mwaitx_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_mwaitx)
+}
+
+// bool has_extapic = 157;
 inline void CPU_Features::clear_has_extapic() {
   has_extapic_ = false;
 }
@@ -20213,6 +20542,34 @@ inline void CPU_Features::set_has_extapic(bool value) {
   
   has_extapic_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_extapic)
+}
+
+// bool has_longrun = 158;
+inline void CPU_Features::clear_has_longrun() {
+  has_longrun_ = false;
+}
+inline bool CPU_Features::has_longrun() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_longrun)
+  return has_longrun_;
+}
+inline void CPU_Features::set_has_longrun(bool value) {
+  
+  has_longrun_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_longrun)
+}
+
+// bool has_lrti = 159;
+inline void CPU_Features::clear_has_lrti() {
+  has_lrti_ = false;
+}
+inline bool CPU_Features::has_lrti() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_lrti)
+  return has_lrti_;
+}
+inline void CPU_Features::set_has_lrti(bool value) {
+  
+  has_lrti_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lrti)
 }
 
 // -------------------------------------------------------------------

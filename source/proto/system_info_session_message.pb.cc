@@ -13566,24 +13566,41 @@ const int CPU_Features::kHasSgxLcFieldNumber;
 const int CPU_Features::kHasAvx5124VnniwFieldNumber;
 const int CPU_Features::kHasAvx5124FmapsFieldNumber;
 const int CPU_Features::kHasAisFieldNumber;
+const int CPU_Features::kHasAisEFieldNumber;
 const int CPU_Features::kHasRngFieldNumber;
+const int CPU_Features::kHasRngEFieldNumber;
 const int CPU_Features::kHasLhFieldNumber;
 const int CPU_Features::kHasFemmsFieldNumber;
 const int CPU_Features::kHasAceFieldNumber;
+const int CPU_Features::kHasAceEFieldNumber;
 const int CPU_Features::kHasAce2FieldNumber;
+const int CPU_Features::kHasAce2EFieldNumber;
 const int CPU_Features::kHasPheFieldNumber;
+const int CPU_Features::kHasPheEFieldNumber;
 const int CPU_Features::kHasPmmFieldNumber;
+const int CPU_Features::kHasPmmEFieldNumber;
 const int CPU_Features::kHasParallaxFieldNumber;
+const int CPU_Features::kHasParallaxEFieldNumber;
 const int CPU_Features::kHasOverstressFieldNumber;
+const int CPU_Features::kHasOverstressEFieldNumber;
 const int CPU_Features::kHasTm3FieldNumber;
+const int CPU_Features::kHasTm3EFieldNumber;
 const int CPU_Features::kHasRng2FieldNumber;
+const int CPU_Features::kHasRng2EFieldNumber;
 const int CPU_Features::kHasPhe2FieldNumber;
+const int CPU_Features::kHasPhe2EFieldNumber;
 const int CPU_Features::kHasIbsFieldNumber;
 const int CPU_Features::kHasSkinitFieldNumber;
 const int CPU_Features::kHasLwpFieldNumber;
 const int CPU_Features::kHasTbmFieldNumber;
 const int CPU_Features::kHasPerfctrCoreFieldNumber;
+const int CPU_Features::kHasPerfctrNbFieldNumber;
+const int CPU_Features::kHasBpextFieldNumber;
+const int CPU_Features::kHasPtscFieldNumber;
+const int CPU_Features::kHasMwaitxFieldNumber;
 const int CPU_Features::kHasExtapicFieldNumber;
+const int CPU_Features::kHasLongrunFieldNumber;
+const int CPU_Features::kHasLrtiFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CPU_Features::CPU_Features()
@@ -13600,15 +13617,15 @@ CPU_Features::CPU_Features(const CPU_Features& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&has_fpu_, &from.has_fpu_,
-    static_cast<size_t>(reinterpret_cast<char*>(&has_extapic_) -
-    reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
+    static_cast<size_t>(reinterpret_cast<char*>(&has_lrti_) -
+    reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_lrti_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.CPU.Features)
 }
 
 void CPU_Features::SharedCtor() {
   ::memset(&has_fpu_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_extapic_) -
-      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
+      reinterpret_cast<char*>(&has_lrti_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_lrti_));
   _cached_size_ = 0;
 }
 
@@ -13645,8 +13662,8 @@ void CPU_Features::Clear() {
   (void) cached_has_bits;
 
   ::memset(&has_fpu_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_extapic_) -
-      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
+      reinterpret_cast<char*>(&has_lrti_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_lrti_));
   _internal_metadata_.Clear();
 }
 
@@ -15402,10 +15419,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_rng = 125;
+      // bool has_ais_e = 125;
       case 125: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(232u /* 1000 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ais_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rng = 126;
+      case 126: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 1008 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15416,10 +15447,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_lh = 126;
-      case 126: {
+      // bool has_rng_e = 127;
+      case 127: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(240u /* 1008 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(248u /* 1016 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rng_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lh = 128;
+      case 128: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(0u /* 1024 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15430,10 +15475,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_femms = 127;
-      case 127: {
+      // bool has_femms = 129;
+      case 129: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(248u /* 1016 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(8u /* 1032 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15444,10 +15489,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_ace = 128;
-      case 128: {
+      // bool has_ace = 130;
+      case 130: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(0u /* 1024 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 1040 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15458,10 +15503,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_ace2 = 129;
-      case 129: {
+      // bool has_ace_e = 131;
+      case 131: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u /* 1032 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(24u /* 1048 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ace_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ace2 = 132;
+      case 132: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 1056 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15472,10 +15531,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_phe = 130;
-      case 130: {
+      // bool has_ace2_e = 133;
+      case 133: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 1040 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(40u /* 1064 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ace2_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_phe = 134;
+      case 134: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 1072 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15486,10 +15559,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_pmm = 131;
-      case 131: {
+      // bool has_phe_e = 135;
+      case 135: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 1048 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(56u /* 1080 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_phe_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_pmm = 136;
+      case 136: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 1088 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15500,10 +15587,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_parallax = 132;
-      case 132: {
+      // bool has_pmm_e = 137;
+      case 137: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 1056 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(72u /* 1096 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_pmm_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_parallax = 138;
+      case 138: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 1104 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15514,10 +15615,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_overstress = 133;
-      case 133: {
+      // bool has_parallax_e = 139;
+      case 139: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 1064 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(88u /* 1112 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_parallax_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_overstress = 140;
+      case 140: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 1120 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15528,10 +15643,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_tm3 = 134;
-      case 134: {
+      // bool has_overstress_e = 141;
+      case 141: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(48u /* 1072 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(104u /* 1128 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_overstress_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tm3 = 142;
+      case 142: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 1136 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15542,10 +15671,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_rng2 = 135;
-      case 135: {
+      // bool has_tm3_e = 143;
+      case 143: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(56u /* 1080 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(120u /* 1144 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tm3_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_rng2 = 144;
+      case 144: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 1152 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15556,10 +15699,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_phe2 = 136;
-      case 136: {
+      // bool has_rng2_e = 145;
+      case 145: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(64u /* 1088 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(136u /* 1160 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_rng2_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_phe2 = 146;
+      case 146: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(144u /* 1168 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15570,10 +15727,24 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_ibs = 137;
-      case 137: {
+      // bool has_phe2_e = 147;
+      case 147: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(72u /* 1096 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(152u /* 1176 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_phe2_e_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ibs = 148;
+      case 148: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(160u /* 1184 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15584,10 +15755,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_skinit = 138;
-      case 138: {
+      // bool has_skinit = 149;
+      case 149: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(80u /* 1104 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(168u /* 1192 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15598,10 +15769,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_lwp = 139;
-      case 139: {
+      // bool has_lwp = 150;
+      case 150: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(88u /* 1112 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(176u /* 1200 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15612,10 +15783,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_tbm = 140;
-      case 140: {
+      // bool has_tbm = 151;
+      case 151: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(96u /* 1120 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(184u /* 1208 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15626,10 +15797,10 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_perfctr_core = 141;
-      case 141: {
+      // bool has_perfctr_core = 152;
+      case 152: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(104u /* 1128 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(192u /* 1216 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -15640,14 +15811,98 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
-      // bool has_extapic = 142;
-      case 142: {
+      // bool has_perfctr_nb = 153;
+      case 153: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(112u /* 1136 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(200u /* 1224 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_perfctr_nb_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_bpext = 154;
+      case 154: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 1232 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_bpext_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_ptsc = 155;
+      case 155: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(216u /* 1240 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ptsc_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_mwaitx = 156;
+      case 156: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(224u /* 1248 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_mwaitx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_extapic = 157;
+      case 157: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(232u /* 1256 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &has_extapic_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_longrun = 158;
+      case 158: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(240u /* 1264 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_longrun_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lrti = 159;
+      case 159: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(248u /* 1272 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_lrti_)));
         } else {
           goto handle_unusual;
         }
@@ -16300,94 +16555,179 @@ void CPU_Features::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(124, this->has_ais(), output);
   }
 
-  // bool has_rng = 125;
+  // bool has_ais_e = 125;
+  if (this->has_ais_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(125, this->has_ais_e(), output);
+  }
+
+  // bool has_rng = 126;
   if (this->has_rng() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(125, this->has_rng(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(126, this->has_rng(), output);
   }
 
-  // bool has_lh = 126;
+  // bool has_rng_e = 127;
+  if (this->has_rng_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(127, this->has_rng_e(), output);
+  }
+
+  // bool has_lh = 128;
   if (this->has_lh() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(126, this->has_lh(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(128, this->has_lh(), output);
   }
 
-  // bool has_femms = 127;
+  // bool has_femms = 129;
   if (this->has_femms() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(127, this->has_femms(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(129, this->has_femms(), output);
   }
 
-  // bool has_ace = 128;
+  // bool has_ace = 130;
   if (this->has_ace() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(128, this->has_ace(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(130, this->has_ace(), output);
   }
 
-  // bool has_ace2 = 129;
+  // bool has_ace_e = 131;
+  if (this->has_ace_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(131, this->has_ace_e(), output);
+  }
+
+  // bool has_ace2 = 132;
   if (this->has_ace2() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(129, this->has_ace2(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(132, this->has_ace2(), output);
   }
 
-  // bool has_phe = 130;
+  // bool has_ace2_e = 133;
+  if (this->has_ace2_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(133, this->has_ace2_e(), output);
+  }
+
+  // bool has_phe = 134;
   if (this->has_phe() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(130, this->has_phe(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(134, this->has_phe(), output);
   }
 
-  // bool has_pmm = 131;
+  // bool has_phe_e = 135;
+  if (this->has_phe_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(135, this->has_phe_e(), output);
+  }
+
+  // bool has_pmm = 136;
   if (this->has_pmm() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(131, this->has_pmm(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(136, this->has_pmm(), output);
   }
 
-  // bool has_parallax = 132;
+  // bool has_pmm_e = 137;
+  if (this->has_pmm_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(137, this->has_pmm_e(), output);
+  }
+
+  // bool has_parallax = 138;
   if (this->has_parallax() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(132, this->has_parallax(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(138, this->has_parallax(), output);
   }
 
-  // bool has_overstress = 133;
+  // bool has_parallax_e = 139;
+  if (this->has_parallax_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(139, this->has_parallax_e(), output);
+  }
+
+  // bool has_overstress = 140;
   if (this->has_overstress() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(133, this->has_overstress(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(140, this->has_overstress(), output);
   }
 
-  // bool has_tm3 = 134;
+  // bool has_overstress_e = 141;
+  if (this->has_overstress_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(141, this->has_overstress_e(), output);
+  }
+
+  // bool has_tm3 = 142;
   if (this->has_tm3() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(134, this->has_tm3(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(142, this->has_tm3(), output);
   }
 
-  // bool has_rng2 = 135;
+  // bool has_tm3_e = 143;
+  if (this->has_tm3_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(143, this->has_tm3_e(), output);
+  }
+
+  // bool has_rng2 = 144;
   if (this->has_rng2() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(135, this->has_rng2(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(144, this->has_rng2(), output);
   }
 
-  // bool has_phe2 = 136;
+  // bool has_rng2_e = 145;
+  if (this->has_rng2_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(145, this->has_rng2_e(), output);
+  }
+
+  // bool has_phe2 = 146;
   if (this->has_phe2() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(136, this->has_phe2(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(146, this->has_phe2(), output);
   }
 
-  // bool has_ibs = 137;
+  // bool has_phe2_e = 147;
+  if (this->has_phe2_e() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(147, this->has_phe2_e(), output);
+  }
+
+  // bool has_ibs = 148;
   if (this->has_ibs() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(137, this->has_ibs(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(148, this->has_ibs(), output);
   }
 
-  // bool has_skinit = 138;
+  // bool has_skinit = 149;
   if (this->has_skinit() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(138, this->has_skinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(149, this->has_skinit(), output);
   }
 
-  // bool has_lwp = 139;
+  // bool has_lwp = 150;
   if (this->has_lwp() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(139, this->has_lwp(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(150, this->has_lwp(), output);
   }
 
-  // bool has_tbm = 140;
+  // bool has_tbm = 151;
   if (this->has_tbm() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(140, this->has_tbm(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(151, this->has_tbm(), output);
   }
 
-  // bool has_perfctr_core = 141;
+  // bool has_perfctr_core = 152;
   if (this->has_perfctr_core() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(141, this->has_perfctr_core(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(152, this->has_perfctr_core(), output);
   }
 
-  // bool has_extapic = 142;
+  // bool has_perfctr_nb = 153;
+  if (this->has_perfctr_nb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(153, this->has_perfctr_nb(), output);
+  }
+
+  // bool has_bpext = 154;
+  if (this->has_bpext() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(154, this->has_bpext(), output);
+  }
+
+  // bool has_ptsc = 155;
+  if (this->has_ptsc() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(155, this->has_ptsc(), output);
+  }
+
+  // bool has_mwaitx = 156;
+  if (this->has_mwaitx() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(156, this->has_mwaitx(), output);
+  }
+
+  // bool has_extapic = 157;
   if (this->has_extapic() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(142, this->has_extapic(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(157, this->has_extapic(), output);
+  }
+
+  // bool has_longrun = 158;
+  if (this->has_longrun() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(158, this->has_longrun(), output);
+  }
+
+  // bool has_lrti = 159;
+  if (this->has_lrti() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(159, this->has_lrti(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -17021,93 +17361,178 @@ size_t CPU_Features::ByteSizeLong() const {
     total_size += 2 + 1;
   }
 
-  // bool has_rng = 125;
+  // bool has_ais_e = 125;
+  if (this->has_ais_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rng = 126;
   if (this->has_rng() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_lh = 126;
+  // bool has_rng_e = 127;
+  if (this->has_rng_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lh = 128;
   if (this->has_lh() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_femms = 127;
+  // bool has_femms = 129;
   if (this->has_femms() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_ace = 128;
+  // bool has_ace = 130;
   if (this->has_ace() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_ace2 = 129;
+  // bool has_ace_e = 131;
+  if (this->has_ace_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ace2 = 132;
   if (this->has_ace2() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_phe = 130;
+  // bool has_ace2_e = 133;
+  if (this->has_ace2_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_phe = 134;
   if (this->has_phe() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_pmm = 131;
+  // bool has_phe_e = 135;
+  if (this->has_phe_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_pmm = 136;
   if (this->has_pmm() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_parallax = 132;
+  // bool has_pmm_e = 137;
+  if (this->has_pmm_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_parallax = 138;
   if (this->has_parallax() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_overstress = 133;
+  // bool has_parallax_e = 139;
+  if (this->has_parallax_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_overstress = 140;
   if (this->has_overstress() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_tm3 = 134;
+  // bool has_overstress_e = 141;
+  if (this->has_overstress_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tm3 = 142;
   if (this->has_tm3() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_rng2 = 135;
+  // bool has_tm3_e = 143;
+  if (this->has_tm3_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_rng2 = 144;
   if (this->has_rng2() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_phe2 = 136;
+  // bool has_rng2_e = 145;
+  if (this->has_rng2_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_phe2 = 146;
   if (this->has_phe2() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_ibs = 137;
+  // bool has_phe2_e = 147;
+  if (this->has_phe2_e() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ibs = 148;
   if (this->has_ibs() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_skinit = 138;
+  // bool has_skinit = 149;
   if (this->has_skinit() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_lwp = 139;
+  // bool has_lwp = 150;
   if (this->has_lwp() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_tbm = 140;
+  // bool has_tbm = 151;
   if (this->has_tbm() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_perfctr_core = 141;
+  // bool has_perfctr_core = 152;
   if (this->has_perfctr_core() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_extapic = 142;
+  // bool has_perfctr_nb = 153;
+  if (this->has_perfctr_nb() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_bpext = 154;
+  if (this->has_bpext() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_ptsc = 155;
+  if (this->has_ptsc() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_mwaitx = 156;
+  if (this->has_mwaitx() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_extapic = 157;
   if (this->has_extapic() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_longrun = 158;
+  if (this->has_longrun() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lrti = 159;
+  if (this->has_lrti() != 0) {
     total_size += 2 + 1;
   }
 
@@ -17502,8 +17927,14 @@ void CPU_Features::MergeFrom(const CPU_Features& from) {
   if (from.has_ais() != 0) {
     set_has_ais(from.has_ais());
   }
+  if (from.has_ais_e() != 0) {
+    set_has_ais_e(from.has_ais_e());
+  }
   if (from.has_rng() != 0) {
     set_has_rng(from.has_rng());
+  }
+  if (from.has_rng_e() != 0) {
+    set_has_rng_e(from.has_rng_e());
   }
   if (from.has_lh() != 0) {
     set_has_lh(from.has_lh());
@@ -17514,29 +17945,56 @@ void CPU_Features::MergeFrom(const CPU_Features& from) {
   if (from.has_ace() != 0) {
     set_has_ace(from.has_ace());
   }
+  if (from.has_ace_e() != 0) {
+    set_has_ace_e(from.has_ace_e());
+  }
   if (from.has_ace2() != 0) {
     set_has_ace2(from.has_ace2());
+  }
+  if (from.has_ace2_e() != 0) {
+    set_has_ace2_e(from.has_ace2_e());
   }
   if (from.has_phe() != 0) {
     set_has_phe(from.has_phe());
   }
+  if (from.has_phe_e() != 0) {
+    set_has_phe_e(from.has_phe_e());
+  }
   if (from.has_pmm() != 0) {
     set_has_pmm(from.has_pmm());
+  }
+  if (from.has_pmm_e() != 0) {
+    set_has_pmm_e(from.has_pmm_e());
   }
   if (from.has_parallax() != 0) {
     set_has_parallax(from.has_parallax());
   }
+  if (from.has_parallax_e() != 0) {
+    set_has_parallax_e(from.has_parallax_e());
+  }
   if (from.has_overstress() != 0) {
     set_has_overstress(from.has_overstress());
+  }
+  if (from.has_overstress_e() != 0) {
+    set_has_overstress_e(from.has_overstress_e());
   }
   if (from.has_tm3() != 0) {
     set_has_tm3(from.has_tm3());
   }
+  if (from.has_tm3_e() != 0) {
+    set_has_tm3_e(from.has_tm3_e());
+  }
   if (from.has_rng2() != 0) {
     set_has_rng2(from.has_rng2());
   }
+  if (from.has_rng2_e() != 0) {
+    set_has_rng2_e(from.has_rng2_e());
+  }
   if (from.has_phe2() != 0) {
     set_has_phe2(from.has_phe2());
+  }
+  if (from.has_phe2_e() != 0) {
+    set_has_phe2_e(from.has_phe2_e());
   }
   if (from.has_ibs() != 0) {
     set_has_ibs(from.has_ibs());
@@ -17553,8 +18011,26 @@ void CPU_Features::MergeFrom(const CPU_Features& from) {
   if (from.has_perfctr_core() != 0) {
     set_has_perfctr_core(from.has_perfctr_core());
   }
+  if (from.has_perfctr_nb() != 0) {
+    set_has_perfctr_nb(from.has_perfctr_nb());
+  }
+  if (from.has_bpext() != 0) {
+    set_has_bpext(from.has_bpext());
+  }
+  if (from.has_ptsc() != 0) {
+    set_has_ptsc(from.has_ptsc());
+  }
+  if (from.has_mwaitx() != 0) {
+    set_has_mwaitx(from.has_mwaitx());
+  }
   if (from.has_extapic() != 0) {
     set_has_extapic(from.has_extapic());
+  }
+  if (from.has_longrun() != 0) {
+    set_has_longrun(from.has_longrun());
+  }
+  if (from.has_lrti() != 0) {
+    set_has_lrti(from.has_lrti());
   }
 }
 
@@ -17699,24 +18175,41 @@ void CPU_Features::InternalSwap(CPU_Features* other) {
   swap(has_avx512_4vnniw_, other->has_avx512_4vnniw_);
   swap(has_avx512_4fmaps_, other->has_avx512_4fmaps_);
   swap(has_ais_, other->has_ais_);
+  swap(has_ais_e_, other->has_ais_e_);
   swap(has_rng_, other->has_rng_);
+  swap(has_rng_e_, other->has_rng_e_);
   swap(has_lh_, other->has_lh_);
   swap(has_femms_, other->has_femms_);
   swap(has_ace_, other->has_ace_);
+  swap(has_ace_e_, other->has_ace_e_);
   swap(has_ace2_, other->has_ace2_);
+  swap(has_ace2_e_, other->has_ace2_e_);
   swap(has_phe_, other->has_phe_);
+  swap(has_phe_e_, other->has_phe_e_);
   swap(has_pmm_, other->has_pmm_);
+  swap(has_pmm_e_, other->has_pmm_e_);
   swap(has_parallax_, other->has_parallax_);
+  swap(has_parallax_e_, other->has_parallax_e_);
   swap(has_overstress_, other->has_overstress_);
+  swap(has_overstress_e_, other->has_overstress_e_);
   swap(has_tm3_, other->has_tm3_);
+  swap(has_tm3_e_, other->has_tm3_e_);
   swap(has_rng2_, other->has_rng2_);
+  swap(has_rng2_e_, other->has_rng2_e_);
   swap(has_phe2_, other->has_phe2_);
+  swap(has_phe2_e_, other->has_phe2_e_);
   swap(has_ibs_, other->has_ibs_);
   swap(has_skinit_, other->has_skinit_);
   swap(has_lwp_, other->has_lwp_);
   swap(has_tbm_, other->has_tbm_);
   swap(has_perfctr_core_, other->has_perfctr_core_);
+  swap(has_perfctr_nb_, other->has_perfctr_nb_);
+  swap(has_bpext_, other->has_bpext_);
+  swap(has_ptsc_, other->has_ptsc_);
+  swap(has_mwaitx_, other->has_mwaitx_);
   swap(has_extapic_, other->has_extapic_);
+  swap(has_longrun_, other->has_longrun_);
+  swap(has_lrti_, other->has_lrti_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

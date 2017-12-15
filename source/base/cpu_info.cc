@@ -77,6 +77,7 @@ void GetCPUInformation(CPUInfo& cpu_info)
     DCHECK_EQ(sizeof(FN_7_0_ECX), sizeof(uint32_t));
     DCHECK_EQ(sizeof(FN_7_0_EDX), sizeof(uint32_t));
     DCHECK_EQ(sizeof(FN_C0000001_EDX), sizeof(uint32_t));
+    DCHECK_EQ(sizeof(FN_80860001_EDX), sizeof(uint32_t));
 
     memset(&cpu_info, 0, sizeof(CPUInfo));
 
@@ -195,6 +196,30 @@ void GetCPUInformation(CPUInfo& cpu_info)
             case 0xC0000001:
             {
                 memcpy(&cpu_info.fn_c1_edx, &edx, sizeof(edx));
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+
+    max_leaf = CPUID(0x80860000).eax();
+
+    for (uint32_t leaf = 0x80860000; leaf <= max_leaf; ++leaf)
+    {
+        cpuid.get(leaf);
+
+        eax = cpuid.eax();
+        ebx = cpuid.ebx();
+        ecx = cpuid.ecx();
+        edx = cpuid.edx();
+
+        switch (leaf)
+        {
+            case 0x80860001:
+            {
+                memcpy(&cpu_info.fn_80860001_edx, &edx, sizeof(edx));
             }
             break;
 
