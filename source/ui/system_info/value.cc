@@ -11,57 +11,17 @@
 
 namespace aspia {
 
-Value::Value(std::string&& value, std::string&& unit)
-    : type_(Type::STRING),
-      value_(std::move(value)),
-      unit_(std::move(unit))
-{
-    // Nothing
-}
-
-Value::Value(bool value)
-    : type_(Type::BOOL),
-      value_(value)
-{
-    // Nothing
-}
-
-Value::Value(uint32_t value, std::string_view unit)
-    : type_(Type::UINT32),
-      value_(value),
+Value::Value(Type type, ValueType&& value, std::string_view unit)
+    : value_(std::move(value)),
+      type_(type),
       unit_(unit)
 {
     // Nothing
 }
 
-Value::Value(int32_t value, std::string_view unit)
-    : type_(Type::INT32),
-      value_(value),
-      unit_(unit)
-{
-    // Nothing
-}
-
-Value::Value(uint64_t value, std::string_view unit)
-    : type_(Type::UINT64),
-      value_(value),
-      unit_(unit)
-{
-    // Nothing
-}
-
-Value::Value(int64_t value, std::string_view unit)
-    : type_(Type::INT64),
-      value_(value),
-      unit_(unit)
-{
-    // Nothing
-}
-
-Value::Value(double value, std::string_view unit)
-    : type_(Type::DOUBLE),
-      value_(value),
-      unit_(unit)
+Value::Value(Type type, ValueType&& value)
+    : value_(std::move(value)),
+      type_(type)
 {
     // Nothing
 }
@@ -85,13 +45,26 @@ Value& Value::operator=(Value&& other)
 // static
 Value Value::EmptyString()
 {
-    return Value(std::string(), std::string());
+    return Value(Type::STRING, std::string());
 }
 
 // static
-Value Value::String(std::string_view value)
+Value Value::String(const char* value)
 {
-    return Value(std::string(value), std::string());
+    DCHECK(value != nullptr);
+    return Value(Type::STRING, std::string(value));
+}
+
+// static
+Value Value::String(const std::string& value)
+{
+    return Value(Type::STRING, value);
+}
+
+// static
+Value Value::String(std::string&& value)
+{
+    return Value(Type::STRING, std::move(value));
 }
 
 // static
@@ -103,73 +76,73 @@ Value Value::FormattedString(const char* format, ...)
     std::string out = StringPrintfV(format, args);
     va_end(args);
 
-    return Value(std::move(out), std::string());
+    return Value(Type::STRING, std::move(out));
 }
 
 // static
 Value Value::Bool(bool value)
 {
-    return Value(value);
+    return Value(Type::BOOL, value);
 }
 
 // static
 Value Value::Number(uint32_t value, std::string_view unit)
 {
-    return Value(value, unit);
+    return Value(Type::UINT32, value, unit);
 }
 
 // static
 Value Value::Number(uint32_t value)
 {
-    return Number(value, std::string());
+    return Value(Type::UINT32, value);
 }
 
 // static
 Value Value::Number(int32_t value, std::string_view unit)
 {
-    return Value(value, unit);
+    return Value(Type::INT32, value, unit);
 }
 
 // static
 Value Value::Number(int32_t value)
 {
-    return Number(value, std::string());
+    return Value(Type::INT32, value);
 }
 
 // static
 Value Value::Number(uint64_t value, std::string_view unit)
 {
-    return Value(value, unit);
+    return Value(Type::UINT64, value, unit);
 }
 
 // static
 Value Value::Number(uint64_t value)
 {
-    return Number(value, std::string());
+    return Value(Type::UINT64, value);
 }
 
 // static
 Value Value::Number(int64_t value, std::string_view unit)
 {
-    return Value(value, unit);
+    return Value(Type::INT64, value, unit);
 }
 
 // static
 Value Value::Number(int64_t value)
 {
-    return Number(value, std::string());
+    return Value(Type::INT64, value);
 }
 
 // static
 Value Value::Number(double value, std::string_view unit)
 {
-    return Value(value, unit);
+    return Value(Type::DOUBLE, value, unit);
 }
 
 // static
 Value Value::Number(double value)
 {
-    return Number(value, std::string());
+    return Value(Type::DOUBLE, value);
 }
 
 Value::Type Value::type() const

@@ -12,42 +12,65 @@
 
 namespace aspia {
 
-std::string StringPrintfV(const char* format, va_list args)
+namespace {
+
+HRESULT StringCchVPrintfT(char* buffer,
+                          size_t buffer_size,
+                          const char* format,
+                          va_list args)
+{
+    return StringCchVPrintfA(buffer, buffer_size, format, args);
+}
+
+HRESULT StringCchVPrintfT(wchar_t* buffer,
+                          size_t buffer_size,
+                          const wchar_t* format,
+                          va_list args)
+{
+    return StringCchVPrintfW(buffer, buffer_size, format, args);
+}
+
+int vscprintfT(const char* format, va_list args)
+{
+    return _vscprintf(format, args);
+}
+
+int vscprintfT(const wchar_t* format, va_list args)
+{
+    return _vscwprintf(format, args);
+}
+
+template<class StringType>
+StringType StringPrintfVT(const typename StringType::value_type* format,
+                          va_list args)
 {
     va_list args_copy;
 
     va_copy(args_copy, args);
 
-    int length = _vscprintf(format, args_copy);
+    int length = vscprintfT(format, args_copy);
     CHECK(length >= 0) << errno;
 
-    std::string result;
+    StringType result;
     result.resize(length);
 
-    CHECK(SUCCEEDED(StringCchVPrintfA(&result[0], length + 1, format, args_copy)));
+    CHECK(SUCCEEDED(StringCchVPrintfT(&result[0], length + 1, format, args_copy)));
 
     va_end(args_copy);
 
     return result;
 }
 
+} // namespace
+
+std::string StringPrintfV(const char* format, va_list args)
+{
+    return StringPrintfVT<std::string>(format, args);
+}
+
 std::wstring StringPrintfV(const wchar_t* format, va_list args)
 {
-    va_list args_copy;
-
-    va_copy(args_copy, args);
-
-    int length = _vscwprintf(format, args_copy);
-    CHECK(length >= 0) << errno;
-
-    std::wstring result;
-    result.resize(length);
-
-    CHECK(SUCCEEDED(StringCchVPrintfW(&result[0], length + 1, format, args_copy)));
-
-    va_end(args_copy);
-
-    return result;
+    return StringPrintfVT<std::wstring>(format, args);
 }
 
 std::string StringPrintf(const char* format, ...)

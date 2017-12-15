@@ -23,7 +23,9 @@ public:
     Value& operator=(Value&& other);
 
     static Value EmptyString();
-    static Value String(const std::string_view value);
+    static Value String(const char* value);
+    static Value String(const std::string& value);
+    static Value String(std::string&& value);
     static Value FormattedString(const char* format, ...);
     static Value Bool(bool value);
     static Value Number(uint32_t value, std::string_view unit);
@@ -60,16 +62,11 @@ public:
     bool HasUnit() const;
 
 private:
-    Value(std::string&& value, std::string&& unit);
-    Value(bool value);
-    Value(uint32_t value, std::string_view unit);
-    Value(int32_t value, std::string_view unit);
-    Value(uint64_t value, std::string_view unit);
-    Value(int64_t value, std::string_view unit);
-    Value(double value, std::string_view unit);
-
     using ValueType =
         std::variant<std::string, bool, uint32_t, int32_t, uint64_t, int64_t, double>;
+
+    Value(Type type, ValueType&& value, std::string_view unit);
+    Value(Type type, ValueType&& value);
 
     Type type_;
     ValueType value_;
