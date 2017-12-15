@@ -241,7 +241,7 @@ std::string CategoryServices::Serialize()
     return message.SerializeAsString();
 }
 
-    // static
+// static
 const char* CategoryServices::StatusToString(proto::Services::Item::Status status)
 {
     switch (status)
@@ -272,7 +272,7 @@ const char* CategoryServices::StatusToString(proto::Services::Item::Status statu
     }
 }
 
-    // static
+// static
 const char* CategoryServices::StartupTypeToString(
     proto::Services::Item::StartupType startup_type)
 {
