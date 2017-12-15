@@ -6,7 +6,7 @@
 //
 
 #include "base/devices/battery_enumerator.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 

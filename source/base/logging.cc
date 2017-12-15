@@ -6,6 +6,7 @@
 //
 
 #include "base/logging.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 

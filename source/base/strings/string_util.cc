@@ -10,13 +10,56 @@
 #include "base/logging.h"
 
 #include <algorithm>
-#include <bitset>
 #include <cwctype>
-#include <iomanip>
-#include <sstream>
+#include <cctype>
 #include <strsafe.h>
 
 namespace aspia {
+
+namespace {
+
+static const std::string kEmptyString;
+static const std::wstring kEmptyStringWide;
+
+// Assuming that a pointer is the size of a "machine word", then
+// uintptr_t is an integer type that is also a machine word.
+using MachineWord = uintptr_t;
+const uintptr_t kMachineWordAlignmentMask = sizeof(MachineWord) - 1;
+
+bool IsAlignedToMachineWord(const void* pointer)
+{
+    return !(reinterpret_cast<MachineWord>(pointer) & kMachineWordAlignmentMask);
+}
+
+template<typename T> T* AlignToMachineWord(T* pointer)
+{
+    return reinterpret_cast<T*>(reinterpret_cast<MachineWord>(pointer) &
+        ~kMachineWordAlignmentMask);
+}
+
+template<size_t size, typename CharacterType> struct NonASCIIMask;
+
+template<> struct NonASCIIMask<4, wchar_t>
+{
+    static inline uint32_t value() { return 0xFF80FF80U; }
+};
+
+template<> struct NonASCIIMask<4, char>
+{
+    static inline uint32_t value() { return 0x80808080U; }
+};
+
+template<> struct NonASCIIMask<8, wchar_t>
+{
+    static inline uint64_t value() { return 0xFF80FF80FF80FF80ULL; }
+};
+
+template<> struct NonASCIIMask<8, char>
+{
+    static inline uint64_t value() { return 0x8080808080808080ULL; }
+};
+
+} // namespace
 
 std::string ReplaceLfByCrLf(const std::string& in)
 {
@@ -77,7 +120,7 @@ std::string ReplaceCrLfByLf(const std::string& in)
     return out;
 }
 
-bool StringIsUtf8(const char* data, size_t length)
+bool IsStringUTF8(const char* data, size_t length)
 {
     const char* ptr = data;
     const char* ptr_end = data + length;
@@ -118,42 +161,64 @@ bool StringIsUtf8(const char* data, size_t length)
     return true;
 }
 
-std::string StringPrintf(const char* format, ...)
+bool IsStringUTF8(const std::string& string)
 {
-    va_list args;
-
-    va_start(args, format);
-
-    int len = _vscprintf(format, args);
-    CHECK(len >= 0) << errno;
-
-    std::string out;
-    out.resize(len);
-
-    CHECK(SUCCEEDED(StringCchVPrintfA(&out[0], len + 1, format, args)));
-
-    va_end(args);
-
-    return out;
+    return IsStringUTF8(string.data(), string.length());
 }
 
-std::wstring StringPrintfW(const WCHAR* format, ...)
+template <class Char>
+bool DoIsStringASCII(const Char* characters, size_t length)
 {
-    va_list args;
+    MachineWord all_char_bits = 0;
+    const Char* end = characters + length;
 
-    va_start(args, format);
+    // Prologue: align the input.
+    while (!IsAlignedToMachineWord(characters) && characters != end)
+    {
+        all_char_bits |= *characters;
+        ++characters;
+    }
 
-    int len = _vscwprintf(format, args);
-    CHECK(len >= 0) << errno;
+    // Compare the values of CPU word size.
+    const Char* word_end = AlignToMachineWord(end);
+    const size_t loop_increment = sizeof(MachineWord) / sizeof(Char);
 
-    std::wstring out;
-    out.resize(len);
+    while (characters < word_end)
+    {
+        all_char_bits |= *(reinterpret_cast<const MachineWord*>(characters));
+        characters += loop_increment;
+    }
 
-    CHECK(SUCCEEDED(StringCchVPrintfW(&out[0], len + 1, format, args)));
+    // Process the remaining bytes.
+    while (characters != end)
+    {
+        all_char_bits |= *characters;
+        ++characters;
+    }
 
-    va_end(args);
+    MachineWord non_ascii_bit_mask = NonASCIIMask<sizeof(MachineWord), Char>::value();
 
-    return out;
+    return !(all_char_bits & non_ascii_bit_mask);
+}
+
+bool IsStringASCII(const char* data, size_t length)
+{
+    return DoIsStringASCII(data, length);
+}
+
+bool IsStringASCII(const std::string& string)
+{
+    return DoIsStringASCII(string.data(), string.length());
+}
+
+bool IsStringASCII(const wchar_t* data, size_t length)
+{
+    return DoIsStringASCII(data, length);
+}
+
+bool IsStringASCII(const std::wstring& string)
+{
+    return DoIsStringASCII(string.data(), string.length());
 }
 
 bool IsUnicodeWhitespace(wchar_t c)
@@ -276,6 +341,16 @@ TrimPositions TrimStringT(const Str& input,
         ((last_good_char == last_char) ? TRIM_NONE : TRIM_TRAILING));
 }
 
+bool TrimString(const std::string& input, std::string_view trim_chars, std::string& output)
+{
+    return TrimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
+}
+
+bool TrimString(const std::wstring& input, std::wstring_view trim_chars, std::wstring& output)
+{
+    return TrimStringT(input, trim_chars.data(), TRIM_ALL, output) != TRIM_NONE;
+}
+
 TrimPositions TrimWhitespace(const std::wstring& input,
                              TrimPositions positions,
                              std::wstring& output)
@@ -290,98 +365,44 @@ TrimPositions TrimWhitespaceASCII(const std::string& input,
     return TrimStringT(input, kWhitespaceASCII, positions, output);
 }
 
-void ToUpper(std::wstring& string)
-{
-    std::transform(string.begin(), string.end(), string.begin(), std::towupper);
-}
-
-std::wstring ToUpperCopy(const std::wstring& in)
+std::wstring ToUpper(const std::wstring& in)
 {
     std::wstring out(in);
-    ToUpper(out);
+    std::transform(out.begin(), out.end(), out.begin(), std::towupper);
     return out;
 }
 
-void ToLower(std::wstring& string)
-{
-    std::transform(string.begin(), string.end(), string.begin(), std::towlower);
-}
-
-std::wstring ToLowerCopy(const std::wstring& in)
+std::wstring ToLower(const std::wstring& in)
 {
     std::wstring out(in);
-    ToLower(out);
+    std::transform(out.begin(), out.end(), out.begin(), std::towlower);
     return out;
 }
 
-std::string ToHexString(const uint8_t* data, size_t data_size)
+std::string ToUpperASCII(const std::string& in)
 {
-    DCHECK(data);
-
-    std::stringstream ss;
-
-    for (size_t i = 0; i < data_size; ++i)
-    {
-        ss << std::setw(2) << std::setfill('0') << std::hex
-           << std::uppercase << static_cast<int>(data[i]);
-    }
-
-    return ss.str();
+    std::string out(in);
+    std::transform(out.begin(), out.end(), out.begin(),
+        [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+    return out;
 }
 
-std::string ToHexString(uint64_t data)
+std::string ToLowerASCII(const std::string& in)
 {
-    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+    std::string out(in);
+    std::transform(out.begin(), out.end(), out.begin(),
+        [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    return out;
 }
 
-std::string ToHexString(uint32_t data)
+const std::string& EmptyString()
 {
-    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+    return kEmptyString;
 }
 
-std::string ToHexString(uint16_t data)
+const std::wstring& EmptyStringW()
 {
-    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
-}
-
-std::string ToHexString(uint8_t data)
-{
-    return ToHexString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
-}
-
-std::string ToBinaryString(const uint8_t* data, size_t data_size)
-{
-    DCHECK(data);
-
-    std::string string;
-
-    for (size_t i = 0; i < data_size; ++i)
-    {
-        std::bitset<8> c(data[i]);
-        string += c.to_string();
-    }
-
-    return string;
-}
-
-std::string ToBinaryString(uint64_t data)
-{
-    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
-}
-
-std::string ToBinaryString(uint32_t data)
-{
-    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
-}
-
-std::string ToBinaryString(uint16_t data)
-{
-    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
-}
-
-std::string ToBinaryString(uint8_t data)
-{
-    return ToBinaryString(reinterpret_cast<uint8_t*>(&data), sizeof(data));
+    return kEmptyStringWide;
 }
 
 } // namespace aspia

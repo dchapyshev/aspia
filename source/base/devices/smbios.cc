@@ -6,6 +6,7 @@
 //
 
 #include "base/devices/smbios.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/bitset.h"
 #include "base/logging.h"

@@ -9,7 +9,7 @@
 #include "ipc/pipe_channel_proxy.h"
 #include "base/version_helpers.h"
 #include "base/security_helpers.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 
 #include <random>
@@ -38,7 +38,7 @@ static std::wstring GenerateUniqueRandomChannelID()
 
     ++_last_channel_id;
 
-    return StringPrintfW(L"%u.%u.%u", process_id, last_channel_id, random);
+    return StringPrintf(L"%u.%u.%u", process_id, last_channel_id, random);
 }
 
 static std::wstring CreatePipeName(const std::wstring& channel_id)
@@ -63,10 +63,10 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
     // Create a security descriptor that gives full access to the caller and authenticated users
     // and denies access by anyone else.
     std::wstring security_descriptor =
-        StringPrintfW(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
-                      user_sid.c_str(),
-                      user_sid.c_str(),
-                      user_sid.c_str());
+        StringPrintf(L"O:%sG:%sD:(A;;GA;;;%s)(A;;GA;;;AU)",
+                     user_sid.c_str(),
+                     user_sid.c_str(),
+                     user_sid.c_str());
 
     ScopedSd sd = ConvertSddlToSd(security_descriptor);
     if (!sd.get())

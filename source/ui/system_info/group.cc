@@ -5,9 +5,9 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/logging.h"
 #include "ui/system_info/group.h"
 #include "ui/system_info/output.h"
-#include "base/logging.h"
 
 namespace aspia {
 

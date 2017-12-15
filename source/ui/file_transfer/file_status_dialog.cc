@@ -7,7 +7,7 @@
 
 #include "ui/file_transfer/file_status_dialog.h"
 #include "base/files/base_paths.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 
 #include <atlctrls.h>
@@ -124,7 +124,7 @@ void FileStatusDialog::WriteMessage(const WCHAR* message)
 
     if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, time, _countof(time)))
     {
-        std::wstring text = StringPrintfW(L"%s %s\r\n", time, message);
+        std::wstring text = StringPrintf(L"%s %s\r\n", time, message);
 
         SETTEXTEX settext;
         settext.codepage = 1200; // Unicode.

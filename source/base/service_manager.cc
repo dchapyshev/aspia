@@ -7,7 +7,7 @@
 
 #include "base/service_manager.h"
 #include "base/strings/unicode.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 
 #include <atomic>
@@ -135,7 +135,7 @@ std::wstring ServiceManager::GenerateUniqueServiceId()
 
     ++_last_service_id;
 
-    return StringPrintfW(L"%u.%u.%u", process_id, last_service_id, random);
+    return StringPrintf(L"%u.%u.%u", process_id, last_service_id, random);
 }
 
 // static

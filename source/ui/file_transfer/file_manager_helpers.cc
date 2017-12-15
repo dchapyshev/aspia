@@ -8,7 +8,7 @@
 #include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/get_stock_icon.h"
 #include "ui/resource.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
 #include <clocale>
@@ -224,9 +224,9 @@ std::wstring SizeToString(uint64_t size)
         divider = 1;
     }
 
-    return StringPrintfW(L"%.2f %s",
-                         static_cast<double>(size) / static_cast<double>(divider),
-                         units);
+    return StringPrintf(L"%.2f %s",
+                        static_cast<double>(size) / static_cast<double>(divider),
+                        units);
 }
 
 } // namespace aspia

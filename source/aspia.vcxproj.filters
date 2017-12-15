@@ -685,6 +685,9 @@
     <ClCompile Include="crypto\secure_memory.cc">
       <Filter>crypto</Filter>
     </ClCompile>
+    <ClCompile Include="base\strings\string_printf.cc">
+      <Filter>base\strings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1405,6 +1408,9 @@
     </ClInclude>
     <ClInclude Include="crypto\secure_memory.h">
       <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\strings\string_printf.h">
+      <Filter>base\strings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

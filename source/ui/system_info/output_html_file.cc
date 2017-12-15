@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 #include "ui/system_info/output_html_file.h"
 

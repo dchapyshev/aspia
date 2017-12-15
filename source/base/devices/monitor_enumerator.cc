@@ -6,7 +6,7 @@
 //
 
 #include "base/devices/monitor_enumerator.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/registry.h"
 #include "base/logging.h"
@@ -24,8 +24,8 @@ MonitorEnumerator::MonitorEnumerator()
 std::unique_ptr<Edid> MonitorEnumerator::GetEDID() const
 {
     std::wstring key_path =
-        StringPrintfW(L"SYSTEM\\CurrentControlSet\\Enum\\%s\\Device Parameters",
-                      UNICODEfromUTF8(GetDeviceID()).c_str());
+        StringPrintf(L"SYSTEM\\CurrentControlSet\\Enum\\%s\\Device Parameters",
+                     UNICODEfromUTF8(GetDeviceID()).c_str());
 
     RegistryKey key;
 

@@ -6,7 +6,7 @@
 //
 
 #include "network/network_adapter_enumerator.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/registry.h"
 #include "base/logging.h"
@@ -65,7 +65,7 @@ static std::wstring GetAdapterRegistryPath(const char* adapter_name)
     const WCHAR kFormat[] =
         L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
 
-    return StringPrintfW(kFormat, adapter_name);
+    return StringPrintf(kFormat, adapter_name);
 }
 
 std::string NetworkAdapterEnumerator::GetAdapterName() const

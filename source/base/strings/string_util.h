@@ -16,11 +16,14 @@ std::string ReplaceLfByCrLf(const std::string& in);
 
 std::string ReplaceCrLfByLf(const std::string& in);
 
-bool StringIsUtf8(const char* data, size_t length);
+bool IsStringUTF8(const char* data, size_t length);
+bool IsStringUTF8(const std::string& string);
 
-std::string StringPrintf(const char* format, ...);
+bool IsStringASCII(const char* data, size_t length);
+bool IsStringASCII(const std::string& string);
 
-std::wstring StringPrintfW(const WCHAR* format, ...);
+bool IsStringASCII(const wchar_t* data, size_t length);
+bool IsStringASCII(const std::wstring& string);
 
 // Searches  for CR or LF characters. Removes all contiguous whitespace
 // strings that contain them. This is useful when trying to deal with text
@@ -35,10 +38,8 @@ std::wstring CollapseWhitespace(const std::wstring& text,
 std::string CollapseWhitespaceASCII(const std::string& text,
                                     bool trim_sequences_with_line_breaks);
 
-int CompareCaseInsensitive(const std::string& first,
-                           const std::string& second);
-int CompareCaseInsensitive(const std::wstring& first,
-                           const std::wstring& second);
+int CompareCaseInsensitive(const std::string& first, const std::string& second);
+int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second);
 
 enum TrimPositions
 {
@@ -47,6 +48,15 @@ enum TrimPositions
     TRIM_TRAILING = 1 << 1,
     TRIM_ALL      = TRIM_LEADING | TRIM_TRAILING,
 };
+
+// Removes characters in |trim_chars| from the beginning and end of |input|.
+// The 8-bit version only works on 8-bit characters, not UTF-8. Returns true if
+// any characters were removed.
+//
+// It is safe to use the same variable for both |input| and |output| (this is
+// the normal usage to trim in-place).
+bool TrimString(const std::string& input, std::string_view trim_chars, std::string& output);
+bool TrimString(const std::wstring& input, std::wstring_view trim_chars, std::wstring& output);
 
 // Trims any whitespace from either end of the input string.
 //
@@ -62,23 +72,14 @@ TrimPositions TrimWhitespaceASCII(const std::string& input,
                                   TrimPositions positions,
                                   std::string& output);
 
-void ToUpper(std::wstring& string);
-std::wstring ToUpperCopy(const std::wstring& string);
+std::wstring ToUpper(const std::wstring& in);
+std::wstring ToLower(const std::wstring& in);
 
-void ToLower(std::wstring& string);
-std::wstring ToLowerCopy(const std::wstring& string);
+std::string ToUpperASCII(const std::string& in);
+std::string ToLowerASCII(const std::string& in);
 
-std::string ToHexString(const uint8_t* data, size_t data_size);
-std::string ToHexString(uint64_t data);
-std::string ToHexString(uint32_t data);
-std::string ToHexString(uint16_t data);
-std::string ToHexString(uint8_t data);
-
-std::string ToBinaryString(const uint8_t* data, size_t data_size);
-std::string ToBinaryString(uint64_t data);
-std::string ToBinaryString(uint32_t data);
-std::string ToBinaryString(uint16_t data);
-std::string ToBinaryString(uint8_t data);
+const std::string& EmptyString();
+const std::wstring& EmptyStringW();
 
 } // namespace aspia
 

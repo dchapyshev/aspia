@@ -11,6 +11,7 @@
 #include "base/devices/video_adapter_enumarator.h"
 #include "base/devices/physical_drive_enumerator.h"
 #include "base/devices/smbios_reader.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/cpu_info.h"
 #include "protocol/category_group_hardware.h"
@@ -371,6 +372,9 @@ void CategoryDmiBaseboard::Parse(Table& table, const std::string& data)
         if (!item.asset_tag().empty())
             group.AddParam("Asset Tag", Value::String(item.asset_tag()));
 
+        if (!item.location_in_chassis().empty())
+            group.AddParam("Location in chassis", Value::String(item.location_in_chassis()));
+
         if (item.has_features())
         {
             Group features_group = group.AddGroup("Supported Features");
@@ -387,9 +391,6 @@ void CategoryDmiBaseboard::Parse(Table& table, const std::string& data)
             features_group.AddParam("Board is hot swappable",
                                     Value::Bool(features.is_hot_swappable()));
         }
-
-        if (!item.location_in_chassis().empty())
-            group.AddParam("Location in chassis", Value::String(item.location_in_chassis()));
     }
 }
 
@@ -3556,8 +3557,8 @@ std::string CategoryCPU::Serialize()
     CPUInfo cpu;
     GetCPUInformation(cpu);
 
-    message.set_brand_string(cpu.brand_string);
-    message.set_vendor(cpu.vendor);
+    message.set_brand_string(CollapseWhitespaceASCII(cpu.brand_string, true));
+    message.set_vendor(CollapseWhitespaceASCII(cpu.vendor, true));
     message.set_stepping(cpu.stepping);
     message.set_model(cpu.model);
     message.set_family(cpu.family);

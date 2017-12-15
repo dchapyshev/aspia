@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "network/network_adapter_enumerator.h"
 #include "network/open_connection_enumerator.h"
 #include "network/share_enumerator.h"

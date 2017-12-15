@@ -6,7 +6,7 @@
 //
 
 #include "base/devices/edid.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/byte_order.h"
 #include "base/bitset.h"
 #include "base/logging.h"

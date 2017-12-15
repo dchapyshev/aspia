@@ -6,7 +6,7 @@
 //
 
 #include "base/program_enumerator.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 
@@ -63,7 +63,7 @@ void ProgramEnumerator::Advance()
 
 ProgramEnumerator::Type ProgramEnumerator::GetType() const
 {
-    std::wstring key_path = StringPrintfW(L"%s\\%s", kUninstallKeyPath, key_iterator_.Name());
+    std::wstring key_path = StringPrintf(L"%s\\%s", kUninstallKeyPath, key_iterator_.Name());
 
     RegistryKey key;
     LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
@@ -94,7 +94,7 @@ ProgramEnumerator::Type ProgramEnumerator::GetType() const
 
 std::string ProgramEnumerator::GetRegistryValue(const WCHAR* name) const
 {
-    std::wstring key_path = StringPrintfW(L"%s\\%s", kUninstallKeyPath, key_iterator_.Name());
+    std::wstring key_path = StringPrintf(L"%s\\%s", kUninstallKeyPath, key_iterator_.Name());
 
     RegistryKey key;
     LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);

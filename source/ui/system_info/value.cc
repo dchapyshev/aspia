@@ -5,10 +5,9 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 #include "ui/system_info/value.h"
-
-#include <strsafe.h>
 
 namespace aspia {
 
@@ -100,16 +99,8 @@ Value Value::FormattedString(const char* format, ...)
 {
     va_list args;
 
-    va_start(args, format);
-
-    int len = _vscprintf(format, args);
-    CHECK(len >= 0) << errno;
-
-    std::string out;
-    out.resize(len);
-
-    CHECK(SUCCEEDED(StringCchVPrintfA(&out[0], len + 1, format, args)));
-
+    va_start(format, args);
+    std::string out = StringPrintfV(format, args);
     va_end(args);
 
     return Value(std::move(out), std::string());

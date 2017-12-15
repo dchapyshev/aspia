@@ -219,7 +219,7 @@ void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clip
         return;
     }
 
-    if (!StringIsUtf8(clipboard_event->data().c_str(), clipboard_event->data().length()))
+    if (!IsStringUTF8(clipboard_event->data()))
     {
         LOG(WARNING) << "Clipboard data is not UTF-8 encoded";
         return;

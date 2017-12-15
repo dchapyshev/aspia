@@ -6,6 +6,7 @@
 //
 
 #include "base/devices/physical_drive_enumerator.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/byte_order.h"
 #include "base/logging.h"
@@ -489,7 +490,7 @@ bool PhysicalDriveEnumerator::GetDriveInfo(DWORD device_number) const
     memset(&id_data_, 0, sizeof(id_data_));
 
     const std::wstring device_path =
-        StringPrintfW(L"\\\\.\\PhysicalDrive%lu", device_number);
+        StringPrintf(L"\\\\.\\PhysicalDrive%lu", device_number);
 
     if (!device_.Open(device_path))
         return false;

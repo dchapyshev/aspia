@@ -6,7 +6,7 @@
 //
 
 #include "base/process/process_enumerator.h"
-#include "base/strings/string_util.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_privilege.h"
 #include "base/logging.h"
@@ -153,9 +153,9 @@ std::string ProcessEnumerator::GetFileDescription() const
         return std::string();
     }
 
-    std::wstring subblock = StringPrintfW(L"\\StringFileInfo\\%04x%04x\\FileDescription",
-                                          translate->language,
-                                          translate->code_page);
+    std::wstring subblock = StringPrintf(L"\\StringFileInfo\\%04x%04x\\FileDescription",
+                                         translate->language,
+                                         translate->code_page);
 
     WCHAR* description = nullptr;
 
