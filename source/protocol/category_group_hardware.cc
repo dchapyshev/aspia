@@ -3471,15 +3471,23 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
         add(features.has_intel64(), "64-bit x86 Extension (AMD64, Intel64)");
         add(features.has_3dnowext(), "AMD Extended 3DNow!");
         add(features.has_3dnow(), "AMD 3DNow!");
+
         add(features.has_lahf(), "LAHF/SAHF Instructions");
         add(features.has_svm(), "Secure Virtual Machine (SVM, Pacifica)");
+        add(features.has_extapic(), "Extended APIC Register Space");
         add(features.has_lzcnt(), "LZCNT Instruction");
         add(features.has_sse4a(), "AMD SSE4A");
         add(features.has_misalignsse(), "AMD MisAligned SSE");
         add(features.has_3dnow_prefetch(), "AMD 3DNowPrefetch");
+        add(features.has_ibs(), "Instruction Based Sampling");
         add(features.has_xop(), "AMD XOP");
+        add(features.has_skinit(), "SKINIT / STGI Instruction");
         add(features.has_wdt(), "Watchdog Timer");
+        add(features.has_lwp(), "Light Weight Profiling");
         add(features.has_fma4(), "AMD FMA4");
+        add(features.has_tbm(), "Trailing Bit Manipulation Instructions");
+        add(features.has_perfctr_core(), "Core Performance Counters");
+
         add(features.has_fsgsbase(), "RDFSBASE / RDGSBASE / WRFSBASE / WRGSBASE Instruction");
         add(features.has_sgx(), "Software Guard Extensions (SGE)");
         add(features.has_bmi1(), "Bit Manipulation Instruction Set 1 (BMI1)");
@@ -3649,13 +3657,19 @@ std::string CategoryCPU::Serialize()
     // Function 0x80000001 ECX
     features->set_has_lahf(cpu.fn_81_ecx.has_lahf);
     features->set_has_svm(cpu.fn_81_ecx.has_svm);
+    features->set_has_extapic(cpu.fn_81_ecx.has_extapic);
     features->set_has_lzcnt(cpu.fn_81_ecx.has_lzcnt);
     features->set_has_sse4a(cpu.fn_81_ecx.has_sse4a);
     features->set_has_misalignsse(cpu.fn_81_ecx.has_misalignsse);
     features->set_has_3dnow_prefetch(cpu.fn_81_ecx.has_3dnow_prefetch);
+    features->set_has_ibs(cpu.fn_81_ecx.has_ibs);
     features->set_has_xop(cpu.fn_81_ecx.has_xop);
+    features->set_has_skinit(cpu.fn_81_ecx.has_skinit);
     features->set_has_wdt(cpu.fn_81_ecx.has_wdt);
+    features->set_has_lwp(cpu.fn_81_ecx.has_lwp);
     features->set_has_fma4(cpu.fn_81_ecx.has_fma4);
+    features->set_has_tbm(cpu.fn_81_ecx.has_tbm);
+    features->set_has_perfctr_core(cpu.fn_81_ecx.has_perfctr_core);
 
     // Function 7 EBX
     features->set_has_fsgsbase(cpu.fn_7_0_ebx.has_fsgsbase);

@@ -13578,6 +13578,12 @@ const int CPU_Features::kHasOverstressFieldNumber;
 const int CPU_Features::kHasTm3FieldNumber;
 const int CPU_Features::kHasRng2FieldNumber;
 const int CPU_Features::kHasPhe2FieldNumber;
+const int CPU_Features::kHasIbsFieldNumber;
+const int CPU_Features::kHasSkinitFieldNumber;
+const int CPU_Features::kHasLwpFieldNumber;
+const int CPU_Features::kHasTbmFieldNumber;
+const int CPU_Features::kHasPerfctrCoreFieldNumber;
+const int CPU_Features::kHasExtapicFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CPU_Features::CPU_Features()
@@ -13594,15 +13600,15 @@ CPU_Features::CPU_Features(const CPU_Features& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&has_fpu_, &from.has_fpu_,
-    static_cast<size_t>(reinterpret_cast<char*>(&has_phe2_) -
-    reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
+    static_cast<size_t>(reinterpret_cast<char*>(&has_extapic_) -
+    reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.CPU.Features)
 }
 
 void CPU_Features::SharedCtor() {
   ::memset(&has_fpu_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_phe2_) -
-      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
+      reinterpret_cast<char*>(&has_extapic_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
   _cached_size_ = 0;
 }
 
@@ -13639,8 +13645,8 @@ void CPU_Features::Clear() {
   (void) cached_has_bits;
 
   ::memset(&has_fpu_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_phe2_) -
-      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_phe2_));
+      reinterpret_cast<char*>(&has_extapic_) -
+      reinterpret_cast<char*>(&has_fpu_)) + sizeof(has_extapic_));
   _internal_metadata_.Clear();
 }
 
@@ -15564,6 +15570,90 @@ bool CPU_Features::MergePartialFromCodedStream(
         break;
       }
 
+      // bool has_ibs = 137;
+      case 137: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 1096 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_ibs_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_skinit = 138;
+      case 138: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 1104 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_skinit_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_lwp = 139;
+      case 139: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 1112 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_lwp_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_tbm = 140;
+      case 140: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 1120 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_tbm_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_perfctr_core = 141;
+      case 141: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 1128 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_perfctr_core_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool has_extapic = 142;
+      case 142: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 1136 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_extapic_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -16270,6 +16360,36 @@ void CPU_Features::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(136, this->has_phe2(), output);
   }
 
+  // bool has_ibs = 137;
+  if (this->has_ibs() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(137, this->has_ibs(), output);
+  }
+
+  // bool has_skinit = 138;
+  if (this->has_skinit() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(138, this->has_skinit(), output);
+  }
+
+  // bool has_lwp = 139;
+  if (this->has_lwp() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(139, this->has_lwp(), output);
+  }
+
+  // bool has_tbm = 140;
+  if (this->has_tbm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(140, this->has_tbm(), output);
+  }
+
+  // bool has_perfctr_core = 141;
+  if (this->has_perfctr_core() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(141, this->has_perfctr_core(), output);
+  }
+
+  // bool has_extapic = 142;
+  if (this->has_extapic() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(142, this->has_extapic(), output);
+  }
+
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.CPU.Features)
@@ -16961,6 +17081,36 @@ size_t CPU_Features::ByteSizeLong() const {
     total_size += 2 + 1;
   }
 
+  // bool has_ibs = 137;
+  if (this->has_ibs() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_skinit = 138;
+  if (this->has_skinit() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_lwp = 139;
+  if (this->has_lwp() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_tbm = 140;
+  if (this->has_tbm() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_perfctr_core = 141;
+  if (this->has_perfctr_core() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool has_extapic = 142;
+  if (this->has_extapic() != 0) {
+    total_size += 2 + 1;
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -17388,6 +17538,24 @@ void CPU_Features::MergeFrom(const CPU_Features& from) {
   if (from.has_phe2() != 0) {
     set_has_phe2(from.has_phe2());
   }
+  if (from.has_ibs() != 0) {
+    set_has_ibs(from.has_ibs());
+  }
+  if (from.has_skinit() != 0) {
+    set_has_skinit(from.has_skinit());
+  }
+  if (from.has_lwp() != 0) {
+    set_has_lwp(from.has_lwp());
+  }
+  if (from.has_tbm() != 0) {
+    set_has_tbm(from.has_tbm());
+  }
+  if (from.has_perfctr_core() != 0) {
+    set_has_perfctr_core(from.has_perfctr_core());
+  }
+  if (from.has_extapic() != 0) {
+    set_has_extapic(from.has_extapic());
+  }
 }
 
 void CPU_Features::CopyFrom(const CPU_Features& from) {
@@ -17543,6 +17711,12 @@ void CPU_Features::InternalSwap(CPU_Features* other) {
   swap(has_tm3_, other->has_tm3_);
   swap(has_rng2_, other->has_rng2_);
   swap(has_phe2_, other->has_phe2_);
+  swap(has_ibs_, other->has_ibs_);
+  swap(has_skinit_, other->has_skinit_);
+  swap(has_lwp_, other->has_lwp_);
+  swap(has_tbm_, other->has_tbm_);
+  swap(has_perfctr_core_, other->has_perfctr_core_);
+  swap(has_extapic_, other->has_extapic_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

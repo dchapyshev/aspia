@@ -1158,6 +1158,12 @@ message CPU
         bool has_tm3             = 134;
         bool has_rng2            = 135;
         bool has_phe2            = 136;
+        bool has_ibs             = 137;
+        bool has_skinit          = 138;
+        bool has_lwp             = 139;
+        bool has_tbm             = 140;
+        bool has_perfctr_core    = 141;
+        bool has_extapic         = 142;
     }
 
     string brand_string      = 1;

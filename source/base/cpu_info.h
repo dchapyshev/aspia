@@ -126,27 +126,27 @@ struct FN_80000001_ECX
     uint8_t has_lahf : 1;           // Bit 0. LAHF/SAHF Instructions
     uint8_t reserved0 : 1;          // Bit 1. Reserved
     uint8_t has_svm : 1;            // Bit 2. Secure Virtual Machine (SVM, Pacifica)
-    uint8_t reserved2 : 1;          // Bit 3. Reserved
+    uint8_t has_extapic : 1;        // Bit 3. Extended APIC Register Space
     uint8_t reserved3 : 1;          // Bit 4. Reserved
     uint8_t has_lzcnt : 1;          // Bit 5. Reserved
     uint8_t has_sse4a : 1;          // Bit 6. AMD SSE4A
     uint8_t has_misalignsse : 1;    // Bit 7. AMD MisAligned SSE
     uint8_t has_3dnow_prefetch : 1; // Bit 8. AMD 3DNowPrefetch
     uint8_t reserved5 : 1;          // Bit 9. Reserved
-    uint8_t reserved6 : 1;          // Bit 10. Reserved
+    uint8_t has_ibs : 1;            // Bit 10. Instruction Based Sampling
     uint8_t has_xop : 1;            // Bit 11. AMD XOP
-    uint8_t reserved7 : 1;          // Bit 12. Reserved
+    uint8_t has_skinit : 1;         // Bit 12. SKINIT/STGI Instructions
     uint8_t has_wdt : 1;            // Bit 13. Watchdog Timer
     uint8_t reserved9 : 1;          // Bit 14. Reserved
-    uint8_t reserved10 : 1;         // Bit 15. Reserved
+    uint8_t has_lwp : 1;            // Bit 15. Light Weight Profiling
     uint8_t has_fma4 : 1;           // Bit 16. AMD FMA4
     uint8_t reserved11 : 1;         // Bit 17. Reserved
     uint8_t reserved12 : 1;         // Bit 18. Reserved
     uint8_t reserved13 : 1;         // Bit 19. Reserved
     uint8_t reserved14 : 1;         // Bit 20. Reserved
-    uint8_t reserved15 : 1;         // Bit 21. Reserved
+    uint8_t has_tbm : 1;            // Bit 21. Trailing Bit Manipulation Instructions
     uint8_t reserved16 : 1;         // Bit 22. Reserved
-    uint8_t reserved17 : 1;         // Bit 23. Reserved
+    uint8_t has_perfctr_core : 1;   // Bit 23. Core Performance Counters
     uint8_t reserved18 : 1;         // Bit 24. Reserved
     uint8_t reserved19 : 1;         // Bit 25. Reserved
     uint8_t reserved20 : 1;         // Bit 26. Reserved

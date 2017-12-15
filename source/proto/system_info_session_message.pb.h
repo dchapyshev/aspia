@@ -7802,6 +7802,42 @@ class CPU_Features : public ::google::protobuf::MessageLite /* @@protoc_insertio
   bool has_phe2() const;
   void set_has_phe2(bool value);
 
+  // bool has_ibs = 137;
+  void clear_has_ibs();
+  static const int kHasIbsFieldNumber = 137;
+  bool has_ibs() const;
+  void set_has_ibs(bool value);
+
+  // bool has_skinit = 138;
+  void clear_has_skinit();
+  static const int kHasSkinitFieldNumber = 138;
+  bool has_skinit() const;
+  void set_has_skinit(bool value);
+
+  // bool has_lwp = 139;
+  void clear_has_lwp();
+  static const int kHasLwpFieldNumber = 139;
+  bool has_lwp() const;
+  void set_has_lwp(bool value);
+
+  // bool has_tbm = 140;
+  void clear_has_tbm();
+  static const int kHasTbmFieldNumber = 140;
+  bool has_tbm() const;
+  void set_has_tbm(bool value);
+
+  // bool has_perfctr_core = 141;
+  void clear_has_perfctr_core();
+  static const int kHasPerfctrCoreFieldNumber = 141;
+  bool has_perfctr_core() const;
+  void set_has_perfctr_core(bool value);
+
+  // bool has_extapic = 142;
+  void clear_has_extapic();
+  static const int kHasExtapicFieldNumber = 142;
+  bool has_extapic() const;
+  void set_has_extapic(bool value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.CPU.Features)
  private:
 
@@ -7942,6 +7978,12 @@ class CPU_Features : public ::google::protobuf::MessageLite /* @@protoc_insertio
   bool has_tm3_;
   bool has_rng2_;
   bool has_phe2_;
+  bool has_ibs_;
+  bool has_skinit_;
+  bool has_lwp_;
+  bool has_tbm_;
+  bool has_perfctr_core_;
+  bool has_extapic_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsCPU_FeaturesImpl();
@@ -20087,6 +20129,90 @@ inline void CPU_Features::set_has_phe2(bool value) {
   
   has_phe2_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_phe2)
+}
+
+// bool has_ibs = 137;
+inline void CPU_Features::clear_has_ibs() {
+  has_ibs_ = false;
+}
+inline bool CPU_Features::has_ibs() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_ibs)
+  return has_ibs_;
+}
+inline void CPU_Features::set_has_ibs(bool value) {
+  
+  has_ibs_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_ibs)
+}
+
+// bool has_skinit = 138;
+inline void CPU_Features::clear_has_skinit() {
+  has_skinit_ = false;
+}
+inline bool CPU_Features::has_skinit() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_skinit)
+  return has_skinit_;
+}
+inline void CPU_Features::set_has_skinit(bool value) {
+  
+  has_skinit_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_skinit)
+}
+
+// bool has_lwp = 139;
+inline void CPU_Features::clear_has_lwp() {
+  has_lwp_ = false;
+}
+inline bool CPU_Features::has_lwp() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_lwp)
+  return has_lwp_;
+}
+inline void CPU_Features::set_has_lwp(bool value) {
+  
+  has_lwp_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_lwp)
+}
+
+// bool has_tbm = 140;
+inline void CPU_Features::clear_has_tbm() {
+  has_tbm_ = false;
+}
+inline bool CPU_Features::has_tbm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_tbm)
+  return has_tbm_;
+}
+inline void CPU_Features::set_has_tbm(bool value) {
+  
+  has_tbm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_tbm)
+}
+
+// bool has_perfctr_core = 141;
+inline void CPU_Features::clear_has_perfctr_core() {
+  has_perfctr_core_ = false;
+}
+inline bool CPU_Features::has_perfctr_core() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_perfctr_core)
+  return has_perfctr_core_;
+}
+inline void CPU_Features::set_has_perfctr_core(bool value) {
+  
+  has_perfctr_core_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_perfctr_core)
+}
+
+// bool has_extapic = 142;
+inline void CPU_Features::clear_has_extapic() {
+  has_extapic_ = false;
+}
+inline bool CPU_Features::has_extapic() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.CPU.Features.has_extapic)
+  return has_extapic_;
+}
+inline void CPU_Features::set_has_extapic(bool value) {
+  
+  has_extapic_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.CPU.Features.has_extapic)
 }
 
 // -------------------------------------------------------------------
