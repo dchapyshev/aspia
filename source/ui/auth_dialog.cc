@@ -41,10 +41,10 @@ LRESULT AuthDialog::OnOkButton(
 {
     SecureArray<WCHAR, 128> buffer;
 
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), buffer.count());
+    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), static_cast<int>(buffer.count()));
     UNICODEtoUTF8(buffer.get(), username_);
 
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), buffer.count());
+    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
     UNICODEtoUTF8(buffer.get(), password_.mutable_string());
 
     EndDialog(IDOK);

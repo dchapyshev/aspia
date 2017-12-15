@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-static const size_t kGuidLength = 36;
+static const size_t kGuidLength = 38;
 
 ClientSessionSystemInfo::ClientSessionSystemInfo(
     const ClientConfig& config,
@@ -58,14 +58,14 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
     {
         const std::string& guid = message.guid();
 
-        if (guid.length() == kGuidLength)
+        if (guid.length() == kGuidLength && guid.front() == '{' && guid.back() == '}')
         {
             report_creator_->Parse(message.data());
             return;
         }
         else
         {
-            DLOG(ERROR) << "Invalid GUID length: " << guid.length();
+            DLOG(ERROR) << "Invalid GUID: " << guid;
         }
     }
 

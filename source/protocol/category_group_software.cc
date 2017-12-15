@@ -30,7 +30,7 @@ Category::IconId CategoryPrograms::Icon() const
 
 const char* CategoryPrograms::Guid() const
 {
-    return "606C70BE-0C6C-4CB6-90E6-D374760FC5EE";
+    return "{606C70BE-0C6C-4CB6-90E6-D374760FC5EE}";
 }
 
 void CategoryPrograms::Parse(Table& table, const std::string& data)
@@ -94,7 +94,7 @@ Category::IconId CategoryUpdates::Icon() const
 
 const char* CategoryUpdates::Guid() const
 {
-    return "3E160E27-BE2E-45DB-8292-C3786C9533AB";
+    return "{3E160E27-BE2E-45DB-8292-C3786C9533AB}";
 }
 
 void CategoryUpdates::Parse(Table& /* table */, const std::string& /* data */)
@@ -124,7 +124,7 @@ Category::IconId CategoryServices::Icon() const
 
 const char* CategoryServices::Guid() const
 {
-    return "BE3143AB-67C3-4EFE-97F5-FA0C84F338C3";
+    return "{BE3143AB-67C3-4EFE-97F5-FA0C84F338C3}";
 }
 
 void CategoryServices::Parse(Table& table, const std::string& data)
@@ -314,7 +314,7 @@ Category::IconId CategoryDrivers::Icon() const
 
 const char* CategoryDrivers::Guid() const
 {
-    return "8278DA10-227F-4484-9D5D-9A66C294CA82";
+    return "{8278DA10-227F-4484-9D5D-9A66C294CA82}";
 }
 
 void CategoryDrivers::Parse(Table& table, const std::string& data)
@@ -445,7 +445,7 @@ Category::IconId CategoryProcesses::Icon() const
 
 const char* CategoryProcesses::Guid() const
 {
-    return "14BB101B-EE61-49E6-B5B9-874C4DBEA03C";
+    return "{14BB101B-EE61-49E6-B5B9-874C4DBEA03C}";
 }
 
 void CategoryProcesses::Parse(Table& table, const std::string& data)
@@ -509,7 +509,7 @@ Category::IconId CategoryLicenses::Icon() const
 
 const char* CategoryLicenses::Guid() const
 {
-    return "6BD88575-9D23-44BC-8A49-64D94CC3EE48";
+    return "{6BD88575-9D23-44BC-8A49-64D94CC3EE48}";
 }
 
 void CategoryLicenses::Parse(Table& /* table */, const std::string& /* data */)

@@ -32,7 +32,7 @@ Category::IconId CategoryNetworkCards::Icon() const
 
 const char* CategoryNetworkCards::Guid() const
 {
-    return "98D665E9-0F78-4054-BDF3-A51E950A8618";
+    return "{98D665E9-0F78-4054-BDF3-A51E950A8618}";
 }
 
 void CategoryNetworkCards::Parse(Table& table, const std::string& data)
@@ -190,7 +190,7 @@ Category::IconId CategoryRasConnections::Icon() const
 
 const char* CategoryRasConnections::Guid() const
 {
-    return "E0A43CFD-3A97-4577-B3FB-3B542C0729F7";
+    return "{E0A43CFD-3A97-4577-B3FB-3B542C0729F7}";
 }
 
 void CategoryRasConnections::Parse(Table& /* table */, const std::string& /* data */)
@@ -220,7 +220,7 @@ Category::IconId CategoryOpenConnections::Icon() const
 
 const char* CategoryOpenConnections::Guid() const
 {
-    return "1A9CBCBD-5623-4CEC-B58C-BD7BD8FAE622";
+    return "{1A9CBCBD-5623-4CEC-B58C-BD7BD8FAE622}";
 }
 
 void CategoryOpenConnections::Parse(Table& table, const std::string& data)
@@ -367,7 +367,7 @@ Category::IconId CategorySharedResources::Icon() const
 
 const char* CategorySharedResources::Guid() const
 {
-    return "9219D538-E1B8-453C-9298-61D5B80C4130";
+    return "{9219D538-E1B8-453C-9298-61D5B80C4130}";
 }
 
 void CategorySharedResources::Parse(Table& table, const std::string& data)
@@ -493,7 +493,7 @@ Category::IconId CategoryOpenFiles::Icon() const
 
 const char* CategoryOpenFiles::Guid() const
 {
-    return "EAE638B9-CCF6-442C-84A1-B0901A64DA3D";
+    return "{EAE638B9-CCF6-442C-84A1-B0901A64DA3D}";
 }
 
 void CategoryOpenFiles::Parse(Table& /* table */, const std::string& /* data */)
@@ -523,7 +523,7 @@ Category::IconId CategoryRoutes::Icon() const
 
 const char* CategoryRoutes::Guid() const
 {
-    return "84184CEB-E232-4CA7-BCAC-E156F1E6DDCB";
+    return "{84184CEB-E232-4CA7-BCAC-E156F1E6DDCB}";
 }
 
 void CategoryRoutes::Parse(Table& table, const std::string& data)

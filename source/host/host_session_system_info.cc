@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-static const size_t kGuidLength = 36;
+static const size_t kGuidLength = 38;
 
 void HostSessionSystemInfo::Run(const std::wstring& channel_id)
 {
@@ -56,7 +56,7 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
     {
         const std::string& guid = request.guid();
 
-        if (guid.length() == kGuidLength)
+        if (guid.length() == kGuidLength && guid.front() == '{' && guid.back() == '}')
         {
             proto::system_info::HostToClient reply;
 

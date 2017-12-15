@@ -12,6 +12,8 @@
 
 namespace aspia {
 
+static const size_t kGuidLength = 38;
+
 void HostLocalSystemInfo::Run()
 {
     thread_.Start(MessageLoop::TYPE_DEFAULT, this);
@@ -47,7 +49,9 @@ void HostLocalSystemInfo::OnWindowClose()
 void HostLocalSystemInfo::ExecuteRequest(std::string_view guid,
                                          std::shared_ptr<ReportCreatorProxy> report_creator)
 {
+    DCHECK(guid.length() == kGuidLength && guid.front() == '{' && guid.back() == '}');
     DCHECK(runner_->BelongsToCurrentThread());
+    DCHECK(report_creator != nullptr);
 
     std::string data;
 

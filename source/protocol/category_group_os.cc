@@ -32,7 +32,7 @@ Category::IconId CategoryTaskScheduler::Icon() const
 
 const char* CategoryTaskScheduler::Guid() const
 {
-    return "1B27C27F-847E-47CC-92DF-6B8F5CB4827A";
+    return "{1B27C27F-847E-47CC-92DF-6B8F5CB4827A}";
 }
 
 void CategoryTaskScheduler::Parse(Table& /* table */, const std::string& /* data */)
@@ -62,7 +62,7 @@ Category::IconId CategoryEnvironmentVariables::Icon() const
 
 const char* CategoryEnvironmentVariables::Guid() const
 {
-    return "AAB8670A-3C90-4F75-A907-512ACBAD1BE6";
+    return "{AAB8670A-3C90-4F75-A907-512ACBAD1BE6}";
 }
 
 void CategoryEnvironmentVariables::Parse(Table& /* table */, const std::string& /* data */)
@@ -92,7 +92,7 @@ Category::IconId CategoryEventLogsApplications::Icon() const
 
 const char* CategoryEventLogsApplications::Guid() const
 {
-    return "0DD03A20-D1AF-4D1F-938F-956EE9003EE9";
+    return "{0DD03A20-D1AF-4D1F-938F-956EE9003EE9}";
 }
 
 void CategoryEventLogsApplications::Parse(Table& /* table */, const std::string& /* data */)
@@ -122,7 +122,7 @@ Category::IconId CategoryEventLogsSecurity::Icon() const
 
 const char* CategoryEventLogsSecurity::Guid() const
 {
-    return "7E0220A8-AC51-4C9E-8834-F0F805D40977";
+    return "{7E0220A8-AC51-4C9E-8834-F0F805D40977}";
 }
 
 void CategoryEventLogsSecurity::Parse(Table& /* table */, const std::string& /* data */)
@@ -152,7 +152,7 @@ Category::IconId CategoryEventLogsSystem::Icon() const
 
 const char* CategoryEventLogsSystem::Guid() const
 {
-    return "8421A38A-4757-4298-A5CB-9493C7726515";
+    return "{8421A38A-4757-4298-A5CB-9493C7726515}";
 }
 
 void CategoryEventLogsSystem::Parse(Table& /* table */, const std::string& /* data */)
@@ -196,7 +196,7 @@ Category::IconId CategoryUsers::Icon() const
 
 const char* CategoryUsers::Guid() const
 {
-    return "838AD22A-82BB-47F2-9001-1CD9714ED298";
+    return "{838AD22A-82BB-47F2-9001-1CD9714ED298}";
 }
 
 void CategoryUsers::Parse(Table& table, const std::string& data)
@@ -273,7 +273,7 @@ Category::IconId CategoryUserGroups::Icon() const
 
 const char* CategoryUserGroups::Guid() const
 {
-    return "B560FDED-5E88-4116-98A5-12462C07AC90";
+    return "{B560FDED-5E88-4116-98A5-12462C07AC90}";
 }
 
 void CategoryUserGroups::Parse(Table& table, const std::string& data)
@@ -328,7 +328,7 @@ Category::IconId CategoryActiveSessions::Icon() const
 
 const char* CategoryActiveSessions::Guid() const
 {
-    return "8702E4A1-C9A2-4BA3-BBDE-CFCB6937D2C8";
+    return "{8702E4A1-C9A2-4BA3-BBDE-CFCB6937D2C8}";
 }
 
 void CategoryActiveSessions::Parse(Table& table, const std::string& data)

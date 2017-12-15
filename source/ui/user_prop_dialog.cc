@@ -199,7 +199,7 @@ LRESULT UserPropDialog::OnOkButton(
     // TODO: Clear memory.
 
     SecureArray<WCHAR, 128> buffer;
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), buffer.count());
+    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), static_cast<int>(buffer.count()));
 
     std::wstring username(buffer.get());
 
@@ -227,7 +227,7 @@ LRESULT UserPropDialog::OnOkButton(
 
     if (mode_ == Mode::ADD || password_changed_)
     {
-        GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), buffer.count());
+        GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
 
         SecureString<std::wstring> password(buffer.get());
 
@@ -237,7 +237,7 @@ LRESULT UserPropDialog::OnOkButton(
             return 0;
         }
 
-        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT, buffer.get(), buffer.count());
+        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT, buffer.get(), static_cast<int>(buffer.count()));
 
         SecureString<std::wstring> password_retry(buffer.get());
 
