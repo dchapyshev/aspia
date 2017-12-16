@@ -37,6 +37,7 @@
     <ClCompile Include="base\devices\edid.cc" />
     <ClCompile Include="base\devices\monitor_enumerator.cc" />
     <ClCompile Include="base\devices\physical_drive_enumerator.cc" />
+    <ClCompile Include="base\devices\physical_drive_util.cc" />
     <ClCompile Include="base\devices\smbios.cc" />
     <ClCompile Include="base\devices\smbios_reader.cc" />
     <ClCompile Include="base\devices\video_adapter_enumerator.cc" />
@@ -246,6 +247,7 @@
     <ClInclude Include="base\devices\edid.h" />
     <ClInclude Include="base\devices\monitor_enumerator.h" />
     <ClInclude Include="base\devices\physical_drive_enumerator.h" />
+    <ClInclude Include="base\devices\physical_drive_util.h" />
     <ClInclude Include="base\devices\smbios.h" />
     <ClInclude Include="base\devices\smbios_reader.h" />
     <ClInclude Include="base\devices\video_adapter_enumarator.h" />

@@ -51,16 +51,10 @@ bool Device::IoControl(DWORD io_control_code,
                        DWORD output_buffer_size,
                        LPDWORD bytes_returned)
 {
-    if (!DeviceIoControl(device_, io_control_code,
-                         input_buffer, input_buffer_size,
-                         output_buffer, output_buffer_size,
-                         bytes_returned, nullptr))
-    {
-        LOG(WARNING) << "DeviceIoControl() failed: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    return true;
+    return !!DeviceIoControl(device_, io_control_code,
+                             input_buffer, input_buffer_size,
+                             output_buffer, output_buffer_size,
+                             bytes_returned, nullptr);
 }
 
 } // namespace aspia

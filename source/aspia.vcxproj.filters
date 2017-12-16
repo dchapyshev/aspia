@@ -691,6 +691,9 @@
     <ClCompile Include="base\scoped_privilege.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="base\devices\physical_drive_util.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1414,6 +1417,9 @@
     </ClInclude>
     <ClInclude Include="base\strings\string_printf.h">
       <Filter>base\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\physical_drive_util.h">
+      <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

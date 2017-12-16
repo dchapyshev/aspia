@@ -17,11 +17,11 @@ UserEnumerator::UserEnumerator()
 
     DWORD error_code = NetUserEnum(nullptr, 3,
                                    FILTER_NORMAL_ACCOUNT,
-                                    reinterpret_cast<LPBYTE*>(&user_info_),
-                                    MAX_PREFERRED_LENGTH,
-                                    &entries_read,
-                                    &total_entries_,
-                                    nullptr);
+                                   reinterpret_cast<LPBYTE*>(&user_info_),
+                                   MAX_PREFERRED_LENGTH,
+                                   &entries_read,
+                                   &total_entries_,
+                                   nullptr);
     if (error_code != NERR_Success)
     {
         DLOG(WARNING) << "NetUserEnum() failed: " << SystemErrorCodeToString(error_code);
