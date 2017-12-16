@@ -132,6 +132,15 @@ struct DriveIdentifyData
 #pragma pack (pop, id_data)
 
 //
+// Generic Functions
+//
+
+bool OpenDrive(Device& device, uint8_t device_number);
+STORAGE_BUS_TYPE GetDriveBusType(Device& device);
+bool GetDriveNumber(Device& device, uint8_t& device_number);
+bool GetDriveGeometry(Device& device, DISK_GEOMETRY& geometry);
+
+//
 // Physical Drive Functions
 //
 

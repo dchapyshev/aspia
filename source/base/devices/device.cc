@@ -24,14 +24,7 @@ bool Device::Open(const FilePath& device_path, DWORD desired_access, DWORD share
                               OPEN_EXISTING,
                               0,
                               nullptr));
-    if (!device_.IsValid())
-    {
-        LOG(WARNING) << "Unable to open device: " << device_path
-                     << ". Error code: " << GetLastSystemErrorString();
-        return false;
-    }
-
-    return true;
+    return device_.IsValid();
 }
 
 bool Device::Open(const FilePath& device_path)

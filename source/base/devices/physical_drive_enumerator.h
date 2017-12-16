@@ -47,7 +47,7 @@ public:
     uint64_t GetEnabledFeatures() const;
 
 private:
-    bool GetDriveInfo(DWORD device_number) const;
+    bool GetDriveInfo(uint8_t device_number) const;
     uint16_t GetMajorVersion() const;
 
     HDEVINFO device_info_;

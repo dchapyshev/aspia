@@ -6,6 +6,7 @@
 //
 
 #include "base/devices/physical_drive_util.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -56,6 +57,79 @@ typedef struct
 } SCSI_PASS_THROUGH_WBUF;
 
 } // namespace
+
+bool OpenDrive(Device& device, uint8_t device_number)
+{
+    const FilePath device_path =
+        StringPrintf(L"\\\\.\\PhysicalDrive%u", device_number);
+
+    if (!device.Open(device_path))
+    {
+        LOG(WARNING) << "Unable to open device: " << device_path
+                     << ". Error code: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
+}
+
+STORAGE_BUS_TYPE GetDriveBusType(Device& device)
+{
+    STORAGE_DEVICE_DESCRIPTOR device_descriptor;
+    memset(&device_descriptor, 0, sizeof(device_descriptor));
+
+    STORAGE_PROPERTY_QUERY property_query;
+    memset(&property_query, 0, sizeof(property_query));
+
+    DWORD bytes_returned;
+
+    if (!device.IoControl(IOCTL_STORAGE_QUERY_PROPERTY,
+                          &property_query, sizeof(property_query),
+                          &device_descriptor, sizeof(device_descriptor),
+                          &bytes_returned))
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return BusTypeUnknown;
+    }
+
+    return device_descriptor.BusType;
+}
+
+bool GetDriveNumber(Device& device, uint8_t& device_number)
+{
+    STORAGE_DEVICE_NUMBER number;
+    memset(&number, 0, sizeof(number));
+
+    DWORD bytes_returned;
+
+    if (!device.IoControl(IOCTL_STORAGE_GET_DEVICE_NUMBER,
+                          nullptr, 0,
+                          &number, sizeof(number),
+                          &bytes_returned))
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    device_number = static_cast<uint8_t>(number.DeviceNumber);
+    return true;
+}
+
+bool GetDriveGeometry(Device& device, DISK_GEOMETRY& geometry)
+{
+    DWORD bytes_returned;
+
+    if (device.IoControl(IOCTL_DISK_GET_DRIVE_GEOMETRY,
+                         nullptr, 0,
+                         &geometry, sizeof(DISK_GEOMETRY),
+                         &bytes_returned))
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    return true;
+}
 
 std::unique_ptr<DriveIdentifyData>
     GetDriveIdentifyDataPD(Device& device, uint8_t device_number)
@@ -123,7 +197,7 @@ bool EnableSmartPD(Device& device, uint8_t device_number)
 }
 
 std::unique_ptr<DriveIdentifyData>
-    GetDriveIdentifyDataSAT(Device& device, uint8_t /* device_number */)
+    GetDriveIdentifyDataSAT(Device& device, uint8_t device_number)
 {
     SCSI_PASS_THROUGH_WBUF scsi_cmd;
     memset(&scsi_cmd, 0, sizeof(scsi_cmd));
@@ -139,17 +213,17 @@ std::unique_ptr<DriveIdentifyData>
     scsi_cmd.spt.DataTransferLength = IDENTIFY_BUFFER_SIZE;
     scsi_cmd.spt.DataBufferOffset   = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
 
-    scsi_cmd.spt.CdbLength = 12;
-    scsi_cmd.spt.Cdb[0] = 0xA1;
+    scsi_cmd.spt.CdbLength = 12;  // ATA Pass Through
+    scsi_cmd.spt.Cdb[0] = 0xA1;   // Operation Code
     scsi_cmd.spt.Cdb[1] = (4 << 1) | 0;
     scsi_cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
-    scsi_cmd.spt.Cdb[3] = 0;
-    scsi_cmd.spt.Cdb[4] = 1;
-    scsi_cmd.spt.Cdb[5] = 0;
-    scsi_cmd.spt.Cdb[6] = 0;
-    scsi_cmd.spt.Cdb[7] = 0;
-    scsi_cmd.spt.Cdb[8] = DRIVE_HEAD_REG;
-    scsi_cmd.spt.Cdb[9] = ID_CMD;
+    scsi_cmd.spt.Cdb[3] = 0;      // Features
+    scsi_cmd.spt.Cdb[4] = 1;      // Sector Count
+    scsi_cmd.spt.Cdb[5] = 0;      // LBA_LOW
+    scsi_cmd.spt.Cdb[6] = 0;      // LBA_MIDLE
+    scsi_cmd.spt.Cdb[7] = 0;      // LBA_HIGH
+    scsi_cmd.spt.Cdb[8] = DRIVE_HEAD_REG | ((device_number & 1) << 4);
+    scsi_cmd.spt.Cdb[9] = ID_CMD; // Command
 
     DWORD bytes_returned;
 
@@ -168,7 +242,7 @@ std::unique_ptr<DriveIdentifyData>
     return data;
 }
 
-bool EnableSmartSAT(Device& device, uint8_t /* device_number */)
+bool EnableSmartSAT(Device& device, uint8_t device_number)
 {
     SCSI_PASS_THROUGH_WBUF cmd;
     memset(&cmd, 0, sizeof(cmd));
@@ -178,21 +252,21 @@ bool EnableSmartSAT(Device& device, uint8_t /* device_number */)
     cmd.spt.TargetId         = 0;
     cmd.spt.Lun              = 0;
     cmd.spt.TimeOutValue     = 5;
-    // cmd.spt.SenseInfoLength  = READ_ATTRIBUTE_BUFFER_SIZE;
+    cmd.spt.SenseInfoLength  = SPT_SENSEBUFFER_LENGTH;
     cmd.spt.SenseInfoOffset  = offsetof(SCSI_PASS_THROUGH_WBUF, SenseBuffer);
     cmd.spt.DataIn           = SCSI_IOCTL_DATA_IN;
     cmd.spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
 
     cmd.spt.CdbLength = 12;
     cmd.spt.Cdb[0] = 0xA1;
-    cmd.spt.Cdb[1] = (4 << 1) | 0;;
+    cmd.spt.Cdb[1] = (4 << 1) | 0;
     cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
     cmd.spt.Cdb[3] = ENABLE_SMART;
     cmd.spt.Cdb[4] = 1;
     cmd.spt.Cdb[5] = 1;
     cmd.spt.Cdb[6] = SMART_CYL_LOW;
     cmd.spt.Cdb[7] = SMART_CYL_HI;
-    cmd.spt.Cdb[8] = DRIVE_HEAD_REG;
+    cmd.spt.Cdb[8] = DRIVE_HEAD_REG | ((device_number & 1) << 4);
     cmd.spt.Cdb[9] = SMART_CMD;
 
     DWORD bytes_returned;

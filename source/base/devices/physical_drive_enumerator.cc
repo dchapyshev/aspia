@@ -19,7 +19,6 @@ namespace aspia {
 
 PhysicalDriveEnumerator::PhysicalDriveEnumerator()
 {
-    memset(&id_data_, 0, sizeof(id_data_));
     memset(&geometry_, 0, sizeof(geometry_));
 
     const DWORD flags = DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
@@ -101,16 +100,13 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
         Device disk;
 
-        if (disk.Open(detail_data->DevicePath,
-                      GENERIC_READ,
-                      FILE_SHARE_READ | FILE_SHARE_WRITE))
+        if (disk.Open(detail_data->DevicePath, GENERIC_READ, FILE_SHARE_READ))
         {
-            STORAGE_DEVICE_NUMBER device_number;
+            uint8_t device_number;
 
-            if (disk.IoControl(IOCTL_STORAGE_GET_DEVICE_NUMBER, nullptr, 0, &device_number,
-                               sizeof(device_number), &required_size))
+            if (GetDriveNumber(disk, device_number))
             {
-                if (GetDriveInfo(device_number.DeviceNumber))
+                if (GetDriveInfo(device_number))
                     break;
             }
         }
@@ -167,23 +163,7 @@ std::string PhysicalDriveEnumerator::GetFirmwareRevision() const
 
 proto::AtaDrives::BusType PhysicalDriveEnumerator::GetBusType() const
 {
-    STORAGE_DEVICE_DESCRIPTOR device_descriptor;
-    memset(&device_descriptor, 0, sizeof(device_descriptor));
-
-    STORAGE_PROPERTY_QUERY property_query;
-    memset(&property_query, 0, sizeof(property_query));
-
-    DWORD bytes_returned;
-
-    if (!device_.IoControl(IOCTL_STORAGE_QUERY_PROPERTY,
-                           &property_query, sizeof(property_query),
-                           &device_descriptor, sizeof(device_descriptor),
-                           &bytes_returned))
-    {
-        return proto::AtaDrives::BUS_TYPE_UNKNOWN;
-    }
-
-    switch (device_descriptor.BusType)
+    switch (GetDriveBusType(device_))
     {
         case BusTypeScsi: return proto::AtaDrives::BUS_TYPE_SCSI;
         case BusTypeAtapi: return proto::AtaDrives::BUS_TYPE_ATAPI;
@@ -482,31 +462,37 @@ uint64_t PhysicalDriveEnumerator::GetEnabledFeatures() const
     return features;
 }
 
-bool PhysicalDriveEnumerator::GetDriveInfo(DWORD device_number) const
+bool PhysicalDriveEnumerator::GetDriveInfo(uint8_t device_number) const
 {
     memset(&geometry_, 0, sizeof(geometry_));
-
     id_data_.reset();
 
-    const std::wstring device_path =
-        StringPrintf(L"\\\\.\\PhysicalDrive%lu", device_number);
-
-    if (!device_.Open(device_path))
+    if (!OpenDrive(device_, device_number))
         return false;
 
-    id_data_ = GetDriveIdentifyDataPD(device_, static_cast<uint8_t>(device_number));
-    if (!id_data_)
+    STORAGE_BUS_TYPE bus_type = GetDriveBusType(device_);
+
+    switch (bus_type)
     {
-        id_data_ = GetDriveIdentifyDataSAT(device_, static_cast<uint8_t>(device_number));
-        if (!id_data_)
-            return false;
+        case BusTypeAta:
+        case BusTypeAtapi:
+        case BusTypeSata:
+            id_data_ = GetDriveIdentifyDataPD(device_, device_number);
+            break;
+
+        case BusTypeUsb:
+            id_data_ = GetDriveIdentifyDataSAT(device_, device_number);
+            break;
+
+        default:
+            LOG(WARNING) << "Unhandled bus type: " << bus_type;
+            break;
     }
 
-    DWORD bytes_returned;
+    if (!id_data_)
+        return false;
 
-    device_.IoControl(IOCTL_DISK_GET_DRIVE_GEOMETRY,
-                      nullptr, 0, &geometry_, sizeof(geometry_),
-                      &bytes_returned);
+    GetDriveGeometry(device_, geometry_);
 
     return true;
 }
