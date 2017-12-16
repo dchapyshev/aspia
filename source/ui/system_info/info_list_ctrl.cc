@@ -220,11 +220,12 @@ void InfoListCtrl::AddValue(const Value& value)
     {
         LVITEMW item = { 0 };
 
-        item.mask     = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE;
+        item.mask     = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE | LVIF_INDENT;
         item.iImage   = ICON_INDEX_CATEGORY;
         item.pszText  = const_cast<LPWSTR>(text.c_str());
         item.iItem    = item_count_;
         item.iSubItem = current_column_;
+        item.iIndent  = indent_;
 
         InsertItem(&item);
         ++item_count_;

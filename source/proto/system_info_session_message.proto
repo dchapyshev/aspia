@@ -1285,6 +1285,26 @@ message AtaDrives
     repeated Item item = 1;
 }
 
+message SMART
+{
+    message Attribute
+    {
+        uint32 id          = 1;
+        uint32 value       = 2;
+        uint32 worst_value = 3;
+        uint32 threshold   = 4;
+        uint64 raw         = 5;
+    }
+
+    message Drive
+    {
+        string model_number = 1;
+        repeated Attribute attribute = 2;
+    }
+
+    repeated Drive drive = 1;
+}
+
 message VideoAdapters
 {
     message Item

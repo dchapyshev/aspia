@@ -14,6 +14,7 @@ namespace aspia {
 
 class Output;
 class Table;
+class Group;
 
 class Row
 {
@@ -27,6 +28,7 @@ public:
 
 private:
     friend class Table;
+    friend class Group;
 
     Row(Output* output);
 

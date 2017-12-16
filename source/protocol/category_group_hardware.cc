@@ -4075,15 +4075,83 @@ const char* CategorySMART::Guid() const
     return "{7B1F2ED7-7A2E-4F5C-A70B-A56AB5B8CE00}";
 }
 
-void CategorySMART::Parse(Table& /* table */, const std::string& /* data */)
+void CategorySMART::Parse(Table& table, const std::string& data)
 {
-    // TODO
+    proto::SMART message;
+
+    if (!message.ParseFromString(data))
+        return;
+
+    table.AddColumns(ColumnList::Create()
+                     .AddColumn("Attribute", 250)
+                     .AddColumn("Threshold", 80)
+                     .AddColumn("Value", 80)
+                     .AddColumn("Worst", 80)
+                     .AddColumn("Data", 80));
+
+    for (int index = 0; index < message.drive_size(); ++index)
+    {
+        const proto::SMART::Drive& drive = message.drive(index);
+
+        Group group = table.AddGroup(drive.model_number());
+
+        for (int i = 0; i < drive.attribute_size(); ++i)
+        {
+            const proto::SMART::Attribute& attribute = drive.attribute(i);
+
+            Row row = group.AddRow();
+            row.AddValue(Value::FormattedString("%02X", attribute.id()));
+            row.AddValue(Value::Number(attribute.threshold()));
+            row.AddValue(Value::Number(attribute.value()));
+            row.AddValue(Value::Number(attribute.worst_value()));
+            row.AddValue(Value::Number(attribute.raw()));
+        }
+    }
 }
 
 std::string CategorySMART::Serialize()
 {
-    // TODO
-    return std::string();
+    proto::SMART message;
+
+    for (PhysicalDriveEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    {
+        SmartAttributeData attributes;
+        memset(&attributes, 0, sizeof(attributes));
+
+        SmartThresholdData thresholds;
+        memset(&thresholds, 0, sizeof(thresholds));
+
+        if (!enumerator.GetSmartData(attributes, thresholds))
+            continue;
+
+        proto::SMART::Drive* drive = nullptr;
+
+        for (size_t i = 0; i < kMaxSmartAttributesCount; ++i)
+        {
+            if (attributes.attribute[i].id != 0)
+            {
+                if (!drive)
+                {
+                    drive = message.add_drive();
+                    drive->set_model_number(enumerator.GetModelNumber());
+                }
+
+                proto::SMART::Attribute* attribute = drive->add_attribute();
+
+                attribute->set_id(attributes.attribute[i].id);
+                attribute->set_value(attributes.attribute[i].value);
+                attribute->set_worst_value(attributes.attribute[i].worst_value);
+                attribute->set_threshold(thresholds.threshold[i].warranty_threshold);
+
+                uint64_t raw = 0ULL;
+                memcpy(&raw, attributes.attribute[i].raw_value, sizeof(attributes.attribute[i].raw_value));
+
+                attribute->set_raw(raw);
+            }
+        }
+    }
+
+    return message.SerializeAsString();
 }
 
 //

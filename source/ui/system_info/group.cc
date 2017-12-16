@@ -48,4 +48,9 @@ void Group::AddParam(std::string_view param, const Value& value)
     output_->AddParam(param, value);
 }
 
+Row Group::AddRow()
+{
+    return Row(output_);
+}
+
 } // namespace aspia

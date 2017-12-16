@@ -9,6 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__GROUP_H
 
 #include "ui/system_info/value.h"
+#include "ui/system_info/row.h"
 
 namespace aspia {
 
@@ -22,6 +23,7 @@ public:
 
     Group AddGroup(std::string_view name);
     void AddParam(std::string_view param, const Value& value);
+    Row AddRow();
 
     Group& operator=(Group&& other);
 

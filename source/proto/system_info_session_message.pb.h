@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[60];
+  static const ::google::protobuf::internal::ParseTable schema[63];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -97,6 +97,12 @@ void InitDefaultsAtaDrives_ItemImpl();
 void InitDefaultsAtaDrives_Item();
 void InitDefaultsAtaDrivesImpl();
 void InitDefaultsAtaDrives();
+void InitDefaultsSMART_AttributeImpl();
+void InitDefaultsSMART_Attribute();
+void InitDefaultsSMART_DriveImpl();
+void InitDefaultsSMART_Drive();
+void InitDefaultsSMARTImpl();
+void InitDefaultsSMART();
 void InitDefaultsVideoAdapters_ItemImpl();
 void InitDefaultsVideoAdapters_Item();
 void InitDefaultsVideoAdaptersImpl();
@@ -190,6 +196,9 @@ inline void InitDefaults() {
   InitDefaultsCPU();
   InitDefaultsAtaDrives_Item();
   InitDefaultsAtaDrives();
+  InitDefaultsSMART_Attribute();
+  InitDefaultsSMART_Drive();
+  InitDefaultsSMART();
   InitDefaultsVideoAdapters_Item();
   InitDefaultsVideoAdapters();
   InitDefaultsMonitors_Timing();
@@ -364,6 +373,15 @@ extern RoutesDefaultTypeInternal _Routes_default_instance_;
 class Routes_Item;
 class Routes_ItemDefaultTypeInternal;
 extern Routes_ItemDefaultTypeInternal _Routes_Item_default_instance_;
+class SMART;
+class SMARTDefaultTypeInternal;
+extern SMARTDefaultTypeInternal _SMART_default_instance_;
+class SMART_Attribute;
+class SMART_AttributeDefaultTypeInternal;
+extern SMART_AttributeDefaultTypeInternal _SMART_Attribute_default_instance_;
+class SMART_Drive;
+class SMART_DriveDefaultTypeInternal;
+extern SMART_DriveDefaultTypeInternal _SMART_Drive_default_instance_;
 class Services;
 class ServicesDefaultTypeInternal;
 extern ServicesDefaultTypeInternal _Services_default_instance_;
@@ -8780,6 +8798,355 @@ class AtaDrives : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
+class SMART_Attribute : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SMART.Attribute) */ {
+ public:
+  SMART_Attribute();
+  virtual ~SMART_Attribute();
+
+  SMART_Attribute(const SMART_Attribute& from);
+
+  inline SMART_Attribute& operator=(const SMART_Attribute& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  SMART_Attribute(SMART_Attribute&& from) noexcept
+    : SMART_Attribute() {
+    *this = ::std::move(from);
+  }
+
+  inline SMART_Attribute& operator=(SMART_Attribute&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const SMART_Attribute& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SMART_Attribute* internal_default_instance() {
+    return reinterpret_cast<const SMART_Attribute*>(
+               &_SMART_Attribute_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    28;
+
+  void Swap(SMART_Attribute* other);
+  friend void swap(SMART_Attribute& a, SMART_Attribute& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SMART_Attribute* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  SMART_Attribute* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const SMART_Attribute& from);
+  void MergeFrom(const SMART_Attribute& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(SMART_Attribute* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 id = 1;
+  void clear_id();
+  static const int kIdFieldNumber = 1;
+  ::google::protobuf::uint32 id() const;
+  void set_id(::google::protobuf::uint32 value);
+
+  // uint32 value = 2;
+  void clear_value();
+  static const int kValueFieldNumber = 2;
+  ::google::protobuf::uint32 value() const;
+  void set_value(::google::protobuf::uint32 value);
+
+  // uint32 worst_value = 3;
+  void clear_worst_value();
+  static const int kWorstValueFieldNumber = 3;
+  ::google::protobuf::uint32 worst_value() const;
+  void set_worst_value(::google::protobuf::uint32 value);
+
+  // uint32 threshold = 4;
+  void clear_threshold();
+  static const int kThresholdFieldNumber = 4;
+  ::google::protobuf::uint32 threshold() const;
+  void set_threshold(::google::protobuf::uint32 value);
+
+  // uint64 raw = 5;
+  void clear_raw();
+  static const int kRawFieldNumber = 5;
+  ::google::protobuf::uint64 raw() const;
+  void set_raw(::google::protobuf::uint64 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.SMART.Attribute)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 value_;
+  ::google::protobuf::uint32 worst_value_;
+  ::google::protobuf::uint32 threshold_;
+  ::google::protobuf::uint64 raw_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSMART_AttributeImpl();
+};
+// -------------------------------------------------------------------
+
+class SMART_Drive : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SMART.Drive) */ {
+ public:
+  SMART_Drive();
+  virtual ~SMART_Drive();
+
+  SMART_Drive(const SMART_Drive& from);
+
+  inline SMART_Drive& operator=(const SMART_Drive& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  SMART_Drive(SMART_Drive&& from) noexcept
+    : SMART_Drive() {
+    *this = ::std::move(from);
+  }
+
+  inline SMART_Drive& operator=(SMART_Drive&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const SMART_Drive& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SMART_Drive* internal_default_instance() {
+    return reinterpret_cast<const SMART_Drive*>(
+               &_SMART_Drive_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    29;
+
+  void Swap(SMART_Drive* other);
+  friend void swap(SMART_Drive& a, SMART_Drive& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SMART_Drive* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  SMART_Drive* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const SMART_Drive& from);
+  void MergeFrom(const SMART_Drive& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(SMART_Drive* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.SMART.Attribute attribute = 2;
+  int attribute_size() const;
+  void clear_attribute();
+  static const int kAttributeFieldNumber = 2;
+  const ::aspia::proto::SMART_Attribute& attribute(int index) const;
+  ::aspia::proto::SMART_Attribute* mutable_attribute(int index);
+  ::aspia::proto::SMART_Attribute* add_attribute();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Attribute >*
+      mutable_attribute();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Attribute >&
+      attribute() const;
+
+  // string model_number = 1;
+  void clear_model_number();
+  static const int kModelNumberFieldNumber = 1;
+  const ::std::string& model_number() const;
+  void set_model_number(const ::std::string& value);
+  #if LANG_CXX11
+  void set_model_number(::std::string&& value);
+  #endif
+  void set_model_number(const char* value);
+  void set_model_number(const char* value, size_t size);
+  ::std::string* mutable_model_number();
+  ::std::string* release_model_number();
+  void set_allocated_model_number(::std::string* model_number);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.SMART.Drive)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Attribute > attribute_;
+  ::google::protobuf::internal::ArenaStringPtr model_number_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSMART_DriveImpl();
+};
+// -------------------------------------------------------------------
+
+class SMART : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SMART) */ {
+ public:
+  SMART();
+  virtual ~SMART();
+
+  SMART(const SMART& from);
+
+  inline SMART& operator=(const SMART& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  SMART(SMART&& from) noexcept
+    : SMART() {
+    *this = ::std::move(from);
+  }
+
+  inline SMART& operator=(SMART&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const SMART& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SMART* internal_default_instance() {
+    return reinterpret_cast<const SMART*>(
+               &_SMART_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    30;
+
+  void Swap(SMART* other);
+  friend void swap(SMART& a, SMART& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SMART* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  SMART* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const SMART& from);
+  void MergeFrom(const SMART& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(SMART* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef SMART_Attribute Attribute;
+  typedef SMART_Drive Drive;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.SMART.Drive drive = 1;
+  int drive_size() const;
+  void clear_drive();
+  static const int kDriveFieldNumber = 1;
+  const ::aspia::proto::SMART_Drive& drive(int index) const;
+  ::aspia::proto::SMART_Drive* mutable_drive(int index);
+  ::aspia::proto::SMART_Drive* add_drive();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Drive >*
+      mutable_drive();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Drive >&
+      drive() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.SMART)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Drive > drive_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
+  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSMARTImpl();
+};
+// -------------------------------------------------------------------
+
 class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoAdapters.Item) */ {
  public:
   VideoAdapters_Item();
@@ -8814,7 +9181,7 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
                &_VideoAdapters_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    31;
 
   void Swap(VideoAdapters_Item* other);
   friend void swap(VideoAdapters_Item& a, VideoAdapters_Item& b) {
@@ -9031,7 +9398,7 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_VideoAdapters_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    32;
 
   void Swap(VideoAdapters* other);
   friend void swap(VideoAdapters& a, VideoAdapters& b) {
@@ -9136,7 +9503,7 @@ class Monitors_Timing : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_Monitors_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    33;
 
   void Swap(Monitors_Timing* other);
   friend void swap(Monitors_Timing& a, Monitors_Timing& b) {
@@ -9247,7 +9614,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    34;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -9579,7 +9946,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    35;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -9702,7 +10069,7 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
                &_PowerOptions_Battery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    36;
 
   void Swap(PowerOptions_Battery* other);
   friend void swap(PowerOptions_Battery& a, PowerOptions_Battery& b) {
@@ -9960,7 +10327,7 @@ class PowerOptions : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_PowerOptions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    37;
 
   void Swap(PowerOptions* other);
   friend void swap(PowerOptions& a, PowerOptions& b) {
@@ -10140,7 +10507,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    38;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -10446,7 +10813,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    39;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -10551,7 +10918,7 @@ class WindowsDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_i
                &_WindowsDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    40;
 
   void Swap(WindowsDevices_Item* other);
   friend void swap(WindowsDevices_Item& a, WindowsDevices_Item& b) {
@@ -10731,7 +11098,7 @@ class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_WindowsDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    41;
 
   void Swap(WindowsDevices* other);
   friend void swap(WindowsDevices& a, WindowsDevices& b) {
@@ -10836,7 +11203,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    42;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -11001,7 +11368,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    43;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -11106,7 +11473,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    44;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -11335,7 +11702,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    45;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -11440,7 +11807,7 @@ class Processes_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_Processes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    46;
 
   void Swap(Processes_Item* other);
   friend void swap(Processes_Item& a, Processes_Item& b) {
@@ -11589,7 +11956,7 @@ class Processes : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_Processes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    47;
 
   void Swap(Processes* other);
   friend void swap(Processes& a, Processes& b) {
@@ -11694,7 +12061,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    48;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -11814,7 +12181,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    49;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -12106,7 +12473,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    50;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -12211,7 +12578,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    51;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -12374,7 +12741,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    52;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -12533,7 +12900,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    53;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -12714,7 +13081,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    54;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -12819,7 +13186,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    55;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -12961,7 +13328,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    56;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -13066,7 +13433,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    57;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -13257,7 +13624,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    58;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -13362,7 +13729,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    59;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -13482,7 +13849,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    60;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -13587,7 +13954,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    61;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -13751,7 +14118,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    62;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -21267,6 +21634,201 @@ AtaDrives::item() const {
 
 // -------------------------------------------------------------------
 
+// SMART_Attribute
+
+// uint32 id = 1;
+inline void SMART_Attribute::clear_id() {
+  id_ = 0u;
+}
+inline ::google::protobuf::uint32 SMART_Attribute::id() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.id)
+  return id_;
+}
+inline void SMART_Attribute::set_id(::google::protobuf::uint32 value) {
+  
+  id_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.id)
+}
+
+// uint32 value = 2;
+inline void SMART_Attribute::clear_value() {
+  value_ = 0u;
+}
+inline ::google::protobuf::uint32 SMART_Attribute::value() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.value)
+  return value_;
+}
+inline void SMART_Attribute::set_value(::google::protobuf::uint32 value) {
+  
+  value_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.value)
+}
+
+// uint32 worst_value = 3;
+inline void SMART_Attribute::clear_worst_value() {
+  worst_value_ = 0u;
+}
+inline ::google::protobuf::uint32 SMART_Attribute::worst_value() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.worst_value)
+  return worst_value_;
+}
+inline void SMART_Attribute::set_worst_value(::google::protobuf::uint32 value) {
+  
+  worst_value_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.worst_value)
+}
+
+// uint32 threshold = 4;
+inline void SMART_Attribute::clear_threshold() {
+  threshold_ = 0u;
+}
+inline ::google::protobuf::uint32 SMART_Attribute::threshold() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.threshold)
+  return threshold_;
+}
+inline void SMART_Attribute::set_threshold(::google::protobuf::uint32 value) {
+  
+  threshold_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.threshold)
+}
+
+// uint64 raw = 5;
+inline void SMART_Attribute::clear_raw() {
+  raw_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 SMART_Attribute::raw() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.raw)
+  return raw_;
+}
+inline void SMART_Attribute::set_raw(::google::protobuf::uint64 value) {
+  
+  raw_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.raw)
+}
+
+// -------------------------------------------------------------------
+
+// SMART_Drive
+
+// string model_number = 1;
+inline void SMART_Drive::clear_model_number() {
+  model_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& SMART_Drive::model_number() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Drive.model_number)
+  return model_number_.GetNoArena();
+}
+inline void SMART_Drive::set_model_number(const ::std::string& value) {
+  
+  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Drive.model_number)
+}
+#if LANG_CXX11
+inline void SMART_Drive::set_model_number(::std::string&& value) {
+  
+  model_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.SMART.Drive.model_number)
+}
+#endif
+inline void SMART_Drive::set_model_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.SMART.Drive.model_number)
+}
+inline void SMART_Drive::set_model_number(const char* value, size_t size) {
+  
+  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.SMART.Drive.model_number)
+}
+inline ::std::string* SMART_Drive::mutable_model_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.SMART.Drive.model_number)
+  return model_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* SMART_Drive::release_model_number() {
+  // @@protoc_insertion_point(field_release:aspia.proto.SMART.Drive.model_number)
+  
+  return model_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void SMART_Drive::set_allocated_model_number(::std::string* model_number) {
+  if (model_number != NULL) {
+    
+  } else {
+    
+  }
+  model_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), model_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.SMART.Drive.model_number)
+}
+
+// repeated .aspia.proto.SMART.Attribute attribute = 2;
+inline int SMART_Drive::attribute_size() const {
+  return attribute_.size();
+}
+inline void SMART_Drive::clear_attribute() {
+  attribute_.Clear();
+}
+inline const ::aspia::proto::SMART_Attribute& SMART_Drive::attribute(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Drive.attribute)
+  return attribute_.Get(index);
+}
+inline ::aspia::proto::SMART_Attribute* SMART_Drive::mutable_attribute(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.SMART.Drive.attribute)
+  return attribute_.Mutable(index);
+}
+inline ::aspia::proto::SMART_Attribute* SMART_Drive::add_attribute() {
+  // @@protoc_insertion_point(field_add:aspia.proto.SMART.Drive.attribute)
+  return attribute_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Attribute >*
+SMART_Drive::mutable_attribute() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.SMART.Drive.attribute)
+  return &attribute_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Attribute >&
+SMART_Drive::attribute() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.SMART.Drive.attribute)
+  return attribute_;
+}
+
+// -------------------------------------------------------------------
+
+// SMART
+
+// repeated .aspia.proto.SMART.Drive drive = 1;
+inline int SMART::drive_size() const {
+  return drive_.size();
+}
+inline void SMART::clear_drive() {
+  drive_.Clear();
+}
+inline const ::aspia::proto::SMART_Drive& SMART::drive(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.drive)
+  return drive_.Get(index);
+}
+inline ::aspia::proto::SMART_Drive* SMART::mutable_drive(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.SMART.drive)
+  return drive_.Mutable(index);
+}
+inline ::aspia::proto::SMART_Drive* SMART::add_drive() {
+  // @@protoc_insertion_point(field_add:aspia.proto.SMART.drive)
+  return drive_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Drive >*
+SMART::mutable_drive() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.SMART.drive)
+  return &drive_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SMART_Drive >&
+SMART::drive() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.SMART.drive)
+  return drive_;
+}
+
+// -------------------------------------------------------------------
+
 // VideoAdapters_Item
 
 // string description = 1;
@@ -27068,6 +27630,12 @@ Sessions::item() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
