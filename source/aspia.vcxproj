@@ -68,6 +68,7 @@
     <ClCompile Include="base\scoped_bstr.cc" />
     <ClCompile Include="base\scoped_clipboard.cc" />
     <ClCompile Include="base\scoped_impersonator.cc" />
+    <ClCompile Include="base\scoped_privilege.cc" />
     <ClCompile Include="base\scoped_thread_desktop.cc" />
     <ClCompile Include="base\scoped_variant.cc" />
     <ClCompile Include="base\security_helpers.cc" />

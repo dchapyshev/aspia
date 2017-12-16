@@ -688,6 +688,9 @@
     <ClCompile Include="base\strings\string_printf.cc">
       <Filter>base\strings</Filter>
     </ClCompile>
+    <ClCompile Include="base\scoped_privilege.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">

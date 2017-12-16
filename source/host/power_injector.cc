@@ -5,8 +5,9 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/power_injector.h"
 #include "base/scoped_privilege.h"
+#include "base/logging.h"
+#include "host/power_injector.h"
 
 namespace aspia {
 

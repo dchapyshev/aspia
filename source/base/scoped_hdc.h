@@ -59,10 +59,7 @@ private:
 class ScopedCreateDC
 {
 public:
-    ScopedCreateDC() : hdc_(nullptr)
-    {
-        // Nothing
-    }
+    ScopedCreateDC() = default;
 
     explicit ScopedCreateDC(HDC h) : hdc_(h)
     {
@@ -93,7 +90,7 @@ private:
         if (hdc_) DeleteDC(hdc_);
     }
 
-    HDC hdc_;
+    HDC hdc_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
