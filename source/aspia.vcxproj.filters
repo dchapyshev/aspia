@@ -1421,6 +1421,9 @@
     <ClInclude Include="base\devices\physical_drive_util.h">
       <Filter>base\devices</Filter>
     </ClInclude>
+    <ClInclude Include="base\devices\physical_drive_smart.h">
+      <Filter>base\devices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

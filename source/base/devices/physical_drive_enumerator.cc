@@ -102,11 +102,9 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
         if (disk.Open(detail_data->DevicePath, GENERIC_READ, FILE_SHARE_READ))
         {
-            uint8_t device_number;
-
-            if (GetDriveNumber(disk, device_number))
+            if (GetDriveNumber(disk, device_number_))
             {
-                if (GetDriveInfo(device_number))
+                if (GetDriveInfo(device_number_))
                     break;
             }
         }
@@ -460,6 +458,44 @@ uint64_t PhysicalDriveEnumerator::GetEnabledFeatures() const
         features |= proto::AtaDrives::FEATURE_DEVICE_CONFIGURATION_OVERLAY;
 
     return features;
+}
+
+bool PhysicalDriveEnumerator::GetSmartData(SmartAttributeData& attributes,
+                                           SmartThresholdData& thresholds)
+{
+    STORAGE_BUS_TYPE bus_type = GetDriveBusType(device_);
+
+    switch (bus_type)
+    {
+        case BusTypeAta:
+        case BusTypeAtapi:
+        case BusTypeSata:
+        {
+            if (!EnableSmartPD(device_, device_number_))
+                break;
+
+            if (!GetSmartAttributesPD(device_, device_number_, attributes))
+                break;
+
+            if (!GetSmartThresholdsPD(device_, device_number_, thresholds))
+                break;
+
+            return true;
+        }
+        break;
+
+        case BusTypeUsb:
+        {
+            // TODO
+        }
+        break;
+
+        default:
+            LOG(WARNING) << "Unhandled bus type: " << bus_type;
+            break;
+    }
+
+    return false;
 }
 
 bool PhysicalDriveEnumerator::GetDriveInfo(uint8_t device_number) const

@@ -33,6 +33,18 @@ typedef struct
 
 typedef struct
 {
+    SENDCMDOUTPARAMS send_cmd_out_params;
+    BYTE data[READ_ATTRIBUTE_BUFFER_SIZE - 1];
+} READ_ATTRIBUTE_DATA_OUTDATA;
+
+typedef struct
+{
+    SENDCMDOUTPARAMS send_cmd_out_params;
+    BYTE data[READ_THRESHOLD_BUFFER_SIZE - 1];
+} READ_THRESHOLD_DATA_OUTDATA;
+
+typedef struct
+{
     USHORT  Length;
     UCHAR  ScsiStatus;
     UCHAR  PathId;
@@ -196,6 +208,80 @@ bool EnableSmartPD(Device& device, uint8_t device_number)
     return true;
 }
 
+bool GetSmartAttributesPD(Device& device, uint8_t device_number, SmartAttributeData& data)
+{
+    SENDCMDINPARAMS cmd_in;
+    memset(&cmd_in, 0, sizeof(cmd_in));
+
+    cmd_in.cBufferSize                  = READ_ATTRIBUTE_BUFFER_SIZE;
+    cmd_in.irDriveRegs.bFeaturesReg     = READ_ATTRIBUTES;
+    cmd_in.irDriveRegs.bSectorCountReg  = 1;
+    cmd_in.irDriveRegs.bSectorNumberReg = 1;
+    cmd_in.irDriveRegs.bCylLowReg       = SMART_CYL_LOW;
+    cmd_in.irDriveRegs.bCylHighReg      = SMART_CYL_HI;
+    cmd_in.irDriveRegs.bDriveHeadReg    = DRIVE_HEAD_REG;
+    cmd_in.irDriveRegs.bCommandReg      = SMART_CMD;
+    cmd_in.bDriveNumber                 = device_number;
+
+    READ_ATTRIBUTE_DATA_OUTDATA cmd_out;
+    memset(&cmd_out, 0, sizeof(cmd_out));
+
+    DWORD bytes_returned;
+
+    if (!device.IoControl(SMART_RCV_DRIVE_DATA,
+                          &cmd_in, sizeof(cmd_in),
+                          &cmd_out, sizeof(cmd_out),
+                          &bytes_returned) ||
+        bytes_returned != sizeof(cmd_out))
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    memcpy(&data,
+           &cmd_out.send_cmd_out_params.bBuffer[0],
+           READ_ATTRIBUTE_BUFFER_SIZE);
+
+    return true;
+}
+
+bool GetSmartThresholdsPD(Device& device, uint8_t device_number, SmartThresholdData& data)
+{
+    SENDCMDINPARAMS cmd_in;
+    memset(&cmd_in, 0, sizeof(cmd_in));
+
+    cmd_in.cBufferSize                  = READ_THRESHOLD_BUFFER_SIZE;
+    cmd_in.irDriveRegs.bFeaturesReg     = READ_THRESHOLDS;
+    cmd_in.irDriveRegs.bSectorCountReg  = 1;
+    cmd_in.irDriveRegs.bSectorNumberReg = 1;
+    cmd_in.irDriveRegs.bCylLowReg       = SMART_CYL_LOW;
+    cmd_in.irDriveRegs.bCylHighReg      = SMART_CYL_HI;
+    cmd_in.irDriveRegs.bDriveHeadReg    = DRIVE_HEAD_REG;
+    cmd_in.irDriveRegs.bCommandReg      = SMART_CMD;
+    cmd_in.bDriveNumber                 = device_number;
+
+    READ_THRESHOLD_DATA_OUTDATA cmd_out;
+    memset(&cmd_out, 0, sizeof(cmd_out));
+
+    DWORD bytes_returned;
+
+    if (!device.IoControl(SMART_RCV_DRIVE_DATA,
+                          &cmd_in, sizeof(cmd_in),
+                          &cmd_out, sizeof(cmd_out),
+                          &bytes_returned) ||
+        bytes_returned != sizeof(cmd_out))
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    memcpy(&data,
+           &cmd_out.send_cmd_out_params.bBuffer[0],
+           READ_THRESHOLD_BUFFER_SIZE);
+
+    return true;
+}
+
 std::unique_ptr<DriveIdentifyData>
     GetDriveIdentifyDataSAT(Device& device, uint8_t device_number)
 {
@@ -215,7 +301,9 @@ std::unique_ptr<DriveIdentifyData>
 
     scsi_cmd.spt.CdbLength = 12;  // ATA Pass Through
     scsi_cmd.spt.Cdb[0] = 0xA1;   // Operation Code
+    // MULTIPLE_COUNT=0, PROTOCOL=4 (PIO Data-In), Reserved
     scsi_cmd.spt.Cdb[1] = (4 << 1) | 0;
+    // OFF_LINE=0, CK_COND=0, Reserved=0, T_DIR=1 (ToDevice), BYTE_BLOCK=1, T_LENGTH=2
     scsi_cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
     scsi_cmd.spt.Cdb[3] = 0;      // Features
     scsi_cmd.spt.Cdb[4] = 1;      // Sector Count
@@ -247,27 +335,30 @@ bool EnableSmartSAT(Device& device, uint8_t device_number)
     SCSI_PASS_THROUGH_WBUF cmd;
     memset(&cmd, 0, sizeof(cmd));
 
-    cmd.spt.Length           = sizeof(SCSI_PASS_THROUGH);
-    cmd.spt.PathId           = 0;
-    cmd.spt.TargetId         = 0;
-    cmd.spt.Lun              = 0;
-    cmd.spt.TimeOutValue     = 5;
-    cmd.spt.SenseInfoLength  = SPT_SENSEBUFFER_LENGTH;
-    cmd.spt.SenseInfoOffset  = offsetof(SCSI_PASS_THROUGH_WBUF, SenseBuffer);
-    cmd.spt.DataIn           = SCSI_IOCTL_DATA_IN;
-    cmd.spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
+    cmd.spt.Length             = sizeof(SCSI_PASS_THROUGH);
+    cmd.spt.PathId             = 0;
+    cmd.spt.TargetId           = 0;
+    cmd.spt.Lun                = 0;
+    cmd.spt.TimeOutValue       = 5;
+    cmd.spt.DataIn             = SCSI_IOCTL_DATA_IN;
+    cmd.spt.DataTransferLength = 0;
+    cmd.spt.SenseInfoLength    = SPT_SENSEBUFFER_LENGTH;
+    cmd.spt.SenseInfoOffset    = offsetof(SCSI_PASS_THROUGH_WBUF, SenseBuffer);
+    cmd.spt.DataBufferOffset   = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
 
-    cmd.spt.CdbLength = 12;
-    cmd.spt.Cdb[0] = 0xA1;
-    cmd.spt.Cdb[1] = (4 << 1) | 0;
+    cmd.spt.CdbLength = 12;         // ATA Pass Through
+    cmd.spt.Cdb[0] = 0xA1;          // Operation Code
+    // MULTIPLE_COUNT=0, PROTOCOL=3 (Non-Data), Reserved
+    cmd.spt.Cdb[1] = (3 << 1) | 0;
+    // OFF_LINE=0, CK_COND=0, Reserved=0, T_DIR=1 (ToDevice), BYTE_BLOCK=1, T_LENGTH=2
     cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
-    cmd.spt.Cdb[3] = ENABLE_SMART;
-    cmd.spt.Cdb[4] = 1;
-    cmd.spt.Cdb[5] = 1;
-    cmd.spt.Cdb[6] = SMART_CYL_LOW;
-    cmd.spt.Cdb[7] = SMART_CYL_HI;
+    cmd.spt.Cdb[3] = ENABLE_SMART;  // Features
+    cmd.spt.Cdb[4] = 0;             // Sector Count
+    cmd.spt.Cdb[5] = 1;             // LBA_LOW
+    cmd.spt.Cdb[6] = SMART_CYL_LOW; // LBA_MIDLE
+    cmd.spt.Cdb[7] = SMART_CYL_HI;  // LBA_HIGH
     cmd.spt.Cdb[8] = DRIVE_HEAD_REG | ((device_number & 1) << 4);
-    cmd.spt.Cdb[9] = SMART_CMD;
+    cmd.spt.Cdb[9] = SMART_CMD;     // Command
 
     DWORD bytes_returned;
 

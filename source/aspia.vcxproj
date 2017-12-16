@@ -247,6 +247,7 @@
     <ClInclude Include="base\devices\edid.h" />
     <ClInclude Include="base\devices\monitor_enumerator.h" />
     <ClInclude Include="base\devices\physical_drive_enumerator.h" />
+    <ClInclude Include="base\devices\physical_drive_smart.h" />
     <ClInclude Include="base\devices\physical_drive_util.h" />
     <ClInclude Include="base\devices\smbios.h" />
     <ClInclude Include="base\devices\smbios_reader.h" />

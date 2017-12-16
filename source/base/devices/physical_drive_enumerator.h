@@ -9,6 +9,7 @@
 #define _ASPIA_BASE__DEVICES__PHYSICAL_DRIVE_ENUMERATOR_H
 
 #include "base/devices/device.h"
+#include "base/devices/physical_drive_smart.h"
 #include "proto/system_info_session_message.pb.h"
 
 #include <setupapi.h>
@@ -45,6 +46,7 @@ public:
     uint16_t GetHeadsNumber() const;
     uint64_t GetSupportedFeatures() const;
     uint64_t GetEnabledFeatures() const;
+    bool GetSmartData(SmartAttributeData& attributes, SmartThresholdData& thresholds);
 
 private:
     bool GetDriveInfo(uint8_t device_number) const;
@@ -53,6 +55,7 @@ private:
     HDEVINFO device_info_;
     mutable DWORD device_index_ = 0;
     mutable Device device_;
+    mutable uint8_t device_number_;
     mutable std::unique_ptr<DriveIdentifyData> id_data_;
     mutable DISK_GEOMETRY geometry_;
 

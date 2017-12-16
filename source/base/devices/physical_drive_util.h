@@ -9,6 +9,7 @@
 #define _ASPIA_BASE__DEVICES__PHYSICAL_DRIVE_UTIL_H
 
 #include "base/devices/device.h"
+#include "base/devices/physical_drive_smart.h"
 
 #include <cstdint>
 #include <memory>
@@ -16,7 +17,7 @@
 
 namespace aspia {
 
-#pragma pack (push, id_data, 1)
+#pragma pack (push, drive_identify_data, 1)
 struct DriveIdentifyData
 {
     uint16_t general_configuration;          // 0
@@ -129,7 +130,7 @@ struct DriveIdentifyData
     uint16_t reserved48[19];                 // 236-254
     uint16_t reserved49;                     // 255
 };
-#pragma pack (pop, id_data)
+#pragma pack (pop, drive_identify_data)
 
 //
 // Generic Functions
@@ -141,14 +142,16 @@ bool GetDriveNumber(Device& device, uint8_t& device_number);
 bool GetDriveGeometry(Device& device, DISK_GEOMETRY& geometry);
 
 //
-// Physical Drive Functions
+// Physical Drive Functions (PD)
 //
 
 std::unique_ptr<DriveIdentifyData> GetDriveIdentifyDataPD(Device& device, uint8_t device_number);
 bool EnableSmartPD(Device& device, uint8_t device_number);
+bool GetSmartAttributesPD(Device& device, uint8_t device_number, SmartAttributeData& data);
+bool GetSmartThresholdsPD(Device& device, uint8_t device_number, SmartThresholdData& data);
 
 //
-// SCSI / ATA Translation Functions
+// SCSI-ATA Translation Functions (SAT)
 //
 
 std::unique_ptr<DriveIdentifyData> GetDriveIdentifyDataSAT(Device& device, uint8_t device_number);
