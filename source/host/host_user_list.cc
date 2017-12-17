@@ -99,7 +99,6 @@ static bool GetUserListDirectoryPath(FilePath& path)
         return false;
 
     path.append(L"Aspia");
-    path.append(L"Remote Desktop");
 
     return true;
 }
