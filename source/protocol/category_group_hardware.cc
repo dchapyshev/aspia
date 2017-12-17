@@ -13,6 +13,7 @@
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
+#include "base/bitset.h"
 #include "base/cpu_info.h"
 #include "protocol/category_group_hardware.h"
 #include "ui/system_info/output.h"
@@ -4149,6 +4150,12 @@ std::string CategorySMART::Serialize()
 
             proto::SMART::Attribute* attribute = drive->add_attribute();
 
+            uint32_t flags = 0;
+
+            if (BitSet<uint16_t>(attributes.attribute[i].status_flags).Test(0))
+                flags |= proto::SMART::Attribute::FLAG_PRE_FAILURE;
+
+            attribute->set_flags(flags);
             attribute->set_id(attributes.attribute[i].id);
             attribute->set_value(attributes.attribute[i].value);
             attribute->set_worst_value(attributes.attribute[i].worst_value);
@@ -4170,8 +4177,13 @@ const char* CategorySMART::GetStatusString(uint32_t attribute, uint32_t threshol
     if (threshold == 0)
         return "OK. Always passed";
 
-    if (flags & proto::SMART::Attribute::FLAG_PRE_FAILURE || attribute <= threshold)
-        return "WARNING. Value is pre-failure";
+    if (attribute <= threshold)
+    {
+        if (flags & proto::SMART::Attribute::FLAG_PRE_FAILURE)
+            return "WARNING. Value is pre-failure";
+
+        return "WARNING. Value is not normal";
+    }
 
     return "OK. Value is normal";
 }
