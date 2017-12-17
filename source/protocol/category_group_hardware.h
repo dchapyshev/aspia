@@ -328,11 +328,13 @@ private:
         SAMSUNG_SSD        = 2,
         SAND_FORCE_SSD     = 3,
         KINGSTON_UV400_SSD = 4,
-        MICRON_MU02_SSD    = 5
+        MICRON_MU02_SSD    = 5,
+        MICRON_SSD         = 6
     };
 
     static bool IsIntelSSD(const proto::SMART::Drive& drive);
     static bool IsMicronMU02SSD(const proto::SMART::Drive& drive);
+    static bool IsMicronSSD(const proto::SMART::Drive& drive);
     static bool IsSamsungSSD(const proto::SMART::Drive& drive);
     static bool IsKingstonUV400(const proto::SMART::Drive& drive);
     static bool IsSandForceSSD(const proto::SMART::Drive& drive);
@@ -343,6 +345,7 @@ private:
     static const char* GenericAttributeToString(uint32_t value);
     static const char* IntelAttributeToString(uint32_t value);
     static const char* MicronMU02AttributeToString(uint32_t value);
+    static const char* MicronAttributeToString(uint32_t value);
     static const char* SamsungAttributeToString(uint32_t value);
     static const char* KingstonUV400AttributeToString(uint32_t value);
     static const char* SandForceAttributeToString(uint32_t value);

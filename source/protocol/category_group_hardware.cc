@@ -4087,7 +4087,7 @@ void CategorySMART::Parse(Table& table, const std::string& data)
                      .AddColumn("Threshold", 80)
                      .AddColumn("Value", 80)
                      .AddColumn("Worst", 80)
-                     .AddColumn("Data", 80));
+                     .AddColumn("RAW", 100));
 
     for (int index = 0; index < message.drive_size(); ++index)
     {
@@ -4109,7 +4109,7 @@ void CategorySMART::Parse(Table& table, const std::string& data)
             row.AddValue(Value::Number(attribute.threshold()));
             row.AddValue(Value::Number(attribute.value()));
             row.AddValue(Value::Number(attribute.worst_value()));
-            row.AddValue(Value::Number(attribute.raw()));
+            row.AddValue(Value::FormattedString("%012llX", attribute.raw()));
         }
     }
 }
@@ -4149,7 +4149,7 @@ std::string CategorySMART::Serialize()
                 attribute->set_threshold(thresholds.threshold[i].warranty_threshold);
 
                 uint64_t raw = 0ULL;
-                memcpy(&raw, attributes.attribute[i].raw_value, sizeof(attributes.attribute[i].raw_value));
+                memcpy(&raw, attributes.attribute[i].raw_value, 6);
 
                 attribute->set_raw(raw);
             }
@@ -4162,6 +4162,38 @@ std::string CategorySMART::Serialize()
 // static
 bool CategorySMART::IsIntelSSD(const proto::SMART::Drive& drive)
 {
+    if (drive.attribute_size() >= 5 &&
+        drive.attribute(0).id() == 0x03 &&
+        drive.attribute(1).id() == 0x04 &&
+        drive.attribute(2).id() == 0x05 &&
+        drive.attribute(3).id() == 0x09 &&
+        drive.attribute(4).id() == 0x0C)
+    {
+        if (drive.attribute_size() >= 8)
+        {
+            if (drive.attribute(5).id() == 0xC0 &&
+                drive.attribute(6).id() == 0xE8 &&
+                drive.attribute(7).id() == 0xE9)
+            {
+                return true;
+            }
+
+            if (drive.attribute(5).id() == 0xAA &&
+                drive.attribute(6).id() == 0xAB &&
+                drive.attribute(7).id() == 0xAC)
+            {
+                return true;
+            }
+        }
+
+        if (drive.attribute_size() >= 7 &&
+            drive.attribute(5).id() == 0xC0 &&
+            drive.attribute(6).id() == 0xE1)
+        {
+            return true;
+        }
+    }
+
     std::string model_number = ToUpperASCII(drive.model_number());
 
     if (model_number.find("INTEL") != std::string::npos &&
@@ -4204,6 +4236,42 @@ bool CategorySMART::IsMicronMU02SSD(const proto::SMART::Drive& drive)
         drive.attribute(8).id() == 0x95 &&
         drive.attribute(9).id() == 0x96 &&
         drive.attribute(10).id() == 0x97)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// static
+bool CategorySMART::IsMicronSSD(const proto::SMART::Drive& drive)
+{
+    if (drive.attribute_size() >= 11 &&
+        drive.attribute(0).id() == 0x01 &&
+        drive.attribute(1).id() == 0x05 &&
+        drive.attribute(2).id() == 0x09 &&
+        drive.attribute(3).id() == 0x0C &&
+        drive.attribute(4).id() == 0xAA &&
+        drive.attribute(5).id() == 0xAB &&
+        drive.attribute(6).id() == 0xAC &&
+        drive.attribute(7).id() == 0xAD &&
+        drive.attribute(8).id() == 0xAE &&
+        drive.attribute(9).id() == 0xB5 &&
+        drive.attribute(10).id() == 0xB7)
+    {
+        return true;
+    }
+
+    std::string model_number = ToUpperASCII(drive.model_number());
+
+    if (model_number.find("P600") == 0 || model_number.find("C600") == 0 ||
+        model_number.find("M6-") == 0  || model_number.find("M600") == 0 ||
+        model_number.find("P500") == 0 || model_number.find("C500") == 0 ||
+        model_number.find("M5-") == 0  || model_number.find("M500") == 0 ||
+        model_number.find("P400") == 0 || model_number.find("C400") == 0 ||
+        model_number.find("M4-") == 0  || model_number.find("M400") == 0 ||
+        model_number.find("M3-") == 0  || model_number.find("M300") == 0 ||
+        model_number.find("CRUCIAL") == 0 || model_number.find("MICRON") == 0)
     {
         return true;
     }
@@ -4373,6 +4441,8 @@ CategorySMART::DriveType CategorySMART::GetDriveType(const proto::SMART::Drive& 
         return DriveType::SAMSUNG_SSD;
     else if (IsMicronMU02SSD(drive))
         return DriveType::MICRON_MU02_SSD;
+    else if (IsMicronSSD(drive))
+        return DriveType::MICRON_SSD;
     else if (IsSandForceSSD(drive))
         return DriveType::SAND_FORCE_SSD;
     else
@@ -4392,6 +4462,9 @@ const char* CategorySMART::AttributeToString(DriveType type, uint32_t value)
 
         case DriveType::MICRON_MU02_SSD:
             return MicronMU02AttributeToString(value);
+
+        case DriveType::MICRON_SSD:
+            return MicronAttributeToString(value);
 
         case DriveType::SAMSUNG_SSD:
             return SamsungAttributeToString(value);
@@ -4571,6 +4644,54 @@ const char* CategorySMART::MicronMU02AttributeToString(uint32_t value)
         case 0xF3: return "ECC Bits Corrected";
         case 0xF4: return "ECC Cumulative Threshold Events";
         case 0xF5: return "Total Flash Write Count";
+        case 0xF6: return "Total Host Sector Writes";
+        case 0xF7: return "Host Program Page Count";
+        case 0xF8: return "Background Program Page Count";
+        default:   return "Unknown Attribute";
+    }
+}
+
+// static
+const char* CategorySMART::MicronAttributeToString(uint32_t value)
+{
+    switch (value)
+    {
+        case 0x01: return "Raw Read Error Rate";
+        case 0x05: return "Reallocated NAND Blocks";
+        case 0x09: return "Power On Hours";
+        case 0x0C: return "Power Cycle Count";
+        case 0x0D: return "Soft Error Rate";
+        case 0x0E: return "Device Capacity (NAND)";
+        case 0x0F: return "User Capacity";
+        case 0x10: return "Spare Blocks Available";
+        case 0x11: return "Remaining Spare Blocks";
+        case 0x64: return "Total Erase Count";
+        case 0xAA: return "Reserved Block Count";
+        case 0xAB: return "Program Fail Count";
+        case 0xAC: return "Erase Fail Count";
+        case 0xAD: return "Average Block-Erase Count";
+        case 0xAE: return "Unexpected Power Loss Count";
+        case 0xB4: return "Unused Reserve NAND Blocks";
+        case 0xB5: return "Unaligned Access Count";
+        case 0xB7: return "SATA Interface Downshift";
+        case 0xB8: return "Error Correction Count";
+        case 0xBB: return "Reported Uncorrectable Errors";
+        case 0xBC: return "Command Timeout Count";
+        case 0xBD: return "Factory Bad Block Count";
+        case 0xC2: return "Temperature";
+        case 0xC3: return "Cumulative ECC Bit Correction Count";
+        case 0xC4: return "Reallocation Event Count";
+        case 0xC5: return "Current Pending Sector Count";
+        case 0xC6: return "Smart Off-line Scan Uncorrectable Error Count";
+        case 0xC7: return "Ultra DMA CRC Error Rate";
+        case 0xCA: return "Percent Lifetime Used";
+        case 0xCE: return "Write Error Rate";
+        case 0xD2: return "Successful RAIN Recovery Count";
+        case 0xEA: return "Total Bytes Read";
+        case 0xF2: return "Write Protect Progress";
+        case 0xF3: return "ECC Bits Corrected";
+        case 0xF4: return "ECC Cumulative Threshold Events";
+        case 0xF5: return "Cumulative Program NAND Pages";
         case 0xF6: return "Total Host Sector Writes";
         case 0xF7: return "Host Program Page Count";
         case 0xF8: return "Background Program Page Count";
