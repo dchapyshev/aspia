@@ -156,6 +156,8 @@ bool GetSmartThresholdsPD(Device& device, uint8_t device_number, SmartThresholdD
 
 std::unique_ptr<DriveIdentifyData> GetDriveIdentifyDataSAT(Device& device, uint8_t device_number);
 bool EnableSmartSAT(Device& device, uint8_t device_number);
+bool GetSmartAttributesSAT(Device& device, uint8_t device_number, SmartAttributeData& data);
+bool GetSmartThresholdsSAT(Device& device, uint8_t device_number, SmartThresholdData& data);
 
 } // namespace aspia
 

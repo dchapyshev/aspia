@@ -374,4 +374,100 @@ bool EnableSmartSAT(Device& device, uint8_t device_number)
     return true;
 }
 
+bool GetSmartAttributesSAT(Device& device, uint8_t device_number, SmartAttributeData& data)
+{
+    SCSI_PASS_THROUGH_WBUF cmd;
+    memset(&cmd, 0, sizeof(cmd));
+
+    cmd.spt.Length             = sizeof(SCSI_PASS_THROUGH);
+    cmd.spt.PathId             = 0;
+    cmd.spt.TargetId           = 0;
+    cmd.spt.Lun                = 0;
+    cmd.spt.TimeOutValue       = 5;
+    cmd.spt.DataIn             = SCSI_IOCTL_DATA_IN;
+    cmd.spt.DataTransferLength = READ_ATTRIBUTE_BUFFER_SIZE;
+    cmd.spt.SenseInfoLength    = SPT_SENSEBUFFER_LENGTH;
+    cmd.spt.SenseInfoOffset    = offsetof(SCSI_PASS_THROUGH_WBUF, SenseBuffer);
+    cmd.spt.DataBufferOffset   = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
+
+    cmd.spt.CdbLength = 12;           // ATA Pass Through
+    cmd.spt.Cdb[0] = 0xA1;            // Operation Code
+    // MULTIPLE_COUNT=0, PROTOCOL=4 (PIO Data-In), Reserved
+    cmd.spt.Cdb[1] = (4 << 1) | 0;
+    // OFF_LINE=0, CK_COND=0, Reserved=0, T_DIR=1 (ToDevice), BYTE_BLOCK=1, T_LENGTH=2
+    cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
+    cmd.spt.Cdb[3] = READ_ATTRIBUTES; // Features
+    cmd.spt.Cdb[4] = 1;               // Sector Count
+    cmd.spt.Cdb[5] = 1;               // LBA_LOW
+    cmd.spt.Cdb[6] = SMART_CYL_LOW;   // LBA_MIDLE
+    cmd.spt.Cdb[7] = SMART_CYL_HI;    // LBA_HIGH
+    cmd.spt.Cdb[8] = DRIVE_HEAD_REG | ((device_number & 1) << 4);
+    cmd.spt.Cdb[9] = SMART_CMD;       // Command
+
+    DWORD length = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer) + cmd.spt.DataTransferLength;
+    DWORD bytes_returned;
+
+    if (!device.IoControl(IOCTL_SCSI_PASS_THROUGH,
+                          &cmd, sizeof(SCSI_PASS_THROUGH),
+                          &cmd, length,
+                          &bytes_returned) ||
+        bytes_returned != length)
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    memcpy(&data, &cmd.DataBuffer[0], READ_ATTRIBUTE_BUFFER_SIZE);
+
+    return true;
+}
+
+bool GetSmartThresholdsSAT(Device& device, uint8_t device_number, SmartThresholdData& data)
+{
+    SCSI_PASS_THROUGH_WBUF cmd;
+    memset(&cmd, 0, sizeof(cmd));
+
+    cmd.spt.Length             = sizeof(SCSI_PASS_THROUGH);
+    cmd.spt.PathId             = 0;
+    cmd.spt.TargetId           = 0;
+    cmd.spt.Lun                = 0;
+    cmd.spt.TimeOutValue       = 5;
+    cmd.spt.DataIn             = SCSI_IOCTL_DATA_IN;
+    cmd.spt.DataTransferLength = READ_THRESHOLD_BUFFER_SIZE;
+    cmd.spt.SenseInfoLength    = SPT_SENSEBUFFER_LENGTH;
+    cmd.spt.SenseInfoOffset    = offsetof(SCSI_PASS_THROUGH_WBUF, SenseBuffer);
+    cmd.spt.DataBufferOffset   = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer);
+
+    cmd.spt.CdbLength = 12;           // ATA Pass Through
+    cmd.spt.Cdb[0] = 0xA1;            // Operation Code
+    // MULTIPLE_COUNT=0, PROTOCOL=4 (PIO Data-In), Reserved
+    cmd.spt.Cdb[1] = (4 << 1) | 0;
+    // OFF_LINE=0, CK_COND=0, Reserved=0, T_DIR=1 (ToDevice), BYTE_BLOCK=1, T_LENGTH=2
+    cmd.spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;
+    cmd.spt.Cdb[3] = READ_THRESHOLDS; // Features
+    cmd.spt.Cdb[4] = 1;               // Sector Count
+    cmd.spt.Cdb[5] = 1;               // LBA_LOW
+    cmd.spt.Cdb[6] = SMART_CYL_LOW;   // LBA_MIDLE
+    cmd.spt.Cdb[7] = SMART_CYL_HI;    // LBA_HIGH
+    cmd.spt.Cdb[8] = DRIVE_HEAD_REG | ((device_number & 1) << 4);
+    cmd.spt.Cdb[9] = SMART_CMD;       // Command
+
+    DWORD length = offsetof(SCSI_PASS_THROUGH_WBUF, DataBuffer) + cmd.spt.DataTransferLength;
+    DWORD bytes_returned;
+
+    if (!device.IoControl(IOCTL_SCSI_PASS_THROUGH,
+                          &cmd, sizeof(SCSI_PASS_THROUGH),
+                          &cmd, length,
+                          &bytes_returned) ||
+        bytes_returned != length)
+    {
+        LOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        return false;
+    }
+
+    memcpy(&data, &cmd.DataBuffer[0], READ_THRESHOLD_BUFFER_SIZE);
+
+    return true;
+}
+
 } // namespace aspia

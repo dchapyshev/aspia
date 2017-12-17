@@ -480,7 +480,16 @@ bool PhysicalDriveEnumerator::GetSmartData(SmartAttributeData& attributes,
 
         case BusTypeUsb:
         {
-            // TODO
+            if (!EnableSmartSAT(device_, device_number_))
+                break;
+
+            if (!GetSmartAttributesSAT(device_, device_number_, attributes))
+                break;
+
+            if (!GetSmartThresholdsSAT(device_, device_number_, thresholds))
+                break;
+
+            return true;
         }
         break;
 
