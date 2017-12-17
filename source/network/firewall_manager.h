@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            network/firewall_manager.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)

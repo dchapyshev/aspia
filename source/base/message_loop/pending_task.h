@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            base/message_loop/pending_task.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)

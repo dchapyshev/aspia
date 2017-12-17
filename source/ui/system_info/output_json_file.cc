@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            ui/system_info/output_json_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)

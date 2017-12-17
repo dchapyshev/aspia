@@ -31,7 +31,7 @@ matrix:
 
 build:
   parallel: true
-  project: remote-desktop.sln
+  project: aspia.sln
   verbosity: minimal
 
 clone_depth: 1

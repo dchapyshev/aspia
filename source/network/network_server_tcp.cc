@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            network/network_server_tcp.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
@@ -11,8 +11,8 @@
 
 namespace aspia {
 
-static const WCHAR kAppName[] = L"Aspia Remote Desktop";
-static const WCHAR kRuleName[] = L"Aspia Remote Desktop Host";
+static const WCHAR kAppName[] = L"Aspia";
+static const WCHAR kRuleName[] = L"Aspia Host";
 static const WCHAR kRuleDesc[] = L"Allow incoming connections";
 
 static bool IsFailureCode(const std::error_code& code)

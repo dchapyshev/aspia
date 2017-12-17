@@ -583,9 +583,6 @@
     <ClCompile Include="proto\system_info_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
     </ClCompile>

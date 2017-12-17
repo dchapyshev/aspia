@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            ui/system_info/output_xml_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
@@ -47,7 +47,7 @@ void OutputXmlFile::StartDocument()
     root_ = doc_.allocate_node(rapidxml::node_element, "document");
 
     root_->append_attribute(doc_.allocate_attribute("version", "1.0"));
-    root_->append_attribute(doc_.allocate_attribute("generator", "Aspia Remote Desktop"));
+    root_->append_attribute(doc_.allocate_attribute("generator", "Aspia"));
 }
 
 void OutputXmlFile::EndDocument()

@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            ui/system_info/output_html_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
@@ -74,7 +74,7 @@ void OutputHtmlFile::StartDocument()
     head->append_node(meta);
 
     meta = doc_.allocate_node(rapidxml::node_element, "meta");
-    meta->append_attribute(doc_.allocate_attribute("generator", "Aspia Remote Desktop"));
+    meta->append_attribute(doc_.allocate_attribute("generator", "Aspia"));
 
     head->append_node(meta);
 

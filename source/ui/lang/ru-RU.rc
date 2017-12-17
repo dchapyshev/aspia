@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            ui/lang/ru-RU.rc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
@@ -14,7 +14,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
 IDD_MAIN DIALOGEX 100, 100, 335, 152
 STYLE DS_SHELLFONT | WS_BORDER | WS_OVERLAPPED | WS_SYSMENU | DS_CENTER | WS_MINIMIZEBOX | WS_CAPTION
-CAPTION "Aspia Remote Desktop"
+CAPTION "Aspia"
 FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX "Сервер", -1, 5, 5, 160, 130
@@ -96,7 +96,7 @@ FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL -1, IDC_ABOUT_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 15, 10, 32, 32
 
-    LTEXT "Aspia Remote Desktop (1.0.0.0)", IDC_VERSION_TEXT, 67, 15, 180, 11
+    LTEXT "Aspia (1.0.0.0)", IDC_VERSION_TEXT, 67, 15, 180, 11
     LTEXT "© 2016-2017 Dmitry Chapyshev", -1, 66, 27, 180, 10
 
     EDITTEXT IDC_ABOUT_EDIT, 5, 45, 260, 175, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL
@@ -163,7 +163,7 @@ END
 
 IDD_POWER_HOST DIALOGEX 100, 100, 293, 59
 STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Aspia Remote Desktop"
+CAPTION "Aspia"
 FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
@@ -339,14 +339,14 @@ END
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_APPLICATION_NAME          "Aspia Remote Desktop"
+    IDS_APPLICATION_NAME          "Aspia"
     IDS_START                     "&Запустить"
     IDS_STOP                      "&Остановить"
     IDS_DONATE_LINK               "https://aspia.org/donate"
     IDS_SITE_LINK                 "https://aspia.org"
     IDS_HELP_LINK                 "https://aspia.org/help"
 
-    IDS_ABOUT_STRING "Aspia Remote Desktop - свободное программное обеспечение, распространяющеся по лицензии Mozilla Public License Version 2.0.\r\n\
+    IDS_ABOUT_STRING "Aspia - свободное программное обеспечение, распространяющеся по лицензии Mozilla Public License Version 2.0.\r\n\
                       Вы можете получить копию лицензии по адресу:\r\n\
                       https://www.mozilla.org/en-US/MPL/2.0\r\n\r\n\
                       Разработчики:\r\n\

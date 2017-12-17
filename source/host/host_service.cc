@@ -1,5 +1,5 @@
 //
-// PROJECT:         Aspia Remote Desktop
+// PROJECT:         Aspia
 // FILE:            host/host_service.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
@@ -15,8 +15,8 @@
 
 namespace aspia {
 
-static const WCHAR kHostServiceShortName[] = L"aspia-remote-desktop-host";
-static const WCHAR kHostServiceFullName[] = L"Aspia Remote Desktop Host";
+static const WCHAR kHostServiceShortName[] = L"aspia-host";
+static const WCHAR kHostServiceFullName[] = L"Aspia Host";
 
 // Security descriptor allowing local processes running under SYSTEM or
 // LocalService accounts to call COM methods exposed by the daemon.

@@ -1,4 +1,4 @@
-Aspia Remote Desktop
+Aspia
 ====================
 Remote desktop implementation (client and server) based on Google Protocol Buffers.
 
