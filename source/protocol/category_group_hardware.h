@@ -331,7 +331,9 @@ private:
         SAND_FORCE_SSD     = 3,
         KINGSTON_UV400_SSD = 4,
         MICRON_MU02_SSD    = 5,
-        MICRON_SSD         = 6
+        MICRON_SSD         = 6,
+        PLEXTOR_SSD        = 7,
+        OCZ_SSD            = 8
     };
 
     static bool IsIntelSSD(const proto::SMART::Drive& drive);
@@ -340,6 +342,8 @@ private:
     static bool IsSamsungSSD(const proto::SMART::Drive& drive);
     static bool IsKingstonUV400(const proto::SMART::Drive& drive);
     static bool IsSandForceSSD(const proto::SMART::Drive& drive);
+    static bool IsPlextorSSD(const proto::SMART::Drive& drive);
+    static bool IsOczSSD(const proto::SMART::Drive& drive);
 
     static DriveType GetDriveType(const proto::SMART::Drive& drive);
 
@@ -351,6 +355,8 @@ private:
     static const char* SamsungAttributeToString(uint32_t value);
     static const char* KingstonUV400AttributeToString(uint32_t value);
     static const char* SandForceAttributeToString(uint32_t value);
+    static const char* PlextorAttributeToString(uint32_t value);
+    static const char* OczAttributeToString(uint32_t value);
 
     DISALLOW_COPY_AND_ASSIGN(CategorySMART);
 };

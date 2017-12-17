@@ -4138,26 +4138,26 @@ std::string CategorySMART::Serialize()
 
         for (size_t i = 0; i < kMaxSmartAttributesCount; ++i)
         {
-            if (attributes.attribute[i].id != 0)
+            if (attributes.attribute[i].id == 0)
+                continue;
+
+            if (!drive)
             {
-                if (!drive)
-                {
-                    drive = message.add_drive();
-                    drive->set_model_number(enumerator.GetModelNumber());
-                }
-
-                proto::SMART::Attribute* attribute = drive->add_attribute();
-
-                attribute->set_id(attributes.attribute[i].id);
-                attribute->set_value(attributes.attribute[i].value);
-                attribute->set_worst_value(attributes.attribute[i].worst_value);
-                attribute->set_threshold(thresholds.threshold[i].warranty_threshold);
-
-                uint64_t raw = 0ULL;
-                memcpy(&raw, attributes.attribute[i].raw_value, 6);
-
-                attribute->set_raw(raw);
+                drive = message.add_drive();
+                drive->set_model_number(enumerator.GetModelNumber());
             }
+
+            proto::SMART::Attribute* attribute = drive->add_attribute();
+
+            attribute->set_id(attributes.attribute[i].id);
+            attribute->set_value(attributes.attribute[i].value);
+            attribute->set_worst_value(attributes.attribute[i].worst_value);
+            attribute->set_threshold(thresholds.threshold[i].warranty_threshold);
+
+            uint64_t raw = 0ULL;
+            memcpy(&raw, attributes.attribute[i].raw_value, 6);
+
+            attribute->set_raw(raw);
         }
     }
 
@@ -4448,6 +4448,59 @@ bool CategorySMART::IsSandForceSSD(const proto::SMART::Drive& drive)
 }
 
 // static
+bool CategorySMART::IsPlextorSSD(const proto::SMART::Drive& drive)
+{
+    if (drive.attribute_size() >= 8 &&
+        drive.attribute(0).id() == 0x01 &&
+        drive.attribute(1).id() == 0x05 &&
+        drive.attribute(2).id() == 0x09 &&
+        drive.attribute(3).id() == 0x0C &&
+        drive.attribute(4).id() == 0xB1 &&
+        drive.attribute(5).id() == 0xB2 &&
+        drive.attribute(6).id() == 0xB5 &&
+        drive.attribute(7).id() == 0xB6)
+    {
+        return true;
+    }
+
+    std::string model_number = ToUpperASCII(drive.model_number());
+
+    if (model_number.find("PLEXTOR") != std::string::npos ||
+        model_number.find("CSSD-S6T128NM3PQ") != std::string::npos ||
+        model_number.find("CSSD-S6T256NM3PQ") != std::string::npos)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// static
+bool CategorySMART::IsOczSSD(const proto::SMART::Drive& drive)
+{
+    std::string model_number = ToUpperASCII(drive.model_number());
+
+    if (model_number.find("OCZ-TRION") != std::string::npos)
+        return true;
+
+    if (drive.attribute_size() >= 8 &&
+        drive.attribute(0).id() == 0x01 &&
+        drive.attribute(1).id() == 0x03 &&
+        drive.attribute(2).id() == 0x04 &&
+        drive.attribute(3).id() == 0x05 &&
+        drive.attribute(4).id() == 0x09 &&
+        drive.attribute(5).id() == 0x0C &&
+        drive.attribute(6).id() == 0xE8 &&
+        drive.attribute(7).id() == 0xE9 &&
+        model_number.find("OCZ") != std::string::npos)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// static
 CategorySMART::DriveType CategorySMART::GetDriveType(const proto::SMART::Drive& drive)
 {
     if (IsKingstonUV400(drive))
@@ -4462,6 +4515,10 @@ CategorySMART::DriveType CategorySMART::GetDriveType(const proto::SMART::Drive& 
         return DriveType::MICRON_SSD;
     else if (IsSandForceSSD(drive))
         return DriveType::SAND_FORCE_SSD;
+    else if (IsOczSSD(drive))
+        return DriveType::OCZ_SSD;
+    else if (IsPlextorSSD(drive))
+        return DriveType::PLEXTOR_SSD;
     else
         return DriveType::GENERIC;
 }
@@ -4491,6 +4548,12 @@ const char* CategorySMART::AttributeToString(DriveType type, uint32_t value)
 
         case DriveType::SAND_FORCE_SSD:
             return SandForceAttributeToString(value);
+
+        case DriveType::OCZ_SSD:
+            return OczAttributeToString(value);
+
+        case DriveType::PLEXTOR_SSD:
+            return PlextorAttributeToString(value);
 
         default:
             return "Unknown Attribute";
@@ -4817,6 +4880,85 @@ const char* CategorySMART::SandForceAttributeToString(uint32_t value)
         case 0xEB: return "SuperCap health";
         case 0xF1: return "Lifetime Writes from Host";
         case 0xF2: return "Lifetime Reads from Host";
+        default:   return "Unknown Attribute";
+    }
+}
+
+// static
+const char* CategorySMART::PlextorAttributeToString(uint32_t value)
+{
+    switch (value)
+    {
+        case 0x01: return "Read Error Rate";
+        case 0x05: return "Reallocated Sectors Count";
+        case 0x09: return "Power-On Hours";
+        case 0x0C: return "Power Cycle Count";
+        case 0xAA: return "Grown Bad Blocks";
+        case 0xAB: return "Program Fail Count (Total)";
+        case 0xAC: return "Erase Fail Count (Total)";
+        case 0xAD: return "Average Program/Erase Count (Total)";
+        case 0xAE: return "Unexpected Power Loss Count";
+        case 0xAF: return "Program Fail Count (Worst Case)";
+        case 0xB0: return "Erase Fail Count (Worst Case)";
+        case 0xB1: return "Wear Leveling Count";
+        case 0xB2: return "Used Reserved Block Count (Worst Case)";
+        case 0xB3: return "Used Reserved Block Count (Total)";
+        case 0xB4: return "UnUsed Reserved Block Count (Total)";
+        case 0xB5: return "Program Fail Count (Total)";
+        case 0xB6: return "Erase Fail Count (Total)";
+        case 0xB7: return "SATA Interface Down Shift";
+        case 0xB8: return "End-to-End Data Errors Corrected";
+        case 0xBB: return "Uncorrectable Error Count";
+        case 0xBC: return "Command Time out";
+        case 0xC0: return "Unsafe Shutdown Count";
+        case 0xC2: return "Temperature";
+        case 0xC3: return "ECC rate";
+        case 0xC4: return "Reallocation Event Count";
+        case 0xC6: return "Uncorrectable Sector Count";
+        case 0xC7: return "CRC Error Count";
+        case 0xE8: return "Available Reserved Space";
+        case 0xE9: return "NAND GB written";
+        case 0xF1: return "Total LBA written";
+        case 0xF2: return "Total LBA read";
+        default:   return "Unknown Attribute";
+    }
+}
+
+// static
+const char* CategorySMART::OczAttributeToString(uint32_t value)
+{
+    switch (value)
+    {
+        case 0x01: return "Raw Read Error Rate";
+        case 0x03: return "Spin Up Time";
+        case 0x04: return "Start Stop Count";
+        case 0x05: return "Reallocated Sectors Count";
+        case 0x09: return "Power-On Hours";
+        case 0x0C: return "Power Cycle Count";
+        case 0x64: return "Total Blocks Erased";
+        case 0xA7: return "SSD Protect Mode";
+        case 0xA8: return "SATA PHY Error Count";
+        case 0xA9: return "Bad Block Count";
+        case 0xAD: return "Erase Count";
+        case 0xB8: return "Factory Bad Block Count";
+        case 0xC0: return "Unexpected Power Loss Count";
+        case 0xC2: return "Temperature";
+        case 0xCA: return "Total Number of Corrected Bits";
+        case 0xCD: return "Max Rated PE Counts";
+        case 0xCE: return "Minimum Erase Counts";
+        case 0xCF: return "Maximum Erase Counts";
+        case 0xD3: return "SATA Uncorrectable Error Count";
+        case 0xD4: return "NAND Page Reads During Retry";
+        case 0xD5: return "Simple Read Retry Attempts";
+        case 0xD6: return "Adaptive Read Retry Attempts";
+        case 0xDD: return "Internal Data Path Uncorrectable Errors";
+        case 0xDE: return "RAID Recovery Count";
+        case 0xE6: return "Power Loss Protection";
+        case 0xE8: return "Total Count of Write Sectors";
+        case 0xE9: return "Remaining Life";
+        case 0xF1: return "Total Host Writes";
+        case 0xF2: return "Total Host Reads";
+        case 0xFB: return "NAND Read Count";
         default:   return "Unknown Attribute";
     }
 }
