@@ -44,6 +44,9 @@ protected:
 private:
     OutputXmlFile(std::ofstream file);
 
+    static std::string ValueToString(const Value& value);
+    static const char* ValueTypeToString(const Value::Type type);
+
     std::ofstream file_;
     rapidxml::xml_document<> doc_;
     rapidxml::xml_node<>* root_ = nullptr;

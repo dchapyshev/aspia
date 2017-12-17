@@ -154,11 +154,15 @@ void OutputHtmlFile::AddColumns(const ColumnList& column_list)
     DCHECK(table_);
     tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
 
+    column_count_ = 0;
+
     for (const auto& column : column_list)
     {
         rapidxml::xml_node<>* th = doc_.allocate_node(rapidxml::node_element, "th");
         th->value(doc_.allocate_string(column.first.data()));
         tr_->append_node(th);
+
+        ++column_count_;
     }
 
     table_->append_node(tr_);
@@ -169,19 +173,25 @@ void OutputHtmlFile::StartGroup(std::string_view name)
 {
     DCHECK(table_);
 
-    std::string style = "font-weight: bold; padding-left: " +
-        StringPrintf("%dpx;", padding_);
-
-    rapidxml::xml_node<>* td1 = doc_.allocate_node(rapidxml::node_element, "td");
-    td1->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
-    td1->value(doc_.allocate_string(name.data()));
-
-    rapidxml::xml_node<>* td2 = doc_.allocate_node(rapidxml::node_element, "td");
-    td2->value(doc_.allocate_string(" "));
-
     rapidxml::xml_node<>* tr = doc_.allocate_node(rapidxml::node_element, "tr");
-    tr->append_node(td1);
-    tr->append_node(td2);
+
+    for (int column_index = 0; column_index < column_count_; ++column_index)
+    {
+        rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");
+
+        if (column_index == 0)
+        {
+            std::string style = StringPrintf("font-weight: bold; padding-left: %dpx;", padding_);
+            td->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
+            td->value(doc_.allocate_string(name.data()));
+        }
+        else
+        {
+            td->value(doc_.allocate_string(" "));
+        }
+
+        tr->append_node(td);
+    }
 
     table_->append_node(tr);
 
@@ -228,6 +238,7 @@ void OutputHtmlFile::StartRow()
     DCHECK(!tr_);
 
     tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
+    current_column_ = 0;
 }
 
 void OutputHtmlFile::EndRow()
@@ -253,9 +264,18 @@ void OutputHtmlFile::AddValue(const Value& value)
     }
 
     rapidxml::xml_node<>* td = doc_.allocate_node(rapidxml::node_element, "td");
+
+    if (current_column_ == 0)
+    {
+        std::string style = StringPrintf("padding-left: %dpx;", padding_);
+        td->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
+    }
+
     td->value(doc_.allocate_string(value_with_unit.data()));
 
     tr_->append_node(td);
+
+    ++current_column_;
 }
 
 } // namespace aspia

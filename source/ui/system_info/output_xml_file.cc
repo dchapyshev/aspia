@@ -154,6 +154,9 @@ void OutputXmlFile::AddParam(std::string_view param, const Value& value)
     param_node->append_attribute(
         doc_.allocate_attribute("name", doc_.allocate_string(param.data())));
 
+    param_node->append_attribute(
+        doc_.allocate_attribute("type", doc_.allocate_string(ValueTypeToString(value.type()))));
+
     if (value.HasUnit())
     {
         // The unit of measure is an optional parameter.
@@ -161,7 +164,7 @@ void OutputXmlFile::AddParam(std::string_view param, const Value& value)
             doc_.allocate_attribute("unit", doc_.allocate_string(value.Unit().data())));
     }
 
-    param_node->value(doc_.allocate_string(value.ToString().data()));
+    param_node->value(doc_.allocate_string(ValueToString(value).data()));
 
     if (group_stack_.empty())
     {
@@ -187,7 +190,15 @@ void OutputXmlFile::EndRow()
     DCHECK(category_);
     DCHECK(row_);
 
-    category_->append_node(row_);
+    if (group_stack_.empty())
+    {
+        category_->append_node(row_);
+    }
+    else
+    {
+        group_stack_.top()->append_node(row_);
+    }
+
     row_ = nullptr;
 }
 
@@ -205,18 +216,66 @@ void OutputXmlFile::AddValue(const Value& value)
     column->append_attribute(
         doc_.allocate_attribute("name", doc_.allocate_string(column_name.c_str())));
 
-    if (!value.HasUnit())
+    column->append_attribute(
+        doc_.allocate_attribute("type", doc_.allocate_string(ValueTypeToString(value.type()))));
+
+    if (value.HasUnit())
     {
         // The unit of measure is an optional parameter.
         column->append_attribute(
             doc_.allocate_attribute("unit", doc_.allocate_string(value.Unit().data())));
     }
 
-    column->value(doc_.allocate_string(value.ToString().data()));
+    column->value(doc_.allocate_string(ValueToString(value).data()));
 
     row_->append_node(column);
 
     ++current_column_;
+}
+
+// static
+std::string OutputXmlFile::ValueToString(const Value& value)
+{
+    switch (value.type())
+    {
+        case Value::Type::BOOL:
+            return value.ToBool() ? "true" : "false";
+
+        case Value::Type::STRING:
+        case Value::Type::INT32:
+        case Value::Type::UINT32:
+        case Value::Type::INT64:
+        case Value::Type::UINT64:
+        case Value::Type::DOUBLE:
+            return value.ToString();
+
+        default:
+        {
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            return std::string();
+        }
+    }
+}
+
+// static
+const char* OutputXmlFile::ValueTypeToString(const Value::Type type)
+{
+    switch (type)
+    {
+        case Value::Type::STRING: return "string";
+        case Value::Type::BOOL: return "boolean";
+        case Value::Type::INT32: return "int32";
+        case Value::Type::UINT32: return "uint32";
+        case Value::Type::INT64: return "int64";
+        case Value::Type::UINT64: return "uint64";
+        case Value::Type::DOUBLE: return "double";
+
+        default:
+        {
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(type);
+            return "unknown";
+        }
+    }
 }
 
 } // namespace aspia
