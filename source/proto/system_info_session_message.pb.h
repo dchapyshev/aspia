@@ -1398,6 +1398,17 @@ const AtaDrives_Features AtaDrives_Features_Features_MIN = AtaDrives_Features_FE
 const AtaDrives_Features AtaDrives_Features_Features_MAX = AtaDrives_Features_FEATURE_TRIM;
 const int AtaDrives_Features_Features_ARRAYSIZE = AtaDrives_Features_Features_MAX + 1;
 
+enum SMART_Attribute_Flags {
+  SMART_Attribute_Flags_FLAG_NONE = 0,
+  SMART_Attribute_Flags_FLAG_PRE_FAILURE = 1,
+  SMART_Attribute_Flags_SMART_Attribute_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  SMART_Attribute_Flags_SMART_Attribute_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool SMART_Attribute_Flags_IsValid(int value);
+const SMART_Attribute_Flags SMART_Attribute_Flags_Flags_MIN = SMART_Attribute_Flags_FLAG_NONE;
+const SMART_Attribute_Flags SMART_Attribute_Flags_Flags_MAX = SMART_Attribute_Flags_FLAG_PRE_FAILURE;
+const int SMART_Attribute_Flags_Flags_ARRAYSIZE = SMART_Attribute_Flags_Flags_MAX + 1;
+
 enum Monitors_InputSignalType {
   Monitors_InputSignalType_INPUT_SIGNAL_TYPE_UNKNOWN = 0,
   Monitors_InputSignalType_INPUT_SIGNAL_TYPE_ANALOG = 1,
@@ -8876,47 +8887,69 @@ class SMART_Attribute : public ::google::protobuf::MessageLite /* @@protoc_inser
 
   // nested types ----------------------------------------------------
 
+  typedef SMART_Attribute_Flags Flags;
+  static const Flags FLAG_NONE =
+    SMART_Attribute_Flags_FLAG_NONE;
+  static const Flags FLAG_PRE_FAILURE =
+    SMART_Attribute_Flags_FLAG_PRE_FAILURE;
+  static inline bool Flags_IsValid(int value) {
+    return SMART_Attribute_Flags_IsValid(value);
+  }
+  static const Flags Flags_MIN =
+    SMART_Attribute_Flags_Flags_MIN;
+  static const Flags Flags_MAX =
+    SMART_Attribute_Flags_Flags_MAX;
+  static const int Flags_ARRAYSIZE =
+    SMART_Attribute_Flags_Flags_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // uint32 id = 1;
+  // uint32 flags = 1;
+  void clear_flags();
+  static const int kFlagsFieldNumber = 1;
+  ::google::protobuf::uint32 flags() const;
+  void set_flags(::google::protobuf::uint32 value);
+
+  // uint32 id = 2;
   void clear_id();
-  static const int kIdFieldNumber = 1;
+  static const int kIdFieldNumber = 2;
   ::google::protobuf::uint32 id() const;
   void set_id(::google::protobuf::uint32 value);
 
-  // uint32 value = 2;
+  // uint32 value = 3;
   void clear_value();
-  static const int kValueFieldNumber = 2;
+  static const int kValueFieldNumber = 3;
   ::google::protobuf::uint32 value() const;
   void set_value(::google::protobuf::uint32 value);
 
-  // uint32 worst_value = 3;
+  // uint32 worst_value = 4;
   void clear_worst_value();
-  static const int kWorstValueFieldNumber = 3;
+  static const int kWorstValueFieldNumber = 4;
   ::google::protobuf::uint32 worst_value() const;
   void set_worst_value(::google::protobuf::uint32 value);
 
-  // uint32 threshold = 4;
-  void clear_threshold();
-  static const int kThresholdFieldNumber = 4;
-  ::google::protobuf::uint32 threshold() const;
-  void set_threshold(::google::protobuf::uint32 value);
-
-  // uint64 raw = 5;
+  // uint64 raw = 6;
   void clear_raw();
-  static const int kRawFieldNumber = 5;
+  static const int kRawFieldNumber = 6;
   ::google::protobuf::uint64 raw() const;
   void set_raw(::google::protobuf::uint64 value);
+
+  // uint32 threshold = 5;
+  void clear_threshold();
+  static const int kThresholdFieldNumber = 5;
+  ::google::protobuf::uint32 threshold() const;
+  void set_threshold(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.SMART.Attribute)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::uint32 flags_;
   ::google::protobuf::uint32 id_;
   ::google::protobuf::uint32 value_;
   ::google::protobuf::uint32 worst_value_;
-  ::google::protobuf::uint32 threshold_;
   ::google::protobuf::uint64 raw_;
+  ::google::protobuf::uint32 threshold_;
   mutable int _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
   friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSMART_AttributeImpl();
@@ -21636,7 +21669,21 @@ AtaDrives::item() const {
 
 // SMART_Attribute
 
-// uint32 id = 1;
+// uint32 flags = 1;
+inline void SMART_Attribute::clear_flags() {
+  flags_ = 0u;
+}
+inline ::google::protobuf::uint32 SMART_Attribute::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.SMART.Attribute.flags)
+  return flags_;
+}
+inline void SMART_Attribute::set_flags(::google::protobuf::uint32 value) {
+  
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.flags)
+}
+
+// uint32 id = 2;
 inline void SMART_Attribute::clear_id() {
   id_ = 0u;
 }
@@ -21650,7 +21697,7 @@ inline void SMART_Attribute::set_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.id)
 }
 
-// uint32 value = 2;
+// uint32 value = 3;
 inline void SMART_Attribute::clear_value() {
   value_ = 0u;
 }
@@ -21664,7 +21711,7 @@ inline void SMART_Attribute::set_value(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.value)
 }
 
-// uint32 worst_value = 3;
+// uint32 worst_value = 4;
 inline void SMART_Attribute::clear_worst_value() {
   worst_value_ = 0u;
 }
@@ -21678,7 +21725,7 @@ inline void SMART_Attribute::set_worst_value(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.worst_value)
 }
 
-// uint32 threshold = 4;
+// uint32 threshold = 5;
 inline void SMART_Attribute::clear_threshold() {
   threshold_ = 0u;
 }
@@ -21692,7 +21739,7 @@ inline void SMART_Attribute::set_threshold(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.SMART.Attribute.threshold)
 }
 
-// uint64 raw = 5;
+// uint64 raw = 6;
 inline void SMART_Attribute::clear_raw() {
   raw_ = GOOGLE_ULONGLONG(0);
 }
@@ -27795,6 +27842,7 @@ template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> 
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::AtaDrives_Features> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::SMART_Attribute_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Monitors_InputSignalType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_Battery_State> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_PowerSource> : ::google::protobuf::internal::true_type {};

@@ -4084,10 +4084,11 @@ void CategorySMART::Parse(Table& table, const std::string& data)
 
     table.AddColumns(ColumnList::Create()
                      .AddColumn("Attribute", 250)
-                     .AddColumn("Threshold", 80)
-                     .AddColumn("Value", 80)
-                     .AddColumn("Worst", 80)
-                     .AddColumn("RAW", 100));
+                     .AddColumn("Threshold", 70)
+                     .AddColumn("Value", 70)
+                     .AddColumn("Worst", 70)
+                     .AddColumn("RAW", 100)
+                     .AddColumn("Status", 120));
 
     for (int index = 0; index < message.drive_size(); ++index)
     {
@@ -4110,6 +4111,10 @@ void CategorySMART::Parse(Table& table, const std::string& data)
             row.AddValue(Value::Number(attribute.value()));
             row.AddValue(Value::Number(attribute.worst_value()));
             row.AddValue(Value::FormattedString("%012llX", attribute.raw()));
+
+            row.AddValue(Value::String(GetStatusString(attribute.value(),
+                                                       attribute.threshold(),
+                                                       attribute.flags())));
         }
     }
 }
@@ -4157,6 +4162,18 @@ std::string CategorySMART::Serialize()
     }
 
     return message.SerializeAsString();
+}
+
+// static
+const char* CategorySMART::GetStatusString(uint32_t attribute, uint32_t threshold, uint32_t flags)
+{
+    if (threshold == 0)
+        return "OK. Always passed";
+
+    if (flags & proto::SMART::Attribute::FLAG_PRE_FAILURE || attribute <= threshold)
+        return "WARNING. Value is pre-failure";
+
+    return "OK. Value is normal";
 }
 
 // static

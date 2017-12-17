@@ -1289,11 +1289,18 @@ message SMART
 {
     message Attribute
     {
-        uint32 id          = 1;
-        uint32 value       = 2;
-        uint32 worst_value = 3;
-        uint32 threshold   = 4;
-        uint64 raw         = 5;
+        enum Flags
+        {
+            FLAG_NONE        = 0;
+            FLAG_PRE_FAILURE = 1;
+        }
+
+        uint32 flags       = 1;
+        uint32 id          = 2;
+        uint32 value       = 3;
+        uint32 worst_value = 4;
+        uint32 threshold   = 5;
+        uint64 raw         = 6;
     }
 
     message Drive

@@ -3473,6 +3473,23 @@ const AtaDrives_Features AtaDrives::Features_MIN;
 const AtaDrives_Features AtaDrives::Features_MAX;
 const int AtaDrives::Features_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool SMART_Attribute_Flags_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const SMART_Attribute_Flags SMART_Attribute::FLAG_NONE;
+const SMART_Attribute_Flags SMART_Attribute::FLAG_PRE_FAILURE;
+const SMART_Attribute_Flags SMART_Attribute::Flags_MIN;
+const SMART_Attribute_Flags SMART_Attribute::Flags_MAX;
+const int SMART_Attribute::Flags_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool Monitors_InputSignalType_IsValid(int value) {
   switch (value) {
     case 0:
@@ -19858,6 +19875,7 @@ void AtaDrives::InternalSwap(AtaDrives* other) {
 void SMART_Attribute::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int SMART_Attribute::kFlagsFieldNumber;
 const int SMART_Attribute::kIdFieldNumber;
 const int SMART_Attribute::kValueFieldNumber;
 const int SMART_Attribute::kWorstValueFieldNumber;
@@ -19878,16 +19896,16 @@ SMART_Attribute::SMART_Attribute(const SMART_Attribute& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&id_, &from.id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&raw_) -
-    reinterpret_cast<char*>(&id_)) + sizeof(raw_));
+  ::memcpy(&flags_, &from.flags_,
+    static_cast<size_t>(reinterpret_cast<char*>(&threshold_) -
+    reinterpret_cast<char*>(&flags_)) + sizeof(threshold_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.SMART.Attribute)
 }
 
 void SMART_Attribute::SharedCtor() {
-  ::memset(&id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&raw_) -
-      reinterpret_cast<char*>(&id_)) + sizeof(raw_));
+  ::memset(&flags_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&threshold_) -
+      reinterpret_cast<char*>(&flags_)) + sizeof(threshold_));
   _cached_size_ = 0;
 }
 
@@ -19923,9 +19941,9 @@ void SMART_Attribute::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&raw_) -
-      reinterpret_cast<char*>(&id_)) + sizeof(raw_));
+  ::memset(&flags_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&threshold_) -
+      reinterpret_cast<char*>(&flags_)) + sizeof(threshold_));
   _internal_metadata_.Clear();
 }
 
@@ -19945,10 +19963,24 @@ bool SMART_Attribute::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 id = 1;
+      // uint32 flags = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &flags_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 id = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -19959,10 +19991,10 @@ bool SMART_Attribute::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 value = 2;
-      case 2: {
+      // uint32 value = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -19973,10 +20005,10 @@ bool SMART_Attribute::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 worst_value = 3;
-      case 3: {
+      // uint32 worst_value = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -19987,10 +20019,10 @@ bool SMART_Attribute::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 threshold = 4;
-      case 4: {
+      // uint32 threshold = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -20001,10 +20033,10 @@ bool SMART_Attribute::MergePartialFromCodedStream(
         break;
       }
 
-      // uint64 raw = 5;
-      case 5: {
+      // uint64 raw = 6;
+      case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
@@ -20041,29 +20073,34 @@ void SMART_Attribute::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 id = 1;
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
+  }
+
+  // uint32 id = 2;
   if (this->id() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->id(), output);
   }
 
-  // uint32 value = 2;
+  // uint32 value = 3;
   if (this->value() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->value(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->value(), output);
   }
 
-  // uint32 worst_value = 3;
+  // uint32 worst_value = 4;
   if (this->worst_value() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->worst_value(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->worst_value(), output);
   }
 
-  // uint32 threshold = 4;
+  // uint32 threshold = 5;
   if (this->threshold() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->threshold(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->threshold(), output);
   }
 
-  // uint64 raw = 5;
+  // uint64 raw = 6;
   if (this->raw() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(5, this->raw(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(6, this->raw(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -20077,39 +20114,46 @@ size_t SMART_Attribute::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // uint32 id = 1;
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->flags());
+  }
+
+  // uint32 id = 2;
   if (this->id() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->id());
   }
 
-  // uint32 value = 2;
+  // uint32 value = 3;
   if (this->value() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->value());
   }
 
-  // uint32 worst_value = 3;
+  // uint32 worst_value = 4;
   if (this->worst_value() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->worst_value());
   }
 
-  // uint32 threshold = 4;
-  if (this->threshold() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->threshold());
-  }
-
-  // uint64 raw = 5;
+  // uint64 raw = 6;
   if (this->raw() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt64Size(
         this->raw());
+  }
+
+  // uint32 threshold = 5;
+  if (this->threshold() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->threshold());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -20131,6 +20175,9 @@ void SMART_Attribute::MergeFrom(const SMART_Attribute& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.flags() != 0) {
+    set_flags(from.flags());
+  }
   if (from.id() != 0) {
     set_id(from.id());
   }
@@ -20140,11 +20187,11 @@ void SMART_Attribute::MergeFrom(const SMART_Attribute& from) {
   if (from.worst_value() != 0) {
     set_worst_value(from.worst_value());
   }
-  if (from.threshold() != 0) {
-    set_threshold(from.threshold());
-  }
   if (from.raw() != 0) {
     set_raw(from.raw());
+  }
+  if (from.threshold() != 0) {
+    set_threshold(from.threshold());
   }
 }
 
@@ -20165,11 +20212,12 @@ void SMART_Attribute::Swap(SMART_Attribute* other) {
 }
 void SMART_Attribute::InternalSwap(SMART_Attribute* other) {
   using std::swap;
+  swap(flags_, other->flags_);
   swap(id_, other->id_);
   swap(value_, other->value_);
   swap(worst_value_, other->worst_value_);
-  swap(threshold_, other->threshold_);
   swap(raw_, other->raw_);
+  swap(threshold_, other->threshold_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

@@ -321,6 +321,8 @@ public:
     std::string Serialize() final;
 
 private:
+    static const char* GetStatusString(uint32_t attribute, uint32_t threshold, uint32_t flags);
+
     enum class DriveType
     {
         GENERIC            = 0,
