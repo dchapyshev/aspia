@@ -1298,7 +1298,7 @@ message SMART
 
     message Drive
     {
-        string model_number = 1;
+        string model_number          = 1;
         repeated Attribute attribute = 2;
     }
 

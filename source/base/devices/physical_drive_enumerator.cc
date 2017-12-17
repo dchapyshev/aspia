@@ -125,8 +125,6 @@ std::string PhysicalDriveEnumerator::GetModelNumber() const
     if (!id_data_)
         return std::string();
 
-    ChangeByteOrder(id_data_->model_number, sizeof(id_data_->model_number));
-
     std::string output;
     TrimWhitespaceASCII(id_data_->model_number, TRIM_ALL, output);
 
@@ -138,8 +136,6 @@ std::string PhysicalDriveEnumerator::GetSerialNumber() const
     if (!id_data_)
         return std::string();
 
-    ChangeByteOrder(id_data_->serial_number, sizeof(id_data_->serial_number));
-
     std::string output;
     TrimWhitespaceASCII(id_data_->serial_number, TRIM_ALL, output);
 
@@ -150,8 +146,6 @@ std::string PhysicalDriveEnumerator::GetFirmwareRevision() const
 {
     if (!id_data_)
         return std::string();
-
-    ChangeByteOrder(id_data_->firmware_revision, sizeof(id_data_->firmware_revision));
 
     std::string output;
     TrimWhitespaceASCII(id_data_->firmware_revision, TRIM_ALL, output);
@@ -527,6 +521,10 @@ bool PhysicalDriveEnumerator::GetDriveInfo(uint8_t device_number) const
 
     if (!id_data_)
         return false;
+
+    ChangeByteOrder(id_data_->model_number, sizeof(id_data_->model_number));
+    ChangeByteOrder(id_data_->serial_number, sizeof(id_data_->serial_number));
+    ChangeByteOrder(id_data_->firmware_revision, sizeof(id_data_->firmware_revision));
 
     GetDriveGeometry(device_, geometry_);
 
