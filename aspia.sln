@@ -46,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		clean.cmd = clean.cmd
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
-		THIRD_PARTY.txt = THIRD_PARTY.txt
+		THIRD_PARTY.md = THIRD_PARTY.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glog", "third_party\glog\glog.vcxproj", "{772C2111-BBBF-49E6-B912-198A7F7A88E5}"
