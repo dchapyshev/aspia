@@ -712,6 +712,12 @@
     <ClCompile Include="system_info\category_logical_drive.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_ata.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_ata.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1460,6 +1466,12 @@
     <ClInclude Include="system_info\category_logical_drive.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_ata.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_ata.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1511,6 +1523,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_logical_drive.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_ata.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

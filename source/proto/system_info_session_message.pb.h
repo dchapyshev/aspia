@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[61];
+  static const ::google::protobuf::internal::ParseTable schema[59];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -89,10 +89,6 @@ void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
 void InitDefaultsDmiPortableBattery();
-void InitDefaultsAtaDrives_ItemImpl();
-void InitDefaultsAtaDrives_Item();
-void InitDefaultsAtaDrivesImpl();
-void InitDefaultsAtaDrives();
 void InitDefaultsSMART_AttributeImpl();
 void InitDefaultsSMART_Attribute();
 void InitDefaultsSMART_DriveImpl();
@@ -188,8 +184,6 @@ inline void InitDefaults() {
   InitDefaultsDmiPointingDevices();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
-  InitDefaultsAtaDrives_Item();
-  InitDefaultsAtaDrives();
   InitDefaultsSMART_Attribute();
   InitDefaultsSMART_Drive();
   InitDefaultsSMART();
@@ -229,12 +223,6 @@ inline void InitDefaults() {
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 namespace aspia {
 namespace proto {
-class AtaDrives;
-class AtaDrivesDefaultTypeInternal;
-extern AtaDrivesDefaultTypeInternal _AtaDrives_default_instance_;
-class AtaDrives_Item;
-class AtaDrives_ItemDefaultTypeInternal;
-extern AtaDrives_ItemDefaultTypeInternal _AtaDrives_Item_default_instance_;
 class DmiBaseboard;
 class DmiBaseboardDefaultTypeInternal;
 extern DmiBaseboardDefaultTypeInternal _DmiBaseboard_default_instance_;
@@ -1309,82 +1297,6 @@ bool DmiPortableBattery_Chemistry_IsValid(int value);
 const DmiPortableBattery_Chemistry DmiPortableBattery_Chemistry_Chemistry_MIN = DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN;
 const DmiPortableBattery_Chemistry DmiPortableBattery_Chemistry_Chemistry_MAX = DmiPortableBattery_Chemistry_CHEMISTRY_LITHIUM_POLYMER;
 const int DmiPortableBattery_Chemistry_Chemistry_ARRAYSIZE = DmiPortableBattery_Chemistry_Chemistry_MAX + 1;
-
-enum AtaDrives_BusType {
-  AtaDrives_BusType_BUS_TYPE_UNKNOWN = 0,
-  AtaDrives_BusType_BUS_TYPE_SCSI = 1,
-  AtaDrives_BusType_BUS_TYPE_ATAPI = 2,
-  AtaDrives_BusType_BUS_TYPE_ATA = 3,
-  AtaDrives_BusType_BUS_TYPE_IEEE1394 = 4,
-  AtaDrives_BusType_BUS_TYPE_SSA = 5,
-  AtaDrives_BusType_BUS_TYPE_FIBRE = 6,
-  AtaDrives_BusType_BUS_TYPE_USB = 7,
-  AtaDrives_BusType_BUS_TYPE_RAID = 8,
-  AtaDrives_BusType_BUS_TYPE_ISCSI = 9,
-  AtaDrives_BusType_BUS_TYPE_SAS = 10,
-  AtaDrives_BusType_BUS_TYPE_SATA = 11,
-  AtaDrives_BusType_BUS_TYPE_SD = 12,
-  AtaDrives_BusType_BUS_TYPE_MMC = 13,
-  AtaDrives_BusType_BUS_TYPE_VIRTUAL = 14,
-  AtaDrives_BusType_BUS_TYPE_FILE_BACKED_VIRTUAL = 15,
-  AtaDrives_BusType_AtaDrives_BusType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AtaDrives_BusType_AtaDrives_BusType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool AtaDrives_BusType_IsValid(int value);
-const AtaDrives_BusType AtaDrives_BusType_BusType_MIN = AtaDrives_BusType_BUS_TYPE_UNKNOWN;
-const AtaDrives_BusType AtaDrives_BusType_BusType_MAX = AtaDrives_BusType_BUS_TYPE_FILE_BACKED_VIRTUAL;
-const int AtaDrives_BusType_BusType_ARRAYSIZE = AtaDrives_BusType_BusType_MAX + 1;
-
-enum AtaDrives_TransferMode {
-  AtaDrives_TransferMode_TRANSFER_MODE_UNKNOWN = 0,
-  AtaDrives_TransferMode_TRANSFER_MODE_PIO = 1,
-  AtaDrives_TransferMode_TRANSFER_MODE_PIO_DMA = 2,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_133 = 3,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_100 = 4,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_66 = 5,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_44 = 6,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_33 = 7,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_25 = 8,
-  AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_16 = 9,
-  AtaDrives_TransferMode_TRANSFER_MODE_SATA_600 = 10,
-  AtaDrives_TransferMode_TRANSFER_MODE_SATA_300 = 11,
-  AtaDrives_TransferMode_TRANSFER_MODE_SATA_150 = 12,
-  AtaDrives_TransferMode_AtaDrives_TransferMode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AtaDrives_TransferMode_AtaDrives_TransferMode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool AtaDrives_TransferMode_IsValid(int value);
-const AtaDrives_TransferMode AtaDrives_TransferMode_TransferMode_MIN = AtaDrives_TransferMode_TRANSFER_MODE_UNKNOWN;
-const AtaDrives_TransferMode AtaDrives_TransferMode_TransferMode_MAX = AtaDrives_TransferMode_TRANSFER_MODE_SATA_150;
-const int AtaDrives_TransferMode_TransferMode_ARRAYSIZE = AtaDrives_TransferMode_TransferMode_MAX + 1;
-
-enum AtaDrives_Features {
-  AtaDrives_Features_FEATURE_UNKNOWN = 0,
-  AtaDrives_Features_FEATURE_48BIT_LBA = 1,
-  AtaDrives_Features_FEATURE_ADVANCED_POWER_MANAGEMENT = 2,
-  AtaDrives_Features_FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT = 4,
-  AtaDrives_Features_FEATURE_SMART = 8,
-  AtaDrives_Features_FEATURE_SMART_ERROR_LOGGING = 16,
-  AtaDrives_Features_FEATURE_SMART_SELF_TEST = 32,
-  AtaDrives_Features_FEATURE_STREAMING = 64,
-  AtaDrives_Features_FEATURE_GENERAL_PURPOSE_LOGGING = 128,
-  AtaDrives_Features_FEATURE_SECURITY_MODE = 256,
-  AtaDrives_Features_FEATURE_POWER_MANAGEMENT = 512,
-  AtaDrives_Features_FEATURE_WRITE_CACHE = 1024,
-  AtaDrives_Features_FEATURE_READ_LOCK_AHEAD = 2048,
-  AtaDrives_Features_FEATURE_HOST_PROTECTED_AREA = 4096,
-  AtaDrives_Features_FEATURE_RELEASE_INTERRUPT = 8192,
-  AtaDrives_Features_FEATURE_POWER_UP_IN_STANDBY = 16384,
-  AtaDrives_Features_FEATURE_DEVICE_CONFIGURATION_OVERLAY = 32768,
-  AtaDrives_Features_FEATURE_SERVICE_INTERRUPT = 65536,
-  AtaDrives_Features_FEATURE_NATIVE_COMMAND_QUEUING = 131072,
-  AtaDrives_Features_FEATURE_TRIM = 262144,
-  AtaDrives_Features_AtaDrives_Features_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AtaDrives_Features_AtaDrives_Features_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool AtaDrives_Features_IsValid(int value);
-const AtaDrives_Features AtaDrives_Features_Features_MIN = AtaDrives_Features_FEATURE_UNKNOWN;
-const AtaDrives_Features AtaDrives_Features_Features_MAX = AtaDrives_Features_FEATURE_TRIM;
-const int AtaDrives_Features_Features_ARRAYSIZE = AtaDrives_Features_Features_MAX + 1;
 
 enum SMART_Attribute_Flags {
   SMART_Attribute_Flags_FLAG_NONE = 0,
@@ -6923,482 +6835,6 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
-class AtaDrives_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AtaDrives.Item) */ {
- public:
-  AtaDrives_Item();
-  virtual ~AtaDrives_Item();
-
-  AtaDrives_Item(const AtaDrives_Item& from);
-
-  inline AtaDrives_Item& operator=(const AtaDrives_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  AtaDrives_Item(AtaDrives_Item&& from) noexcept
-    : AtaDrives_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline AtaDrives_Item& operator=(AtaDrives_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const AtaDrives_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const AtaDrives_Item* internal_default_instance() {
-    return reinterpret_cast<const AtaDrives_Item*>(
-               &_AtaDrives_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
-
-  void Swap(AtaDrives_Item* other);
-  friend void swap(AtaDrives_Item& a, AtaDrives_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline AtaDrives_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  AtaDrives_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const AtaDrives_Item& from);
-  void MergeFrom(const AtaDrives_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(AtaDrives_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string model_number = 1;
-  void clear_model_number();
-  static const int kModelNumberFieldNumber = 1;
-  const ::std::string& model_number() const;
-  void set_model_number(const ::std::string& value);
-  #if LANG_CXX11
-  void set_model_number(::std::string&& value);
-  #endif
-  void set_model_number(const char* value);
-  void set_model_number(const char* value, size_t size);
-  ::std::string* mutable_model_number();
-  ::std::string* release_model_number();
-  void set_allocated_model_number(::std::string* model_number);
-
-  // string serial_number = 2;
-  void clear_serial_number();
-  static const int kSerialNumberFieldNumber = 2;
-  const ::std::string& serial_number() const;
-  void set_serial_number(const ::std::string& value);
-  #if LANG_CXX11
-  void set_serial_number(::std::string&& value);
-  #endif
-  void set_serial_number(const char* value);
-  void set_serial_number(const char* value, size_t size);
-  ::std::string* mutable_serial_number();
-  ::std::string* release_serial_number();
-  void set_allocated_serial_number(::std::string* serial_number);
-
-  // string firmware_revision = 3;
-  void clear_firmware_revision();
-  static const int kFirmwareRevisionFieldNumber = 3;
-  const ::std::string& firmware_revision() const;
-  void set_firmware_revision(const ::std::string& value);
-  #if LANG_CXX11
-  void set_firmware_revision(::std::string&& value);
-  #endif
-  void set_firmware_revision(const char* value);
-  void set_firmware_revision(const char* value, size_t size);
-  ::std::string* mutable_firmware_revision();
-  ::std::string* release_firmware_revision();
-  void set_allocated_firmware_revision(::std::string* firmware_revision);
-
-  // .aspia.proto.AtaDrives.BusType bus_type = 4;
-  void clear_bus_type();
-  static const int kBusTypeFieldNumber = 4;
-  ::aspia::proto::AtaDrives_BusType bus_type() const;
-  void set_bus_type(::aspia::proto::AtaDrives_BusType value);
-
-  // .aspia.proto.AtaDrives.TransferMode transfer_mode = 5;
-  void clear_transfer_mode();
-  static const int kTransferModeFieldNumber = 5;
-  ::aspia::proto::AtaDrives_TransferMode transfer_mode() const;
-  void set_transfer_mode(::aspia::proto::AtaDrives_TransferMode value);
-
-  // uint64 drive_size = 7;
-  void clear_drive_size();
-  static const int kDriveSizeFieldNumber = 7;
-  ::google::protobuf::uint64 drive_size() const;
-  void set_drive_size(::google::protobuf::uint64 value);
-
-  // uint32 rotation_rate = 6;
-  void clear_rotation_rate();
-  static const int kRotationRateFieldNumber = 6;
-  ::google::protobuf::uint32 rotation_rate() const;
-  void set_rotation_rate(::google::protobuf::uint32 value);
-
-  // uint32 buffer_size = 8;
-  void clear_buffer_size();
-  static const int kBufferSizeFieldNumber = 8;
-  ::google::protobuf::uint32 buffer_size() const;
-  void set_buffer_size(::google::protobuf::uint32 value);
-
-  // uint32 multisectors = 9;
-  void clear_multisectors();
-  static const int kMultisectorsFieldNumber = 9;
-  ::google::protobuf::uint32 multisectors() const;
-  void set_multisectors(::google::protobuf::uint32 value);
-
-  // uint32 ecc_size = 10;
-  void clear_ecc_size();
-  static const int kEccSizeFieldNumber = 10;
-  ::google::protobuf::uint32 ecc_size() const;
-  void set_ecc_size(::google::protobuf::uint32 value);
-
-  // uint64 cylinders_number = 12;
-  void clear_cylinders_number();
-  static const int kCylindersNumberFieldNumber = 12;
-  ::google::protobuf::uint64 cylinders_number() const;
-  void set_cylinders_number(::google::protobuf::uint64 value);
-
-  // bool is_removable = 11;
-  void clear_is_removable();
-  static const int kIsRemovableFieldNumber = 11;
-  bool is_removable() const;
-  void set_is_removable(bool value);
-
-  // uint32 tracks_per_cylinder = 13;
-  void clear_tracks_per_cylinder();
-  static const int kTracksPerCylinderFieldNumber = 13;
-  ::google::protobuf::uint32 tracks_per_cylinder() const;
-  void set_tracks_per_cylinder(::google::protobuf::uint32 value);
-
-  // uint32 sectors_per_track = 14;
-  void clear_sectors_per_track();
-  static const int kSectorsPerTrackFieldNumber = 14;
-  ::google::protobuf::uint32 sectors_per_track() const;
-  void set_sectors_per_track(::google::protobuf::uint32 value);
-
-  // uint32 bytes_per_sector = 15;
-  void clear_bytes_per_sector();
-  static const int kBytesPerSectorFieldNumber = 15;
-  ::google::protobuf::uint32 bytes_per_sector() const;
-  void set_bytes_per_sector(::google::protobuf::uint32 value);
-
-  // uint64 supported_features = 17;
-  void clear_supported_features();
-  static const int kSupportedFeaturesFieldNumber = 17;
-  ::google::protobuf::uint64 supported_features() const;
-  void set_supported_features(::google::protobuf::uint64 value);
-
-  // uint64 enabled_features = 18;
-  void clear_enabled_features();
-  static const int kEnabledFeaturesFieldNumber = 18;
-  ::google::protobuf::uint64 enabled_features() const;
-  void set_enabled_features(::google::protobuf::uint64 value);
-
-  // uint32 heads_number = 16;
-  void clear_heads_number();
-  static const int kHeadsNumberFieldNumber = 16;
-  ::google::protobuf::uint32 heads_number() const;
-  void set_heads_number(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.AtaDrives.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr model_number_;
-  ::google::protobuf::internal::ArenaStringPtr serial_number_;
-  ::google::protobuf::internal::ArenaStringPtr firmware_revision_;
-  int bus_type_;
-  int transfer_mode_;
-  ::google::protobuf::uint64 drive_size_;
-  ::google::protobuf::uint32 rotation_rate_;
-  ::google::protobuf::uint32 buffer_size_;
-  ::google::protobuf::uint32 multisectors_;
-  ::google::protobuf::uint32 ecc_size_;
-  ::google::protobuf::uint64 cylinders_number_;
-  bool is_removable_;
-  ::google::protobuf::uint32 tracks_per_cylinder_;
-  ::google::protobuf::uint32 sectors_per_track_;
-  ::google::protobuf::uint32 bytes_per_sector_;
-  ::google::protobuf::uint64 supported_features_;
-  ::google::protobuf::uint64 enabled_features_;
-  ::google::protobuf::uint32 heads_number_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrives_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class AtaDrives : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AtaDrives) */ {
- public:
-  AtaDrives();
-  virtual ~AtaDrives();
-
-  AtaDrives(const AtaDrives& from);
-
-  inline AtaDrives& operator=(const AtaDrives& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  AtaDrives(AtaDrives&& from) noexcept
-    : AtaDrives() {
-    *this = ::std::move(from);
-  }
-
-  inline AtaDrives& operator=(AtaDrives&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const AtaDrives& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const AtaDrives* internal_default_instance() {
-    return reinterpret_cast<const AtaDrives*>(
-               &_AtaDrives_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
-
-  void Swap(AtaDrives* other);
-  friend void swap(AtaDrives& a, AtaDrives& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline AtaDrives* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  AtaDrives* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const AtaDrives& from);
-  void MergeFrom(const AtaDrives& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(AtaDrives* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef AtaDrives_Item Item;
-
-  typedef AtaDrives_BusType BusType;
-  static const BusType BUS_TYPE_UNKNOWN =
-    AtaDrives_BusType_BUS_TYPE_UNKNOWN;
-  static const BusType BUS_TYPE_SCSI =
-    AtaDrives_BusType_BUS_TYPE_SCSI;
-  static const BusType BUS_TYPE_ATAPI =
-    AtaDrives_BusType_BUS_TYPE_ATAPI;
-  static const BusType BUS_TYPE_ATA =
-    AtaDrives_BusType_BUS_TYPE_ATA;
-  static const BusType BUS_TYPE_IEEE1394 =
-    AtaDrives_BusType_BUS_TYPE_IEEE1394;
-  static const BusType BUS_TYPE_SSA =
-    AtaDrives_BusType_BUS_TYPE_SSA;
-  static const BusType BUS_TYPE_FIBRE =
-    AtaDrives_BusType_BUS_TYPE_FIBRE;
-  static const BusType BUS_TYPE_USB =
-    AtaDrives_BusType_BUS_TYPE_USB;
-  static const BusType BUS_TYPE_RAID =
-    AtaDrives_BusType_BUS_TYPE_RAID;
-  static const BusType BUS_TYPE_ISCSI =
-    AtaDrives_BusType_BUS_TYPE_ISCSI;
-  static const BusType BUS_TYPE_SAS =
-    AtaDrives_BusType_BUS_TYPE_SAS;
-  static const BusType BUS_TYPE_SATA =
-    AtaDrives_BusType_BUS_TYPE_SATA;
-  static const BusType BUS_TYPE_SD =
-    AtaDrives_BusType_BUS_TYPE_SD;
-  static const BusType BUS_TYPE_MMC =
-    AtaDrives_BusType_BUS_TYPE_MMC;
-  static const BusType BUS_TYPE_VIRTUAL =
-    AtaDrives_BusType_BUS_TYPE_VIRTUAL;
-  static const BusType BUS_TYPE_FILE_BACKED_VIRTUAL =
-    AtaDrives_BusType_BUS_TYPE_FILE_BACKED_VIRTUAL;
-  static inline bool BusType_IsValid(int value) {
-    return AtaDrives_BusType_IsValid(value);
-  }
-  static const BusType BusType_MIN =
-    AtaDrives_BusType_BusType_MIN;
-  static const BusType BusType_MAX =
-    AtaDrives_BusType_BusType_MAX;
-  static const int BusType_ARRAYSIZE =
-    AtaDrives_BusType_BusType_ARRAYSIZE;
-
-  typedef AtaDrives_TransferMode TransferMode;
-  static const TransferMode TRANSFER_MODE_UNKNOWN =
-    AtaDrives_TransferMode_TRANSFER_MODE_UNKNOWN;
-  static const TransferMode TRANSFER_MODE_PIO =
-    AtaDrives_TransferMode_TRANSFER_MODE_PIO;
-  static const TransferMode TRANSFER_MODE_PIO_DMA =
-    AtaDrives_TransferMode_TRANSFER_MODE_PIO_DMA;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_133 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_133;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_100 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_100;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_66 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_66;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_44 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_44;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_33 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_33;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_25 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_25;
-  static const TransferMode TRANSFER_MODE_ULTRA_DMA_16 =
-    AtaDrives_TransferMode_TRANSFER_MODE_ULTRA_DMA_16;
-  static const TransferMode TRANSFER_MODE_SATA_600 =
-    AtaDrives_TransferMode_TRANSFER_MODE_SATA_600;
-  static const TransferMode TRANSFER_MODE_SATA_300 =
-    AtaDrives_TransferMode_TRANSFER_MODE_SATA_300;
-  static const TransferMode TRANSFER_MODE_SATA_150 =
-    AtaDrives_TransferMode_TRANSFER_MODE_SATA_150;
-  static inline bool TransferMode_IsValid(int value) {
-    return AtaDrives_TransferMode_IsValid(value);
-  }
-  static const TransferMode TransferMode_MIN =
-    AtaDrives_TransferMode_TransferMode_MIN;
-  static const TransferMode TransferMode_MAX =
-    AtaDrives_TransferMode_TransferMode_MAX;
-  static const int TransferMode_ARRAYSIZE =
-    AtaDrives_TransferMode_TransferMode_ARRAYSIZE;
-
-  typedef AtaDrives_Features Features;
-  static const Features FEATURE_UNKNOWN =
-    AtaDrives_Features_FEATURE_UNKNOWN;
-  static const Features FEATURE_48BIT_LBA =
-    AtaDrives_Features_FEATURE_48BIT_LBA;
-  static const Features FEATURE_ADVANCED_POWER_MANAGEMENT =
-    AtaDrives_Features_FEATURE_ADVANCED_POWER_MANAGEMENT;
-  static const Features FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT =
-    AtaDrives_Features_FEATURE_AUTOMATIC_ACOUSTIC_MANAGEMENT;
-  static const Features FEATURE_SMART =
-    AtaDrives_Features_FEATURE_SMART;
-  static const Features FEATURE_SMART_ERROR_LOGGING =
-    AtaDrives_Features_FEATURE_SMART_ERROR_LOGGING;
-  static const Features FEATURE_SMART_SELF_TEST =
-    AtaDrives_Features_FEATURE_SMART_SELF_TEST;
-  static const Features FEATURE_STREAMING =
-    AtaDrives_Features_FEATURE_STREAMING;
-  static const Features FEATURE_GENERAL_PURPOSE_LOGGING =
-    AtaDrives_Features_FEATURE_GENERAL_PURPOSE_LOGGING;
-  static const Features FEATURE_SECURITY_MODE =
-    AtaDrives_Features_FEATURE_SECURITY_MODE;
-  static const Features FEATURE_POWER_MANAGEMENT =
-    AtaDrives_Features_FEATURE_POWER_MANAGEMENT;
-  static const Features FEATURE_WRITE_CACHE =
-    AtaDrives_Features_FEATURE_WRITE_CACHE;
-  static const Features FEATURE_READ_LOCK_AHEAD =
-    AtaDrives_Features_FEATURE_READ_LOCK_AHEAD;
-  static const Features FEATURE_HOST_PROTECTED_AREA =
-    AtaDrives_Features_FEATURE_HOST_PROTECTED_AREA;
-  static const Features FEATURE_RELEASE_INTERRUPT =
-    AtaDrives_Features_FEATURE_RELEASE_INTERRUPT;
-  static const Features FEATURE_POWER_UP_IN_STANDBY =
-    AtaDrives_Features_FEATURE_POWER_UP_IN_STANDBY;
-  static const Features FEATURE_DEVICE_CONFIGURATION_OVERLAY =
-    AtaDrives_Features_FEATURE_DEVICE_CONFIGURATION_OVERLAY;
-  static const Features FEATURE_SERVICE_INTERRUPT =
-    AtaDrives_Features_FEATURE_SERVICE_INTERRUPT;
-  static const Features FEATURE_NATIVE_COMMAND_QUEUING =
-    AtaDrives_Features_FEATURE_NATIVE_COMMAND_QUEUING;
-  static const Features FEATURE_TRIM =
-    AtaDrives_Features_FEATURE_TRIM;
-  static inline bool Features_IsValid(int value) {
-    return AtaDrives_Features_IsValid(value);
-  }
-  static const Features Features_MIN =
-    AtaDrives_Features_Features_MIN;
-  static const Features Features_MAX =
-    AtaDrives_Features_Features_MAX;
-  static const int Features_ARRAYSIZE =
-    AtaDrives_Features_Features_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.AtaDrives.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::AtaDrives_Item& item(int index) const;
-  ::aspia::proto::AtaDrives_Item* mutable_item(int index);
-  ::aspia::proto::AtaDrives_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::AtaDrives_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::AtaDrives_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.AtaDrives)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::AtaDrives_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsAtaDrivesImpl();
-};
-// -------------------------------------------------------------------
-
 class SMART_Attribute : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SMART.Attribute) */ {
  public:
   SMART_Attribute();
@@ -7433,7 +6869,7 @@ class SMART_Attribute : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SMART_Attribute_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    24;
 
   void Swap(SMART_Attribute* other);
   friend void swap(SMART_Attribute& a, SMART_Attribute& b) {
@@ -7580,7 +7016,7 @@ class SMART_Drive : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_SMART_Drive_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    25;
 
   void Swap(SMART_Drive* other);
   friend void swap(SMART_Drive& a, SMART_Drive& b) {
@@ -7698,7 +7134,7 @@ class SMART : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_SMART_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    26;
 
   void Swap(SMART* other);
   friend void swap(SMART& a, SMART& b) {
@@ -7804,7 +7240,7 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
                &_VideoAdapters_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    27;
 
   void Swap(VideoAdapters_Item* other);
   friend void swap(VideoAdapters_Item& a, VideoAdapters_Item& b) {
@@ -8021,7 +7457,7 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_VideoAdapters_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    28;
 
   void Swap(VideoAdapters* other);
   friend void swap(VideoAdapters& a, VideoAdapters& b) {
@@ -8126,7 +7562,7 @@ class Monitors_Timing : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_Monitors_Timing_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    29;
 
   void Swap(Monitors_Timing* other);
   friend void swap(Monitors_Timing& a, Monitors_Timing& b) {
@@ -8237,7 +7673,7 @@ class Monitors_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Monitors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    30;
 
   void Swap(Monitors_Item* other);
   friend void swap(Monitors_Item& a, Monitors_Item& b) {
@@ -8569,7 +8005,7 @@ class Monitors : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Monitors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    31;
 
   void Swap(Monitors* other);
   friend void swap(Monitors& a, Monitors& b) {
@@ -8692,7 +8128,7 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
                &_PowerOptions_Battery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    32;
 
   void Swap(PowerOptions_Battery* other);
   friend void swap(PowerOptions_Battery& a, PowerOptions_Battery& b) {
@@ -8950,7 +8386,7 @@ class PowerOptions : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_PowerOptions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    33;
 
   void Swap(PowerOptions* other);
   friend void swap(PowerOptions& a, PowerOptions& b) {
@@ -9130,7 +8566,7 @@ class Printers_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Printers_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    34;
 
   void Swap(Printers_Item* other);
   friend void swap(Printers_Item& a, Printers_Item& b) {
@@ -9436,7 +8872,7 @@ class Printers : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Printers_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    35;
 
   void Swap(Printers* other);
   friend void swap(Printers& a, Printers& b) {
@@ -9541,7 +8977,7 @@ class WindowsDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_i
                &_WindowsDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    36;
 
   void Swap(WindowsDevices_Item* other);
   friend void swap(WindowsDevices_Item& a, WindowsDevices_Item& b) {
@@ -9721,7 +9157,7 @@ class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_WindowsDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    37;
 
   void Swap(WindowsDevices* other);
   friend void swap(WindowsDevices& a, WindowsDevices& b) {
@@ -9826,7 +9262,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    38;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -9991,7 +9427,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    39;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -10096,7 +9532,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    40;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -10325,7 +9761,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    41;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -10430,7 +9866,7 @@ class Processes_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_Processes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    42;
 
   void Swap(Processes_Item* other);
   friend void swap(Processes_Item& a, Processes_Item& b) {
@@ -10579,7 +10015,7 @@ class Processes : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_Processes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    43;
 
   void Swap(Processes* other);
   friend void swap(Processes& a, Processes& b) {
@@ -10684,7 +10120,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    44;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -10804,7 +10240,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    45;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -11096,7 +10532,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    46;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -11201,7 +10637,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    47;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -11364,7 +10800,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    48;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -11523,7 +10959,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    49;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -11704,7 +11140,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    50;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -11809,7 +11245,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    51;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -11951,7 +11387,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    52;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -12056,7 +11492,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    53;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -12247,7 +11683,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    54;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -12352,7 +11788,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    55;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -12472,7 +11908,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    56;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -12577,7 +12013,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    57;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -12741,7 +12177,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    60;
+    58;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -17329,413 +16765,6 @@ DmiPortableBattery::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortableBattery_Item >&
 DmiPortableBattery::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.DmiPortableBattery.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
-// AtaDrives_Item
-
-// string model_number = 1;
-inline void AtaDrives_Item::clear_model_number() {
-  model_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& AtaDrives_Item::model_number() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.model_number)
-  return model_number_.GetNoArena();
-}
-inline void AtaDrives_Item::set_model_number(const ::std::string& value) {
-  
-  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.model_number)
-}
-#if LANG_CXX11
-inline void AtaDrives_Item::set_model_number(::std::string&& value) {
-  
-  model_number_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AtaDrives.Item.model_number)
-}
-#endif
-inline void AtaDrives_Item::set_model_number(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.AtaDrives.Item.model_number)
-}
-inline void AtaDrives_Item::set_model_number(const char* value, size_t size) {
-  
-  model_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AtaDrives.Item.model_number)
-}
-inline ::std::string* AtaDrives_Item::mutable_model_number() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AtaDrives.Item.model_number)
-  return model_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* AtaDrives_Item::release_model_number() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AtaDrives.Item.model_number)
-  
-  return model_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AtaDrives_Item::set_allocated_model_number(::std::string* model_number) {
-  if (model_number != NULL) {
-    
-  } else {
-    
-  }
-  model_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), model_number);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AtaDrives.Item.model_number)
-}
-
-// string serial_number = 2;
-inline void AtaDrives_Item::clear_serial_number() {
-  serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& AtaDrives_Item::serial_number() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.serial_number)
-  return serial_number_.GetNoArena();
-}
-inline void AtaDrives_Item::set_serial_number(const ::std::string& value) {
-  
-  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.serial_number)
-}
-#if LANG_CXX11
-inline void AtaDrives_Item::set_serial_number(::std::string&& value) {
-  
-  serial_number_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AtaDrives.Item.serial_number)
-}
-#endif
-inline void AtaDrives_Item::set_serial_number(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.AtaDrives.Item.serial_number)
-}
-inline void AtaDrives_Item::set_serial_number(const char* value, size_t size) {
-  
-  serial_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AtaDrives.Item.serial_number)
-}
-inline ::std::string* AtaDrives_Item::mutable_serial_number() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AtaDrives.Item.serial_number)
-  return serial_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* AtaDrives_Item::release_serial_number() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AtaDrives.Item.serial_number)
-  
-  return serial_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AtaDrives_Item::set_allocated_serial_number(::std::string* serial_number) {
-  if (serial_number != NULL) {
-    
-  } else {
-    
-  }
-  serial_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), serial_number);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AtaDrives.Item.serial_number)
-}
-
-// string firmware_revision = 3;
-inline void AtaDrives_Item::clear_firmware_revision() {
-  firmware_revision_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& AtaDrives_Item::firmware_revision() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.firmware_revision)
-  return firmware_revision_.GetNoArena();
-}
-inline void AtaDrives_Item::set_firmware_revision(const ::std::string& value) {
-  
-  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.firmware_revision)
-}
-#if LANG_CXX11
-inline void AtaDrives_Item::set_firmware_revision(::std::string&& value) {
-  
-  firmware_revision_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AtaDrives.Item.firmware_revision)
-}
-#endif
-inline void AtaDrives_Item::set_firmware_revision(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.AtaDrives.Item.firmware_revision)
-}
-inline void AtaDrives_Item::set_firmware_revision(const char* value, size_t size) {
-  
-  firmware_revision_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AtaDrives.Item.firmware_revision)
-}
-inline ::std::string* AtaDrives_Item::mutable_firmware_revision() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AtaDrives.Item.firmware_revision)
-  return firmware_revision_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* AtaDrives_Item::release_firmware_revision() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AtaDrives.Item.firmware_revision)
-  
-  return firmware_revision_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AtaDrives_Item::set_allocated_firmware_revision(::std::string* firmware_revision) {
-  if (firmware_revision != NULL) {
-    
-  } else {
-    
-  }
-  firmware_revision_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), firmware_revision);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AtaDrives.Item.firmware_revision)
-}
-
-// .aspia.proto.AtaDrives.BusType bus_type = 4;
-inline void AtaDrives_Item::clear_bus_type() {
-  bus_type_ = 0;
-}
-inline ::aspia::proto::AtaDrives_BusType AtaDrives_Item::bus_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.bus_type)
-  return static_cast< ::aspia::proto::AtaDrives_BusType >(bus_type_);
-}
-inline void AtaDrives_Item::set_bus_type(::aspia::proto::AtaDrives_BusType value) {
-  
-  bus_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.bus_type)
-}
-
-// .aspia.proto.AtaDrives.TransferMode transfer_mode = 5;
-inline void AtaDrives_Item::clear_transfer_mode() {
-  transfer_mode_ = 0;
-}
-inline ::aspia::proto::AtaDrives_TransferMode AtaDrives_Item::transfer_mode() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.transfer_mode)
-  return static_cast< ::aspia::proto::AtaDrives_TransferMode >(transfer_mode_);
-}
-inline void AtaDrives_Item::set_transfer_mode(::aspia::proto::AtaDrives_TransferMode value) {
-  
-  transfer_mode_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.transfer_mode)
-}
-
-// uint32 rotation_rate = 6;
-inline void AtaDrives_Item::clear_rotation_rate() {
-  rotation_rate_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::rotation_rate() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.rotation_rate)
-  return rotation_rate_;
-}
-inline void AtaDrives_Item::set_rotation_rate(::google::protobuf::uint32 value) {
-  
-  rotation_rate_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.rotation_rate)
-}
-
-// uint64 drive_size = 7;
-inline void AtaDrives_Item::clear_drive_size() {
-  drive_size_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 AtaDrives_Item::drive_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.drive_size)
-  return drive_size_;
-}
-inline void AtaDrives_Item::set_drive_size(::google::protobuf::uint64 value) {
-  
-  drive_size_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.drive_size)
-}
-
-// uint32 buffer_size = 8;
-inline void AtaDrives_Item::clear_buffer_size() {
-  buffer_size_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::buffer_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.buffer_size)
-  return buffer_size_;
-}
-inline void AtaDrives_Item::set_buffer_size(::google::protobuf::uint32 value) {
-  
-  buffer_size_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.buffer_size)
-}
-
-// uint32 multisectors = 9;
-inline void AtaDrives_Item::clear_multisectors() {
-  multisectors_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::multisectors() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.multisectors)
-  return multisectors_;
-}
-inline void AtaDrives_Item::set_multisectors(::google::protobuf::uint32 value) {
-  
-  multisectors_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.multisectors)
-}
-
-// uint32 ecc_size = 10;
-inline void AtaDrives_Item::clear_ecc_size() {
-  ecc_size_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::ecc_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.ecc_size)
-  return ecc_size_;
-}
-inline void AtaDrives_Item::set_ecc_size(::google::protobuf::uint32 value) {
-  
-  ecc_size_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.ecc_size)
-}
-
-// bool is_removable = 11;
-inline void AtaDrives_Item::clear_is_removable() {
-  is_removable_ = false;
-}
-inline bool AtaDrives_Item::is_removable() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.is_removable)
-  return is_removable_;
-}
-inline void AtaDrives_Item::set_is_removable(bool value) {
-  
-  is_removable_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.is_removable)
-}
-
-// uint64 cylinders_number = 12;
-inline void AtaDrives_Item::clear_cylinders_number() {
-  cylinders_number_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 AtaDrives_Item::cylinders_number() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.cylinders_number)
-  return cylinders_number_;
-}
-inline void AtaDrives_Item::set_cylinders_number(::google::protobuf::uint64 value) {
-  
-  cylinders_number_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.cylinders_number)
-}
-
-// uint32 tracks_per_cylinder = 13;
-inline void AtaDrives_Item::clear_tracks_per_cylinder() {
-  tracks_per_cylinder_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::tracks_per_cylinder() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.tracks_per_cylinder)
-  return tracks_per_cylinder_;
-}
-inline void AtaDrives_Item::set_tracks_per_cylinder(::google::protobuf::uint32 value) {
-  
-  tracks_per_cylinder_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.tracks_per_cylinder)
-}
-
-// uint32 sectors_per_track = 14;
-inline void AtaDrives_Item::clear_sectors_per_track() {
-  sectors_per_track_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::sectors_per_track() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.sectors_per_track)
-  return sectors_per_track_;
-}
-inline void AtaDrives_Item::set_sectors_per_track(::google::protobuf::uint32 value) {
-  
-  sectors_per_track_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.sectors_per_track)
-}
-
-// uint32 bytes_per_sector = 15;
-inline void AtaDrives_Item::clear_bytes_per_sector() {
-  bytes_per_sector_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::bytes_per_sector() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.bytes_per_sector)
-  return bytes_per_sector_;
-}
-inline void AtaDrives_Item::set_bytes_per_sector(::google::protobuf::uint32 value) {
-  
-  bytes_per_sector_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.bytes_per_sector)
-}
-
-// uint32 heads_number = 16;
-inline void AtaDrives_Item::clear_heads_number() {
-  heads_number_ = 0u;
-}
-inline ::google::protobuf::uint32 AtaDrives_Item::heads_number() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.heads_number)
-  return heads_number_;
-}
-inline void AtaDrives_Item::set_heads_number(::google::protobuf::uint32 value) {
-  
-  heads_number_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.heads_number)
-}
-
-// uint64 supported_features = 17;
-inline void AtaDrives_Item::clear_supported_features() {
-  supported_features_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 AtaDrives_Item::supported_features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.supported_features)
-  return supported_features_;
-}
-inline void AtaDrives_Item::set_supported_features(::google::protobuf::uint64 value) {
-  
-  supported_features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.supported_features)
-}
-
-// uint64 enabled_features = 18;
-inline void AtaDrives_Item::clear_enabled_features() {
-  enabled_features_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 AtaDrives_Item::enabled_features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.Item.enabled_features)
-  return enabled_features_;
-}
-inline void AtaDrives_Item::set_enabled_features(::google::protobuf::uint64 value) {
-  
-  enabled_features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AtaDrives.Item.enabled_features)
-}
-
-// -------------------------------------------------------------------
-
-// AtaDrives
-
-// repeated .aspia.proto.AtaDrives.Item item = 1;
-inline int AtaDrives::item_size() const {
-  return item_.size();
-}
-inline void AtaDrives::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::AtaDrives_Item& AtaDrives::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AtaDrives.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::AtaDrives_Item* AtaDrives::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AtaDrives.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::AtaDrives_Item* AtaDrives::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.AtaDrives.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::AtaDrives_Item >*
-AtaDrives::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.AtaDrives.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::AtaDrives_Item >&
-AtaDrives::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.AtaDrives.item)
   return item_;
 }
 
@@ -23867,10 +22896,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -23909,9 +22934,6 @@ template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::go
 template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Interface> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::AtaDrives_BusType> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::AtaDrives_TransferMode> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::AtaDrives_Features> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::SMART_Attribute_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Monitors_InputSignalType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_Battery_State> : ::google::protobuf::internal::true_type {};

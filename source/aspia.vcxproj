@@ -190,6 +190,8 @@
     <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="proto\system_info_session_message.pb.cc" />
+    <ClCompile Include="system_info\category_ata.cc" />
+    <ClCompile Include="system_info\category_ata.pb.cc" />
     <ClCompile Include="system_info\category_cpu.cc" />
     <ClCompile Include="system_info\category_cpu.pb.cc" />
     <ClCompile Include="system_info\category_logical_drive.cc" />
@@ -438,6 +440,8 @@
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="proto\system_info_session_message.pb.h" />
+    <ClInclude Include="system_info\category_ata.h" />
+    <ClInclude Include="system_info\category_ata.pb.h" />
     <ClInclude Include="system_info\category_cpu.h" />
     <ClInclude Include="system_info\category_cpu.pb.h" />
     <ClInclude Include="system_info\category_logical_drive.h" />
@@ -506,6 +510,7 @@
     <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
     <None Include="proto\system_info_session_message.proto" />
+    <None Include="system_info\category_ata.proto" />
     <None Include="system_info\category_cpu.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />

@@ -10,7 +10,7 @@
 
 #include "base/devices/device.h"
 #include "base/devices/physical_drive_smart.h"
-#include "proto/system_info_session_message.pb.h"
+#include "system_info/category_ata.pb.h"
 
 #include <setupapi.h>
 #include <winioctl.h>
@@ -31,8 +31,8 @@ public:
     std::string GetModelNumber() const;
     std::string GetSerialNumber() const;
     std::string GetFirmwareRevision() const;
-    proto::AtaDrives::BusType GetBusType() const;
-    proto::AtaDrives::TransferMode GetCurrentTransferMode() const;
+    proto::ATA::BusType GetBusType() const;
+    proto::ATA::TransferMode GetCurrentTransferMode() const;
     int GetRotationRate() const; // in RPM.
     uint64_t GetDriveSize() const;
     uint32_t GetBufferSize() const; // in bytes.
