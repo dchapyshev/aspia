@@ -10,7 +10,7 @@
 
 #include "base/macros.h"
 #include "proto/system_info_session_message.pb.h"
-#include "protocol/category.h"
+#include "system_info/category.h"
 
 namespace aspia {
 

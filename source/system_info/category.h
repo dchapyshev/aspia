@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/category.h
+// FILE:            system_info/category.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_PROTOCOL__CATEGORY_H
-#define _ASPIA_PROTOCOL__CATEGORY_H
+#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_H
+#define _ASPIA_SYSTEM_INFO__CATEGORY_H
 
 #include "ui/system_info/table.h"
 
@@ -85,4 +85,4 @@ CategoryMap CreateCategoryMap();
 
 } // namespace aspia
 
-#endif // _ASPIA_PROTOCOL__CATEGORY_H
+#endif // _ASPIA_SYSTEM_INFO__CATEGORY_H

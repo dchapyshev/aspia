@@ -8,7 +8,7 @@
 #ifndef _ASPIA_SYSTEM_INFO__CATEGORY_ATA_H
 #define _ASPIA_SYSTEM_INFO__CATEGORY_ATA_H
 
-#include "protocol/category.h"
+#include "system_info/category.h"
 
 namespace aspia {
 

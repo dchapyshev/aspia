@@ -9,7 +9,7 @@
 #define _ASPIA_HOST__HOST_SESSION_SYSTEM_INFO_H
 
 #include "ipc/pipe_channel.h"
-#include "protocol/category.h"
+#include "system_info/category.h"
 
 namespace aspia {
 

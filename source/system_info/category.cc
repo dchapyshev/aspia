@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/category.cc
+// FILE:            system_info/category.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //

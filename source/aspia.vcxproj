@@ -168,7 +168,6 @@
     <ClCompile Include="network\open_connection_enumerator.cc" />
     <ClCompile Include="network\route_enumerator.cc" />
     <ClCompile Include="network\share_enumerator.cc" />
-    <ClCompile Include="protocol\category.cc" />
     <ClCompile Include="protocol\category_group_hardware.cc" />
     <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
@@ -190,6 +189,7 @@
     <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="proto\system_info_session_message.pb.cc" />
+    <ClCompile Include="system_info\category.cc" />
     <ClCompile Include="system_info\category_ata.cc" />
     <ClCompile Include="system_info\category_ata.pb.cc" />
     <ClCompile Include="system_info\category_cpu.cc" />
@@ -416,7 +416,6 @@
     <ClInclude Include="network\open_connection_enumerator.h" />
     <ClInclude Include="network\route_enumerator.h" />
     <ClInclude Include="network\share_enumerator.h" />
-    <ClInclude Include="protocol\category.h" />
     <ClInclude Include="protocol\category_group_hardware.h" />
     <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
@@ -440,6 +439,7 @@
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="proto\system_info_session_message.pb.h" />
+    <ClInclude Include="system_info\category.h" />
     <ClInclude Include="system_info\category_ata.h" />
     <ClInclude Include="system_info\category_ata.pb.h" />
     <ClInclude Include="system_info\category_cpu.h" />

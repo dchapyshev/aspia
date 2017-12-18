@@ -9,7 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_TREE_CTRL_H
 
 #include "base/macros.h"
-#include "protocol/category.h"
+#include "system_info/category.h"
 
 #include <atlbase.h>
 #include <atlapp.h>

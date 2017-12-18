@@ -9,7 +9,7 @@
 #define _ASPIA_PROTOCOL__CATEGORY_GROUP_OS_H
 
 #include "base/macros.h"
-#include "protocol/category.h"
+#include "system_info/category.h"
 
 namespace aspia {
 

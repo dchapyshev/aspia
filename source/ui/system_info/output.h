@@ -47,7 +47,7 @@
 // EndDocument()
 //
 
-#include "protocol/category.h"
+#include "system_info/category.h"
 #include "ui/system_info/column_list.h"
 #include "ui/system_info/group.h"
 #include "ui/system_info/table.h"

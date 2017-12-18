@@ -601,9 +601,6 @@
     <ClCompile Include="protocol\category_group_software.cc">
       <Filter>protocol</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\category.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="ui\system_info\output_xml_file.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
@@ -716,6 +713,9 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_ata.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1340,9 +1340,6 @@
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\category.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\category_group_hardware.h">
       <Filter>protocol</Filter>
     </ClInclude>
@@ -1470,6 +1467,9 @@
       <Filter>system_info</Filter>
     </ClInclude>
     <ClInclude Include="system_info\category_ata.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category.h">
       <Filter>system_info</Filter>
     </ClInclude>
   </ItemGroup>
