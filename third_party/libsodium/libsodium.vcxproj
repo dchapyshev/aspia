@@ -106,17 +106,17 @@
       <PreprocessorDefinitions>SODIUM_STATIC;SODIUM_EXPORT=;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libsodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include/sodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libsodium;$(SolutionDir)third_party/libsodium/src/libsodium/include/sodium;$(SolutionDir)third_party/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
+      <Command>"$(SolutionDir)third_party/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+      <Command>call "$(SolutionDir)third_party/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,17 +128,17 @@
       <PreprocessorDefinitions>SODIUM_STATIC;SODIUM_EXPORT=;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libsodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include/sodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libsodium;$(SolutionDir)third_party/libsodium/src/libsodium/include/sodium;$(SolutionDir)third_party/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
+      <Command>"$(SolutionDir)third_party/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+      <Command>call "$(SolutionDir)third_party/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -153,7 +153,7 @@
       <DisableSpecificWarnings>4197;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libsodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include/sodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libsodium;$(SolutionDir)third_party/libsodium/src/libsodium/include/sodium;$(SolutionDir)third_party/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
@@ -175,10 +175,10 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
+      <Command>"$(SolutionDir)third_party/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+      <Command>call "$(SolutionDir)third_party/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -192,7 +192,7 @@
       <PreprocessorDefinitions>SODIUM_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4197;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libsodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include/sodium;$(SolutionDir)3rdparty/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libsodium;$(SolutionDir)third_party/libsodium/src/libsodium/include/sodium;$(SolutionDir)third_party/libsodium/src/libsodium/include</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -212,10 +212,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)/3rdparty/libsodium/msvc-scripts/process.bat"</Command>
+      <Command>"$(SolutionDir)third_party/libsodium/msvc-scripts/process.bat"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)3rdparty/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
+      <Command>call "$(SolutionDir)third_party/libsodium/test/default/wintest.bat" $(Configuration) $(Platform)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

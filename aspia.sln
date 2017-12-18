@@ -3,32 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libyuv", "3rdparty\libyuv\libyuv.vcxproj", "{6A17CB88-F0BC-3A3E-A739-ADA98D51ED38}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libyuv", "third_party\libyuv\libyuv.vcxproj", "{6A17CB88-F0BC-3A3E-A739-ADA98D51ED38}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdparty", "3rdparty", "{9FFC6DBE-A94A-4C0C-993A-D2EEF8A5722F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "third_party", "third_party", "{9FFC6DBE-A94A-4C0C-993A-D2EEF8A5722F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib-ng", "3rdparty\zlib-ng\zlib-ng.vcxproj", "{395D8CA6-16E7-3C44-B8FA-65F713925FAE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib-ng", "third_party\zlib-ng\zlib-ng.vcxproj", "{395D8CA6-16E7-3C44-B8FA-65F713925FAE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libvpx", "3rdparty\libvpx\build\libvpx.vcxproj", "{DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libvpx", "third_party\libvpx\build\libvpx.vcxproj", "{DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libglog", "3rdparty\libglog\libglog.vcxproj", "{772C2111-BBBF-49E6-B912-198A7F7A88E5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libglog", "third_party\libglog\libglog.vcxproj", "{772C2111-BBBF-49E6-B912-198A7F7A88E5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{099C44D6-3437-300D-BEF0-BD1A1FA56125} = {099C44D6-3437-300D-BEF0-BD1A1FA56125}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf", "3rdparty\protobuf\libprotobuf.vcxproj", "{B81857D6-393F-3BF2-9075-9DEADC4D907F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf", "third_party\protobuf\libprotobuf.vcxproj", "{B81857D6-393F-3BF2-9075-9DEADC4D907F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf-lite", "3rdparty\protobuf\libprotobuf-lite.vcxproj", "{615F5052-CFBB-3E5A-82AA-476D82F4BEF8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotobuf-lite", "third_party\protobuf\libprotobuf-lite.vcxproj", "{615F5052-CFBB-3E5A-82AA-476D82F4BEF8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "protoc", "3rdparty\protobuf\protoc.vcxproj", "{5F614246-679A-3ECE-BA47-322A3D61A8C8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "protoc", "third_party\protobuf\protoc.vcxproj", "{5F614246-679A-3ECE-BA47-322A3D61A8C8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5DD43333-F92F-3BFE-9C5F-67779911FE8B} = {5DD43333-F92F-3BFE-9C5F-67779911FE8B}
 		{B81857D6-393F-3BF2-9075-9DEADC4D907F} = {B81857D6-393F-3BF2-9075-9DEADC4D907F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gflags", "3rdparty\gflags\gflags.vcxproj", "{099C44D6-3437-300D-BEF0-BD1A1FA56125}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gflags", "third_party\gflags\gflags.vcxproj", "{099C44D6-3437-300D-BEF0-BD1A1FA56125}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotoc", "3rdparty\protobuf\libprotoc.vcxproj", "{5DD43333-F92F-3BFE-9C5F-67779911FE8B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libprotoc", "third_party\protobuf\libprotoc.vcxproj", "{5DD43333-F92F-3BFE-9C5F-67779911FE8B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia", "source\aspia.vcxproj", "{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -41,12 +41,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia", "source\aspia.vcxpr
 		{099C44D6-3437-300D-BEF0-BD1A1FA56125} = {099C44D6-3437-300D-BEF0-BD1A1FA56125}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsodium", "3rdparty\libsodium\libsodium.vcxproj", "{A185B162-6CB6-4502-B03F-B56F7699A8D9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsodium", "third_party\libsodium\libsodium.vcxproj", "{A185B162-6CB6-4502-B03F-B56F7699A8D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC3DEF8-9A4B-43D1-9FC3-FEA984A64FF7}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		3RDPARTY.txt = 3RDPARTY.txt
+		THIRD_PARTY.txt = THIRD_PARTY.txt
 		appveyor.yml = appveyor.yml
 		BUILDING.md = BUILDING.md
 		clean.cmd = clean.cmd

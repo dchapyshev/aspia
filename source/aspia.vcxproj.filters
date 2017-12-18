@@ -1486,9 +1486,4 @@
       <Filter>ui</Filter>
     </Manifest>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="protocol\README.txt">
-      <Filter>protocol</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

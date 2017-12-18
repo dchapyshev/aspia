@@ -505,9 +505,6 @@
   <ItemGroup>
     <Manifest Include="ui\common-controls.manifest" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="protocol\README.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4B5FBB6-4E1C-43DB-B73E-6AE3C9AA2AC5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -620,7 +617,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)3rdparty/rapidjson/include;$(SolutionDir)3rdparty/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libglog/src/windows;$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/gflags/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -642,7 +639,7 @@
     </Manifest>
     <ResourceCompile />
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -653,7 +650,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)3rdparty/rapidjson/include;$(SolutionDir)3rdparty/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libglog/src/windows;$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/gflags/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -675,7 +672,7 @@
     </Manifest>
     <ResourceCompile />
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -686,7 +683,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)3rdparty/rapidjson/include;$(SolutionDir)3rdparty/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libglog/src/windows;$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/gflags/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -727,7 +724,7 @@
     </Manifest>
     <ResourceCompile />
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -738,7 +735,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/libglog/src/windows;$(SolutionDir)3rdparty/libvpx;$(SolutionDir)3rdparty/libyuv/include;$(SolutionDir)3rdparty/zlib-ng;$(SolutionDir)3rdparty/protobuf/src;$(SolutionDir)3rdparty/gflags/src;$(SolutionDir)3rdparty/libsodium/src/libsodium/include;$(SolutionDir)3rdparty/wtl/include;$(SolutionDir)3rdparty/asio/include;$(SolutionDir)3rdparty/rapidjson/include;$(SolutionDir)3rdparty/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libglog/src/windows;$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/gflags/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -778,7 +775,7 @@
     </Manifest>
     <ResourceCompile />
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (x64)|Win32'">
