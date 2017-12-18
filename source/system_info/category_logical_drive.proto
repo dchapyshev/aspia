@@ -1,0 +1,38 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_logical_drive.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message LogicalDrive
+{
+    enum DriveType
+    {
+        DRIVE_TYPE_UNKNOWN    = 0;
+        DRIVE_TYPE_LOCAL      = 1;
+        DRIVE_TYPE_REMOVABLE  = 2;
+        DRIVE_TYPE_REMOTE     = 3;
+        DRIVE_TYPE_CDROM      = 4;
+        DRIVE_TYPE_RAM        = 5;
+    }
+
+    message Item
+    {
+        string drive_letter  = 1;
+        string drive_label   = 2;
+        DriveType drive_type = 3;
+        string file_system   = 4;
+        uint64 total_size    = 5;
+        uint64 free_space    = 6;
+        string volume_serial = 7;
+    }
+
+    repeated Item item = 1;
+}

@@ -190,6 +190,12 @@
     <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="proto\system_info_session_message.pb.cc" />
+    <ClCompile Include="system_info\category_cpu.cc" />
+    <ClCompile Include="system_info\category_cpu.pb.cc" />
+    <ClCompile Include="system_info\category_logical_drive.cc" />
+    <ClCompile Include="system_info\category_logical_drive.pb.cc" />
+    <ClCompile Include="system_info\category_memory.cc" />
+    <ClCompile Include="system_info\category_memory.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
@@ -432,6 +438,12 @@
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="proto\system_info_session_message.pb.h" />
+    <ClInclude Include="system_info\category_cpu.h" />
+    <ClInclude Include="system_info\category_cpu.pb.h" />
+    <ClInclude Include="system_info\category_logical_drive.h" />
+    <ClInclude Include="system_info\category_logical_drive.pb.h" />
+    <ClInclude Include="system_info\category_memory.h" />
+    <ClInclude Include="system_info\category_memory.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
@@ -494,6 +506,9 @@
     <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
     <None Include="proto\system_info_session_message.proto" />
+    <None Include="system_info\category_cpu.proto" />
+    <None Include="system_info\category_logical_drive.proto" />
+    <None Include="system_info\category_memory.proto" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />

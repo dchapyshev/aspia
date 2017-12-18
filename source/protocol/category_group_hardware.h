@@ -257,38 +257,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupDMI);
 };
 
-class CategoryCPU : public CategoryInfo
-{
-public:
-    CategoryCPU() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryCPU);
-};
-
-class CategoryMemory : public CategoryInfo
-{
-public:
-    CategoryMemory() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryMemory);
-};
-
 class CategoryOpticalDrives : public CategoryInfo
 {
 public:
@@ -375,24 +343,6 @@ private:
     static const char* OczAttributeToString(uint32_t value);
 
     DISALLOW_COPY_AND_ASSIGN(CategorySMART);
-};
-
-class CategoryLogicalDrives : public CategoryInfo
-{
-public:
-    CategoryLogicalDrives() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* DriveTypeToString(proto::LogicalDrive::DriveType value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryLogicalDrives);
 };
 
 class CategoryGroupStorage : public CategoryGroup

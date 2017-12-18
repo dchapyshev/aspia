@@ -76,6 +76,9 @@
     <Filter Include="base\devices">
       <UniqueIdentifier>{c4ed6713-4dbe-4d95-a8b6-b80a8fc6570a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system_info">
+      <UniqueIdentifier>{44cdb0bd-1821-440a-8026-d54a88cc3a2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -690,6 +693,24 @@
     </ClCompile>
     <ClCompile Include="base\devices\physical_drive_util.cc">
       <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_memory.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_memory.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_cpu.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_cpu.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_logical_drive.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_logical_drive.pb.cc">
+      <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1421,6 +1442,24 @@
     <ClInclude Include="base\devices\physical_drive_smart.h">
       <Filter>base\devices</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_memory.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_memory.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_cpu.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_cpu.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_logical_drive.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_logical_drive.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1464,6 +1503,15 @@
     </None>
     <None Include="proto\system_info_session_message.proto">
       <Filter>proto</Filter>
+    </None>
+    <None Include="system_info\category_memory.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_cpu.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_logical_drive.proto">
+      <Filter>system_info</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

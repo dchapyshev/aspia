@@ -11,6 +11,10 @@
 #include "protocol/category_group_network.h"
 #include "protocol/category_group_os.h"
 
+#include "system_info/category_cpu.h"
+#include "system_info/category_memory.h"
+#include "system_info/category_logical_drive.h"
+
 namespace aspia {
 
 //

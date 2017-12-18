@@ -1,0 +1,22 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_memory.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message Memory
+{
+    uint64 total_physical  = 1;
+    uint64 free_physical   = 2;
+    uint64 total_page_file = 3;
+    uint64 free_page_file  = 4;
+    uint64 total_virtual   = 5;
+    uint64 free_virtual    = 6;
+}
