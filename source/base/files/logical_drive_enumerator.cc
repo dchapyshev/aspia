@@ -6,6 +6,7 @@
 //
 
 #include "base/files/logical_drive_enumerator.h"
+#include "base/strings/string_printf.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -138,6 +139,19 @@ std::wstring LogicalDriveEnumerator::DriveInfo::VolumeName() const
     }
 
     return name;
+}
+
+std::string LogicalDriveEnumerator::DriveInfo::VolumeSerial() const
+{
+    DWORD serial;
+
+    if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
+    {
+        DLOG(ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
+        return std::string();
+    }
+
+    return StringPrintf("%04X-%04X", HIWORD(serial), LOWORD(serial));
 }
 
 } // namespace aspia

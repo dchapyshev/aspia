@@ -189,6 +189,10 @@ void OutputJsonFile::WriteValue(const Value& value)
             writer_.Double(value.ToDouble());
             break;
 
+        case Value::Type::MEMORY_SIZE:
+            writer_.Double(value.ToMemorySize());
+            break;
+
         default:
             DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
             break;

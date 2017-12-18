@@ -11,6 +11,50 @@
 
 namespace aspia {
 
+namespace {
+
+constexpr uint64_t kTB = 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+constexpr uint64_t kGB = 1024ULL * 1024ULL * 1024ULL;
+constexpr uint64_t kMB = 1024ULL * 1024ULL;
+constexpr uint64_t kKB = 1024ULL;
+
+double GetMemorySize(uint64_t size)
+{
+    uint64_t divider;
+
+    if (size >= kTB)
+        divider = kTB;
+    else if (size >= kGB)
+        divider = kGB;
+    else if (size >= kMB)
+        divider = kMB;
+    else if (size >= kKB)
+        divider = kKB;
+    else
+        divider = 1ULL;
+
+    return static_cast<double>(size) / static_cast<double>(divider);
+}
+
+const char* GetMemorySizeUnit(uint64_t size)
+{
+    if (size >= kTB)
+        return "TB";
+
+    if (size >= kGB)
+        return "GB";
+
+    if (size >= kMB)
+        return "MB";
+
+    if (size >= kKB)
+        return "kB";
+
+    return "B";
+}
+
+} // namespace
+
 Value::Value(Type type, ValueType&& value, std::string_view unit)
     : value_(std::move(value)),
       type_(type),
@@ -145,6 +189,12 @@ Value Value::Number(double value)
     return Value(Type::DOUBLE, value);
 }
 
+// static
+Value Value::MemorySizeInBytes(uint64_t value)
+{
+    return Value(Type::MEMORY_SIZE, GetMemorySize(value), GetMemorySizeUnit(value));
+}
+
 Value::Type Value::type() const
 {
     return type_;
@@ -174,6 +224,9 @@ std::string Value::ToString() const
 
         case Type::DOUBLE:
             return std::to_string(ToDouble());
+
+        case Type::MEMORY_SIZE:
+            return StringPrintf("%.2f", ToMemorySize());
 
         default:
             DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(type());
@@ -214,6 +267,12 @@ int64_t Value::ToInt64() const
 double Value::ToDouble() const
 {
     DCHECK(type() == Type::DOUBLE);
+    return std::get<double>(value_);
+}
+
+double Value::ToMemorySize() const
+{
+    DCHECK(type() == Type::MEMORY_SIZE);
     return std::get<double>(value_);
 }
 

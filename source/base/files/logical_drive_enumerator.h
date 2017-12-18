@@ -42,6 +42,7 @@ public:
         uint64_t FreeSpace() const;
         std::wstring FileSystem() const;
         std::wstring VolumeName() const;
+        std::string VolumeSerial() const;
 
     private:
         friend class LogicalDriveEnumerator;

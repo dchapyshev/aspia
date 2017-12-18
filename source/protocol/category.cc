@@ -87,6 +87,7 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> storage = std::make_unique<CategoryGroupStorage>();
 
+    storage->mutable_child_list()->emplace_back(std::make_unique<CategoryLogicalDrives>());
     storage->mutable_child_list()->emplace_back(std::make_unique<CategoryOpticalDrives>());
     storage->mutable_child_list()->emplace_back(std::make_unique<CategoryATA>());
     storage->mutable_child_list()->emplace_back(std::make_unique<CategorySMART>());
@@ -177,6 +178,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 
+    emplace_back(std::make_unique<CategoryLogicalDrives>());
     emplace_back(std::make_unique<CategoryOpticalDrives>());
     emplace_back(std::make_unique<CategoryATA>());
     emplace_back(std::make_unique<CategorySMART>());

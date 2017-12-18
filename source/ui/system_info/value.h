@@ -39,15 +39,18 @@ public:
     static Value Number(double value, std::string_view unit);
     static Value Number(double value);
 
+    static Value MemorySizeInBytes(uint64_t value);
+
     enum class Type
     {
-        STRING = 0,
-        BOOL   = 1,
-        UINT32 = 2,
-        INT32  = 3,
-        UINT64 = 4,
-        INT64  = 5,
-        DOUBLE = 6
+        STRING      = 0,
+        BOOL        = 1,
+        UINT32      = 2,
+        INT32       = 3,
+        UINT64      = 4,
+        INT64       = 5,
+        DOUBLE      = 6,
+        MEMORY_SIZE = 7
     };
 
     Type type() const;
@@ -58,6 +61,7 @@ public:
     uint64_t ToUint64() const;
     int64_t ToInt64() const;
     double ToDouble() const;
+    double ToMemorySize() const;
     const std::string& Unit() const;
     bool HasUnit() const;
 
