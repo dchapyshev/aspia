@@ -101,6 +101,7 @@ CategoryList CreateCategoryTree()
 
     hardware->mutable_child_list()->emplace_back(std::move(dmi));
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryCPU>());
+    hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryMemory>());
     hardware->mutable_child_list()->emplace_back(std::move(storage));
     hardware->mutable_child_list()->emplace_back(std::move(display));
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPowerOptions>());
@@ -188,6 +189,7 @@ CategoryMap CreateCategoryMap()
 
     emplace_back(std::make_unique<CategoryWindowsDevices>());
     emplace_back(std::make_unique<CategoryCPU>());
+    emplace_back(std::make_unique<CategoryMemory>());
     emplace_back(std::make_unique<CategoryPowerOptions>());
     emplace_back(std::make_unique<CategoryPrinters>());
 

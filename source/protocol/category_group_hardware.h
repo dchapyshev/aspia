@@ -273,6 +273,22 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryCPU);
 };
 
+class CategoryMemory : public CategoryInfo
+{
+public:
+    CategoryMemory() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
+
+    const char* Name() const final;
+    IconId Icon() const final;
+
+    const char* Guid() const final;
+    void Parse(Table& table, const std::string& data) final;
+    std::string Serialize() final;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryMemory);
+};
+
 class CategoryOpticalDrives : public CategoryInfo
 {
 public:

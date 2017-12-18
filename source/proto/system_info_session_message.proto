@@ -1197,6 +1197,16 @@ message CPU
     Features features        = 12;
 }
 
+message Memory
+{
+    uint64 total_physical  = 1;
+    uint64 free_physical   = 2;
+    uint64 total_page_file = 3;
+    uint64 free_page_file  = 4;
+    uint64 total_virtual   = 5;
+    uint64 free_virtual    = 6;
+}
+
 message LogicalDrive
 {
     enum DriveType

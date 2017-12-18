@@ -148,6 +148,11 @@ class CPUDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<CPU>
       _instance;
 } _CPU_default_instance_;
+class MemoryDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<Memory>
+      _instance;
+} _Memory_default_instance_;
 class LogicalDrive_ItemDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<LogicalDrive_Item>
@@ -903,6 +908,27 @@ void InitDefaultsCPUImpl() {
 void InitDefaultsCPU() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCPUImpl);
+}
+
+void InitDefaultsMemoryImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_Memory_default_instance_;
+    new (ptr) ::aspia::proto::Memory();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::Memory::InitAsDefaultInstance();
+}
+
+void InitDefaultsMemory() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsMemoryImpl);
 }
 
 void InitDefaultsLogicalDrive_ItemImpl() {
@@ -18975,6 +19001,363 @@ void CPU::InternalSwap(CPU* other) {
 
 ::std::string CPU::GetTypeName() const {
   return "aspia.proto.CPU";
+}
+
+
+// ===================================================================
+
+void Memory::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Memory::kTotalPhysicalFieldNumber;
+const int Memory::kFreePhysicalFieldNumber;
+const int Memory::kTotalPageFileFieldNumber;
+const int Memory::kFreePageFileFieldNumber;
+const int Memory::kTotalVirtualFieldNumber;
+const int Memory::kFreeVirtualFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Memory::Memory()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMemory();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.Memory)
+}
+Memory::Memory(const Memory& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&total_physical_, &from.total_physical_,
+    static_cast<size_t>(reinterpret_cast<char*>(&free_virtual_) -
+    reinterpret_cast<char*>(&total_physical_)) + sizeof(free_virtual_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Memory)
+}
+
+void Memory::SharedCtor() {
+  ::memset(&total_physical_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&free_virtual_) -
+      reinterpret_cast<char*>(&total_physical_)) + sizeof(free_virtual_));
+  _cached_size_ = 0;
+}
+
+Memory::~Memory() {
+  // @@protoc_insertion_point(destructor:aspia.proto.Memory)
+  SharedDtor();
+}
+
+void Memory::SharedDtor() {
+}
+
+void Memory::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Memory& Memory::default_instance() {
+  ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsMemory();
+  return *internal_default_instance();
+}
+
+Memory* Memory::New(::google::protobuf::Arena* arena) const {
+  Memory* n = new Memory;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Memory::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Memory)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&total_physical_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&free_virtual_) -
+      reinterpret_cast<char*>(&total_physical_)) + sizeof(free_virtual_));
+  _internal_metadata_.Clear();
+}
+
+bool Memory::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.Memory)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint64 total_physical = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &total_physical_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 free_physical = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &free_physical_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 total_page_file = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &total_page_file_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 free_page_file = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &free_page_file_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 total_virtual = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &total_virtual_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 free_virtual = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &free_virtual_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.Memory)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Memory)
+  return false;
+#undef DO_
+}
+
+void Memory::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Memory)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 total_physical = 1;
+  if (this->total_physical() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->total_physical(), output);
+  }
+
+  // uint64 free_physical = 2;
+  if (this->free_physical() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->free_physical(), output);
+  }
+
+  // uint64 total_page_file = 3;
+  if (this->total_page_file() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->total_page_file(), output);
+  }
+
+  // uint64 free_page_file = 4;
+  if (this->free_page_file() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(4, this->free_page_file(), output);
+  }
+
+  // uint64 total_virtual = 5;
+  if (this->total_virtual() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(5, this->total_virtual(), output);
+  }
+
+  // uint64 free_virtual = 6;
+  if (this->free_virtual() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(6, this->free_virtual(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Memory)
+}
+
+size_t Memory::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Memory)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // uint64 total_physical = 1;
+  if (this->total_physical() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->total_physical());
+  }
+
+  // uint64 free_physical = 2;
+  if (this->free_physical() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->free_physical());
+  }
+
+  // uint64 total_page_file = 3;
+  if (this->total_page_file() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->total_page_file());
+  }
+
+  // uint64 free_page_file = 4;
+  if (this->free_page_file() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->free_page_file());
+  }
+
+  // uint64 total_virtual = 5;
+  if (this->total_virtual() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->total_virtual());
+  }
+
+  // uint64 free_virtual = 6;
+  if (this->free_virtual() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->free_virtual());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Memory::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Memory*>(&from));
+}
+
+void Memory::MergeFrom(const Memory& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Memory)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.total_physical() != 0) {
+    set_total_physical(from.total_physical());
+  }
+  if (from.free_physical() != 0) {
+    set_free_physical(from.free_physical());
+  }
+  if (from.total_page_file() != 0) {
+    set_total_page_file(from.total_page_file());
+  }
+  if (from.free_page_file() != 0) {
+    set_free_page_file(from.free_page_file());
+  }
+  if (from.total_virtual() != 0) {
+    set_total_virtual(from.total_virtual());
+  }
+  if (from.free_virtual() != 0) {
+    set_free_virtual(from.free_virtual());
+  }
+}
+
+void Memory::CopyFrom(const Memory& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Memory)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Memory::IsInitialized() const {
+  return true;
+}
+
+void Memory::Swap(Memory* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Memory::InternalSwap(Memory* other) {
+  using std::swap;
+  swap(total_physical_, other->total_physical_);
+  swap(free_physical_, other->free_physical_);
+  swap(total_page_file_, other->total_page_file_);
+  swap(free_page_file_, other->free_page_file_);
+  swap(total_virtual_, other->total_virtual_);
+  swap(free_virtual_, other->free_virtual_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Memory::GetTypeName() const {
+  return "aspia.proto.Memory";
 }
 
 
