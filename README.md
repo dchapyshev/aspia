@@ -24,32 +24,13 @@ It is planned to implement
    - Authorization with Windows credentials
    - NAT traversal
 
-Thrid-party components
-----------------------
-In the project partially uses code from WebRTC and Chromium Remoting.
-Also uses:
-   - [libvpx](https://chromium.googlesource.com/webm/libvpx "libvpx") (encoding and decoding vp8/vp9 video formats).
-   - [zlib-ng](https://github.com/Dead2/zlib-ng "zlib-ng") (compressing and decompressing. Different from the
-     original zlib presence of patches from Intel and Cloudflare for faster
-     work on modern processors)
-   - [libglog](https://github.com/google/glog "libglog") (logging)
-   - [gflags](https://github.com/gflags/gflags "gflags") (command line arguments parsing)
-   - [libyuv](https://chromium.googlesource.com/libyuv/libyuv "libyuv") (image formats convertation)
-   - [libsodium](https://github.com/jedisct1/libsodium/releases "libsodium") (encryption)
-   - [WTL](https://sourceforge.net/projects/wtl "WTL") (for UI in Windows)
-   - [asio](https://github.com/chriskohlhoff/asio "asio") (for networking)
-   - [RapidJSON](https://github.com/Tencent/rapidjson "rapidjson") (JSON format reading/writing)
-   - [RapidXML](http://rapidxml.sourceforge.net "rapidxml") (XML format reading/writing)
-   - [FatCow Icons](http://www.fatcow.com/free-icons "FatCow Icons")
-   - [Fugue Icons](https://github.com/yusukekamiyamane/fugue-icons "Fugue Icons")
-
 Building
 --------
 For building the project requires:
    - [Visual Studio 2017](http://visualstudio.com "Visual Studio 2017")
    - [YASM compiller](http://yasm.tortall.net/Download.html "YASM compiller") (version for "general use")
 
-All thrid party dependencies are included in the project.
+For more information, see BUILDING.md.
 
 System requirements
 -------------------
@@ -63,3 +44,5 @@ If you have any questions, you can email me: dmitry@aspia.ru
 Licensing
 ---------
 Project code is available under the Mozilla Public License Version 2.0.
+
+For more information, see LICENSE.md.
