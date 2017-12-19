@@ -18,20 +18,20 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
-class VideoAdapters_ItemDefaultTypeInternal {
+class VideoAdapter_ItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapters_Item>
+  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapter_Item>
       _instance;
-} _VideoAdapters_Item_default_instance_;
-class VideoAdaptersDefaultTypeInternal {
+} _VideoAdapter_Item_default_instance_;
+class VideoAdapterDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapters>
+  ::google::protobuf::internal::ExplicitlyConstructed<VideoAdapter>
       _instance;
-} _VideoAdapters_default_instance_;
+} _VideoAdapter_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_category_5fvideo_5fadapter_2eproto {
-void InitDefaultsVideoAdapters_ItemImpl() {
+void InitDefaultsVideoAdapter_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -40,19 +40,19 @@ void InitDefaultsVideoAdapters_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_VideoAdapters_Item_default_instance_;
-    new (ptr) ::aspia::proto::VideoAdapters_Item();
+    void* ptr = &::aspia::proto::_VideoAdapter_Item_default_instance_;
+    new (ptr) ::aspia::proto::VideoAdapter_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::VideoAdapters_Item::InitAsDefaultInstance();
+  ::aspia::proto::VideoAdapter_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsVideoAdapters_Item() {
+void InitDefaultsVideoAdapter_Item() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdapters_ItemImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdapter_ItemImpl);
 }
 
-void InitDefaultsVideoAdaptersImpl() {
+void InitDefaultsVideoAdapterImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -60,18 +60,18 @@ void InitDefaultsVideoAdaptersImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters_Item();
+  protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter_Item();
   {
-    void* ptr = &::aspia::proto::_VideoAdapters_default_instance_;
-    new (ptr) ::aspia::proto::VideoAdapters();
+    void* ptr = &::aspia::proto::_VideoAdapter_default_instance_;
+    new (ptr) ::aspia::proto::VideoAdapter();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::VideoAdapters::InitAsDefaultInstance();
+  ::aspia::proto::VideoAdapter::InitAsDefaultInstance();
 }
 
-void InitDefaultsVideoAdapters() {
+void InitDefaultsVideoAdapter() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdaptersImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoAdapterImpl);
 }
 
 }  // namespace protobuf_category_5fvideo_5fadapter_2eproto
@@ -80,29 +80,29 @@ namespace proto {
 
 // ===================================================================
 
-void VideoAdapters_Item::InitAsDefaultInstance() {
+void VideoAdapter_Item::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int VideoAdapters_Item::kDescriptionFieldNumber;
-const int VideoAdapters_Item::kAdapterStringFieldNumber;
-const int VideoAdapters_Item::kBiosStringFieldNumber;
-const int VideoAdapters_Item::kChipTypeFieldNumber;
-const int VideoAdapters_Item::kDacTypeFieldNumber;
-const int VideoAdapters_Item::kDriverDateFieldNumber;
-const int VideoAdapters_Item::kDriverVersionFieldNumber;
-const int VideoAdapters_Item::kDriverProviderFieldNumber;
-const int VideoAdapters_Item::kMemorySizeFieldNumber;
+const int VideoAdapter_Item::kDescriptionFieldNumber;
+const int VideoAdapter_Item::kAdapterStringFieldNumber;
+const int VideoAdapter_Item::kBiosStringFieldNumber;
+const int VideoAdapter_Item::kChipTypeFieldNumber;
+const int VideoAdapter_Item::kDacTypeFieldNumber;
+const int VideoAdapter_Item::kDriverDateFieldNumber;
+const int VideoAdapter_Item::kDriverVersionFieldNumber;
+const int VideoAdapter_Item::kDriverProviderFieldNumber;
+const int VideoAdapter_Item::kMemorySizeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-VideoAdapters_Item::VideoAdapters_Item()
+VideoAdapter_Item::VideoAdapter_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters_Item();
+    ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapter.Item)
 }
-VideoAdapters_Item::VideoAdapters_Item(const VideoAdapters_Item& from)
+VideoAdapter_Item::VideoAdapter_Item(const VideoAdapter_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -140,10 +140,10 @@ VideoAdapters_Item::VideoAdapters_Item(const VideoAdapters_Item& from)
     driver_provider_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.driver_provider_);
   }
   memory_size_ = from.memory_size_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapter.Item)
 }
 
-void VideoAdapters_Item::SharedCtor() {
+void VideoAdapter_Item::SharedCtor() {
   description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   adapter_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   bios_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -156,12 +156,12 @@ void VideoAdapters_Item::SharedCtor() {
   _cached_size_ = 0;
 }
 
-VideoAdapters_Item::~VideoAdapters_Item() {
-  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapters.Item)
+VideoAdapter_Item::~VideoAdapter_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapter.Item)
   SharedDtor();
 }
 
-void VideoAdapters_Item::SharedDtor() {
+void VideoAdapter_Item::SharedDtor() {
   description_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   adapter_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   bios_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -172,26 +172,26 @@ void VideoAdapters_Item::SharedDtor() {
   driver_provider_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void VideoAdapters_Item::SetCachedSize(int size) const {
+void VideoAdapter_Item::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const VideoAdapters_Item& VideoAdapters_Item::default_instance() {
-  ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters_Item();
+const VideoAdapter_Item& VideoAdapter_Item::default_instance() {
+  ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter_Item();
   return *internal_default_instance();
 }
 
-VideoAdapters_Item* VideoAdapters_Item::New(::google::protobuf::Arena* arena) const {
-  VideoAdapters_Item* n = new VideoAdapters_Item;
+VideoAdapter_Item* VideoAdapter_Item::New(::google::protobuf::Arena* arena) const {
+  VideoAdapter_Item* n = new VideoAdapter_Item;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void VideoAdapters_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapters.Item)
+void VideoAdapter_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapter.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -208,7 +208,7 @@ void VideoAdapters_Item::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool VideoAdapters_Item::MergePartialFromCodedStream(
+bool VideoAdapter_Item::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -218,7 +218,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapter.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -233,7 +233,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.description"));
+            "aspia.proto.VideoAdapter.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -249,7 +249,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->adapter_string().data(), static_cast<int>(this->adapter_string().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.adapter_string"));
+            "aspia.proto.VideoAdapter.Item.adapter_string"));
         } else {
           goto handle_unusual;
         }
@@ -265,7 +265,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->bios_string().data(), static_cast<int>(this->bios_string().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.bios_string"));
+            "aspia.proto.VideoAdapter.Item.bios_string"));
         } else {
           goto handle_unusual;
         }
@@ -281,7 +281,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->chip_type().data(), static_cast<int>(this->chip_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.chip_type"));
+            "aspia.proto.VideoAdapter.Item.chip_type"));
         } else {
           goto handle_unusual;
         }
@@ -297,7 +297,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->dac_type().data(), static_cast<int>(this->dac_type().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.dac_type"));
+            "aspia.proto.VideoAdapter.Item.dac_type"));
         } else {
           goto handle_unusual;
         }
@@ -313,7 +313,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_date().data(), static_cast<int>(this->driver_date().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.driver_date"));
+            "aspia.proto.VideoAdapter.Item.driver_date"));
         } else {
           goto handle_unusual;
         }
@@ -329,7 +329,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_version().data(), static_cast<int>(this->driver_version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.driver_version"));
+            "aspia.proto.VideoAdapter.Item.driver_version"));
         } else {
           goto handle_unusual;
         }
@@ -345,7 +345,7 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->driver_provider().data(), static_cast<int>(this->driver_provider().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.VideoAdapters.Item.driver_provider"));
+            "aspia.proto.VideoAdapter.Item.driver_provider"));
         } else {
           goto handle_unusual;
         }
@@ -378,17 +378,17 @@ bool VideoAdapters_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapter.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapter.Item)
   return false;
 #undef DO_
 }
 
-void VideoAdapters_Item::SerializeWithCachedSizes(
+void VideoAdapter_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapter.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -397,7 +397,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.description");
+      "aspia.proto.VideoAdapter.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->description(), output);
   }
@@ -407,7 +407,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->adapter_string().data(), static_cast<int>(this->adapter_string().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.adapter_string");
+      "aspia.proto.VideoAdapter.Item.adapter_string");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->adapter_string(), output);
   }
@@ -417,7 +417,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->bios_string().data(), static_cast<int>(this->bios_string().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.bios_string");
+      "aspia.proto.VideoAdapter.Item.bios_string");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->bios_string(), output);
   }
@@ -427,7 +427,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->chip_type().data(), static_cast<int>(this->chip_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.chip_type");
+      "aspia.proto.VideoAdapter.Item.chip_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->chip_type(), output);
   }
@@ -437,7 +437,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->dac_type().data(), static_cast<int>(this->dac_type().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.dac_type");
+      "aspia.proto.VideoAdapter.Item.dac_type");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->dac_type(), output);
   }
@@ -447,7 +447,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_date().data(), static_cast<int>(this->driver_date().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.driver_date");
+      "aspia.proto.VideoAdapter.Item.driver_date");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->driver_date(), output);
   }
@@ -457,7 +457,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_version().data(), static_cast<int>(this->driver_version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.driver_version");
+      "aspia.proto.VideoAdapter.Item.driver_version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       7, this->driver_version(), output);
   }
@@ -467,7 +467,7 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->driver_provider().data(), static_cast<int>(this->driver_provider().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.VideoAdapters.Item.driver_provider");
+      "aspia.proto.VideoAdapter.Item.driver_provider");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       8, this->driver_provider(), output);
   }
@@ -479,11 +479,11 @@ void VideoAdapters_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapter.Item)
 }
 
-size_t VideoAdapters_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapters.Item)
+size_t VideoAdapter_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapter.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -558,13 +558,13 @@ size_t VideoAdapters_Item::ByteSizeLong() const {
   return total_size;
 }
 
-void VideoAdapters_Item::CheckTypeAndMergeFrom(
+void VideoAdapter_Item::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const VideoAdapters_Item*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const VideoAdapter_Item*>(&from));
 }
 
-void VideoAdapters_Item::MergeFrom(const VideoAdapters_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapters.Item)
+void VideoAdapter_Item::MergeFrom(const VideoAdapter_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapter.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -607,22 +607,22 @@ void VideoAdapters_Item::MergeFrom(const VideoAdapters_Item& from) {
   }
 }
 
-void VideoAdapters_Item::CopyFrom(const VideoAdapters_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapters.Item)
+void VideoAdapter_Item::CopyFrom(const VideoAdapter_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapter.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool VideoAdapters_Item::IsInitialized() const {
+bool VideoAdapter_Item::IsInitialized() const {
   return true;
 }
 
-void VideoAdapters_Item::Swap(VideoAdapters_Item* other) {
+void VideoAdapter_Item::Swap(VideoAdapter_Item* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void VideoAdapters_Item::InternalSwap(VideoAdapters_Item* other) {
+void VideoAdapter_Item::InternalSwap(VideoAdapter_Item* other) {
   using std::swap;
   description_.Swap(&other->description_);
   adapter_string_.Swap(&other->adapter_string_);
@@ -637,68 +637,68 @@ void VideoAdapters_Item::InternalSwap(VideoAdapters_Item* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string VideoAdapters_Item::GetTypeName() const {
-  return "aspia.proto.VideoAdapters.Item";
+::std::string VideoAdapter_Item::GetTypeName() const {
+  return "aspia.proto.VideoAdapter.Item";
 }
 
 
 // ===================================================================
 
-void VideoAdapters::InitAsDefaultInstance() {
+void VideoAdapter::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int VideoAdapters::kItemFieldNumber;
+const int VideoAdapter::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-VideoAdapters::VideoAdapters()
+VideoAdapter::VideoAdapter()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters();
+    ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(constructor:aspia.proto.VideoAdapter)
 }
-VideoAdapters::VideoAdapters(const VideoAdapters& from)
+VideoAdapter::VideoAdapter(const VideoAdapter& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.VideoAdapter)
 }
 
-void VideoAdapters::SharedCtor() {
+void VideoAdapter::SharedCtor() {
   _cached_size_ = 0;
 }
 
-VideoAdapters::~VideoAdapters() {
-  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapters)
+VideoAdapter::~VideoAdapter() {
+  // @@protoc_insertion_point(destructor:aspia.proto.VideoAdapter)
   SharedDtor();
 }
 
-void VideoAdapters::SharedDtor() {
+void VideoAdapter::SharedDtor() {
 }
 
-void VideoAdapters::SetCachedSize(int size) const {
+void VideoAdapter::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const VideoAdapters& VideoAdapters::default_instance() {
-  ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters();
+const VideoAdapter& VideoAdapter::default_instance() {
+  ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter();
   return *internal_default_instance();
 }
 
-VideoAdapters* VideoAdapters::New(::google::protobuf::Arena* arena) const {
-  VideoAdapters* n = new VideoAdapters;
+VideoAdapter* VideoAdapter::New(::google::protobuf::Arena* arena) const {
+  VideoAdapter* n = new VideoAdapter;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void VideoAdapters::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapters)
+void VideoAdapter::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.VideoAdapter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -707,7 +707,7 @@ void VideoAdapters::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool VideoAdapters::MergePartialFromCodedStream(
+bool VideoAdapter::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -717,13 +717,13 @@ bool VideoAdapters::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(parse_start:aspia.proto.VideoAdapter)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.VideoAdapters.Item item = 1;
+      // repeated .aspia.proto.VideoAdapter.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -746,21 +746,21 @@ bool VideoAdapters::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(parse_success:aspia.proto.VideoAdapter)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.VideoAdapter)
   return false;
 #undef DO_
 }
 
-void VideoAdapters::SerializeWithCachedSizes(
+void VideoAdapter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.VideoAdapter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.VideoAdapters.Item item = 1;
+  // repeated .aspia.proto.VideoAdapter.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -769,16 +769,16 @@ void VideoAdapters::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.VideoAdapter)
 }
 
-size_t VideoAdapters::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapters)
+size_t VideoAdapter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.VideoAdapter)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.VideoAdapters.Item item = 1;
+  // repeated .aspia.proto.VideoAdapter.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -796,13 +796,13 @@ size_t VideoAdapters::ByteSizeLong() const {
   return total_size;
 }
 
-void VideoAdapters::CheckTypeAndMergeFrom(
+void VideoAdapter::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const VideoAdapters*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const VideoAdapter*>(&from));
 }
 
-void VideoAdapters::MergeFrom(const VideoAdapters& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapters)
+void VideoAdapter::MergeFrom(const VideoAdapter& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.VideoAdapter)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -811,30 +811,30 @@ void VideoAdapters::MergeFrom(const VideoAdapters& from) {
   item_.MergeFrom(from.item_);
 }
 
-void VideoAdapters::CopyFrom(const VideoAdapters& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapters)
+void VideoAdapter::CopyFrom(const VideoAdapter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.VideoAdapter)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool VideoAdapters::IsInitialized() const {
+bool VideoAdapter::IsInitialized() const {
   return true;
 }
 
-void VideoAdapters::Swap(VideoAdapters* other) {
+void VideoAdapter::Swap(VideoAdapter* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void VideoAdapters::InternalSwap(VideoAdapters* other) {
+void VideoAdapter::InternalSwap(VideoAdapter* other) {
   using std::swap;
   item_.InternalSwap(&other->item_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string VideoAdapters::GetTypeName() const {
-  return "aspia.proto.VideoAdapters";
+::std::string VideoAdapter::GetTypeName() const {
+  return "aspia.proto.VideoAdapter";
 }
 
 

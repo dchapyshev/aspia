@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[45];
+  static const ::google::protobuf::internal::ParseTable schema[43];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -89,10 +89,6 @@ void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
 void InitDefaultsDmiPortableBattery();
-void InitDefaultsWindowsDevices_ItemImpl();
-void InitDefaultsWindowsDevices_Item();
-void InitDefaultsWindowsDevicesImpl();
-void InitDefaultsWindowsDevices();
 void InitDefaultsPrograms_ItemImpl();
 void InitDefaultsPrograms_Item();
 void InitDefaultsProgramsImpl();
@@ -156,8 +152,6 @@ inline void InitDefaults() {
   InitDefaultsDmiPointingDevices();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
-  InitDefaultsWindowsDevices_Item();
-  InitDefaultsWindowsDevices();
   InitDefaultsPrograms_Item();
   InitDefaultsPrograms();
   InitDefaultsServices_Item();
@@ -310,12 +304,6 @@ extern UsersDefaultTypeInternal _Users_default_instance_;
 class Users_Item;
 class Users_ItemDefaultTypeInternal;
 extern Users_ItemDefaultTypeInternal _Users_Item_default_instance_;
-class WindowsDevices;
-class WindowsDevicesDefaultTypeInternal;
-extern WindowsDevicesDefaultTypeInternal _WindowsDevices_default_instance_;
-class WindowsDevices_Item;
-class WindowsDevices_ItemDefaultTypeInternal;
-extern WindowsDevices_ItemDefaultTypeInternal _WindowsDevices_Item_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
@@ -6675,291 +6663,6 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
-class WindowsDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.WindowsDevices.Item) */ {
- public:
-  WindowsDevices_Item();
-  virtual ~WindowsDevices_Item();
-
-  WindowsDevices_Item(const WindowsDevices_Item& from);
-
-  inline WindowsDevices_Item& operator=(const WindowsDevices_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  WindowsDevices_Item(WindowsDevices_Item&& from) noexcept
-    : WindowsDevices_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline WindowsDevices_Item& operator=(WindowsDevices_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const WindowsDevices_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const WindowsDevices_Item* internal_default_instance() {
-    return reinterpret_cast<const WindowsDevices_Item*>(
-               &_WindowsDevices_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
-
-  void Swap(WindowsDevices_Item* other);
-  friend void swap(WindowsDevices_Item& a, WindowsDevices_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline WindowsDevices_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  WindowsDevices_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const WindowsDevices_Item& from);
-  void MergeFrom(const WindowsDevices_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(WindowsDevices_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string friendly_name = 1;
-  void clear_friendly_name();
-  static const int kFriendlyNameFieldNumber = 1;
-  const ::std::string& friendly_name() const;
-  void set_friendly_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_friendly_name(::std::string&& value);
-  #endif
-  void set_friendly_name(const char* value);
-  void set_friendly_name(const char* value, size_t size);
-  ::std::string* mutable_friendly_name();
-  ::std::string* release_friendly_name();
-  void set_allocated_friendly_name(::std::string* friendly_name);
-
-  // string description = 2;
-  void clear_description();
-  static const int kDescriptionFieldNumber = 2;
-  const ::std::string& description() const;
-  void set_description(const ::std::string& value);
-  #if LANG_CXX11
-  void set_description(::std::string&& value);
-  #endif
-  void set_description(const char* value);
-  void set_description(const char* value, size_t size);
-  ::std::string* mutable_description();
-  ::std::string* release_description();
-  void set_allocated_description(::std::string* description);
-
-  // string driver_version = 3;
-  void clear_driver_version();
-  static const int kDriverVersionFieldNumber = 3;
-  const ::std::string& driver_version() const;
-  void set_driver_version(const ::std::string& value);
-  #if LANG_CXX11
-  void set_driver_version(::std::string&& value);
-  #endif
-  void set_driver_version(const char* value);
-  void set_driver_version(const char* value, size_t size);
-  ::std::string* mutable_driver_version();
-  ::std::string* release_driver_version();
-  void set_allocated_driver_version(::std::string* driver_version);
-
-  // string driver_date = 4;
-  void clear_driver_date();
-  static const int kDriverDateFieldNumber = 4;
-  const ::std::string& driver_date() const;
-  void set_driver_date(const ::std::string& value);
-  #if LANG_CXX11
-  void set_driver_date(::std::string&& value);
-  #endif
-  void set_driver_date(const char* value);
-  void set_driver_date(const char* value, size_t size);
-  ::std::string* mutable_driver_date();
-  ::std::string* release_driver_date();
-  void set_allocated_driver_date(::std::string* driver_date);
-
-  // string driver_vendor = 5;
-  void clear_driver_vendor();
-  static const int kDriverVendorFieldNumber = 5;
-  const ::std::string& driver_vendor() const;
-  void set_driver_vendor(const ::std::string& value);
-  #if LANG_CXX11
-  void set_driver_vendor(::std::string&& value);
-  #endif
-  void set_driver_vendor(const char* value);
-  void set_driver_vendor(const char* value, size_t size);
-  ::std::string* mutable_driver_vendor();
-  ::std::string* release_driver_vendor();
-  void set_allocated_driver_vendor(::std::string* driver_vendor);
-
-  // string device_id = 6;
-  void clear_device_id();
-  static const int kDeviceIdFieldNumber = 6;
-  const ::std::string& device_id() const;
-  void set_device_id(const ::std::string& value);
-  #if LANG_CXX11
-  void set_device_id(::std::string&& value);
-  #endif
-  void set_device_id(const char* value);
-  void set_device_id(const char* value, size_t size);
-  ::std::string* mutable_device_id();
-  ::std::string* release_device_id();
-  void set_allocated_device_id(::std::string* device_id);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.WindowsDevices.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr friendly_name_;
-  ::google::protobuf::internal::ArenaStringPtr description_;
-  ::google::protobuf::internal::ArenaStringPtr driver_version_;
-  ::google::protobuf::internal::ArenaStringPtr driver_date_;
-  ::google::protobuf::internal::ArenaStringPtr driver_vendor_;
-  ::google::protobuf::internal::ArenaStringPtr device_id_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsWindowsDevices_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class WindowsDevices : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.WindowsDevices) */ {
- public:
-  WindowsDevices();
-  virtual ~WindowsDevices();
-
-  WindowsDevices(const WindowsDevices& from);
-
-  inline WindowsDevices& operator=(const WindowsDevices& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  WindowsDevices(WindowsDevices&& from) noexcept
-    : WindowsDevices() {
-    *this = ::std::move(from);
-  }
-
-  inline WindowsDevices& operator=(WindowsDevices&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const WindowsDevices& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const WindowsDevices* internal_default_instance() {
-    return reinterpret_cast<const WindowsDevices*>(
-               &_WindowsDevices_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
-
-  void Swap(WindowsDevices* other);
-  friend void swap(WindowsDevices& a, WindowsDevices& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline WindowsDevices* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  WindowsDevices* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const WindowsDevices& from);
-  void MergeFrom(const WindowsDevices& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(WindowsDevices* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef WindowsDevices_Item Item;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.WindowsDevices.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::WindowsDevices_Item& item(int index) const;
-  ::aspia::proto::WindowsDevices_Item* mutable_item(int index);
-  ::aspia::proto::WindowsDevices_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::WindowsDevices_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::WindowsDevices_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.WindowsDevices)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::WindowsDevices_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsWindowsDevicesImpl();
-};
-// -------------------------------------------------------------------
-
 class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Programs.Item) */ {
  public:
   Programs_Item();
@@ -6994,7 +6697,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    24;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -7159,7 +6862,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    25;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -7264,7 +6967,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    26;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -7493,7 +7196,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    27;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -7598,7 +7301,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    28;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -7718,7 +7421,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    29;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -8010,7 +7713,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    30;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -8115,7 +7818,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    31;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -8278,7 +7981,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    32;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -8437,7 +8140,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    33;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -8618,7 +8321,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    34;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -8723,7 +8426,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    35;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -8865,7 +8568,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    36;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -8970,7 +8673,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    37;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -9161,7 +8864,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    38;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -9266,7 +8969,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    39;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -9386,7 +9089,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    40;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -9491,7 +9194,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    41;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -9655,7 +9358,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    42;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -14248,362 +13951,6 @@ DmiPortableBattery::item() const {
 
 // -------------------------------------------------------------------
 
-// WindowsDevices_Item
-
-// string friendly_name = 1;
-inline void WindowsDevices_Item::clear_friendly_name() {
-  friendly_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::friendly_name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.friendly_name)
-  return friendly_name_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_friendly_name(const ::std::string& value) {
-  
-  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.friendly_name)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_friendly_name(::std::string&& value) {
-  
-  friendly_name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.friendly_name)
-}
-#endif
-inline void WindowsDevices_Item::set_friendly_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.friendly_name)
-}
-inline void WindowsDevices_Item::set_friendly_name(const char* value, size_t size) {
-  
-  friendly_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.friendly_name)
-}
-inline ::std::string* WindowsDevices_Item::mutable_friendly_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.friendly_name)
-  return friendly_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_friendly_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.friendly_name)
-  
-  return friendly_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_friendly_name(::std::string* friendly_name) {
-  if (friendly_name != NULL) {
-    
-  } else {
-    
-  }
-  friendly_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), friendly_name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.friendly_name)
-}
-
-// string description = 2;
-inline void WindowsDevices_Item::clear_description() {
-  description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::description() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.description)
-  return description_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_description(const ::std::string& value) {
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.description)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_description(::std::string&& value) {
-  
-  description_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.description)
-}
-#endif
-inline void WindowsDevices_Item::set_description(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.description)
-}
-inline void WindowsDevices_Item::set_description(const char* value, size_t size) {
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.description)
-}
-inline ::std::string* WindowsDevices_Item::mutable_description() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.description)
-  return description_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_description() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.description)
-  
-  return description_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_description(::std::string* description) {
-  if (description != NULL) {
-    
-  } else {
-    
-  }
-  description_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), description);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.description)
-}
-
-// string driver_version = 3;
-inline void WindowsDevices_Item::clear_driver_version() {
-  driver_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::driver_version() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.driver_version)
-  return driver_version_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_driver_version(const ::std::string& value) {
-  
-  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.driver_version)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_driver_version(::std::string&& value) {
-  
-  driver_version_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.driver_version)
-}
-#endif
-inline void WindowsDevices_Item::set_driver_version(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.driver_version)
-}
-inline void WindowsDevices_Item::set_driver_version(const char* value, size_t size) {
-  
-  driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.driver_version)
-}
-inline ::std::string* WindowsDevices_Item::mutable_driver_version() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.driver_version)
-  return driver_version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_driver_version() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.driver_version)
-  
-  return driver_version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_driver_version(::std::string* driver_version) {
-  if (driver_version != NULL) {
-    
-  } else {
-    
-  }
-  driver_version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_version);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.driver_version)
-}
-
-// string driver_date = 4;
-inline void WindowsDevices_Item::clear_driver_date() {
-  driver_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::driver_date() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.driver_date)
-  return driver_date_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_driver_date(const ::std::string& value) {
-  
-  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.driver_date)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_driver_date(::std::string&& value) {
-  
-  driver_date_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.driver_date)
-}
-#endif
-inline void WindowsDevices_Item::set_driver_date(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.driver_date)
-}
-inline void WindowsDevices_Item::set_driver_date(const char* value, size_t size) {
-  
-  driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.driver_date)
-}
-inline ::std::string* WindowsDevices_Item::mutable_driver_date() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.driver_date)
-  return driver_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_driver_date() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.driver_date)
-  
-  return driver_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_driver_date(::std::string* driver_date) {
-  if (driver_date != NULL) {
-    
-  } else {
-    
-  }
-  driver_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_date);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.driver_date)
-}
-
-// string driver_vendor = 5;
-inline void WindowsDevices_Item::clear_driver_vendor() {
-  driver_vendor_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::driver_vendor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.driver_vendor)
-  return driver_vendor_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_driver_vendor(const ::std::string& value) {
-  
-  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.driver_vendor)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_driver_vendor(::std::string&& value) {
-  
-  driver_vendor_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.driver_vendor)
-}
-#endif
-inline void WindowsDevices_Item::set_driver_vendor(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.driver_vendor)
-}
-inline void WindowsDevices_Item::set_driver_vendor(const char* value, size_t size) {
-  
-  driver_vendor_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.driver_vendor)
-}
-inline ::std::string* WindowsDevices_Item::mutable_driver_vendor() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.driver_vendor)
-  return driver_vendor_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_driver_vendor() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.driver_vendor)
-  
-  return driver_vendor_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_driver_vendor(::std::string* driver_vendor) {
-  if (driver_vendor != NULL) {
-    
-  } else {
-    
-  }
-  driver_vendor_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_vendor);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.driver_vendor)
-}
-
-// string device_id = 6;
-inline void WindowsDevices_Item::clear_device_id() {
-  device_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& WindowsDevices_Item::device_id() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.Item.device_id)
-  return device_id_.GetNoArena();
-}
-inline void WindowsDevices_Item::set_device_id(const ::std::string& value) {
-  
-  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.WindowsDevices.Item.device_id)
-}
-#if LANG_CXX11
-inline void WindowsDevices_Item::set_device_id(::std::string&& value) {
-  
-  device_id_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.WindowsDevices.Item.device_id)
-}
-#endif
-inline void WindowsDevices_Item::set_device_id(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.WindowsDevices.Item.device_id)
-}
-inline void WindowsDevices_Item::set_device_id(const char* value, size_t size) {
-  
-  device_id_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.WindowsDevices.Item.device_id)
-}
-inline ::std::string* WindowsDevices_Item::mutable_device_id() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.Item.device_id)
-  return device_id_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* WindowsDevices_Item::release_device_id() {
-  // @@protoc_insertion_point(field_release:aspia.proto.WindowsDevices.Item.device_id)
-  
-  return device_id_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void WindowsDevices_Item::set_allocated_device_id(::std::string* device_id) {
-  if (device_id != NULL) {
-    
-  } else {
-    
-  }
-  device_id_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_id);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.WindowsDevices.Item.device_id)
-}
-
-// -------------------------------------------------------------------
-
-// WindowsDevices
-
-// repeated .aspia.proto.WindowsDevices.Item item = 1;
-inline int WindowsDevices::item_size() const {
-  return item_.size();
-}
-inline void WindowsDevices::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::WindowsDevices_Item& WindowsDevices::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.WindowsDevices.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::WindowsDevices_Item* WindowsDevices::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.WindowsDevices.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::WindowsDevices_Item* WindowsDevices::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.WindowsDevices.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::WindowsDevices_Item >*
-WindowsDevices::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.WindowsDevices.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::WindowsDevices_Item >&
-WindowsDevices::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.WindowsDevices.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
 // Programs_Item
 
 // string name = 1;
@@ -17432,10 +16779,6 @@ Sessions::item() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

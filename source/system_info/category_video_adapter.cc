@@ -35,7 +35,7 @@ const char* CategoryVideoAdapter::Guid() const
 
 void CategoryVideoAdapter::Parse(Table& table, const std::string& data)
 {
-    proto::VideoAdapters message;
+    proto::VideoAdapter message;
 
     if (!message.ParseFromString(data))
         return;
@@ -46,7 +46,7 @@ void CategoryVideoAdapter::Parse(Table& table, const std::string& data)
 
     for (int index = 0; index < message.item_size(); ++index)
     {
-        const proto::VideoAdapters::Item& item = message.item(index);
+        const proto::VideoAdapter::Item& item = message.item(index);
 
         Group group = table.AddGroup(item.description());
 
@@ -81,11 +81,11 @@ void CategoryVideoAdapter::Parse(Table& table, const std::string& data)
 
 std::string CategoryVideoAdapter::Serialize()
 {
-    proto::VideoAdapters message;
+    proto::VideoAdapter message;
 
     for (VideoAdapterEnumarator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
     {
-        proto::VideoAdapters::Item* item = message.add_item();
+        proto::VideoAdapter::Item* item = message.add_item();
 
         item->set_description(enumerator.GetDescription());
         item->set_adapter_string(enumerator.GetAdapterString());

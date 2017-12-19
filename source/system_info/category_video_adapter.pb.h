@@ -40,23 +40,23 @@ struct TableStruct {
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsVideoAdapters_ItemImpl();
-void InitDefaultsVideoAdapters_Item();
-void InitDefaultsVideoAdaptersImpl();
-void InitDefaultsVideoAdapters();
+void InitDefaultsVideoAdapter_ItemImpl();
+void InitDefaultsVideoAdapter_Item();
+void InitDefaultsVideoAdapterImpl();
+void InitDefaultsVideoAdapter();
 inline void InitDefaults() {
-  InitDefaultsVideoAdapters_Item();
-  InitDefaultsVideoAdapters();
+  InitDefaultsVideoAdapter_Item();
+  InitDefaultsVideoAdapter();
 }
 }  // namespace protobuf_category_5fvideo_5fadapter_2eproto
 namespace aspia {
 namespace proto {
-class VideoAdapters;
-class VideoAdaptersDefaultTypeInternal;
-extern VideoAdaptersDefaultTypeInternal _VideoAdapters_default_instance_;
-class VideoAdapters_Item;
-class VideoAdapters_ItemDefaultTypeInternal;
-extern VideoAdapters_ItemDefaultTypeInternal _VideoAdapters_Item_default_instance_;
+class VideoAdapter;
+class VideoAdapterDefaultTypeInternal;
+extern VideoAdapterDefaultTypeInternal _VideoAdapter_default_instance_;
+class VideoAdapter_Item;
+class VideoAdapter_ItemDefaultTypeInternal;
+extern VideoAdapter_ItemDefaultTypeInternal _VideoAdapter_Item_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
@@ -64,24 +64,24 @@ namespace proto {
 
 // ===================================================================
 
-class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoAdapters.Item) */ {
+class VideoAdapter_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoAdapter.Item) */ {
  public:
-  VideoAdapters_Item();
-  virtual ~VideoAdapters_Item();
+  VideoAdapter_Item();
+  virtual ~VideoAdapter_Item();
 
-  VideoAdapters_Item(const VideoAdapters_Item& from);
+  VideoAdapter_Item(const VideoAdapter_Item& from);
 
-  inline VideoAdapters_Item& operator=(const VideoAdapters_Item& from) {
+  inline VideoAdapter_Item& operator=(const VideoAdapter_Item& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  VideoAdapters_Item(VideoAdapters_Item&& from) noexcept
-    : VideoAdapters_Item() {
+  VideoAdapter_Item(VideoAdapter_Item&& from) noexcept
+    : VideoAdapter_Item() {
     *this = ::std::move(from);
   }
 
-  inline VideoAdapters_Item& operator=(VideoAdapters_Item&& from) noexcept {
+  inline VideoAdapter_Item& operator=(VideoAdapter_Item&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -90,30 +90,30 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
     return *this;
   }
   #endif
-  static const VideoAdapters_Item& default_instance();
+  static const VideoAdapter_Item& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const VideoAdapters_Item* internal_default_instance() {
-    return reinterpret_cast<const VideoAdapters_Item*>(
-               &_VideoAdapters_Item_default_instance_);
+  static inline const VideoAdapter_Item* internal_default_instance() {
+    return reinterpret_cast<const VideoAdapter_Item*>(
+               &_VideoAdapter_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     0;
 
-  void Swap(VideoAdapters_Item* other);
-  friend void swap(VideoAdapters_Item& a, VideoAdapters_Item& b) {
+  void Swap(VideoAdapter_Item* other);
+  friend void swap(VideoAdapter_Item& a, VideoAdapter_Item& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline VideoAdapters_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline VideoAdapter_Item* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  VideoAdapters_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  VideoAdapter_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const VideoAdapters_Item& from);
-  void MergeFrom(const VideoAdapters_Item& from);
+  void CopyFrom(const VideoAdapter_Item& from);
+  void MergeFrom(const VideoAdapter_Item& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -128,7 +128,7 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(VideoAdapters_Item* other);
+  void InternalSwap(VideoAdapter_Item* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -262,7 +262,7 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::google::protobuf::uint64 memory_size() const;
   void set_memory_size(::google::protobuf::uint64 value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.VideoAdapters.Item)
+  // @@protoc_insertion_point(class_scope:aspia.proto.VideoAdapter.Item)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -277,28 +277,28 @@ class VideoAdapters_Item : public ::google::protobuf::MessageLite /* @@protoc_in
   ::google::protobuf::uint64 memory_size_;
   mutable int _cached_size_;
   friend struct ::protobuf_category_5fvideo_5fadapter_2eproto::TableStruct;
-  friend void ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapters_ItemImpl();
+  friend void ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapter_ItemImpl();
 };
 // -------------------------------------------------------------------
 
-class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoAdapters) */ {
+class VideoAdapter : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.VideoAdapter) */ {
  public:
-  VideoAdapters();
-  virtual ~VideoAdapters();
+  VideoAdapter();
+  virtual ~VideoAdapter();
 
-  VideoAdapters(const VideoAdapters& from);
+  VideoAdapter(const VideoAdapter& from);
 
-  inline VideoAdapters& operator=(const VideoAdapters& from) {
+  inline VideoAdapter& operator=(const VideoAdapter& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  VideoAdapters(VideoAdapters&& from) noexcept
-    : VideoAdapters() {
+  VideoAdapter(VideoAdapter&& from) noexcept
+    : VideoAdapter() {
     *this = ::std::move(from);
   }
 
-  inline VideoAdapters& operator=(VideoAdapters&& from) noexcept {
+  inline VideoAdapter& operator=(VideoAdapter&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -307,30 +307,30 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
     return *this;
   }
   #endif
-  static const VideoAdapters& default_instance();
+  static const VideoAdapter& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const VideoAdapters* internal_default_instance() {
-    return reinterpret_cast<const VideoAdapters*>(
-               &_VideoAdapters_default_instance_);
+  static inline const VideoAdapter* internal_default_instance() {
+    return reinterpret_cast<const VideoAdapter*>(
+               &_VideoAdapter_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     1;
 
-  void Swap(VideoAdapters* other);
-  friend void swap(VideoAdapters& a, VideoAdapters& b) {
+  void Swap(VideoAdapter* other);
+  friend void swap(VideoAdapter& a, VideoAdapter& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline VideoAdapters* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline VideoAdapter* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  VideoAdapters* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  VideoAdapter* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const VideoAdapters& from);
-  void MergeFrom(const VideoAdapters& from);
+  void CopyFrom(const VideoAdapter& from);
+  void MergeFrom(const VideoAdapter& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -345,7 +345,7 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(VideoAdapters* other);
+  void InternalSwap(VideoAdapter* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -359,30 +359,30 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // nested types ----------------------------------------------------
 
-  typedef VideoAdapters_Item Item;
+  typedef VideoAdapter_Item Item;
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.VideoAdapters.Item item = 1;
+  // repeated .aspia.proto.VideoAdapter.Item item = 1;
   int item_size() const;
   void clear_item();
   static const int kItemFieldNumber = 1;
-  const ::aspia::proto::VideoAdapters_Item& item(int index) const;
-  ::aspia::proto::VideoAdapters_Item* mutable_item(int index);
-  ::aspia::proto::VideoAdapters_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapters_Item >*
+  const ::aspia::proto::VideoAdapter_Item& item(int index) const;
+  ::aspia::proto::VideoAdapter_Item* mutable_item(int index);
+  ::aspia::proto::VideoAdapter_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapter_Item >*
       mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapters_Item >&
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapter_Item >&
       item() const;
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.VideoAdapters)
+  // @@protoc_insertion_point(class_scope:aspia.proto.VideoAdapter)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapters_Item > item_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapter_Item > item_;
   mutable int _cached_size_;
   friend struct ::protobuf_category_5fvideo_5fadapter_2eproto::TableStruct;
-  friend void ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdaptersImpl();
+  friend void ::protobuf_category_5fvideo_5fadapter_2eproto::InitDefaultsVideoAdapterImpl();
 };
 // ===================================================================
 
@@ -393,477 +393,477 @@ class VideoAdapters : public ::google::protobuf::MessageLite /* @@protoc_inserti
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// VideoAdapters_Item
+// VideoAdapter_Item
 
 // string description = 1;
-inline void VideoAdapters_Item::clear_description() {
+inline void VideoAdapter_Item::clear_description() {
   description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::description() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.description)
+inline const ::std::string& VideoAdapter_Item::description() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.description)
   return description_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_description(const ::std::string& value) {
+inline void VideoAdapter_Item::set_description(const ::std::string& value) {
   
   description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.description)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_description(::std::string&& value) {
+inline void VideoAdapter_Item::set_description(::std::string&& value) {
   
   description_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.description)
 }
 #endif
-inline void VideoAdapters_Item::set_description(const char* value) {
+inline void VideoAdapter_Item::set_description(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.description)
 }
-inline void VideoAdapters_Item::set_description(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_description(const char* value, size_t size) {
   
   description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.description)
 }
-inline ::std::string* VideoAdapters_Item::mutable_description() {
+inline ::std::string* VideoAdapter_Item::mutable_description() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.description)
   return description_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_description() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.description)
+inline ::std::string* VideoAdapter_Item::release_description() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.description)
   
   return description_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_description(::std::string* description) {
+inline void VideoAdapter_Item::set_allocated_description(::std::string* description) {
   if (description != NULL) {
     
   } else {
     
   }
   description_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), description);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.description)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.description)
 }
 
 // string adapter_string = 2;
-inline void VideoAdapters_Item::clear_adapter_string() {
+inline void VideoAdapter_Item::clear_adapter_string() {
   adapter_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::adapter_string() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.adapter_string)
+inline const ::std::string& VideoAdapter_Item::adapter_string() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.adapter_string)
   return adapter_string_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_adapter_string(const ::std::string& value) {
+inline void VideoAdapter_Item::set_adapter_string(const ::std::string& value) {
   
   adapter_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.adapter_string)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_adapter_string(::std::string&& value) {
+inline void VideoAdapter_Item::set_adapter_string(::std::string&& value) {
   
   adapter_string_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.adapter_string)
 }
 #endif
-inline void VideoAdapters_Item::set_adapter_string(const char* value) {
+inline void VideoAdapter_Item::set_adapter_string(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   adapter_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.adapter_string)
 }
-inline void VideoAdapters_Item::set_adapter_string(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_adapter_string(const char* value, size_t size) {
   
   adapter_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.adapter_string)
 }
-inline ::std::string* VideoAdapters_Item::mutable_adapter_string() {
+inline ::std::string* VideoAdapter_Item::mutable_adapter_string() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.adapter_string)
   return adapter_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_adapter_string() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.adapter_string)
+inline ::std::string* VideoAdapter_Item::release_adapter_string() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.adapter_string)
   
   return adapter_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_adapter_string(::std::string* adapter_string) {
+inline void VideoAdapter_Item::set_allocated_adapter_string(::std::string* adapter_string) {
   if (adapter_string != NULL) {
     
   } else {
     
   }
   adapter_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), adapter_string);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.adapter_string)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.adapter_string)
 }
 
 // string bios_string = 3;
-inline void VideoAdapters_Item::clear_bios_string() {
+inline void VideoAdapter_Item::clear_bios_string() {
   bios_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::bios_string() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.bios_string)
+inline const ::std::string& VideoAdapter_Item::bios_string() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.bios_string)
   return bios_string_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_bios_string(const ::std::string& value) {
+inline void VideoAdapter_Item::set_bios_string(const ::std::string& value) {
   
   bios_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.bios_string)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_bios_string(::std::string&& value) {
+inline void VideoAdapter_Item::set_bios_string(::std::string&& value) {
   
   bios_string_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.bios_string)
 }
 #endif
-inline void VideoAdapters_Item::set_bios_string(const char* value) {
+inline void VideoAdapter_Item::set_bios_string(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   bios_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.bios_string)
 }
-inline void VideoAdapters_Item::set_bios_string(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_bios_string(const char* value, size_t size) {
   
   bios_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.bios_string)
 }
-inline ::std::string* VideoAdapters_Item::mutable_bios_string() {
+inline ::std::string* VideoAdapter_Item::mutable_bios_string() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.bios_string)
   return bios_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_bios_string() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.bios_string)
+inline ::std::string* VideoAdapter_Item::release_bios_string() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.bios_string)
   
   return bios_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_bios_string(::std::string* bios_string) {
+inline void VideoAdapter_Item::set_allocated_bios_string(::std::string* bios_string) {
   if (bios_string != NULL) {
     
   } else {
     
   }
   bios_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bios_string);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.bios_string)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.bios_string)
 }
 
 // string chip_type = 4;
-inline void VideoAdapters_Item::clear_chip_type() {
+inline void VideoAdapter_Item::clear_chip_type() {
   chip_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::chip_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.chip_type)
+inline const ::std::string& VideoAdapter_Item::chip_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.chip_type)
   return chip_type_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_chip_type(const ::std::string& value) {
+inline void VideoAdapter_Item::set_chip_type(const ::std::string& value) {
   
   chip_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.chip_type)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_chip_type(::std::string&& value) {
+inline void VideoAdapter_Item::set_chip_type(::std::string&& value) {
   
   chip_type_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.chip_type)
 }
 #endif
-inline void VideoAdapters_Item::set_chip_type(const char* value) {
+inline void VideoAdapter_Item::set_chip_type(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   chip_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.chip_type)
 }
-inline void VideoAdapters_Item::set_chip_type(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_chip_type(const char* value, size_t size) {
   
   chip_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.chip_type)
 }
-inline ::std::string* VideoAdapters_Item::mutable_chip_type() {
+inline ::std::string* VideoAdapter_Item::mutable_chip_type() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.chip_type)
   return chip_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_chip_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.chip_type)
+inline ::std::string* VideoAdapter_Item::release_chip_type() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.chip_type)
   
   return chip_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_chip_type(::std::string* chip_type) {
+inline void VideoAdapter_Item::set_allocated_chip_type(::std::string* chip_type) {
   if (chip_type != NULL) {
     
   } else {
     
   }
   chip_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), chip_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.chip_type)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.chip_type)
 }
 
 // string dac_type = 5;
-inline void VideoAdapters_Item::clear_dac_type() {
+inline void VideoAdapter_Item::clear_dac_type() {
   dac_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::dac_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.dac_type)
+inline const ::std::string& VideoAdapter_Item::dac_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.dac_type)
   return dac_type_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_dac_type(const ::std::string& value) {
+inline void VideoAdapter_Item::set_dac_type(const ::std::string& value) {
   
   dac_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.dac_type)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_dac_type(::std::string&& value) {
+inline void VideoAdapter_Item::set_dac_type(::std::string&& value) {
   
   dac_type_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.dac_type)
 }
 #endif
-inline void VideoAdapters_Item::set_dac_type(const char* value) {
+inline void VideoAdapter_Item::set_dac_type(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   dac_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.dac_type)
 }
-inline void VideoAdapters_Item::set_dac_type(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_dac_type(const char* value, size_t size) {
   
   dac_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.dac_type)
 }
-inline ::std::string* VideoAdapters_Item::mutable_dac_type() {
+inline ::std::string* VideoAdapter_Item::mutable_dac_type() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.dac_type)
   return dac_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_dac_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.dac_type)
+inline ::std::string* VideoAdapter_Item::release_dac_type() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.dac_type)
   
   return dac_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_dac_type(::std::string* dac_type) {
+inline void VideoAdapter_Item::set_allocated_dac_type(::std::string* dac_type) {
   if (dac_type != NULL) {
     
   } else {
     
   }
   dac_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), dac_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.dac_type)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.dac_type)
 }
 
 // string driver_date = 6;
-inline void VideoAdapters_Item::clear_driver_date() {
+inline void VideoAdapter_Item::clear_driver_date() {
   driver_date_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::driver_date() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.driver_date)
+inline const ::std::string& VideoAdapter_Item::driver_date() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.driver_date)
   return driver_date_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_driver_date(const ::std::string& value) {
+inline void VideoAdapter_Item::set_driver_date(const ::std::string& value) {
   
   driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.driver_date)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_driver_date(::std::string&& value) {
+inline void VideoAdapter_Item::set_driver_date(::std::string&& value) {
   
   driver_date_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.driver_date)
 }
 #endif
-inline void VideoAdapters_Item::set_driver_date(const char* value) {
+inline void VideoAdapter_Item::set_driver_date(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.driver_date)
 }
-inline void VideoAdapters_Item::set_driver_date(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_driver_date(const char* value, size_t size) {
   
   driver_date_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.driver_date)
 }
-inline ::std::string* VideoAdapters_Item::mutable_driver_date() {
+inline ::std::string* VideoAdapter_Item::mutable_driver_date() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.driver_date)
   return driver_date_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_driver_date() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.driver_date)
+inline ::std::string* VideoAdapter_Item::release_driver_date() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.driver_date)
   
   return driver_date_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_driver_date(::std::string* driver_date) {
+inline void VideoAdapter_Item::set_allocated_driver_date(::std::string* driver_date) {
   if (driver_date != NULL) {
     
   } else {
     
   }
   driver_date_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_date);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.driver_date)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.driver_date)
 }
 
 // string driver_version = 7;
-inline void VideoAdapters_Item::clear_driver_version() {
+inline void VideoAdapter_Item::clear_driver_version() {
   driver_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::driver_version() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.driver_version)
+inline const ::std::string& VideoAdapter_Item::driver_version() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.driver_version)
   return driver_version_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_driver_version(const ::std::string& value) {
+inline void VideoAdapter_Item::set_driver_version(const ::std::string& value) {
   
   driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.driver_version)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_driver_version(::std::string&& value) {
+inline void VideoAdapter_Item::set_driver_version(::std::string&& value) {
   
   driver_version_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.driver_version)
 }
 #endif
-inline void VideoAdapters_Item::set_driver_version(const char* value) {
+inline void VideoAdapter_Item::set_driver_version(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.driver_version)
 }
-inline void VideoAdapters_Item::set_driver_version(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_driver_version(const char* value, size_t size) {
   
   driver_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.driver_version)
 }
-inline ::std::string* VideoAdapters_Item::mutable_driver_version() {
+inline ::std::string* VideoAdapter_Item::mutable_driver_version() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.driver_version)
   return driver_version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_driver_version() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.driver_version)
+inline ::std::string* VideoAdapter_Item::release_driver_version() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.driver_version)
   
   return driver_version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_driver_version(::std::string* driver_version) {
+inline void VideoAdapter_Item::set_allocated_driver_version(::std::string* driver_version) {
   if (driver_version != NULL) {
     
   } else {
     
   }
   driver_version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_version);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.driver_version)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.driver_version)
 }
 
 // string driver_provider = 8;
-inline void VideoAdapters_Item::clear_driver_provider() {
+inline void VideoAdapter_Item::clear_driver_provider() {
   driver_provider_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoAdapters_Item::driver_provider() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.driver_provider)
+inline const ::std::string& VideoAdapter_Item::driver_provider() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.driver_provider)
   return driver_provider_.GetNoArena();
 }
-inline void VideoAdapters_Item::set_driver_provider(const ::std::string& value) {
+inline void VideoAdapter_Item::set_driver_provider(const ::std::string& value) {
   
   driver_provider_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.driver_provider)
 }
 #if LANG_CXX11
-inline void VideoAdapters_Item::set_driver_provider(::std::string&& value) {
+inline void VideoAdapter_Item::set_driver_provider(::std::string&& value) {
   
   driver_provider_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.VideoAdapter.Item.driver_provider)
 }
 #endif
-inline void VideoAdapters_Item::set_driver_provider(const char* value) {
+inline void VideoAdapter_Item::set_driver_provider(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   driver_provider_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.VideoAdapter.Item.driver_provider)
 }
-inline void VideoAdapters_Item::set_driver_provider(const char* value, size_t size) {
+inline void VideoAdapter_Item::set_driver_provider(const char* value, size_t size) {
   
   driver_provider_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.VideoAdapter.Item.driver_provider)
 }
-inline ::std::string* VideoAdapters_Item::mutable_driver_provider() {
+inline ::std::string* VideoAdapter_Item::mutable_driver_provider() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.Item.driver_provider)
   return driver_provider_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoAdapters_Item::release_driver_provider() {
-  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapters.Item.driver_provider)
+inline ::std::string* VideoAdapter_Item::release_driver_provider() {
+  // @@protoc_insertion_point(field_release:aspia.proto.VideoAdapter.Item.driver_provider)
   
   return driver_provider_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoAdapters_Item::set_allocated_driver_provider(::std::string* driver_provider) {
+inline void VideoAdapter_Item::set_allocated_driver_provider(::std::string* driver_provider) {
   if (driver_provider != NULL) {
     
   } else {
     
   }
   driver_provider_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), driver_provider);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapters.Item.driver_provider)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.VideoAdapter.Item.driver_provider)
 }
 
 // uint64 memory_size = 9;
-inline void VideoAdapters_Item::clear_memory_size() {
+inline void VideoAdapter_Item::clear_memory_size() {
   memory_size_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint64 VideoAdapters_Item::memory_size() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.Item.memory_size)
+inline ::google::protobuf::uint64 VideoAdapter_Item::memory_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.Item.memory_size)
   return memory_size_;
 }
-inline void VideoAdapters_Item::set_memory_size(::google::protobuf::uint64 value) {
+inline void VideoAdapter_Item::set_memory_size(::google::protobuf::uint64 value) {
   
   memory_size_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapters.Item.memory_size)
+  // @@protoc_insertion_point(field_set:aspia.proto.VideoAdapter.Item.memory_size)
 }
 
 // -------------------------------------------------------------------
 
-// VideoAdapters
+// VideoAdapter
 
-// repeated .aspia.proto.VideoAdapters.Item item = 1;
-inline int VideoAdapters::item_size() const {
+// repeated .aspia.proto.VideoAdapter.Item item = 1;
+inline int VideoAdapter::item_size() const {
   return item_.size();
 }
-inline void VideoAdapters::clear_item() {
+inline void VideoAdapter::clear_item() {
   item_.Clear();
 }
-inline const ::aspia::proto::VideoAdapters_Item& VideoAdapters::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapters.item)
+inline const ::aspia::proto::VideoAdapter_Item& VideoAdapter::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.VideoAdapter.item)
   return item_.Get(index);
 }
-inline ::aspia::proto::VideoAdapters_Item* VideoAdapters::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapters.item)
+inline ::aspia::proto::VideoAdapter_Item* VideoAdapter::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.VideoAdapter.item)
   return item_.Mutable(index);
 }
-inline ::aspia::proto::VideoAdapters_Item* VideoAdapters::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.VideoAdapters.item)
+inline ::aspia::proto::VideoAdapter_Item* VideoAdapter::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.VideoAdapter.item)
   return item_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapters_Item >*
-VideoAdapters::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.VideoAdapters.item)
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapter_Item >*
+VideoAdapter::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.VideoAdapter.item)
   return &item_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapters_Item >&
-VideoAdapters::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.VideoAdapters.item)
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::VideoAdapter_Item >&
+VideoAdapter::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.VideoAdapter.item)
   return item_;
 }
 
