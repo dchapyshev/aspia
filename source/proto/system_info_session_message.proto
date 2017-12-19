@@ -1018,24 +1018,6 @@ message DmiPortableBattery
     repeated Item item = 1;
 }
 
-message VideoAdapters
-{
-    message Item
-    {
-        string description     = 1;
-        string adapter_string  = 2;
-        string bios_string     = 3;
-        string chip_type       = 4;
-        string dac_type        = 5;
-        string driver_date     = 6;
-        string driver_version  = 7;
-        string driver_provider = 8;
-        uint64 memory_size     = 9;
-    }
-
-    repeated Item item = 1;
-}
-
 message Monitors
 {
     enum InputSignalType

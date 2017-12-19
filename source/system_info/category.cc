@@ -16,6 +16,7 @@
 #include "system_info/category_memory.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
+#include "system_info/category_video_adapter.h"
 
 namespace aspia {
 
@@ -100,7 +101,7 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> display = std::make_unique<CategoryGroupDisplay>();
 
-    display->mutable_child_list()->emplace_back(std::make_unique<CategoryVideoAdapters>());
+    display->mutable_child_list()->emplace_back(std::make_unique<CategoryVideoAdapter>());
     display->mutable_child_list()->emplace_back(std::make_unique<CategoryMonitor>());
 
     std::unique_ptr<CategoryGroup> hardware = std::make_unique<CategoryGroupHardware>();
@@ -190,7 +191,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryATA>());
     emplace_back(std::make_unique<CategorySMART>());
 
-    emplace_back(std::make_unique<CategoryVideoAdapters>());
+    emplace_back(std::make_unique<CategoryVideoAdapter>());
     emplace_back(std::make_unique<CategoryMonitor>());
 
     emplace_back(std::make_unique<CategoryWindowsDevices>());
