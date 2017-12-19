@@ -15,6 +15,7 @@
 #include "system_info/category_cpu.h"
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
+#include "system_info/category_power_options.h"
 #include "system_info/category_printer.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"

@@ -200,6 +200,8 @@
     <ClCompile Include="system_info\category_memory.pb.cc" />
     <ClCompile Include="system_info\category_monitor.cc" />
     <ClCompile Include="system_info\category_monitor.pb.cc" />
+    <ClCompile Include="system_info\category_power_options.cc" />
+    <ClCompile Include="system_info\category_power_options.pb.cc" />
     <ClCompile Include="system_info\category_printer.cc" />
     <ClCompile Include="system_info\category_printer.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
@@ -458,6 +460,8 @@
     <ClInclude Include="system_info\category_memory.pb.h" />
     <ClInclude Include="system_info\category_monitor.h" />
     <ClInclude Include="system_info\category_monitor.pb.h" />
+    <ClInclude Include="system_info\category_power_options.h" />
+    <ClInclude Include="system_info\category_power_options.pb.h" />
     <ClInclude Include="system_info\category_printer.h" />
     <ClInclude Include="system_info\category_printer.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
@@ -531,6 +535,7 @@
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
+    <None Include="system_info\category_power_options.proto" />
     <None Include="system_info\category_printer.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_video_adapter.proto" />
