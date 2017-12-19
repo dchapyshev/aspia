@@ -18,6 +18,7 @@
 #include "system_info/category_dmi_cache.h"
 #include "system_info/category_dmi_chassis.h"
 #include "system_info/category_dmi_memory_device.h"
+#include "system_info/category_dmi_onboard_device.h"
 #include "system_info/category_dmi_port_connector.h"
 #include "system_info/category_dmi_processor.h"
 #include "system_info/category_dmi_system.h"
@@ -103,7 +104,7 @@ CategoryList CreateCategoryTree()
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiMemoryDevice>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiSystemSlot>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPortConnector>());
-    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiOnboardDevices>());
+    dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiOnboardDevice>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     dmi->mutable_child_list()->emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 
@@ -197,7 +198,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryDmiMemoryDevice>());
     emplace_back(std::make_unique<CategoryDmiSystemSlot>());
     emplace_back(std::make_unique<CategoryDmiPortConnector>());
-    emplace_back(std::make_unique<CategoryDmiOnboardDevices>());
+    emplace_back(std::make_unique<CategoryDmiOnboardDevice>());
     emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 

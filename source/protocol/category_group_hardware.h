@@ -14,24 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiOnboardDevices : public CategoryInfo
-{
-public:
-    CategoryDmiOnboardDevices() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* TypeToString(proto::DmiOnBoardDevices::Type value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiOnboardDevices);
-};
-
 class CategoryDmiPointingDevices : public CategoryInfo
 {
 public:

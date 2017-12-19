@@ -820,6 +820,12 @@
     <ClCompile Include="system_info\category_dmi_port_connector.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_dmi_onboard_device.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_dmi_onboard_device.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1676,6 +1682,12 @@
     <ClInclude Include="system_info\category_dmi_port_connector.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_dmi_onboard_device.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_dmi_onboard_device.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1781,6 +1793,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_dmi_port_connector.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_dmi_onboard_device.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

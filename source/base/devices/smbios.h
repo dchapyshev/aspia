@@ -74,6 +74,7 @@ public:
         TABLE_TYPE_CACHE          = 0x07,
         TABLE_TYPE_PORT_CONNECTOR = 0x08,
         TABLE_TYPE_SYSTEM_SLOT    = 0x09,
+        TABLE_TYPE_ONBOARD_DEVICE = 0x0A,
         TABLE_TYPE_MEMORY_DEVICE  = 0x11
     };
 
@@ -118,25 +119,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class OnBoardDeviceTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x0A };
-
-        int GetDeviceCount() const;
-        std::string GetDescription(int index) const;
-        proto::DmiOnBoardDevices::Type GetType(int index) const;
-        bool IsEnabled(int index) const;
-
-    private:
-        friend class TableEnumerator<OnBoardDeviceTable>;
-        explicit OnBoardDeviceTable(const TableReader& reader);
-
-        const int count_;
-        const uint8_t* ptr_;
-        TableReader reader_;
     };
 
     class PointingDeviceTable
