@@ -68,7 +68,8 @@ public:
     {
         TABLE_TYPE_BIOS      = 0x00,
         TABLE_TYPE_SYSTEM    = 0x01,
-        TABLE_TYPE_BASEBOARD = 0x02
+        TABLE_TYPE_BASEBOARD = 0x02,
+        TABLE_TYPE_CHASSIS   = 0x03
     };
 
     class TableReader
@@ -112,30 +113,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class ChassisTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x03 };
-
-        std::string GetManufacturer() const;
-        std::string GetVersion() const;
-        std::string GetSerialNumber() const;
-        std::string GetAssetTag() const;
-        proto::DmiChassis::Type GetType() const;
-        proto::DmiChassis::Status GetOSLoadStatus() const;
-        proto::DmiChassis::Status GetPowerSourceStatus() const;
-        proto::DmiChassis::Status GetTemperatureStatus() const;
-        proto::DmiChassis::SecurityStatus GetSecurityStatus() const;
-        int GetHeight() const; // In Units.
-        int GetNumberOfPowerCords() const;
-
-    private:
-        friend class TableEnumerator<ChassisTable>;
-        explicit ChassisTable(const TableReader& reader);
-
-        TableReader reader_;
     };
 
     class ProcessorTable

@@ -14,26 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiChassis : public CategoryInfo
-{
-public:
-    CategoryDmiChassis() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* TypeToString(proto::DmiChassis:: Type type);
-    static const char* StatusToString(proto::DmiChassis::Status status);
-    static const char* SecurityStatusToString(proto::DmiChassis::SecurityStatus status);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiChassis);
-};
-
 class CategoryDmiCaches : public CategoryInfo
 {
 public:
