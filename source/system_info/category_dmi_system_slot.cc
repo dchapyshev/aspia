@@ -456,16 +456,16 @@ std::string CategoryDmiSystemSlot::Serialize()
          table_enumerator.Advance())
     {
         SMBios::Table table = table_enumerator.GetTable();
-        if (table.GetTableLength() < 0x0C)
+        if (table.Length() < 0x0C)
             continue;
 
         proto::DmiSystemSlot::Item* item = message.add_item();
 
-        item->set_slot_designation(table.GetString(0x04));
-        item->set_type(GetType(table.GetByte(0x05)));
-        item->set_usage(GetUsage(table.GetByte(0x07)));
-        item->set_bus_width(GetBusWidth(table.GetByte(0x06)));
-        item->set_length(GetLength(table.GetByte(0x08)));
+        item->set_slot_designation(table.String(0x04));
+        item->set_type(GetType(table.Byte(0x05)));
+        item->set_usage(GetUsage(table.Byte(0x07)));
+        item->set_bus_width(GetBusWidth(table.Byte(0x06)));
+        item->set_length(GetLength(table.Byte(0x08)));
     }
 
     return message.SerializeAsString();

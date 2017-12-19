@@ -59,7 +59,7 @@ std::string GetDescription(const SMBios::Table& table, uint8_t handle)
         return std::string();
 
     char* string = reinterpret_cast<char*>(const_cast<uint8_t*>(
-        table.GetPointer(0))) + table.GetTableLength();
+        table.Pointer(0))) + table.Length();
 
     while (handle > 1 && *string)
     {
@@ -156,8 +156,8 @@ std::string CategoryDmiOnboardDevice::Serialize()
     {
         SMBios::Table table = table_enumerator.GetTable();
 
-        uint8_t count = (table.GetTableLength() - 4) / 2;
-        const uint8_t* ptr = table.GetPointer(0) + 4;
+        uint8_t count = (table.Length() - 4) / 2;
+        const uint8_t* ptr = table.Pointer(0) + 4;
 
         for (uint8_t index = 0; index < count; ++index)
         {

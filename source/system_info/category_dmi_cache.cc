@@ -439,24 +439,24 @@ std::string CategoryDmiCache::Serialize()
         SMBios::Table table = table_enumerator.GetTable();
         proto::DmiCaches::Item* item = message.add_item();
 
-        item->set_name(table.GetString(0x04));
+        item->set_name(table.String(0x04));
 
-        item->set_location(GetLocation(table.GetWord(0x05)));
-        item->set_status(GetStatus(table.GetWord(0x05)));
-        item->set_mode(GetMode(table.GetWord(0x05)));
-        item->set_level(GetLevel(table.GetWord(0x05)));
+        item->set_location(GetLocation(table.Word(0x05)));
+        item->set_status(GetStatus(table.Word(0x05)));
+        item->set_mode(GetMode(table.Word(0x05)));
+        item->set_level(GetLevel(table.Word(0x05)));
 
-        item->set_maximum_size(BitSet<uint16_t>(table.GetWord(0x07)).Range(0, 14));
-        item->set_current_size(BitSet<uint16_t>(table.GetWord(0x09)).Range(0, 14));
-        item->set_supported_sram_types(GetSupportedSRAMTypes(table.GetWord(0x0B)));
-        item->set_current_sram_type(GetCurrentSRAMType(table.GetWord(0x0D)));
+        item->set_maximum_size(BitSet<uint16_t>(table.Word(0x07)).Range(0, 14));
+        item->set_current_size(BitSet<uint16_t>(table.Word(0x09)).Range(0, 14));
+        item->set_supported_sram_types(GetSupportedSRAMTypes(table.Word(0x0B)));
+        item->set_current_sram_type(GetCurrentSRAMType(table.Word(0x0D)));
 
-        if (table.GetTableLength() >= 0x13)
+        if (table.Length() >= 0x13)
         {
-            item->set_speed(table.GetByte(0x0F));
-            item->set_error_correction_type(GetErrorCorrectionType(table.GetByte(0x10)));
-            item->set_type(GetType(table.GetByte(0x11)));
-            item->set_associativity(GetAssociativity(table.GetByte(0x12)));
+            item->set_speed(table.Byte(0x0F));
+            item->set_error_correction_type(GetErrorCorrectionType(table.Byte(0x10)));
+            item->set_type(GetType(table.Byte(0x11)));
+            item->set_associativity(GetAssociativity(table.Byte(0x12)));
         }
     }
 

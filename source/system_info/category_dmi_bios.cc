@@ -18,15 +18,15 @@ namespace {
 
 uint64_t GetSize(const SMBios::Table& table)
 {
-    const uint8_t old_size = table.GetByte(0x09);
+    const uint8_t old_size = table.Byte(0x09);
     if (old_size != 0xFF)
         return (old_size + 1) << 6;
 
-    BitSet<uint16_t> bitfield(table.GetWord(0x18));
+    BitSet<uint16_t> bitfield(table.Word(0x18));
 
     uint16_t size = 16; // By default 16 MBytes.
 
-    if (table.GetTableLength() >= 0x1A)
+    if (table.Length() >= 0x1A)
         size = bitfield.Range(0, 13);
 
     switch (bitfield.Range(14, 15))
@@ -44,8 +44,8 @@ uint64_t GetSize(const SMBios::Table& table)
 
 std::string GetBiosRevision(const SMBios::Table& table)
 {
-    const uint8_t major = table.GetByte(0x14);
-    const uint8_t minor = table.GetByte(0x15);
+    const uint8_t major = table.Byte(0x14);
+    const uint8_t minor = table.Byte(0x15);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -55,8 +55,8 @@ std::string GetBiosRevision(const SMBios::Table& table)
 
 std::string GetFirmwareRevision(const SMBios::Table& table)
 {
-    const uint8_t major = table.GetByte(0x16);
-    const uint8_t minor = table.GetByte(0x17);
+    const uint8_t major = table.Byte(0x16);
+    const uint8_t minor = table.Byte(0x17);
 
     if (major != 0xFF && minor != 0xFF)
         return StringPrintf("%u.%u", major, minor);
@@ -66,7 +66,7 @@ std::string GetFirmwareRevision(const SMBios::Table& table)
 
 std::string GetAddress(const SMBios::Table& table)
 {
-    const uint16_t address = table.GetWord(0x06);
+    const uint16_t address = table.Word(0x06);
 
     if (address != 0)
         return StringPrintf("%04X0h", address);
@@ -76,7 +76,7 @@ std::string GetAddress(const SMBios::Table& table)
 
 int GetRuntimeSize(const SMBios::Table& table)
 {
-    const uint16_t address = table.GetWord(0x06);
+    const uint16_t address = table.Word(0x06);
     if (address == 0)
         return 0;
 
@@ -225,9 +225,9 @@ std::string CategoryDmiBios::Serialize()
     SMBios::Table table = table_enumerator.GetTable();
     proto::DmiBios message;
 
-    message.set_manufacturer(table.GetString(0x04));
-    message.set_version(table.GetString(0x05));
-    message.set_date(table.GetString(0x08));
+    message.set_manufacturer(table.String(0x04));
+    message.set_version(table.String(0x05));
+    message.set_date(table.String(0x08));
     message.set_size(GetSize(table));
     message.set_bios_revision(GetBiosRevision(table));
     message.set_firmware_revision(GetFirmwareRevision(table));
@@ -236,7 +236,7 @@ std::string CategoryDmiBios::Serialize()
 
     proto::DmiBios::Characteristics* item = message.mutable_characteristics();
 
-    BitSet<uint64_t> characteristics = table.GetQword(0x0A);
+    BitSet<uint64_t> characteristics = table.Qword(0x0A);
     if (!characteristics.Test(3))
     {
         item->set_has_isa(characteristics.Test(4));
@@ -269,9 +269,9 @@ std::string CategoryDmiBios::Serialize()
         item->set_has_nec_pc98(characteristics.Test(31));
     }
 
-    if (table.GetTableLength() >= 0x13)
+    if (table.Length() >= 0x13)
     {
-        BitSet<uint8_t> characteristics1 = table.GetByte(0x12);
+        BitSet<uint8_t> characteristics1 = table.Byte(0x12);
 
         item->set_has_acpi(characteristics1.Test(0));
         item->set_has_usb_legacy(characteristics1.Test(1));
@@ -283,9 +283,9 @@ std::string CategoryDmiBios::Serialize()
         item->set_has_smart_battery(characteristics1.Test(7));
     }
 
-    if (table.GetTableLength() >= 0x14)
+    if (table.Length() >= 0x14)
     {
-        BitSet<uint8_t> characteristics2 = table.GetByte(0x13);
+        BitSet<uint8_t> characteristics2 = table.Byte(0x13);
 
         item->set_has_bios_boot_specification(characteristics2.Test(0));
         item->set_has_key_init_network_boot(characteristics2.Test(1));

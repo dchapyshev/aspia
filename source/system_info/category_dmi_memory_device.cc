@@ -215,11 +215,11 @@ proto::DmiMemoryDevice::FormFactor GetFormFactor(uint8_t value)
 
 uint64_t GetSize(const SMBios::Table& table)
 {
-    uint16_t size = table.GetWord(0x0C);
+    uint16_t size = table.Word(0x0C);
 
-    if (table.GetTableLength() >= 0x20 && size == 0x7FFF)
+    if (table.Length() >= 0x20 && size == 0x7FFF)
     {
-        uint32_t ext_size = table.GetDword(0x1C) & 0x7FFFFFFFUL;
+        uint32_t ext_size = table.Dword(0x1C) & 0x7FFFFFFFUL;
 
         if (ext_size & 0x3FFUL)
         {
@@ -344,28 +344,28 @@ std::string CategoryDmiMemoryDevice::Serialize()
          table_enumerator.Advance())
     {
         SMBios::Table table = table_enumerator.GetTable();
-        if (table.GetTableLength() < 0x15)
+        if (table.Length() < 0x15)
             continue;
 
         proto::DmiMemoryDevice::Item* item = message.add_item();
 
-        item->set_total_width(table.GetWord(0x08));
-        item->set_data_width(table.GetWord(0x0A));
+        item->set_total_width(table.Word(0x08));
+        item->set_data_width(table.Word(0x0A));
         item->set_size(GetSize(table));
 
-        item->set_form_factor(GetFormFactor(table.GetByte(0x0E)));
-        item->set_device_locator(table.GetString(0x10));
-        item->set_bank(table.GetString(0x11));
-        item->set_type(GetType(table.GetByte(0x12)));
+        item->set_form_factor(GetFormFactor(table.Byte(0x0E)));
+        item->set_device_locator(table.String(0x10));
+        item->set_bank(table.String(0x11));
+        item->set_type(GetType(table.Byte(0x12)));
 
-        if (table.GetTableLength() >= 0x17)
-            item->set_speed(table.GetWord(0x15));
+        if (table.Length() >= 0x17)
+            item->set_speed(table.Word(0x15));
 
-        if (table.GetTableLength() >= 0x1B)
+        if (table.Length() >= 0x1B)
         {
-            item->set_serial_number(table.GetString(0x18));
-            item->set_manufactorer(table.GetString(0x17));
-            item->set_part_number(table.GetString(0x1A));
+            item->set_serial_number(table.String(0x18));
+            item->set_manufactorer(table.String(0x17));
+            item->set_part_number(table.String(0x1A));
         }
     }
 

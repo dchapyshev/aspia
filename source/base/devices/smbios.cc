@@ -170,34 +170,34 @@ SMBios::Table& SMBios::Table::operator=(const Table& other)
     return *this;
 }
 
-uint8_t SMBios::Table::GetByte(uint8_t offset) const
+uint8_t SMBios::Table::Byte(uint8_t offset) const
 {
     return table_[offset];
 }
 
-uint16_t SMBios::Table::GetWord(uint8_t offset) const
+uint16_t SMBios::Table::Word(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
+    return *reinterpret_cast<const uint16_t*>(Pointer(offset));
 }
 
-uint32_t SMBios::Table::GetDword(uint8_t offset) const
+uint32_t SMBios::Table::Dword(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
+    return *reinterpret_cast<const uint32_t*>(Pointer(offset));
 }
 
-uint64_t SMBios::Table::GetQword(uint8_t offset) const
+uint64_t SMBios::Table::Qword(uint8_t offset) const
 {
-    return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
+    return *reinterpret_cast<const uint64_t*>(Pointer(offset));
 }
 
-std::string SMBios::Table::GetString(uint8_t offset) const
+std::string SMBios::Table::String(uint8_t offset) const
 {
-    uint8_t handle = GetByte(offset);
+    uint8_t handle = Byte(offset);
     if (!handle)
         return std::string();
 
     char* string = reinterpret_cast<char*>(
-        const_cast<uint8_t*>(GetPointer(0))) + GetTableLength();
+        const_cast<uint8_t*>(Pointer(0))) + Length();
 
     while (handle > 1 && *string)
     {
@@ -214,14 +214,14 @@ std::string SMBios::Table::GetString(uint8_t offset) const
     return output;
 }
 
-const uint8_t* SMBios::Table::GetPointer(uint8_t offset) const
+const uint8_t* SMBios::Table::Pointer(uint8_t offset) const
 {
     return &table_[offset];
 }
 
-uint8_t SMBios::Table::GetTableLength() const
+uint8_t SMBios::Table::Length() const
 {
-    return GetByte(0x01);
+    return Byte(0x01);
 }
 
 } // namespace aspia

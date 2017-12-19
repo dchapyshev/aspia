@@ -47,10 +47,10 @@ const char* WakeupTypeToString(proto::DmiSystem::WakeupType value)
 
 std::string GetUUID(const SMBios::Table& table, uint8_t major_version, uint8_t minor_version)
 {
-    if (table.GetTableLength() < 0x19)
+    if (table.Length() < 0x19)
         return std::string();
 
-    const uint8_t* ptr = table.GetPointer(0x08);
+    const uint8_t* ptr = table.Pointer(0x08);
 
     bool only_0xFF = true;
     bool only_0x00 = true;
@@ -78,10 +78,10 @@ std::string GetUUID(const SMBios::Table& table, uint8_t major_version, uint8_t m
 
 proto::DmiSystem::WakeupType GetWakeupType(const SMBios::Table& table)
 {
-    if (table.GetTableLength() < 0x19)
+    if (table.Length() < 0x19)
         return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
 
-    switch (table.GetByte(0x18))
+    switch (table.Byte(0x18))
     {
         case 0x01: return proto::DmiSystem::WAKEUP_TYPE_OTHER;
         case 0x02: return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
@@ -97,18 +97,18 @@ proto::DmiSystem::WakeupType GetWakeupType(const SMBios::Table& table)
 
 std::string GetSKUNumber(const SMBios::Table& table)
 {
-    if (table.GetTableLength() < 0x1B)
+    if (table.Length() < 0x1B)
         return std::string();
 
-    return table.GetString(0x19);
+    return table.String(0x19);
 }
 
 std::string GetFamily(const SMBios::Table& table)
 {
-    if (table.GetTableLength() < 0x1B)
+    if (table.Length() < 0x1B)
         return std::string();
 
-    return table.GetString(0x1A);
+    return table.String(0x1A);
 }
 
 } // namespace
@@ -182,10 +182,10 @@ std::string CategoryDmiSystem::Serialize()
     SMBios::Table table = table_enumerator.GetTable();
     proto::DmiSystem message;
 
-    message.set_manufacturer(table.GetString(0x04));
-    message.set_product_name(table.GetString(0x05));
-    message.set_version(table.GetString(0x06));
-    message.set_serial_number(table.GetString(0x07));
+    message.set_manufacturer(table.String(0x04));
+    message.set_product_name(table.String(0x05));
+    message.set_version(table.String(0x06));
+    message.set_serial_number(table.String(0x07));
     message.set_uuid(GetUUID(table, smbios->GetMajorVersion(), smbios->GetMinorVersion()));
     message.set_wakeup_type(GetWakeupType(table));
     message.set_sku_number(GetSKUNumber(table));

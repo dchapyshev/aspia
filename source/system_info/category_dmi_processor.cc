@@ -886,23 +886,23 @@ const char* UpgradeToString(proto::DmiProcessor::Upgrade value)
 proto::DmiProcessor::Family GetFamily(
     const SMBios::Table& table, uint8_t major_version, uint8_t minor_version)
 {
-    uint8_t length = table.GetTableLength();
-    uint16_t value = table.GetByte(0x06);
+    uint8_t length = table.Length();
+    uint16_t value = table.Byte(0x06);
 
     if (major_version == 2 && minor_version == 0 && value == 0x30)
     {
-        std::string manufacturer = table.GetString(0x07);
+        std::string manufacturer = table.String(0x07);
 
         if (manufacturer.find("Intel") != std::string::npos)
             return proto::DmiProcessor::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
     }
 
     if (value == 0xFE && length >= 0x2A)
-        value = table.GetWord(0x28);
+        value = table.Word(0x28);
 
     if (value == 0xBE)
     {
-        std::string manufacturer = table.GetString(0x07);
+        std::string manufacturer = table.String(0x07);
 
         if (manufacturer.find("Intel") != std::string::npos)
             return proto::DmiProcessor::FAMILY_INTEL_CORE_2_FAMILY;
@@ -1398,36 +1398,36 @@ std::string CategoryDmiProcessor::Serialize()
     {
         SMBios::Table table = table_enumerator.GetTable();
 
-        if (table.GetTableLength() < 0x1A)
+        if (table.Length() < 0x1A)
             continue;
 
         proto::DmiProcessor::Item* item = message.add_item();
 
-        item->set_manufacturer(table.GetString(0x07));
-        item->set_version(table.GetString(0x10));
+        item->set_manufacturer(table.String(0x07));
+        item->set_version(table.String(0x10));
         item->set_family(GetFamily(table, smbios->GetMajorVersion(), smbios->GetMinorVersion()));
-        item->set_type(GetType(table.GetByte(0x05)));
-        item->set_status(GetStatus(table.GetByte(0x18)));
-        item->set_socket(table.GetString(0x04));
-        item->set_upgrade(GetUpgrade(table.GetByte(0x19)));
-        item->set_external_clock(table.GetWord(0x12));
-        item->set_current_speed(table.GetWord(0x16));
-        item->set_maximum_speed(table.GetWord(0x14));
-        item->set_voltage(GetVoltage(table.GetByte(0x11)));
+        item->set_type(GetType(table.Byte(0x05)));
+        item->set_status(GetStatus(table.Byte(0x18)));
+        item->set_socket(table.String(0x04));
+        item->set_upgrade(GetUpgrade(table.Byte(0x19)));
+        item->set_external_clock(table.Word(0x12));
+        item->set_current_speed(table.Word(0x16));
+        item->set_maximum_speed(table.Word(0x14));
+        item->set_voltage(GetVoltage(table.Byte(0x11)));
 
-        if (table.GetTableLength() >= 0x23)
+        if (table.Length() >= 0x23)
         {
-            item->set_serial_number(table.GetString(0x20));
-            item->set_asset_tag(table.GetString(0x21));
-            item->set_part_number(table.GetString(0x22));
+            item->set_serial_number(table.String(0x20));
+            item->set_asset_tag(table.String(0x21));
+            item->set_part_number(table.String(0x22));
         }
 
-        if (table.GetTableLength() >= 0x28)
+        if (table.Length() >= 0x28)
         {
-            item->set_core_count(table.GetByte(0x23));
-            item->set_core_enabled(table.GetByte(0x24));
-            item->set_thread_count(table.GetByte(0x25));
-            item->set_characteristics(GetCharacteristics(table.GetWord(0x26)));
+            item->set_core_count(table.Byte(0x23));
+            item->set_core_enabled(table.Byte(0x24));
+            item->set_thread_count(table.Byte(0x25));
+            item->set_characteristics(GetCharacteristics(table.Word(0x26)));
         }
     }
 

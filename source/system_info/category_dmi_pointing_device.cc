@@ -182,14 +182,14 @@ std::string CategoryDmiPointingDevice::Serialize()
          table_enumerator.Advance())
     {
         SMBios::Table table = table_enumerator.GetTable();
-        if (table.GetTableLength() < 0x07)
+        if (table.Length() < 0x07)
             continue;
 
         proto::DmiPointingDevice::Item* item = message.add_item();
 
-        item->set_device_type(GetDeviceType(table.GetByte(0x04)));
-        item->set_device_interface(GetInterface(table.GetByte(0x05)));
-        item->set_button_count(table.GetByte(0x06));
+        item->set_device_type(GetDeviceType(table.Byte(0x04)));
+        item->set_device_interface(GetInterface(table.Byte(0x05)));
+        item->set_button_count(table.Byte(0x06));
     }
 
     return message.SerializeAsString();

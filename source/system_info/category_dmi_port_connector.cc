@@ -430,16 +430,16 @@ std::string CategoryDmiPortConnector::Serialize()
          table_enumerator.Advance())
     {
         SMBios::Table table = table_enumerator.GetTable();
-        if (table.GetTableLength() < 0x09)
+        if (table.Length() < 0x09)
             continue;
 
         proto::DmiPortConnector::Item* item = message.add_item();
 
-        item->set_internal_designation(table.GetString(0x04));
-        item->set_external_designation(table.GetString(0x06));
-        item->set_type(GetType(table.GetByte(0x08)));
-        item->set_internal_connector_type(ConnectorType(table.GetByte(0x05)));
-        item->set_external_connector_type(ConnectorType(table.GetByte(0x07)));
+        item->set_internal_designation(table.String(0x04));
+        item->set_external_designation(table.String(0x06));
+        item->set_type(GetType(table.Byte(0x08)));
+        item->set_internal_connector_type(ConnectorType(table.Byte(0x05)));
+        item->set_external_connector_type(ConnectorType(table.Byte(0x07)));
     }
 
     return message.SerializeAsString();

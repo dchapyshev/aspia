@@ -162,33 +162,33 @@ std::string CategoryDmiPortableBattery::Serialize()
          table_enumerator.Advance())
     {
         SMBios::Table table = table_enumerator.GetTable();
-        if (table.GetTableLength() < 0x10)
+        if (table.Length() < 0x10)
             continue;
 
         proto::DmiPortableBattery::Item* item = message.add_item();
 
-        item->set_location(table.GetString(0x04));
-        item->set_manufacturer(table.GetString(0x05));
-        item->set_manufacture_date(table.GetString(0x06));
-        item->set_serial_number(table.GetString(0x07));
-        item->set_device_name(table.GetString(0x08));
-        item->set_chemistry(GetChemistry(table.GetByte(0x09)));
+        item->set_location(table.String(0x04));
+        item->set_manufacturer(table.String(0x05));
+        item->set_manufacture_date(table.String(0x06));
+        item->set_serial_number(table.String(0x07));
+        item->set_device_name(table.String(0x08));
+        item->set_chemistry(GetChemistry(table.Byte(0x09)));
 
-        if (table.GetTableLength() < 0x16)
-            item->set_design_capacity(table.GetWord(0x0A));
+        if (table.Length() < 0x16)
+            item->set_design_capacity(table.Word(0x0A));
         else
-            item->set_design_capacity(table.GetWord(0x0A) + table.GetByte(0x15));
+            item->set_design_capacity(table.Word(0x0A) + table.Byte(0x15));
 
-        item->set_design_voltage(table.GetWord(0x0C));
+        item->set_design_voltage(table.Word(0x0C));
 
-        item->set_sbds_version_number(table.GetString(0x0E));
-        item->set_max_error_in_battery_data(table.GetByte(0x0F));
+        item->set_sbds_version_number(table.String(0x0E));
+        item->set_max_error_in_battery_data(table.Byte(0x0F));
 
-        if (table.GetTableLength() >= 0x1A)
+        if (table.Length() >= 0x1A)
         {
-            item->set_sbds_serial_number(StringPrintf("%04X", table.GetWord(0x10)));
+            item->set_sbds_serial_number(StringPrintf("%04X", table.Word(0x10)));
 
-            BitSet<uint16_t> date = table.GetWord(0x12);
+            BitSet<uint16_t> date = table.Word(0x12);
 
             item->set_sbds_manufacture_date(
                 StringPrintf("%02u-%02u-%u",
@@ -196,7 +196,7 @@ std::string CategoryDmiPortableBattery::Serialize()
                              date.Range(5, 8), // Month.
                              1980U + date.Range(9, 15))); // Year.
 
-            item->set_sbds_device_chemistry(table.GetString(0x14));
+            item->set_sbds_device_chemistry(table.String(0x14));
         }
     }
 

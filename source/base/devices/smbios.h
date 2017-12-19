@@ -21,6 +21,8 @@ class SMBios
     struct Data;
 
 public:
+    class TableEnumerator;
+
     static std::unique_ptr<SMBios> Create(std::unique_ptr<uint8_t[]> data, size_t data_size);
 
     uint8_t GetMajorVersion() const;
@@ -46,19 +48,20 @@ public:
     {
     public:
         Table(const Table& other);
-        Table(const uint8_t* table);
-
         Table& operator=(const Table& other);
 
-        uint8_t GetByte(uint8_t offset) const;
-        uint16_t GetWord(uint8_t offset) const;
-        uint32_t GetDword(uint8_t offset) const;
-        uint64_t GetQword(uint8_t offset) const;
-        std::string GetString(uint8_t offset) const;
-        const uint8_t* GetPointer(uint8_t offset) const;
-        uint8_t GetTableLength() const;
+        uint8_t Byte(uint8_t offset) const;
+        uint16_t Word(uint8_t offset) const;
+        uint32_t Dword(uint8_t offset) const;
+        uint64_t Qword(uint8_t offset) const;
+        std::string String(uint8_t offset) const;
+        const uint8_t* Pointer(uint8_t offset) const;
+        uint8_t Length() const;
 
     private:
+        friend class TableEnumerator;
+        Table(const uint8_t* table);
+
         const uint8_t* table_;
     };
 

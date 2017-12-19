@@ -7,7 +7,6 @@
 
 #include "base/devices/smbios_reader.h"
 #include "base/strings/string_printf.h"
-#include "base/logging.h"
 #include "system_info/category_dmi_chassis.h"
 #include "system_info/category_dmi_chassis.pb.h"
 #include "ui/resource.h"
@@ -156,9 +155,7 @@ const char* SecurityStatusToString(proto::DmiChassis::SecurityStatus status)
 
 proto::DmiChassis::Type GetType(const SMBios::Table& table)
 {
-    DCHECK(table.GetTableLength() >= 0x09);
-
-    switch (table.GetByte(0x05) & 0x7F)
+    switch (table.Byte(0x05) & 0x7F)
     {
         case 0x03: return proto::DmiChassis::TYPE_DESKTOP;
         case 0x04: return proto::DmiChassis::TYPE_LOW_PROFILE_DESKTOP;
@@ -298,29 +295,29 @@ std::string CategoryDmiChassis::Serialize()
     {
         SMBios::Table table = table_enumerator.GetTable();
 
-        if (table.GetTableLength() < 0x09)
+        if (table.Length() < 0x09)
             continue;
 
         proto::DmiChassis::Item* item = message.add_item();
 
-        item->set_manufacturer(table.GetString(0x04));
-        item->set_version(table.GetString(0x06));
-        item->set_serial_number(table.GetString(0x07));
-        item->set_asset_tag(table.GetString(0x08));
+        item->set_manufacturer(table.String(0x04));
+        item->set_version(table.String(0x06));
+        item->set_serial_number(table.String(0x07));
+        item->set_asset_tag(table.String(0x08));
         item->set_type(GetType(table));
 
-        if (table.GetTableLength() >= 0x0D)
+        if (table.Length() >= 0x0D)
         {
-            item->set_os_load_status(GetStatus(table.GetByte(0x09)));
-            item->set_power_source_status(GetStatus(table.GetByte(0x0A)));
-            item->set_temparature_status(GetStatus(table.GetByte(0x0B)));
-            item->set_security_status(GetSecurityStatus(table.GetByte(0x0C)));
+            item->set_os_load_status(GetStatus(table.Byte(0x09)));
+            item->set_power_source_status(GetStatus(table.Byte(0x0A)));
+            item->set_temparature_status(GetStatus(table.Byte(0x0B)));
+            item->set_security_status(GetSecurityStatus(table.Byte(0x0C)));
         }
 
-        if (table.GetTableLength() >= 0x13)
+        if (table.Length() >= 0x13)
         {
-            item->set_height(table.GetByte(0x11));
-            item->set_number_of_power_cords(table.GetByte(0x12));
+            item->set_height(table.Byte(0x11));
+            item->set_number_of_power_cords(table.Byte(0x12));
         }
     }
 

@@ -63,10 +63,10 @@ const char* BoardTypeToString(proto::DmiBaseboard::BoardType type)
 
 proto::DmiBaseboard::BoardType GetBoardType(const SMBios::Table& table)
 {
-    if (table.GetTableLength() < 0x0E)
+    if (table.Length() < 0x0E)
         return proto::DmiBaseboard::BOARD_TYPE_UNKNOWN;
 
-    switch (table.GetByte(0x0D))
+    switch (table.Byte(0x0D))
     {
         case 0x02: return proto::DmiBaseboard::BOARD_TYPE_OTHER;
         case 0x03: return proto::DmiBaseboard::BOARD_TYPE_SERVER_BLADE;
@@ -178,23 +178,23 @@ std::string CategoryDmiBaseboard::Serialize()
         SMBios::Table table = table_enumerator.GetTable();
         proto::DmiBaseboard::Item* item = message.add_item();
 
-        item->set_manufacturer(table.GetString(0x04));
-        item->set_product_name(table.GetString(0x05));
-        item->set_version(table.GetString(0x06));
-        item->set_serial_number(table.GetString(0x07));
+        item->set_manufacturer(table.String(0x04));
+        item->set_product_name(table.String(0x05));
+        item->set_version(table.String(0x06));
+        item->set_serial_number(table.String(0x07));
 
-        if (table.GetTableLength() >= 0x09)
-            item->set_asset_tag(table.GetString(0x08));
+        if (table.Length() >= 0x09)
+            item->set_asset_tag(table.String(0x08));
 
-        if (table.GetTableLength() >= 0x0E)
-            item->set_location_in_chassis(table.GetString(0x0A));
+        if (table.Length() >= 0x0E)
+            item->set_location_in_chassis(table.String(0x0A));
 
         item->set_type(GetBoardType(table));
 
-        if (table.GetTableLength() >= 0x0A)
+        if (table.Length() >= 0x0A)
         {
             proto::DmiBaseboard::Features* features = item->mutable_features();
-            BitSet<uint8_t> flags = table.GetByte(0x09);
+            BitSet<uint8_t> flags = table.Byte(0x09);
 
             features->set_is_hosting_board(flags.Test(0));
             features->set_is_requires_at_least_one_daughter_board(flags.Test(1));
