@@ -70,6 +70,7 @@ public:
         TABLE_TYPE_SYSTEM    = 0x01,
         TABLE_TYPE_BASEBOARD = 0x02,
         TABLE_TYPE_CHASSIS   = 0x03,
+        TABLE_TYPE_PROCESSOR = 0x04,
         TABLE_TYPE_CACHE     = 0x07
     };
 
@@ -114,37 +115,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class ProcessorTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x04 };
-
-        std::string GetManufacturer() const;
-        std::string GetVersion() const;
-        proto::DmiProcessors::Family GetFamily() const;
-        proto::DmiProcessors::Type GetType() const;
-        proto::DmiProcessors::Status GetStatus() const;
-        std::string GetSocket() const;
-        proto::DmiProcessors::Upgrade GetUpgrade() const;
-        int GetExternalClock() const;
-        int GetCurrentSpeed() const;
-        int GetMaximumSpeed() const;
-        double GetVoltage() const;
-        std::string GetSerialNumber() const;
-        std::string GetAssetTag() const;
-        std::string GetPartNumber() const;
-        int GetCoreCount() const;
-        int GetCoreEnabled() const;
-        int GetThreadCount() const;
-        uint32_t GetCharacteristics() const;
-
-    private:
-        friend class TableEnumerator<ProcessorTable>;
-        explicit ProcessorTable(const TableReader& reader);
-
-        TableReader reader_;
     };
 
     class PortConnectorTable
