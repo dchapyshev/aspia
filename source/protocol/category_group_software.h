@@ -81,22 +81,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryDrivers);
 };
 
-class CategoryProcesses : public CategoryInfo
-{
-public:
-    CategoryProcesses() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryProcesses);
-};
-
 class CategoryLicenses : public CategoryInfo
 {
 public:

@@ -17,6 +17,7 @@
 #include "system_info/category_monitor.h"
 #include "system_info/category_power_options.h"
 #include "system_info/category_printer.h"
+#include "system_info/category_process.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_video_adapter.h"
@@ -124,7 +125,7 @@ CategoryList CreateCategoryTree()
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryUpdates>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryServices>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryDrivers>());
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryProcesses>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryProcess>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryLicenses>());
 
     std::unique_ptr<CategoryGroup> network = std::make_unique<CategoryGroupNetwork>();
@@ -207,7 +208,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryUpdates>());
     emplace_back(std::make_unique<CategoryServices>());
     emplace_back(std::make_unique<CategoryDrivers>());
-    emplace_back(std::make_unique<CategoryProcesses>());
+    emplace_back(std::make_unique<CategoryProcess>());
     emplace_back(std::make_unique<CategoryLicenses>());
 
     emplace_back(std::make_unique<CategoryNetworkCards>());
