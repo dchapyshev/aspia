@@ -15,6 +15,7 @@
 #include "system_info/category_cpu.h"
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
+#include "system_info/category_optical_drive.h"
 #include "system_info/category_power_options.h"
 #include "system_info/category_printer.h"
 #include "system_info/category_process.h"
@@ -99,8 +100,8 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> storage = std::make_unique<CategoryGroupStorage>();
 
-    storage->mutable_child_list()->emplace_back(std::make_unique<CategoryLogicalDrives>());
-    storage->mutable_child_list()->emplace_back(std::make_unique<CategoryOpticalDrives>());
+    storage->mutable_child_list()->emplace_back(std::make_unique<CategoryLogicalDrive>());
+    storage->mutable_child_list()->emplace_back(std::make_unique<CategoryOpticalDrive>());
     storage->mutable_child_list()->emplace_back(std::make_unique<CategoryATA>());
     storage->mutable_child_list()->emplace_back(std::make_unique<CategorySMART>());
 
@@ -191,8 +192,8 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryDmiPointingDevices>());
     emplace_back(std::make_unique<CategoryDmiPortableBattery>());
 
-    emplace_back(std::make_unique<CategoryLogicalDrives>());
-    emplace_back(std::make_unique<CategoryOpticalDrives>());
+    emplace_back(std::make_unique<CategoryLogicalDrive>());
+    emplace_back(std::make_unique<CategoryOpticalDrive>());
     emplace_back(std::make_unique<CategoryATA>());
     emplace_back(std::make_unique<CategorySMART>());
 

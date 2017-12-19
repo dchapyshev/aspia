@@ -200,6 +200,7 @@
     <ClCompile Include="system_info\category_memory.pb.cc" />
     <ClCompile Include="system_info\category_monitor.cc" />
     <ClCompile Include="system_info\category_monitor.pb.cc" />
+    <ClCompile Include="system_info\category_optical_drive.cc" />
     <ClCompile Include="system_info\category_power_options.cc" />
     <ClCompile Include="system_info\category_power_options.pb.cc" />
     <ClCompile Include="system_info\category_printer.cc" />
@@ -464,6 +465,7 @@
     <ClInclude Include="system_info\category_memory.pb.h" />
     <ClInclude Include="system_info\category_monitor.h" />
     <ClInclude Include="system_info\category_monitor.pb.h" />
+    <ClInclude Include="system_info\category_optical_drive.h" />
     <ClInclude Include="system_info\category_power_options.h" />
     <ClInclude Include="system_info\category_power_options.pb.h" />
     <ClInclude Include="system_info\category_printer.h" />
@@ -543,6 +545,7 @@
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
+    <None Include="system_info\category_optical_drive.proto" />
     <None Include="system_info\category_power_options.proto" />
     <None Include="system_info\category_printer.proto" />
     <None Include="system_info\category_process.proto" />

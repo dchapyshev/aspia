@@ -257,22 +257,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupDMI);
 };
 
-class CategoryOpticalDrives : public CategoryInfo
-{
-public:
-    CategoryOpticalDrives() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryOpticalDrives);
-};
-
 class CategoryGroupStorage : public CategoryGroup
 {
 public:

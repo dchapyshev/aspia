@@ -41,28 +41,28 @@ const char* DriveTypeToString(proto::LogicalDrive::DriveType value)
 
 } // namespace
 
-CategoryLogicalDrives::CategoryLogicalDrives()
+CategoryLogicalDrive::CategoryLogicalDrive()
     : CategoryInfo(Type::INFO_LIST)
 {
     // Nothing
 }
 
-const char* CategoryLogicalDrives::Name() const
+const char* CategoryLogicalDrive::Name() const
 {
     return "Logical Drives";
 }
 
-Category::IconId CategoryLogicalDrives::Icon() const
+Category::IconId CategoryLogicalDrive::Icon() const
 {
     return IDI_DRIVE;
 }
 
-const char* CategoryLogicalDrives::Guid() const
+const char* CategoryLogicalDrive::Guid() const
 {
     return "{8F6D959F-C9E1-41E4-9D97-A12F650B489F}";
 }
 
-void CategoryLogicalDrives::Parse(Table& table, const std::string& data)
+void CategoryLogicalDrive::Parse(Table& table, const std::string& data)
 {
     proto::LogicalDrive message;
 
@@ -103,7 +103,7 @@ void CategoryLogicalDrives::Parse(Table& table, const std::string& data)
     }
 }
 
-std::string CategoryLogicalDrives::Serialize()
+std::string CategoryLogicalDrive::Serialize()
 {
     proto::LogicalDrive message;
 

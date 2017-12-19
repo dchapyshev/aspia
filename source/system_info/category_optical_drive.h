@@ -1,21 +1,21 @@
 //
 // PROJECT:         Aspia
-// FILE:            system_info/category_logical_drive.h
+// FILE:            system_info/category_optical_drive.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_LOGICAL_DRIVE_H
-#define _ASPIA_SYSTEM_INFO__CATEGORY_LOGICAL_DRIVE_H
+#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_OPTICAL_DRIVE_H
+#define _ASPIA_SYSTEM_INFO__CATEGORY_OPTICAL_DRIVE_H
 
 #include "system_info/category.h"
 
 namespace aspia {
 
-class CategoryLogicalDrive : public CategoryInfo
+class CategoryOpticalDrive : public CategoryInfo
 {
 public:
-    CategoryLogicalDrive();
+    CategoryOpticalDrive();
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -25,9 +25,9 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryLogicalDrive);
+    DISALLOW_COPY_AND_ASSIGN(CategoryOpticalDrive);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__CATEGORY_LOGICAL_DRIVE_H
+#endif // _ASPIA_SYSTEM_INFO__CATEGORY_OPTICAL_DRIVE_H

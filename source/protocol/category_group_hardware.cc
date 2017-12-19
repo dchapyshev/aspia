@@ -3344,36 +3344,6 @@ Category::IconId CategoryGroupDMI::Icon() const
 }
 
 //
-// CategoryOpticalDrives
-//
-
-const char* CategoryOpticalDrives::Name() const
-{
-    return "Optical Drives";
-}
-
-Category::IconId CategoryOpticalDrives::Icon() const
-{
-    return IDI_DRIVE_DISK;
-}
-
-const char* CategoryOpticalDrives::Guid() const
-{
-    return "{68E028FE-3DA6-4BAF-9E18-CDB828372860}";
-}
-
-void CategoryOpticalDrives::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryOpticalDrives::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
 // CategoryGroupStorage
 //
 
