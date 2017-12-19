@@ -198,6 +198,8 @@
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
     <ClCompile Include="system_info\category_memory.pb.cc" />
+    <ClCompile Include="system_info\category_monitor.cc" />
+    <ClCompile Include="system_info\category_monitor.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
     <ClCompile Include="system_info\category_smart.pb.cc" />
     <ClCompile Include="system_info\category_video_adapter.cc" />
@@ -452,6 +454,8 @@
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
     <ClInclude Include="system_info\category_memory.pb.h" />
+    <ClInclude Include="system_info\category_monitor.h" />
+    <ClInclude Include="system_info\category_monitor.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
     <ClInclude Include="system_info\category_smart.pb.h" />
     <ClInclude Include="system_info\category_video_adapter.h" />
@@ -522,6 +526,7 @@
     <None Include="system_info\category_cpu.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
+    <None Include="system_info\category_monitor.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_video_adapter.proto" />
   </ItemGroup>

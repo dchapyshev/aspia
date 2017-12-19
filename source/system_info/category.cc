@@ -14,6 +14,7 @@
 #include "system_info/category_ata.h"
 #include "system_info/category_cpu.h"
 #include "system_info/category_memory.h"
+#include "system_info/category_monitor.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_video_adapter.h"

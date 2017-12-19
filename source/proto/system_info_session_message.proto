@@ -1018,57 +1018,6 @@ message DmiPortableBattery
     repeated Item item = 1;
 }
 
-message Monitors
-{
-    enum InputSignalType
-    {
-        INPUT_SIGNAL_TYPE_UNKNOWN = 0;
-        INPUT_SIGNAL_TYPE_ANALOG  = 1;
-        INPUT_SIGNAL_TYPE_DIGITAL = 2;
-    }
-
-    message Timing
-    {
-        int32 width     = 1;
-        int32 height    = 2;
-        int32 frequency = 3;
-    }
-
-    message Item
-    {
-        string system_name                   = 1;
-        string monitor_name                  = 2;
-        string manufacturer_name             = 3;
-        string monitor_id                    = 4;
-        string serial_number                 = 5;
-        int32 edid_version                   = 6;
-        int32 edid_revision                  = 7;
-        int32 week_of_manufacture            = 8;
-        int32 year_of_manufacture            = 9;
-        int32 max_horizontal_image_size      = 10;
-        int32 max_vertical_image_size        = 11;
-        int32 horizontal_resolution          = 12;
-        int32 vertical_resoulution           = 13;
-        double gamma                         = 14;
-        int32 min_horizontal_rate            = 15;
-        int32 max_horizontal_rate            = 16;
-        int32 min_vertical_rate              = 17;
-        int32 max_vertical_rate              = 18;
-        double pixel_clock                   = 19;
-        int32 max_pixel_clock                = 20;
-        InputSignalType input_signal_type    = 21;
-        bool default_gtf_supported           = 22;
-        bool suspend_supported               = 23;
-        bool standby_supported               = 24;
-        bool active_off_supported            = 25;
-        bool preferred_timing_mode_supported = 26;
-        bool srgb_supported                  = 27;
-        repeated Timing timings              = 28;
-    }
-
-    repeated Item item = 1;
-}
-
 message PowerOptions
 {
     enum PowerSource

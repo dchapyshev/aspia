@@ -285,24 +285,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupStorage);
 };
 
-class CategoryMonitor : public CategoryInfo
-{
-public:
-    CategoryMonitor() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* InputSignalTypeToString(proto::Monitors::InputSignalType value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryMonitor);
-};
-
 class CategoryGroupDisplay : public CategoryGroup
 {
 public:
