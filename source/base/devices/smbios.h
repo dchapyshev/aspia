@@ -69,7 +69,8 @@ public:
         TABLE_TYPE_BIOS      = 0x00,
         TABLE_TYPE_SYSTEM    = 0x01,
         TABLE_TYPE_BASEBOARD = 0x02,
-        TABLE_TYPE_CHASSIS   = 0x03
+        TABLE_TYPE_CHASSIS   = 0x03,
+        TABLE_TYPE_CACHE     = 0x07
     };
 
     class TableReader
@@ -142,32 +143,6 @@ public:
     private:
         friend class TableEnumerator<ProcessorTable>;
         explicit ProcessorTable(const TableReader& reader);
-
-        TableReader reader_;
-    };
-
-    class CacheTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x07 };
-
-        std::string GetName() const;
-        proto::DmiCaches::Location GetLocation() const;
-        proto::DmiCaches::Status GetStatus() const;
-        proto::DmiCaches::Mode GetMode() const;
-        int GetLevel() const;
-        int GetMaximumSize() const;
-        int GetCurrentSize() const;
-        uint32_t GetSupportedSRAMTypes() const;
-        proto::DmiCaches::SRAMType GetCurrentSRAMType() const;
-        int GetSpeed() const;
-        proto::DmiCaches::ErrorCorrectionType GetErrorCorrectionType() const;
-        proto::DmiCaches::Type GetType() const;
-        proto::DmiCaches::Associativity GetAssociativity() const;
-
-    private:
-        friend class TableEnumerator<CacheTable>;
-        explicit CacheTable(const TableReader& reader);
 
         TableReader reader_;
     };
