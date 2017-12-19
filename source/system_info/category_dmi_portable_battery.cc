@@ -157,11 +157,11 @@ std::string CategoryDmiPortableBattery::Serialize()
 
     proto::DmiPortableBattery message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_PORTABLE_BATTERY);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_PORTABLE_BATTERY);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
         if (table.GetTableLength() < 0x10)
             continue;
 

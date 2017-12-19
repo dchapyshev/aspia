@@ -45,7 +45,7 @@ const char* WakeupTypeToString(proto::DmiSystem::WakeupType value)
     }
 }
 
-std::string GetUUID(const SMBios::TableReader& table)
+std::string GetUUID(const SMBios::Table& table, uint8_t major_version, uint8_t minor_version)
 {
     if (table.GetTableLength() < 0x19)
         return std::string();
@@ -64,7 +64,7 @@ std::string GetUUID(const SMBios::TableReader& table)
     if (only_0xFF || only_0x00)
         return std::string();
 
-    if ((table.GetMajorVersion() << 8) + table.GetMinorVersion() >= 0x0206)
+    if ((major_version << 8) + minor_version >= 0x0206)
     {
         return StringPrintf("%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                             ptr[3], ptr[2], ptr[1], ptr[0], ptr[5], ptr[4], ptr[7], ptr[6],
@@ -76,7 +76,7 @@ std::string GetUUID(const SMBios::TableReader& table)
                         ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
-proto::DmiSystem::WakeupType GetWakeupType(const SMBios::TableReader& table)
+proto::DmiSystem::WakeupType GetWakeupType(const SMBios::Table& table)
 {
     if (table.GetTableLength() < 0x19)
         return proto::DmiSystem::WAKEUP_TYPE_UNKNOWN;
@@ -95,7 +95,7 @@ proto::DmiSystem::WakeupType GetWakeupType(const SMBios::TableReader& table)
     }
 }
 
-std::string GetSKUNumber(const SMBios::TableReader& table)
+std::string GetSKUNumber(const SMBios::Table& table)
 {
     if (table.GetTableLength() < 0x1B)
         return std::string();
@@ -103,7 +103,7 @@ std::string GetSKUNumber(const SMBios::TableReader& table)
     return table.GetString(0x19);
 }
 
-std::string GetFamily(const SMBios::TableReader& table)
+std::string GetFamily(const SMBios::Table& table)
 {
     if (table.GetTableLength() < 0x1B)
         return std::string();
@@ -175,18 +175,18 @@ std::string CategoryDmiSystem::Serialize()
     if (!smbios)
         return std::string();
 
-    SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_SYSTEM);
+    SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_SYSTEM);
     if (table_enumerator.IsAtEnd())
         return std::string();
 
-    SMBios::TableReader table = table_enumerator.GetTable();
+    SMBios::Table table = table_enumerator.GetTable();
     proto::DmiSystem message;
 
     message.set_manufacturer(table.GetString(0x04));
     message.set_product_name(table.GetString(0x05));
     message.set_version(table.GetString(0x06));
     message.set_serial_number(table.GetString(0x07));
-    message.set_uuid(GetUUID(table));
+    message.set_uuid(GetUUID(table, smbios->GetMajorVersion(), smbios->GetMinorVersion()));
     message.set_wakeup_type(GetWakeupType(table));
     message.set_sku_number(GetSKUNumber(table));
     message.set_family(GetFamily(table));

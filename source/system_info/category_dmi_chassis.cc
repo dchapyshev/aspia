@@ -154,7 +154,7 @@ const char* SecurityStatusToString(proto::DmiChassis::SecurityStatus status)
     }
 }
 
-proto::DmiChassis::Type GetType(const SMBios::TableReader& table)
+proto::DmiChassis::Type GetType(const SMBios::Table& table)
 {
     DCHECK(table.GetTableLength() >= 0x09);
 
@@ -292,11 +292,11 @@ std::string CategoryDmiChassis::Serialize()
 
     proto::DmiChassis message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_CHASSIS);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_CHASSIS);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
 
         if (table.GetTableLength() < 0x09)
             continue;

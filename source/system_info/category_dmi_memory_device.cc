@@ -213,7 +213,7 @@ proto::DmiMemoryDevice::FormFactor GetFormFactor(uint8_t value)
     }
 }
 
-uint64_t GetSize(const SMBios::TableReader& table)
+uint64_t GetSize(const SMBios::Table& table)
 {
     uint16_t size = table.GetWord(0x0C);
 
@@ -339,11 +339,11 @@ std::string CategoryDmiMemoryDevice::Serialize()
 
     proto::DmiMemoryDevice message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_MEMORY_DEVICE);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_MEMORY_DEVICE);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
         if (table.GetTableLength() < 0x15)
             continue;
 

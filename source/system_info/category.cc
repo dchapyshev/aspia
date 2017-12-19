@@ -6,7 +6,6 @@
 //
 
 #include "base/logging.h"
-#include "protocol/category_group_hardware.h"
 #include "protocol/category_group_software.h"
 #include "protocol/category_group_network.h"
 #include "protocol/category_group_os.h"
@@ -35,8 +34,73 @@
 #include "system_info/category_smart.h"
 #include "system_info/category_video_adapter.h"
 #include "system_info/category_windows_device.h"
+#include "ui/resource.h"
 
 namespace aspia {
+
+namespace {
+
+//
+// CategoryGroupDMI
+//
+
+class CategoryGroupDMI : public CategoryGroup
+{
+public:
+    CategoryGroupDMI() = default;
+
+    const char* Name() const final { return "DMI"; }
+    IconId Icon() const final { return IDI_COMPUTER; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupDMI);
+};
+
+//
+// CategoryGroupStorage
+//
+
+class CategoryGroupStorage : public CategoryGroup
+{
+public:
+    CategoryGroupStorage() = default;
+
+    const char* Name() const final { return "Storage"; }
+    IconId Icon() const final { return IDI_DRIVE; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupStorage);
+};
+
+class CategoryGroupDisplay : public CategoryGroup
+{
+public:
+    CategoryGroupDisplay() = default;
+
+    const char* Name() const final { return "Display"; }
+    IconId Icon() const final { return IDI_MONITOR; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupDisplay);
+};
+
+//
+// CategoryGroupHardware
+//
+
+class CategoryGroupHardware : public CategoryGroup
+{
+public:
+    CategoryGroupHardware() = default;
+
+    const char* Name() const final { return "Hardware"; }
+    IconId Icon() const final { return IDI_HARDWARE; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupHardware);
+};
+
+} // namespace
 
 //
 // Category

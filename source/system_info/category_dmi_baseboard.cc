@@ -61,7 +61,7 @@ const char* BoardTypeToString(proto::DmiBaseboard::BoardType type)
     }
 }
 
-proto::DmiBaseboard::BoardType GetBoardType(const SMBios::TableReader& table)
+proto::DmiBaseboard::BoardType GetBoardType(const SMBios::Table& table)
 {
     if (table.GetTableLength() < 0x0E)
         return proto::DmiBaseboard::BOARD_TYPE_UNKNOWN;
@@ -171,11 +171,11 @@ std::string CategoryDmiBaseboard::Serialize()
 
     proto::DmiBaseboard message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_BASEBOARD);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_BASEBOARD);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
         proto::DmiBaseboard::Item* item = message.add_item();
 
         item->set_manufacturer(table.GetString(0x04));

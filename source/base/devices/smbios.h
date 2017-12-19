@@ -26,25 +26,6 @@ public:
     uint8_t GetMajorVersion() const;
     uint8_t GetMinorVersion() const;
 
-    class TableEnumeratorImpl
-    {
-    public:
-        TableEnumeratorImpl(const Data* data, uint8_t type);
-
-        bool IsAtEnd() const;
-        void Advance(uint8_t type);
-        const Data* GetSMBiosData() const;
-        const uint8_t* GetTableData() const;
-
-    private:
-        const Data* data_;
-        const uint8_t* start_;
-        const uint8_t* next_;
-        const uint8_t* end_;
-        const uint8_t* current_;
-        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorImpl);
-    };
-
     enum TableType : uint8_t
     {
         TABLE_TYPE_BIOS             = 0x00,
@@ -61,16 +42,14 @@ public:
         TABLE_TYPE_PORTABLE_BATTERY = 0x16
     };
 
-    class TableReader
+    class Table
     {
     public:
-        TableReader(const TableReader& other);
-        TableReader(const Data* smbios, const uint8_t* table);
+        Table(const Table& other);
+        Table(const uint8_t* table);
 
-        TableReader& operator=(const TableReader& other);
+        Table& operator=(const Table& other);
 
-        uint8_t GetMajorVersion() const { return smbios_->smbios_major_version; }
-        uint8_t GetMinorVersion() const { return smbios_->smbios_minor_version; }
         uint8_t GetByte(uint8_t offset) const;
         uint16_t GetWord(uint8_t offset) const;
         uint32_t GetDword(uint8_t offset) const;
@@ -80,28 +59,27 @@ public:
         uint8_t GetTableLength() const;
 
     private:
-        const Data* smbios_;
         const uint8_t* table_;
     };
 
-    class TableEnumeratorNew
+    class TableEnumerator
     {
     public:
-        TableEnumeratorNew(const SMBios& smbios, TableType table_type)
-            : impl_(reinterpret_cast<const Data*>(smbios.data_.get()), table_type),
-              table_type_(table_type)
-        {
-            // Nothing
-        }
+        TableEnumerator(const SMBios& smbios, TableType table_type);
 
-        bool IsAtEnd() const { return impl_.IsAtEnd(); }
-        void Advance() { impl_.Advance(table_type_); }
-        TableReader GetTable() const { return TableReader(impl_.GetSMBiosData(), impl_.GetTableData()); }
+        bool IsAtEnd() const;
+        void Advance();
+        Table GetTable() const;
 
     private:
         const TableType table_type_;
-        TableEnumeratorImpl impl_;
-        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
+        const Data* data_;
+        const uint8_t* start_;
+        const uint8_t* next_;
+        const uint8_t* end_;
+        const uint8_t* current_;
+
+        DISALLOW_COPY_AND_ASSIGN(TableEnumerator);
     };
 
 private:

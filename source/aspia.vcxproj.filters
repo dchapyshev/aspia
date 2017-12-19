@@ -589,9 +589,6 @@
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\category_group_hardware.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="protocol\category_group_network.cc">
       <Filter>protocol</Filter>
     </ClCompile>
@@ -1459,9 +1456,6 @@
     </ClInclude>
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\category_group_hardware.h">
-      <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="protocol\category_group_network.h">
       <Filter>protocol</Filter>

@@ -78,26 +78,27 @@ int SMBios::GetTableCount(const uint8_t* table_data, uint32_t length)
 }
 
 //
-// TableEnumeratorImpl
+// TableEnumerator
 //
 
-SMBios::TableEnumeratorImpl::TableEnumeratorImpl(const Data* data, uint8_t type)
-    : data_(data)
+SMBios::TableEnumerator::TableEnumerator(const SMBios& smbios, TableType table_type)
+    : data_(reinterpret_cast<const Data*>(smbios.data_.get())),
+      table_type_(table_type)
 {
     start_ = &data_->smbios_table_data[0];
     end_ = start_ + data_->length;
     current_ = start_;
     next_ = start_;
 
-    Advance(type);
+    Advance();
 }
 
-bool SMBios::TableEnumeratorImpl::IsAtEnd() const
+bool SMBios::TableEnumerator::IsAtEnd() const
 {
     return current_ == nullptr;
 }
 
-void SMBios::TableEnumeratorImpl::Advance(uint8_t type)
+void SMBios::TableEnumerator::Advance()
 {
     current_ = next_;
     DCHECK(current_);
@@ -132,7 +133,7 @@ void SMBios::TableEnumeratorImpl::Advance(uint8_t type)
         next_ += 2;
 
         // The table of the specified type is found.
-        if (table_type == type)
+        if (table_type == table_type_)
             return;
 
         current_ = next_;
@@ -142,63 +143,54 @@ void SMBios::TableEnumeratorImpl::Advance(uint8_t type)
     next_ = nullptr;
 }
 
-const SMBios::Data* SMBios::TableEnumeratorImpl::GetSMBiosData() const
+SMBios::Table SMBios::TableEnumerator::GetTable() const
 {
-    return data_;
-}
-
-const uint8_t* SMBios::TableEnumeratorImpl::GetTableData() const
-{
-    return current_;
+    return Table(current_);
 }
 
 //
 // SMBiosTable
 //
 
-SMBios::TableReader::TableReader(const TableReader& other)
-    : smbios_(other.smbios_),
-      table_(other.table_)
+SMBios::Table::Table(const Table& other)
+    : table_(other.table_)
 {
     // Nothing
 }
 
-SMBios::TableReader::TableReader(const Data* smbios, const uint8_t* table)
-    : smbios_(smbios),
-      table_(table)
+SMBios::Table::Table(const uint8_t* table)
+    : table_(table)
 {
-    DCHECK(smbios_);
     DCHECK(table_);
 }
 
-SMBios::TableReader& SMBios::TableReader::operator=(const TableReader& other)
+SMBios::Table& SMBios::Table::operator=(const Table& other)
 {
-    smbios_ = other.smbios_;
     table_ = other.table_;
     return *this;
 }
 
-uint8_t SMBios::TableReader::GetByte(uint8_t offset) const
+uint8_t SMBios::Table::GetByte(uint8_t offset) const
 {
     return table_[offset];
 }
 
-uint16_t SMBios::TableReader::GetWord(uint8_t offset) const
+uint16_t SMBios::Table::GetWord(uint8_t offset) const
 {
     return *reinterpret_cast<const uint16_t*>(GetPointer(offset));
 }
 
-uint32_t SMBios::TableReader::GetDword(uint8_t offset) const
+uint32_t SMBios::Table::GetDword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint32_t*>(GetPointer(offset));
 }
 
-uint64_t SMBios::TableReader::GetQword(uint8_t offset) const
+uint64_t SMBios::Table::GetQword(uint8_t offset) const
 {
     return *reinterpret_cast<const uint64_t*>(GetPointer(offset));
 }
 
-std::string SMBios::TableReader::GetString(uint8_t offset) const
+std::string SMBios::Table::GetString(uint8_t offset) const
 {
     uint8_t handle = GetByte(offset);
     if (!handle)
@@ -222,12 +214,12 @@ std::string SMBios::TableReader::GetString(uint8_t offset) const
     return output;
 }
 
-const uint8_t* SMBios::TableReader::GetPointer(uint8_t offset) const
+const uint8_t* SMBios::Table::GetPointer(uint8_t offset) const
 {
     return &table_[offset];
 }
 
-uint8_t SMBios::TableReader::GetTableLength() const
+uint8_t SMBios::Table::GetTableLength() const
 {
     return GetByte(0x01);
 }

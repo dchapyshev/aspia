@@ -53,7 +53,7 @@ const char* TypeToString(proto::DmiOnBoardDevice::Type value)
     }
 }
 
-std::string GetDescription(const SMBios::TableReader& table, uint8_t handle)
+std::string GetDescription(const SMBios::Table& table, uint8_t handle)
 {
     if (!handle)
         return std::string();
@@ -150,11 +150,11 @@ std::string CategoryDmiOnboardDevice::Serialize()
 
     proto::DmiOnBoardDevice message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_ONBOARD_DEVICE);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_ONBOARD_DEVICE);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
 
         uint8_t count = (table.GetTableLength() - 4) / 2;
         const uint8_t* ptr = table.GetPointer(0) + 4;

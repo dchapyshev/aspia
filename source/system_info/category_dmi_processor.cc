@@ -883,12 +883,13 @@ const char* UpgradeToString(proto::DmiProcessor::Upgrade value)
     }
 }
 
-proto::DmiProcessor::Family GetFamily(const SMBios::TableReader& table)
+proto::DmiProcessor::Family GetFamily(
+    const SMBios::Table& table, uint8_t major_version, uint8_t minor_version)
 {
     uint8_t length = table.GetTableLength();
     uint16_t value = table.GetByte(0x06);
 
-    if (table.GetMajorVersion() == 2 && table.GetMinorVersion() == 0 && value == 0x30)
+    if (major_version == 2 && minor_version == 0 && value == 0x30)
     {
         std::string manufacturer = table.GetString(0x07);
 
@@ -1391,11 +1392,11 @@ std::string CategoryDmiProcessor::Serialize()
 
     proto::DmiProcessor message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_PROCESSOR);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_PROCESSOR);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
 
         if (table.GetTableLength() < 0x1A)
             continue;
@@ -1404,7 +1405,7 @@ std::string CategoryDmiProcessor::Serialize()
 
         item->set_manufacturer(table.GetString(0x07));
         item->set_version(table.GetString(0x10));
-        item->set_family(GetFamily(table));
+        item->set_family(GetFamily(table, smbios->GetMajorVersion(), smbios->GetMinorVersion()));
         item->set_type(GetType(table.GetByte(0x05)));
         item->set_status(GetStatus(table.GetByte(0x18)));
         item->set_socket(table.GetString(0x04));

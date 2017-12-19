@@ -168,7 +168,6 @@
     <ClCompile Include="network\open_connection_enumerator.cc" />
     <ClCompile Include="network\route_enumerator.cc" />
     <ClCompile Include="network\share_enumerator.cc" />
-    <ClCompile Include="protocol\category_group_hardware.cc" />
     <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
     <ClCompile Include="protocol\category_group_software.cc" />
@@ -456,7 +455,6 @@
     <ClInclude Include="network\open_connection_enumerator.h" />
     <ClInclude Include="network\route_enumerator.h" />
     <ClInclude Include="network\share_enumerator.h" />
-    <ClInclude Include="protocol\category_group_hardware.h" />
     <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
     <ClInclude Include="protocol\category_group_software.h" />

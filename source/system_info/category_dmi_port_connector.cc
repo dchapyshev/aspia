@@ -425,11 +425,11 @@ std::string CategoryDmiPortConnector::Serialize()
 
     proto::DmiPortConnector message;
 
-    for (SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_PORT_CONNECTOR);
+    for (SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_PORT_CONNECTOR);
          !table_enumerator.IsAtEnd();
          table_enumerator.Advance())
     {
-        SMBios::TableReader table = table_enumerator.GetTable();
+        SMBios::Table table = table_enumerator.GetTable();
         if (table.GetTableLength() < 0x09)
             continue;
 

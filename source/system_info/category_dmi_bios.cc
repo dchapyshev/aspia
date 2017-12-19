@@ -16,7 +16,7 @@ namespace aspia {
 
 namespace {
 
-uint64_t GetSize(const SMBios::TableReader& table)
+uint64_t GetSize(const SMBios::Table& table)
 {
     const uint8_t old_size = table.GetByte(0x09);
     if (old_size != 0xFF)
@@ -42,7 +42,7 @@ uint64_t GetSize(const SMBios::TableReader& table)
     }
 }
 
-std::string GetBiosRevision(const SMBios::TableReader& table)
+std::string GetBiosRevision(const SMBios::Table& table)
 {
     const uint8_t major = table.GetByte(0x14);
     const uint8_t minor = table.GetByte(0x15);
@@ -53,7 +53,7 @@ std::string GetBiosRevision(const SMBios::TableReader& table)
     return std::string();
 }
 
-std::string GetFirmwareRevision(const SMBios::TableReader& table)
+std::string GetFirmwareRevision(const SMBios::Table& table)
 {
     const uint8_t major = table.GetByte(0x16);
     const uint8_t minor = table.GetByte(0x17);
@@ -64,7 +64,7 @@ std::string GetFirmwareRevision(const SMBios::TableReader& table)
     return std::string();
 }
 
-std::string GetAddress(const SMBios::TableReader& table)
+std::string GetAddress(const SMBios::Table& table)
 {
     const uint16_t address = table.GetWord(0x06);
 
@@ -74,7 +74,7 @@ std::string GetAddress(const SMBios::TableReader& table)
     return std::string();
 }
 
-int GetRuntimeSize(const SMBios::TableReader& table)
+int GetRuntimeSize(const SMBios::Table& table)
 {
     const uint16_t address = table.GetWord(0x06);
     if (address == 0)
@@ -218,11 +218,11 @@ std::string CategoryDmiBios::Serialize()
     if (!smbios)
         return std::string();
 
-    SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_BIOS);
+    SMBios::TableEnumerator table_enumerator(*smbios, SMBios::TABLE_TYPE_BIOS);
     if (table_enumerator.IsAtEnd())
         return std::string();
 
-    SMBios::TableReader table = table_enumerator.GetTable();
+    SMBios::Table table = table_enumerator.GetTable();
     proto::DmiBios message;
 
     message.set_manufacturer(table.GetString(0x04));
