@@ -832,6 +832,12 @@
     <ClCompile Include="system_info\category_dmi_pointing_device.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_dmi_portable_battery.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_dmi_portable_battery.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1700,6 +1706,12 @@
     <ClInclude Include="system_info\category_dmi_pointing_device.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_dmi_portable_battery.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_dmi_portable_battery.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1811,6 +1823,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_dmi_pointing_device.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_dmi_portable_battery.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

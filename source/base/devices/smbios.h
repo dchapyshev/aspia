@@ -45,38 +45,20 @@ public:
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorImpl);
     };
 
-    template <class T>
-    class TableEnumerator
-    {
-    public:
-        TableEnumerator(const SMBios& smbios)
-            : impl_(reinterpret_cast<const Data*>(smbios.data_.get()), T::TABLE_TYPE)
-        {
-            // Nothing
-        }
-
-        bool IsAtEnd() const { return impl_.IsAtEnd(); }
-        void Advance() { impl_.Advance(T::TABLE_TYPE); }
-        T GetTable() const { return T(TableReader(impl_.GetSMBiosData(), impl_.GetTableData())); }
-
-    private:
-        TableEnumeratorImpl impl_;
-        DISALLOW_COPY_AND_ASSIGN(TableEnumerator);
-    };
-
     enum TableType : uint8_t
     {
-        TABLE_TYPE_BIOS            = 0x00,
-        TABLE_TYPE_SYSTEM          = 0x01,
-        TABLE_TYPE_BASEBOARD       = 0x02,
-        TABLE_TYPE_CHASSIS         = 0x03,
-        TABLE_TYPE_PROCESSOR       = 0x04,
-        TABLE_TYPE_CACHE           = 0x07,
-        TABLE_TYPE_PORT_CONNECTOR  = 0x08,
-        TABLE_TYPE_SYSTEM_SLOT     = 0x09,
-        TABLE_TYPE_ONBOARD_DEVICE  = 0x0A,
-        TABLE_TYPE_MEMORY_DEVICE   = 0x11,
-        TABLE_TYPE_POINTING_DEVICE = 0x15
+        TABLE_TYPE_BIOS             = 0x00,
+        TABLE_TYPE_SYSTEM           = 0x01,
+        TABLE_TYPE_BASEBOARD        = 0x02,
+        TABLE_TYPE_CHASSIS          = 0x03,
+        TABLE_TYPE_PROCESSOR        = 0x04,
+        TABLE_TYPE_CACHE            = 0x07,
+        TABLE_TYPE_PORT_CONNECTOR   = 0x08,
+        TABLE_TYPE_SYSTEM_SLOT      = 0x09,
+        TABLE_TYPE_ONBOARD_DEVICE   = 0x0A,
+        TABLE_TYPE_MEMORY_DEVICE    = 0x11,
+        TABLE_TYPE_POINTING_DEVICE  = 0x15,
+        TABLE_TYPE_PORTABLE_BATTERY = 0x16
     };
 
     class TableReader
@@ -120,32 +102,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class PortableBatteryTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x16 };
-
-        std::string GetLocation() const;
-        std::string GetManufacturer() const;
-        std::string GetManufactureDate() const;
-        std::string GetSerialNumber() const;
-        std::string GetDeviceName() const;
-        proto::DmiPortableBattery::Chemistry GetChemistry() const;
-        int GetDesignCapacity() const;
-        int GetDesignVoltage() const;
-        std::string GetSBDSVersionNumber() const;
-        int GetMaxErrorInBatteryData() const;
-        std::string GetSBDSSerialNumber() const;
-        std::string GetSBDSManufactureDate() const;
-        std::string GetSBDSDeviceChemistry() const;
-
-    private:
-        friend class TableEnumerator<PortableBatteryTable>;
-        explicit PortableBatteryTable(const TableReader& reader);
-
-        TableReader reader_;
     };
 
 private:

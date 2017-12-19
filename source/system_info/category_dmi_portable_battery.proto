@@ -1,0 +1,46 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_dmi_portable_battery.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DmiPortableBattery
+{
+    enum Chemistry
+    {
+        CHEMISTRY_UNKNOWN              = 0;
+        CHEMISTRY_OTHER                = 1;
+        CHEMISTRY_LEAD_ACID            = 2;
+        CHEMISTRY_NICKEL_CADMIUM       = 3;
+        CHEMISTRY_NICKEL_METAL_HYDRIDE = 4;
+        CHEMISTRY_LITHIUM_ION          = 5;
+        CHEMISTRY_ZINC_AIR             = 6;
+        CHEMISTRY_LITHIUM_POLYMER      = 7;
+    }
+
+    message Item
+    {
+        string location                 = 1;
+        string manufacturer             = 2;
+        string manufacture_date         = 3;
+        string serial_number            = 4;
+        string device_name              = 5;
+        Chemistry chemistry             = 6;
+        int32 design_capacity           = 7;
+        int32 design_voltage            = 8;
+        string sbds_version_number      = 9;
+        int32 max_error_in_battery_data = 10;
+        string sbds_serial_number       = 11;
+        string sbds_manufacture_date    = 12;
+        string sbds_device_chemistry    = 13;
+    }
+
+    repeated Item item = 1;
+}

@@ -21,6 +21,7 @@
 #include "system_info/category_dmi_onboard_device.h"
 #include "system_info/category_dmi_pointing_device.h"
 #include "system_info/category_dmi_port_connector.h"
+#include "system_info/category_dmi_portable_battery.h"
 #include "system_info/category_dmi_processor.h"
 #include "system_info/category_dmi_system.h"
 #include "system_info/category_dmi_system_slot.h"

@@ -14,24 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiPortableBattery : public CategoryInfo
-{
-public:
-    CategoryDmiPortableBattery() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* ChemistryToString(proto::DmiPortableBattery::Chemistry value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiPortableBattery);
-};
-
 class CategoryGroupDMI : public CategoryGroup
 {
 public:

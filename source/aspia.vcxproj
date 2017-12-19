@@ -208,6 +208,8 @@
     <ClCompile Include="system_info\category_dmi_onboard_device.pb.cc" />
     <ClCompile Include="system_info\category_dmi_pointing_device.cc" />
     <ClCompile Include="system_info\category_dmi_pointing_device.pb.cc" />
+    <ClCompile Include="system_info\category_dmi_portable_battery.cc" />
+    <ClCompile Include="system_info\category_dmi_portable_battery.pb.cc" />
     <ClCompile Include="system_info\category_dmi_port_connector.cc" />
     <ClCompile Include="system_info\category_dmi_port_connector.pb.cc" />
     <ClCompile Include="system_info\category_dmi_processor.cc" />
@@ -496,6 +498,8 @@
     <ClInclude Include="system_info\category_dmi_onboard_device.pb.h" />
     <ClInclude Include="system_info\category_dmi_pointing_device.h" />
     <ClInclude Include="system_info\category_dmi_pointing_device.pb.h" />
+    <ClInclude Include="system_info\category_dmi_portable_battery.h" />
+    <ClInclude Include="system_info\category_dmi_portable_battery.pb.h" />
     <ClInclude Include="system_info\category_dmi_port_connector.h" />
     <ClInclude Include="system_info\category_dmi_port_connector.pb.h" />
     <ClInclude Include="system_info\category_dmi_processor.h" />
@@ -595,6 +599,7 @@
     <None Include="system_info\category_dmi_memory_device.proto" />
     <None Include="system_info\category_dmi_onboard_device.proto" />
     <None Include="system_info\category_dmi_pointing_device.proto" />
+    <None Include="system_info\category_dmi_portable_battery.proto" />
     <None Include="system_info\category_dmi_port_connector.proto" />
     <None Include="system_info\category_dmi_processor.proto" />
     <None Include="system_info\category_dmi_system.proto" />
