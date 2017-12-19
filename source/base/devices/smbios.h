@@ -66,12 +66,13 @@ public:
 
     enum TableType : uint8_t
     {
-        TABLE_TYPE_BIOS      = 0x00,
-        TABLE_TYPE_SYSTEM    = 0x01,
-        TABLE_TYPE_BASEBOARD = 0x02,
-        TABLE_TYPE_CHASSIS   = 0x03,
-        TABLE_TYPE_PROCESSOR = 0x04,
-        TABLE_TYPE_CACHE     = 0x07
+        TABLE_TYPE_BIOS          = 0x00,
+        TABLE_TYPE_SYSTEM        = 0x01,
+        TABLE_TYPE_BASEBOARD     = 0x02,
+        TABLE_TYPE_CHASSIS       = 0x03,
+        TABLE_TYPE_PROCESSOR     = 0x04,
+        TABLE_TYPE_CACHE         = 0x07,
+        TABLE_TYPE_MEMORY_DEVICE = 0x11
     };
 
     class TableReader
@@ -171,30 +172,6 @@ public:
 
         const int count_;
         const uint8_t* ptr_;
-        TableReader reader_;
-    };
-
-    class MemoryDeviceTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x11 };
-
-        std::string GetDeviceLocator() const;
-        int GetSize() const;
-        proto::DmiMemoryDevices::Type GetType() const;
-        int GetSpeed() const;
-        proto::DmiMemoryDevices::FormFactor GetFormFactor() const;
-        std::string GetSerialNumber() const;
-        std::string GetPartNumber() const;
-        std::string GetManufacturer() const;
-        std::string GetBank() const;
-        int GetTotalWidth() const;
-        int GetDataWidth() const;
-
-    private:
-        friend class TableEnumerator<MemoryDeviceTable>;
-        explicit MemoryDeviceTable(const TableReader& reader);
-
         TableReader reader_;
     };
 

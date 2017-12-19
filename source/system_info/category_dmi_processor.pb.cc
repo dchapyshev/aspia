@@ -18,20 +18,20 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
-class DmiProcessors_ItemDefaultTypeInternal {
+class DmiProcessor_ItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors_Item>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessor_Item>
       _instance;
-} _DmiProcessors_Item_default_instance_;
-class DmiProcessorsDefaultTypeInternal {
+} _DmiProcessor_Item_default_instance_;
+class DmiProcessorDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessors>
+  ::google::protobuf::internal::ExplicitlyConstructed<DmiProcessor>
       _instance;
-} _DmiProcessors_default_instance_;
+} _DmiProcessor_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_category_5fdmi_5fprocessor_2eproto {
-void InitDefaultsDmiProcessors_ItemImpl() {
+void InitDefaultsDmiProcessor_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -40,19 +40,19 @@ void InitDefaultsDmiProcessors_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_DmiProcessors_Item_default_instance_;
-    new (ptr) ::aspia::proto::DmiProcessors_Item();
+    void* ptr = &::aspia::proto::_DmiProcessor_Item_default_instance_;
+    new (ptr) ::aspia::proto::DmiProcessor_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiProcessors_Item::InitAsDefaultInstance();
+  ::aspia::proto::DmiProcessor_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiProcessors_Item() {
+void InitDefaultsDmiProcessor_Item() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiProcessors_ItemImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiProcessor_ItemImpl);
 }
 
-void InitDefaultsDmiProcessorsImpl() {
+void InitDefaultsDmiProcessorImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -60,24 +60,24 @@ void InitDefaultsDmiProcessorsImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessors_Item();
+  protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessor_Item();
   {
-    void* ptr = &::aspia::proto::_DmiProcessors_default_instance_;
-    new (ptr) ::aspia::proto::DmiProcessors();
+    void* ptr = &::aspia::proto::_DmiProcessor_default_instance_;
+    new (ptr) ::aspia::proto::DmiProcessor();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DmiProcessors::InitAsDefaultInstance();
+  ::aspia::proto::DmiProcessor::InitAsDefaultInstance();
 }
 
-void InitDefaultsDmiProcessors() {
+void InitDefaultsDmiProcessor() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiProcessorsImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDmiProcessorImpl);
 }
 
 }  // namespace protobuf_category_5fdmi_5fprocessor_2eproto
 namespace aspia {
 namespace proto {
-bool DmiProcessors_Family_IsValid(int value) {
+bool DmiProcessor_Family_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -299,224 +299,224 @@ bool DmiProcessors_Family_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Family DmiProcessors::FAMILY_UNKNOWN;
-const DmiProcessors_Family DmiProcessors::FAMILY_OTHER;
-const DmiProcessors_Family DmiProcessors::FAMILY_8086;
-const DmiProcessors_Family DmiProcessors::FAMILY_80286;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_386_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_486_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_8087;
-const DmiProcessors_Family DmiProcessors::FAMILY_80287;
-const DmiProcessors_Family DmiProcessors::FAMILY_80387;
-const DmiProcessors_Family DmiProcessors::FAMILY_80487;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_2_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_PENTIUM_PROCESSOR_WITH_MMX;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CELERON_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_M1_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_M2_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CELEROM_M_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_DURON_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K5_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K6_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K6_2;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K6_3;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_29000_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K6_2_PLUS;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_601;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_603;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_603_PLUS;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_604;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_620;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_X704;
-const DmiProcessors_Family DmiProcessors::FAMILY_POWER_PC_750;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_DUO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_ATOM_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_M_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_M3_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_M5_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_M7_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21064;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21066;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21164;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21164PC;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21164A;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21264;
-const DmiProcessors_Family DmiProcessors::FAMILY_ALPHA_21364;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_FX_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_R4000;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_R4200;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_R4400;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_R4600;
-const DmiProcessors_Family DmiProcessors::FAMILY_MIPS_R10000;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_C_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_E_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_A_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_G_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_Z_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_R_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_FIREPRO_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_SPARC_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_SUPER_SPARC;
-const DmiProcessors_Family DmiProcessors::FAMILY_MICRO_SPARC_2;
-const DmiProcessors_Family DmiProcessors::FAMILY_MICRO_SPARC_2EP;
-const DmiProcessors_Family DmiProcessors::FAMILY_ULTRA_SPARC;
-const DmiProcessors_Family DmiProcessors::FAMILY_ULTRA_SPARC_2;
-const DmiProcessors_Family DmiProcessors::FAMILY_ULTRA_SPARC_2I;
-const DmiProcessors_Family DmiProcessors::FAMILY_ULTRA_SPARC_3;
-const DmiProcessors_Family DmiProcessors::FAMILY_ULTRA_SPARC_3I;
-const DmiProcessors_Family DmiProcessors::FAMILY_68040_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_68XXX;
-const DmiProcessors_Family DmiProcessors::FAMILY_68000;
-const DmiProcessors_Family DmiProcessors::FAMILY_68010;
-const DmiProcessors_Family DmiProcessors::FAMILY_68020;
-const DmiProcessors_Family DmiProcessors::FAMILY_68030;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_X2000_SERIES_APU;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_X3000_SERIES_APU;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ZEN_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_HOBBIT_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_CRUSOE_TM5000_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_CRUSOE_TM3000_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_EFFICEON_TM8000_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_WEITEK;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_ITANIUM_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_8500;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_8000;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_7300LC;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_7200;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_7100LC;
-const DmiProcessors_Family DmiProcessors::FAMILY_PA_RISC_7100;
-const DmiProcessors_Family DmiProcessors::FAMILY_V30_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_4_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AS400_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_MP_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_ITANIUM_2_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_M_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CELERON_D_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_D_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_SOLO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_DUO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_QUAD_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_I7_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_IBM390_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_G4;
-const DmiProcessors_Family DmiProcessors::FAMILY_G5;
-const DmiProcessors_Family DmiProcessors::FAMILY_ESA_390_G6;
-const DmiProcessors_Family DmiProcessors::FAMILY_Z_ARCHITECTURE_BASE;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_I5_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_I3_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIA_C7_M_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIA_C7_D_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIA_C7_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIA_EDEN_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIA_NANO_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_SEMPRON_II_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_I860;
-const DmiProcessors_Family DmiProcessors::FAMILY_I960;
-const DmiProcessors_Family DmiProcessors::FAMILY_ARM_V7;
-const DmiProcessors_Family DmiProcessors::FAMILY_ARM_V8;
-const DmiProcessors_Family DmiProcessors::FAMILY_SH_3;
-const DmiProcessors_Family DmiProcessors::FAMILY_SH_4;
-const DmiProcessors_Family DmiProcessors::FAMILY_ARM;
-const DmiProcessors_Family DmiProcessors::FAMILY_STRONG_ARM;
-const DmiProcessors_Family DmiProcessors::FAMILY_6X86;
-const DmiProcessors_Family DmiProcessors::FAMILY_MEDIA_GX;
-const DmiProcessors_Family DmiProcessors::FAMILY_MII;
-const DmiProcessors_Family DmiProcessors::FAMILY_WIN_CHIP;
-const DmiProcessors_Family DmiProcessors::FAMILY_DSP;
-const DmiProcessors_Family DmiProcessors::FAMILY_VIDEO_PROCESSOR;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_AMD_K7_FAMILY;
-const DmiProcessors_Family DmiProcessors::FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY;
-const DmiProcessors_Family DmiProcessors::Family_MIN;
-const DmiProcessors_Family DmiProcessors::Family_MAX;
-const int DmiProcessors::Family_ARRAYSIZE;
+const DmiProcessor_Family DmiProcessor::FAMILY_UNKNOWN;
+const DmiProcessor_Family DmiProcessor::FAMILY_OTHER;
+const DmiProcessor_Family DmiProcessor::FAMILY_8086;
+const DmiProcessor_Family DmiProcessor::FAMILY_80286;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_386_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_486_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_8087;
+const DmiProcessor_Family DmiProcessor::FAMILY_80287;
+const DmiProcessor_Family DmiProcessor::FAMILY_80387;
+const DmiProcessor_Family DmiProcessor::FAMILY_80487;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_PRO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_2_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_PENTIUM_PROCESSOR_WITH_MMX;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CELERON_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_2_XEON_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_3_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_M1_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_M2_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CELEROM_M_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_4_HT_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_DURON_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K5_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K6_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K6_2;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K6_3;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_29000_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K6_2_PLUS;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_601;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_603;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_603_PLUS;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_604;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_620;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_X704;
+const DmiProcessor_Family DmiProcessor::FAMILY_POWER_PC_750;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_DUO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_DUO_MOBILE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_SOLO_MOBILE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_ATOM_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_M_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_M3_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_M5_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_M7_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21064;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21066;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21164;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21164PC;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21164A;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21264;
+const DmiProcessor_Family DmiProcessor::FAMILY_ALPHA_21364;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_2_ULTRA_DUAL_CORE_MOBILE_M_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_2_DUAL_CORE_MOBILE_M_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_2_DUAL_CORE_M_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_6100_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_4100_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_6200_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_4200_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_FX_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_R4000;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_R4200;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_R4400;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_R4600;
+const DmiProcessor_Family DmiProcessor::FAMILY_MIPS_R10000;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_C_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_E_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_A_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_G_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_Z_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_R_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_4300_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_6300_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_3300_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_FIREPRO_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_SPARC_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_SUPER_SPARC;
+const DmiProcessor_Family DmiProcessor::FAMILY_MICRO_SPARC_2;
+const DmiProcessor_Family DmiProcessor::FAMILY_MICRO_SPARC_2EP;
+const DmiProcessor_Family DmiProcessor::FAMILY_ULTRA_SPARC;
+const DmiProcessor_Family DmiProcessor::FAMILY_ULTRA_SPARC_2;
+const DmiProcessor_Family DmiProcessor::FAMILY_ULTRA_SPARC_2I;
+const DmiProcessor_Family DmiProcessor::FAMILY_ULTRA_SPARC_3;
+const DmiProcessor_Family DmiProcessor::FAMILY_ULTRA_SPARC_3I;
+const DmiProcessor_Family DmiProcessor::FAMILY_68040_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_68XXX;
+const DmiProcessor_Family DmiProcessor::FAMILY_68000;
+const DmiProcessor_Family DmiProcessor::FAMILY_68010;
+const DmiProcessor_Family DmiProcessor::FAMILY_68020;
+const DmiProcessor_Family DmiProcessor::FAMILY_68030;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_X4_QUAD_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_X1000_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_X2000_SERIES_APU;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_A_SERIES_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_X3000_SERIES_APU;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ZEN_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_HOBBIT_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_CRUSOE_TM5000_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_CRUSOE_TM3000_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_EFFICEON_TM8000_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_WEITEK;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_ITANIUM_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_64_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_SEMPRON_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_64_MOBILE_TECHNOLOGY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_DUAL_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_64_X2_DUAL_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_64_X2_MOBILE_TECHNOLOGY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_QUAD_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_THIRD_GEN_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_PHENOM_FX_QUAD_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_PHENOM_X4_QUAD_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_PHENOM_X2_DUAL_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_X2_DUAL_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_8500;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_8000;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_7300LC;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_7200;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_7100LC;
+const DmiProcessor_Family DmiProcessor::FAMILY_PA_RISC_7100;
+const DmiProcessor_Family DmiProcessor::FAMILY_V30_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_3200_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_3000_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_5300_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_5100_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_5000_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_LV_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_ULV_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_7100_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_5400_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_5200_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_7200_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_7300_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_7400_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_MULTI_CORE_7400_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_3_XEON_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_3_PROCESSOR_WITH_SPEED_STEP;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_4_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AS400_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_MP_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_XP_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_MP_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_ITANIUM_2_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_M_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CELERON_D_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_D_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_PENTIUM_PROCESSOR_EXTREME_EDITION;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_SOLO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_DUO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_SOLO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_EXTREME_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_QUAD_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_EXTREME_MOBILE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_DUO_MOBILE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_SOLO_MOBILE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_I7_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CELERON_DUAL_CORE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_IBM390_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_G4;
+const DmiProcessor_Family DmiProcessor::FAMILY_G5;
+const DmiProcessor_Family DmiProcessor::FAMILY_ESA_390_G6;
+const DmiProcessor_Family DmiProcessor::FAMILY_Z_ARCHITECTURE_BASE;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_I5_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_I3_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIA_C7_M_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIA_C7_D_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIA_C7_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIA_EDEN_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_MULTI_CORE_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_3XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_3XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIA_NANO_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_5XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_5XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_DUAL_CORE_7XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_QUAD_CORE_7XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_MULTI_CORE_7XXX_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_XEON_MULTI_CORE_3400_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_3000_PROCESSOR_SERIES;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_SEMPRON_II_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_QUAD_CORE_EMBEDDED_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_PHENOM_TRIPLE_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_ULTRA_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_TURION_DUAL_CORE_MOBILE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_DUAL_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_SEMPRON_SI_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_PHENOM_2_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_ATHLON_2_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_OPTERON_SIX_CORE_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_SEMPRON_M_PROCESSOR_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_I860;
+const DmiProcessor_Family DmiProcessor::FAMILY_I960;
+const DmiProcessor_Family DmiProcessor::FAMILY_ARM_V7;
+const DmiProcessor_Family DmiProcessor::FAMILY_ARM_V8;
+const DmiProcessor_Family DmiProcessor::FAMILY_SH_3;
+const DmiProcessor_Family DmiProcessor::FAMILY_SH_4;
+const DmiProcessor_Family DmiProcessor::FAMILY_ARM;
+const DmiProcessor_Family DmiProcessor::FAMILY_STRONG_ARM;
+const DmiProcessor_Family DmiProcessor::FAMILY_6X86;
+const DmiProcessor_Family DmiProcessor::FAMILY_MEDIA_GX;
+const DmiProcessor_Family DmiProcessor::FAMILY_MII;
+const DmiProcessor_Family DmiProcessor::FAMILY_WIN_CHIP;
+const DmiProcessor_Family DmiProcessor::FAMILY_DSP;
+const DmiProcessor_Family DmiProcessor::FAMILY_VIDEO_PROCESSOR;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_AMD_K7_FAMILY;
+const DmiProcessor_Family DmiProcessor::FAMILY_INTEL_CORE_2_OR_AMD_K7_FAMILY;
+const DmiProcessor_Family DmiProcessor::Family_MIN;
+const DmiProcessor_Family DmiProcessor::Family_MAX;
+const int DmiProcessor::Family_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Type_IsValid(int value) {
+bool DmiProcessor_Type_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -531,17 +531,17 @@ bool DmiProcessors_Type_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Type DmiProcessors::TYPE_UNKNOWN;
-const DmiProcessors_Type DmiProcessors::TYPE_OTHER;
-const DmiProcessors_Type DmiProcessors::TYPE_CENTRAL_PROCESSOR;
-const DmiProcessors_Type DmiProcessors::TYPE_MATH_PROCESSOR;
-const DmiProcessors_Type DmiProcessors::TYPE_DSP_PROCESSOR;
-const DmiProcessors_Type DmiProcessors::TYPE_VIDEO_PROCESSOR;
-const DmiProcessors_Type DmiProcessors::Type_MIN;
-const DmiProcessors_Type DmiProcessors::Type_MAX;
-const int DmiProcessors::Type_ARRAYSIZE;
+const DmiProcessor_Type DmiProcessor::TYPE_UNKNOWN;
+const DmiProcessor_Type DmiProcessor::TYPE_OTHER;
+const DmiProcessor_Type DmiProcessor::TYPE_CENTRAL_PROCESSOR;
+const DmiProcessor_Type DmiProcessor::TYPE_MATH_PROCESSOR;
+const DmiProcessor_Type DmiProcessor::TYPE_DSP_PROCESSOR;
+const DmiProcessor_Type DmiProcessor::TYPE_VIDEO_PROCESSOR;
+const DmiProcessor_Type DmiProcessor::Type_MIN;
+const DmiProcessor_Type DmiProcessor::Type_MAX;
+const int DmiProcessor::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Status_IsValid(int value) {
+bool DmiProcessor_Status_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -556,17 +556,17 @@ bool DmiProcessors_Status_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Status DmiProcessors::STATUS_UNKNOWN;
-const DmiProcessors_Status DmiProcessors::STATUS_ENABLED;
-const DmiProcessors_Status DmiProcessors::STATUS_DISABLED_BY_USER;
-const DmiProcessors_Status DmiProcessors::STATUS_DISABLED_BY_BIOS;
-const DmiProcessors_Status DmiProcessors::STATUS_IDLE;
-const DmiProcessors_Status DmiProcessors::STATUS_OTHER;
-const DmiProcessors_Status DmiProcessors::Status_MIN;
-const DmiProcessors_Status DmiProcessors::Status_MAX;
-const int DmiProcessors::Status_ARRAYSIZE;
+const DmiProcessor_Status DmiProcessor::STATUS_UNKNOWN;
+const DmiProcessor_Status DmiProcessor::STATUS_ENABLED;
+const DmiProcessor_Status DmiProcessor::STATUS_DISABLED_BY_USER;
+const DmiProcessor_Status DmiProcessor::STATUS_DISABLED_BY_BIOS;
+const DmiProcessor_Status DmiProcessor::STATUS_IDLE;
+const DmiProcessor_Status DmiProcessor::STATUS_OTHER;
+const DmiProcessor_Status DmiProcessor::Status_MIN;
+const DmiProcessor_Status DmiProcessor::Status_MAX;
+const int DmiProcessor::Status_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Upgrade_IsValid(int value) {
+bool DmiProcessor_Upgrade_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -631,67 +631,67 @@ bool DmiProcessors_Upgrade_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_UNKNOWN;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_OTHER;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_DAUGHTER_BOARD;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_ZIF_SOCKET;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_REPLACEABLE_PIGGY_BACK;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_NONE;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_LIF_SOCKET;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SLOT_1;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SLOT_2;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_370_PIN_SOCKET;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SLOT_A;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SLOT_M;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_423;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_462;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_478;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_754;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_940;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_939;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_MPGA604;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA771;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA775;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_S1;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_AM2;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_F;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1366;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_G34;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_AM3;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_C32;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1156;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1567;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_PGA988A;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1288;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_RPGA988B;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1023;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1224;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1155;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1356;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA2011;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_FS1;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_FS2;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_FM1;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_FM2;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA2011_3;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1356_3;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1150;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1168;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1234;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1364;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_AM4;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA1151;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1356;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1440;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_BGA1515;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_LGA3647_1;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_SP3;
-const DmiProcessors_Upgrade DmiProcessors::UPGRADE_SOCKET_SP3_R2;
-const DmiProcessors_Upgrade DmiProcessors::Upgrade_MIN;
-const DmiProcessors_Upgrade DmiProcessors::Upgrade_MAX;
-const int DmiProcessors::Upgrade_ARRAYSIZE;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_UNKNOWN;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_OTHER;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_DAUGHTER_BOARD;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_ZIF_SOCKET;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_REPLACEABLE_PIGGY_BACK;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_NONE;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_LIF_SOCKET;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SLOT_1;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SLOT_2;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_370_PIN_SOCKET;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SLOT_A;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SLOT_M;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_423;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_462;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_478;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_754;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_940;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_939;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_MPGA604;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA771;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA775;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_S1;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_AM2;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_F;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1366;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_G34;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_AM3;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_C32;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1156;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1567;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_PGA988A;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1288;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_RPGA988B;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1023;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1224;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1155;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1356;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA2011;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_FS1;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_FS2;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_FM1;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_FM2;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA2011_3;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1356_3;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1150;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1168;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1234;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1364;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_AM4;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA1151;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1356;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1440;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_BGA1515;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_LGA3647_1;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_SP3;
+const DmiProcessor_Upgrade DmiProcessor::UPGRADE_SOCKET_SP3_R2;
+const DmiProcessor_Upgrade DmiProcessor::Upgrade_MIN;
+const DmiProcessor_Upgrade DmiProcessor::Upgrade_MAX;
+const int DmiProcessor::Upgrade_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DmiProcessors_Characteristics_IsValid(int value) {
+bool DmiProcessor_Characteristics_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -707,52 +707,52 @@ bool DmiProcessors_Characteristics_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_NONE;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_64BIT_CAPABLE;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_MULTI_CORE;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_HARDWARE_THREAD;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_EXECUTE_PROTECTION;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_ENHANCED_VIRTUALIZATION;
-const DmiProcessors_Characteristics DmiProcessors::CHARACTERISTIC_POWER_CONTROL;
-const DmiProcessors_Characteristics DmiProcessors::Characteristics_MIN;
-const DmiProcessors_Characteristics DmiProcessors::Characteristics_MAX;
-const int DmiProcessors::Characteristics_ARRAYSIZE;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_NONE;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_64BIT_CAPABLE;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_MULTI_CORE;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_HARDWARE_THREAD;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_EXECUTE_PROTECTION;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_ENHANCED_VIRTUALIZATION;
+const DmiProcessor_Characteristics DmiProcessor::CHARACTERISTIC_POWER_CONTROL;
+const DmiProcessor_Characteristics DmiProcessor::Characteristics_MIN;
+const DmiProcessor_Characteristics DmiProcessor::Characteristics_MAX;
+const int DmiProcessor::Characteristics_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
 
-void DmiProcessors_Item::InitAsDefaultInstance() {
+void DmiProcessor_Item::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiProcessors_Item::kManufacturerFieldNumber;
-const int DmiProcessors_Item::kVersionFieldNumber;
-const int DmiProcessors_Item::kFamilyFieldNumber;
-const int DmiProcessors_Item::kTypeFieldNumber;
-const int DmiProcessors_Item::kStatusFieldNumber;
-const int DmiProcessors_Item::kSocketFieldNumber;
-const int DmiProcessors_Item::kUpgradeFieldNumber;
-const int DmiProcessors_Item::kExternalClockFieldNumber;
-const int DmiProcessors_Item::kCurrentSpeedFieldNumber;
-const int DmiProcessors_Item::kMaximumSpeedFieldNumber;
-const int DmiProcessors_Item::kVoltageFieldNumber;
-const int DmiProcessors_Item::kSerialNumberFieldNumber;
-const int DmiProcessors_Item::kAssetTagFieldNumber;
-const int DmiProcessors_Item::kPartNumberFieldNumber;
-const int DmiProcessors_Item::kCoreCountFieldNumber;
-const int DmiProcessors_Item::kCoreEnabledFieldNumber;
-const int DmiProcessors_Item::kThreadCountFieldNumber;
-const int DmiProcessors_Item::kCharacteristicsFieldNumber;
+const int DmiProcessor_Item::kManufacturerFieldNumber;
+const int DmiProcessor_Item::kVersionFieldNumber;
+const int DmiProcessor_Item::kFamilyFieldNumber;
+const int DmiProcessor_Item::kTypeFieldNumber;
+const int DmiProcessor_Item::kStatusFieldNumber;
+const int DmiProcessor_Item::kSocketFieldNumber;
+const int DmiProcessor_Item::kUpgradeFieldNumber;
+const int DmiProcessor_Item::kExternalClockFieldNumber;
+const int DmiProcessor_Item::kCurrentSpeedFieldNumber;
+const int DmiProcessor_Item::kMaximumSpeedFieldNumber;
+const int DmiProcessor_Item::kVoltageFieldNumber;
+const int DmiProcessor_Item::kSerialNumberFieldNumber;
+const int DmiProcessor_Item::kAssetTagFieldNumber;
+const int DmiProcessor_Item::kPartNumberFieldNumber;
+const int DmiProcessor_Item::kCoreCountFieldNumber;
+const int DmiProcessor_Item::kCoreEnabledFieldNumber;
+const int DmiProcessor_Item::kThreadCountFieldNumber;
+const int DmiProcessor_Item::kCharacteristicsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiProcessors_Item::DmiProcessors_Item()
+DmiProcessor_Item::DmiProcessor_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessors_Item();
+    ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessor_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessor.Item)
 }
-DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
+DmiProcessor_Item::DmiProcessor_Item(const DmiProcessor_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -784,10 +784,10 @@ DmiProcessors_Item::DmiProcessors_Item(const DmiProcessors_Item& from)
   ::memcpy(&family_, &from.family_,
     static_cast<size_t>(reinterpret_cast<char*>(&characteristics_) -
     reinterpret_cast<char*>(&family_)) + sizeof(characteristics_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessor.Item)
 }
 
-void DmiProcessors_Item::SharedCtor() {
+void DmiProcessor_Item::SharedCtor() {
   manufacturer_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   socket_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -800,12 +800,12 @@ void DmiProcessors_Item::SharedCtor() {
   _cached_size_ = 0;
 }
 
-DmiProcessors_Item::~DmiProcessors_Item() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessors.Item)
+DmiProcessor_Item::~DmiProcessor_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessor.Item)
   SharedDtor();
 }
 
-void DmiProcessors_Item::SharedDtor() {
+void DmiProcessor_Item::SharedDtor() {
   manufacturer_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   version_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   socket_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -814,26 +814,26 @@ void DmiProcessors_Item::SharedDtor() {
   part_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void DmiProcessors_Item::SetCachedSize(int size) const {
+void DmiProcessor_Item::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiProcessors_Item& DmiProcessors_Item::default_instance() {
-  ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessors_Item();
+const DmiProcessor_Item& DmiProcessor_Item::default_instance() {
+  ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessor_Item();
   return *internal_default_instance();
 }
 
-DmiProcessors_Item* DmiProcessors_Item::New(::google::protobuf::Arena* arena) const {
-  DmiProcessors_Item* n = new DmiProcessors_Item;
+DmiProcessor_Item* DmiProcessor_Item::New(::google::protobuf::Arena* arena) const {
+  DmiProcessor_Item* n = new DmiProcessor_Item;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiProcessors_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessors.Item)
+void DmiProcessor_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessor.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -850,7 +850,7 @@ void DmiProcessors_Item::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiProcessors_Item::MergePartialFromCodedStream(
+bool DmiProcessor_Item::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -860,7 +860,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessor.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
     tag = p.first;
@@ -875,7 +875,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.manufacturer"));
+            "aspia.proto.DmiProcessor.Item.manufacturer"));
         } else {
           goto handle_unusual;
         }
@@ -891,14 +891,14 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->version().data(), static_cast<int>(this->version().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.version"));
+            "aspia.proto.DmiProcessor.Item.version"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiProcessors.Family family = 3;
+      // .aspia.proto.DmiProcessor.Family family = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
@@ -906,14 +906,14 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_family(static_cast< ::aspia::proto::DmiProcessors_Family >(value));
+          set_family(static_cast< ::aspia::proto::DmiProcessor_Family >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiProcessors.Type type = 4;
+      // .aspia.proto.DmiProcessor.Type type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
@@ -921,14 +921,14 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::aspia::proto::DmiProcessors_Type >(value));
+          set_type(static_cast< ::aspia::proto::DmiProcessor_Type >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiProcessors.Status status = 5;
+      // .aspia.proto.DmiProcessor.Status status = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
@@ -936,7 +936,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::aspia::proto::DmiProcessors_Status >(value));
+          set_status(static_cast< ::aspia::proto::DmiProcessor_Status >(value));
         } else {
           goto handle_unusual;
         }
@@ -952,14 +952,14 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->socket().data(), static_cast<int>(this->socket().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.socket"));
+            "aspia.proto.DmiProcessor.Item.socket"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.DmiProcessors.Upgrade upgrade = 7;
+      // .aspia.proto.DmiProcessor.Upgrade upgrade = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
@@ -967,7 +967,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_upgrade(static_cast< ::aspia::proto::DmiProcessors_Upgrade >(value));
+          set_upgrade(static_cast< ::aspia::proto::DmiProcessor_Upgrade >(value));
         } else {
           goto handle_unusual;
         }
@@ -1039,7 +1039,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->serial_number().data(), static_cast<int>(this->serial_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.serial_number"));
+            "aspia.proto.DmiProcessor.Item.serial_number"));
         } else {
           goto handle_unusual;
         }
@@ -1055,7 +1055,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.asset_tag"));
+            "aspia.proto.DmiProcessor.Item.asset_tag"));
         } else {
           goto handle_unusual;
         }
@@ -1071,7 +1071,7 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->part_number().data(), static_cast<int>(this->part_number().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.DmiProcessors.Item.part_number"));
+            "aspia.proto.DmiProcessor.Item.part_number"));
         } else {
           goto handle_unusual;
         }
@@ -1146,17 +1146,17 @@ bool DmiProcessors_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessor.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessor.Item)
   return false;
 #undef DO_
 }
 
-void DmiProcessors_Item::SerializeWithCachedSizes(
+void DmiProcessor_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessor.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1165,7 +1165,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->manufacturer().data(), static_cast<int>(this->manufacturer().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.manufacturer");
+      "aspia.proto.DmiProcessor.Item.manufacturer");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->manufacturer(), output);
   }
@@ -1175,24 +1175,24 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->version().data(), static_cast<int>(this->version().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.version");
+      "aspia.proto.DmiProcessor.Item.version");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->version(), output);
   }
 
-  // .aspia.proto.DmiProcessors.Family family = 3;
+  // .aspia.proto.DmiProcessor.Family family = 3;
   if (this->family() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->family(), output);
   }
 
-  // .aspia.proto.DmiProcessors.Type type = 4;
+  // .aspia.proto.DmiProcessor.Type type = 4;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->type(), output);
   }
 
-  // .aspia.proto.DmiProcessors.Status status = 5;
+  // .aspia.proto.DmiProcessor.Status status = 5;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->status(), output);
@@ -1203,12 +1203,12 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->socket().data(), static_cast<int>(this->socket().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.socket");
+      "aspia.proto.DmiProcessor.Item.socket");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->socket(), output);
   }
 
-  // .aspia.proto.DmiProcessors.Upgrade upgrade = 7;
+  // .aspia.proto.DmiProcessor.Upgrade upgrade = 7;
   if (this->upgrade() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       7, this->upgrade(), output);
@@ -1239,7 +1239,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->serial_number().data(), static_cast<int>(this->serial_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.serial_number");
+      "aspia.proto.DmiProcessor.Item.serial_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       12, this->serial_number(), output);
   }
@@ -1249,7 +1249,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->asset_tag().data(), static_cast<int>(this->asset_tag().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.asset_tag");
+      "aspia.proto.DmiProcessor.Item.asset_tag");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       13, this->asset_tag(), output);
   }
@@ -1259,7 +1259,7 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->part_number().data(), static_cast<int>(this->part_number().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.DmiProcessors.Item.part_number");
+      "aspia.proto.DmiProcessor.Item.part_number");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       14, this->part_number(), output);
   }
@@ -1286,11 +1286,11 @@ void DmiProcessors_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessors.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessor.Item)
 }
 
-size_t DmiProcessors_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessors.Item)
+size_t DmiProcessor_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessor.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -1337,25 +1337,25 @@ size_t DmiProcessors_Item::ByteSizeLong() const {
         this->part_number());
   }
 
-  // .aspia.proto.DmiProcessors.Family family = 3;
+  // .aspia.proto.DmiProcessor.Family family = 3;
   if (this->family() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->family());
   }
 
-  // .aspia.proto.DmiProcessors.Type type = 4;
+  // .aspia.proto.DmiProcessor.Type type = 4;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
   }
 
-  // .aspia.proto.DmiProcessors.Status status = 5;
+  // .aspia.proto.DmiProcessor.Status status = 5;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
   }
 
-  // .aspia.proto.DmiProcessors.Upgrade upgrade = 7;
+  // .aspia.proto.DmiProcessor.Upgrade upgrade = 7;
   if (this->upgrade() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->upgrade());
@@ -1422,13 +1422,13 @@ size_t DmiProcessors_Item::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiProcessors_Item::CheckTypeAndMergeFrom(
+void DmiProcessor_Item::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiProcessors_Item*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiProcessor_Item*>(&from));
 }
 
-void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessors.Item)
+void DmiProcessor_Item::MergeFrom(const DmiProcessor_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessor.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1496,22 +1496,22 @@ void DmiProcessors_Item::MergeFrom(const DmiProcessors_Item& from) {
   }
 }
 
-void DmiProcessors_Item::CopyFrom(const DmiProcessors_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessors.Item)
+void DmiProcessor_Item::CopyFrom(const DmiProcessor_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessor.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiProcessors_Item::IsInitialized() const {
+bool DmiProcessor_Item::IsInitialized() const {
   return true;
 }
 
-void DmiProcessors_Item::Swap(DmiProcessors_Item* other) {
+void DmiProcessor_Item::Swap(DmiProcessor_Item* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiProcessors_Item::InternalSwap(DmiProcessors_Item* other) {
+void DmiProcessor_Item::InternalSwap(DmiProcessor_Item* other) {
   using std::swap;
   manufacturer_.Swap(&other->manufacturer_);
   version_.Swap(&other->version_);
@@ -1535,68 +1535,68 @@ void DmiProcessors_Item::InternalSwap(DmiProcessors_Item* other) {
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiProcessors_Item::GetTypeName() const {
-  return "aspia.proto.DmiProcessors.Item";
+::std::string DmiProcessor_Item::GetTypeName() const {
+  return "aspia.proto.DmiProcessor.Item";
 }
 
 
 // ===================================================================
 
-void DmiProcessors::InitAsDefaultInstance() {
+void DmiProcessor::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DmiProcessors::kItemFieldNumber;
+const int DmiProcessor::kItemFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DmiProcessors::DmiProcessors()
+DmiProcessor::DmiProcessor()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessors();
+    ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessor();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(constructor:aspia.proto.DmiProcessor)
 }
-DmiProcessors::DmiProcessors(const DmiProcessors& from)
+DmiProcessor::DmiProcessor(const DmiProcessor& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.DmiProcessor)
 }
 
-void DmiProcessors::SharedCtor() {
+void DmiProcessor::SharedCtor() {
   _cached_size_ = 0;
 }
 
-DmiProcessors::~DmiProcessors() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessors)
+DmiProcessor::~DmiProcessor() {
+  // @@protoc_insertion_point(destructor:aspia.proto.DmiProcessor)
   SharedDtor();
 }
 
-void DmiProcessors::SharedDtor() {
+void DmiProcessor::SharedDtor() {
 }
 
-void DmiProcessors::SetCachedSize(int size) const {
+void DmiProcessor::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DmiProcessors& DmiProcessors::default_instance() {
-  ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessors();
+const DmiProcessor& DmiProcessor::default_instance() {
+  ::protobuf_category_5fdmi_5fprocessor_2eproto::InitDefaultsDmiProcessor();
   return *internal_default_instance();
 }
 
-DmiProcessors* DmiProcessors::New(::google::protobuf::Arena* arena) const {
-  DmiProcessors* n = new DmiProcessors;
+DmiProcessor* DmiProcessor::New(::google::protobuf::Arena* arena) const {
+  DmiProcessor* n = new DmiProcessor;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DmiProcessors::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessors)
+void DmiProcessor::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.DmiProcessor)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1605,7 +1605,7 @@ void DmiProcessors::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DmiProcessors::MergePartialFromCodedStream(
+bool DmiProcessor::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -1615,13 +1615,13 @@ bool DmiProcessors::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(parse_start:aspia.proto.DmiProcessor)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.DmiProcessors.Item item = 1;
+      // repeated .aspia.proto.DmiProcessor.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -1644,21 +1644,21 @@ bool DmiProcessors::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(parse_success:aspia.proto.DmiProcessor)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.DmiProcessor)
   return false;
 #undef DO_
 }
 
-void DmiProcessors::SerializeWithCachedSizes(
+void DmiProcessor::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.DmiProcessor)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.DmiProcessors.Item item = 1;
+  // repeated .aspia.proto.DmiProcessor.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -1667,16 +1667,16 @@ void DmiProcessors::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessors)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.DmiProcessor)
 }
 
-size_t DmiProcessors::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessors)
+size_t DmiProcessor::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DmiProcessor)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.DmiProcessors.Item item = 1;
+  // repeated .aspia.proto.DmiProcessor.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -1694,13 +1694,13 @@ size_t DmiProcessors::ByteSizeLong() const {
   return total_size;
 }
 
-void DmiProcessors::CheckTypeAndMergeFrom(
+void DmiProcessor::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DmiProcessors*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const DmiProcessor*>(&from));
 }
 
-void DmiProcessors::MergeFrom(const DmiProcessors& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessors)
+void DmiProcessor::MergeFrom(const DmiProcessor& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DmiProcessor)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1709,30 +1709,30 @@ void DmiProcessors::MergeFrom(const DmiProcessors& from) {
   item_.MergeFrom(from.item_);
 }
 
-void DmiProcessors::CopyFrom(const DmiProcessors& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessors)
+void DmiProcessor::CopyFrom(const DmiProcessor& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DmiProcessor)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DmiProcessors::IsInitialized() const {
+bool DmiProcessor::IsInitialized() const {
   return true;
 }
 
-void DmiProcessors::Swap(DmiProcessors* other) {
+void DmiProcessor::Swap(DmiProcessor* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DmiProcessors::InternalSwap(DmiProcessors* other) {
+void DmiProcessor::InternalSwap(DmiProcessor* other) {
   using std::swap;
   item_.InternalSwap(&other->item_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DmiProcessors::GetTypeName() const {
-  return "aspia.proto.DmiProcessors";
+::std::string DmiProcessor::GetTypeName() const {
+  return "aspia.proto.DmiProcessor";
 }
 
 

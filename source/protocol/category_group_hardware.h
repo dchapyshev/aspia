@@ -14,25 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiMemoryDevices : public CategoryInfo
-{
-public:
-    CategoryDmiMemoryDevices() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* TypeToString(proto::DmiMemoryDevices::Type value);
-    static const char* FormFactorToString(proto::DmiMemoryDevices::FormFactor value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiMemoryDevices);
-};
-
 class CategoryDmiSystemSlots : public CategoryInfo
 {
 public:

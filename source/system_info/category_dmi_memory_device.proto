@@ -1,0 +1,82 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_dmi_memory_device.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DmiMemoryDevice
+{
+    enum Type
+    {
+        TYPE_UNKNOWN      = 0;
+        TYPE_OTHER        = 1;
+        TYPE_DRAM         = 2;
+        TYPE_EDRAM        = 3;
+        TYPE_VRAM         = 4;
+        TYPE_SRAM         = 5;
+        TYPE_RAM          = 6;
+        TYPE_ROM          = 7;
+        TYPE_FLASH        = 8;
+        TYPE_EEPROM       = 9;
+        TYPE_FEPROM       = 10;
+        TYPE_EPROM        = 11;
+        TYPE_CDRAM        = 12;
+        TYPE_3DRAM        = 13;
+        TYPE_SDRAM        = 14;
+        TYPE_SGRAM        = 15;
+        TYPE_RDRAM        = 16;
+        TYPE_DDR          = 17;
+        TYPE_DDR2         = 18;
+        TYPE_DDR2_FB_DIMM = 19;
+        TYPE_DDR3         = 20;
+        TYPE_FBD2         = 21;
+        TYPE_DDR4         = 22;
+        TYPE_LPDDR        = 23;
+        TYPE_LPDDR2       = 24;
+        TYPE_LPDDR3       = 25;
+        TYPE_LPDDR4       = 26;
+    }
+
+    enum FormFactor
+    {
+        FORM_FACTOR_UNKNOWN          = 0;
+        FORM_FACTOR_OTHER            = 1;
+        FORM_FACTOR_SIMM             = 2;
+        FORM_FACTOR_SIP              = 3;
+        FORM_FACTOR_CHIP             = 4;
+        FORM_FACTOR_DIP              = 5;
+        FORM_FACTOR_ZIP              = 6;
+        FORM_FACTOR_PROPRIETARY_CARD = 7;
+        FORM_FACTOR_DIMM             = 8;
+        FORM_FACTOR_TSOP             = 9;
+        FORM_FACTOR_ROW_OF_CHIPS     = 10;
+        FORM_FACTOR_RIMM             = 11;
+        FORM_FACTOR_SODIMM           = 12;
+        FORM_FACTOR_SRIMM            = 13;
+        FORM_FACTOR_FB_DIMM          = 14;
+    }
+
+    message Item
+    {
+        string device_locator  = 1;
+        uint64 size            = 2;
+        Type type              = 3;
+        int32 speed            = 4;
+        FormFactor form_factor = 5;
+        string serial_number   = 6;
+        string part_number     = 7;
+        string manufactorer    = 8;
+        string bank            = 9;
+        int32 total_width      = 10;
+        int32 data_width       = 11;
+    }
+
+    repeated Item item = 1;
+}
