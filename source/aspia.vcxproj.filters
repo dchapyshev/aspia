@@ -736,6 +736,12 @@
     <ClCompile Include="system_info\category_monitor.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_printer.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_printer.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1508,6 +1514,12 @@
     <ClInclude Include="system_info\category_monitor.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_printer.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_printer.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1571,6 +1583,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_monitor.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_printer.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

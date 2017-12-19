@@ -15,6 +15,7 @@
 #include "system_info/category_cpu.h"
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
+#include "system_info/category_printer.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_video_adapter.h"
@@ -113,7 +114,7 @@ CategoryList CreateCategoryTree()
     hardware->mutable_child_list()->emplace_back(std::move(storage));
     hardware->mutable_child_list()->emplace_back(std::move(display));
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPowerOptions>());
-    hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPrinters>());
+    hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryPrinter>());
     hardware->mutable_child_list()->emplace_back(std::make_unique<CategoryWindowsDevices>());
 
     std::unique_ptr<CategoryGroup> software = std::make_unique<CategoryGroupSoftware>();
@@ -199,7 +200,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryCPU>());
     emplace_back(std::make_unique<CategoryMemory>());
     emplace_back(std::make_unique<CategoryPowerOptions>());
-    emplace_back(std::make_unique<CategoryPrinters>());
+    emplace_back(std::make_unique<CategoryPrinter>());
 
     emplace_back(std::make_unique<CategoryPrograms>());
     emplace_back(std::make_unique<CategoryUpdates>());
