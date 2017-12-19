@@ -66,16 +66,17 @@ public:
 
     enum TableType : uint8_t
     {
-        TABLE_TYPE_BIOS           = 0x00,
-        TABLE_TYPE_SYSTEM         = 0x01,
-        TABLE_TYPE_BASEBOARD      = 0x02,
-        TABLE_TYPE_CHASSIS        = 0x03,
-        TABLE_TYPE_PROCESSOR      = 0x04,
-        TABLE_TYPE_CACHE          = 0x07,
-        TABLE_TYPE_PORT_CONNECTOR = 0x08,
-        TABLE_TYPE_SYSTEM_SLOT    = 0x09,
-        TABLE_TYPE_ONBOARD_DEVICE = 0x0A,
-        TABLE_TYPE_MEMORY_DEVICE  = 0x11
+        TABLE_TYPE_BIOS            = 0x00,
+        TABLE_TYPE_SYSTEM          = 0x01,
+        TABLE_TYPE_BASEBOARD       = 0x02,
+        TABLE_TYPE_CHASSIS         = 0x03,
+        TABLE_TYPE_PROCESSOR       = 0x04,
+        TABLE_TYPE_CACHE           = 0x07,
+        TABLE_TYPE_PORT_CONNECTOR  = 0x08,
+        TABLE_TYPE_SYSTEM_SLOT     = 0x09,
+        TABLE_TYPE_ONBOARD_DEVICE  = 0x0A,
+        TABLE_TYPE_MEMORY_DEVICE   = 0x11,
+        TABLE_TYPE_POINTING_DEVICE = 0x15
     };
 
     class TableReader
@@ -119,22 +120,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class PointingDeviceTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x15 };
-
-        proto::DmiPointingDevices::Type GetDeviceType() const;
-        proto::DmiPointingDevices::Interface GetInterface() const;
-        int GetButtonCount() const;
-
-    private:
-        friend class TableEnumerator<PointingDeviceTable>;
-        explicit PointingDeviceTable(const TableReader& reader);
-
-        TableReader reader_;
     };
 
     class PortableBatteryTable

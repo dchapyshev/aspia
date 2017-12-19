@@ -36,15 +36,11 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[23];
+  static const ::google::protobuf::internal::ParseTable schema[21];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsDmiPointingDevices_ItemImpl();
-void InitDefaultsDmiPointingDevices_Item();
-void InitDefaultsDmiPointingDevicesImpl();
-void InitDefaultsDmiPointingDevices();
 void InitDefaultsDmiPortableBattery_ItemImpl();
 void InitDefaultsDmiPortableBattery_Item();
 void InitDefaultsDmiPortableBatteryImpl();
@@ -88,8 +84,6 @@ void InitDefaultsSessions_Item();
 void InitDefaultsSessionsImpl();
 void InitDefaultsSessions();
 inline void InitDefaults() {
-  InitDefaultsDmiPointingDevices_Item();
-  InitDefaultsDmiPointingDevices();
   InitDefaultsDmiPortableBattery_Item();
   InitDefaultsDmiPortableBattery();
   InitDefaultsPrograms_Item();
@@ -115,12 +109,6 @@ inline void InitDefaults() {
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 namespace aspia {
 namespace proto {
-class DmiPointingDevices;
-class DmiPointingDevicesDefaultTypeInternal;
-extern DmiPointingDevicesDefaultTypeInternal _DmiPointingDevices_default_instance_;
-class DmiPointingDevices_Item;
-class DmiPointingDevices_ItemDefaultTypeInternal;
-extern DmiPointingDevices_ItemDefaultTypeInternal _DmiPointingDevices_Item_default_instance_;
 class DmiPortableBattery;
 class DmiPortableBatteryDefaultTypeInternal;
 extern DmiPortableBatteryDefaultTypeInternal _DmiPortableBattery_default_instance_;
@@ -188,44 +176,6 @@ extern Users_ItemDefaultTypeInternal _Users_Item_default_instance_;
 }  // namespace aspia
 namespace aspia {
 namespace proto {
-
-enum DmiPointingDevices_Type {
-  DmiPointingDevices_Type_TYPE_UNKNOWN = 0,
-  DmiPointingDevices_Type_TYPE_OTHER = 1,
-  DmiPointingDevices_Type_TYPE_MOUSE = 2,
-  DmiPointingDevices_Type_TYPE_TRACK_BALL = 3,
-  DmiPointingDevices_Type_TYPE_TRACK_POINT = 4,
-  DmiPointingDevices_Type_TYPE_GLIDE_POINT = 5,
-  DmiPointingDevices_Type_TYPE_TOUCH_PAD = 6,
-  DmiPointingDevices_Type_TYPE_TOUCH_SCREEN = 7,
-  DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR = 8,
-  DmiPointingDevices_Type_DmiPointingDevices_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPointingDevices_Type_DmiPointingDevices_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiPointingDevices_Type_IsValid(int value);
-const DmiPointingDevices_Type DmiPointingDevices_Type_Type_MIN = DmiPointingDevices_Type_TYPE_UNKNOWN;
-const DmiPointingDevices_Type DmiPointingDevices_Type_Type_MAX = DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR;
-const int DmiPointingDevices_Type_Type_ARRAYSIZE = DmiPointingDevices_Type_Type_MAX + 1;
-
-enum DmiPointingDevices_Interface {
-  DmiPointingDevices_Interface_INTERFACE_UNKNOWN = 0,
-  DmiPointingDevices_Interface_INTERFACE_OTHER = 1,
-  DmiPointingDevices_Interface_INTERFACE_SERIAL = 2,
-  DmiPointingDevices_Interface_INTERFACE_PS_2 = 3,
-  DmiPointingDevices_Interface_INTERFACE_INFRARED = 4,
-  DmiPointingDevices_Interface_INTERFACE_HP_HIL = 5,
-  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE = 6,
-  DmiPointingDevices_Interface_INTERFACE_ADB = 7,
-  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_DB_9 = 8,
-  DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN = 9,
-  DmiPointingDevices_Interface_INTERFACE_USB = 10,
-  DmiPointingDevices_Interface_DmiPointingDevices_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPointingDevices_Interface_DmiPointingDevices_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiPointingDevices_Interface_IsValid(int value);
-const DmiPointingDevices_Interface DmiPointingDevices_Interface_Interface_MIN = DmiPointingDevices_Interface_INTERFACE_UNKNOWN;
-const DmiPointingDevices_Interface DmiPointingDevices_Interface_Interface_MAX = DmiPointingDevices_Interface_INTERFACE_USB;
-const int DmiPointingDevices_Interface_Interface_ARRAYSIZE = DmiPointingDevices_Interface_Interface_MAX + 1;
 
 enum DmiPortableBattery_Chemistry {
   DmiPortableBattery_Chemistry_CHEMISTRY_UNKNOWN = 0,
@@ -348,284 +298,6 @@ const int Sessions_ConnectState_ConnectState_ARRAYSIZE = Sessions_ConnectState_C
 
 // ===================================================================
 
-class DmiPointingDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevices.Item) */ {
- public:
-  DmiPointingDevices_Item();
-  virtual ~DmiPointingDevices_Item();
-
-  DmiPointingDevices_Item(const DmiPointingDevices_Item& from);
-
-  inline DmiPointingDevices_Item& operator=(const DmiPointingDevices_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiPointingDevices_Item(DmiPointingDevices_Item&& from) noexcept
-    : DmiPointingDevices_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiPointingDevices_Item& operator=(DmiPointingDevices_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiPointingDevices_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPointingDevices_Item* internal_default_instance() {
-    return reinterpret_cast<const DmiPointingDevices_Item*>(
-               &_DmiPointingDevices_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
-
-  void Swap(DmiPointingDevices_Item* other);
-  friend void swap(DmiPointingDevices_Item& a, DmiPointingDevices_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiPointingDevices_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiPointingDevices_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiPointingDevices_Item& from);
-  void MergeFrom(const DmiPointingDevices_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiPointingDevices_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // .aspia.proto.DmiPointingDevices.Type device_type = 1;
-  void clear_device_type();
-  static const int kDeviceTypeFieldNumber = 1;
-  ::aspia::proto::DmiPointingDevices_Type device_type() const;
-  void set_device_type(::aspia::proto::DmiPointingDevices_Type value);
-
-  // .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
-  void clear_device_interface();
-  static const int kDeviceInterfaceFieldNumber = 2;
-  ::aspia::proto::DmiPointingDevices_Interface device_interface() const;
-  void set_device_interface(::aspia::proto::DmiPointingDevices_Interface value);
-
-  // int32 button_count = 3;
-  void clear_button_count();
-  static const int kButtonCountFieldNumber = 3;
-  ::google::protobuf::int32 button_count() const;
-  void set_button_count(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevices.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  int device_type_;
-  int device_interface_;
-  ::google::protobuf::int32 button_count_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevices_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class DmiPointingDevices : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPointingDevices) */ {
- public:
-  DmiPointingDevices();
-  virtual ~DmiPointingDevices();
-
-  DmiPointingDevices(const DmiPointingDevices& from);
-
-  inline DmiPointingDevices& operator=(const DmiPointingDevices& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiPointingDevices(DmiPointingDevices&& from) noexcept
-    : DmiPointingDevices() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiPointingDevices& operator=(DmiPointingDevices&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiPointingDevices& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPointingDevices* internal_default_instance() {
-    return reinterpret_cast<const DmiPointingDevices*>(
-               &_DmiPointingDevices_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
-
-  void Swap(DmiPointingDevices* other);
-  friend void swap(DmiPointingDevices& a, DmiPointingDevices& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiPointingDevices* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiPointingDevices* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiPointingDevices& from);
-  void MergeFrom(const DmiPointingDevices& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiPointingDevices* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef DmiPointingDevices_Item Item;
-
-  typedef DmiPointingDevices_Type Type;
-  static const Type TYPE_UNKNOWN =
-    DmiPointingDevices_Type_TYPE_UNKNOWN;
-  static const Type TYPE_OTHER =
-    DmiPointingDevices_Type_TYPE_OTHER;
-  static const Type TYPE_MOUSE =
-    DmiPointingDevices_Type_TYPE_MOUSE;
-  static const Type TYPE_TRACK_BALL =
-    DmiPointingDevices_Type_TYPE_TRACK_BALL;
-  static const Type TYPE_TRACK_POINT =
-    DmiPointingDevices_Type_TYPE_TRACK_POINT;
-  static const Type TYPE_GLIDE_POINT =
-    DmiPointingDevices_Type_TYPE_GLIDE_POINT;
-  static const Type TYPE_TOUCH_PAD =
-    DmiPointingDevices_Type_TYPE_TOUCH_PAD;
-  static const Type TYPE_TOUCH_SCREEN =
-    DmiPointingDevices_Type_TYPE_TOUCH_SCREEN;
-  static const Type TYPE_OPTICAL_SENSOR =
-    DmiPointingDevices_Type_TYPE_OPTICAL_SENSOR;
-  static inline bool Type_IsValid(int value) {
-    return DmiPointingDevices_Type_IsValid(value);
-  }
-  static const Type Type_MIN =
-    DmiPointingDevices_Type_Type_MIN;
-  static const Type Type_MAX =
-    DmiPointingDevices_Type_Type_MAX;
-  static const int Type_ARRAYSIZE =
-    DmiPointingDevices_Type_Type_ARRAYSIZE;
-
-  typedef DmiPointingDevices_Interface Interface;
-  static const Interface INTERFACE_UNKNOWN =
-    DmiPointingDevices_Interface_INTERFACE_UNKNOWN;
-  static const Interface INTERFACE_OTHER =
-    DmiPointingDevices_Interface_INTERFACE_OTHER;
-  static const Interface INTERFACE_SERIAL =
-    DmiPointingDevices_Interface_INTERFACE_SERIAL;
-  static const Interface INTERFACE_PS_2 =
-    DmiPointingDevices_Interface_INTERFACE_PS_2;
-  static const Interface INTERFACE_INFRARED =
-    DmiPointingDevices_Interface_INTERFACE_INFRARED;
-  static const Interface INTERFACE_HP_HIL =
-    DmiPointingDevices_Interface_INTERFACE_HP_HIL;
-  static const Interface INTERFACE_BUS_MOUSE =
-    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE;
-  static const Interface INTERFACE_ADB =
-    DmiPointingDevices_Interface_INTERFACE_ADB;
-  static const Interface INTERFACE_BUS_MOUSE_DB_9 =
-    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_DB_9;
-  static const Interface INTERFACE_BUS_MOUSE_MICRO_DIN =
-    DmiPointingDevices_Interface_INTERFACE_BUS_MOUSE_MICRO_DIN;
-  static const Interface INTERFACE_USB =
-    DmiPointingDevices_Interface_INTERFACE_USB;
-  static inline bool Interface_IsValid(int value) {
-    return DmiPointingDevices_Interface_IsValid(value);
-  }
-  static const Interface Interface_MIN =
-    DmiPointingDevices_Interface_Interface_MIN;
-  static const Interface Interface_MAX =
-    DmiPointingDevices_Interface_Interface_MAX;
-  static const int Interface_ARRAYSIZE =
-    DmiPointingDevices_Interface_Interface_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.DmiPointingDevices.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::DmiPointingDevices_Item& item(int index) const;
-  ::aspia::proto::DmiPointingDevices_Item* mutable_item(int index);
-  ::aspia::proto::DmiPointingDevices_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPointingDevices)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPointingDevicesImpl();
-};
-// -------------------------------------------------------------------
-
 class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPortableBattery.Item) */ {
  public:
   DmiPortableBattery_Item();
@@ -660,7 +332,7 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
                &_DmiPortableBattery_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    0;
 
   void Swap(DmiPortableBattery_Item* other);
   friend void swap(DmiPortableBattery_Item& a, DmiPortableBattery_Item& b) {
@@ -913,7 +585,7 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
                &_DmiPortableBattery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    1;
 
   void Swap(DmiPortableBattery* other);
   friend void swap(DmiPortableBattery& a, DmiPortableBattery& b) {
@@ -1045,7 +717,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    2;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -1210,7 +882,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    3;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -1315,7 +987,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -1544,7 +1216,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -1649,7 +1321,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -1769,7 +1441,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -2061,7 +1733,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -2166,7 +1838,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -2329,7 +2001,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -2488,7 +2160,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -2669,7 +2341,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -2774,7 +2446,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -2916,7 +2588,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    14;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -3021,7 +2693,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    15;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -3212,7 +2884,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    16;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -3317,7 +2989,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    17;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -3437,7 +3109,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    18;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -3542,7 +3214,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    19;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -3706,7 +3378,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    20;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -3817,86 +3489,6 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// DmiPointingDevices_Item
-
-// .aspia.proto.DmiPointingDevices.Type device_type = 1;
-inline void DmiPointingDevices_Item::clear_device_type() {
-  device_type_ = 0;
-}
-inline ::aspia::proto::DmiPointingDevices_Type DmiPointingDevices_Item::device_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.device_type)
-  return static_cast< ::aspia::proto::DmiPointingDevices_Type >(device_type_);
-}
-inline void DmiPointingDevices_Item::set_device_type(::aspia::proto::DmiPointingDevices_Type value) {
-  
-  device_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.device_type)
-}
-
-// .aspia.proto.DmiPointingDevices.Interface device_interface = 2;
-inline void DmiPointingDevices_Item::clear_device_interface() {
-  device_interface_ = 0;
-}
-inline ::aspia::proto::DmiPointingDevices_Interface DmiPointingDevices_Item::device_interface() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.device_interface)
-  return static_cast< ::aspia::proto::DmiPointingDevices_Interface >(device_interface_);
-}
-inline void DmiPointingDevices_Item::set_device_interface(::aspia::proto::DmiPointingDevices_Interface value) {
-  
-  device_interface_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.device_interface)
-}
-
-// int32 button_count = 3;
-inline void DmiPointingDevices_Item::clear_button_count() {
-  button_count_ = 0;
-}
-inline ::google::protobuf::int32 DmiPointingDevices_Item::button_count() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.Item.button_count)
-  return button_count_;
-}
-inline void DmiPointingDevices_Item::set_button_count(::google::protobuf::int32 value) {
-  
-  button_count_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPointingDevices.Item.button_count)
-}
-
-// -------------------------------------------------------------------
-
-// DmiPointingDevices
-
-// repeated .aspia.proto.DmiPointingDevices.Item item = 1;
-inline int DmiPointingDevices::item_size() const {
-  return item_.size();
-}
-inline void DmiPointingDevices::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::DmiPointingDevices_Item& DmiPointingDevices::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPointingDevices.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::DmiPointingDevices_Item* DmiPointingDevices::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPointingDevices.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::DmiPointingDevices_Item* DmiPointingDevices::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiPointingDevices.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >*
-DmiPointingDevices::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiPointingDevices.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPointingDevices_Item >&
-DmiPointingDevices::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiPointingDevices.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
 // DmiPortableBattery_Item
 
 // string location = 1;
@@ -7336,10 +6928,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -7349,8 +6937,6 @@ Sessions::item() const {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Interface> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortableBattery_Chemistry> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};
