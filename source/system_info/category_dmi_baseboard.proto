@@ -1,0 +1,55 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_dmi_baseboard.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DmiBaseboard
+{
+    enum BoardType
+    {
+        BOARD_TYPE_UNKNOWN                      = 0;
+        BOARD_TYPE_OTHER                        = 1;
+        BOARD_TYPE_SERVER_BLADE                 = 2;
+        BOARD_TYPE_CONNECTIVITY_SWITCH          = 3;
+        BOARD_TYPE_SYSTEM_MANAGEMENT_MODULE     = 4;
+        BOARD_TYPE_PROCESSOR_MODULE             = 5;
+        BOARD_TYPE_IO_MODULE                    = 6;
+        BOARD_TYPE_MEMORY_MODULE                = 7;
+        BOARD_TYPE_DAUGHTER_BOARD               = 8;
+        BOARD_TYPE_MOTHERBOARD                  = 9;
+        BOARD_TYPE_PROCESSOR_PLUS_MEMORY_MODULE = 10;
+        BOARD_TYPE_PROCESSOR_PLUS_IO_MODULE     = 11;
+        BOARD_TYPE_INTERCONNECT_BOARD           = 12;
+    }
+
+    message Features
+    {
+        bool is_hosting_board                        = 1;
+        bool is_requires_at_least_one_daughter_board = 2;
+        bool is_removable                            = 3;
+        bool is_replaceable                          = 4;
+        bool is_hot_swappable                        = 5;
+    }
+
+    message Item
+    {
+        string manufacturer        = 1;
+        string product_name        = 2;
+        string version             = 3;
+        string serial_number       = 4;
+        string asset_tag           = 5;
+        Features features          = 6;
+        string location_in_chassis = 7;
+        BoardType type             = 8;
+    }
+
+    repeated Item item = 1;
+}

@@ -66,8 +66,9 @@ public:
 
     enum TableType : uint8_t
     {
-        TABLE_TYPE_BIOS   = 0x00,
-        TABLE_TYPE_SYSTEM = 0x01
+        TABLE_TYPE_BIOS      = 0x00,
+        TABLE_TYPE_SYSTEM    = 0x01,
+        TABLE_TYPE_BASEBOARD = 0x02
     };
 
     class TableReader
@@ -111,32 +112,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class BaseboardTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x02 };
-
-        std::string GetManufacturer() const;
-        std::string GetProductName() const;
-        std::string GetVersion() const;
-        std::string GetSerialNumber() const;
-        std::string GetAssetTag() const;
-        std::string GetLocationInChassis() const;
-        proto::DmiBaseboard::BoardType GetBoardType() const;
-
-        bool IsHostingBoard() const;
-        bool IsRequiresAtLeastOneDaughterBoard() const;
-        bool IsRemovable() const;
-        bool IsReplaceable() const;
-        bool IsHotSwappable() const;
-
-    private:
-        friend class TableEnumerator<BaseboardTable>;
-        explicit BaseboardTable(const TableReader& reader);
-
-        TableReader reader_;
     };
 
     class ChassisTable

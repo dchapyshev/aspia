@@ -778,6 +778,12 @@
     <ClCompile Include="system_info\category_dmi_system.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_dmi_baseboard.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_dmi_baseboard.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1592,6 +1598,12 @@
     <ClInclude Include="system_info\category_dmi_system.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_dmi_baseboard.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_dmi_baseboard.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1676,6 +1688,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_dmi_system.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_dmi_baseboard.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

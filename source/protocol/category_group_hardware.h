@@ -14,24 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiBaseboard : public CategoryInfo
-{
-public:
-    CategoryDmiBaseboard() : CategoryInfo((Type::INFO_PARAM_VALUE)) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* BoardTypeToString(proto::DmiBaseboard::BoardType type);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiBaseboard);
-};
-
 class CategoryDmiChassis : public CategoryInfo
 {
 public:
