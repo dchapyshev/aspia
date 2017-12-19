@@ -17,36 +17,6 @@
 namespace aspia {
 
 //
-// CategoryRasConnections
-//
-
-const char* CategoryRasConnections::Name() const
-{
-    return "RAS Connections";
-}
-
-Category::IconId CategoryRasConnections::Icon() const
-{
-    return IDI_TELEPHONE_FAX;
-}
-
-const char* CategoryRasConnections::Guid() const
-{
-    return "{E0A43CFD-3A97-4577-B3FB-3B542C0729F7}";
-}
-
-void CategoryRasConnections::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryRasConnections::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
 // CategoryOpenConnections
 //
 

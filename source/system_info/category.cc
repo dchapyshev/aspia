@@ -31,6 +31,7 @@
 #include "system_info/category_power_options.h"
 #include "system_info/category_printer.h"
 #include "system_info/category_process.h"
+#include "system_info/category_ras.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_video_adapter.h"
@@ -210,7 +211,7 @@ CategoryList CreateCategoryTree()
     std::unique_ptr<CategoryGroup> network = std::make_unique<CategoryGroupNetwork>();
 
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryNetworkCard>());
-    network->mutable_child_list()->emplace_back(std::make_unique<CategoryRasConnections>());
+    network->mutable_child_list()->emplace_back(std::make_unique<CategoryRAS>());
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryOpenConnections>());
     network->mutable_child_list()->emplace_back(std::make_unique<CategorySharedResources>());
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryOpenFiles>());
@@ -291,7 +292,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryLicenses>());
 
     emplace_back(std::make_unique<CategoryNetworkCard>());
-    emplace_back(std::make_unique<CategoryRasConnections>());
+    emplace_back(std::make_unique<CategoryRAS>());
     emplace_back(std::make_unique<CategoryOpenConnections>());
     emplace_back(std::make_unique<CategorySharedResources>());
     emplace_back(std::make_unique<CategoryOpenFiles>());

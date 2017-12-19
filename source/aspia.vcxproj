@@ -233,6 +233,8 @@
     <ClCompile Include="system_info\category_printer.pb.cc" />
     <ClCompile Include="system_info\category_process.cc" />
     <ClCompile Include="system_info\category_process.pb.cc" />
+    <ClCompile Include="system_info\category_ras.cc" />
+    <ClCompile Include="system_info\category_ras.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
     <ClCompile Include="system_info\category_smart.pb.cc" />
     <ClCompile Include="system_info\category_video_adapter.cc" />
@@ -524,6 +526,8 @@
     <ClInclude Include="system_info\category_printer.pb.h" />
     <ClInclude Include="system_info\category_process.h" />
     <ClInclude Include="system_info\category_process.pb.h" />
+    <ClInclude Include="system_info\category_ras.h" />
+    <ClInclude Include="system_info\category_ras.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
     <ClInclude Include="system_info\category_smart.pb.h" />
     <ClInclude Include="system_info\category_video_adapter.h" />
@@ -614,6 +618,7 @@
     <None Include="system_info\category_power_options.proto" />
     <None Include="system_info\category_printer.proto" />
     <None Include="system_info\category_process.proto" />
+    <None Include="system_info\category_ras.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_video_adapter.proto" />
     <None Include="system_info\category_windows_device.proto" />
