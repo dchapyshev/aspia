@@ -39,7 +39,7 @@ public:
     static Value Number(double value, std::string_view unit);
     static Value Number(double value);
 
-    static Value MemorySizeInBytes(uint64_t value);
+    static Value MemorySize(uint64_t value);
 
     enum class Type
     {

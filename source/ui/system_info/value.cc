@@ -190,7 +190,7 @@ Value Value::Number(double value)
 }
 
 // static
-Value Value::MemorySizeInBytes(uint64_t value)
+Value Value::MemorySize(uint64_t value)
 {
     return Value(Type::MEMORY_SIZE, GetMemorySize(value), GetMemorySizeUnit(value));
 }

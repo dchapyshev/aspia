@@ -47,12 +47,12 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
     {
         Group group = table.AddGroup("Physical Memory");
 
-        group.AddParam("Total", Value::MemorySizeInBytes(message.total_physical()));
+        group.AddParam("Total", Value::MemorySize(message.total_physical()));
 
         uint64_t used = message.total_physical() - message.free_physical();
-        group.AddParam("Used", Value::MemorySizeInBytes(used));
+        group.AddParam("Used", Value::MemorySize(used));
 
-        group.AddParam("Free", Value::MemorySizeInBytes(message.free_physical()));
+        group.AddParam("Free", Value::MemorySize(message.free_physical()));
 
         uint64_t utilization = (message.free_physical() * 100ULL) / message.total_physical();
         group.AddParam("Utilization", Value::Number(utilization, "%"));
@@ -62,12 +62,12 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
     {
         Group group = table.AddGroup("Page File Memory");
 
-        group.AddParam("Total", Value::MemorySizeInBytes(message.total_page_file()));
+        group.AddParam("Total", Value::MemorySize(message.total_page_file()));
 
         uint64_t used = message.total_page_file() - message.free_page_file();
-        group.AddParam("Used", Value::MemorySizeInBytes(used));
+        group.AddParam("Used", Value::MemorySize(used));
 
-        group.AddParam("Free", Value::MemorySizeInBytes(message.free_page_file()));
+        group.AddParam("Free", Value::MemorySize(message.free_page_file()));
 
         uint64_t utilization = (message.free_page_file() * 100ULL) / message.total_page_file();
         group.AddParam("Utilization", Value::Number(utilization, "%"));
@@ -77,12 +77,12 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
     {
         Group group = table.AddGroup("Virtual Memory");
 
-        group.AddParam("Total", Value::MemorySizeInBytes(message.total_virtual()));
+        group.AddParam("Total", Value::MemorySize(message.total_virtual()));
 
         uint64_t used = message.total_virtual() - message.free_virtual();
-        group.AddParam("Used", Value::MemorySizeInBytes(used));
+        group.AddParam("Used", Value::MemorySize(used));
 
-        group.AddParam("Free", Value::MemorySizeInBytes(message.free_virtual()));
+        group.AddParam("Free", Value::MemorySize(message.free_virtual()));
 
         uint64_t utilization = (message.free_virtual() * 100ULL) / message.total_virtual();
         group.AddParam("Utilization", Value::Number(utilization, "%"));

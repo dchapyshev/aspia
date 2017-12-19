@@ -89,12 +89,12 @@ void CategoryLogicalDrive::Parse(Table& table, const std::string& data)
         row.AddValue(Value::String(item.drive_label()));
         row.AddValue(Value::String(DriveTypeToString(item.drive_type())));
         row.AddValue(Value::String(item.file_system()));
-        row.AddValue(Value::MemorySizeInBytes(item.total_size()));
+        row.AddValue(Value::MemorySize(item.total_size()));
 
         uint64_t used_space = item.total_size() - item.free_space();
-        row.AddValue(Value::MemorySizeInBytes(used_space));
+        row.AddValue(Value::MemorySize(used_space));
 
-        row.AddValue(Value::MemorySizeInBytes(item.free_space()));
+        row.AddValue(Value::MemorySize(item.free_space()));
 
         uint64_t free_percent = (item.free_space() * 100ULL) / item.total_size();
         row.AddValue(Value::Number(free_percent, "%"));

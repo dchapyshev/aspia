@@ -302,7 +302,7 @@ void CategoryDmiMemoryDevice::Parse(Table& table, const std::string& data)
             group.AddParam("Device Locator", Value::String(item.device_locator()));
 
         if (item.size() != 0)
-            group.AddParam("Size", Value::MemorySizeInBytes(item.size()));
+            group.AddParam("Size", Value::MemorySize(item.size()));
 
         group.AddParam("Type", Value::String(TypeToString(item.type())));
 
