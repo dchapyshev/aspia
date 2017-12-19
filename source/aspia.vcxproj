@@ -194,6 +194,8 @@
     <ClCompile Include="system_info\category_ata.pb.cc" />
     <ClCompile Include="system_info\category_cpu.cc" />
     <ClCompile Include="system_info\category_cpu.pb.cc" />
+    <ClCompile Include="system_info\category_dmi_bios.cc" />
+    <ClCompile Include="system_info\category_dmi_bios.pb.cc" />
     <ClCompile Include="system_info\category_logical_drive.cc" />
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
@@ -201,6 +203,7 @@
     <ClCompile Include="system_info\category_monitor.cc" />
     <ClCompile Include="system_info\category_monitor.pb.cc" />
     <ClCompile Include="system_info\category_optical_drive.cc" />
+    <ClCompile Include="system_info\category_optical_drive.pb.cc" />
     <ClCompile Include="system_info\category_power_options.cc" />
     <ClCompile Include="system_info\category_power_options.pb.cc" />
     <ClCompile Include="system_info\category_printer.cc" />
@@ -459,6 +462,8 @@
     <ClInclude Include="system_info\category_ata.pb.h" />
     <ClInclude Include="system_info\category_cpu.h" />
     <ClInclude Include="system_info\category_cpu.pb.h" />
+    <ClInclude Include="system_info\category_dmi_bios.h" />
+    <ClInclude Include="system_info\category_dmi_bios.pb.h" />
     <ClInclude Include="system_info\category_logical_drive.h" />
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
@@ -466,6 +471,7 @@
     <ClInclude Include="system_info\category_monitor.h" />
     <ClInclude Include="system_info\category_monitor.pb.h" />
     <ClInclude Include="system_info\category_optical_drive.h" />
+    <ClInclude Include="system_info\category_optical_drive.pb.h" />
     <ClInclude Include="system_info\category_power_options.h" />
     <ClInclude Include="system_info\category_power_options.pb.h" />
     <ClInclude Include="system_info\category_printer.h" />
@@ -542,6 +548,7 @@
     <None Include="proto\system_info_session_message.proto" />
     <None Include="system_info\category_ata.proto" />
     <None Include="system_info\category_cpu.proto" />
+    <None Include="system_info\category_dmi_bios.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
