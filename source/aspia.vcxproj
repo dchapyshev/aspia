@@ -198,6 +198,8 @@
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
     <ClCompile Include="system_info\category_memory.pb.cc" />
+    <ClCompile Include="system_info\category_smart.cc" />
+    <ClCompile Include="system_info\category_smart.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
@@ -448,6 +450,8 @@
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
     <ClInclude Include="system_info\category_memory.pb.h" />
+    <ClInclude Include="system_info\category_smart.h" />
+    <ClInclude Include="system_info\category_smart.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
@@ -514,6 +518,7 @@
     <None Include="system_info\category_cpu.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
+    <None Include="system_info\category_smart.proto" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />

@@ -718,6 +718,12 @@
     <ClCompile Include="system_info\category.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_smart.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_smart.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1472,6 +1478,12 @@
     <ClInclude Include="system_info\category.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_smart.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_smart.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1526,6 +1538,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_ata.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_smart.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>
