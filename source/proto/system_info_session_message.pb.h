@@ -36,15 +36,11 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[29];
+  static const ::google::protobuf::internal::ParseTable schema[27];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsDmiSystemSlots_ItemImpl();
-void InitDefaultsDmiSystemSlots_Item();
-void InitDefaultsDmiSystemSlotsImpl();
-void InitDefaultsDmiSystemSlots();
 void InitDefaultsDmiPortConnectors_ItemImpl();
 void InitDefaultsDmiPortConnectors_Item();
 void InitDefaultsDmiPortConnectorsImpl();
@@ -100,8 +96,6 @@ void InitDefaultsSessions_Item();
 void InitDefaultsSessionsImpl();
 void InitDefaultsSessions();
 inline void InitDefaults() {
-  InitDefaultsDmiSystemSlots_Item();
-  InitDefaultsDmiSystemSlots();
   InitDefaultsDmiPortConnectors_Item();
   InitDefaultsDmiPortConnectors();
   InitDefaultsDmiOnBoardDevices_Item();
@@ -157,12 +151,6 @@ extern DmiPortableBatteryDefaultTypeInternal _DmiPortableBattery_default_instanc
 class DmiPortableBattery_Item;
 class DmiPortableBattery_ItemDefaultTypeInternal;
 extern DmiPortableBattery_ItemDefaultTypeInternal _DmiPortableBattery_Item_default_instance_;
-class DmiSystemSlots;
-class DmiSystemSlotsDefaultTypeInternal;
-extern DmiSystemSlotsDefaultTypeInternal _DmiSystemSlots_default_instance_;
-class DmiSystemSlots_Item;
-class DmiSystemSlots_ItemDefaultTypeInternal;
-extern DmiSystemSlots_ItemDefaultTypeInternal _DmiSystemSlots_Item_default_instance_;
 class NetworkCards;
 class NetworkCardsDefaultTypeInternal;
 extern NetworkCardsDefaultTypeInternal _NetworkCards_default_instance_;
@@ -224,122 +212,6 @@ extern Users_ItemDefaultTypeInternal _Users_Item_default_instance_;
 }  // namespace aspia
 namespace aspia {
 namespace proto {
-
-enum DmiSystemSlots_Type {
-  DmiSystemSlots_Type_TYPE_UNKNOWN = 0,
-  DmiSystemSlots_Type_TYPE_OTHER = 1,
-  DmiSystemSlots_Type_TYPE_ISA = 2,
-  DmiSystemSlots_Type_TYPE_MCA = 3,
-  DmiSystemSlots_Type_TYPE_EISA = 4,
-  DmiSystemSlots_Type_TYPE_PCI = 5,
-  DmiSystemSlots_Type_TYPE_PC_CARD = 6,
-  DmiSystemSlots_Type_TYPE_VLB = 7,
-  DmiSystemSlots_Type_TYPE_PROPRIETARY = 8,
-  DmiSystemSlots_Type_TYPE_PROCESSOR_CARD = 9,
-  DmiSystemSlots_Type_TYPE_PROPRIETARY_MEMORY_CARD = 10,
-  DmiSystemSlots_Type_TYPE_IO_RISER_CARD = 11,
-  DmiSystemSlots_Type_TYPE_NUBUS = 12,
-  DmiSystemSlots_Type_TYPE_PCI_66 = 13,
-  DmiSystemSlots_Type_TYPE_AGP = 14,
-  DmiSystemSlots_Type_TYPE_AGP_2X = 15,
-  DmiSystemSlots_Type_TYPE_AGP_4X = 16,
-  DmiSystemSlots_Type_TYPE_PCI_X = 17,
-  DmiSystemSlots_Type_TYPE_AGP_8X = 18,
-  DmiSystemSlots_Type_TYPE_M2_SOCKET_1DP = 19,
-  DmiSystemSlots_Type_TYPE_M2_SOCKET_1SD = 20,
-  DmiSystemSlots_Type_TYPE_M2_SOCKET_2 = 21,
-  DmiSystemSlots_Type_TYPE_M2_SOCKET_3 = 22,
-  DmiSystemSlots_Type_TYPE_MXM_TYPE_I = 23,
-  DmiSystemSlots_Type_TYPE_MXM_TYPE_II = 24,
-  DmiSystemSlots_Type_TYPE_MXM_TYPE_III = 25,
-  DmiSystemSlots_Type_TYPE_MXM_TYPE_III_HE = 26,
-  DmiSystemSlots_Type_TYPE_MXM_TYPE_IV = 27,
-  DmiSystemSlots_Type_TYPE_MXM_30_TYPE_A = 28,
-  DmiSystemSlots_Type_TYPE_MXM_30_TYPE_B = 29,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_SFF_8639 = 30,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_SFF_8639 = 31,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE = 32,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_52PIN = 33,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_76PIN = 34,
-  DmiSystemSlots_Type_TYPE_PC98_C20 = 35,
-  DmiSystemSlots_Type_TYPE_PC98_C24 = 36,
-  DmiSystemSlots_Type_TYPE_PC98_E = 37,
-  DmiSystemSlots_Type_TYPE_PC98_LOCAL_BUS = 38,
-  DmiSystemSlots_Type_TYPE_PC98_CARD = 39,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS = 40,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X1 = 41,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X2 = 42,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X4 = 43,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X8 = 44,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X16 = 45,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2 = 46,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X1 = 47,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X2 = 48,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X4 = 49,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X8 = 50,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X16 = 51,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3 = 52,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X1 = 53,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X2 = 54,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X4 = 55,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X8 = 56,
-  DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X16 = 57,
-  DmiSystemSlots_Type_DmiSystemSlots_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiSystemSlots_Type_DmiSystemSlots_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiSystemSlots_Type_IsValid(int value);
-const DmiSystemSlots_Type DmiSystemSlots_Type_Type_MIN = DmiSystemSlots_Type_TYPE_UNKNOWN;
-const DmiSystemSlots_Type DmiSystemSlots_Type_Type_MAX = DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X16;
-const int DmiSystemSlots_Type_Type_ARRAYSIZE = DmiSystemSlots_Type_Type_MAX + 1;
-
-enum DmiSystemSlots_Usage {
-  DmiSystemSlots_Usage_USAGE_UNKNOWN = 0,
-  DmiSystemSlots_Usage_USAGE_OTHER = 1,
-  DmiSystemSlots_Usage_USAGE_AVAILABLE = 2,
-  DmiSystemSlots_Usage_USAGE_IN_USE = 3,
-  DmiSystemSlots_Usage_DmiSystemSlots_Usage_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiSystemSlots_Usage_DmiSystemSlots_Usage_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiSystemSlots_Usage_IsValid(int value);
-const DmiSystemSlots_Usage DmiSystemSlots_Usage_Usage_MIN = DmiSystemSlots_Usage_USAGE_UNKNOWN;
-const DmiSystemSlots_Usage DmiSystemSlots_Usage_Usage_MAX = DmiSystemSlots_Usage_USAGE_IN_USE;
-const int DmiSystemSlots_Usage_Usage_ARRAYSIZE = DmiSystemSlots_Usage_Usage_MAX + 1;
-
-enum DmiSystemSlots_BusWidth {
-  DmiSystemSlots_BusWidth_BUS_WIDTH_UNKNOWN = 0,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_OTHER = 1,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_8_BIT = 2,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_16_BIT = 3,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_32_BIT = 4,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_64_BIT = 5,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_128_BIT = 6,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X1 = 7,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X2 = 8,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X4 = 9,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X8 = 10,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X12 = 11,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X16 = 12,
-  DmiSystemSlots_BusWidth_BUS_WIDTH_X32 = 13,
-  DmiSystemSlots_BusWidth_DmiSystemSlots_BusWidth_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiSystemSlots_BusWidth_DmiSystemSlots_BusWidth_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiSystemSlots_BusWidth_IsValid(int value);
-const DmiSystemSlots_BusWidth DmiSystemSlots_BusWidth_BusWidth_MIN = DmiSystemSlots_BusWidth_BUS_WIDTH_UNKNOWN;
-const DmiSystemSlots_BusWidth DmiSystemSlots_BusWidth_BusWidth_MAX = DmiSystemSlots_BusWidth_BUS_WIDTH_X32;
-const int DmiSystemSlots_BusWidth_BusWidth_ARRAYSIZE = DmiSystemSlots_BusWidth_BusWidth_MAX + 1;
-
-enum DmiSystemSlots_Length {
-  DmiSystemSlots_Length_LENGTH_UNKNOWN = 0,
-  DmiSystemSlots_Length_LENGTH_OTHER = 1,
-  DmiSystemSlots_Length_LENGTH_SHORT = 2,
-  DmiSystemSlots_Length_LENGTH_LONG = 3,
-  DmiSystemSlots_Length_DmiSystemSlots_Length_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiSystemSlots_Length_DmiSystemSlots_Length_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiSystemSlots_Length_IsValid(int value);
-const DmiSystemSlots_Length DmiSystemSlots_Length_Length_MIN = DmiSystemSlots_Length_LENGTH_UNKNOWN;
-const DmiSystemSlots_Length DmiSystemSlots_Length_Length_MAX = DmiSystemSlots_Length_LENGTH_LONG;
-const int DmiSystemSlots_Length_Length_ARRAYSIZE = DmiSystemSlots_Length_Length_MAX + 1;
 
 enum DmiPortConnectors_Type {
   DmiPortConnectors_Type_TYPE_UNKNOWN = 0,
@@ -616,448 +488,6 @@ const int Sessions_ConnectState_ConnectState_ARRAYSIZE = Sessions_ConnectState_C
 
 // ===================================================================
 
-class DmiSystemSlots_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiSystemSlots.Item) */ {
- public:
-  DmiSystemSlots_Item();
-  virtual ~DmiSystemSlots_Item();
-
-  DmiSystemSlots_Item(const DmiSystemSlots_Item& from);
-
-  inline DmiSystemSlots_Item& operator=(const DmiSystemSlots_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiSystemSlots_Item(DmiSystemSlots_Item&& from) noexcept
-    : DmiSystemSlots_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiSystemSlots_Item& operator=(DmiSystemSlots_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiSystemSlots_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiSystemSlots_Item* internal_default_instance() {
-    return reinterpret_cast<const DmiSystemSlots_Item*>(
-               &_DmiSystemSlots_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
-
-  void Swap(DmiSystemSlots_Item* other);
-  friend void swap(DmiSystemSlots_Item& a, DmiSystemSlots_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiSystemSlots_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiSystemSlots_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiSystemSlots_Item& from);
-  void MergeFrom(const DmiSystemSlots_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiSystemSlots_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string slot_designation = 1;
-  void clear_slot_designation();
-  static const int kSlotDesignationFieldNumber = 1;
-  const ::std::string& slot_designation() const;
-  void set_slot_designation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_slot_designation(::std::string&& value);
-  #endif
-  void set_slot_designation(const char* value);
-  void set_slot_designation(const char* value, size_t size);
-  ::std::string* mutable_slot_designation();
-  ::std::string* release_slot_designation();
-  void set_allocated_slot_designation(::std::string* slot_designation);
-
-  // .aspia.proto.DmiSystemSlots.Type type = 2;
-  void clear_type();
-  static const int kTypeFieldNumber = 2;
-  ::aspia::proto::DmiSystemSlots_Type type() const;
-  void set_type(::aspia::proto::DmiSystemSlots_Type value);
-
-  // .aspia.proto.DmiSystemSlots.Usage usage = 3;
-  void clear_usage();
-  static const int kUsageFieldNumber = 3;
-  ::aspia::proto::DmiSystemSlots_Usage usage() const;
-  void set_usage(::aspia::proto::DmiSystemSlots_Usage value);
-
-  // .aspia.proto.DmiSystemSlots.BusWidth bus_width = 4;
-  void clear_bus_width();
-  static const int kBusWidthFieldNumber = 4;
-  ::aspia::proto::DmiSystemSlots_BusWidth bus_width() const;
-  void set_bus_width(::aspia::proto::DmiSystemSlots_BusWidth value);
-
-  // .aspia.proto.DmiSystemSlots.Length length = 5;
-  void clear_length();
-  static const int kLengthFieldNumber = 5;
-  ::aspia::proto::DmiSystemSlots_Length length() const;
-  void set_length(::aspia::proto::DmiSystemSlots_Length value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiSystemSlots.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr slot_designation_;
-  int type_;
-  int usage_;
-  int bus_width_;
-  int length_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemSlots_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class DmiSystemSlots : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiSystemSlots) */ {
- public:
-  DmiSystemSlots();
-  virtual ~DmiSystemSlots();
-
-  DmiSystemSlots(const DmiSystemSlots& from);
-
-  inline DmiSystemSlots& operator=(const DmiSystemSlots& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiSystemSlots(DmiSystemSlots&& from) noexcept
-    : DmiSystemSlots() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiSystemSlots& operator=(DmiSystemSlots&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiSystemSlots& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiSystemSlots* internal_default_instance() {
-    return reinterpret_cast<const DmiSystemSlots*>(
-               &_DmiSystemSlots_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
-
-  void Swap(DmiSystemSlots* other);
-  friend void swap(DmiSystemSlots& a, DmiSystemSlots& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiSystemSlots* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiSystemSlots* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiSystemSlots& from);
-  void MergeFrom(const DmiSystemSlots& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiSystemSlots* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef DmiSystemSlots_Item Item;
-
-  typedef DmiSystemSlots_Type Type;
-  static const Type TYPE_UNKNOWN =
-    DmiSystemSlots_Type_TYPE_UNKNOWN;
-  static const Type TYPE_OTHER =
-    DmiSystemSlots_Type_TYPE_OTHER;
-  static const Type TYPE_ISA =
-    DmiSystemSlots_Type_TYPE_ISA;
-  static const Type TYPE_MCA =
-    DmiSystemSlots_Type_TYPE_MCA;
-  static const Type TYPE_EISA =
-    DmiSystemSlots_Type_TYPE_EISA;
-  static const Type TYPE_PCI =
-    DmiSystemSlots_Type_TYPE_PCI;
-  static const Type TYPE_PC_CARD =
-    DmiSystemSlots_Type_TYPE_PC_CARD;
-  static const Type TYPE_VLB =
-    DmiSystemSlots_Type_TYPE_VLB;
-  static const Type TYPE_PROPRIETARY =
-    DmiSystemSlots_Type_TYPE_PROPRIETARY;
-  static const Type TYPE_PROCESSOR_CARD =
-    DmiSystemSlots_Type_TYPE_PROCESSOR_CARD;
-  static const Type TYPE_PROPRIETARY_MEMORY_CARD =
-    DmiSystemSlots_Type_TYPE_PROPRIETARY_MEMORY_CARD;
-  static const Type TYPE_IO_RISER_CARD =
-    DmiSystemSlots_Type_TYPE_IO_RISER_CARD;
-  static const Type TYPE_NUBUS =
-    DmiSystemSlots_Type_TYPE_NUBUS;
-  static const Type TYPE_PCI_66 =
-    DmiSystemSlots_Type_TYPE_PCI_66;
-  static const Type TYPE_AGP =
-    DmiSystemSlots_Type_TYPE_AGP;
-  static const Type TYPE_AGP_2X =
-    DmiSystemSlots_Type_TYPE_AGP_2X;
-  static const Type TYPE_AGP_4X =
-    DmiSystemSlots_Type_TYPE_AGP_4X;
-  static const Type TYPE_PCI_X =
-    DmiSystemSlots_Type_TYPE_PCI_X;
-  static const Type TYPE_AGP_8X =
-    DmiSystemSlots_Type_TYPE_AGP_8X;
-  static const Type TYPE_M2_SOCKET_1DP =
-    DmiSystemSlots_Type_TYPE_M2_SOCKET_1DP;
-  static const Type TYPE_M2_SOCKET_1SD =
-    DmiSystemSlots_Type_TYPE_M2_SOCKET_1SD;
-  static const Type TYPE_M2_SOCKET_2 =
-    DmiSystemSlots_Type_TYPE_M2_SOCKET_2;
-  static const Type TYPE_M2_SOCKET_3 =
-    DmiSystemSlots_Type_TYPE_M2_SOCKET_3;
-  static const Type TYPE_MXM_TYPE_I =
-    DmiSystemSlots_Type_TYPE_MXM_TYPE_I;
-  static const Type TYPE_MXM_TYPE_II =
-    DmiSystemSlots_Type_TYPE_MXM_TYPE_II;
-  static const Type TYPE_MXM_TYPE_III =
-    DmiSystemSlots_Type_TYPE_MXM_TYPE_III;
-  static const Type TYPE_MXM_TYPE_III_HE =
-    DmiSystemSlots_Type_TYPE_MXM_TYPE_III_HE;
-  static const Type TYPE_MXM_TYPE_IV =
-    DmiSystemSlots_Type_TYPE_MXM_TYPE_IV;
-  static const Type TYPE_MXM_30_TYPE_A =
-    DmiSystemSlots_Type_TYPE_MXM_30_TYPE_A;
-  static const Type TYPE_MXM_30_TYPE_B =
-    DmiSystemSlots_Type_TYPE_MXM_30_TYPE_B;
-  static const Type TYPE_PCI_EXPRESS_2_SFF_8639 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_SFF_8639;
-  static const Type TYPE_PCI_EXPRESS_3_SFF_8639 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_SFF_8639;
-  static const Type TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE;
-  static const Type TYPE_PCI_EXPRESS_MINI_52PIN =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_52PIN;
-  static const Type TYPE_PCI_EXPRESS_MINI_76PIN =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_MINI_76PIN;
-  static const Type TYPE_PC98_C20 =
-    DmiSystemSlots_Type_TYPE_PC98_C20;
-  static const Type TYPE_PC98_C24 =
-    DmiSystemSlots_Type_TYPE_PC98_C24;
-  static const Type TYPE_PC98_E =
-    DmiSystemSlots_Type_TYPE_PC98_E;
-  static const Type TYPE_PC98_LOCAL_BUS =
-    DmiSystemSlots_Type_TYPE_PC98_LOCAL_BUS;
-  static const Type TYPE_PC98_CARD =
-    DmiSystemSlots_Type_TYPE_PC98_CARD;
-  static const Type TYPE_PCI_EXPRESS =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS;
-  static const Type TYPE_PCI_EXPRESS_X1 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X1;
-  static const Type TYPE_PCI_EXPRESS_X2 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X2;
-  static const Type TYPE_PCI_EXPRESS_X4 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X4;
-  static const Type TYPE_PCI_EXPRESS_X8 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X8;
-  static const Type TYPE_PCI_EXPRESS_X16 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_X16;
-  static const Type TYPE_PCI_EXPRESS_2 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2;
-  static const Type TYPE_PCI_EXPRESS_2_X1 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X1;
-  static const Type TYPE_PCI_EXPRESS_2_X2 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X2;
-  static const Type TYPE_PCI_EXPRESS_2_X4 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X4;
-  static const Type TYPE_PCI_EXPRESS_2_X8 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X8;
-  static const Type TYPE_PCI_EXPRESS_2_X16 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_2_X16;
-  static const Type TYPE_PCI_EXPRESS_3 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3;
-  static const Type TYPE_PCI_EXPRESS_3_X1 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X1;
-  static const Type TYPE_PCI_EXPRESS_3_X2 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X2;
-  static const Type TYPE_PCI_EXPRESS_3_X4 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X4;
-  static const Type TYPE_PCI_EXPRESS_3_X8 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X8;
-  static const Type TYPE_PCI_EXPRESS_3_X16 =
-    DmiSystemSlots_Type_TYPE_PCI_EXPRESS_3_X16;
-  static inline bool Type_IsValid(int value) {
-    return DmiSystemSlots_Type_IsValid(value);
-  }
-  static const Type Type_MIN =
-    DmiSystemSlots_Type_Type_MIN;
-  static const Type Type_MAX =
-    DmiSystemSlots_Type_Type_MAX;
-  static const int Type_ARRAYSIZE =
-    DmiSystemSlots_Type_Type_ARRAYSIZE;
-
-  typedef DmiSystemSlots_Usage Usage;
-  static const Usage USAGE_UNKNOWN =
-    DmiSystemSlots_Usage_USAGE_UNKNOWN;
-  static const Usage USAGE_OTHER =
-    DmiSystemSlots_Usage_USAGE_OTHER;
-  static const Usage USAGE_AVAILABLE =
-    DmiSystemSlots_Usage_USAGE_AVAILABLE;
-  static const Usage USAGE_IN_USE =
-    DmiSystemSlots_Usage_USAGE_IN_USE;
-  static inline bool Usage_IsValid(int value) {
-    return DmiSystemSlots_Usage_IsValid(value);
-  }
-  static const Usage Usage_MIN =
-    DmiSystemSlots_Usage_Usage_MIN;
-  static const Usage Usage_MAX =
-    DmiSystemSlots_Usage_Usage_MAX;
-  static const int Usage_ARRAYSIZE =
-    DmiSystemSlots_Usage_Usage_ARRAYSIZE;
-
-  typedef DmiSystemSlots_BusWidth BusWidth;
-  static const BusWidth BUS_WIDTH_UNKNOWN =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_UNKNOWN;
-  static const BusWidth BUS_WIDTH_OTHER =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_OTHER;
-  static const BusWidth BUS_WIDTH_8_BIT =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_8_BIT;
-  static const BusWidth BUS_WIDTH_16_BIT =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_16_BIT;
-  static const BusWidth BUS_WIDTH_32_BIT =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_32_BIT;
-  static const BusWidth BUS_WIDTH_64_BIT =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_64_BIT;
-  static const BusWidth BUS_WIDTH_128_BIT =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_128_BIT;
-  static const BusWidth BUS_WIDTH_X1 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X1;
-  static const BusWidth BUS_WIDTH_X2 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X2;
-  static const BusWidth BUS_WIDTH_X4 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X4;
-  static const BusWidth BUS_WIDTH_X8 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X8;
-  static const BusWidth BUS_WIDTH_X12 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X12;
-  static const BusWidth BUS_WIDTH_X16 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X16;
-  static const BusWidth BUS_WIDTH_X32 =
-    DmiSystemSlots_BusWidth_BUS_WIDTH_X32;
-  static inline bool BusWidth_IsValid(int value) {
-    return DmiSystemSlots_BusWidth_IsValid(value);
-  }
-  static const BusWidth BusWidth_MIN =
-    DmiSystemSlots_BusWidth_BusWidth_MIN;
-  static const BusWidth BusWidth_MAX =
-    DmiSystemSlots_BusWidth_BusWidth_MAX;
-  static const int BusWidth_ARRAYSIZE =
-    DmiSystemSlots_BusWidth_BusWidth_ARRAYSIZE;
-
-  typedef DmiSystemSlots_Length Length;
-  static const Length LENGTH_UNKNOWN =
-    DmiSystemSlots_Length_LENGTH_UNKNOWN;
-  static const Length LENGTH_OTHER =
-    DmiSystemSlots_Length_LENGTH_OTHER;
-  static const Length LENGTH_SHORT =
-    DmiSystemSlots_Length_LENGTH_SHORT;
-  static const Length LENGTH_LONG =
-    DmiSystemSlots_Length_LENGTH_LONG;
-  static inline bool Length_IsValid(int value) {
-    return DmiSystemSlots_Length_IsValid(value);
-  }
-  static const Length Length_MIN =
-    DmiSystemSlots_Length_Length_MIN;
-  static const Length Length_MAX =
-    DmiSystemSlots_Length_Length_MAX;
-  static const int Length_ARRAYSIZE =
-    DmiSystemSlots_Length_Length_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.DmiSystemSlots.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::DmiSystemSlots_Item& item(int index) const;
-  ::aspia::proto::DmiSystemSlots_Item* mutable_item(int index);
-  ::aspia::proto::DmiSystemSlots_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiSystemSlots_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiSystemSlots_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiSystemSlots)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiSystemSlots_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiSystemSlotsImpl();
-};
-// -------------------------------------------------------------------
-
 class DmiPortConnectors_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPortConnectors.Item) */ {
  public:
   DmiPortConnectors_Item();
@@ -1092,7 +522,7 @@ class DmiPortConnectors_Item : public ::google::protobuf::MessageLite /* @@proto
                &_DmiPortConnectors_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    0;
 
   void Swap(DmiPortConnectors_Item* other);
   friend void swap(DmiPortConnectors_Item& a, DmiPortConnectors_Item& b) {
@@ -1233,7 +663,7 @@ class DmiPortConnectors : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_DmiPortConnectors_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    1;
 
   void Swap(DmiPortConnectors* other);
   friend void swap(DmiPortConnectors& a, DmiPortConnectors& b) {
@@ -1518,7 +948,7 @@ class DmiOnBoardDevices_Item : public ::google::protobuf::MessageLite /* @@proto
                &_DmiOnBoardDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    2;
 
   void Swap(DmiOnBoardDevices_Item* other);
   friend void swap(DmiOnBoardDevices_Item& a, DmiOnBoardDevices_Item& b) {
@@ -1637,7 +1067,7 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_DmiOnBoardDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    3;
 
   void Swap(DmiOnBoardDevices* other);
   friend void swap(DmiOnBoardDevices& a, DmiOnBoardDevices& b) {
@@ -1773,7 +1203,7 @@ class DmiPointingDevices_Item : public ::google::protobuf::MessageLite /* @@prot
                &_DmiPointingDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(DmiPointingDevices_Item* other);
   friend void swap(DmiPointingDevices_Item& a, DmiPointingDevices_Item& b) {
@@ -1884,7 +1314,7 @@ class DmiPointingDevices : public ::google::protobuf::MessageLite /* @@protoc_in
                &_DmiPointingDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(DmiPointingDevices* other);
   friend void swap(DmiPointingDevices& a, DmiPointingDevices& b) {
@@ -2051,7 +1481,7 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
                &_DmiPortableBattery_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(DmiPortableBattery_Item* other);
   friend void swap(DmiPortableBattery_Item& a, DmiPortableBattery_Item& b) {
@@ -2304,7 +1734,7 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
                &_DmiPortableBattery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(DmiPortableBattery* other);
   friend void swap(DmiPortableBattery& a, DmiPortableBattery& b) {
@@ -2436,7 +1866,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -2601,7 +2031,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -2706,7 +2136,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -2935,7 +2365,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -3040,7 +2470,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -3160,7 +2590,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -3452,7 +2882,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    14;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -3557,7 +2987,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    15;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -3720,7 +3150,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    16;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -3879,7 +3309,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    17;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -4060,7 +3490,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    18;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -4165,7 +3595,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    19;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -4307,7 +3737,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    20;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -4412,7 +3842,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    21;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -4603,7 +4033,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    22;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -4708,7 +4138,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    23;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -4828,7 +4258,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    24;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -4933,7 +4363,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    25;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -5097,7 +4527,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    26;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -5208,153 +4638,6 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// DmiSystemSlots_Item
-
-// string slot_designation = 1;
-inline void DmiSystemSlots_Item::clear_slot_designation() {
-  slot_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& DmiSystemSlots_Item::slot_designation() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.Item.slot_designation)
-  return slot_designation_.GetNoArena();
-}
-inline void DmiSystemSlots_Item::set_slot_designation(const ::std::string& value) {
-  
-  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiSystemSlots.Item.slot_designation)
-}
-#if LANG_CXX11
-inline void DmiSystemSlots_Item::set_slot_designation(::std::string&& value) {
-  
-  slot_designation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiSystemSlots.Item.slot_designation)
-}
-#endif
-inline void DmiSystemSlots_Item::set_slot_designation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiSystemSlots.Item.slot_designation)
-}
-inline void DmiSystemSlots_Item::set_slot_designation(const char* value, size_t size) {
-  
-  slot_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiSystemSlots.Item.slot_designation)
-}
-inline ::std::string* DmiSystemSlots_Item::mutable_slot_designation() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiSystemSlots.Item.slot_designation)
-  return slot_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiSystemSlots_Item::release_slot_designation() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiSystemSlots.Item.slot_designation)
-  
-  return slot_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiSystemSlots_Item::set_allocated_slot_designation(::std::string* slot_designation) {
-  if (slot_designation != NULL) {
-    
-  } else {
-    
-  }
-  slot_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), slot_designation);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiSystemSlots.Item.slot_designation)
-}
-
-// .aspia.proto.DmiSystemSlots.Type type = 2;
-inline void DmiSystemSlots_Item::clear_type() {
-  type_ = 0;
-}
-inline ::aspia::proto::DmiSystemSlots_Type DmiSystemSlots_Item::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.Item.type)
-  return static_cast< ::aspia::proto::DmiSystemSlots_Type >(type_);
-}
-inline void DmiSystemSlots_Item::set_type(::aspia::proto::DmiSystemSlots_Type value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiSystemSlots.Item.type)
-}
-
-// .aspia.proto.DmiSystemSlots.Usage usage = 3;
-inline void DmiSystemSlots_Item::clear_usage() {
-  usage_ = 0;
-}
-inline ::aspia::proto::DmiSystemSlots_Usage DmiSystemSlots_Item::usage() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.Item.usage)
-  return static_cast< ::aspia::proto::DmiSystemSlots_Usage >(usage_);
-}
-inline void DmiSystemSlots_Item::set_usage(::aspia::proto::DmiSystemSlots_Usage value) {
-  
-  usage_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiSystemSlots.Item.usage)
-}
-
-// .aspia.proto.DmiSystemSlots.BusWidth bus_width = 4;
-inline void DmiSystemSlots_Item::clear_bus_width() {
-  bus_width_ = 0;
-}
-inline ::aspia::proto::DmiSystemSlots_BusWidth DmiSystemSlots_Item::bus_width() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.Item.bus_width)
-  return static_cast< ::aspia::proto::DmiSystemSlots_BusWidth >(bus_width_);
-}
-inline void DmiSystemSlots_Item::set_bus_width(::aspia::proto::DmiSystemSlots_BusWidth value) {
-  
-  bus_width_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiSystemSlots.Item.bus_width)
-}
-
-// .aspia.proto.DmiSystemSlots.Length length = 5;
-inline void DmiSystemSlots_Item::clear_length() {
-  length_ = 0;
-}
-inline ::aspia::proto::DmiSystemSlots_Length DmiSystemSlots_Item::length() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.Item.length)
-  return static_cast< ::aspia::proto::DmiSystemSlots_Length >(length_);
-}
-inline void DmiSystemSlots_Item::set_length(::aspia::proto::DmiSystemSlots_Length value) {
-  
-  length_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiSystemSlots.Item.length)
-}
-
-// -------------------------------------------------------------------
-
-// DmiSystemSlots
-
-// repeated .aspia.proto.DmiSystemSlots.Item item = 1;
-inline int DmiSystemSlots::item_size() const {
-  return item_.size();
-}
-inline void DmiSystemSlots::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::DmiSystemSlots_Item& DmiSystemSlots::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiSystemSlots.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::DmiSystemSlots_Item* DmiSystemSlots::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiSystemSlots.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::DmiSystemSlots_Item* DmiSystemSlots::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiSystemSlots.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiSystemSlots_Item >*
-DmiSystemSlots::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiSystemSlots.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiSystemSlots_Item >&
-DmiSystemSlots::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiSystemSlots.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
 // DmiPortConnectors_Item
 
 // string internal_designation = 1;
@@ -9191,10 +8474,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -9204,10 +8483,6 @@ Sessions::item() const {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Usage> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_BusWidth> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiSystemSlots_Length> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};

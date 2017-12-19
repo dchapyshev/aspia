@@ -14,27 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiSystemSlots : public CategoryInfo
-{
-public:
-    CategoryDmiSystemSlots() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* TypeToString(proto::DmiSystemSlots::Type value);
-    static const char* UsageToString(proto::DmiSystemSlots::Usage value);
-    static const char* BusWidthToString(proto::DmiSystemSlots::BusWidth value);
-    static const char* LengthToString(proto::DmiSystemSlots::Length value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystemSlots);
-};
-
 class CategoryDmiPortConnectors : public CategoryInfo
 {
 public:

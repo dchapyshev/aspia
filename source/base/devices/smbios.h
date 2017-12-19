@@ -72,6 +72,7 @@ public:
         TABLE_TYPE_CHASSIS       = 0x03,
         TABLE_TYPE_PROCESSOR     = 0x04,
         TABLE_TYPE_CACHE         = 0x07,
+        TABLE_TYPE_SYSTEM_SLOT   = 0x09,
         TABLE_TYPE_MEMORY_DEVICE = 0x11
     };
 
@@ -134,24 +135,6 @@ public:
         explicit PortConnectorTable(const TableReader& reader);
 
         static proto::DmiPortConnectors::ConnectorType ConnectorType(uint8_t type);
-
-        TableReader reader_;
-    };
-
-    class SystemSlotTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x09 };
-
-        std::string GetSlotDesignation() const;
-        proto::DmiSystemSlots::Type GetType() const;
-        proto::DmiSystemSlots::Usage GetUsage() const;
-        proto::DmiSystemSlots::BusWidth GetBusWidth() const;
-        proto::DmiSystemSlots::Length GetLength() const;
-
-    private:
-        friend class TableEnumerator<SystemSlotTable>;
-        explicit SystemSlotTable(const TableReader& reader);
 
         TableReader reader_;
     };

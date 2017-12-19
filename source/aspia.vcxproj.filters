@@ -808,6 +808,12 @@
     <ClCompile Include="system_info\category_dmi_memory_device.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_dmi_system_slot.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_dmi_system_slot.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1652,6 +1658,12 @@
     <ClInclude Include="system_info\category_dmi_memory_device.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_dmi_system_slot.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_dmi_system_slot.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1751,6 +1763,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_dmi_memory_device.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_dmi_system_slot.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>
