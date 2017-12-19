@@ -1,0 +1,42 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_network_card.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message NetworkCard
+{
+    message Item
+    {
+        string adapter_name          = 1;
+        string connection_name       = 2;
+        string interface_type        = 3;
+        uint32 mtu                   = 4;
+        uint32 speed                 = 5;
+        string mac_address           = 6;
+        bool is_wins_enabled         = 7;
+        string primary_wins_server   = 8;
+        string secondary_wins_server = 9;
+        bool is_dhcp_enabled         = 10;
+
+        message IpAddress
+        {
+            string address = 1;
+            string mask    = 2;
+        }
+
+        repeated IpAddress ip_address       = 11;
+        repeated string gateway_address     = 12;
+        repeated string dhcp_server_address = 13;
+        repeated string dns_server_address  = 14;
+    }
+
+    repeated Item item = 1;
+}

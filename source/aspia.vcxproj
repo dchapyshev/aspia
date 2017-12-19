@@ -223,6 +223,8 @@
     <ClCompile Include="system_info\category_memory.pb.cc" />
     <ClCompile Include="system_info\category_monitor.cc" />
     <ClCompile Include="system_info\category_monitor.pb.cc" />
+    <ClCompile Include="system_info\category_network_card.cc" />
+    <ClCompile Include="system_info\category_network_card.pb.cc" />
     <ClCompile Include="system_info\category_optical_drive.cc" />
     <ClCompile Include="system_info\category_optical_drive.pb.cc" />
     <ClCompile Include="system_info\category_power_options.cc" />
@@ -512,6 +514,8 @@
     <ClInclude Include="system_info\category_memory.pb.h" />
     <ClInclude Include="system_info\category_monitor.h" />
     <ClInclude Include="system_info\category_monitor.pb.h" />
+    <ClInclude Include="system_info\category_network_card.h" />
+    <ClInclude Include="system_info\category_network_card.pb.h" />
     <ClInclude Include="system_info\category_optical_drive.h" />
     <ClInclude Include="system_info\category_optical_drive.pb.h" />
     <ClInclude Include="system_info\category_power_options.h" />
@@ -605,6 +609,7 @@
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
+    <None Include="system_info\category_network_card.proto" />
     <None Include="system_info\category_optical_drive.proto" />
     <None Include="system_info\category_power_options.proto" />
     <None Include="system_info\category_printer.proto" />

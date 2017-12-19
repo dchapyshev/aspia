@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[19];
+  static const ::google::protobuf::internal::ParseTable schema[16];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -49,12 +49,6 @@ void InitDefaultsServices_ItemImpl();
 void InitDefaultsServices_Item();
 void InitDefaultsServicesImpl();
 void InitDefaultsServices();
-void InitDefaultsNetworkCards_Item_IpAddressImpl();
-void InitDefaultsNetworkCards_Item_IpAddress();
-void InitDefaultsNetworkCards_ItemImpl();
-void InitDefaultsNetworkCards_Item();
-void InitDefaultsNetworkCardsImpl();
-void InitDefaultsNetworkCards();
 void InitDefaultsOpenConnections_ItemImpl();
 void InitDefaultsOpenConnections_Item();
 void InitDefaultsOpenConnectionsImpl();
@@ -84,9 +78,6 @@ inline void InitDefaults() {
   InitDefaultsPrograms();
   InitDefaultsServices_Item();
   InitDefaultsServices();
-  InitDefaultsNetworkCards_Item_IpAddress();
-  InitDefaultsNetworkCards_Item();
-  InitDefaultsNetworkCards();
   InitDefaultsOpenConnections_Item();
   InitDefaultsOpenConnections();
   InitDefaultsSharedResources_Item();
@@ -103,15 +94,6 @@ inline void InitDefaults() {
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 namespace aspia {
 namespace proto {
-class NetworkCards;
-class NetworkCardsDefaultTypeInternal;
-extern NetworkCardsDefaultTypeInternal _NetworkCards_default_instance_;
-class NetworkCards_Item;
-class NetworkCards_ItemDefaultTypeInternal;
-extern NetworkCards_ItemDefaultTypeInternal _NetworkCards_Item_default_instance_;
-class NetworkCards_Item_IpAddress;
-class NetworkCards_Item_IpAddressDefaultTypeInternal;
-extern NetworkCards_Item_IpAddressDefaultTypeInternal _NetworkCards_Item_IpAddress_default_instance_;
 class OpenConnections;
 class OpenConnectionsDefaultTypeInternal;
 extern OpenConnectionsDefaultTypeInternal _OpenConnections_default_instance_;
@@ -873,523 +855,6 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.NetworkCards.Item.IpAddress) */ {
- public:
-  NetworkCards_Item_IpAddress();
-  virtual ~NetworkCards_Item_IpAddress();
-
-  NetworkCards_Item_IpAddress(const NetworkCards_Item_IpAddress& from);
-
-  inline NetworkCards_Item_IpAddress& operator=(const NetworkCards_Item_IpAddress& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  NetworkCards_Item_IpAddress(NetworkCards_Item_IpAddress&& from) noexcept
-    : NetworkCards_Item_IpAddress() {
-    *this = ::std::move(from);
-  }
-
-  inline NetworkCards_Item_IpAddress& operator=(NetworkCards_Item_IpAddress&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const NetworkCards_Item_IpAddress& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const NetworkCards_Item_IpAddress* internal_default_instance() {
-    return reinterpret_cast<const NetworkCards_Item_IpAddress*>(
-               &_NetworkCards_Item_IpAddress_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
-
-  void Swap(NetworkCards_Item_IpAddress* other);
-  friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline NetworkCards_Item_IpAddress* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  NetworkCards_Item_IpAddress* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const NetworkCards_Item_IpAddress& from);
-  void MergeFrom(const NetworkCards_Item_IpAddress& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(NetworkCards_Item_IpAddress* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string address = 1;
-  void clear_address();
-  static const int kAddressFieldNumber = 1;
-  const ::std::string& address() const;
-  void set_address(const ::std::string& value);
-  #if LANG_CXX11
-  void set_address(::std::string&& value);
-  #endif
-  void set_address(const char* value);
-  void set_address(const char* value, size_t size);
-  ::std::string* mutable_address();
-  ::std::string* release_address();
-  void set_allocated_address(::std::string* address);
-
-  // string mask = 2;
-  void clear_mask();
-  static const int kMaskFieldNumber = 2;
-  const ::std::string& mask() const;
-  void set_mask(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mask(::std::string&& value);
-  #endif
-  void set_mask(const char* value);
-  void set_mask(const char* value, size_t size);
-  ::std::string* mutable_mask();
-  ::std::string* release_mask();
-  void set_allocated_mask(::std::string* mask);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.NetworkCards.Item.IpAddress)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr address_;
-  ::google::protobuf::internal::ArenaStringPtr mask_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_Item_IpAddressImpl();
-};
-// -------------------------------------------------------------------
-
-class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.NetworkCards.Item) */ {
- public:
-  NetworkCards_Item();
-  virtual ~NetworkCards_Item();
-
-  NetworkCards_Item(const NetworkCards_Item& from);
-
-  inline NetworkCards_Item& operator=(const NetworkCards_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  NetworkCards_Item(NetworkCards_Item&& from) noexcept
-    : NetworkCards_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline NetworkCards_Item& operator=(NetworkCards_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const NetworkCards_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const NetworkCards_Item* internal_default_instance() {
-    return reinterpret_cast<const NetworkCards_Item*>(
-               &_NetworkCards_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
-
-  void Swap(NetworkCards_Item* other);
-  friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline NetworkCards_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  NetworkCards_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const NetworkCards_Item& from);
-  void MergeFrom(const NetworkCards_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(NetworkCards_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef NetworkCards_Item_IpAddress IpAddress;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.NetworkCards.Item.IpAddress ip_address = 11;
-  int ip_address_size() const;
-  void clear_ip_address();
-  static const int kIpAddressFieldNumber = 11;
-  const ::aspia::proto::NetworkCards_Item_IpAddress& ip_address(int index) const;
-  ::aspia::proto::NetworkCards_Item_IpAddress* mutable_ip_address(int index);
-  ::aspia::proto::NetworkCards_Item_IpAddress* add_ip_address();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item_IpAddress >*
-      mutable_ip_address();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item_IpAddress >&
-      ip_address() const;
-
-  // repeated string gateway_address = 12;
-  int gateway_address_size() const;
-  void clear_gateway_address();
-  static const int kGatewayAddressFieldNumber = 12;
-  const ::std::string& gateway_address(int index) const;
-  ::std::string* mutable_gateway_address(int index);
-  void set_gateway_address(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_gateway_address(int index, ::std::string&& value);
-  #endif
-  void set_gateway_address(int index, const char* value);
-  void set_gateway_address(int index, const char* value, size_t size);
-  ::std::string* add_gateway_address();
-  void add_gateway_address(const ::std::string& value);
-  #if LANG_CXX11
-  void add_gateway_address(::std::string&& value);
-  #endif
-  void add_gateway_address(const char* value);
-  void add_gateway_address(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField< ::std::string>& gateway_address() const;
-  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_gateway_address();
-
-  // repeated string dhcp_server_address = 13;
-  int dhcp_server_address_size() const;
-  void clear_dhcp_server_address();
-  static const int kDhcpServerAddressFieldNumber = 13;
-  const ::std::string& dhcp_server_address(int index) const;
-  ::std::string* mutable_dhcp_server_address(int index);
-  void set_dhcp_server_address(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_dhcp_server_address(int index, ::std::string&& value);
-  #endif
-  void set_dhcp_server_address(int index, const char* value);
-  void set_dhcp_server_address(int index, const char* value, size_t size);
-  ::std::string* add_dhcp_server_address();
-  void add_dhcp_server_address(const ::std::string& value);
-  #if LANG_CXX11
-  void add_dhcp_server_address(::std::string&& value);
-  #endif
-  void add_dhcp_server_address(const char* value);
-  void add_dhcp_server_address(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField< ::std::string>& dhcp_server_address() const;
-  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_dhcp_server_address();
-
-  // repeated string dns_server_address = 14;
-  int dns_server_address_size() const;
-  void clear_dns_server_address();
-  static const int kDnsServerAddressFieldNumber = 14;
-  const ::std::string& dns_server_address(int index) const;
-  ::std::string* mutable_dns_server_address(int index);
-  void set_dns_server_address(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_dns_server_address(int index, ::std::string&& value);
-  #endif
-  void set_dns_server_address(int index, const char* value);
-  void set_dns_server_address(int index, const char* value, size_t size);
-  ::std::string* add_dns_server_address();
-  void add_dns_server_address(const ::std::string& value);
-  #if LANG_CXX11
-  void add_dns_server_address(::std::string&& value);
-  #endif
-  void add_dns_server_address(const char* value);
-  void add_dns_server_address(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField< ::std::string>& dns_server_address() const;
-  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_dns_server_address();
-
-  // string adapter_name = 1;
-  void clear_adapter_name();
-  static const int kAdapterNameFieldNumber = 1;
-  const ::std::string& adapter_name() const;
-  void set_adapter_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_adapter_name(::std::string&& value);
-  #endif
-  void set_adapter_name(const char* value);
-  void set_adapter_name(const char* value, size_t size);
-  ::std::string* mutable_adapter_name();
-  ::std::string* release_adapter_name();
-  void set_allocated_adapter_name(::std::string* adapter_name);
-
-  // string connection_name = 2;
-  void clear_connection_name();
-  static const int kConnectionNameFieldNumber = 2;
-  const ::std::string& connection_name() const;
-  void set_connection_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_connection_name(::std::string&& value);
-  #endif
-  void set_connection_name(const char* value);
-  void set_connection_name(const char* value, size_t size);
-  ::std::string* mutable_connection_name();
-  ::std::string* release_connection_name();
-  void set_allocated_connection_name(::std::string* connection_name);
-
-  // string interface_type = 3;
-  void clear_interface_type();
-  static const int kInterfaceTypeFieldNumber = 3;
-  const ::std::string& interface_type() const;
-  void set_interface_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_interface_type(::std::string&& value);
-  #endif
-  void set_interface_type(const char* value);
-  void set_interface_type(const char* value, size_t size);
-  ::std::string* mutable_interface_type();
-  ::std::string* release_interface_type();
-  void set_allocated_interface_type(::std::string* interface_type);
-
-  // string mac_address = 6;
-  void clear_mac_address();
-  static const int kMacAddressFieldNumber = 6;
-  const ::std::string& mac_address() const;
-  void set_mac_address(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mac_address(::std::string&& value);
-  #endif
-  void set_mac_address(const char* value);
-  void set_mac_address(const char* value, size_t size);
-  ::std::string* mutable_mac_address();
-  ::std::string* release_mac_address();
-  void set_allocated_mac_address(::std::string* mac_address);
-
-  // string primary_wins_server = 8;
-  void clear_primary_wins_server();
-  static const int kPrimaryWinsServerFieldNumber = 8;
-  const ::std::string& primary_wins_server() const;
-  void set_primary_wins_server(const ::std::string& value);
-  #if LANG_CXX11
-  void set_primary_wins_server(::std::string&& value);
-  #endif
-  void set_primary_wins_server(const char* value);
-  void set_primary_wins_server(const char* value, size_t size);
-  ::std::string* mutable_primary_wins_server();
-  ::std::string* release_primary_wins_server();
-  void set_allocated_primary_wins_server(::std::string* primary_wins_server);
-
-  // string secondary_wins_server = 9;
-  void clear_secondary_wins_server();
-  static const int kSecondaryWinsServerFieldNumber = 9;
-  const ::std::string& secondary_wins_server() const;
-  void set_secondary_wins_server(const ::std::string& value);
-  #if LANG_CXX11
-  void set_secondary_wins_server(::std::string&& value);
-  #endif
-  void set_secondary_wins_server(const char* value);
-  void set_secondary_wins_server(const char* value, size_t size);
-  ::std::string* mutable_secondary_wins_server();
-  ::std::string* release_secondary_wins_server();
-  void set_allocated_secondary_wins_server(::std::string* secondary_wins_server);
-
-  // uint32 mtu = 4;
-  void clear_mtu();
-  static const int kMtuFieldNumber = 4;
-  ::google::protobuf::uint32 mtu() const;
-  void set_mtu(::google::protobuf::uint32 value);
-
-  // uint32 speed = 5;
-  void clear_speed();
-  static const int kSpeedFieldNumber = 5;
-  ::google::protobuf::uint32 speed() const;
-  void set_speed(::google::protobuf::uint32 value);
-
-  // bool is_wins_enabled = 7;
-  void clear_is_wins_enabled();
-  static const int kIsWinsEnabledFieldNumber = 7;
-  bool is_wins_enabled() const;
-  void set_is_wins_enabled(bool value);
-
-  // bool is_dhcp_enabled = 10;
-  void clear_is_dhcp_enabled();
-  static const int kIsDhcpEnabledFieldNumber = 10;
-  bool is_dhcp_enabled() const;
-  void set_is_dhcp_enabled(bool value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.NetworkCards.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item_IpAddress > ip_address_;
-  ::google::protobuf::RepeatedPtrField< ::std::string> gateway_address_;
-  ::google::protobuf::RepeatedPtrField< ::std::string> dhcp_server_address_;
-  ::google::protobuf::RepeatedPtrField< ::std::string> dns_server_address_;
-  ::google::protobuf::internal::ArenaStringPtr adapter_name_;
-  ::google::protobuf::internal::ArenaStringPtr connection_name_;
-  ::google::protobuf::internal::ArenaStringPtr interface_type_;
-  ::google::protobuf::internal::ArenaStringPtr mac_address_;
-  ::google::protobuf::internal::ArenaStringPtr primary_wins_server_;
-  ::google::protobuf::internal::ArenaStringPtr secondary_wins_server_;
-  ::google::protobuf::uint32 mtu_;
-  ::google::protobuf::uint32 speed_;
-  bool is_wins_enabled_;
-  bool is_dhcp_enabled_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCards_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.NetworkCards) */ {
- public:
-  NetworkCards();
-  virtual ~NetworkCards();
-
-  NetworkCards(const NetworkCards& from);
-
-  inline NetworkCards& operator=(const NetworkCards& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  NetworkCards(NetworkCards&& from) noexcept
-    : NetworkCards() {
-    *this = ::std::move(from);
-  }
-
-  inline NetworkCards& operator=(NetworkCards&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const NetworkCards& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const NetworkCards* internal_default_instance() {
-    return reinterpret_cast<const NetworkCards*>(
-               &_NetworkCards_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
-
-  void Swap(NetworkCards* other);
-  friend void swap(NetworkCards& a, NetworkCards& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline NetworkCards* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  NetworkCards* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const NetworkCards& from);
-  void MergeFrom(const NetworkCards& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(NetworkCards* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef NetworkCards_Item Item;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.NetworkCards.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::NetworkCards_Item& item(int index) const;
-  ::aspia::proto::NetworkCards_Item* mutable_item(int index);
-  ::aspia::proto::NetworkCards_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.NetworkCards)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsNetworkCardsImpl();
-};
-// -------------------------------------------------------------------
-
 class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpenConnections.Item) */ {
  public:
   OpenConnections_Item();
@@ -1424,7 +889,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    4;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -1587,7 +1052,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    5;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -1746,7 +1211,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    6;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -1927,7 +1392,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    7;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -2032,7 +1497,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    8;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -2174,7 +1639,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    9;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -2279,7 +1744,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    10;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -2470,7 +1935,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    11;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -2575,7 +2040,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    12;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -2695,7 +2160,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    13;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -2800,7 +2265,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    14;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -2964,7 +2429,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    15;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -3704,765 +3169,6 @@ Services::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Services_Item >&
 Services::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.Services.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
-// NetworkCards_Item_IpAddress
-
-// string address = 1;
-inline void NetworkCards_Item_IpAddress::clear_address() {
-  address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item_IpAddress::address() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.IpAddress.address)
-  return address_.GetNoArena();
-}
-inline void NetworkCards_Item_IpAddress::set_address(const ::std::string& value) {
-  
-  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.IpAddress.address)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item_IpAddress::set_address(::std::string&& value) {
-  
-  address_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.IpAddress.address)
-}
-#endif
-inline void NetworkCards_Item_IpAddress::set_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.IpAddress.address)
-}
-inline void NetworkCards_Item_IpAddress::set_address(const char* value, size_t size) {
-  
-  address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.IpAddress.address)
-}
-inline ::std::string* NetworkCards_Item_IpAddress::mutable_address() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.IpAddress.address)
-  return address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item_IpAddress::release_address() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.IpAddress.address)
-  
-  return address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item_IpAddress::set_allocated_address(::std::string* address) {
-  if (address != NULL) {
-    
-  } else {
-    
-  }
-  address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), address);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.IpAddress.address)
-}
-
-// string mask = 2;
-inline void NetworkCards_Item_IpAddress::clear_mask() {
-  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item_IpAddress::mask() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.IpAddress.mask)
-  return mask_.GetNoArena();
-}
-inline void NetworkCards_Item_IpAddress::set_mask(const ::std::string& value) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.IpAddress.mask)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item_IpAddress::set_mask(::std::string&& value) {
-  
-  mask_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.IpAddress.mask)
-}
-#endif
-inline void NetworkCards_Item_IpAddress::set_mask(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.IpAddress.mask)
-}
-inline void NetworkCards_Item_IpAddress::set_mask(const char* value, size_t size) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.IpAddress.mask)
-}
-inline ::std::string* NetworkCards_Item_IpAddress::mutable_mask() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.IpAddress.mask)
-  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item_IpAddress::release_mask() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.IpAddress.mask)
-  
-  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item_IpAddress::set_allocated_mask(::std::string* mask) {
-  if (mask != NULL) {
-    
-  } else {
-    
-  }
-  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.IpAddress.mask)
-}
-
-// -------------------------------------------------------------------
-
-// NetworkCards_Item
-
-// string adapter_name = 1;
-inline void NetworkCards_Item::clear_adapter_name() {
-  adapter_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::adapter_name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.adapter_name)
-  return adapter_name_.GetNoArena();
-}
-inline void NetworkCards_Item::set_adapter_name(const ::std::string& value) {
-  
-  adapter_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.adapter_name)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_adapter_name(::std::string&& value) {
-  
-  adapter_name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.adapter_name)
-}
-#endif
-inline void NetworkCards_Item::set_adapter_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  adapter_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.adapter_name)
-}
-inline void NetworkCards_Item::set_adapter_name(const char* value, size_t size) {
-  
-  adapter_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.adapter_name)
-}
-inline ::std::string* NetworkCards_Item::mutable_adapter_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.adapter_name)
-  return adapter_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_adapter_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.adapter_name)
-  
-  return adapter_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_adapter_name(::std::string* adapter_name) {
-  if (adapter_name != NULL) {
-    
-  } else {
-    
-  }
-  adapter_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), adapter_name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.adapter_name)
-}
-
-// string connection_name = 2;
-inline void NetworkCards_Item::clear_connection_name() {
-  connection_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::connection_name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.connection_name)
-  return connection_name_.GetNoArena();
-}
-inline void NetworkCards_Item::set_connection_name(const ::std::string& value) {
-  
-  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.connection_name)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_connection_name(::std::string&& value) {
-  
-  connection_name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.connection_name)
-}
-#endif
-inline void NetworkCards_Item::set_connection_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.connection_name)
-}
-inline void NetworkCards_Item::set_connection_name(const char* value, size_t size) {
-  
-  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.connection_name)
-}
-inline ::std::string* NetworkCards_Item::mutable_connection_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.connection_name)
-  return connection_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_connection_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.connection_name)
-  
-  return connection_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_connection_name(::std::string* connection_name) {
-  if (connection_name != NULL) {
-    
-  } else {
-    
-  }
-  connection_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), connection_name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.connection_name)
-}
-
-// string interface_type = 3;
-inline void NetworkCards_Item::clear_interface_type() {
-  interface_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::interface_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.interface_type)
-  return interface_type_.GetNoArena();
-}
-inline void NetworkCards_Item::set_interface_type(const ::std::string& value) {
-  
-  interface_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.interface_type)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_interface_type(::std::string&& value) {
-  
-  interface_type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.interface_type)
-}
-#endif
-inline void NetworkCards_Item::set_interface_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  interface_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.interface_type)
-}
-inline void NetworkCards_Item::set_interface_type(const char* value, size_t size) {
-  
-  interface_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.interface_type)
-}
-inline ::std::string* NetworkCards_Item::mutable_interface_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.interface_type)
-  return interface_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_interface_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.interface_type)
-  
-  return interface_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_interface_type(::std::string* interface_type) {
-  if (interface_type != NULL) {
-    
-  } else {
-    
-  }
-  interface_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), interface_type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.interface_type)
-}
-
-// uint32 mtu = 4;
-inline void NetworkCards_Item::clear_mtu() {
-  mtu_ = 0u;
-}
-inline ::google::protobuf::uint32 NetworkCards_Item::mtu() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.mtu)
-  return mtu_;
-}
-inline void NetworkCards_Item::set_mtu(::google::protobuf::uint32 value) {
-  
-  mtu_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.mtu)
-}
-
-// uint32 speed = 5;
-inline void NetworkCards_Item::clear_speed() {
-  speed_ = 0u;
-}
-inline ::google::protobuf::uint32 NetworkCards_Item::speed() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.speed)
-  return speed_;
-}
-inline void NetworkCards_Item::set_speed(::google::protobuf::uint32 value) {
-  
-  speed_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.speed)
-}
-
-// string mac_address = 6;
-inline void NetworkCards_Item::clear_mac_address() {
-  mac_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::mac_address() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.mac_address)
-  return mac_address_.GetNoArena();
-}
-inline void NetworkCards_Item::set_mac_address(const ::std::string& value) {
-  
-  mac_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.mac_address)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_mac_address(::std::string&& value) {
-  
-  mac_address_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.mac_address)
-}
-#endif
-inline void NetworkCards_Item::set_mac_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mac_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.mac_address)
-}
-inline void NetworkCards_Item::set_mac_address(const char* value, size_t size) {
-  
-  mac_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.mac_address)
-}
-inline ::std::string* NetworkCards_Item::mutable_mac_address() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.mac_address)
-  return mac_address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_mac_address() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.mac_address)
-  
-  return mac_address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_mac_address(::std::string* mac_address) {
-  if (mac_address != NULL) {
-    
-  } else {
-    
-  }
-  mac_address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mac_address);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.mac_address)
-}
-
-// bool is_wins_enabled = 7;
-inline void NetworkCards_Item::clear_is_wins_enabled() {
-  is_wins_enabled_ = false;
-}
-inline bool NetworkCards_Item::is_wins_enabled() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.is_wins_enabled)
-  return is_wins_enabled_;
-}
-inline void NetworkCards_Item::set_is_wins_enabled(bool value) {
-  
-  is_wins_enabled_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.is_wins_enabled)
-}
-
-// string primary_wins_server = 8;
-inline void NetworkCards_Item::clear_primary_wins_server() {
-  primary_wins_server_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::primary_wins_server() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.primary_wins_server)
-  return primary_wins_server_.GetNoArena();
-}
-inline void NetworkCards_Item::set_primary_wins_server(const ::std::string& value) {
-  
-  primary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.primary_wins_server)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_primary_wins_server(::std::string&& value) {
-  
-  primary_wins_server_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.primary_wins_server)
-}
-#endif
-inline void NetworkCards_Item::set_primary_wins_server(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  primary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.primary_wins_server)
-}
-inline void NetworkCards_Item::set_primary_wins_server(const char* value, size_t size) {
-  
-  primary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.primary_wins_server)
-}
-inline ::std::string* NetworkCards_Item::mutable_primary_wins_server() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.primary_wins_server)
-  return primary_wins_server_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_primary_wins_server() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.primary_wins_server)
-  
-  return primary_wins_server_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_primary_wins_server(::std::string* primary_wins_server) {
-  if (primary_wins_server != NULL) {
-    
-  } else {
-    
-  }
-  primary_wins_server_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), primary_wins_server);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.primary_wins_server)
-}
-
-// string secondary_wins_server = 9;
-inline void NetworkCards_Item::clear_secondary_wins_server() {
-  secondary_wins_server_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& NetworkCards_Item::secondary_wins_server() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.secondary_wins_server)
-  return secondary_wins_server_.GetNoArena();
-}
-inline void NetworkCards_Item::set_secondary_wins_server(const ::std::string& value) {
-  
-  secondary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.secondary_wins_server)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_secondary_wins_server(::std::string&& value) {
-  
-  secondary_wins_server_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.NetworkCards.Item.secondary_wins_server)
-}
-#endif
-inline void NetworkCards_Item::set_secondary_wins_server(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  secondary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.secondary_wins_server)
-}
-inline void NetworkCards_Item::set_secondary_wins_server(const char* value, size_t size) {
-  
-  secondary_wins_server_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.secondary_wins_server)
-}
-inline ::std::string* NetworkCards_Item::mutable_secondary_wins_server() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.secondary_wins_server)
-  return secondary_wins_server_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* NetworkCards_Item::release_secondary_wins_server() {
-  // @@protoc_insertion_point(field_release:aspia.proto.NetworkCards.Item.secondary_wins_server)
-  
-  return secondary_wins_server_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void NetworkCards_Item::set_allocated_secondary_wins_server(::std::string* secondary_wins_server) {
-  if (secondary_wins_server != NULL) {
-    
-  } else {
-    
-  }
-  secondary_wins_server_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), secondary_wins_server);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.NetworkCards.Item.secondary_wins_server)
-}
-
-// bool is_dhcp_enabled = 10;
-inline void NetworkCards_Item::clear_is_dhcp_enabled() {
-  is_dhcp_enabled_ = false;
-}
-inline bool NetworkCards_Item::is_dhcp_enabled() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.is_dhcp_enabled)
-  return is_dhcp_enabled_;
-}
-inline void NetworkCards_Item::set_is_dhcp_enabled(bool value) {
-  
-  is_dhcp_enabled_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.is_dhcp_enabled)
-}
-
-// repeated .aspia.proto.NetworkCards.Item.IpAddress ip_address = 11;
-inline int NetworkCards_Item::ip_address_size() const {
-  return ip_address_.size();
-}
-inline void NetworkCards_Item::clear_ip_address() {
-  ip_address_.Clear();
-}
-inline const ::aspia::proto::NetworkCards_Item_IpAddress& NetworkCards_Item::ip_address(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.ip_address)
-  return ip_address_.Get(index);
-}
-inline ::aspia::proto::NetworkCards_Item_IpAddress* NetworkCards_Item::mutable_ip_address(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.ip_address)
-  return ip_address_.Mutable(index);
-}
-inline ::aspia::proto::NetworkCards_Item_IpAddress* NetworkCards_Item::add_ip_address() {
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.ip_address)
-  return ip_address_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item_IpAddress >*
-NetworkCards_Item::mutable_ip_address() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.NetworkCards.Item.ip_address)
-  return &ip_address_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item_IpAddress >&
-NetworkCards_Item::ip_address() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.NetworkCards.Item.ip_address)
-  return ip_address_;
-}
-
-// repeated string gateway_address = 12;
-inline int NetworkCards_Item::gateway_address_size() const {
-  return gateway_address_.size();
-}
-inline void NetworkCards_Item::clear_gateway_address() {
-  gateway_address_.Clear();
-}
-inline const ::std::string& NetworkCards_Item::gateway_address(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.gateway_address)
-  return gateway_address_.Get(index);
-}
-inline ::std::string* NetworkCards_Item::mutable_gateway_address(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.gateway_address)
-  return gateway_address_.Mutable(index);
-}
-inline void NetworkCards_Item::set_gateway_address(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.gateway_address)
-  gateway_address_.Mutable(index)->assign(value);
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_gateway_address(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.gateway_address)
-  gateway_address_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void NetworkCards_Item::set_gateway_address(int index, const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  gateway_address_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.gateway_address)
-}
-inline void NetworkCards_Item::set_gateway_address(int index, const char* value, size_t size) {
-  gateway_address_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.gateway_address)
-}
-inline ::std::string* NetworkCards_Item::add_gateway_address() {
-  // @@protoc_insertion_point(field_add_mutable:aspia.proto.NetworkCards.Item.gateway_address)
-  return gateway_address_.Add();
-}
-inline void NetworkCards_Item::add_gateway_address(const ::std::string& value) {
-  gateway_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.gateway_address)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::add_gateway_address(::std::string&& value) {
-  gateway_address_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.gateway_address)
-}
-#endif
-inline void NetworkCards_Item::add_gateway_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  gateway_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:aspia.proto.NetworkCards.Item.gateway_address)
-}
-inline void NetworkCards_Item::add_gateway_address(const char* value, size_t size) {
-  gateway_address_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:aspia.proto.NetworkCards.Item.gateway_address)
-}
-inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
-NetworkCards_Item::gateway_address() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.NetworkCards.Item.gateway_address)
-  return gateway_address_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::std::string>*
-NetworkCards_Item::mutable_gateway_address() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.NetworkCards.Item.gateway_address)
-  return &gateway_address_;
-}
-
-// repeated string dhcp_server_address = 13;
-inline int NetworkCards_Item::dhcp_server_address_size() const {
-  return dhcp_server_address_.size();
-}
-inline void NetworkCards_Item::clear_dhcp_server_address() {
-  dhcp_server_address_.Clear();
-}
-inline const ::std::string& NetworkCards_Item::dhcp_server_address(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  return dhcp_server_address_.Get(index);
-}
-inline ::std::string* NetworkCards_Item::mutable_dhcp_server_address(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  return dhcp_server_address_.Mutable(index);
-}
-inline void NetworkCards_Item::set_dhcp_server_address(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  dhcp_server_address_.Mutable(index)->assign(value);
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_dhcp_server_address(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  dhcp_server_address_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void NetworkCards_Item::set_dhcp_server_address(int index, const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  dhcp_server_address_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-inline void NetworkCards_Item::set_dhcp_server_address(int index, const char* value, size_t size) {
-  dhcp_server_address_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-inline ::std::string* NetworkCards_Item::add_dhcp_server_address() {
-  // @@protoc_insertion_point(field_add_mutable:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  return dhcp_server_address_.Add();
-}
-inline void NetworkCards_Item::add_dhcp_server_address(const ::std::string& value) {
-  dhcp_server_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::add_dhcp_server_address(::std::string&& value) {
-  dhcp_server_address_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-#endif
-inline void NetworkCards_Item::add_dhcp_server_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  dhcp_server_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-inline void NetworkCards_Item::add_dhcp_server_address(const char* value, size_t size) {
-  dhcp_server_address_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:aspia.proto.NetworkCards.Item.dhcp_server_address)
-}
-inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
-NetworkCards_Item::dhcp_server_address() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  return dhcp_server_address_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::std::string>*
-NetworkCards_Item::mutable_dhcp_server_address() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.NetworkCards.Item.dhcp_server_address)
-  return &dhcp_server_address_;
-}
-
-// repeated string dns_server_address = 14;
-inline int NetworkCards_Item::dns_server_address_size() const {
-  return dns_server_address_.size();
-}
-inline void NetworkCards_Item::clear_dns_server_address() {
-  dns_server_address_.Clear();
-}
-inline const ::std::string& NetworkCards_Item::dns_server_address(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.Item.dns_server_address)
-  return dns_server_address_.Get(index);
-}
-inline ::std::string* NetworkCards_Item::mutable_dns_server_address(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.Item.dns_server_address)
-  return dns_server_address_.Mutable(index);
-}
-inline void NetworkCards_Item::set_dns_server_address(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.dns_server_address)
-  dns_server_address_.Mutable(index)->assign(value);
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::set_dns_server_address(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:aspia.proto.NetworkCards.Item.dns_server_address)
-  dns_server_address_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void NetworkCards_Item::set_dns_server_address(int index, const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  dns_server_address_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-inline void NetworkCards_Item::set_dns_server_address(int index, const char* value, size_t size) {
-  dns_server_address_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-inline ::std::string* NetworkCards_Item::add_dns_server_address() {
-  // @@protoc_insertion_point(field_add_mutable:aspia.proto.NetworkCards.Item.dns_server_address)
-  return dns_server_address_.Add();
-}
-inline void NetworkCards_Item::add_dns_server_address(const ::std::string& value) {
-  dns_server_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-#if LANG_CXX11
-inline void NetworkCards_Item::add_dns_server_address(::std::string&& value) {
-  dns_server_address_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-#endif
-inline void NetworkCards_Item::add_dns_server_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  dns_server_address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-inline void NetworkCards_Item::add_dns_server_address(const char* value, size_t size) {
-  dns_server_address_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:aspia.proto.NetworkCards.Item.dns_server_address)
-}
-inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
-NetworkCards_Item::dns_server_address() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.NetworkCards.Item.dns_server_address)
-  return dns_server_address_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::std::string>*
-NetworkCards_Item::mutable_dns_server_address() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.NetworkCards.Item.dns_server_address)
-  return &dns_server_address_;
-}
-
-// -------------------------------------------------------------------
-
-// NetworkCards
-
-// repeated .aspia.proto.NetworkCards.Item item = 1;
-inline int NetworkCards::item_size() const {
-  return item_.size();
-}
-inline void NetworkCards::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::NetworkCards_Item& NetworkCards::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.NetworkCards.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::NetworkCards_Item* NetworkCards::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.NetworkCards.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::NetworkCards_Item* NetworkCards::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.NetworkCards.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item >*
-NetworkCards::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.NetworkCards.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::NetworkCards_Item >&
-NetworkCards::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.NetworkCards.item)
   return item_;
 }
 
@@ -5903,12 +4609,6 @@ Sessions::item() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
