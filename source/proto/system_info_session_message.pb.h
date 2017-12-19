@@ -36,15 +36,11 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[27];
+  static const ::google::protobuf::internal::ParseTable schema[25];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsDmiPortConnectors_ItemImpl();
-void InitDefaultsDmiPortConnectors_Item();
-void InitDefaultsDmiPortConnectorsImpl();
-void InitDefaultsDmiPortConnectors();
 void InitDefaultsDmiOnBoardDevices_ItemImpl();
 void InitDefaultsDmiOnBoardDevices_Item();
 void InitDefaultsDmiOnBoardDevicesImpl();
@@ -96,8 +92,6 @@ void InitDefaultsSessions_Item();
 void InitDefaultsSessionsImpl();
 void InitDefaultsSessions();
 inline void InitDefaults() {
-  InitDefaultsDmiPortConnectors_Item();
-  InitDefaultsDmiPortConnectors();
   InitDefaultsDmiOnBoardDevices_Item();
   InitDefaultsDmiOnBoardDevices();
   InitDefaultsDmiPointingDevices_Item();
@@ -139,12 +133,6 @@ extern DmiPointingDevicesDefaultTypeInternal _DmiPointingDevices_default_instanc
 class DmiPointingDevices_Item;
 class DmiPointingDevices_ItemDefaultTypeInternal;
 extern DmiPointingDevices_ItemDefaultTypeInternal _DmiPointingDevices_Item_default_instance_;
-class DmiPortConnectors;
-class DmiPortConnectorsDefaultTypeInternal;
-extern DmiPortConnectorsDefaultTypeInternal _DmiPortConnectors_default_instance_;
-class DmiPortConnectors_Item;
-class DmiPortConnectors_ItemDefaultTypeInternal;
-extern DmiPortConnectors_ItemDefaultTypeInternal _DmiPortConnectors_Item_default_instance_;
 class DmiPortableBattery;
 class DmiPortableBatteryDefaultTypeInternal;
 extern DmiPortableBatteryDefaultTypeInternal _DmiPortableBattery_default_instance_;
@@ -212,103 +200,6 @@ extern Users_ItemDefaultTypeInternal _Users_Item_default_instance_;
 }  // namespace aspia
 namespace aspia {
 namespace proto {
-
-enum DmiPortConnectors_Type {
-  DmiPortConnectors_Type_TYPE_UNKNOWN = 0,
-  DmiPortConnectors_Type_TYPE_NONE = 1,
-  DmiPortConnectors_Type_TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE = 2,
-  DmiPortConnectors_Type_TYPE_PARALLEL_PORT_PS_2 = 3,
-  DmiPortConnectors_Type_TYPE_PARALLEL_PORT_ECP = 4,
-  DmiPortConnectors_Type_TYPE_PARALLEL_PORT_EPP = 5,
-  DmiPortConnectors_Type_TYPE_PARALLEL_PORT_ECP_EPP = 6,
-  DmiPortConnectors_Type_TYPE_SERIAL_PORT_XT_AT_COMPATIBLE = 7,
-  DmiPortConnectors_Type_TYPE_SERIAL_PORT_16450_COMPATIBLE = 8,
-  DmiPortConnectors_Type_TYPE_SERIAL_PORT_16550_COMPATIBLE = 9,
-  DmiPortConnectors_Type_TYPE_SERIAL_PORT_16550A_COMPATIBLE = 10,
-  DmiPortConnectors_Type_TYPE_SCSI_PORT = 11,
-  DmiPortConnectors_Type_TYPE_MIDI_PORT = 12,
-  DmiPortConnectors_Type_TYPE_JOYSTICK_PORT = 13,
-  DmiPortConnectors_Type_TYPE_KEYBOARD_PORT = 14,
-  DmiPortConnectors_Type_TYPE_MOUSE_PORT = 15,
-  DmiPortConnectors_Type_TYPE_SSA_SCSI = 16,
-  DmiPortConnectors_Type_TYPE_USB = 17,
-  DmiPortConnectors_Type_TYPE_FIREWIRE = 18,
-  DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_I = 19,
-  DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_II = 20,
-  DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_III = 21,
-  DmiPortConnectors_Type_TYPE_CARDBUS = 22,
-  DmiPortConnectors_Type_TYPE_ACCESS_BUS_PORT = 23,
-  DmiPortConnectors_Type_TYPE_SCSI_II = 24,
-  DmiPortConnectors_Type_TYPE_SCSI_WIDE = 25,
-  DmiPortConnectors_Type_TYPE_PC_98 = 26,
-  DmiPortConnectors_Type_TYPE_PC_98_HIRESO = 27,
-  DmiPortConnectors_Type_TYPE_PC_H98 = 28,
-  DmiPortConnectors_Type_TYPE_VIDEO_PORT = 29,
-  DmiPortConnectors_Type_TYPE_AUDIO_PORT = 30,
-  DmiPortConnectors_Type_TYPE_MODEM_PORT = 31,
-  DmiPortConnectors_Type_TYPE_NETWORK_PORT = 32,
-  DmiPortConnectors_Type_TYPE_SATA = 33,
-  DmiPortConnectors_Type_TYPE_SAS = 34,
-  DmiPortConnectors_Type_TYPE_8251_COMPATIBLE = 35,
-  DmiPortConnectors_Type_TYPE_8251_FIFO_COMPATIBLE = 36,
-  DmiPortConnectors_Type_DmiPortConnectors_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPortConnectors_Type_DmiPortConnectors_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiPortConnectors_Type_IsValid(int value);
-const DmiPortConnectors_Type DmiPortConnectors_Type_Type_MIN = DmiPortConnectors_Type_TYPE_UNKNOWN;
-const DmiPortConnectors_Type DmiPortConnectors_Type_Type_MAX = DmiPortConnectors_Type_TYPE_8251_FIFO_COMPATIBLE;
-const int DmiPortConnectors_Type_Type_ARRAYSIZE = DmiPortConnectors_Type_Type_MAX + 1;
-
-enum DmiPortConnectors_ConnectorType {
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_UNKNOWN = 0,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_NONE = 1,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_OTHER = 2,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CENTRONICS = 3,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS = 4,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PROPRIETARY = 5,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_25_MALE = 6,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_25_FEMALE = 7,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_15_MALE = 8,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_15_FEMALE = 9,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_9_MALE = 10,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_9_FEMALE = 11,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_RJ_11 = 12,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_RJ_45 = 13,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_50_PIN_MINISCSI = 14,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_DIN = 15,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MICRO_DIN = 16,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PS_2 = 17,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_INFRARED = 18,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_HP_HIL = 19,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ACCESS_BUS_USB = 20,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_SSA_SCSI = 21,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE = 22,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE = 23,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_IDE = 24,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_FLOPPY = 25,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_9_PIN_DUAL_INLINE = 26,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_25_PIN_DUAL_INLINE = 27,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_50_PIN_DUAL_INLINE = 28,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_68_PIN_DUAL_INLINE = 29,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM = 30,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14 = 31,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26 = 32,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_JACK = 33,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_BNC = 34,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_IEEE_1394 = 35,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE = 36,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98 = 37,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_HIRESO = 38,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_H98 = 39,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_NOTE = 40,
-  DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_FULL = 41,
-  DmiPortConnectors_ConnectorType_DmiPortConnectors_ConnectorType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  DmiPortConnectors_ConnectorType_DmiPortConnectors_ConnectorType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool DmiPortConnectors_ConnectorType_IsValid(int value);
-const DmiPortConnectors_ConnectorType DmiPortConnectors_ConnectorType_ConnectorType_MIN = DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_UNKNOWN;
-const DmiPortConnectors_ConnectorType DmiPortConnectors_ConnectorType_ConnectorType_MAX = DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_FULL;
-const int DmiPortConnectors_ConnectorType_ConnectorType_ARRAYSIZE = DmiPortConnectors_ConnectorType_ConnectorType_MAX + 1;
 
 enum DmiOnBoardDevices_Type {
   DmiOnBoardDevices_Type_TYPE_UNKNOWN = 0,
@@ -488,432 +379,6 @@ const int Sessions_ConnectState_ConnectState_ARRAYSIZE = Sessions_ConnectState_C
 
 // ===================================================================
 
-class DmiPortConnectors_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPortConnectors.Item) */ {
- public:
-  DmiPortConnectors_Item();
-  virtual ~DmiPortConnectors_Item();
-
-  DmiPortConnectors_Item(const DmiPortConnectors_Item& from);
-
-  inline DmiPortConnectors_Item& operator=(const DmiPortConnectors_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiPortConnectors_Item(DmiPortConnectors_Item&& from) noexcept
-    : DmiPortConnectors_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiPortConnectors_Item& operator=(DmiPortConnectors_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiPortConnectors_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPortConnectors_Item* internal_default_instance() {
-    return reinterpret_cast<const DmiPortConnectors_Item*>(
-               &_DmiPortConnectors_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
-
-  void Swap(DmiPortConnectors_Item* other);
-  friend void swap(DmiPortConnectors_Item& a, DmiPortConnectors_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiPortConnectors_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiPortConnectors_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiPortConnectors_Item& from);
-  void MergeFrom(const DmiPortConnectors_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiPortConnectors_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string internal_designation = 1;
-  void clear_internal_designation();
-  static const int kInternalDesignationFieldNumber = 1;
-  const ::std::string& internal_designation() const;
-  void set_internal_designation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_internal_designation(::std::string&& value);
-  #endif
-  void set_internal_designation(const char* value);
-  void set_internal_designation(const char* value, size_t size);
-  ::std::string* mutable_internal_designation();
-  ::std::string* release_internal_designation();
-  void set_allocated_internal_designation(::std::string* internal_designation);
-
-  // string external_designation = 2;
-  void clear_external_designation();
-  static const int kExternalDesignationFieldNumber = 2;
-  const ::std::string& external_designation() const;
-  void set_external_designation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_external_designation(::std::string&& value);
-  #endif
-  void set_external_designation(const char* value);
-  void set_external_designation(const char* value, size_t size);
-  ::std::string* mutable_external_designation();
-  ::std::string* release_external_designation();
-  void set_allocated_external_designation(::std::string* external_designation);
-
-  // .aspia.proto.DmiPortConnectors.Type type = 3;
-  void clear_type();
-  static const int kTypeFieldNumber = 3;
-  ::aspia::proto::DmiPortConnectors_Type type() const;
-  void set_type(::aspia::proto::DmiPortConnectors_Type value);
-
-  // .aspia.proto.DmiPortConnectors.ConnectorType internal_connector_type = 4;
-  void clear_internal_connector_type();
-  static const int kInternalConnectorTypeFieldNumber = 4;
-  ::aspia::proto::DmiPortConnectors_ConnectorType internal_connector_type() const;
-  void set_internal_connector_type(::aspia::proto::DmiPortConnectors_ConnectorType value);
-
-  // .aspia.proto.DmiPortConnectors.ConnectorType external_connector_type = 5;
-  void clear_external_connector_type();
-  static const int kExternalConnectorTypeFieldNumber = 5;
-  ::aspia::proto::DmiPortConnectors_ConnectorType external_connector_type() const;
-  void set_external_connector_type(::aspia::proto::DmiPortConnectors_ConnectorType value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPortConnectors.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr internal_designation_;
-  ::google::protobuf::internal::ArenaStringPtr external_designation_;
-  int type_;
-  int internal_connector_type_;
-  int external_connector_type_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortConnectors_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class DmiPortConnectors : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiPortConnectors) */ {
- public:
-  DmiPortConnectors();
-  virtual ~DmiPortConnectors();
-
-  DmiPortConnectors(const DmiPortConnectors& from);
-
-  inline DmiPortConnectors& operator=(const DmiPortConnectors& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  DmiPortConnectors(DmiPortConnectors&& from) noexcept
-    : DmiPortConnectors() {
-    *this = ::std::move(from);
-  }
-
-  inline DmiPortConnectors& operator=(DmiPortConnectors&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const DmiPortConnectors& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const DmiPortConnectors* internal_default_instance() {
-    return reinterpret_cast<const DmiPortConnectors*>(
-               &_DmiPortConnectors_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
-
-  void Swap(DmiPortConnectors* other);
-  friend void swap(DmiPortConnectors& a, DmiPortConnectors& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline DmiPortConnectors* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  DmiPortConnectors* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const DmiPortConnectors& from);
-  void MergeFrom(const DmiPortConnectors& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(DmiPortConnectors* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef DmiPortConnectors_Item Item;
-
-  typedef DmiPortConnectors_Type Type;
-  static const Type TYPE_UNKNOWN =
-    DmiPortConnectors_Type_TYPE_UNKNOWN;
-  static const Type TYPE_NONE =
-    DmiPortConnectors_Type_TYPE_NONE;
-  static const Type TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_PARALLEL_PORT_XT_AT_COMPATIBLE;
-  static const Type TYPE_PARALLEL_PORT_PS_2 =
-    DmiPortConnectors_Type_TYPE_PARALLEL_PORT_PS_2;
-  static const Type TYPE_PARALLEL_PORT_ECP =
-    DmiPortConnectors_Type_TYPE_PARALLEL_PORT_ECP;
-  static const Type TYPE_PARALLEL_PORT_EPP =
-    DmiPortConnectors_Type_TYPE_PARALLEL_PORT_EPP;
-  static const Type TYPE_PARALLEL_PORT_ECP_EPP =
-    DmiPortConnectors_Type_TYPE_PARALLEL_PORT_ECP_EPP;
-  static const Type TYPE_SERIAL_PORT_XT_AT_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_SERIAL_PORT_XT_AT_COMPATIBLE;
-  static const Type TYPE_SERIAL_PORT_16450_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_SERIAL_PORT_16450_COMPATIBLE;
-  static const Type TYPE_SERIAL_PORT_16550_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_SERIAL_PORT_16550_COMPATIBLE;
-  static const Type TYPE_SERIAL_PORT_16550A_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_SERIAL_PORT_16550A_COMPATIBLE;
-  static const Type TYPE_SCSI_PORT =
-    DmiPortConnectors_Type_TYPE_SCSI_PORT;
-  static const Type TYPE_MIDI_PORT =
-    DmiPortConnectors_Type_TYPE_MIDI_PORT;
-  static const Type TYPE_JOYSTICK_PORT =
-    DmiPortConnectors_Type_TYPE_JOYSTICK_PORT;
-  static const Type TYPE_KEYBOARD_PORT =
-    DmiPortConnectors_Type_TYPE_KEYBOARD_PORT;
-  static const Type TYPE_MOUSE_PORT =
-    DmiPortConnectors_Type_TYPE_MOUSE_PORT;
-  static const Type TYPE_SSA_SCSI =
-    DmiPortConnectors_Type_TYPE_SSA_SCSI;
-  static const Type TYPE_USB =
-    DmiPortConnectors_Type_TYPE_USB;
-  static const Type TYPE_FIREWIRE =
-    DmiPortConnectors_Type_TYPE_FIREWIRE;
-  static const Type TYPE_PCMCIA_TYPE_I =
-    DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_I;
-  static const Type TYPE_PCMCIA_TYPE_II =
-    DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_II;
-  static const Type TYPE_PCMCIA_TYPE_III =
-    DmiPortConnectors_Type_TYPE_PCMCIA_TYPE_III;
-  static const Type TYPE_CARDBUS =
-    DmiPortConnectors_Type_TYPE_CARDBUS;
-  static const Type TYPE_ACCESS_BUS_PORT =
-    DmiPortConnectors_Type_TYPE_ACCESS_BUS_PORT;
-  static const Type TYPE_SCSI_II =
-    DmiPortConnectors_Type_TYPE_SCSI_II;
-  static const Type TYPE_SCSI_WIDE =
-    DmiPortConnectors_Type_TYPE_SCSI_WIDE;
-  static const Type TYPE_PC_98 =
-    DmiPortConnectors_Type_TYPE_PC_98;
-  static const Type TYPE_PC_98_HIRESO =
-    DmiPortConnectors_Type_TYPE_PC_98_HIRESO;
-  static const Type TYPE_PC_H98 =
-    DmiPortConnectors_Type_TYPE_PC_H98;
-  static const Type TYPE_VIDEO_PORT =
-    DmiPortConnectors_Type_TYPE_VIDEO_PORT;
-  static const Type TYPE_AUDIO_PORT =
-    DmiPortConnectors_Type_TYPE_AUDIO_PORT;
-  static const Type TYPE_MODEM_PORT =
-    DmiPortConnectors_Type_TYPE_MODEM_PORT;
-  static const Type TYPE_NETWORK_PORT =
-    DmiPortConnectors_Type_TYPE_NETWORK_PORT;
-  static const Type TYPE_SATA =
-    DmiPortConnectors_Type_TYPE_SATA;
-  static const Type TYPE_SAS =
-    DmiPortConnectors_Type_TYPE_SAS;
-  static const Type TYPE_8251_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_8251_COMPATIBLE;
-  static const Type TYPE_8251_FIFO_COMPATIBLE =
-    DmiPortConnectors_Type_TYPE_8251_FIFO_COMPATIBLE;
-  static inline bool Type_IsValid(int value) {
-    return DmiPortConnectors_Type_IsValid(value);
-  }
-  static const Type Type_MIN =
-    DmiPortConnectors_Type_Type_MIN;
-  static const Type Type_MAX =
-    DmiPortConnectors_Type_Type_MAX;
-  static const int Type_ARRAYSIZE =
-    DmiPortConnectors_Type_Type_ARRAYSIZE;
-
-  typedef DmiPortConnectors_ConnectorType ConnectorType;
-  static const ConnectorType CONNECTOR_TYPE_UNKNOWN =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_UNKNOWN;
-  static const ConnectorType CONNECTOR_TYPE_NONE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_NONE;
-  static const ConnectorType CONNECTOR_TYPE_OTHER =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_OTHER;
-  static const ConnectorType CONNECTOR_TYPE_CENTRONICS =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CENTRONICS;
-  static const ConnectorType CONNECTOR_TYPE_MINI_CENTRONICS =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS;
-  static const ConnectorType CONNECTOR_TYPE_PROPRIETARY =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PROPRIETARY;
-  static const ConnectorType CONNECTOR_TYPE_DB_25_MALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_25_MALE;
-  static const ConnectorType CONNECTOR_TYPE_DB_25_FEMALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_25_FEMALE;
-  static const ConnectorType CONNECTOR_TYPE_DB_15_MALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_15_MALE;
-  static const ConnectorType CONNECTOR_TYPE_DB_15_FEMALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_15_FEMALE;
-  static const ConnectorType CONNECTOR_TYPE_DB_9_MALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_9_MALE;
-  static const ConnectorType CONNECTOR_TYPE_DB_9_FEMALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_DB_9_FEMALE;
-  static const ConnectorType CONNECTOR_TYPE_RJ_11 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_RJ_11;
-  static const ConnectorType CONNECTOR_TYPE_RJ_45 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_RJ_45;
-  static const ConnectorType CONNECTOR_TYPE_50_PIN_MINISCSI =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_50_PIN_MINISCSI;
-  static const ConnectorType CONNECTOR_TYPE_MINI_DIN =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_DIN;
-  static const ConnectorType CONNECTOR_TYPE_MICRO_DIN =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MICRO_DIN;
-  static const ConnectorType CONNECTOR_TYPE_PS_2 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PS_2;
-  static const ConnectorType CONNECTOR_TYPE_INFRARED =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_INFRARED;
-  static const ConnectorType CONNECTOR_TYPE_HP_HIL =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_HP_HIL;
-  static const ConnectorType CONNECTOR_TYPE_ACCESS_BUS_USB =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ACCESS_BUS_USB;
-  static const ConnectorType CONNECTOR_TYPE_SSA_SCSI =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_SSA_SCSI;
-  static const ConnectorType CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CIRCULAR_DIN_8_MALE;
-  static const ConnectorType CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_CIRCULAR_DIN_8_FEMALE;
-  static const ConnectorType CONNECTOR_TYPE_ONBOARD_IDE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_IDE;
-  static const ConnectorType CONNECTOR_TYPE_ONBOARD_FLOPPY =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_FLOPPY;
-  static const ConnectorType CONNECTOR_TYPE_9_PIN_DUAL_INLINE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_9_PIN_DUAL_INLINE;
-  static const ConnectorType CONNECTOR_TYPE_25_PIN_DUAL_INLINE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_25_PIN_DUAL_INLINE;
-  static const ConnectorType CONNECTOR_TYPE_50_PIN_DUAL_INLINE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_50_PIN_DUAL_INLINE;
-  static const ConnectorType CONNECTOR_TYPE_68_PIN_DUAL_INLINE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_68_PIN_DUAL_INLINE;
-  static const ConnectorType CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_ONBOARD_SOUND_INPUT_FROM_CDROM;
-  static const ConnectorType CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_14;
-  static const ConnectorType CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_CENTRONICS_TYPE_26;
-  static const ConnectorType CONNECTOR_TYPE_MINI_JACK =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_MINI_JACK;
-  static const ConnectorType CONNECTOR_TYPE_BNC =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_BNC;
-  static const ConnectorType CONNECTOR_TYPE_IEEE_1394 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_IEEE_1394;
-  static const ConnectorType CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_SAS_SATE_PLUG_RECEPTACLE;
-  static const ConnectorType CONNECTOR_TYPE_PC_98 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98;
-  static const ConnectorType CONNECTOR_TYPE_PC_98_HIRESO =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_HIRESO;
-  static const ConnectorType CONNECTOR_TYPE_PC_H98 =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_H98;
-  static const ConnectorType CONNECTOR_TYPE_PC_98_NOTE =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_NOTE;
-  static const ConnectorType CONNECTOR_TYPE_PC_98_FULL =
-    DmiPortConnectors_ConnectorType_CONNECTOR_TYPE_PC_98_FULL;
-  static inline bool ConnectorType_IsValid(int value) {
-    return DmiPortConnectors_ConnectorType_IsValid(value);
-  }
-  static const ConnectorType ConnectorType_MIN =
-    DmiPortConnectors_ConnectorType_ConnectorType_MIN;
-  static const ConnectorType ConnectorType_MAX =
-    DmiPortConnectors_ConnectorType_ConnectorType_MAX;
-  static const int ConnectorType_ARRAYSIZE =
-    DmiPortConnectors_ConnectorType_ConnectorType_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.DmiPortConnectors.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::DmiPortConnectors_Item& item(int index) const;
-  ::aspia::proto::DmiPortConnectors_Item* mutable_item(int index);
-  ::aspia::proto::DmiPortConnectors_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortConnectors_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortConnectors_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.DmiPortConnectors)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortConnectors_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsDmiPortConnectorsImpl();
-};
-// -------------------------------------------------------------------
-
 class DmiOnBoardDevices_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.DmiOnBoardDevices.Item) */ {
  public:
   DmiOnBoardDevices_Item();
@@ -948,7 +413,7 @@ class DmiOnBoardDevices_Item : public ::google::protobuf::MessageLite /* @@proto
                &_DmiOnBoardDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    0;
 
   void Swap(DmiOnBoardDevices_Item* other);
   friend void swap(DmiOnBoardDevices_Item& a, DmiOnBoardDevices_Item& b) {
@@ -1067,7 +532,7 @@ class DmiOnBoardDevices : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_DmiOnBoardDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    1;
 
   void Swap(DmiOnBoardDevices* other);
   friend void swap(DmiOnBoardDevices& a, DmiOnBoardDevices& b) {
@@ -1203,7 +668,7 @@ class DmiPointingDevices_Item : public ::google::protobuf::MessageLite /* @@prot
                &_DmiPointingDevices_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    2;
 
   void Swap(DmiPointingDevices_Item* other);
   friend void swap(DmiPointingDevices_Item& a, DmiPointingDevices_Item& b) {
@@ -1314,7 +779,7 @@ class DmiPointingDevices : public ::google::protobuf::MessageLite /* @@protoc_in
                &_DmiPointingDevices_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    3;
 
   void Swap(DmiPointingDevices* other);
   friend void swap(DmiPointingDevices& a, DmiPointingDevices& b) {
@@ -1481,7 +946,7 @@ class DmiPortableBattery_Item : public ::google::protobuf::MessageLite /* @@prot
                &_DmiPortableBattery_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(DmiPortableBattery_Item* other);
   friend void swap(DmiPortableBattery_Item& a, DmiPortableBattery_Item& b) {
@@ -1734,7 +1199,7 @@ class DmiPortableBattery : public ::google::protobuf::MessageLite /* @@protoc_in
                &_DmiPortableBattery_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(DmiPortableBattery* other);
   friend void swap(DmiPortableBattery& a, DmiPortableBattery& b) {
@@ -1866,7 +1331,7 @@ class Programs_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Programs_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(Programs_Item* other);
   friend void swap(Programs_Item& a, Programs_Item& b) {
@@ -2031,7 +1496,7 @@ class Programs : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Programs_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(Programs* other);
   friend void swap(Programs& a, Programs& b) {
@@ -2136,7 +1601,7 @@ class Services_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Services_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Services_Item* other);
   friend void swap(Services_Item& a, Services_Item& b) {
@@ -2365,7 +1830,7 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Services_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(Services* other);
   friend void swap(Services& a, Services& b) {
@@ -2470,7 +1935,7 @@ class NetworkCards_Item_IpAddress : public ::google::protobuf::MessageLite /* @@
                &_NetworkCards_Item_IpAddress_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(NetworkCards_Item_IpAddress* other);
   friend void swap(NetworkCards_Item_IpAddress& a, NetworkCards_Item_IpAddress& b) {
@@ -2590,7 +2055,7 @@ class NetworkCards_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_NetworkCards_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(NetworkCards_Item* other);
   friend void swap(NetworkCards_Item& a, NetworkCards_Item& b) {
@@ -2882,7 +2347,7 @@ class NetworkCards : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_NetworkCards_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(NetworkCards* other);
   friend void swap(NetworkCards& a, NetworkCards& b) {
@@ -2987,7 +2452,7 @@ class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_OpenConnections_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(OpenConnections_Item* other);
   friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
@@ -3150,7 +2615,7 @@ class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_OpenConnections_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    14;
 
   void Swap(OpenConnections* other);
   friend void swap(OpenConnections& a, OpenConnections& b) {
@@ -3309,7 +2774,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    15;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -3490,7 +2955,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    16;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -3595,7 +3060,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    17;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -3737,7 +3202,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    18;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -3842,7 +3307,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    19;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -4033,7 +3498,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    20;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -4138,7 +3603,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    21;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -4258,7 +3723,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    22;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -4363,7 +3828,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    23;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -4527,7 +3992,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    24;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -4638,192 +4103,6 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// DmiPortConnectors_Item
-
-// string internal_designation = 1;
-inline void DmiPortConnectors_Item::clear_internal_designation() {
-  internal_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& DmiPortConnectors_Item::internal_designation() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.Item.internal_designation)
-  return internal_designation_.GetNoArena();
-}
-inline void DmiPortConnectors_Item::set_internal_designation(const ::std::string& value) {
-  
-  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPortConnectors.Item.internal_designation)
-}
-#if LANG_CXX11
-inline void DmiPortConnectors_Item::set_internal_designation(::std::string&& value) {
-  
-  internal_designation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiPortConnectors.Item.internal_designation)
-}
-#endif
-inline void DmiPortConnectors_Item::set_internal_designation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiPortConnectors.Item.internal_designation)
-}
-inline void DmiPortConnectors_Item::set_internal_designation(const char* value, size_t size) {
-  
-  internal_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiPortConnectors.Item.internal_designation)
-}
-inline ::std::string* DmiPortConnectors_Item::mutable_internal_designation() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPortConnectors.Item.internal_designation)
-  return internal_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiPortConnectors_Item::release_internal_designation() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiPortConnectors.Item.internal_designation)
-  
-  return internal_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiPortConnectors_Item::set_allocated_internal_designation(::std::string* internal_designation) {
-  if (internal_designation != NULL) {
-    
-  } else {
-    
-  }
-  internal_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), internal_designation);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiPortConnectors.Item.internal_designation)
-}
-
-// string external_designation = 2;
-inline void DmiPortConnectors_Item::clear_external_designation() {
-  external_designation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& DmiPortConnectors_Item::external_designation() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.Item.external_designation)
-  return external_designation_.GetNoArena();
-}
-inline void DmiPortConnectors_Item::set_external_designation(const ::std::string& value) {
-  
-  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPortConnectors.Item.external_designation)
-}
-#if LANG_CXX11
-inline void DmiPortConnectors_Item::set_external_designation(::std::string&& value) {
-  
-  external_designation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.DmiPortConnectors.Item.external_designation)
-}
-#endif
-inline void DmiPortConnectors_Item::set_external_designation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.DmiPortConnectors.Item.external_designation)
-}
-inline void DmiPortConnectors_Item::set_external_designation(const char* value, size_t size) {
-  
-  external_designation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.DmiPortConnectors.Item.external_designation)
-}
-inline ::std::string* DmiPortConnectors_Item::mutable_external_designation() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPortConnectors.Item.external_designation)
-  return external_designation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* DmiPortConnectors_Item::release_external_designation() {
-  // @@protoc_insertion_point(field_release:aspia.proto.DmiPortConnectors.Item.external_designation)
-  
-  return external_designation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void DmiPortConnectors_Item::set_allocated_external_designation(::std::string* external_designation) {
-  if (external_designation != NULL) {
-    
-  } else {
-    
-  }
-  external_designation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), external_designation);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.DmiPortConnectors.Item.external_designation)
-}
-
-// .aspia.proto.DmiPortConnectors.Type type = 3;
-inline void DmiPortConnectors_Item::clear_type() {
-  type_ = 0;
-}
-inline ::aspia::proto::DmiPortConnectors_Type DmiPortConnectors_Item::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.Item.type)
-  return static_cast< ::aspia::proto::DmiPortConnectors_Type >(type_);
-}
-inline void DmiPortConnectors_Item::set_type(::aspia::proto::DmiPortConnectors_Type value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPortConnectors.Item.type)
-}
-
-// .aspia.proto.DmiPortConnectors.ConnectorType internal_connector_type = 4;
-inline void DmiPortConnectors_Item::clear_internal_connector_type() {
-  internal_connector_type_ = 0;
-}
-inline ::aspia::proto::DmiPortConnectors_ConnectorType DmiPortConnectors_Item::internal_connector_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.Item.internal_connector_type)
-  return static_cast< ::aspia::proto::DmiPortConnectors_ConnectorType >(internal_connector_type_);
-}
-inline void DmiPortConnectors_Item::set_internal_connector_type(::aspia::proto::DmiPortConnectors_ConnectorType value) {
-  
-  internal_connector_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPortConnectors.Item.internal_connector_type)
-}
-
-// .aspia.proto.DmiPortConnectors.ConnectorType external_connector_type = 5;
-inline void DmiPortConnectors_Item::clear_external_connector_type() {
-  external_connector_type_ = 0;
-}
-inline ::aspia::proto::DmiPortConnectors_ConnectorType DmiPortConnectors_Item::external_connector_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.Item.external_connector_type)
-  return static_cast< ::aspia::proto::DmiPortConnectors_ConnectorType >(external_connector_type_);
-}
-inline void DmiPortConnectors_Item::set_external_connector_type(::aspia::proto::DmiPortConnectors_ConnectorType value) {
-  
-  external_connector_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.DmiPortConnectors.Item.external_connector_type)
-}
-
-// -------------------------------------------------------------------
-
-// DmiPortConnectors
-
-// repeated .aspia.proto.DmiPortConnectors.Item item = 1;
-inline int DmiPortConnectors::item_size() const {
-  return item_.size();
-}
-inline void DmiPortConnectors::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::DmiPortConnectors_Item& DmiPortConnectors::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.DmiPortConnectors.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::DmiPortConnectors_Item* DmiPortConnectors::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.DmiPortConnectors.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::DmiPortConnectors_Item* DmiPortConnectors::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.DmiPortConnectors.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortConnectors_Item >*
-DmiPortConnectors::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.DmiPortConnectors.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::DmiPortConnectors_Item >&
-DmiPortConnectors::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.DmiPortConnectors.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
 // DmiOnBoardDevices_Item
 
 // string description = 1;
@@ -8470,10 +7749,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -8483,8 +7758,6 @@ Sessions::item() const {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_Type> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::DmiPortConnectors_ConnectorType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiOnBoardDevices_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::DmiPointingDevices_Interface> : ::google::protobuf::internal::true_type {};

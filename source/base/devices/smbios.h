@@ -66,14 +66,15 @@ public:
 
     enum TableType : uint8_t
     {
-        TABLE_TYPE_BIOS          = 0x00,
-        TABLE_TYPE_SYSTEM        = 0x01,
-        TABLE_TYPE_BASEBOARD     = 0x02,
-        TABLE_TYPE_CHASSIS       = 0x03,
-        TABLE_TYPE_PROCESSOR     = 0x04,
-        TABLE_TYPE_CACHE         = 0x07,
-        TABLE_TYPE_SYSTEM_SLOT   = 0x09,
-        TABLE_TYPE_MEMORY_DEVICE = 0x11
+        TABLE_TYPE_BIOS           = 0x00,
+        TABLE_TYPE_SYSTEM         = 0x01,
+        TABLE_TYPE_BASEBOARD      = 0x02,
+        TABLE_TYPE_CHASSIS        = 0x03,
+        TABLE_TYPE_PROCESSOR      = 0x04,
+        TABLE_TYPE_CACHE          = 0x07,
+        TABLE_TYPE_PORT_CONNECTOR = 0x08,
+        TABLE_TYPE_SYSTEM_SLOT    = 0x09,
+        TABLE_TYPE_MEMORY_DEVICE  = 0x11
     };
 
     class TableReader
@@ -117,26 +118,6 @@ public:
         const TableType table_type_;
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
-    };
-
-    class PortConnectorTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x08 };
-
-        std::string GetInternalDesignation() const;
-        std::string GetExternalDesignation() const;
-        proto::DmiPortConnectors::Type GetType() const;
-        proto::DmiPortConnectors::ConnectorType GetInternalConnectorType() const;
-        proto::DmiPortConnectors::ConnectorType GetExternalConnectorType() const;
-
-    private:
-        friend class TableEnumerator<PortConnectorTable>;
-        explicit PortConnectorTable(const TableReader& reader);
-
-        static proto::DmiPortConnectors::ConnectorType ConnectorType(uint8_t type);
-
-        TableReader reader_;
     };
 
     class OnBoardDeviceTable

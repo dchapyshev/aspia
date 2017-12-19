@@ -204,6 +204,8 @@
     <ClCompile Include="system_info\category_dmi_chassis.pb.cc" />
     <ClCompile Include="system_info\category_dmi_memory_device.cc" />
     <ClCompile Include="system_info\category_dmi_memory_device.pb.cc" />
+    <ClCompile Include="system_info\category_dmi_port_connector.cc" />
+    <ClCompile Include="system_info\category_dmi_port_connector.pb.cc" />
     <ClCompile Include="system_info\category_dmi_processor.cc" />
     <ClCompile Include="system_info\category_dmi_processor.pb.cc" />
     <ClCompile Include="system_info\category_dmi_system.cc" />
@@ -486,6 +488,8 @@
     <ClInclude Include="system_info\category_dmi_chassis.pb.h" />
     <ClInclude Include="system_info\category_dmi_memory_device.h" />
     <ClInclude Include="system_info\category_dmi_memory_device.pb.h" />
+    <ClInclude Include="system_info\category_dmi_port_connector.h" />
+    <ClInclude Include="system_info\category_dmi_port_connector.pb.h" />
     <ClInclude Include="system_info\category_dmi_processor.h" />
     <ClInclude Include="system_info\category_dmi_processor.pb.h" />
     <ClInclude Include="system_info\category_dmi_system.h" />
@@ -581,6 +585,7 @@
     <None Include="system_info\category_dmi_cache.proto" />
     <None Include="system_info\category_dmi_chassis.proto" />
     <None Include="system_info\category_dmi_memory_device.proto" />
+    <None Include="system_info\category_dmi_port_connector.proto" />
     <None Include="system_info\category_dmi_processor.proto" />
     <None Include="system_info\category_dmi_system.proto" />
     <None Include="system_info\category_dmi_system_slot.proto" />
