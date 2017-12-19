@@ -18,7 +18,6 @@ namespace aspia {
 
 class SMBios
 {
-    class TableEnumeratorImpl;
     struct Data;
 
 public:
@@ -26,6 +25,25 @@ public:
 
     uint8_t GetMajorVersion() const;
     uint8_t GetMinorVersion() const;
+
+    class TableEnumeratorImpl
+    {
+    public:
+        TableEnumeratorImpl(const Data* data, uint8_t type);
+
+        bool IsAtEnd() const;
+        void Advance(uint8_t type);
+        const Data* GetSMBiosData() const;
+        const uint8_t* GetTableData() const;
+
+    private:
+        const Data* data_;
+        const uint8_t* start_;
+        const uint8_t* next_;
+        const uint8_t* end_;
+        const uint8_t* current_;
+        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorImpl);
+    };
 
     template <class T>
     class TableEnumerator
@@ -44,6 +62,12 @@ public:
     private:
         TableEnumeratorImpl impl_;
         DISALLOW_COPY_AND_ASSIGN(TableEnumerator);
+    };
+
+    enum TableType : uint8_t
+    {
+        TABLE_TYPE_BIOS   = 0x00,
+        TABLE_TYPE_SYSTEM = 0x01
     };
 
     class TableReader
@@ -69,88 +93,24 @@ public:
         const uint8_t* table_;
     };
 
-    class BiosTable
+    class TableEnumeratorNew
     {
     public:
-        enum : uint8_t { TABLE_TYPE = 0x00 };
+        TableEnumeratorNew(const SMBios& smbios, TableType table_type)
+            : impl_(reinterpret_cast<const Data*>(smbios.data_.get()), table_type),
+              table_type_(table_type)
+        {
+            // Nothing
+        }
 
-        std::string GetManufacturer() const;
-        std::string GetVersion() const;
-        std::string GetDate() const;
-        uint64_t GetSize() const; // In kB.
-        std::string GetBiosRevision() const;
-        std::string GetFirmwareRevision() const;
-        std::string GetAddress() const;
-        int GetRuntimeSize() const; // In bytes.
-
-        bool HasISA() const;
-        bool HasMCA() const;
-        bool HasEISA() const;
-        bool HasPCI() const;
-        bool HasPCCard() const;
-        bool HasPNP() const;
-        bool HasAPM() const;
-        bool HasBiosUpgradeable() const;
-        bool HasBiosShadowing() const;
-        bool HasVLB() const;
-        bool HasESCD() const;
-        bool HasBootFromCD() const;
-        bool HasSelectableBoot() const;
-        bool HasSocketedBootROM() const;
-        bool HasBootFromPCCard() const;
-        bool HasEDD() const;
-        bool HasJapaneseFloppyForNec9800() const;
-        bool HasJapaneceFloppyForToshiba() const;
-        bool Has525_360kbFloppy() const;
-        bool Has525_12mbFloppy() const;
-        bool Has35_720kbFloppy() const;
-        bool Has35_288mbFloppy() const;
-        bool HasPrintScreen() const;
-        bool Has8042Keyboard() const;
-        bool HasSerial() const;
-        bool HasPrinter() const;
-        bool HasCGAVideo() const;
-        bool HasNecPC98() const;
-        bool HasACPI() const;
-        bool HasUSBLegacy() const;
-        bool HasAGP() const;
-        bool HasI2OBoot() const;
-        bool HasLS120Boot() const;
-        bool HasAtapiZipDriveBoot() const;
-        bool HasIeee1394Boot() const;
-        bool HasSmartBattery() const;
-        bool HasBiosBootSpecification() const;
-        bool HasKeyInitNetworkBoot() const;
-        bool HasTargetedContentDistrib() const;
-        bool HasUEFI() const;
-        bool HasVirtualMachine() const;
+        bool IsAtEnd() const { return impl_.IsAtEnd(); }
+        void Advance() { impl_.Advance(table_type_); }
+        TableReader GetTable() const { return TableReader(impl_.GetSMBiosData(), impl_.GetTableData()); }
 
     private:
-        friend class TableEnumerator<BiosTable>;
-        explicit BiosTable(const TableReader& reader);
-
-        TableReader reader_;
-    };
-
-    class SystemTable
-    {
-    public:
-        enum : uint8_t { TABLE_TYPE = 0x01 };
-
-        std::string GetManufacturer() const;
-        std::string GetProductName() const;
-        std::string GetVersion() const;
-        std::string GetSerialNumber() const;
-        std::string GetUUID() const;
-        proto::DmiSystem::WakeupType GetWakeupType() const;
-        std::string GetSKUNumber() const;
-        std::string GetFamily() const;
-
-    private:
-        friend class TableEnumerator<SystemTable>;
-        explicit SystemTable(const TableReader& reader);
-
-        TableReader reader_;
+        const TableType table_type_;
+        TableEnumeratorImpl impl_;
+        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorNew);
     };
 
     class BaseboardTable
@@ -397,25 +357,6 @@ private:
         uint8_t dmi_revision;
         uint32_t length;
         uint8_t smbios_table_data[kMaxDataSize];
-    };
-
-    class TableEnumeratorImpl
-    {
-    public:
-        TableEnumeratorImpl(const Data* data, uint8_t type);
-
-        bool IsAtEnd() const;
-        void Advance(uint8_t type);
-        const Data* GetSMBiosData() const;
-        const uint8_t* GetTableData() const;
-
-    private:
-        const Data* data_;
-        const uint8_t* start_;
-        const uint8_t* next_;
-        const uint8_t* end_;
-        const uint8_t* current_;
-        DISALLOW_COPY_AND_ASSIGN(TableEnumeratorImpl);
     };
 
     std::unique_ptr<uint8_t[]> data_;

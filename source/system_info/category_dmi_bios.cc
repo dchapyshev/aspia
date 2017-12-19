@@ -6,11 +6,89 @@
 //
 
 #include "base/devices/smbios_reader.h"
+#include "base/strings/string_printf.h"
+#include "base/bitset.h"
 #include "system_info/category_dmi_bios.h"
 #include "system_info/category_dmi_bios.pb.h"
 #include "ui/resource.h"
 
 namespace aspia {
+
+namespace {
+
+uint64_t GetSize(const SMBios::TableReader& table)
+{
+    const uint8_t old_size = table.GetByte(0x09);
+    if (old_size != 0xFF)
+        return (old_size + 1) << 6;
+
+    BitSet<uint16_t> bitfield(table.GetWord(0x18));
+
+    uint16_t size = 16; // By default 16 MBytes.
+
+    if (table.GetTableLength() >= 0x1A)
+        size = bitfield.Range(0, 13);
+
+    switch (bitfield.Range(14, 15))
+    {
+        case 0x0000: // MB
+            return static_cast<uint64_t>(size) * 1024ULL;
+
+        case 0x0001: // GB
+            return static_cast<uint64_t>(size) * 1024ULL * 1024ULL;
+
+        default:
+            return 0;
+    }
+}
+
+std::string GetBiosRevision(const SMBios::TableReader& table)
+{
+    const uint8_t major = table.GetByte(0x14);
+    const uint8_t minor = table.GetByte(0x15);
+
+    if (major != 0xFF && minor != 0xFF)
+        return StringPrintf("%u.%u", major, minor);
+
+    return std::string();
+}
+
+std::string GetFirmwareRevision(const SMBios::TableReader& table)
+{
+    const uint8_t major = table.GetByte(0x16);
+    const uint8_t minor = table.GetByte(0x17);
+
+    if (major != 0xFF && minor != 0xFF)
+        return StringPrintf("%u.%u", major, minor);
+
+    return std::string();
+}
+
+std::string GetAddress(const SMBios::TableReader& table)
+{
+    const uint16_t address = table.GetWord(0x06);
+
+    if (address != 0)
+        return StringPrintf("%04X0h", address);
+
+    return std::string();
+}
+
+int GetRuntimeSize(const SMBios::TableReader& table)
+{
+    const uint16_t address = table.GetWord(0x06);
+    if (address == 0)
+        return 0;
+
+    const uint32_t code = (0x10000 - address) << 4;
+
+    if (code & 0x000003FF)
+        return code;
+
+    return (code >> 10) * 1024;
+}
+
+} // namespace
 
 CategoryDmiBios::CategoryDmiBios()
     : CategoryInfo(Type::INFO_PARAM_VALUE)
@@ -140,65 +218,81 @@ std::string CategoryDmiBios::Serialize()
     if (!smbios)
         return std::string();
 
-    SMBios::TableEnumerator<SMBios::BiosTable> table_enumerator(*smbios);
+    SMBios::TableEnumeratorNew table_enumerator(*smbios, SMBios::TABLE_TYPE_BIOS);
     if (table_enumerator.IsAtEnd())
         return std::string();
 
-    SMBios::BiosTable table = table_enumerator.GetTable();
+    SMBios::TableReader table = table_enumerator.GetTable();
     proto::DmiBios message;
 
-    message.set_manufacturer(table.GetManufacturer());
-    message.set_version(table.GetVersion());
-    message.set_date(table.GetDate());
-    message.set_size(table.GetSize());
-    message.set_bios_revision(table.GetBiosRevision());
-    message.set_firmware_revision(table.GetFirmwareRevision());
-    message.set_address(table.GetAddress());
-    message.set_runtime_size(table.GetRuntimeSize());
+    message.set_manufacturer(table.GetString(0x04));
+    message.set_version(table.GetString(0x05));
+    message.set_date(table.GetString(0x08));
+    message.set_size(GetSize(table));
+    message.set_bios_revision(GetBiosRevision(table));
+    message.set_firmware_revision(GetFirmwareRevision(table));
+    message.set_address(GetAddress(table));
+    message.set_runtime_size(GetRuntimeSize(table));
 
-    proto::DmiBios::Characteristics* characteristics = message.mutable_characteristics();
+    proto::DmiBios::Characteristics* item = message.mutable_characteristics();
 
-    characteristics->set_has_isa(table.HasISA());
-    characteristics->set_has_mca(table.HasMCA());
-    characteristics->set_has_eisa(table.HasEISA());
-    characteristics->set_has_pci(table.HasPCI());
-    characteristics->set_has_pc_card(table.HasPCCard());
-    characteristics->set_has_pnp(table.HasPNP());
-    characteristics->set_has_apm(table.HasAPM());
-    characteristics->set_has_bios_upgradeable(table.HasBiosUpgradeable());
-    characteristics->set_has_bios_shadowing(table.HasBiosShadowing());
-    characteristics->set_has_vlb(table.HasVLB());
-    characteristics->set_has_escd(table.HasESCD());
-    characteristics->set_has_boot_from_cd(table.HasBootFromCD());
-    characteristics->set_has_selectable_boot(table.HasSelectableBoot());
-    characteristics->set_has_socketed_boot_rom(table.HasSocketedBootROM());
-    characteristics->set_has_boot_from_pc_card(table.HasBootFromPCCard());
-    characteristics->set_has_edd(table.HasEDD());
-    characteristics->set_has_japanese_floppy_for_nec9800(table.HasJapaneseFloppyForNec9800());
-    characteristics->set_has_japanece_floppy_for_toshiba(table.HasJapaneceFloppyForToshiba());
-    characteristics->set_has_525_360kb_floppy(table.Has525_360kbFloppy());
-    characteristics->set_has_525_12mb_floppy(table.Has525_12mbFloppy());
-    characteristics->set_has_35_720kb_floppy(table.Has35_720kbFloppy());
-    characteristics->set_has_35_288mb_floppy(table.Has35_288mbFloppy());
-    characteristics->set_has_print_screen(table.HasPrintScreen());
-    characteristics->set_has_8042_keyboard(table.Has8042Keyboard());
-    characteristics->set_has_serial(table.HasSerial());
-    characteristics->set_has_printer(table.HasPrinter());
-    characteristics->set_has_cga_video(table.HasCGAVideo());
-    characteristics->set_has_nec_pc98(table.HasNecPC98());
-    characteristics->set_has_acpi(table.HasACPI());
-    characteristics->set_has_usb_legacy(table.HasUSBLegacy());
-    characteristics->set_has_agp(table.HasAGP());
-    characteristics->set_has_i2o_boot(table.HasI2OBoot());
-    characteristics->set_has_ls120_boot(table.HasLS120Boot());
-    characteristics->set_has_atapi_zip_drive_boot(table.HasAtapiZipDriveBoot());
-    characteristics->set_has_ieee1394_boot(table.HasIeee1394Boot());
-    characteristics->set_has_smart_battery(table.HasSmartBattery());
-    characteristics->set_has_bios_boot_specification(table.HasBiosBootSpecification());
-    characteristics->set_has_key_init_network_boot(table.HasKeyInitNetworkBoot());
-    characteristics->set_has_targeted_content_distrib(table.HasTargetedContentDistrib());
-    characteristics->set_has_uefi(table.HasUEFI());
-    characteristics->set_has_virtual_machine(table.HasVirtualMachine());
+    BitSet<uint64_t> characteristics = table.GetQword(0x0A);
+    if (!characteristics.Test(3))
+    {
+        item->set_has_isa(characteristics.Test(4));
+        item->set_has_mca(characteristics.Test(5));
+        item->set_has_eisa(characteristics.Test(6));
+        item->set_has_pci(characteristics.Test(7));
+        item->set_has_pc_card(characteristics.Test(8));
+        item->set_has_pnp(characteristics.Test(9));
+        item->set_has_apm(characteristics.Test(10));
+        item->set_has_bios_upgradeable(characteristics.Test(11));
+        item->set_has_bios_shadowing(characteristics.Test(12));
+        item->set_has_vlb(characteristics.Test(13));
+        item->set_has_escd(characteristics.Test(14));
+        item->set_has_boot_from_cd(characteristics.Test(15));
+        item->set_has_selectable_boot(characteristics.Test(16));
+        item->set_has_socketed_boot_rom(characteristics.Test(17));
+        item->set_has_boot_from_pc_card(characteristics.Test(18));
+        item->set_has_edd(characteristics.Test(19));
+        item->set_has_japanese_floppy_for_nec9800(characteristics.Test(20));
+        item->set_has_japanece_floppy_for_toshiba(characteristics.Test(21));
+        item->set_has_525_360kb_floppy(characteristics.Test(22));
+        item->set_has_525_12mb_floppy(characteristics.Test(23));
+        item->set_has_35_720kb_floppy(characteristics.Test(24));
+        item->set_has_35_288mb_floppy(characteristics.Test(25));
+        item->set_has_print_screen(characteristics.Test(26));
+        item->set_has_8042_keyboard(characteristics.Test(27));
+        item->set_has_serial(characteristics.Test(28));
+        item->set_has_printer(characteristics.Test(29));
+        item->set_has_cga_video(characteristics.Test(30));
+        item->set_has_nec_pc98(characteristics.Test(31));
+    }
+
+    if (table.GetTableLength() >= 0x13)
+    {
+        BitSet<uint8_t> characteristics1 = table.GetByte(0x12);
+
+        item->set_has_acpi(characteristics1.Test(0));
+        item->set_has_usb_legacy(characteristics1.Test(1));
+        item->set_has_agp(characteristics1.Test(2));
+        item->set_has_i2o_boot(characteristics1.Test(3));
+        item->set_has_ls120_boot(characteristics1.Test(4));
+        item->set_has_atapi_zip_drive_boot(characteristics1.Test(5));
+        item->set_has_ieee1394_boot(characteristics1.Test(6));
+        item->set_has_smart_battery(characteristics1.Test(7));
+    }
+
+    if (table.GetTableLength() >= 0x14)
+    {
+        BitSet<uint8_t> characteristics2 = table.GetByte(0x13);
+
+        item->set_has_bios_boot_specification(characteristics2.Test(0));
+        item->set_has_key_init_network_boot(characteristics2.Test(1));
+        item->set_has_targeted_content_distrib(characteristics2.Test(2));
+        item->set_has_uefi(characteristics2.Test(3));
+        item->set_has_virtual_machine(characteristics2.Test(4));
+    }
 
     return message.SerializeAsString();
 }

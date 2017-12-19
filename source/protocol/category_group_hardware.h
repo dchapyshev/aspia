@@ -14,24 +14,6 @@
 
 namespace aspia {
 
-class CategoryDmiSystem : public CategoryInfo
-{
-public:
-    CategoryDmiSystem() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* WakeupTypeToString(proto::DmiSystem::WakeupType value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryDmiSystem);
-};
-
 class CategoryDmiBaseboard : public CategoryInfo
 {
 public:

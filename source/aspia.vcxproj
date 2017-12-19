@@ -196,6 +196,8 @@
     <ClCompile Include="system_info\category_cpu.pb.cc" />
     <ClCompile Include="system_info\category_dmi_bios.cc" />
     <ClCompile Include="system_info\category_dmi_bios.pb.cc" />
+    <ClCompile Include="system_info\category_dmi_system.cc" />
+    <ClCompile Include="system_info\category_dmi_system.pb.cc" />
     <ClCompile Include="system_info\category_logical_drive.cc" />
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
@@ -464,6 +466,8 @@
     <ClInclude Include="system_info\category_cpu.pb.h" />
     <ClInclude Include="system_info\category_dmi_bios.h" />
     <ClInclude Include="system_info\category_dmi_bios.pb.h" />
+    <ClInclude Include="system_info\category_dmi_system.h" />
+    <ClInclude Include="system_info\category_dmi_system.pb.h" />
     <ClInclude Include="system_info\category_logical_drive.h" />
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
@@ -549,6 +553,7 @@
     <None Include="system_info\category_ata.proto" />
     <None Include="system_info\category_cpu.proto" />
     <None Include="system_info\category_dmi_bios.proto" />
+    <None Include="system_info\category_dmi_system.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
