@@ -165,8 +165,6 @@
     <ClCompile Include="network\network_channel_tcp.cc" />
     <ClCompile Include="network\network_client_tcp.cc" />
     <ClCompile Include="network\network_server_tcp.cc" />
-    <ClCompile Include="network\route_enumerator.cc" />
-    <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
     <ClCompile Include="protocol\category_group_software.cc" />
     <ClCompile Include="protocol\clipboard.cc" />
@@ -225,6 +223,7 @@
     <ClCompile Include="system_info\category_monitor.pb.cc" />
     <ClCompile Include="system_info\category_network_card.cc" />
     <ClCompile Include="system_info\category_network_card.pb.cc" />
+    <ClCompile Include="system_info\category_open_files.cc" />
     <ClCompile Include="system_info\category_optical_drive.cc" />
     <ClCompile Include="system_info\category_optical_drive.pb.cc" />
     <ClCompile Include="system_info\category_power_options.cc" />
@@ -235,6 +234,8 @@
     <ClCompile Include="system_info\category_process.pb.cc" />
     <ClCompile Include="system_info\category_ras.cc" />
     <ClCompile Include="system_info\category_ras.pb.cc" />
+    <ClCompile Include="system_info\category_route.cc" />
+    <ClCompile Include="system_info\category_route.pb.cc" />
     <ClCompile Include="system_info\category_share.cc" />
     <ClCompile Include="system_info\category_share.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
@@ -458,8 +459,6 @@
     <ClInclude Include="network\network_channel_tcp.h" />
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
-    <ClInclude Include="network\route_enumerator.h" />
-    <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
     <ClInclude Include="protocol\category_group_software.h" />
     <ClInclude Include="protocol\clipboard.h" />
@@ -520,6 +519,7 @@
     <ClInclude Include="system_info\category_monitor.pb.h" />
     <ClInclude Include="system_info\category_network_card.h" />
     <ClInclude Include="system_info\category_network_card.pb.h" />
+    <ClInclude Include="system_info\category_open_files.h" />
     <ClInclude Include="system_info\category_optical_drive.h" />
     <ClInclude Include="system_info\category_optical_drive.pb.h" />
     <ClInclude Include="system_info\category_power_options.h" />
@@ -530,6 +530,8 @@
     <ClInclude Include="system_info\category_process.pb.h" />
     <ClInclude Include="system_info\category_ras.h" />
     <ClInclude Include="system_info\category_ras.pb.h" />
+    <ClInclude Include="system_info\category_route.h" />
+    <ClInclude Include="system_info\category_route.pb.h" />
     <ClInclude Include="system_info\category_share.h" />
     <ClInclude Include="system_info\category_share.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
@@ -619,11 +621,13 @@
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
     <None Include="system_info\category_network_card.proto" />
+    <None Include="system_info\category_open_files.proto" />
     <None Include="system_info\category_optical_drive.proto" />
     <None Include="system_info\category_power_options.proto" />
     <None Include="system_info\category_printer.proto" />
     <None Include="system_info\category_process.proto" />
     <None Include="system_info\category_ras.proto" />
+    <None Include="system_info\category_route.proto" />
     <None Include="system_info\category_share.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_video_adapter.proto" />

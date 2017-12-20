@@ -556,9 +556,6 @@
     <ClCompile Include="base\devices\device_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="network\route_enumerator.cc">
-      <Filter>network</Filter>
-    </ClCompile>
     <ClCompile Include="base\user_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -582,9 +579,6 @@
     </ClCompile>
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="protocol\category_group_network.cc">
-      <Filter>protocol</Filter>
     </ClCompile>
     <ClCompile Include="protocol\category_group_os.cc">
       <Filter>protocol</Filter>
@@ -851,6 +845,15 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_share.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_route.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_route.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_open_files.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1439,9 +1442,6 @@
     <ClInclude Include="base\devices\device_enumerator.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="network\route_enumerator.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="base\user_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -1468,9 +1468,6 @@
     </ClInclude>
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="protocol\category_group_network.h">
-      <Filter>protocol</Filter>
     </ClInclude>
     <ClInclude Include="protocol\category_group_os.h">
       <Filter>protocol</Filter>
@@ -1742,6 +1739,15 @@
     <ClInclude Include="system_info\category_share.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_route.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_route.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_open_files.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1868,6 +1874,12 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_share.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_route.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_open_files.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

@@ -1,0 +1,25 @@
+//
+// PROJECT:         Aspia
+// FILE:            system_info/category_route.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message Route
+{
+    message Item
+    {
+        string destonation = 1;
+        string mask        = 2;
+        string gateway     = 3;
+        uint32 metric      = 4;
+    }
+
+    repeated Item item = 1;
+}

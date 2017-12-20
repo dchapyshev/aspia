@@ -65,19 +65,6 @@ message Services
     repeated Item item = 1;
 }
 
-message Routes
-{
-    message Item
-    {
-        string destonation = 1;
-        string mask        = 2;
-        string gateway     = 3;
-        uint32 metric      = 4;
-    }
-
-    repeated Item item = 1;
-}
-
 message Users
 {
     message Item

@@ -7,7 +7,6 @@
 
 #include "base/logging.h"
 #include "protocol/category_group_software.h"
-#include "protocol/category_group_network.h"
 #include "protocol/category_group_os.h"
 
 #include "system_info/category_ata.h"
@@ -28,11 +27,13 @@
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
 #include "system_info/category_network_card.h"
+#include "system_info/category_open_files.h"
 #include "system_info/category_optical_drive.h"
 #include "system_info/category_power_options.h"
 #include "system_info/category_printer.h"
 #include "system_info/category_process.h"
 #include "system_info/category_ras.h"
+#include "system_info/category_route.h"
 #include "system_info/category_share.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
@@ -102,6 +103,18 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupHardware);
+};
+
+class CategoryGroupNetwork : public CategoryGroup
+{
+public:
+    CategoryGroupNetwork() = default;
+
+    const char* Name() const final { return "Network"; }
+    IconId Icon() const final { return IDI_NETWORK; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupNetwork);
 };
 
 } // namespace
@@ -217,7 +230,7 @@ CategoryList CreateCategoryTree()
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryConnection>());
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryShare>());
     network->mutable_child_list()->emplace_back(std::make_unique<CategoryOpenFiles>());
-    network->mutable_child_list()->emplace_back(std::make_unique<CategoryRoutes>());
+    network->mutable_child_list()->emplace_back(std::make_unique<CategoryRoute>());
 
     std::unique_ptr<CategoryGroup> users_and_groups = std::make_unique<CategoryGroupUsers>();
 
@@ -298,7 +311,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryConnection>());
     emplace_back(std::make_unique<CategoryShare>());
     emplace_back(std::make_unique<CategoryOpenFiles>());
-    emplace_back(std::make_unique<CategoryRoutes>());
+    emplace_back(std::make_unique<CategoryRoute>());
 
     emplace_back(std::make_unique<CategoryUsers>());
     emplace_back(std::make_unique<CategoryUserGroups>());

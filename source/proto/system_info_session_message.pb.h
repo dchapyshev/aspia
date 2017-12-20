@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[12];
+  static const ::google::protobuf::internal::ParseTable schema[10];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -49,10 +49,6 @@ void InitDefaultsServices_ItemImpl();
 void InitDefaultsServices_Item();
 void InitDefaultsServicesImpl();
 void InitDefaultsServices();
-void InitDefaultsRoutes_ItemImpl();
-void InitDefaultsRoutes_Item();
-void InitDefaultsRoutesImpl();
-void InitDefaultsRoutes();
 void InitDefaultsUsers_ItemImpl();
 void InitDefaultsUsers_Item();
 void InitDefaultsUsersImpl();
@@ -70,8 +66,6 @@ inline void InitDefaults() {
   InitDefaultsPrograms();
   InitDefaultsServices_Item();
   InitDefaultsServices();
-  InitDefaultsRoutes_Item();
-  InitDefaultsRoutes();
   InitDefaultsUsers_Item();
   InitDefaultsUsers();
   InitDefaultsUserGroups_Item();
@@ -88,12 +82,6 @@ extern ProgramsDefaultTypeInternal _Programs_default_instance_;
 class Programs_Item;
 class Programs_ItemDefaultTypeInternal;
 extern Programs_ItemDefaultTypeInternal _Programs_Item_default_instance_;
-class Routes;
-class RoutesDefaultTypeInternal;
-extern RoutesDefaultTypeInternal _Routes_default_instance_;
-class Routes_Item;
-class Routes_ItemDefaultTypeInternal;
-extern Routes_ItemDefaultTypeInternal _Routes_Item_default_instance_;
 class Services;
 class ServicesDefaultTypeInternal;
 extern ServicesDefaultTypeInternal _Services_default_instance_;
@@ -781,253 +769,6 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Routes.Item) */ {
- public:
-  Routes_Item();
-  virtual ~Routes_Item();
-
-  Routes_Item(const Routes_Item& from);
-
-  inline Routes_Item& operator=(const Routes_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Routes_Item(Routes_Item&& from) noexcept
-    : Routes_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline Routes_Item& operator=(Routes_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Routes_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Routes_Item* internal_default_instance() {
-    return reinterpret_cast<const Routes_Item*>(
-               &_Routes_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
-
-  void Swap(Routes_Item* other);
-  friend void swap(Routes_Item& a, Routes_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Routes_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  Routes_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const Routes_Item& from);
-  void MergeFrom(const Routes_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Routes_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string destonation = 1;
-  void clear_destonation();
-  static const int kDestonationFieldNumber = 1;
-  const ::std::string& destonation() const;
-  void set_destonation(const ::std::string& value);
-  #if LANG_CXX11
-  void set_destonation(::std::string&& value);
-  #endif
-  void set_destonation(const char* value);
-  void set_destonation(const char* value, size_t size);
-  ::std::string* mutable_destonation();
-  ::std::string* release_destonation();
-  void set_allocated_destonation(::std::string* destonation);
-
-  // string mask = 2;
-  void clear_mask();
-  static const int kMaskFieldNumber = 2;
-  const ::std::string& mask() const;
-  void set_mask(const ::std::string& value);
-  #if LANG_CXX11
-  void set_mask(::std::string&& value);
-  #endif
-  void set_mask(const char* value);
-  void set_mask(const char* value, size_t size);
-  ::std::string* mutable_mask();
-  ::std::string* release_mask();
-  void set_allocated_mask(::std::string* mask);
-
-  // string gateway = 3;
-  void clear_gateway();
-  static const int kGatewayFieldNumber = 3;
-  const ::std::string& gateway() const;
-  void set_gateway(const ::std::string& value);
-  #if LANG_CXX11
-  void set_gateway(::std::string&& value);
-  #endif
-  void set_gateway(const char* value);
-  void set_gateway(const char* value, size_t size);
-  ::std::string* mutable_gateway();
-  ::std::string* release_gateway();
-  void set_allocated_gateway(::std::string* gateway);
-
-  // uint32 metric = 4;
-  void clear_metric();
-  static const int kMetricFieldNumber = 4;
-  ::google::protobuf::uint32 metric() const;
-  void set_metric(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.Routes.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr destonation_;
-  ::google::protobuf::internal::ArenaStringPtr mask_;
-  ::google::protobuf::internal::ArenaStringPtr gateway_;
-  ::google::protobuf::uint32 metric_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsRoutes_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Routes) */ {
- public:
-  Routes();
-  virtual ~Routes();
-
-  Routes(const Routes& from);
-
-  inline Routes& operator=(const Routes& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Routes(Routes&& from) noexcept
-    : Routes() {
-    *this = ::std::move(from);
-  }
-
-  inline Routes& operator=(Routes&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Routes& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Routes* internal_default_instance() {
-    return reinterpret_cast<const Routes*>(
-               &_Routes_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
-
-  void Swap(Routes* other);
-  friend void swap(Routes& a, Routes& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Routes* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  Routes* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const Routes& from);
-  void MergeFrom(const Routes& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Routes* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef Routes_Item Item;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.Routes.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::Routes_Item& item(int index) const;
-  ::aspia::proto::Routes_Item* mutable_item(int index);
-  ::aspia::proto::Routes_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Routes_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Routes_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.Routes)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Routes_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsRoutesImpl();
-};
-// -------------------------------------------------------------------
-
 class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Users.Item) */ {
  public:
   Users_Item();
@@ -1062,7 +803,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -1253,7 +994,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -1358,7 +1099,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -1478,7 +1219,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -1583,7 +1324,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -1747,7 +1488,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -2492,217 +2233,6 @@ Services::item() const {
 
 // -------------------------------------------------------------------
 
-// Routes_Item
-
-// string destonation = 1;
-inline void Routes_Item::clear_destonation() {
-  destonation_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Routes_Item::destonation() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Routes.Item.destonation)
-  return destonation_.GetNoArena();
-}
-inline void Routes_Item::set_destonation(const ::std::string& value) {
-  
-  destonation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Routes.Item.destonation)
-}
-#if LANG_CXX11
-inline void Routes_Item::set_destonation(::std::string&& value) {
-  
-  destonation_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Routes.Item.destonation)
-}
-#endif
-inline void Routes_Item::set_destonation(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  destonation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Routes.Item.destonation)
-}
-inline void Routes_Item::set_destonation(const char* value, size_t size) {
-  
-  destonation_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Routes.Item.destonation)
-}
-inline ::std::string* Routes_Item::mutable_destonation() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Routes.Item.destonation)
-  return destonation_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Routes_Item::release_destonation() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Routes.Item.destonation)
-  
-  return destonation_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Routes_Item::set_allocated_destonation(::std::string* destonation) {
-  if (destonation != NULL) {
-    
-  } else {
-    
-  }
-  destonation_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), destonation);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Routes.Item.destonation)
-}
-
-// string mask = 2;
-inline void Routes_Item::clear_mask() {
-  mask_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Routes_Item::mask() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Routes.Item.mask)
-  return mask_.GetNoArena();
-}
-inline void Routes_Item::set_mask(const ::std::string& value) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Routes.Item.mask)
-}
-#if LANG_CXX11
-inline void Routes_Item::set_mask(::std::string&& value) {
-  
-  mask_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Routes.Item.mask)
-}
-#endif
-inline void Routes_Item::set_mask(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Routes.Item.mask)
-}
-inline void Routes_Item::set_mask(const char* value, size_t size) {
-  
-  mask_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Routes.Item.mask)
-}
-inline ::std::string* Routes_Item::mutable_mask() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Routes.Item.mask)
-  return mask_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Routes_Item::release_mask() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Routes.Item.mask)
-  
-  return mask_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Routes_Item::set_allocated_mask(::std::string* mask) {
-  if (mask != NULL) {
-    
-  } else {
-    
-  }
-  mask_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mask);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Routes.Item.mask)
-}
-
-// string gateway = 3;
-inline void Routes_Item::clear_gateway() {
-  gateway_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Routes_Item::gateway() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Routes.Item.gateway)
-  return gateway_.GetNoArena();
-}
-inline void Routes_Item::set_gateway(const ::std::string& value) {
-  
-  gateway_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Routes.Item.gateway)
-}
-#if LANG_CXX11
-inline void Routes_Item::set_gateway(::std::string&& value) {
-  
-  gateway_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Routes.Item.gateway)
-}
-#endif
-inline void Routes_Item::set_gateway(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  gateway_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Routes.Item.gateway)
-}
-inline void Routes_Item::set_gateway(const char* value, size_t size) {
-  
-  gateway_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Routes.Item.gateway)
-}
-inline ::std::string* Routes_Item::mutable_gateway() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Routes.Item.gateway)
-  return gateway_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Routes_Item::release_gateway() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Routes.Item.gateway)
-  
-  return gateway_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Routes_Item::set_allocated_gateway(::std::string* gateway) {
-  if (gateway != NULL) {
-    
-  } else {
-    
-  }
-  gateway_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), gateway);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Routes.Item.gateway)
-}
-
-// uint32 metric = 4;
-inline void Routes_Item::clear_metric() {
-  metric_ = 0u;
-}
-inline ::google::protobuf::uint32 Routes_Item::metric() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Routes.Item.metric)
-  return metric_;
-}
-inline void Routes_Item::set_metric(::google::protobuf::uint32 value) {
-  
-  metric_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.Routes.Item.metric)
-}
-
-// -------------------------------------------------------------------
-
-// Routes
-
-// repeated .aspia.proto.Routes.Item item = 1;
-inline int Routes::item_size() const {
-  return item_.size();
-}
-inline void Routes::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::Routes_Item& Routes::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Routes.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::Routes_Item* Routes::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Routes.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::Routes_Item* Routes::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.Routes.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::Routes_Item >*
-Routes::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.Routes.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Routes_Item >&
-Routes::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.Routes.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
 // Users_Item
 
 // string name = 1;
@@ -3435,10 +2965,6 @@ Sessions::item() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
