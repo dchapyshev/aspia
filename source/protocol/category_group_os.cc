@@ -17,66 +17,6 @@
 namespace aspia {
 
 //
-// CategoryTaskScheduler
-//
-
-const char* CategoryTaskScheduler::Name() const
-{
-    return "Task Scheduler";
-}
-
-Category::IconId CategoryTaskScheduler::Icon() const
-{
-    return IDI_CLOCK;
-}
-
-const char* CategoryTaskScheduler::Guid() const
-{
-    return "{1B27C27F-847E-47CC-92DF-6B8F5CB4827A}";
-}
-
-void CategoryTaskScheduler::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryTaskScheduler::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
-// CategoryEnvironmentVariables
-//
-
-const char* CategoryEnvironmentVariables::Name() const
-{
-    return "Environment Variables";
-}
-
-Category::IconId CategoryEnvironmentVariables::Icon() const
-{
-    return IDI_APPLICATIONS;
-}
-
-const char* CategoryEnvironmentVariables::Guid() const
-{
-    return "{AAB8670A-3C90-4F75-A907-512ACBAD1BE6}";
-}
-
-void CategoryEnvironmentVariables::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryEnvironmentVariables::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
 // CategoryEventLogsApplications
 //
 

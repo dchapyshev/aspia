@@ -13,38 +13,6 @@
 
 namespace aspia {
 
-class CategoryTaskScheduler : public CategoryInfo
-{
-public:
-    CategoryTaskScheduler() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryTaskScheduler);
-};
-
-class CategoryEnvironmentVariables : public CategoryInfo
-{
-public:
-    CategoryEnvironmentVariables() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryEnvironmentVariables);
-};
-
 class CategoryEventLogsApplications : public CategoryInfo
 {
 public:

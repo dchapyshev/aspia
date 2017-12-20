@@ -215,6 +215,8 @@
     <ClCompile Include="system_info\category_dmi_system.pb.cc" />
     <ClCompile Include="system_info\category_dmi_system_slot.cc" />
     <ClCompile Include="system_info\category_dmi_system_slot.pb.cc" />
+    <ClCompile Include="system_info\category_environment_variables.cc" />
+    <ClCompile Include="system_info\category_environment_variables.pb.cc" />
     <ClCompile Include="system_info\category_logical_drive.cc" />
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
@@ -224,6 +226,7 @@
     <ClCompile Include="system_info\category_network_card.cc" />
     <ClCompile Include="system_info\category_network_card.pb.cc" />
     <ClCompile Include="system_info\category_open_files.cc" />
+    <ClCompile Include="system_info\category_open_files.pb.cc" />
     <ClCompile Include="system_info\category_optical_drive.cc" />
     <ClCompile Include="system_info\category_optical_drive.pb.cc" />
     <ClCompile Include="system_info\category_power_options.cc" />
@@ -240,6 +243,8 @@
     <ClCompile Include="system_info\category_share.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
     <ClCompile Include="system_info\category_smart.pb.cc" />
+    <ClCompile Include="system_info\category_task_scheduler.cc" />
+    <ClCompile Include="system_info\category_task_scheduler.pb.cc" />
     <ClCompile Include="system_info\category_video_adapter.cc" />
     <ClCompile Include="system_info\category_video_adapter.pb.cc" />
     <ClCompile Include="system_info\category_windows_device.cc" />
@@ -511,6 +516,8 @@
     <ClInclude Include="system_info\category_dmi_system.pb.h" />
     <ClInclude Include="system_info\category_dmi_system_slot.h" />
     <ClInclude Include="system_info\category_dmi_system_slot.pb.h" />
+    <ClInclude Include="system_info\category_environment_variables.h" />
+    <ClInclude Include="system_info\category_environment_variables.pb.h" />
     <ClInclude Include="system_info\category_logical_drive.h" />
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
@@ -520,6 +527,7 @@
     <ClInclude Include="system_info\category_network_card.h" />
     <ClInclude Include="system_info\category_network_card.pb.h" />
     <ClInclude Include="system_info\category_open_files.h" />
+    <ClInclude Include="system_info\category_open_files.pb.h" />
     <ClInclude Include="system_info\category_optical_drive.h" />
     <ClInclude Include="system_info\category_optical_drive.pb.h" />
     <ClInclude Include="system_info\category_power_options.h" />
@@ -536,6 +544,8 @@
     <ClInclude Include="system_info\category_share.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
     <ClInclude Include="system_info\category_smart.pb.h" />
+    <ClInclude Include="system_info\category_task_scheduler.h" />
+    <ClInclude Include="system_info\category_task_scheduler.pb.h" />
     <ClInclude Include="system_info\category_video_adapter.h" />
     <ClInclude Include="system_info\category_video_adapter.pb.h" />
     <ClInclude Include="system_info\category_windows_device.h" />
@@ -617,6 +627,7 @@
     <None Include="system_info\category_dmi_processor.proto" />
     <None Include="system_info\category_dmi_system.proto" />
     <None Include="system_info\category_dmi_system_slot.proto" />
+    <None Include="system_info\category_environment_variables.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
@@ -630,6 +641,7 @@
     <None Include="system_info\category_route.proto" />
     <None Include="system_info\category_share.proto" />
     <None Include="system_info\category_smart.proto" />
+    <None Include="system_info\category_task_scheduler.proto" />
     <None Include="system_info\category_video_adapter.proto" />
     <None Include="system_info\category_windows_device.proto" />
   </ItemGroup>
