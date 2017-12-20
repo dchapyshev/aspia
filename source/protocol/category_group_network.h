@@ -14,24 +14,6 @@
 
 namespace aspia {
 
-class CategorySharedResources : public CategoryInfo
-{
-public:
-    CategorySharedResources() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* TypeToString(proto::SharedResources::Item::Type type);
-
-    DISALLOW_COPY_AND_ASSIGN(CategorySharedResources);
-};
-
 class CategoryOpenFiles : public CategoryInfo
 {
 public:

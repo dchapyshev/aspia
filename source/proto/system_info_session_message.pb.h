@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[14];
+  static const ::google::protobuf::internal::ParseTable schema[12];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -49,10 +49,6 @@ void InitDefaultsServices_ItemImpl();
 void InitDefaultsServices_Item();
 void InitDefaultsServicesImpl();
 void InitDefaultsServices();
-void InitDefaultsSharedResources_ItemImpl();
-void InitDefaultsSharedResources_Item();
-void InitDefaultsSharedResourcesImpl();
-void InitDefaultsSharedResources();
 void InitDefaultsRoutes_ItemImpl();
 void InitDefaultsRoutes_Item();
 void InitDefaultsRoutesImpl();
@@ -74,8 +70,6 @@ inline void InitDefaults() {
   InitDefaultsPrograms();
   InitDefaultsServices_Item();
   InitDefaultsServices();
-  InitDefaultsSharedResources_Item();
-  InitDefaultsSharedResources();
   InitDefaultsRoutes_Item();
   InitDefaultsRoutes();
   InitDefaultsUsers_Item();
@@ -112,12 +106,6 @@ extern SessionsDefaultTypeInternal _Sessions_default_instance_;
 class Sessions_Item;
 class Sessions_ItemDefaultTypeInternal;
 extern Sessions_ItemDefaultTypeInternal _Sessions_Item_default_instance_;
-class SharedResources;
-class SharedResourcesDefaultTypeInternal;
-extern SharedResourcesDefaultTypeInternal _SharedResources_default_instance_;
-class SharedResources_Item;
-class SharedResources_ItemDefaultTypeInternal;
-extern SharedResources_ItemDefaultTypeInternal _SharedResources_Item_default_instance_;
 class UserGroups;
 class UserGroupsDefaultTypeInternal;
 extern UserGroupsDefaultTypeInternal _UserGroups_default_instance_;
@@ -166,22 +154,6 @@ bool Services_Item_StartupType_IsValid(int value);
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MIN = Services_Item_StartupType_STARTUP_TYPE_UNKNOWN;
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MAX = Services_Item_StartupType_STARTUP_TYPE_SYSTEM_START;
 const int Services_Item_StartupType_StartupType_ARRAYSIZE = Services_Item_StartupType_StartupType_MAX + 1;
-
-enum SharedResources_Item_Type {
-  SharedResources_Item_Type_TYPE_UNKNOWN = 0,
-  SharedResources_Item_Type_TYPE_DISK = 1,
-  SharedResources_Item_Type_TYPE_PRINTER = 2,
-  SharedResources_Item_Type_TYPE_DEVICE = 3,
-  SharedResources_Item_Type_TYPE_IPC = 4,
-  SharedResources_Item_Type_TYPE_SPECIAL = 5,
-  SharedResources_Item_Type_TYPE_TEMPORARY = 6,
-  SharedResources_Item_Type_SharedResources_Item_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  SharedResources_Item_Type_SharedResources_Item_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool SharedResources_Item_Type_IsValid(int value);
-const SharedResources_Item_Type SharedResources_Item_Type_Type_MIN = SharedResources_Item_Type_TYPE_UNKNOWN;
-const SharedResources_Item_Type SharedResources_Item_Type_Type_MAX = SharedResources_Item_Type_TYPE_TEMPORARY;
-const int SharedResources_Item_Type_Type_ARRAYSIZE = SharedResources_Item_Type_Type_MAX + 1;
 
 enum Sessions_ConnectState {
   Sessions_ConnectState_CONNECT_STATE_UNKNOWN = 0,
@@ -809,292 +781,6 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SharedResources.Item) */ {
- public:
-  SharedResources_Item();
-  virtual ~SharedResources_Item();
-
-  SharedResources_Item(const SharedResources_Item& from);
-
-  inline SharedResources_Item& operator=(const SharedResources_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  SharedResources_Item(SharedResources_Item&& from) noexcept
-    : SharedResources_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline SharedResources_Item& operator=(SharedResources_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const SharedResources_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const SharedResources_Item* internal_default_instance() {
-    return reinterpret_cast<const SharedResources_Item*>(
-               &_SharedResources_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
-
-  void Swap(SharedResources_Item* other);
-  friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline SharedResources_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  SharedResources_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const SharedResources_Item& from);
-  void MergeFrom(const SharedResources_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(SharedResources_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef SharedResources_Item_Type Type;
-  static const Type TYPE_UNKNOWN =
-    SharedResources_Item_Type_TYPE_UNKNOWN;
-  static const Type TYPE_DISK =
-    SharedResources_Item_Type_TYPE_DISK;
-  static const Type TYPE_PRINTER =
-    SharedResources_Item_Type_TYPE_PRINTER;
-  static const Type TYPE_DEVICE =
-    SharedResources_Item_Type_TYPE_DEVICE;
-  static const Type TYPE_IPC =
-    SharedResources_Item_Type_TYPE_IPC;
-  static const Type TYPE_SPECIAL =
-    SharedResources_Item_Type_TYPE_SPECIAL;
-  static const Type TYPE_TEMPORARY =
-    SharedResources_Item_Type_TYPE_TEMPORARY;
-  static inline bool Type_IsValid(int value) {
-    return SharedResources_Item_Type_IsValid(value);
-  }
-  static const Type Type_MIN =
-    SharedResources_Item_Type_Type_MIN;
-  static const Type Type_MAX =
-    SharedResources_Item_Type_Type_MAX;
-  static const int Type_ARRAYSIZE =
-    SharedResources_Item_Type_Type_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // string name = 1;
-  void clear_name();
-  static const int kNameFieldNumber = 1;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
-
-  // string description = 3;
-  void clear_description();
-  static const int kDescriptionFieldNumber = 3;
-  const ::std::string& description() const;
-  void set_description(const ::std::string& value);
-  #if LANG_CXX11
-  void set_description(::std::string&& value);
-  #endif
-  void set_description(const char* value);
-  void set_description(const char* value, size_t size);
-  ::std::string* mutable_description();
-  ::std::string* release_description();
-  void set_allocated_description(::std::string* description);
-
-  // string local_path = 4;
-  void clear_local_path();
-  static const int kLocalPathFieldNumber = 4;
-  const ::std::string& local_path() const;
-  void set_local_path(const ::std::string& value);
-  #if LANG_CXX11
-  void set_local_path(::std::string&& value);
-  #endif
-  void set_local_path(const char* value);
-  void set_local_path(const char* value, size_t size);
-  ::std::string* mutable_local_path();
-  ::std::string* release_local_path();
-  void set_allocated_local_path(::std::string* local_path);
-
-  // .aspia.proto.SharedResources.Item.Type type = 2;
-  void clear_type();
-  static const int kTypeFieldNumber = 2;
-  ::aspia::proto::SharedResources_Item_Type type() const;
-  void set_type(::aspia::proto::SharedResources_Item_Type value);
-
-  // uint32 current_uses = 5;
-  void clear_current_uses();
-  static const int kCurrentUsesFieldNumber = 5;
-  ::google::protobuf::uint32 current_uses() const;
-  void set_current_uses(::google::protobuf::uint32 value);
-
-  // uint32 maximum_uses = 6;
-  void clear_maximum_uses();
-  static const int kMaximumUsesFieldNumber = 6;
-  ::google::protobuf::uint32 maximum_uses() const;
-  void set_maximum_uses(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.SharedResources.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::internal::ArenaStringPtr description_;
-  ::google::protobuf::internal::ArenaStringPtr local_path_;
-  int type_;
-  ::google::protobuf::uint32 current_uses_;
-  ::google::protobuf::uint32 maximum_uses_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSharedResources_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SharedResources) */ {
- public:
-  SharedResources();
-  virtual ~SharedResources();
-
-  SharedResources(const SharedResources& from);
-
-  inline SharedResources& operator=(const SharedResources& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  SharedResources(SharedResources&& from) noexcept
-    : SharedResources() {
-    *this = ::std::move(from);
-  }
-
-  inline SharedResources& operator=(SharedResources&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const SharedResources& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const SharedResources* internal_default_instance() {
-    return reinterpret_cast<const SharedResources*>(
-               &_SharedResources_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
-
-  void Swap(SharedResources* other);
-  friend void swap(SharedResources& a, SharedResources& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline SharedResources* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  SharedResources* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const SharedResources& from);
-  void MergeFrom(const SharedResources& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(SharedResources* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef SharedResources_Item Item;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.SharedResources.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::SharedResources_Item& item(int index) const;
-  ::aspia::proto::SharedResources_Item* mutable_item(int index);
-  ::aspia::proto::SharedResources_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SharedResources_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SharedResources_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.SharedResources)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::SharedResources_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsSharedResourcesImpl();
-};
-// -------------------------------------------------------------------
-
 class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Routes.Item) */ {
  public:
   Routes_Item();
@@ -1129,7 +815,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -1271,7 +957,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -1376,7 +1062,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -1567,7 +1253,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -1672,7 +1358,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -1792,7 +1478,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -1897,7 +1583,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -2061,7 +1747,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -2801,245 +2487,6 @@ Services::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Services_Item >&
 Services::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.Services.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
-// SharedResources_Item
-
-// string name = 1;
-inline void SharedResources_Item::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& SharedResources_Item::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.name)
-  return name_.GetNoArena();
-}
-inline void SharedResources_Item::set_name(const ::std::string& value) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.name)
-}
-#if LANG_CXX11
-inline void SharedResources_Item::set_name(::std::string&& value) {
-  
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.SharedResources.Item.name)
-}
-#endif
-inline void SharedResources_Item::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.SharedResources.Item.name)
-}
-inline void SharedResources_Item::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.SharedResources.Item.name)
-}
-inline ::std::string* SharedResources_Item::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.SharedResources.Item.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* SharedResources_Item::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.SharedResources.Item.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void SharedResources_Item::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
-    
-  } else {
-    
-  }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.SharedResources.Item.name)
-}
-
-// .aspia.proto.SharedResources.Item.Type type = 2;
-inline void SharedResources_Item::clear_type() {
-  type_ = 0;
-}
-inline ::aspia::proto::SharedResources_Item_Type SharedResources_Item::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.type)
-  return static_cast< ::aspia::proto::SharedResources_Item_Type >(type_);
-}
-inline void SharedResources_Item::set_type(::aspia::proto::SharedResources_Item_Type value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.type)
-}
-
-// string description = 3;
-inline void SharedResources_Item::clear_description() {
-  description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& SharedResources_Item::description() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.description)
-  return description_.GetNoArena();
-}
-inline void SharedResources_Item::set_description(const ::std::string& value) {
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.description)
-}
-#if LANG_CXX11
-inline void SharedResources_Item::set_description(::std::string&& value) {
-  
-  description_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.SharedResources.Item.description)
-}
-#endif
-inline void SharedResources_Item::set_description(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.SharedResources.Item.description)
-}
-inline void SharedResources_Item::set_description(const char* value, size_t size) {
-  
-  description_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.SharedResources.Item.description)
-}
-inline ::std::string* SharedResources_Item::mutable_description() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.SharedResources.Item.description)
-  return description_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* SharedResources_Item::release_description() {
-  // @@protoc_insertion_point(field_release:aspia.proto.SharedResources.Item.description)
-  
-  return description_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void SharedResources_Item::set_allocated_description(::std::string* description) {
-  if (description != NULL) {
-    
-  } else {
-    
-  }
-  description_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), description);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.SharedResources.Item.description)
-}
-
-// string local_path = 4;
-inline void SharedResources_Item::clear_local_path() {
-  local_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& SharedResources_Item::local_path() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.local_path)
-  return local_path_.GetNoArena();
-}
-inline void SharedResources_Item::set_local_path(const ::std::string& value) {
-  
-  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.local_path)
-}
-#if LANG_CXX11
-inline void SharedResources_Item::set_local_path(::std::string&& value) {
-  
-  local_path_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.SharedResources.Item.local_path)
-}
-#endif
-inline void SharedResources_Item::set_local_path(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.SharedResources.Item.local_path)
-}
-inline void SharedResources_Item::set_local_path(const char* value, size_t size) {
-  
-  local_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.SharedResources.Item.local_path)
-}
-inline ::std::string* SharedResources_Item::mutable_local_path() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.SharedResources.Item.local_path)
-  return local_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* SharedResources_Item::release_local_path() {
-  // @@protoc_insertion_point(field_release:aspia.proto.SharedResources.Item.local_path)
-  
-  return local_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void SharedResources_Item::set_allocated_local_path(::std::string* local_path) {
-  if (local_path != NULL) {
-    
-  } else {
-    
-  }
-  local_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), local_path);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.SharedResources.Item.local_path)
-}
-
-// uint32 current_uses = 5;
-inline void SharedResources_Item::clear_current_uses() {
-  current_uses_ = 0u;
-}
-inline ::google::protobuf::uint32 SharedResources_Item::current_uses() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.current_uses)
-  return current_uses_;
-}
-inline void SharedResources_Item::set_current_uses(::google::protobuf::uint32 value) {
-  
-  current_uses_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.current_uses)
-}
-
-// uint32 maximum_uses = 6;
-inline void SharedResources_Item::clear_maximum_uses() {
-  maximum_uses_ = 0u;
-}
-inline ::google::protobuf::uint32 SharedResources_Item::maximum_uses() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.Item.maximum_uses)
-  return maximum_uses_;
-}
-inline void SharedResources_Item::set_maximum_uses(::google::protobuf::uint32 value) {
-  
-  maximum_uses_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.SharedResources.Item.maximum_uses)
-}
-
-// -------------------------------------------------------------------
-
-// SharedResources
-
-// repeated .aspia.proto.SharedResources.Item item = 1;
-inline int SharedResources::item_size() const {
-  return item_.size();
-}
-inline void SharedResources::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::SharedResources_Item& SharedResources::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.SharedResources.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::SharedResources_Item* SharedResources::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.SharedResources.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::SharedResources_Item* SharedResources::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.SharedResources.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::SharedResources_Item >*
-SharedResources::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.SharedResources.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::SharedResources_Item >&
-SharedResources::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.SharedResources.item)
   return item_;
 }
 
@@ -4010,10 +3457,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -4025,7 +3468,6 @@ namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::SharedResources_Item_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Sessions_ConnectState> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf

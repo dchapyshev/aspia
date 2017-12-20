@@ -165,6 +165,12 @@ proto::Connection::State ToState(DWORD state)
 
 } // namespace
 
+CategoryConnection::CategoryConnection()
+    : CategoryInfo(Type::INFO_LIST)
+{
+    // Nothing
+}
+
 const char* CategoryConnection::Name() const
 {
     return "Open Connections";

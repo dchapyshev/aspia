@@ -65,33 +65,6 @@ message Services
     repeated Item item = 1;
 }
 
-message SharedResources
-{
-    message Item
-    {
-        string name = 1;
-
-        enum Type
-        {
-            TYPE_UNKNOWN   = 0;
-            TYPE_DISK      = 1;
-            TYPE_PRINTER   = 2;
-            TYPE_DEVICE    = 3;
-            TYPE_IPC       = 4;
-            TYPE_SPECIAL   = 5;
-            TYPE_TEMPORARY = 6;
-        }
-
-        Type type           = 2;
-        string description  = 3;
-        string local_path   = 4;
-        uint32 current_uses = 5;
-        uint32 maximum_uses = 6;
-    }
-
-    repeated Item item = 1;
-}
-
 message Routes
 {
     message Item

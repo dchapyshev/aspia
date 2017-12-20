@@ -1,21 +1,21 @@
 //
 // PROJECT:         Aspia
-// FILE:            system_info/category_connection.h
+// FILE:            system_info/category_share.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_CONNECTION_H
-#define _ASPIA_SYSTEM_INFO__CATEGORY_CONNECTION_H
+#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_SHARE_H
+#define _ASPIA_SYSTEM_INFO__CATEGORY_SHARE_H
 
 #include "system_info/category.h"
 
 namespace aspia {
 
-class CategoryConnection : public CategoryInfo
+class CategoryShare : public CategoryInfo
 {
 public:
-    CategoryConnection();
+    CategoryShare();
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -25,9 +25,9 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryConnection);
+    DISALLOW_COPY_AND_ASSIGN(CategoryShare);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__CATEGORY_CONNECTION_H
+#endif // _ASPIA_SYSTEM_INFO__CATEGORY_SHARE_H

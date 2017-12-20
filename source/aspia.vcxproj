@@ -166,7 +166,6 @@
     <ClCompile Include="network\network_client_tcp.cc" />
     <ClCompile Include="network\network_server_tcp.cc" />
     <ClCompile Include="network\route_enumerator.cc" />
-    <ClCompile Include="network\share_enumerator.cc" />
     <ClCompile Include="protocol\category_group_network.cc" />
     <ClCompile Include="protocol\category_group_os.cc" />
     <ClCompile Include="protocol\category_group_software.cc" />
@@ -236,6 +235,8 @@
     <ClCompile Include="system_info\category_process.pb.cc" />
     <ClCompile Include="system_info\category_ras.cc" />
     <ClCompile Include="system_info\category_ras.pb.cc" />
+    <ClCompile Include="system_info\category_share.cc" />
+    <ClCompile Include="system_info\category_share.pb.cc" />
     <ClCompile Include="system_info\category_smart.cc" />
     <ClCompile Include="system_info\category_smart.pb.cc" />
     <ClCompile Include="system_info\category_video_adapter.cc" />
@@ -458,7 +459,6 @@
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
     <ClInclude Include="network\route_enumerator.h" />
-    <ClInclude Include="network\share_enumerator.h" />
     <ClInclude Include="protocol\category_group_network.h" />
     <ClInclude Include="protocol\category_group_os.h" />
     <ClInclude Include="protocol\category_group_software.h" />
@@ -530,6 +530,8 @@
     <ClInclude Include="system_info\category_process.pb.h" />
     <ClInclude Include="system_info\category_ras.h" />
     <ClInclude Include="system_info\category_ras.pb.h" />
+    <ClInclude Include="system_info\category_share.h" />
+    <ClInclude Include="system_info\category_share.pb.h" />
     <ClInclude Include="system_info\category_smart.h" />
     <ClInclude Include="system_info\category_smart.pb.h" />
     <ClInclude Include="system_info\category_video_adapter.h" />
@@ -622,6 +624,7 @@
     <None Include="system_info\category_printer.proto" />
     <None Include="system_info\category_process.proto" />
     <None Include="system_info\category_ras.proto" />
+    <None Include="system_info\category_share.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_video_adapter.proto" />
     <None Include="system_info\category_windows_device.proto" />
