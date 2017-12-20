@@ -36,7 +36,7 @@ namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[16];
+  static const ::google::protobuf::internal::ParseTable schema[14];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -49,10 +49,6 @@ void InitDefaultsServices_ItemImpl();
 void InitDefaultsServices_Item();
 void InitDefaultsServicesImpl();
 void InitDefaultsServices();
-void InitDefaultsOpenConnections_ItemImpl();
-void InitDefaultsOpenConnections_Item();
-void InitDefaultsOpenConnectionsImpl();
-void InitDefaultsOpenConnections();
 void InitDefaultsSharedResources_ItemImpl();
 void InitDefaultsSharedResources_Item();
 void InitDefaultsSharedResourcesImpl();
@@ -78,8 +74,6 @@ inline void InitDefaults() {
   InitDefaultsPrograms();
   InitDefaultsServices_Item();
   InitDefaultsServices();
-  InitDefaultsOpenConnections_Item();
-  InitDefaultsOpenConnections();
   InitDefaultsSharedResources_Item();
   InitDefaultsSharedResources();
   InitDefaultsRoutes_Item();
@@ -94,12 +88,6 @@ inline void InitDefaults() {
 }  // namespace protobuf_system_5finfo_5fsession_5fmessage_2eproto
 namespace aspia {
 namespace proto {
-class OpenConnections;
-class OpenConnectionsDefaultTypeInternal;
-extern OpenConnectionsDefaultTypeInternal _OpenConnections_default_instance_;
-class OpenConnections_Item;
-class OpenConnections_ItemDefaultTypeInternal;
-extern OpenConnections_ItemDefaultTypeInternal _OpenConnections_Item_default_instance_;
 class Programs;
 class ProgramsDefaultTypeInternal;
 extern ProgramsDefaultTypeInternal _Programs_default_instance_;
@@ -178,40 +166,6 @@ bool Services_Item_StartupType_IsValid(int value);
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MIN = Services_Item_StartupType_STARTUP_TYPE_UNKNOWN;
 const Services_Item_StartupType Services_Item_StartupType_StartupType_MAX = Services_Item_StartupType_STARTUP_TYPE_SYSTEM_START;
 const int Services_Item_StartupType_StartupType_ARRAYSIZE = Services_Item_StartupType_StartupType_MAX + 1;
-
-enum OpenConnections_Protocol {
-  OpenConnections_Protocol_PROTOCOL_UNKNOWN = 0,
-  OpenConnections_Protocol_PROTOCOL_TCP = 1,
-  OpenConnections_Protocol_PROTOCOL_UDP = 2,
-  OpenConnections_Protocol_OpenConnections_Protocol_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  OpenConnections_Protocol_OpenConnections_Protocol_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool OpenConnections_Protocol_IsValid(int value);
-const OpenConnections_Protocol OpenConnections_Protocol_Protocol_MIN = OpenConnections_Protocol_PROTOCOL_UNKNOWN;
-const OpenConnections_Protocol OpenConnections_Protocol_Protocol_MAX = OpenConnections_Protocol_PROTOCOL_UDP;
-const int OpenConnections_Protocol_Protocol_ARRAYSIZE = OpenConnections_Protocol_Protocol_MAX + 1;
-
-enum OpenConnections_State {
-  OpenConnections_State_STATE_UNKNOWN = 0,
-  OpenConnections_State_STATE_CLOSED = 1,
-  OpenConnections_State_STATE_LISTENING = 2,
-  OpenConnections_State_STATE_SYN_SENT = 3,
-  OpenConnections_State_STATE_SYN_RCVD = 4,
-  OpenConnections_State_STATE_ESTABLISHED = 5,
-  OpenConnections_State_STATE_FIN_WAIT1 = 6,
-  OpenConnections_State_STATE_FIN_WAIT2 = 7,
-  OpenConnections_State_STATE_CLOSE_WAIT = 8,
-  OpenConnections_State_STATE_CLOSING = 9,
-  OpenConnections_State_STATE_LAST_ACK = 10,
-  OpenConnections_State_STATE_TIME_WAIT = 11,
-  OpenConnections_State_STATE_DELETE_TCB = 12,
-  OpenConnections_State_OpenConnections_State_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  OpenConnections_State_OpenConnections_State_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool OpenConnections_State_IsValid(int value);
-const OpenConnections_State OpenConnections_State_State_MIN = OpenConnections_State_STATE_UNKNOWN;
-const OpenConnections_State OpenConnections_State_State_MAX = OpenConnections_State_STATE_DELETE_TCB;
-const int OpenConnections_State_State_ARRAYSIZE = OpenConnections_State_State_MAX + 1;
 
 enum SharedResources_Item_Type {
   SharedResources_Item_Type_TYPE_UNKNOWN = 0,
@@ -855,328 +809,6 @@ class Services : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
-class OpenConnections_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpenConnections.Item) */ {
- public:
-  OpenConnections_Item();
-  virtual ~OpenConnections_Item();
-
-  OpenConnections_Item(const OpenConnections_Item& from);
-
-  inline OpenConnections_Item& operator=(const OpenConnections_Item& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  OpenConnections_Item(OpenConnections_Item&& from) noexcept
-    : OpenConnections_Item() {
-    *this = ::std::move(from);
-  }
-
-  inline OpenConnections_Item& operator=(OpenConnections_Item&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const OpenConnections_Item& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const OpenConnections_Item* internal_default_instance() {
-    return reinterpret_cast<const OpenConnections_Item*>(
-               &_OpenConnections_Item_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
-
-  void Swap(OpenConnections_Item* other);
-  friend void swap(OpenConnections_Item& a, OpenConnections_Item& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline OpenConnections_Item* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  OpenConnections_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const OpenConnections_Item& from);
-  void MergeFrom(const OpenConnections_Item& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(OpenConnections_Item* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string process_name = 1;
-  void clear_process_name();
-  static const int kProcessNameFieldNumber = 1;
-  const ::std::string& process_name() const;
-  void set_process_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_process_name(::std::string&& value);
-  #endif
-  void set_process_name(const char* value);
-  void set_process_name(const char* value, size_t size);
-  ::std::string* mutable_process_name();
-  ::std::string* release_process_name();
-  void set_allocated_process_name(::std::string* process_name);
-
-  // string local_address = 3;
-  void clear_local_address();
-  static const int kLocalAddressFieldNumber = 3;
-  const ::std::string& local_address() const;
-  void set_local_address(const ::std::string& value);
-  #if LANG_CXX11
-  void set_local_address(::std::string&& value);
-  #endif
-  void set_local_address(const char* value);
-  void set_local_address(const char* value, size_t size);
-  ::std::string* mutable_local_address();
-  ::std::string* release_local_address();
-  void set_allocated_local_address(::std::string* local_address);
-
-  // string remote_address = 4;
-  void clear_remote_address();
-  static const int kRemoteAddressFieldNumber = 4;
-  const ::std::string& remote_address() const;
-  void set_remote_address(const ::std::string& value);
-  #if LANG_CXX11
-  void set_remote_address(::std::string&& value);
-  #endif
-  void set_remote_address(const char* value);
-  void set_remote_address(const char* value, size_t size);
-  ::std::string* mutable_remote_address();
-  ::std::string* release_remote_address();
-  void set_allocated_remote_address(::std::string* remote_address);
-
-  // .aspia.proto.OpenConnections.Protocol protocol = 2;
-  void clear_protocol();
-  static const int kProtocolFieldNumber = 2;
-  ::aspia::proto::OpenConnections_Protocol protocol() const;
-  void set_protocol(::aspia::proto::OpenConnections_Protocol value);
-
-  // uint32 local_port = 5;
-  void clear_local_port();
-  static const int kLocalPortFieldNumber = 5;
-  ::google::protobuf::uint32 local_port() const;
-  void set_local_port(::google::protobuf::uint32 value);
-
-  // uint32 remote_port = 6;
-  void clear_remote_port();
-  static const int kRemotePortFieldNumber = 6;
-  ::google::protobuf::uint32 remote_port() const;
-  void set_remote_port(::google::protobuf::uint32 value);
-
-  // .aspia.proto.OpenConnections.State state = 7;
-  void clear_state();
-  static const int kStateFieldNumber = 7;
-  ::aspia::proto::OpenConnections_State state() const;
-  void set_state(::aspia::proto::OpenConnections_State value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.OpenConnections.Item)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr process_name_;
-  ::google::protobuf::internal::ArenaStringPtr local_address_;
-  ::google::protobuf::internal::ArenaStringPtr remote_address_;
-  int protocol_;
-  ::google::protobuf::uint32 local_port_;
-  ::google::protobuf::uint32 remote_port_;
-  int state_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnections_ItemImpl();
-};
-// -------------------------------------------------------------------
-
-class OpenConnections : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpenConnections) */ {
- public:
-  OpenConnections();
-  virtual ~OpenConnections();
-
-  OpenConnections(const OpenConnections& from);
-
-  inline OpenConnections& operator=(const OpenConnections& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  OpenConnections(OpenConnections&& from) noexcept
-    : OpenConnections() {
-    *this = ::std::move(from);
-  }
-
-  inline OpenConnections& operator=(OpenConnections&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const OpenConnections& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const OpenConnections* internal_default_instance() {
-    return reinterpret_cast<const OpenConnections*>(
-               &_OpenConnections_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
-
-  void Swap(OpenConnections* other);
-  friend void swap(OpenConnections& a, OpenConnections& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline OpenConnections* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  OpenConnections* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const OpenConnections& from);
-  void MergeFrom(const OpenConnections& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(OpenConnections* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef OpenConnections_Item Item;
-
-  typedef OpenConnections_Protocol Protocol;
-  static const Protocol PROTOCOL_UNKNOWN =
-    OpenConnections_Protocol_PROTOCOL_UNKNOWN;
-  static const Protocol PROTOCOL_TCP =
-    OpenConnections_Protocol_PROTOCOL_TCP;
-  static const Protocol PROTOCOL_UDP =
-    OpenConnections_Protocol_PROTOCOL_UDP;
-  static inline bool Protocol_IsValid(int value) {
-    return OpenConnections_Protocol_IsValid(value);
-  }
-  static const Protocol Protocol_MIN =
-    OpenConnections_Protocol_Protocol_MIN;
-  static const Protocol Protocol_MAX =
-    OpenConnections_Protocol_Protocol_MAX;
-  static const int Protocol_ARRAYSIZE =
-    OpenConnections_Protocol_Protocol_ARRAYSIZE;
-
-  typedef OpenConnections_State State;
-  static const State STATE_UNKNOWN =
-    OpenConnections_State_STATE_UNKNOWN;
-  static const State STATE_CLOSED =
-    OpenConnections_State_STATE_CLOSED;
-  static const State STATE_LISTENING =
-    OpenConnections_State_STATE_LISTENING;
-  static const State STATE_SYN_SENT =
-    OpenConnections_State_STATE_SYN_SENT;
-  static const State STATE_SYN_RCVD =
-    OpenConnections_State_STATE_SYN_RCVD;
-  static const State STATE_ESTABLISHED =
-    OpenConnections_State_STATE_ESTABLISHED;
-  static const State STATE_FIN_WAIT1 =
-    OpenConnections_State_STATE_FIN_WAIT1;
-  static const State STATE_FIN_WAIT2 =
-    OpenConnections_State_STATE_FIN_WAIT2;
-  static const State STATE_CLOSE_WAIT =
-    OpenConnections_State_STATE_CLOSE_WAIT;
-  static const State STATE_CLOSING =
-    OpenConnections_State_STATE_CLOSING;
-  static const State STATE_LAST_ACK =
-    OpenConnections_State_STATE_LAST_ACK;
-  static const State STATE_TIME_WAIT =
-    OpenConnections_State_STATE_TIME_WAIT;
-  static const State STATE_DELETE_TCB =
-    OpenConnections_State_STATE_DELETE_TCB;
-  static inline bool State_IsValid(int value) {
-    return OpenConnections_State_IsValid(value);
-  }
-  static const State State_MIN =
-    OpenConnections_State_State_MIN;
-  static const State State_MAX =
-    OpenConnections_State_State_MAX;
-  static const int State_ARRAYSIZE =
-    OpenConnections_State_State_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // repeated .aspia.proto.OpenConnections.Item item = 1;
-  int item_size() const;
-  void clear_item();
-  static const int kItemFieldNumber = 1;
-  const ::aspia::proto::OpenConnections_Item& item(int index) const;
-  ::aspia::proto::OpenConnections_Item* mutable_item(int index);
-  ::aspia::proto::OpenConnections_Item* add_item();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpenConnections_Item >*
-      mutable_item();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpenConnections_Item >&
-      item() const;
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.OpenConnections)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpenConnections_Item > item_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::TableStruct;
-  friend void ::protobuf_system_5finfo_5fsession_5fmessage_2eproto::InitDefaultsOpenConnectionsImpl();
-};
-// -------------------------------------------------------------------
-
 class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.SharedResources.Item) */ {
  public:
   SharedResources_Item();
@@ -1211,7 +843,7 @@ class SharedResources_Item : public ::google::protobuf::MessageLite /* @@protoc_
                &_SharedResources_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    4;
 
   void Swap(SharedResources_Item* other);
   friend void swap(SharedResources_Item& a, SharedResources_Item& b) {
@@ -1392,7 +1024,7 @@ class SharedResources : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_SharedResources_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(SharedResources* other);
   friend void swap(SharedResources& a, SharedResources& b) {
@@ -1497,7 +1129,7 @@ class Routes_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_Routes_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(Routes_Item* other);
   friend void swap(Routes_Item& a, Routes_Item& b) {
@@ -1639,7 +1271,7 @@ class Routes : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Routes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(Routes* other);
   friend void swap(Routes& a, Routes& b) {
@@ -1744,7 +1376,7 @@ class Users_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Users_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Users_Item* other);
   friend void swap(Users_Item& a, Users_Item& b) {
@@ -1935,7 +1567,7 @@ class Users : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
                &_Users_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(Users* other);
   friend void swap(Users& a, Users& b) {
@@ -2040,7 +1672,7 @@ class UserGroups_Item : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_UserGroups_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(UserGroups_Item* other);
   friend void swap(UserGroups_Item& a, UserGroups_Item& b) {
@@ -2160,7 +1792,7 @@ class UserGroups : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_UserGroups_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(UserGroups* other);
   friend void swap(UserGroups& a, UserGroups& b) {
@@ -2265,7 +1897,7 @@ class Sessions_Item : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_Sessions_Item_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(Sessions_Item* other);
   friend void swap(Sessions_Item& a, Sessions_Item& b) {
@@ -2429,7 +2061,7 @@ class Sessions : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Sessions_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(Sessions* other);
   friend void swap(Sessions& a, Sessions& b) {
@@ -3169,259 +2801,6 @@ Services::mutable_item() {
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Services_Item >&
 Services::item() const {
   // @@protoc_insertion_point(field_list:aspia.proto.Services.item)
-  return item_;
-}
-
-// -------------------------------------------------------------------
-
-// OpenConnections_Item
-
-// string process_name = 1;
-inline void OpenConnections_Item::clear_process_name() {
-  process_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& OpenConnections_Item::process_name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.process_name)
-  return process_name_.GetNoArena();
-}
-inline void OpenConnections_Item::set_process_name(const ::std::string& value) {
-  
-  process_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.process_name)
-}
-#if LANG_CXX11
-inline void OpenConnections_Item::set_process_name(::std::string&& value) {
-  
-  process_name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpenConnections.Item.process_name)
-}
-#endif
-inline void OpenConnections_Item::set_process_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  process_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.OpenConnections.Item.process_name)
-}
-inline void OpenConnections_Item::set_process_name(const char* value, size_t size) {
-  
-  process_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpenConnections.Item.process_name)
-}
-inline ::std::string* OpenConnections_Item::mutable_process_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.OpenConnections.Item.process_name)
-  return process_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* OpenConnections_Item::release_process_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.OpenConnections.Item.process_name)
-  
-  return process_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void OpenConnections_Item::set_allocated_process_name(::std::string* process_name) {
-  if (process_name != NULL) {
-    
-  } else {
-    
-  }
-  process_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), process_name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpenConnections.Item.process_name)
-}
-
-// .aspia.proto.OpenConnections.Protocol protocol = 2;
-inline void OpenConnections_Item::clear_protocol() {
-  protocol_ = 0;
-}
-inline ::aspia::proto::OpenConnections_Protocol OpenConnections_Item::protocol() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.protocol)
-  return static_cast< ::aspia::proto::OpenConnections_Protocol >(protocol_);
-}
-inline void OpenConnections_Item::set_protocol(::aspia::proto::OpenConnections_Protocol value) {
-  
-  protocol_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.protocol)
-}
-
-// string local_address = 3;
-inline void OpenConnections_Item::clear_local_address() {
-  local_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& OpenConnections_Item::local_address() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.local_address)
-  return local_address_.GetNoArena();
-}
-inline void OpenConnections_Item::set_local_address(const ::std::string& value) {
-  
-  local_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.local_address)
-}
-#if LANG_CXX11
-inline void OpenConnections_Item::set_local_address(::std::string&& value) {
-  
-  local_address_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpenConnections.Item.local_address)
-}
-#endif
-inline void OpenConnections_Item::set_local_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  local_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.OpenConnections.Item.local_address)
-}
-inline void OpenConnections_Item::set_local_address(const char* value, size_t size) {
-  
-  local_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpenConnections.Item.local_address)
-}
-inline ::std::string* OpenConnections_Item::mutable_local_address() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.OpenConnections.Item.local_address)
-  return local_address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* OpenConnections_Item::release_local_address() {
-  // @@protoc_insertion_point(field_release:aspia.proto.OpenConnections.Item.local_address)
-  
-  return local_address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void OpenConnections_Item::set_allocated_local_address(::std::string* local_address) {
-  if (local_address != NULL) {
-    
-  } else {
-    
-  }
-  local_address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), local_address);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpenConnections.Item.local_address)
-}
-
-// string remote_address = 4;
-inline void OpenConnections_Item::clear_remote_address() {
-  remote_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& OpenConnections_Item::remote_address() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.remote_address)
-  return remote_address_.GetNoArena();
-}
-inline void OpenConnections_Item::set_remote_address(const ::std::string& value) {
-  
-  remote_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.remote_address)
-}
-#if LANG_CXX11
-inline void OpenConnections_Item::set_remote_address(::std::string&& value) {
-  
-  remote_address_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpenConnections.Item.remote_address)
-}
-#endif
-inline void OpenConnections_Item::set_remote_address(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  remote_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.OpenConnections.Item.remote_address)
-}
-inline void OpenConnections_Item::set_remote_address(const char* value, size_t size) {
-  
-  remote_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpenConnections.Item.remote_address)
-}
-inline ::std::string* OpenConnections_Item::mutable_remote_address() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.OpenConnections.Item.remote_address)
-  return remote_address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* OpenConnections_Item::release_remote_address() {
-  // @@protoc_insertion_point(field_release:aspia.proto.OpenConnections.Item.remote_address)
-  
-  return remote_address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void OpenConnections_Item::set_allocated_remote_address(::std::string* remote_address) {
-  if (remote_address != NULL) {
-    
-  } else {
-    
-  }
-  remote_address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), remote_address);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpenConnections.Item.remote_address)
-}
-
-// uint32 local_port = 5;
-inline void OpenConnections_Item::clear_local_port() {
-  local_port_ = 0u;
-}
-inline ::google::protobuf::uint32 OpenConnections_Item::local_port() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.local_port)
-  return local_port_;
-}
-inline void OpenConnections_Item::set_local_port(::google::protobuf::uint32 value) {
-  
-  local_port_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.local_port)
-}
-
-// uint32 remote_port = 6;
-inline void OpenConnections_Item::clear_remote_port() {
-  remote_port_ = 0u;
-}
-inline ::google::protobuf::uint32 OpenConnections_Item::remote_port() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.remote_port)
-  return remote_port_;
-}
-inline void OpenConnections_Item::set_remote_port(::google::protobuf::uint32 value) {
-  
-  remote_port_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.remote_port)
-}
-
-// .aspia.proto.OpenConnections.State state = 7;
-inline void OpenConnections_Item::clear_state() {
-  state_ = 0;
-}
-inline ::aspia::proto::OpenConnections_State OpenConnections_Item::state() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.Item.state)
-  return static_cast< ::aspia::proto::OpenConnections_State >(state_);
-}
-inline void OpenConnections_Item::set_state(::aspia::proto::OpenConnections_State value) {
-  
-  state_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.OpenConnections.Item.state)
-}
-
-// -------------------------------------------------------------------
-
-// OpenConnections
-
-// repeated .aspia.proto.OpenConnections.Item item = 1;
-inline int OpenConnections::item_size() const {
-  return item_.size();
-}
-inline void OpenConnections::clear_item() {
-  item_.Clear();
-}
-inline const ::aspia::proto::OpenConnections_Item& OpenConnections::item(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpenConnections.item)
-  return item_.Get(index);
-}
-inline ::aspia::proto::OpenConnections_Item* OpenConnections::mutable_item(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.OpenConnections.item)
-  return item_.Mutable(index);
-}
-inline ::aspia::proto::OpenConnections_Item* OpenConnections::add_item() {
-  // @@protoc_insertion_point(field_add:aspia.proto.OpenConnections.item)
-  return item_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpenConnections_Item >*
-OpenConnections::mutable_item() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.OpenConnections.item)
-  return &item_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpenConnections_Item >&
-OpenConnections::item() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.OpenConnections.item)
   return item_;
 }
 
@@ -4635,10 +4014,6 @@ Sessions::item() const {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -4650,8 +4025,6 @@ namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Services_Item_StartupType> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::OpenConnections_Protocol> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::OpenConnections_State> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::SharedResources_Item_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::Sessions_ConnectState> : ::google::protobuf::internal::true_type {};
 

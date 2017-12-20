@@ -553,9 +553,6 @@
     <ClCompile Include="network\network_adapter_enumerator.cc">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="network\open_connection_enumerator.cc">
-      <Filter>network</Filter>
-    </ClCompile>
     <ClCompile Include="base\devices\device_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
@@ -845,6 +842,12 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_ras.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_connection.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_connection.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1430,9 +1433,6 @@
     <ClInclude Include="network\network_adapter_enumerator.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="network\open_connection_enumerator.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="base\devices\device_enumerator.h">
       <Filter>base\devices</Filter>
     </ClInclude>
@@ -1730,6 +1730,12 @@
     <ClInclude Include="system_info\category_ras.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_connection.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_connection.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1850,6 +1856,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_ras.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_connection.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

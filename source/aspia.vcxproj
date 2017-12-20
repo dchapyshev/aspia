@@ -165,7 +165,6 @@
     <ClCompile Include="network\network_channel_tcp.cc" />
     <ClCompile Include="network\network_client_tcp.cc" />
     <ClCompile Include="network\network_server_tcp.cc" />
-    <ClCompile Include="network\open_connection_enumerator.cc" />
     <ClCompile Include="network\route_enumerator.cc" />
     <ClCompile Include="network\share_enumerator.cc" />
     <ClCompile Include="protocol\category_group_network.cc" />
@@ -191,6 +190,8 @@
     <ClCompile Include="system_info\category.cc" />
     <ClCompile Include="system_info\category_ata.cc" />
     <ClCompile Include="system_info\category_ata.pb.cc" />
+    <ClCompile Include="system_info\category_connection.cc" />
+    <ClCompile Include="system_info\category_connection.pb.cc" />
     <ClCompile Include="system_info\category_cpu.cc" />
     <ClCompile Include="system_info\category_cpu.pb.cc" />
     <ClCompile Include="system_info\category_dmi_baseboard.cc" />
@@ -456,7 +457,6 @@
     <ClInclude Include="network\network_channel_tcp.h" />
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
-    <ClInclude Include="network\open_connection_enumerator.h" />
     <ClInclude Include="network\route_enumerator.h" />
     <ClInclude Include="network\share_enumerator.h" />
     <ClInclude Include="protocol\category_group_network.h" />
@@ -484,6 +484,8 @@
     <ClInclude Include="system_info\category.h" />
     <ClInclude Include="system_info\category_ata.h" />
     <ClInclude Include="system_info\category_ata.pb.h" />
+    <ClInclude Include="system_info\category_connection.h" />
+    <ClInclude Include="system_info\category_connection.pb.h" />
     <ClInclude Include="system_info\category_cpu.h" />
     <ClInclude Include="system_info\category_cpu.pb.h" />
     <ClInclude Include="system_info\category_dmi_baseboard.h" />
@@ -597,6 +599,7 @@
     <None Include="proto\system_info_session.proto" />
     <None Include="proto\system_info_session_message.proto" />
     <None Include="system_info\category_ata.proto" />
+    <None Include="system_info\category_connection.proto" />
     <None Include="system_info\category_cpu.proto" />
     <None Include="system_info\category_dmi_baseboard.proto" />
     <None Include="system_info\category_dmi_bios.proto" />
