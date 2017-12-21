@@ -10,9 +10,9 @@
 
 #include "base/devices/device.h"
 #include "base/devices/physical_drive_smart.h"
+#include "base/scoped_device_info.h"
 #include "system_info/category_ata.pb.h"
 
-#include <setupapi.h>
 #include <winioctl.h>
 
 namespace aspia {
@@ -52,7 +52,7 @@ private:
     bool GetDriveInfo(uint8_t device_number) const;
     uint16_t GetMajorVersion() const;
 
-    HDEVINFO device_info_;
+    ScopedDeviceInfo device_info_;
     mutable DWORD device_index_ = 0;
     mutable Device device_;
     mutable uint8_t device_number_;

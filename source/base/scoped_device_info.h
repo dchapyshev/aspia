@@ -17,6 +17,8 @@ namespace aspia {
 class ScopedDeviceInfo
 {
 public:
+    ScopedDeviceInfo() = default;
+
     explicit ScopedDeviceInfo(HDEVINFO device_info)
         : device_info_(device_info)
     {
@@ -66,7 +68,7 @@ private:
         }
     }
 
-    HDEVINFO device_info_;
+    HDEVINFO device_info_ = INVALID_HANDLE_VALUE;
 
     DISALLOW_COPY_AND_ASSIGN(ScopedDeviceInfo);
 };

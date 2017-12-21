@@ -8,9 +8,8 @@
 #ifndef _ASPIA_BASE__DEVICES__DEVICE_ENUMERATOR_H
 #define _ASPIA_BASE__DEVICES__DEVICE_ENUMERATOR_H
 
-#include "base/macros.h"
+#include "base/scoped_device_info.h"
 
-#include <setupapi.h>
 #include <string>
 
 namespace aspia {
@@ -40,7 +39,7 @@ protected:
 private:
     std::wstring GetDriverKeyPath() const;
 
-    HDEVINFO device_info_;
+    ScopedDeviceInfo device_info_;
     mutable SP_DEVINFO_DATA device_info_data_;
     DWORD device_index_ = 0;
 

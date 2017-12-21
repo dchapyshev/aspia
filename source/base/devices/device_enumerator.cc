@@ -26,27 +26,21 @@ DeviceEnumerator::DeviceEnumerator()
 
 DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
 {
-    device_info_ = SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags);
-    if (!device_info_ || device_info_ == INVALID_HANDLE_VALUE)
+    device_info_.Reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
+    if (!device_info_.IsValid())
     {
-        LOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
     device_info_data_.cbSize = sizeof(device_info_data_);
 }
 
-DeviceEnumerator::~DeviceEnumerator()
-{
-    if (device_info_ && device_info_ != INVALID_HANDLE_VALUE)
-    {
-        SetupDiDestroyDeviceInfoList(device_info_);
-    }
-}
+DeviceEnumerator::~DeviceEnumerator() = default;
 
 bool DeviceEnumerator::IsAtEnd() const
 {
-    if (!SetupDiEnumDeviceInfo(device_info_, device_index_, &device_info_data_))
+    if (!SetupDiEnumDeviceInfo(device_info_.Get(), device_index_, &device_info_data_))
     {
         SystemErrorCode error_code = GetLastError();
 
@@ -71,7 +65,7 @@ std::string DeviceEnumerator::GetFriendlyName() const
 {
     WCHAR friendly_name[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_,
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
                                            SPDRP_FRIENDLYNAME,
                                            nullptr,
@@ -91,7 +85,7 @@ std::string DeviceEnumerator::GetDescription() const
 {
     WCHAR description[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_,
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
                                            SPDRP_DEVICEDESC,
                                            nullptr,
@@ -111,7 +105,7 @@ std::wstring DeviceEnumerator::GetDriverKeyPath() const
 {
     WCHAR driver[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_,
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
                                            SPDRP_DRIVER,
                                            nullptr,
@@ -196,7 +190,7 @@ std::string DeviceEnumerator::GetDeviceID() const
 {
     WCHAR device_id[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceInstanceIdW(device_info_,
+    if (!SetupDiGetDeviceInstanceIdW(device_info_.Get(),
                                      &device_info_data_,
                                      device_id,
                                      ARRAYSIZE(device_id),

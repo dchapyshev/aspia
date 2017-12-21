@@ -23,20 +23,14 @@ PhysicalDriveEnumerator::PhysicalDriveEnumerator()
 
     const DWORD flags = DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
-    device_info_ = SetupDiGetClassDevsW(&GUID_DEVINTERFACE_DISK, nullptr, nullptr, flags);
-    if (!device_info_ || device_info_ == INVALID_HANDLE_VALUE)
+    device_info_.Reset(SetupDiGetClassDevsW(&GUID_DEVINTERFACE_DISK, nullptr, nullptr, flags));
+    if (!device_info_.IsValid())
     {
         LOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
     }
 }
 
-PhysicalDriveEnumerator::~PhysicalDriveEnumerator()
-{
-    if (device_info_ && device_info_ != INVALID_HANDLE_VALUE)
-    {
-        SetupDiDestroyDeviceInfoList(device_info_);
-    }
-}
+PhysicalDriveEnumerator::~PhysicalDriveEnumerator() = default;
 
 bool PhysicalDriveEnumerator::IsAtEnd() const
 {
@@ -47,7 +41,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
         memset(&device_iface_data, 0, sizeof(device_iface_data));
         device_iface_data.cbSize = sizeof(device_iface_data);
 
-        if (!SetupDiEnumDeviceInterfaces(device_info_,
+        if (!SetupDiEnumDeviceInterfaces(device_info_.Get(),
                                          nullptr,
                                          &GUID_DEVINTERFACE_DISK,
                                          device_index_,
@@ -66,7 +60,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
         DWORD required_size = 0;
 
-        if (SetupDiGetDeviceInterfaceDetailW(device_info_,
+        if (SetupDiGetDeviceInterfaceDetailW(device_info_.Get(),
                                              &device_iface_data,
                                              nullptr,
                                              0,
@@ -85,7 +79,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
         detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
 
-        if (!SetupDiGetDeviceInterfaceDetailW(device_info_,
+        if (!SetupDiGetDeviceInterfaceDetailW(device_info_.Get(),
                                               &device_iface_data,
                                               detail_data,
                                               required_size,
