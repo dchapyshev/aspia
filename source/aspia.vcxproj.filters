@@ -556,9 +556,6 @@
     <ClCompile Include="base\devices\device_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\user_group_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\file_transfer\drive_list_ctrl.cc">
       <Filter>ui\file_transfer</Filter>
     </ClCompile>
@@ -1504,9 +1501,6 @@
     </ClInclude>
     <ClInclude Include="base\devices\device_enumerator.h">
       <Filter>base\devices</Filter>
-    </ClInclude>
-    <ClInclude Include="base\user_group_enumerator.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="ui\file_transfer\drive_list_ctrl.h">
       <Filter>ui\file_transfer</Filter>

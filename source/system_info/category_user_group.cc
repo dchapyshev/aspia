@@ -5,10 +5,13 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/user_group_enumerator.h"
+#include "base/strings/unicode.h"
+#include "base/logging.h"
 #include "system_info/category_user_group.h"
 #include "system_info/category_user_group.pb.h"
 #include "ui/resource.h"
+
+#include <lm.h>
 
 namespace aspia {
 
@@ -56,15 +59,33 @@ void CategoryUserGroup::Parse(Table& table, const std::string& data)
 
 std::string CategoryUserGroup::Serialize()
 {
+    PLOCALGROUP_INFO_1 group_info = nullptr;
+    DWORD total_entries = 0;
+    DWORD entries_read = 0;
+
+    DWORD error_code = NetLocalGroupEnum(nullptr, 1,
+                                         reinterpret_cast<LPBYTE*>(&group_info),
+                                         MAX_PREFERRED_LENGTH,
+                                         &entries_read,
+                                         &total_entries,
+                                         nullptr);
+    if (error_code != NERR_Success)
+    {
+        DLOG(WARNING) << "NetUserEnum() failed: " << SystemErrorCodeToString(error_code);
+        return std::string();
+    }
+
     proto::UserGroup message;
 
-    for (UserGroupEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    for (DWORD i = 0; i < total_entries; ++i)
     {
         proto::UserGroup::Item* item = message.add_item();
 
-        item->set_name(enumerator.GetName());
-        item->set_comment(enumerator.GetComment());
+        item->set_name(UTF8fromUNICODE(group_info[i].lgrpi1_name));
+        item->set_comment(UTF8fromUNICODE(group_info[i].lgrpi1_comment));
     }
+
+    NetApiBufferFree(group_info);
 
     return message.SerializeAsString();
 }
