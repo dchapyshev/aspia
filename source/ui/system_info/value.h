@@ -8,8 +8,6 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__VALUE_H
 #define _ASPIA_UI__SYSTEM_INFO__VALUE_H
 
-#include "base/macros.h"
-
 #include <cstdint>
 #include <string>
 #include <variant>
@@ -19,8 +17,8 @@ namespace aspia {
 class Value
 {
 public:
-    Value(Value&& other);
-    Value& operator=(Value&& other);
+    Value(const Value& other);
+    Value& operator=(const Value& other);
 
     static Value EmptyString();
     static Value String(std::string_view value);
@@ -71,14 +69,12 @@ private:
                                    int64_t,
                                    double>;
 
-    Value(Type type, ValueType&& value, std::string_view unit);
-    Value(Type type, ValueType&& value);
+    Value(Type type, const ValueType& value, std::string_view unit);
+    Value(Type type, const ValueType& value);
 
     Type type_;
     ValueType value_;
     std::string_view unit_;
-
-    DISALLOW_COPY_AND_ASSIGN(Value);
 };
 
 } // namespace aspia

@@ -8,6 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__GROUP_H
 #define _ASPIA_UI__SYSTEM_INFO__GROUP_H
 
+#include "base/macros.h"
 #include "ui/system_info/value.h"
 #include "ui/system_info/row.h"
 

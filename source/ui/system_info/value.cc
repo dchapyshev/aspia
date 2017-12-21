@@ -56,34 +56,34 @@ const char* GetMemorySizeUnit(uint64_t size)
 
 } // namespace
 
-Value::Value(Type type, ValueType&& value, std::string_view unit)
-    : value_(std::move(value)),
+Value::Value(Type type, const ValueType& value, std::string_view unit)
+    : value_(value),
       type_(type),
       unit_(unit)
 {
     // Nothing
 }
 
-Value::Value(Type type, ValueType&& value)
-    : value_(std::move(value)),
+Value::Value(Type type, const ValueType& value)
+    : value_(value),
       type_(type)
 {
     // Nothing
 }
 
-Value::Value(Value&& other)
+Value::Value(const Value& other)
     : type_(other.type_),
-      value_(std::move(other.value_)),
-      unit_(std::move(other.unit_))
+      value_(other.value_),
+      unit_(other.unit_)
 {
     // Nothing
 }
 
-Value& Value::operator=(Value&& other)
+Value& Value::operator=(const Value& other)
 {
     type_ = other.type_;
-    value_ = std::move(other.value_);
-    unit_ = std::move(other.unit_);
+    value_ = other.value_;
+    unit_ = other.unit_;
     return *this;
 }
 
