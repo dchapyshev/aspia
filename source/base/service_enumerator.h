@@ -26,9 +26,9 @@ public:
     bool IsAtEnd() const;
     void Advance();
 
-    std::string GetName() const;
-    std::string GetDisplayName() const;
-    std::string GetDescription() const;
+    std::wstring GetName() const;
+    std::wstring GetDisplayName() const;
+    std::wstring GetDescription() const;
 
     enum class Status
     {
@@ -55,8 +55,8 @@ public:
     };
 
     StartupType GetStartupType() const;
-    std::string GetBinaryPath() const;
-    std::string GetStartName() const;
+    std::wstring GetBinaryPath() const;
+    std::wstring GetStartName() const;
 
 private:
     ENUM_SERVICE_STATUS_PROCESS* GetCurrentService() const;

@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/unicode.h"
 #include "base/service_enumerator.h"
 #include "system_info/category_driver.h"
 #include "system_info/category_driver.pb.h"
@@ -130,9 +131,9 @@ std::string CategoryDriver::Serialize()
     {
         proto::Driver::Item* item = message.add_item();
 
-        item->set_name(enumerator.GetName());
-        item->set_display_name(enumerator.GetDisplayName());
-        item->set_description(enumerator.GetDescription());
+        item->set_name(UTF8fromUNICODE(enumerator.GetName()));
+        item->set_display_name(UTF8fromUNICODE(enumerator.GetDisplayName()));
+        item->set_description(UTF8fromUNICODE(enumerator.GetDescription()));
 
         switch (enumerator.GetStatus())
         {
@@ -196,7 +197,7 @@ std::string CategoryDriver::Serialize()
                 break;
         }
 
-        item->set_binary_path(enumerator.GetBinaryPath());
+        item->set_binary_path(UTF8fromUNICODE(enumerator.GetBinaryPath()));
     }
 
     return message.SerializeAsString();

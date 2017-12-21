@@ -6,7 +6,6 @@
 //
 
 #include "base/service_enumerator.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -130,27 +129,27 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
     return reinterpret_cast<LPQUERY_SERVICE_CONFIG>(current_service_config_.get());
 }
 
-std::string ServiceEnumerator::GetName() const
+std::wstring ServiceEnumerator::GetName() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
 
-    if (!service)
-        return std::string();
+    if (!service || !service->lpServiceName)
+        return std::wstring();
 
-    return UTF8fromUNICODE(service->lpServiceName);
+    return service->lpServiceName;
 }
 
-std::string ServiceEnumerator::GetDisplayName() const
+std::wstring ServiceEnumerator::GetDisplayName() const
 {
     ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
 
-    if (!service)
-        return std::string();
+    if (!service || !service->lpDisplayName)
+        return std::wstring();
 
-    return UTF8fromUNICODE(service->lpDisplayName);
+    return service->lpDisplayName;
 }
 
-std::string ServiceEnumerator::GetDescription() const
+std::wstring ServiceEnumerator::GetDescription() const
 {
     SC_HANDLE service_handle = GetCurrentServiceHandle();
 
@@ -164,7 +163,7 @@ std::string ServiceEnumerator::GetDescription() const
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         LOG(WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
-        return std::string();
+        return std::wstring();
     }
 
     std::unique_ptr<uint8_t[]> result = std::make_unique<uint8_t[]>(bytes_needed);
@@ -176,12 +175,14 @@ std::string ServiceEnumerator::GetDescription() const
                               &bytes_needed))
     {
         LOG(WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
-        return std::string();
+        return std::wstring();
     }
 
     SERVICE_DESCRIPTION* description = reinterpret_cast<SERVICE_DESCRIPTION*>(result.get());
+    if (!description->lpDescription)
+        return std::wstring();
 
-    return UTF8fromUNICODE(description->lpDescription);
+    return description->lpDescription;
 }
 
 ServiceEnumerator::Status ServiceEnumerator::GetStatus() const
@@ -248,24 +249,24 @@ ServiceEnumerator::StartupType ServiceEnumerator::GetStartupType() const
     }
 }
 
-std::string ServiceEnumerator::GetBinaryPath() const
+std::wstring ServiceEnumerator::GetBinaryPath() const
 {
     LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
 
-    if (!config)
-        return std::string();
+    if (!config || !config->lpBinaryPathName)
+        return std::wstring();
 
-    return UTF8fromUNICODE(config->lpBinaryPathName);
+    return config->lpBinaryPathName;
 }
 
-std::string ServiceEnumerator::GetStartName() const
+std::wstring ServiceEnumerator::GetStartName() const
 {
     LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
 
-    if (!config)
-        return std::string();
+    if (!config || !config->lpServiceStartName)
+        return std::wstring();
 
-    return UTF8fromUNICODE(config->lpServiceStartName);
+    return config->lpServiceStartName;
 }
 
 } // namespace aspia
