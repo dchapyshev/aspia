@@ -5,10 +5,13 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/printer_enumerator.h"
+#include "base/strings/unicode.h"
+#include "base/logging.h"
 #include "system_info/category_printer.h"
 #include "system_info/category_printer.pb.h"
 #include "ui/resource.h"
+
+#include <winspool.h>
 
 namespace aspia {
 
@@ -93,43 +96,82 @@ void CategoryPrinter::Parse(Table& table, const std::string& data)
 
 std::string CategoryPrinter::Serialize()
 {
+    const DWORD flags = PRINTER_ENUM_FAVORITE | PRINTER_ENUM_LOCAL | PRINTER_ENUM_NETWORK;
+    DWORD bytes_needed = 0;
+    DWORD count = 0;
+
+    if (EnumPrintersW(flags, nullptr, 2, nullptr, 0, &bytes_needed, &count) ||
+        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        DLOG(ERROR) << "Unexpected return value: " << GetLastSystemErrorString();
+        return std::string();
+    }
+
+    std::unique_ptr<uint8_t[]> printers_info_buffer = std::make_unique<uint8_t[]>(bytes_needed);
+
+    if (!EnumPrintersW(flags, nullptr, 2, printers_info_buffer.get(), bytes_needed,
+                       &bytes_needed, &count))
+    {
+        DLOG(ERROR) << "EnumPrintersW() failed: " << GetLastSystemErrorString();
+        return std::string();
+    }
+
+    WCHAR default_printer_name[256] = { 0 };
+    DWORD characters_count = ARRAYSIZE(default_printer_name);
+
+    if (!GetDefaultPrinterW(&default_printer_name[0], &characters_count))
+    {
+        DLOG(ERROR) << "GetDefaultPrinterW() failed: " << GetLastSystemErrorString();
+    }
+
+    PPRINTER_INFO_2W printers_info =
+        reinterpret_cast<PPRINTER_INFO_2W>(printers_info_buffer.get());
+
     proto::Printers message;
 
-    for (PrinterEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    for (DWORD i = 0; i < count; ++i)
     {
         proto::Printers::Item* item = message.add_item();
+        PPRINTER_INFO_2W printer = &printers_info[i];
 
-        item->set_name(enumerator.GetName());
-        item->set_is_default(enumerator.IsDefault());
-        item->set_is_shared(enumerator.IsShared());
-        item->set_share_name(enumerator.GetShareName());
-        item->set_port_name(enumerator.GetPortName());
-        item->set_driver_name(enumerator.GetDriverName());
-        item->set_device_name(enumerator.GetDeviceName());
-        item->set_print_processor(enumerator.GetPrintProcessor());
-        item->set_data_type(enumerator.GetDataType());
-        item->set_server_name(enumerator.GetServerName());
-        item->set_location(enumerator.GetLocation());
-        item->set_comment(enumerator.GetComment());
-        item->set_jobs_count(enumerator.GetJobsCount());
-        item->set_paper_width(enumerator.GetPaperWidth());
-        item->set_paper_length(enumerator.GetPaperLength());
-        item->set_print_quality(enumerator.GetPrintQuality());
+        bool is_default = (printer->pPrinterName != nullptr &&
+                           wcscmp(printer->pPrinterName, default_printer_name) == 0);
 
-        switch (enumerator.GetOrientation())
+        item->set_name(UTF8fromUNICODE(printer->pPrinterName));
+        item->set_is_default(is_default);
+        item->set_is_shared(printer->Attributes & PRINTER_ATTRIBUTE_SHARED);
+        item->set_share_name(UTF8fromUNICODE(printer->pShareName));
+        item->set_port_name(UTF8fromUNICODE(printer->pPortName));
+        item->set_driver_name(UTF8fromUNICODE(printer->pDriverName));
+
+        if (printer->pDevMode)
         {
-            case PrinterEnumerator::Orientation::PORTRAIT:
-                item->set_orientation(proto::Printers::Item::ORIENTATION_PORTRAIT);
-                break;
+            item->set_device_name(UTF8fromUNICODE(printer->pDevMode->dmDeviceName));
+            item->set_paper_width(printer->pDevMode->dmPaperWidth / 10);
+            item->set_paper_length(printer->pDevMode->dmPaperLength / 10);
+            item->set_print_quality(printer->pDevMode->dmPrintQuality);
 
-            case PrinterEnumerator::Orientation::LANDSCAPE:
-                item->set_orientation(proto::Printers::Item::ORIENTATION_LANDSCAPE);
-                break;
+            switch (printer->pDevMode->dmOrientation)
+            {
+                case DMORIENT_PORTRAIT:
+                    item->set_orientation(proto::Printers::Item::ORIENTATION_PORTRAIT);
+                    break;
 
-            default:
-                item->set_orientation(proto::Printers::Item::ORIENTATION_UNKNOWN);
-                break;
+                case DMORIENT_LANDSCAPE:
+                    item->set_orientation(proto::Printers::Item::ORIENTATION_LANDSCAPE);
+                    break;
+
+                default:
+                    break;
+            }
         }
+
+        item->set_print_processor(UTF8fromUNICODE(printer->pPrintProcessor));
+        item->set_data_type(UTF8fromUNICODE(printer->pDatatype));
+        item->set_server_name(UTF8fromUNICODE(printer->pServerName));
+        item->set_location(UTF8fromUNICODE(printer->pLocation));
+        item->set_comment(UTF8fromUNICODE(printer->pComment));
+        item->set_jobs_count(printer->cJobs);
     }
 
     return message.SerializeAsString();
