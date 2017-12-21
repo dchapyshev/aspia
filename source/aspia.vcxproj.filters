@@ -556,9 +556,6 @@
     <ClCompile Include="base\devices\device_enumerator.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="base\user_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="base\user_group_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
@@ -859,9 +856,6 @@
     <ClCompile Include="system_info\category_environment_variables.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
-    <ClCompile Include="system_info\category_user.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
     <ClCompile Include="system_info\category_user.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
@@ -920,6 +914,9 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_driver.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_user.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1507,9 +1504,6 @@
     </ClInclude>
     <ClInclude Include="base\devices\device_enumerator.h">
       <Filter>base\devices</Filter>
-    </ClInclude>
-    <ClInclude Include="base\user_enumerator.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\user_group_enumerator.h">
       <Filter>base</Filter>

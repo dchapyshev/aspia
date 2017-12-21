@@ -5,11 +5,14 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/unicode.h"
 #include "base/datetime.h"
-#include "base/user_enumerator.h"
+#include "base/logging.h"
 #include "system_info/category_user.h"
 #include "system_info/category_user.pb.h"
 #include "ui/resource.h"
+
+#include <lm.h>
 
 namespace aspia {
 
@@ -70,24 +73,43 @@ void CategoryUser::Parse(Table& table, const std::string& data)
 
 std::string CategoryUser::Serialize()
 {
+    PUSER_INFO_3 user_info = nullptr;
+    DWORD total_entries = 0;
+    DWORD entries_read = 0;
+
+    DWORD error_code = NetUserEnum(nullptr, 3,
+                                   FILTER_NORMAL_ACCOUNT,
+                                   reinterpret_cast<LPBYTE*>(&user_info),
+                                   MAX_PREFERRED_LENGTH,
+                                   &entries_read,
+                                   &total_entries,
+                                   nullptr);
+    if (error_code != NERR_Success)
+    {
+        DLOG(WARNING) << "NetUserEnum() failed: " << SystemErrorCodeToString(error_code);
+        return std::string();
+    }
+
     proto::User message;
 
-    for (UserEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    for (DWORD i = 0; i < total_entries; ++i)
     {
         proto::User::Item* item = message.add_item();
 
-        item->set_name(enumerator.GetName());
-        item->set_full_name(enumerator.GetFullName());
-        item->set_comment(enumerator.GetComment());
-        item->set_is_disabled(enumerator.IsDisabled());
-        item->set_is_password_cant_change(enumerator.IsPasswordCantChange());
-        item->set_is_password_expired(enumerator.IsPasswordExpired());
-        item->set_is_dont_expire_password(enumerator.IsDontExpirePassword());
-        item->set_is_lockout(enumerator.IsLockout());
-        item->set_number_logons(enumerator.GetNumberLogons());
-        item->set_bad_password_count(enumerator.GetBadPasswordCount());
-        item->set_last_logon_time(enumerator.GetLastLogonTime());
+        item->set_name(UTF8fromUNICODE(user_info[i].usri3_name));
+        item->set_full_name(UTF8fromUNICODE(user_info[i].usri3_full_name));
+        item->set_comment(UTF8fromUNICODE(user_info[i].usri3_comment));
+        item->set_is_disabled(user_info[i].usri3_flags & UF_ACCOUNTDISABLE);
+        item->set_is_password_cant_change(user_info[i].usri3_flags & UF_PASSWD_CANT_CHANGE);
+        item->set_is_password_expired(user_info[i].usri3_flags & UF_PASSWORD_EXPIRED);
+        item->set_is_dont_expire_password(user_info[i].usri3_flags & UF_DONT_EXPIRE_PASSWD);
+        item->set_is_lockout(user_info[i].usri3_flags & UF_LOCKOUT);
+        item->set_number_logons(user_info[i].usri3_num_logons);
+        item->set_bad_password_count(user_info[i].usri3_bad_pw_count);
+        item->set_last_logon_time(user_info[i].usri3_last_logon);
     }
+
+    NetApiBufferFree(user_info);
 
     return message.SerializeAsString();
 }
