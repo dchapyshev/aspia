@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            system_info/category_update.proto
+// FILE:            system_info/category_wsus.proto
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -11,12 +11,12 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto;
 
-message Update
+message WSUS
 {
     message Item
     {
         string description = 1;
-        string install_date = 2;
+        int64 install_date = 2;
     }
 
     repeated Item item = 1;

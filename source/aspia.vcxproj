@@ -261,6 +261,8 @@
     <ClCompile Include="system_info\category_video_adapter.pb.cc" />
     <ClCompile Include="system_info\category_windows_device.cc" />
     <ClCompile Include="system_info\category_windows_device.pb.cc" />
+    <ClCompile Include="system_info\category_wsus.cc" />
+    <ClCompile Include="system_info\category_wsus.pb.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
@@ -575,6 +577,8 @@
     <ClInclude Include="system_info\category_video_adapter.pb.h" />
     <ClInclude Include="system_info\category_windows_device.h" />
     <ClInclude Include="system_info\category_windows_device.pb.h" />
+    <ClInclude Include="system_info\category_wsus.h" />
+    <ClInclude Include="system_info\category_wsus.pb.h" />
     <ClInclude Include="ui\about_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
@@ -679,6 +683,7 @@
     <None Include="system_info\category_user_group.proto" />
     <None Include="system_info\category_video_adapter.proto" />
     <None Include="system_info\category_windows_device.proto" />
+    <None Include="system_info\category_wsus.proto" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc" />
@@ -897,7 +902,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SetChecksum>true</SetChecksum>
-      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;glog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;glog.lib;gflags.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>

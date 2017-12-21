@@ -907,6 +907,12 @@
     <ClCompile Include="system_info\category_user.cc">
       <Filter>system_info</Filter>
     </ClCompile>
+    <ClCompile Include="system_info\category_wsus.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_wsus.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1853,6 +1859,12 @@
     <ClInclude Include="base\scoped_device_info.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_wsus.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_wsus.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -2021,6 +2033,9 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_driver.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_wsus.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

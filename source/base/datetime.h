@@ -13,8 +13,10 @@
 namespace aspia {
 
 std::wstring TimeToStringW(time_t time);
-
 std::string TimeToString(time_t time);
+
+time_t SystemTimeToUnixTime(const SYSTEMTIME& system_time);
+time_t VariantTimeToUnixTime(double variant_time);
 
 } // namespace aspia
 

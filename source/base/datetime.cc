@@ -9,6 +9,7 @@
 
 #include <clocale>
 #include <ctime>
+#include <oleauto.h>
 
 namespace aspia {
 
@@ -44,6 +45,33 @@ std::string TimeToString(time_t time)
         return std::string();
 
     return string;
+}
+
+time_t SystemTimeToUnixTime(const SYSTEMTIME& system_time)
+{
+    struct tm tm;
+    memset(&tm, 0, sizeof(tm));
+
+    tm.tm_year = system_time.wYear - 1900;
+    tm.tm_mon = system_time.wMonth - 1;
+    tm.tm_mday = system_time.wDay;
+
+    tm.tm_hour = system_time.wHour;
+    tm.tm_min = system_time.wMinute;
+    tm.tm_sec = system_time.wSecond;
+    tm.tm_isdst = -1;
+
+    return mktime(&tm);
+}
+
+time_t VariantTimeToUnixTime(double variant_time)
+{
+    SYSTEMTIME system_time;
+    memset(&system_time, 0, sizeof(system_time));
+
+    VariantTimeToSystemTime(variant_time, &system_time);
+
+    return SystemTimeToUnixTime(system_time);
 }
 
 } // namespace aspia

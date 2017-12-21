@@ -49,6 +49,7 @@
 #include "system_info/category_user_group.h"
 #include "system_info/category_video_adapter.h"
 #include "system_info/category_windows_device.h"
+#include "system_info/category_wsus.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -296,6 +297,7 @@ CategoryList CreateCategoryTree()
     os->mutable_child_list()->emplace_back(std::move(users_and_groups));
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryEnvironmentVariables>());
     os->mutable_child_list()->emplace_back(std::move(event_logs));
+    os->mutable_child_list()->emplace_back(std::make_unique<CategoryWSUS>());
 
     CategoryList tree;
 
@@ -369,6 +371,7 @@ CategoryMap CreateCategoryMap()
 
     emplace_back(std::make_unique<CategoryTaskScheduler>());
     emplace_back(std::make_unique<CategoryEnvironmentVariables>());
+    emplace_back(std::make_unique<CategoryWSUS>());
 
     return map;
 }
