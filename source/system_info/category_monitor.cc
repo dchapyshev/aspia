@@ -99,7 +99,7 @@ void CategoryMonitor::Parse(Table& table, const std::string& data)
         }
 
         if (item.gamma() != 0.0)
-            group.AddParam("Gamma", Value::FormattedString("%.2f", item.gamma()));
+            group.AddParam("Gamma", Value::String(StringPrintf("%.2f", item.gamma())));
 
         if (item.max_horizontal_image_size() != 0)
         {

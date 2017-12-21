@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
@@ -157,6 +158,42 @@ void InfoListCtrl::EndGroup()
     --indent_;
 }
 
+std::wstring InfoListCtrl::ValueToString(const Value& value)
+{
+    switch (value.type())
+    {
+        case Value::Type::BOOL:
+            return value.ToBool() ? L"Yes" : L"No";
+
+        case Value::Type::STRING:
+            return UNICODEfromUTF8(value.ToString().data());
+
+        case Value::Type::INT32:
+            return std::to_wstring(value.ToInt32());
+
+        case Value::Type::UINT32:
+            return std::to_wstring(value.ToUint32());
+
+        case Value::Type::INT64:
+            return std::to_wstring(value.ToInt64());
+
+        case Value::Type::UINT64:
+            return std::to_wstring(value.ToUint64());
+
+        case Value::Type::DOUBLE:
+            return std::to_wstring(value.ToDouble());
+
+        case Value::Type::MEMORY_SIZE:
+            return StringPrintf(L"%.2f", value.ToMemorySize());
+
+        default:
+        {
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            return std::wstring();
+        }
+    }
+}
+
 void InfoListCtrl::AddParam(std::string_view param, const Value& value)
 {
     int icon_index;
@@ -184,12 +221,12 @@ void InfoListCtrl::AddParam(std::string_view param, const Value& value)
 
     const int item_index = InsertItem(&item);
 
-    std::wstring text(UNICODEfromUTF8(value.ToString()));
+    std::wstring text = ValueToString(value);
 
     if (value.HasUnit())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(value.Unit()));
+        text.append(UNICODEfromUTF8(value.Unit().data()));
     }
 
     AddItem(item_index, 1, text.c_str());
@@ -208,12 +245,12 @@ void InfoListCtrl::EndRow()
 
 void InfoListCtrl::AddValue(const Value& value)
 {
-    std::wstring text(UNICODEfromUTF8(value.ToString()));
+    std::wstring text = ValueToString(value);
 
     if (value.HasUnit())
     {
         text.append(L" ");
-        text.append(UNICODEfromUTF8(value.Unit()));
+        text.append(UNICODEfromUTF8(value.Unit().data()));
     }
 
     if (current_column_ == 0)

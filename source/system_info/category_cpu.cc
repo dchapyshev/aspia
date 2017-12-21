@@ -5,10 +5,11 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "system_info/category_cpu.h"
-#include "system_info/category_cpu.pb.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/cpu_info.h"
+#include "system_info/category_cpu.h"
+#include "system_info/category_cpu.pb.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -47,21 +48,23 @@ void CategoryCPU::Parse(Table& table, const std::string& data)
 
     table.AddParam("Brand String", Value::String(message.brand_string()));
     table.AddParam("Vendor", Value::String(message.vendor()));
-    table.AddParam("Stepping", Value::FormattedString("%02Xh", message.stepping()));
-    table.AddParam("Model", Value::FormattedString("%02Xh", message.model()));
-    table.AddParam("Family", Value::FormattedString("%02Xh", message.family()));
+    table.AddParam("Stepping", Value::String(StringPrintf("%02Xh", message.stepping())));
+    table.AddParam("Model", Value::String(StringPrintf("%02Xh", message.model())));
+    table.AddParam("Family", Value::String(StringPrintf("%02Xh", message.family())));
 
     if (message.extended_model())
     {
-        table.AddParam("Extended Model", Value::FormattedString("%02Xh", message.extended_model()));
+        table.AddParam("Extended Model",
+                       Value::String(StringPrintf("%02Xh", message.extended_model())));
     }
 
     if (message.extended_family())
     {
-        table.AddParam("Extended Family", Value::FormattedString("%02Xh", message.extended_family()));
+        table.AddParam("Extended Family",
+                       Value::String(StringPrintf("%02Xh", message.extended_family())));
     }
 
-    table.AddParam("Brand ID", Value::FormattedString("%02Xh", message.brand_id()));
+    table.AddParam("Brand ID", Value::String(StringPrintf("%02Xh", message.brand_id())));
     table.AddParam("Packages", Value::Number(message.packages()));
     table.AddParam("Physical Cores", Value::Number(message.physical_cores()));
     table.AddParam("Logical Cores", Value::Number(message.logical_cores()));

@@ -15,6 +15,7 @@
 
 namespace aspia {
 
+namespace {
 static const char kCssStyle[] =
     "body {"
         "color: #353535;"
@@ -37,6 +38,44 @@ static const char kCssStyle[] =
         "background-color: #DCDCED;"
         "font-weight: bold;"
     "}";
+
+std::string ValueToString(const Value& value)
+{
+    switch (value.type())
+    {
+        case Value::Type::BOOL:
+            return value.ToBool() ? "Yes" : "No";
+
+        case Value::Type::STRING:
+            return value.ToString().data();
+
+        case Value::Type::INT32:
+            return std::to_string(value.ToInt32());
+
+        case Value::Type::UINT32:
+            return std::to_string(value.ToUint32());
+
+        case Value::Type::INT64:
+            return std::to_string(value.ToInt64());
+
+        case Value::Type::UINT64:
+            return std::to_string(value.ToUint64());
+
+        case Value::Type::DOUBLE:
+            return std::to_string(value.ToDouble());
+
+        case Value::Type::MEMORY_SIZE:
+            return std::to_string(value.ToMemorySize());
+
+        default:
+        {
+            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            return std::string();
+        }
+    }
+}
+
+} // namespace
 
 OutputHtmlFile::OutputHtmlFile(std::ofstream file)
     : file_(std::move(file))
@@ -214,7 +253,7 @@ void OutputHtmlFile::AddParam(std::string_view param, const Value& value)
     td1->append_attribute(doc_.allocate_attribute("style", doc_.allocate_string(style.data())));
     td1->value(doc_.allocate_string(param.data()));
 
-    std::string value_with_unit(value.ToString());
+    std::string value_with_unit = ValueToString(value);
 
     if (value.HasUnit())
     {
@@ -255,7 +294,7 @@ void OutputHtmlFile::AddValue(const Value& value)
     DCHECK(table_);
     DCHECK(tr_);
 
-    std::string value_with_unit(value.ToString());
+    std::string value_with_unit = ValueToString(value);
 
     if (value.HasUnit())
     {

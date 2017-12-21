@@ -380,7 +380,7 @@ void CategoryDmiCache::Parse(Table& table, const std::string& data)
         group.AddParam("Mode", Value::String(ModeToString(item.mode())));
 
         if (item.level() != 0)
-            group.AddParam("Level", Value::FormattedString("L%d", item.level()));
+            group.AddParam("Level", Value::String(StringPrintf("L%d", item.level())));
 
         if (item.maximum_size() != 0)
             group.AddParam("Maximum Size", Value::Number(item.maximum_size(), "kB"));

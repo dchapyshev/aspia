@@ -236,12 +236,25 @@ std::string OutputXmlFile::ValueToString(const Value& value)
             return value.ToBool() ? "true" : "false";
 
         case Value::Type::STRING:
+            return std::string(value.ToString());
+
         case Value::Type::INT32:
+            return std::to_string(value.ToInt32());
+
         case Value::Type::UINT32:
+            return std::to_string(value.ToUint32());
+
         case Value::Type::INT64:
+            return std::to_string(value.ToInt64());
+
         case Value::Type::UINT64:
+            return std::to_string(value.ToUint64());
+
         case Value::Type::DOUBLE:
-            return value.ToString();
+            return std::to_string(value.ToDouble());
+
+        case Value::Type::MEMORY_SIZE:
+            return std::to_string(value.ToMemorySize());
 
         default:
         {

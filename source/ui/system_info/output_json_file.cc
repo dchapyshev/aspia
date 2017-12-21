@@ -116,7 +116,7 @@ void OutputJsonFile::AddParam(std::string_view param, const Value& value)
         WriteValue(value);
 
         writer_.Key("unit");
-        writer_.String(value.Unit());
+        writer_.String(value.Unit().data());
 
         writer_.EndObject();
     }
@@ -149,7 +149,7 @@ void OutputJsonFile::AddValue(const Value& value)
         WriteValue(value);
 
         writer_.Key("unit");
-        writer_.String(value.Unit());
+        writer_.String(value.Unit().data());
 
         writer_.EndObject();
     }
@@ -162,7 +162,7 @@ void OutputJsonFile::WriteValue(const Value& value)
     switch (value.type())
     {
         case Value::Type::STRING:
-            writer_.String(value.ToString());
+            writer_.String(value.ToString().data());
             break;
 
         case Value::Type::BOOL:

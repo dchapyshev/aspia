@@ -6,6 +6,7 @@
 //
 
 #include "base/devices/physical_drive_enumerator.h"
+#include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/bitset.h"
 #include "system_info/category_smart.h"
@@ -864,14 +865,13 @@ void CategorySMART::Parse(Table& table, const std::string& data)
 
             Row row = group.AddRow();
 
-            row.AddValue(Value::FormattedString("%02X %s",
-                                                attribute.id(),
-                                                AttributeToString(type, attribute.id())));
+            row.AddValue(Value::String(
+                StringPrintf("%02X %s", attribute.id(), AttributeToString(type, attribute.id()))));
 
             row.AddValue(Value::Number(attribute.threshold()));
             row.AddValue(Value::Number(attribute.value()));
             row.AddValue(Value::Number(attribute.worst_value()));
-            row.AddValue(Value::FormattedString("%012llX", attribute.raw()));
+            row.AddValue(Value::String(StringPrintf("%012llX", attribute.raw())));
 
             row.AddValue(Value::String(GetStatusString(attribute.value(),
                                                        attribute.threshold(),

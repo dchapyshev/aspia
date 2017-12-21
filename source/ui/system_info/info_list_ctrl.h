@@ -51,6 +51,7 @@ private:
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    std::wstring ValueToString(const Value& value);
 
     enum IconIndex
     {

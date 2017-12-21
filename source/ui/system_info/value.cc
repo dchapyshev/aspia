@@ -6,6 +6,7 @@
 //
 
 #include "base/strings/string_printf.h"
+#include "base/strings/string_util.h"
 #include "base/logging.h"
 #include "ui/system_info/value.h"
 
@@ -89,38 +90,13 @@ Value& Value::operator=(Value&& other)
 // static
 Value Value::EmptyString()
 {
-    return Value(Type::STRING, std::string());
+    return Value(Type::STRING, ::aspia::EmptyString());
 }
 
 // static
-Value Value::String(const char* value)
-{
-    DCHECK(value != nullptr);
-    return Value(Type::STRING, std::string(value));
-}
-
-// static
-Value Value::String(const std::string& value)
+Value Value::String(std::string_view value)
 {
     return Value(Type::STRING, value);
-}
-
-// static
-Value Value::String(std::string&& value)
-{
-    return Value(Type::STRING, std::move(value));
-}
-
-// static
-Value Value::FormattedString(const char* format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    std::string out = StringPrintfV(format, args);
-    va_end(args);
-
-    return Value(Type::STRING, std::move(out));
 }
 
 // static
@@ -200,38 +176,10 @@ Value::Type Value::type() const
     return type_;
 }
 
-std::string Value::ToString() const
+std::string_view Value::ToString() const
 {
-    switch (type())
-    {
-        case Type::STRING:
-            return std::get<std::string>(value_);
-
-        case Type::BOOL:
-            return ToBool() ? "Yes" : "No";
-
-        case Type::UINT32:
-            return std::to_string(ToUint32());
-
-        case Type::INT32:
-            return std::to_string(ToInt32());
-
-        case Type::UINT64:
-            return std::to_string(ToUint64());
-
-        case Type::INT64:
-            return std::to_string(ToInt64());
-
-        case Type::DOUBLE:
-            return std::to_string(ToDouble());
-
-        case Type::MEMORY_SIZE:
-            return StringPrintf("%.2f", ToMemorySize());
-
-        default:
-            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(type());
-            return std::string();
-    }
+    DCHECK(type() == Type::STRING);
+    return std::get<std::string_view>(value_);
 }
 
 bool Value::ToBool() const
@@ -276,7 +224,7 @@ double Value::ToMemorySize() const
     return std::get<double>(value_);
 }
 
-const std::string& Value::Unit() const
+std::string_view Value::Unit() const
 {
     return unit_;
 }
