@@ -164,7 +164,6 @@
     <ClCompile Include="network\network_channel_tcp.cc" />
     <ClCompile Include="network\network_client_tcp.cc" />
     <ClCompile Include="network\network_server_tcp.cc" />
-    <ClCompile Include="protocol\category_group_software.cc" />
     <ClCompile Include="protocol\clipboard.cc" />
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
@@ -181,7 +180,6 @@
     <ClCompile Include="proto\power_session_message.pb.cc" />
     <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
-    <ClCompile Include="proto\system_info_session_message.pb.cc" />
     <ClCompile Include="system_info\category.cc" />
     <ClCompile Include="system_info\category_application.cc" />
     <ClCompile Include="system_info\category_application.pb.cc" />
@@ -215,6 +213,8 @@
     <ClCompile Include="system_info\category_dmi_system.pb.cc" />
     <ClCompile Include="system_info\category_dmi_system_slot.cc" />
     <ClCompile Include="system_info\category_dmi_system_slot.pb.cc" />
+    <ClCompile Include="system_info\category_driver.cc" />
+    <ClCompile Include="system_info\category_driver.pb.cc" />
     <ClCompile Include="system_info\category_environment_variables.cc" />
     <ClCompile Include="system_info\category_environment_variables.pb.cc" />
     <ClCompile Include="system_info\category_eventlog_application.cc" />
@@ -246,6 +246,8 @@
     <ClCompile Include="system_info\category_ras.pb.cc" />
     <ClCompile Include="system_info\category_route.cc" />
     <ClCompile Include="system_info\category_route.pb.cc" />
+    <ClCompile Include="system_info\category_service.cc" />
+    <ClCompile Include="system_info\category_service.pb.cc" />
     <ClCompile Include="system_info\category_session.cc" />
     <ClCompile Include="system_info\category_session.pb.cc" />
     <ClCompile Include="system_info\category_share.cc" />
@@ -478,7 +480,6 @@
     <ClInclude Include="network\network_channel_tcp.h" />
     <ClInclude Include="network\network_client_tcp.h" />
     <ClInclude Include="network\network_server_tcp.h" />
-    <ClInclude Include="protocol\category_group_software.h" />
     <ClInclude Include="protocol\clipboard.h" />
     <ClInclude Include="protocol\filesystem.h" />
     <ClInclude Include="protocol\file_depacketizer.h" />
@@ -497,7 +498,6 @@
     <ClInclude Include="proto\power_session_message.pb.h" />
     <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
-    <ClInclude Include="proto\system_info_session_message.pb.h" />
     <ClInclude Include="system_info\category.h" />
     <ClInclude Include="system_info\category_application.h" />
     <ClInclude Include="system_info\category_application.pb.h" />
@@ -531,6 +531,8 @@
     <ClInclude Include="system_info\category_dmi_system.pb.h" />
     <ClInclude Include="system_info\category_dmi_system_slot.h" />
     <ClInclude Include="system_info\category_dmi_system_slot.pb.h" />
+    <ClInclude Include="system_info\category_driver.h" />
+    <ClInclude Include="system_info\category_driver.pb.h" />
     <ClInclude Include="system_info\category_environment_variables.h" />
     <ClInclude Include="system_info\category_environment_variables.pb.h" />
     <ClInclude Include="system_info\category_eventlog_application.h" />
@@ -562,6 +564,8 @@
     <ClInclude Include="system_info\category_ras.pb.h" />
     <ClInclude Include="system_info\category_route.h" />
     <ClInclude Include="system_info\category_route.pb.h" />
+    <ClInclude Include="system_info\category_service.h" />
+    <ClInclude Include="system_info\category_service.pb.h" />
     <ClInclude Include="system_info\category_session.h" />
     <ClInclude Include="system_info\category_session.pb.h" />
     <ClInclude Include="system_info\category_share.h" />
@@ -641,7 +645,6 @@
     <None Include="proto\power_session_message.proto" />
     <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
-    <None Include="proto\system_info_session_message.proto" />
     <None Include="system_info\category_application.proto" />
     <None Include="system_info\category_ata.proto" />
     <None Include="system_info\category_connection.proto" />
@@ -658,6 +661,7 @@
     <None Include="system_info\category_dmi_processor.proto" />
     <None Include="system_info\category_dmi_system.proto" />
     <None Include="system_info\category_dmi_system_slot.proto" />
+    <None Include="system_info\category_driver.proto" />
     <None Include="system_info\category_environment_variables.proto" />
     <None Include="system_info\category_eventlog_application.proto" />
     <None Include="system_info\category_eventlog_security.proto" />
@@ -674,6 +678,7 @@
     <None Include="system_info\category_process.proto" />
     <None Include="system_info\category_ras.proto" />
     <None Include="system_info\category_route.proto" />
+    <None Include="system_info\category_service.proto" />
     <None Include="system_info\category_session.proto" />
     <None Include="system_info\category_share.proto" />
     <None Include="system_info\category_smart.proto" />

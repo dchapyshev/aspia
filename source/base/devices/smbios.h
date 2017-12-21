@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__DEVICES__SMBIOS_H
 #define _ASPIA_BASE__DEVICES__SMBIOS_H
 
-#include "proto/system_info_session_message.pb.h"
 #include "base/macros.h"
 
 #include <memory>

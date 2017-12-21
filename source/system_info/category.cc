@@ -6,8 +6,6 @@
 //
 
 #include "base/logging.h"
-#include "protocol/category_group_software.h"
-
 #include "system_info/category_application.h"
 #include "system_info/category_ata.h"
 #include "system_info/category_connection.h"
@@ -24,6 +22,7 @@
 #include "system_info/category_dmi_processor.h"
 #include "system_info/category_dmi_system.h"
 #include "system_info/category_dmi_system_slot.h"
+#include "system_info/category_driver.h"
 #include "system_info/category_environment_variables.h"
 #include "system_info/category_eventlog_application.h"
 #include "system_info/category_eventlog_security.h"
@@ -39,6 +38,7 @@
 #include "system_info/category_process.h"
 #include "system_info/category_ras.h"
 #include "system_info/category_route.h"
+#include "system_info/category_service.h"
 #include "system_info/category_session.h"
 #include "system_info/category_share.h"
 #include "system_info/category_logical_drive.h"
@@ -101,6 +101,18 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupHardware);
+};
+
+class CategoryGroupSoftware : public CategoryGroup
+{
+public:
+    CategoryGroupSoftware() = default;
+
+    const char* Name() const final { return "Software"; }
+    IconId Icon() const final { return IDI_SOFTWARE; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupSoftware);
 };
 
 class CategoryGroupNetwork : public CategoryGroup
@@ -252,8 +264,8 @@ CategoryList CreateCategoryTree()
 
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryApplication>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryUpdate>());
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryServices>());
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryDrivers>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryService>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryDriver>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryProcess>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryLicense>());
 
@@ -335,8 +347,8 @@ CategoryMap CreateCategoryMap()
 
     emplace_back(std::make_unique<CategoryApplication>());
     emplace_back(std::make_unique<CategoryUpdate>());
-    emplace_back(std::make_unique<CategoryServices>());
-    emplace_back(std::make_unique<CategoryDrivers>());
+    emplace_back(std::make_unique<CategoryService>());
+    emplace_back(std::make_unique<CategoryDriver>());
     emplace_back(std::make_unique<CategoryProcess>());
     emplace_back(std::make_unique<CategoryLicense>());
 
