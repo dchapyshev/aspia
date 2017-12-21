@@ -183,6 +183,8 @@
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="proto\system_info_session_message.pb.cc" />
     <ClCompile Include="system_info\category.cc" />
+    <ClCompile Include="system_info\category_application.cc" />
+    <ClCompile Include="system_info\category_application.pb.cc" />
     <ClCompile Include="system_info\category_ata.cc" />
     <ClCompile Include="system_info\category_ata.pb.cc" />
     <ClCompile Include="system_info\category_connection.cc" />
@@ -220,6 +222,8 @@
     <ClCompile Include="system_info\category_eventlog_security.pb.cc" />
     <ClCompile Include="system_info\category_eventlog_system.cc" />
     <ClCompile Include="system_info\category_eventlog_system.pb.cc" />
+    <ClCompile Include="system_info\category_license.cc" />
+    <ClCompile Include="system_info\category_license.pb.cc" />
     <ClCompile Include="system_info\category_logical_drive.cc" />
     <ClCompile Include="system_info\category_logical_drive.pb.cc" />
     <ClCompile Include="system_info\category_memory.cc" />
@@ -250,6 +254,8 @@
     <ClCompile Include="system_info\category_smart.pb.cc" />
     <ClCompile Include="system_info\category_task_scheduler.cc" />
     <ClCompile Include="system_info\category_task_scheduler.pb.cc" />
+    <ClCompile Include="system_info\category_update.cc" />
+    <ClCompile Include="system_info\category_update.pb.cc" />
     <ClCompile Include="system_info\category_user.cc" />
     <ClCompile Include="system_info\category_user.pb.cc" />
     <ClCompile Include="system_info\category_user_group.cc" />
@@ -493,6 +499,8 @@
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="proto\system_info_session_message.pb.h" />
     <ClInclude Include="system_info\category.h" />
+    <ClInclude Include="system_info\category_application.h" />
+    <ClInclude Include="system_info\category_application.pb.h" />
     <ClInclude Include="system_info\category_ata.h" />
     <ClInclude Include="system_info\category_ata.pb.h" />
     <ClInclude Include="system_info\category_connection.h" />
@@ -530,6 +538,8 @@
     <ClInclude Include="system_info\category_eventlog_security.pb.h" />
     <ClInclude Include="system_info\category_eventlog_system.h" />
     <ClInclude Include="system_info\category_eventlog_system.pb.h" />
+    <ClInclude Include="system_info\category_license.h" />
+    <ClInclude Include="system_info\category_license.pb.h" />
     <ClInclude Include="system_info\category_logical_drive.h" />
     <ClInclude Include="system_info\category_logical_drive.pb.h" />
     <ClInclude Include="system_info\category_memory.h" />
@@ -560,6 +570,8 @@
     <ClInclude Include="system_info\category_smart.pb.h" />
     <ClInclude Include="system_info\category_task_scheduler.h" />
     <ClInclude Include="system_info\category_task_scheduler.pb.h" />
+    <ClInclude Include="system_info\category_update.h" />
+    <ClInclude Include="system_info\category_update.pb.h" />
     <ClInclude Include="system_info\category_user.h" />
     <ClInclude Include="system_info\category_user.pb.h" />
     <ClInclude Include="system_info\category_user_group.h" />
@@ -630,6 +642,7 @@
     <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
     <None Include="proto\system_info_session_message.proto" />
+    <None Include="system_info\category_application.proto" />
     <None Include="system_info\category_ata.proto" />
     <None Include="system_info\category_connection.proto" />
     <None Include="system_info\category_cpu.proto" />
@@ -649,6 +662,7 @@
     <None Include="system_info\category_eventlog_application.proto" />
     <None Include="system_info\category_eventlog_security.proto" />
     <None Include="system_info\category_eventlog_system.proto" />
+    <None Include="system_info\category_license.proto" />
     <None Include="system_info\category_logical_drive.proto" />
     <None Include="system_info\category_memory.proto" />
     <None Include="system_info\category_monitor.proto" />
@@ -664,6 +678,7 @@
     <None Include="system_info\category_share.proto" />
     <None Include="system_info\category_smart.proto" />
     <None Include="system_info\category_task_scheduler.proto" />
+    <None Include="system_info\category_update.proto" />
     <None Include="system_info\category_user.proto" />
     <None Include="system_info\category_user_group.proto" />
     <None Include="system_info\category_video_adapter.proto" />

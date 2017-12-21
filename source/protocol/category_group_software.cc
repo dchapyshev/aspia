@@ -15,100 +15,6 @@
 namespace aspia {
 
 //
-// CategoryPrograms
-//
-
-const char* CategoryPrograms::Name() const
-{
-    return "Programs";
-}
-
-Category::IconId CategoryPrograms::Icon() const
-{
-    return IDI_APPLICATIONS;
-}
-
-const char* CategoryPrograms::Guid() const
-{
-    return "{606C70BE-0C6C-4CB6-90E6-D374760FC5EE}";
-}
-
-void CategoryPrograms::Parse(Table& table, const std::string& data)
-{
-    proto::Programs message;
-
-    if (!message.ParseFromString(data))
-        return;
-
-    table.AddColumns(ColumnList::Create()
-                     .AddColumn("Name", 200)
-                     .AddColumn("Version", 100)
-                     .AddColumn("Publisher", 100)
-                     .AddColumn("Install Date", 80)
-                     .AddColumn("Install Location", 150));
-
-    for (int index = 0; index < message.item_size(); ++index)
-    {
-        const proto::Programs::Item& item = message.item(index);
-
-        Row row = table.AddRow();
-        row.AddValue(Value::String(item.name()));
-        row.AddValue(Value::String(item.version()));
-        row.AddValue(Value::String(item.publisher()));
-        row.AddValue(Value::String(item.install_date()));
-        row.AddValue(Value::String(item.install_location()));
-    }
-}
-
-std::string CategoryPrograms::Serialize()
-{
-    proto::Programs message;
-
-    for (ProgramEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
-    {
-        proto::Programs::Item* item = message.add_item();
-
-        item->set_name(enumerator.GetName());
-        item->set_version(enumerator.GetVersion());
-        item->set_publisher(enumerator.GetPublisher());
-        item->set_install_date(enumerator.GetInstallDate());
-        item->set_install_location(enumerator.GetInstallLocation());
-    }
-
-    return message.SerializeAsString();
-}
-
-//
-// CategoryUpdates
-//
-
-const char* CategoryUpdates::Name() const
-{
-    return "Updates";
-}
-
-Category::IconId CategoryUpdates::Icon() const
-{
-    return IDI_APPLICATIONS;
-}
-
-const char* CategoryUpdates::Guid() const
-{
-    return "{3E160E27-BE2E-45DB-8292-C3786C9533AB}";
-}
-
-void CategoryUpdates::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryUpdates::Serialize()
-{
-    // TODO
-    return std::string();
-}
-
-//
 // CategoryServices
 //
 
@@ -427,36 +333,6 @@ std::string CategoryDrivers::Serialize()
     }
 
     return message.SerializeAsString();
-}
-
-//
-// CategoryLicenses
-//
-
-const char* CategoryLicenses::Name() const
-{
-    return "Licenses";
-}
-
-Category::IconId CategoryLicenses::Icon() const
-{
-    return IDI_LICENSE_KEY;
-}
-
-const char* CategoryLicenses::Guid() const
-{
-    return "{6BD88575-9D23-44BC-8A49-64D94CC3EE48}";
-}
-
-void CategoryLicenses::Parse(Table& /* table */, const std::string& /* data */)
-{
-    // TODO
-}
-
-std::string CategoryLicenses::Serialize()
-{
-    // TODO
-    return std::string();
 }
 
 //

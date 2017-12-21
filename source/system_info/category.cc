@@ -8,6 +8,7 @@
 #include "base/logging.h"
 #include "protocol/category_group_software.h"
 
+#include "system_info/category_application.h"
 #include "system_info/category_ata.h"
 #include "system_info/category_connection.h"
 #include "system_info/category_cpu.h"
@@ -27,6 +28,7 @@
 #include "system_info/category_eventlog_application.h"
 #include "system_info/category_eventlog_security.h"
 #include "system_info/category_eventlog_system.h"
+#include "system_info/category_license.h"
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
 #include "system_info/category_network_card.h"
@@ -42,6 +44,7 @@
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_task_scheduler.h"
+#include "system_info/category_update.h"
 #include "system_info/category_user.h"
 #include "system_info/category_user_group.h"
 #include "system_info/category_video_adapter.h"
@@ -247,12 +250,12 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> software = std::make_unique<CategoryGroupSoftware>();
 
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryPrograms>());
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryUpdates>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryApplication>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryUpdate>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryServices>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryDrivers>());
     software->mutable_child_list()->emplace_back(std::make_unique<CategoryProcess>());
-    software->mutable_child_list()->emplace_back(std::make_unique<CategoryLicenses>());
+    software->mutable_child_list()->emplace_back(std::make_unique<CategoryLicense>());
 
     std::unique_ptr<CategoryGroup> network = std::make_unique<CategoryGroupNetwork>();
 
@@ -330,12 +333,12 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryPowerOptions>());
     emplace_back(std::make_unique<CategoryPrinter>());
 
-    emplace_back(std::make_unique<CategoryPrograms>());
-    emplace_back(std::make_unique<CategoryUpdates>());
+    emplace_back(std::make_unique<CategoryApplication>());
+    emplace_back(std::make_unique<CategoryUpdate>());
     emplace_back(std::make_unique<CategoryServices>());
     emplace_back(std::make_unique<CategoryDrivers>());
     emplace_back(std::make_unique<CategoryProcess>());
-    emplace_back(std::make_unique<CategoryLicenses>());
+    emplace_back(std::make_unique<CategoryLicense>());
 
     emplace_back(std::make_unique<CategoryNetworkCard>());
     emplace_back(std::make_unique<CategoryRAS>());
