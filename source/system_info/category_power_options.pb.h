@@ -77,6 +77,22 @@ const PowerOptions_Battery_State PowerOptions_Battery_State_State_MIN = PowerOpt
 const PowerOptions_Battery_State PowerOptions_Battery_State_State_MAX = PowerOptions_Battery_State_STATE_POWER_ONLINE;
 const int PowerOptions_Battery_State_State_ARRAYSIZE = PowerOptions_Battery_State_State_MAX + 1;
 
+enum PowerOptions_Battery_Type {
+  PowerOptions_Battery_Type_TYPE_UNKNOWN = 0,
+  PowerOptions_Battery_Type_TYPE_PBAC = 1,
+  PowerOptions_Battery_Type_TYPE_LION = 2,
+  PowerOptions_Battery_Type_TYPE_NICD = 3,
+  PowerOptions_Battery_Type_TYPE_NIMH = 4,
+  PowerOptions_Battery_Type_TYPE_NIZN = 5,
+  PowerOptions_Battery_Type_TYPE_RAM = 6,
+  PowerOptions_Battery_Type_PowerOptions_Battery_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PowerOptions_Battery_Type_PowerOptions_Battery_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PowerOptions_Battery_Type_IsValid(int value);
+const PowerOptions_Battery_Type PowerOptions_Battery_Type_Type_MIN = PowerOptions_Battery_Type_TYPE_UNKNOWN;
+const PowerOptions_Battery_Type PowerOptions_Battery_Type_Type_MAX = PowerOptions_Battery_Type_TYPE_RAM;
+const int PowerOptions_Battery_Type_Type_ARRAYSIZE = PowerOptions_Battery_Type_Type_MAX + 1;
+
 enum PowerOptions_PowerSource {
   PowerOptions_PowerSource_POWER_SOURCE_UNKNOWN = 0,
   PowerOptions_PowerSource_POWER_SOURCE_DC_BATTERY = 1,
@@ -205,6 +221,31 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
   static const int State_ARRAYSIZE =
     PowerOptions_Battery_State_State_ARRAYSIZE;
 
+  typedef PowerOptions_Battery_Type Type;
+  static const Type TYPE_UNKNOWN =
+    PowerOptions_Battery_Type_TYPE_UNKNOWN;
+  static const Type TYPE_PBAC =
+    PowerOptions_Battery_Type_TYPE_PBAC;
+  static const Type TYPE_LION =
+    PowerOptions_Battery_Type_TYPE_LION;
+  static const Type TYPE_NICD =
+    PowerOptions_Battery_Type_TYPE_NICD;
+  static const Type TYPE_NIMH =
+    PowerOptions_Battery_Type_TYPE_NIMH;
+  static const Type TYPE_NIZN =
+    PowerOptions_Battery_Type_TYPE_NIZN;
+  static const Type TYPE_RAM =
+    PowerOptions_Battery_Type_TYPE_RAM;
+  static inline bool Type_IsValid(int value) {
+    return PowerOptions_Battery_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    PowerOptions_Battery_Type_Type_MIN;
+  static const Type Type_MAX =
+    PowerOptions_Battery_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    PowerOptions_Battery_Type_Type_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
   // string device_name = 1;
@@ -291,25 +332,17 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
   ::std::string* release_temperature();
   void set_allocated_temperature(::std::string* temperature);
 
-  // string type = 8;
-  void clear_type();
-  static const int kTypeFieldNumber = 8;
-  const ::std::string& type() const;
-  void set_type(const ::std::string& value);
-  #if LANG_CXX11
-  void set_type(::std::string&& value);
-  #endif
-  void set_type(const char* value);
-  void set_type(const char* value, size_t size);
-  ::std::string* mutable_type();
-  ::std::string* release_type();
-  void set_allocated_type(::std::string* type);
-
   // int32 design_capacity = 7;
   void clear_design_capacity();
   static const int kDesignCapacityFieldNumber = 7;
   ::google::protobuf::int32 design_capacity() const;
   void set_design_capacity(::google::protobuf::int32 value);
+
+  // .aspia.proto.PowerOptions.Battery.Type type = 8;
+  void clear_type();
+  static const int kTypeFieldNumber = 8;
+  ::aspia::proto::PowerOptions_Battery_Type type() const;
+  void set_type(::aspia::proto::PowerOptions_Battery_Type value);
 
   // int32 full_charged_capacity = 9;
   void clear_full_charged_capacity();
@@ -351,8 +384,8 @@ class PowerOptions_Battery : public ::google::protobuf::MessageLite /* @@protoc_
   ::google::protobuf::internal::ArenaStringPtr unique_id_;
   ::google::protobuf::internal::ArenaStringPtr serial_number_;
   ::google::protobuf::internal::ArenaStringPtr temperature_;
-  ::google::protobuf::internal::ArenaStringPtr type_;
   ::google::protobuf::int32 design_capacity_;
+  int type_;
   ::google::protobuf::int32 full_charged_capacity_;
   ::google::protobuf::int32 depreciation_;
   ::google::protobuf::int32 current_capacity_;
@@ -885,57 +918,18 @@ inline void PowerOptions_Battery::set_design_capacity(::google::protobuf::int32 
   // @@protoc_insertion_point(field_set:aspia.proto.PowerOptions.Battery.design_capacity)
 }
 
-// string type = 8;
+// .aspia.proto.PowerOptions.Battery.Type type = 8;
 inline void PowerOptions_Battery::clear_type() {
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_ = 0;
 }
-inline const ::std::string& PowerOptions_Battery::type() const {
+inline ::aspia::proto::PowerOptions_Battery_Type PowerOptions_Battery::type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.PowerOptions.Battery.type)
-  return type_.GetNoArena();
+  return static_cast< ::aspia::proto::PowerOptions_Battery_Type >(type_);
 }
-inline void PowerOptions_Battery::set_type(const ::std::string& value) {
+inline void PowerOptions_Battery::set_type(::aspia::proto::PowerOptions_Battery_Type value) {
   
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.PowerOptions.Battery.type)
-}
-#if LANG_CXX11
-inline void PowerOptions_Battery::set_type(::std::string&& value) {
-  
-  type_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.PowerOptions.Battery.type)
-}
-#endif
-inline void PowerOptions_Battery::set_type(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.PowerOptions.Battery.type)
-}
-inline void PowerOptions_Battery::set_type(const char* value, size_t size) {
-  
-  type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.PowerOptions.Battery.type)
-}
-inline ::std::string* PowerOptions_Battery::mutable_type() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.PowerOptions.Battery.type)
-  return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* PowerOptions_Battery::release_type() {
-  // @@protoc_insertion_point(field_release:aspia.proto.PowerOptions.Battery.type)
-  
-  return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void PowerOptions_Battery::set_allocated_type(::std::string* type) {
-  if (type != NULL) {
-    
-  } else {
-    
-  }
-  type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.PowerOptions.Battery.type)
 }
 
 // int32 full_charged_capacity = 9;
@@ -1127,6 +1121,7 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_Battery_State> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::PowerOptions_Battery_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_PowerSource> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::PowerOptions_BatteryStatus> : ::google::protobuf::internal::true_type {};
 

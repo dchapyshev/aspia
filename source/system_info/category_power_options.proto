@@ -41,6 +41,17 @@ message PowerOptions
             STATE_POWER_ONLINE = 8;
         }
 
+        enum Type
+        {
+            TYPE_UNKNOWN = 0;
+            TYPE_PBAC    = 1;
+            TYPE_LION    = 2;
+            TYPE_NICD    = 3;
+            TYPE_NIMH    = 4;
+            TYPE_NIZN    = 5;
+            TYPE_RAM     = 6;
+        }
+
         string device_name          = 1;
         string manufacturer         = 2;
         string manufacture_date     = 3;
@@ -48,7 +59,7 @@ message PowerOptions
         string serial_number        = 5;
         string temperature          = 6;
         int32 design_capacity       = 7;
-        string type                 = 8;
+        Type type                   = 8;
         int32 full_charged_capacity = 9;
         int32 depreciation          = 10;
         int32 current_capacity      = 11;

@@ -100,6 +100,33 @@ const PowerOptions_Battery_State PowerOptions_Battery::State_MIN;
 const PowerOptions_Battery_State PowerOptions_Battery::State_MAX;
 const int PowerOptions_Battery::State_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool PowerOptions_Battery_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_UNKNOWN;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_PBAC;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_LION;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_NICD;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_NIMH;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_NIZN;
+const PowerOptions_Battery_Type PowerOptions_Battery::TYPE_RAM;
+const PowerOptions_Battery_Type PowerOptions_Battery::Type_MIN;
+const PowerOptions_Battery_Type PowerOptions_Battery::Type_MAX;
+const int PowerOptions_Battery::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool PowerOptions_PowerSource_IsValid(int value) {
   switch (value) {
     case 0:
@@ -202,10 +229,6 @@ PowerOptions_Battery::PowerOptions_Battery(const PowerOptions_Battery& from)
   if (from.temperature().size() > 0) {
     temperature_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.temperature_);
   }
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.type().size() > 0) {
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
   ::memcpy(&design_capacity_, &from.design_capacity_,
     static_cast<size_t>(reinterpret_cast<char*>(&state_) -
     reinterpret_cast<char*>(&design_capacity_)) + sizeof(state_));
@@ -219,7 +242,6 @@ void PowerOptions_Battery::SharedCtor() {
   unique_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   temperature_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&design_capacity_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&state_) -
       reinterpret_cast<char*>(&design_capacity_)) + sizeof(state_));
@@ -238,7 +260,6 @@ void PowerOptions_Battery::SharedDtor() {
   unique_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   temperature_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void PowerOptions_Battery::SetCachedSize(int size) const {
@@ -271,7 +292,6 @@ void PowerOptions_Battery::Clear() {
   unique_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   serial_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   temperature_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&design_capacity_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&state_) -
       reinterpret_cast<char*>(&design_capacity_)) + sizeof(state_));
@@ -404,16 +424,15 @@ bool PowerOptions_Battery::MergePartialFromCodedStream(
         break;
       }
 
-      // string type = 8;
+      // .aspia.proto.PowerOptions.Battery.Type type = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->type().data(), static_cast<int>(this->type().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.PowerOptions.Battery.type"));
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::PowerOptions_Battery_Type >(value));
         } else {
           goto handle_unusual;
         }
@@ -581,13 +600,9 @@ void PowerOptions_Battery::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->design_capacity(), output);
   }
 
-  // string type = 8;
-  if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), static_cast<int>(this->type().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.PowerOptions.Battery.type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+  // .aspia.proto.PowerOptions.Battery.Type type = 8;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
       8, this->type(), output);
   }
 
@@ -669,18 +684,17 @@ size_t PowerOptions_Battery::ByteSizeLong() const {
         this->temperature());
   }
 
-  // string type = 8;
-  if (this->type().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->type());
-  }
-
   // int32 design_capacity = 7;
   if (this->design_capacity() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->design_capacity());
+  }
+
+  // .aspia.proto.PowerOptions.Battery.Type type = 8;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
   }
 
   // int32 full_charged_capacity = 9;
@@ -761,12 +775,11 @@ void PowerOptions_Battery::MergeFrom(const PowerOptions_Battery& from) {
 
     temperature_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.temperature_);
   }
-  if (from.type().size() > 0) {
-
-    type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.type_);
-  }
   if (from.design_capacity() != 0) {
     set_design_capacity(from.design_capacity());
+  }
+  if (from.type() != 0) {
+    set_type(from.type());
   }
   if (from.full_charged_capacity() != 0) {
     set_full_charged_capacity(from.full_charged_capacity());
@@ -808,8 +821,8 @@ void PowerOptions_Battery::InternalSwap(PowerOptions_Battery* other) {
   unique_id_.Swap(&other->unique_id_);
   serial_number_.Swap(&other->serial_number_);
   temperature_.Swap(&other->temperature_);
-  type_.Swap(&other->type_);
   swap(design_capacity_, other->design_capacity_);
+  swap(type_, other->type_);
   swap(full_charged_capacity_, other->full_charged_capacity_);
   swap(depreciation_, other->depreciation_);
   swap(current_capacity_, other->current_capacity_);

@@ -31,7 +31,6 @@
     <ClCompile Include="base\cpu_info.cc" />
     <ClCompile Include="base\datetime.cc" />
     <ClCompile Include="base\desktop.cc" />
-    <ClCompile Include="base\devices\battery_enumerator.cc" />
     <ClCompile Include="base\devices\device.cc" />
     <ClCompile Include="base\devices\device_enumerator.cc" />
     <ClCompile Include="base\devices\edid.cc" />
@@ -312,7 +311,6 @@
     <ClInclude Include="base\cpu_info.h" />
     <ClInclude Include="base\datetime.h" />
     <ClInclude Include="base\desktop.h" />
-    <ClInclude Include="base\devices\battery_enumerator.h" />
     <ClInclude Include="base\devices\device.h" />
     <ClInclude Include="base\devices\device_enumerator.h" />
     <ClInclude Include="base\devices\edid.h" />
@@ -356,6 +354,7 @@
     <ClInclude Include="base\scoped_clipboard.h" />
     <ClInclude Include="base\scoped_comptr.h" />
     <ClInclude Include="base\scoped_com_initializer.h" />
+    <ClInclude Include="base\scoped_device_info.h" />
     <ClInclude Include="base\scoped_gdi_object.h" />
     <ClInclude Include="base\scoped_hdc.h" />
     <ClInclude Include="base\scoped_hglobal.h" />

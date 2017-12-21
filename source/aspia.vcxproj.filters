@@ -589,9 +589,6 @@
     <ClCompile Include="ui\status_code.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="base\devices\battery_enumerator.cc">
-      <Filter>base\devices</Filter>
-    </ClCompile>
     <ClCompile Include="base\devices\edid.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
@@ -1529,9 +1526,6 @@
     <ClInclude Include="base\devices\smbios.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="base\devices\battery_enumerator.h">
-      <Filter>base\devices</Filter>
-    </ClInclude>
     <ClInclude Include="base\devices\edid.h">
       <Filter>base\devices</Filter>
     </ClInclude>
@@ -1855,6 +1849,9 @@
     </ClInclude>
     <ClInclude Include="system_info\category_driver.pb.h">
       <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="base\scoped_device_info.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,13 +5,328 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/devices/battery_enumerator.h"
+#include "base/devices/device.h"
 #include "base/strings/string_printf.h"
+#include "base/strings/unicode.h"
+#include "base/scoped_device_info.h"
+#include "base/logging.h"
 #include "system_info/category_power_options.h"
 #include "system_info/category_power_options.pb.h"
 #include "ui/resource.h"
 
+#include <batclass.h>
+#include <winioctl.h>
+#include <devguid.h>
+
 namespace aspia {
+
+namespace {
+
+bool GetBatteryTag(Device& battery, ULONG& tag)
+{
+    ULONG bytes_returned;
+    ULONG input_buffer = 0;
+    ULONG output_buffer = 0;
+
+    if (!battery.IoControl(IOCTL_BATTERY_QUERY_TAG,
+                           &input_buffer, sizeof(input_buffer),
+                           &output_buffer, sizeof(output_buffer),
+                           &bytes_returned))
+    {
+        return false;
+    }
+
+    tag = output_buffer;
+    return true;
+}
+
+
+bool GetBatteryInformation(Device& battery,
+                           ULONG tag,
+                           BATTERY_QUERY_INFORMATION_LEVEL level,
+                           LPVOID buffer,
+                           ULONG buffer_size)
+{
+    BATTERY_QUERY_INFORMATION battery_info;
+
+    memset(&battery_info, 0, sizeof(battery_info));
+    battery_info.BatteryTag = tag;
+    battery_info.InformationLevel = level;
+
+    ULONG bytes_returned;
+
+    return battery.IoControl(IOCTL_BATTERY_QUERY_INFORMATION,
+                             &battery_info, sizeof(battery_info),
+                             buffer, buffer_size,
+                             &bytes_returned);
+}
+
+bool GetBatteryStatus(Device& battery, ULONG tag, BATTERY_STATUS& status)
+{
+    BATTERY_WAIT_STATUS status_request;
+    memset(&status_request, 0, sizeof(status_request));
+    status_request.BatteryTag = tag;
+
+    BATTERY_STATUS status_reply;
+    memset(&status_reply, 0, sizeof(status_reply));
+
+    DWORD bytes_returned = 0;
+
+    if (!battery.IoControl(IOCTL_BATTERY_QUERY_STATUS,
+                           &status_request, sizeof(status_request),
+                           &status_reply, sizeof(status_reply),
+                           &bytes_returned))
+    {
+        return false;
+    }
+
+    status = status_reply;
+    return true;
+}
+
+std::string GetBatteryName(Device& battery, ULONG tag)
+{
+    WCHAR buffer[256] = { 0 };
+
+    if (!GetBatteryInformation(battery, tag, BatteryDeviceName, buffer, sizeof(buffer)))
+        return std::string();
+
+    return UTF8fromUNICODE(buffer);
+}
+
+std::string GetBatteryManufacturer(Device& battery, ULONG tag)
+{
+    WCHAR buffer[256] = { 0 };
+
+    if (!GetBatteryInformation(battery, tag, BatteryManufactureName, buffer, sizeof(buffer)))
+        return std::string();
+
+    return UTF8fromUNICODE(buffer);
+}
+
+std::string GetBatteryManufactureDate(Device& battery, ULONG tag)
+{
+    BATTERY_MANUFACTURE_DATE date;
+
+    memset(&date, 0, sizeof(date));
+
+    if (!GetBatteryInformation(battery, tag, BatteryManufactureDate, &date, sizeof(date)))
+        return std::string();
+
+    return StringPrintf("%u-%u-%u", date.Day, date.Month, date.Year);
+}
+
+std::string GetBatteryUniqueId(Device& battery, ULONG tag)
+{
+    WCHAR buffer[256] = { 0 };
+
+    if (!GetBatteryInformation(battery, tag, BatteryUniqueID, buffer, sizeof(buffer)))
+        return std::string();
+
+    return UTF8fromUNICODE(buffer);
+}
+
+std::string GetBatterySerialNumber(Device& battery, ULONG tag)
+{
+    WCHAR buffer[256] = { 0 };
+
+    if (!GetBatteryInformation(battery, tag, BatterySerialNumber, buffer, sizeof(buffer)))
+        return std::string();
+
+    return UTF8fromUNICODE(buffer);
+}
+
+std::string GetBatteryTemperature(Device& battery, ULONG tag)
+{
+    WCHAR buffer[256] = { 0 };
+
+    if (!GetBatteryInformation(battery, tag, BatteryTemperature, buffer, sizeof(buffer)))
+        return std::string();
+
+    return UTF8fromUNICODE(buffer);
+}
+
+int GetBatteryDesignCapacity(Device& battery, ULONG tag)
+{
+    BATTERY_INFORMATION battery_info;
+
+    memset(&battery_info, 0, sizeof(battery_info));
+
+    if (!GetBatteryInformation(battery, tag, BatteryInformation,
+                               &battery_info, sizeof(battery_info)))
+        return 0;
+
+    return battery_info.DesignedCapacity;
+}
+
+proto::PowerOptions::Battery::Type GetBatteryType(Device& battery, ULONG tag)
+{
+    BATTERY_INFORMATION battery_info;
+    memset(&battery_info, 0, sizeof(battery_info));
+
+    if (GetBatteryInformation(battery, tag, BatteryInformation,
+                              &battery_info, sizeof(battery_info)))
+    {
+        if (memcmp(&battery_info.Chemistry[0], "PbAc", 4) == 0)
+            return proto::PowerOptions::Battery::TYPE_PBAC;
+
+        if (memcmp(&battery_info.Chemistry[0], "LION", 4) == 0 ||
+            memcmp(&battery_info.Chemistry[0], "Li-I", 4) == 0)
+            return proto::PowerOptions::Battery::TYPE_LION;
+
+        if (memcmp(&battery_info.Chemistry[0], "NiCd", 4) == 0)
+            return proto::PowerOptions::Battery::TYPE_NICD;
+
+        if (memcmp(&battery_info.Chemistry[0], "NiMH", 4) == 0)
+            return proto::PowerOptions::Battery::TYPE_NIMH;
+
+        if (memcmp(&battery_info.Chemistry[0], "NiZn", 4) == 0)
+            return proto::PowerOptions::Battery::TYPE_NIZN;
+
+        if (memcmp(&battery_info.Chemistry[0], "RAM", 3) == 0)
+            return proto::PowerOptions::Battery::TYPE_RAM;
+    }
+
+    return proto::PowerOptions::Battery::TYPE_UNKNOWN;
+}
+
+int GetBatteryFullChargedCapacity(Device& battery, ULONG tag)
+{
+    BATTERY_INFORMATION battery_info;
+    memset(&battery_info, 0, sizeof(battery_info));
+
+    if (!GetBatteryInformation(battery, tag, BatteryInformation,
+                               &battery_info, sizeof(battery_info)))
+        return 0;
+
+    return battery_info.FullChargedCapacity;
+}
+
+int GetBatteryDepreciation(Device& battery, ULONG tag)
+{
+    BATTERY_INFORMATION battery_info;
+    memset(&battery_info, 0, sizeof(battery_info));
+
+    if (!GetBatteryInformation(battery, tag, BatteryInformation,
+                               &battery_info, sizeof(battery_info)))
+        return 0;
+
+    const int percent = 100 - (battery_info.FullChargedCapacity * 100) /
+        battery_info.DesignedCapacity;
+
+    return (percent >= 0) ? percent : 0;
+}
+
+void AddBattery(proto::PowerOptions& message, const WCHAR* device_path)
+{
+    Device battery;
+    if (!battery.Open(device_path))
+        return;
+
+    ULONG tag;
+    if (!GetBatteryTag(battery, tag))
+        return;
+
+    proto::PowerOptions::Battery* item = message.add_battery();
+
+    item->set_device_name(GetBatteryName(battery, tag));
+    item->set_manufacturer(GetBatteryManufacturer(battery, tag));
+    item->set_manufacture_date(GetBatteryManufactureDate(battery, tag));
+    item->set_unique_id(GetBatteryUniqueId(battery, tag));
+    item->set_serial_number(GetBatterySerialNumber(battery, tag));
+    item->set_temperature(GetBatteryTemperature(battery, tag));
+    item->set_design_capacity(GetBatteryDesignCapacity(battery, tag));
+    item->set_type(GetBatteryType(battery, tag));
+    item->set_full_charged_capacity(GetBatteryFullChargedCapacity(battery, tag));
+    item->set_depreciation(GetBatteryDepreciation(battery, tag));
+
+    BATTERY_STATUS battery_status;
+    if (GetBatteryStatus(battery, tag, battery_status))
+    {
+        item->set_current_capacity(battery_status.Capacity);
+        item->set_voltage(battery_status.Voltage);
+
+        if (battery_status.PowerState & BATTERY_CHARGING)
+            item->set_state(item->state() | proto::PowerOptions::Battery::STATE_CHARGING);
+
+        if (battery_status.PowerState & BATTERY_CRITICAL)
+            item->set_state(item->state() | proto::PowerOptions::Battery::STATE_CRITICAL);
+
+        if (battery_status.PowerState & BATTERY_DISCHARGING)
+            item->set_state(item->state() | proto::PowerOptions::Battery::STATE_DISCHARGING);
+
+        if (battery_status.PowerState & BATTERY_POWER_ON_LINE)
+            item->set_state(item->state() | proto::PowerOptions::Battery::STATE_POWER_ONLINE);
+    }
+}
+
+const char* BatteryTypeToString(proto::PowerOptions::Battery::Type value)
+{
+    switch (value)
+    {
+        case proto::PowerOptions::Battery::TYPE_PBAC:
+            return "Lead Acid";
+
+        case proto::PowerOptions::Battery::TYPE_LION:
+            return "Lithium Ion";
+
+        case proto::PowerOptions::Battery::TYPE_NICD:
+            return "Nickel Cadmium";
+
+        case proto::PowerOptions::Battery::TYPE_NIMH:
+            return "Nickel Metal Hydride";
+
+        case proto::PowerOptions::Battery::TYPE_NIZN:
+            return "Nickel Zinc";
+
+        case proto::PowerOptions::Battery::TYPE_RAM:
+            return "Rechargeable Alkaline-Manganese";
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* BatteryStatusToString(proto::PowerOptions::BatteryStatus value)
+{
+    switch (value)
+    {
+        case proto::PowerOptions::BATTERY_STATUS_HIGH:
+            return "High";
+
+        case proto::PowerOptions::BATTERY_STATUS_LOW:
+            return "Low";
+
+        case proto::PowerOptions::BATTERY_STATUS_CRITICAL:
+            return "Critical";
+
+        case proto::PowerOptions::BATTERY_STATUS_CHARGING:
+            return "Charging";
+
+        case proto::PowerOptions::BATTERY_STATUS_NO_BATTERY:
+            return "No Battery";
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* PowerSourceToString(proto::PowerOptions::PowerSource value)
+{
+    switch (value)
+    {
+        case proto::PowerOptions::POWER_SOURCE_DC_BATTERY:
+            return "DC Battery";
+
+        case proto::PowerOptions::POWER_SOURCE_AC_LINE:
+            return "AC Line";
+
+        default:
+            return "Unknown";
+    }
+}
+
+} // namespace
 
 CategoryPowerOptions::CategoryPowerOptions()
     : CategoryInfo(Type::INFO_PARAM_VALUE)
@@ -45,53 +360,8 @@ void CategoryPowerOptions::Parse(Table& table, const std::string& data)
                      .AddColumn("Parameter", 250)
                      .AddColumn("Value", 250));
 
-    const char* power_source;
-    switch (message.power_source())
-    {
-        case proto::PowerOptions::POWER_SOURCE_DC_BATTERY:
-            power_source = "DC Battery";
-            break;
-
-        case proto::PowerOptions::POWER_SOURCE_AC_LINE:
-            power_source = "AC Line";
-            break;
-
-        default:
-            power_source = "Unknown";
-            break;
-    }
-
-    table.AddParam("Power Source", Value::String(power_source));
-
-    const char* battery_status;
-    switch (message.battery_status())
-    {
-        case proto::PowerOptions::BATTERY_STATUS_HIGH:
-            battery_status = "High";
-            break;
-
-        case proto::PowerOptions::BATTERY_STATUS_LOW:
-            battery_status = "Low";
-            break;
-
-        case proto::PowerOptions::BATTERY_STATUS_CRITICAL:
-            battery_status = "Critical";
-            break;
-
-        case proto::PowerOptions::BATTERY_STATUS_CHARGING:
-            battery_status = "Charging";
-            break;
-
-        case proto::PowerOptions::BATTERY_STATUS_NO_BATTERY:
-            battery_status = "No Battery";
-            break;
-
-        default:
-            battery_status = "Unknown";
-            break;
-    }
-
-    table.AddParam("Battery Status", Value::String(battery_status));
+    table.AddParam("Power Source", Value::String(PowerSourceToString(message.power_source())));
+    table.AddParam("Battery Status", Value::String(BatteryStatusToString(message.battery_status())));
 
     if (message.battery_status() != proto::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
         message.battery_status() != proto::PowerOptions::BATTERY_STATUS_UNKNOWN)
@@ -135,8 +405,7 @@ void CategoryPowerOptions::Parse(Table& table, const std::string& data)
             group.AddParam("Design Capacity", Value::Number(battery.design_capacity(), "mWh"));
         }
 
-        if (!battery.type().empty())
-            group.AddParam("Type", Value::String(battery.type()));
+        group.AddParam("Type", Value::String(BatteryTypeToString(battery.type())));
 
         if (battery.full_charged_capacity() != 0)
         {
@@ -233,47 +502,74 @@ std::string CategoryPowerOptions::Serialize()
         }
     }
 
-    for (BatteryEnumerator enumerator; !enumerator.IsAtEnd(); enumerator.Advance())
+    const DWORD flags = DIGCF_PROFILE | DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
+
+    ScopedDeviceInfo device_info(
+        SetupDiGetClassDevsW(&GUID_DEVCLASS_BATTERY, nullptr, nullptr, flags));
+
+    if (device_info.IsValid())
     {
-        proto::PowerOptions::Battery* battery = message.add_battery();
+        DWORD device_index = 0;
 
-        battery->set_device_name(enumerator.GetDeviceName());
-        battery->set_manufacturer(enumerator.GetManufacturer());
-        battery->set_manufacture_date(enumerator.GetManufactureDate());
-        battery->set_unique_id(enumerator.GetUniqueId());
-        battery->set_serial_number(enumerator.GetSerialNumber());
-        battery->set_temperature(enumerator.GetTemperature());
-        battery->set_design_capacity(enumerator.GetDesignCapacity());
-        battery->set_type(enumerator.GetType());
-        battery->set_full_charged_capacity(enumerator.GetFullChargedCapacity());
-        battery->set_depreciation(enumerator.GetDepreciation());
-        battery->set_current_capacity(enumerator.GetCurrentCapacity());
-        battery->set_voltage(enumerator.GetVoltage());
-
-        const uint32_t state = enumerator.GetState();
-
-        if (state & BatteryEnumerator::STATE_CHARGING)
+        for (;;)
         {
-            battery->set_state(
-                battery->state() | proto::PowerOptions::Battery::STATE_CHARGING);
-        }
+            SP_DEVICE_INTERFACE_DATA device_iface_data;
 
-        if (state & BatteryEnumerator::STATE_CRITICAL)
-        {
-            battery->set_state(
-                battery->state() | proto::PowerOptions::Battery::STATE_CRITICAL);
-        }
+            memset(&device_iface_data, 0, sizeof(device_iface_data));
+            device_iface_data.cbSize = sizeof(device_iface_data);
 
-        if (state & BatteryEnumerator::STATE_DISCHARGING)
-        {
-            battery->set_state(
-                battery->state() | proto::PowerOptions::Battery::STATE_DISCHARGING);
-        }
+            if (!SetupDiEnumDeviceInterfaces(device_info,
+                                             nullptr,
+                                             &GUID_DEVCLASS_BATTERY,
+                                             device_index,
+                                             &device_iface_data))
+            {
+                SystemErrorCode error_code = GetLastError();
 
-        if (state & BatteryEnumerator::STATE_POWER_ONLINE)
-        {
-            battery->set_state(
-                battery->state() | proto::PowerOptions::Battery::STATE_POWER_ONLINE);
+                if (error_code != ERROR_NO_MORE_ITEMS)
+                {
+                    DLOG(WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                                  << SystemErrorCodeToString(error_code);
+                }
+
+                break;
+            }
+
+            DWORD required_size = 0;
+
+            if (SetupDiGetDeviceInterfaceDetailW(device_info,
+                                                 &device_iface_data,
+                                                 nullptr,
+                                                 0,
+                                                 &required_size,
+                                                 nullptr) ||
+                GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+            {
+                DLOG(WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
+                break;
+            }
+
+            std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(required_size);
+            PSP_DEVICE_INTERFACE_DETAIL_DATA_W detail_data =
+                reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA_W>(buffer.get());
+
+            detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
+
+            if (!SetupDiGetDeviceInterfaceDetailW(device_info,
+                                                  &device_iface_data,
+                                                  detail_data,
+                                                  required_size,
+                                                  &required_size,
+                                                  nullptr))
+            {
+                DLOG(WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
+                              << GetLastSystemErrorString();
+                break;
+            }
+
+            AddBattery(message, detail_data->DevicePath);
+
+            ++device_index;
         }
     }
 
