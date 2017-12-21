@@ -577,9 +577,6 @@
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="protocol\category_group_os.cc">
-      <Filter>protocol</Filter>
-    </ClCompile>
     <ClCompile Include="protocol\category_group_software.cc">
       <Filter>protocol</Filter>
     </ClCompile>
@@ -884,6 +881,21 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_session.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_eventlog_security.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_eventlog_security.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_eventlog_system.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_eventlog_system.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_eventlog_application.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1496,9 +1508,6 @@
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="protocol\category_group_os.h">
-      <Filter>protocol</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\category_group_software.h">
       <Filter>protocol</Filter>
     </ClInclude>
@@ -1808,6 +1817,21 @@
     <ClInclude Include="system_info\category_session.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_eventlog_security.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_eventlog_security.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_eventlog_system.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_eventlog_system.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_eventlog_application.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1955,6 +1979,15 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_session.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_eventlog_security.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_eventlog_system.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_eventlog_application.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

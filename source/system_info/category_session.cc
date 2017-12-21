@@ -57,6 +57,12 @@ const char* ConnectStateToString(proto::Session::ConnectState value)
 
 } // namespace
 
+CategorySession::CategorySession()
+    : CategoryInfo(Type::INFO_LIST)
+{
+    // Nothing
+}
+
 const char* CategorySession::Name() const
 {
     return "Active Sessions";

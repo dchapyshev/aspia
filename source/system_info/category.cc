@@ -7,7 +7,6 @@
 
 #include "base/logging.h"
 #include "protocol/category_group_software.h"
-#include "protocol/category_group_os.h"
 
 #include "system_info/category_ata.h"
 #include "system_info/category_connection.h"
@@ -25,6 +24,9 @@
 #include "system_info/category_dmi_system.h"
 #include "system_info/category_dmi_system_slot.h"
 #include "system_info/category_environment_variables.h"
+#include "system_info/category_eventlog_application.h"
+#include "system_info/category_eventlog_security.h"
+#include "system_info/category_eventlog_system.h"
 #include "system_info/category_memory.h"
 #include "system_info/category_monitor.h"
 #include "system_info/category_network_card.h"
@@ -50,10 +52,6 @@ namespace aspia {
 
 namespace {
 
-//
-// CategoryGroupDMI
-//
-
 class CategoryGroupDMI : public CategoryGroup
 {
 public:
@@ -65,10 +63,6 @@ public:
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupDMI);
 };
-
-//
-// CategoryGroupStorage
-//
 
 class CategoryGroupStorage : public CategoryGroup
 {
@@ -94,10 +88,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupDisplay);
 };
 
-//
-// CategoryGroupHardware
-//
-
 class CategoryGroupHardware : public CategoryGroup
 {
 public:
@@ -120,6 +110,42 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupNetwork);
+};
+
+class CategoryGroupEventLog : public CategoryGroup
+{
+public:
+    CategoryGroupEventLog() = default;
+
+    const char* Name() const final { return "Event Logs"; }
+    IconId Icon() const final { return IDI_BOOKS_STACK; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupEventLog);
+};
+
+class CategoryGroupUsers : public CategoryGroup
+{
+public:
+    CategoryGroupUsers() = default;
+
+    const char* Name() const final { return "Users and groups"; }
+    IconId Icon() const final { return IDI_USERS; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupUsers);
+};
+
+class CategoryGroupOS : public CategoryGroup
+{
+public:
+    CategoryGroupOS() = default;
+
+    const char* Name() const final { return "Operating System"; }
+    IconId Icon() const final { return IDI_OS; }
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupOS);
 };
 
 } // namespace
@@ -245,9 +271,9 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> event_logs = std::make_unique<CategoryGroupEventLog>();
 
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogsApplications>());
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogsSecurity>());
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogsSystem>());
+    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogApplication>());
+    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogSecurity>());
+    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogSystem>());
 
     std::unique_ptr<CategoryGroup> os = std::make_unique<CategoryGroupOS>();
 
@@ -322,9 +348,9 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryUserGroup>());
     emplace_back(std::make_unique<CategorySession>());
 
-    emplace_back(std::make_unique<CategoryEventLogsApplications>());
-    emplace_back(std::make_unique<CategoryEventLogsSecurity>());
-    emplace_back(std::make_unique<CategoryEventLogsSystem>());
+    emplace_back(std::make_unique<CategoryEventLogApplication>());
+    emplace_back(std::make_unique<CategoryEventLogSecurity>());
+    emplace_back(std::make_unique<CategoryEventLogSystem>());
 
     emplace_back(std::make_unique<CategoryTaskScheduler>());
     emplace_back(std::make_unique<CategoryEnvironmentVariables>());
