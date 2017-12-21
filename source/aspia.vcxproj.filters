@@ -601,9 +601,6 @@
     <ClCompile Include="base\process\process_enumerator.cc">
       <Filter>base\process</Filter>
     </ClCompile>
-    <ClCompile Include="base\program_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="desktop_capture\desktop_geometry.cc">
       <Filter>desktop_capture</Filter>
     </ClCompile>
@@ -1546,9 +1543,6 @@
     </ClInclude>
     <ClInclude Include="base\process\process_enumerator.h">
       <Filter>base\process</Filter>
-    </ClInclude>
-    <ClInclude Include="base\program_enumerator.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="desktop_capture\desktop_geometry.h">
       <Filter>desktop_capture</Filter>
