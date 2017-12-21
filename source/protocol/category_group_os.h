@@ -73,56 +73,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupEventLog);
 };
 
-class CategoryUsers : public CategoryInfo
-{
-public:
-    CategoryUsers() : CategoryInfo(Type::INFO_PARAM_VALUE) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUsers);
-};
-
-class CategoryUserGroups : public CategoryInfo
-{
-public:
-    CategoryUserGroups() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryUserGroups);
-};
-
-class CategoryActiveSessions : public CategoryInfo
-{
-public:
-    CategoryActiveSessions() : CategoryInfo(Type::INFO_LIST) { /* Nothing */ }
-
-    const char* Name() const final;
-    IconId Icon() const final;
-
-    const char* Guid() const final;
-    void Parse(Table& table, const std::string& data) final;
-    std::string Serialize() final;
-
-private:
-    static const char* ConnectStateToString(proto::Sessions::ConnectState value);
-
-    DISALLOW_COPY_AND_ASSIGN(CategoryActiveSessions);
-};
-
 class CategoryGroupUsers : public CategoryGroup
 {
 public:

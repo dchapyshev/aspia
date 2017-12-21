@@ -562,9 +562,6 @@
     <ClCompile Include="base\user_group_enumerator.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\session_enumerator.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\file_transfer\drive_list_ctrl.cc">
       <Filter>ui\file_transfer</Filter>
     </ClCompile>
@@ -869,6 +866,24 @@
       <Filter>system_info</Filter>
     </ClCompile>
     <ClCompile Include="system_info\category_environment_variables.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_user.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_user.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_user_group.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_user_group.pb.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_session.cc">
+      <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="system_info\category_session.pb.cc">
       <Filter>system_info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1463,9 +1478,6 @@
     <ClInclude Include="base\user_group_enumerator.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\session_enumerator.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\file_transfer\drive_list_ctrl.h">
       <Filter>ui\file_transfer</Filter>
     </ClInclude>
@@ -1778,6 +1790,24 @@
     <ClInclude Include="system_info\category_environment_variables.pb.h">
       <Filter>system_info</Filter>
     </ClInclude>
+    <ClInclude Include="system_info\category_user.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_user.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_user_group.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_user_group.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_session.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="system_info\category_session.pb.h">
+      <Filter>system_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1916,6 +1946,15 @@
       <Filter>system_info</Filter>
     </None>
     <None Include="system_info\category_environment_variables.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_user.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_user_group.proto">
+      <Filter>system_info</Filter>
+    </None>
+    <None Include="system_info\category_session.proto">
       <Filter>system_info</Filter>
     </None>
   </ItemGroup>

@@ -35,10 +35,13 @@
 #include "system_info/category_process.h"
 #include "system_info/category_ras.h"
 #include "system_info/category_route.h"
+#include "system_info/category_session.h"
 #include "system_info/category_share.h"
 #include "system_info/category_logical_drive.h"
 #include "system_info/category_smart.h"
 #include "system_info/category_task_scheduler.h"
+#include "system_info/category_user.h"
+#include "system_info/category_user_group.h"
 #include "system_info/category_video_adapter.h"
 #include "system_info/category_windows_device.h"
 #include "ui/resource.h"
@@ -236,9 +239,9 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> users_and_groups = std::make_unique<CategoryGroupUsers>();
 
-    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryUsers>());
-    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryUserGroups>());
-    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryActiveSessions>());
+    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryUser>());
+    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryUserGroup>());
+    users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategorySession>());
 
     std::unique_ptr<CategoryGroup> event_logs = std::make_unique<CategoryGroupEventLog>();
 
@@ -315,9 +318,9 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryOpenFiles>());
     emplace_back(std::make_unique<CategoryRoute>());
 
-    emplace_back(std::make_unique<CategoryUsers>());
-    emplace_back(std::make_unique<CategoryUserGroups>());
-    emplace_back(std::make_unique<CategoryActiveSessions>());
+    emplace_back(std::make_unique<CategoryUser>());
+    emplace_back(std::make_unique<CategoryUserGroup>());
+    emplace_back(std::make_unique<CategorySession>());
 
     emplace_back(std::make_unique<CategoryEventLogsApplications>());
     emplace_back(std::make_unique<CategoryEventLogsSecurity>());
