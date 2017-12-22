@@ -1,0 +1,26 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_application.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message Application
+{
+    message Item
+    {
+        string name             = 1;
+        string version          = 2;
+        string publisher        = 3;
+        string install_date     = 4;
+        string install_location = 5;
+    }
+
+    repeated Item item = 1;
+}

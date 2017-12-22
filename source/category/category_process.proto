@@ -1,0 +1,26 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_process.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message Processes
+{
+    message Item
+    {
+        string process_name = 1;
+        string file_path    = 2;
+        uint64 used_memory  = 3;
+        uint64 used_swap    = 4;
+        string description  = 5;
+    }
+
+    repeated Item item = 1;
+}

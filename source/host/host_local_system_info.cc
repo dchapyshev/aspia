@@ -8,7 +8,7 @@
 #include "base/logging.h"
 #include "host/host_local_system_info.h"
 #include "report/report_creator_proxy.h"
-#include "system_info/category.h"
+#include "category/category.h"
 
 namespace aspia {
 

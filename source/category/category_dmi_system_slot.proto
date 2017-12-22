@@ -1,0 +1,122 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_dmi_system_slot.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DmiSystemSlot
+{
+    enum Type
+    {
+        TYPE_UNKNOWN                                 = 0;
+        TYPE_OTHER                                   = 1;
+        TYPE_ISA                                     = 2;
+        TYPE_MCA                                     = 3;
+        TYPE_EISA                                    = 4;
+        TYPE_PCI                                     = 5;
+        TYPE_PC_CARD                                 = 6;
+        TYPE_VLB                                     = 7;
+        TYPE_PROPRIETARY                             = 8;
+        TYPE_PROCESSOR_CARD                          = 9;
+        TYPE_PROPRIETARY_MEMORY_CARD                 = 10;
+        TYPE_IO_RISER_CARD                           = 11;
+        TYPE_NUBUS                                   = 12;
+        TYPE_PCI_66                                  = 13;
+        TYPE_AGP                                     = 14;
+        TYPE_AGP_2X                                  = 15;
+        TYPE_AGP_4X                                  = 16;
+        TYPE_PCI_X                                   = 17;
+        TYPE_AGP_8X                                  = 18;
+        TYPE_M2_SOCKET_1DP                           = 19;
+        TYPE_M2_SOCKET_1SD                           = 20;
+        TYPE_M2_SOCKET_2                             = 21;
+        TYPE_M2_SOCKET_3                             = 22;
+        TYPE_MXM_TYPE_I                              = 23;
+        TYPE_MXM_TYPE_II                             = 24;
+        TYPE_MXM_TYPE_III                            = 25;
+        TYPE_MXM_TYPE_III_HE                         = 26;
+        TYPE_MXM_TYPE_IV                             = 27;
+        TYPE_MXM_30_TYPE_A                           = 28;
+        TYPE_MXM_30_TYPE_B                           = 29;
+        TYPE_PCI_EXPRESS_2_SFF_8639                  = 30;
+        TYPE_PCI_EXPRESS_3_SFF_8639                  = 31;
+        TYPE_PCI_EXPRESS_MINI_52PIN_WITH_BOTTOM_SIDE = 32;
+        TYPE_PCI_EXPRESS_MINI_52PIN                  = 33;
+        TYPE_PCI_EXPRESS_MINI_76PIN                  = 34;
+        TYPE_PC98_C20                                = 35;
+        TYPE_PC98_C24                                = 36;
+        TYPE_PC98_E                                  = 37;
+        TYPE_PC98_LOCAL_BUS                          = 38;
+        TYPE_PC98_CARD                               = 39;
+        TYPE_PCI_EXPRESS                             = 40;
+        TYPE_PCI_EXPRESS_X1                          = 41;
+        TYPE_PCI_EXPRESS_X2                          = 42;
+        TYPE_PCI_EXPRESS_X4                          = 43;
+        TYPE_PCI_EXPRESS_X8                          = 44;
+        TYPE_PCI_EXPRESS_X16                         = 45;
+        TYPE_PCI_EXPRESS_2                           = 46;
+        TYPE_PCI_EXPRESS_2_X1                        = 47;
+        TYPE_PCI_EXPRESS_2_X2                        = 48;
+        TYPE_PCI_EXPRESS_2_X4                        = 49;
+        TYPE_PCI_EXPRESS_2_X8                        = 50;
+        TYPE_PCI_EXPRESS_2_X16                       = 51;
+        TYPE_PCI_EXPRESS_3                           = 52;
+        TYPE_PCI_EXPRESS_3_X1                        = 53;
+        TYPE_PCI_EXPRESS_3_X2                        = 54;
+        TYPE_PCI_EXPRESS_3_X4                        = 55;
+        TYPE_PCI_EXPRESS_3_X8                        = 56;
+        TYPE_PCI_EXPRESS_3_X16                       = 57;
+    }
+
+    enum Usage
+    {
+        USAGE_UNKNOWN   = 0;
+        USAGE_OTHER     = 1;
+        USAGE_AVAILABLE = 2;
+        USAGE_IN_USE    = 3;
+    }
+
+    enum BusWidth
+    {
+        BUS_WIDTH_UNKNOWN = 0;
+        BUS_WIDTH_OTHER   = 1;
+        BUS_WIDTH_8_BIT   = 2;
+        BUS_WIDTH_16_BIT  = 3;
+        BUS_WIDTH_32_BIT  = 4;
+        BUS_WIDTH_64_BIT  = 5;
+        BUS_WIDTH_128_BIT = 6;
+        BUS_WIDTH_X1      = 7;
+        BUS_WIDTH_X2      = 8;
+        BUS_WIDTH_X4      = 9;
+        BUS_WIDTH_X8      = 10;
+        BUS_WIDTH_X12     = 11;
+        BUS_WIDTH_X16     = 12;
+        BUS_WIDTH_X32     = 13;
+    }
+
+    enum Length
+    {
+        LENGTH_UNKNOWN = 0;
+        LENGTH_OTHER   = 1;
+        LENGTH_SHORT   = 2;
+        LENGTH_LONG    = 3;
+    }
+
+    message Item
+    {
+        string slot_designation = 1;
+        Type type               = 2;
+        Usage usage             = 3;
+        BusWidth bus_width      = 4;
+        Length length           = 5;
+    }
+
+    repeated Item item = 1;
+}

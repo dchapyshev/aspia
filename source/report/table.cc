@@ -7,7 +7,7 @@
 
 #include "report/table.h"
 #include "report/report.h"
-#include "system_info/category.h"
+#include "category/category.h"
 #include "base/logging.h"
 
 namespace aspia {

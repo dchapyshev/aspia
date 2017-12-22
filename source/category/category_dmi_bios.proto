@@ -1,0 +1,70 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_dmi_bios.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message DmiBios
+{
+    message Characteristics
+    {
+        bool has_isa                         = 1;
+        bool has_mca                         = 2;
+        bool has_eisa                        = 3;
+        bool has_pci                         = 4;
+        bool has_pc_card                     = 5;
+        bool has_pnp                         = 6;
+        bool has_apm                         = 7;
+        bool has_bios_upgradeable            = 8;
+        bool has_bios_shadowing              = 9;
+        bool has_vlb                         = 10;
+        bool has_escd                        = 11;
+        bool has_boot_from_cd                = 12;
+        bool has_selectable_boot             = 13;
+        bool has_socketed_boot_rom           = 14;
+        bool has_boot_from_pc_card           = 15;
+        bool has_edd                         = 16;
+        bool has_japanese_floppy_for_nec9800 = 17;
+        bool has_japanece_floppy_for_toshiba = 18;
+        bool has_525_360kb_floppy            = 19;
+        bool has_525_12mb_floppy             = 20;
+        bool has_35_720kb_floppy             = 21;
+        bool has_35_288mb_floppy             = 22;
+        bool has_print_screen                = 23;
+        bool has_8042_keyboard               = 24;
+        bool has_serial                      = 25;
+        bool has_printer                     = 26;
+        bool has_cga_video                   = 27;
+        bool has_nec_pc98                    = 28;
+        bool has_acpi                        = 29;
+        bool has_usb_legacy                  = 30;
+        bool has_agp                         = 31;
+        bool has_i2o_boot                    = 32;
+        bool has_ls120_boot                  = 33;
+        bool has_atapi_zip_drive_boot        = 34;
+        bool has_ieee1394_boot               = 35;
+        bool has_smart_battery               = 36;
+        bool has_bios_boot_specification     = 37;
+        bool has_key_init_network_boot       = 38;
+        bool has_targeted_content_distrib    = 39;
+        bool has_uefi                        = 40;
+        bool has_virtual_machine             = 41;
+    }
+
+    string manufacturer             = 1;
+    string version                  = 2;
+    string date                     = 3;
+    uint64 size                     = 4;
+    string bios_revision            = 5;
+    string firmware_revision        = 6;
+    string address                  = 7;
+    int32 runtime_size              = 8;
+    Characteristics characteristics = 9;
+}

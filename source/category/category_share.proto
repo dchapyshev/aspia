@@ -1,0 +1,39 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_share.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message Share
+{
+    enum Type
+    {
+        TYPE_UNKNOWN   = 0;
+        TYPE_DISK      = 1;
+        TYPE_PRINTER   = 2;
+        TYPE_DEVICE    = 3;
+        TYPE_IPC       = 4;
+        TYPE_SPECIAL   = 5;
+        TYPE_TEMPORARY = 6;
+    }
+
+    message Item
+    {
+        string name = 1;
+
+        Type type           = 2;
+        string description  = 3;
+        string local_path   = 4;
+        uint32 current_uses = 5;
+        uint32 maximum_uses = 6;
+    }
+
+    repeated Item item = 1;
+}

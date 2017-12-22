@@ -11,7 +11,7 @@
 #include "base/devices/device.h"
 #include "base/devices/physical_drive_smart.h"
 #include "base/scoped_device_info.h"
-#include "system_info/category_ata.pb.h"
+#include "category/category_ata.pb.h"
 
 #include <winioctl.h>
 

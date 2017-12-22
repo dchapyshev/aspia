@@ -76,11 +76,11 @@
     <Filter Include="base\devices">
       <UniqueIdentifier>{c4ed6713-4dbe-4d95-a8b6-b80a8fc6570a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="system_info">
-      <UniqueIdentifier>{44cdb0bd-1821-440a-8026-d54a88cc3a2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="report">
       <UniqueIdentifier>{ccf241b1-2592-4594-8444-a075f9a64c13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="category">
+      <UniqueIdentifier>{7d8c84d5-e6e0-4c30-a70f-0a40b358cd86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -622,270 +622,6 @@
     <ClCompile Include="base\devices\physical_drive_util.cc">
       <Filter>base\devices</Filter>
     </ClCompile>
-    <ClCompile Include="system_info\category_memory.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_memory.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_cpu.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_cpu.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_logical_drive.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_logical_drive.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_ata.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_ata.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_smart.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_smart.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_video_adapter.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_video_adapter.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_monitor.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_monitor.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_printer.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_printer.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_power_options.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_power_options.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_process.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_process.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_windows_device.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_windows_device.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_optical_drive.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_bios.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_optical_drive.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_bios.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_system.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_system.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_baseboard.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_baseboard.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_chassis.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_chassis.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_cache.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_cache.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_processor.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_processor.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_memory_device.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_memory_device.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_system_slot.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_system_slot.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_port_connector.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_port_connector.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_onboard_device.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_onboard_device.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_pointing_device.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_pointing_device.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_portable_battery.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_dmi_portable_battery.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_network_card.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_network_card.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_ras.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_ras.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_connection.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_connection.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_share.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_share.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_route.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_route.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_open_files.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_open_files.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_task_scheduler.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_task_scheduler.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_environment_variables.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_environment_variables.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_user.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_user_group.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_user_group.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_session.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_session.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_eventlog_security.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_eventlog_security.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_eventlog_system.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_eventlog_system.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_eventlog_application.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_application.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_application.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_update.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_update.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_license.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_license.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_service.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_service.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_driver.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_driver.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_user.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_wsus.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="system_info\category_wsus.pb.cc">
-      <Filter>system_info</Filter>
-    </ClCompile>
     <ClCompile Include="report\column_list.cc">
       <Filter>report</Filter>
     </ClCompile>
@@ -915,6 +651,273 @@
     </ClCompile>
     <ClCompile Include="report\report_xml_file.cc">
       <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_application.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_application.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_ata.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_ata.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_connection.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_connection.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_cpu.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_cpu.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_baseboard.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_baseboard.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_bios.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_bios.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_cache.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_cache.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_chassis.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_chassis.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_memory_device.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_memory_device.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_onboard_device.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_onboard_device.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_pointing_device.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_pointing_device.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_port_connector.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_port_connector.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_portable_battery.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_portable_battery.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_processor.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_processor.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_system.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_system.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_system_slot.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_dmi_system_slot.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_driver.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_driver.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_environment_variables.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_environment_variables.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_application.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_application.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_security.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_security.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_system.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog_system.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_license.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_license.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_logical_drive.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_logical_drive.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_memory.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_memory.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_monitor.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_monitor.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_network_card.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_network_card.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_open_files.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_open_files.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_optical_drive.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_optical_drive.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_power_options.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_power_options.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_printer.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_printer.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_process.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_process.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_ras.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_ras.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_route.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_route.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_service.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_service.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_session.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_session.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_share.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_share.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_smart.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_smart.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_task_scheduler.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_task_scheduler.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_update.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_update.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_user.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_user.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_user_group.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_user_group.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_video_adapter.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_video_adapter.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_windows_device.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_windows_device.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_wsus.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_wsus.pb.cc">
+      <Filter>category</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1568,272 +1571,8 @@
     <ClInclude Include="base\devices\physical_drive_smart.h">
       <Filter>base\devices</Filter>
     </ClInclude>
-    <ClInclude Include="system_info\category_memory.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_memory.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_cpu.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_cpu.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_logical_drive.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_logical_drive.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_ata.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_ata.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_smart.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_smart.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_video_adapter.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_video_adapter.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_monitor.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_monitor.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_printer.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_printer.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_power_options.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_power_options.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_process.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_process.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_windows_device.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_windows_device.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_optical_drive.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_bios.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_optical_drive.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_bios.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_system.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_system.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_baseboard.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_baseboard.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_chassis.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_chassis.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_cache.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_cache.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_processor.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_processor.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_memory_device.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_memory_device.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_system_slot.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_system_slot.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_port_connector.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_port_connector.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_onboard_device.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_onboard_device.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_pointing_device.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_pointing_device.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_portable_battery.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_dmi_portable_battery.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_network_card.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_network_card.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_ras.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_ras.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_connection.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_connection.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_share.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_share.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_route.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_route.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_open_files.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_open_files.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_task_scheduler.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_task_scheduler.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_environment_variables.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_environment_variables.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_user.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_user.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_user_group.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_user_group.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_session.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_session.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_eventlog_security.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_eventlog_security.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_eventlog_system.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_eventlog_system.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_eventlog_application.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_application.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_application.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_update.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_update.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_license.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_license.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_service.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_service.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_driver.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_driver.pb.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
     <ClInclude Include="base\scoped_device_info.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_wsus.h">
-      <Filter>system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="system_info\category_wsus.pb.h">
-      <Filter>system_info</Filter>
     </ClInclude>
     <ClInclude Include="report\column_list.h">
       <Filter>report</Filter>
@@ -1867,6 +1606,273 @@
     </ClInclude>
     <ClInclude Include="report\report_xml_file.h">
       <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_application.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_application.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_ata.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_ata.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_connection.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_connection.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_cpu.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_cpu.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_baseboard.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_baseboard.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_bios.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_bios.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_cache.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_cache.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_chassis.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_chassis.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_memory_device.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_memory_device.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_onboard_device.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_onboard_device.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_pointing_device.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_pointing_device.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_port_connector.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_port_connector.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_portable_battery.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_portable_battery.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_processor.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_processor.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_system.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_system.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_system_slot.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_dmi_system_slot.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_driver.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_driver.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_environment_variables.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_environment_variables.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_application.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_application.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_security.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_security.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_system.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog_system.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_license.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_license.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_logical_drive.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_logical_drive.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_memory.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_memory.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_monitor.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_monitor.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_network_card.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_network_card.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_open_files.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_open_files.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_optical_drive.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_optical_drive.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_power_options.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_power_options.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_printer.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_printer.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_process.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_process.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_ras.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_ras.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_route.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_route.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_service.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_service.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_session.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_session.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_share.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_share.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_smart.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_smart.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_task_scheduler.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_task_scheduler.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_update.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_update.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_user.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_user.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_user_group.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_user_group.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_video_adapter.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_video_adapter.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_windows_device.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_windows_device.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_wsus.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_wsus.pb.h">
+      <Filter>category</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1909,137 +1915,137 @@
     <None Include="proto\system_info_session.proto">
       <Filter>proto</Filter>
     </None>
-    <None Include="system_info\category_memory.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_application.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_cpu.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_ata.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_logical_drive.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_connection.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_ata.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_cpu.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_smart.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_baseboard.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_video_adapter.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_bios.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_monitor.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_cache.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_printer.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_chassis.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_power_options.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_memory_device.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_process.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_onboard_device.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_windows_device.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_pointing_device.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_optical_drive.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_port_connector.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_bios.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_portable_battery.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_system.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_processor.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_baseboard.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_system.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_chassis.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_dmi_system_slot.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_cache.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_driver.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_processor.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_environment_variables.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_memory_device.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_eventlog_application.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_system_slot.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_eventlog_security.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_port_connector.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_eventlog_system.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_onboard_device.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_license.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_pointing_device.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_logical_drive.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_dmi_portable_battery.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_memory.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_network_card.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_monitor.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_ras.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_network_card.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_connection.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_open_files.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_share.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_optical_drive.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_route.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_power_options.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_open_files.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_printer.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_task_scheduler.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_process.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_environment_variables.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_ras.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_user.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_route.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_user_group.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_service.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_session.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_session.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_eventlog_security.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_share.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_eventlog_system.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_smart.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_eventlog_application.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_task_scheduler.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_application.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_update.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_update.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_user.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_license.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_user_group.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_service.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_video_adapter.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_driver.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_windows_device.proto">
+      <Filter>category</Filter>
     </None>
-    <None Include="system_info\category_wsus.proto">
-      <Filter>system_info</Filter>
+    <None Include="category\category_wsus.proto">
+      <Filter>category</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

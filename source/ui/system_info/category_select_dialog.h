@@ -8,8 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__CATEGORY_SELECT_DIALOG_H
 #define _ASPIA_UI__SYSTEM_INFO__CATEGORY_SELECT_DIALOG_H
 
-#include "base/macros.h"
-#include "system_info/category.h"
+#include "category/category.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
