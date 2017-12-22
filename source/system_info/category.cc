@@ -145,7 +145,7 @@ class CategoryGroupUsers : public CategoryGroup
 public:
     CategoryGroupUsers() = default;
 
-    const char* Name() const final { return "Users and groups"; }
+    const char* Name() const final { return "Users and Groups"; }
     IconId Icon() const final { return IDI_USERS; }
 
 private:

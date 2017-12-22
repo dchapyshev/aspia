@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/value.cc
+// FILE:            report/value.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
@@ -8,7 +8,7 @@
 #include "base/strings/string_printf.h"
 #include "base/strings/string_util.h"
 #include "base/logging.h"
-#include "ui/system_info/value.h"
+#include "report/value.h"
 
 namespace aspia {
 

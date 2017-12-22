@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/column_list.h
+// FILE:            report/column_list.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__COLUMN_LIST_H
-#define _ASPIA_UI__SYSTEM_INFO__COLUMN_LIST_H
+#ifndef _ASPIA_REPORT__COLUMN_LIST_H
+#define _ASPIA_REPORT__COLUMN_LIST_H
 
 #include "base/macros.h"
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__COLUMN_LIST_H
+#endif // _ASPIA_REPORT__COLUMN_LIST_H

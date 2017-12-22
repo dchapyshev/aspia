@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/row.cc
+// FILE:            report/row.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info/row.h"
-#include "ui/system_info/output.h"
+#include "report/row.h"
+#include "report/output.h"
 #include "base/logging.h"
 
 namespace aspia {

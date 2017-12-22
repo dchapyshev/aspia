@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/report_creator.h
+// FILE:            report/report_creator.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H
-#define _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H
+#ifndef _ASPIA_REPORT__REPORT_CREATOR_H
+#define _ASPIA_REPORT__REPORT_CREATOR_H
 
-#include "ui/system_info/output.h"
+#include "report/output.h"
 
 #include <functional>
 #include <stack>
@@ -59,4 +59,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_H
+#endif // _ASPIA_REPORT__REPORT_CREATOR_H

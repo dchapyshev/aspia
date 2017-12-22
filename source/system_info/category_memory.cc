@@ -54,7 +54,7 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
 
         group.AddParam("Free", Value::MemorySize(message.free_physical()));
 
-        uint64_t utilization = (message.free_physical() * 100ULL) / message.total_physical();
+        uint64_t utilization = (used * 100ULL) / message.total_physical();
         group.AddParam("Utilization", Value::Number(utilization, "%"));
     }
 
@@ -69,7 +69,7 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
 
         group.AddParam("Free", Value::MemorySize(message.free_page_file()));
 
-        uint64_t utilization = (message.free_page_file() * 100ULL) / message.total_page_file();
+        uint64_t utilization = (used * 100ULL) / message.total_page_file();
         group.AddParam("Utilization", Value::Number(utilization, "%"));
     }
 
@@ -84,7 +84,7 @@ void CategoryMemory::Parse(Table& table, const std::string& data)
 
         group.AddParam("Free", Value::MemorySize(message.free_virtual()));
 
-        uint64_t utilization = (message.free_virtual() * 100ULL) / message.total_virtual();
+        uint64_t utilization = (used * 100ULL) / message.total_virtual();
         group.AddParam("Utilization", Value::Number(utilization, "%"));
     }
 }

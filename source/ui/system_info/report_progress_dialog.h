@@ -9,7 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__REPORT_PROGRESS_DIALOG_H
 
 #include "base/macros.h"
-#include "ui/system_info/report_creator.h"
+#include "report/report_creator.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>

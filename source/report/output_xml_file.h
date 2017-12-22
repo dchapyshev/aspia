@@ -1,28 +1,29 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/output_html_file.h
+// FILE:            report/output_xml_file.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_HTML_FILE_H
-#define _ASPIA_UI__SYSTEM_INFO__OUTPUT_HTML_FILE_H
+#ifndef _ASPIA_REPORT__OUTPUT_XML_FILE_H
+#define _ASPIA_REPORT__OUTPUT_XML_FILE_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
-#include "ui/system_info/output.h"
+#include "report/output.h"
 
 #include <rapidxml.hpp>
 #include <fstream>
+#include <stack>
 
 namespace aspia {
 
-class OutputHtmlFile : public Output
+class OutputXmlFile : public Output
 {
 public:
-    ~OutputHtmlFile() = default;
+    ~OutputXmlFile() = default;
 
-    static std::unique_ptr<OutputHtmlFile> Create(const FilePath& file_path);
+    static std::unique_ptr<OutputXmlFile> Create(const FilePath& file_path);
 
 protected:
     // Output implementation.
@@ -41,22 +42,24 @@ protected:
     void AddValue(const Value& value) final;
 
 private:
-    OutputHtmlFile(std::ofstream file);
+    OutputXmlFile(std::ofstream file);
+
+    static std::string ValueToString(const Value& value);
 
     std::ofstream file_;
     rapidxml::xml_document<> doc_;
-    rapidxml::xml_node<>* html_ = nullptr;
-    rapidxml::xml_node<>* body_ = nullptr;
-    rapidxml::xml_node<>* table_ = nullptr;
-    rapidxml::xml_node<>* tr_ = nullptr;
-    int h_level_ = 1;
-    int padding_ = 5;
-    int column_count_ = 0;
-    int current_column_ = 0;
+    rapidxml::xml_node<>* root_ = nullptr;
+    rapidxml::xml_node<>* category_ = nullptr;
+    std::stack<rapidxml::xml_node<>*> group_stack_;
+    rapidxml::xml_node<>* row_ = nullptr;
+    std::stack<rapidxml::xml_node<>*> category_group_stack_;
 
-    DISALLOW_COPY_AND_ASSIGN(OutputHtmlFile);
+    std::vector<std::string> column_list_;
+    size_t current_column_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(OutputXmlFile);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__OUTPUT_HTML_FILE_H
+#endif // _ASPIA_REPORT__OUTPUT_XML_FILE_H

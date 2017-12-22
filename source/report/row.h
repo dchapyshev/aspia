@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/row.h
+// FILE:            report/row.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__ROW_H
-#define _ASPIA_UI__SYSTEM_INFO__ROW_H
+#ifndef _ASPIA_REPORT__ROW_H
+#define _ASPIA_REPORT__ROW_H
 
-#include "ui/system_info/value.h"
+#include "report/value.h"
 
 namespace aspia {
 
@@ -37,4 +37,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__ROW_H
+#endif // _ASPIA_REPORT__ROW_H

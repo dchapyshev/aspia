@@ -480,7 +480,7 @@ END
 // System Information
 STRINGTABLE DISCARDABLE
 BEGIN
-    IDS_SI_SYSTEM_INFORMATION               "System Information"
+    IDS_SI_SYSTEM_INFORMATION               "Aspia - System Information"
     IDS_SI_SAVE_REPORT                      "Save Report"
     IDS_SI_TOOLTIP_SAVE                     "Save the report to a file"
     IDS_SI_TOOLTIP_SCREENSHOT               "Copy the image of the window to the clipboard"

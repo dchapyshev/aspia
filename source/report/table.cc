@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/table.cc
+// FILE:            report/table.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info/table.h"
-#include "ui/system_info/output.h"
+#include "report/table.h"
+#include "report/output.h"
 #include "system_info/category.h"
 #include "base/logging.h"
 

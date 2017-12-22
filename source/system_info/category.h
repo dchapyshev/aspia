@@ -8,7 +8,7 @@
 #ifndef _ASPIA_SYSTEM_INFO__CATEGORY_H
 #define _ASPIA_SYSTEM_INFO__CATEGORY_H
 
-#include "ui/system_info/table.h"
+#include "report/table.h"
 
 #include <list>
 #include <map>

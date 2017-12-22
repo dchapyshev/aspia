@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/column_list.cc
+// FILE:            report/column_list.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info/column_list.h"
+#include "report/column_list.h"
 
 namespace aspia {
 

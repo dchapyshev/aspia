@@ -6,9 +6,9 @@
 //
 
 #include "client/client_session_system_info.h"
+#include "report/report_creator_proxy.h"
 #include "proto/system_info_session.pb.h"
 #include "protocol/message_serialization.h"
-#include "ui/system_info/report_creator_proxy.h"
 
 namespace aspia {
 

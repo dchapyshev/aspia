@@ -79,6 +79,9 @@
     <Filter Include="system_info">
       <UniqueIdentifier>{44cdb0bd-1821-440a-8026-d54a88cc3a2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="report">
+      <UniqueIdentifier>{ccf241b1-2592-4594-8444-a075f9a64c13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -565,15 +568,6 @@
     <ClCompile Include="base\datetime.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\output_xml_file.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\output_json_file.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\output_html_file.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_local_system_info.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -613,29 +607,8 @@
     <ClCompile Include="ui\system_info\report_progress_dialog.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="ui\system_info\report_creator.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\report_creator_proxy.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
     <ClCompile Include="base\cpu_info.cc">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\value.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\column_list.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\group.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\table.cc">
-      <Filter>ui\system_info</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\system_info\row.cc">
-      <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="crypto\secure_memory.cc">
       <Filter>crypto</Filter>
@@ -912,6 +885,36 @@
     </ClCompile>
     <ClCompile Include="system_info\category_wsus.pb.cc">
       <Filter>system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="report\column_list.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\group.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\output_html_file.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\output_json_file.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\output_xml_file.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\report_creator.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\report_creator_proxy.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\row.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\table.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\value.cc">
+      <Filter>report</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1505,20 +1508,8 @@
     <ClInclude Include="proto\system_info_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\output.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="base\datetime.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_xml_file.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_json_file.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\output_html_file.h">
-      <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="host\host_local_system_info.h">
       <Filter>host</Filter>
@@ -1556,12 +1547,6 @@
     <ClInclude Include="ui\system_info\report_progress_dialog.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\system_info\report_creator.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\report_creator_proxy.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
     <ClInclude Include="base\bitset.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -1570,21 +1555,6 @@
     </ClInclude>
     <ClInclude Include="base\cpu_info.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\value.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\column_list.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\group.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\table.h">
-      <Filter>ui\system_info</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\system_info\row.h">
-      <Filter>ui\system_info</Filter>
     </ClInclude>
     <ClInclude Include="crypto\secure_memory.h">
       <Filter>crypto</Filter>
@@ -1864,6 +1834,39 @@
     </ClInclude>
     <ClInclude Include="system_info\category_wsus.pb.h">
       <Filter>system_info</Filter>
+    </ClInclude>
+    <ClInclude Include="report\column_list.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\group.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\output.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\output_html_file.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\output_json_file.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\output_xml_file.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report_creator.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report_creator_proxy.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\row.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\table.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\value.h">
+      <Filter>report</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

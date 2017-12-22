@@ -9,8 +9,8 @@
 #define _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H
 
 #include "base/message_loop/message_loop_thread.h"
+#include "report/report_creator.h"
 #include "ui/system_info/system_info_window.h"
-#include "ui/system_info/report_creator.h"
 
 namespace aspia {
 

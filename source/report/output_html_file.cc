@@ -1,13 +1,13 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/output_html_file.cc
+// FILE:            report/output_html_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/strings/string_printf.h"
 #include "base/logging.h"
-#include "ui/system_info/output_html_file.h"
+#include "report/output_html_file.h"
 
 #pragma warning(push, 3)
 #include <rapidxml_print.hpp>

@@ -1,13 +1,13 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/group.cc
+// FILE:            report/group.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/logging.h"
-#include "ui/system_info/group.h"
-#include "ui/system_info/output.h"
+#include "report/group.h"
+#include "report/output.h"
 
 namespace aspia {
 

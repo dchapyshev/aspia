@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/group.h
+// FILE:            report/group.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__GROUP_H
-#define _ASPIA_UI__SYSTEM_INFO__GROUP_H
+#ifndef _ASPIA_REPORT__GROUP_H
+#define _ASPIA_REPORT__GROUP_H
 
 #include "base/macros.h"
-#include "ui/system_info/value.h"
-#include "ui/system_info/row.h"
+#include "report/value.h"
+#include "report/row.h"
 
 namespace aspia {
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__GROUP_H
+#endif // _ASPIA_REPORT__GROUP_H

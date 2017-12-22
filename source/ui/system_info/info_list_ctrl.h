@@ -9,7 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__INFO_LIST_CTRL_H
 
 #include "base/macros.h"
-#include "ui/system_info/output.h"
+#include "report/output.h"
 
 #include <atlbase.h>
 #include <atlapp.h>

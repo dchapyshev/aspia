@@ -1,29 +1,31 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/output_xml_file.h
+// FILE:            report/output_json_file.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_XML_FILE_H
-#define _ASPIA_UI__SYSTEM_INFO__OUTPUT_XML_FILE_H
+#ifndef _ASPIA_REPORT__OUTPUT_JSON_FILE_H
+#define _ASPIA_REPORT__OUTPUT_JSON_FILE_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
-#include "ui/system_info/output.h"
+#include "report/output.h"
 
-#include <rapidxml.hpp>
+#define RAPIDJSON_HAS_STDSTRING 1
+#define RAPIDJSON_SSE2
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
 #include <fstream>
-#include <stack>
 
 namespace aspia {
 
-class OutputXmlFile : public Output
+class OutputJsonFile : public Output
 {
 public:
-    ~OutputXmlFile() = default;
+    ~OutputJsonFile() = default;
 
-    static std::unique_ptr<OutputXmlFile> Create(const FilePath& file_path);
+    static std::unique_ptr<OutputJsonFile> Create(const FilePath& file_path);
 
 protected:
     // Output implementation.
@@ -42,24 +44,21 @@ protected:
     void AddValue(const Value& value) final;
 
 private:
-    OutputXmlFile(std::ofstream file);
+    OutputJsonFile(std::ofstream file);
 
-    static std::string ValueToString(const Value& value);
+    void WriteValue(const Value& value);
 
     std::ofstream file_;
-    rapidxml::xml_document<> doc_;
-    rapidxml::xml_node<>* root_ = nullptr;
-    rapidxml::xml_node<>* category_ = nullptr;
-    std::stack<rapidxml::xml_node<>*> group_stack_;
-    rapidxml::xml_node<>* row_ = nullptr;
-    std::stack<rapidxml::xml_node<>*> category_group_stack_;
+    rapidjson::StringBuffer buffer_;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_;
 
     std::vector<std::string> column_list_;
-    size_t current_column_ = 0;
+    int column_index_ = 0;
+    Category* category_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(OutputXmlFile);
+    DISALLOW_COPY_AND_ASSIGN(OutputJsonFile);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__OUTPUT_XML_FILE_H
+#endif // _ASPIA_REPORT__OUTPUT_JSON_FILE_H

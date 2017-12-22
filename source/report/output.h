@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/output.h
+// FILE:            report/output.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
-#define _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
+#ifndef _ASPIA_REPORT__OUTPUT_H
+#define _ASPIA_REPORT__OUTPUT_H
 
 //
 // To display the information, we use a table representation. Each category is a separate table.
@@ -48,11 +48,11 @@
 //
 
 #include "system_info/category.h"
-#include "ui/system_info/column_list.h"
-#include "ui/system_info/group.h"
-#include "ui/system_info/table.h"
-#include "ui/system_info/value.h"
-#include "ui/system_info/row.h"
+#include "report/column_list.h"
+#include "report/group.h"
+#include "report/table.h"
+#include "report/value.h"
+#include "report/row.h"
 
 namespace aspia {
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__OUTPUT_H
+#endif // _ASPIA_REPORT__OUTPUT_H

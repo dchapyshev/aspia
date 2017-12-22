@@ -9,7 +9,7 @@
 #define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "ui/system_info/report_creator.h"
+#include "report/report_creator.h"
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/system_info/info_list_ctrl.h"

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/value.h
+// FILE:            report/value.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__VALUE_H
-#define _ASPIA_UI__SYSTEM_INFO__VALUE_H
+#ifndef _ASPIA_REPORT__VALUE_H
+#define _ASPIA_REPORT__VALUE_H
 
 #include <cstdint>
 #include <string>
@@ -79,4 +79,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__VALUE_H
+#endif // _ASPIA_REPORT__VALUE_H

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/report_creator_proxy.cc
+// FILE:            report/report_creator_proxy.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/system_info/report_creator_proxy.h"
+#include "report/report_creator_proxy.h"
 
 namespace aspia {
 

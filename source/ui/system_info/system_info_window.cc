@@ -11,12 +11,12 @@
 #include "base/scoped_select_object.h"
 #include "base/scoped_hdc.h"
 #include "base/logging.h"
+#include "report/output_html_file.h"
+#include "report/output_json_file.h"
+#include "report/output_xml_file.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
 #include "ui/system_info/report_progress_dialog.h"
-#include "ui/system_info/output_html_file.h"
-#include "ui/system_info/output_json_file.h"
-#include "ui/system_info/output_xml_file.h"
 #include "ui/about_dialog.h"
 
 #include <atldlgs.h>

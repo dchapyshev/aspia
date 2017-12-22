@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/system_info/report_creator_proxy.h
+// FILE:            report/report_creator_proxy.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_PROXY_H
-#define _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_PROXY_H
+#ifndef _ASPIA_REPORT__REPORT_CREATOR_PROXY_H
+#define _ASPIA_REPORT__REPORT_CREATOR_PROXY_H
 
-#include "ui/system_info/report_creator.h"
+#include "report/report_creator.h"
 
 #include <mutex>
 
@@ -35,4 +35,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__SYSTEM_INFO__REPORT_CREATOR_PROXY_H
+#endif // _ASPIA_REPORT__REPORT_CREATOR_PROXY_H

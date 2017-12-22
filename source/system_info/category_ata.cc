@@ -166,10 +166,10 @@ void CategoryATA::Parse(Table& table, const std::string& data)
             group.AddParam("Rotation Rate", Value::Number(item.rotation_rate(), "RPM"));
 
         if (item.drive_size())
-            group.AddParam("Drive Size", Value::Number(item.drive_size(), "Bytes"));
+            group.AddParam("Drive Size", Value::MemorySize(item.drive_size()));
 
         if (item.buffer_size())
-            group.AddParam("Buffer Size", Value::Number(item.buffer_size(), "Bytes"));
+            group.AddParam("Buffer Size", Value::MemorySize(item.buffer_size()));
 
         if (item.multisectors())
             group.AddParam("Multisectors", Value::Number(item.multisectors()));
