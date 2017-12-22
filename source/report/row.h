@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-class Output;
+class Report;
 class Table;
 class Group;
 
@@ -30,9 +30,9 @@ private:
     friend class Table;
     friend class Group;
 
-    Row(Output* output);
+    Row(Report* report);
 
-    Output* output_;
+    Report* report_;
 };
 
 } // namespace aspia

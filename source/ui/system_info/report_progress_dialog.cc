@@ -12,8 +12,8 @@
 namespace aspia {
 
 ReportProgressDialog::ReportProgressDialog(
-    CategoryList* list, Output* output, ReportCreator::RequestCallback request_callback)
-    : report_creator_(std::make_unique<ReportCreator>(list, output, request_callback))
+    CategoryList* list, Report* report, ReportCreator::RequestCallback request_callback)
+    : report_creator_(std::make_unique<ReportCreator>(list, report, request_callback))
 {
     // Nothing
 }

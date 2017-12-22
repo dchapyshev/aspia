@@ -26,7 +26,7 @@ public:
     enum { IDD = IDD_REPORT_PROGRESS };
 
     ReportProgressDialog(CategoryList* list,
-                         Output* output,
+                         Report* report,
                          ReportCreator::RequestCallback request_callback);
     ~ReportProgressDialog() = default;
 

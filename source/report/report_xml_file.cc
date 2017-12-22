@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            report/output_xml_file.cc
+// FILE:            report/report_xml_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/logging.h"
-#include "report/output_xml_file.h"
+#include "report/report_xml_file.h"
 
 #pragma warning(push, 3)
 #include <rapidxml_print.hpp>
@@ -14,14 +14,14 @@
 
 namespace aspia {
 
-OutputXmlFile::OutputXmlFile(std::ofstream file)
+ReportXmlFile::ReportXmlFile(std::ofstream file)
     : file_(std::move(file))
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<OutputXmlFile> OutputXmlFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportXmlFile> ReportXmlFile::Create(const FilePath& file_path)
 {
     std::ofstream file;
 
@@ -32,10 +32,10 @@ std::unique_ptr<OutputXmlFile> OutputXmlFile::Create(const FilePath& file_path)
         return nullptr;
     }
 
-    return std::unique_ptr<OutputXmlFile>(new OutputXmlFile(std::move(file)));
+    return std::unique_ptr<ReportXmlFile>(new ReportXmlFile(std::move(file)));
 }
 
-void OutputXmlFile::StartDocument()
+void ReportXmlFile::StartDocument()
 {
     rapidxml::xml_node<>* decl = doc_.allocate_node(rapidxml::node_declaration);
 
@@ -50,7 +50,7 @@ void OutputXmlFile::StartDocument()
     root_->append_attribute(doc_.allocate_attribute("generator", "Aspia"));
 }
 
-void OutputXmlFile::EndDocument()
+void ReportXmlFile::EndDocument()
 {
     doc_.append_node(root_);
     file_ << doc_;
@@ -58,7 +58,7 @@ void OutputXmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputXmlFile::StartTableGroup(std::string_view name)
+void ReportXmlFile::StartTableGroup(std::string_view name)
 {
     rapidxml::xml_node<>* category_group =
         doc_.allocate_node(rapidxml::node_element, "category_group");
@@ -68,7 +68,7 @@ void OutputXmlFile::StartTableGroup(std::string_view name)
     category_group_stack_.push(category_group);
 }
 
-void OutputXmlFile::EndTableGroup()
+void ReportXmlFile::EndTableGroup()
 {
     rapidxml::xml_node<>* category_group = category_group_stack_.top();
     category_group_stack_.pop();
@@ -83,14 +83,14 @@ void OutputXmlFile::EndTableGroup()
     }
 }
 
-void OutputXmlFile::StartTable(Category* category)
+void ReportXmlFile::StartTable(Category* category)
 {
     category_ = doc_.allocate_node(rapidxml::node_element, "category");
     category_->append_attribute(
         doc_.allocate_attribute("name", doc_.allocate_string(category->Name())));
 }
 
-void OutputXmlFile::EndTable()
+void ReportXmlFile::EndTable()
 {
     DCHECK(category_);
 
@@ -107,7 +107,7 @@ void OutputXmlFile::EndTable()
     column_list_.clear();
 }
 
-void OutputXmlFile::AddColumns(const ColumnList& column_list)
+void ReportXmlFile::AddColumns(const ColumnList& column_list)
 {
     DCHECK(category_);
 
@@ -117,7 +117,7 @@ void OutputXmlFile::AddColumns(const ColumnList& column_list)
     }
 }
 
-void OutputXmlFile::StartGroup(std::string_view name)
+void ReportXmlFile::StartGroup(std::string_view name)
 {
     DCHECK(category_);
 
@@ -128,7 +128,7 @@ void OutputXmlFile::StartGroup(std::string_view name)
     group_stack_.push(group);
 }
 
-void OutputXmlFile::EndGroup()
+void ReportXmlFile::EndGroup()
 {
     DCHECK(category_);
 
@@ -145,7 +145,7 @@ void OutputXmlFile::EndGroup()
     }
 }
 
-void OutputXmlFile::AddParam(std::string_view param, const Value& value)
+void ReportXmlFile::AddParam(std::string_view param, const Value& value)
 {
     DCHECK(category_);
 
@@ -173,7 +173,7 @@ void OutputXmlFile::AddParam(std::string_view param, const Value& value)
     }
 }
 
-void OutputXmlFile::StartRow()
+void ReportXmlFile::StartRow()
 {
     DCHECK(category_);
     DCHECK(!row_);
@@ -182,7 +182,7 @@ void OutputXmlFile::StartRow()
     current_column_ = 0;
 }
 
-void OutputXmlFile::EndRow()
+void ReportXmlFile::EndRow()
 {
     DCHECK(category_);
     DCHECK(row_);
@@ -199,7 +199,7 @@ void OutputXmlFile::EndRow()
     row_ = nullptr;
 }
 
-void OutputXmlFile::AddValue(const Value& value)
+void ReportXmlFile::AddValue(const Value& value)
 {
     DCHECK(category_);
     DCHECK(row_);
@@ -228,7 +228,7 @@ void OutputXmlFile::AddValue(const Value& value)
 }
 
 // static
-std::string OutputXmlFile::ValueToString(const Value& value)
+std::string ReportXmlFile::ValueToString(const Value& value)
 {
     switch (value.type())
     {

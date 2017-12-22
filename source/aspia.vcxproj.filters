@@ -892,15 +892,6 @@
     <ClCompile Include="report\group.cc">
       <Filter>report</Filter>
     </ClCompile>
-    <ClCompile Include="report\output_html_file.cc">
-      <Filter>report</Filter>
-    </ClCompile>
-    <ClCompile Include="report\output_json_file.cc">
-      <Filter>report</Filter>
-    </ClCompile>
-    <ClCompile Include="report\output_xml_file.cc">
-      <Filter>report</Filter>
-    </ClCompile>
     <ClCompile Include="report\report_creator.cc">
       <Filter>report</Filter>
     </ClCompile>
@@ -914,6 +905,15 @@
       <Filter>report</Filter>
     </ClCompile>
     <ClCompile Include="report\value.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\report_html_file.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\report_json_file.cc">
+      <Filter>report</Filter>
+    </ClCompile>
+    <ClCompile Include="report\report_xml_file.cc">
       <Filter>report</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1841,18 +1841,6 @@
     <ClInclude Include="report\group.h">
       <Filter>report</Filter>
     </ClInclude>
-    <ClInclude Include="report\output.h">
-      <Filter>report</Filter>
-    </ClInclude>
-    <ClInclude Include="report\output_html_file.h">
-      <Filter>report</Filter>
-    </ClInclude>
-    <ClInclude Include="report\output_json_file.h">
-      <Filter>report</Filter>
-    </ClInclude>
-    <ClInclude Include="report\output_xml_file.h">
-      <Filter>report</Filter>
-    </ClInclude>
     <ClInclude Include="report\report_creator.h">
       <Filter>report</Filter>
     </ClInclude>
@@ -1866,6 +1854,18 @@
       <Filter>report</Filter>
     </ClInclude>
     <ClInclude Include="report\value.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report_html_file.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report_json_file.h">
+      <Filter>report</Filter>
+    </ClInclude>
+    <ClInclude Include="report\report_xml_file.h">
       <Filter>report</Filter>
     </ClInclude>
   </ItemGroup>

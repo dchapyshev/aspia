@@ -6,65 +6,65 @@
 //
 
 #include "report/table.h"
-#include "report/output.h"
+#include "report/report.h"
 #include "system_info/category.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-Table::Table(Output* output, Category* category)
-    : output_(output)
+Table::Table(Report* report, Category* category)
+    : report_(report)
 {
-    DCHECK(output_);
+    DCHECK(report_);
     DCHECK(category);
-    output_->StartTable(category);
+    report_->StartTable(category);
 }
 
 Table::Table(Table&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
 }
 
 Table::~Table()
 {
-    if (output_)
-        output_->EndTable();
+    if (report_)
+        report_->EndTable();
 }
 
 
 Table& Table::operator=(Table&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
     return *this;
 }
 
 // static
-Table Table::Create(Output* output, Category* category)
+Table Table::Create(Report* report, Category* category)
 {
-    return Table(output, category);
+    return Table(report, category);
 }
 
 void Table::AddColumns(const ColumnList& column_list)
 {
-    DCHECK(output_);
-    output_->AddColumns(column_list);
+    DCHECK(report_);
+    report_->AddColumns(column_list);
 }
 
 Group Table::AddGroup(std::string_view name)
 {
-    return Group(output_, name);
+    return Group(report_, name);
 }
 
 void Table::AddParam(std::string_view param, const Value& value)
 {
-    output_->AddParam(param, value);
+    report_->AddParam(param, value);
 }
 
 Row Table::AddRow()
 {
-    return Row(output_);
+    return Row(report_);
 }
 
 } // namespace aspia

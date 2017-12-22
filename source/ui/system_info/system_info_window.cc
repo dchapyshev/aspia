@@ -11,9 +11,9 @@
 #include "base/scoped_select_object.h"
 #include "base/scoped_hdc.h"
 #include "base/logging.h"
-#include "report/output_html_file.h"
-#include "report/output_json_file.h"
-#include "report/output_xml_file.h"
+#include "report/report_html_file.h"
+#include "report/report_json_file.h"
+#include "report/report_xml_file.h"
 #include "ui/system_info/system_info_window.h"
 #include "ui/system_info/category_select_dialog.h"
 #include "ui/system_info/report_progress_dialog.h"
@@ -517,19 +517,19 @@ void SystemInfoWindow::Save(CategoryList* category_list)
     FilePath file_path = save_dialog.m_szFileName;
     FilePath extension = file_path.extension();
 
-    std::unique_ptr<Output> output;
+    std::unique_ptr<Report> report;
 
     if (extension == L".html" || extension == L".htm")
     {
-        output = OutputHtmlFile::Create(file_path);
+        report = ReportHtmlFile::Create(file_path);
     }
     else if (extension == L".json")
     {
-        output = OutputJsonFile::Create(file_path);
+        report = ReportJsonFile::Create(file_path);
     }
     else if (extension == L".xml")
     {
-        output = OutputXmlFile::Create(file_path);
+        report = ReportXmlFile::Create(file_path);
     }
     else
     {
@@ -537,10 +537,10 @@ void SystemInfoWindow::Save(CategoryList* category_list)
         return;
     }
 
-    if (!output)
+    if (!report)
         return;
 
-    ReportProgressDialog progress_dialog(category_list, output.get(),
+    ReportProgressDialog progress_dialog(category_list, report.get(),
                                          std::bind(&SystemInfoWindow::OnRequest, this,
                                                    std::placeholders::_1, std::placeholders::_2));
     progress_dialog.DoModal();

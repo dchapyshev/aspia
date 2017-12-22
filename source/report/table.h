@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-class Output;
+class Report;
 class Category;
 
 class Table
@@ -23,7 +23,7 @@ public:
     Table(Table&& other);
     ~Table();
 
-    static Table Create(Output* output, Category* category);
+    static Table Create(Report* report, Category* category);
 
     void AddColumns(const ColumnList& column_list);
 
@@ -34,9 +34,9 @@ public:
     Table& operator=(Table&& other);
 
 private:
-    Table(Output* output, Category* category);
+    Table(Report* report, Category* category);
 
-    Output* output_;
+    Report* report_;
 
     DISALLOW_COPY_AND_ASSIGN(Table);
 };

@@ -8,7 +8,7 @@
 #ifndef _ASPIA_REPORT__REPORT_CREATOR_H
 #define _ASPIA_REPORT__REPORT_CREATOR_H
 
-#include "report/output.h"
+#include "report/report.h"
 
 #include <functional>
 #include <stack>
@@ -24,7 +24,7 @@ public:
         std::function<void(std::string_view guid,
                            std::shared_ptr <ReportCreatorProxy> report_creator)>;
 
-    ReportCreator(CategoryList* list, Output* output, RequestCallback request_callback);
+    ReportCreator(CategoryList* list, Report* report, RequestCallback request_callback);
     ~ReportCreator();
 
     enum class State { REQUEST, OUTPUT };
@@ -50,7 +50,7 @@ private:
     TerminateCallback terminate_callback_;
 
     CategoryList* list_;
-    Output* output_;
+    Report* report_;
 
     std::stack<std::pair<CategoryList*, CategoryList::iterator>> iterator_stack_;
 

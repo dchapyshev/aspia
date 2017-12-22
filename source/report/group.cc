@@ -7,50 +7,50 @@
 
 #include "base/logging.h"
 #include "report/group.h"
-#include "report/output.h"
+#include "report/report.h"
 
 namespace aspia {
 
-Group::Group(Output* output, std::string_view name)
-    : output_(output)
+Group::Group(Report* report, std::string_view name)
+    : report_(report)
 {
-    DCHECK(output_);
-    output_->StartGroup(name);
+    DCHECK(report_);
+    report_->StartGroup(name);
 }
 
 Group::Group(Group&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
 }
 
 Group::~Group()
 {
-    if (output_)
-        output_->EndGroup();
+    if (report_)
+        report_->EndGroup();
 }
 
 Group& Group::operator=(Group&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
     return *this;
 }
 
 Group Group::AddGroup(std::string_view name)
 {
-    return Group(output_, name);
+    return Group(report_, name);
 }
 
 void Group::AddParam(std::string_view param, const Value& value)
 {
-    DCHECK(output_);
-    output_->AddParam(param, value);
+    DCHECK(report_);
+    report_->AddParam(param, value);
 }
 
 Row Group::AddRow()
 {
-    return Row(output_);
+    return Row(report_);
 }
 
 } // namespace aspia

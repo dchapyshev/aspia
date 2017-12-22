@@ -16,7 +16,6 @@
 
 namespace aspia {
 
-class Output;
 class Category;
 class CategoryGroup;
 class CategoryInfo;

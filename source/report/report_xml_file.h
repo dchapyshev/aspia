@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            report/output_xml_file.h
+// FILE:            report/report_xml_file.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_REPORT__OUTPUT_XML_FILE_H
-#define _ASPIA_REPORT__OUTPUT_XML_FILE_H
+#ifndef _ASPIA_REPORT__REPORT_XML_FILE_H
+#define _ASPIA_REPORT__REPORT_XML_FILE_H
 
 #include "base/files/file_path.h"
 #include "base/macros.h"
-#include "report/output.h"
+#include "report/report.h"
 
 #include <rapidxml.hpp>
 #include <fstream>
@@ -18,15 +18,15 @@
 
 namespace aspia {
 
-class OutputXmlFile : public Output
+class ReportXmlFile : public Report
 {
 public:
-    ~OutputXmlFile() = default;
+    ~ReportXmlFile() = default;
 
-    static std::unique_ptr<OutputXmlFile> Create(const FilePath& file_path);
+    static std::unique_ptr<ReportXmlFile> Create(const FilePath& file_path);
 
 protected:
-    // Output implementation.
+    // Report implementation.
     void StartDocument() final;
     void EndDocument() final;
     void StartTableGroup(std::string_view name) final;
@@ -42,7 +42,7 @@ protected:
     void AddValue(const Value& value) final;
 
 private:
-    OutputXmlFile(std::ofstream file);
+    ReportXmlFile(std::ofstream file);
 
     static std::string ValueToString(const Value& value);
 
@@ -57,9 +57,9 @@ private:
     std::vector<std::string> column_list_;
     size_t current_column_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(OutputXmlFile);
+    DISALLOW_COPY_AND_ASSIGN(ReportXmlFile);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_REPORT__OUTPUT_XML_FILE_H
+#endif // _ASPIA_REPORT__REPORT_XML_FILE_H

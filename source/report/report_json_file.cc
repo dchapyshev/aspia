@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            report/output_json_file.cc
+// FILE:            report/report_json_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/logging.h"
-#include "report/output_json_file.h"
+#include "report/report_json_file.h"
 
 namespace aspia {
 
-OutputJsonFile::OutputJsonFile(std::ofstream file)
+ReportJsonFile::ReportJsonFile(std::ofstream file)
     : writer_(buffer_),
       file_(std::move(file))
 {
@@ -18,7 +18,7 @@ OutputJsonFile::OutputJsonFile(std::ofstream file)
 }
 
 // static
-std::unique_ptr<OutputJsonFile> OutputJsonFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportJsonFile> ReportJsonFile::Create(const FilePath& file_path)
 {
     std::ofstream file;
 
@@ -29,33 +29,33 @@ std::unique_ptr<OutputJsonFile> OutputJsonFile::Create(const FilePath& file_path
         return nullptr;
     }
 
-    return std::unique_ptr<OutputJsonFile>(new OutputJsonFile(std::move(file)));
+    return std::unique_ptr<ReportJsonFile>(new ReportJsonFile(std::move(file)));
 }
 
-void OutputJsonFile::StartDocument()
+void ReportJsonFile::StartDocument()
 {
     writer_.StartObject();
 }
 
-void OutputJsonFile::EndDocument()
+void ReportJsonFile::EndDocument()
 {
     writer_.EndObject();
     file_.write(buffer_.GetString(), buffer_.GetSize());
     file_.close();
 }
 
-void OutputJsonFile::StartTableGroup(std::string_view name)
+void ReportJsonFile::StartTableGroup(std::string_view name)
 {
     writer_.String(name.data());
     writer_.StartObject();
 }
 
-void OutputJsonFile::EndTableGroup()
+void ReportJsonFile::EndTableGroup()
 {
     writer_.EndObject();
 }
 
-void OutputJsonFile::StartTable(Category* category)
+void ReportJsonFile::StartTable(Category* category)
 {
     DCHECK(!category_);
     category_ = category;
@@ -68,7 +68,7 @@ void OutputJsonFile::StartTable(Category* category)
         writer_.StartArray();
 }
 
-void OutputJsonFile::EndTable()
+void ReportJsonFile::EndTable()
 {
     DCHECK(category_);
 
@@ -81,7 +81,7 @@ void OutputJsonFile::EndTable()
     category_ = nullptr;
 }
 
-void OutputJsonFile::AddColumns(const ColumnList& column_list)
+void ReportJsonFile::AddColumns(const ColumnList& column_list)
 {
     for (const auto& column : column_list)
     {
@@ -89,18 +89,18 @@ void OutputJsonFile::AddColumns(const ColumnList& column_list)
     }
 }
 
-void OutputJsonFile::StartGroup(std::string_view name)
+void ReportJsonFile::StartGroup(std::string_view name)
 {
     writer_.String(name.data());
     writer_.StartObject();
 }
 
-void OutputJsonFile::EndGroup()
+void ReportJsonFile::EndGroup()
 {
     writer_.EndObject();
 }
 
-void OutputJsonFile::AddParam(std::string_view param, const Value& value)
+void ReportJsonFile::AddParam(std::string_view param, const Value& value)
 {
     if (!value.HasUnit())
     {
@@ -122,18 +122,18 @@ void OutputJsonFile::AddParam(std::string_view param, const Value& value)
     }
 }
 
-void OutputJsonFile::StartRow()
+void ReportJsonFile::StartRow()
 {
     writer_.StartObject();
     column_index_ = 0;
 }
 
-void OutputJsonFile::EndRow()
+void ReportJsonFile::EndRow()
 {
     writer_.EndObject();
 }
 
-void OutputJsonFile::AddValue(const Value& value)
+void ReportJsonFile::AddValue(const Value& value)
 {
     if (!value.HasUnit())
     {
@@ -157,7 +157,7 @@ void OutputJsonFile::AddValue(const Value& value)
     ++column_index_;
 }
 
-void OutputJsonFile::WriteValue(const Value& value)
+void ReportJsonFile::WriteValue(const Value& value)
 {
     switch (value.type())
     {

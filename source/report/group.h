@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-class Output;
+class Report;
 
 class Group
 {
@@ -31,9 +31,9 @@ public:
 private:
     friend class Table;
 
-    Group(Output* output, std::string_view name);
+    Group(Report* report, std::string_view name);
 
-    Output* output_;
+    Report* report_;
 
     DISALLOW_COPY_AND_ASSIGN(Group);
 };

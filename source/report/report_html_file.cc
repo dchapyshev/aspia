@@ -1,13 +1,13 @@
 //
 // PROJECT:         Aspia
-// FILE:            report/output_html_file.cc
+// FILE:            report/report_html_file.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #include "base/strings/string_printf.h"
 #include "base/logging.h"
-#include "report/output_html_file.h"
+#include "report/report_html_file.h"
 
 #pragma warning(push, 3)
 #include <rapidxml_print.hpp>
@@ -77,14 +77,14 @@ std::string ValueToString(const Value& value)
 
 } // namespace
 
-OutputHtmlFile::OutputHtmlFile(std::ofstream file)
+ReportHtmlFile::ReportHtmlFile(std::ofstream file)
     : file_(std::move(file))
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<OutputHtmlFile> OutputHtmlFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportHtmlFile> ReportHtmlFile::Create(const FilePath& file_path)
 {
     std::ofstream file;
 
@@ -95,10 +95,10 @@ std::unique_ptr<OutputHtmlFile> OutputHtmlFile::Create(const FilePath& file_path
         return nullptr;
     }
 
-    return std::unique_ptr<OutputHtmlFile>(new OutputHtmlFile(std::move(file)));
+    return std::unique_ptr<ReportHtmlFile>(new ReportHtmlFile(std::move(file)));
 }
 
-void OutputHtmlFile::StartDocument()
+void ReportHtmlFile::StartDocument()
 {
     html_ = doc_.allocate_node(rapidxml::node_element, "html");
 
@@ -132,7 +132,7 @@ void OutputHtmlFile::StartDocument()
     body_ = doc_.allocate_node(rapidxml::node_element, "body");
 }
 
-void OutputHtmlFile::EndDocument()
+void ReportHtmlFile::EndDocument()
 {
     DCHECK(html_);
     DCHECK(body_);
@@ -145,7 +145,7 @@ void OutputHtmlFile::EndDocument()
     doc_.clear();
 }
 
-void OutputHtmlFile::StartTableGroup(std::string_view name)
+void ReportHtmlFile::StartTableGroup(std::string_view name)
 {
     rapidxml::xml_node<>* h =
         doc_.allocate_node(rapidxml::node_element,
@@ -158,13 +158,13 @@ void OutputHtmlFile::StartTableGroup(std::string_view name)
         ++h_level_;
 }
 
-void OutputHtmlFile::EndTableGroup()
+void ReportHtmlFile::EndTableGroup()
 {
     if (h_level_ > 1)
         --h_level_;
 }
 
-void OutputHtmlFile::StartTable(Category* category)
+void ReportHtmlFile::StartTable(Category* category)
 {
     DCHECK(body_);
     DCHECK(!table_);
@@ -179,7 +179,7 @@ void OutputHtmlFile::StartTable(Category* category)
     table_ = doc_.allocate_node(rapidxml::node_element, "table");
 }
 
-void OutputHtmlFile::EndTable()
+void ReportHtmlFile::EndTable()
 {
     DCHECK(body_);
     DCHECK(table_);
@@ -188,7 +188,7 @@ void OutputHtmlFile::EndTable()
     table_ = nullptr;
 }
 
-void OutputHtmlFile::AddColumns(const ColumnList& column_list)
+void ReportHtmlFile::AddColumns(const ColumnList& column_list)
 {
     DCHECK(table_);
     tr_ = doc_.allocate_node(rapidxml::node_element, "tr");
@@ -208,7 +208,7 @@ void OutputHtmlFile::AddColumns(const ColumnList& column_list)
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::StartGroup(std::string_view name)
+void ReportHtmlFile::StartGroup(std::string_view name)
 {
     DCHECK(table_);
 
@@ -237,12 +237,12 @@ void OutputHtmlFile::StartGroup(std::string_view name)
     padding_ += 12;
 }
 
-void OutputHtmlFile::EndGroup()
+void ReportHtmlFile::EndGroup()
 {
     padding_ -= 12;
 }
 
-void OutputHtmlFile::AddParam(std::string_view param, const Value& value)
+void ReportHtmlFile::AddParam(std::string_view param, const Value& value)
 {
     DCHECK(table_);
 
@@ -271,7 +271,7 @@ void OutputHtmlFile::AddParam(std::string_view param, const Value& value)
     table_->append_node(tr);
 }
 
-void OutputHtmlFile::StartRow()
+void ReportHtmlFile::StartRow()
 {
     DCHECK(table_);
     DCHECK(!tr_);
@@ -280,7 +280,7 @@ void OutputHtmlFile::StartRow()
     current_column_ = 0;
 }
 
-void OutputHtmlFile::EndRow()
+void ReportHtmlFile::EndRow()
 {
     DCHECK(table_);
     DCHECK(tr_);
@@ -289,7 +289,7 @@ void OutputHtmlFile::EndRow()
     tr_ = nullptr;
 }
 
-void OutputHtmlFile::AddValue(const Value& value)
+void ReportHtmlFile::AddValue(const Value& value)
 {
     DCHECK(table_);
     DCHECK(tr_);

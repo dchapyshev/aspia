@@ -6,41 +6,41 @@
 //
 
 #include "report/row.h"
-#include "report/output.h"
+#include "report/report.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-Row::Row(Output* output)
-    : output_(output)
+Row::Row(Report* report)
+    : report_(report)
 {
-    DCHECK(output_);
-    output_->StartRow();
+    DCHECK(report_);
+    report_->StartRow();
 }
 
 Row::Row(Row&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
 }
 
 Row::~Row()
 {
-    if (output_)
-        output_->EndRow();
+    if (report_)
+        report_->EndRow();
 }
 
 Row& Row::operator=(Row&& other)
 {
-    output_ = other.output_;
-    other.output_ = nullptr;
+    report_ = other.report_;
+    other.report_ = nullptr;
     return *this;
 }
 
 void Row::AddValue(const Value& value)
 {
-    DCHECK(output_);
-    output_->AddValue(value);
+    DCHECK(report_);
+    report_->AddValue(value);
 }
 
 } // namespace aspia

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            report/output.h
+// FILE:            report/report.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_REPORT__OUTPUT_H
-#define _ASPIA_REPORT__OUTPUT_H
+#ifndef _ASPIA_REPORT__REPORT_H
+#define _ASPIA_REPORT__REPORT_H
 
 //
 // To display the information, we use a table representation. Each category is a separate table.
@@ -56,10 +56,10 @@
 
 namespace aspia {
 
-class Output
+class Report
 {
 public:
-    virtual ~Output() = default;
+    virtual ~Report() = default;
 
 private:
     friend class ReportCreator;
@@ -89,4 +89,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_REPORT__OUTPUT_H
+#endif // _ASPIA_REPORT__REPORT_H

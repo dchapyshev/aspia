@@ -10,14 +10,14 @@
 
 namespace aspia {
 
-ReportCreator::ReportCreator(CategoryList* list, Output* output, RequestCallback request_callback)
+ReportCreator::ReportCreator(CategoryList* list, Report* report, RequestCallback request_callback)
     : request_callback_(std::move(request_callback)),
       list_(list),
-      output_(output)
+      report_(report)
 {
     DCHECK(request_callback_);
     DCHECK(list_);
-    DCHECK(output_);
+    DCHECK(report_);
 
     proxy_.reset(new ReportCreatorProxy(this));
 }
@@ -41,7 +41,7 @@ void ReportCreator::ProcessNextItem()
     if (iterator_stack_.empty())
     {
         iterator_stack_.emplace(list_, list_->begin());
-        output_->StartDocument();
+        report_->StartDocument();
     }
 
     CategoryList* list = iterator_stack_.top().first;
@@ -53,12 +53,12 @@ void ReportCreator::ProcessNextItem()
 
         if (iterator_stack_.empty())
         {
-            output_->EndDocument();
+            report_->EndDocument();
             terminate_callback_();
             return;
         }
 
-        output_->EndTableGroup();
+        report_->EndTableGroup();
     }
     else
     {
@@ -85,7 +85,7 @@ void ReportCreator::ProcessNextItem()
 
             if (HasCheckedItems(category_group))
             {
-                output_->StartTableGroup(category_group->Name());
+                report_->StartTableGroup(category_group->Name());
 
                 iterator_stack_.emplace(category_group->mutable_child_list(),
                                         category_group->mutable_child_list()->begin());
@@ -139,7 +139,7 @@ void ReportCreator::Parse(const std::string& data)
     state_change_callback_(category_info->Name(), State::OUTPUT);
 
     {
-        Table table = Table::Create(output_, category);
+        Table table = Table::Create(report_, category);
 
         if (!data.empty())
             category_info->Parse(table, data);
