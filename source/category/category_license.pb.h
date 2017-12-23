@@ -25,8 +25,10 @@
 #include <google/protobuf/generated_message_table_driven.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/metadata_lite.h>
+#include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_category_5flicense_2eproto {
@@ -34,24 +36,410 @@ namespace protobuf_category_5flicense_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[1];
+  static const ::google::protobuf::internal::ParseTable schema[3];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
+void InitDefaultsLicense_FieldImpl();
+void InitDefaultsLicense_Field();
+void InitDefaultsLicense_ItemImpl();
+void InitDefaultsLicense_Item();
+void InitDefaultsLicenseImpl();
+void InitDefaultsLicense();
 inline void InitDefaults() {
+  InitDefaultsLicense_Field();
+  InitDefaultsLicense_Item();
+  InitDefaultsLicense();
 }
 }  // namespace protobuf_category_5flicense_2eproto
 namespace aspia {
 namespace proto {
+class License;
+class LicenseDefaultTypeInternal;
+extern LicenseDefaultTypeInternal _License_default_instance_;
+class License_Field;
+class License_FieldDefaultTypeInternal;
+extern License_FieldDefaultTypeInternal _License_Field_default_instance_;
+class License_Item;
+class License_ItemDefaultTypeInternal;
+extern License_ItemDefaultTypeInternal _License_Item_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
 namespace proto {
 
+enum License_Field_Type {
+  License_Field_Type_TYPE_UNKNOWN = 0,
+  License_Field_Type_TYPE_OWNER = 2,
+  License_Field_Type_TYPE_ORGANIZATION = 3,
+  License_Field_Type_TYPE_PRODUCT_KEY = 4,
+  License_Field_Type_TYPE_PRODUCT_ID = 5,
+  License_Field_Type_License_Field_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  License_Field_Type_License_Field_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool License_Field_Type_IsValid(int value);
+const License_Field_Type License_Field_Type_Type_MIN = License_Field_Type_TYPE_UNKNOWN;
+const License_Field_Type License_Field_Type_Type_MAX = License_Field_Type_TYPE_PRODUCT_ID;
+const int License_Field_Type_Type_ARRAYSIZE = License_Field_Type_Type_MAX + 1;
+
 // ===================================================================
 
+class License_Field : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.License.Field) */ {
+ public:
+  License_Field();
+  virtual ~License_Field();
 
+  License_Field(const License_Field& from);
+
+  inline License_Field& operator=(const License_Field& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  License_Field(License_Field&& from) noexcept
+    : License_Field() {
+    *this = ::std::move(from);
+  }
+
+  inline License_Field& operator=(License_Field&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const License_Field& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const License_Field* internal_default_instance() {
+    return reinterpret_cast<const License_Field*>(
+               &_License_Field_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(License_Field* other);
+  friend void swap(License_Field& a, License_Field& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline License_Field* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  License_Field* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const License_Field& from);
+  void MergeFrom(const License_Field& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(License_Field* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef License_Field_Type Type;
+  static const Type TYPE_UNKNOWN =
+    License_Field_Type_TYPE_UNKNOWN;
+  static const Type TYPE_OWNER =
+    License_Field_Type_TYPE_OWNER;
+  static const Type TYPE_ORGANIZATION =
+    License_Field_Type_TYPE_ORGANIZATION;
+  static const Type TYPE_PRODUCT_KEY =
+    License_Field_Type_TYPE_PRODUCT_KEY;
+  static const Type TYPE_PRODUCT_ID =
+    License_Field_Type_TYPE_PRODUCT_ID;
+  static inline bool Type_IsValid(int value) {
+    return License_Field_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    License_Field_Type_Type_MIN;
+  static const Type Type_MAX =
+    License_Field_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    License_Field_Type_Type_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // string value = 2;
+  void clear_value();
+  static const int kValueFieldNumber = 2;
+  const ::std::string& value() const;
+  void set_value(const ::std::string& value);
+  #if LANG_CXX11
+  void set_value(::std::string&& value);
+  #endif
+  void set_value(const char* value);
+  void set_value(const char* value, size_t size);
+  ::std::string* mutable_value();
+  ::std::string* release_value();
+  void set_allocated_value(::std::string* value);
+
+  // .aspia.proto.License.Field.Type type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::aspia::proto::License_Field_Type type() const;
+  void set_type(::aspia::proto::License_Field_Type value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.License.Field)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr value_;
+  int type_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5flicense_2eproto::TableStruct;
+  friend void ::protobuf_category_5flicense_2eproto::InitDefaultsLicense_FieldImpl();
+};
+// -------------------------------------------------------------------
+
+class License_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.License.Item) */ {
+ public:
+  License_Item();
+  virtual ~License_Item();
+
+  License_Item(const License_Item& from);
+
+  inline License_Item& operator=(const License_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  License_Item(License_Item&& from) noexcept
+    : License_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline License_Item& operator=(License_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const License_Item& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const License_Item* internal_default_instance() {
+    return reinterpret_cast<const License_Item*>(
+               &_License_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(License_Item* other);
+  friend void swap(License_Item& a, License_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline License_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  License_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const License_Item& from);
+  void MergeFrom(const License_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(License_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.License.Field field = 2;
+  int field_size() const;
+  void clear_field();
+  static const int kFieldFieldNumber = 2;
+  const ::aspia::proto::License_Field& field(int index) const;
+  ::aspia::proto::License_Field* mutable_field(int index);
+  ::aspia::proto::License_Field* add_field();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Field >*
+      mutable_field();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Field >&
+      field() const;
+
+  // string product_name = 1;
+  void clear_product_name();
+  static const int kProductNameFieldNumber = 1;
+  const ::std::string& product_name() const;
+  void set_product_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_product_name(::std::string&& value);
+  #endif
+  void set_product_name(const char* value);
+  void set_product_name(const char* value, size_t size);
+  ::std::string* mutable_product_name();
+  ::std::string* release_product_name();
+  void set_allocated_product_name(::std::string* product_name);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.License.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Field > field_;
+  ::google::protobuf::internal::ArenaStringPtr product_name_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5flicense_2eproto::TableStruct;
+  friend void ::protobuf_category_5flicense_2eproto::InitDefaultsLicense_ItemImpl();
+};
+// -------------------------------------------------------------------
+
+class License : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.License) */ {
+ public:
+  License();
+  virtual ~License();
+
+  License(const License& from);
+
+  inline License& operator=(const License& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  License(License&& from) noexcept
+    : License() {
+    *this = ::std::move(from);
+  }
+
+  inline License& operator=(License&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const License& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const License* internal_default_instance() {
+    return reinterpret_cast<const License*>(
+               &_License_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(License* other);
+  friend void swap(License& a, License& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline License* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  License* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const License& from);
+  void MergeFrom(const License& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(License* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef License_Field Field;
+  typedef License_Item Item;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.License.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::proto::License_Item& item(int index) const;
+  ::aspia::proto::License_Item* mutable_item(int index);
+  ::aspia::proto::License_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.License)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Item > item_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5flicense_2eproto::TableStruct;
+  friend void ::protobuf_category_5flicense_2eproto::InitDefaultsLicenseImpl();
+};
 // ===================================================================
 
 
@@ -61,14 +449,216 @@ namespace proto {
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// License_Field
+
+// .aspia.proto.License.Field.Type type = 1;
+inline void License_Field::clear_type() {
+  type_ = 0;
+}
+inline ::aspia::proto::License_Field_Type License_Field::type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.License.Field.type)
+  return static_cast< ::aspia::proto::License_Field_Type >(type_);
+}
+inline void License_Field::set_type(::aspia::proto::License_Field_Type value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.License.Field.type)
+}
+
+// string value = 2;
+inline void License_Field::clear_value() {
+  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& License_Field::value() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.License.Field.value)
+  return value_.GetNoArena();
+}
+inline void License_Field::set_value(const ::std::string& value) {
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.License.Field.value)
+}
+#if LANG_CXX11
+inline void License_Field::set_value(::std::string&& value) {
+  
+  value_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.License.Field.value)
+}
+#endif
+inline void License_Field::set_value(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.License.Field.value)
+}
+inline void License_Field::set_value(const char* value, size_t size) {
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.License.Field.value)
+}
+inline ::std::string* License_Field::mutable_value() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.License.Field.value)
+  return value_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* License_Field::release_value() {
+  // @@protoc_insertion_point(field_release:aspia.proto.License.Field.value)
+  
+  return value_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void License_Field::set_allocated_value(::std::string* value) {
+  if (value != NULL) {
+    
+  } else {
+    
+  }
+  value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.License.Field.value)
+}
+
+// -------------------------------------------------------------------
+
+// License_Item
+
+// string product_name = 1;
+inline void License_Item::clear_product_name() {
+  product_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& License_Item::product_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.License.Item.product_name)
+  return product_name_.GetNoArena();
+}
+inline void License_Item::set_product_name(const ::std::string& value) {
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.License.Item.product_name)
+}
+#if LANG_CXX11
+inline void License_Item::set_product_name(::std::string&& value) {
+  
+  product_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.License.Item.product_name)
+}
+#endif
+inline void License_Item::set_product_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.License.Item.product_name)
+}
+inline void License_Item::set_product_name(const char* value, size_t size) {
+  
+  product_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.License.Item.product_name)
+}
+inline ::std::string* License_Item::mutable_product_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.License.Item.product_name)
+  return product_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* License_Item::release_product_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.License.Item.product_name)
+  
+  return product_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void License_Item::set_allocated_product_name(::std::string* product_name) {
+  if (product_name != NULL) {
+    
+  } else {
+    
+  }
+  product_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), product_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.License.Item.product_name)
+}
+
+// repeated .aspia.proto.License.Field field = 2;
+inline int License_Item::field_size() const {
+  return field_.size();
+}
+inline void License_Item::clear_field() {
+  field_.Clear();
+}
+inline const ::aspia::proto::License_Field& License_Item::field(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.License.Item.field)
+  return field_.Get(index);
+}
+inline ::aspia::proto::License_Field* License_Item::mutable_field(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.License.Item.field)
+  return field_.Mutable(index);
+}
+inline ::aspia::proto::License_Field* License_Item::add_field() {
+  // @@protoc_insertion_point(field_add:aspia.proto.License.Item.field)
+  return field_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Field >*
+License_Item::mutable_field() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.License.Item.field)
+  return &field_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Field >&
+License_Item::field() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.License.Item.field)
+  return field_;
+}
+
+// -------------------------------------------------------------------
+
+// License
+
+// repeated .aspia.proto.License.Item item = 1;
+inline int License::item_size() const {
+  return item_.size();
+}
+inline void License::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::proto::License_Item& License::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.License.item)
+  return item_.Get(index);
+}
+inline ::aspia::proto::License_Item* License::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.License.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::proto::License_Item* License::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.License.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Item >*
+License::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.License.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::License_Item >&
+License::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.License.item)
+  return item_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::License_Field_Type> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 
