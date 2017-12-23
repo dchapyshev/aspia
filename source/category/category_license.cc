@@ -42,9 +42,9 @@ std::string DigitalProductIdToString(uint8_t* product_id, size_t product_id_size
 
         for (int j = kDecodeStringLength - 1; j >= 0; --j)
         {
-            int value = (key_map_index << 8) | product_id[kStartIndex + j];
-            product_id[kStartIndex + j] = static_cast<uint8_t>(value / kKeyMapSize);
-            key_map_index = value % kKeyMapSize;
+            key_map_index = (key_map_index << 8) | product_id[kStartIndex + j];
+            product_id[kStartIndex + j] = static_cast<uint8_t>(key_map_index / kKeyMapSize);
+            key_map_index %= kKeyMapSize;
         }
 
         key.insert(key.begin(), kKeyMap[key_map_index]);
@@ -74,13 +74,21 @@ void AddMsProduct(proto::License& message, const std::wstring& product_name, con
 
     LONG status = key.ReadValue(L"DigitalProductId", nullptr, &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
-        return;
+    {
+        status = key.ReadValue(L"DPID", nullptr, &product_id_size, nullptr);
+        if (status != ERROR_SUCCESS)
+            return;
+    }
 
     std::unique_ptr<uint8_t[]> product_id = std::make_unique<uint8_t[]>(product_id_size);
 
     status = key.ReadValue(L"DigitalProductId", product_id.get(), &product_id_size, nullptr);
     if (status != ERROR_SUCCESS)
-        return;
+    {
+        status = key.ReadValue(L"DPID", product_id.get(), &product_id_size, nullptr);
+        if (status != ERROR_SUCCESS)
+            return;
+    }
 
     proto::License::Item* item = message.add_item();
 
@@ -198,6 +206,69 @@ void AddMsProducts(proto::License& message, REGSAM access)
     }
 }
 
+void AddVisualStudio(proto::License& message, REGSAM access)
+{
+    static const WCHAR kVisualStudioPath[] = L"SOFTWARE\\Microsoft\\VisualStudio";
+    static const int kProductKeyLength = 25;
+    static const int kGroupLength = 5;
+
+    RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kVisualStudioPath, access);
+
+    while (key_iterator.Valid())
+    {
+        std::wstring key_path =
+            StringPrintf(L"%s\\%s\\Registration", kVisualStudioPath, key_iterator.Name());
+
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, key_path.c_str(), access);
+
+        while (sub_key_iterator.Valid())
+        {
+            std::wstring sub_key_path =
+                StringPrintf(L"%s\\%s", key_path.c_str(), sub_key_iterator.Name());
+
+            RegistryKey key;
+
+            LONG status = key.Open(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access | KEY_READ);
+            if (status == ERROR_SUCCESS)
+            {
+                std::wstring value;
+
+                status = key.ReadValue(L"PIDKEY", &value);
+                if (status == ERROR_SUCCESS && value.length() == kProductKeyLength)
+                {
+                    for (size_t i = kGroupLength; i < value.length(); i += kGroupLength + 1)
+                    {
+                        // Insert group separators.
+                        value.insert(i, 1, '-');
+                    }
+
+                    proto::License::Item* item = message.add_item();
+
+                    item->set_product_name("Microsoft Visual Studio");
+
+                    proto::License::Field* product_key = item->add_field();
+
+                    product_key->set_type(proto::License::Field::TYPE_PRODUCT_KEY);
+                    product_key->set_value(UTF8fromUNICODE(value));
+
+                    status = key.ReadValue(L"UserName", &value);
+                    if (status == ERROR_SUCCESS)
+                    {
+                        proto::License::Field* owner = item->add_field();
+
+                        owner->set_type(proto::License::Field::TYPE_OWNER);
+                        owner->set_value(UTF8fromUNICODE(value));
+                    }
+                }
+            }
+
+            ++sub_key_iterator;
+        }
+
+        ++key_iterator;
+    }
+}
+
 const char* FieldTypeToString(proto::License::Field::Type value)
 {
     switch (value)
@@ -281,17 +352,20 @@ std::string CategoryLicense::Serialize()
     {
         // We need to read the 64-bit keys.
         AddMsProducts(message, KEY_WOW64_64KEY);
+        AddVisualStudio(message, KEY_WOW64_64KEY);
     }
 
 #elif (ARCH_CPU_X86_64 == 1)
     // If the x64 application is running in a x64 system we always read 32-bit keys.
     AddMsProducts(message, KEY_WOW64_32KEY);
+    AddVisualStudio(message, KEY_WOW64_32KEY);
 #else
 #error Unknown architecture
 #endif
 
     // Read native keys.
     AddMsProducts(message, 0);
+    AddVisualStudio(message, 0);
 
     return message.SerializeAsString();
 }
