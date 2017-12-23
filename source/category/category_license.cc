@@ -269,6 +269,83 @@ void AddVisualStudio(proto::License& message, REGSAM access)
     }
 }
 
+void AddVMWareProduct(proto::License& message, const RegistryKey& key)
+{
+    std::wstring product_id;
+
+    LONG status = key.ReadValue(L"ProductID", &product_id);
+    if (status != ERROR_SUCCESS)
+        return;
+
+    std::wstring value;
+
+    status = key.ReadValue(L"Serial", &value);
+    if (status != ERROR_SUCCESS)
+        return;
+
+    proto::License::Item* item = message.add_item();
+
+    item->set_product_name(UTF8fromUNICODE(product_id));
+
+    proto::License::Field* serial_field = item->add_field();
+    serial_field->set_type(proto::License::Field::TYPE_PRODUCT_KEY);
+    serial_field->set_value(UTF8fromUNICODE(value));
+
+    status = key.ReadValue(L"LicenseVersion", &value);
+    if (status == ERROR_SUCCESS)
+    {
+        proto::License::Field* field = item->add_field();
+
+        field->set_type(proto::License::Field::TYPE_LICENSE_VERSION);
+        field->set_value(UTF8fromUNICODE(value));
+    }
+
+    status = key.ReadValue(L"LicenseType", &value);
+    if (status == ERROR_SUCCESS)
+    {
+        proto::License::Field* field = item->add_field();
+
+        field->set_type(proto::License::Field::TYPE_LICENSE_TYPE);
+        field->set_value(UTF8fromUNICODE(value));
+    }
+}
+
+void AddVMWareProducts(proto::License& message, REGSAM access)
+{
+    static const WCHAR kKeyPath[] = L"Software\\VMware, Inc.";
+
+    RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kKeyPath, access);
+
+    // Enumerate products types (Workstation, Server, etc).
+    while (key_iterator.Valid())
+    {
+        std::wstring sub_key_path = StringPrintf(L"%s\\%s", kKeyPath, key_iterator.Name());
+
+        RegistryKeyIterator sub_key_iterator(HKEY_LOCAL_MACHINE, sub_key_path.c_str(), access);
+
+        while (sub_key_iterator.Valid())
+        {
+            if (wcsncmp(sub_key_iterator.Name(), L"License.ws", 10) == 0)
+            {
+                std::wstring license_key_path =
+                    StringPrintf(L"%s\\%s", sub_key_path.c_str(), sub_key_iterator.Name());
+
+                RegistryKey key;
+
+                LONG status = key.Open(HKEY_LOCAL_MACHINE,
+                                       license_key_path.c_str(),
+                                       access | KEY_READ);
+                if (status == ERROR_SUCCESS)
+                    AddVMWareProduct(message, key);
+            }
+
+            ++sub_key_iterator;
+        }
+
+        ++key_iterator;
+    }
+}
+
 const char* FieldTypeToString(proto::License::Field::Type value)
 {
     switch (value)
@@ -284,6 +361,12 @@ const char* FieldTypeToString(proto::License::Field::Type value)
 
         case proto::License::Field::TYPE_PRODUCT_ID:
             return "Product Id";
+
+        case proto::License::Field::TYPE_LICENSE_VERSION:
+            return "License Version";
+
+        case proto::License::Field::TYPE_LICENSE_TYPE:
+            return "License Type";
 
         default:
             return "Unknown";
@@ -353,12 +436,14 @@ std::string CategoryLicense::Serialize()
         // We need to read the 64-bit keys.
         AddMsProducts(message, KEY_WOW64_64KEY);
         AddVisualStudio(message, KEY_WOW64_64KEY);
+        AddVMWareProducts(message, KEY_WOW64_64KEY);
     }
 
 #elif (ARCH_CPU_X86_64 == 1)
     // If the x64 application is running in a x64 system we always read 32-bit keys.
     AddMsProducts(message, KEY_WOW64_32KEY);
     AddVisualStudio(message, KEY_WOW64_32KEY);
+    AddVMWareProducts(message, KEY_WOW64_32KEY);
 #else
 #error Unknown architecture
 #endif
@@ -366,6 +451,7 @@ std::string CategoryLicense::Serialize()
     // Read native keys.
     AddMsProducts(message, 0);
     AddVisualStudio(message, 0);
+    AddVMWareProducts(message, 0);
 
     return message.SerializeAsString();
 }

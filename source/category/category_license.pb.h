@@ -75,12 +75,14 @@ enum License_Field_Type {
   License_Field_Type_TYPE_ORGANIZATION = 3,
   License_Field_Type_TYPE_PRODUCT_KEY = 4,
   License_Field_Type_TYPE_PRODUCT_ID = 5,
+  License_Field_Type_TYPE_LICENSE_VERSION = 6,
+  License_Field_Type_TYPE_LICENSE_TYPE = 7,
   License_Field_Type_License_Field_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   License_Field_Type_License_Field_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool License_Field_Type_IsValid(int value);
 const License_Field_Type License_Field_Type_Type_MIN = License_Field_Type_TYPE_UNKNOWN;
-const License_Field_Type License_Field_Type_Type_MAX = License_Field_Type_TYPE_PRODUCT_ID;
+const License_Field_Type License_Field_Type_Type_MAX = License_Field_Type_TYPE_LICENSE_TYPE;
 const int License_Field_Type_Type_ARRAYSIZE = License_Field_Type_Type_MAX + 1;
 
 // ===================================================================
@@ -174,6 +176,10 @@ class License_Field : public ::google::protobuf::MessageLite /* @@protoc_inserti
     License_Field_Type_TYPE_PRODUCT_KEY;
   static const Type TYPE_PRODUCT_ID =
     License_Field_Type_TYPE_PRODUCT_ID;
+  static const Type TYPE_LICENSE_VERSION =
+    License_Field_Type_TYPE_LICENSE_VERSION;
+  static const Type TYPE_LICENSE_TYPE =
+    License_Field_Type_TYPE_LICENSE_TYPE;
   static inline bool Type_IsValid(int value) {
     return License_Field_Type_IsValid(value);
   }

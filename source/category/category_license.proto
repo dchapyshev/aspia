@@ -17,11 +17,13 @@ message License
     {
         enum Type
         {
-            TYPE_UNKNOWN       = 0;
-            TYPE_OWNER         = 2;
-            TYPE_ORGANIZATION  = 3;
-            TYPE_PRODUCT_KEY   = 4;
-            TYPE_PRODUCT_ID    = 5;
+            TYPE_UNKNOWN         = 0;
+            TYPE_OWNER           = 2;
+            TYPE_ORGANIZATION    = 3;
+            TYPE_PRODUCT_KEY     = 4;
+            TYPE_PRODUCT_ID      = 5;
+            TYPE_LICENSE_VERSION = 6;
+            TYPE_LICENSE_TYPE    = 7;
         }
 
         Type type    = 1;

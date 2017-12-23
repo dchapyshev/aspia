@@ -111,6 +111,8 @@ bool License_Field_Type_IsValid(int value) {
     case 3:
     case 4:
     case 5:
+    case 6:
+    case 7:
       return true;
     default:
       return false;
@@ -123,6 +125,8 @@ const License_Field_Type License_Field::TYPE_OWNER;
 const License_Field_Type License_Field::TYPE_ORGANIZATION;
 const License_Field_Type License_Field::TYPE_PRODUCT_KEY;
 const License_Field_Type License_Field::TYPE_PRODUCT_ID;
+const License_Field_Type License_Field::TYPE_LICENSE_VERSION;
+const License_Field_Type License_Field::TYPE_LICENSE_TYPE;
 const License_Field_Type License_Field::Type_MIN;
 const License_Field_Type License_Field::Type_MAX;
 const int License_Field::Type_ARRAYSIZE;
