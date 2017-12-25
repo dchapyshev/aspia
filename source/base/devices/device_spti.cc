@@ -157,7 +157,7 @@ bool DeviceSPTI::GetModeSenseData(uint8_t page, ModeSenseData* mode_sense_data)
     cmd.spt.Cdb[7] = (cmd.spt.DataTransferLength >> 8) & 0xFF;
     cmd.spt.Cdb[8] = cmd.spt.DataTransferLength & 0xFF;
 
-    DWORD length = cmd.spt.DataBufferOffset + cmd.spt.DataTransferLength;
+    DWORD length = offsetof(SCSI_PASS_THROUGH_WBUF, data_buffer) + cmd.spt.DataTransferLength;
     DWORD bytes_returned;
 
     if (IoControl(IOCTL_SCSI_PASS_THROUGH,
