@@ -33,6 +33,7 @@
     <ClCompile Include="base\desktop.cc" />
     <ClCompile Include="base\devices\device.cc" />
     <ClCompile Include="base\devices\device_enumerator.cc" />
+    <ClCompile Include="base\devices\device_spti.cc" />
     <ClCompile Include="base\devices\edid.cc" />
     <ClCompile Include="base\devices\monitor_enumerator.cc" />
     <ClCompile Include="base\devices\physical_drive_enumerator.cc" />
@@ -316,6 +317,7 @@
     <ClInclude Include="base\desktop.h" />
     <ClInclude Include="base\devices\device.h" />
     <ClInclude Include="base\devices\device_enumerator.h" />
+    <ClInclude Include="base\devices\device_spti.h" />
     <ClInclude Include="base\devices\edid.h" />
     <ClInclude Include="base\devices\monitor_enumerator.h" />
     <ClInclude Include="base\devices\physical_drive_enumerator.h" />

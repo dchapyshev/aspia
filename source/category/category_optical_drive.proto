@@ -11,4 +11,80 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto;
 
-// TODO
+message OpticalDrive
+{
+    enum Interface
+    {
+        INTERFACE_UNKNOWN          = 0;
+        INTERFACE_UNSPECIFIED      = 1;
+        INTERFACE_SCSI             = 2;
+        INTERFACE_ATAPI            = 3;
+        INTERFACE_IEEE1394_1995    = 4;
+        INTERFACE_IEEE1394A        = 5;
+        INTERFACE_FIBRE_CHANNEL    = 6;
+        INTERFACE_IEEE1394B        = 7;
+        INTERFACE_SERIAL_ATAPI     = 8;
+        INTERFACE_USB              = 9;
+    }
+
+    message Features
+    {
+        bool has_smart                       = 1;
+        bool has_power_management            = 2;
+        bool has_cd_text                     = 3;
+        bool has_css                         = 4;
+        bool has_cprm                        = 5;
+        bool has_aacs                        = 6;
+        bool has_vcps                        = 7;
+        bool has_c2_error_pointers           = 8;
+        bool has_hybrid_disk                 = 9;
+        bool has_dvd_download_disk_recording = 10;
+        bool has_layer_jump_recording        = 11;
+        bool has_mount_rainier               = 12;
+    }
+
+    message MediaTypes
+    {
+        message MediaType
+        {
+            bool read  = 1;
+            bool write = 2;
+        }
+
+        MediaType bd_rom         = 1;
+        MediaType bd_r           = 2;
+        MediaType bd_re          = 3;
+        MediaType hd_dvd_rom     = 4;
+        MediaType hd_dvd_r       = 5;
+        MediaType hd_dvd_ram     = 6;
+        MediaType dvd_rom        = 7;
+        MediaType dvd_plus_r_dl  = 8;
+        MediaType dvd_plus_rw_dl = 9;
+        MediaType dvd_plus_r     = 10;
+        MediaType dvd_plus_rw    = 11;
+        MediaType dvd_r_dl       = 12;
+        MediaType dvd_rw_dl      = 13;
+        MediaType dvd_r          = 14;
+        MediaType dvd_rw         = 15;
+        MediaType dvd_ram        = 16;
+        MediaType cd_rom         = 17;
+        MediaType cd_r           = 18;
+        MediaType cd_rw          = 19;
+    }
+
+    message Item
+    {
+        string device_name                = 1;
+        string vendor_code                = 2;
+        string firmware_version           = 3;
+        Interface interface               = 4;
+        uint64 buffer_size                = 5;
+        uint32 region_code                = 6;
+        uint32 region_code_vendor_changes = 7;
+        uint32 region_code_user_changes   = 8;
+        Features features                 = 9;
+        MediaTypes media_types            = 10;
+    }
+
+    repeated Item item = 1;
+}

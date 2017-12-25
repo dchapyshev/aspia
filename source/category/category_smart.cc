@@ -824,7 +824,7 @@ CategorySMART::CategorySMART()
 
 const char* CategorySMART::Name() const
 {
-    return "S.M.A.R.T.";
+    return "SMART";
 }
 
 Category::IconId CategorySMART::Icon() const

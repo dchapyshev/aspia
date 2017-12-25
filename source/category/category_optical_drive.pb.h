@@ -25,8 +25,10 @@
 #include <google/protobuf/generated_message_table_driven.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/metadata_lite.h>
+#include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_category_5foptical_5fdrive_2eproto {
@@ -34,24 +36,958 @@ namespace protobuf_category_5foptical_5fdrive_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[1];
+  static const ::google::protobuf::internal::ParseTable schema[5];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
+void InitDefaultsOpticalDrive_FeaturesImpl();
+void InitDefaultsOpticalDrive_Features();
+void InitDefaultsOpticalDrive_MediaTypes_MediaTypeImpl();
+void InitDefaultsOpticalDrive_MediaTypes_MediaType();
+void InitDefaultsOpticalDrive_MediaTypesImpl();
+void InitDefaultsOpticalDrive_MediaTypes();
+void InitDefaultsOpticalDrive_ItemImpl();
+void InitDefaultsOpticalDrive_Item();
+void InitDefaultsOpticalDriveImpl();
+void InitDefaultsOpticalDrive();
 inline void InitDefaults() {
+  InitDefaultsOpticalDrive_Features();
+  InitDefaultsOpticalDrive_MediaTypes_MediaType();
+  InitDefaultsOpticalDrive_MediaTypes();
+  InitDefaultsOpticalDrive_Item();
+  InitDefaultsOpticalDrive();
 }
 }  // namespace protobuf_category_5foptical_5fdrive_2eproto
 namespace aspia {
 namespace proto {
+class OpticalDrive;
+class OpticalDriveDefaultTypeInternal;
+extern OpticalDriveDefaultTypeInternal _OpticalDrive_default_instance_;
+class OpticalDrive_Features;
+class OpticalDrive_FeaturesDefaultTypeInternal;
+extern OpticalDrive_FeaturesDefaultTypeInternal _OpticalDrive_Features_default_instance_;
+class OpticalDrive_Item;
+class OpticalDrive_ItemDefaultTypeInternal;
+extern OpticalDrive_ItemDefaultTypeInternal _OpticalDrive_Item_default_instance_;
+class OpticalDrive_MediaTypes;
+class OpticalDrive_MediaTypesDefaultTypeInternal;
+extern OpticalDrive_MediaTypesDefaultTypeInternal _OpticalDrive_MediaTypes_default_instance_;
+class OpticalDrive_MediaTypes_MediaType;
+class OpticalDrive_MediaTypes_MediaTypeDefaultTypeInternal;
+extern OpticalDrive_MediaTypes_MediaTypeDefaultTypeInternal _OpticalDrive_MediaTypes_MediaType_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
 namespace proto {
 
+enum OpticalDrive_Interface {
+  OpticalDrive_Interface_INTERFACE_UNKNOWN = 0,
+  OpticalDrive_Interface_INTERFACE_UNSPECIFIED = 1,
+  OpticalDrive_Interface_INTERFACE_SCSI = 2,
+  OpticalDrive_Interface_INTERFACE_ATAPI = 3,
+  OpticalDrive_Interface_INTERFACE_IEEE1394_1995 = 4,
+  OpticalDrive_Interface_INTERFACE_IEEE1394A = 5,
+  OpticalDrive_Interface_INTERFACE_FIBRE_CHANNEL = 6,
+  OpticalDrive_Interface_INTERFACE_IEEE1394B = 7,
+  OpticalDrive_Interface_INTERFACE_SERIAL_ATAPI = 8,
+  OpticalDrive_Interface_INTERFACE_USB = 9,
+  OpticalDrive_Interface_OpticalDrive_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  OpticalDrive_Interface_OpticalDrive_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool OpticalDrive_Interface_IsValid(int value);
+const OpticalDrive_Interface OpticalDrive_Interface_Interface_MIN = OpticalDrive_Interface_INTERFACE_UNKNOWN;
+const OpticalDrive_Interface OpticalDrive_Interface_Interface_MAX = OpticalDrive_Interface_INTERFACE_USB;
+const int OpticalDrive_Interface_Interface_ARRAYSIZE = OpticalDrive_Interface_Interface_MAX + 1;
+
 // ===================================================================
 
+class OpticalDrive_Features : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpticalDrive.Features) */ {
+ public:
+  OpticalDrive_Features();
+  virtual ~OpticalDrive_Features();
 
+  OpticalDrive_Features(const OpticalDrive_Features& from);
+
+  inline OpticalDrive_Features& operator=(const OpticalDrive_Features& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OpticalDrive_Features(OpticalDrive_Features&& from) noexcept
+    : OpticalDrive_Features() {
+    *this = ::std::move(from);
+  }
+
+  inline OpticalDrive_Features& operator=(OpticalDrive_Features&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const OpticalDrive_Features& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OpticalDrive_Features* internal_default_instance() {
+    return reinterpret_cast<const OpticalDrive_Features*>(
+               &_OpticalDrive_Features_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(OpticalDrive_Features* other);
+  friend void swap(OpticalDrive_Features& a, OpticalDrive_Features& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OpticalDrive_Features* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OpticalDrive_Features* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const OpticalDrive_Features& from);
+  void MergeFrom(const OpticalDrive_Features& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(OpticalDrive_Features* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bool has_smart = 1;
+  void clear_has_smart();
+  static const int kHasSmartFieldNumber = 1;
+  bool has_smart() const;
+  void set_has_smart(bool value);
+
+  // bool has_power_management = 2;
+  void clear_has_power_management();
+  static const int kHasPowerManagementFieldNumber = 2;
+  bool has_power_management() const;
+  void set_has_power_management(bool value);
+
+  // bool has_cd_text = 3;
+  void clear_has_cd_text();
+  static const int kHasCdTextFieldNumber = 3;
+  bool has_cd_text() const;
+  void set_has_cd_text(bool value);
+
+  // bool has_css = 4;
+  void clear_has_css();
+  static const int kHasCssFieldNumber = 4;
+  bool has_css() const;
+  void set_has_css(bool value);
+
+  // bool has_cprm = 5;
+  void clear_has_cprm();
+  static const int kHasCprmFieldNumber = 5;
+  bool has_cprm() const;
+  void set_has_cprm(bool value);
+
+  // bool has_aacs = 6;
+  void clear_has_aacs();
+  static const int kHasAacsFieldNumber = 6;
+  bool has_aacs() const;
+  void set_has_aacs(bool value);
+
+  // bool has_vcps = 7;
+  void clear_has_vcps();
+  static const int kHasVcpsFieldNumber = 7;
+  bool has_vcps() const;
+  void set_has_vcps(bool value);
+
+  // bool has_c2_error_pointers = 8;
+  void clear_has_c2_error_pointers();
+  static const int kHasC2ErrorPointersFieldNumber = 8;
+  bool has_c2_error_pointers() const;
+  void set_has_c2_error_pointers(bool value);
+
+  // bool has_hybrid_disk = 9;
+  void clear_has_hybrid_disk();
+  static const int kHasHybridDiskFieldNumber = 9;
+  bool has_hybrid_disk() const;
+  void set_has_hybrid_disk(bool value);
+
+  // bool has_dvd_download_disk_recording = 10;
+  void clear_has_dvd_download_disk_recording();
+  static const int kHasDvdDownloadDiskRecordingFieldNumber = 10;
+  bool has_dvd_download_disk_recording() const;
+  void set_has_dvd_download_disk_recording(bool value);
+
+  // bool has_layer_jump_recording = 11;
+  void clear_has_layer_jump_recording();
+  static const int kHasLayerJumpRecordingFieldNumber = 11;
+  bool has_layer_jump_recording() const;
+  void set_has_layer_jump_recording(bool value);
+
+  // bool has_mount_rainier = 12;
+  void clear_has_mount_rainier();
+  static const int kHasMountRainierFieldNumber = 12;
+  bool has_mount_rainier() const;
+  void set_has_mount_rainier(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.OpticalDrive.Features)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  bool has_smart_;
+  bool has_power_management_;
+  bool has_cd_text_;
+  bool has_css_;
+  bool has_cprm_;
+  bool has_aacs_;
+  bool has_vcps_;
+  bool has_c2_error_pointers_;
+  bool has_hybrid_disk_;
+  bool has_dvd_download_disk_recording_;
+  bool has_layer_jump_recording_;
+  bool has_mount_rainier_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5foptical_5fdrive_2eproto::TableStruct;
+  friend void ::protobuf_category_5foptical_5fdrive_2eproto::InitDefaultsOpticalDrive_FeaturesImpl();
+};
+// -------------------------------------------------------------------
+
+class OpticalDrive_MediaTypes_MediaType : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpticalDrive.MediaTypes.MediaType) */ {
+ public:
+  OpticalDrive_MediaTypes_MediaType();
+  virtual ~OpticalDrive_MediaTypes_MediaType();
+
+  OpticalDrive_MediaTypes_MediaType(const OpticalDrive_MediaTypes_MediaType& from);
+
+  inline OpticalDrive_MediaTypes_MediaType& operator=(const OpticalDrive_MediaTypes_MediaType& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OpticalDrive_MediaTypes_MediaType(OpticalDrive_MediaTypes_MediaType&& from) noexcept
+    : OpticalDrive_MediaTypes_MediaType() {
+    *this = ::std::move(from);
+  }
+
+  inline OpticalDrive_MediaTypes_MediaType& operator=(OpticalDrive_MediaTypes_MediaType&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const OpticalDrive_MediaTypes_MediaType& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OpticalDrive_MediaTypes_MediaType* internal_default_instance() {
+    return reinterpret_cast<const OpticalDrive_MediaTypes_MediaType*>(
+               &_OpticalDrive_MediaTypes_MediaType_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(OpticalDrive_MediaTypes_MediaType* other);
+  friend void swap(OpticalDrive_MediaTypes_MediaType& a, OpticalDrive_MediaTypes_MediaType& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OpticalDrive_MediaTypes_MediaType* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OpticalDrive_MediaTypes_MediaType* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const OpticalDrive_MediaTypes_MediaType& from);
+  void MergeFrom(const OpticalDrive_MediaTypes_MediaType& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(OpticalDrive_MediaTypes_MediaType* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bool read = 1;
+  void clear_read();
+  static const int kReadFieldNumber = 1;
+  bool read() const;
+  void set_read(bool value);
+
+  // bool write = 2;
+  void clear_write();
+  static const int kWriteFieldNumber = 2;
+  bool write() const;
+  void set_write(bool value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.OpticalDrive.MediaTypes.MediaType)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  bool read_;
+  bool write_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5foptical_5fdrive_2eproto::TableStruct;
+  friend void ::protobuf_category_5foptical_5fdrive_2eproto::InitDefaultsOpticalDrive_MediaTypes_MediaTypeImpl();
+};
+// -------------------------------------------------------------------
+
+class OpticalDrive_MediaTypes : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpticalDrive.MediaTypes) */ {
+ public:
+  OpticalDrive_MediaTypes();
+  virtual ~OpticalDrive_MediaTypes();
+
+  OpticalDrive_MediaTypes(const OpticalDrive_MediaTypes& from);
+
+  inline OpticalDrive_MediaTypes& operator=(const OpticalDrive_MediaTypes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OpticalDrive_MediaTypes(OpticalDrive_MediaTypes&& from) noexcept
+    : OpticalDrive_MediaTypes() {
+    *this = ::std::move(from);
+  }
+
+  inline OpticalDrive_MediaTypes& operator=(OpticalDrive_MediaTypes&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const OpticalDrive_MediaTypes& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OpticalDrive_MediaTypes* internal_default_instance() {
+    return reinterpret_cast<const OpticalDrive_MediaTypes*>(
+               &_OpticalDrive_MediaTypes_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(OpticalDrive_MediaTypes* other);
+  friend void swap(OpticalDrive_MediaTypes& a, OpticalDrive_MediaTypes& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OpticalDrive_MediaTypes* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OpticalDrive_MediaTypes* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const OpticalDrive_MediaTypes& from);
+  void MergeFrom(const OpticalDrive_MediaTypes& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(OpticalDrive_MediaTypes* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef OpticalDrive_MediaTypes_MediaType MediaType;
+
+  // accessors -------------------------------------------------------
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_rom = 1;
+  bool has_bd_rom() const;
+  void clear_bd_rom();
+  static const int kBdRomFieldNumber = 1;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& bd_rom() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_bd_rom();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_bd_rom();
+  void set_allocated_bd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_rom);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_r = 2;
+  bool has_bd_r() const;
+  void clear_bd_r();
+  static const int kBdRFieldNumber = 2;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& bd_r() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_bd_r();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_bd_r();
+  void set_allocated_bd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_r);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_re = 3;
+  bool has_bd_re() const;
+  void clear_bd_re();
+  static const int kBdReFieldNumber = 3;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& bd_re() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_bd_re();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_bd_re();
+  void set_allocated_bd_re(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_re);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_rom = 4;
+  bool has_hd_dvd_rom() const;
+  void clear_hd_dvd_rom();
+  static const int kHdDvdRomFieldNumber = 4;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& hd_dvd_rom() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_hd_dvd_rom();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_hd_dvd_rom();
+  void set_allocated_hd_dvd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_rom);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_r = 5;
+  bool has_hd_dvd_r() const;
+  void clear_hd_dvd_r();
+  static const int kHdDvdRFieldNumber = 5;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& hd_dvd_r() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_hd_dvd_r();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_hd_dvd_r();
+  void set_allocated_hd_dvd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_r);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_ram = 6;
+  bool has_hd_dvd_ram() const;
+  void clear_hd_dvd_ram();
+  static const int kHdDvdRamFieldNumber = 6;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& hd_dvd_ram() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_hd_dvd_ram();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_hd_dvd_ram();
+  void set_allocated_hd_dvd_ram(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_ram);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rom = 7;
+  bool has_dvd_rom() const;
+  void clear_dvd_rom();
+  static const int kDvdRomFieldNumber = 7;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_rom() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_rom();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_rom();
+  void set_allocated_dvd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rom);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_r_dl = 8;
+  bool has_dvd_plus_r_dl() const;
+  void clear_dvd_plus_r_dl();
+  static const int kDvdPlusRDlFieldNumber = 8;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_plus_r_dl() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_plus_r_dl();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_plus_r_dl();
+  void set_allocated_dvd_plus_r_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r_dl);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_rw_dl = 9;
+  bool has_dvd_plus_rw_dl() const;
+  void clear_dvd_plus_rw_dl();
+  static const int kDvdPlusRwDlFieldNumber = 9;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_plus_rw_dl() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_plus_rw_dl();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_plus_rw_dl();
+  void set_allocated_dvd_plus_rw_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw_dl);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_r = 10;
+  bool has_dvd_plus_r() const;
+  void clear_dvd_plus_r();
+  static const int kDvdPlusRFieldNumber = 10;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_plus_r() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_plus_r();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_plus_r();
+  void set_allocated_dvd_plus_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_rw = 11;
+  bool has_dvd_plus_rw() const;
+  void clear_dvd_plus_rw();
+  static const int kDvdPlusRwFieldNumber = 11;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_plus_rw() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_plus_rw();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_plus_rw();
+  void set_allocated_dvd_plus_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_r_dl = 12;
+  bool has_dvd_r_dl() const;
+  void clear_dvd_r_dl();
+  static const int kDvdRDlFieldNumber = 12;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_r_dl() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_r_dl();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_r_dl();
+  void set_allocated_dvd_r_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r_dl);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rw_dl = 13;
+  bool has_dvd_rw_dl() const;
+  void clear_dvd_rw_dl();
+  static const int kDvdRwDlFieldNumber = 13;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_rw_dl() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_rw_dl();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_rw_dl();
+  void set_allocated_dvd_rw_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw_dl);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_r = 14;
+  bool has_dvd_r() const;
+  void clear_dvd_r();
+  static const int kDvdRFieldNumber = 14;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_r() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_r();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_r();
+  void set_allocated_dvd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rw = 15;
+  bool has_dvd_rw() const;
+  void clear_dvd_rw();
+  static const int kDvdRwFieldNumber = 15;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_rw() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_rw();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_rw();
+  void set_allocated_dvd_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_ram = 16;
+  bool has_dvd_ram() const;
+  void clear_dvd_ram();
+  static const int kDvdRamFieldNumber = 16;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& dvd_ram() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_dvd_ram();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_dvd_ram();
+  void set_allocated_dvd_ram(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_ram);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_rom = 17;
+  bool has_cd_rom() const;
+  void clear_cd_rom();
+  static const int kCdRomFieldNumber = 17;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& cd_rom() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_cd_rom();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_cd_rom();
+  void set_allocated_cd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rom);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_r = 18;
+  bool has_cd_r() const;
+  void clear_cd_r();
+  static const int kCdRFieldNumber = 18;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& cd_r() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_cd_r();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_cd_r();
+  void set_allocated_cd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_r);
+
+  // .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_rw = 19;
+  bool has_cd_rw() const;
+  void clear_cd_rw();
+  static const int kCdRwFieldNumber = 19;
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& cd_rw() const;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* release_cd_rw();
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* mutable_cd_rw();
+  void set_allocated_cd_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rw);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.OpticalDrive.MediaTypes)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_rom_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_r_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_re_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_rom_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_r_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_ram_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rom_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r_dl_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw_dl_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r_dl_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw_dl_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_ram_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rom_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_r_;
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rw_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5foptical_5fdrive_2eproto::TableStruct;
+  friend void ::protobuf_category_5foptical_5fdrive_2eproto::InitDefaultsOpticalDrive_MediaTypesImpl();
+};
+// -------------------------------------------------------------------
+
+class OpticalDrive_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpticalDrive.Item) */ {
+ public:
+  OpticalDrive_Item();
+  virtual ~OpticalDrive_Item();
+
+  OpticalDrive_Item(const OpticalDrive_Item& from);
+
+  inline OpticalDrive_Item& operator=(const OpticalDrive_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OpticalDrive_Item(OpticalDrive_Item&& from) noexcept
+    : OpticalDrive_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline OpticalDrive_Item& operator=(OpticalDrive_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const OpticalDrive_Item& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OpticalDrive_Item* internal_default_instance() {
+    return reinterpret_cast<const OpticalDrive_Item*>(
+               &_OpticalDrive_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    3;
+
+  void Swap(OpticalDrive_Item* other);
+  friend void swap(OpticalDrive_Item& a, OpticalDrive_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OpticalDrive_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OpticalDrive_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const OpticalDrive_Item& from);
+  void MergeFrom(const OpticalDrive_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(OpticalDrive_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string device_name = 1;
+  void clear_device_name();
+  static const int kDeviceNameFieldNumber = 1;
+  const ::std::string& device_name() const;
+  void set_device_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_name(::std::string&& value);
+  #endif
+  void set_device_name(const char* value);
+  void set_device_name(const char* value, size_t size);
+  ::std::string* mutable_device_name();
+  ::std::string* release_device_name();
+  void set_allocated_device_name(::std::string* device_name);
+
+  // string vendor_code = 2;
+  void clear_vendor_code();
+  static const int kVendorCodeFieldNumber = 2;
+  const ::std::string& vendor_code() const;
+  void set_vendor_code(const ::std::string& value);
+  #if LANG_CXX11
+  void set_vendor_code(::std::string&& value);
+  #endif
+  void set_vendor_code(const char* value);
+  void set_vendor_code(const char* value, size_t size);
+  ::std::string* mutable_vendor_code();
+  ::std::string* release_vendor_code();
+  void set_allocated_vendor_code(::std::string* vendor_code);
+
+  // string firmware_version = 3;
+  void clear_firmware_version();
+  static const int kFirmwareVersionFieldNumber = 3;
+  const ::std::string& firmware_version() const;
+  void set_firmware_version(const ::std::string& value);
+  #if LANG_CXX11
+  void set_firmware_version(::std::string&& value);
+  #endif
+  void set_firmware_version(const char* value);
+  void set_firmware_version(const char* value, size_t size);
+  ::std::string* mutable_firmware_version();
+  ::std::string* release_firmware_version();
+  void set_allocated_firmware_version(::std::string* firmware_version);
+
+  // .aspia.proto.OpticalDrive.Features features = 9;
+  bool has_features() const;
+  void clear_features();
+  static const int kFeaturesFieldNumber = 9;
+  const ::aspia::proto::OpticalDrive_Features& features() const;
+  ::aspia::proto::OpticalDrive_Features* release_features();
+  ::aspia::proto::OpticalDrive_Features* mutable_features();
+  void set_allocated_features(::aspia::proto::OpticalDrive_Features* features);
+
+  // .aspia.proto.OpticalDrive.MediaTypes media_types = 10;
+  bool has_media_types() const;
+  void clear_media_types();
+  static const int kMediaTypesFieldNumber = 10;
+  const ::aspia::proto::OpticalDrive_MediaTypes& media_types() const;
+  ::aspia::proto::OpticalDrive_MediaTypes* release_media_types();
+  ::aspia::proto::OpticalDrive_MediaTypes* mutable_media_types();
+  void set_allocated_media_types(::aspia::proto::OpticalDrive_MediaTypes* media_types);
+
+  // uint64 buffer_size = 5;
+  void clear_buffer_size();
+  static const int kBufferSizeFieldNumber = 5;
+  ::google::protobuf::uint64 buffer_size() const;
+  void set_buffer_size(::google::protobuf::uint64 value);
+
+  // .aspia.proto.OpticalDrive.Interface interface = 4;
+  void clear_interface();
+  static const int kInterfaceFieldNumber = 4;
+  ::aspia::proto::OpticalDrive_Interface interface() const;
+  void set_interface(::aspia::proto::OpticalDrive_Interface value);
+
+  // uint32 region_code = 6;
+  void clear_region_code();
+  static const int kRegionCodeFieldNumber = 6;
+  ::google::protobuf::uint32 region_code() const;
+  void set_region_code(::google::protobuf::uint32 value);
+
+  // uint32 region_code_vendor_changes = 7;
+  void clear_region_code_vendor_changes();
+  static const int kRegionCodeVendorChangesFieldNumber = 7;
+  ::google::protobuf::uint32 region_code_vendor_changes() const;
+  void set_region_code_vendor_changes(::google::protobuf::uint32 value);
+
+  // uint32 region_code_user_changes = 8;
+  void clear_region_code_user_changes();
+  static const int kRegionCodeUserChangesFieldNumber = 8;
+  ::google::protobuf::uint32 region_code_user_changes() const;
+  void set_region_code_user_changes(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.OpticalDrive.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr device_name_;
+  ::google::protobuf::internal::ArenaStringPtr vendor_code_;
+  ::google::protobuf::internal::ArenaStringPtr firmware_version_;
+  ::aspia::proto::OpticalDrive_Features* features_;
+  ::aspia::proto::OpticalDrive_MediaTypes* media_types_;
+  ::google::protobuf::uint64 buffer_size_;
+  int interface_;
+  ::google::protobuf::uint32 region_code_;
+  ::google::protobuf::uint32 region_code_vendor_changes_;
+  ::google::protobuf::uint32 region_code_user_changes_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5foptical_5fdrive_2eproto::TableStruct;
+  friend void ::protobuf_category_5foptical_5fdrive_2eproto::InitDefaultsOpticalDrive_ItemImpl();
+};
+// -------------------------------------------------------------------
+
+class OpticalDrive : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.OpticalDrive) */ {
+ public:
+  OpticalDrive();
+  virtual ~OpticalDrive();
+
+  OpticalDrive(const OpticalDrive& from);
+
+  inline OpticalDrive& operator=(const OpticalDrive& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OpticalDrive(OpticalDrive&& from) noexcept
+    : OpticalDrive() {
+    *this = ::std::move(from);
+  }
+
+  inline OpticalDrive& operator=(OpticalDrive&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const OpticalDrive& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OpticalDrive* internal_default_instance() {
+    return reinterpret_cast<const OpticalDrive*>(
+               &_OpticalDrive_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    4;
+
+  void Swap(OpticalDrive* other);
+  friend void swap(OpticalDrive& a, OpticalDrive& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OpticalDrive* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OpticalDrive* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const OpticalDrive& from);
+  void MergeFrom(const OpticalDrive& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(OpticalDrive* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef OpticalDrive_Features Features;
+  typedef OpticalDrive_MediaTypes MediaTypes;
+  typedef OpticalDrive_Item Item;
+
+  typedef OpticalDrive_Interface Interface;
+  static const Interface INTERFACE_UNKNOWN =
+    OpticalDrive_Interface_INTERFACE_UNKNOWN;
+  static const Interface INTERFACE_UNSPECIFIED =
+    OpticalDrive_Interface_INTERFACE_UNSPECIFIED;
+  static const Interface INTERFACE_SCSI =
+    OpticalDrive_Interface_INTERFACE_SCSI;
+  static const Interface INTERFACE_ATAPI =
+    OpticalDrive_Interface_INTERFACE_ATAPI;
+  static const Interface INTERFACE_IEEE1394_1995 =
+    OpticalDrive_Interface_INTERFACE_IEEE1394_1995;
+  static const Interface INTERFACE_IEEE1394A =
+    OpticalDrive_Interface_INTERFACE_IEEE1394A;
+  static const Interface INTERFACE_FIBRE_CHANNEL =
+    OpticalDrive_Interface_INTERFACE_FIBRE_CHANNEL;
+  static const Interface INTERFACE_IEEE1394B =
+    OpticalDrive_Interface_INTERFACE_IEEE1394B;
+  static const Interface INTERFACE_SERIAL_ATAPI =
+    OpticalDrive_Interface_INTERFACE_SERIAL_ATAPI;
+  static const Interface INTERFACE_USB =
+    OpticalDrive_Interface_INTERFACE_USB;
+  static inline bool Interface_IsValid(int value) {
+    return OpticalDrive_Interface_IsValid(value);
+  }
+  static const Interface Interface_MIN =
+    OpticalDrive_Interface_Interface_MIN;
+  static const Interface Interface_MAX =
+    OpticalDrive_Interface_Interface_MAX;
+  static const int Interface_ARRAYSIZE =
+    OpticalDrive_Interface_Interface_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.OpticalDrive.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::proto::OpticalDrive_Item& item(int index) const;
+  ::aspia::proto::OpticalDrive_Item* mutable_item(int index);
+  ::aspia::proto::OpticalDrive_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpticalDrive_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpticalDrive_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.OpticalDrive)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpticalDrive_Item > item_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5foptical_5fdrive_2eproto::TableStruct;
+  friend void ::protobuf_category_5foptical_5fdrive_2eproto::InitDefaultsOpticalDriveImpl();
+};
 // ===================================================================
 
 
@@ -61,14 +997,1553 @@ namespace proto {
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// OpticalDrive_Features
+
+// bool has_smart = 1;
+inline void OpticalDrive_Features::clear_has_smart() {
+  has_smart_ = false;
+}
+inline bool OpticalDrive_Features::has_smart() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_smart)
+  return has_smart_;
+}
+inline void OpticalDrive_Features::set_has_smart(bool value) {
+  
+  has_smart_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_smart)
+}
+
+// bool has_power_management = 2;
+inline void OpticalDrive_Features::clear_has_power_management() {
+  has_power_management_ = false;
+}
+inline bool OpticalDrive_Features::has_power_management() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_power_management)
+  return has_power_management_;
+}
+inline void OpticalDrive_Features::set_has_power_management(bool value) {
+  
+  has_power_management_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_power_management)
+}
+
+// bool has_cd_text = 3;
+inline void OpticalDrive_Features::clear_has_cd_text() {
+  has_cd_text_ = false;
+}
+inline bool OpticalDrive_Features::has_cd_text() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_cd_text)
+  return has_cd_text_;
+}
+inline void OpticalDrive_Features::set_has_cd_text(bool value) {
+  
+  has_cd_text_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_cd_text)
+}
+
+// bool has_css = 4;
+inline void OpticalDrive_Features::clear_has_css() {
+  has_css_ = false;
+}
+inline bool OpticalDrive_Features::has_css() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_css)
+  return has_css_;
+}
+inline void OpticalDrive_Features::set_has_css(bool value) {
+  
+  has_css_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_css)
+}
+
+// bool has_cprm = 5;
+inline void OpticalDrive_Features::clear_has_cprm() {
+  has_cprm_ = false;
+}
+inline bool OpticalDrive_Features::has_cprm() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_cprm)
+  return has_cprm_;
+}
+inline void OpticalDrive_Features::set_has_cprm(bool value) {
+  
+  has_cprm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_cprm)
+}
+
+// bool has_aacs = 6;
+inline void OpticalDrive_Features::clear_has_aacs() {
+  has_aacs_ = false;
+}
+inline bool OpticalDrive_Features::has_aacs() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_aacs)
+  return has_aacs_;
+}
+inline void OpticalDrive_Features::set_has_aacs(bool value) {
+  
+  has_aacs_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_aacs)
+}
+
+// bool has_vcps = 7;
+inline void OpticalDrive_Features::clear_has_vcps() {
+  has_vcps_ = false;
+}
+inline bool OpticalDrive_Features::has_vcps() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_vcps)
+  return has_vcps_;
+}
+inline void OpticalDrive_Features::set_has_vcps(bool value) {
+  
+  has_vcps_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_vcps)
+}
+
+// bool has_c2_error_pointers = 8;
+inline void OpticalDrive_Features::clear_has_c2_error_pointers() {
+  has_c2_error_pointers_ = false;
+}
+inline bool OpticalDrive_Features::has_c2_error_pointers() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_c2_error_pointers)
+  return has_c2_error_pointers_;
+}
+inline void OpticalDrive_Features::set_has_c2_error_pointers(bool value) {
+  
+  has_c2_error_pointers_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_c2_error_pointers)
+}
+
+// bool has_hybrid_disk = 9;
+inline void OpticalDrive_Features::clear_has_hybrid_disk() {
+  has_hybrid_disk_ = false;
+}
+inline bool OpticalDrive_Features::has_hybrid_disk() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_hybrid_disk)
+  return has_hybrid_disk_;
+}
+inline void OpticalDrive_Features::set_has_hybrid_disk(bool value) {
+  
+  has_hybrid_disk_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_hybrid_disk)
+}
+
+// bool has_dvd_download_disk_recording = 10;
+inline void OpticalDrive_Features::clear_has_dvd_download_disk_recording() {
+  has_dvd_download_disk_recording_ = false;
+}
+inline bool OpticalDrive_Features::has_dvd_download_disk_recording() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_dvd_download_disk_recording)
+  return has_dvd_download_disk_recording_;
+}
+inline void OpticalDrive_Features::set_has_dvd_download_disk_recording(bool value) {
+  
+  has_dvd_download_disk_recording_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_dvd_download_disk_recording)
+}
+
+// bool has_layer_jump_recording = 11;
+inline void OpticalDrive_Features::clear_has_layer_jump_recording() {
+  has_layer_jump_recording_ = false;
+}
+inline bool OpticalDrive_Features::has_layer_jump_recording() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_layer_jump_recording)
+  return has_layer_jump_recording_;
+}
+inline void OpticalDrive_Features::set_has_layer_jump_recording(bool value) {
+  
+  has_layer_jump_recording_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_layer_jump_recording)
+}
+
+// bool has_mount_rainier = 12;
+inline void OpticalDrive_Features::clear_has_mount_rainier() {
+  has_mount_rainier_ = false;
+}
+inline bool OpticalDrive_Features::has_mount_rainier() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Features.has_mount_rainier)
+  return has_mount_rainier_;
+}
+inline void OpticalDrive_Features::set_has_mount_rainier(bool value) {
+  
+  has_mount_rainier_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Features.has_mount_rainier)
+}
+
+// -------------------------------------------------------------------
+
+// OpticalDrive_MediaTypes_MediaType
+
+// bool read = 1;
+inline void OpticalDrive_MediaTypes_MediaType::clear_read() {
+  read_ = false;
+}
+inline bool OpticalDrive_MediaTypes_MediaType::read() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.MediaType.read)
+  return read_;
+}
+inline void OpticalDrive_MediaTypes_MediaType::set_read(bool value) {
+  
+  read_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.MediaTypes.MediaType.read)
+}
+
+// bool write = 2;
+inline void OpticalDrive_MediaTypes_MediaType::clear_write() {
+  write_ = false;
+}
+inline bool OpticalDrive_MediaTypes_MediaType::write() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.MediaType.write)
+  return write_;
+}
+inline void OpticalDrive_MediaTypes_MediaType::set_write(bool value) {
+  
+  write_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.MediaTypes.MediaType.write)
+}
+
+// -------------------------------------------------------------------
+
+// OpticalDrive_MediaTypes
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_rom = 1;
+inline bool OpticalDrive_MediaTypes::has_bd_rom() const {
+  return this != internal_default_instance() && bd_rom_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_bd_rom() {
+  if (GetArenaNoVirtual() == NULL && bd_rom_ != NULL) {
+    delete bd_rom_;
+  }
+  bd_rom_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::bd_rom() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = bd_rom_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.bd_rom)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_bd_rom() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.bd_rom)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = bd_rom_;
+  bd_rom_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_bd_rom() {
+  
+  if (bd_rom_ == NULL) {
+    bd_rom_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.bd_rom)
+  return bd_rom_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_bd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_rom) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete bd_rom_;
+  }
+  if (bd_rom) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      bd_rom = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, bd_rom, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  bd_rom_ = bd_rom;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.bd_rom)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_r = 2;
+inline bool OpticalDrive_MediaTypes::has_bd_r() const {
+  return this != internal_default_instance() && bd_r_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_bd_r() {
+  if (GetArenaNoVirtual() == NULL && bd_r_ != NULL) {
+    delete bd_r_;
+  }
+  bd_r_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::bd_r() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = bd_r_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.bd_r)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_bd_r() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.bd_r)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = bd_r_;
+  bd_r_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_bd_r() {
+  
+  if (bd_r_ == NULL) {
+    bd_r_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.bd_r)
+  return bd_r_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_bd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_r) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete bd_r_;
+  }
+  if (bd_r) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      bd_r = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, bd_r, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  bd_r_ = bd_r;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.bd_r)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType bd_re = 3;
+inline bool OpticalDrive_MediaTypes::has_bd_re() const {
+  return this != internal_default_instance() && bd_re_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_bd_re() {
+  if (GetArenaNoVirtual() == NULL && bd_re_ != NULL) {
+    delete bd_re_;
+  }
+  bd_re_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::bd_re() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = bd_re_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.bd_re)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_bd_re() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.bd_re)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = bd_re_;
+  bd_re_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_bd_re() {
+  
+  if (bd_re_ == NULL) {
+    bd_re_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.bd_re)
+  return bd_re_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_bd_re(::aspia::proto::OpticalDrive_MediaTypes_MediaType* bd_re) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete bd_re_;
+  }
+  if (bd_re) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      bd_re = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, bd_re, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  bd_re_ = bd_re;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.bd_re)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_rom = 4;
+inline bool OpticalDrive_MediaTypes::has_hd_dvd_rom() const {
+  return this != internal_default_instance() && hd_dvd_rom_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_hd_dvd_rom() {
+  if (GetArenaNoVirtual() == NULL && hd_dvd_rom_ != NULL) {
+    delete hd_dvd_rom_;
+  }
+  hd_dvd_rom_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::hd_dvd_rom() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = hd_dvd_rom_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_rom)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_hd_dvd_rom() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_rom)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = hd_dvd_rom_;
+  hd_dvd_rom_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_hd_dvd_rom() {
+  
+  if (hd_dvd_rom_ == NULL) {
+    hd_dvd_rom_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_rom)
+  return hd_dvd_rom_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_hd_dvd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_rom) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete hd_dvd_rom_;
+  }
+  if (hd_dvd_rom) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      hd_dvd_rom = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, hd_dvd_rom, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  hd_dvd_rom_ = hd_dvd_rom;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_rom)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_r = 5;
+inline bool OpticalDrive_MediaTypes::has_hd_dvd_r() const {
+  return this != internal_default_instance() && hd_dvd_r_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_hd_dvd_r() {
+  if (GetArenaNoVirtual() == NULL && hd_dvd_r_ != NULL) {
+    delete hd_dvd_r_;
+  }
+  hd_dvd_r_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::hd_dvd_r() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = hd_dvd_r_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_r)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_hd_dvd_r() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_r)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = hd_dvd_r_;
+  hd_dvd_r_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_hd_dvd_r() {
+  
+  if (hd_dvd_r_ == NULL) {
+    hd_dvd_r_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_r)
+  return hd_dvd_r_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_hd_dvd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_r) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete hd_dvd_r_;
+  }
+  if (hd_dvd_r) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      hd_dvd_r = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, hd_dvd_r, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  hd_dvd_r_ = hd_dvd_r;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_r)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType hd_dvd_ram = 6;
+inline bool OpticalDrive_MediaTypes::has_hd_dvd_ram() const {
+  return this != internal_default_instance() && hd_dvd_ram_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_hd_dvd_ram() {
+  if (GetArenaNoVirtual() == NULL && hd_dvd_ram_ != NULL) {
+    delete hd_dvd_ram_;
+  }
+  hd_dvd_ram_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::hd_dvd_ram() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = hd_dvd_ram_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_ram)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_hd_dvd_ram() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_ram)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = hd_dvd_ram_;
+  hd_dvd_ram_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_hd_dvd_ram() {
+  
+  if (hd_dvd_ram_ == NULL) {
+    hd_dvd_ram_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_ram)
+  return hd_dvd_ram_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_hd_dvd_ram(::aspia::proto::OpticalDrive_MediaTypes_MediaType* hd_dvd_ram) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete hd_dvd_ram_;
+  }
+  if (hd_dvd_ram) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      hd_dvd_ram = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, hd_dvd_ram, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  hd_dvd_ram_ = hd_dvd_ram;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.hd_dvd_ram)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rom = 7;
+inline bool OpticalDrive_MediaTypes::has_dvd_rom() const {
+  return this != internal_default_instance() && dvd_rom_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_rom() {
+  if (GetArenaNoVirtual() == NULL && dvd_rom_ != NULL) {
+    delete dvd_rom_;
+  }
+  dvd_rom_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_rom() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_rom_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_rom)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_rom() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_rom)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_rom_;
+  dvd_rom_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_rom() {
+  
+  if (dvd_rom_ == NULL) {
+    dvd_rom_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_rom)
+  return dvd_rom_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rom) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_rom_;
+  }
+  if (dvd_rom) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_rom = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_rom, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_rom_ = dvd_rom;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_rom)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_r_dl = 8;
+inline bool OpticalDrive_MediaTypes::has_dvd_plus_r_dl() const {
+  return this != internal_default_instance() && dvd_plus_r_dl_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_plus_r_dl() {
+  if (GetArenaNoVirtual() == NULL && dvd_plus_r_dl_ != NULL) {
+    delete dvd_plus_r_dl_;
+  }
+  dvd_plus_r_dl_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_plus_r_dl() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_plus_r_dl_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r_dl)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_plus_r_dl() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r_dl)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_plus_r_dl_;
+  dvd_plus_r_dl_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_plus_r_dl() {
+  
+  if (dvd_plus_r_dl_ == NULL) {
+    dvd_plus_r_dl_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r_dl)
+  return dvd_plus_r_dl_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_plus_r_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r_dl) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_plus_r_dl_;
+  }
+  if (dvd_plus_r_dl) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_plus_r_dl = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_plus_r_dl, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_plus_r_dl_ = dvd_plus_r_dl;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r_dl)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_rw_dl = 9;
+inline bool OpticalDrive_MediaTypes::has_dvd_plus_rw_dl() const {
+  return this != internal_default_instance() && dvd_plus_rw_dl_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_plus_rw_dl() {
+  if (GetArenaNoVirtual() == NULL && dvd_plus_rw_dl_ != NULL) {
+    delete dvd_plus_rw_dl_;
+  }
+  dvd_plus_rw_dl_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_plus_rw_dl() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_plus_rw_dl_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw_dl)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_plus_rw_dl() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw_dl)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_plus_rw_dl_;
+  dvd_plus_rw_dl_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_plus_rw_dl() {
+  
+  if (dvd_plus_rw_dl_ == NULL) {
+    dvd_plus_rw_dl_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw_dl)
+  return dvd_plus_rw_dl_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_plus_rw_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw_dl) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_plus_rw_dl_;
+  }
+  if (dvd_plus_rw_dl) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_plus_rw_dl = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_plus_rw_dl, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_plus_rw_dl_ = dvd_plus_rw_dl;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw_dl)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_r = 10;
+inline bool OpticalDrive_MediaTypes::has_dvd_plus_r() const {
+  return this != internal_default_instance() && dvd_plus_r_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_plus_r() {
+  if (GetArenaNoVirtual() == NULL && dvd_plus_r_ != NULL) {
+    delete dvd_plus_r_;
+  }
+  dvd_plus_r_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_plus_r() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_plus_r_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_plus_r() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_plus_r_;
+  dvd_plus_r_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_plus_r() {
+  
+  if (dvd_plus_r_ == NULL) {
+    dvd_plus_r_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r)
+  return dvd_plus_r_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_plus_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_r) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_plus_r_;
+  }
+  if (dvd_plus_r) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_plus_r = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_plus_r, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_plus_r_ = dvd_plus_r;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_r)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_plus_rw = 11;
+inline bool OpticalDrive_MediaTypes::has_dvd_plus_rw() const {
+  return this != internal_default_instance() && dvd_plus_rw_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_plus_rw() {
+  if (GetArenaNoVirtual() == NULL && dvd_plus_rw_ != NULL) {
+    delete dvd_plus_rw_;
+  }
+  dvd_plus_rw_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_plus_rw() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_plus_rw_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_plus_rw() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_plus_rw_;
+  dvd_plus_rw_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_plus_rw() {
+  
+  if (dvd_plus_rw_ == NULL) {
+    dvd_plus_rw_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw)
+  return dvd_plus_rw_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_plus_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_plus_rw) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_plus_rw_;
+  }
+  if (dvd_plus_rw) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_plus_rw = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_plus_rw, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_plus_rw_ = dvd_plus_rw;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_plus_rw)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_r_dl = 12;
+inline bool OpticalDrive_MediaTypes::has_dvd_r_dl() const {
+  return this != internal_default_instance() && dvd_r_dl_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_r_dl() {
+  if (GetArenaNoVirtual() == NULL && dvd_r_dl_ != NULL) {
+    delete dvd_r_dl_;
+  }
+  dvd_r_dl_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_r_dl() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_r_dl_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_r_dl)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_r_dl() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_r_dl)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_r_dl_;
+  dvd_r_dl_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_r_dl() {
+  
+  if (dvd_r_dl_ == NULL) {
+    dvd_r_dl_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_r_dl)
+  return dvd_r_dl_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_r_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r_dl) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_r_dl_;
+  }
+  if (dvd_r_dl) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_r_dl = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_r_dl, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_r_dl_ = dvd_r_dl;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_r_dl)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rw_dl = 13;
+inline bool OpticalDrive_MediaTypes::has_dvd_rw_dl() const {
+  return this != internal_default_instance() && dvd_rw_dl_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_rw_dl() {
+  if (GetArenaNoVirtual() == NULL && dvd_rw_dl_ != NULL) {
+    delete dvd_rw_dl_;
+  }
+  dvd_rw_dl_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_rw_dl() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_rw_dl_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_rw_dl)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_rw_dl() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_rw_dl)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_rw_dl_;
+  dvd_rw_dl_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_rw_dl() {
+  
+  if (dvd_rw_dl_ == NULL) {
+    dvd_rw_dl_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_rw_dl)
+  return dvd_rw_dl_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_rw_dl(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw_dl) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_rw_dl_;
+  }
+  if (dvd_rw_dl) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_rw_dl = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_rw_dl, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_rw_dl_ = dvd_rw_dl;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_rw_dl)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_r = 14;
+inline bool OpticalDrive_MediaTypes::has_dvd_r() const {
+  return this != internal_default_instance() && dvd_r_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_r() {
+  if (GetArenaNoVirtual() == NULL && dvd_r_ != NULL) {
+    delete dvd_r_;
+  }
+  dvd_r_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_r() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_r_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_r)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_r() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_r)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_r_;
+  dvd_r_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_r() {
+  
+  if (dvd_r_ == NULL) {
+    dvd_r_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_r)
+  return dvd_r_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_r) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_r_;
+  }
+  if (dvd_r) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_r = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_r, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_r_ = dvd_r;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_r)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_rw = 15;
+inline bool OpticalDrive_MediaTypes::has_dvd_rw() const {
+  return this != internal_default_instance() && dvd_rw_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_rw() {
+  if (GetArenaNoVirtual() == NULL && dvd_rw_ != NULL) {
+    delete dvd_rw_;
+  }
+  dvd_rw_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_rw() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_rw_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_rw)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_rw() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_rw)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_rw_;
+  dvd_rw_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_rw() {
+  
+  if (dvd_rw_ == NULL) {
+    dvd_rw_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_rw)
+  return dvd_rw_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_rw) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_rw_;
+  }
+  if (dvd_rw) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_rw = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_rw, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_rw_ = dvd_rw;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_rw)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType dvd_ram = 16;
+inline bool OpticalDrive_MediaTypes::has_dvd_ram() const {
+  return this != internal_default_instance() && dvd_ram_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_dvd_ram() {
+  if (GetArenaNoVirtual() == NULL && dvd_ram_ != NULL) {
+    delete dvd_ram_;
+  }
+  dvd_ram_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::dvd_ram() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = dvd_ram_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.dvd_ram)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_dvd_ram() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.dvd_ram)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = dvd_ram_;
+  dvd_ram_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_dvd_ram() {
+  
+  if (dvd_ram_ == NULL) {
+    dvd_ram_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.dvd_ram)
+  return dvd_ram_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_dvd_ram(::aspia::proto::OpticalDrive_MediaTypes_MediaType* dvd_ram) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete dvd_ram_;
+  }
+  if (dvd_ram) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      dvd_ram = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, dvd_ram, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  dvd_ram_ = dvd_ram;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.dvd_ram)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_rom = 17;
+inline bool OpticalDrive_MediaTypes::has_cd_rom() const {
+  return this != internal_default_instance() && cd_rom_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_cd_rom() {
+  if (GetArenaNoVirtual() == NULL && cd_rom_ != NULL) {
+    delete cd_rom_;
+  }
+  cd_rom_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::cd_rom() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = cd_rom_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.cd_rom)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_cd_rom() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.cd_rom)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = cd_rom_;
+  cd_rom_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_cd_rom() {
+  
+  if (cd_rom_ == NULL) {
+    cd_rom_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.cd_rom)
+  return cd_rom_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_cd_rom(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rom) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete cd_rom_;
+  }
+  if (cd_rom) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      cd_rom = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, cd_rom, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  cd_rom_ = cd_rom;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.cd_rom)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_r = 18;
+inline bool OpticalDrive_MediaTypes::has_cd_r() const {
+  return this != internal_default_instance() && cd_r_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_cd_r() {
+  if (GetArenaNoVirtual() == NULL && cd_r_ != NULL) {
+    delete cd_r_;
+  }
+  cd_r_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::cd_r() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = cd_r_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.cd_r)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_cd_r() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.cd_r)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = cd_r_;
+  cd_r_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_cd_r() {
+  
+  if (cd_r_ == NULL) {
+    cd_r_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.cd_r)
+  return cd_r_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_cd_r(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_r) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete cd_r_;
+  }
+  if (cd_r) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      cd_r = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, cd_r, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  cd_r_ = cd_r;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.cd_r)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes.MediaType cd_rw = 19;
+inline bool OpticalDrive_MediaTypes::has_cd_rw() const {
+  return this != internal_default_instance() && cd_rw_ != NULL;
+}
+inline void OpticalDrive_MediaTypes::clear_cd_rw() {
+  if (GetArenaNoVirtual() == NULL && cd_rw_ != NULL) {
+    delete cd_rw_;
+  }
+  cd_rw_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes_MediaType& OpticalDrive_MediaTypes::cd_rw() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes_MediaType* p = cd_rw_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.MediaTypes.cd_rw)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes_MediaType*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_MediaType_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::release_cd_rw() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.MediaTypes.cd_rw)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes_MediaType* temp = cd_rw_;
+  cd_rw_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes_MediaType* OpticalDrive_MediaTypes::mutable_cd_rw() {
+  
+  if (cd_rw_ == NULL) {
+    cd_rw_ = new ::aspia::proto::OpticalDrive_MediaTypes_MediaType;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.MediaTypes.cd_rw)
+  return cd_rw_;
+}
+inline void OpticalDrive_MediaTypes::set_allocated_cd_rw(::aspia::proto::OpticalDrive_MediaTypes_MediaType* cd_rw) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete cd_rw_;
+  }
+  if (cd_rw) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      cd_rw = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, cd_rw, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  cd_rw_ = cd_rw;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.MediaTypes.cd_rw)
+}
+
+// -------------------------------------------------------------------
+
+// OpticalDrive_Item
+
+// string device_name = 1;
+inline void OpticalDrive_Item::clear_device_name() {
+  device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& OpticalDrive_Item::device_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.device_name)
+  return device_name_.GetNoArena();
+}
+inline void OpticalDrive_Item::set_device_name(const ::std::string& value) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.device_name)
+}
+#if LANG_CXX11
+inline void OpticalDrive_Item::set_device_name(::std::string&& value) {
+  
+  device_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpticalDrive.Item.device_name)
+}
+#endif
+inline void OpticalDrive_Item::set_device_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.OpticalDrive.Item.device_name)
+}
+inline void OpticalDrive_Item::set_device_name(const char* value, size_t size) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpticalDrive.Item.device_name)
+}
+inline ::std::string* OpticalDrive_Item::mutable_device_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.Item.device_name)
+  return device_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* OpticalDrive_Item::release_device_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.Item.device_name)
+  
+  return device_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void OpticalDrive_Item::set_allocated_device_name(::std::string* device_name) {
+  if (device_name != NULL) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.device_name)
+}
+
+// string vendor_code = 2;
+inline void OpticalDrive_Item::clear_vendor_code() {
+  vendor_code_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& OpticalDrive_Item::vendor_code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.vendor_code)
+  return vendor_code_.GetNoArena();
+}
+inline void OpticalDrive_Item::set_vendor_code(const ::std::string& value) {
+  
+  vendor_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.vendor_code)
+}
+#if LANG_CXX11
+inline void OpticalDrive_Item::set_vendor_code(::std::string&& value) {
+  
+  vendor_code_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpticalDrive.Item.vendor_code)
+}
+#endif
+inline void OpticalDrive_Item::set_vendor_code(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  vendor_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.OpticalDrive.Item.vendor_code)
+}
+inline void OpticalDrive_Item::set_vendor_code(const char* value, size_t size) {
+  
+  vendor_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpticalDrive.Item.vendor_code)
+}
+inline ::std::string* OpticalDrive_Item::mutable_vendor_code() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.Item.vendor_code)
+  return vendor_code_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* OpticalDrive_Item::release_vendor_code() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.Item.vendor_code)
+  
+  return vendor_code_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void OpticalDrive_Item::set_allocated_vendor_code(::std::string* vendor_code) {
+  if (vendor_code != NULL) {
+    
+  } else {
+    
+  }
+  vendor_code_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), vendor_code);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.vendor_code)
+}
+
+// string firmware_version = 3;
+inline void OpticalDrive_Item::clear_firmware_version() {
+  firmware_version_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& OpticalDrive_Item::firmware_version() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.firmware_version)
+  return firmware_version_.GetNoArena();
+}
+inline void OpticalDrive_Item::set_firmware_version(const ::std::string& value) {
+  
+  firmware_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.firmware_version)
+}
+#if LANG_CXX11
+inline void OpticalDrive_Item::set_firmware_version(::std::string&& value) {
+  
+  firmware_version_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.OpticalDrive.Item.firmware_version)
+}
+#endif
+inline void OpticalDrive_Item::set_firmware_version(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  firmware_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.OpticalDrive.Item.firmware_version)
+}
+inline void OpticalDrive_Item::set_firmware_version(const char* value, size_t size) {
+  
+  firmware_version_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.OpticalDrive.Item.firmware_version)
+}
+inline ::std::string* OpticalDrive_Item::mutable_firmware_version() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.Item.firmware_version)
+  return firmware_version_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* OpticalDrive_Item::release_firmware_version() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.Item.firmware_version)
+  
+  return firmware_version_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void OpticalDrive_Item::set_allocated_firmware_version(::std::string* firmware_version) {
+  if (firmware_version != NULL) {
+    
+  } else {
+    
+  }
+  firmware_version_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), firmware_version);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.firmware_version)
+}
+
+// .aspia.proto.OpticalDrive.Interface interface = 4;
+inline void OpticalDrive_Item::clear_interface() {
+  interface_ = 0;
+}
+inline ::aspia::proto::OpticalDrive_Interface OpticalDrive_Item::interface() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.interface)
+  return static_cast< ::aspia::proto::OpticalDrive_Interface >(interface_);
+}
+inline void OpticalDrive_Item::set_interface(::aspia::proto::OpticalDrive_Interface value) {
+  
+  interface_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.interface)
+}
+
+// uint64 buffer_size = 5;
+inline void OpticalDrive_Item::clear_buffer_size() {
+  buffer_size_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 OpticalDrive_Item::buffer_size() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.buffer_size)
+  return buffer_size_;
+}
+inline void OpticalDrive_Item::set_buffer_size(::google::protobuf::uint64 value) {
+  
+  buffer_size_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.buffer_size)
+}
+
+// uint32 region_code = 6;
+inline void OpticalDrive_Item::clear_region_code() {
+  region_code_ = 0u;
+}
+inline ::google::protobuf::uint32 OpticalDrive_Item::region_code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.region_code)
+  return region_code_;
+}
+inline void OpticalDrive_Item::set_region_code(::google::protobuf::uint32 value) {
+  
+  region_code_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.region_code)
+}
+
+// uint32 region_code_vendor_changes = 7;
+inline void OpticalDrive_Item::clear_region_code_vendor_changes() {
+  region_code_vendor_changes_ = 0u;
+}
+inline ::google::protobuf::uint32 OpticalDrive_Item::region_code_vendor_changes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.region_code_vendor_changes)
+  return region_code_vendor_changes_;
+}
+inline void OpticalDrive_Item::set_region_code_vendor_changes(::google::protobuf::uint32 value) {
+  
+  region_code_vendor_changes_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.region_code_vendor_changes)
+}
+
+// uint32 region_code_user_changes = 8;
+inline void OpticalDrive_Item::clear_region_code_user_changes() {
+  region_code_user_changes_ = 0u;
+}
+inline ::google::protobuf::uint32 OpticalDrive_Item::region_code_user_changes() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.region_code_user_changes)
+  return region_code_user_changes_;
+}
+inline void OpticalDrive_Item::set_region_code_user_changes(::google::protobuf::uint32 value) {
+  
+  region_code_user_changes_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.region_code_user_changes)
+}
+
+// .aspia.proto.OpticalDrive.Features features = 9;
+inline bool OpticalDrive_Item::has_features() const {
+  return this != internal_default_instance() && features_ != NULL;
+}
+inline void OpticalDrive_Item::clear_features() {
+  if (GetArenaNoVirtual() == NULL && features_ != NULL) {
+    delete features_;
+  }
+  features_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_Features& OpticalDrive_Item::features() const {
+  const ::aspia::proto::OpticalDrive_Features* p = features_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.features)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_Features*>(
+      &::aspia::proto::_OpticalDrive_Features_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_Features* OpticalDrive_Item::release_features() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.Item.features)
+  
+  ::aspia::proto::OpticalDrive_Features* temp = features_;
+  features_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_Features* OpticalDrive_Item::mutable_features() {
+  
+  if (features_ == NULL) {
+    features_ = new ::aspia::proto::OpticalDrive_Features;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.Item.features)
+  return features_;
+}
+inline void OpticalDrive_Item::set_allocated_features(::aspia::proto::OpticalDrive_Features* features) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete features_;
+  }
+  if (features) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      features = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, features, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  features_ = features;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.features)
+}
+
+// .aspia.proto.OpticalDrive.MediaTypes media_types = 10;
+inline bool OpticalDrive_Item::has_media_types() const {
+  return this != internal_default_instance() && media_types_ != NULL;
+}
+inline void OpticalDrive_Item::clear_media_types() {
+  if (GetArenaNoVirtual() == NULL && media_types_ != NULL) {
+    delete media_types_;
+  }
+  media_types_ = NULL;
+}
+inline const ::aspia::proto::OpticalDrive_MediaTypes& OpticalDrive_Item::media_types() const {
+  const ::aspia::proto::OpticalDrive_MediaTypes* p = media_types_;
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.media_types)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::OpticalDrive_MediaTypes*>(
+      &::aspia::proto::_OpticalDrive_MediaTypes_default_instance_);
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes* OpticalDrive_Item::release_media_types() {
+  // @@protoc_insertion_point(field_release:aspia.proto.OpticalDrive.Item.media_types)
+  
+  ::aspia::proto::OpticalDrive_MediaTypes* temp = media_types_;
+  media_types_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::OpticalDrive_MediaTypes* OpticalDrive_Item::mutable_media_types() {
+  
+  if (media_types_ == NULL) {
+    media_types_ = new ::aspia::proto::OpticalDrive_MediaTypes;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.Item.media_types)
+  return media_types_;
+}
+inline void OpticalDrive_Item::set_allocated_media_types(::aspia::proto::OpticalDrive_MediaTypes* media_types) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete media_types_;
+  }
+  if (media_types) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      media_types = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, media_types, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  media_types_ = media_types;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.media_types)
+}
+
+// -------------------------------------------------------------------
+
+// OpticalDrive
+
+// repeated .aspia.proto.OpticalDrive.Item item = 1;
+inline int OpticalDrive::item_size() const {
+  return item_.size();
+}
+inline void OpticalDrive::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::proto::OpticalDrive_Item& OpticalDrive::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.item)
+  return item_.Get(index);
+}
+inline ::aspia::proto::OpticalDrive_Item* OpticalDrive::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.OpticalDrive.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::proto::OpticalDrive_Item* OpticalDrive::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.OpticalDrive.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpticalDrive_Item >*
+OpticalDrive::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.OpticalDrive.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::OpticalDrive_Item >&
+OpticalDrive::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.OpticalDrive.item)
+  return item_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::OpticalDrive_Interface> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

@@ -93,13 +93,13 @@ void InfoListCtrl::StartTable(Category* category)
     {
         imagelist_.AddIcon(icon);
 
-        icon = AtlLoadIconImage(IDI_CHECKED,
+        icon = AtlLoadIconImage(IDI_TICK,
                                 LR_CREATEDIBSECTION,
                                 small_icon_size_.cx,
                                 small_icon_size_.cy);
         imagelist_.AddIcon(icon);
 
-        icon = AtlLoadIconImage(IDI_UNCHECKED,
+        icon = AtlLoadIconImage(IDI_DELETE,
                                 LR_CREATEDIBSECTION,
                                 small_icon_size_.cx,
                                 small_icon_size_.cy);

@@ -919,6 +919,9 @@
     <ClCompile Include="category\category_wsus.pb.cc">
       <Filter>category</Filter>
     </ClCompile>
+    <ClCompile Include="base\devices\device_spti.cc">
+      <Filter>base\devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1873,6 +1876,9 @@
     </ClInclude>
     <ClInclude Include="category\category_wsus.pb.h">
       <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="base\devices\device_spti.h">
+      <Filter>base\devices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
