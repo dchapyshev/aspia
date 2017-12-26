@@ -43,33 +43,34 @@ message OpticalDrive
         bool has_mount_rainier               = 12;
     }
 
-    message MediaTypes
+    message Media
     {
-        message MediaType
+        enum Mode
         {
-            bool read  = 1;
-            bool write = 2;
+            MODE_NONE  = 0;
+            MODE_READ  = 1;
+            MODE_WRITE = 2;
         }
 
-        MediaType bd_rom         = 1;
-        MediaType bd_r           = 2;
-        MediaType bd_re          = 3;
-        MediaType hd_dvd_rom     = 4;
-        MediaType hd_dvd_r       = 5;
-        MediaType hd_dvd_ram     = 6;
-        MediaType dvd_rom        = 7;
-        MediaType dvd_plus_r_dl  = 8;
-        MediaType dvd_plus_rw_dl = 9;
-        MediaType dvd_plus_r     = 10;
-        MediaType dvd_plus_rw    = 11;
-        MediaType dvd_r_dl       = 12;
-        MediaType dvd_rw_dl      = 13;
-        MediaType dvd_r          = 14;
-        MediaType dvd_rw         = 15;
-        MediaType dvd_ram        = 16;
-        MediaType cd_rom         = 17;
-        MediaType cd_r           = 18;
-        MediaType cd_rw          = 19;
+        uint32 bd_rom         = 1;
+        uint32 bd_r           = 2;
+        uint32 bd_re          = 3;
+        uint32 hd_dvd_rom     = 4;
+        uint32 hd_dvd_r       = 5;
+        uint32 hd_dvd_ram     = 6;
+        uint32 dvd_rom        = 7;
+        uint32 dvd_plus_r_dl  = 8;
+        uint32 dvd_plus_rw_dl = 9;
+        uint32 dvd_plus_r     = 10;
+        uint32 dvd_plus_rw    = 11;
+        uint32 dvd_r_dl       = 12;
+        uint32 dvd_rw_dl      = 13;
+        uint32 dvd_r          = 14;
+        uint32 dvd_rw         = 15;
+        uint32 dvd_ram        = 16;
+        uint32 cd_rom         = 17;
+        uint32 cd_r           = 18;
+        uint32 cd_rw          = 19;
     }
 
     message Item
@@ -83,7 +84,7 @@ message OpticalDrive
         uint32 region_code_vendor_changes = 7;
         uint32 region_code_user_changes   = 8;
         Features features                 = 9;
-        MediaTypes media_types            = 10;
+        Media media                       = 10;
     }
 
     repeated Item item = 1;

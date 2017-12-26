@@ -23,9 +23,12 @@ struct ScsiVendor
 {
     const char* vendor_code;
     const char* vendor_name;
-} const kScsiVendors[] =
+};
+
+const ScsiVendor kScsiVendors[] =
 {
     { "0B4C", "MOOSIK Ltd." },
+    { "13FE", "PHISON" },
     { "2AI", "2AI (Automatisme et Avenir Informatique)" },
     { "3M", "3M Company" },
     { "3nhtech", "3NH Technologies" },
@@ -36,6 +39,7 @@ struct ScsiVendor
     { "Accusys", "Accusys INC." },
     { "Acer", "Acer, Inc." },
     { "ACL", "Automated Cartridge Librarys, Inc." },
+    { "Actifio", "Actifio" },
     { "Acuid", "Acuid Corporation Ltd." },
     { "AcuLab", "AcuLab, Inc. (Tulsa, OK)" },
     { "ADAPTEC", "Adaptec (now PMC-Sierra)" },
@@ -46,19 +50,22 @@ struct ScsiVendor
     { "AEM", "AEM Performance Electronics" },
     { "AERONICS", "Aeronics, Inc." },
     { "AGFA", "AGFA" },
+    { "Agilent", "Agilent Technologies" },
     { "AIC", "Advanced Industrial Computer, Inc." },
     { "AIPTEK", "AIPTEK International Inc." },
+    { "Alcohol", "Alcohol Soft" },
     { "ALCOR", "Alcor Micro, Corp." },
     { "AMCC", "Applied Micro Circuits Corporation" },
     { "AMCODYNE", "Amcodyne" },
     { "Amgeon", "Amgeon LLC" },
     { "AMI", "American Megatrends, Inc." },
+    { "AMPEX", "Ampex Data Systems" },
     { "Amphenol", "Amphenol" },
     { "Amtl", "Tenlon Technology Co.,Ltd" },
     { "ANAMATIC", "Anamartic Limited (England)" },
     { "Ancor", "Ancor Communications, Inc." },
     { "ANCOT", "ANCOT Corp." },
-    { "ANDATACO", "Andataco  (now nStor)" },
+    { "ANDATACO", "Andataco (now nStor)" },
     { "andiamo", "Andiamo Systems, Inc." },
     { "ANOBIT", "Anobit" },
     { "ANRITSU", "Anritsu Corporation" },
@@ -69,10 +76,12 @@ struct ScsiVendor
     { "ARDENCE", "Ardence Inc" },
     { "Areca", "Areca Technology Corporation" },
     { "Arena", "MaxTronic International Co., Ltd." },
+    { "Argent", "Argent Data Systems, Inc." },
     { "ARIO", "Ario Data Networks, Inc." },
-    { "ARISTOS", "Aristos Logic Corp. (now part of Adaptec)" },
+    { "ARISTOS", "Aristos Logic Corp. (now part of PMC Sierra)" },
     { "ARK", "ARK Research Corporation" },
-    { "ARTECON", "Artecon Inc.  (Obs. - now Dot Hill)" },
+    { "ARL:UT@A", "Applied Research Laboratories : University of Texas at Austin" },
+    { "ARTECON", "Artecon Inc. (Obs. - now Dot Hill)" },
     { "Artistic", "Artistic Licence (UK) Ltd" },
     { "ARTON", "Arton Int." },
     { "ASACA", "ASACA Corp." },
@@ -81,6 +90,8 @@ struct ScsiVendor
     { "AST", "AST Research" },
     { "ASTEK", "Astek Corporation" },
     { "ASTK", "Alcatel STK A/S" },
+    { "AStor", "AccelStor, Inc." },
+    { "ASTRO", "ASTRODESIGN,Inc." },
     { "ASTUTE", "Astute Networks, Inc." },
     { "AT&T", "AT&T" },
     { "ATA", "SCSI / ATA Translator Software (Organization Not Specified)" },
@@ -91,40 +102,51 @@ struct ScsiVendor
     { "ATTO", "ATTO Technology Inc." },
     { "ATTRATEC", "Attratech Ltd liab. Co" },
     { "ATX", "Alphatronix" },
+    { "Audio3", "Audio3 Ltd." },
     { "AURASEN", "Aurasen Limited" },
+    { "Avago", "Avago Technologies" },
     { "AVC", "AVC Technology Ltd" },
     { "AVIDVIDR", "AVID Technologies, Inc." },
     { "AVR", "Advanced Vision Research" },
-    { "AXSTOR", "AXSTOR" },
+    { "AXSTOR", "AXSTOR", },
+    { "Axxana", "Axxana Ltd.", },
+    { "B*BRIDGE", "Blockbridge Networks LLC", },
     { "BALLARD", "Ballard Synergy Corp." },
     { "Barco", "Barco" },
     { "BAROMTEC", "Barom Technologies Co., Ltd." },
     { "Bassett", "Bassett Electronic Systems Ltd" },
+    { "BC Hydro", "BC Hydro" },
     { "BDT", "BDT AG" },
     { "BECEEM", "Beceem Communications, Inc" },
     { "BENQ", "BENQ Corporation." },
     { "BERGSWD", "Berg Software Design" },
     { "BEZIER", "Bezier Systems, Inc." },
     { "BHTi", "Breece Hill Technologies" },
+    { "biodata", "Biodata Devices SL" },
     { "BIOS", "BIOS Corporation" },
     { "BIR", "Bio-Imaging Research, Inc." },
     { "BiT", "BiT Microsystems (obsolete, new ID: BITMICRO)" },
     { "BITMICRO", "BiT Microsystems, Inc." },
+    { "Blendlgy", "Blendology Limited" },
     { "BLOOMBAS", "Bloombase Technologies Limited" },
     { "BlueArc", "BlueArc Corporation" },
+    { "bluecog", "bluecog" },
+    { "BME-HVT", "Broadband Infocommunicatons and Electromagnetic Theory Department" },
     { "BNCHMARK", "Benchmark Tape Systems Corporation" },
     { "Bosch", "Robert Bosch GmbH" },
     { "Botman", "Botmanfamily Electronics" },
-    { "BoxHill", "Box Hill Systems Corporation  (Obs. - now Dot Hill)" },
+    { "BoxHill", "Box Hill Systems Corporation (Obs. - now Dot Hill)" },
     { "BRDGWRKS", "Bridgeworks Ltd." },
     { "BREA", "BREA Technologies, Inc." },
     { "BREECE", "Breece Hill LLC" },
+    { "BreqLabs", "BreqLabs Inc." },
     { "Broadcom", "Broadcom Corporation" },
     { "BROCADE", "Brocade Communications Systems, Incorporated" },
     { "BUFFALO", "BUFFALO INC." },
     { "BULL", "Bull Peripherals Corp." },
     { "BUSLOGIC", "BusLogic Inc." },
     { "BVIRTUAL", "B-Virtual N.V." },
+    { "CACHEIO", "CacheIO LLC" },
     { "CalComp", "CalComp, A Lockheed Company" },
     { "CALCULEX", "CALCULEX, Inc." },
     { "CALIPER", "Caliper (California Peripheral Corp.)" },
@@ -137,18 +159,22 @@ struct ScsiVendor
     { "CCDISK", "iSCSI Cake" },
     { "CDC", "Control Data or MPI" },
     { "CDP", "Columbia Data Products" },
+    { "CDS", "Cirrus Data Solutions, Inc." },
     { "Celsia", "A M Bromley Limited" },
     { "CenData", "Central Data Corporation" },
     { "Cereva", "Cereva Networks Inc." },
     { "CERTANCE", "Certance" },
+    { "Chantil", "Chantil Technology" },
     { "CHEROKEE", "Cherokee Data Systems" },
     { "CHINON", "Chinon" },
+    { "CHPSYSTM", "Cheapie Systems" },
     { "CHRISTMA", "Christmann Informationstechnik + Medien GmbH & Co KG" },
     { "CIE&YED", "YE Data, C.Itoh Electric Corp." },
     { "CIPHER", "Cipher Data Products" },
     { "Ciprico", "Ciprico, Inc." },
     { "CIRRUSL", "Cirrus Logic Inc." },
     { "CISCO", "Cisco Systems, Inc." },
+    { "CLEARSKY", "ClearSky Data, Inc." },
     { "CLOVERLF", "Cloverleaf Communications, Inc" },
     { "CLS", "Celestica" },
     { "CMD", "CMD Technology Inc." },
@@ -158,15 +184,18 @@ struct ScsiVendor
     { "CNT", "Computer Network Technology" },
     { "COBY", "Coby Electronics Corporation, USA" },
     { "COGITO", "Cogito" },
+    { "COMAY", "Corerise Electronics" },
     { "COMPAQ", "Compaq Computer Corporation (now HP)" },
     { "COMPELNT", "Compellent Technologies, Inc. (now Dell)" },
     { "COMPORT", "Comport Corp." },
     { "COMPSIG", "Computer Signal Corporation" },
     { "COMPTEX", "Comptex Pty Limited" },
     { "CONNER", "Conner Peripherals" },
+    { "Control", "Controlant ehf." },
     { "COPANSYS", "COPAN SYSTEMS INC" },
     { "CORAID", "Coraid, Inc" },
     { "CORE", "Core International, Inc." },
+    { "CORERISE", "Corerise Electronics" },
     { "COVOTE", "Covote GmbH & Co KG" },
     { "COWON", "COWON SYSTEMS, Inc." },
     { "CPL", "Cross Products Ltd" },
@@ -177,9 +206,11 @@ struct ScsiVendor
     { "crosswlk", "Crosswalk, Inc." },
     { "CSCOVRTS", "Cisco - Veritas" },
     { "CSM, INC", "Computer SM, Inc." },
+    { "CULTECH", "Cultech Trading Ltd" },
     { "Cunuqui", "CUNUQUI SLU" },
     { "CYBERNET", "Cybernetics" },
     { "Cygnal", "Dekimo" },
+    { "CYPRESS", "Cypress Semiconductor Corp." },
     { "D Bit", "Digby's Bitpile, Inc. DBA D Bit" },
     { "DALSEMI", "Dallas Semiconductor" },
     { "DANEELEC", "Dane-Elec" },
@@ -189,32 +220,40 @@ struct ScsiVendor
     { "DATABOOK", "Databook, Inc." },
     { "DATACOPY", "Datacopy Corp." },
     { "DataCore", "DataCore Software Corporation" },
+    { "DataG", "DataGravity" },
     { "DATAPT", "Datapoint Corp." },
     { "DATARAM", "Dataram Corporation" },
+    { "DATC", "Datum Champion Technology Co., Ltd" },
     { "DAVIS", "Daviscomms (S) Pte Ltd" },
+    { "DCS", "ShenZhen DCS Group Co.,Ltd" },
     { "DDN", "DataDirect Networks, Inc." },
     { "DDRDRIVE", "DDRdrive LLC" },
     { "DE", "Dimension Engineering LLC" },
     { "DEC", "Digital Equipment Corporation (now HP)" },
     { "DEI", "Digital Engineering, Inc." },
     { "DELL", "Dell, Inc." },
+    { "Dell(tm)", "Dell, Inc" },
+    { "DellEMC", "Dell EMC" },
     { "DELPHI", "Delphi Data Div. of Sparks Industries, Inc." },
     { "DENON", "Denon/Nippon Columbia" },
     { "DenOptix", "DenOptix, Inc." },
     { "DEST", "DEST Corp." },
     { "DFC", "DavioFranke.com" },
+    { "DFT", "Data Fault Tolerance System CO.,LTD." },
     { "DGC", "Data General Corp." },
     { "DIGIDATA", "Digi-Data Corporation" },
     { "DigiIntl", "Digi International" },
     { "Digital", "Digital Equipment Corporation (now HP)" },
     { "DILOG", "Distributed Logic Corp." },
     { "DISC", "Document Imaging Systems Corp." },
+    { "DiscSoft", "Disc Soft Ltd" },
     { "DLNET", "Driveline" },
     { "DNS", "Data and Network Security" },
     { "DNUK", "Digital Networks Uk Ltd" },
     { "DotHill", "Dot Hill Systems Corp." },
     { "DP", "Dell, Inc." },
     { "DPT", "Distributed Processing Technology" },
+    { "Drewtech", "Drew Technologies, Inc." },
     { "DROBO", "Data Robotics, Inc." },
     { "DSC", "DigitalStream Corporation" },
     { "DSI", "Data Spectrum, Inc." },
@@ -223,11 +262,13 @@ struct ScsiVendor
     { "DT", "Double-Take Software, INC." },
     { "DTC QUME", "Data Technology Qume" },
     { "DXIMAGIN", "DX Imaging" },
+    { "E-Motion", "E-Motion LLC" },
     { "EARTHLAB", "EarthLabs" },
     { "EarthLCD", "Earth Computer Technologies, Inc." },
     { "ECCS", "ECCS, Inc." },
     { "ECMA", "European Computer Manufacturers Association" },
     { "EDS", "Embedded Data Systems" },
+    { "EIM", "InfoCore" },
     { "ELE Intl", "ELE International" },
     { "ELEGANT", "Elegant Invention, LLC" },
     { "Elektron", "Elektron Music Machines MAV AB" },
@@ -243,20 +284,22 @@ struct ScsiVendor
     { "ENERGY-B", "Energybeam Corporation" },
     { "ENGENIO", "Engenio Information Technologies, Inc." },
     { "ENMOTUS", "Enmotus Inc" },
+    { "Entacore", "Entacore" },
     { "EPOS", "EPOS Technologies Ltd." },
     { "EPSON", "Epson" },
     { "EQLOGIC", "EqualLogic" },
     { "Eris/RSI", "RSI Systems, Inc." },
     { "ETERNE", "EterneData Technology Co.,Ltd.(China PRC.)" },
-    { "EuroLogc", "Eurologic Systems Limited (now part of Adaptec)" },
+    { "EuroLogc", "Eurologic Systems Limited (now part of PMC Sierra)" },
     { "evolve", "Evolution Technologies, Inc" },
-    { "EXABYTE", "Exabyte Corp." },
+    { "EXABYTE", "Exabyte Corp. (now part of Tandberg)" },
     { "EXATEL", "Exatelecom Co., Ltd." },
     { "EXAVIO", "Exavio, Inc." },
     { "Exsequi", "Exsequi Ltd" },
     { "Exxotest", "Annecy Electronique" },
     { "FAIRHAVN", "Fairhaven Health, LLC" },
     { "FALCON", "FalconStor, Inc." },
+    { "FDS", "Formation Data Systems" },
     { "FFEILTD", "FujiFilm Electonic Imaging Ltd" },
     { "Fibxn", "Fiberxon, Inc." },
     { "FID", "First International Digital, Inc." },
@@ -266,6 +309,7 @@ struct ScsiVendor
     { "FOXCONN", "Foxconn Technology Group" },
     { "FRAMDRV", "FRAMEDRIVE Corp." },
     { "FREECION", "Nable Communications, Inc." },
+    { "FRESHDTK", "FreshDetect GmbH" },
     { "FSC", "Fujitsu Siemens Computers" },
     { "FTPL", "Frontline Technologies Pte Ltd" },
     { "FUJI", "Fuji Electric Co., Ltd. (Japan)" },
@@ -283,6 +327,7 @@ struct ScsiVendor
     { "Gen_Dyn", "General Dynamics" },
     { "Generic", "Generic Technology Co., Ltd." },
     { "GENSIG", "General Signal Networks" },
+    { "GEO", "Green Energy Options Ltd" },
     { "GIGATAPE", "GIGATAPE GmbH" },
     { "GIGATRND", "GigaTrend Incorporated" },
     { "Global", "Global Memory Test Consortium" },
@@ -290,12 +335,16 @@ struct ScsiVendor
     { "Goidelic", "Goidelic Precision, Inc." },
     { "GoldKey", "GoldKey Security Corporation" },
     { "GoldStar", "LG Electronics Inc." },
+    { "GOOGLE", "Google, Inc." },
     { "GORDIUS", "Gordius" },
+    { "Gossen", "Gossen Foto- und Lichtmesstechnik GmbH" },
     { "GOULD", "Gould" },
     { "HAGIWARA", "Hagiwara Sys-Com Co., Ltd." },
     { "HAPP3", "Inventec Multimedia and Telecom co., ltd" },
     { "HDS", "Horizon Data Systems, Inc." },
+    { "Helldyne", "Helldyne, Inc" },
     { "Heydays", "Mazo Technology Co., Ltd." },
+    { "HGST", "HGST a Western Digital Company" },
     { "HI-TECH", "HI-TECH Software Pty. Ltd." },
     { "HITACHI", "Hitachi America Ltd or Nissei Sangyo America Ltd" },
     { "HL-DT-ST", "Hitachi-LG Data Storage, Inc." },
@@ -303,12 +352,18 @@ struct ScsiVendor
     { "Hoptroff", "HexWax Ltd" },
     { "HORIZONT", "Horizontigo Software" },
     { "HP", "Hewlett Packard" },
+    { "HPE", "Hewlett Packard Enterprise" },
+    { "HPI", "HP Inc." },
     { "HPQ", "Hewlett Packard" },
+    { "HUALU", "CHINA HUALU GROUP CO., LTD" },
     { "HUASY", "Huawei Symantec Technologies Co., Ltd." },
+    { "HUAWEI", "Huawei Technologies Co. Ltd." },
+    { "HYLINX", "Hylinx Ltd." },
     { "HYUNWON", "HYUNWON inc" },
     { "i-cubed", "i-cubed ltd." },
     { "IBM", "International Business Machines" },
     { "Icefield", "Icefield Tools Corporation" },
+    { "Iceweb", "Iceweb Storage Corp" },
     { "ICL", "ICL" },
     { "ICP", "ICP vortex Computersysteme GmbH" },
     { "IDE", "International Data Engineering, Inc." },
@@ -316,6 +371,8 @@ struct ScsiVendor
     { "IET", "ISCSI ENTERPRISE TARGET" },
     { "IFT", "Infortrend Technology, Inc." },
     { "IGR", "Intergraph Corp." },
+    { "IMAGINE", "Imagine Communications Corp." },
+    { "IMAGO", "IMAGO SOFTWARE SL" },
     { "IMATION", "Imation" },
     { "IMPLTD", "Integrated Micro Products Ltd." },
     { "IMPRIMIS", "Imprimis Technology Inc." },
@@ -323,17 +380,23 @@ struct ScsiVendor
     { "INCITS", "InterNational Committee for Information Technology" },
     { "INDCOMP", "Industrial Computing Limited" },
     { "Indigita", "Indigita Corporation" },
+    { "INFOCORE", "InfoCore" },
     { "INITIO", "Initio Corporation" },
+    { "INNES", "INNES" },
     { "INRANGE", "INRANGE Technologies Corporation" },
     { "Insight", "L-3 Insight Technology Inc" },
     { "INSITE", "Insite Peripherals" },
+    { "INSPUR", "Inspur Electronic Information Industry Co.,Ltd." },
     { "integrix", "Integrix, Inc." },
     { "INTEL", "Intel Corporation" },
     { "Intransa", "Intransa, Inc." },
+    { "INTRMODL", "InterModal Data, Inc" },
     { "IOC", "I/O Concepts, Inc." },
+    { "ioFABRIC", "ioFABRIC Inc." },
     { "iofy", "iofy Corporation" },
     { "IOMEGA", "Iomega" },
     { "IOT", "IO Turbine, Inc." },
+    { "iPaper", "intelliPaper, LLC" },
     { "iqstor", "iQstor Networks, Inc." },
     { "iQue", "iQue" },
     { "ISi", "Information Storage inc." },
@@ -347,6 +410,7 @@ struct ScsiVendor
     { "JABIL001", "Jabil Circuit" },
     { "JETWAY", "Jetway Information Co., Ltd" },
     { "JMR", "JMR Electronics Inc." },
+    { "JOFEMAR", "Jofemar" },
     { "JOLLYLOG", "Jolly Logic" },
     { "JPC Inc.", "JPC Inc." },
     { "JSCSI", "jSCSI Project" },
@@ -363,7 +427,7 @@ struct ScsiVendor
     { "koncepts", "koncepts International Ltd." },
     { "KONICA", "Konica Japan" },
     { "KOVE", "KOVE" },
-    { "KSCOM", "KSCOM Co. Ltd." },
+    { "KSCOM", "KSCOM Co. Ltd.," },
     { "KUDELSKI", "Nagravision SA - Kudelski Group" },
     { "Kyocera", "Kyocera Corporation" },
     { "Lapida", "Gonmalo Electronics" },
@@ -377,6 +441,7 @@ struct ScsiVendor
     { "LEYIO", "LEYIO" },
     { "LG", "LG Electronics Inc." },
     { "LGE", "LG Electronics Inc." },
+    { "LIBNOVA", "LIBNOVA, SL Digital Preservation Systems" },
     { "LION", "Lion Optics Corporation" },
     { "LMS", "Laser Magnetic Storage International Company" },
     { "LoupTech", "Loup Technologies, Inc." },
@@ -384,10 +449,12 @@ struct ScsiVendor
     { "LSILOGIC", "LSI Logic Storage Systems, Inc." },
     { "LTO-CVE", "Linear Tape - Open, Compliance Verification Entity" },
     { "LUXPRO", "Luxpro Corporation" },
+    { "MacroSAN", "MacroSAN Technologies Co., Ltd." },
     { "Malakite", "Malachite Technologies (New VID is: Sandial)" },
     { "MarcBoon", "marcboon.com" },
     { "Marner", "Marner Storage Technologies, Inc." },
     { "MARVELL", "Marvell Semiconductor, Inc." },
+    { "Matrix", "Matrix Orbital Corp." },
     { "MATSHITA", "Matsushita" },
     { "MAXELL", "Hitachi Maxell, Ltd." },
     { "MAXIM-IC", "Maxim Integrated Products" },
@@ -403,6 +470,7 @@ struct ScsiVendor
     { "MDI", "Micro Design International, Inc." },
     { "MEADE", "Meade Instruments Corporation" },
     { "mediamat", "mediamatic" },
+    { "MegaElec", "Mega Electronics Ltd" },
     { "MEII", "Mountain Engineering II, Inc." },
     { "MELA", "Mitsubishi Electronics America" },
     { "MELCO", "Mitsubishi Electric (Japan)" },
@@ -455,8 +523,10 @@ struct ScsiVendor
     { "NCITS", "InterNational Committee for Information Technology Standards (INCITS)" },
     { "NCL", "NCL America" },
     { "NCR", "NCR Corporation" },
+    { "NDBTECH", "NDB Technologie Inc." },
     { "Neartek", "Neartek, Inc." },
     { "NEC", "NEC" },
+    { "nemon", "NorthEast Monitoring" },
     { "NETAPP", "NetApp, Inc. (was Network Appliance)" },
     { "NetBSD", "The NetBSD Foundation" },
     { "Netcom", "Netcom Storage" },
@@ -470,6 +540,7 @@ struct ScsiVendor
     { "Nimble", "Nimble Storage" },
     { "NISCA", "NISCA Inc." },
     { "NISHAN", "Nishan Systems Inc." },
+    { "Nitz", "Nitz Associates, Inc." },
     { "NKK", "NKK Corp." },
     { "NRC", "Nakamichi Research Corporation" },
     { "NSD", "Nippon Systems Development Co.,Ltd." },
@@ -482,6 +553,7 @@ struct ScsiVendor
     { "NVMe", "NVM Express Working Group" },
     { "OAI", "Optical Access International" },
     { "OCE", "Oce Graphics" },
+    { "ODS", "ShenZhen DCS Group Co.,Ltd" },
     { "OHDEN", "Ohden Co., Ltd." },
     { "OKI", "OKI Electric Industry Co.,Ltd (Japan)" },
     { "Olidata", "Olidata S.p.A." },
@@ -497,6 +569,7 @@ struct ScsiVendor
     { "ORACLE", "Oracle Corporation" },
     { "ORANGE", "Orange Micro, Inc." },
     { "ORCA", "Orca Technology" },
+    { "Origin", "Origin Energy" },
     { "OSI", "Optical Storage International" },
     { "OSNEXUS", "OS NEXUS, Inc." },
     { "OTL", "OTL Engineering" },
@@ -507,10 +580,12 @@ struct ScsiVendor
     { "PARALAN", "Paralan Corporation" },
     { "PASCOsci", "Pasco Scientific" },
     { "PATHLGHT", "Pathlight Technology, Inc." },
+    { "PCS", "Pro Charging Systems, LLC" },
     { "PerStor", "Perstor" },
     { "PERTEC", "Pertec Peripherals Corporation" },
     { "PFTI", "Performance Technology Inc." },
     { "PFU", "PFU Limited" },
+    { "Phigment", "Phigment Technologies" },
     { "PHILIPS", "Philips Electronics" },
     { "PICO", "Packard Instrument Company" },
     { "PIK", "TECHNILIENT & MCS" },
@@ -521,6 +596,7 @@ struct ScsiVendor
     { "PLASMON", "Plasmon Data" },
     { "Pliant", "Pliant Technology, Inc." },
     { "PMCSIERA", "PMC-Sierra" },
+    { "PME", "Precision Measurement Engineering" },
     { "PNNMed", "PNN Medical SA" },
     { "POKEN", "Poken SA" },
     { "POLYTRON", "PT. HARTONO ISTANA TEKNOLOGI" },
@@ -531,41 +607,56 @@ struct ScsiVendor
     { "PRIAM", "Priam" },
     { "PRIMAGFX", "Primagraphics Ltd" },
     { "PRIMOS", "Primos" },
+    { "PRNXDATA", "PernixData Inc." },
     { "PROCOM", "Procom Technology" },
     { "PROLIFIC", "Prolific Technology Inc." },
+    { "ProMAX", "ProMAX Systems" },
     { "PROMISE", "PROMISE TECHNOLOGY, Inc" },
     { "PROSTOR", "ProStor Systems, Inc." },
     { "PROSUM", "PROSUM" },
     { "PROWARE", "Proware Technology Corp." },
     { "PTI", "Peripheral Technology Inc." },
     { "PTICO", "Pacific Technology International" },
+    { "PULAX", "PULAX Corporation" },
     { "PURE", "PURE Storage" },
+    { "Qi-Hardw", "Qi Hardware" },
     { "QIC", "Quarter-Inch Cartridge Drive Standards, Inc." },
     { "QLogic", "QLogic Corporation" },
     { "QNAP", "QNAP Systems" },
     { "Qsan", "QSAN Technology, Inc." },
+    { "QStar", "QStar Technologies, Inc" },
     { "QUALSTAR", "Qualstar" },
     { "QUANTEL", "Quantel Ltd." },
     { "QUANTUM", "Quantum Corp." },
+    { "QUEST", "Quest Software Inc." },
     { "QUIX", "Quix Computerware AG" },
     { "R-BYTE", "R-Byte, Inc." },
     { "RACALREC", "Racal Recorders" },
     { "RADITEC", "Radikal Technologies Deutschland GmbH" },
     { "RADSTONE", "Radstone Technology" },
+    { "RAIDINC", "RAID Inc." },
     { "RASSYS", "Rasilient Systems Inc." },
     { "RASVIA", "Rasvia Systems, Inc." },
     { "rave-mp", "Go Video" },
+    { "RDKMSTG", "MMS Dipl. Ing. Rolf-Dieter Klein" },
+    { "RDStor", "Rorke China" },
     { "Readboy", "Readboy Ltd Co." },
     { "Realm", "Realm Systems" },
     { "realtek", "Realtek Semiconductor Corp." },
+    { "REDUXIO", "Reduxio Systems Ltd." },
+    { "rehanltd", "Rehan Electronics Ltd" },
+    { "REKA", "REKA HEALTH PTE LTD" },
     { "RELDATA", "RELDATA Inc" },
     { "RENAGmbH", "RENA GmbH" },
+    { "ReThinkM", "RETHINK MEDICAL, INC" },
     { "Revivio", "Revivio, Inc." },
+    { "RGBLaser", "RGB Lasersysteme GmbH" },
     { "RGI", "Raster Graphics, Inc." },
     { "RHAPSODY", "Rhapsody Networks, Inc." },
     { "RHS", "Racal-Heim Systems GmbH" },
     { "RICOH", "Ricoh" },
     { "RODIME", "Rodime" },
+    { "Rorke", "RD DATA Technology (ShenZhen) Limited" },
     { "Royaltek", "RoyalTek company Ltd." },
     { "RPS", "RPS" },
     { "RTI", "Reference Technology" },
@@ -579,6 +670,7 @@ struct ScsiVendor
     { "SanDisk", "SanDisk Corporation" },
     { "SANKYO", "Sankyo Seiki" },
     { "SANRAD", "SANRAD Inc." },
+    { "SANSSTOR", "SANS Technology, Inc.," },
     { "SANYO", "SANYO Electric Co., Ltd." },
     { "SC.Net", "StorageConnections.Net" },
     { "SCALE", "Scale Computing, Inc." },
@@ -593,13 +685,20 @@ struct ScsiVendor
     { "Seanodes", "Seanodes" },
     { "Sec. Key", "SecureKey Technologies Inc." },
     { "SEQUOIA", "Sequoia Advanced Technologies, Inc." },
+    { "SGI", "Silicon Graphics International" },
+    { "Shannon", "Shannon Systems Co., Ltd." },
     { "Shinko", "Shinko Electric Co., Ltd." },
     { "SIEMENS", "Siemens" },
     { "SigmaTel", "SigmaTel, Inc." },
     { "SII", "Seiko Instruments Inc." },
     { "SIMPLE", "SimpleTech, Inc. (Obs - now STEC, Inc.)" },
+    { "SIVMSD", "IMAGO SOFTWARE SL" },
+    { "SKhynix", "SK hynix Inc." },
+    { "SKT", "SK Telecom Co., Ltd." },
     { "SLCNSTOR", "SiliconStor, Inc." },
     { "SLI", "Sierra Logic, Inc." },
+    { "SMCI", "Super Micro Computer, Inc." },
+    { "SmrtStor", "Smart Storage Systems" },
     { "SMS", "Scientific Micro Systems/OMTI" },
     { "SMSC", "SMSC Storage, Inc." },
     { "SMX", "Smartronix, Inc." },
@@ -615,6 +714,7 @@ struct ScsiVendor
     { "SPECTRA", "Spectra Logic, a Division of Western Automation Labs, Inc." },
     { "SPERRY", "Sperry (now Unisys Corp.)" },
     { "Spintso", "Spintso International AB" },
+    { "STARBORD", "Starboard Storage Systems, Inc." },
     { "STARWIND", "StarWind Software, Inc." },
     { "STEC", "STEC, Inc." },
     { "Sterling", "Sterling Diagnostic Imaging, Inc." },
@@ -622,7 +722,8 @@ struct ScsiVendor
     { "STNWOOD", "Stonewood Group" },
     { "STONEFLY", "StoneFly Networks, Inc." },
     { "STOR", "StorageNetworks, Inc." },
-    { "STORAPPVStorageApps, Inc. (now HP)" },
+    { "STORAPP", "StorageApps, Inc. (now HP)" },
+    { "STORCIUM", "Intelligent Systems Services Inc." },
     { "STORCOMP", "Storage Computer Corporation" },
     { "STORM", "Storm Technology, Inc." },
     { "StorMagc", "StorMagic" },
@@ -632,9 +733,11 @@ struct ScsiVendor
     { "SUN", "Sun Microsystems, Inc." },
     { "SUNCORP", "SunCorporation" },
     { "suntx", "Suntx System Co., Ltd" },
+    { "SUSE", "SUSE Linux" },
     { "Swinxs", "Swinxs BV" },
     { "SYMANTEC", "Symantec Corporation" },
     { "SYMBIOS", "Symbios Logic Inc." },
+    { "SYMPLY", "Symply, Inc." },
     { "SYMWAVE", "Symwave, Inc." },
     { "SYNCSORT", "Syncsort Incorporated" },
     { "SYNERWAY", "Synerway" },
@@ -654,6 +757,7 @@ struct ScsiVendor
     { "TEAC", "TEAC Japan" },
     { "TECOLOTE", "Tecolote Designs" },
     { "TEGRA", "Tegra Varityper" },
+    { "Teilch", "Teilch" },
     { "Tek", "Tektronix" },
     { "TELLERT", "Tellert Elektronik GmbH" },
     { "TENTIME", "Laura Technologies, Inc." },
@@ -663,12 +767,16 @@ struct ScsiVendor
     { "TI-DSG", "Texas Instruments" },
     { "TiGi", "TiGi Corporation" },
     { "TILDESGN", "Tildesign bv" },
+    { "TINTRI", "Tintri" },
     { "Tite", "Tite Technology Limited" },
     { "TKS Inc.", "TimeKeeping Systems, Inc." },
+    { "TLMKS", "Telemakus LLC" },
     { "TMS", "Texas Memory Systems, Inc." },
     { "TMS100", "TechnoVas" },
     { "TOLISGRP", "The TOLIS Group" },
     { "TOSHIBA", "Toshiba Japan" },
+    { "TOYOU", "TOYOU FEIJI ELECTRONICS CO.,LTD." },
+    { "Tracker", "Tracker, LLC" },
     { "TRIOFLEX", "Trioflex Oy" },
     { "TRIPACE", "Tripace" },
     { "TRLogger", "TrueLogger Ltd." },
@@ -687,14 +795,18 @@ struct ScsiVendor
     { "USDC", "US Design Corp." },
     { "VASCO", "Vasco Data Security" },
     { "VDS", "Victor Data Systems Co., Ltd." },
+    { "VELDANA", "VELDANA MEDICAL SA" },
+    { "VENTANA", "Ventana Medical Systems" },
     { "Verari", "Verari Systems, Inc." },
     { "VERBATIM", "Verbatim Corporation" },
     { "Vercet", "Vercet LLC" },
     { "VERITAS", "VERITAS Software Corporation" },
+    { "Vexata", "Vexata Inc" },
     { "VEXCEL", "VEXCEL IMAGING GmbH" },
     { "VicomSys", "Vicom Systems, Inc." },
     { "VIDEXINC", "Videx, Inc." },
     { "VIOLIN", "Violin Memory, Inc." },
+    { "VIRIDENT", "Virident Systems, Inc." },
     { "VITESSE", "Vitesse Semiconductor Corporation" },
     { "VIXEL", "Vixel Corporation (now part of Emulex)" },
     { "VLS", "Van Lent Systems BV" },
@@ -704,6 +816,7 @@ struct ScsiVendor
     { "VOLTAIRE", "Voltaire Ltd." },
     { "VRC", "Vermont Research Corp." },
     { "VRugged", "Vanguard Rugged Storage" },
+    { "VTGadget", "Vermont Gadget Company" },
     { "Waitec", "Waitec NV" },
     { "WangDAT", "WangDAT" },
     { "WANGTEK", "Wangtek" },
@@ -712,6 +825,7 @@ struct ScsiVendor
     { "WD", "Western Digital Corporation" },
     { "WDC", "Western Digital Corporation" },
     { "WDIGTL", "Western Digital" },
+    { "WDTI", "Western Digital Technologies, Inc." },
     { "WEARNES", "Wearnes Technology Corporation" },
     { "WeeraRes", "Weera Research Pte Ltd" },
     { "Wildflwr", "Wildflower Technologies, Inc." },
@@ -720,6 +834,7 @@ struct ScsiVendor
     { "XEBEC", "Xebec Corporation" },
     { "XENSRC", "XenSource, Inc." },
     { "Xerox", "Xerox Corporation" },
+    { "Xield", "Xield Technologies Limited" },
     { "XIOtech", "XIOtech Corporation" },
     { "XIRANET", "Xiranet Communications GmbH" },
     { "XIV", "XIV (now IBM)" },
@@ -729,70 +844,81 @@ struct ScsiVendor
     { "YIXUN", "Yixun Electronic Co.,Ltd." },
     { "YOTTA", "YottaYotta, Inc." },
     { "Zarva", "Zarva Digital Technology Co., Ltd." },
+    { "ZBS", "SMARTX Corporation" },
     { "ZETTA", "Zetta Systems, Inc." },
+    { "ZTE", "ZTE Corporation" },
+    { "ZVAULT", "Zetavault" }
+};
+
+const ScsiVendor kScsiVendorsAlt[] =
+{
     { "ZMVE", "Zalman Tech Co." }
 };
 
-void AddProfileMediaTypes(
-    proto::OpticalDrive::MediaTypes* media, DeviceSPTI& device,uint16_t profile)
+void AddProfileMedia(proto::OpticalDrive::Media* media, DeviceSPTI& device,uint16_t profile)
 {
     // FIXME: DVD-RW Double Layer write support not handled.
+
+    constexpr uint32_t kRead = proto::OpticalDrive::Media::MODE_READ;
+    constexpr uint32_t kWrite = proto::OpticalDrive::Media::MODE_WRITE;
 
     switch (profile)
     {
         case DeviceSPTI::PROFILE_CD_ROM:
         {
-            media->mutable_cd_rom()->set_read(true);
-            media->mutable_cd_r()->set_read(true);
-            media->mutable_cd_rw()->set_read(true);
+            media->set_cd_rom(media->cd_rom() | kRead);
+            media->set_cd_r(media->cd_r() | kRead);
+            media->set_cd_rw(media->cd_rw() | kRead);
         }
         break;
 
         case DeviceSPTI::PROFILE_CD_R:
         {
-            media->mutable_cd_r()->set_write(true);
+            media->set_cd_r(media->cd_r() | kWrite);
         }
         break;
 
         case DeviceSPTI::PROFILE_CD_RW:
         {
-            media->mutable_cd_rw()->set_write(true);
+            media->set_cd_rw(media->cd_rw() | kWrite);
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_ROM:
         {
-            media->mutable_dvd_rom()->set_read(true);
-            media->mutable_dvd_r()->set_read(true);
-            media->mutable_dvd_rw()->set_read(true);
+            media->set_dvd_rom(media->dvd_rom() | kRead);
+            media->set_dvd_r(media->dvd_r() | kRead);
+            media->set_dvd_rw(media->dvd_rw() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_READ, &feature))
             {
-                media->mutable_dvd_r_dl()->set_read(feature.table.dvd_read.dual_r != 0);
-                media->mutable_dvd_rw_dl()->set_read(feature.table.dvd_read.dual_rw != 0);
+                if (feature.table.dvd_read.dual_r != 0)
+                    media->set_dvd_r_dl(media->dvd_r_dl() | kRead);
+
+                if (feature.table.dvd_read.dual_rw != 0)
+                    media->set_dvd_rw_dl(media->dvd_rw_dl() | kRead);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_R_SEQUENTIAL_RECORDING:
         {
-            media->mutable_dvd_r()->set_write(true);
+            media->set_dvd_r(media->dvd_r() | kWrite);
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_RAM:
         {
-            media->mutable_dvd_ram()->set_read(true);
-            media->mutable_dvd_ram()->set_write(true);
+            media->set_dvd_ram(kRead | kWrite);
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_RW_SEQUENTIAL_RECORDING:
         {
-            media->mutable_dvd_rw()->set_write(true);
+            media->set_dvd_rw(media->dvd_rw() | kWrite);
         }
         break;
 
@@ -804,65 +930,68 @@ void AddProfileMediaTypes(
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_R_RW_WRITE, &feature))
             {
-                media->mutable_dvd_r_dl()->set_write(feature.table.dvd_r_rw_write.rdl != 0);
+                if (feature.table.dvd_r_rw_write.rdl != 0)
+                    media->set_dvd_r_dl(media->dvd_r_dl() | kWrite);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_PLUS_RW:
         {
-            media->mutable_dvd_plus_rw()->set_read(true);
+            media->set_dvd_plus_rw(media->dvd_plus_rw() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_PLUS_RW, &feature))
             {
-                media->mutable_dvd_plus_rw()->set_write(feature.table.dvd_plus_rw.write != 0);
+                if (feature.table.dvd_plus_rw.write != 0)
+                    media->set_dvd_plus_rw(media->dvd_plus_rw() | kWrite);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_PLUS_R:
         {
-            media->mutable_dvd_plus_r()->set_read(true);
+            media->set_dvd_plus_r(media->dvd_plus_r() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_PLUS_R, &feature))
             {
-                media->mutable_dvd_plus_r()->set_write(feature.table.dvd_plus_r.write != 0);
+                if (feature.table.dvd_plus_r.write != 0)
+                    media->set_dvd_plus_r(media->dvd_plus_r() | kWrite);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_PLUS_RW_DUAL_LAYER:
         {
-            media->mutable_dvd_plus_rw_dl()->set_read(true);
+            media->set_dvd_plus_rw_dl(media->dvd_plus_rw_dl() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_PLUS_RW_DUAL_LAYER, &feature))
             {
-                media->mutable_dvd_plus_rw_dl()->set_write(
-                    feature.table.dvd_plus_rw_dual_layer.write != 0);
+                if (feature.table.dvd_plus_rw_dual_layer.write != 0)
+                    media->set_dvd_plus_rw_dl(media->dvd_plus_rw_dl() | kWrite);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_DVD_PLUS_R_DUAL_LAYER:
         {
-            media->mutable_dvd_plus_r_dl()->set_read(true);
+            media->set_dvd_plus_r_dl(media->dvd_plus_r_dl() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_DVD_PLUS_R_DUAL_LAYER, &feature))
             {
-                media->mutable_dvd_plus_r_dl()->set_write(
-                    feature.table.dvd_plus_r_dual_layer.write != 0);
+                if (feature.table.dvd_plus_r_dual_layer.write != 0)
+                    media->set_dvd_plus_r_dl(media->dvd_plus_r_dl() | kWrite);
             }
         }
         break;
@@ -874,9 +1003,14 @@ void AddProfileMediaTypes(
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_BD_READ, &feature))
             {
-                media->mutable_bd_rom()->set_read(ByteSwap(feature.table.bd_read.rom) != 0);
-                media->mutable_bd_r()->set_read(ByteSwap(feature.table.bd_read.r) != 0);
-                media->mutable_bd_re()->set_read(ByteSwap(feature.table.bd_read.re) != 0);
+                if (ByteSwap(feature.table.bd_read.rom) != 0)
+                    media->set_bd_rom(media->bd_rom() | kRead);
+
+                if (ByteSwap(feature.table.bd_read.r) != 0)
+                    media->set_bd_r(media->bd_r() | kRead);
+
+                if (ByteSwap(feature.table.bd_read.re) != 0)
+                    media->set_bd_re(media->bd_re() | kRead);
             }
         }
         break;
@@ -889,23 +1023,29 @@ void AddProfileMediaTypes(
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_BD_WRITE, &feature))
             {
-                media->mutable_bd_re()->set_write(ByteSwap(feature.table.bd_write.re) != 0);
-                media->mutable_bd_r()->set_write(ByteSwap(feature.table.bd_write.r) != 0);
+                if (ByteSwap(feature.table.bd_write.re) != 0)
+                    media->set_bd_re(media->bd_re() | kWrite);
+
+                if (ByteSwap(feature.table.bd_write.r) != 0)
+                    media->set_bd_r(media->bd_r() | kWrite);
             }
         }
         break;
 
         case DeviceSPTI::PROFILE_HD_DVD_ROM:
         {
-            media->mutable_hd_dvd_rom()->set_read(true);
+            media->set_hd_dvd_rom(media->hd_dvd_rom() | kRead);
 
             DeviceSPTI::Feature feature;
             memset(&feature, 0, sizeof(feature));
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_HD_DVD_READ, &feature))
             {
-                media->mutable_hd_dvd_r()->set_read(feature.table.hd_dvd_read.hd_dvd_r != 0);
-                media->mutable_hd_dvd_ram()->set_read(feature.table.hd_dvd_read.hd_dvd_ram != 0);
+                if (feature.table.hd_dvd_read.hd_dvd_r != 0)
+                    media->set_hd_dvd_r(media->hd_dvd_r() | kRead);
+
+                if (feature.table.hd_dvd_read.hd_dvd_ram != 0)
+                    media->set_hd_dvd_ram(media->hd_dvd_ram() | kRead);
             }
         }
         break;
@@ -918,8 +1058,11 @@ void AddProfileMediaTypes(
 
             if (device.GetConfiguration(DeviceSPTI::FEATURE_CODE_HD_DVD_WRITE, &feature))
             {
-                media->mutable_hd_dvd_r()->set_write(feature.table.hd_dvd_write.hd_dvd_r != 0);
-                media->mutable_hd_dvd_ram()->set_write(feature.table.hd_dvd_write.hd_dvd_ram != 0);
+                if (feature.table.hd_dvd_write.hd_dvd_r != 0)
+                    media->set_hd_dvd_r(media->hd_dvd_r() | kWrite);
+
+                if (feature.table.hd_dvd_write.hd_dvd_ram != 0)
+                    media->set_hd_dvd_ram(media->hd_dvd_ram() | kWrite);
             }
         }
         break;
@@ -1068,6 +1211,12 @@ const char* VendorCodeToName(const char* vendor_code)
             return kScsiVendors[i].vendor_name;
     }
 
+    for (size_t i = 0; i < _countof(kScsiVendorsAlt); ++i)
+    {
+        if (_stricmp(kScsiVendorsAlt[i].vendor_code, vendor_code) == 0)
+            return kScsiVendorsAlt[i].vendor_name;
+    }
+
     return "Unknown";
 }
 
@@ -1124,19 +1273,23 @@ void CategoryOpticalDrive::Parse(Table& table, const std::string& data)
         group.AddParam("Remaining Vendor Changes", Value::Number(item.region_code_vendor_changes()));
 
         {
-            const proto::OpticalDrive::MediaTypes& media = item.media_types();
+            const proto::OpticalDrive::Media& media = item.media();
 
             Group media_group = group.AddGroup("Supported Disk Types");
 
-            auto add_type = [&](const char* type_name,
-                                const proto::OpticalDrive::MediaTypes::MediaType& media_type)
+            auto add_type = [&](const char* type_name, uint32_t media_flags)
             {
                 const char* value = "Not Supported";
 
-                if (media_type.read() && media_type.write())
+                if ((media_flags & proto::OpticalDrive::Media::MODE_READ) &&
+                    (media_flags & proto::OpticalDrive::Media::MODE_WRITE))
+                {
                     value = "Read + Write";
-                else if (media_type.read())
+                }
+                else if (media_flags & proto::OpticalDrive::Media::MODE_READ)
+                {
                     value = "Read";
+                }
 
                 media_group.AddParam(type_name, Value::String(value));
             };
@@ -1286,7 +1439,7 @@ std::string CategoryOpticalDrive::Serialize()
             {
                 uint16_t profile = ByteSwap(*(uint16_t*)(&feature.table.additional_data[i]));
 
-                AddProfileMediaTypes(item->mutable_media_types(), device, profile);
+                AddProfileMedia(item->mutable_media(), device, profile);
                 AddProfileFeatures(item->mutable_features(), device, profile);
             }
         }
