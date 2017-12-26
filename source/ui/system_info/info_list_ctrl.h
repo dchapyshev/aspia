@@ -63,6 +63,7 @@ private:
     CSize small_icon_size_;
     CImageListManaged imagelist_;
 
+    bool sorting_enabled_ = true;
     int item_count_ = 0;
     int column_count_ = 0;
     int current_column_ = 0;

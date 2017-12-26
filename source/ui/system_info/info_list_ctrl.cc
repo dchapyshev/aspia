@@ -112,6 +112,14 @@ void InfoListCtrl::StartTable(Category* category)
 
     item_count_ = 0;
     indent_ = 0;
+
+    if (!sorting_enabled_)
+    {
+        // By default, sorting must be enabled.
+        // If at least one group is added, the sorting will be disabled.
+        GetHeader().ModifyStyle(0, HDS_BUTTONS);
+        sorting_enabled_ = true;
+    }
 }
 
 void InfoListCtrl::EndTable()
@@ -151,6 +159,14 @@ void InfoListCtrl::StartGroup(std::string_view name)
 
     ++indent_;
     ++item_count_;
+
+    // Categories that contain groups can not be sorted by a column.
+    if (sorting_enabled_)
+    {
+        // Disable the possibility of sorting in the control.
+        GetHeader().ModifyStyle(HDS_BUTTONS, 0);
+        sorting_enabled_ = false;
+    }
 }
 
 void InfoListCtrl::EndGroup()
