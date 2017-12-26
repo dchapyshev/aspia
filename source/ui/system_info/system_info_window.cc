@@ -268,6 +268,13 @@ LRESULT SystemInfoWindow::OnListRightClick(
     return 0;
 }
 
+LRESULT SystemInfoWindow::OnListColumnClick(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(hdr);
+    list_.SortColumnItems(pnmv->iSubItem);
+    return 0;
+}
+
 LRESULT SystemInfoWindow::OnSaveSelectedButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {

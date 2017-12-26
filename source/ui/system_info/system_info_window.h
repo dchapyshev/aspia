@@ -58,6 +58,7 @@ private:
 
         NOTIFY_HANDLER(kTreeControl, TVN_SELCHANGED, OnCategorySelected)
         NOTIFY_HANDLER(kListControl, NM_RCLICK, OnListRightClick)
+        NOTIFY_HANDLER(kListControl, LVN_COLUMNCLICK, OnListColumnClick)
         NOTIFY_CODE_HANDLER(TBN_DROPDOWN, OnToolBarDropDown)
 
         COMMAND_ID_HANDLER(ID_SAVE_SELECTED, OnSaveSelectedButton)
@@ -81,6 +82,7 @@ private:
 
     LRESULT OnCategorySelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnListColumnClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnToolBarDropDown(int control_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnSaveSelectedButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);

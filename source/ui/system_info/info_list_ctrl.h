@@ -29,6 +29,7 @@ public:
 
     void DeleteAllColumns();
     int GetColumnCount() const;
+    void SortColumnItems(int column_index);
 
 protected:
     void StartDocument() final;
@@ -53,6 +54,14 @@ private:
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     std::wstring ValueToString(const Value& value);
 
+    struct SortingContext
+    {
+        InfoListCtrl* list;
+        int column_index;
+    };
+
+    static int CALLBACK SortingCompare(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort);
+
     enum IconIndex
     {
         ICON_INDEX_CATEGORY  = 0,
@@ -64,6 +73,7 @@ private:
     CImageListManaged imagelist_;
 
     bool sorting_enabled_ = true;
+    bool sorting_ascending_ = false;
     int item_count_ = 0;
     int column_count_ = 0;
     int current_column_ = 0;

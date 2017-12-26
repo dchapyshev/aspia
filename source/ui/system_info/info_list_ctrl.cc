@@ -62,6 +62,49 @@ int InfoListCtrl::GetColumnCount() const
     return header.GetItemCount();
 }
 
+void InfoListCtrl::SortColumnItems(int column_index)
+{
+    if (!sorting_enabled_)
+        return;
+
+    SortingContext sorting_context;
+
+    sorting_context.list = this;
+    sorting_context.column_index = column_index;
+
+    SortItems(SortingCompare, reinterpret_cast<LPARAM>(&sorting_context));
+
+    sorting_ascending_ = !sorting_ascending_;
+}
+
+// static
+int CALLBACK InfoListCtrl::SortingCompare(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort)
+{
+    SortingContext* context = reinterpret_cast<SortingContext*>(lparam_sort);
+
+    LVFINDINFOW find_info;
+    memset(&find_info, 0, sizeof(find_info));
+
+    find_info.flags = LVFI_PARAM;
+
+    find_info.lParam = lparam1;
+    int item_index = context->list->FindItem(&find_info, -1);
+
+    WCHAR item1[256] = { 0 };
+    context->list->GetItemText(item_index, context->column_index, item1, ARRAYSIZE(item1));
+
+    find_info.lParam = lparam2;
+    item_index = context->list->FindItem(&find_info, -1);
+
+    WCHAR item2[256] = { 0 };
+    context->list->GetItemText(item_index, context->column_index, item2, ARRAYSIZE(item2));
+
+    if (context->list->sorting_ascending_)
+        return _wcsicmp(item2, item1);
+    else
+        return _wcsicmp(item1, item2);
+}
+
 void InfoListCtrl::StartDocument()
 {
     // Nothing
@@ -153,7 +196,7 @@ void InfoListCtrl::StartGroup(std::string_view name)
     item.iIndent = indent_;
     item.pszText = const_cast<LPWSTR>(text.c_str());
     item.iItem   = item_count_;
-    item.lParam  = 0;
+    item.lParam  = item_count_;
 
     InsertItem(&item);
 
@@ -228,11 +271,12 @@ void InfoListCtrl::AddParam(std::string_view param, const Value& value)
     std::wstring param_name(UNICODEfromUTF8(param.data()));
 
     LVITEMW item = { 0 };
-    item.mask     = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT;
+    item.mask     = LVIF_IMAGE | LVIF_INDENT | LVIF_TEXT | LVIF_PARAM;
     item.iImage   = icon_index;
     item.iIndent  = indent_;
     item.pszText  = const_cast<LPWSTR>(param_name.c_str());
     item.iItem    = item_count_;
+    item.lParam   = item_count_;
     item.iSubItem = 0;
 
     const int item_index = InsertItem(&item);
@@ -273,10 +317,11 @@ void InfoListCtrl::AddValue(const Value& value)
     {
         LVITEMW item = { 0 };
 
-        item.mask     = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE | LVIF_INDENT;
+        item.mask     = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE | LVIF_INDENT | LVIF_PARAM;
         item.iImage   = ICON_INDEX_CATEGORY;
         item.pszText  = const_cast<LPWSTR>(text.c_str());
         item.iItem    = item_count_;
+        item.lParam   = item_count_;
         item.iSubItem = current_column_;
         item.iIndent  = indent_;
 
