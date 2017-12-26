@@ -28,13 +28,13 @@ constexpr WCHAR kInstallLocation[] = L"InstallLocation";
 constexpr WCHAR kSystemComponent[] = L"SystemComponent";
 constexpr WCHAR kParentKeyName[] = L"ParentKeyName";
 
-bool AddApplication(proto::Application* message, const WCHAR* key_name)
+bool AddApplication(proto::Application* message, const WCHAR* key_name, REGSAM access)
 {
     std::wstring key_path = StringPrintf(L"%s\\%s", kUninstallKeyPath, key_name);
 
     RegistryKey key;
 
-    LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
+    LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
     if (status != ERROR_SUCCESS)
     {
         LOG(WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
@@ -148,7 +148,7 @@ std::string CategoryApplication::Serialize()
 
     while (machine_key_iterator.Valid())
     {
-        AddApplication(&message, machine_key_iterator.Name());
+        AddApplication(&message, machine_key_iterator.Name(), 0);
         ++machine_key_iterator;
     }
 
@@ -156,30 +156,36 @@ std::string CategoryApplication::Serialize()
 
     while (user_key_iterator.Valid())
     {
-        AddApplication(&message, user_key_iterator.Name());
+        AddApplication(&message, user_key_iterator.Name(), 0);
         ++user_key_iterator;
     }
 
 #if (ARCH_CPU_X86 == 1)
 
-    RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE,
-                                               kUninstallKeyPath,
-                                               KEY_WOW64_64KEY);
+    BOOL is_wow64;
 
-    while (machine64_key_iterator.Valid())
+    // If the x86 application is running in a x64 system.
+    if (IsWow64Process(GetCurrentProcess(), &is_wow64) && is_wow64)
     {
-        AddApplication(&message, machine64_key_iterator.Name());
-        ++machine64_key_iterator;
-    }
+        RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE,
+                                                   kUninstallKeyPath,
+                                                   KEY_WOW64_64KEY);
 
-    RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER,
-                                            kUninstallKeyPath,
-                                            KEY_WOW64_64KEY);
+        while (machine64_key_iterator.Valid())
+        {
+            AddApplication(&message, machine64_key_iterator.Name(), KEY_WOW64_64KEY);
+            ++machine64_key_iterator;
+        }
 
-    while (user64_key_iterator.Valid())
-    {
-        AddApplication(&message, user64_key_iterator.Name());
-        ++user64_key_iterator;
+        RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER,
+                                                kUninstallKeyPath,
+                                                KEY_WOW64_64KEY);
+
+        while (user64_key_iterator.Valid())
+        {
+            AddApplication(&message, user64_key_iterator.Name(), KEY_WOW64_64KEY);
+            ++user64_key_iterator;
+        }
     }
 
 #elif (ARCH_CPU_X86_64 == 1)
@@ -190,7 +196,7 @@ std::string CategoryApplication::Serialize()
 
     while (machine32_key_iterator.Valid())
     {
-        AddApplication(&message, machine32_key_iterator.Name());
+        AddApplication(&message, machine32_key_iterator.Name(), KEY_WOW64_32KEY);
         ++machine32_key_iterator;
     }
 
@@ -200,7 +206,7 @@ std::string CategoryApplication::Serialize()
 
     while (user32_key_iterator.Valid())
     {
-        AddApplication(&message, user32_key_iterator.Name());
+        AddApplication(&message, user32_key_iterator.Name(), KEY_WOW64_32KEY);
         ++user32_key_iterator;
     }
 
