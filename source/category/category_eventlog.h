@@ -1,21 +1,21 @@
 //
 // PROJECT:         Aspia
-// FILE:            category/category_eventlog_system.h
+// FILE:            category/category_eventlog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CATEGORY__CATEGORY_EVENTLOG_SYSTEM_H
-#define _ASPIA_CATEGORY__CATEGORY_EVENTLOG_SYSTEM_H
+#ifndef _ASPIA_CATEGORY__CATEGORY_EVENTLOG_H
+#define _ASPIA_CATEGORY__CATEGORY_EVENTLOG_H
 
 #include "category/category.h"
 
 namespace aspia {
 
-class CategoryEventLogSystem : public CategoryInfo
+class CategoryEventLog : public CategoryInfo
 {
 public:
-    CategoryEventLogSystem();
+    CategoryEventLog();
 
     const char* Name() const final;
     IconId Icon() const final;
@@ -25,9 +25,9 @@ public:
     std::string Serialize() final;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryEventLogSystem);
+    DISALLOW_COPY_AND_ASSIGN(CategoryEventLog);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CATEGORY__CATEGORY_EVENTLOG_SYSTEM_H
+#endif // _ASPIA_CATEGORY__CATEGORY_EVENTLOG_H

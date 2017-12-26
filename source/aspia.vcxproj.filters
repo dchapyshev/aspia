@@ -763,24 +763,6 @@
     <ClCompile Include="category\category_environment_variables.pb.cc">
       <Filter>category</Filter>
     </ClCompile>
-    <ClCompile Include="category\category_eventlog_application.cc">
-      <Filter>category</Filter>
-    </ClCompile>
-    <ClCompile Include="category\category_eventlog_application.pb.cc">
-      <Filter>category</Filter>
-    </ClCompile>
-    <ClCompile Include="category\category_eventlog_security.cc">
-      <Filter>category</Filter>
-    </ClCompile>
-    <ClCompile Include="category\category_eventlog_security.pb.cc">
-      <Filter>category</Filter>
-    </ClCompile>
-    <ClCompile Include="category\category_eventlog_system.cc">
-      <Filter>category</Filter>
-    </ClCompile>
-    <ClCompile Include="category\category_eventlog_system.pb.cc">
-      <Filter>category</Filter>
-    </ClCompile>
     <ClCompile Include="category\category_license.cc">
       <Filter>category</Filter>
     </ClCompile>
@@ -921,6 +903,12 @@
     </ClCompile>
     <ClCompile Include="base\devices\device_spti.cc">
       <Filter>base\devices</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_eventlog.pb.cc">
+      <Filter>category</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1721,24 +1709,6 @@
     <ClInclude Include="category\category_environment_variables.pb.h">
       <Filter>category</Filter>
     </ClInclude>
-    <ClInclude Include="category\category_eventlog_application.h">
-      <Filter>category</Filter>
-    </ClInclude>
-    <ClInclude Include="category\category_eventlog_application.pb.h">
-      <Filter>category</Filter>
-    </ClInclude>
-    <ClInclude Include="category\category_eventlog_security.h">
-      <Filter>category</Filter>
-    </ClInclude>
-    <ClInclude Include="category\category_eventlog_security.pb.h">
-      <Filter>category</Filter>
-    </ClInclude>
-    <ClInclude Include="category\category_eventlog_system.h">
-      <Filter>category</Filter>
-    </ClInclude>
-    <ClInclude Include="category\category_eventlog_system.pb.h">
-      <Filter>category</Filter>
-    </ClInclude>
     <ClInclude Include="category\category_license.h">
       <Filter>category</Filter>
     </ClInclude>
@@ -1880,6 +1850,12 @@
     <ClInclude Include="base\devices\device_spti.h">
       <Filter>base\devices</Filter>
     </ClInclude>
+    <ClInclude Include="category\category_eventlog.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_eventlog.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1975,15 +1951,6 @@
     <None Include="category\category_environment_variables.proto">
       <Filter>category</Filter>
     </None>
-    <None Include="category\category_eventlog_application.proto">
-      <Filter>category</Filter>
-    </None>
-    <None Include="category\category_eventlog_security.proto">
-      <Filter>category</Filter>
-    </None>
-    <None Include="category\category_eventlog_system.proto">
-      <Filter>category</Filter>
-    </None>
     <None Include="category\category_license.proto">
       <Filter>category</Filter>
     </None>
@@ -2051,6 +2018,9 @@
       <Filter>category</Filter>
     </None>
     <None Include="category\category_wsus.proto">
+      <Filter>category</Filter>
+    </None>
+    <None Include="category\category_eventlog.proto">
       <Filter>category</Filter>
     </None>
   </ItemGroup>

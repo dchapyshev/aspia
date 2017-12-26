@@ -24,9 +24,7 @@
 #include "category/category_dmi_system_slot.h"
 #include "category/category_driver.h"
 #include "category/category_environment_variables.h"
-#include "category/category_eventlog_application.h"
-#include "category/category_eventlog_security.h"
-#include "category/category_eventlog_system.h"
+#include "category/category_eventlog.h"
 #include "category/category_license.h"
 #include "category/category_memory.h"
 #include "category/category_monitor.h"
@@ -126,18 +124,6 @@ public:
 
 private:
     DISALLOW_COPY_AND_ASSIGN(CategoryGroupNetwork);
-};
-
-class CategoryGroupEventLog : public CategoryGroup
-{
-public:
-    CategoryGroupEventLog() = default;
-
-    const char* Name() const final { return "Event Logs"; }
-    IconId Icon() const final { return IDI_BOOKS_STACK; }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(CategoryGroupEventLog);
 };
 
 class CategoryGroupUsers : public CategoryGroup
@@ -285,18 +271,12 @@ CategoryList CreateCategoryTree()
     users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategoryUserGroup>());
     users_and_groups->mutable_child_list()->emplace_back(std::make_unique<CategorySession>());
 
-    std::unique_ptr<CategoryGroup> event_logs = std::make_unique<CategoryGroupEventLog>();
-
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogApplication>());
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogSecurity>());
-    event_logs->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLogSystem>());
-
     std::unique_ptr<CategoryGroup> os = std::make_unique<CategoryGroupOS>();
 
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryTaskScheduler>());
     os->mutable_child_list()->emplace_back(std::move(users_and_groups));
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryEnvironmentVariables>());
-    os->mutable_child_list()->emplace_back(std::move(event_logs));
+    os->mutable_child_list()->emplace_back(std::make_unique<CategoryEventLog>());
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryWSUS>());
 
     CategoryList tree;
@@ -365,12 +345,9 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryUserGroup>());
     emplace_back(std::make_unique<CategorySession>());
 
-    emplace_back(std::make_unique<CategoryEventLogApplication>());
-    emplace_back(std::make_unique<CategoryEventLogSecurity>());
-    emplace_back(std::make_unique<CategoryEventLogSystem>());
-
     emplace_back(std::make_unique<CategoryTaskScheduler>());
     emplace_back(std::make_unique<CategoryEnvironmentVariables>());
+    emplace_back(std::make_unique<CategoryEventLog>());
     emplace_back(std::make_unique<CategoryWSUS>());
 
     return map;
