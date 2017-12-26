@@ -96,9 +96,10 @@ void CategoryLogicalDrive::Parse(Table& table, const std::string& data)
 
         row.AddValue(Value::MemorySize(item.free_space()));
 
-        uint64_t free_percent = (item.free_space() * 100ULL) / item.total_size();
-        row.AddValue(Value::Number(free_percent, "%"));
+        uint64_t free_percent = (item.total_size() != 0) ?
+            ((item.free_space() * 100ULL) / item.total_size()) : 0;
 
+        row.AddValue(Value::Number(free_percent, "%"));
         row.AddValue(Value::String(item.volume_serial()));
     }
 }
