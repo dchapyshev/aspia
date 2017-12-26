@@ -208,8 +208,11 @@ int GetBatteryDepreciation(Device& battery, ULONG tag)
     memset(&battery_info, 0, sizeof(battery_info));
 
     if (!GetBatteryInformation(battery, tag, BatteryInformation,
-                               &battery_info, sizeof(battery_info)))
+                               &battery_info, sizeof(battery_info)) ||
+        battery_info.DesignedCapacity == 0)
+    {
         return 0;
+    }
 
     const int percent = 100 - (battery_info.FullChargedCapacity * 100) /
         battery_info.DesignedCapacity;
@@ -370,10 +373,12 @@ void CategoryPowerOptions::Parse(Table& table, const std::string& data)
                        Value::Number(message.battery_life_percent(), "%"));
 
         table.AddParam("Full Battery Life Time",
-                       Value::Number(message.full_battery_life_time(), "s"));
+            (message.full_battery_life_time() != 0) ?
+                Value::Number(message.full_battery_life_time(), "s") : Value::String("Unknown"));
 
         table.AddParam("Remaining Battery Life Time",
-                       Value::Number(message.remaining_battery_life_time(), "s"));
+            (message.remaining_battery_life_time() != 0) ?
+                Value::Number(message.remaining_battery_life_time(), "s") : Value::String("Unknown"));
     }
 
     for (int index = 0; index < message.battery_size(); ++index)
