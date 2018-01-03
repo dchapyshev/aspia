@@ -10,9 +10,9 @@
 
 #include "report/table.h"
 
-#include <list>
 #include <map>
 #include <memory>
+#include <vector>
 
 namespace aspia {
 
@@ -20,7 +20,7 @@ class Category;
 class CategoryGroup;
 class CategoryInfo;
 
-using CategoryList = std::list<std::unique_ptr<Category>>;
+using CategoryList = std::vector<std::unique_ptr<Category>>;
 using CategoryMap = std::map<std::string, std::unique_ptr<CategoryInfo>>;
 
 class Category

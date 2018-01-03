@@ -10,6 +10,7 @@
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // This is a temporary google only hack
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
 #include "third_party/protobuf/version.h"
@@ -17,12 +18,5394 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
+class TaskScheduler_ActionDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Action>
+      _instance;
+} _TaskScheduler_Action_default_instance_;
+class TaskScheduler_Trigger_Event_NamedValueDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Event_NamedValue>
+      _instance;
+} _TaskScheduler_Trigger_Event_NamedValue_default_instance_;
+class TaskScheduler_Trigger_EventDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Event>
+      _instance;
+} _TaskScheduler_Trigger_Event_default_instance_;
+class TaskScheduler_Trigger_DailyDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Daily>
+      _instance;
+} _TaskScheduler_Trigger_Daily_default_instance_;
+class TaskScheduler_Trigger_WeeklyDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Weekly>
+      _instance;
+} _TaskScheduler_Trigger_Weekly_default_instance_;
+class TaskScheduler_Trigger_MonthlyDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Monthly>
+      _instance;
+} _TaskScheduler_Trigger_Monthly_default_instance_;
+class TaskScheduler_Trigger_MonthlyDowDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_MonthlyDow>
+      _instance;
+} _TaskScheduler_Trigger_MonthlyDow_default_instance_;
+class TaskScheduler_Trigger_RegistrationDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Registration>
+      _instance;
+} _TaskScheduler_Trigger_Registration_default_instance_;
+class TaskScheduler_Trigger_BootDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Boot>
+      _instance;
+} _TaskScheduler_Trigger_Boot_default_instance_;
+class TaskScheduler_Trigger_LogonDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Logon>
+      _instance;
+} _TaskScheduler_Trigger_Logon_default_instance_;
+class TaskScheduler_Trigger_SessionStateChangeDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_SessionStateChange>
+      _instance;
+} _TaskScheduler_Trigger_SessionStateChange_default_instance_;
+class TaskScheduler_Trigger_RepetitionDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger_Repetition>
+      _instance;
+} _TaskScheduler_Trigger_Repetition_default_instance_;
+class TaskScheduler_TriggerDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Trigger>
+      _instance;
+  const ::aspia::proto::TaskScheduler_Trigger_Event* event_;
+  const ::aspia::proto::TaskScheduler_Trigger_Daily* daily_;
+  const ::aspia::proto::TaskScheduler_Trigger_Weekly* weekly_;
+  const ::aspia::proto::TaskScheduler_Trigger_Monthly* monthly_;
+  const ::aspia::proto::TaskScheduler_Trigger_MonthlyDow* monthly_dow_;
+  const ::aspia::proto::TaskScheduler_Trigger_Registration* registration_;
+  const ::aspia::proto::TaskScheduler_Trigger_Boot* boot_;
+  const ::aspia::proto::TaskScheduler_Trigger_Logon* logon_;
+  const ::aspia::proto::TaskScheduler_Trigger_SessionStateChange* session_state_change_;
+} _TaskScheduler_Trigger_default_instance_;
+class TaskScheduler_TaskDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler_Task>
+      _instance;
+} _TaskScheduler_Task_default_instance_;
+class TaskSchedulerDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<TaskScheduler>
+      _instance;
+} _TaskScheduler_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_category_5ftask_5fscheduler_2eproto {
+void InitDefaultsTaskScheduler_ActionImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Action_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Action();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Action::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Action() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_ActionImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_Event_NamedValueImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Event_NamedValue_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Event_NamedValue();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Event_NamedValue::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Event_NamedValue() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_Event_NamedValueImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_EventImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event_NamedValue();
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Event_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Event();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Event::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Event() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_EventImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_DailyImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Daily_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Daily();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Daily::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Daily() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_DailyImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_WeeklyImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Weekly_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Weekly();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Weekly::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Weekly() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_WeeklyImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_MonthlyImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Monthly_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Monthly();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Monthly::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Monthly() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_MonthlyImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_MonthlyDowImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_MonthlyDow_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_MonthlyDow();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_MonthlyDow::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_MonthlyDow() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_MonthlyDowImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_RegistrationImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Registration_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Registration();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Registration::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Registration() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_RegistrationImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_BootImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Boot_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Boot();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Boot::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Boot() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_BootImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_LogonImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Logon_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Logon();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Logon::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Logon() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_LogonImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_SessionStateChangeImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_SessionStateChange_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_SessionStateChange();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_SessionStateChange::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_SessionStateChange() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_SessionStateChangeImpl);
+}
+
+void InitDefaultsTaskScheduler_Trigger_RepetitionImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_Repetition_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger_Repetition();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger_Repetition::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger_Repetition() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_Trigger_RepetitionImpl);
+}
+
+void InitDefaultsTaskScheduler_TriggerImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Repetition();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Daily();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Weekly();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Monthly();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_MonthlyDow();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Registration();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Boot();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Logon();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_SessionStateChange();
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Trigger_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Trigger();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Trigger::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Trigger() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_TriggerImpl);
+}
+
+void InitDefaultsTaskScheduler_TaskImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Action();
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger();
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_Task_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler_Task();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler_Task::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler_Task() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskScheduler_TaskImpl);
+}
+
+void InitDefaultsTaskSchedulerImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Task();
+  {
+    void* ptr = &::aspia::proto::_TaskScheduler_default_instance_;
+    new (ptr) ::aspia::proto::TaskScheduler();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::TaskScheduler::InitAsDefaultInstance();
+}
+
+void InitDefaultsTaskScheduler() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTaskSchedulerImpl);
+}
+
 }  // namespace protobuf_category_5ftask_5fscheduler_2eproto
 namespace aspia {
 namespace proto {
+bool TaskScheduler_Trigger_SessionStateChange_ChangeType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_UNKNOWN;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_CONSOLE_CONNECT;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_CONSOLE_DISCONNECT;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_REMOTE_CONNECT;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_REMOTE_DISCONNECT;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_SESSION_LOCK;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::CHANGE_TYPE_SESSION_UNLOCK;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::ChangeType_MIN;
+const TaskScheduler_Trigger_SessionStateChange_ChangeType TaskScheduler_Trigger_SessionStateChange::ChangeType_MAX;
+const int TaskScheduler_Trigger_SessionStateChange::ChangeType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Trigger_Type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_UNKNOWN;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_EVENT;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_TIME;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_DAILY;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_WEEKLY;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_MONTHLY;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_MONTHLYDOW;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_IDLE;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_REGISTRATION;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_BOOT;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_LOGON;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::TYPE_SESSION_STATE_CHANGE;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::Type_MIN;
+const TaskScheduler_Trigger_Type TaskScheduler_Trigger::Type_MAX;
+const int TaskScheduler_Trigger::Type_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Trigger_DayOfWeek_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+    case 32:
+    case 64:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_UNKNOWN;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_SUNDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_MONDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_TUESDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_WEDNESDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_THURSDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_FRIDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DAY_OF_WEEK_SATURDAY;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DayOfWeek_MIN;
+const TaskScheduler_Trigger_DayOfWeek TaskScheduler_Trigger::DayOfWeek_MAX;
+const int TaskScheduler_Trigger::DayOfWeek_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Trigger_DayOfMonth_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+    case 32:
+    case 64:
+    case 128:
+    case 256:
+    case 512:
+    case 1024:
+    case 2048:
+    case 4096:
+    case 8192:
+    case 16384:
+    case 32768:
+    case 65536:
+    case 131072:
+    case 262144:
+    case 524288:
+    case 1048576:
+    case 2097152:
+    case 4194304:
+    case 8388608:
+    case 16777216:
+    case 33554432:
+    case 67108864:
+    case 134217728:
+    case 268435456:
+    case 536870912:
+    case 1073741824:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_UNKNOWN;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_1;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_2;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_3;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_4;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_5;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_6;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_7;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_8;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_9;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_10;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_11;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_12;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_13;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_14;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_15;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_16;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_17;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_18;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_19;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_20;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_21;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_22;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_23;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_24;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_25;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_26;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_27;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_28;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_29;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_30;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DAY_OF_MONTH_31;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DayOfMonth_MIN;
+const TaskScheduler_Trigger_DayOfMonth TaskScheduler_Trigger::DayOfMonth_MAX;
+const int TaskScheduler_Trigger::DayOfMonth_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Trigger_Month_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+    case 32:
+    case 64:
+    case 128:
+    case 256:
+    case 512:
+    case 1024:
+    case 2048:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_UNKNOWN;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_JANUARY;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_FEBRUARY;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_MARCH;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_APRIL;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_MAY;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_JUNE;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_JULY;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_AUGUST;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_SEPTEMBER;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_OCTOBER;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_NOVEMBER;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::MONTH_DECEMBER;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::Month_MIN;
+const TaskScheduler_Trigger_Month TaskScheduler_Trigger::Month_MAX;
+const int TaskScheduler_Trigger::Month_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Trigger_WeekOfMonth_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WEEK_OF_MONTH_UNKNOWN;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WEEK_OF_MONTH_FIRST;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WEEK_OF_MONTH_SECOND;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WEEK_OF_MONTH_THIRD;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WEEK_OF_MONTH_FOURTH;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WeekOfMonth_MIN;
+const TaskScheduler_Trigger_WeekOfMonth TaskScheduler_Trigger::WeekOfMonth_MAX;
+const int TaskScheduler_Trigger::WeekOfMonth_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool TaskScheduler_Task_Status_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const TaskScheduler_Task_Status TaskScheduler_Task::STATUS_UNKNOWN;
+const TaskScheduler_Task_Status TaskScheduler_Task::STATUS_DISABLED;
+const TaskScheduler_Task_Status TaskScheduler_Task::STATUS_QUEUED;
+const TaskScheduler_Task_Status TaskScheduler_Task::STATUS_READY;
+const TaskScheduler_Task_Status TaskScheduler_Task::STATUS_RUNNING;
+const TaskScheduler_Task_Status TaskScheduler_Task::Status_MIN;
+const TaskScheduler_Task_Status TaskScheduler_Task::Status_MAX;
+const int TaskScheduler_Task::Status_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+// ===================================================================
+
+void TaskScheduler_Action::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Action::kPathFieldNumber;
+const int TaskScheduler_Action::kArgumentsFieldNumber;
+const int TaskScheduler_Action::kWorkingDirectoryFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Action::TaskScheduler_Action()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Action();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Action)
+}
+TaskScheduler_Action::TaskScheduler_Action(const TaskScheduler_Action& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.path().size() > 0) {
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
+  }
+  arguments_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.arguments().size() > 0) {
+    arguments_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.arguments_);
+  }
+  working_directory_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.working_directory().size() > 0) {
+    working_directory_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.working_directory_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Action)
+}
+
+void TaskScheduler_Action::SharedCtor() {
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  arguments_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  working_directory_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Action::~TaskScheduler_Action() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Action)
+  SharedDtor();
+}
+
+void TaskScheduler_Action::SharedDtor() {
+  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  arguments_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  working_directory_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Action::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Action& TaskScheduler_Action::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Action();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Action* TaskScheduler_Action::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Action* n = new TaskScheduler_Action;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Action::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Action)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  arguments_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  working_directory_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Action::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Action)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string path = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->path().data(), static_cast<int>(this->path().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Action.path"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string arguments = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_arguments()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->arguments().data(), static_cast<int>(this->arguments().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Action.arguments"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string working_directory = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_working_directory()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->working_directory().data(), static_cast<int>(this->working_directory().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Action.working_directory"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Action)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Action)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Action::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Action)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string path = 1;
+  if (this->path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->path().data(), static_cast<int>(this->path().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Action.path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->path(), output);
+  }
+
+  // string arguments = 2;
+  if (this->arguments().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->arguments().data(), static_cast<int>(this->arguments().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Action.arguments");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->arguments(), output);
+  }
+
+  // string working_directory = 3;
+  if (this->working_directory().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->working_directory().data(), static_cast<int>(this->working_directory().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Action.working_directory");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->working_directory(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Action)
+}
+
+size_t TaskScheduler_Action::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Action)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string path = 1;
+  if (this->path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->path());
+  }
+
+  // string arguments = 2;
+  if (this->arguments().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->arguments());
+  }
+
+  // string working_directory = 3;
+  if (this->working_directory().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->working_directory());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Action::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Action*>(&from));
+}
+
+void TaskScheduler_Action::MergeFrom(const TaskScheduler_Action& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Action)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.path().size() > 0) {
+
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
+  }
+  if (from.arguments().size() > 0) {
+
+    arguments_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.arguments_);
+  }
+  if (from.working_directory().size() > 0) {
+
+    working_directory_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.working_directory_);
+  }
+}
+
+void TaskScheduler_Action::CopyFrom(const TaskScheduler_Action& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Action)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Action::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Action::Swap(TaskScheduler_Action* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Action::InternalSwap(TaskScheduler_Action* other) {
+  using std::swap;
+  path_.Swap(&other->path_);
+  arguments_.Swap(&other->arguments_);
+  working_directory_.Swap(&other->working_directory_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Action::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Action";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Event_NamedValue::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Event_NamedValue::kNameFieldNumber;
+const int TaskScheduler_Trigger_Event_NamedValue::kValueFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Event_NamedValue::TaskScheduler_Trigger_Event_NamedValue()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event_NamedValue();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+}
+TaskScheduler_Trigger_Event_NamedValue::TaskScheduler_Trigger_Event_NamedValue(const TaskScheduler_Trigger_Event_NamedValue& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.value().size() > 0) {
+    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::SharedCtor() {
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Event_NamedValue::~TaskScheduler_Trigger_Event_NamedValue() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Event_NamedValue& TaskScheduler_Trigger_Event_NamedValue::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event_NamedValue();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Event_NamedValue* TaskScheduler_Trigger_Event_NamedValue::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Event_NamedValue* n = new TaskScheduler_Trigger_Event_NamedValue;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Event_NamedValue::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Event.NamedValue.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string value = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_value()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->value().data(), static_cast<int>(this->value().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Event.NamedValue.value"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Event.NamedValue.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // string value = 2;
+  if (this->value().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->value().data(), static_cast<int>(this->value().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Event.NamedValue.value");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->value(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+}
+
+size_t TaskScheduler_Trigger_Event_NamedValue::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // string value = 2;
+  if (this->value().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->value());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Event_NamedValue*>(&from));
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::MergeFrom(const TaskScheduler_Trigger_Event_NamedValue& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.value().size() > 0) {
+
+    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
+  }
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::CopyFrom(const TaskScheduler_Trigger_Event_NamedValue& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Event.NamedValue)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Event_NamedValue::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Event_NamedValue::Swap(TaskScheduler_Trigger_Event_NamedValue* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Event_NamedValue::InternalSwap(TaskScheduler_Trigger_Event_NamedValue* other) {
+  using std::swap;
+  name_.Swap(&other->name_);
+  value_.Swap(&other->value_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Event_NamedValue::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Event.NamedValue";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Event::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Event::kDelayFieldNumber;
+const int TaskScheduler_Trigger_Event::kNamedValueFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Event::TaskScheduler_Trigger_Event()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Event)
+}
+TaskScheduler_Trigger_Event::TaskScheduler_Trigger_Event(const TaskScheduler_Trigger_Event& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      named_value_(from.named_value_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.delay().size() > 0) {
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Event)
+}
+
+void TaskScheduler_Trigger_Event::SharedCtor() {
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Event::~TaskScheduler_Trigger_Event() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Event)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Event::SharedDtor() {
+  delay_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Event::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Event& TaskScheduler_Trigger_Event::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Event();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Event* TaskScheduler_Trigger_Event::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Event* n = new TaskScheduler_Trigger_Event;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Event::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Event)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  named_value_.Clear();
+  delay_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Event::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Event)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string delay = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_delay()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->delay().data(), static_cast<int>(this->delay().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Event.delay"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.TaskScheduler.Trigger.Event.NamedValue named_value = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_named_value()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Event)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Event)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Event::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Event)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->delay().data(), static_cast<int>(this->delay().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Event.delay");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->delay(), output);
+  }
+
+  // repeated .aspia.proto.TaskScheduler.Trigger.Event.NamedValue named_value = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->named_value_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, this->named_value(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Event)
+}
+
+size_t TaskScheduler_Trigger_Event::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Event)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.TaskScheduler.Trigger.Event.NamedValue named_value = 2;
+  {
+    unsigned int count = static_cast<unsigned int>(this->named_value_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->named_value(static_cast<int>(i)));
+    }
+  }
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->delay());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Event::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Event*>(&from));
+}
+
+void TaskScheduler_Trigger_Event::MergeFrom(const TaskScheduler_Trigger_Event& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Event)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  named_value_.MergeFrom(from.named_value_);
+  if (from.delay().size() > 0) {
+
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+}
+
+void TaskScheduler_Trigger_Event::CopyFrom(const TaskScheduler_Trigger_Event& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Event)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Event::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Event::Swap(TaskScheduler_Trigger_Event* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Event::InternalSwap(TaskScheduler_Trigger_Event* other) {
+  using std::swap;
+  named_value_.InternalSwap(&other->named_value_);
+  delay_.Swap(&other->delay_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Event::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Event";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Daily::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Daily::kDaysIntervalFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Daily::TaskScheduler_Trigger_Daily()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Daily();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Daily)
+}
+TaskScheduler_Trigger_Daily::TaskScheduler_Trigger_Daily(const TaskScheduler_Trigger_Daily& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  days_interval_ = from.days_interval_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Daily)
+}
+
+void TaskScheduler_Trigger_Daily::SharedCtor() {
+  days_interval_ = 0;
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Daily::~TaskScheduler_Trigger_Daily() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Daily)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Daily::SharedDtor() {
+}
+
+void TaskScheduler_Trigger_Daily::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Daily& TaskScheduler_Trigger_Daily::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Daily();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Daily* TaskScheduler_Trigger_Daily::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Daily* n = new TaskScheduler_Trigger_Daily;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Daily::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  days_interval_ = 0;
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Daily::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 days_interval = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &days_interval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Daily)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Daily)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Daily::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 days_interval = 1;
+  if (this->days_interval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->days_interval(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Daily)
+}
+
+size_t TaskScheduler_Trigger_Daily::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // int32 days_interval = 1;
+  if (this->days_interval() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->days_interval());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Daily::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Daily*>(&from));
+}
+
+void TaskScheduler_Trigger_Daily::MergeFrom(const TaskScheduler_Trigger_Daily& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.days_interval() != 0) {
+    set_days_interval(from.days_interval());
+  }
+}
+
+void TaskScheduler_Trigger_Daily::CopyFrom(const TaskScheduler_Trigger_Daily& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Daily)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Daily::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Daily::Swap(TaskScheduler_Trigger_Daily* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Daily::InternalSwap(TaskScheduler_Trigger_Daily* other) {
+  using std::swap;
+  swap(days_interval_, other->days_interval_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Daily::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Daily";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Weekly::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Weekly::kWeeksIntervalFieldNumber;
+const int TaskScheduler_Trigger_Weekly::kDaysOfWeekFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Weekly::TaskScheduler_Trigger_Weekly()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Weekly();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Weekly)
+}
+TaskScheduler_Trigger_Weekly::TaskScheduler_Trigger_Weekly(const TaskScheduler_Trigger_Weekly& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&weeks_interval_, &from.weeks_interval_,
+    static_cast<size_t>(reinterpret_cast<char*>(&days_of_week_) -
+    reinterpret_cast<char*>(&weeks_interval_)) + sizeof(days_of_week_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Weekly)
+}
+
+void TaskScheduler_Trigger_Weekly::SharedCtor() {
+  ::memset(&weeks_interval_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&days_of_week_) -
+      reinterpret_cast<char*>(&weeks_interval_)) + sizeof(days_of_week_));
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Weekly::~TaskScheduler_Trigger_Weekly() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Weekly)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Weekly::SharedDtor() {
+}
+
+void TaskScheduler_Trigger_Weekly::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Weekly& TaskScheduler_Trigger_Weekly::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Weekly();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Weekly* TaskScheduler_Trigger_Weekly::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Weekly* n = new TaskScheduler_Trigger_Weekly;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Weekly::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&weeks_interval_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&days_of_week_) -
+      reinterpret_cast<char*>(&weeks_interval_)) + sizeof(days_of_week_));
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Weekly::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 weeks_interval = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &weeks_interval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 days_of_week = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &days_of_week_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Weekly)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Weekly)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Weekly::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 weeks_interval = 1;
+  if (this->weeks_interval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->weeks_interval(), output);
+  }
+
+  // uint32 days_of_week = 2;
+  if (this->days_of_week() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->days_of_week(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Weekly)
+}
+
+size_t TaskScheduler_Trigger_Weekly::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // int32 weeks_interval = 1;
+  if (this->weeks_interval() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->weeks_interval());
+  }
+
+  // uint32 days_of_week = 2;
+  if (this->days_of_week() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->days_of_week());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Weekly::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Weekly*>(&from));
+}
+
+void TaskScheduler_Trigger_Weekly::MergeFrom(const TaskScheduler_Trigger_Weekly& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.weeks_interval() != 0) {
+    set_weeks_interval(from.weeks_interval());
+  }
+  if (from.days_of_week() != 0) {
+    set_days_of_week(from.days_of_week());
+  }
+}
+
+void TaskScheduler_Trigger_Weekly::CopyFrom(const TaskScheduler_Trigger_Weekly& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Weekly)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Weekly::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Weekly::Swap(TaskScheduler_Trigger_Weekly* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Weekly::InternalSwap(TaskScheduler_Trigger_Weekly* other) {
+  using std::swap;
+  swap(weeks_interval_, other->weeks_interval_);
+  swap(days_of_week_, other->days_of_week_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Weekly::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Weekly";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Monthly::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Monthly::kDaysOfMonthFieldNumber;
+const int TaskScheduler_Trigger_Monthly::kMonthsOfYearFieldNumber;
+const int TaskScheduler_Trigger_Monthly::kLastDayFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Monthly::TaskScheduler_Trigger_Monthly()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Monthly();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Monthly)
+}
+TaskScheduler_Trigger_Monthly::TaskScheduler_Trigger_Monthly(const TaskScheduler_Trigger_Monthly& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&days_of_month_, &from.days_of_month_,
+    static_cast<size_t>(reinterpret_cast<char*>(&last_day_) -
+    reinterpret_cast<char*>(&days_of_month_)) + sizeof(last_day_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Monthly)
+}
+
+void TaskScheduler_Trigger_Monthly::SharedCtor() {
+  ::memset(&days_of_month_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&last_day_) -
+      reinterpret_cast<char*>(&days_of_month_)) + sizeof(last_day_));
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Monthly::~TaskScheduler_Trigger_Monthly() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Monthly)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Monthly::SharedDtor() {
+}
+
+void TaskScheduler_Trigger_Monthly::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Monthly& TaskScheduler_Trigger_Monthly::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Monthly();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Monthly* TaskScheduler_Trigger_Monthly::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Monthly* n = new TaskScheduler_Trigger_Monthly;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Monthly::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&days_of_month_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&last_day_) -
+      reinterpret_cast<char*>(&days_of_month_)) + sizeof(last_day_));
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Monthly::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 days_of_month = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &days_of_month_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 months_of_year = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &months_of_year_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool last_day = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &last_day_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Monthly)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Monthly)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Monthly::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 days_of_month = 1;
+  if (this->days_of_month() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->days_of_month(), output);
+  }
+
+  // uint32 months_of_year = 2;
+  if (this->months_of_year() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->months_of_year(), output);
+  }
+
+  // bool last_day = 3;
+  if (this->last_day() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->last_day(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Monthly)
+}
+
+size_t TaskScheduler_Trigger_Monthly::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // uint32 days_of_month = 1;
+  if (this->days_of_month() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->days_of_month());
+  }
+
+  // uint32 months_of_year = 2;
+  if (this->months_of_year() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->months_of_year());
+  }
+
+  // bool last_day = 3;
+  if (this->last_day() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Monthly::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Monthly*>(&from));
+}
+
+void TaskScheduler_Trigger_Monthly::MergeFrom(const TaskScheduler_Trigger_Monthly& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.days_of_month() != 0) {
+    set_days_of_month(from.days_of_month());
+  }
+  if (from.months_of_year() != 0) {
+    set_months_of_year(from.months_of_year());
+  }
+  if (from.last_day() != 0) {
+    set_last_day(from.last_day());
+  }
+}
+
+void TaskScheduler_Trigger_Monthly::CopyFrom(const TaskScheduler_Trigger_Monthly& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Monthly)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Monthly::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Monthly::Swap(TaskScheduler_Trigger_Monthly* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Monthly::InternalSwap(TaskScheduler_Trigger_Monthly* other) {
+  using std::swap;
+  swap(days_of_month_, other->days_of_month_);
+  swap(months_of_year_, other->months_of_year_);
+  swap(last_day_, other->last_day_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Monthly::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Monthly";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_MonthlyDow::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_MonthlyDow::kDaysOfWeekFieldNumber;
+const int TaskScheduler_Trigger_MonthlyDow::kMonthsOfYearFieldNumber;
+const int TaskScheduler_Trigger_MonthlyDow::kLastWeekFieldNumber;
+const int TaskScheduler_Trigger_MonthlyDow::kWeeksOfMonthFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_MonthlyDow::TaskScheduler_Trigger_MonthlyDow()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_MonthlyDow();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+}
+TaskScheduler_Trigger_MonthlyDow::TaskScheduler_Trigger_MonthlyDow(const TaskScheduler_Trigger_MonthlyDow& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&days_of_week_, &from.days_of_week_,
+    static_cast<size_t>(reinterpret_cast<char*>(&weeks_of_month_) -
+    reinterpret_cast<char*>(&days_of_week_)) + sizeof(weeks_of_month_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+}
+
+void TaskScheduler_Trigger_MonthlyDow::SharedCtor() {
+  ::memset(&days_of_week_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&weeks_of_month_) -
+      reinterpret_cast<char*>(&days_of_week_)) + sizeof(weeks_of_month_));
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_MonthlyDow::~TaskScheduler_Trigger_MonthlyDow() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_MonthlyDow::SharedDtor() {
+}
+
+void TaskScheduler_Trigger_MonthlyDow::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_MonthlyDow& TaskScheduler_Trigger_MonthlyDow::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_MonthlyDow();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_MonthlyDow* TaskScheduler_Trigger_MonthlyDow::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_MonthlyDow* n = new TaskScheduler_Trigger_MonthlyDow;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_MonthlyDow::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&days_of_week_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&weeks_of_month_) -
+      reinterpret_cast<char*>(&days_of_week_)) + sizeof(weeks_of_month_));
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_MonthlyDow::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 days_of_week = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &days_of_week_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 months_of_year = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &months_of_year_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool last_week = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &last_week_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 weeks_of_month = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &weeks_of_month_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_MonthlyDow::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 days_of_week = 1;
+  if (this->days_of_week() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->days_of_week(), output);
+  }
+
+  // uint32 months_of_year = 2;
+  if (this->months_of_year() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->months_of_year(), output);
+  }
+
+  // bool last_week = 3;
+  if (this->last_week() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->last_week(), output);
+  }
+
+  // uint32 weeks_of_month = 4;
+  if (this->weeks_of_month() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->weeks_of_month(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+}
+
+size_t TaskScheduler_Trigger_MonthlyDow::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // uint32 days_of_week = 1;
+  if (this->days_of_week() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->days_of_week());
+  }
+
+  // uint32 months_of_year = 2;
+  if (this->months_of_year() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->months_of_year());
+  }
+
+  // bool last_week = 3;
+  if (this->last_week() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // uint32 weeks_of_month = 4;
+  if (this->weeks_of_month() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->weeks_of_month());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_MonthlyDow::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_MonthlyDow*>(&from));
+}
+
+void TaskScheduler_Trigger_MonthlyDow::MergeFrom(const TaskScheduler_Trigger_MonthlyDow& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.days_of_week() != 0) {
+    set_days_of_week(from.days_of_week());
+  }
+  if (from.months_of_year() != 0) {
+    set_months_of_year(from.months_of_year());
+  }
+  if (from.last_week() != 0) {
+    set_last_week(from.last_week());
+  }
+  if (from.weeks_of_month() != 0) {
+    set_weeks_of_month(from.weeks_of_month());
+  }
+}
+
+void TaskScheduler_Trigger_MonthlyDow::CopyFrom(const TaskScheduler_Trigger_MonthlyDow& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.MonthlyDow)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_MonthlyDow::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_MonthlyDow::Swap(TaskScheduler_Trigger_MonthlyDow* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_MonthlyDow::InternalSwap(TaskScheduler_Trigger_MonthlyDow* other) {
+  using std::swap;
+  swap(days_of_week_, other->days_of_week_);
+  swap(months_of_year_, other->months_of_year_);
+  swap(last_week_, other->last_week_);
+  swap(weeks_of_month_, other->weeks_of_month_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_MonthlyDow::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.MonthlyDow";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Registration::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Registration::kDelayFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Registration::TaskScheduler_Trigger_Registration()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Registration();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Registration)
+}
+TaskScheduler_Trigger_Registration::TaskScheduler_Trigger_Registration(const TaskScheduler_Trigger_Registration& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.delay().size() > 0) {
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Registration)
+}
+
+void TaskScheduler_Trigger_Registration::SharedCtor() {
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Registration::~TaskScheduler_Trigger_Registration() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Registration)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Registration::SharedDtor() {
+  delay_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Registration::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Registration& TaskScheduler_Trigger_Registration::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Registration();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Registration* TaskScheduler_Trigger_Registration::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Registration* n = new TaskScheduler_Trigger_Registration;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Registration::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  delay_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Registration::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string delay = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_delay()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->delay().data(), static_cast<int>(this->delay().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Registration.delay"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Registration)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Registration)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Registration::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->delay().data(), static_cast<int>(this->delay().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Registration.delay");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->delay(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Registration)
+}
+
+size_t TaskScheduler_Trigger_Registration::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->delay());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Registration::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Registration*>(&from));
+}
+
+void TaskScheduler_Trigger_Registration::MergeFrom(const TaskScheduler_Trigger_Registration& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.delay().size() > 0) {
+
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+}
+
+void TaskScheduler_Trigger_Registration::CopyFrom(const TaskScheduler_Trigger_Registration& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Registration)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Registration::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Registration::Swap(TaskScheduler_Trigger_Registration* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Registration::InternalSwap(TaskScheduler_Trigger_Registration* other) {
+  using std::swap;
+  delay_.Swap(&other->delay_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Registration::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Registration";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Boot::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Boot::kDelayFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Boot::TaskScheduler_Trigger_Boot()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Boot();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Boot)
+}
+TaskScheduler_Trigger_Boot::TaskScheduler_Trigger_Boot(const TaskScheduler_Trigger_Boot& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.delay().size() > 0) {
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Boot)
+}
+
+void TaskScheduler_Trigger_Boot::SharedCtor() {
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Boot::~TaskScheduler_Trigger_Boot() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Boot)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Boot::SharedDtor() {
+  delay_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Boot::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Boot& TaskScheduler_Trigger_Boot::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Boot();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Boot* TaskScheduler_Trigger_Boot::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Boot* n = new TaskScheduler_Trigger_Boot;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Boot::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  delay_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Boot::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string delay = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_delay()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->delay().data(), static_cast<int>(this->delay().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Boot.delay"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Boot)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Boot)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Boot::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->delay().data(), static_cast<int>(this->delay().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Boot.delay");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->delay(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Boot)
+}
+
+size_t TaskScheduler_Trigger_Boot::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string delay = 1;
+  if (this->delay().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->delay());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Boot::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Boot*>(&from));
+}
+
+void TaskScheduler_Trigger_Boot::MergeFrom(const TaskScheduler_Trigger_Boot& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.delay().size() > 0) {
+
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+}
+
+void TaskScheduler_Trigger_Boot::CopyFrom(const TaskScheduler_Trigger_Boot& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Boot)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Boot::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Boot::Swap(TaskScheduler_Trigger_Boot* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Boot::InternalSwap(TaskScheduler_Trigger_Boot* other) {
+  using std::swap;
+  delay_.Swap(&other->delay_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Boot::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Boot";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Logon::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Logon::kUserIdFieldNumber;
+const int TaskScheduler_Trigger_Logon::kDelayFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Logon::TaskScheduler_Trigger_Logon()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Logon();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Logon)
+}
+TaskScheduler_Trigger_Logon::TaskScheduler_Trigger_Logon(const TaskScheduler_Trigger_Logon& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  user_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.user_id().size() > 0) {
+    user_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_id_);
+  }
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.delay().size() > 0) {
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Logon)
+}
+
+void TaskScheduler_Trigger_Logon::SharedCtor() {
+  user_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Logon::~TaskScheduler_Trigger_Logon() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Logon)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Logon::SharedDtor() {
+  user_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Logon::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Logon& TaskScheduler_Trigger_Logon::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Logon();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Logon* TaskScheduler_Trigger_Logon::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Logon* n = new TaskScheduler_Trigger_Logon;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Logon::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  user_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Logon::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string user_id = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_user_id()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->user_id().data(), static_cast<int>(this->user_id().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Logon.user_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string delay = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_delay()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->delay().data(), static_cast<int>(this->delay().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Logon.delay"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Logon)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Logon)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Logon::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string user_id = 1;
+  if (this->user_id().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->user_id().data(), static_cast<int>(this->user_id().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Logon.user_id");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->user_id(), output);
+  }
+
+  // string delay = 2;
+  if (this->delay().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->delay().data(), static_cast<int>(this->delay().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Logon.delay");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->delay(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Logon)
+}
+
+size_t TaskScheduler_Trigger_Logon::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string user_id = 1;
+  if (this->user_id().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->user_id());
+  }
+
+  // string delay = 2;
+  if (this->delay().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->delay());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Logon::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Logon*>(&from));
+}
+
+void TaskScheduler_Trigger_Logon::MergeFrom(const TaskScheduler_Trigger_Logon& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.user_id().size() > 0) {
+
+    user_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_id_);
+  }
+  if (from.delay().size() > 0) {
+
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+}
+
+void TaskScheduler_Trigger_Logon::CopyFrom(const TaskScheduler_Trigger_Logon& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Logon)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Logon::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Logon::Swap(TaskScheduler_Trigger_Logon* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Logon::InternalSwap(TaskScheduler_Trigger_Logon* other) {
+  using std::swap;
+  user_id_.Swap(&other->user_id_);
+  delay_.Swap(&other->delay_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Logon::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Logon";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_SessionStateChange::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_SessionStateChange::kChangeTypeFieldNumber;
+const int TaskScheduler_Trigger_SessionStateChange::kUserIdFieldNumber;
+const int TaskScheduler_Trigger_SessionStateChange::kDelayFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_SessionStateChange::TaskScheduler_Trigger_SessionStateChange()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_SessionStateChange();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+}
+TaskScheduler_Trigger_SessionStateChange::TaskScheduler_Trigger_SessionStateChange(const TaskScheduler_Trigger_SessionStateChange& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  user_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.user_id().size() > 0) {
+    user_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_id_);
+  }
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.delay().size() > 0) {
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  change_type_ = from.change_type_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+}
+
+void TaskScheduler_Trigger_SessionStateChange::SharedCtor() {
+  user_id_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  change_type_ = 0;
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_SessionStateChange::~TaskScheduler_Trigger_SessionStateChange() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_SessionStateChange::SharedDtor() {
+  user_id_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_SessionStateChange::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_SessionStateChange& TaskScheduler_Trigger_SessionStateChange::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_SessionStateChange();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_SessionStateChange* TaskScheduler_Trigger_SessionStateChange::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_SessionStateChange* n = new TaskScheduler_Trigger_SessionStateChange;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_SessionStateChange::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  user_id_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  delay_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  change_type_ = 0;
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_SessionStateChange::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.TaskScheduler.Trigger.SessionStateChange.ChangeType change_type = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_change_type(static_cast< ::aspia::proto::TaskScheduler_Trigger_SessionStateChange_ChangeType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string user_id = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_user_id()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->user_id().data(), static_cast<int>(this->user_id().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.SessionStateChange.user_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string delay = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_delay()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->delay().data(), static_cast<int>(this->delay().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.SessionStateChange.delay"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_SessionStateChange::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .aspia.proto.TaskScheduler.Trigger.SessionStateChange.ChangeType change_type = 1;
+  if (this->change_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->change_type(), output);
+  }
+
+  // string user_id = 2;
+  if (this->user_id().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->user_id().data(), static_cast<int>(this->user_id().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.SessionStateChange.user_id");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->user_id(), output);
+  }
+
+  // string delay = 3;
+  if (this->delay().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->delay().data(), static_cast<int>(this->delay().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.SessionStateChange.delay");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->delay(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+}
+
+size_t TaskScheduler_Trigger_SessionStateChange::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string user_id = 2;
+  if (this->user_id().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->user_id());
+  }
+
+  // string delay = 3;
+  if (this->delay().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->delay());
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.SessionStateChange.ChangeType change_type = 1;
+  if (this->change_type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->change_type());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_SessionStateChange::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_SessionStateChange*>(&from));
+}
+
+void TaskScheduler_Trigger_SessionStateChange::MergeFrom(const TaskScheduler_Trigger_SessionStateChange& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.user_id().size() > 0) {
+
+    user_id_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_id_);
+  }
+  if (from.delay().size() > 0) {
+
+    delay_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.delay_);
+  }
+  if (from.change_type() != 0) {
+    set_change_type(from.change_type());
+  }
+}
+
+void TaskScheduler_Trigger_SessionStateChange::CopyFrom(const TaskScheduler_Trigger_SessionStateChange& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.SessionStateChange)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_SessionStateChange::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_SessionStateChange::Swap(TaskScheduler_Trigger_SessionStateChange* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_SessionStateChange::InternalSwap(TaskScheduler_Trigger_SessionStateChange* other) {
+  using std::swap;
+  user_id_.Swap(&other->user_id_);
+  delay_.Swap(&other->delay_);
+  swap(change_type_, other->change_type_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_SessionStateChange::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.SessionStateChange";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger_Repetition::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger_Repetition::kDurationFieldNumber;
+const int TaskScheduler_Trigger_Repetition::kIntervalFieldNumber;
+const int TaskScheduler_Trigger_Repetition::kStopAtDurationEndFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger_Repetition::TaskScheduler_Trigger_Repetition()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Repetition();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger.Repetition)
+}
+TaskScheduler_Trigger_Repetition::TaskScheduler_Trigger_Repetition(const TaskScheduler_Trigger_Repetition& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  duration_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.duration().size() > 0) {
+    duration_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.duration_);
+  }
+  interval_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.interval().size() > 0) {
+    interval_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.interval_);
+  }
+  stop_at_duration_end_ = from.stop_at_duration_end_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger.Repetition)
+}
+
+void TaskScheduler_Trigger_Repetition::SharedCtor() {
+  duration_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  interval_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  stop_at_duration_end_ = false;
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger_Repetition::~TaskScheduler_Trigger_Repetition() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger.Repetition)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger_Repetition::SharedDtor() {
+  duration_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  interval_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Trigger_Repetition::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger_Repetition& TaskScheduler_Trigger_Repetition::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger_Repetition();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger_Repetition* TaskScheduler_Trigger_Repetition::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger_Repetition* n = new TaskScheduler_Trigger_Repetition;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger_Repetition::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  duration_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  interval_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  stop_at_duration_end_ = false;
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger_Repetition::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string duration = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_duration()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->duration().data(), static_cast<int>(this->duration().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Repetition.duration"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string interval = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_interval()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->interval().data(), static_cast<int>(this->interval().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.Repetition.interval"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bool stop_at_duration_end = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &stop_at_duration_end_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger.Repetition)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger.Repetition)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger_Repetition::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string duration = 1;
+  if (this->duration().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->duration().data(), static_cast<int>(this->duration().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Repetition.duration");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->duration(), output);
+  }
+
+  // string interval = 2;
+  if (this->interval().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->interval().data(), static_cast<int>(this->interval().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.Repetition.interval");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->interval(), output);
+  }
+
+  // bool stop_at_duration_end = 3;
+  if (this->stop_at_duration_end() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->stop_at_duration_end(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger.Repetition)
+}
+
+size_t TaskScheduler_Trigger_Repetition::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string duration = 1;
+  if (this->duration().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->duration());
+  }
+
+  // string interval = 2;
+  if (this->interval().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->interval());
+  }
+
+  // bool stop_at_duration_end = 3;
+  if (this->stop_at_duration_end() != 0) {
+    total_size += 1 + 1;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger_Repetition::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger_Repetition*>(&from));
+}
+
+void TaskScheduler_Trigger_Repetition::MergeFrom(const TaskScheduler_Trigger_Repetition& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.duration().size() > 0) {
+
+    duration_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.duration_);
+  }
+  if (from.interval().size() > 0) {
+
+    interval_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.interval_);
+  }
+  if (from.stop_at_duration_end() != 0) {
+    set_stop_at_duration_end(from.stop_at_duration_end());
+  }
+}
+
+void TaskScheduler_Trigger_Repetition::CopyFrom(const TaskScheduler_Trigger_Repetition& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger.Repetition)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger_Repetition::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger_Repetition::Swap(TaskScheduler_Trigger_Repetition* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger_Repetition::InternalSwap(TaskScheduler_Trigger_Repetition* other) {
+  using std::swap;
+  duration_.Swap(&other->duration_);
+  interval_.Swap(&other->interval_);
+  swap(stop_at_duration_end_, other->stop_at_duration_end_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger_Repetition::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger.Repetition";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Trigger::InitAsDefaultInstance() {
+  ::aspia::proto::_TaskScheduler_Trigger_default_instance_._instance.get_mutable()->repetition_ = const_cast< ::aspia::proto::TaskScheduler_Trigger_Repetition*>(
+      ::aspia::proto::TaskScheduler_Trigger_Repetition::internal_default_instance());
+}
+void TaskScheduler_Trigger::set_allocated_event(::aspia::proto::TaskScheduler_Trigger_Event* event) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (event) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      event = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, event, submessage_arena);
+    }
+    set_has_event();
+    TypeUnion_.event_ = event;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.event)
+}
+void TaskScheduler_Trigger::set_allocated_daily(::aspia::proto::TaskScheduler_Trigger_Daily* daily) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (daily) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      daily = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, daily, submessage_arena);
+    }
+    set_has_daily();
+    TypeUnion_.daily_ = daily;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.daily)
+}
+void TaskScheduler_Trigger::set_allocated_weekly(::aspia::proto::TaskScheduler_Trigger_Weekly* weekly) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (weekly) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      weekly = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, weekly, submessage_arena);
+    }
+    set_has_weekly();
+    TypeUnion_.weekly_ = weekly;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.weekly)
+}
+void TaskScheduler_Trigger::set_allocated_monthly(::aspia::proto::TaskScheduler_Trigger_Monthly* monthly) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (monthly) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      monthly = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, monthly, submessage_arena);
+    }
+    set_has_monthly();
+    TypeUnion_.monthly_ = monthly;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.monthly)
+}
+void TaskScheduler_Trigger::set_allocated_monthly_dow(::aspia::proto::TaskScheduler_Trigger_MonthlyDow* monthly_dow) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (monthly_dow) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      monthly_dow = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, monthly_dow, submessage_arena);
+    }
+    set_has_monthly_dow();
+    TypeUnion_.monthly_dow_ = monthly_dow;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.monthly_dow)
+}
+void TaskScheduler_Trigger::set_allocated_registration(::aspia::proto::TaskScheduler_Trigger_Registration* registration) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (registration) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      registration = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, registration, submessage_arena);
+    }
+    set_has_registration();
+    TypeUnion_.registration_ = registration;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.registration)
+}
+void TaskScheduler_Trigger::set_allocated_boot(::aspia::proto::TaskScheduler_Trigger_Boot* boot) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (boot) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      boot = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, boot, submessage_arena);
+    }
+    set_has_boot();
+    TypeUnion_.boot_ = boot;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.boot)
+}
+void TaskScheduler_Trigger::set_allocated_logon(::aspia::proto::TaskScheduler_Trigger_Logon* logon) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (logon) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      logon = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, logon, submessage_arena);
+    }
+    set_has_logon();
+    TypeUnion_.logon_ = logon;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.logon)
+}
+void TaskScheduler_Trigger::set_allocated_session_state_change(::aspia::proto::TaskScheduler_Trigger_SessionStateChange* session_state_change) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  clear_TypeUnion();
+  if (session_state_change) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      session_state_change = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, session_state_change, submessage_arena);
+    }
+    set_has_session_state_change();
+    TypeUnion_.session_state_change_ = session_state_change;
+  }
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.TaskScheduler.Trigger.session_state_change)
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Trigger::kEnabledFieldNumber;
+const int TaskScheduler_Trigger::kTypeFieldNumber;
+const int TaskScheduler_Trigger::kStartTimeFieldNumber;
+const int TaskScheduler_Trigger::kEndTimeFieldNumber;
+const int TaskScheduler_Trigger::kExecutionTimeLimitFieldNumber;
+const int TaskScheduler_Trigger::kRepetitionFieldNumber;
+const int TaskScheduler_Trigger::kEventFieldNumber;
+const int TaskScheduler_Trigger::kDailyFieldNumber;
+const int TaskScheduler_Trigger::kWeeklyFieldNumber;
+const int TaskScheduler_Trigger::kMonthlyFieldNumber;
+const int TaskScheduler_Trigger::kMonthlyDowFieldNumber;
+const int TaskScheduler_Trigger::kRegistrationFieldNumber;
+const int TaskScheduler_Trigger::kBootFieldNumber;
+const int TaskScheduler_Trigger::kLogonFieldNumber;
+const int TaskScheduler_Trigger::kSessionStateChangeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Trigger::TaskScheduler_Trigger()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Trigger)
+}
+TaskScheduler_Trigger::TaskScheduler_Trigger(const TaskScheduler_Trigger& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  start_time_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.start_time().size() > 0) {
+    start_time_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.start_time_);
+  }
+  end_time_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.end_time().size() > 0) {
+    end_time_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.end_time_);
+  }
+  execution_time_limit_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.execution_time_limit().size() > 0) {
+    execution_time_limit_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.execution_time_limit_);
+  }
+  if (from.has_repetition()) {
+    repetition_ = new ::aspia::proto::TaskScheduler_Trigger_Repetition(*from.repetition_);
+  } else {
+    repetition_ = NULL;
+  }
+  ::memcpy(&enabled_, &from.enabled_,
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&enabled_)) + sizeof(type_));
+  clear_has_TypeUnion();
+  switch (from.TypeUnion_case()) {
+    case kEvent: {
+      mutable_event()->::aspia::proto::TaskScheduler_Trigger_Event::MergeFrom(from.event());
+      break;
+    }
+    case kDaily: {
+      mutable_daily()->::aspia::proto::TaskScheduler_Trigger_Daily::MergeFrom(from.daily());
+      break;
+    }
+    case kWeekly: {
+      mutable_weekly()->::aspia::proto::TaskScheduler_Trigger_Weekly::MergeFrom(from.weekly());
+      break;
+    }
+    case kMonthly: {
+      mutable_monthly()->::aspia::proto::TaskScheduler_Trigger_Monthly::MergeFrom(from.monthly());
+      break;
+    }
+    case kMonthlyDow: {
+      mutable_monthly_dow()->::aspia::proto::TaskScheduler_Trigger_MonthlyDow::MergeFrom(from.monthly_dow());
+      break;
+    }
+    case kRegistration: {
+      mutable_registration()->::aspia::proto::TaskScheduler_Trigger_Registration::MergeFrom(from.registration());
+      break;
+    }
+    case kBoot: {
+      mutable_boot()->::aspia::proto::TaskScheduler_Trigger_Boot::MergeFrom(from.boot());
+      break;
+    }
+    case kLogon: {
+      mutable_logon()->::aspia::proto::TaskScheduler_Trigger_Logon::MergeFrom(from.logon());
+      break;
+    }
+    case kSessionStateChange: {
+      mutable_session_state_change()->::aspia::proto::TaskScheduler_Trigger_SessionStateChange::MergeFrom(from.session_state_change());
+      break;
+    }
+    case TYPEUNION_NOT_SET: {
+      break;
+    }
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Trigger)
+}
+
+void TaskScheduler_Trigger::SharedCtor() {
+  start_time_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  end_time_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  execution_time_limit_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&repetition_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&repetition_)) + sizeof(type_));
+  clear_has_TypeUnion();
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Trigger::~TaskScheduler_Trigger() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Trigger)
+  SharedDtor();
+}
+
+void TaskScheduler_Trigger::SharedDtor() {
+  start_time_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  end_time_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  execution_time_limit_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete repetition_;
+  if (has_TypeUnion()) {
+    clear_TypeUnion();
+  }
+}
+
+void TaskScheduler_Trigger::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Trigger& TaskScheduler_Trigger::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Trigger();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Trigger* TaskScheduler_Trigger::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Trigger* n = new TaskScheduler_Trigger;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Trigger::clear_TypeUnion() {
+// @@protoc_insertion_point(one_of_clear_start:aspia.proto.TaskScheduler.Trigger)
+  switch (TypeUnion_case()) {
+    case kEvent: {
+      delete TypeUnion_.event_;
+      break;
+    }
+    case kDaily: {
+      delete TypeUnion_.daily_;
+      break;
+    }
+    case kWeekly: {
+      delete TypeUnion_.weekly_;
+      break;
+    }
+    case kMonthly: {
+      delete TypeUnion_.monthly_;
+      break;
+    }
+    case kMonthlyDow: {
+      delete TypeUnion_.monthly_dow_;
+      break;
+    }
+    case kRegistration: {
+      delete TypeUnion_.registration_;
+      break;
+    }
+    case kBoot: {
+      delete TypeUnion_.boot_;
+      break;
+    }
+    case kLogon: {
+      delete TypeUnion_.logon_;
+      break;
+    }
+    case kSessionStateChange: {
+      delete TypeUnion_.session_state_change_;
+      break;
+    }
+    case TYPEUNION_NOT_SET: {
+      break;
+    }
+  }
+  _oneof_case_[0] = TYPEUNION_NOT_SET;
+}
+
+
+void TaskScheduler_Trigger::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Trigger)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  start_time_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  end_time_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  execution_time_limit_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && repetition_ != NULL) {
+    delete repetition_;
+  }
+  repetition_ = NULL;
+  ::memset(&enabled_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&enabled_)) + sizeof(type_));
+  clear_TypeUnion();
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Trigger::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Trigger)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // bool enabled = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &enabled_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Type type = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::TaskScheduler_Trigger_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string start_time = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_start_time()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->start_time().data(), static_cast<int>(this->start_time().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.start_time"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string end_time = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_end_time()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->end_time().data(), static_cast<int>(this->end_time().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.end_time"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string execution_time_limit = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_execution_time_limit()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->execution_time_limit().data(), static_cast<int>(this->execution_time_limit().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Trigger.execution_time_limit"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Repetition repetition = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_repetition()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Event event = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_event()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Daily daily = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_daily()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Weekly weekly = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_weekly()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Monthly monthly = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(82u /* 82 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_monthly()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.MonthlyDow monthly_dow = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_monthly_dow()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Registration registration = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_registration()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Boot boot = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_boot()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.Logon logon = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(114u /* 114 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_logon()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Trigger.SessionStateChange session_state_change = 15;
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(122u /* 122 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_session_state_change()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Trigger)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Trigger)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Trigger::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Trigger)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool enabled = 1;
+  if (this->enabled() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->enabled(), output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Type type = 2;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->type(), output);
+  }
+
+  // string start_time = 3;
+  if (this->start_time().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->start_time().data(), static_cast<int>(this->start_time().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.start_time");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->start_time(), output);
+  }
+
+  // string end_time = 4;
+  if (this->end_time().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->end_time().data(), static_cast<int>(this->end_time().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.end_time");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->end_time(), output);
+  }
+
+  // string execution_time_limit = 5;
+  if (this->execution_time_limit().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->execution_time_limit().data(), static_cast<int>(this->execution_time_limit().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Trigger.execution_time_limit");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->execution_time_limit(), output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Repetition repetition = 6;
+  if (this->has_repetition()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      6, *this->repetition_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Event event = 7;
+  if (has_event()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      7, *TypeUnion_.event_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Daily daily = 8;
+  if (has_daily()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      8, *TypeUnion_.daily_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Weekly weekly = 9;
+  if (has_weekly()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      9, *TypeUnion_.weekly_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Monthly monthly = 10;
+  if (has_monthly()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      10, *TypeUnion_.monthly_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.MonthlyDow monthly_dow = 11;
+  if (has_monthly_dow()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      11, *TypeUnion_.monthly_dow_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Registration registration = 12;
+  if (has_registration()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      12, *TypeUnion_.registration_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Boot boot = 13;
+  if (has_boot()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      13, *TypeUnion_.boot_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Logon logon = 14;
+  if (has_logon()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      14, *TypeUnion_.logon_, output);
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.SessionStateChange session_state_change = 15;
+  if (has_session_state_change()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      15, *TypeUnion_.session_state_change_, output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Trigger)
+}
+
+size_t TaskScheduler_Trigger::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Trigger)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // string start_time = 3;
+  if (this->start_time().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->start_time());
+  }
+
+  // string end_time = 4;
+  if (this->end_time().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->end_time());
+  }
+
+  // string execution_time_limit = 5;
+  if (this->execution_time_limit().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->execution_time_limit());
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Repetition repetition = 6;
+  if (this->has_repetition()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->repetition_);
+  }
+
+  // bool enabled = 1;
+  if (this->enabled() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // .aspia.proto.TaskScheduler.Trigger.Type type = 2;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  switch (TypeUnion_case()) {
+    // .aspia.proto.TaskScheduler.Trigger.Event event = 7;
+    case kEvent: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.event_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Daily daily = 8;
+    case kDaily: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.daily_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Weekly weekly = 9;
+    case kWeekly: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.weekly_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Monthly monthly = 10;
+    case kMonthly: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.monthly_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.MonthlyDow monthly_dow = 11;
+    case kMonthlyDow: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.monthly_dow_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Registration registration = 12;
+    case kRegistration: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.registration_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Boot boot = 13;
+    case kBoot: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.boot_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.Logon logon = 14;
+    case kLogon: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.logon_);
+      break;
+    }
+    // .aspia.proto.TaskScheduler.Trigger.SessionStateChange session_state_change = 15;
+    case kSessionStateChange: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *TypeUnion_.session_state_change_);
+      break;
+    }
+    case TYPEUNION_NOT_SET: {
+      break;
+    }
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Trigger::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Trigger*>(&from));
+}
+
+void TaskScheduler_Trigger::MergeFrom(const TaskScheduler_Trigger& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Trigger)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.start_time().size() > 0) {
+
+    start_time_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.start_time_);
+  }
+  if (from.end_time().size() > 0) {
+
+    end_time_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.end_time_);
+  }
+  if (from.execution_time_limit().size() > 0) {
+
+    execution_time_limit_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.execution_time_limit_);
+  }
+  if (from.has_repetition()) {
+    mutable_repetition()->::aspia::proto::TaskScheduler_Trigger_Repetition::MergeFrom(from.repetition());
+  }
+  if (from.enabled() != 0) {
+    set_enabled(from.enabled());
+  }
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+  switch (from.TypeUnion_case()) {
+    case kEvent: {
+      mutable_event()->::aspia::proto::TaskScheduler_Trigger_Event::MergeFrom(from.event());
+      break;
+    }
+    case kDaily: {
+      mutable_daily()->::aspia::proto::TaskScheduler_Trigger_Daily::MergeFrom(from.daily());
+      break;
+    }
+    case kWeekly: {
+      mutable_weekly()->::aspia::proto::TaskScheduler_Trigger_Weekly::MergeFrom(from.weekly());
+      break;
+    }
+    case kMonthly: {
+      mutable_monthly()->::aspia::proto::TaskScheduler_Trigger_Monthly::MergeFrom(from.monthly());
+      break;
+    }
+    case kMonthlyDow: {
+      mutable_monthly_dow()->::aspia::proto::TaskScheduler_Trigger_MonthlyDow::MergeFrom(from.monthly_dow());
+      break;
+    }
+    case kRegistration: {
+      mutable_registration()->::aspia::proto::TaskScheduler_Trigger_Registration::MergeFrom(from.registration());
+      break;
+    }
+    case kBoot: {
+      mutable_boot()->::aspia::proto::TaskScheduler_Trigger_Boot::MergeFrom(from.boot());
+      break;
+    }
+    case kLogon: {
+      mutable_logon()->::aspia::proto::TaskScheduler_Trigger_Logon::MergeFrom(from.logon());
+      break;
+    }
+    case kSessionStateChange: {
+      mutable_session_state_change()->::aspia::proto::TaskScheduler_Trigger_SessionStateChange::MergeFrom(from.session_state_change());
+      break;
+    }
+    case TYPEUNION_NOT_SET: {
+      break;
+    }
+  }
+}
+
+void TaskScheduler_Trigger::CopyFrom(const TaskScheduler_Trigger& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Trigger)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Trigger::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Trigger::Swap(TaskScheduler_Trigger* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Trigger::InternalSwap(TaskScheduler_Trigger* other) {
+  using std::swap;
+  start_time_.Swap(&other->start_time_);
+  end_time_.Swap(&other->end_time_);
+  execution_time_limit_.Swap(&other->execution_time_limit_);
+  swap(repetition_, other->repetition_);
+  swap(enabled_, other->enabled_);
+  swap(type_, other->type_);
+  swap(TypeUnion_, other->TypeUnion_);
+  swap(_oneof_case_[0], other->_oneof_case_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Trigger::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Trigger";
+}
+
+
+// ===================================================================
+
+void TaskScheduler_Task::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler_Task::kTaskNameFieldNumber;
+const int TaskScheduler_Task::kStatusFieldNumber;
+const int TaskScheduler_Task::kCommentFieldNumber;
+const int TaskScheduler_Task::kAccountNameFieldNumber;
+const int TaskScheduler_Task::kCreatorFieldNumber;
+const int TaskScheduler_Task::kLastRunFieldNumber;
+const int TaskScheduler_Task::kNextRunFieldNumber;
+const int TaskScheduler_Task::kNumberOfMissedRunsFieldNumber;
+const int TaskScheduler_Task::kLastTaskResultFieldNumber;
+const int TaskScheduler_Task::kActionFieldNumber;
+const int TaskScheduler_Task::kTriggerFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler_Task::TaskScheduler_Task()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Task();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler.Task)
+}
+TaskScheduler_Task::TaskScheduler_Task(const TaskScheduler_Task& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      action_(from.action_),
+      trigger_(from.trigger_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  task_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.task_name().size() > 0) {
+    task_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.task_name_);
+  }
+  comment_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.comment().size() > 0) {
+    comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
+  }
+  account_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.account_name().size() > 0) {
+    account_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.account_name_);
+  }
+  creator_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.creator().size() > 0) {
+    creator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.creator_);
+  }
+  ::memcpy(&status_, &from.status_,
+    static_cast<size_t>(reinterpret_cast<char*>(&last_task_result_) -
+    reinterpret_cast<char*>(&status_)) + sizeof(last_task_result_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler.Task)
+}
+
+void TaskScheduler_Task::SharedCtor() {
+  task_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  comment_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  account_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  creator_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&status_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&last_task_result_) -
+      reinterpret_cast<char*>(&status_)) + sizeof(last_task_result_));
+  _cached_size_ = 0;
+}
+
+TaskScheduler_Task::~TaskScheduler_Task() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler.Task)
+  SharedDtor();
+}
+
+void TaskScheduler_Task::SharedDtor() {
+  task_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  comment_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  account_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  creator_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TaskScheduler_Task::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler_Task& TaskScheduler_Task::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler_Task();
+  return *internal_default_instance();
+}
+
+TaskScheduler_Task* TaskScheduler_Task::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler_Task* n = new TaskScheduler_Task;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler_Task::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler.Task)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  action_.Clear();
+  trigger_.Clear();
+  task_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  account_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  creator_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&status_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&last_task_result_) -
+      reinterpret_cast<char*>(&status_)) + sizeof(last_task_result_));
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler_Task::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler.Task)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string task_name = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_task_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->task_name().data(), static_cast<int>(this->task_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Task.task_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.TaskScheduler.Task.Status status = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_status(static_cast< ::aspia::proto::TaskScheduler_Task_Status >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string comment = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_comment()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->comment().data(), static_cast<int>(this->comment().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Task.comment"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string account_name = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_account_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->account_name().data(), static_cast<int>(this->account_name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Task.account_name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string creator = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_creator()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->creator().data(), static_cast<int>(this->creator().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.TaskScheduler.Task.creator"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 last_run = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &last_run_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 next_run = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &next_run_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 number_of_missed_runs = 8;
+      case 8: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &number_of_missed_runs_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 last_task_result = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &last_task_result_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.TaskScheduler.Action action = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(82u /* 82 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_action()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.TaskScheduler.Trigger trigger = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_trigger()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler.Task)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler.Task)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler_Task::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler.Task)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string task_name = 1;
+  if (this->task_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->task_name().data(), static_cast<int>(this->task_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Task.task_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->task_name(), output);
+  }
+
+  // .aspia.proto.TaskScheduler.Task.Status status = 2;
+  if (this->status() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->status(), output);
+  }
+
+  // string comment = 3;
+  if (this->comment().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->comment().data(), static_cast<int>(this->comment().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Task.comment");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->comment(), output);
+  }
+
+  // string account_name = 4;
+  if (this->account_name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->account_name().data(), static_cast<int>(this->account_name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Task.account_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->account_name(), output);
+  }
+
+  // string creator = 5;
+  if (this->creator().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->creator().data(), static_cast<int>(this->creator().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.TaskScheduler.Task.creator");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->creator(), output);
+  }
+
+  // int64 last_run = 6;
+  if (this->last_run() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(6, this->last_run(), output);
+  }
+
+  // int64 next_run = 7;
+  if (this->next_run() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(7, this->next_run(), output);
+  }
+
+  // uint32 number_of_missed_runs = 8;
+  if (this->number_of_missed_runs() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(8, this->number_of_missed_runs(), output);
+  }
+
+  // uint32 last_task_result = 9;
+  if (this->last_task_result() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(9, this->last_task_result(), output);
+  }
+
+  // repeated .aspia.proto.TaskScheduler.Action action = 10;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->action_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      10, this->action(static_cast<int>(i)), output);
+  }
+
+  // repeated .aspia.proto.TaskScheduler.Trigger trigger = 11;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->trigger_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      11, this->trigger(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler.Task)
+}
+
+size_t TaskScheduler_Task::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler.Task)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.TaskScheduler.Action action = 10;
+  {
+    unsigned int count = static_cast<unsigned int>(this->action_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->action(static_cast<int>(i)));
+    }
+  }
+
+  // repeated .aspia.proto.TaskScheduler.Trigger trigger = 11;
+  {
+    unsigned int count = static_cast<unsigned int>(this->trigger_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->trigger(static_cast<int>(i)));
+    }
+  }
+
+  // string task_name = 1;
+  if (this->task_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->task_name());
+  }
+
+  // string comment = 3;
+  if (this->comment().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->comment());
+  }
+
+  // string account_name = 4;
+  if (this->account_name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->account_name());
+  }
+
+  // string creator = 5;
+  if (this->creator().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->creator());
+  }
+
+  // .aspia.proto.TaskScheduler.Task.Status status = 2;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
+  }
+
+  // uint32 number_of_missed_runs = 8;
+  if (this->number_of_missed_runs() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->number_of_missed_runs());
+  }
+
+  // int64 last_run = 6;
+  if (this->last_run() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->last_run());
+  }
+
+  // int64 next_run = 7;
+  if (this->next_run() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->next_run());
+  }
+
+  // uint32 last_task_result = 9;
+  if (this->last_task_result() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->last_task_result());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler_Task::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler_Task*>(&from));
+}
+
+void TaskScheduler_Task::MergeFrom(const TaskScheduler_Task& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler.Task)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  action_.MergeFrom(from.action_);
+  trigger_.MergeFrom(from.trigger_);
+  if (from.task_name().size() > 0) {
+
+    task_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.task_name_);
+  }
+  if (from.comment().size() > 0) {
+
+    comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
+  }
+  if (from.account_name().size() > 0) {
+
+    account_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.account_name_);
+  }
+  if (from.creator().size() > 0) {
+
+    creator_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.creator_);
+  }
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+  if (from.number_of_missed_runs() != 0) {
+    set_number_of_missed_runs(from.number_of_missed_runs());
+  }
+  if (from.last_run() != 0) {
+    set_last_run(from.last_run());
+  }
+  if (from.next_run() != 0) {
+    set_next_run(from.next_run());
+  }
+  if (from.last_task_result() != 0) {
+    set_last_task_result(from.last_task_result());
+  }
+}
+
+void TaskScheduler_Task::CopyFrom(const TaskScheduler_Task& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler.Task)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler_Task::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler_Task::Swap(TaskScheduler_Task* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler_Task::InternalSwap(TaskScheduler_Task* other) {
+  using std::swap;
+  action_.InternalSwap(&other->action_);
+  trigger_.InternalSwap(&other->trigger_);
+  task_name_.Swap(&other->task_name_);
+  comment_.Swap(&other->comment_);
+  account_name_.Swap(&other->account_name_);
+  creator_.Swap(&other->creator_);
+  swap(status_, other->status_);
+  swap(number_of_missed_runs_, other->number_of_missed_runs_);
+  swap(last_run_, other->last_run_);
+  swap(next_run_, other->next_run_);
+  swap(last_task_result_, other->last_task_result_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler_Task::GetTypeName() const {
+  return "aspia.proto.TaskScheduler.Task";
+}
+
+
+// ===================================================================
+
+void TaskScheduler::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TaskScheduler::kTaskFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TaskScheduler::TaskScheduler()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.TaskScheduler)
+}
+TaskScheduler::TaskScheduler(const TaskScheduler& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      task_(from.task_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.TaskScheduler)
+}
+
+void TaskScheduler::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+TaskScheduler::~TaskScheduler() {
+  // @@protoc_insertion_point(destructor:aspia.proto.TaskScheduler)
+  SharedDtor();
+}
+
+void TaskScheduler::SharedDtor() {
+}
+
+void TaskScheduler::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TaskScheduler& TaskScheduler::default_instance() {
+  ::protobuf_category_5ftask_5fscheduler_2eproto::InitDefaultsTaskScheduler();
+  return *internal_default_instance();
+}
+
+TaskScheduler* TaskScheduler::New(::google::protobuf::Arena* arena) const {
+  TaskScheduler* n = new TaskScheduler;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TaskScheduler::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.TaskScheduler)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  task_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool TaskScheduler::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.TaskScheduler)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .aspia.proto.TaskScheduler.Task task = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_task()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.TaskScheduler)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.TaskScheduler)
+  return false;
+#undef DO_
+}
+
+void TaskScheduler::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.TaskScheduler)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .aspia.proto.TaskScheduler.Task task = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->task_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1, this->task(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.TaskScheduler)
+}
+
+size_t TaskScheduler::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.TaskScheduler)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.TaskScheduler.Task task = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->task_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->task(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TaskScheduler::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TaskScheduler*>(&from));
+}
+
+void TaskScheduler::MergeFrom(const TaskScheduler& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.TaskScheduler)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  task_.MergeFrom(from.task_);
+}
+
+void TaskScheduler::CopyFrom(const TaskScheduler& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.TaskScheduler)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskScheduler::IsInitialized() const {
+  return true;
+}
+
+void TaskScheduler::Swap(TaskScheduler* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TaskScheduler::InternalSwap(TaskScheduler* other) {
+  using std::swap;
+  task_.InternalSwap(&other->task_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TaskScheduler::GetTypeName() const {
+  return "aspia.proto.TaskScheduler";
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace proto

@@ -11,4 +11,36 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto;
 
-// TODO
+message EventLog
+{
+    enum Type
+    {
+        TYPE_UNKNOWN     = 0;
+        TYPE_APPLICATION = 1;
+        TYPE_SECURITY    = 2;
+        TYPE_SYSTEM      = 3;
+    }
+
+    enum Level
+    {
+        LEVEL_UNKNOWN       = 0;
+        LEVEL_INFORMATION   = 1;
+        LEVEL_WARNING       = 2;
+        LEVEL_ERROR         = 3;
+        LEVEL_AUDIT_SUCCESS = 4;
+        LEVEL_AUDIT_FAILURE = 5;
+    }
+
+    message Item
+    {
+        Type type          = 1;
+        Level level        = 2;
+        int64 time         = 3;
+        int32 category     = 4;
+        string user_name   = 5;
+        string source      = 6;
+        string description = 7;
+    }
+
+    repeated Item item = 1;
+}
