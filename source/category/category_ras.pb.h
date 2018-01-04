@@ -25,8 +25,10 @@
 #include <google/protobuf/generated_message_table_driven.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/metadata_lite.h>
+#include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_category_5fras_2eproto {
@@ -34,24 +36,532 @@ namespace protobuf_category_5fras_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[1];
+  static const ::google::protobuf::internal::ParseTable schema[2];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
+void InitDefaultsRAS_ItemImpl();
+void InitDefaultsRAS_Item();
+void InitDefaultsRASImpl();
+void InitDefaultsRAS();
 inline void InitDefaults() {
+  InitDefaultsRAS_Item();
+  InitDefaultsRAS();
 }
 }  // namespace protobuf_category_5fras_2eproto
 namespace aspia {
 namespace proto {
+class RAS;
+class RASDefaultTypeInternal;
+extern RASDefaultTypeInternal _RAS_default_instance_;
+class RAS_Item;
+class RAS_ItemDefaultTypeInternal;
+extern RAS_ItemDefaultTypeInternal _RAS_Item_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
 namespace proto {
 
+enum RAS_FramingProtocol {
+  RAS_FramingProtocol_FRAMING_PROTOCOL_UNKNOWN = 0,
+  RAS_FramingProtocol_FRAMING_PROTOCOL_PPP = 1,
+  RAS_FramingProtocol_FRAMING_PROTOCOL_SLIP = 2,
+  RAS_FramingProtocol_RAS_FramingProtocol_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RAS_FramingProtocol_RAS_FramingProtocol_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RAS_FramingProtocol_IsValid(int value);
+const RAS_FramingProtocol RAS_FramingProtocol_FramingProtocol_MIN = RAS_FramingProtocol_FRAMING_PROTOCOL_UNKNOWN;
+const RAS_FramingProtocol RAS_FramingProtocol_FramingProtocol_MAX = RAS_FramingProtocol_FRAMING_PROTOCOL_SLIP;
+const int RAS_FramingProtocol_FramingProtocol_ARRAYSIZE = RAS_FramingProtocol_FramingProtocol_MAX + 1;
+
+enum RAS_Options {
+  RAS_Options_OPTION_UNKNOWN = 0,
+  RAS_Options_OPTION_IP_HEADER_COMPRESSION = 1,
+  RAS_Options_OPTION_PPP_LCP_EXTENSIONS = 2,
+  RAS_Options_OPTION_SW_COMPRESSION = 4,
+  RAS_Options_OPTION_REQUIRE_ENCRYPTED_PASSWORD = 8,
+  RAS_Options_OPTION_REQUIRE_MS_ENCRYPTED_PASSWORD = 16,
+  RAS_Options_OPTION_REQUIRE_DATA_ENCRYPTION = 32,
+  RAS_Options_OPTION_REQUIRE_EAP = 64,
+  RAS_Options_OPTION_REQUIRE_PAP = 128,
+  RAS_Options_OPTION_REQUIRE_SPAP = 256,
+  RAS_Options_OPTION_REQUIRE_CHAP = 512,
+  RAS_Options_OPTION_REQUIRE_MS_CHAP = 1024,
+  RAS_Options_OPTION_REQUIRE_MS_CHAP_2 = 2048,
+  RAS_Options_RAS_Options_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RAS_Options_RAS_Options_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RAS_Options_IsValid(int value);
+const RAS_Options RAS_Options_Options_MIN = RAS_Options_OPTION_UNKNOWN;
+const RAS_Options RAS_Options_Options_MAX = RAS_Options_OPTION_REQUIRE_MS_CHAP_2;
+const int RAS_Options_Options_ARRAYSIZE = RAS_Options_Options_MAX + 1;
+
 // ===================================================================
 
+class RAS_Item : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RAS.Item) */ {
+ public:
+  RAS_Item();
+  virtual ~RAS_Item();
 
+  RAS_Item(const RAS_Item& from);
+
+  inline RAS_Item& operator=(const RAS_Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RAS_Item(RAS_Item&& from) noexcept
+    : RAS_Item() {
+    *this = ::std::move(from);
+  }
+
+  inline RAS_Item& operator=(RAS_Item&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const RAS_Item& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RAS_Item* internal_default_instance() {
+    return reinterpret_cast<const RAS_Item*>(
+               &_RAS_Item_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    0;
+
+  void Swap(RAS_Item* other);
+  friend void swap(RAS_Item& a, RAS_Item& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RAS_Item* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RAS_Item* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RAS_Item& from);
+  void MergeFrom(const RAS_Item& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RAS_Item* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string connection_name = 1;
+  void clear_connection_name();
+  static const int kConnectionNameFieldNumber = 1;
+  const ::std::string& connection_name() const;
+  void set_connection_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_connection_name(::std::string&& value);
+  #endif
+  void set_connection_name(const char* value);
+  void set_connection_name(const char* value, size_t size);
+  ::std::string* mutable_connection_name();
+  ::std::string* release_connection_name();
+  void set_allocated_connection_name(::std::string* connection_name);
+
+  // string device_name = 2;
+  void clear_device_name();
+  static const int kDeviceNameFieldNumber = 2;
+  const ::std::string& device_name() const;
+  void set_device_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_name(::std::string&& value);
+  #endif
+  void set_device_name(const char* value);
+  void set_device_name(const char* value, size_t size);
+  ::std::string* mutable_device_name();
+  ::std::string* release_device_name();
+  void set_allocated_device_name(::std::string* device_name);
+
+  // string device_type = 3;
+  void clear_device_type();
+  static const int kDeviceTypeFieldNumber = 3;
+  const ::std::string& device_type() const;
+  void set_device_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_device_type(::std::string&& value);
+  #endif
+  void set_device_type(const char* value);
+  void set_device_type(const char* value, size_t size);
+  ::std::string* mutable_device_type();
+  ::std::string* release_device_type();
+  void set_allocated_device_type(::std::string* device_type);
+
+  // string area_code = 5;
+  void clear_area_code();
+  static const int kAreaCodeFieldNumber = 5;
+  const ::std::string& area_code() const;
+  void set_area_code(const ::std::string& value);
+  #if LANG_CXX11
+  void set_area_code(::std::string&& value);
+  #endif
+  void set_area_code(const char* value);
+  void set_area_code(const char* value, size_t size);
+  ::std::string* mutable_area_code();
+  ::std::string* release_area_code();
+  void set_allocated_area_code(::std::string* area_code);
+
+  // string local_phone_number = 6;
+  void clear_local_phone_number();
+  static const int kLocalPhoneNumberFieldNumber = 6;
+  const ::std::string& local_phone_number() const;
+  void set_local_phone_number(const ::std::string& value);
+  #if LANG_CXX11
+  void set_local_phone_number(::std::string&& value);
+  #endif
+  void set_local_phone_number(const char* value);
+  void set_local_phone_number(const char* value, size_t size);
+  ::std::string* mutable_local_phone_number();
+  ::std::string* release_local_phone_number();
+  void set_allocated_local_phone_number(::std::string* local_phone_number);
+
+  // string user_name = 7;
+  void clear_user_name();
+  static const int kUserNameFieldNumber = 7;
+  const ::std::string& user_name() const;
+  void set_user_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_user_name(::std::string&& value);
+  #endif
+  void set_user_name(const char* value);
+  void set_user_name(const char* value, size_t size);
+  ::std::string* mutable_user_name();
+  ::std::string* release_user_name();
+  void set_allocated_user_name(::std::string* user_name);
+
+  // string domain = 8;
+  void clear_domain();
+  static const int kDomainFieldNumber = 8;
+  const ::std::string& domain() const;
+  void set_domain(const ::std::string& value);
+  #if LANG_CXX11
+  void set_domain(::std::string&& value);
+  #endif
+  void set_domain(const char* value);
+  void set_domain(const char* value, size_t size);
+  ::std::string* mutable_domain();
+  ::std::string* release_domain();
+  void set_allocated_domain(::std::string* domain);
+
+  // string ip_address = 9;
+  void clear_ip_address();
+  static const int kIpAddressFieldNumber = 9;
+  const ::std::string& ip_address() const;
+  void set_ip_address(const ::std::string& value);
+  #if LANG_CXX11
+  void set_ip_address(::std::string&& value);
+  #endif
+  void set_ip_address(const char* value);
+  void set_ip_address(const char* value, size_t size);
+  ::std::string* mutable_ip_address();
+  ::std::string* release_ip_address();
+  void set_allocated_ip_address(::std::string* ip_address);
+
+  // string dns_address_1 = 10;
+  void clear_dns_address_1();
+  static const int kDnsAddress1FieldNumber = 10;
+  const ::std::string& dns_address_1() const;
+  void set_dns_address_1(const ::std::string& value);
+  #if LANG_CXX11
+  void set_dns_address_1(::std::string&& value);
+  #endif
+  void set_dns_address_1(const char* value);
+  void set_dns_address_1(const char* value, size_t size);
+  ::std::string* mutable_dns_address_1();
+  ::std::string* release_dns_address_1();
+  void set_allocated_dns_address_1(::std::string* dns_address_1);
+
+  // string dns_address_2 = 11;
+  void clear_dns_address_2();
+  static const int kDnsAddress2FieldNumber = 11;
+  const ::std::string& dns_address_2() const;
+  void set_dns_address_2(const ::std::string& value);
+  #if LANG_CXX11
+  void set_dns_address_2(::std::string&& value);
+  #endif
+  void set_dns_address_2(const char* value);
+  void set_dns_address_2(const char* value, size_t size);
+  ::std::string* mutable_dns_address_2();
+  ::std::string* release_dns_address_2();
+  void set_allocated_dns_address_2(::std::string* dns_address_2);
+
+  // string wins_address_1 = 12;
+  void clear_wins_address_1();
+  static const int kWinsAddress1FieldNumber = 12;
+  const ::std::string& wins_address_1() const;
+  void set_wins_address_1(const ::std::string& value);
+  #if LANG_CXX11
+  void set_wins_address_1(::std::string&& value);
+  #endif
+  void set_wins_address_1(const char* value);
+  void set_wins_address_1(const char* value, size_t size);
+  ::std::string* mutable_wins_address_1();
+  ::std::string* release_wins_address_1();
+  void set_allocated_wins_address_1(::std::string* wins_address_1);
+
+  // string wins_address_2 = 13;
+  void clear_wins_address_2();
+  static const int kWinsAddress2FieldNumber = 13;
+  const ::std::string& wins_address_2() const;
+  void set_wins_address_2(const ::std::string& value);
+  #if LANG_CXX11
+  void set_wins_address_2(::std::string&& value);
+  #endif
+  void set_wins_address_2(const char* value);
+  void set_wins_address_2(const char* value, size_t size);
+  ::std::string* mutable_wins_address_2();
+  ::std::string* release_wins_address_2();
+  void set_allocated_wins_address_2(::std::string* wins_address_2);
+
+  // string script = 15;
+  void clear_script();
+  static const int kScriptFieldNumber = 15;
+  const ::std::string& script() const;
+  void set_script(const ::std::string& value);
+  #if LANG_CXX11
+  void set_script(::std::string&& value);
+  #endif
+  void set_script(const char* value);
+  void set_script(const char* value, size_t size);
+  ::std::string* mutable_script();
+  ::std::string* release_script();
+  void set_allocated_script(::std::string* script);
+
+  // uint32 country_code = 4;
+  void clear_country_code();
+  static const int kCountryCodeFieldNumber = 4;
+  ::google::protobuf::uint32 country_code() const;
+  void set_country_code(::google::protobuf::uint32 value);
+
+  // .aspia.proto.RAS.FramingProtocol framing_protocol = 14;
+  void clear_framing_protocol();
+  static const int kFramingProtocolFieldNumber = 14;
+  ::aspia::proto::RAS_FramingProtocol framing_protocol() const;
+  void set_framing_protocol(::aspia::proto::RAS_FramingProtocol value);
+
+  // uint32 options = 16;
+  void clear_options();
+  static const int kOptionsFieldNumber = 16;
+  ::google::protobuf::uint32 options() const;
+  void set_options(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.RAS.Item)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr connection_name_;
+  ::google::protobuf::internal::ArenaStringPtr device_name_;
+  ::google::protobuf::internal::ArenaStringPtr device_type_;
+  ::google::protobuf::internal::ArenaStringPtr area_code_;
+  ::google::protobuf::internal::ArenaStringPtr local_phone_number_;
+  ::google::protobuf::internal::ArenaStringPtr user_name_;
+  ::google::protobuf::internal::ArenaStringPtr domain_;
+  ::google::protobuf::internal::ArenaStringPtr ip_address_;
+  ::google::protobuf::internal::ArenaStringPtr dns_address_1_;
+  ::google::protobuf::internal::ArenaStringPtr dns_address_2_;
+  ::google::protobuf::internal::ArenaStringPtr wins_address_1_;
+  ::google::protobuf::internal::ArenaStringPtr wins_address_2_;
+  ::google::protobuf::internal::ArenaStringPtr script_;
+  ::google::protobuf::uint32 country_code_;
+  int framing_protocol_;
+  ::google::protobuf::uint32 options_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5fras_2eproto::TableStruct;
+  friend void ::protobuf_category_5fras_2eproto::InitDefaultsRAS_ItemImpl();
+};
+// -------------------------------------------------------------------
+
+class RAS : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.RAS) */ {
+ public:
+  RAS();
+  virtual ~RAS();
+
+  RAS(const RAS& from);
+
+  inline RAS& operator=(const RAS& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RAS(RAS&& from) noexcept
+    : RAS() {
+    *this = ::std::move(from);
+  }
+
+  inline RAS& operator=(RAS&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const RAS& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RAS* internal_default_instance() {
+    return reinterpret_cast<const RAS*>(
+               &_RAS_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(RAS* other);
+  friend void swap(RAS& a, RAS& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RAS* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RAS* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RAS& from);
+  void MergeFrom(const RAS& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RAS* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  typedef RAS_Item Item;
+
+  typedef RAS_FramingProtocol FramingProtocol;
+  static const FramingProtocol FRAMING_PROTOCOL_UNKNOWN =
+    RAS_FramingProtocol_FRAMING_PROTOCOL_UNKNOWN;
+  static const FramingProtocol FRAMING_PROTOCOL_PPP =
+    RAS_FramingProtocol_FRAMING_PROTOCOL_PPP;
+  static const FramingProtocol FRAMING_PROTOCOL_SLIP =
+    RAS_FramingProtocol_FRAMING_PROTOCOL_SLIP;
+  static inline bool FramingProtocol_IsValid(int value) {
+    return RAS_FramingProtocol_IsValid(value);
+  }
+  static const FramingProtocol FramingProtocol_MIN =
+    RAS_FramingProtocol_FramingProtocol_MIN;
+  static const FramingProtocol FramingProtocol_MAX =
+    RAS_FramingProtocol_FramingProtocol_MAX;
+  static const int FramingProtocol_ARRAYSIZE =
+    RAS_FramingProtocol_FramingProtocol_ARRAYSIZE;
+
+  typedef RAS_Options Options;
+  static const Options OPTION_UNKNOWN =
+    RAS_Options_OPTION_UNKNOWN;
+  static const Options OPTION_IP_HEADER_COMPRESSION =
+    RAS_Options_OPTION_IP_HEADER_COMPRESSION;
+  static const Options OPTION_PPP_LCP_EXTENSIONS =
+    RAS_Options_OPTION_PPP_LCP_EXTENSIONS;
+  static const Options OPTION_SW_COMPRESSION =
+    RAS_Options_OPTION_SW_COMPRESSION;
+  static const Options OPTION_REQUIRE_ENCRYPTED_PASSWORD =
+    RAS_Options_OPTION_REQUIRE_ENCRYPTED_PASSWORD;
+  static const Options OPTION_REQUIRE_MS_ENCRYPTED_PASSWORD =
+    RAS_Options_OPTION_REQUIRE_MS_ENCRYPTED_PASSWORD;
+  static const Options OPTION_REQUIRE_DATA_ENCRYPTION =
+    RAS_Options_OPTION_REQUIRE_DATA_ENCRYPTION;
+  static const Options OPTION_REQUIRE_EAP =
+    RAS_Options_OPTION_REQUIRE_EAP;
+  static const Options OPTION_REQUIRE_PAP =
+    RAS_Options_OPTION_REQUIRE_PAP;
+  static const Options OPTION_REQUIRE_SPAP =
+    RAS_Options_OPTION_REQUIRE_SPAP;
+  static const Options OPTION_REQUIRE_CHAP =
+    RAS_Options_OPTION_REQUIRE_CHAP;
+  static const Options OPTION_REQUIRE_MS_CHAP =
+    RAS_Options_OPTION_REQUIRE_MS_CHAP;
+  static const Options OPTION_REQUIRE_MS_CHAP_2 =
+    RAS_Options_OPTION_REQUIRE_MS_CHAP_2;
+  static inline bool Options_IsValid(int value) {
+    return RAS_Options_IsValid(value);
+  }
+  static const Options Options_MIN =
+    RAS_Options_Options_MIN;
+  static const Options Options_MAX =
+    RAS_Options_Options_MAX;
+  static const int Options_ARRAYSIZE =
+    RAS_Options_Options_ARRAYSIZE;
+
+  // accessors -------------------------------------------------------
+
+  // repeated .aspia.proto.RAS.Item item = 1;
+  int item_size() const;
+  void clear_item();
+  static const int kItemFieldNumber = 1;
+  const ::aspia::proto::RAS_Item& item(int index) const;
+  ::aspia::proto::RAS_Item* mutable_item(int index);
+  ::aspia::proto::RAS_Item* add_item();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::RAS_Item >*
+      mutable_item();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::RAS_Item >&
+      item() const;
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.RAS)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::RAS_Item > item_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_category_5fras_2eproto::TableStruct;
+  friend void ::protobuf_category_5fras_2eproto::InitDefaultsRASImpl();
+};
 // ===================================================================
 
 
@@ -61,14 +571,792 @@ namespace proto {
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// RAS_Item
+
+// string connection_name = 1;
+inline void RAS_Item::clear_connection_name() {
+  connection_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::connection_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.connection_name)
+  return connection_name_.GetNoArena();
+}
+inline void RAS_Item::set_connection_name(const ::std::string& value) {
+  
+  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.connection_name)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_connection_name(::std::string&& value) {
+  
+  connection_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.connection_name)
+}
+#endif
+inline void RAS_Item::set_connection_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.connection_name)
+}
+inline void RAS_Item::set_connection_name(const char* value, size_t size) {
+  
+  connection_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.connection_name)
+}
+inline ::std::string* RAS_Item::mutable_connection_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.connection_name)
+  return connection_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_connection_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.connection_name)
+  
+  return connection_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_connection_name(::std::string* connection_name) {
+  if (connection_name != NULL) {
+    
+  } else {
+    
+  }
+  connection_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), connection_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.connection_name)
+}
+
+// string device_name = 2;
+inline void RAS_Item::clear_device_name() {
+  device_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::device_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.device_name)
+  return device_name_.GetNoArena();
+}
+inline void RAS_Item::set_device_name(const ::std::string& value) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.device_name)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_device_name(::std::string&& value) {
+  
+  device_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.device_name)
+}
+#endif
+inline void RAS_Item::set_device_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.device_name)
+}
+inline void RAS_Item::set_device_name(const char* value, size_t size) {
+  
+  device_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.device_name)
+}
+inline ::std::string* RAS_Item::mutable_device_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.device_name)
+  return device_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_device_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.device_name)
+  
+  return device_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_device_name(::std::string* device_name) {
+  if (device_name != NULL) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.device_name)
+}
+
+// string device_type = 3;
+inline void RAS_Item::clear_device_type() {
+  device_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::device_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.device_type)
+  return device_type_.GetNoArena();
+}
+inline void RAS_Item::set_device_type(const ::std::string& value) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.device_type)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_device_type(::std::string&& value) {
+  
+  device_type_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.device_type)
+}
+#endif
+inline void RAS_Item::set_device_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.device_type)
+}
+inline void RAS_Item::set_device_type(const char* value, size_t size) {
+  
+  device_type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.device_type)
+}
+inline ::std::string* RAS_Item::mutable_device_type() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.device_type)
+  return device_type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_device_type() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.device_type)
+  
+  return device_type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_device_type(::std::string* device_type) {
+  if (device_type != NULL) {
+    
+  } else {
+    
+  }
+  device_type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), device_type);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.device_type)
+}
+
+// uint32 country_code = 4;
+inline void RAS_Item::clear_country_code() {
+  country_code_ = 0u;
+}
+inline ::google::protobuf::uint32 RAS_Item::country_code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.country_code)
+  return country_code_;
+}
+inline void RAS_Item::set_country_code(::google::protobuf::uint32 value) {
+  
+  country_code_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.country_code)
+}
+
+// string area_code = 5;
+inline void RAS_Item::clear_area_code() {
+  area_code_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::area_code() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.area_code)
+  return area_code_.GetNoArena();
+}
+inline void RAS_Item::set_area_code(const ::std::string& value) {
+  
+  area_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.area_code)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_area_code(::std::string&& value) {
+  
+  area_code_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.area_code)
+}
+#endif
+inline void RAS_Item::set_area_code(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  area_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.area_code)
+}
+inline void RAS_Item::set_area_code(const char* value, size_t size) {
+  
+  area_code_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.area_code)
+}
+inline ::std::string* RAS_Item::mutable_area_code() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.area_code)
+  return area_code_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_area_code() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.area_code)
+  
+  return area_code_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_area_code(::std::string* area_code) {
+  if (area_code != NULL) {
+    
+  } else {
+    
+  }
+  area_code_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), area_code);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.area_code)
+}
+
+// string local_phone_number = 6;
+inline void RAS_Item::clear_local_phone_number() {
+  local_phone_number_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::local_phone_number() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.local_phone_number)
+  return local_phone_number_.GetNoArena();
+}
+inline void RAS_Item::set_local_phone_number(const ::std::string& value) {
+  
+  local_phone_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.local_phone_number)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_local_phone_number(::std::string&& value) {
+  
+  local_phone_number_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.local_phone_number)
+}
+#endif
+inline void RAS_Item::set_local_phone_number(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  local_phone_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.local_phone_number)
+}
+inline void RAS_Item::set_local_phone_number(const char* value, size_t size) {
+  
+  local_phone_number_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.local_phone_number)
+}
+inline ::std::string* RAS_Item::mutable_local_phone_number() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.local_phone_number)
+  return local_phone_number_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_local_phone_number() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.local_phone_number)
+  
+  return local_phone_number_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_local_phone_number(::std::string* local_phone_number) {
+  if (local_phone_number != NULL) {
+    
+  } else {
+    
+  }
+  local_phone_number_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), local_phone_number);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.local_phone_number)
+}
+
+// string user_name = 7;
+inline void RAS_Item::clear_user_name() {
+  user_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::user_name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.user_name)
+  return user_name_.GetNoArena();
+}
+inline void RAS_Item::set_user_name(const ::std::string& value) {
+  
+  user_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.user_name)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_user_name(::std::string&& value) {
+  
+  user_name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.user_name)
+}
+#endif
+inline void RAS_Item::set_user_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  user_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.user_name)
+}
+inline void RAS_Item::set_user_name(const char* value, size_t size) {
+  
+  user_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.user_name)
+}
+inline ::std::string* RAS_Item::mutable_user_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.user_name)
+  return user_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_user_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.user_name)
+  
+  return user_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_user_name(::std::string* user_name) {
+  if (user_name != NULL) {
+    
+  } else {
+    
+  }
+  user_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), user_name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.user_name)
+}
+
+// string domain = 8;
+inline void RAS_Item::clear_domain() {
+  domain_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::domain() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.domain)
+  return domain_.GetNoArena();
+}
+inline void RAS_Item::set_domain(const ::std::string& value) {
+  
+  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.domain)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_domain(::std::string&& value) {
+  
+  domain_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.domain)
+}
+#endif
+inline void RAS_Item::set_domain(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.domain)
+}
+inline void RAS_Item::set_domain(const char* value, size_t size) {
+  
+  domain_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.domain)
+}
+inline ::std::string* RAS_Item::mutable_domain() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.domain)
+  return domain_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_domain() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.domain)
+  
+  return domain_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_domain(::std::string* domain) {
+  if (domain != NULL) {
+    
+  } else {
+    
+  }
+  domain_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), domain);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.domain)
+}
+
+// string ip_address = 9;
+inline void RAS_Item::clear_ip_address() {
+  ip_address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::ip_address() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.ip_address)
+  return ip_address_.GetNoArena();
+}
+inline void RAS_Item::set_ip_address(const ::std::string& value) {
+  
+  ip_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.ip_address)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_ip_address(::std::string&& value) {
+  
+  ip_address_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.ip_address)
+}
+#endif
+inline void RAS_Item::set_ip_address(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  ip_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.ip_address)
+}
+inline void RAS_Item::set_ip_address(const char* value, size_t size) {
+  
+  ip_address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.ip_address)
+}
+inline ::std::string* RAS_Item::mutable_ip_address() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.ip_address)
+  return ip_address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_ip_address() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.ip_address)
+  
+  return ip_address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_ip_address(::std::string* ip_address) {
+  if (ip_address != NULL) {
+    
+  } else {
+    
+  }
+  ip_address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ip_address);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.ip_address)
+}
+
+// string dns_address_1 = 10;
+inline void RAS_Item::clear_dns_address_1() {
+  dns_address_1_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::dns_address_1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.dns_address_1)
+  return dns_address_1_.GetNoArena();
+}
+inline void RAS_Item::set_dns_address_1(const ::std::string& value) {
+  
+  dns_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.dns_address_1)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_dns_address_1(::std::string&& value) {
+  
+  dns_address_1_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.dns_address_1)
+}
+#endif
+inline void RAS_Item::set_dns_address_1(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  dns_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.dns_address_1)
+}
+inline void RAS_Item::set_dns_address_1(const char* value, size_t size) {
+  
+  dns_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.dns_address_1)
+}
+inline ::std::string* RAS_Item::mutable_dns_address_1() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.dns_address_1)
+  return dns_address_1_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_dns_address_1() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.dns_address_1)
+  
+  return dns_address_1_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_dns_address_1(::std::string* dns_address_1) {
+  if (dns_address_1 != NULL) {
+    
+  } else {
+    
+  }
+  dns_address_1_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), dns_address_1);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.dns_address_1)
+}
+
+// string dns_address_2 = 11;
+inline void RAS_Item::clear_dns_address_2() {
+  dns_address_2_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::dns_address_2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.dns_address_2)
+  return dns_address_2_.GetNoArena();
+}
+inline void RAS_Item::set_dns_address_2(const ::std::string& value) {
+  
+  dns_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.dns_address_2)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_dns_address_2(::std::string&& value) {
+  
+  dns_address_2_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.dns_address_2)
+}
+#endif
+inline void RAS_Item::set_dns_address_2(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  dns_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.dns_address_2)
+}
+inline void RAS_Item::set_dns_address_2(const char* value, size_t size) {
+  
+  dns_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.dns_address_2)
+}
+inline ::std::string* RAS_Item::mutable_dns_address_2() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.dns_address_2)
+  return dns_address_2_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_dns_address_2() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.dns_address_2)
+  
+  return dns_address_2_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_dns_address_2(::std::string* dns_address_2) {
+  if (dns_address_2 != NULL) {
+    
+  } else {
+    
+  }
+  dns_address_2_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), dns_address_2);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.dns_address_2)
+}
+
+// string wins_address_1 = 12;
+inline void RAS_Item::clear_wins_address_1() {
+  wins_address_1_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::wins_address_1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.wins_address_1)
+  return wins_address_1_.GetNoArena();
+}
+inline void RAS_Item::set_wins_address_1(const ::std::string& value) {
+  
+  wins_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.wins_address_1)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_wins_address_1(::std::string&& value) {
+  
+  wins_address_1_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.wins_address_1)
+}
+#endif
+inline void RAS_Item::set_wins_address_1(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  wins_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.wins_address_1)
+}
+inline void RAS_Item::set_wins_address_1(const char* value, size_t size) {
+  
+  wins_address_1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.wins_address_1)
+}
+inline ::std::string* RAS_Item::mutable_wins_address_1() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.wins_address_1)
+  return wins_address_1_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_wins_address_1() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.wins_address_1)
+  
+  return wins_address_1_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_wins_address_1(::std::string* wins_address_1) {
+  if (wins_address_1 != NULL) {
+    
+  } else {
+    
+  }
+  wins_address_1_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), wins_address_1);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.wins_address_1)
+}
+
+// string wins_address_2 = 13;
+inline void RAS_Item::clear_wins_address_2() {
+  wins_address_2_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::wins_address_2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.wins_address_2)
+  return wins_address_2_.GetNoArena();
+}
+inline void RAS_Item::set_wins_address_2(const ::std::string& value) {
+  
+  wins_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.wins_address_2)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_wins_address_2(::std::string&& value) {
+  
+  wins_address_2_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.wins_address_2)
+}
+#endif
+inline void RAS_Item::set_wins_address_2(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  wins_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.wins_address_2)
+}
+inline void RAS_Item::set_wins_address_2(const char* value, size_t size) {
+  
+  wins_address_2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.wins_address_2)
+}
+inline ::std::string* RAS_Item::mutable_wins_address_2() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.wins_address_2)
+  return wins_address_2_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_wins_address_2() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.wins_address_2)
+  
+  return wins_address_2_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_wins_address_2(::std::string* wins_address_2) {
+  if (wins_address_2 != NULL) {
+    
+  } else {
+    
+  }
+  wins_address_2_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), wins_address_2);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.wins_address_2)
+}
+
+// .aspia.proto.RAS.FramingProtocol framing_protocol = 14;
+inline void RAS_Item::clear_framing_protocol() {
+  framing_protocol_ = 0;
+}
+inline ::aspia::proto::RAS_FramingProtocol RAS_Item::framing_protocol() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.framing_protocol)
+  return static_cast< ::aspia::proto::RAS_FramingProtocol >(framing_protocol_);
+}
+inline void RAS_Item::set_framing_protocol(::aspia::proto::RAS_FramingProtocol value) {
+  
+  framing_protocol_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.framing_protocol)
+}
+
+// string script = 15;
+inline void RAS_Item::clear_script() {
+  script_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RAS_Item::script() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.script)
+  return script_.GetNoArena();
+}
+inline void RAS_Item::set_script(const ::std::string& value) {
+  
+  script_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.script)
+}
+#if LANG_CXX11
+inline void RAS_Item::set_script(::std::string&& value) {
+  
+  script_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.RAS.Item.script)
+}
+#endif
+inline void RAS_Item::set_script(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  script_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.RAS.Item.script)
+}
+inline void RAS_Item::set_script(const char* value, size_t size) {
+  
+  script_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.RAS.Item.script)
+}
+inline ::std::string* RAS_Item::mutable_script() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.Item.script)
+  return script_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RAS_Item::release_script() {
+  // @@protoc_insertion_point(field_release:aspia.proto.RAS.Item.script)
+  
+  return script_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RAS_Item::set_allocated_script(::std::string* script) {
+  if (script != NULL) {
+    
+  } else {
+    
+  }
+  script_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), script);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.RAS.Item.script)
+}
+
+// uint32 options = 16;
+inline void RAS_Item::clear_options() {
+  options_ = 0u;
+}
+inline ::google::protobuf::uint32 RAS_Item::options() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.Item.options)
+  return options_;
+}
+inline void RAS_Item::set_options(::google::protobuf::uint32 value) {
+  
+  options_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.RAS.Item.options)
+}
+
+// -------------------------------------------------------------------
+
+// RAS
+
+// repeated .aspia.proto.RAS.Item item = 1;
+inline int RAS::item_size() const {
+  return item_.size();
+}
+inline void RAS::clear_item() {
+  item_.Clear();
+}
+inline const ::aspia::proto::RAS_Item& RAS::item(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.RAS.item)
+  return item_.Get(index);
+}
+inline ::aspia::proto::RAS_Item* RAS::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.RAS.item)
+  return item_.Mutable(index);
+}
+inline ::aspia::proto::RAS_Item* RAS::add_item() {
+  // @@protoc_insertion_point(field_add:aspia.proto.RAS.item)
+  return item_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::RAS_Item >*
+RAS::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.RAS.item)
+  return &item_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::RAS_Item >&
+RAS::item() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.RAS.item)
+  return item_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::RAS_FramingProtocol> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::RAS_Options> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 
