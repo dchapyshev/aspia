@@ -18,11 +18,16 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
-class EventLog_ItemDefaultTypeInternal {
+class EventLog_Log_ItemDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<EventLog_Item>
+  ::google::protobuf::internal::ExplicitlyConstructed<EventLog_Log_Item>
       _instance;
-} _EventLog_Item_default_instance_;
+} _EventLog_Log_Item_default_instance_;
+class EventLog_LogDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<EventLog_Log>
+      _instance;
+} _EventLog_Log_default_instance_;
 class EventLogDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<EventLog>
@@ -31,7 +36,7 @@ class EventLogDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_category_5feventlog_2eproto {
-void InitDefaultsEventLog_ItemImpl() {
+void InitDefaultsEventLog_Log_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -40,16 +45,38 @@ void InitDefaultsEventLog_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_EventLog_Item_default_instance_;
-    new (ptr) ::aspia::proto::EventLog_Item();
+    void* ptr = &::aspia::proto::_EventLog_Log_Item_default_instance_;
+    new (ptr) ::aspia::proto::EventLog_Log_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::EventLog_Item::InitAsDefaultInstance();
+  ::aspia::proto::EventLog_Log_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsEventLog_Item() {
+void InitDefaultsEventLog_Log_Item() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsEventLog_ItemImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsEventLog_Log_ItemImpl);
+}
+
+void InitDefaultsEventLog_LogImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log_Item();
+  {
+    void* ptr = &::aspia::proto::_EventLog_Log_default_instance_;
+    new (ptr) ::aspia::proto::EventLog_Log();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::EventLog_Log::InitAsDefaultInstance();
+}
+
+void InitDefaultsEventLog_Log() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsEventLog_LogImpl);
 }
 
 void InitDefaultsEventLogImpl() {
@@ -60,7 +87,7 @@ void InitDefaultsEventLogImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Item();
+  protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log();
   {
     void* ptr = &::aspia::proto::_EventLog_default_instance_;
     new (ptr) ::aspia::proto::EventLog();
@@ -77,7 +104,7 @@ void InitDefaultsEventLog() {
 }  // namespace protobuf_category_5feventlog_2eproto
 namespace aspia {
 namespace proto {
-bool EventLog_Type_IsValid(int value) {
+bool EventLog_Log_Type_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -90,15 +117,15 @@ bool EventLog_Type_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const EventLog_Type EventLog::TYPE_UNKNOWN;
-const EventLog_Type EventLog::TYPE_APPLICATION;
-const EventLog_Type EventLog::TYPE_SECURITY;
-const EventLog_Type EventLog::TYPE_SYSTEM;
-const EventLog_Type EventLog::Type_MIN;
-const EventLog_Type EventLog::Type_MAX;
-const int EventLog::Type_ARRAYSIZE;
+const EventLog_Log_Type EventLog_Log::TYPE_UNKNOWN;
+const EventLog_Log_Type EventLog_Log::TYPE_APPLICATION;
+const EventLog_Log_Type EventLog_Log::TYPE_SECURITY;
+const EventLog_Log_Type EventLog_Log::TYPE_SYSTEM;
+const EventLog_Log_Type EventLog_Log::Type_MIN;
+const EventLog_Log_Type EventLog_Log::Type_MAX;
+const int EventLog_Log::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool EventLog_Level_IsValid(int value) {
+bool EventLog_Log_Level_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -106,6 +133,7 @@ bool EventLog_Level_IsValid(int value) {
     case 3:
     case 4:
     case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -113,48 +141,44 @@ bool EventLog_Level_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const EventLog_Level EventLog::LEVEL_UNKNOWN;
-const EventLog_Level EventLog::LEVEL_INFORMATION;
-const EventLog_Level EventLog::LEVEL_WARNING;
-const EventLog_Level EventLog::LEVEL_ERROR;
-const EventLog_Level EventLog::LEVEL_AUDIT_SUCCESS;
-const EventLog_Level EventLog::LEVEL_AUDIT_FAILURE;
-const EventLog_Level EventLog::Level_MIN;
-const EventLog_Level EventLog::Level_MAX;
-const int EventLog::Level_ARRAYSIZE;
+const EventLog_Log_Level EventLog_Log::LEVEL_UNKNOWN;
+const EventLog_Log_Level EventLog_Log::LEVEL_SUCCESS;
+const EventLog_Log_Level EventLog_Log::LEVEL_INFORMATION;
+const EventLog_Log_Level EventLog_Log::LEVEL_WARNING;
+const EventLog_Log_Level EventLog_Log::LEVEL_ERROR;
+const EventLog_Log_Level EventLog_Log::LEVEL_AUDIT_SUCCESS;
+const EventLog_Log_Level EventLog_Log::LEVEL_AUDIT_FAILURE;
+const EventLog_Log_Level EventLog_Log::Level_MIN;
+const EventLog_Log_Level EventLog_Log::Level_MAX;
+const int EventLog_Log::Level_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
 
-void EventLog_Item::InitAsDefaultInstance() {
+void EventLog_Log_Item::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int EventLog_Item::kTypeFieldNumber;
-const int EventLog_Item::kLevelFieldNumber;
-const int EventLog_Item::kTimeFieldNumber;
-const int EventLog_Item::kCategoryFieldNumber;
-const int EventLog_Item::kUserNameFieldNumber;
-const int EventLog_Item::kSourceFieldNumber;
-const int EventLog_Item::kDescriptionFieldNumber;
+const int EventLog_Log_Item::kLevelFieldNumber;
+const int EventLog_Log_Item::kTimeFieldNumber;
+const int EventLog_Log_Item::kCategoryFieldNumber;
+const int EventLog_Log_Item::kEventIdFieldNumber;
+const int EventLog_Log_Item::kSourceFieldNumber;
+const int EventLog_Log_Item::kDescriptionFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-EventLog_Item::EventLog_Item()
+EventLog_Log_Item::EventLog_Log_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Item();
+    ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.EventLog.Log.Item)
 }
-EventLog_Item::EventLog_Item(const EventLog_Item& from)
+EventLog_Log_Item::EventLog_Log_Item(const EventLog_Log_Item& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  user_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.user_name().size() > 0) {
-    user_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_name_);
-  }
   source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.source().size() > 0) {
     source_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.source_);
@@ -163,67 +187,64 @@ EventLog_Item::EventLog_Item(const EventLog_Item& from)
   if (from.description().size() > 0) {
     description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
   }
-  ::memcpy(&type_, &from.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&category_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(category_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.EventLog.Item)
+  ::memcpy(&time_, &from.time_,
+    static_cast<size_t>(reinterpret_cast<char*>(&event_id_) -
+    reinterpret_cast<char*>(&time_)) + sizeof(event_id_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.EventLog.Log.Item)
 }
 
-void EventLog_Item::SharedCtor() {
-  user_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+void EventLog_Log_Item::SharedCtor() {
   source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   description_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&category_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(category_));
+  ::memset(&time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&event_id_) -
+      reinterpret_cast<char*>(&time_)) + sizeof(event_id_));
   _cached_size_ = 0;
 }
 
-EventLog_Item::~EventLog_Item() {
-  // @@protoc_insertion_point(destructor:aspia.proto.EventLog.Item)
+EventLog_Log_Item::~EventLog_Log_Item() {
+  // @@protoc_insertion_point(destructor:aspia.proto.EventLog.Log.Item)
   SharedDtor();
 }
 
-void EventLog_Item::SharedDtor() {
-  user_name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+void EventLog_Log_Item::SharedDtor() {
   source_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   description_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void EventLog_Item::SetCachedSize(int size) const {
+void EventLog_Log_Item::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const EventLog_Item& EventLog_Item::default_instance() {
-  ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Item();
+const EventLog_Log_Item& EventLog_Log_Item::default_instance() {
+  ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log_Item();
   return *internal_default_instance();
 }
 
-EventLog_Item* EventLog_Item::New(::google::protobuf::Arena* arena) const {
-  EventLog_Item* n = new EventLog_Item;
+EventLog_Log_Item* EventLog_Log_Item::New(::google::protobuf::Arena* arena) const {
+  EventLog_Log_Item* n = new EventLog_Log_Item;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void EventLog_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.EventLog.Item)
+void EventLog_Log_Item::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.EventLog.Log.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  user_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   description_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&category_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(category_));
+  ::memset(&time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&event_id_) -
+      reinterpret_cast<char*>(&time_)) + sizeof(event_id_));
   _internal_metadata_.Clear();
 }
 
-bool EventLog_Item::MergePartialFromCodedStream(
+bool EventLog_Log_Item::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -233,13 +254,13 @@ bool EventLog_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.EventLog.Log.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.EventLog.Type type = 1;
+      // .aspia.proto.EventLog.Log.Level level = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -247,32 +268,17 @@ bool EventLog_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::aspia::proto::EventLog_Type >(value));
+          set_level(static_cast< ::aspia::proto::EventLog_Log_Level >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.EventLog.Level level = 2;
+      // int64 time = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_level(static_cast< ::aspia::proto::EventLog_Level >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // int64 time = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
@@ -283,13 +289,13 @@ bool EventLog_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // int32 category = 4;
-      case 4: {
+      // uint32 category = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &category_)));
         } else {
           goto handle_unusual;
@@ -297,48 +303,46 @@ bool EventLog_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // string user_name = 5;
-      case 5: {
+      // uint32 event_id = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_user_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->user_name().data(), static_cast<int>(this->user_name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.EventLog.Item.user_name"));
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &event_id_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string source = 6;
-      case 6: {
+      // string source = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_source()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->source().data(), static_cast<int>(this->source().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.EventLog.Item.source"));
+            "aspia.proto.EventLog.Log.Item.source"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // string description = 7;
-      case 7: {
+      // string description = 6;
+      case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_description()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->description().data(), static_cast<int>(this->description().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.EventLog.Item.description"));
+            "aspia.proto.EventLog.Log.Item.description"));
         } else {
           goto handle_unusual;
         }
@@ -357,128 +361,111 @@ bool EventLog_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.EventLog.Log.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.EventLog.Log.Item)
   return false;
 #undef DO_
 }
 
-void EventLog_Item::SerializeWithCachedSizes(
+void EventLog_Log_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.EventLog.Log.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.EventLog.Type type = 1;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->type(), output);
-  }
-
-  // .aspia.proto.EventLog.Level level = 2;
+  // .aspia.proto.EventLog.Log.Level level = 1;
   if (this->level() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->level(), output);
+      1, this->level(), output);
   }
 
-  // int64 time = 3;
+  // int64 time = 2;
   if (this->time() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(3, this->time(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->time(), output);
   }
 
-  // int32 category = 4;
+  // uint32 category = 3;
   if (this->category() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->category(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->category(), output);
   }
 
-  // string user_name = 5;
-  if (this->user_name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->user_name().data(), static_cast<int>(this->user_name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.EventLog.Item.user_name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      5, this->user_name(), output);
+  // uint32 event_id = 4;
+  if (this->event_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->event_id(), output);
   }
 
-  // string source = 6;
+  // string source = 5;
   if (this->source().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->source().data(), static_cast<int>(this->source().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.EventLog.Item.source");
+      "aspia.proto.EventLog.Log.Item.source");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      6, this->source(), output);
+      5, this->source(), output);
   }
 
-  // string description = 7;
+  // string description = 6;
   if (this->description().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->description().data(), static_cast<int>(this->description().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.EventLog.Item.description");
+      "aspia.proto.EventLog.Log.Item.description");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      7, this->description(), output);
+      6, this->description(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.EventLog.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.EventLog.Log.Item)
 }
 
-size_t EventLog_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.EventLog.Item)
+size_t EventLog_Log_Item::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.EventLog.Log.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string user_name = 5;
-  if (this->user_name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->user_name());
-  }
-
-  // string source = 6;
+  // string source = 5;
   if (this->source().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->source());
   }
 
-  // string description = 7;
+  // string description = 6;
   if (this->description().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->description());
   }
 
-  // .aspia.proto.EventLog.Type type = 1;
-  if (this->type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
-  }
-
-  // .aspia.proto.EventLog.Level level = 2;
-  if (this->level() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->level());
-  }
-
-  // int64 time = 3;
+  // int64 time = 2;
   if (this->time() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int64Size(
         this->time());
   }
 
-  // int32 category = 4;
+  // .aspia.proto.EventLog.Log.Level level = 1;
+  if (this->level() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->level());
+  }
+
+  // uint32 category = 3;
   if (this->category() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->category());
+  }
+
+  // uint32 event_id = 4;
+  if (this->event_id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->event_id());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -488,22 +475,18 @@ size_t EventLog_Item::ByteSizeLong() const {
   return total_size;
 }
 
-void EventLog_Item::CheckTypeAndMergeFrom(
+void EventLog_Log_Item::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const EventLog_Item*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const EventLog_Log_Item*>(&from));
 }
 
-void EventLog_Item::MergeFrom(const EventLog_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.EventLog.Item)
+void EventLog_Log_Item::MergeFrom(const EventLog_Log_Item& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.EventLog.Log.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.user_name().size() > 0) {
-
-    user_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.user_name_);
-  }
   if (from.source().size() > 0) {
 
     source_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.source_);
@@ -512,50 +495,280 @@ void EventLog_Item::MergeFrom(const EventLog_Item& from) {
 
     description_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.description_);
   }
-  if (from.type() != 0) {
-    set_type(from.type());
+  if (from.time() != 0) {
+    set_time(from.time());
   }
   if (from.level() != 0) {
     set_level(from.level());
   }
-  if (from.time() != 0) {
-    set_time(from.time());
-  }
   if (from.category() != 0) {
     set_category(from.category());
   }
+  if (from.event_id() != 0) {
+    set_event_id(from.event_id());
+  }
 }
 
-void EventLog_Item::CopyFrom(const EventLog_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.EventLog.Item)
+void EventLog_Log_Item::CopyFrom(const EventLog_Log_Item& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.EventLog.Log.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool EventLog_Item::IsInitialized() const {
+bool EventLog_Log_Item::IsInitialized() const {
   return true;
 }
 
-void EventLog_Item::Swap(EventLog_Item* other) {
+void EventLog_Log_Item::Swap(EventLog_Log_Item* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void EventLog_Item::InternalSwap(EventLog_Item* other) {
+void EventLog_Log_Item::InternalSwap(EventLog_Log_Item* other) {
   using std::swap;
-  user_name_.Swap(&other->user_name_);
   source_.Swap(&other->source_);
   description_.Swap(&other->description_);
-  swap(type_, other->type_);
-  swap(level_, other->level_);
   swap(time_, other->time_);
+  swap(level_, other->level_);
   swap(category_, other->category_);
+  swap(event_id_, other->event_id_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string EventLog_Item::GetTypeName() const {
-  return "aspia.proto.EventLog.Item";
+::std::string EventLog_Log_Item::GetTypeName() const {
+  return "aspia.proto.EventLog.Log.Item";
+}
+
+
+// ===================================================================
+
+void EventLog_Log::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int EventLog_Log::kTypeFieldNumber;
+const int EventLog_Log::kItemFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+EventLog_Log::EventLog_Log()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.EventLog.Log)
+}
+EventLog_Log::EventLog_Log(const EventLog_Log& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      item_(from.item_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  type_ = from.type_;
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.EventLog.Log)
+}
+
+void EventLog_Log::SharedCtor() {
+  type_ = 0;
+  _cached_size_ = 0;
+}
+
+EventLog_Log::~EventLog_Log() {
+  // @@protoc_insertion_point(destructor:aspia.proto.EventLog.Log)
+  SharedDtor();
+}
+
+void EventLog_Log::SharedDtor() {
+}
+
+void EventLog_Log::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const EventLog_Log& EventLog_Log::default_instance() {
+  ::protobuf_category_5feventlog_2eproto::InitDefaultsEventLog_Log();
+  return *internal_default_instance();
+}
+
+EventLog_Log* EventLog_Log::New(::google::protobuf::Arena* arena) const {
+  EventLog_Log* n = new EventLog_Log;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void EventLog_Log::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.EventLog.Log)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  item_.Clear();
+  type_ = 0;
+  _internal_metadata_.Clear();
+}
+
+bool EventLog_Log::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.EventLog.Log)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.EventLog.Log.Type type = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::aspia::proto::EventLog_Log_Type >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .aspia.proto.EventLog.Log.Item item = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.EventLog.Log)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.EventLog.Log)
+  return false;
+#undef DO_
+}
+
+void EventLog_Log::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.EventLog.Log)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .aspia.proto.EventLog.Log.Type type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // repeated .aspia.proto.EventLog.Log.Item item = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, this->item(static_cast<int>(i)), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.EventLog.Log)
+}
+
+size_t EventLog_Log::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.EventLog.Log)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // repeated .aspia.proto.EventLog.Log.Item item = 2;
+  {
+    unsigned int count = static_cast<unsigned int>(this->item_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->item(static_cast<int>(i)));
+    }
+  }
+
+  // .aspia.proto.EventLog.Log.Type type = 1;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void EventLog_Log::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const EventLog_Log*>(&from));
+}
+
+void EventLog_Log::MergeFrom(const EventLog_Log& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.EventLog.Log)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  item_.MergeFrom(from.item_);
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+}
+
+void EventLog_Log::CopyFrom(const EventLog_Log& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.EventLog.Log)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EventLog_Log::IsInitialized() const {
+  return true;
+}
+
+void EventLog_Log::Swap(EventLog_Log* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void EventLog_Log::InternalSwap(EventLog_Log* other) {
+  using std::swap;
+  item_.InternalSwap(&other->item_);
+  swap(type_, other->type_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string EventLog_Log::GetTypeName() const {
+  return "aspia.proto.EventLog.Log";
 }
 
 
@@ -564,7 +777,7 @@ void EventLog_Item::InternalSwap(EventLog_Item* other) {
 void EventLog::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int EventLog::kItemFieldNumber;
+const int EventLog::kLogFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 EventLog::EventLog()
@@ -578,7 +791,7 @@ EventLog::EventLog()
 EventLog::EventLog(const EventLog& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      item_(from.item_),
+      log_(from.log_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:aspia.proto.EventLog)
@@ -620,7 +833,7 @@ void EventLog::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  item_.Clear();
+  log_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -640,11 +853,11 @@ bool EventLog::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.EventLog.Item item = 1;
+      // repeated .aspia.proto.EventLog.Log log = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_item()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_log()));
         } else {
           goto handle_unusual;
         }
@@ -677,11 +890,11 @@ void EventLog::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.EventLog.Item item = 1;
+  // repeated .aspia.proto.EventLog.Log log = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->log_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->item(static_cast<int>(i)), output);
+      1, this->log(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -695,14 +908,14 @@ size_t EventLog::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.EventLog.Item item = 1;
+  // repeated .aspia.proto.EventLog.Log log = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->item_size());
+    unsigned int count = static_cast<unsigned int>(this->log_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->item(static_cast<int>(i)));
+          this->log(static_cast<int>(i)));
     }
   }
 
@@ -725,7 +938,7 @@ void EventLog::MergeFrom(const EventLog& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  item_.MergeFrom(from.item_);
+  log_.MergeFrom(from.log_);
 }
 
 void EventLog::CopyFrom(const EventLog& from) {
@@ -745,7 +958,7 @@ void EventLog::Swap(EventLog* other) {
 }
 void EventLog::InternalSwap(EventLog* other) {
   using std::swap;
-  item_.InternalSwap(&other->item_);
+  log_.InternalSwap(&other->log_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

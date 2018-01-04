@@ -126,8 +126,28 @@ private:
     DISALLOW_IMPLICIT_CONSTRUCTORS(ScHandleObjectTraits);
 };
 
+class EventLogObjectTraits
+{
+public:
+    // Closes the handle.
+    static void Close(HANDLE object)
+    {
+        if (IsValid(object))
+            CloseEventLog(object);
+    }
+
+    static bool IsValid(HANDLE object)
+    {
+        return (object != nullptr);
+    }
+
+private:
+    DISALLOW_IMPLICIT_CONSTRUCTORS(EventLogObjectTraits);
+};
+
 using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;
 using ScopedScHandle = ScopedObject<SC_HANDLE, ScHandleObjectTraits>;
+using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
 
 } // namespace aspia
 

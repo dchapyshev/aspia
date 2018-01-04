@@ -13,34 +13,40 @@ package aspia.proto;
 
 message EventLog
 {
-    enum Type
+    message Log
     {
-        TYPE_UNKNOWN     = 0;
-        TYPE_APPLICATION = 1;
-        TYPE_SECURITY    = 2;
-        TYPE_SYSTEM      = 3;
-    }
+        enum Type
+        {
+            TYPE_UNKNOWN     = 0;
+            TYPE_APPLICATION = 1;
+            TYPE_SECURITY    = 2;
+            TYPE_SYSTEM      = 3;
+        }
 
-    enum Level
-    {
-        LEVEL_UNKNOWN       = 0;
-        LEVEL_INFORMATION   = 1;
-        LEVEL_WARNING       = 2;
-        LEVEL_ERROR         = 3;
-        LEVEL_AUDIT_SUCCESS = 4;
-        LEVEL_AUDIT_FAILURE = 5;
-    }
+        enum Level
+        {
+            LEVEL_UNKNOWN       = 0;
+            LEVEL_SUCCESS       = 1;
+            LEVEL_INFORMATION   = 2;
+            LEVEL_WARNING       = 3;
+            LEVEL_ERROR         = 4;
+            LEVEL_AUDIT_SUCCESS = 5;
+            LEVEL_AUDIT_FAILURE = 6;
+        }
 
-    message Item
-    {
+        message Item
+        {
+            Level level        = 1;
+            int64 time         = 2;
+            uint32 category    = 3;
+            uint32 event_id    = 4;
+            string source      = 5;
+            string description = 6;
+        }
+
         Type type          = 1;
-        Level level        = 2;
-        int64 time         = 3;
-        int32 category     = 4;
-        string user_name   = 5;
-        string source      = 6;
-        string description = 7;
+        repeated Item item = 2;
     }
 
-    repeated Item item = 1;
+    repeated Log log = 1;
 }
