@@ -182,7 +182,7 @@ nobase_include_HEADERS =                                         \
 lib_LTLIBRARIES = libprotobuf-lite.la libprotobuf.la libprotoc.la
 
 libprotobuf_lite_la_LIBADD = $(PTHREAD_LIBS)
-libprotobuf_lite_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
+libprotobuf_lite_la_LDFLAGS = -version-info 15:1:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotobuf_lite_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotobuf-lite.map
 EXTRA_libprotobuf_lite_la_DEPENDENCIES = libprotobuf-lite.map
@@ -231,7 +231,7 @@ libprotobuf_lite_la_SOURCES =                                  \
   google/protobuf/io/zero_copy_stream_impl_lite.cc
 
 libprotobuf_la_LIBADD = $(PTHREAD_LIBS)
-libprotobuf_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
+libprotobuf_la_LDFLAGS = -version-info 15:1:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotobuf_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotobuf.map
 EXTRA_libprotobuf_la_DEPENDENCIES = libprotobuf.map
@@ -322,7 +322,7 @@ libprotobuf_la_SOURCES =                                       \
 nodist_libprotobuf_la_SOURCES = $(nodist_libprotobuf_lite_la_SOURCES)
 
 libprotoc_la_LIBADD = $(PTHREAD_LIBS) libprotobuf.la
-libprotoc_la_LDFLAGS = -version-info 15:0:0 -export-dynamic -no-undefined
+libprotoc_la_LDFLAGS = -version-info 15:1:0 -export-dynamic -no-undefined
 if HAVE_LD_VERSION_SCRIPT
 libprotoc_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libprotoc.map
 EXTRA_libprotoc_la_DEPENDENCIES = libprotoc.map
@@ -525,6 +525,7 @@ js_well_known_types_sources =                                  \
 	google/protobuf/compiler/js/well_known_types/timestamp.js
 # We have to cd to $(srcdir) so that out-of-tree builds work properly.
 google/protobuf/compiler/js/well_known_types_embed.cc: js_embed$(EXEEXT) $(js_well_known_types_sources)
+	mkdir -p `dirname $@` && \
 	oldpwd=`pwd` && cd $(srcdir) && \
 	$$oldpwd/js_embed$(EXEEXT) $(js_well_known_types_sources) > $$oldpwd/$@
 
