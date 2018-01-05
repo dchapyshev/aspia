@@ -129,6 +129,8 @@
     <ClCompile Include="category\category_open_files.pb.cc" />
     <ClCompile Include="category\category_optical_drive.cc" />
     <ClCompile Include="category\category_optical_drive.pb.cc" />
+    <ClCompile Include="category\category_os.cc" />
+    <ClCompile Include="category\category_os.pb.cc" />
     <ClCompile Include="category\category_power_options.cc" />
     <ClCompile Include="category\category_power_options.pb.cc" />
     <ClCompile Include="category\category_printer.cc" />
@@ -431,6 +433,8 @@
     <ClInclude Include="category\category_open_files.pb.h" />
     <ClInclude Include="category\category_optical_drive.h" />
     <ClInclude Include="category\category_optical_drive.pb.h" />
+    <ClInclude Include="category\category_os.h" />
+    <ClInclude Include="category\category_os.pb.h" />
     <ClInclude Include="category\category_power_options.h" />
     <ClInclude Include="category\category_power_options.pb.h" />
     <ClInclude Include="category\category_printer.h" />
@@ -641,6 +645,7 @@
     <None Include="category\category_network_card.proto" />
     <None Include="category\category_open_files.proto" />
     <None Include="category\category_optical_drive.proto" />
+    <None Include="category\category_os.proto" />
     <None Include="category\category_power_options.proto" />
     <None Include="category\category_printer.proto" />
     <None Include="category\category_process.proto" />

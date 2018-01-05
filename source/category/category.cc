@@ -31,6 +31,7 @@
 #include "category/category_network_card.h"
 #include "category/category_open_files.h"
 #include "category/category_optical_drive.h"
+#include "category/category_os.h"
 #include "category/category_power_options.h"
 #include "category/category_printer.h"
 #include "category/category_process.h"
@@ -273,6 +274,7 @@ CategoryList CreateCategoryTree()
 
     std::unique_ptr<CategoryGroup> os = std::make_unique<CategoryGroupOS>();
 
+    os->mutable_child_list()->emplace_back(std::make_unique<CategoryOS>());
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryTaskScheduler>());
     os->mutable_child_list()->emplace_back(std::move(users_and_groups));
     os->mutable_child_list()->emplace_back(std::make_unique<CategoryEnvironmentVariables>());
@@ -345,6 +347,7 @@ CategoryMap CreateCategoryMap()
     emplace_back(std::make_unique<CategoryUserGroup>());
     emplace_back(std::make_unique<CategorySession>());
 
+    emplace_back(std::make_unique<CategoryOS>());
     emplace_back(std::make_unique<CategoryTaskScheduler>());
     emplace_back(std::make_unique<CategoryEnvironmentVariables>());
     emplace_back(std::make_unique<CategoryEventLog>());

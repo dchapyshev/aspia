@@ -121,7 +121,7 @@ std::string ProcessEnumerator::GetFileDescription() const
     }
 
     DWORD handle = 0;
-    const DWORD size = GetFileVersionInfoSizeW(file_path, &handle);;
+    const DWORD size = GetFileVersionInfoSizeW(file_path, &handle);
     if (!size)
     {
         DLOG(WARNING) << "GetFileVersionInfoSizeW() failed: " << GetLastSystemErrorString();

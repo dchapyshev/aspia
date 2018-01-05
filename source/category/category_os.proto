@@ -1,0 +1,32 @@
+//
+// PROJECT:         Aspia
+// FILE:            category/category_os.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto;
+
+message OS
+{
+    enum Architecture
+    {
+        ARCHITECTURE_UNKNOWN = 0;
+        ARCHITECTURE_X86     = 1;
+        ARCHITECTURE_X86_64  = 2;
+    }
+
+    string os_name                = 1;
+    string os_version             = 2;
+    Architecture os_architecture  = 3;
+    Architecture cpu_architecture = 4;
+    int64 install_date            = 5;
+    string system_root            = 6;
+    uint64 uptime                 = 7;
+    string computer_name          = 8;
+    int64 local_time              = 9;
+}

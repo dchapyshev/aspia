@@ -910,6 +910,12 @@
     <ClCompile Include="category\category_eventlog.pb.cc">
       <Filter>category</Filter>
     </ClCompile>
+    <ClCompile Include="category\category_os.cc">
+      <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="category\category_os.pb.cc">
+      <Filter>category</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1856,6 +1862,12 @@
     <ClInclude Include="category\category_eventlog.pb.h">
       <Filter>category</Filter>
     </ClInclude>
+    <ClInclude Include="category\category_os.h">
+      <Filter>category</Filter>
+    </ClInclude>
+    <ClInclude Include="category\category_os.pb.h">
+      <Filter>category</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -2021,6 +2033,9 @@
       <Filter>category</Filter>
     </None>
     <None Include="category\category_eventlog.proto">
+      <Filter>category</Filter>
+    </None>
+    <None Include="category\category_os.proto">
       <Filter>category</Filter>
     </None>
   </ItemGroup>
