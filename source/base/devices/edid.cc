@@ -128,16 +128,16 @@ std::unique_ptr<Edid> Edid::Create(std::unique_ptr<uint8_t[]> data, size_t data_
                 return std::unique_ptr<Edid>(new Edid(std::move(data), data_size));
             }
 
-            LOG(WARNING) << "Invalid EDID checksum: " << checksum;
+            DLOG(WARNING) << "Invalid EDID checksum: " << checksum;
         }
         else
         {
-            LOG(WARNING) << "Invalid EDID header: " << edid->header;
+            DLOG(WARNING) << "Invalid EDID header: " << edid->header;
         }
     }
     else
     {
-        LOG(WARNING) << "Invalid EDID data";
+        DLOG(WARNING) << "Invalid EDID data";
     }
 
     return nullptr;

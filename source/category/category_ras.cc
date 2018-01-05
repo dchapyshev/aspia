@@ -153,7 +153,7 @@ std::string CategoryRAS::Serialize()
     DWORD error_code = RasEnumEntriesW(nullptr, nullptr, nullptr, &required_size, &total_entries);
     if (error_code != ERROR_BUFFER_TOO_SMALL)
     {
-        LOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
+        DLOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
         return std::string();
     }
 
@@ -168,7 +168,7 @@ std::string CategoryRAS::Serialize()
     error_code = RasEnumEntriesW(nullptr, nullptr, entry_name, &required_size, &total_entries);
     if (error_code != ERROR_SUCCESS)
     {
-        LOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
+        DLOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
         return std::string();
     }
 

@@ -42,7 +42,7 @@ Desktop Desktop::GetDesktop(const WCHAR* desktop_name)
     HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
     if (!desktop)
     {
-        LOG(ERROR) << "OpenDesktopW() failed: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "OpenDesktopW() failed: " << GetLastSystemErrorString();
         return Desktop();
     }
 
@@ -57,7 +57,7 @@ Desktop Desktop::GetInputDesktop()
     HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
     if (!desktop)
     {
-        LOG(ERROR) << "OpenInputDesktop() failed: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "OpenInputDesktop() failed: " << GetLastSystemErrorString();
         return Desktop();
     }
 
@@ -70,7 +70,7 @@ Desktop Desktop::GetThreadDesktop()
     HDESK desktop = ::GetThreadDesktop(GetCurrentThreadId());
     if (!desktop)
     {
-        LOG(ERROR) << "GetThreadDesktop() failed: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "GetThreadDesktop() failed: " << GetLastSystemErrorString();
         return Desktop();
     }
 
@@ -84,7 +84,7 @@ bool Desktop::GetName(WCHAR* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        LOG(ERROR) << "Failed to query the desktop name: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "Failed to query the desktop name: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -110,7 +110,7 @@ bool Desktop::SetThreadDesktop() const
 {
     if (!::SetThreadDesktop(desktop_))
     {
-        LOG(ERROR) << "SetThreadDesktop() failed: " << GetLastSystemErrorString();
+        DLOG(ERROR) << "SetThreadDesktop() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -128,7 +128,7 @@ void Desktop::Close()
     {
         if (!CloseDesktop(desktop_))
         {
-            LOG(ERROR) << "CloseDesktop() failed: " << GetLastSystemErrorString();
+            DLOG(ERROR) << "CloseDesktop() failed: " << GetLastSystemErrorString();
         }
     }
 

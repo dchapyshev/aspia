@@ -15,7 +15,7 @@
 namespace aspia {
 
 static const WCHAR kShellIcons[] =
-L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons";
+    L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons";
 
 static const WCHAR kShell32LibraryName[] = L"shell32.dll";
 

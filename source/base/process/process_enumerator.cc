@@ -22,7 +22,7 @@ ProcessEnumerator::ProcessEnumerator()
     snapshot_.Reset(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
     if (!snapshot_.IsValid())
     {
-        LOG(WARNING) << "CreateToolhelp32Snapshot() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "CreateToolhelp32Snapshot() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -31,7 +31,7 @@ ProcessEnumerator::ProcessEnumerator()
 
     if (!Process32FirstW(snapshot_, &process_entry_))
     {
-        LOG(WARNING) << "Process32FirstW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "Process32FirstW() failed: " << GetLastSystemErrorString();
         snapshot_.Reset();
     }
     else
@@ -50,7 +50,7 @@ ProcessEnumerator::ProcessEnumerator()
 
         if (!current_process_.IsValid())
         {
-            LOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
+            DLOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
         }
     }
 }
@@ -67,7 +67,7 @@ void ProcessEnumerator::Advance()
         const DWORD error_code = GetLastError();
         if (error_code != ERROR_NO_MORE_FILES)
         {
-            LOG(WARNING) << "Process32NextW() failed: " << GetLastSystemErrorString();
+            DLOG(WARNING) << "Process32NextW() failed: " << GetLastSystemErrorString();
         }
 
         snapshot_.Reset();
@@ -81,7 +81,7 @@ void ProcessEnumerator::Advance()
                                            process_entry_.th32ProcessID));
         if (!current_process_.IsValid())
         {
-            LOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
+            DLOG(WARNING) << "OpenProcess() failed: " << GetLastSystemErrorString();
         }
     }
 }
@@ -100,7 +100,7 @@ std::string ProcessEnumerator::GetFilePath() const
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
     {
-        LOG(WARNING) << "GetModuleFileNameExW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetModuleFileNameExW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -116,7 +116,7 @@ std::string ProcessEnumerator::GetFileDescription() const
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
     {
-        LOG(WARNING) << "GetModuleFileNameExW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetModuleFileNameExW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -124,7 +124,7 @@ std::string ProcessEnumerator::GetFileDescription() const
     const DWORD size = GetFileVersionInfoSizeW(file_path, &handle);;
     if (!size)
     {
-        LOG(WARNING) << "GetFileVersionInfoSizeW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetFileVersionInfoSizeW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -132,7 +132,7 @@ std::string ProcessEnumerator::GetFileDescription() const
 
     if (!GetFileVersionInfoW(file_path, handle, size, buffer.get()))
     {
-        LOG(WARNING) << "GetFileVersionInfoW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetFileVersionInfoW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -149,7 +149,7 @@ std::string ProcessEnumerator::GetFileDescription() const
                         reinterpret_cast<LPVOID*>(&translate),
                         &value_size))
     {
-        LOG(WARNING) << "VerQueryValueW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "VerQueryValueW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -164,7 +164,7 @@ std::string ProcessEnumerator::GetFileDescription() const
                         reinterpret_cast<LPVOID*>(&description),
                         &value_size))
     {
-        LOG(WARNING) << "VerQueryValueW() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "VerQueryValueW() failed: " << GetLastSystemErrorString();
         return std::string();
     }
 
@@ -181,7 +181,7 @@ uint64_t ProcessEnumerator::GetUsedMemory() const
 
     if (!GetProcessMemoryInfo(current_process_.Get(), &memory_counters, sizeof(memory_counters)))
     {
-        LOG(WARNING) << "GetProcessMemoryInfo() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetProcessMemoryInfo() failed: " << GetLastSystemErrorString();
         return 0;
     }
 
@@ -198,7 +198,7 @@ uint64_t ProcessEnumerator::GetUsedSwap() const
 
     if (!GetProcessMemoryInfo(current_process_.Get(), &memory_counters, sizeof(memory_counters)))
     {
-        LOG(WARNING) << "GetProcessMemoryInfo() failed: " << GetLastSystemErrorString();
+        DLOG(WARNING) << "GetProcessMemoryInfo() failed: " << GetLastSystemErrorString();
         return 0;
     }
 

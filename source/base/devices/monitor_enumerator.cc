@@ -32,7 +32,7 @@ std::unique_ptr<Edid> MonitorEnumerator::GetEDID() const
     LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        LOG(WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
+        DLOG(WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
         return nullptr;
     }
 
@@ -51,15 +51,15 @@ std::unique_ptr<Edid> MonitorEnumerator::GetEDID() const
 
         if (status != ERROR_SUCCESS)
         {
-            LOG(WARNING) << "Unable to read EDID data from registry: "
-                         << SystemErrorCodeToString(status);
+            DLOG(WARNING) << "Unable to read EDID data from registry: "
+                          << SystemErrorCodeToString(status);
             return nullptr;
         }
     }
 
     if (type != REG_BINARY)
     {
-        LOG(WARNING) << "Unexpected data type: " << type;
+        DLOG(WARNING) << "Unexpected data type: " << type;
         return nullptr;
     }
 

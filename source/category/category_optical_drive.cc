@@ -1357,8 +1357,8 @@ std::string CategoryOpticalDrive::Serialize()
 
         if (!device.Open(device_path))
         {
-            LOG(WARNING) << "Unable to open device: " << device_path
-                         << " error code: " << GetLastSystemErrorCode();
+            DLOG(WARNING) << "Unable to open device: " << device_path
+                          << " error code: " << GetLastSystemErrorCode();
             continue;
         }
 
@@ -1367,7 +1367,7 @@ std::string CategoryOpticalDrive::Serialize()
 
         if (!device.GetInquiryData(&inquiry_data))
         {
-            LOG(WARNING) << "device.Inquiry() failed: " << GetLastSystemErrorString();
+            DLOG(WARNING) << "device.Inquiry() failed: " << GetLastSystemErrorString();
             continue;
         }
 

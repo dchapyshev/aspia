@@ -18,8 +18,8 @@ bool ViewerToolBar::CreateViewerToolBar(HWND parent, proto::SessionType session_
 
     if (!Create(parent, nullptr, nullptr, style))
     {
-        DLOG(ERROR) << "Unable to create viewer toolbar window: "
-                    << GetLastSystemErrorString();
+        LOG(ERROR) << "Unable to create viewer toolbar window: "
+                   << GetLastSystemErrorString();
         return false;
     }
 
