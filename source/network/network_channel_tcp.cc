@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-static const size_t kMaxMessageSize = 5 * 1024 * 1024; // 5MB
+static const size_t kMaxMessageSize = 10 * 1024 * 1024; // 10MB
 
 static bool IsFailureCode(const std::error_code& code)
 {

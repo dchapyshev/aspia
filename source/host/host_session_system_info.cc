@@ -5,8 +5,10 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/host_session_system_info.h"
 #include "base/process/process.h"
+#include "base/byte_order.h"
+#include "codec/compressor_zlib.h"
+#include "host/host_session_system_info.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 #include "proto/system_info_session.pb.h"
@@ -14,7 +16,68 @@
 
 namespace aspia {
 
-static const size_t kGuidLength = 38;
+namespace {
+
+static constexpr size_t kGuidLength = 38;
+
+// If the size of the received data exceeds this value, then the data will not be transferred.
+static constexpr size_t kMaxMessageSize = 8 * 1024 * 1024; // 8 MB
+
+// If the message size exceeds |kMaxUncompressedMessageSize|, then the data is compressed.
+static constexpr size_t kMaxUncompressedMessageSize = 4 * 1024; // 4 kB
+
+// The compression ratio can be in the range of 1 to 9.
+static constexpr int32_t kCompressionRatio = 6;
+
+void CompressMessageData(const std::string& input_data, std::string* output_data)
+{
+    size_t output_data_size = input_data.size() + input_data.size() / 100 + 16;
+
+    output_data->resize(output_data_size + sizeof(uint32_t));
+
+    uint8_t* output_buffer = reinterpret_cast<uint8_t*>(output_data->data());
+    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(input_data.data());
+
+    // The first 4 bytes store the size of the original (uncompressed) buffer.
+    *reinterpret_cast<uint32_t*>(output_buffer) =
+        HostByteOrderToNetwork(static_cast<uint32_t>(input_data.size()));
+    output_buffer += sizeof(uint32_t);
+
+    size_t input_buffer_pos = 0;
+    size_t output_buffer_pos = 0;
+
+    bool compress_again = true;
+
+    CompressorZLIB compressor(kCompressionRatio);
+
+    while (compress_again)
+    {
+        Compressor::CompressorFlush flush = Compressor::CompressorNoFlush;
+
+        if (input_buffer_pos == input_data.size())
+            flush = Compressor::CompressorFinish;
+
+        size_t consumed = 0;
+        size_t written = 0;
+
+        compress_again = compressor.Process(
+            input_buffer + input_buffer_pos, input_data.size() - input_buffer_pos,
+            output_buffer + output_buffer_pos, output_data_size - output_buffer_pos,
+            flush, &consumed, &written);
+
+        input_buffer_pos += consumed;
+        output_buffer_pos += written;
+
+        // If we have filled the message or we have reached the end of stream.
+        if (output_buffer_pos == output_data_size || !compress_again)
+        {
+            output_data->resize(output_buffer_pos);
+            return;
+        }
+    }
+}
+
+} // namespace
 
 void HostSessionSystemInfo::Run(const std::wstring& channel_id)
 {
@@ -66,9 +129,26 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
             const auto category = map_.find(guid);
             if (category != map_.end())
             {
-                // TODO: COMPRESSOR_ZLIB support.
-                reply.set_compressor(proto::system_info::HostToClient::COMPRESSOR_RAW);
-                reply.set_data(category->second->Serialize());
+                std::string data = category->second->Serialize();
+
+                if (data.size() > kMaxUncompressedMessageSize)
+                {
+                    reply.set_compressor(proto::system_info::HostToClient::COMPRESSOR_ZLIB);
+                    CompressMessageData(data, reply.mutable_data());
+                }
+                else
+                {
+                    reply.set_compressor(proto::system_info::HostToClient::COMPRESSOR_RAW);
+                    reply.set_data(std::move(data));
+                }
+            }
+
+            size_t message_size = reply.ByteSizeLong();
+
+            if (message_size > kMaxMessageSize)
+            {
+                LOG(WARNING) << "Too much data: " << message_size;
+                reply.clear_data();
             }
 
             // Sending response to the request.
