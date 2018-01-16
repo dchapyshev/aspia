@@ -91,6 +91,7 @@ void NetworkChannelTcp::DoSendHello()
     write_buffer_ = encryptor_->HelloMessage();
     if (write_buffer_.empty())
     {
+        DLOG(ERROR) << "Empty hello message";
         DoDisconnect();
         return;
     }
@@ -98,6 +99,7 @@ void NetworkChannelTcp::DoSendHello()
     write_size_ = static_cast<MessageSizeType>(write_buffer_.size());
     if (write_size_ > kMaxMessageSize)
     {
+        DLOG(ERROR) << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
@@ -170,6 +172,7 @@ void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
     read_size_ = NetworkByteOrderToHost(read_size_);
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
+        DLOG(ERROR) << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
@@ -196,6 +199,7 @@ void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
 
     if (!encryptor_->ReadHelloMessage(read_buffer_))
     {
+        DLOG(ERROR) << "Unable to read hello message";
         DoDisconnect();
         return;
     }
@@ -234,6 +238,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
+        DLOG(ERROR) << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
@@ -261,6 +266,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 
     if (decrypted_buffer.empty())
     {
+        DLOG(ERROR) << "Empty decrypted buffer";
         DoDisconnect();
         return;
     }
@@ -310,6 +316,7 @@ void NetworkChannelTcp::DoNextWriteTask()
 
     if (source_buffer.empty())
     {
+        DLOG(ERROR) << "Empty source buffer";
         DoDisconnect();
         return;
     }
@@ -317,6 +324,7 @@ void NetworkChannelTcp::DoNextWriteTask()
     write_buffer_ = encryptor_->Encrypt(source_buffer);
     if (write_buffer_.empty())
     {
+        DLOG(ERROR) << "Empty encrypted buffer";
         DoDisconnect();
         return;
     }
@@ -325,6 +333,7 @@ void NetworkChannelTcp::DoNextWriteTask()
 
     if (write_size_ > kMaxMessageSize)
     {
+        DLOG(ERROR) << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
