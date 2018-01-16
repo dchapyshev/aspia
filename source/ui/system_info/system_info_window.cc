@@ -37,6 +37,14 @@ SystemInfoWindow::SystemInfoWindow(Delegate* delegate)
 
 SystemInfoWindow::~SystemInfoWindow()
 {
+    GUITHREADINFO thread_info;
+    thread_info.cbSize = sizeof(thread_info);
+
+    if (GetGUIThreadInfo(ui_thread_.thread_id(), &thread_info))
+    {
+        ::PostMessageW(thread_info.hwndActive, WM_CLOSE, 0, 0);
+    }
+
     ui_thread_.Stop();
 }
 
