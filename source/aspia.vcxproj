@@ -253,7 +253,6 @@
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\power_session.pb.cc" />
     <ClCompile Include="proto\power_session_message.pb.cc" />
-    <ClCompile Include="proto\status.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="report\column_list.cc" />
     <ClCompile Include="report\group.cc" />
@@ -279,6 +278,7 @@
     <ClCompile Include="ui\file_transfer\file_manager_helpers.cc" />
     <ClCompile Include="ui\file_transfer\file_manager_panel.cc" />
     <ClCompile Include="ui\file_transfer\file_remove_dialog.cc" />
+    <ClCompile Include="ui\file_transfer\file_status_code.cc" />
     <ClCompile Include="ui\file_transfer\file_status_dialog.cc" />
     <ClCompile Include="ui\file_transfer\file_toolbar.cc" />
     <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc" />
@@ -286,7 +286,6 @@
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\power\power_manage_dialog.cc" />
     <ClCompile Include="ui\power\power_session_dialog.cc" />
-    <ClCompile Include="ui\status_code.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\system_info\category_select_dialog.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
@@ -569,7 +568,6 @@
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\power_session.pb.h" />
     <ClInclude Include="proto\power_session_message.pb.h" />
-    <ClInclude Include="proto\status.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="report\column_list.h" />
     <ClInclude Include="report\group.h" />
@@ -598,6 +596,7 @@
     <ClInclude Include="ui\file_transfer\file_manager_helpers.h" />
     <ClInclude Include="ui\file_transfer\file_manager_panel.h" />
     <ClInclude Include="ui\file_transfer\file_remove_dialog.h" />
+    <ClInclude Include="ui\file_transfer\file_status_code.h" />
     <ClInclude Include="ui\file_transfer\file_status_dialog.h" />
     <ClInclude Include="ui\file_transfer\file_toolbar.h" />
     <ClInclude Include="ui\file_transfer\file_transfer_dialog.h" />
@@ -606,7 +605,6 @@
     <ClInclude Include="ui\power\power_manage_dialog.h" />
     <ClInclude Include="ui\power\power_session_dialog.h" />
     <ClInclude Include="ui\resource.h" />
-    <ClInclude Include="ui\status_code.h" />
     <ClInclude Include="ui\status_dialog.h" />
     <ClInclude Include="ui\system_info\category_select_dialog.h" />
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
@@ -673,7 +671,6 @@
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\power_session.proto" />
     <None Include="proto\power_session_message.proto" />
-    <None Include="proto\status.proto" />
     <None Include="proto\system_info_session.proto" />
   </ItemGroup>
   <ItemGroup>

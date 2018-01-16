@@ -6,7 +6,6 @@
 //
 
 #include "ui/status_dialog.h"
-#include "ui/status_code.h"
 #include "base/logging.h"
 
 #include <atlctrls.h>
@@ -29,9 +28,70 @@ void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
     SetWindowTextW(message);
 }
 
-void StatusDialog::SetStatus(proto::Status status)
+void StatusDialog::SetConnectionStatus(ConnectionStatus status)
 {
-    AddMessage(StatusCodeToString(status));
+    UINT resource_id;
+
+    switch (status)
+    {
+        case ConnectionStatus::SUCCESS:
+            resource_id = IDS_CONN_STATUS_SUCCESS;
+            break;
+
+        case ConnectionStatus::INVALID_ADDRESS:
+            resource_id = IDS_CONN_STATUS_INVALID_ADDRESS;
+            break;
+
+        case ConnectionStatus::INVALID_PORT:
+            resource_id = IDS_CONN_STATUS_INVALID_PORT;
+            break;
+
+        case ConnectionStatus::CONNECT_TIMEOUT:
+            resource_id = IDS_CONN_STATUS_CONNECT_TIMEOUT;
+            break;
+
+        case ConnectionStatus::CONNECT_ERROR:
+            resource_id = IDS_CONN_STATUS_CONNECT_ERROR;
+            break;
+
+        case ConnectionStatus::CONNECTING:
+            resource_id = IDS_CONN_STATUS_CONNECTING;
+            break;
+
+        default:
+            resource_id = IDS_CONN_STATUS_UNKNOWN;
+            break;
+    }
+
+    CString text;
+    text.LoadStringW(resource_id);
+
+    AddMessage(text);
+}
+
+void StatusDialog::SetAuthorizationStatus(proto::AuthStatus status)
+{
+    UINT resource_id;
+
+    switch (status)
+    {
+        case proto::AUTH_STATUS_SUCCESS:
+            resource_id = IDS_AUTH_STATUS_SUCCESS;
+            break;
+
+        case proto::AUTH_STATUS_ACCESS_DENIED:
+            resource_id = IDS_AUTH_STATUS_ACCESS_DENIED;
+            break;
+
+        default:
+            resource_id = IDS_AUTH_STATUS_UNKNOWN;
+            break;
+    }
+
+    CString text;
+    text.LoadStringW(resource_id);
+
+    AddMessage(text);
 }
 
 LRESULT StatusDialog::OnInitDialog(

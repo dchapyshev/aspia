@@ -85,7 +85,6 @@ namespace auth {
 void HostToClient::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int HostToClient::kSessionTypeFieldNumber;
 const int HostToClient::kStatusFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -102,16 +101,12 @@ HostToClient::HostToClient(const HostToClient& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&session_type_, &from.session_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&status_) -
-    reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
+  status_ = from.status_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.HostToClient)
 }
 
 void HostToClient::SharedCtor() {
-  ::memset(&session_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&status_) -
-      reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
+  status_ = 0;
   _cached_size_ = 0;
 }
 
@@ -147,9 +142,7 @@ void HostToClient::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&session_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&status_) -
-      reinterpret_cast<char*>(&session_type_)) + sizeof(status_));
+  status_ = 0;
   _internal_metadata_.Clear();
 }
 
@@ -169,7 +162,7 @@ bool HostToClient::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.SessionType session_type = 1;
+      // .aspia.proto.AuthStatus status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -177,22 +170,7 @@ bool HostToClient::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.Status status = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_status(static_cast< ::aspia::proto::Status >(value));
+          set_status(static_cast< ::aspia::proto::AuthStatus >(value));
         } else {
           goto handle_unusual;
         }
@@ -225,16 +203,10 @@ void HostToClient::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.SessionType session_type = 1;
-  if (this->session_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->session_type(), output);
-  }
-
-  // .aspia.proto.Status status = 2;
+  // .aspia.proto.AuthStatus status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->status(), output);
+      1, this->status(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -248,13 +220,7 @@ size_t HostToClient::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.SessionType session_type = 1;
-  if (this->session_type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
-  }
-
-  // .aspia.proto.Status status = 2;
+  // .aspia.proto.AuthStatus status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -279,9 +245,6 @@ void HostToClient::MergeFrom(const HostToClient& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.session_type() != 0) {
-    set_session_type(from.session_type());
-  }
   if (from.status() != 0) {
     set_status(from.status());
   }
@@ -304,7 +267,6 @@ void HostToClient::Swap(HostToClient* other) {
 }
 void HostToClient::InternalSwap(HostToClient* other) {
   using std::swap;
-  swap(session_type_, other->session_type_);
   swap(status_, other->status_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);

@@ -76,6 +76,18 @@ const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
 const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
 const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
 
+enum AuthStatus {
+  AUTH_STATUS_UNKNOWN = 0,
+  AUTH_STATUS_SUCCESS = 1,
+  AUTH_STATUS_ACCESS_DENIED = 2,
+  AuthStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  AuthStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool AuthStatus_IsValid(int value);
+const AuthStatus AuthStatus_MIN = AUTH_STATUS_UNKNOWN;
+const AuthStatus AuthStatus_MAX = AUTH_STATUS_ACCESS_DENIED;
+const int AuthStatus_ARRAYSIZE = AuthStatus_MAX + 1;
+
 // ===================================================================
 
 
@@ -102,6 +114,7 @@ namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::AuthMethod> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::SessionType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::AuthStatus> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

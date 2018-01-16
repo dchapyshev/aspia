@@ -29,7 +29,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include "auth_session_message.pb.h"
-#include "status.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_auth_5fsession_2eproto {
@@ -149,23 +148,16 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.SessionType session_type = 1;
-  void clear_session_type();
-  static const int kSessionTypeFieldNumber = 1;
-  ::aspia::proto::SessionType session_type() const;
-  void set_session_type(::aspia::proto::SessionType value);
-
-  // .aspia.proto.Status status = 2;
+  // .aspia.proto.AuthStatus status = 1;
   void clear_status();
-  static const int kStatusFieldNumber = 2;
-  ::aspia::proto::Status status() const;
-  void set_status(::aspia::proto::Status value);
+  static const int kStatusFieldNumber = 1;
+  ::aspia::proto::AuthStatus status() const;
+  void set_status(::aspia::proto::AuthStatus value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.HostToClient)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  int session_type_;
   int status_;
   mutable int _cached_size_;
   friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
@@ -316,29 +308,15 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #endif  // __GNUC__
 // HostToClient
 
-// .aspia.proto.SessionType session_type = 1;
-inline void HostToClient::clear_session_type() {
-  session_type_ = 0;
-}
-inline ::aspia::proto::SessionType HostToClient::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.session_type)
-  return static_cast< ::aspia::proto::SessionType >(session_type_);
-}
-inline void HostToClient::set_session_type(::aspia::proto::SessionType value) {
-  
-  session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.session_type)
-}
-
-// .aspia.proto.Status status = 2;
+// .aspia.proto.AuthStatus status = 1;
 inline void HostToClient::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::Status HostToClient::status() const {
+inline ::aspia::proto::AuthStatus HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.status)
-  return static_cast< ::aspia::proto::Status >(status_);
+  return static_cast< ::aspia::proto::AuthStatus >(status_);
 }
-inline void HostToClient::set_status(::aspia::proto::Status value) {
+inline void HostToClient::set_status(::aspia::proto::AuthStatus value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.status)

@@ -9,7 +9,7 @@
 #define _ASPIA_UI__STATUS_DIALOG_H
 
 #include "base/macros.h"
-#include "proto/status.pb.h"
+#include "proto/auth_session.pb.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -37,8 +37,20 @@ public:
     StatusDialog(Delegate* delegate);
     ~StatusDialog() = default;
 
+    enum class ConnectionStatus
+    {
+        UNKNOWN         = 0,
+        SUCCESS         = 1,
+        INVALID_ADDRESS = 2,
+        INVALID_PORT    = 3,
+        CONNECT_TIMEOUT = 4,
+        CONNECT_ERROR   = 5,
+        CONNECTING      = 6
+    };
+
     void SetDestonation(const std::wstring& address, uint16_t port);
-    void SetStatus(proto::Status status);
+    void SetConnectionStatus(ConnectionStatus status);
+    void SetAuthorizationStatus(proto::AuthStatus status);
 
 private:
     BEGIN_MSG_MAP(StatusDialog)

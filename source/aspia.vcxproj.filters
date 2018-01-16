@@ -349,9 +349,6 @@
     <ClCompile Include="proto\file_transfer_session_message.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="proto\status.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -579,9 +576,6 @@
     </ClCompile>
     <ClCompile Include="base\devices\smbios.cc">
       <Filter>base\devices</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\status_code.cc">
-      <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="base\devices\edid.cc">
       <Filter>base\devices</Filter>
@@ -915,6 +909,9 @@
     </ClCompile>
     <ClCompile Include="category\category_os.pb.cc">
       <Filter>category</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\file_transfer\file_status_code.cc">
+      <Filter>ui\file_transfer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1268,17 +1265,11 @@
     <ClInclude Include="proto\file_transfer_session_message.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="proto\status.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="protocol\filesystem.h">
       <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\status_code.h">
-      <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="base\memory\aligned_memory.h">
       <Filter>base\memory</Filter>
@@ -1868,6 +1859,9 @@
     <ClInclude Include="category\category_os.pb.h">
       <Filter>category</Filter>
     </ClInclude>
+    <ClInclude Include="ui\file_transfer\file_status_code.h">
+      <Filter>ui\file_transfer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -1898,9 +1892,6 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\file_transfer_session_message.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\status.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\build.cmd">

@@ -9,7 +9,7 @@
 #include "ui/file_transfer/file_remove_dialog.h"
 #include "ui/file_transfer/file_manager.h"
 #include "ui/file_transfer/file_manager_helpers.h"
-#include "ui/status_code.h"
+#include "ui/file_transfer/file_status_code.h"
 #include "base/logging.h"
 
 #include <uxtheme.h>

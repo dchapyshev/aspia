@@ -93,7 +93,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 void Client::OnStatusDialogOpen()
 {
     status_dialog_.SetDestonation(config_.address(), config_.port());
-    status_dialog_.SetStatus(status_);
+    status_dialog_.SetAuthorizationStatus(status_);
 }
 
 void Client::OpenStatusDialog()
@@ -107,11 +107,10 @@ void Client::OnAuthRequestSended()
 }
 
 static std::unique_ptr<ClientSession> CreateSession(
-    proto::SessionType session_type,
     const ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    switch (session_type)
+    switch (config.session_type())
     {
         case proto::SESSION_TYPE_DESKTOP_MANAGE:
             return std::make_unique<ClientSessionDesktopManage>(config, channel_proxy);
@@ -129,22 +128,22 @@ static std::unique_ptr<ClientSession> CreateSession(
             return std::make_unique<ClientSessionSystemInfo>(config, channel_proxy);
 
         default:
-            LOG(ERROR) << "Invalid session type: " << session_type;
+            LOG(ERROR) << "Invalid session type: " << config.session_type();
             return nullptr;
     }
 }
 
 void Client::DoAuthorize(const IOBuffer& buffer)
 {
-    proto::auth::HostToClient result;
+    proto::auth::HostToClient reply;
 
-    if (ParseMessage(buffer, result))
+    if (ParseMessage(buffer, reply))
     {
-        status_ = result.status();
+        status_ = reply.status();
 
-        if (status_ == proto::Status::STATUS_SUCCESS)
+        if (status_ == proto::AUTH_STATUS_SUCCESS)
         {
-            session_ = CreateSession(result.session_type(), config_, channel_proxy_);
+            session_ = CreateSession(config_, channel_proxy_);
             if (session_)
                 return;
         }

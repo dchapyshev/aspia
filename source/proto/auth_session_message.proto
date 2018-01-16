@@ -28,3 +28,10 @@ enum SessionType
     SESSION_TYPE_FILE_TRANSFER  = 8;
     SESSION_TYPE_SYSTEM_INFO    = 16;
 }
+
+enum AuthStatus
+{
+    AUTH_STATUS_UNKNOWN       = 0;
+    AUTH_STATUS_SUCCESS       = 1;
+    AUTH_STATUS_ACCESS_DENIED = 2;
+}

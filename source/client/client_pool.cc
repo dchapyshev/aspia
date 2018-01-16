@@ -34,16 +34,16 @@ void ClientPool::OnStatusDialogOpen()
 {
     if (!NetworkClientTcp::IsValidHostName(config_.address()))
     {
-        status_dialog_.SetStatus(proto::STATUS_INVALID_ADDRESS);
+        status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::INVALID_ADDRESS);
     }
     else if (!NetworkClientTcp::IsValidPort(config_.port()))
     {
-        status_dialog_.SetStatus(proto::STATUS_INVALID_PORT);
+        status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::INVALID_PORT);
     }
     else
     {
         status_dialog_.SetDestonation(config_.address(), config_.port());
-        status_dialog_.SetStatus(proto::STATUS_CONNECTING);
+        status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::CONNECTING);
 
         network_client_ = std::make_unique<NetworkClientTcp>(
             config_.address(),
@@ -62,7 +62,7 @@ void ClientPool::OnConnect(std::shared_ptr<NetworkChannel> channel)
 
     if (!channel)
     {
-        status_dialog_.SetStatus(proto::STATUS_CONNECT_ERROR);
+        status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::CONNECT_ERROR);
         return;
     }
 

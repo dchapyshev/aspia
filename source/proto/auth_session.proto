@@ -10,14 +10,12 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "auth_session_message.proto";
-import "status.proto";
 
 package aspia.proto.auth;
 
 message HostToClient
 {
-    SessionType session_type = 1;
-    Status status            = 2;
+    AuthStatus status = 1;
 }
 
 message ClientToHost

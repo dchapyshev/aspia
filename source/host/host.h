@@ -33,7 +33,7 @@ public:
 
 private:
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
-    void OnAuthResultSended(proto::SessionType session_type, proto::Status status);
+    void OnAuthResultSended(proto::SessionType session_type, proto::AuthStatus status);
     void DoAuthorize(IOBuffer& buffer);
 
     std::shared_ptr<NetworkChannel> channel_;

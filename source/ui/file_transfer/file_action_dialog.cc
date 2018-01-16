@@ -6,7 +6,7 @@
 //
 
 #include "ui/file_transfer/file_action_dialog.h"
-#include "ui/status_code.h"
+#include "ui/file_transfer/file_status_code.h"
 
 namespace aspia {
 

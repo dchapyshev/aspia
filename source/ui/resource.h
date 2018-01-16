@@ -338,6 +338,11 @@
 #define IDS_SI_FILTER_JSON                          3011
 #define IDS_SI_FILTER_XML                           3012
 
+// Authorization Status
+#define IDS_AUTH_STATUS_UNKNOWN                     10000
+#define IDS_AUTH_STATUS_SUCCESS                     10001
+#define IDS_AUTH_STATUS_ACCESS_DENIED               10002
+
 // Request Status
 #define IDS_REQUEST_STATUS_FIRST                    11000
 #define IDS_REQUEST_STATUS_UNKNOWN                  11000
@@ -354,17 +359,13 @@
 #define IDS_REQUEST_STATUS_FILE_READ_ERROR          11011
 #define IDS_REQUEST_STATUS_LAST                     11011
 
-// Status
-#define IDS_STATUS_FIRST                            10000
-#define IDS_STATUS_SUCCESS                          10000
-#define IDS_STATUS_NO_CONSOLE_SESSION               10001
-#define IDS_STATUS_ACCESS_DENIED                    10002
-#define IDS_STATUS_INVALID_ADDRESS                  10003
-#define IDS_STATUS_INVALID_PORT                     10004
-#define IDS_STATUS_CONNECT_TIMEOUT                  10005
-#define IDS_STATUS_CONNECT_ERROR                    10006
-#define IDS_STATUS_CONNECTING                       10007
-#define IDS_STATUS_LAST                             10007
-#define IDS_STATUS_UNKNOWN                          10009
+// Connection Status
+#define IDS_CONN_STATUS_UNKNOWN                     12000
+#define IDS_CONN_STATUS_SUCCESS                     12001
+#define IDS_CONN_STATUS_INVALID_ADDRESS             12002
+#define IDS_CONN_STATUS_INVALID_PORT                12003
+#define IDS_CONN_STATUS_CONNECT_TIMEOUT             12004
+#define IDS_CONN_STATUS_CONNECT_ERROR               12005
+#define IDS_CONN_STATUS_CONNECTING                  12006
 
 #endif // _ASPIA_UI__RESOURCE_H
