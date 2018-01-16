@@ -306,15 +306,6 @@ static void ScaleARGBBilinearDown(int src_width,
     }
   }
 #endif
-#if defined(HAS_INTERPOLATEROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src_argb, 4) &&
-      IS_ALIGNED(src_stride, 4)) {
-    InterpolateRow = InterpolateRow_Any_DSPR2;
-    if (IS_ALIGNED(clip_src_width, 4)) {
-      InterpolateRow = InterpolateRow_DSPR2;
-    }
-  }
-#endif
 #if defined(HAS_INTERPOLATEROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     InterpolateRow = InterpolateRow_Any_MSA;
@@ -417,12 +408,6 @@ static void ScaleARGBBilinearUp(int src_width,
     if (IS_ALIGNED(dst_width, 4)) {
       InterpolateRow = InterpolateRow_NEON;
     }
-  }
-#endif
-#if defined(HAS_INTERPOLATEROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(dst_argb, 4) &&
-      IS_ALIGNED(dst_stride, 4)) {
-    InterpolateRow = InterpolateRow_DSPR2;
   }
 #endif
 #if defined(HAS_INTERPOLATEROW_MSA)
@@ -587,15 +572,6 @@ static void ScaleYUVToARGBBilinearUp(int src_width,
     }
   }
 #endif
-#if defined(HAS_I422TOARGBROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src_width, 4) &&
-      IS_ALIGNED(src_y, 4) && IS_ALIGNED(src_stride_y, 4) &&
-      IS_ALIGNED(src_u, 2) && IS_ALIGNED(src_stride_u, 2) &&
-      IS_ALIGNED(src_v, 2) && IS_ALIGNED(src_stride_v, 2) &&
-      IS_ALIGNED(dst_argb, 4) && IS_ALIGNED(dst_stride_argb, 4)) {
-    I422ToARGBRow = I422ToARGBRow_DSPR2;
-  }
-#endif
 #if defined(HAS_I422TOARGBROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     I422ToARGBRow = I422ToARGBRow_Any_MSA;
@@ -630,12 +606,6 @@ static void ScaleYUVToARGBBilinearUp(int src_width,
     if (IS_ALIGNED(dst_width, 4)) {
       InterpolateRow = InterpolateRow_NEON;
     }
-  }
-#endif
-#if defined(HAS_INTERPOLATEROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(dst_argb, 4) &&
-      IS_ALIGNED(dst_stride_argb, 4)) {
-    InterpolateRow = InterpolateRow_DSPR2;
   }
 #endif
 #if defined(HAS_INTERPOLATEROW_MSA)

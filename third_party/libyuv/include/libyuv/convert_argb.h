@@ -63,6 +63,71 @@ int I420ToABGR(const uint8* src_y,
                int width,
                int height);
 
+// Convert I010 to ARGB.
+LIBYUV_API
+int I010ToARGB(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height);
+
+// Convert I010 to ARGB.
+LIBYUV_API
+int I010ToARGB(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height);
+
+// Convert I010 to ABGR.
+LIBYUV_API
+int I010ToABGR(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_abgr,
+               int dst_stride_abgr,
+               int width,
+               int height);
+
+// Convert H010 to ARGB.
+LIBYUV_API
+int H010ToARGB(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height);
+
+// Convert H010 to ABGR.
+LIBYUV_API
+int H010ToABGR(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_abgr,
+               int dst_stride_abgr,
+               int width,
+               int height);
+
 // Convert I422 to ARGB.
 LIBYUV_API
 int I422ToARGB(const uint8* src_y,
@@ -442,6 +507,15 @@ int ARGB4444ToARGB(const uint8* src_frame,
                    int dst_stride_argb,
                    int width,
                    int height);
+
+// Convert AR30 To ARGB.
+LIBYUV_API
+int AR30ToARGB(const uint8* src_ar30,
+               int src_stride_ar30,
+               uint8* dst_argb,
+               int dst_stride_argb,
+               int width,
+               int height);
 
 #ifdef HAVE_JPEG
 // src_width/height provided by capture

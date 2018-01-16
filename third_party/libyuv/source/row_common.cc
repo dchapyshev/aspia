@@ -165,6 +165,23 @@ void ARGB4444ToARGBRow_C(const uint8* src_argb4444,
   }
 }
 
+void AR30ToARGBRow_C(const uint8* src_ar30, uint8* dst_argb, int width) {
+  int x;
+  for (x = 0; x < width; ++x) {
+    uint32 ar30 = *(uint32*)src_ar30;
+    uint32 b = ar30 & 0x3ff;
+    uint32 g = (ar30 >> 10) & 0x3ff;
+    uint32 r = (ar30 >> 20) & 0x3ff;
+    uint32 a = (ar30 >> 30) & 0x3;
+    dst_argb[0] = b >> 2;
+    dst_argb[1] = g >> 2;
+    dst_argb[2] = r >> 2;
+    dst_argb[3] = a * 0x55;
+    dst_argb += 4;
+    src_ar30 += 4;
+  }
+}
+
 void ARGBToRGB24Row_C(const uint8* src_argb, uint8* dst_rgb, int width) {
   int x;
   for (x = 0; x < width; ++x) {
@@ -304,9 +321,9 @@ void ARGBToARGB4444Row_C(const uint8* src_argb, uint8* dst_rgb, int width) {
 void ARGBToAR30Row_C(const uint8* src_argb, uint8* dst_rgb, int width) {
   int x;
   for (x = 0; x < width; ++x) {
-    uint32 b0 = (src_argb[0] >> 6) | (src_argb[0] << 2);
-    uint32 g0 = (src_argb[1] >> 6) | (src_argb[1] << 2);
-    uint32 r0 = (src_argb[2] >> 6) | (src_argb[2] << 2);
+    uint32 b0 = (src_argb[0] >> 6) | ((uint32)(src_argb[0]) << 2);
+    uint32 g0 = (src_argb[1] >> 6) | ((uint32)(src_argb[1]) << 2);
+    uint32 r0 = (src_argb[2] >> 6) | ((uint32)(src_argb[2]) << 2);
     uint32 a0 = (src_argb[3] >> 6);
     *(uint32*)(dst_rgb) = b0 | (g0 << 10) | (r0 << 20) | (a0 << 30);
     dst_rgb += 4;
@@ -1278,6 +1295,51 @@ static __inline void YuvPixel(uint8 y,
   *r = Clamp((int32)(-(v * vr) + y1 + br) >> 6);
 }
 
+// C reference code that mimics the YUV 10 bit assembly.
+static __inline void YuvPixel10(uint16 y,
+                                uint16 u,
+                                uint16 v,
+                                uint8* b,
+                                uint8* g,
+                                uint8* r,
+                                const struct YuvConstants* yuvconstants) {
+#if defined(__aarch64__)
+  int ub = -yuvconstants->kUVToRB[0];
+  int ug = yuvconstants->kUVToG[0];
+  int vg = yuvconstants->kUVToG[1];
+  int vr = -yuvconstants->kUVToRB[1];
+  int bb = yuvconstants->kUVBiasBGR[0];
+  int bg = yuvconstants->kUVBiasBGR[1];
+  int br = yuvconstants->kUVBiasBGR[2];
+  int yg = yuvconstants->kYToRgb[0] / 0x0101;
+#elif defined(__arm__)
+  int ub = -yuvconstants->kUVToRB[0];
+  int ug = yuvconstants->kUVToG[0];
+  int vg = yuvconstants->kUVToG[4];
+  int vr = -yuvconstants->kUVToRB[4];
+  int bb = yuvconstants->kUVBiasBGR[0];
+  int bg = yuvconstants->kUVBiasBGR[1];
+  int br = yuvconstants->kUVBiasBGR[2];
+  int yg = yuvconstants->kYToRgb[0] / 0x0101;
+#else
+  int ub = yuvconstants->kUVToB[0];
+  int ug = yuvconstants->kUVToG[0];
+  int vg = yuvconstants->kUVToG[1];
+  int vr = yuvconstants->kUVToR[1];
+  int bb = yuvconstants->kUVBiasB[0];
+  int bg = yuvconstants->kUVBiasG[0];
+  int br = yuvconstants->kUVBiasR[0];
+  int yg = yuvconstants->kYToRgb[0];
+#endif
+
+  uint32 y1 = (uint32)((y << 6) * yg) >> 16;
+  u = clamp255(u >> 2);
+  v = clamp255(v >> 2);
+  *b = Clamp((int32)(-(u * ub) + y1 + bb) >> 6);
+  *g = Clamp((int32)(-(u * ug + v * vg) + y1 + bg) >> 6);
+  *r = Clamp((int32)(-(v * vr) + y1 + br) >> 6);
+}
+
 // Y contribution to R,G,B.  Scale and bias.
 #define YG 18997  /* round(1.164 * 64 * 256 * 256 / 257) */
 #define YGB -1160 /* 1.164 * 64 * -16 + 64 / 2 */
@@ -1367,6 +1429,33 @@ void I422ToARGBRow_C(const uint8* src_y,
   if (width & 1) {
     YuvPixel(src_y[0], src_u[0], src_v[0], rgb_buf + 0, rgb_buf + 1,
              rgb_buf + 2, yuvconstants);
+    rgb_buf[3] = 255;
+  }
+}
+
+// 10 bit YUV to ARGB
+void I210ToARGBRow_C(const uint16* src_y,
+                     const uint16* src_u,
+                     const uint16* src_v,
+                     uint8* rgb_buf,
+                     const struct YuvConstants* yuvconstants,
+                     int width) {
+  int x;
+  for (x = 0; x < width - 1; x += 2) {
+    YuvPixel10(src_y[0], src_u[0], src_v[0], rgb_buf + 0, rgb_buf + 1,
+               rgb_buf + 2, yuvconstants);
+    rgb_buf[3] = 255;
+    YuvPixel10(src_y[1], src_u[0], src_v[0], rgb_buf + 4, rgb_buf + 5,
+               rgb_buf + 6, yuvconstants);
+    rgb_buf[7] = 255;
+    src_y += 2;
+    src_u += 1;
+    src_v += 1;
+    rgb_buf += 8;  // Advance 2 pixels.
+  }
+  if (width & 1) {
+    YuvPixel10(src_y[0], src_u[0], src_v[0], rgb_buf + 0, rgb_buf + 1,
+               rgb_buf + 2, yuvconstants);
     rgb_buf[3] = 255;
   }
 }
@@ -1855,6 +1944,19 @@ void Convert16To8Row_C(const uint16* src_y,
                        int scale,
                        int width) {
   int x;
+  for (x = 0; x < width; ++x) {
+    dst_y[x] = clamp255((src_y[x] * scale) >> 16);
+  }
+}
+
+// Use scale to convert lsb formats to msb, depending how many bits there are:
+// 1024 = 10 bits
+void Convert8To16Row_C(const uint8* src_y,
+                       uint16* dst_y,
+                       int scale,
+                       int width) {
+  int x;
+  scale *= 0x0101;  // replicates the byte.
   for (x = 0; x < width; ++x) {
     dst_y[x] = (src_y[x] * scale) >> 16;
   }

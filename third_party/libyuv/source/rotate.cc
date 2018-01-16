@@ -57,16 +57,6 @@ void TransposePlane(const uint8* src,
     }
   }
 #endif
-#if defined(HAS_TRANSPOSEWX8_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2)) {
-    if (IS_ALIGNED(width, 4) && IS_ALIGNED(src, 4) &&
-        IS_ALIGNED(src_stride, 4)) {
-      TransposeWx8 = TransposeWx8_Fast_DSPR2;
-    } else {
-      TransposeWx8 = TransposeWx8_DSPR2;
-    }
-  }
-#endif
 #if defined(HAS_TRANSPOSEWX16_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     TransposeWx16 = TransposeWx16_Any_MSA;
@@ -168,14 +158,6 @@ void RotatePlane180(const uint8* src,
     }
   }
 #endif
-// TODO(fbarchard): Mirror on mips handle unaligned memory.
-#if defined(HAS_MIRRORROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src, 4) &&
-      IS_ALIGNED(src_stride, 4) && IS_ALIGNED(dst, 4) &&
-      IS_ALIGNED(dst_stride, 4)) {
-    MirrorRow = MirrorRow_DSPR2;
-  }
-#endif
 #if defined(HAS_MIRRORROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     MirrorRow = MirrorRow_Any_MSA;
@@ -202,11 +184,6 @@ void RotatePlane180(const uint8* src,
 #if defined(HAS_COPYROW_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     CopyRow = IS_ALIGNED(width, 32) ? CopyRow_NEON : CopyRow_Any_NEON;
-  }
-#endif
-#if defined(HAS_COPYROW_MIPS)
-  if (TestCpuFlag(kCpuHasMIPS)) {
-    CopyRow = CopyRow_MIPS;
   }
 #endif
 
@@ -253,12 +230,6 @@ void TransposeUV(const uint8* src,
     if (IS_ALIGNED(width, 8)) {
       TransposeUVWx8 = TransposeUVWx8_SSE2;
     }
-  }
-#endif
-#if defined(HAS_TRANSPOSEUVWX8_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(width, 2) && IS_ALIGNED(src, 4) &&
-      IS_ALIGNED(src_stride, 4)) {
-    TransposeUVWx8 = TransposeUVWx8_DSPR2;
   }
 #endif
 #if defined(HAS_TRANSPOSEUVWX16_MSA)
@@ -353,12 +324,6 @@ void RotateUV180(const uint8* src,
 #if defined(HAS_MIRRORUVROW_SSSE3)
   if (TestCpuFlag(kCpuHasSSSE3) && IS_ALIGNED(width, 16)) {
     MirrorUVRow = MirrorUVRow_SSSE3;
-  }
-#endif
-#if defined(HAS_MIRRORUVROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src, 4) &&
-      IS_ALIGNED(src_stride, 4)) {
-    MirrorUVRow = MirrorUVRow_DSPR2;
   }
 #endif
 #if defined(HAS_MIRRORUVROW_MSA)

@@ -19,9 +19,13 @@ namespace libyuv {
 extern "C" {
 #endif
 
-#if defined(__pnacl__) || defined(__CLR_VER) || \
+#if defined(__pnacl__) || defined(__CLR_VER) ||            \
+    (defined(__native_client__) && defined(__x86_64__)) || \
     (defined(__i386__) && !defined(__SSE__) && !defined(__clang__))
 #define LIBYUV_DISABLE_X86
+#endif
+#if defined(__native_client__)
+#define LIBYUV_DISABLE_NEON
 #endif
 // MemorySanitizer does not support assembly code yet. http://crbug.com/344505
 #if defined(__has_feature)
@@ -29,7 +33,6 @@ extern "C" {
 #define LIBYUV_DISABLE_X86
 #endif
 #endif
-
 // GCC >= 4.7.0 required for AVX2.
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && (__GNUC_MINOR__ >= 7))
@@ -81,7 +84,7 @@ extern "C" {
 #endif
 
 // The following are available on Neon platforms:
-#if !defined(LIBYUV_DISABLE_NEON) && !defined(__native_client__) && \
+#if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__ARM_NEON__) || defined(LIBYUV_NEON) || defined(__aarch64__))
 #define HAS_SCALEARGBCOLS_NEON
 #define HAS_SCALEARGBROWDOWN2_NEON
@@ -92,16 +95,6 @@ extern "C" {
 #define HAS_SCALEROWDOWN38_NEON
 #define HAS_SCALEROWDOWN4_NEON
 #define HAS_SCALEARGBFILTERCOLS_NEON
-#endif
-
-// The following are available on Mips platforms:
-#if !defined(LIBYUV_DISABLE_DSPR2) && !defined(__native_client__) && \
-    defined(__mips__) && defined(__mips_dsp) && (__mips_dsp_rev >= 2)
-#define HAS_SCALEROWDOWN2_DSPR2
-#define HAS_SCALEROWDOWN4_DSPR2
-#define HAS_SCALEROWDOWN34_DSPR2
-#define HAS_SCALEROWDOWN38_DSPR2
-#define HAS_SCALEADDROW_DSPR2
 #endif
 
 #if !defined(LIBYUV_DISABLE_MSA) && defined(__mips_msa)
@@ -830,51 +823,6 @@ void ScaleFilterCols_Any_NEON(uint8* dst_ptr,
                               int dst_width,
                               int x,
                               int dx);
-
-void ScaleRowDown2_DSPR2(const uint8* src_ptr,
-                         ptrdiff_t src_stride,
-                         uint8* dst,
-                         int dst_width);
-void ScaleRowDown2Box_DSPR2(const uint8* src_ptr,
-                            ptrdiff_t src_stride,
-                            uint8* dst,
-                            int dst_width);
-void ScaleRowDown4_DSPR2(const uint8* src_ptr,
-                         ptrdiff_t src_stride,
-                         uint8* dst,
-                         int dst_width);
-void ScaleRowDown4Box_DSPR2(const uint8* src_ptr,
-                            ptrdiff_t src_stride,
-                            uint8* dst,
-                            int dst_width);
-void ScaleRowDown34_DSPR2(const uint8* src_ptr,
-                          ptrdiff_t src_stride,
-                          uint8* dst,
-                          int dst_width);
-void ScaleRowDown34_0_Box_DSPR2(const uint8* src_ptr,
-                                ptrdiff_t src_stride,
-                                uint8* d,
-                                int dst_width);
-void ScaleRowDown34_1_Box_DSPR2(const uint8* src_ptr,
-                                ptrdiff_t src_stride,
-                                uint8* d,
-                                int dst_width);
-void ScaleRowDown38_DSPR2(const uint8* src_ptr,
-                          ptrdiff_t src_stride,
-                          uint8* dst,
-                          int dst_width);
-void ScaleRowDown38_2_Box_DSPR2(const uint8* src_ptr,
-                                ptrdiff_t src_stride,
-                                uint8* dst_ptr,
-                                int dst_width);
-void ScaleRowDown38_3_Box_DSPR2(const uint8* src_ptr,
-                                ptrdiff_t src_stride,
-                                uint8* dst_ptr,
-                                int dst_width);
-void ScaleAddRow_DSPR2(const uint8* src_ptr, uint16* dst_ptr, int src_width);
-void ScaleAddRow_Any_DSPR2(const uint8* src_ptr,
-                           uint16* dst_ptr,
-                           int src_width);
 
 void ScaleRowDown2_MSA(const uint8_t* src_ptr,
                        ptrdiff_t src_stride,

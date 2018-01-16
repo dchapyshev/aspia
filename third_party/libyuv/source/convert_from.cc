@@ -65,6 +65,50 @@ static int I420ToI4xx(const uint8* src_y,
   return 0;
 }
 
+// Convert 8 bit YUV to 10 bit.
+LIBYUV_API
+int I420ToI010(const uint8* src_y,
+               int src_stride_y,
+               const uint8* src_u,
+               int src_stride_u,
+               const uint8* src_v,
+               int src_stride_v,
+               uint16* dst_y,
+               int dst_stride_y,
+               uint16* dst_u,
+               int dst_stride_u,
+               uint16* dst_v,
+               int dst_stride_v,
+               int width,
+               int height) {
+  int halfwidth = (width + 1) >> 1;
+  int halfheight = (height + 1) >> 1;
+  if (!src_u || !src_v || !dst_u || !dst_v || width <= 0 || height == 0) {
+    return -1;
+  }
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    halfheight = (height + 1) >> 1;
+    src_y = src_y + (height - 1) * src_stride_y;
+    src_u = src_u + (halfheight - 1) * src_stride_u;
+    src_v = src_v + (halfheight - 1) * src_stride_v;
+    src_stride_y = -src_stride_y;
+    src_stride_u = -src_stride_u;
+    src_stride_v = -src_stride_v;
+  }
+
+  // Convert Y plane.
+  Convert8To16Plane(src_y, src_stride_y, dst_y, dst_stride_y, 1024, width,
+                    height);
+  // Convert UV planes.
+  Convert8To16Plane(src_u, src_stride_u, dst_u, dst_stride_u, 1024, halfwidth,
+                    halfheight);
+  Convert8To16Plane(src_v, src_stride_v, dst_v, dst_stride_v, 1024, halfwidth,
+                    halfheight);
+  return 0;
+}
+
 // 420 chroma is 1/2 width, 1/2 height
 // 422 chroma is 1/2 width, 1x height
 LIBYUV_API
@@ -484,15 +528,6 @@ static int I420ToRGBAMatrix(const uint8* src_y,
     }
   }
 #endif
-#if defined(HAS_I422TORGBAROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(width, 4) &&
-      IS_ALIGNED(src_y, 4) && IS_ALIGNED(src_stride_y, 4) &&
-      IS_ALIGNED(src_u, 2) && IS_ALIGNED(src_stride_u, 2) &&
-      IS_ALIGNED(src_v, 2) && IS_ALIGNED(src_stride_v, 2) &&
-      IS_ALIGNED(dst_rgba, 4) && IS_ALIGNED(dst_stride_rgba, 4)) {
-    I422ToRGBARow = I422ToRGBARow_DSPR2;
-  }
-#endif
 #if defined(HAS_I422TORGBAROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     I422ToRGBARow = I422ToRGBARow_Any_MSA;
@@ -744,14 +779,6 @@ int I420ToARGB1555(const uint8* src_y,
     }
   }
 #endif
-#if defined(HAS_I422TOARGB1555ROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2)) {
-    I422ToARGB1555Row = I422ToARGB1555Row_Any_DSPR2;
-    if (IS_ALIGNED(width, 4)) {
-      I422ToARGB1555Row = I422ToARGB1555Row_DSPR2;
-    }
-  }
-#endif
 #if defined(HAS_I422TOARGB1555ROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     I422ToARGB1555Row = I422ToARGB1555Row_Any_MSA;
@@ -822,14 +849,6 @@ int I420ToARGB4444(const uint8* src_y,
     I422ToARGB4444Row = I422ToARGB4444Row_Any_NEON;
     if (IS_ALIGNED(width, 8)) {
       I422ToARGB4444Row = I422ToARGB4444Row_NEON;
-    }
-  }
-#endif
-#if defined(HAS_I422TOARGB4444ROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2)) {
-    I422ToARGB4444Row = I422ToARGB4444Row_Any_DSPR2;
-    if (IS_ALIGNED(width, 4)) {
-      I422ToARGB4444Row = I422ToARGB4444Row_DSPR2;
     }
   }
 #endif
@@ -1057,14 +1076,6 @@ int I420ToRGB565Dither(const uint8* src_y,
     }
   }
 #endif
-#if defined(HAS_I422TOARGBROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(width, 4) &&
-      IS_ALIGNED(src_y, 4) && IS_ALIGNED(src_stride_y, 4) &&
-      IS_ALIGNED(src_u, 2) && IS_ALIGNED(src_stride_u, 2) &&
-      IS_ALIGNED(src_v, 2) && IS_ALIGNED(src_stride_v, 2)) {
-    I422ToARGBRow = I422ToARGBRow_DSPR2;
-  }
-#endif
 #if defined(HAS_I422TOARGBROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     I422ToARGBRow = I422ToARGBRow_Any_MSA;
@@ -1123,6 +1134,122 @@ int I420ToRGB565Dither(const uint8* src_y,
     free_aligned_buffer_64(row_argb);
   }
   return 0;
+}
+
+// Convert I420 to AR30 with matrix
+static int I420ToAR30Matrix(const uint8* src_y,
+                            int src_stride_y,
+                            const uint8* src_u,
+                            int src_stride_u,
+                            const uint8* src_v,
+                            int src_stride_v,
+                            uint8* dst_ar30,
+                            int dst_stride_ar30,
+                            const struct YuvConstants* yuvconstants,
+                            int width,
+                            int height) {
+  int y;
+  void (*I422ToARGBRow)(const uint8* y_buf, const uint8* u_buf,
+                        const uint8* v_buf, uint8* rgb_buf,
+                        const struct YuvConstants* yuvconstants, int width) =
+      I422ToARGBRow_C;
+  void (*ARGBToAR30Row)(const uint8* src_argb, uint8* dst_rgb, int width) =
+      ARGBToAR30Row_C;
+
+  if (!src_y || !src_u || !src_v || !dst_ar30 || width <= 0 || height == 0) {
+    return -1;
+  }
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_ar30 = dst_ar30 + (height - 1) * dst_stride_ar30;
+    dst_stride_ar30 = -dst_stride_ar30;
+  }
+
+#if defined(HAS_ARGBTOAR30ROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    ARGBToAR30Row = ARGBToAR30Row_Any_SSSE3;
+    if (IS_ALIGNED(width, 4)) {
+      ARGBToAR30Row = ARGBToAR30Row_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_ARGBTOAR30ROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    ARGBToAR30Row = ARGBToAR30Row_Any_AVX2;
+    if (IS_ALIGNED(width, 8)) {
+      ARGBToAR30Row = ARGBToAR30Row_AVX2;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    I422ToARGBRow = I422ToARGBRow_Any_SSSE3;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    I422ToARGBRow = I422ToARGBRow_Any_AVX2;
+    if (IS_ALIGNED(width, 16)) {
+      I422ToARGBRow = I422ToARGBRow_AVX2;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_NEON)
+  if (TestCpuFlag(kCpuHasNEON)) {
+    I422ToARGBRow = I422ToARGBRow_Any_NEON;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_NEON;
+    }
+  }
+#endif
+#if defined(HAS_I422TOARGBROW_MSA)
+  if (TestCpuFlag(kCpuHasMSA)) {
+    I422ToARGBRow = I422ToARGBRow_Any_MSA;
+    if (IS_ALIGNED(width, 8)) {
+      I422ToARGBRow = I422ToARGBRow_MSA;
+    }
+  }
+#endif
+
+  {
+    // Row buffer for ARGB.
+    align_buffer_64(row_argb, width * 4);
+
+    for (y = 0; y < height; ++y) {
+      I422ToARGBRow(src_y, src_u, src_v, row_argb, yuvconstants, width);
+      ARGBToAR30Row(row_argb, dst_ar30, width);
+      dst_ar30 += dst_stride_ar30;
+      src_y += src_stride_y;
+      if (y & 1) {
+        src_u += src_stride_u;
+        src_v += src_stride_v;
+      }
+    }
+
+    free_aligned_buffer_64(row_argb);
+  }
+  return 0;
+}
+
+// Convert I420 to AR30.
+LIBYUV_API
+int I420ToAR30(const uint8* src_y,
+               int src_stride_y,
+               const uint8* src_u,
+               int src_stride_u,
+               const uint8* src_v,
+               int src_stride_v,
+               uint8* dst_ar30,
+               int dst_stride_ar30,
+               int width,
+               int height) {
+  return I420ToAR30Matrix(src_y, src_stride_y, src_u, src_stride_u, src_v,
+                          src_stride_v, dst_ar30, dst_stride_ar30,
+                          &kYuvI601Constants, width, height);
 }
 
 // Convert I420 to specified format
@@ -1197,6 +1324,11 @@ int ConvertFromI420(const uint8* y,
       break;
     case FOURCC_RGBA:
       r = I420ToRGBA(y, y_stride, u, u_stride, v, v_stride, dst_sample,
+                     dst_sample_stride ? dst_sample_stride : width * 4, width,
+                     height);
+      break;
+    case FOURCC_AR30:
+      r = I420ToAR30(y, y_stride, u, u_stride, v, v_stride, dst_sample,
                      dst_sample_stride ? dst_sample_stride : width * 4, width,
                      height);
       break;

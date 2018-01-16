@@ -272,7 +272,7 @@ double CalcFramePsnr(const uint8* src_a,
                      int stride_b,
                      int width,
                      int height) {
-  const uint64 samples = width * height;
+  const uint64 samples = (uint64)width * (uint64)height;
   const uint64 sse = ComputeSumSquareErrorPlane(src_a, stride_a, src_b,
                                                 stride_b, width, height);
   return SumSquareErrorToPsnr(sse, samples);
@@ -301,7 +301,8 @@ double I420Psnr(const uint8* src_y_a,
       src_u_a, stride_u_a, src_u_b, stride_u_b, width_uv, height_uv);
   const uint64 sse_v = ComputeSumSquareErrorPlane(
       src_v_a, stride_v_a, src_v_b, stride_v_b, width_uv, height_uv);
-  const uint64 samples = width * height + 2 * (width_uv * height_uv);
+  const uint64 samples = (uint64)width * (uint64)height +
+                         2 * ((uint64)width_uv * (uint64)height_uv);
   const uint64 sse = sse_y + sse_u + sse_v;
   return SumSquareErrorToPsnr(sse, samples);
 }

@@ -77,6 +77,43 @@ int I420Copy(const uint8* src_y,
              int width,
              int height);
 
+// Copy I010 to I010
+#define I010ToI010 I010Copy
+#define H010ToH010 I010Copy
+LIBYUV_API
+int I010Copy(const uint16* src_y,
+             int src_stride_y,
+             const uint16* src_u,
+             int src_stride_u,
+             const uint16* src_v,
+             int src_stride_v,
+             uint16* dst_y,
+             int dst_stride_y,
+             uint16* dst_u,
+             int dst_stride_u,
+             uint16* dst_v,
+             int dst_stride_v,
+             int width,
+             int height);
+
+// Convert 10 bit YUV to 8 bit
+#define H010ToH420 I010ToI420
+LIBYUV_API
+int I010ToI420(const uint16* src_y,
+               int src_stride_y,
+               const uint16* src_u,
+               int src_stride_u,
+               const uint16* src_v,
+               int src_stride_v,
+               uint8* dst_y,
+               int dst_stride_y,
+               uint8* dst_u,
+               int dst_stride_u,
+               uint8* dst_v,
+               int dst_stride_v,
+               int width,
+               int height);
+
 // Convert I400 (grey) to I420.
 LIBYUV_API
 int I400ToI420(const uint8* src_y,

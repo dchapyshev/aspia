@@ -50,6 +50,7 @@ void CopyPlane(const uint8* src_y,
   if (src_y == dst_y && src_stride_y == dst_stride_y) {
     return;
   }
+
 #if defined(HAS_COPYROW_SSE2)
   if (TestCpuFlag(kCpuHasSSE2)) {
     CopyRow = IS_ALIGNED(width, 32) ? CopyRow_SSE2 : CopyRow_Any_SSE2;
@@ -68,11 +69,6 @@ void CopyPlane(const uint8* src_y,
 #if defined(HAS_COPYROW_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     CopyRow = IS_ALIGNED(width, 32) ? CopyRow_NEON : CopyRow_Any_NEON;
-  }
-#endif
-#if defined(HAS_COPYROW_MIPS)
-  if (TestCpuFlag(kCpuHasMIPS)) {
-    CopyRow = CopyRow_MIPS;
   }
 #endif
 
@@ -116,15 +112,110 @@ void CopyPlane_16(const uint16* src_y,
     CopyRow = CopyRow_16_NEON;
   }
 #endif
-#if defined(HAS_COPYROW_16_MIPS)
-  if (TestCpuFlag(kCpuHasMIPS)) {
-    CopyRow = CopyRow_16_MIPS;
-  }
-#endif
 
   // Copy plane
   for (y = 0; y < height; ++y) {
     CopyRow(src_y, dst_y, width);
+    src_y += src_stride_y;
+    dst_y += dst_stride_y;
+  }
+}
+
+// Convert a plane of 16 bit data to 8 bit
+LIBYUV_API
+void Convert16To8Plane(const uint16* src_y,
+                       int src_stride_y,
+                       uint8* dst_y,
+                       int dst_stride_y,
+                       int scale,  // 16384 for 10 bits
+                       int width,
+                       int height) {
+  int y;
+  void (*Convert16To8Row)(const uint16* src_y, uint8* dst_y, int scale,
+                          int width) = Convert16To8Row_C;
+
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_y = dst_y + (height - 1) * dst_stride_y;
+    dst_stride_y = -dst_stride_y;
+  }
+  // Coalesce rows.
+  if (src_stride_y == width && dst_stride_y == width) {
+    width *= height;
+    height = 1;
+    src_stride_y = dst_stride_y = 0;
+  }
+#if defined(HAS_CONVERT16TO8ROW_SSSE3)
+  if (TestCpuFlag(kCpuHasSSSE3)) {
+    Convert16To8Row = Convert16To8Row_Any_SSSE3;
+    if (IS_ALIGNED(width, 16)) {
+      Convert16To8Row = Convert16To8Row_SSSE3;
+    }
+  }
+#endif
+#if defined(HAS_CONVERT16TO8ROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    Convert16To8Row = Convert16To8Row_Any_AVX2;
+    if (IS_ALIGNED(width, 32)) {
+      Convert16To8Row = Convert16To8Row_AVX2;
+    }
+  }
+#endif
+
+  // Convert plane
+  for (y = 0; y < height; ++y) {
+    Convert16To8Row(src_y, dst_y, scale, width);
+    src_y += src_stride_y;
+    dst_y += dst_stride_y;
+  }
+}
+
+// Convert a plane of 8 bit data to 16 bit
+LIBYUV_API
+void Convert8To16Plane(const uint8* src_y,
+                       int src_stride_y,
+                       uint16* dst_y,
+                       int dst_stride_y,
+                       int scale,  // 16384 for 10 bits
+                       int width,
+                       int height) {
+  int y;
+  void (*Convert8To16Row)(const uint8* src_y, uint16* dst_y, int scale,
+                          int width) = Convert8To16Row_C;
+
+  // Negative height means invert the image.
+  if (height < 0) {
+    height = -height;
+    dst_y = dst_y + (height - 1) * dst_stride_y;
+    dst_stride_y = -dst_stride_y;
+  }
+  // Coalesce rows.
+  if (src_stride_y == width && dst_stride_y == width) {
+    width *= height;
+    height = 1;
+    src_stride_y = dst_stride_y = 0;
+  }
+#if defined(HAS_CONVERT8TO16ROW_SSE2)
+  if (TestCpuFlag(kCpuHasSSE2)) {
+    Convert8To16Row = Convert8To16Row_Any_SSE2;
+    if (IS_ALIGNED(width, 16)) {
+      Convert8To16Row = Convert8To16Row_SSE2;
+    }
+  }
+#endif
+#if defined(HAS_CONVERT8TO16ROW_AVX2)
+  if (TestCpuFlag(kCpuHasAVX2)) {
+    Convert8To16Row = Convert8To16Row_Any_AVX2;
+    if (IS_ALIGNED(width, 32)) {
+      Convert8To16Row = Convert8To16Row_AVX2;
+    }
+  }
+#endif
+
+  // Convert plane
+  for (y = 0; y < height; ++y) {
+    Convert8To16Row(src_y, dst_y, scale, width);
     src_y += src_stride_y;
     dst_y += dst_stride_y;
   }
@@ -308,16 +399,6 @@ void SplitUVPlane(const uint8* src_uv,
     SplitUVRow = SplitUVRow_Any_NEON;
     if (IS_ALIGNED(width, 16)) {
       SplitUVRow = SplitUVRow_NEON;
-    }
-  }
-#endif
-#if defined(HAS_SPLITUVROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(dst_u, 4) &&
-      IS_ALIGNED(dst_stride_u, 4) && IS_ALIGNED(dst_v, 4) &&
-      IS_ALIGNED(dst_stride_v, 4)) {
-    SplitUVRow = SplitUVRow_Any_DSPR2;
-    if (IS_ALIGNED(width, 16)) {
-      SplitUVRow = SplitUVRow_DSPR2;
     }
   }
 #endif
@@ -560,14 +641,6 @@ void MirrorPlane(const uint8* src_y,
     if (IS_ALIGNED(width, 32)) {
       MirrorRow = MirrorRow_AVX2;
     }
-  }
-#endif
-// TODO(fbarchard): Mirror on mips handle unaligned memory.
-#if defined(HAS_MIRRORROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src_y, 4) &&
-      IS_ALIGNED(src_stride_y, 4) && IS_ALIGNED(dst_y, 4) &&
-      IS_ALIGNED(dst_stride_y, 4)) {
-    MirrorRow = MirrorRow_DSPR2;
   }
 #endif
 #if defined(HAS_MIRRORROW_MSA)
@@ -1471,15 +1544,6 @@ static int I422ToRGBAMatrix(const uint8* src_y,
     if (IS_ALIGNED(width, 8)) {
       I422ToRGBARow = I422ToRGBARow_NEON;
     }
-  }
-#endif
-#if defined(HAS_I422TORGBAROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(width, 4) &&
-      IS_ALIGNED(src_y, 4) && IS_ALIGNED(src_stride_y, 4) &&
-      IS_ALIGNED(src_u, 2) && IS_ALIGNED(src_stride_u, 2) &&
-      IS_ALIGNED(src_v, 2) && IS_ALIGNED(src_stride_v, 2) &&
-      IS_ALIGNED(dst_rgba, 4) && IS_ALIGNED(dst_stride_rgba, 4)) {
-    I422ToRGBARow = I422ToRGBARow_DSPR2;
   }
 #endif
 #if defined(HAS_I422TORGBAROW_MSA)
@@ -2534,14 +2598,6 @@ int InterpolatePlane(const uint8* src0,
     }
   }
 #endif
-#if defined(HAS_INTERPOLATEROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src0, 4) &&
-      IS_ALIGNED(src_stride0, 4) && IS_ALIGNED(src1, 4) &&
-      IS_ALIGNED(src_stride1, 4) && IS_ALIGNED(dst, 4) &&
-      IS_ALIGNED(dst_stride, 4) && IS_ALIGNED(width, 4)) {
-    InterpolateRow = InterpolateRow_DSPR2;
-  }
-#endif
 #if defined(HAS_INTERPOLATEROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     InterpolateRow = InterpolateRow_Any_MSA;
@@ -2641,14 +2697,6 @@ int ARGBShuffle(const uint8* src_bgra,
     height = 1;
     src_stride_bgra = dst_stride_argb = 0;
   }
-#if defined(HAS_ARGBSHUFFLEROW_SSE2)
-  if (TestCpuFlag(kCpuHasSSE2)) {
-    ARGBShuffleRow = ARGBShuffleRow_Any_SSE2;
-    if (IS_ALIGNED(width, 4)) {
-      ARGBShuffleRow = ARGBShuffleRow_SSE2;
-    }
-  }
-#endif
 #if defined(HAS_ARGBSHUFFLEROW_SSSE3)
   if (TestCpuFlag(kCpuHasSSSE3)) {
     ARGBShuffleRow = ARGBShuffleRow_Any_SSSE3;

@@ -55,7 +55,7 @@ bool DeviceSPTI::GetInquiryData(InquiryData* inquiry_data)
                   &cmd, sizeof(cmd),
                   &bytes_returned))
     {
-        memcpy(inquiry_data, cmd.data_buffer, sizeof(InquiryData));
+        memcpy(inquiry_data, &cmd.data_buffer[0], sizeof(InquiryData));
         return true;
     }
 

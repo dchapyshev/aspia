@@ -456,9 +456,6 @@ SAANY(ScaleAddRow_Any_NEON, ScaleAddRow_NEON, ScaleAddRow_C, 15)
 #ifdef HAS_SCALEADDROW_MSA
 SAANY(ScaleAddRow_Any_MSA, ScaleAddRow_MSA, ScaleAddRow_C, 15)
 #endif
-#ifdef HAS_SCALEADDROW_DSPR2
-SAANY(ScaleAddRow_Any_DSPR2, ScaleAddRow_DSPR2, ScaleAddRow_C, 15)
-#endif
 #undef SAANY
 
 #ifdef __cplusplus

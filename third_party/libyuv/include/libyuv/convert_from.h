@@ -21,7 +21,22 @@ extern "C" {
 
 // See Also convert.h for conversions from formats to I420.
 
-// I420Copy in convert to I420ToI420.
+// Convert 8 bit YUV to 10 bit.
+#define H420ToH010 I420ToI010
+int I420ToI010(const uint8* src_y,
+               int src_stride_y,
+               const uint8* src_u,
+               int src_stride_u,
+               const uint8* src_v,
+               int src_stride_v,
+               uint16* dst_y,
+               int dst_stride_y,
+               uint16* dst_u,
+               int dst_stride_u,
+               uint16* dst_v,
+               int dst_stride_v,
+               int width,
+               int height);
 
 LIBYUV_API
 int I420ToI422(const uint8* src_y,
@@ -276,6 +291,18 @@ int I420ToARGB4444(const uint8* src_y,
                    int dst_stride_frame,
                    int width,
                    int height);
+// Convert I420 to AR30.
+LIBYUV_API
+int I420ToAR30(const uint8* src_y,
+               int src_stride_y,
+               const uint8* src_u,
+               int src_stride_u,
+               const uint8* src_v,
+               int src_stride_v,
+               uint8* dst_ar30,
+               int dst_stride_ar30,
+               int width,
+               int height);
 
 // Convert I420 to specified format.
 // "dst_sample_stride" is bytes in a row for the destination. Pass 0 if the

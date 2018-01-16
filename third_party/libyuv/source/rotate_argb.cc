@@ -22,10 +22,8 @@ extern "C" {
 
 // ARGBScale has a function to copy pixels to a row, striding each source
 // pixel by a constant.
-#if !defined(LIBYUV_DISABLE_X86) &&                          \
-    (defined(_M_IX86) ||                                     \
-     (defined(__x86_64__) && !defined(__native_client__)) || \
-     defined(__i386__))
+#if !defined(LIBYUV_DISABLE_X86) && \
+    (defined(_M_IX86) || defined(__x86_64__) || defined(__i386__))
 #define HAS_SCALEARGBROWDOWNEVEN_SSE2
 void ScaleARGBRowDownEven_SSE2(const uint8* src_ptr,
                                int src_stride,
@@ -33,7 +31,7 @@ void ScaleARGBRowDownEven_SSE2(const uint8* src_ptr,
                                uint8* dst_ptr,
                                int dst_width);
 #endif
-#if !defined(LIBYUV_DISABLE_NEON) && !defined(__native_client__) && \
+#if !defined(LIBYUV_DISABLE_NEON) && \
     (defined(__ARM_NEON__) || defined(LIBYUV_NEON) || defined(__aarch64__))
 #define HAS_SCALEARGBROWDOWNEVEN_NEON
 void ScaleARGBRowDownEven_NEON(const uint8* src_ptr,
@@ -171,11 +169,6 @@ void ARGBRotate180(const uint8* src,
 #if defined(HAS_COPYROW_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     CopyRow = IS_ALIGNED(width * 4, 32) ? CopyRow_NEON : CopyRow_Any_NEON;
-  }
-#endif
-#if defined(HAS_COPYROW_MIPS)
-  if (TestCpuFlag(kCpuHasMIPS)) {
-    CopyRow = CopyRow_MIPS;
   }
 #endif
 

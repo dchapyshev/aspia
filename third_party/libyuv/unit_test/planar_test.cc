@@ -2699,16 +2699,48 @@ TEST_F(LibYUVPlanarTest, MultiplyRow_16_Opt) {
 }
 #endif  // HAS_MULTIPLYROW_16_AVX2
 
-// TODO(fbarchard): Improve test for more platforms.
-#ifdef HAS_CONVERT16TO8ROW_AVX2
-TEST_F(LibYUVPlanarTest, Convert16To8Row_Opt) {
+TEST_F(LibYUVPlanarTest, Convert16To8Plane) {
   const int kPixels = benchmark_width_ * benchmark_height_;
   align_buffer_page_end(src_pixels_y, kPixels * 2);
   align_buffer_page_end(dst_pixels_y_opt, kPixels);
   align_buffer_page_end(dst_pixels_y_c, kPixels);
 
   MemRandomize(src_pixels_y, kPixels * 2);
-  // C code does not clamp so limit source range to 10 bits.
+  memset(dst_pixels_y_opt, 0, kPixels);
+  memset(dst_pixels_y_c, 1, kPixels);
+
+  MaskCpuFlags(disable_cpu_flags_);
+  Convert16To8Plane(reinterpret_cast<const uint16*>(src_pixels_y),
+                    benchmark_width_, dst_pixels_y_c, benchmark_width_, 16384,
+                    benchmark_width_, benchmark_height_);
+  MaskCpuFlags(benchmark_cpu_info_);
+
+  for (int i = 0; i < benchmark_iterations_; ++i) {
+    Convert16To8Plane(reinterpret_cast<const uint16*>(src_pixels_y),
+                      benchmark_width_, dst_pixels_y_opt, benchmark_width_,
+                      16384, benchmark_width_, benchmark_height_);
+  }
+
+  for (int i = 0; i < kPixels; ++i) {
+    EXPECT_EQ(dst_pixels_y_opt[i], dst_pixels_y_c[i]);
+  }
+
+  free_aligned_buffer_page_end(src_pixels_y);
+  free_aligned_buffer_page_end(dst_pixels_y_opt);
+  free_aligned_buffer_page_end(dst_pixels_y_c);
+}
+
+// TODO(fbarchard): Improve test for more platforms.
+#ifdef HAS_CONVERT16TO8ROW_AVX2
+TEST_F(LibYUVPlanarTest, Convert16To8Row_Opt) {
+  // AVX2 does multiple of 32, so round count up
+  const int kPixels = (benchmark_width_ * benchmark_height_ + 31) & ~31;
+  align_buffer_page_end(src_pixels_y, kPixels * 2);
+  align_buffer_page_end(dst_pixels_y_opt, kPixels);
+  align_buffer_page_end(dst_pixels_y_c, kPixels);
+
+  MemRandomize(src_pixels_y, kPixels * 2);
+  // clamp source range to 10 bits.
   for (int i = 0; i < kPixels; ++i) {
     reinterpret_cast<uint16*>(src_pixels_y)[i] &= 1023;
   }
@@ -2743,6 +2775,81 @@ TEST_F(LibYUVPlanarTest, Convert16To8Row_Opt) {
   free_aligned_buffer_page_end(dst_pixels_y_c);
 }
 #endif  // HAS_CONVERT16TO8ROW_AVX2
+
+TEST_F(LibYUVPlanarTest, Convert8To16Plane) {
+  const int kPixels = benchmark_width_ * benchmark_height_;
+  align_buffer_page_end(src_pixels_y, kPixels);
+  align_buffer_page_end(dst_pixels_y_opt, kPixels * 2);
+  align_buffer_page_end(dst_pixels_y_c, kPixels * 2);
+
+  MemRandomize(src_pixels_y, kPixels);
+  memset(dst_pixels_y_opt, 0, kPixels * 2);
+  memset(dst_pixels_y_c, 1, kPixels * 2);
+
+  MaskCpuFlags(disable_cpu_flags_);
+  Convert8To16Plane(src_pixels_y, benchmark_width_,
+                    reinterpret_cast<uint16*>(dst_pixels_y_c), benchmark_width_,
+                    1024, benchmark_width_, benchmark_height_);
+  MaskCpuFlags(benchmark_cpu_info_);
+
+  for (int i = 0; i < benchmark_iterations_; ++i) {
+    Convert8To16Plane(src_pixels_y, benchmark_width_,
+                      reinterpret_cast<uint16*>(dst_pixels_y_opt),
+                      benchmark_width_, 1024, benchmark_width_,
+                      benchmark_height_);
+  }
+
+  for (int i = 0; i < kPixels * 2; ++i) {
+    EXPECT_EQ(dst_pixels_y_opt[i], dst_pixels_y_c[i]);
+  }
+
+  free_aligned_buffer_page_end(src_pixels_y);
+  free_aligned_buffer_page_end(dst_pixels_y_opt);
+  free_aligned_buffer_page_end(dst_pixels_y_c);
+}
+
+// TODO(fbarchard): Improve test for more platforms.
+#ifdef HAS_CONVERT8TO16ROW_AVX2
+TEST_F(LibYUVPlanarTest, Convert8To16Row_Opt) {
+  const int kPixels = (benchmark_width_ * benchmark_height_ + 31) & ~31;
+  align_buffer_page_end(src_pixels_y, kPixels);
+  align_buffer_page_end(dst_pixels_y_opt, kPixels * 2);
+  align_buffer_page_end(dst_pixels_y_c, kPixels * 2);
+
+  MemRandomize(src_pixels_y, kPixels);
+  memset(dst_pixels_y_opt, 0, kPixels * 2);
+  memset(dst_pixels_y_c, 1, kPixels * 2);
+
+  Convert8To16Row_C(src_pixels_y, reinterpret_cast<uint16*>(dst_pixels_y_c),
+                    1024, kPixels);
+
+  int has_avx2 = TestCpuFlag(kCpuHasAVX2);
+  int has_sse2 = TestCpuFlag(kCpuHasSSE2);
+  for (int i = 0; i < benchmark_iterations_; ++i) {
+    if (has_avx2) {
+      Convert8To16Row_AVX2(src_pixels_y,
+                           reinterpret_cast<uint16*>(dst_pixels_y_opt), 1024,
+                           kPixels);
+    } else if (has_sse2) {
+      Convert8To16Row_SSE2(src_pixels_y,
+                           reinterpret_cast<uint16*>(dst_pixels_y_opt), 1024,
+                           kPixels);
+    } else {
+      Convert8To16Row_C(src_pixels_y,
+                        reinterpret_cast<uint16*>(dst_pixels_y_opt), 1024,
+                        kPixels);
+    }
+  }
+
+  for (int i = 0; i < kPixels * 2; ++i) {
+    EXPECT_EQ(dst_pixels_y_opt[i], dst_pixels_y_c[i]);
+  }
+
+  free_aligned_buffer_page_end(src_pixels_y);
+  free_aligned_buffer_page_end(dst_pixels_y_opt);
+  free_aligned_buffer_page_end(dst_pixels_y_c);
+}
+#endif  // HAS_CONVERT8TO16ROW_AVX2
 
 float TestScaleMaxSamples(int benchmark_width,
                           int benchmark_height,

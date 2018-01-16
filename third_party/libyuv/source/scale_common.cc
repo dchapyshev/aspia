@@ -1063,16 +1063,6 @@ void ScalePlaneVertical(int src_height,
     }
   }
 #endif
-#if defined(HAS_INTERPOLATEROW_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src_argb, 4) &&
-      IS_ALIGNED(src_stride, 4) && IS_ALIGNED(dst_argb, 4) &&
-      IS_ALIGNED(dst_stride, 4)) {
-    InterpolateRow = InterpolateRow_Any_DSPR2;
-    if (IS_ALIGNED(dst_width_bytes, 4)) {
-      InterpolateRow = InterpolateRow_DSPR2;
-    }
-  }
-#endif
 #if defined(HAS_INTERPOLATEROW_MSA)
   if (TestCpuFlag(kCpuHasMSA)) {
     InterpolateRow = InterpolateRow_Any_MSA;
@@ -1148,16 +1138,6 @@ void ScalePlaneVertical_16(int src_height,
     InterpolateRow = InterpolateRow_Any_16_NEON;
     if (IS_ALIGNED(dst_width_bytes, 16)) {
       InterpolateRow = InterpolateRow_16_NEON;
-    }
-  }
-#endif
-#if defined(HAS_INTERPOLATEROW_16_DSPR2)
-  if (TestCpuFlag(kCpuHasDSPR2) && IS_ALIGNED(src_argb, 4) &&
-      IS_ALIGNED(src_stride, 4) && IS_ALIGNED(dst_argb, 4) &&
-      IS_ALIGNED(dst_stride, 4)) {
-    InterpolateRow = InterpolateRow_Any_16_DSPR2;
-    if (IS_ALIGNED(dst_width_bytes, 4)) {
-      InterpolateRow = InterpolateRow_16_DSPR2;
     }
   }
 #endif
