@@ -18,15 +18,13 @@ namespace aspia {
 namespace {
 
 static const uint32_t kSupportedVideoEncodings =
-    proto::VideoEncoding::VIDEO_ENCODING_ZLIB |
-    proto::VideoEncoding::VIDEO_ENCODING_VP8 |
-    proto::VideoEncoding::VIDEO_ENCODING_VP9;
-
-static const uint32_t kSupportedAudioEncodings = 0;
+    proto::desktop::VIDEO_ENCODING_ZLIB |
+    proto::desktop::VIDEO_ENCODING_VP8 |
+    proto::desktop::VIDEO_ENCODING_VP9;
 
 static const uint32_t kSupportedFeatures =
-    proto::DesktopSessionFeatures::FEATURE_CURSOR_SHAPE |
-    proto::DesktopSessionFeatures::FEATURE_CLIPBOARD;
+    proto::desktop::FEATURE_CURSOR_SHAPE |
+    proto::desktop::FEATURE_CLIPBOARD;
 
 } // namespace
 
@@ -93,7 +91,7 @@ void HostSessionDesktop::OnIpcChannelMessage(const IOBuffer& buffer)
         }
         else if (message.has_clipboard_event())
         {
-            std::shared_ptr<proto::ClipboardEvent> clipboard_event(
+            std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event(
                 message.release_clipboard_event());
 
             success = ReadClipboardEvent(clipboard_event);
@@ -131,7 +129,7 @@ void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
     // If the screen image has changes.
     if (screen_frame)
     {
-        std::unique_ptr<proto::VideoPacket> packet = video_encoder_->Encode(screen_frame);
+        std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder_->Encode(screen_frame);
         message.set_allocated_video_packet(packet.release());
     }
 
@@ -141,7 +139,7 @@ void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
         DCHECK_EQ(session_type_, proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
         DCHECK(cursor_encoder_);
 
-        std::unique_ptr<proto::CursorShape> cursor_shape =
+        std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
             cursor_encoder_->Encode(std::move(mouse_cursor));
 
         message.set_allocated_cursor_shape(cursor_shape.release());
@@ -170,7 +168,7 @@ void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& messag
     WriteMessage(message, nullptr);
 }
 
-bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
+bool HostSessionDesktop::ReadPointerEvent(const proto::desktop::PointerEvent& event)
 {
     if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -182,7 +180,7 @@ bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
     return true;
 }
 
-bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
+bool HostSessionDesktop::ReadKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -194,7 +192,8 @@ bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
     return true;
 }
 
-bool HostSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+bool HostSessionDesktop::ReadClipboardEvent(
+    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
 {
     if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -206,7 +205,7 @@ bool HostSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEven
     return true;
 }
 
-void HostSessionDesktop::SendClipboardEvent(proto::ClipboardEvent& clipboard_event)
+void HostSessionDesktop::SendClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event)
 {
     proto::desktop::HostToClient message;
     message.mutable_clipboard_event()->Swap(&clipboard_event);
@@ -217,9 +216,8 @@ void HostSessionDesktop::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
 
-    proto::SessionConfigRequest* request = message.mutable_config_request();
+    proto::desktop::ConfigRequest* request = message.mutable_config_request();
     request->set_video_encodings(kSupportedVideoEncodings);
-    request->set_audio_encodings(kSupportedAudioEncodings);
 
     if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         request->set_features(kSupportedFeatures);
@@ -229,7 +227,7 @@ void HostSessionDesktop::SendConfigRequest()
     WriteMessage(message);
 }
 
-bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
+bool HostSessionDesktop::ReadConfig(const proto::desktop::Config& config)
 {
     screen_updater_.reset();
 
@@ -237,7 +235,7 @@ bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
 
     if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE)
+        if (config.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE)
             enable_cursor_shape = true;
 
         if (enable_cursor_shape)
@@ -249,7 +247,7 @@ bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
             cursor_encoder_.reset();
         }
 
-        if (config.flags() & proto::SessionConfig::ENABLE_CLIPBOARD)
+        if (config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
         {
             clipboard_thread_ = std::make_unique<ClipboardThread>();
 
@@ -264,15 +262,15 @@ bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
 
     switch (config.video_encoding())
     {
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             video_encoder_ = VideoEncoderVPX::CreateVP8();
             break;
 
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             video_encoder_ = VideoEncoderVPX::CreateVP9();
             break;
 
-        case proto::VIDEO_ENCODING_ZLIB:
+        case proto::desktop::VIDEO_ENCODING_ZLIB:
             video_encoder_ = VideoEncoderZLIB::Create(
                 ConvertFromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
             break;

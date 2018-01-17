@@ -17,7 +17,7 @@ std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::Create()
     return std::unique_ptr<VideoDecoderZLIB>(new VideoDecoderZLIB());
 }
 
-bool VideoDecoderZLIB::Decode(const proto::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
 {
     const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
     const size_t src_size = packet.data().size();

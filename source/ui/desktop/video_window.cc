@@ -7,20 +7,24 @@
 
 #include "ui/desktop/video_window.h"
 #include "base/scoped_select_object.h"
-#include "proto/desktop_session_message.pb.h"
+#include "proto/desktop_session.pb.h"
 
 #include <algorithm>
 #include <atlgdi.h>
 
 namespace aspia {
 
-static const UINT_PTR kScrollTimerId = 1;
-static const int kScrollDelta = 25;
-static const int kScrollTimerInterval = 20;
-static const int kScrollBorder = 15;
+namespace {
 
-static const uint8_t kWheelMask =
-    proto::PointerEvent::WHEEL_DOWN | proto::PointerEvent::WHEEL_UP;
+constexpr UINT_PTR kScrollTimerId = 1;
+constexpr int kScrollDelta = 25;
+constexpr int kScrollTimerInterval = 20;
+constexpr int kScrollBorder = 15;
+
+constexpr uint8_t kWheelMask =
+    proto::desktop::PointerEvent::WHEEL_DOWN | proto::desktop::PointerEvent::WHEEL_UP;
+
+} // namespace
 
 VideoWindow::VideoWindow(Delegate* delegate)
     : delegate_(delegate),
@@ -159,9 +163,9 @@ LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /
 
     DWORD flags = static_cast<DWORD>(wparam);
 
-    uint8_t mask = ((flags & MK_LBUTTON) ? proto::PointerEvent::LEFT_BUTTON : 0) |
-                   ((flags & MK_MBUTTON) ? proto::PointerEvent::MIDDLE_BUTTON : 0) |
-                   ((flags & MK_RBUTTON) ? proto::PointerEvent::RIGHT_BUTTON : 0);
+    uint8_t mask = ((flags & MK_LBUTTON) ? proto::desktop::PointerEvent::LEFT_BUTTON : 0) |
+                   ((flags & MK_MBUTTON) ? proto::desktop::PointerEvent::MIDDLE_BUTTON : 0) |
+                   ((flags & MK_RBUTTON) ? proto::desktop::PointerEvent::RIGHT_BUTTON : 0);
 
     WORD wheel_speed = 0;
 
@@ -171,12 +175,12 @@ LRESULT VideoWindow::OnMouse(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /
 
         if (speed < 0)
         {
-            mask |= proto::PointerEvent::WHEEL_DOWN;
+            mask |= proto::desktop::PointerEvent::WHEEL_DOWN;
             wheel_speed = -speed / WHEEL_DELTA;
         }
         else
         {
-            mask |= proto::PointerEvent::WHEEL_UP;
+            mask |= proto::desktop::PointerEvent::WHEEL_UP;
             wheel_speed = speed / WHEEL_DELTA;
         }
 

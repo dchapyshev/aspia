@@ -47,7 +47,7 @@ void InputInjector::SwitchToInputDesktop()
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
-void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
+void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event)
 {
     SwitchToInputDesktop();
 
@@ -74,36 +74,36 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
 
     uint32_t mask = event.mask();
 
-    bool prev = (prev_mouse_button_mask_ & proto::PointerEvent::LEFT_BUTTON) != 0;
-    bool curr = (mask & proto::PointerEvent::LEFT_BUTTON) != 0;
+    bool prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
+    bool curr = (mask & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
 
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
-    prev = (prev_mouse_button_mask_ & proto::PointerEvent::MIDDLE_BUTTON) != 0;
-    curr = (mask & proto::PointerEvent::MIDDLE_BUTTON) != 0;
+    prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::MIDDLE_BUTTON) != 0;
+    curr = (mask & proto::desktop::PointerEvent::MIDDLE_BUTTON) != 0;
 
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP);
     }
 
-    prev = (prev_mouse_button_mask_ & proto::PointerEvent::RIGHT_BUTTON) != 0;
-    curr = (mask & proto::PointerEvent::RIGHT_BUTTON) != 0;
+    prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::RIGHT_BUTTON) != 0;
+    curr = (mask & proto::desktop::PointerEvent::RIGHT_BUTTON) != 0;
 
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
     }
 
-    if (mask & proto::PointerEvent::WHEEL_UP)
+    if (mask & proto::desktop::PointerEvent::WHEEL_UP)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(WHEEL_DELTA);
     }
-    else if (mask & proto::PointerEvent::WHEEL_DOWN)
+    else if (mask & proto::desktop::PointerEvent::WHEEL_DOWN)
     {
         flags |= MOUSEEVENTF_WHEEL;
         wheel_movement = static_cast<DWORD>(-WHEEL_DELTA);
@@ -128,12 +128,12 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
+void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     SwitchToInputDesktop();
 
     // If the combination Ctrl + Alt + Delete is pressed.
-    if ((event.flags() & proto::KeyEvent::PRESSED) && event.keycode() == VK_DELETE &&
+    if ((event.flags() & proto::desktop::KeyEvent::PRESSED) && event.keycode() == VK_DELETE &&
         (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
         (GetAsyncKeyState(VK_MENU) & 0x8000))
     {
@@ -142,7 +142,7 @@ void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
     }
 
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
-    bool curr_state = (event.flags() & proto::KeyEvent::CAPSLOCK) != 0;
+    bool curr_state = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
 
     if (prev_state != curr_state)
     {
@@ -151,7 +151,7 @@ void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
     }
 
     prev_state = GetKeyState(VK_NUMLOCK) != 0;
-    curr_state = (event.flags() & proto::KeyEvent::NUMLOCK) != 0;
+    curr_state = (event.flags() & proto::desktop::KeyEvent::NUMLOCK) != 0;
 
     if (prev_state != curr_state)
     {
@@ -161,8 +161,8 @@ void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)
 
     DWORD flags = 0;
 
-    flags |= ((event.flags() & proto::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
-    flags |= ((event.flags() & proto::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
+    flags |= ((event.flags() & proto::desktop::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
+    flags |= ((event.flags() & proto::desktop::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
 
     SendKeyboardInput(static_cast<WORD>(event.keycode()), flags);
 }

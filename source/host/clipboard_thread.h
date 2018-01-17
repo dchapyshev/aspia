@@ -20,7 +20,7 @@ public:
     ~ClipboardThread();
 
     void Start(Clipboard::ClipboardEventCallback event_callback);
-    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event);
 
 private:
     // MessageThread::Delegate implementation.

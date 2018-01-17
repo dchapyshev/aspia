@@ -11,7 +11,7 @@
 #include "base/macros.h"
 #include "codec/compressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
-#include "proto/desktop_session_message.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace aspia {
 
@@ -21,10 +21,11 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    std::unique_ptr<proto::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
+    std::unique_ptr<proto::desktop::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
-    void CompressCursor(proto::CursorShape* cursor_shape, const MouseCursor* mouse_cursor);
+    void CompressCursor(proto::desktop::CursorShape* cursor_shape,
+                        const MouseCursor* mouse_cursor);
 
     CompressorZLIB compressor_;
     MouseCursorCache cache_;

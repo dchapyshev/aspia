@@ -15,7 +15,7 @@ namespace {
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size)
+uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
@@ -58,7 +58,7 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
     return std::unique_ptr<VideoEncoderZLIB>(new VideoEncoderZLIB(format, compression_ratio));
 }
 
-void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_data_size)
+void VideoEncoderZLIB::CompressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
 {
     compressor_.Reset();
 
@@ -95,15 +95,16 @@ void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_
     }
 }
 
-std::unique_ptr<proto::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
+std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(proto::VIDEO_ENCODING_ZLIB));
+    std::unique_ptr<proto::desktop::VideoPacket> packet(
+        CreateVideoPacket(proto::desktop::VIDEO_ENCODING_ZLIB));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {
         screen_size_ = frame->Size();
 
-        proto::VideoPacketFormat* format = packet->mutable_format();
+        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
 
         ConvertToVideoSize(screen_size_, format->mutable_screen_size());
         ConvertToVideoPixelFormat(format_, format->mutable_pixel_format());

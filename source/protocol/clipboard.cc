@@ -148,7 +148,7 @@ void Clipboard::OnClipboardUpdate()
 
             if (last_mime_type_ != kMimeTypeTextUtf8 || last_data_ != data)
             {
-                proto::ClipboardEvent event;
+                proto::desktop::ClipboardEvent event;
 
                 event.set_mime_type(kMimeTypeTextUtf8);
                 event.set_data(data);
@@ -211,7 +211,8 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& r
     return true;
 }
 
-void Clipboard::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void Clipboard::InjectClipboardEvent(
+    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
 {
     if (!window_ || !clipboard_event)
         return;

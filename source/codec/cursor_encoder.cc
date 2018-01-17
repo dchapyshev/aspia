@@ -19,6 +19,14 @@ constexpr uint8_t kCacheSize = 16;
 // The compression ratio can be in the range of 1 to 9.
 constexpr int32_t kCompressionRatio = 6;
 
+uint8_t* GetOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+{
+    cursor_shape->mutable_data()->resize(size);
+
+    return const_cast<uint8_t*>(
+        reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
+}
+
 } // namespace
 
 CursorEncoder::CursorEncoder()
@@ -30,16 +38,7 @@ CursorEncoder::CursorEncoder()
                   "Invalid compression ratio");
 }
 
-static uint8_t* GetOutputBuffer(proto::CursorShape* cursor_shape, size_t size)
-{
-    cursor_shape->mutable_data()->resize(size);
-
-    return const_cast<uint8_t*>(
-        reinterpret_cast<const uint8_t*>(
-            cursor_shape->mutable_data()->data()));
-}
-
-void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
+void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
                                    const MouseCursor* mouse_cursor)
 {
     compressor_.Reset();
@@ -97,7 +96,7 @@ void CursorEncoder::CompressCursor(proto::CursorShape* cursor_shape,
     }
 }
 
-std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
+std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
     std::unique_ptr<MouseCursor> mouse_cursor)
 {
     if (!mouse_cursor)
@@ -114,8 +113,8 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
         return nullptr;
     }
 
-    std::unique_ptr<proto::CursorShape> cursor_shape =
-        std::make_unique<proto::CursorShape>();
+    std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
+        std::make_unique<proto::desktop::CursorShape>();
 
     size_t index = cache_.Find(mouse_cursor.get());
 
@@ -132,14 +131,14 @@ std::unique_ptr<proto::CursorShape> CursorEncoder::Encode(
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.
         cursor_shape->set_flags(cache_.IsEmpty() ?
-            (proto::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
+            (proto::desktop::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
 
         // Add the cursor to the cache.
         cache_.Add(std::move(mouse_cursor));
     }
     else
     {
-        cursor_shape->set_flags(proto::CursorShape::CACHE | (index & 0x1F));
+        cursor_shape->set_flags(proto::desktop::CursorShape::CACHE | (index & 0x1F));
     }
 
     return cursor_shape;

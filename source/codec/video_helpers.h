@@ -10,28 +10,28 @@
 
 #include "desktop_capture/desktop_geometry.h"
 #include "desktop_capture/pixel_format.h"
-#include "proto/desktop_session_message.pb.h"
+#include "proto/desktop_session.pb.h"
 
 #include <memory>
 
 namespace aspia {
 
-static INLINE std::unique_ptr<proto::VideoPacket>
-CreateVideoPacket(proto::VideoEncoding encoding)
+static INLINE std::unique_ptr<proto::desktop::VideoPacket>
+CreateVideoPacket(proto::desktop::VideoEncoding encoding)
 {
-    std::unique_ptr<proto::VideoPacket> packet(new proto::VideoPacket());
+    std::unique_ptr<proto::desktop::VideoPacket> packet(new proto::desktop::VideoPacket());
     packet->set_encoding(encoding);
     return packet;
 }
 
 static INLINE DesktopRect
-ConvertFromVideoRect(const proto::VideoRect& rect)
+ConvertFromVideoRect(const proto::desktop::Rect& rect)
 {
     return DesktopRect::MakeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 static INLINE void
-ConvertToVideoRect(const DesktopRect& from, proto::VideoRect* to)
+ConvertToVideoRect(const DesktopRect& from, proto::desktop::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
@@ -40,20 +40,20 @@ ConvertToVideoRect(const DesktopRect& from, proto::VideoRect* to)
 }
 
 static INLINE DesktopSize
-ConvertFromVideoSize(const proto::VideoSize& size)
+ConvertFromVideoSize(const proto::desktop::Size& size)
 {
     return DesktopSize(size.width(), size.height());
 }
 
 static INLINE void
-ConvertToVideoSize(const DesktopSize& from, proto::VideoSize* to)
+ConvertToVideoSize(const DesktopSize& from, proto::desktop::Size* to)
 {
     to->set_width(from.Width());
     to->set_height(from.Height());
 }
 
 static INLINE PixelFormat
-ConvertFromVideoPixelFormat(const proto::VideoPixelFormat& format)
+ConvertFromVideoPixelFormat(const proto::desktop::PixelFormat& format)
 {
     return PixelFormat(static_cast<uint8_t>(format.bits_per_pixel()),
                        static_cast<uint16_t>(format.red_max()),
@@ -65,7 +65,7 @@ ConvertFromVideoPixelFormat(const proto::VideoPixelFormat& format)
 }
 
 static INLINE void
-ConvertToVideoPixelFormat(const PixelFormat& from, proto::VideoPixelFormat* to)
+ConvertToVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to)
 {
     to->set_bits_per_pixel(from.BitsPerPixel());
 

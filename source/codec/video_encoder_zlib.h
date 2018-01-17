@@ -26,12 +26,11 @@ public:
     static std::unique_ptr<VideoEncoderZLIB> Create(const PixelFormat& format,
                                                     int compression_ratio);
 
-    std::unique_ptr<proto::VideoPacket> Encode(
-        const DesktopFrame* frame) override;
+    std::unique_ptr<proto::desktop::VideoPacket> Encode(const DesktopFrame* frame) override;
 
 private:
     VideoEncoderZLIB(const PixelFormat& format, int compression_ratio);
-    void CompressPacket(proto::VideoPacket* packet, size_t source_data_size);
+    void CompressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
 
     // The current frame size.
     DesktopSize screen_size_;

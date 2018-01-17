@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "base/message_window.h"
-#include "proto/desktop_session_message.pb.h"
+#include "proto/desktop_session.pb.h"
 
 namespace aspia {
 
@@ -21,7 +21,7 @@ public:
     Clipboard() = default;
     ~Clipboard();
 
-    using ClipboardEventCallback = std::function<void(proto::ClipboardEvent& event)>;
+    using ClipboardEventCallback = std::function<void(proto::desktop::ClipboardEvent& event)>;
 
     // Callback is called when there is an outgoing clipboard.
     bool Start(ClipboardEventCallback clipboard_event_callback);
@@ -29,7 +29,7 @@ public:
     void Stop();
 
     // Receiving the incoming clipboard.
-    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
+    void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> event);
 
 private:
     // Handles messages received by |window_|.

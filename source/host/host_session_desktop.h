@@ -39,12 +39,12 @@ private:
     void WriteMessage(const proto::desktop::HostToClient& message,
                       PipeChannel::SendCompleteHandler handler);
 
-    bool ReadPointerEvent(const proto::PointerEvent& event);
-    bool ReadKeyEvent(const proto::KeyEvent& event);
-    bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
-    bool ReadConfig(const proto::SessionConfig& config);
+    bool ReadPointerEvent(const proto::desktop::PointerEvent& event);
+    bool ReadKeyEvent(const proto::desktop::KeyEvent& event);
+    bool ReadClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> event);
+    bool ReadConfig(const proto::desktop::Config& config);
 
-    void SendClipboardEvent(proto::ClipboardEvent& event);
+    void SendClipboardEvent(proto::desktop::ClipboardEvent& event);
     void SendConfigRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;

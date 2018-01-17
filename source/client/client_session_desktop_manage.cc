@@ -27,7 +27,7 @@ ClientSessionDesktopManage::~ClientSessionDesktopManage()
     // Nothing
 }
 
-void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& cursor_shape)
+void ClientSessionDesktopManage::ReadCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
     if (!cursor_decoder_)
         cursor_decoder_ = std::make_unique<CursorDecoder>();
@@ -40,7 +40,7 @@ void ClientSessionDesktopManage::ReadCursorShape(const proto::CursorShape& curso
 }
 
 void ClientSessionDesktopManage::ReadClipboardEvent(
-    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
 {
     viewer_->InjectClipboardEvent(clipboard_event);
 }
@@ -63,7 +63,7 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
         }
         else if (message.has_clipboard_event())
         {
-            std::shared_ptr<proto::ClipboardEvent> clipboard_event(
+            std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event(
                 message.release_clipboard_event());
 
             ReadClipboardEvent(clipboard_event);
@@ -93,7 +93,7 @@ void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
 {
     proto::desktop::ClientToHost message;
 
-    proto::KeyEvent* event = message.mutable_key_event();
+    proto::desktop::KeyEvent* event = message.mutable_key_event();
     event->set_keycode(keycode);
     event->set_flags(flags);
 
@@ -104,7 +104,7 @@ void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_
 {
     proto::desktop::ClientToHost message;
 
-    proto::PointerEvent* event = message.mutable_pointer_event();
+    proto::desktop::PointerEvent* event = message.mutable_pointer_event();
     event->set_x(pos.x());
     event->set_y(pos.y());
     event->set_mask(mask);
@@ -112,7 +112,7 @@ void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnClipboardEvent(proto::ClipboardEvent& clipboard_event)
+void ClientSessionDesktopManage::OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event)
 {
     proto::desktop::ClientToHost message;
     message.mutable_clipboard_event()->Swap(&clipboard_event);

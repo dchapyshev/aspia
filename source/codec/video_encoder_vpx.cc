@@ -60,17 +60,17 @@ void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& si
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP8()
 {
     return std::unique_ptr<VideoEncoderVPX>(
-        new VideoEncoderVPX(proto::VideoEncoding::VIDEO_ENCODING_VP8));
+        new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP9()
 {
     return std::unique_ptr<VideoEncoderVPX>(
-        new VideoEncoderVPX(proto::VideoEncoding::VIDEO_ENCODING_VP9));
+        new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
 }
 
-VideoEncoderVPX::VideoEncoderVPX(proto::VideoEncoding encoding)
+VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
     : encoding_(encoding)
 {
     memset(&active_map_, 0, sizeof(active_map_));
@@ -84,13 +84,13 @@ void VideoEncoderVPX::CreateImage()
     image_.d_w = image_.w = screen_size_.Width();
     image_.d_h = image_.h = screen_size_.Height();
 
-    if (encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP8)
+    if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
     {
         image_.fmt = VPX_IMG_FMT_YV12;
         image_.x_chroma_shift = 1;
         image_.y_chroma_shift = 1;
     }
-    else if (encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP9)
+    else if (encoding_ == proto::desktop::VIDEO_ENCODING_VP9)
     {
         image_.fmt = VPX_IMG_FMT_I444;
         image_.x_chroma_shift = 0;
@@ -262,7 +262,7 @@ void VideoEncoderVPX::SetActiveMap(const DesktopRect& rect)
 }
 
 void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
-                                               proto::VideoPacket* packet)
+                                               proto::desktop::VideoPacket* packet)
 {
     memset(active_map_.active_map, 0, active_map_size_);
 
@@ -329,12 +329,12 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
     }
 }
 
-std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* frame)
+std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* frame)
 {
-    DCHECK(encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP8 ||
-           encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP9);
+    DCHECK(encoding_ == proto::desktop::VIDEO_ENCODING_VP8 ||
+           encoding_ == proto::desktop::VIDEO_ENCODING_VP9);
 
-    std::unique_ptr<proto::VideoPacket> packet(CreateVideoPacket(encoding_));
+    std::unique_ptr<proto::desktop::VideoPacket> packet(CreateVideoPacket(encoding_));
 
     if (!screen_size_.IsEqual(frame->Size()))
     {
@@ -343,11 +343,11 @@ std::unique_ptr<proto::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* 
         CreateImage();
         CreateActiveMap();
 
-        if (encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP8)
+        if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
         {
             CreateVp8Codec();
         }
-        else if (encoding_ == proto::VideoEncoding::VIDEO_ENCODING_VP9)
+        else if (encoding_ == proto::desktop::VIDEO_ENCODING_VP9)
         {
             CreateVp9Codec();
         }

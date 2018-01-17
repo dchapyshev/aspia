@@ -15,7 +15,9 @@ namespace aspia {
 
 namespace {
 
-bool ConvertImage(const proto::VideoPacket& packet, vpx_image_t* image, DesktopFrame* frame)
+bool ConvertImage(const proto::desktop::VideoPacket& packet,
+                  vpx_image_t* image,
+                  DesktopFrame* frame)
 {
     DesktopRect frame_rect(DesktopRect::MakeSize(frame->Size()));
 
@@ -101,17 +103,17 @@ bool ConvertImage(const proto::VideoPacket& packet, vpx_image_t* image, DesktopF
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::CreateVP8()
 {
     return std::unique_ptr<VideoDecoderVPX>(
-        new VideoDecoderVPX(proto::VideoEncoding::VIDEO_ENCODING_VP8));
+        new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 // static
 std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::CreateVP9()
 {
     return std::unique_ptr<VideoDecoderVPX>(
-        new VideoDecoderVPX(proto::VideoEncoding::VIDEO_ENCODING_VP9));
+        new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
 }
 
-VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
+VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -125,11 +127,11 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
 
     switch (encoding)
     {
-        case proto::VideoEncoding::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             algo = vpx_codec_vp8_dx();
             break;
 
-        case proto::VideoEncoding::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             algo = vpx_codec_vp9_dx();
             break;
 
@@ -142,7 +144,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::VideoEncoding encoding)
     CHECK_EQ(VPX_CODEC_OK, ret);
 }
 
-bool VideoDecoderVPX::Decode(const proto::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =

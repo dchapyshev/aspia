@@ -26,23 +26,23 @@ public:
 
 protected:
     void WriteMessage(const proto::desktop::ClientToHost& message);
-    void ReadConfigRequest(const proto::SessionConfigRequest& config_request);
-    bool ReadVideoPacket(const proto::VideoPacket& video_packet);
+    void ReadConfigRequest(const proto::desktop::ConfigRequest& config_request);
+    bool ReadVideoPacket(const proto::desktop::VideoPacket& video_packet);
 
     std::unique_ptr<ViewerWindow> viewer_;
 
 private:
     // ViewerWindow::Delegate implementation.
     void OnWindowClose() override;
-    void OnConfigChange(const proto::SessionConfig& config) override;
+    void OnConfigChange(const proto::desktop::Config& config) override;
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
-    void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) override;
+    void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) override;
 
     virtual void OnMessageReceived(const IOBuffer& buffer);
 
     std::unique_ptr<VideoDecoder> video_decoder_;
-    proto::VideoEncoding video_encoding_ = proto::VIDEO_ENCODING_UNKNOWN;
+    proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopView);
 };

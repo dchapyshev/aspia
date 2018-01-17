@@ -16,17 +16,17 @@ namespace aspia {
 
 namespace {
 
-std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::VideoEncoding encoding)
+std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::desktop::VideoEncoding encoding)
 {
     switch (encoding)
     {
-        case proto::VIDEO_ENCODING_VP8:
+        case proto::desktop::VIDEO_ENCODING_VP8:
             return VideoDecoderVPX::CreateVP8();
 
-        case proto::VIDEO_ENCODING_VP9:
+        case proto::desktop::VIDEO_ENCODING_VP9:
             return VideoDecoderVPX::CreateVP9();
 
-        case proto::VIDEO_ENCODING_ZLIB:
+        case proto::desktop::VIDEO_ENCODING_ZLIB:
             return VideoDecoderZLIB::Create();
 
         default:
@@ -53,7 +53,7 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
     viewer_.reset();
 }
 
-bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_packet)
+bool ClientSessionDesktopView::ReadVideoPacket(const proto::desktop::VideoPacket& video_packet)
 {
     if (video_encoding_ != video_packet.encoding())
     {
@@ -68,7 +68,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
     {
         PixelFormat pixel_format;
 
-        if (video_encoding_ == proto::VideoEncoding::VIDEO_ENCODING_ZLIB)
+        if (video_encoding_ == proto::desktop::VIDEO_ENCODING_ZLIB)
         {
             pixel_format = ConvertFromVideoPixelFormat(video_packet.format().pixel_format());
         }
@@ -107,7 +107,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
 }
 
 void ClientSessionDesktopView::ReadConfigRequest(
-    const proto::SessionConfigRequest& /* config_request */)
+    const proto::desktop::ConfigRequest& /* config_request */)
 {
     OnConfigChange(config_.desktop_session_config());
 }
@@ -155,7 +155,7 @@ void ClientSessionDesktopView::OnWindowClose()
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionDesktopView::OnConfigChange(const proto::SessionConfig& config)
+void ClientSessionDesktopView::OnConfigChange(const proto::desktop::Config& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
@@ -172,7 +172,8 @@ void ClientSessionDesktopView::OnPointerEvent(const DesktopPoint& /* pos */, uin
     // Nothing
 }
 
-void ClientSessionDesktopView::OnClipboardEvent(proto::ClipboardEvent& /* clipboard_event */)
+void ClientSessionDesktopView::OnClipboardEvent(
+    proto::desktop::ClipboardEvent& /* clipboard_event */)
 {
     // Nothing
 }

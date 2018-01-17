@@ -33,7 +33,7 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 
 SettingsDialog::SettingsDialog(proto::auth::SessionType session_type,
-                               const proto::SessionConfig& config)
+                               const proto::desktop::Config& config)
     : session_type_(session_type),
       config_(config)
 {
@@ -123,13 +123,13 @@ void SettingsDialog::InitCodecList()
     CComboBox combo(GetDlgItem(IDC_CODEC_COMBO));
 
     int item_index = combo.AddString(L"VP9 (LossLess)");
-    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_VP9);
+    combo.SetItemData(item_index, proto::desktop::VIDEO_ENCODING_VP9);
 
     item_index = combo.AddString(L"VP8");
-    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_VP8);
+    combo.SetItemData(item_index, proto::desktop::VIDEO_ENCODING_VP8);
 
     item_index = combo.AddString(L"ZLIB");
-    combo.SetItemData(item_index, proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    combo.SetItemData(item_index, proto::desktop::VIDEO_ENCODING_ZLIB);
 
     SelectItemWithData(combo, config_.video_encoding());
 }
@@ -167,11 +167,11 @@ LRESULT SettingsDialog::OnInitDialog(
     else
     {
         CheckDlgButton(IDC_ENABLE_CURSOR_SHAPE_CHECK,
-            (config_.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE) ?
+            (config_.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE) ?
                 BST_CHECKED : BST_UNCHECKED);
 
         CheckDlgButton(IDC_ENABLE_CLIPBOARD_CHECK,
-            (config_.flags() & proto::SessionConfig::ENABLE_CLIPBOARD) ?
+            (config_.flags() & proto::desktop::Config::ENABLE_CLIPBOARD) ?
                 BST_CHECKED : BST_UNCHECKED);
     }
 
@@ -205,7 +205,7 @@ void SettingsDialog::OnCodecChanged()
 
     BOOL has_pixel_format =
         (codec_combo.GetItemData(codec_combo.GetCurSel()) ==
-            proto::VIDEO_ENCODING_ZLIB);
+            proto::desktop::VIDEO_ENCODING_ZLIB);
 
     GetDlgItem(IDC_COLOR_DEPTH_TEXT).EnableWindow(has_pixel_format);
     GetDlgItem(IDC_COLOR_DEPTH_COMBO).EnableWindow(has_pixel_format);
@@ -227,12 +227,13 @@ LRESULT SettingsDialog::OnOkButton(
 {
     CComboBox codec_combo(GetDlgItem(IDC_CODEC_COMBO));
 
-    proto::VideoEncoding encoding =
-        static_cast<proto::VideoEncoding>(codec_combo.GetItemData(codec_combo.GetCurSel()));
+    proto::desktop::VideoEncoding encoding =
+        static_cast<proto::desktop::VideoEncoding>(
+            codec_combo.GetItemData(codec_combo.GetCurSel()));
 
     config_.set_video_encoding(encoding);
 
-    if (encoding == proto::VIDEO_ENCODING_ZLIB)
+    if (encoding == proto::desktop::VIDEO_ENCODING_ZLIB)
     {
         CComboBox color_combo(GetDlgItem(IDC_COLOR_DEPTH_COMBO));
         PixelFormat format;
@@ -288,10 +289,10 @@ LRESULT SettingsDialog::OnOkButton(
     uint32_t flags = 0;
 
     if (IsDlgButtonChecked(IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED)
-        flags |= proto::SessionConfig::ENABLE_CURSOR_SHAPE;
+        flags |= proto::desktop::Config::ENABLE_CURSOR_SHAPE;
 
     if (IsDlgButtonChecked(IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED)
-        flags |= proto::SessionConfig::ENABLE_CLIPBOARD;
+        flags |= proto::desktop::Config::ENABLE_CLIPBOARD;
 
     config_.set_flags(flags);
 

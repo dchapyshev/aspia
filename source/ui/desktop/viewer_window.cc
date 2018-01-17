@@ -10,7 +10,6 @@
 #include "ui/resource.h"
 #include "base/strings/unicode.h"
 #include "desktop_capture/cursor.h"
-#include "proto/desktop_session_message.pb.h"
 
 namespace aspia {
 
@@ -121,7 +120,8 @@ void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
                      reinterpret_cast<LONG_PTR>(cursor.Get()));
 }
 
-void ViewerWindow::InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+void ViewerWindow::InjectClipboardEvent(
+    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -309,10 +309,10 @@ LRESULT ViewerWindow::OnKeyboard(
 
         uint32_t flags = 0;
 
-        flags |= ((key_data & kKeyUpFlag) == 0) ? proto::KeyEvent::PRESSED : 0;
-        flags |= ((key_data & kKeyExtendedFlag) != 0) ? proto::KeyEvent::EXTENDED : 0;
-        flags |= (GetKeyState(VK_CAPITAL) != 0) ? proto::KeyEvent::CAPSLOCK : 0;
-        flags |= (GetKeyState(VK_NUMLOCK) != 0) ? proto::KeyEvent::NUMLOCK : 0;
+        flags |= ((key_data & kKeyUpFlag) == 0) ? proto::desktop::KeyEvent::PRESSED : 0;
+        flags |= ((key_data & kKeyExtendedFlag) != 0) ? proto::desktop::KeyEvent::EXTENDED : 0;
+        flags |= (GetKeyState(VK_CAPITAL) != 0) ? proto::desktop::KeyEvent::CAPSLOCK : 0;
+        flags |= (GetKeyState(VK_NUMLOCK) != 0) ? proto::desktop::KeyEvent::NUMLOCK : 0;
 
         delegate_->OnKeyEvent(key_code, flags);
     }
@@ -341,14 +341,14 @@ LRESULT ViewerWindow::OnKillFocus(
     return 0;
 }
 
-void ViewerWindow::ApplyConfig(const proto::SessionConfig& config)
+void ViewerWindow::ApplyConfig(const proto::desktop::Config& config)
 {
-    if (!(config.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
     {
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 
-    if (config.flags() & proto::SessionConfig::ENABLE_CLIPBOARD)
+    if (config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
     {
         clipboard_.Start(std::bind(&ViewerWindow::Delegate::OnClipboardEvent,
                                    delegate_,
@@ -550,13 +550,14 @@ LRESULT ViewerWindow::OnDropDownButton(
 LRESULT ViewerWindow::OnCADButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
-    delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
-    delegate_->OnKeyEvent(VK_DELETE, proto::KeyEvent::EXTENDED | proto::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(VK_DELETE, proto::desktop::KeyEvent::EXTENDED |
+                                     proto::desktop::KeyEvent::PRESSED);
 
     delegate_->OnKeyEvent(VK_CONTROL, 0);
     delegate_->OnKeyEvent(VK_MENU, 0);
-    delegate_->OnKeyEvent(VK_DELETE, proto::KeyEvent::EXTENDED);
+    delegate_->OnKeyEvent(VK_DELETE, proto::desktop::KeyEvent::EXTENDED);
 
     return 0;
 }
@@ -568,8 +569,8 @@ LRESULT ViewerWindow::OnKeyButton(
     {
         case ID_KEY_CTRL_ESC:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_ESCAPE, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_ESCAPE, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_CONTROL, 0);
             delegate_->OnKeyEvent(VK_ESCAPE, 0);
@@ -578,8 +579,8 @@ LRESULT ViewerWindow::OnKeyButton(
 
         case ID_KEY_ALT_TAB:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_TAB, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_TAB, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_TAB, 0);
             delegate_->OnKeyEvent(VK_MENU, 0);
@@ -588,9 +589,9 @@ LRESULT ViewerWindow::OnKeyButton(
 
         case ID_KEY_ALT_SHIFT_TAB:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_SHIFT, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_TAB, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_SHIFT, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_TAB, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_TAB, 0);
             delegate_->OnKeyEvent(VK_SHIFT, 0);
@@ -600,15 +601,15 @@ LRESULT ViewerWindow::OnKeyButton(
 
         case ID_KEY_PRINTSCREEN:
         {
-            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::desktop::KeyEvent::PRESSED);
             delegate_->OnKeyEvent(VK_SNAPSHOT, 0);
         }
         break;
 
         case ID_KEY_ALT_PRINTSCREEN:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_SNAPSHOT, 0);
             delegate_->OnKeyEvent(VK_MENU, 0);
@@ -617,9 +618,9 @@ LRESULT ViewerWindow::OnKeyButton(
 
         case ID_KEY_CTRL_ALT_F12:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_MENU, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_F12, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_F12, 0);
             delegate_->OnKeyEvent(VK_MENU, 0);
@@ -629,15 +630,15 @@ LRESULT ViewerWindow::OnKeyButton(
 
         case ID_KEY_F12:
         {
-            delegate_->OnKeyEvent(VK_F12, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
             delegate_->OnKeyEvent(VK_F12, 0);
         }
         break;
 
         case ID_KEY_CTRL_F12:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_F12, proto::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
 
             delegate_->OnKeyEvent(VK_F12, 0);
             delegate_->OnKeyEvent(VK_CONTROL, 0);

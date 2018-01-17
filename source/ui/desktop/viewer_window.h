@@ -29,10 +29,10 @@ public:
     public:
         virtual ~Delegate() = default;
         virtual void OnWindowClose() = 0;
-        virtual void OnConfigChange(const proto::SessionConfig& config) = 0;
+        virtual void OnConfigChange(const proto::desktop::Config& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
-        virtual void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) = 0;
+        virtual void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) = 0;
     };
 
     ViewerWindow(ClientConfig* config, Delegate* delegate);
@@ -42,7 +42,7 @@ public:
     void DrawFrame();
     void ResizeFrame(const DesktopSize& size, const PixelFormat& format);
     void InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor);
-    void InjectClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event);
+    void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event);
 
 private:
     static const UINT kResizeFrameMessage = WM_APP + 1;
@@ -118,7 +118,7 @@ private:
 
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
-    void ApplyConfig(const proto::SessionConfig& config);
+    void ApplyConfig(const proto::desktop::Config& config);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

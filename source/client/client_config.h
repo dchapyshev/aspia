@@ -31,8 +31,8 @@ public:
     void set_session_type(proto::auth::SessionType session_type);
     proto::auth::SessionType session_type() const;
 
-    const proto::SessionConfig& desktop_session_config() const;
-    proto::SessionConfig* mutable_desktop_session_config();
+    const proto::desktop::Config& desktop_session_config() const;
+    proto::desktop::Config* mutable_desktop_session_config();
 
     ClientConfig& operator=(const ClientConfig& other);
 
@@ -45,7 +45,7 @@ private:
     proto::auth::SessionType session_type_ =
         proto::auth::SessionType::SESSION_TYPE_UNKNOWN;
 
-    proto::SessionConfig desktop_session_config_;
+    proto::desktop::Config desktop_session_config_;
 };
 
 } // namespace aspia

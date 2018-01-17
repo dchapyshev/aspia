@@ -23,7 +23,7 @@ void ClipboardThread::Start(Clipboard::ClipboardEventCallback event_callback)
 }
 
 void ClipboardThread::InjectClipboardEvent(
-    std::shared_ptr<proto::ClipboardEvent> clipboard_event)
+    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {
