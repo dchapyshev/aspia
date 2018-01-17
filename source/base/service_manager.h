@@ -26,15 +26,15 @@ public:
     // Creates a service in the system and returns a pointer to the instance
     // of the class to manage it.
     static std::unique_ptr<ServiceManager>
-    Create(const std::wstring& command_line,
-           const std::wstring& service_name,
-           const std::wstring& service_short_name,
-           const std::wstring& service_description = std::wstring());
+    Create(const std::wstring_view& command_line,
+           const std::wstring_view& service_name,
+           const std::wstring_view& service_short_name,
+           const std::wstring_view& service_description);
 
     static std::wstring GenerateUniqueServiceId();
 
-    static std::wstring CreateUniqueServiceName(const std::wstring& service_name,
-                                                const std::wstring& service_id);
+    static std::wstring CreateUniqueServiceName(const std::wstring_view& service_name,
+                                                const std::wstring_view& service_id);
 
     static bool IsServiceInstalled(const std::wstring& service_name);
 

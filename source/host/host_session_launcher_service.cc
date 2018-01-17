@@ -55,7 +55,10 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
 
     // Install the service in the system.
     std::unique_ptr<ServiceManager> manager =
-        ServiceManager::Create(command_line, unique_full_name, unique_short_name);
+        ServiceManager::Create(command_line,
+                               unique_full_name,
+                               unique_short_name,
+                               kServiceFullName);
 
     // If the service was not installed.
     if (!manager)

@@ -53,10 +53,10 @@ ServiceManager::~ServiceManager()
 
 // static
 std::unique_ptr<ServiceManager>
-ServiceManager::Create(const std::wstring& command_line,
-                       const std::wstring& service_full_name,
-                       const std::wstring& service_short_name,
-                       const std::wstring& service_description)
+ServiceManager::Create(const std::wstring_view& command_line,
+                       const std::wstring_view& service_full_name,
+                       const std::wstring_view& service_short_name,
+                       const std::wstring_view& service_description)
 {
     // Open the service manager.
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
@@ -68,13 +68,13 @@ ServiceManager::Create(const std::wstring& command_line,
 
     // Trying to create a service.
     ScopedScHandle service(CreateServiceW(sc_manager,
-                                          service_short_name.c_str(),
-                                          service_full_name.c_str(),
+                                          service_short_name.data(),
+                                          service_full_name.data(),
                                           SERVICE_ALL_ACCESS,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
                                           SERVICE_ERROR_NORMAL,
-                                          command_line.c_str(),
+                                          command_line.data(),
                                           nullptr,
                                           nullptr,
                                           nullptr,
@@ -89,7 +89,7 @@ ServiceManager::Create(const std::wstring& command_line,
     if (!service_description.empty())
     {
         SERVICE_DESCRIPTIONW description;
-        description.lpDescription = const_cast<LPWSTR>(service_description.c_str());
+        description.lpDescription = const_cast<LPWSTR>(service_description.data());
 
         // Set the service description.
         if (!ChangeServiceConfig2W(service,
@@ -139,8 +139,8 @@ std::wstring ServiceManager::GenerateUniqueServiceId()
 }
 
 // static
-std::wstring ServiceManager::CreateUniqueServiceName(const std::wstring& service_name,
-                                                     const std::wstring& service_id)
+std::wstring ServiceManager::CreateUniqueServiceName(const std::wstring_view& service_name,
+                                                     const std::wstring_view& service_id)
 {
     std::wstring unique_name(service_name);
 
