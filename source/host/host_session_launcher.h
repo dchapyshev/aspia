@@ -25,7 +25,7 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
                                      uint32_t session_id,
                                      const std::wstring& channel_id);
 
-bool LaunchSessionProcess(proto::SessionType session_type,
+bool LaunchSessionProcess(proto::auth::SessionType session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id);
 

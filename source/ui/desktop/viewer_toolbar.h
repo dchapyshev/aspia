@@ -25,7 +25,7 @@ public:
     ViewerToolBar() = default;
     ~ViewerToolBar() = default;
 
-    bool CreateViewerToolBar(HWND parent, proto::SessionType session_type);
+    bool CreateViewerToolBar(HWND parent, proto::auth::SessionType session_type);
 
 private:
     BEGIN_MSG_MAP(ViewerToolBar)

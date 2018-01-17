@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-bool ViewerToolBar::CreateViewerToolBar(HWND parent, proto::SessionType session_type)
+bool ViewerToolBar::CreateViewerToolBar(HWND parent, proto::auth::SessionType session_type)
 {
     const DWORD style = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT |
         TBSTYLE_LIST | TBSTYLE_TOOLTIPS;
@@ -23,7 +23,7 @@ bool ViewerToolBar::CreateViewerToolBar(HWND parent, proto::SessionType session_
         return false;
     }
 
-    if (session_type == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
+    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW)
     {
         TBBUTTONINFOW button_info;
 

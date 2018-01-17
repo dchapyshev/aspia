@@ -28,8 +28,8 @@ public:
     void set_port(uint16_t port);
     uint16_t port() const;
 
-    void set_session_type(proto::SessionType session_type);
-    proto::SessionType session_type() const;
+    void set_session_type(proto::auth::SessionType session_type);
+    proto::auth::SessionType session_type() const;
 
     const proto::SessionConfig& desktop_session_config() const;
     proto::SessionConfig* mutable_desktop_session_config();
@@ -42,8 +42,8 @@ private:
     std::wstring address_;
     uint16_t port_ = kDefaultHostTcpPort;
 
-    proto::SessionType session_type_ =
-        proto::SessionType::SESSION_TYPE_UNKNOWN;
+    proto::auth::SessionType session_type_ =
+        proto::auth::SessionType::SESSION_TYPE_UNKNOWN;
 
     proto::SessionConfig desktop_session_config_;
 };

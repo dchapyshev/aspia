@@ -283,19 +283,19 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
     return CreateProcessWithToken(session_token, command_line);
 }
 
-bool LaunchSessionProcess(proto::SessionType session_type,
+bool LaunchSessionProcess(proto::auth::SessionType session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id)
 {
     switch (session_type)
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
             const WCHAR* launcher_mode = kDesktopSessionSwitch;
 
-            if (session_type == proto::SESSION_TYPE_SYSTEM_INFO)
+            if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
                 launcher_mode = kSystemInfoSessionSwitch;
 
             if (!IsCallerHasAdminRights())
@@ -315,12 +315,12 @@ bool LaunchSessionProcess(proto::SessionType session_type,
             return LaunchSessionProcessFromService(launcher_mode, session_id, channel_id);
         }
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
         {
             return LaunchSessionProcess(kFileTransferSessionSwitch, session_id, channel_id);
         }
 
-        case proto::SESSION_TYPE_POWER_MANAGE:
+        case proto::auth::SESSION_TYPE_POWER_MANAGE:
         {
             return LaunchSessionProcess(kPowerManageSessionSwitch, session_id, channel_id);
         }

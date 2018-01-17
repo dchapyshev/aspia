@@ -28,7 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "auth_session_message.pb.h"
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_auth_5fsession_2eproto {
@@ -65,6 +65,44 @@ extern HostToClientDefaultTypeInternal _HostToClient_default_instance_;
 namespace aspia {
 namespace proto {
 namespace auth {
+
+enum Method {
+  METHOD_UNKNOWN = 0,
+  METHOD_BASIC = 1,
+  Method_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Method_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Method_IsValid(int value);
+const Method Method_MIN = METHOD_UNKNOWN;
+const Method Method_MAX = METHOD_BASIC;
+const int Method_ARRAYSIZE = Method_MAX + 1;
+
+enum SessionType {
+  SESSION_TYPE_UNKNOWN = 0,
+  SESSION_TYPE_DESKTOP_MANAGE = 1,
+  SESSION_TYPE_DESKTOP_VIEW = 2,
+  SESSION_TYPE_POWER_MANAGE = 4,
+  SESSION_TYPE_FILE_TRANSFER = 8,
+  SESSION_TYPE_SYSTEM_INFO = 16,
+  SessionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  SessionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool SessionType_IsValid(int value);
+const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
+const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
+const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
+
+enum Status {
+  STATUS_UNKNOWN = 0,
+  STATUS_SUCCESS = 1,
+  STATUS_ACCESS_DENIED = 2,
+  Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Status_IsValid(int value);
+const Status Status_MIN = STATUS_UNKNOWN;
+const Status Status_MAX = STATUS_ACCESS_DENIED;
+const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================
 
@@ -148,11 +186,11 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.auth.Status status = 1;
   void clear_status();
   static const int kStatusFieldNumber = 1;
-  ::aspia::proto::AuthStatus status() const;
-  void set_status(::aspia::proto::AuthStatus value);
+  ::aspia::proto::auth::Status status() const;
+  void set_status(::aspia::proto::auth::Status value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.HostToClient)
  private:
@@ -273,17 +311,17 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_password();
   void set_allocated_password(::std::string* password);
 
-  // .aspia.proto.SessionType session_type = 1;
+  // .aspia.proto.auth.SessionType session_type = 1;
   void clear_session_type();
   static const int kSessionTypeFieldNumber = 1;
-  ::aspia::proto::SessionType session_type() const;
-  void set_session_type(::aspia::proto::SessionType value);
+  ::aspia::proto::auth::SessionType session_type() const;
+  void set_session_type(::aspia::proto::auth::SessionType value);
 
-  // .aspia.proto.AuthMethod method = 2;
+  // .aspia.proto.auth.Method method = 2;
   void clear_method();
   static const int kMethodFieldNumber = 2;
-  ::aspia::proto::AuthMethod method() const;
-  void set_method(::aspia::proto::AuthMethod value);
+  ::aspia::proto::auth::Method method() const;
+  void set_method(::aspia::proto::auth::Method value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.ClientToHost)
  private:
@@ -308,15 +346,15 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #endif  // __GNUC__
 // HostToClient
 
-// .aspia.proto.AuthStatus status = 1;
+// .aspia.proto.auth.Status status = 1;
 inline void HostToClient::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::AuthStatus HostToClient::status() const {
+inline ::aspia::proto::auth::Status HostToClient::status() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.status)
-  return static_cast< ::aspia::proto::AuthStatus >(status_);
+  return static_cast< ::aspia::proto::auth::Status >(status_);
 }
-inline void HostToClient::set_status(::aspia::proto::AuthStatus value) {
+inline void HostToClient::set_status(::aspia::proto::auth::Status value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.HostToClient.status)
@@ -326,29 +364,29 @@ inline void HostToClient::set_status(::aspia::proto::AuthStatus value) {
 
 // ClientToHost
 
-// .aspia.proto.SessionType session_type = 1;
+// .aspia.proto.auth.SessionType session_type = 1;
 inline void ClientToHost::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::SessionType ClientToHost::session_type() const {
+inline ::aspia::proto::auth::SessionType ClientToHost::session_type() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.session_type)
-  return static_cast< ::aspia::proto::SessionType >(session_type_);
+  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
 }
-inline void ClientToHost::set_session_type(::aspia::proto::SessionType value) {
+inline void ClientToHost::set_session_type(::aspia::proto::auth::SessionType value) {
   
   session_type_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.session_type)
 }
 
-// .aspia.proto.AuthMethod method = 2;
+// .aspia.proto.auth.Method method = 2;
 inline void ClientToHost::clear_method() {
   method_ = 0;
 }
-inline ::aspia::proto::AuthMethod ClientToHost::method() const {
+inline ::aspia::proto::auth::Method ClientToHost::method() const {
   // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.method)
-  return static_cast< ::aspia::proto::AuthMethod >(method_);
+  return static_cast< ::aspia::proto::auth::Method >(method_);
 }
-inline void ClientToHost::set_method(::aspia::proto::AuthMethod value) {
+inline void ClientToHost::set_method(::aspia::proto::auth::Method value) {
   
   method_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientToHost.method)
@@ -471,6 +509,16 @@ inline void ClientToHost::set_allocated_password(::std::string* password) {
 }  // namespace auth
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::auth::Method> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

@@ -70,7 +70,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
         proto::auth::ClientToHost request;
 
-        request.set_method(proto::AuthMethod::AUTH_METHOD_BASIC);
+        request.set_method(proto::auth::METHOD_BASIC);
         request.set_session_type(config_.session_type());
         request.set_username(auth_dialog.UserName());
         request.set_password(auth_dialog.Password());
@@ -112,19 +112,19 @@ static std::unique_ptr<ClientSession> CreateSession(
 {
     switch (config.session_type())
     {
-        case proto::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
             return std::make_unique<ClientSessionDesktopManage>(config, channel_proxy);
 
-        case proto::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
             return std::make_unique<ClientSessionDesktopView>(config, channel_proxy);
 
-        case proto::SESSION_TYPE_FILE_TRANSFER:
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
             return std::make_unique<ClientSessionFileTransfer>(config, channel_proxy);
 
-        case proto::SESSION_TYPE_POWER_MANAGE:
+        case proto::auth::SESSION_TYPE_POWER_MANAGE:
             return std::make_unique<ClientSessionPowerManage>(config, channel_proxy);
 
-        case proto::SESSION_TYPE_SYSTEM_INFO:
+        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
             return std::make_unique<ClientSessionSystemInfo>(config, channel_proxy);
 
         default:
@@ -141,7 +141,7 @@ void Client::DoAuthorize(const IOBuffer& buffer)
     {
         status_ = reply.status();
 
-        if (status_ == proto::AUTH_STATUS_SUCCESS)
+        if (status_ == proto::auth::STATUS_SUCCESS)
         {
             session_ = CreateSession(config_, channel_proxy_);
             if (session_)

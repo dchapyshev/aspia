@@ -244,7 +244,6 @@
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
-    <ClCompile Include="proto\auth_session_message.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\desktop_session_message.pb.cc" />
     <ClCompile Include="proto\file_transfer_session.pb.cc" />
@@ -559,7 +558,6 @@
     <ClInclude Include="protocol\io_buffer.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
-    <ClInclude Include="proto\auth_session_message.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\desktop_session_message.pb.h" />
     <ClInclude Include="proto\file_transfer_session.pb.h" />
@@ -661,7 +659,6 @@
     <None Include="category\category_windows_device.proto" />
     <None Include="category\category_wsus.proto" />
     <None Include="proto\auth_session.proto" />
-    <None Include="proto\auth_session_message.proto" />
     <None Include="proto\build.cmd" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\desktop_session_message.proto" />

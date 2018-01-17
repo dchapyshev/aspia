@@ -25,7 +25,7 @@ class SettingsDialog : public CDialogImpl<SettingsDialog>
 public:
     enum { IDD = IDD_SETTINGS };
 
-    SettingsDialog(proto::SessionType session_type,const proto::SessionConfig& config);
+    SettingsDialog(proto::auth::SessionType session_type,const proto::SessionConfig& config);
     ~SettingsDialog() = default;
 
     const proto::SessionConfig& Config() const { return config_; }
@@ -57,7 +57,7 @@ private:
     void UpdateCompressionRatio(int compression_ratio);
     void SelectItemWithData(CComboBox& combobox, int item_data);
 
-    proto::SessionType session_type_;
+    proto::auth::SessionType session_type_;
     proto::SessionConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(SettingsDialog);

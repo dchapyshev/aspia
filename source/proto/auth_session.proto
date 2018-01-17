@@ -9,19 +9,42 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "auth_session_message.proto";
-
 package aspia.proto.auth;
+
+enum Method
+{
+    METHOD_UNKNOWN = 0;
+
+    // Means of protocol (user name, password).
+    METHOD_BASIC = 1;
+}
+
+enum SessionType
+{
+    SESSION_TYPE_UNKNOWN        = 0;
+    SESSION_TYPE_DESKTOP_MANAGE = 1;
+    SESSION_TYPE_DESKTOP_VIEW   = 2;
+    SESSION_TYPE_POWER_MANAGE   = 4;
+    SESSION_TYPE_FILE_TRANSFER  = 8;
+    SESSION_TYPE_SYSTEM_INFO    = 16;
+}
+
+enum Status
+{
+    STATUS_UNKNOWN       = 0;
+    STATUS_SUCCESS       = 1;
+    STATUS_ACCESS_DENIED = 2;
+}
 
 message HostToClient
 {
-    AuthStatus status = 1;
+    Status status = 1;
 }
 
 message ClientToHost
 {
     SessionType session_type = 1;
-    AuthMethod method        = 2;
+    Method method            = 2;
     string username          = 3;
     bytes password           = 4;
 }

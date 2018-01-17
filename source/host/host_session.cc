@@ -18,7 +18,7 @@ constexpr std::chrono::seconds kAttachTimeout{ 30 };
 
 } // namespace
 
-HostSession::HostSession(proto::SessionType session_type,
+HostSession::HostSession(proto::auth::SessionType session_type,
                          std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : session_type_(session_type),
       channel_proxy_(channel_proxy),
@@ -99,9 +99,9 @@ void HostSession::OnSessionDetached()
     process_connector_.Disconnect();
     process_watcher_.StopWatching();
 
-    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW ||
-        session_type_ == proto::SESSION_TYPE_SYSTEM_INFO)
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_VIEW ||
+        session_type_ == proto::auth::SESSION_TYPE_SYSTEM_INFO)
     {
         // We close the session process only for desktop manage and desktop view sessions.
         // Processes for other types of sessions are left open so that the user can see the fact
@@ -111,8 +111,8 @@ void HostSession::OnSessionDetached()
 
     process_.Close();
 
-    if (session_type_ == proto::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type_ == proto::SESSION_TYPE_DESKTOP_VIEW)
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_VIEW)
     {
         // If the new session is not connected within the specified time interval,
         // an error occurred.

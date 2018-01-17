@@ -56,7 +56,7 @@ private:
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    proto::AuthStatus status_;
+    proto::auth::Status status_;
     StatusDialog status_dialog_;
 
     std::shared_ptr<NetworkChannel> channel_;

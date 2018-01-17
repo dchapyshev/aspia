@@ -59,7 +59,9 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     void OnPasswordEditDblClick();
     void ShowErrorMessage(UINT string_id);
-    void InsertSessionType(CListViewCtrl& list, proto::SessionType session_type, UINT string_id);
+    void InsertSessionType(CListViewCtrl& list,
+                           proto::auth::SessionType session_type,
+                           UINT string_id);
 
     static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
                                                    UINT msg,

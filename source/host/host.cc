@@ -61,14 +61,14 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
-static proto::AuthStatus DoBasicAuthorization(const std::string& username,
-                                              const std::string& password,
-                                              proto::SessionType session_type)
+static proto::auth::Status DoBasicAuthorization(const std::string& username,
+                                                const std::string& password,
+                                                proto::auth::SessionType session_type)
 {
     HostUserList user_list;
 
     if (!user_list.LoadFromStorage())
-        return proto::AUTH_STATUS_ACCESS_DENIED;
+        return proto::auth::STATUS_ACCESS_DENIED;
 
     const int size = user_list.size();
 
@@ -80,23 +80,23 @@ static proto::AuthStatus DoBasicAuthorization(const std::string& username,
             continue;
 
         if (!user.enabled())
-            return proto::AUTH_STATUS_ACCESS_DENIED;
+            return proto::auth::STATUS_ACCESS_DENIED;
 
         SecureString<std::string> password_hash;
 
         if (!HostUserList::CreatePasswordHash(password, password_hash.mutable_string()))
-            return proto::AUTH_STATUS_ACCESS_DENIED;
+            return proto::auth::STATUS_ACCESS_DENIED;
 
         if (user.password_hash() != password_hash.string())
-            return proto::AUTH_STATUS_ACCESS_DENIED;
+            return proto::auth::STATUS_ACCESS_DENIED;
 
         if (!(user.session_types() & session_type))
-            return proto::AUTH_STATUS_ACCESS_DENIED;
+            return proto::auth::STATUS_ACCESS_DENIED;
 
-        return proto::AUTH_STATUS_SUCCESS;
+        return proto::auth::STATUS_SUCCESS;
     }
 
-    return proto::AUTH_STATUS_ACCESS_DENIED;
+    return proto::auth::STATUS_ACCESS_DENIED;
 }
 
 void Host::DoAuthorize(IOBuffer& buffer)
@@ -113,7 +113,7 @@ void Host::DoAuthorize(IOBuffer& buffer)
 
     switch (request.method())
     {
-        case proto::AUTH_METHOD_BASIC:
+        case proto::auth::METHOD_BASIC:
         {
             reply.set_status(
                 DoBasicAuthorization(request.username(),
@@ -123,7 +123,7 @@ void Host::DoAuthorize(IOBuffer& buffer)
         break;
 
         default:
-            reply.set_status(proto::AUTH_STATUS_ACCESS_DENIED);
+            reply.set_status(proto::auth::STATUS_ACCESS_DENIED);
             break;
     }
 
@@ -134,21 +134,21 @@ void Host::DoAuthorize(IOBuffer& buffer)
         std::bind(&Host::OnAuthResultSended, this, request.session_type(), reply.status()));
 }
 
-void Host::OnAuthResultSended(proto::SessionType session_type, proto::AuthStatus status)
+void Host::OnAuthResultSended(proto::auth::SessionType session_type, proto::auth::Status status)
 {
     // Authorization result sended, stop the timer.
     auth_timer_.Stop();
 
     // If authorization was successful, then start the session.
-    if (status == proto::AUTH_STATUS_SUCCESS)
+    if (status == proto::auth::STATUS_SUCCESS)
     {
         switch (session_type)
         {
-            case proto::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::SESSION_TYPE_DESKTOP_VIEW:
-            case proto::SESSION_TYPE_FILE_TRANSFER:
-            case proto::SESSION_TYPE_POWER_MANAGE:
-            case proto::SESSION_TYPE_SYSTEM_INFO:
+            case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            case proto::auth::SESSION_TYPE_POWER_MANAGE:
+            case proto::auth::SESSION_TYPE_SYSTEM_INFO:
                 session_ = std::make_unique<HostSession>(session_type, channel_proxy_);
                 break;
 

@@ -26,7 +26,7 @@ UserPropDialog::UserPropDialog(Mode mode, proto::HostUser* user, const HostUserL
 }
 
 void UserPropDialog::InsertSessionType(CListViewCtrl& list,
-                                       proto::SessionType session_type,
+                                       proto::auth::SessionType session_type,
                                        UINT string_id)
 {
     CString text;
@@ -104,23 +104,23 @@ LRESULT UserPropDialog::OnInitDialog(
     list.AddColumn(L"", 0);
 
     InsertSessionType(list,
-                      proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE,
+                      proto::auth::SESSION_TYPE_DESKTOP_MANAGE,
                       IDS_SESSION_TYPE_DESKTOP_MANAGE);
 
     InsertSessionType(list,
-                      proto::SessionType::SESSION_TYPE_DESKTOP_VIEW,
+                      proto::auth::SESSION_TYPE_DESKTOP_VIEW,
                       IDS_SESSION_TYPE_DESKTOP_VIEW);
 
     InsertSessionType(list,
-                      proto::SessionType::SESSION_TYPE_POWER_MANAGE,
+                      proto::auth::SESSION_TYPE_POWER_MANAGE,
                       IDS_SESSION_TYPE_POWER_MANAGE);
 
     InsertSessionType(list,
-                      proto::SessionType::SESSION_TYPE_FILE_TRANSFER,
+                      proto::auth::SESSION_TYPE_FILE_TRANSFER,
                       IDS_SESSION_TYPE_FILE_TRANSFER);
 
     InsertSessionType(list,
-                      proto::SessionType::SESSION_TYPE_SYSTEM_INFO,
+                      proto::auth::SESSION_TYPE_SYSTEM_INFO,
                       IDS_SESSION_TYPE_SYSTEM_INFO);
 
     CEdit username_edit(GetDlgItem(IDC_USERNAME_EDIT));

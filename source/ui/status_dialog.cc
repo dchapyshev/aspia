@@ -69,17 +69,17 @@ void StatusDialog::SetConnectionStatus(ConnectionStatus status)
     AddMessage(text);
 }
 
-void StatusDialog::SetAuthorizationStatus(proto::AuthStatus status)
+void StatusDialog::SetAuthorizationStatus(proto::auth::Status status)
 {
     UINT resource_id;
 
     switch (status)
     {
-        case proto::AUTH_STATUS_SUCCESS:
+        case proto::auth::STATUS_SUCCESS:
             resource_id = IDS_AUTH_STATUS_SUCCESS;
             break;
 
-        case proto::AUTH_STATUS_ACCESS_DENIED:
+        case proto::auth::STATUS_ACCESS_DENIED:
             resource_id = IDS_AUTH_STATUS_ACCESS_DENIED;
             break;
 

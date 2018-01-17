@@ -67,7 +67,7 @@ void MainDialog::UpdateIpList()
 
 int MainDialog::AddSessionType(CComboBox& combobox,
                                UINT string_resource_id,
-                               proto::SessionType session_type)
+                               proto::auth::SessionType session_type)
 {
     CString text;
     text.LoadStringW(string_resource_id);
@@ -84,31 +84,31 @@ void MainDialog::InitSessionTypesCombo()
 
     const int first_item = AddSessionType(combobox,
                                           IDS_SESSION_TYPE_DESKTOP_MANAGE,
-                                          proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+                                          proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 
     AddSessionType(combobox,
                    IDS_SESSION_TYPE_DESKTOP_VIEW,
-                   proto::SessionType::SESSION_TYPE_DESKTOP_VIEW);
+                   proto::auth::SESSION_TYPE_DESKTOP_VIEW);
 
     AddSessionType(combobox,
                    IDS_SESSION_TYPE_FILE_TRANSFER,
-                   proto::SessionType::SESSION_TYPE_FILE_TRANSFER);
+                   proto::auth::SESSION_TYPE_FILE_TRANSFER);
 
     AddSessionType(combobox,
                    IDS_SESSION_TYPE_SYSTEM_INFO,
-                   proto::SessionType::SESSION_TYPE_SYSTEM_INFO);
+                   proto::auth::SESSION_TYPE_SYSTEM_INFO);
 
     AddSessionType(combobox,
                    IDS_SESSION_TYPE_POWER_MANAGE,
-                   proto::SessionType::SESSION_TYPE_POWER_MANAGE);
+                   proto::auth::SESSION_TYPE_POWER_MANAGE);
 
     combobox.SetCurSel(first_item);
 }
 
-proto::SessionType MainDialog::GetSelectedSessionType() const
+proto::auth::SessionType MainDialog::GetSelectedSessionType() const
 {
     CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
-    return static_cast<proto::SessionType>(combo.GetItemData(combo.GetCurSel()));
+    return static_cast<proto::auth::SessionType>(combo.GetItemData(combo.GetCurSel()));
 }
 
 LRESULT MainDialog::OnInitDialog(
@@ -259,8 +259,8 @@ void MainDialog::UpdateSessionType()
 {
     switch (GetSelectedSessionType())
     {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
             config_.SetDefaultDesktopSessionConfig();
             GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(TRUE);
@@ -283,12 +283,12 @@ LRESULT MainDialog::OnSessionTypeChanged(
 LRESULT MainDialog::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    const proto::SessionType session_type = GetSelectedSessionType();
+    const proto::auth::SessionType session_type = GetSelectedSessionType();
 
     switch (session_type)
     {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
             SettingsDialog dialog(session_type, config_.desktop_session_config());
 
@@ -309,9 +309,9 @@ LRESULT MainDialog::OnSettingsButton(
 LRESULT MainDialog::OnConnectButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    const proto::SessionType session_type = GetSelectedSessionType();
+    const proto::auth::SessionType session_type = GetSelectedSessionType();
 
-    if (session_type != proto::SessionType::SESSION_TYPE_UNKNOWN)
+    if (session_type != proto::auth::SESSION_TYPE_UNKNOWN)
     {
         WCHAR buffer[128] = { 0 };
         GetDlgItemTextW(IDC_SERVER_ADDRESS_EDIT, buffer, _countof(buffer));

@@ -234,9 +234,6 @@
     <ClCompile Include="network\network_server_tcp.cc">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="proto\auth_session_message.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="proto\auth_session.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -1119,9 +1116,6 @@
     <ClInclude Include="network\network_server_tcp.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="proto\auth_session_message.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="proto\auth_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -1877,9 +1871,6 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\auth_session.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\auth_session_message.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\host_user.proto">

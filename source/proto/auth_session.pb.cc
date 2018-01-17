@@ -79,6 +79,41 @@ void InitDefaultsClientToHost() {
 namespace aspia {
 namespace proto {
 namespace auth {
+bool Method_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool SessionType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 4:
+    case 8:
+    case 16:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool Status_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -162,7 +197,7 @@ bool HostToClient::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.AuthStatus status = 1;
+      // .aspia.proto.auth.Status status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -170,7 +205,7 @@ bool HostToClient::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::aspia::proto::AuthStatus >(value));
+          set_status(static_cast< ::aspia::proto::auth::Status >(value));
         } else {
           goto handle_unusual;
         }
@@ -203,7 +238,7 @@ void HostToClient::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.auth.Status status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->status(), output);
@@ -220,7 +255,7 @@ size_t HostToClient::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.AuthStatus status = 1;
+  // .aspia.proto.auth.Status status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -382,7 +417,7 @@ bool ClientToHost::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.SessionType session_type = 1;
+      // .aspia.proto.auth.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -390,14 +425,14 @@ bool ClientToHost::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::aspia::proto::SessionType >(value));
+          set_session_type(static_cast< ::aspia::proto::auth::SessionType >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .aspia.proto.AuthMethod method = 2;
+      // .aspia.proto.auth.Method method = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
@@ -405,7 +440,7 @@ bool ClientToHost::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_method(static_cast< ::aspia::proto::AuthMethod >(value));
+          set_method(static_cast< ::aspia::proto::auth::Method >(value));
         } else {
           goto handle_unusual;
         }
@@ -466,13 +501,13 @@ void ClientToHost::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.SessionType session_type = 1;
+  // .aspia.proto.auth.SessionType session_type = 1;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->session_type(), output);
   }
 
-  // .aspia.proto.AuthMethod method = 2;
+  // .aspia.proto.auth.Method method = 2;
   if (this->method() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->method(), output);
@@ -519,13 +554,13 @@ size_t ClientToHost::ByteSizeLong() const {
         this->password());
   }
 
-  // .aspia.proto.SessionType session_type = 1;
+  // .aspia.proto.auth.SessionType session_type = 1;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
   }
 
-  // .aspia.proto.AuthMethod method = 2;
+  // .aspia.proto.auth.Method method = 2;
   if (this->method() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());

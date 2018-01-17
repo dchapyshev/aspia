@@ -50,7 +50,7 @@ public:
 
     void SetDestonation(const std::wstring& address, uint16_t port);
     void SetConnectionStatus(ConnectionStatus status);
-    void SetAuthorizationStatus(proto::AuthStatus status);
+    void SetAuthorizationStatus(proto::auth::Status status);
 
 private:
     BEGIN_MSG_MAP(StatusDialog)

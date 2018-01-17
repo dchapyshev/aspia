@@ -32,7 +32,7 @@ static const int kMinUpdateInterval = 15;
 static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 
-SettingsDialog::SettingsDialog(proto::SessionType session_type,
+SettingsDialog::SettingsDialog(proto::auth::SessionType session_type,
                                const proto::SessionConfig& config)
     : session_type_(session_type),
       config_(config)
@@ -159,7 +159,7 @@ LRESULT SettingsDialog::OnInitDialog(
     updown.SetRange(kMinUpdateInterval, kMaxUpdateInterval);
     updown.SetPos(config_.update_interval());
 
-    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_VIEW)
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_VIEW)
     {
         GetDlgItem(IDC_ENABLE_CLIPBOARD_CHECK).EnableWindow(FALSE);
         GetDlgItem(IDC_ENABLE_CURSOR_SHAPE_CHECK).EnableWindow(FALSE);

@@ -50,8 +50,7 @@ private:
     std::unique_ptr<PipeChannel> ipc_channel_;
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
 
-    proto::SessionType session_type_ =
-        proto::SessionType::SESSION_TYPE_UNKNOWN;
+    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
 
     std::unique_ptr<VideoEncoder> video_encoder_;
     std::unique_ptr<CursorEncoder> cursor_encoder_;

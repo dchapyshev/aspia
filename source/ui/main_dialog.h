@@ -84,8 +84,10 @@ private:
     void InitIpList();
     void UpdateIpList();
     void InitSessionTypesCombo();
-    proto::SessionType GetSelectedSessionType() const;
-    int AddSessionType(CComboBox& combobox, UINT string_resource_id, proto::SessionType session_type);
+    proto::auth::SessionType GetSelectedSessionType() const;
+    int AddSessionType(CComboBox& combobox,
+                       UINT string_resource_id,
+                       proto::auth::SessionType session_type);
     void UpdateSessionType();
     void StopHostMode();
     void CopySelectedIp();

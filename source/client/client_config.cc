@@ -55,12 +55,12 @@ const std::wstring& ClientConfig::address() const
     return address_;
 }
 
-void ClientConfig::set_session_type(proto::SessionType session_type)
+void ClientConfig::set_session_type(proto::auth::SessionType session_type)
 {
     session_type_ = session_type;
 }
 
-proto::SessionType ClientConfig::session_type() const
+proto::auth::SessionType ClientConfig::session_type() const
 {
     return session_type_;
 }

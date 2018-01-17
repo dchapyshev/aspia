@@ -56,12 +56,12 @@ void HostSessionDesktop::Run(const std::wstring& channel_id)
 void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
-    session_type_ = static_cast<proto::SessionType>(user_data);
+    session_type_ = static_cast<proto::auth::SessionType>(user_data);
 
     switch (session_type_)
     {
-        case proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::SessionType::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
             break;
 
         default:
@@ -138,7 +138,7 @@ void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
     // If the mouse cursor has changes.
     if (mouse_cursor)
     {
-        DCHECK_EQ(session_type_, proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE);
+        DCHECK_EQ(session_type_, proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
         DCHECK(cursor_encoder_);
 
         std::unique_ptr<proto::CursorShape> cursor_shape =
@@ -172,7 +172,7 @@ void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& messag
 
 bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
 {
-    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!input_injector_)
@@ -184,7 +184,7 @@ bool HostSessionDesktop::ReadPointerEvent(const proto::PointerEvent& event)
 
 bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
 {
-    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!input_injector_)
@@ -196,7 +196,7 @@ bool HostSessionDesktop::ReadKeyEvent(const proto::KeyEvent& event)
 
 bool HostSessionDesktop::ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> clipboard_event)
 {
-    if (session_type_ != proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
 
     if (!clipboard_thread_)
@@ -221,7 +221,7 @@ void HostSessionDesktop::SendConfigRequest()
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
 
-    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         request->set_features(kSupportedFeatures);
     else
         request->set_features(0);
@@ -235,7 +235,7 @@ bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
 
     bool enable_cursor_shape = false;
 
-    if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
         if (config.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE)
             enable_cursor_shape = true;

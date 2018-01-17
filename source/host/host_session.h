@@ -24,7 +24,7 @@ class HostSession :
     private MessageLoopThread::Delegate
 {
 public:
-    HostSession(proto::SessionType session_type,
+    HostSession(proto::auth::SessionType session_type,
                 std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~HostSession();
 
@@ -44,7 +44,7 @@ private:
 
     void OnSessionAttachTimeout();
 
-    proto::SessionType session_type_;
+    proto::auth::SessionType session_type_;
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

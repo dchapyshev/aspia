@@ -45,10 +45,10 @@ void HostSessionFileTransfer::Run(const std::wstring& channel_id)
 void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
 {
     // The server sends the session type in user_data.
-    proto::SessionType session_type =
-        static_cast<proto::SessionType>(user_data);
+    proto::auth::SessionType session_type =
+        static_cast<proto::auth::SessionType>(user_data);
 
-    if (session_type != proto::SESSION_TYPE_FILE_TRANSFER)
+    if (session_type != proto::auth::SESSION_TYPE_FILE_TRANSFER)
     {
         LOG(FATAL) << "Invalid session type passed: " << session_type;
         return;
