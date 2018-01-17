@@ -34,13 +34,13 @@ void ClientSessionPowerManage::OnAfterThreadRunning()
 {
     PowerManageDialog dialog;
 
-    proto::PowerEvent::Action action =
-        static_cast<proto::PowerEvent::Action>(dialog.DoModal(nullptr));
+    proto::power::Command command =
+        static_cast<proto::power::Command>(dialog.DoModal(nullptr));
 
-    if (action != proto::PowerEvent::UNKNOWN)
+    if (command != proto::power::COMMAND_UNKNOWN)
     {
         proto::power::ClientToHost message;
-        message.mutable_power_event()->set_action(action);
+        message.set_command(command);
 
         channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
     }

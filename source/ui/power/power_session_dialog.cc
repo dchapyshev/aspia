@@ -16,8 +16,8 @@ namespace aspia {
 static const UINT_PTR kTimerId = 100;
 static const int kTimeout = 60; // 60 seconds
 
-PowerSessionDialog::PowerSessionDialog(proto::PowerEvent::Action action)
-    : action_(action),
+PowerSessionDialog::PowerSessionDialog(proto::power::Command command)
+    : command_(command),
       timer_(kTimerId),
       time_left_(kTimeout)
 {
@@ -46,26 +46,26 @@ LRESULT PowerSessionDialog::OnInitDialog(
 
     CString title;
 
-    switch (action_)
+    switch (command_)
     {
-        case proto::PowerEvent::SHUTDOWN:
+        case proto::power::COMMAND_SHUTDOWN:
             title.LoadStringW(IDS_PM_SHUTDOWN_COMMAND);
             break;
 
-        case proto::PowerEvent::REBOOT:
+        case proto::power::COMMAND_REBOOT:
             title.LoadStringW(IDS_PM_REBOOT_COMMAND);
             break;
 
-        case proto::PowerEvent::HIBERNATE:
+        case proto::power::COMMAND_HIBERNATE:
             title.LoadStringW(IDS_PM_HIBERNATE_COMMAND);
             break;
 
-        case proto::PowerEvent::SUSPEND:
+        case proto::power::COMMAND_SUSPEND:
             title.LoadStringW(IDS_PM_SUSPEND_COMMAND);
             break;
 
         default:
-            DLOG(FATAL) << "Wrong power action: " << action_;
+            DLOG(FATAL) << "Wrong power action: " << command_;
             break;
     }
 

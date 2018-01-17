@@ -28,7 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "power_session_message.pb.h"
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_power_5fsession_2eproto {
@@ -59,6 +59,20 @@ extern ClientToHostDefaultTypeInternal _ClientToHost_default_instance_;
 namespace aspia {
 namespace proto {
 namespace power {
+
+enum Command {
+  COMMAND_UNKNOWN = 0,
+  COMMAND_SHUTDOWN = 1,
+  COMMAND_REBOOT = 2,
+  COMMAND_HIBERNATE = 3,
+  COMMAND_SUSPEND = 4,
+  Command_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Command_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Command_IsValid(int value);
+const Command Command_MIN = COMMAND_UNKNOWN;
+const Command Command_MAX = COMMAND_SUSPEND;
+const int Command_ARRAYSIZE = Command_MAX + 1;
 
 // ===================================================================
 
@@ -142,20 +156,17 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.PowerEvent power_event = 1;
-  bool has_power_event() const;
-  void clear_power_event();
-  static const int kPowerEventFieldNumber = 1;
-  const ::aspia::proto::PowerEvent& power_event() const;
-  ::aspia::proto::PowerEvent* release_power_event();
-  ::aspia::proto::PowerEvent* mutable_power_event();
-  void set_allocated_power_event(::aspia::proto::PowerEvent* power_event);
+  // .aspia.proto.power.Command command = 1;
+  void clear_command();
+  static const int kCommandFieldNumber = 1;
+  ::aspia::proto::power::Command command() const;
+  void set_command(::aspia::proto::power::Command value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.power.ClientToHost)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::PowerEvent* power_event_;
+  int command_;
   mutable int _cached_size_;
   friend struct ::protobuf_power_5fsession_2eproto::TableStruct;
   friend void ::protobuf_power_5fsession_2eproto::InitDefaultsClientToHostImpl();
@@ -171,48 +182,18 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #endif  // __GNUC__
 // ClientToHost
 
-// .aspia.proto.PowerEvent power_event = 1;
-inline bool ClientToHost::has_power_event() const {
-  return this != internal_default_instance() && power_event_ != NULL;
+// .aspia.proto.power.Command command = 1;
+inline void ClientToHost::clear_command() {
+  command_ = 0;
 }
-inline const ::aspia::proto::PowerEvent& ClientToHost::power_event() const {
-  const ::aspia::proto::PowerEvent* p = power_event_;
-  // @@protoc_insertion_point(field_get:aspia.proto.power.ClientToHost.power_event)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::PowerEvent*>(
-      &::aspia::proto::_PowerEvent_default_instance_);
+inline ::aspia::proto::power::Command ClientToHost::command() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.power.ClientToHost.command)
+  return static_cast< ::aspia::proto::power::Command >(command_);
 }
-inline ::aspia::proto::PowerEvent* ClientToHost::release_power_event() {
-  // @@protoc_insertion_point(field_release:aspia.proto.power.ClientToHost.power_event)
+inline void ClientToHost::set_command(::aspia::proto::power::Command value) {
   
-  ::aspia::proto::PowerEvent* temp = power_event_;
-  power_event_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::PowerEvent* ClientToHost::mutable_power_event() {
-  
-  if (power_event_ == NULL) {
-    power_event_ = new ::aspia::proto::PowerEvent;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.power.ClientToHost.power_event)
-  return power_event_;
-}
-inline void ClientToHost::set_allocated_power_event(::aspia::proto::PowerEvent* power_event) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete reinterpret_cast< ::google::protobuf::MessageLite*>(power_event_);
-  }
-  if (power_event) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      power_event = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, power_event, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  power_event_ = power_event;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.power.ClientToHost.power_event)
+  command_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.power.ClientToHost.command)
 }
 
 #ifdef __GNUC__
@@ -224,6 +205,14 @@ inline void ClientToHost::set_allocated_power_event(::aspia::proto::PowerEvent* 
 }  // namespace power
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::power::Command> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

@@ -11,15 +11,15 @@
 
 namespace aspia {
 
-bool InjectPowerEvent(const proto::PowerEvent& event)
+bool InjectPowerCommand(proto::power::Command command)
 {
     ScopedProcessPrivilege privilege(SE_SHUTDOWN_NAME);
     if (!privilege.IsSuccessed())
         return false;
 
-    switch (event.action())
+    switch (command)
     {
-        case proto::PowerEvent::SHUTDOWN:
+        case proto::power::COMMAND_SHUTDOWN:
         {
             if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
             {
@@ -28,7 +28,7 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         }
         break;
 
-        case proto::PowerEvent::REBOOT:
+        case proto::power::COMMAND_REBOOT:
         {
             if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
             {
@@ -37,7 +37,7 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         }
         break;
 
-        case proto::PowerEvent::HIBERNATE:
+        case proto::power::COMMAND_HIBERNATE:
         {
             if (!SetSystemPowerState(FALSE, TRUE))
             {
@@ -47,7 +47,7 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
         }
         break;
 
-        case proto::PowerEvent::SUSPEND:
+        case proto::power::COMMAND_SUSPEND:
         {
             if (!SetSystemPowerState(TRUE, TRUE))
             {
@@ -59,7 +59,7 @@ bool InjectPowerEvent(const proto::PowerEvent& event)
 
         default:
         {
-            DLOG(WARNING) << "Unknown power control action requested: " << event.action();
+            DLOG(WARNING) << "Unknown power control action requested: " << command;
             return false;
         }
     }

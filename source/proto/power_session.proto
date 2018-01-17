@@ -9,11 +9,18 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "power_session_message.proto";
-
 package aspia.proto.power;
+
+enum Command
+{
+    COMMAND_UNKNOWN   = 0;
+    COMMAND_SHUTDOWN  = 1;
+    COMMAND_REBOOT    = 2;
+    COMMAND_HIBERNATE = 3;
+    COMMAND_SUSPEND   = 4;
+}
 
 message ClientToHost
 {
-    PowerEvent power_event = 1;
+    Command command = 1;
 }

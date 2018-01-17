@@ -32,32 +32,32 @@ LRESULT PowerManageDialog::OnInitDialog(
 LRESULT PowerManageDialog::OnClose(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    EndDialog(proto::PowerEvent::UNKNOWN);
+    EndDialog(proto::power::COMMAND_UNKNOWN);
     return 0;
 }
 
 LRESULT PowerManageDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    proto::PowerEvent::Action action = proto::PowerEvent::UNKNOWN;
+    proto::power::Command command = proto::power::COMMAND_UNKNOWN;
 
     if (IsDlgButtonChecked(ID_POWER_SHUTDOWN) == BST_CHECKED)
-        action = proto::PowerEvent::SHUTDOWN;
+        command = proto::power::COMMAND_SHUTDOWN;
     else if (IsDlgButtonChecked(ID_POWER_REBOOT) == BST_CHECKED)
-        action = proto::PowerEvent::REBOOT;
+        command = proto::power::COMMAND_REBOOT;
     else if (IsDlgButtonChecked(ID_POWER_HIBERNATE) == BST_CHECKED)
-        action = proto::PowerEvent::HIBERNATE;
+        command = proto::power::COMMAND_HIBERNATE;
     else if (IsDlgButtonChecked(ID_POWER_SUSPEND) == BST_CHECKED)
-        action = proto::PowerEvent::SUSPEND;
+        command = proto::power::COMMAND_SUSPEND;
 
-    EndDialog(action);
+    EndDialog(command);
     return 0;
 }
 
 LRESULT PowerManageDialog::OnCancelButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    EndDialog(proto::PowerEvent::UNKNOWN);
+    EndDialog(proto::power::COMMAND_UNKNOWN);
     return 0;
 }
 

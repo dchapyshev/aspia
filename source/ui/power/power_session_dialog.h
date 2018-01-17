@@ -25,7 +25,7 @@ public:
     enum { IDD = IDD_POWER_HOST };
     enum class Result { CANCEL, EXECUTE };
 
-    PowerSessionDialog(proto::PowerEvent::Action action);
+    PowerSessionDialog(proto::power::Command command);
     ~PowerSessionDialog() = default;
 
 private:
@@ -47,7 +47,7 @@ private:
     void UpdateTimer();
     void Exit(Result result);
 
-    const proto::PowerEvent::Action action_;
+    const proto::power::Command command_;
     int time_left_;
     Timer timer_;
 

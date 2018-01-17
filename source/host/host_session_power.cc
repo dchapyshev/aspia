@@ -55,28 +55,28 @@ void HostSessionPower::OnIpcChannelMessage(const IOBuffer& buffer)
 
     if (ParseMessage(buffer, message))
     {
-        switch (message.power_event().action())
+        switch (message.command())
         {
-            case proto::PowerEvent::SHUTDOWN:
-            case proto::PowerEvent::REBOOT:
-            case proto::PowerEvent::HIBERNATE:
-            case proto::PowerEvent::SUSPEND:
+            case proto::power::COMMAND_SHUTDOWN:
+            case proto::power::COMMAND_REBOOT:
+            case proto::power::COMMAND_HIBERNATE:
+            case proto::power::COMMAND_SUSPEND:
             {
-                PowerSessionDialog session_dialog(message.power_event().action());
+                PowerSessionDialog session_dialog(message.command());
 
                 PowerSessionDialog::Result result =
                     static_cast<PowerSessionDialog::Result>(session_dialog.DoModal());
 
                 if (result == PowerSessionDialog::Result::EXECUTE)
                 {
-                    InjectPowerEvent(message.power_event());
+                    InjectPowerCommand(message.command());
                 }
             }
             break;
 
             default:
             {
-                LOG(ERROR) << "Unknown power action: " << message.power_event().action();
+                LOG(ERROR) << "Unknown power action: " << message.command();
             }
             break;
         }

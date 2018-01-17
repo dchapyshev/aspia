@@ -8,11 +8,11 @@
 #ifndef _ASPIA_BASE__POWER_INJECTOR_H
 #define _ASPIA_BASE__POWER_INJECTOR_H
 
-#include "proto/power_session_message.pb.h"
+#include "proto/power_session.pb.h"
 
 namespace aspia {
 
-bool InjectPowerEvent(const proto::PowerEvent& event);
+bool InjectPowerCommand(proto::power::Command command);
 
 } // namespace aspia
 

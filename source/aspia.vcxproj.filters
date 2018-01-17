@@ -237,9 +237,6 @@
     <ClCompile Include="proto\auth_session.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="proto\power_session_message.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="codec\pixel_translator.cc">
       <Filter>codec</Filter>
     </ClCompile>
@@ -1113,9 +1110,6 @@
     <ClInclude Include="proto\auth_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="proto\power_session_message.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="codec\video_helpers.h">
       <Filter>codec</Filter>
     </ClInclude>
@@ -1850,9 +1844,6 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\power_session.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\power_session_message.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\auth_session.proto">
