@@ -152,7 +152,7 @@ void FileTransferDialog::OnObjectTransfer(uint64_t left_size)
 }
 
 void FileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
-                                                proto::RequestStatus status,
+                                                proto::file_transfer::Status status,
                                                 FileTransfer::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())

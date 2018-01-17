@@ -113,7 +113,7 @@ void FileRemover::OnRemoveObjectFailureAction(FileAction action)
     }
 }
 
-void FileRemover::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
+void FileRemover::OnRemoveReply(const FilePath& path, proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -121,7 +121,7 @@ void FileRemover::OnRemoveReply(const FilePath& path, proto::RequestStatus statu
         return;
     }
 
-    if (status == proto::REQUEST_STATUS_SUCCESS)
+    if (status == proto::file_transfer::STATUS_SUCCESS)
     {
         RunNextTask();
         return;

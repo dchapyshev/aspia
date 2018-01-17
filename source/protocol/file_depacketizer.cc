@@ -37,12 +37,12 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(const FilePath& file_
     return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(std::move(file_stream)));
 }
 
-bool FileDepacketizer::ReadNextPacket(const proto::FilePacket& packet)
+bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::FilePacket& packet)
 {
     DCHECK(file_stream_.is_open());
 
     // The first packet must have the full file size.
-    if (packet.flags() & proto::FilePacket::FIRST_PACKET)
+    if (packet.flags() & proto::file_transfer::FilePacket::FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = packet.file_size();
@@ -60,7 +60,7 @@ bool FileDepacketizer::ReadNextPacket(const proto::FilePacket& packet)
 
     left_size_ -= packet_size;
 
-    if (packet.flags() & proto::FilePacket::LAST_PACKET)
+    if (packet.flags() & proto::file_transfer::FilePacket::LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();

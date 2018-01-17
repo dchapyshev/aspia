@@ -33,14 +33,14 @@ private:
     void OnReplySended();
 
     void ReadDriveListRequest();
-    void ReadFileListRequest(const proto::FileListRequest& request);
-    void ReadCreateDirectoryRequest(const proto::CreateDirectoryRequest& request);
-    void ReadDirectorySizeRequest(const proto::DirectorySizeRequest& request);
-    void ReadRenameRequest(const proto::RenameRequest& request);
-    void ReadRemoveRequest(const proto::RemoveRequest& request);
-    void ReadFileUploadRequest(const proto::FileUploadRequest& request);
-    bool ReadFilePacket(const proto::FilePacket& file_packet);
-    void ReadFileDownloadRequest(const proto::FileDownloadRequest& request);
+    void ReadFileListRequest(const proto::file_transfer::FileListRequest& request);
+    void ReadCreateDirectoryRequest(const proto::file_transfer::CreateDirectoryRequest& request);
+    void ReadDirectorySizeRequest(const proto::file_transfer::DirectorySizeRequest& request);
+    void ReadRenameRequest(const proto::file_transfer::RenameRequest& request);
+    void ReadRemoveRequest(const proto::file_transfer::RemoveRequest& request);
+    void ReadFileUploadRequest(const proto::file_transfer::FileUploadRequest& request);
+    bool ReadFilePacket(const proto::file_transfer::FilePacket& file_packet);
+    void ReadFileDownloadRequest(const proto::file_transfer::FileDownloadRequest& request);
     bool ReadFilePacketRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;

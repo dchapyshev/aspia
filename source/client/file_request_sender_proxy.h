@@ -45,7 +45,7 @@ public:
                                  const FilePath& file_path);
 
     bool SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                        std::unique_ptr<proto::FilePacket> file_packet);
+                        std::unique_ptr<proto::file_transfer::FilePacket> file_packet);
 
     bool SendFilePacketRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
 

@@ -9,13 +9,133 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "file_transfer_session_message.proto";
-
 package aspia.proto.file_transfer;
+
+enum Status
+{
+    STATUS_UNKNOWN             = 0;
+    STATUS_SUCCESS             = 1;
+    STATUS_INVALID_PATH_NAME   = 2;
+    STATUS_PATH_NOT_FOUND      = 3;
+    STATUS_PATH_ALREADY_EXISTS = 4;
+    STATUS_NO_DRIVES_FOUND     = 5;
+    STATUS_DISK_FULL           = 6;
+    STATUS_ACCESS_DENIED       = 7;
+    STATUS_FILE_OPEN_ERROR     = 8;
+    STATUS_FILE_CREATE_ERROR   = 9;
+    STATUS_FILE_WRITE_ERROR    = 10;
+    STATUS_FILE_READ_ERROR     = 11;
+}
+
+message DriveList
+{
+    message Item
+    {
+        enum Type
+        {
+            UNKNOWN        = 0;
+            CDROM          = 1;
+            REMOVABLE      = 2;
+            FIXED          = 3;
+            REMOTE         = 4;
+            RAM            = 5;
+            HOME_FOLDER    = 6;
+            DESKTOP_FOLDER = 7;
+        }
+
+        Type type          = 1;
+        string name        = 2;
+        string path        = 3;
+        uint64 total_space = 4;
+        uint64 free_space  = 5;
+    }
+
+    repeated Item item = 1;
+}
+
+message DriveListRequest
+{
+    uint32 dummy = 1;
+}
+
+message FileList
+{
+    message Item
+    {
+        string name             = 1;
+        uint64 size             = 2;
+        int64 modification_time = 3;
+        bool is_directory       = 4;
+    }
+
+    repeated Item item = 1;
+}
+
+message FileListRequest
+{
+    string path = 1;
+}
+
+message DirectorySize
+{
+    uint64 size = 1;
+}
+
+message DirectorySizeRequest
+{
+    string path = 1;
+}
+
+message FileUploadRequest
+{
+    string file_path = 1;
+    bool overwrite = 2;
+}
+
+message FileDownloadRequest
+{
+   string file_path = 1;
+}
+
+message FilePacketRequest
+{
+    uint32 dummy = 1;
+}
+
+message FilePacket
+{
+    enum Flags
+    {
+        ERROR        = 0;
+        PACKET       = 1;
+        FIRST_PACKET = 2;
+        LAST_PACKET  = 4;
+    }
+
+    uint32 flags = 1;
+    uint64 file_size = 2;
+    bytes data = 3;
+}
+
+message CreateDirectoryRequest
+{
+    string path = 1;
+}
+
+message RenameRequest
+{
+    string old_name = 1;
+    string new_name = 2;
+}
+
+message RemoveRequest
+{
+    string path = 1;
+}
 
 message HostToClient
 {
-    RequestStatus status         = 1;
+    Status status                = 1;
     DriveList drive_list         = 2;
     FileList file_list           = 3;
     DirectorySize directory_size = 4;

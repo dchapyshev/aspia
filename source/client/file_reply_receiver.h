@@ -27,36 +27,36 @@ public:
 protected:
     std::shared_ptr<FileReplyReceiverProxy> This() const { return receiver_proxy_; }
 
-    virtual void OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                                  proto::RequestStatus status);
+    virtual void OnDriveListReply(std::shared_ptr<proto::file_transfer::DriveList> drive_list,
+                                  proto::file_transfer::Status status);
 
     virtual void OnFileListReply(const FilePath& path,
-                                 std::shared_ptr<proto::FileList> file_list,
-                                 proto::RequestStatus status);
+                                 std::shared_ptr<proto::file_transfer::FileList> file_list,
+                                 proto::file_transfer::Status status);
 
     virtual void OnDirectorySizeReply(const FilePath& path,
                                       uint64_t size,
-                                      proto::RequestStatus status);
+                                      proto::file_transfer::Status status);
 
     virtual void OnCreateDirectoryReply(const FilePath& path,
-                                        proto::RequestStatus status);
+                                        proto::file_transfer::Status status);
 
-    virtual void OnRemoveReply(const FilePath& path, proto::RequestStatus status);
+    virtual void OnRemoveReply(const FilePath& path, proto::file_transfer::Status status);
 
     virtual void OnRenameReply(const FilePath& old_name,
                                const FilePath& new_name,
-                               proto::RequestStatus status);
+                               proto::file_transfer::Status status);
 
     virtual void OnFileUploadReply(const FilePath& file_path,
-                                   proto::RequestStatus status);
+                                   proto::file_transfer::Status status);
 
     virtual void OnFileDownloadReply(const FilePath& file_path,
-                                     proto::RequestStatus status);
+                                     proto::file_transfer::Status status);
 
-    virtual void OnFilePacketSended(uint32_t flags, proto::RequestStatus status);
+    virtual void OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status);
 
-    virtual void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                                      proto::RequestStatus status);
+    virtual void OnFilePacketReceived(std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
+                                      proto::file_transfer::Status status);
 
 private:
     friend class FileReplyReceiverProxy;

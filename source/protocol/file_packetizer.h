@@ -28,7 +28,7 @@ public:
     static std::unique_ptr<FilePacketizer> Create(const FilePath& file_path);
 
     // Creates a packet for transferring.
-    std::unique_ptr<proto::FilePacket> CreateNextPacket();
+    std::unique_ptr<proto::file_transfer::FilePacket> CreateNextPacket();
 
     uint64_t LeftSize() const { return left_size_; }
 

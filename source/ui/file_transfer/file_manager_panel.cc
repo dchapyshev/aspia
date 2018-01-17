@@ -541,10 +541,11 @@ LRESULT FileManagerPanel::OnHome(
     return 0;
 }
 
-void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                                        proto::RequestStatus status)
+void FileManagerPanel::OnDriveListReply(
+    std::shared_ptr<proto::file_transfer::DriveList> drive_list,
+    proto::file_transfer::Status status)
 {
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
 
@@ -568,10 +569,10 @@ void FileManagerPanel::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_
 }
 
 void FileManagerPanel::OnFileListReply(const FilePath& path,
-                                       std::shared_ptr<proto::FileList> file_list,
-                                       proto::RequestStatus status)
+                                       std::shared_ptr<proto::file_transfer::FileList> file_list,
+                                       proto::file_transfer::Status status)
 {
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
 
@@ -590,9 +591,10 @@ void FileManagerPanel::OnFileListReply(const FilePath& path,
     }
 }
 
-void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status)
+void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path,
+                                              proto::file_transfer::Status status)
 {
-    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
 
@@ -608,9 +610,9 @@ void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path, proto::Reque
 
 void FileManagerPanel::OnRenameReply(const FilePath& old_name,
                                      const FilePath& new_name,
-                                     proto::RequestStatus status)
+                                     proto::file_transfer::Status status)
 {
-    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         CString status_string = RequestStatusCodeToString(status);
 

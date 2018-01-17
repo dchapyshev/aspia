@@ -36,8 +36,10 @@ void FileRequestSenderLocal::DriveListRequest(std::shared_ptr<FileReplyReceiverP
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    std::unique_ptr<proto::DriveList> drive_list = std::make_unique<proto::DriveList>();
-    proto::RequestStatus status = ExecuteDriveListRequest(drive_list.get());
+    std::unique_ptr<proto::file_transfer::DriveList> drive_list =
+        std::make_unique<proto::file_transfer::DriveList>();
+
+    proto::file_transfer::Status status = ExecuteDriveListRequest(drive_list.get());
 
     receiver->OnDriveListReply(std::move(drive_list), status);
 }
@@ -52,8 +54,10 @@ void FileRequestSenderLocal::FileListRequest(std::shared_ptr<FileReplyReceiverPr
 {
     DCHECK(worker_->BelongsToCurrentThread());
 
-    std::unique_ptr<proto::FileList> file_list = std::make_unique<proto::FileList>();
-    proto::RequestStatus status = ExecuteFileListRequest(path, file_list.get());
+    std::unique_ptr<proto::file_transfer::FileList> file_list =
+        std::make_unique<proto::file_transfer::FileList>();
+
+    proto::file_transfer::Status status = ExecuteFileListRequest(path, file_list.get());
 
     receiver->OnFileListReply(path, std::move(file_list), status);
 }
@@ -142,7 +146,7 @@ void FileRequestSenderLocal::SendFileDownloadRequest(
 
 void FileRequestSenderLocal::SendFilePacket(
     std::shared_ptr<FileReplyReceiverProxy> /* receiver */,
-    std::unique_ptr<proto::FilePacket> /* file_packet */)
+    std::unique_ptr<proto::file_transfer::FilePacket> /* file_packet */)
 {
     DLOG(FATAL) << "The request type is not allowed for local processing";
 }

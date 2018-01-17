@@ -94,8 +94,9 @@ void FileRequestSenderRemote::SendFileDownloadRequest(
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                             std::unique_ptr<proto::FilePacket> file_packet)
+void FileRequestSenderRemote::SendFilePacket(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    std::unique_ptr<proto::file_transfer::FilePacket> file_packet)
 {
     proto::file_transfer::ClientToHost request;
     request.set_allocated_file_packet(file_packet.release());
@@ -167,18 +168,18 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
 
     if (request.has_drive_list_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_drive_list())
+        if (reply.status() == proto::file_transfer::STATUS_SUCCESS && !reply.has_drive_list())
             return false;
 
-        std::unique_ptr<proto::DriveList> drive_list(reply.release_drive_list());
+        std::unique_ptr<proto::file_transfer::DriveList> drive_list(reply.release_drive_list());
         receiver->OnDriveListReply(std::move(drive_list), reply.status());
     }
     else if (request.has_file_list_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_list())
+        if (reply.status() == proto::file_transfer::STATUS_SUCCESS && !reply.has_file_list())
             return false;
 
-        std::unique_ptr<proto::FileList> file_list(reply.release_file_list());
+        std::unique_ptr<proto::file_transfer::FileList> file_list(reply.release_file_list());
 
         receiver->OnFileListReply(
             std::experimental::filesystem::u8path(request.file_list_request().path()),
@@ -187,7 +188,7 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
     }
     else if (request.has_directory_size_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_directory_size())
+        if (reply.status() == proto::file_transfer::STATUS_SUCCESS && !reply.has_directory_size())
             return false;
 
         receiver->OnDirectorySizeReply(
@@ -228,10 +229,10 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
     }
     else if (request.has_file_packet_request())
     {
-        if (reply.status() == proto::REQUEST_STATUS_SUCCESS && !reply.has_file_packet())
+        if (reply.status() == proto::file_transfer::STATUS_SUCCESS && !reply.has_file_packet())
             return false;
 
-        std::unique_ptr<proto::FilePacket> file_packet(reply.release_file_packet());
+        std::unique_ptr<proto::file_transfer::FilePacket> file_packet(reply.release_file_packet());
         receiver->OnFilePacketReceived(std::move(file_packet), reply.status());
     }
     else if (request.has_file_packet())

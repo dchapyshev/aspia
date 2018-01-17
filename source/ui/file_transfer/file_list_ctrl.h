@@ -31,15 +31,15 @@ public:
 
     bool CreateFileList(HWND parent, int control_id);
 
-    void Read(std::shared_ptr<proto::FileList> list);
-    void Read(const proto::DriveList& list);
+    void Read(std::shared_ptr<proto::file_transfer::FileList> list);
+    void Read(const proto::file_transfer::DriveList& list);
 
     bool IsValidObjectIndex(int object_index) const;
     bool HasFileList() const;
-    const proto::FileList::Item& Object(int object_index) const;
+    const proto::file_transfer::FileList::Item& Object(int object_index) const;
     FilePath ObjectName(int object_index) const;
     bool IsDirectoryObject(int object_index) const;
-    proto::FileList::Item* FirstSelectedObject() const;
+    proto::file_transfer::FileList::Item* FirstSelectedObject() const;
     int GetObjectUnderMousePointer() const;
     void AddDirectory();
 
@@ -57,7 +57,7 @@ public:
 
         bool IsAtEnd() const;
         void Advance();
-        const proto::FileList::Item& Object() const;
+        const proto::file_transfer::FileList::Item& Object() const;
 
     private:
         const FileListCtrl& list_;
@@ -75,7 +75,7 @@ private:
     void AddNewColumn(UINT string_id, int width);
 
     CImageListManaged imagelist_;
-    std::shared_ptr<proto::FileList> list_;
+    std::shared_ptr<proto::file_transfer::FileList> list_;
 
     DISALLOW_COPY_AND_ASSIGN(FileListCtrl);
 };

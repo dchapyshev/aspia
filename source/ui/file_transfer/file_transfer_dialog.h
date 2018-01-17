@@ -55,7 +55,7 @@ private:
     void OnTransferStarted(uint64_t size) final;
     void OnTransferComplete() final;
     void OnFileOperationFailure(const FilePath& file_path,
-                                proto::RequestStatus status,
+                                proto::file_transfer::Status status,
                                 FileTransfer::ActionCallback callback) final;
     void OnObjectTransferStarted(const FilePath& object_path, uint64_t object_size) final;
     void OnObjectTransfer(uint64_t left_size) final;

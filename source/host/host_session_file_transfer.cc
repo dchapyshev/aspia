@@ -143,7 +143,7 @@ void HostSessionFileTransfer::ReadDriveListRequest()
     proto::file_transfer::HostToClient reply;
     reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnDriveListRequest();
     }
@@ -151,7 +151,8 @@ void HostSessionFileTransfer::ReadDriveListRequest()
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadFileListRequest(const proto::FileListRequest& request)
+void HostSessionFileTransfer::ReadFileListRequest(
+    const proto::file_transfer::FileListRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -159,7 +160,7 @@ void HostSessionFileTransfer::ReadFileListRequest(const proto::FileListRequest& 
 
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnFileListRequest(path);
     }
@@ -168,7 +169,7 @@ void HostSessionFileTransfer::ReadFileListRequest(const proto::FileListRequest& 
 }
 
 void HostSessionFileTransfer::ReadCreateDirectoryRequest(
-    const proto::CreateDirectoryRequest& request)
+    const proto::file_transfer::CreateDirectoryRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -176,7 +177,7 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
 
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnCreateDirectoryRequest(path);
     }
@@ -184,7 +185,8 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadDirectorySizeRequest(const proto::DirectorySizeRequest& request)
+void HostSessionFileTransfer::ReadDirectorySizeRequest(
+    const proto::file_transfer::DirectorySizeRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -198,7 +200,7 @@ void HostSessionFileTransfer::ReadDirectorySizeRequest(const proto::DirectorySiz
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& request)
+void HostSessionFileTransfer::ReadRenameRequest(const proto::file_transfer::RenameRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -207,7 +209,7 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& requ
 
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnRenameRequest(old_name, new_name);
     }
@@ -215,7 +217,7 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::RenameRequest& requ
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadRemoveRequest(const proto::RemoveRequest& request)
+void HostSessionFileTransfer::ReadRemoveRequest(const proto::file_transfer::RemoveRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -223,7 +225,7 @@ void HostSessionFileTransfer::ReadRemoveRequest(const proto::RemoveRequest& requ
 
     reply.set_status(ExecuteRemoveRequest(path));
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnRemoveRequest(path);
     }
@@ -231,7 +233,8 @@ void HostSessionFileTransfer::ReadRemoveRequest(const proto::RemoveRequest& requ
     SendReply(reply);
 }
 
-void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadRequest& request)
+void HostSessionFileTransfer::ReadFileUploadRequest(
+    const proto::file_transfer::FileUploadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -241,7 +244,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
     {
         if (!IsValidPathName(file_path))
         {
-            reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
+            reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
             break;
         }
 
@@ -249,7 +252,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
         {
             if (PathExists(file_path))
             {
-                reply.set_status(proto::REQUEST_STATUS_PATH_ALREADY_EXISTS);
+                reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
                 break;
             }
         }
@@ -257,15 +260,15 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
         file_depacketizer_ = FileDepacketizer::Create(file_path, request.overwrite());
         if (!file_depacketizer_)
         {
-            reply.set_status(proto::REQUEST_STATUS_FILE_CREATE_ERROR);
+            reply.set_status(proto::file_transfer::STATUS_FILE_CREATE_ERROR);
             break;
         }
 
-        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
     while (false);
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnFileUploadRequest(file_path);
     }
@@ -273,7 +276,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(const proto::FileUploadReque
     SendReply(reply);
 }
 
-bool HostSessionFileTransfer::ReadFilePacket(const proto::FilePacket& file_packet)
+bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePacket& file_packet)
 {
     if (!file_depacketizer_)
     {
@@ -285,14 +288,14 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::FilePacket& file_packe
 
     if (!file_depacketizer_->ReadNextPacket(file_packet))
     {
-        reply.set_status(proto::REQUEST_STATUS_FILE_WRITE_ERROR);
+        reply.set_status(proto::file_transfer::STATUS_FILE_WRITE_ERROR);
     }
     else
     {
-        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
 
-    if (file_packet.flags() & proto::FilePacket::LAST_PACKET)
+    if (file_packet.flags() & proto::file_transfer::FilePacket::LAST_PACKET)
     {
         file_depacketizer_.reset();
     }
@@ -301,7 +304,8 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::FilePacket& file_packe
     return true;
 }
 
-void HostSessionFileTransfer::ReadFileDownloadRequest(const proto::FileDownloadRequest& request)
+void HostSessionFileTransfer::ReadFileDownloadRequest(
+    const proto::file_transfer::FileDownloadRequest& request)
 {
     proto::file_transfer::HostToClient reply;
 
@@ -309,22 +313,22 @@ void HostSessionFileTransfer::ReadFileDownloadRequest(const proto::FileDownloadR
 
     if (!IsValidPathName(file_path))
     {
-        reply.set_status(proto::REQUEST_STATUS_INVALID_PATH_NAME);
+        reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
     }
     else
     {
         file_packetizer_ = FilePacketizer::Create(file_path);
         if (!file_packetizer_)
         {
-            reply.set_status(proto::REQUEST_STATUS_FILE_OPEN_ERROR);
+            reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
         }
         else
         {
-            reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+            reply.set_status(proto::file_transfer::STATUS_SUCCESS);
         }
     }
 
-    if (reply.status() == proto::REQUEST_STATUS_SUCCESS)
+    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
         status_dialog_->OnFileDownloadRequest(file_path);
     }
@@ -342,19 +346,20 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
 
     proto::file_transfer::HostToClient reply;
 
-    std::unique_ptr<proto::FilePacket> packet = file_packetizer_->CreateNextPacket();
+    std::unique_ptr<proto::file_transfer::FilePacket> packet =
+        file_packetizer_->CreateNextPacket();
     if (!packet)
     {
-        reply.set_status(proto::REQUEST_STATUS_FILE_READ_ERROR);
+        reply.set_status(proto::file_transfer::STATUS_FILE_READ_ERROR);
     }
     else
     {
-        if (packet->flags() & proto::FilePacket::LAST_PACKET)
+        if (packet->flags() & proto::file_transfer::FilePacket::LAST_PACKET)
         {
             file_packetizer_.reset();
         }
 
-        reply.set_status(proto::REQUEST_STATUS_SUCCESS);
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
         reply.set_allocated_file_packet(packet.release());
     }
 

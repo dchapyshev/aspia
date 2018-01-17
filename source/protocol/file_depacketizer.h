@@ -25,7 +25,7 @@ public:
     static std::unique_ptr<FileDepacketizer> Create(const FilePath& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
-    bool ReadNextPacket(const proto::FilePacket& packet);
+    bool ReadNextPacket(const proto::file_transfer::FilePacket& packet);
 
     uint64_t LeftSize() const { return left_size_; }
 

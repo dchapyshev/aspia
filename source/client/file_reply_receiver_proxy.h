@@ -18,31 +18,33 @@ namespace aspia {
 class FileReplyReceiverProxy
 {
 public:
-    bool OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                          proto::RequestStatus status);
+    bool OnDriveListReply(std::shared_ptr<proto::file_transfer::DriveList> drive_list,
+                          proto::file_transfer::Status status);
 
     bool OnFileListReply(const FilePath& path,
-                         std::shared_ptr<proto::FileList> file_list,
-                         proto::RequestStatus status);
+                         std::shared_ptr<proto::file_transfer::FileList> file_list,
+                         proto::file_transfer::Status status);
 
-    bool OnDirectorySizeReply(const FilePath& path, uint64_t size, proto::RequestStatus status);
+    bool OnDirectorySizeReply(const FilePath& path,
+                              uint64_t size,
+                              proto::file_transfer::Status status);
 
-    bool OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status);
+    bool OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status);
 
-    bool OnRemoveReply(const FilePath& path, proto::RequestStatus status);
+    bool OnRemoveReply(const FilePath& path, proto::file_transfer::Status status);
 
     bool OnRenameReply(const FilePath& old_name,
                        const FilePath& new_name,
-                       proto::RequestStatus status);
+                       proto::file_transfer::Status status);
 
-    bool OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status);
+    bool OnFileUploadReply(const FilePath& file_path, proto::file_transfer::Status status);
 
-    bool OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status);
+    bool OnFileDownloadReply(const FilePath& file_path, proto::file_transfer::Status status);
 
-    bool OnFilePacketSended(uint32_t flags, proto::RequestStatus status);
+    bool OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status);
 
-    bool OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                              proto::RequestStatus status);
+    bool OnFilePacketReceived(std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
+                              proto::file_transfer::Status status);
 
 private:
     friend class FileReplyReceiver;

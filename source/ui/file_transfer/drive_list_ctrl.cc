@@ -38,7 +38,7 @@ bool DriveListCtrl::CreateDriveList(HWND parent, int control_id)
     return true;
 }
 
-void DriveListCtrl::Read(std::shared_ptr<proto::DriveList> list)
+void DriveListCtrl::Read(std::shared_ptr<proto::file_transfer::DriveList> list)
 {
     ResetContent();
     imagelist_.RemoveAll();
@@ -58,7 +58,7 @@ void DriveListCtrl::Read(std::shared_ptr<proto::DriveList> list)
 
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DriveList::Item& object = list_->item(object_index);
+        const proto::file_transfer::DriveList::Item& object = list_->item(object_index);
 
         icon = GetDriveIcon(object.type());
         icon_index = imagelist_.AddIcon(icon);
@@ -107,14 +107,14 @@ int DriveListCtrl::SelectedObject() const
     return static_cast<int>(GetItemData(selected_item));
 }
 
-const proto::DriveList::Item& DriveListCtrl::Object(int object_index) const
+const proto::file_transfer::DriveList::Item& DriveListCtrl::Object(int object_index) const
 {
     DCHECK(HasDriveList());
     DCHECK(IsValidObjectIndex(object_index));
     return list_->item(object_index);
 }
 
-const proto::DriveList& DriveListCtrl::DriveList() const
+const proto::file_transfer::DriveList& DriveListCtrl::DriveList() const
 {
     DCHECK(HasDriveList());
     return *list_;

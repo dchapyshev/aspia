@@ -123,7 +123,7 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(FileAction action)
 }
 
 void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
-                                                  proto::RequestStatus status)
+                                                  proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -132,8 +132,8 @@ void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
         return;
     }
 
-    if (status == proto::REQUEST_STATUS_SUCCESS ||
-        status == proto::REQUEST_STATUS_PATH_ALREADY_EXISTS)
+    if (status == proto::file_transfer::STATUS_SUCCESS ||
+        status == proto::file_transfer::STATUS_PATH_ALREADY_EXISTS)
     {
         RunNextTask();
         return;
@@ -234,7 +234,7 @@ void FileTransferUploader::OnUnableToReadFileAction(FileAction action)
 }
 
 void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
-                                             proto::RequestStatus status)
+                                             proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -243,7 +243,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
         return;
     }
 
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         if (file_create_failure_action_ == FileAction::ASK)
         {
@@ -271,7 +271,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
                 &FileTransferUploader::OnUnableToOpenFileAction, this, std::placeholders::_1);
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else
@@ -282,7 +282,8 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
         return;
     }
 
-    std::unique_ptr<proto::FilePacket> file_packet = file_packetizer_->CreateNextPacket();
+    std::unique_ptr<proto::file_transfer::FilePacket> file_packet =
+        file_packetizer_->CreateNextPacket();
     if (!file_packet)
     {
         if (file_read_failure_action_ == FileAction::ASK)
@@ -291,7 +292,7 @@ void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
                 &FileTransferUploader::OnUnableToReadFileAction, this, std::placeholders::_1);
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else
@@ -329,7 +330,7 @@ void FileTransferUploader::OnUnableToWriteFileAction(FileAction action)
     }
 }
 
-void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
+void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -344,7 +345,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
         return;
     }
 
-    if (status != proto::RequestStatus::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         if (file_write_failure_action_ == FileAction::ASK)
         {
@@ -367,14 +368,15 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
 
     delegate_->OnObjectTransfer(file_packetizer_->LeftSize());
 
-    if (flags & proto::FilePacket::LAST_PACKET)
+    if (flags & proto::file_transfer::FilePacket::LAST_PACKET)
     {
         file_packetizer_.reset();
         RunNextTask();
         return;
     }
 
-    std::unique_ptr<proto::FilePacket> file_packet = file_packetizer_->CreateNextPacket();
+    std::unique_ptr<proto::file_transfer::FilePacket> file_packet =
+        file_packetizer_->CreateNextPacket();
     if (!file_packet)
     {
         if (file_read_failure_action_ == FileAction::ASK)
@@ -385,7 +387,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::RequestStat
             const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else

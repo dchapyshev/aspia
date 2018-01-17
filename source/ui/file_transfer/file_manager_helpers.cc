@@ -15,37 +15,37 @@
 
 namespace aspia {
 
-HICON GetDriveIcon(proto::DriveList::Item::Type drive_type)
+HICON GetDriveIcon(proto::file_transfer::DriveList::Item::Type drive_type)
 {
     SHSTOCKICONID icon_id;
 
     switch (drive_type)
     {
-        case proto::DriveList::Item::CDROM:
+        case proto::file_transfer::DriveList::Item::CDROM:
             icon_id = SIID_DRIVECD;
             break;
 
-        case proto::DriveList::Item::FIXED:
+        case proto::file_transfer::DriveList::Item::FIXED:
             icon_id = SIID_DRIVEFIXED;
             break;
 
-        case proto::DriveList::Item::REMOVABLE:
+        case proto::file_transfer::DriveList::Item::REMOVABLE:
             icon_id = SIID_DRIVEREMOVE;
             break;
 
-        case proto::DriveList::Item::REMOTE:
+        case proto::file_transfer::DriveList::Item::REMOTE:
             icon_id = SIID_DRIVENET;
             break;
 
-        case proto::DriveList::Item::RAM:
+        case proto::file_transfer::DriveList::Item::RAM:
             icon_id = SIID_DRIVERAM;
             break;
 
-        case proto::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
             icon_id = SIID_DESKTOP;
             break;
 
-        case proto::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
         default:
             icon_id = SIID_FOLDER;
             break;
@@ -102,17 +102,17 @@ HICON GetFileIcon(const FilePath& file_name)
     return file_info.hIcon;
 }
 
-CString GetDriveDisplayName(const proto::DriveList::Item& item)
+CString GetDriveDisplayName(const proto::file_transfer::DriveList::Item& item)
 {
     CString name;
 
     switch (item.type())
     {
-        case proto::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
             name.LoadStringW(IDS_FT_HOME_FOLDER);
             return name;
 
-        case proto::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
             name.LoadStringW(IDS_FT_DESKTOP_FOLDER);
             return name;
 
@@ -132,37 +132,37 @@ CString GetDriveDisplayName(const proto::DriveList::Item& item)
     return UNICODEfromUTF8(item.path()).c_str();
 }
 
-CString GetDriveDescription(proto::DriveList::Item::Type type)
+CString GetDriveDescription(proto::file_transfer::DriveList::Item::Type type)
 {
     CString desc;
 
     switch (type)
     {
-        case proto::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_HOME);
             break;
 
-        case proto::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_DESKTOP);
             break;
 
-        case proto::DriveList::Item::CDROM:
+        case proto::file_transfer::DriveList::Item::CDROM:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_CDROM);
             break;
 
-        case proto::DriveList::Item::FIXED:
+        case proto::file_transfer::DriveList::Item::FIXED:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_FIXED);
             break;
 
-        case proto::DriveList::Item::REMOVABLE:
+        case proto::file_transfer::DriveList::Item::REMOVABLE:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOVABLE);
             break;
 
-        case proto::DriveList::Item::REMOTE:
+        case proto::file_transfer::DriveList::Item::REMOTE:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOTE);
             break;
 
-        case proto::DriveList::Item::RAM:
+        case proto::file_transfer::DriveList::Item::RAM:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_RAM);
             break;
 

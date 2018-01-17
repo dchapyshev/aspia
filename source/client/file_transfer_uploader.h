@@ -42,9 +42,9 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnFileUploadReply(const FilePath& file_path, proto::RequestStatus status) final;
-    void OnFilePacketSended(uint32_t flags, proto::RequestStatus status) final;
+    void OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status) final;
+    void OnFileUploadReply(const FilePath& file_path, proto::file_transfer::Status status) final;
+    void OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status) final;
 
     void OnUnableToCreateDirectoryAction(FileAction action);
     void OnUnableToCreateFileAction(FileAction action);

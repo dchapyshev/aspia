@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-CString RequestStatusCodeToString(proto::RequestStatus status);
+CString RequestStatusCodeToString(proto::file_transfer::Status status);
 
 } // namespace aspia
 

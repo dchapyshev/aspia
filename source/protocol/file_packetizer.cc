@@ -17,7 +17,7 @@ namespace {
 // This parameter specifies the size of the part.
 constexpr size_t kPacketPartSize = 16 * 1024; // 16 kB
 
-char* GetOutputBuffer(proto::FilePacket* packet, size_t size)
+char* GetOutputBuffer(proto::file_transfer::FilePacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return const_cast<char*>(packet->mutable_data()->data());
@@ -49,15 +49,16 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const FilePath& file_path
     return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
 }
 
-std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
+std::unique_ptr<proto::file_transfer::FilePacket> FilePacketizer::CreateNextPacket()
 {
     DCHECK(file_stream_.is_open());
 
     // Create a new file packet.
-    std::unique_ptr<proto::FilePacket> packet = std::make_unique<proto::FilePacket>();
+    std::unique_ptr<proto::file_transfer::FilePacket> packet =
+        std::make_unique<proto::file_transfer::FilePacket>();
 
     // All file packets must have the flag.
-    packet->set_flags(proto::FilePacket::PACKET);
+    packet->set_flags(proto::file_transfer::FilePacket::PACKET);
 
     size_t packet_buffer_size = kPacketPartSize;
 
@@ -78,7 +79,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
 
     if (left_size_ == file_size_)
     {
-        packet->set_flags(packet->flags() | proto::FilePacket::FIRST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::FilePacket::FIRST_PACKET);
 
         // Set file path and size in first packet.
         packet->set_file_size(file_size_);
@@ -91,7 +92,7 @@ std::unique_ptr<proto::FilePacket> FilePacketizer::CreateNextPacket()
         file_size_ = 0;
         file_stream_.close();
 
-        packet->set_flags(packet->flags() | proto::FilePacket::LAST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::FilePacket::LAST_PACKET);
     }
 
     return packet;

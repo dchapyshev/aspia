@@ -48,7 +48,7 @@ bool FileListCtrl::CreateFileList(HWND parent, int control_id)
     return true;
 }
 
-void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
+void FileListCtrl::Read(std::shared_ptr<proto::file_transfer::FileList> list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -75,7 +75,7 @@ void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
     // Enumerate the directories first.
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::FileList::Item& item = list_->item(object_index);
+        const proto::file_transfer::FileList::Item& item = list_->item(object_index);
 
         if (!item.is_directory())
             continue;
@@ -91,7 +91,7 @@ void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
     // Enumerate the files.
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::FileList::Item& object = list_->item(object_index);
+        const proto::file_transfer::FileList::Item& object = list_->item(object_index);
 
         if (object.is_directory())
             continue;
@@ -110,7 +110,7 @@ void FileListCtrl::Read(std::shared_ptr<proto::FileList> list)
     }
 }
 
-void FileListCtrl::Read(const proto::DriveList& list)
+void FileListCtrl::Read(const proto::file_transfer::DriveList& list)
 {
     DeleteAllItems();
     imagelist_.RemoveAll();
@@ -129,7 +129,7 @@ void FileListCtrl::Read(const proto::DriveList& list)
 
     for (int object_index = 0; object_index < object_count; ++object_index)
     {
-        const proto::DriveList::Item& object = list.item(object_index);
+        const proto::file_transfer::DriveList::Item& object = list.item(object_index);
 
         const CIcon icon(GetDriveIcon(object.type()));
         const int icon_index = imagelist_.AddIcon(icon);
@@ -153,7 +153,7 @@ bool FileListCtrl::HasFileList() const
     return list_ != nullptr;
 }
 
-const proto::FileList::Item& FileListCtrl::Object(int object_index) const
+const proto::file_transfer::FileList::Item& FileListCtrl::Object(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));
@@ -177,7 +177,7 @@ bool FileListCtrl::IsDirectoryObject(int object_index) const
     return list_->item(object_index).is_directory();
 }
 
-proto::FileList::Item* FileListCtrl::FirstSelectedObject() const
+proto::file_transfer::FileList::Item* FileListCtrl::FirstSelectedObject() const
 {
     const int selected_item = GetNextItem(-1, LVNI_SELECTED);
     if (selected_item == -1)
@@ -264,9 +264,9 @@ void FileListCtrl::Iterator::Advance()
     item_index_ = list_.GetNextItem(item_index_, mode_);
 }
 
-const proto::FileList::Item& FileListCtrl::Iterator::Object() const
+const proto::file_transfer::FileList::Item& FileListCtrl::Iterator::Object() const
 {
-    static const proto::FileList::Item empty_item;
+    static const proto::file_transfer::FileList::Item empty_item;
 
     if (item_index_ == -1)
         return empty_item;

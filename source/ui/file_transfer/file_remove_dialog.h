@@ -50,7 +50,7 @@ private:
     void OnRemovingComplete() final;
     void OnRemoveObject(const FilePath& object_path) final;
     void OnRemoveObjectFailure(const FilePath& object_path,
-                                       proto::RequestStatus status,
+                                       proto::file_transfer::Status status,
                                        FileRemover::ActionCallback callback) final;
 
     std::shared_ptr<MessageLoopProxy> runner_;

@@ -18,7 +18,7 @@
 
 namespace aspia {
 
-HICON GetDriveIcon(proto::DriveList::Item::Type drive_type);
+HICON GetDriveIcon(proto::file_transfer::DriveList::Item::Type drive_type);
 
 HICON GetComputerIcon();
 
@@ -26,9 +26,9 @@ HICON GetDirectoryIcon();
 
 HICON GetFileIcon(const FilePath& file_name);
 
-CString GetDriveDisplayName(const proto::DriveList::Item& item);
+CString GetDriveDisplayName(const proto::file_transfer::DriveList::Item& item);
 
-CString GetDriveDescription(proto::DriveList::Item::Type type);
+CString GetDriveDescription(proto::file_transfer::DriveList::Item::Type type);
 
 CString GetFileTypeString(const FilePath& file_name);
 

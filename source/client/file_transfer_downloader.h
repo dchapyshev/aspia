@@ -40,10 +40,10 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnCreateDirectoryReply(const FilePath& path, proto::RequestStatus status) final;
-    void OnFileDownloadReply(const FilePath& file_path, proto::RequestStatus status) final;
-    void OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                              proto::RequestStatus status) final;
+    void OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status) final;
+    void OnFileDownloadReply(const FilePath& file_path, proto::file_transfer::Status status) final;
+    void OnFilePacketReceived(std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
+                              proto::file_transfer::Status status) final;
     void CreateDepacketizer(const FilePath& file_path, bool overwrite);
 
     void OnUnableToCreateDirectoryAction(FileAction action);

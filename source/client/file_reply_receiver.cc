@@ -22,65 +22,68 @@ FileReplyReceiver::~FileReplyReceiver()
     receiver_proxy_ = nullptr;
 }
 
-void FileReplyReceiver::OnDriveListReply(std::shared_ptr<proto::DriveList> /* drive_list */,
-                                         proto::RequestStatus /* status */)
+void FileReplyReceiver::OnDriveListReply(
+    std::shared_ptr<proto::file_transfer::DriveList> /* drive_list */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: drive list";
 }
 
-void FileReplyReceiver::OnFileListReply(const FilePath& /* path */,
-                                        std::shared_ptr<proto::FileList> /* file_list */,
-                                        proto::RequestStatus /* status */)
+void FileReplyReceiver::OnFileListReply(
+    const FilePath& /* path */,
+    std::shared_ptr<proto::file_transfer::FileList> /* file_list */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file list";
 }
 
 void FileReplyReceiver::OnDirectorySizeReply(const FilePath& /* path */,
                                              uint64_t /* size */,
-                                             proto::RequestStatus /* status */)
+                                             proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: directory size";
 }
 
 void FileReplyReceiver::OnCreateDirectoryReply(
-    const FilePath& /* path */, proto::RequestStatus /* status */)
+    const FilePath& /* path */, proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: create directory";
 }
 
 void FileReplyReceiver::OnRemoveReply(
-    const FilePath& /* path */, proto::RequestStatus /* status */)
+    const FilePath& /* path */, proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: remove";
 }
 
 void FileReplyReceiver::OnRenameReply(const FilePath& /* old_name */,
                                       const FilePath& /* new_name */,
-                                      proto::RequestStatus /* status */)
+                                      proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: rename";
 }
 
 void FileReplyReceiver::OnFileUploadReply(
-    const FilePath& /* file_path */, proto::RequestStatus /* status */)
+    const FilePath& /* file_path */, proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file upload";
 }
 
 void FileReplyReceiver::OnFileDownloadReply(
-    const FilePath& /* file_path */, proto::RequestStatus /* status */)
+    const FilePath& /* file_path */, proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file download";
 }
 
 void FileReplyReceiver::OnFilePacketSended(
-    uint32_t /* flags */, proto::RequestStatus /* status */)
+    uint32_t /* flags */, proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file packet sended";
 }
 
-void FileReplyReceiver::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> /* file_packet */,
-                                             proto::RequestStatus /* status */)
+void FileReplyReceiver::OnFilePacketReceived(
+    std::shared_ptr<proto::file_transfer::FilePacket> /* file_packet */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file packet received";
 }

@@ -32,7 +32,7 @@ public:
         virtual void OnTransferComplete() = 0;
 
         virtual void OnFileOperationFailure(const FilePath& file_path,
-                                            proto::RequestStatus status,
+                                            proto::file_transfer::Status status,
                                             ActionCallback callback) = 0;
 
         virtual void OnObjectTransferStarted(const FilePath& object_path,

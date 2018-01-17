@@ -38,11 +38,12 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
     Start(sender, path, FilePath(), file_list, callback);
 }
 
-void FileTaskQueueBuilder::OnFileListReply(const FilePath& /* path */,
-                                           std::shared_ptr<proto::FileList> file_list,
-                                           proto::RequestStatus status)
+void FileTaskQueueBuilder::OnFileListReply(
+    const FilePath& /* path */,
+    std::shared_ptr<proto::file_transfer::FileList> file_list,
+    proto::file_transfer::Status status)
 {
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         return;
     }
@@ -61,7 +62,7 @@ void FileTaskQueueBuilder::OnFileListReply(const FilePath& /* path */,
 
 void FileTaskQueueBuilder::AddIncomingTask(const FilePath& source_path,
                                            const FilePath& target_path,
-                                           const proto::FileList::Item& file)
+                                           const proto::file_transfer::FileList::Item& file)
 {
     FilePath object_name(std::experimental::filesystem::u8path(file.name()));
 

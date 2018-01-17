@@ -13,7 +13,6 @@
 #include "client/file_reply_receiver.h"
 #include "client/file_task_queue_builder.h"
 #include "client/file_constants.h"
-#include "proto/file_transfer_session_message.pb.h"
 
 namespace aspia {
 
@@ -33,7 +32,7 @@ public:
         virtual void OnRemovingComplete() = 0;
         virtual void OnRemoveObject(const FilePath& object_path) = 0;
         virtual void OnRemoveObjectFailure(const FilePath& object_path,
-                                           proto::RequestStatus status,
+                                           proto::file_transfer::Status status,
                                            ActionCallback callback) = 0;
     };
 
@@ -48,7 +47,7 @@ private:
     void OnAfterThreadRunning() final;
 
     // FileReplyReceiver implementation.
-    void OnRemoveReply(const FilePath& path, proto::RequestStatus status) final;
+    void OnRemoveReply(const FilePath& path, proto::file_transfer::Status status) final;
 
     void OnTaskQueueBuilded(FileTaskQueue& task_queue,
                             int64_t task_object_size,

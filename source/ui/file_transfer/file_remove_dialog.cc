@@ -105,7 +105,7 @@ void FileRemoveDialog::OnRemoveObject(const FilePath& object_path)
 }
 
 void FileRemoveDialog::OnRemoveObjectFailure(const FilePath& object_path,
-                                             proto::RequestStatus status,
+                                             proto::file_transfer::Status status,
                                              FileRemover::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())

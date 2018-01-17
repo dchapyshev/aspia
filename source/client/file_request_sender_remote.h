@@ -48,7 +48,7 @@ public:
                                  const FilePath& file_path) override;
 
     void SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                        std::unique_ptr<proto::FilePacket> file_packet) override;
+                        std::unique_ptr<proto::file_transfer::FilePacket> file_packet) override;
 
     void SendFilePacketRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 

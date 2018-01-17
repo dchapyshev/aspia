@@ -340,9 +340,6 @@
     <ClCompile Include="proto\file_transfer_session.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="proto\file_transfer_session_message.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -1250,9 +1247,6 @@
     <ClInclude Include="proto\file_transfer_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="proto\file_transfer_session_message.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -1871,9 +1865,6 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\file_transfer_session.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\file_transfer_session_message.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\build.cmd">

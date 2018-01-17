@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-FileActionDialog::FileActionDialog(const FilePath& path, proto::RequestStatus status)
+FileActionDialog::FileActionDialog(const FilePath& path, proto::file_transfer::Status status)
     : path_(path),
       status_(status)
 {
@@ -22,7 +22,7 @@ LRESULT FileActionDialog::OnInitDialog(
 {
     CenterWindow();
 
-    if (status_ != proto::REQUEST_STATUS_PATH_ALREADY_EXISTS)
+    if (status_ != proto::file_transfer::STATUS_PATH_ALREADY_EXISTS)
     {
         GetDlgItem(IDC_REPLACE_BUTTON).EnableWindow(FALSE);
         GetDlgItem(IDC_REPLACE_ALL_BUTTON).EnableWindow(FALSE);

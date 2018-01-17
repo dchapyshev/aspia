@@ -128,9 +128,9 @@ void FileTransferDownloader::RunNextTask()
 }
 
 void FileTransferDownloader::OnCreateDirectoryReply(
-    const FilePath& /* path */, proto::RequestStatus status)
+    const FilePath& /* path */, proto::file_transfer::Status status)
 {
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         if (create_directory_failure_action_ == FileAction::ASK)
         {
@@ -141,7 +141,7 @@ void FileTransferDownloader::OnCreateDirectoryReply(
             const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.TargetPath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else
@@ -157,7 +157,7 @@ void FileTransferDownloader::OnCreateDirectoryReply(
 
 void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool overwrite)
 {
-    proto::RequestStatus status = proto::REQUEST_STATUS_SUCCESS;
+    proto::file_transfer::Status status = proto::file_transfer::STATUS_SUCCESS;
 
     do
     {
@@ -165,7 +165,7 @@ void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool 
         {
             if (PathExists(file_path))
             {
-                status = proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
+                status = proto::file_transfer::STATUS_PATH_ALREADY_EXISTS;
                 break;
             }
         }
@@ -173,13 +173,13 @@ void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool 
         file_depacketizer_ = FileDepacketizer::Create(file_path, overwrite);
         if (!file_depacketizer_)
         {
-            status = proto::REQUEST_STATUS_ACCESS_DENIED;
+            status = proto::file_transfer::STATUS_ACCESS_DENIED;
             break;
         }
     }
     while (false);
 
-    if (status == proto::REQUEST_STATUS_SUCCESS)
+    if (status == proto::file_transfer::STATUS_SUCCESS)
     {
         remote_sender_->SendFilePacketRequest(This());
         return;
@@ -265,7 +265,7 @@ void FileTransferDownloader::OnUnableToOpenFileAction(FileAction action)
 }
 
 void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
-                                                 proto::RequestStatus status)
+                                                 proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -277,7 +277,7 @@ void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
     DCHECK(!task_queue_.empty());
     const FileTask& current_task = task_queue_.front();
 
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         if (file_open_failure_action_ == FileAction::ASK)
         {
@@ -347,8 +347,9 @@ void FileTransferDownloader::OnUnableToWriteFileAction(FileAction action)
     }
 }
 
-void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                                                  proto::RequestStatus status)
+void FileTransferDownloader::OnFilePacketReceived(
+    std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
+    proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -364,7 +365,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
         return;
     }
 
-    if (status != proto::REQUEST_STATUS_SUCCESS)
+    if (status != proto::file_transfer::STATUS_SUCCESS)
     {
         if (file_read_failure_action_ == FileAction::ASK)
         {
@@ -374,7 +375,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
             const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.SourcePath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else
@@ -395,7 +396,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
             const FileTask& current_task = task_queue_.front();
 
             delegate_->OnFileOperationFailure(current_task.TargetPath(),
-                                              proto::REQUEST_STATUS_ACCESS_DENIED,
+                                              proto::file_transfer::STATUS_ACCESS_DENIED,
                                               std::move(callback));
         }
         else
@@ -408,7 +409,7 @@ void FileTransferDownloader::OnFilePacketReceived(std::shared_ptr<proto::FilePac
 
     delegate_->OnObjectTransfer(file_depacketizer_->LeftSize());
 
-    if (file_packet->flags() & proto::FilePacket::LAST_PACKET)
+    if (file_packet->flags() & proto::file_transfer::FilePacket::LAST_PACKET)
     {
         file_depacketizer_.reset();
         RunNextTask();

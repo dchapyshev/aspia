@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
+proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::DriveList* drive_list)
 {
     DCHECK(drive_list);
 
@@ -29,7 +29,7 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
         if (path.empty())
             break;
 
-        proto::DriveList::Item* item = drive_list->add_item();
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
         item->set_path(UTF8fromUNICODE(path));
 
@@ -42,27 +42,27 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
         switch (drive_info.Type())
         {
             case LogicalDriveEnumerator::DriveInfo::DriveType::CDROM:
-                item->set_type(proto::DriveList::Item::CDROM);
+                item->set_type(proto::file_transfer::DriveList::Item::CDROM);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::REMOVABLE:
-                item->set_type(proto::DriveList::Item::REMOVABLE);
+                item->set_type(proto::file_transfer::DriveList::Item::REMOVABLE);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::FIXED:
-                item->set_type(proto::DriveList::Item::FIXED);
+                item->set_type(proto::file_transfer::DriveList::Item::FIXED);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::RAM:
-                item->set_type(proto::DriveList::Item::RAM);
+                item->set_type(proto::file_transfer::DriveList::Item::RAM);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::REMOTE:
-                item->set_type(proto::DriveList::Item::REMOTE);
+                item->set_type(proto::file_transfer::DriveList::Item::REMOTE);
                 break;
 
             default:
-                item->set_type(proto::DriveList::Item::UNKNOWN);
+                item->set_type(proto::file_transfer::DriveList::Item::UNKNOWN);
                 break;
         }
     }
@@ -71,42 +71,43 @@ proto::RequestStatus ExecuteDriveListRequest(proto::DriveList* drive_list)
 
     if (GetBasePath(BasePathKey::DIR_USER_HOME, path))
     {
-        proto::DriveList::Item* item = drive_list->add_item();
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
-        item->set_type(proto::DriveList::Item::HOME_FOLDER);
+        item->set_type(proto::file_transfer::DriveList::Item::HOME_FOLDER);
         item->set_path(path.u8string());
     }
 
     if (GetBasePath(BasePathKey::DIR_USER_DESKTOP, path))
     {
-        proto::DriveList::Item* item = drive_list->add_item();
+        proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
-        item->set_type(proto::DriveList::Item::DESKTOP_FOLDER);
+        item->set_type(proto::file_transfer::DriveList::Item::DESKTOP_FOLDER);
         item->set_path(path.u8string());
     }
 
     if (!drive_list->item_size())
-        return proto::REQUEST_STATUS_NO_DRIVES_FOUND;
+        return proto::file_transfer::STATUS_NO_DRIVES_FOUND;
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileList* file_list)
+proto::file_transfer::Status ExecuteFileListRequest(const FilePath& path,
+                                                    proto::file_transfer::FileList* file_list)
 {
     DCHECK(file_list);
 
     if (!IsValidPathName(path))
-        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::file_transfer::STATUS_INVALID_PATH_NAME;
 
     if (!DirectoryExists(path))
-        return proto::REQUEST_STATUS_PATH_NOT_FOUND;
+        return proto::file_transfer::STATUS_PATH_NOT_FOUND;
 
     FileEnumerator enumerator(path, false, FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
 
     for (FilePath current = enumerator.Next(); !current.empty(); current = enumerator.Next())
     {
         FileEnumerator::FileInfo info = enumerator.GetInfo();
-        proto::FileList::Item* item = file_list->add_item();
+        proto::file_transfer::FileList::Item* item = file_list->add_item();
 
         item->set_name(info.GetName().u8string());
         item->set_modification_time(info.GetLastModifiedTime());
@@ -114,66 +115,67 @@ proto::RequestStatus ExecuteFileListRequest(const FilePath& path, proto::FileLis
         item->set_size(info.GetSize());
     }
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteCreateDirectoryRequest(const FilePath& path)
+proto::file_transfer::Status ExecuteCreateDirectoryRequest(const FilePath& path)
 {
     if (!IsValidPathName(path))
-        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::file_transfer::STATUS_INVALID_PATH_NAME;
 
     if (!CreateDirectory(path, nullptr))
     {
         if (PathExists(path))
-            return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
+            return proto::file_transfer::STATUS_PATH_ALREADY_EXISTS;
 
-        return proto::REQUEST_STATUS_ACCESS_DENIED;
+        return proto::file_transfer::STATUS_ACCESS_DENIED;
     }
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size)
+proto::file_transfer::Status ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size)
 {
     if (!IsValidPathName(path))
-        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::file_transfer::STATUS_INVALID_PATH_NAME;
 
     size = ComputeDirectorySize(path);
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteRenameRequest(const FilePath& old_name, const FilePath& new_name)
+proto::file_transfer::Status ExecuteRenameRequest(const FilePath& old_name,
+                                                  const FilePath& new_name)
 {
     if (!IsValidPathName(old_name) || !IsValidPathName(new_name))
     {
-        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::file_transfer::STATUS_INVALID_PATH_NAME;
     }
 
     if (old_name != new_name)
     {
         if (PathExists(new_name))
-            return proto::REQUEST_STATUS_PATH_ALREADY_EXISTS;
+            return proto::file_transfer::STATUS_PATH_ALREADY_EXISTS;
 
         if (!ReplaceFile(old_name, new_name, nullptr))
-            return proto::REQUEST_STATUS_ACCESS_DENIED;
+            return proto::file_transfer::STATUS_ACCESS_DENIED;
     }
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::RequestStatus ExecuteRemoveRequest(const FilePath& path)
+proto::file_transfer::Status ExecuteRemoveRequest(const FilePath& path)
 {
     if (!IsValidPathName(path))
-        return proto::REQUEST_STATUS_INVALID_PATH_NAME;
+        return proto::file_transfer::STATUS_INVALID_PATH_NAME;
 
     if (!PathExists(path))
-        return proto::REQUEST_STATUS_PATH_NOT_FOUND;
+        return proto::file_transfer::STATUS_PATH_NOT_FOUND;
 
     if (!DeleteFile(path))
-        return proto::REQUEST_STATUS_ACCESS_DENIED;
+        return proto::file_transfer::STATUS_ACCESS_DENIED;
 
-    return proto::REQUEST_STATUS_SUCCESS;
+    return proto::file_transfer::STATUS_SUCCESS;
 }
 
 } // namespace aspia

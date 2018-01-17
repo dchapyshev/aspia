@@ -21,8 +21,9 @@ void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
     receiver_ = nullptr;
 }
 
-bool FileReplyReceiverProxy::OnDriveListReply(std::shared_ptr<proto::DriveList> drive_list,
-                                              proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnDriveListReply(
+    std::shared_ptr<proto::file_transfer::DriveList> drive_list,
+    proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -33,9 +34,10 @@ bool FileReplyReceiverProxy::OnDriveListReply(std::shared_ptr<proto::DriveList> 
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFileListReply(const FilePath& path,
-                                             std::shared_ptr<proto::FileList> file_list,
-                                             proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnFileListReply(
+    const FilePath& path,
+    std::shared_ptr<proto::file_transfer::FileList> file_list,
+    proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -48,7 +50,7 @@ bool FileReplyReceiverProxy::OnFileListReply(const FilePath& path,
 
 bool FileReplyReceiverProxy::OnDirectorySizeReply(const FilePath& path,
                                                   uint64_t size,
-                                                  proto::RequestStatus status)
+                                                  proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -60,7 +62,7 @@ bool FileReplyReceiverProxy::OnDirectorySizeReply(const FilePath& path,
 }
 
 bool FileReplyReceiverProxy::OnCreateDirectoryReply(const FilePath& path,
-                                                    proto::RequestStatus status)
+                                                    proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -71,7 +73,8 @@ bool FileReplyReceiverProxy::OnCreateDirectoryReply(const FilePath& path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnRemoveReply(const FilePath& path, proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnRemoveReply(const FilePath& path,
+                                           proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -84,7 +87,7 @@ bool FileReplyReceiverProxy::OnRemoveReply(const FilePath& path, proto::RequestS
 
 bool FileReplyReceiverProxy::OnRenameReply(const FilePath& old_name,
                                            const FilePath& new_name,
-                                           proto::RequestStatus status)
+                                           proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -96,7 +99,7 @@ bool FileReplyReceiverProxy::OnRenameReply(const FilePath& old_name,
 }
 
 bool FileReplyReceiverProxy::OnFileUploadReply(const FilePath& file_path,
-                                               proto::RequestStatus status)
+                                               proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -108,7 +111,7 @@ bool FileReplyReceiverProxy::OnFileUploadReply(const FilePath& file_path,
 }
 
 bool FileReplyReceiverProxy::OnFileDownloadReply(const FilePath& file_path,
-                                                 proto::RequestStatus status)
+                                                 proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -119,7 +122,8 @@ bool FileReplyReceiverProxy::OnFileDownloadReply(const FilePath& file_path,
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFilePacketSended(uint32_t flags, proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnFilePacketSended(uint32_t flags,
+                                                proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 
@@ -130,8 +134,9 @@ bool FileReplyReceiverProxy::OnFilePacketSended(uint32_t flags, proto::RequestSt
     return true;
 }
 
-bool FileReplyReceiverProxy::OnFilePacketReceived(std::shared_ptr<proto::FilePacket> file_packet,
-                                                  proto::RequestStatus status)
+bool FileReplyReceiverProxy::OnFilePacketReceived(
+    std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
+    proto::file_transfer::Status status)
 {
     std::lock_guard<std::mutex> lock(receiver_lock_);
 

@@ -23,7 +23,7 @@ class FileActionDialog : public CDialogImpl<FileActionDialog>
 public:
     enum { IDD = IDD_FILE_ACTION };
 
-    FileActionDialog(const FilePath& path, proto::RequestStatus status);
+    FileActionDialog(const FilePath& path, proto::file_transfer::Status status);
     ~FileActionDialog() = default;
 
     FileAction GetAction() const { return action_; }
@@ -49,7 +49,7 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     const FilePath path_;
-    const proto::RequestStatus status_;
+    const proto::file_transfer::Status status_;
     FileAction action_ = FileAction::ABORT;
 
     DISALLOW_COPY_AND_ASSIGN(FileActionDialog);

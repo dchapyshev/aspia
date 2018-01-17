@@ -24,7 +24,7 @@ public:
                                               int64_t task_object_size,
                                               int64_t task_object_count)>;
 
-    using FileList = std::list<proto::FileList::Item>;
+    using FileList = std::list<proto::file_transfer::FileList::Item>;
 
     void Start(std::shared_ptr<FileRequestSenderProxy> sender,
                const FilePath& source_path,
@@ -40,12 +40,12 @@ public:
 private:
     // FileReplyReceiver implementation.
     void OnFileListReply(const FilePath& path,
-                         std::shared_ptr<proto::FileList> file_list,
-                         proto::RequestStatus status) final;
+                         std::shared_ptr<proto::file_transfer::FileList> file_list,
+                         proto::file_transfer::Status status) final;
 
     void AddIncomingTask(const FilePath& source_path,
                          const FilePath& target_path,
-                         const proto::FileList::Item& file);
+                         const proto::file_transfer::FileList::Item& file);
     void FrontIncomingToBackPending();
     void ProcessNextIncommingTask();
 

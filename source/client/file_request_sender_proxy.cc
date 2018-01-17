@@ -128,7 +128,7 @@ bool FileRequestSenderProxy::SendFileDownloadRequest(
 
 bool FileRequestSenderProxy::SendFilePacket(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    std::unique_ptr<proto::FilePacket> file_packet)
+    std::unique_ptr<proto::file_transfer::FilePacket> file_packet)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
