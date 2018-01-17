@@ -18,7 +18,7 @@ static const DWORD kKeyExtendedFlag = 0x1000000;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
-ViewerWindow::ViewerWindow(ClientConfig* config, Delegate* delegate)
+ViewerWindow::ViewerWindow(proto::ClientConfig* config, Delegate* delegate)
     : config_(config),
       delegate_(delegate),
       video_window_(this)
@@ -163,7 +163,7 @@ LRESULT ViewerWindow::OnCreate(
 
     DoAutoSize(kVideoWindowSize);
 
-    ApplyConfig(config_->desktop_session_config());
+    ApplyConfig(config_->desktop_session());
 
     return 0;
 }
@@ -363,14 +363,14 @@ void ViewerWindow::ApplyConfig(const proto::desktop::Config& config)
 LRESULT ViewerWindow::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SettingsDialog dialog(config_->session_type(), config_->desktop_session_config());
+    SettingsDialog dialog(config_->session_type(), config_->desktop_session());
 
     if (dialog.DoModal(*this) == IDOK)
     {
-        config_->mutable_desktop_session_config()->CopyFrom(dialog.Config());
+        config_->mutable_desktop_session()->CopyFrom(dialog.Config());
 
-        ApplyConfig(config_->desktop_session_config());
-        delegate_->OnConfigChange(config_->desktop_session_config());
+        ApplyConfig(config_->desktop_session());
+        delegate_->OnConfigChange(config_->desktop_session());
     }
 
     return 0;

@@ -22,8 +22,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
         {
             if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetModuleFileNameW() failed: "
-                           << GetLastSystemErrorString();
+                LOG(ERROR) << "GetModuleFileNameW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -35,8 +34,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: "
-                           << SystemErrorCodeToString(hr);
+                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -48,8 +46,19 @@ bool GetBasePath(BasePathKey key, FilePath& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: "
-                           << SystemErrorCodeToString(hr);
+                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                return false;
+            }
+        }
+        break;
+
+        case BasePathKey::DIR_APP_DATA:
+        {
+            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_APPDATA,
+                                          nullptr, SHGFP_TYPE_CURRENT, buffer);
+            if (FAILED(hr))
+            {
+                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -61,8 +70,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: "
-                           << SystemErrorCodeToString(hr);
+                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -74,8 +82,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
                                           SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: "
-                           << SystemErrorCodeToString(hr);
+                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -85,8 +92,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
         {
             if (!GetCurrentDirectoryW(_countof(buffer), buffer))
             {
-                LOG(ERROR) << "GetCurrentDirectoryW() failed: "
-                           << GetLastSystemErrorString();
+                LOG(ERROR) << "GetCurrentDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -96,8 +102,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
         {
             if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetWindowsDirectoryW() failed: "
-                           << GetLastSystemErrorString();
+                LOG(ERROR) << "GetWindowsDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -107,8 +112,7 @@ bool GetBasePath(BasePathKey key, FilePath& result)
         {
             if (!GetSystemDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetSystemDirectoryW() failed: "
-                           << GetLastSystemErrorString();
+                LOG(ERROR) << "GetSystemDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }

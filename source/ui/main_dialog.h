@@ -10,7 +10,9 @@
 
 #include "host/host_pool.h"
 #include "client/client_pool.h"
+#include "proto/client_config.pb.h"
 #include "ui/base/tray_icon.h"
+#include "ui/mru.h"
 #include "ui/resource.h"
 
 #include <atlbase.h>
@@ -51,6 +53,7 @@ private:
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO, OnSystemInfoButton)
 
         COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
+        COMMAND_HANDLER(IDC_SERVER_ADDRESS_COMBO, CBN_SELCHANGE, OnAddressChanged)
 
         NOTIFY_HANDLER(IDC_IP_LIST, NM_DBLCLK, OnIpListDoubleClick)
         NOTIFY_HANDLER(IDC_IP_LIST, NM_RCLICK, OnIpListRightClick)
@@ -65,6 +68,7 @@ private:
     LRESULT OnStartServerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnUpdateIpListButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAddressChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnConnectButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
@@ -83,6 +87,7 @@ private:
 
     void InitIpList();
     void UpdateIpList();
+    void UpdateMRUList();
     void InitSessionTypesCombo();
     proto::auth::SessionType GetSelectedSessionType() const;
     int AddSessionType(CComboBox& combobox,
@@ -100,7 +105,8 @@ private:
 
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
-    ClientConfig config_;
+    proto::ClientConfig current_config_;
+    MRU mru_;
 
     DISALLOW_COPY_AND_ASSIGN(MainDialog);
 };

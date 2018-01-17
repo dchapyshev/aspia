@@ -23,7 +23,7 @@ ClientPool::~ClientPool()
     session_list_.clear();
 }
 
-void ClientPool::Connect(HWND parent, const ClientConfig& config)
+void ClientPool::Connect(HWND parent, const proto::ClientConfig& config)
 {
     config_.CopyFrom(config);
     status_dialog_.DoModal(parent);

@@ -10,7 +10,7 @@
 namespace aspia {
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(
-    const ClientConfig& config,
+    const proto::ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {

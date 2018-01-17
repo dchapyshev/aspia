@@ -99,7 +99,7 @@
 //
 // Controls
 //
-#define IDC_SERVER_ADDRESS_EDIT                    100
+#define IDC_SERVER_ADDRESS_COMBO                   100
 #define IDC_SERVER_PORT_EDIT                       101
 #define IDC_SERVER_DEFAULT_PORT_CHECK              102
 #define IDC_SETTINGS_BUTTON                        103

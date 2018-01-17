@@ -48,7 +48,7 @@ public:
         CONNECTING      = 6
     };
 
-    void SetDestonation(const std::wstring& address, uint16_t port);
+    void SetDestonation(const std::string& address, uint32_t port);
     void SetConnectionStatus(ConnectionStatus status);
     void SetAuthorizationStatus(proto::auth::Status status);
 

@@ -66,7 +66,7 @@ void UncompressMessageData(const std::string& input_data, std::string* output_da
 } // namespace
 
 ClientSessionSystemInfo::ClientSessionSystemInfo(
-    const ClientConfig& config,
+    const proto::ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {

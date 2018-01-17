@@ -20,7 +20,7 @@ class ClientSessionFileTransfer :
     private FileManagerWindow::Delegate
 {
 public:
-    ClientSessionFileTransfer(const ClientConfig& config,
+    ClientSessionFileTransfer(const proto::ClientConfig& config,
                               std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionFileTransfer();
 

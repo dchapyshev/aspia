@@ -15,7 +15,7 @@
 namespace aspia {
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(
-    const ClientConfig& config,
+    const proto::ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSessionDesktopView(config, channel_proxy)
 {

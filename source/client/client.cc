@@ -17,7 +17,7 @@
 namespace aspia {
 
 Client::Client(std::shared_ptr<NetworkChannel> channel,
-               const ClientConfig& config,
+               const proto::ClientConfig& config,
                Delegate* delegate)
     : channel_(std::move(channel)),
       config_(config),
@@ -107,7 +107,7 @@ void Client::OnAuthRequestSended()
 }
 
 static std::unique_ptr<ClientSession> CreateSession(
-    const ClientConfig& config,
+    const proto::ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
     switch (config.session_type())

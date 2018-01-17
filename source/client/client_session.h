@@ -8,15 +8,16 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_H
 
-#include "client/client_config.h"
 #include "network/network_channel_proxy.h"
+#include "proto/client_config.pb.h"
 
 namespace aspia {
 
 class ClientSession
 {
 public:
-    ClientSession(const ClientConfig& config, std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    ClientSession(const proto::ClientConfig& config,
+                  std::shared_ptr<NetworkChannelProxy> channel_proxy)
         : channel_proxy_(channel_proxy),
           config_(config)
     {
@@ -27,7 +28,7 @@ public:
 
 protected:
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
-    ClientConfig config_;
+    proto::ClientConfig config_;
 
 private:
     DISALLOW_COPY_AND_ASSIGN(ClientSession);

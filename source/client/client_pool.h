@@ -10,8 +10,8 @@
 
 #include "base/message_loop/message_loop_proxy.h"
 #include "client/client.h"
-#include "client/client_config.h"
 #include "network/network_client_tcp.h"
+#include "proto/client_config.pb.h"
 #include "ui/status_dialog.h"
 
 #include <list>
@@ -26,7 +26,7 @@ public:
     explicit ClientPool(std::shared_ptr<MessageLoopProxy> runner);
     ~ClientPool();
 
-    void Connect(HWND parent, const ClientConfig& config);
+    void Connect(HWND parent, const proto::ClientConfig& config);
 
 private:
     // StatusDialog::Delegate implementation.
@@ -39,7 +39,7 @@ private:
 
     bool terminating_ = false;
 
-    ClientConfig config_;
+    proto::ClientConfig config_;
     StatusDialog status_dialog_;
 
     std::shared_ptr<MessageLoopProxy> runner_;

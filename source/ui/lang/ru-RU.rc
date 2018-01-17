@@ -25,7 +25,7 @@ BEGIN
 
     GROUPBOX "Клиент", -1, 170, 5, 160, 130
     LTEXT "Адрес сервера:", -1, 177, 17, 90, 9
-    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 177, 28, 146, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL
+    COMBOBOX IDC_SERVER_ADDRESS_COMBO, 177, 28, 146, 150, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | WS_VSCROLL | CBS_DROPDOWN
 
     LTEXT "Порт сервера:", -1, 177, 47, 100, 9
     EDITTEXT IDC_SERVER_PORT_EDIT, 177, 58, 50, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | ES_AUTOHSCROLL | ES_NUMBER
@@ -372,7 +372,7 @@ BEGIN
                       • Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License"
 
     IDS_CONFIRMATION                      "Подтверждение"
-    IDS_CONNECTION                        "Подключение к: %s:%u"
+    IDS_CONNECTION                        "Подключение к: %s:%lu"
     IDS_INVALID_USERNAME                  "Имя пользователя не может быть пустым и может содержать только символы алфавита, числа и символы ""_"", ""-"", "".""."
     IDS_USER_ALREADY_EXISTS               "Пользователь с указанным именем уже существует."
     IDS_INVALID_PASSWORD                  "Пароль не может быть короче 6 символов."

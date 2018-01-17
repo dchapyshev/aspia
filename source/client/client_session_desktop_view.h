@@ -20,7 +20,7 @@ class ClientSessionDesktopView :
     private ViewerWindow::Delegate
 {
 public:
-    ClientSessionDesktopView(const ClientConfig& config,
+    ClientSessionDesktopView(const proto::ClientConfig& config,
                              std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionDesktopView();
 

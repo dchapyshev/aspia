@@ -6,6 +6,7 @@
 //
 
 #include "ui/status_dialog.h"
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 #include <atlctrls.h>
@@ -21,10 +22,10 @@ StatusDialog::StatusDialog(Delegate* delegate) :
     // Nothing
 }
 
-void StatusDialog::SetDestonation(const std::wstring& address, uint16_t port)
+void StatusDialog::SetDestonation(const std::string& address, uint32_t port)
 {
     CString message;
-    message.Format(IDS_CONNECTION, address.c_str(), port);
+    message.Format(IDS_CONNECTION, UNICODEfromUTF8(address).c_str(), port);
     SetWindowTextW(message);
 }
 

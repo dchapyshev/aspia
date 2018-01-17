@@ -164,7 +164,6 @@
     <ClCompile Include="category\category_wsus.cc" />
     <ClCompile Include="category\category_wsus.pb.cc" />
     <ClCompile Include="client\client.cc" />
-    <ClCompile Include="client\client_config.cc" />
     <ClCompile Include="client\client_pool.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
@@ -244,10 +243,12 @@
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
+    <ClCompile Include="proto\client_config.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\file_transfer_session.pb.cc" />
     <ClCompile Include="proto\host_user.pb.cc" />
     <ClCompile Include="proto\key_exchange.pb.cc" />
+    <ClCompile Include="proto\mru.pb.cc" />
     <ClCompile Include="proto\power_session.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="report\column_list.cc" />
@@ -280,6 +281,7 @@
     <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc" />
     <ClCompile Include="ui\get_stock_icon.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
+    <ClCompile Include="ui\mru.cc" />
     <ClCompile Include="ui\power\power_manage_dialog.cc" />
     <ClCompile Include="ui\power\power_session_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
@@ -463,7 +465,6 @@
     <ClInclude Include="category\category_wsus.h" />
     <ClInclude Include="category\category_wsus.pb.h" />
     <ClInclude Include="client\client.h" />
-    <ClInclude Include="client\client_config.h" />
     <ClInclude Include="client\client_pool.h" />
     <ClInclude Include="client\client_session.h" />
     <ClInclude Include="client\client_session_desktop_manage.h" />
@@ -555,10 +556,12 @@
     <ClInclude Include="protocol\io_buffer.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
+    <ClInclude Include="proto\client_config.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\file_transfer_session.pb.h" />
     <ClInclude Include="proto\host_user.pb.h" />
     <ClInclude Include="proto\key_exchange.pb.h" />
+    <ClInclude Include="proto\mru.pb.h" />
     <ClInclude Include="proto\power_session.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="report\column_list.h" />
@@ -594,6 +597,7 @@
     <ClInclude Include="ui\file_transfer\file_transfer_dialog.h" />
     <ClInclude Include="ui\get_stock_icon.h" />
     <ClInclude Include="ui\main_dialog.h" />
+    <ClInclude Include="ui\mru.h" />
     <ClInclude Include="ui\power\power_manage_dialog.h" />
     <ClInclude Include="ui\power\power_session_dialog.h" />
     <ClInclude Include="ui\resource.h" />
@@ -654,10 +658,12 @@
     <None Include="category\category_wsus.proto" />
     <None Include="proto\auth_session.proto" />
     <None Include="proto\build.cmd" />
+    <None Include="proto\client_config.proto" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\file_transfer_session.proto" />
     <None Include="proto\host_user.proto" />
     <None Include="proto\key_exchange.proto" />
+    <None Include="proto\mru.proto" />
     <None Include="proto\power_session.proto" />
     <None Include="proto\system_info_session.proto" />
   </ItemGroup>

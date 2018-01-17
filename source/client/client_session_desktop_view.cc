@@ -38,7 +38,7 @@ std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::desktop::VideoEncoding e
 } // namespace
 
 ClientSessionDesktopView::ClientSessionDesktopView(
-    const ClientConfig& config,
+    const proto::ClientConfig& config,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
@@ -109,7 +109,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::ReadConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {
-    OnConfigChange(config_.desktop_session_config());
+    OnConfigChange(config_.desktop_session());
 }
 
 void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
