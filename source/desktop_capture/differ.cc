@@ -11,13 +11,13 @@
 
 namespace aspia {
 
-static const int kBytesPerPixel = 4;
-static const int kBlockSize = 16;
-static const int kBytesPerBlock = kBytesPerPixel * kBlockSize;
+namespace {
 
-static INLINE uint8_t DiffFullBlock_C(const uint8_t* image1,
-                                      const uint8_t* image2,
-                                      int bytes_per_row)
+constexpr int kBytesPerPixel = 4;
+constexpr int kBlockSize = 16;
+constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
+
+INLINE uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
     for (int y = 0; y < kBlockSize; ++y)
     {
@@ -39,11 +39,11 @@ static INLINE uint8_t DiffFullBlock_C(const uint8_t* image1,
 // Note that if we force the capturer to always return images whose width and
 // height are multiples of kBlockSize, then this will never be called.
 //
-static INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
-                                       const uint8_t* curr_image,
-                                       int bytes_per_row,
-                                       int bytes_per_block,
-                                       int height)
+INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
+                                const uint8_t* curr_image,
+                                int bytes_per_row,
+                                int bytes_per_block,
+                                int height)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -58,6 +58,8 @@ static INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
 
     return 0U;
 }
+
+} // namespace
 
 Differ::Differ(const DesktopSize& size)
     : size_(size),

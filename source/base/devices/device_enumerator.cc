@@ -13,10 +13,14 @@
 
 namespace aspia {
 
-static const WCHAR kClassRootPath[] = L"SYSTEM\\CurrentControlSet\\Control\\Class\\";
-static const WCHAR kDriverVersionKey[] = L"DriverVersion";
-static const WCHAR kDriverDateKey[] = L"DriverDate";
-static const WCHAR kProviderNameKey[] = L"ProviderName";
+namespace {
+
+constexpr WCHAR kClassRootPath[] = L"SYSTEM\\CurrentControlSet\\Control\\Class\\";
+constexpr WCHAR kDriverVersionKey[] = L"DriverVersion";
+constexpr WCHAR kDriverDateKey[] = L"DriverDate";
+constexpr WCHAR kProviderNameKey[] = L"ProviderName";
+
+} // namespace
 
 DeviceEnumerator::DeviceEnumerator()
     : DeviceEnumerator(nullptr, DIGCF_ALLCLASSES | DIGCF_PRESENT | DIGCF_PROFILE)

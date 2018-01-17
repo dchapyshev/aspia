@@ -11,6 +11,18 @@
 
 namespace aspia {
 
+namespace {
+
+// Retrieves a pointer to the output buffer in |update| used for storing the
+// encoded rectangle data. Will resize the buffer to |size|.
+uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size)
+{
+    packet->mutable_data()->resize(size);
+    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
+}
+
+} // namespace
+
 VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format, int compression_ratio)
     : format_(format),
       compressor_(compression_ratio),
@@ -44,14 +56,6 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
     }
 
     return std::unique_ptr<VideoEncoderZLIB>(new VideoEncoderZLIB(format, compression_ratio));
-}
-
-// Retrieves a pointer to the output buffer in |update| used for storing the
-// encoded rectangle data. Will resize the buffer to |size|.
-static uint8_t* GetOutputBuffer(proto::VideoPacket* packet, size_t size)
-{
-    packet->mutable_data()->resize(size);
-    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
 }
 
 void VideoEncoderZLIB::CompressPacket(proto::VideoPacket* packet, size_t source_data_size)

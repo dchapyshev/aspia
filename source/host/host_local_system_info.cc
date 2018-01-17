@@ -12,7 +12,11 @@
 
 namespace aspia {
 
-static const size_t kGuidLength = 38;
+namespace {
+
+constexpr size_t kGuidLength = 38;
+
+} // namespace
 
 void HostLocalSystemInfo::Run()
 {

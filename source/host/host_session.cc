@@ -12,7 +12,11 @@
 
 namespace aspia {
 
-static const std::chrono::seconds kAttachTimeout{ 30 };
+namespace {
+
+constexpr std::chrono::seconds kAttachTimeout{ 30 };
+
+} // namespace
 
 HostSession::HostSession(proto::SessionType session_type,
                          std::shared_ptr<NetworkChannelProxy> channel_proxy)

@@ -10,8 +10,12 @@
 
 namespace aspia {
 
-static const size_t kMinCacheSize = 2;
-static const size_t kMaxCacheSize = 31;
+namespace {
+
+constexpr size_t kMinCacheSize = 2;
+constexpr size_t kMaxCacheSize = 31;
+
+} // namespace
 
 MouseCursorCache::MouseCursorCache(size_t cache_size) :
     cache_size_(cache_size)

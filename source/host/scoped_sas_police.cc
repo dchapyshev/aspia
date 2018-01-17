@@ -10,10 +10,14 @@
 
 namespace aspia {
 
-static const WCHAR kSoftwareSASGenerationPath[] =
+namespace {
+
+constexpr WCHAR kSoftwareSASGenerationPath[] =
     L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 
-static const WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
+constexpr WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
+
+} // namespace
 
 ScopedSasPolice::ScopedSasPolice()
 {

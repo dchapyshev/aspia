@@ -11,14 +11,18 @@
 
 namespace aspia {
 
-static const WCHAR kAppName[] = L"Aspia";
-static const WCHAR kRuleName[] = L"Aspia Host";
-static const WCHAR kRuleDesc[] = L"Allow incoming connections";
+namespace {
 
-static bool IsFailureCode(const std::error_code& code)
+constexpr WCHAR kAppName[] = L"Aspia";
+constexpr WCHAR kRuleName[] = L"Aspia Host";
+constexpr WCHAR kRuleDesc[] = L"Allow incoming connections";
+
+bool IsFailureCode(const std::error_code& code)
 {
     return code.value() != 0;
 }
+
+} // namespace
 
 NetworkServerTcp::NetworkServerTcp(uint16_t port, ConnectCallback connect_callback)
     : connect_callback_(std::move(connect_callback)),

@@ -15,6 +15,8 @@
 
 namespace aspia {
 
+namespace {
+
 static const WCHAR kHostServiceShortName[] = L"aspia-host";
 static const WCHAR kHostServiceFullName[] = L"Aspia Host";
 
@@ -33,6 +35,8 @@ const WCHAR kComProcessSd[] =
 const WCHAR kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
+
+} // namespace
 
 HostService::HostService() :
     Service(kHostServiceShortName)

@@ -10,14 +10,16 @@
 
 namespace aspia {
 
-static const size_t kMaxHostNameLength = 64;
+namespace {
 
-static bool IsFailureCode(const std::error_code& code)
+constexpr size_t kMaxHostNameLength = 64;
+
+bool IsFailureCode(const std::error_code& code)
 {
     return code.value() != 0;
 }
 
-static bool IsValidHostNameChar(wchar_t c)
+bool IsValidHostNameChar(wchar_t c)
 {
     if (iswalnum(c) != 0)
         return true;
@@ -27,6 +29,8 @@ static bool IsValidHostNameChar(wchar_t c)
 
     return false;
 }
+
+} // namespace
 
 // static
 bool NetworkClientTcp::IsValidHostName(const std::wstring& hostname)

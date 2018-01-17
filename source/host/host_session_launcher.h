@@ -14,12 +14,12 @@
 
 namespace aspia {
 
-static const WCHAR kSessionLauncherSwitch[] = L"session-launcher";
-static const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
-static const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
-static const WCHAR kPowerManageSessionSwitch[] = L"power-manage-session";
-static const WCHAR kSystemInfoSessionSwitch[] = L"system-info-session";
-static const WCHAR kSystemInfoSwitch[] = L"system-info";
+extern const WCHAR kSessionLauncherSwitch[];
+extern const WCHAR kDesktopSessionSwitch[];
+extern const WCHAR kFileTransferSessionSwitch[];
+extern const WCHAR kPowerManageSessionSwitch[];
+extern const WCHAR kSystemInfoSessionSwitch[];
+extern const WCHAR kSystemInfoSwitch[];
 
 bool LaunchSessionProcessFromService(const std::wstring& run_mode,
                                      uint32_t session_id,

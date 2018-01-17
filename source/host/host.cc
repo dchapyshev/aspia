@@ -13,7 +13,11 @@
 
 namespace aspia {
 
-static const std::chrono::seconds kAuthTimeout{ 60 };
+namespace {
+
+constexpr std::chrono::seconds kAuthTimeout{ 60 };
+
+} // namespace
 
 Host::Host(std::shared_ptr<NetworkChannel> channel, Delegate* delegate)
     : channel_(std::move(channel)),

@@ -13,7 +13,11 @@
 
 namespace aspia {
 
+namespace {
+
 const wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
+
+} // namespace
 
 ConsoleSessionWatcher::ConsoleSessionWatcher()
 {

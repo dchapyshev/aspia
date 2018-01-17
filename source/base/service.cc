@@ -10,7 +10,11 @@
 
 namespace aspia {
 
-static Service *_self = nullptr;
+namespace {
+
+static Service* _self = nullptr;
+
+} // namespace
 
 // public
 Service::Service(const std::wstring& service_name) :

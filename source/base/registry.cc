@@ -10,10 +10,12 @@
 
 namespace aspia {
 
+namespace {
+
 // RegEnumValue() reports the number of characters from the name that were
 // written to the buffer, not how many there are. This constant is the maximum
 // name size, such that a buffer with this size should read any name.
-const DWORD MAX_REGISTRY_NAME_SIZE = 16384;
+constexpr DWORD MAX_REGISTRY_NAME_SIZE = 16384;
 
 // Registry values are read as BYTE* but can have wchar_t* data whose last
 // wchar_t is truncated. This function converts the reported |byte_size| to
@@ -24,7 +26,7 @@ INLINE DWORD to_wchar_size(DWORD byte_size)
 }
 
 // Mask to pull WOW64 access flags out of REGSAM access.
-const REGSAM kWow64AccessMask = KEY_WOW64_32KEY | KEY_WOW64_64KEY;
+constexpr REGSAM kWow64AccessMask = KEY_WOW64_32KEY | KEY_WOW64_64KEY;
 
 WCHAR* WriteInto(std::wstring* str, size_t length_with_null)
 {
@@ -33,6 +35,8 @@ WCHAR* WriteInto(std::wstring* str, size_t length_with_null)
     str->resize(length_with_null - 1);
     return &((*str)[0]);
 }
+
+} // namespace
 
 RegistryKey::RegistryKey(HKEY key) :
     key_(key)

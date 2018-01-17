@@ -11,6 +11,28 @@
 
 namespace aspia {
 
+namespace {
+
+void SendKeyboardInput(WORD key_code, DWORD flags)
+{
+    INPUT input;
+
+    input.type           = INPUT_KEYBOARD;
+    input.ki.wVk         = key_code;
+    input.ki.dwFlags     = flags;
+    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
+    input.ki.time        = 0;
+    input.ki.dwExtraInfo = 0;
+
+    // Do the keyboard event.
+    if (!SendInput(1, &input, sizeof(input)))
+    {
+        LOG(WARNING) << "SendInput() failed: " << GetLastSystemErrorString();
+    }
+}
+
+} // namespace
+
 void InputInjector::SwitchToInputDesktop()
 {
     Desktop input_desktop(Desktop::GetInputDesktop());
@@ -104,24 +126,6 @@ void InputInjector::InjectPointerEvent(const proto::PointerEvent& event)
     }
 
     prev_mouse_button_mask_ = mask;
-}
-
-static void SendKeyboardInput(WORD key_code, DWORD flags)
-{
-    INPUT input;
-
-    input.type           = INPUT_KEYBOARD;
-    input.ki.wVk         = key_code;
-    input.ki.dwFlags     = flags;
-    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
-    input.ki.time        = 0;
-    input.ki.dwExtraInfo = 0;
-
-    // Do the keyboard event.
-    if (!SendInput(1, &input, sizeof(input)))
-    {
-        LOG(WARNING) << "SendInput() failed: " << GetLastSystemErrorString();
-    }
 }
 
 void InputInjector::InjectKeyEvent(const proto::KeyEvent& event)

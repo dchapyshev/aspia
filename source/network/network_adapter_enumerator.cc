@@ -62,7 +62,7 @@ void NetworkAdapterEnumerator::Advance()
 
 static std::wstring GetAdapterRegistryPath(const char* adapter_name)
 {
-    const WCHAR kFormat[] =
+    static constexpr WCHAR kFormat[] =
         L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
 
     return StringPrintf(kFormat, adapter_name);

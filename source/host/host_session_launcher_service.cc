@@ -13,8 +13,12 @@
 
 namespace aspia {
 
-static const WCHAR kServiceShortName[] = L"aspia-session-launcher";
-static const WCHAR kServiceFullName[] = L"Aspia Session Launcher";
+namespace {
+
+constexpr WCHAR kServiceShortName[] = L"aspia-session-launcher";
+constexpr WCHAR kServiceFullName[] = L"Aspia Session Launcher";
+
+} // namespace
 
 HostSessionLauncherService::HostSessionLauncherService(const std::wstring& service_id)
     : Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))

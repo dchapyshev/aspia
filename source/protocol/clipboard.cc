@@ -14,7 +14,11 @@
 
 namespace aspia {
 
-static const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
+namespace {
+
+constexpr char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
+
+} // namespace
 
 Clipboard::~Clipboard()
 {

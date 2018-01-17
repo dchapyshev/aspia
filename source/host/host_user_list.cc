@@ -18,15 +18,19 @@
 
 namespace aspia {
 
-static const size_t kMaximumUserNameLength = 64;
-static const size_t kMinimumPasswordLength = 6;
-static const size_t kMaximumPasswordLength = 64;
-static const size_t kPasswordHashLength = 64; // 512 bits
+namespace {
 
-static const size_t kMaximumUserListSize = 10 * 1024 * 1024; // 10MB
+constexpr size_t kMaximumUserNameLength = 64;
+constexpr size_t kMinimumPasswordLength = 6;
+constexpr size_t kMaximumPasswordLength = 64;
+constexpr size_t kPasswordHashLength = 64; // 512 bits
+
+constexpr size_t kMaximumUserListSize = 10 * 1024 * 1024; // 10MB
 
 // Number of iterations for hashing a user's password.
-static const size_t kPasswordHashIterCount = 100;
+constexpr size_t kPasswordHashIterCount = 100;
+
+} // namespace
 
 HostUserList::~HostUserList()
 {

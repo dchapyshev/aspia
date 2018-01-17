@@ -9,21 +9,23 @@
 
 namespace aspia {
 
+namespace {
+
 // Minimal path name is 2 characters (for example: "C:").
-static const size_t kMinPathLength = 2;
+constexpr size_t kMinPathLength = 2;
 
 // Under Window the length of a full path is 260 characters.
-static const size_t kMaxPathLength = MAX_PATH;
+constexpr size_t kMaxPathLength = MAX_PATH;
 
 // The file name can not be shorter than 1 character.
-static const size_t kMinNameLength = 1;
+constexpr size_t kMinNameLength = 1;
 
 // For FAT: file and folder names may be up to 255 characters long.
 // For NTFS: file and folder names may be up to 256 characters long.
 // We use FAT variant: 255 characters long.
-static const size_t kMaxNameLength = (MAX_PATH - 5);
+constexpr size_t kMaxNameLength = (MAX_PATH - 5);
 
-static bool IsValidNameChar(wchar_t character)
+bool IsValidNameChar(wchar_t character)
 {
     switch (character)
     {
@@ -44,6 +46,26 @@ static bool IsValidNameChar(wchar_t character)
     }
 }
 
+bool IsValidPathChar(wchar_t character)
+{
+    switch (character)
+    {
+        // Invalid characters for path name.
+        case L'*':
+        case L'?':
+        case L'"':
+        case L'<':
+        case L'>':
+        case L'|':
+            return false;
+
+        default:
+            return true;
+    }
+}
+
+} // namespace
+
 bool IsValidFileName(const FilePath& path)
 {
     std::wstring native_path(path.wstring());
@@ -60,24 +82,6 @@ bool IsValidFileName(const FilePath& path)
     }
 
     return true;
-}
-
-static bool IsValidPathChar(wchar_t character)
-{
-    switch (character)
-    {
-        // Invalid characters for path name.
-        case L'*':
-        case L'?':
-        case L'"':
-        case L'<':
-        case L'>':
-        case L'|':
-            return false;
-
-        default:
-            return true;
-    }
 }
 
 bool IsValidPathName(const FilePath& path)

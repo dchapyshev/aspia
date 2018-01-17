@@ -13,11 +13,22 @@
 
 namespace aspia {
 
-// Constants from dwmapi.h.
-const UINT DWM_EC_DISABLECOMPOSITION = 0;
-const UINT DWM_EC_ENABLECOMPOSITION = 1;
+namespace {
 
-const wchar_t kDwmapiLibraryName[] = L"dwmapi.dll";
+// Constants from dwmapi.h.
+constexpr UINT DWM_EC_DISABLECOMPOSITION = 0;
+constexpr UINT DWM_EC_ENABLECOMPOSITION = 1;
+
+constexpr wchar_t kDwmapiLibraryName[] = L"dwmapi.dll";
+
+bool IsSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
+{
+    // If the cursors are not showing, we do not care the hCursor handle.
+    return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
+                                         left.hCursor == right.hCursor);
+}
+
+} // namespace
 
 CapturerGDI::CapturerGDI()
 {
@@ -148,13 +159,6 @@ const DesktopFrame* CapturerGDI::CaptureImage()
     curr_frame_id_ = prev_frame_id;
 
     return curr_frame;
-}
-
-static bool IsSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
-{
-    // If the cursors are not showing, we do not care the hCursor handle.
-    return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
-                                         left.hCursor == right.hCursor);
 }
 
 std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()

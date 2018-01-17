@@ -11,11 +11,15 @@
 
 namespace aspia {
 
+namespace {
+
 // Cache size can be in the range from 2 to 31.
-static const uint8_t kCacheSize = 16;
+constexpr uint8_t kCacheSize = 16;
 
 // The compression ratio can be in the range of 1 to 9.
-static const int32_t kCompressionRatio = 6;
+constexpr int32_t kCompressionRatio = 6;
+
+} // namespace
 
 CursorEncoder::CursorEncoder()
     : compressor_(kCompressionRatio),

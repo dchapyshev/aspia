@@ -19,10 +19,19 @@
 
 namespace aspia {
 
-// Name of the default session desktop.
-static WCHAR kDefaultDesktopName[] = L"winsta0\\default";
+const WCHAR kSessionLauncherSwitch[] = L"session-launcher";
+const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
+const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
+const WCHAR kPowerManageSessionSwitch[] = L"power-manage-session";
+const WCHAR kSystemInfoSessionSwitch[] = L"system-info-session";
+const WCHAR kSystemInfoSwitch[] = L"system-info";
 
-static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
+namespace {
+
+// Name of the default session desktop.
+constexpr WCHAR kDefaultDesktopName[] = L"winsta0\\default";
+
+bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 {
     ScopedHandle process_token;
 
@@ -49,7 +58,7 @@ static bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 }
 
 // Creates a copy of the current process with SE_TCB_NAME privilege enabled.
-static bool CreatePrivilegedToken(ScopedHandle& token_out)
+bool CreatePrivilegedToken(ScopedHandle& token_out)
 {
     ScopedHandle privileged_token;
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
@@ -83,7 +92,7 @@ static bool CreatePrivilegedToken(ScopedHandle& token_out)
 
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
+bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
 {
     ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
@@ -119,21 +128,24 @@ static bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
     return true;
 }
 
-static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
+bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
 {
-    PROCESS_INFORMATION process_info = { 0 };
-    STARTUPINFOW startup_info = { 0 };
+    STARTUPINFOW startup_info;
+    memset(&startup_info, 0, sizeof(startup_info));
 
     startup_info.cb = sizeof(startup_info);
-    startup_info.lpDesktop = kDefaultDesktopName;
+    startup_info.lpDesktop = const_cast<WCHAR*>(kDefaultDesktopName);
 
-    PVOID environment;
+    PVOID environment = nullptr;
 
     if (!CreateEnvironmentBlock(&environment, user_token, FALSE))
     {
         LOG(ERROR) << "CreateEnvironmentBlock() failed: " << GetLastSystemErrorString();
         return false;
     }
+
+    PROCESS_INFORMATION process_info;
+    memset(&process_info, 0, sizeof(process_info));
 
     if (!CreateProcessAsUserW(user_token,
                               nullptr,
@@ -160,9 +172,9 @@ static bool CreateProcessWithToken(HANDLE user_token, const std::wstring& comman
     return true;
 }
 
-static bool CreateCommandLine(const std::wstring& run_mode,
-                              const std::wstring& channel_id,
-                              std::wstring& command_line)
+bool CreateCommandLine(const std::wstring& run_mode,
+                       const std::wstring& channel_id,
+                       std::wstring& command_line)
 {
     FilePath path;
 
@@ -178,25 +190,7 @@ static bool CreateCommandLine(const std::wstring& run_mode,
     return true;
 }
 
-bool LaunchSessionProcessFromService(const std::wstring& run_mode,
-                                     uint32_t session_id,
-                                     const std::wstring& channel_id)
-{
-    std::wstring command_line;
-
-    if (!CreateCommandLine(run_mode, channel_id, command_line))
-        return false;
-
-    ScopedHandle session_token;
-
-    if (!CreateSessionToken(session_id, session_token))
-        return false;
-
-    return CreateProcessWithToken(session_token, command_line);
-}
-
-static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
-                                           const std::wstring& channel_id)
+bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wstring& channel_id)
 {
     std::wstring command_line;
 
@@ -211,9 +205,9 @@ static bool LaunchProcessWithCurrentRights(const std::wstring& run_mode,
     return CreateProcessWithToken(token, command_line);
 }
 
-static bool LaunchSessionProcess(const std::wstring& run_mode,
-                                 uint32_t session_id,
-                                 const std::wstring& channel_id)
+bool LaunchSessionProcess(const std::wstring& run_mode,
+                          uint32_t session_id,
+                          const std::wstring& channel_id)
 {
     if (IsRunningAsService())
     {
@@ -268,6 +262,25 @@ static bool LaunchSessionProcess(const std::wstring& run_mode,
     }
 
     return LaunchProcessWithCurrentRights(run_mode, channel_id);
+}
+
+} // namespace
+
+bool LaunchSessionProcessFromService(const std::wstring& run_mode,
+                                     uint32_t session_id,
+                                     const std::wstring& channel_id)
+{
+    std::wstring command_line;
+
+    if (!CreateCommandLine(run_mode, channel_id, command_line))
+        return false;
+
+    ScopedHandle session_token;
+
+    if (!CreateSessionToken(session_id, session_token))
+        return false;
+
+    return CreateProcessWithToken(session_token, command_line);
 }
 
 bool LaunchSessionProcess(proto::SessionType session_type,

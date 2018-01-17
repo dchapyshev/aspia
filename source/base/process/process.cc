@@ -14,8 +14,12 @@
 
 namespace aspia {
 
-static const DWORD kBasicProcessAccess =
+namespace {
+
+constexpr DWORD kBasicProcessAccess =
     PROCESS_TERMINATE | PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
+
+} // namespace
 
 Process::Process(ProcessHandle process_handle) :
     process_handle_(process_handle)

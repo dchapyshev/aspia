@@ -14,17 +14,47 @@
 
 namespace aspia {
 
-//
+namespace {
+
 // Defines the dimension of a macro block. This is used to compute the active
 // map for the encoder.
-//
-static const int kMacroBlockSize = 16;
+constexpr int kMacroBlockSize = 16;
 
 // Magic encoder profile numbers for I444 input formats.
-static const int kVp9I444ProfileNumber = 1;
+constexpr int kVp9I444ProfileNumber = 1;
 
 // Magic encoder constants for adaptive quantization strategy.
-static const int kVp9AqModeNone = 0;
+constexpr int kVp9AqModeNone = 0;
+
+void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
+{
+    // Use millisecond granularity time base.
+    config->g_timebase.num = 1;
+    config->g_timebase.den = 1000;
+
+    config->g_w = size.Width();
+    config->g_h = size.Height();
+    config->g_pass = VPX_RC_ONE_PASS;
+
+    // Start emitting packets immediately.
+    config->g_lag_in_frames = 0;
+
+    // Since the transport layer is reliable, keyframes should not be necessary.
+    // However, due to crbug.com/440223, decoding fails after 30,000 non-key
+    // frames, so take the hit of an "unnecessary" key-frame every 10,000 frames.
+    config->kf_min_dist = 10000;
+    config->kf_max_dist = 10000;
+
+    //
+    // Using 2 threads gives a great boost in performance for most systems with
+    // adequate processing power. NB: Going to multiple threads on low end
+    // windows systems can really hurt performance.
+    // http://crbug.com/99179
+    //
+    config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
+}
+
+} // namespace
 
 // static
 std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP8()
@@ -112,34 +142,6 @@ void VideoEncoderVPX::CreateActiveMap()
 
     memset(active_map_buffer_.get(), 0, active_map_size_);
     active_map_.active_map = active_map_buffer_.get();
-}
-
-static void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
-{
-    // Use millisecond granularity time base.
-    config->g_timebase.num = 1;
-    config->g_timebase.den = 1000;
-
-    config->g_w = size.Width();
-    config->g_h = size.Height();
-    config->g_pass = VPX_RC_ONE_PASS;
-
-    // Start emitting packets immediately.
-    config->g_lag_in_frames = 0;
-
-    // Since the transport layer is reliable, keyframes should not be necessary.
-    // However, due to crbug.com/440223, decoding fails after 30,000 non-key
-    // frames, so take the hit of an "unnecessary" key-frame every 10,000 frames.
-    config->kf_min_dist = 10000;
-    config->kf_max_dist = 10000;
-
-    //
-    // Using 2 threads gives a great boost in performance for most systems with
-    // adequate processing power. NB: Going to multiple threads on low end
-    // windows systems can really hurt performance.
-    // http://crbug.com/99179
-    //
-    config->g_threads = (std::thread::hardware_concurrency() > 2) ? 2 : 1;
 }
 
 void VideoEncoderVPX::CreateVp8Codec()

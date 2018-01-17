@@ -16,7 +16,7 @@ namespace aspia {
 
 namespace {
 
-static constexpr size_t kGuidLength = 38;
+constexpr size_t kGuidLength = 38;
 
 void UncompressMessageData(const std::string& input_data, std::string* output_data)
 {

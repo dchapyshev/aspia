@@ -11,12 +11,16 @@
 
 namespace aspia {
 
-static const size_t kMaxMessageSize = 10 * 1024 * 1024; // 10MB
+namespace {
 
-static bool IsFailureCode(const std::error_code& code)
+constexpr size_t kMaxMessageSize = 10 * 1024 * 1024; // 10MB
+
+bool IsFailureCode(const std::error_code& code)
 {
     return code.value() != 0;
 }
+
+} // namespace
 
 NetworkChannelTcp::NetworkChannelTcp(Mode mode)
     : mode_(mode)

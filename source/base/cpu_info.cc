@@ -14,6 +14,8 @@
 
 namespace aspia {
 
+namespace {
+
 void GetCPUCount(uint32_t& package_count,
                  uint32_t& physical_core_count,
                  uint32_t& logical_core_count)
@@ -66,6 +68,8 @@ void GetCPUCount(uint32_t& package_count,
         }
     }
 }
+
+} // namespace
 
 void GetCPUInformation(CPUInfo& cpu_info)
 {

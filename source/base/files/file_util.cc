@@ -15,8 +15,7 @@ namespace aspia {
 
 namespace {
 
-const DWORD kFileShareAll =
-FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
+constexpr DWORD kFileShareAll = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
 } // namespace
 

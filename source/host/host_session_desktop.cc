@@ -15,6 +15,8 @@
 
 namespace aspia {
 
+namespace {
+
 static const uint32_t kSupportedVideoEncodings =
     proto::VideoEncoding::VIDEO_ENCODING_ZLIB |
     proto::VideoEncoding::VIDEO_ENCODING_VP8 |
@@ -25,6 +27,8 @@ static const uint32_t kSupportedAudioEncodings = 0;
 static const uint32_t kSupportedFeatures =
     proto::DesktopSessionFeatures::FEATURE_CURSOR_SHAPE |
     proto::DesktopSessionFeatures::FEATURE_CLIPBOARD;
+
+} // namespace
 
 void HostSessionDesktop::Run(const std::wstring& channel_id)
 {

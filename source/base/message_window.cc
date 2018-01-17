@@ -12,9 +12,14 @@
 
 namespace aspia {
 
-static const WCHAR kWindowClassName[] = L"Aspia_MessageWindowClass";
-static const WCHAR kWindowName[] = L"Aspia_MessageWindow";
+namespace {
+
+constexpr WCHAR kWindowClassName[] = L"Aspia_MessageWindowClass";
+constexpr WCHAR kWindowName[] = L"Aspia_MessageWindow";
+
 static std::atomic_bool _class_registered = false;
+
+} // namespace
 
 MessageWindow::~MessageWindow()
 {

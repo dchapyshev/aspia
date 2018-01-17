@@ -14,23 +14,9 @@
 
 namespace aspia {
 
-ClientSessionDesktopView::ClientSessionDesktopView(
-    const ClientConfig& config,
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-    : ClientSession(config, channel_proxy)
-{
-    viewer_.reset(new ViewerWindow(&config_, this));
+namespace {
 
-    channel_proxy_->Receive(std::bind(
-        &ClientSessionDesktopView::OnMessageReceived, this, std::placeholders::_1));
-}
-
-ClientSessionDesktopView::~ClientSessionDesktopView()
-{
-    viewer_.reset();
-}
-
-static std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::VideoEncoding encoding)
+std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::VideoEncoding encoding)
 {
     switch (encoding)
     {
@@ -47,6 +33,24 @@ static std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::VideoEncoding enc
             LOG(ERROR) << "Unsupported encoding: " << encoding;
             return nullptr;
     }
+}
+
+} // namespace
+
+ClientSessionDesktopView::ClientSessionDesktopView(
+    const ClientConfig& config,
+    std::shared_ptr<NetworkChannelProxy> channel_proxy)
+    : ClientSession(config, channel_proxy)
+{
+    viewer_.reset(new ViewerWindow(&config_, this));
+
+    channel_proxy_->Receive(std::bind(
+        &ClientSessionDesktopView::OnMessageReceived, this, std::placeholders::_1));
+}
+
+ClientSessionDesktopView::~ClientSessionDesktopView()
+{
+    viewer_.reset();
 }
 
 bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_packet)
