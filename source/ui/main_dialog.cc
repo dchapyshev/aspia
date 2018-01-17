@@ -14,7 +14,6 @@
 #include "base/process/process_helpers.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
-#include "codec/video_helpers.h"
 #include "host/host_session_launcher.h"
 #include "host/host_service.h"
 #include "network/network_adapter_enumerator.h"
@@ -67,66 +66,54 @@ void MainDialog::UpdateIpList()
 
 void MainDialog::UpdateMRUList()
 {
-    CComboBox combobox(GetDlgItem(IDC_SERVER_ADDRESS_COMBO));
+    CComboBox combo(GetDlgItem(IDC_SERVER_ADDRESS_COMBO));
 
-    combobox.ResetContent();
+    // Remove all items.
+    combo.ResetContent();
 
-    for (int index = mru_.GetItemCount() - 1; index >= 0; --index)
+    const int item_count = mru_.GetItemCount();
+
+    if (!item_count)
     {
-        const int item_index = combobox.AddString(
-            UNICODEfromUTF8(mru_.GetItem(index).address()).c_str());
-
-        combobox.SetItemData(item_index, index);
-
-        if (index == mru_.GetItemCount() - 1)
-            combobox.SetCurSel(item_index);
+        UpdateCurrentConfig(MRU::GetDefaultConfig());
+        return;
     }
-}
 
-int MainDialog::AddSessionType(CComboBox& combobox,
-                               UINT string_resource_id,
-                               proto::auth::SessionType session_type)
-{
-    CString text;
-    text.LoadStringW(string_resource_id);
+    for (int index = item_count - 1; index >= 0; --index)
+    {
+        const proto::ClientConfig& client_config = mru_.GetItem(index);
 
-    const int item_index = combobox.AddString(text);
-    combobox.SetItemData(item_index, session_type);
+        // Add address to combobox.
+        const int item_index = combo.AddString(UNICODEfromUTF8(client_config.address()).c_str());
 
-    return item_index;
+        combo.SetItemData(item_index, index);
+
+        if (index == item_count - 1)
+        {
+            UpdateCurrentConfig(client_config);
+            combo.SetCurSel(item_index);
+        }
+    }
 }
 
 void MainDialog::InitSessionTypesCombo()
 {
     CComboBox combobox(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
-    const int first_item = AddSessionType(combobox,
-                                          IDS_SESSION_TYPE_DESKTOP_MANAGE,
-                                          proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    auto add_session = [&](UINT resource_id, proto::auth::SessionType session_type)
+    {
+        CString text;
+        text.LoadStringW(resource_id);
 
-    AddSessionType(combobox,
-                   IDS_SESSION_TYPE_DESKTOP_VIEW,
-                   proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        const int item_index = combobox.AddString(text);
+        combobox.SetItemData(item_index, session_type);
+    };
 
-    AddSessionType(combobox,
-                   IDS_SESSION_TYPE_FILE_TRANSFER,
-                   proto::auth::SESSION_TYPE_FILE_TRANSFER);
-
-    AddSessionType(combobox,
-                   IDS_SESSION_TYPE_SYSTEM_INFO,
-                   proto::auth::SESSION_TYPE_SYSTEM_INFO);
-
-    AddSessionType(combobox,
-                   IDS_SESSION_TYPE_POWER_MANAGE,
-                   proto::auth::SESSION_TYPE_POWER_MANAGE);
-
-    combobox.SetCurSel(first_item);
-}
-
-proto::auth::SessionType MainDialog::GetSelectedSessionType() const
-{
-    CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
-    return static_cast<proto::auth::SessionType>(combo.GetItemData(combo.GetCurSel()));
+    add_session(IDS_SESSION_TYPE_DESKTOP_MANAGE, proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    add_session(IDS_SESSION_TYPE_DESKTOP_VIEW, proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(IDS_SESSION_TYPE_FILE_TRANSFER, proto::auth::SESSION_TYPE_FILE_TRANSFER);
+    add_session(IDS_SESSION_TYPE_SYSTEM_INFO, proto::auth::SESSION_TYPE_SYSTEM_INFO);
+    add_session(IDS_SESSION_TYPE_POWER_MANAGE, proto::auth::SESSION_TYPE_POWER_MANAGE);
 }
 
 LRESULT MainDialog::OnInitDialog(
@@ -164,9 +151,6 @@ LRESULT MainDialog::OnInitDialog(
 
     InitIpList();
     UpdateIpList();
-    InitSessionTypesCombo();
-
-    current_config_.set_port(kDefaultHostTcpPort);
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
     CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
@@ -191,8 +175,8 @@ LRESULT MainDialog::OnInitDialog(
     if (host_service_installed)
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
 
+    InitSessionTypesCombo();
     UpdateMRUList();
-    UpdateSessionType();
 
     const DWORD active_thread_id =
         GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
@@ -276,31 +260,34 @@ LRESULT MainDialog::OnUpdateIpListButton(
     return 0;
 }
 
-void MainDialog::UpdateSessionType()
+void MainDialog::UpdateCurrentConfig(const proto::ClientConfig& client_config)
 {
-    switch (GetSelectedSessionType())
+    current_config_.CopyFrom(client_config);
+
+    CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
+
+    for (int i = combo.GetCount() - 1; i >= 0; --i)
+    {
+        if (static_cast<proto::auth::SessionType>(combo.GetItemData(i)) ==
+            client_config.session_type())
+        {
+            UpdateCurrentSessionType(client_config.session_type());
+            combo.SetCurSel(i);
+            break;
+        }
+    }
+}
+
+void MainDialog::UpdateCurrentSessionType(proto::auth::SessionType session_type)
+{
+    current_config_.set_session_type(session_type);
+
+    switch (session_type)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            proto::desktop::Config* desktop_session_config =
-                current_config_.mutable_desktop_session();
-
-            desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
-                                              proto::desktop::Config::ENABLE_CURSOR_SHAPE);
-
-            desktop_session_config->set_video_encoding(
-                proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-
-            desktop_session_config->set_update_interval(30);
-            desktop_session_config->set_compress_ratio(6);
-
-            ConvertToVideoPixelFormat(PixelFormat::RGB565(),
-                                      desktop_session_config->mutable_pixel_format());
-
             GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(TRUE);
-        }
-        break;
+            break;
 
         default:
             GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(FALSE);
@@ -309,37 +296,43 @@ void MainDialog::UpdateSessionType()
 }
 
 LRESULT MainDialog::OnSessionTypeChanged(
-    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+    WORD /* notify_code */, WORD /* control_id */, HWND control, BOOL& /* handled */)
 {
-    UpdateSessionType();
+    CComboBox combo(control);
+    UpdateCurrentSessionType(static_cast<proto::auth::SessionType>(
+        combo.GetItemData(combo.GetCurSel())));
     return 0;
 }
 
 LRESULT MainDialog::OnAddressChanged(
     WORD /* notify_code */, WORD /* control_id */, HWND control, BOOL& /* handled */)
 {
-    CComboBox combobox(control);
+    CComboBox combo(control);
 
-    const int item_index = combobox.GetItemData(combobox.GetCurSel());
+    // Get current selected MRU index from combobox.
+    const int item_index = combo.GetItemData(combo.GetCurSel());
 
-    if (item_index < 0 || item_index >= mru_.GetItemCount())
-        return 0;
+    // Validate MRU cache index.
+    if (item_index >= 0 && item_index < mru_.GetItemCount())
+    {
+        // Address found in MRU list. Copy config from cache.
+        current_config_.CopyFrom(mru_.SetLastItem(item_index));
+        UpdateMRUList();
+    }
 
-    current_config_.CopyFrom(mru_.GetItem(item_index));
     return 0;
 }
 
 LRESULT MainDialog::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    const proto::auth::SessionType session_type = GetSelectedSessionType();
-
-    switch (session_type)
+    switch (current_config_.session_type())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            SettingsDialog dialog(session_type, current_config_.desktop_session());
+            SettingsDialog dialog(current_config_.session_type(),
+                                  current_config_.desktop_session());
 
             if (dialog.DoModal(*this) == IDOK)
             {
@@ -358,19 +351,20 @@ LRESULT MainDialog::OnSettingsButton(
 LRESULT MainDialog::OnConnectButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    const proto::auth::SessionType session_type = GetSelectedSessionType();
-
-    if (session_type != proto::auth::SESSION_TYPE_UNKNOWN)
+    if (current_config_.session_type() != proto::auth::SESSION_TYPE_UNKNOWN)
     {
         WCHAR buffer[128] = { 0 };
         GetDlgItemTextW(IDC_SERVER_ADDRESS_COMBO, buffer, _countof(buffer));
 
+        // Update address and port in current config.
         current_config_.set_address(UTF8fromUNICODE(buffer));
-        current_config_.set_port(static_cast<uint16_t>(
+        current_config_.set_port(static_cast<uint32_t>(
             GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
-        current_config_.set_session_type(session_type);
 
+        // Add current config to MRU list.
         mru_.AddItem(current_config_);
+
+        // Reload MRU list to combobox.
         UpdateMRUList();
 
         if (!client_pool_)

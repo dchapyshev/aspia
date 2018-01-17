@@ -7,6 +7,7 @@
 
 #include "base/files/base_paths.h"
 #include "base/logging.h"
+#include "codec/video_helpers.h"
 #include "ui/mru.h"
 
 #include <fstream>
@@ -16,7 +17,7 @@ namespace aspia {
 namespace {
 
 constexpr size_t kMaxMRUFileSize = 1024 * 1024; // 1 MB
-constexpr size_t kMaxMRUItemCount = 50;
+constexpr size_t kMaxMRUItemCount = 30;
 
 bool GetMRUFilePath(FilePath& path)
 {
@@ -105,12 +106,12 @@ bool WriteMRUFile(const std::string& mru)
 
 MRU::MRU()
 {
-    std::string mru;
+    std::string string;
 
-    if (!ReadMRUFile(mru))
+    if (!ReadMRUFile(string))
         return;
 
-    if (!mru_.ParseFromString(mru))
+    if (!mru_.ParseFromString(string))
     {
         LOG(ERROR) << "Unable to parse MRU file";
         return;
@@ -118,8 +119,8 @@ MRU::MRU()
 
     if (mru_.client_config_size() > kMaxMRUItemCount)
     {
-        mru_.mutable_client_config()
-            ->DeleteSubrange(0, mru_.client_config_size() - kMaxMRUFileSize);
+        mru_.mutable_client_config()->DeleteSubrange(
+            0, mru_.client_config_size() - kMaxMRUFileSize);
     }
 }
 
@@ -128,18 +129,44 @@ MRU::~MRU()
     WriteMRUFile(mru_.SerializeAsString());
 }
 
+// static
+proto::ClientConfig MRU::GetDefaultConfig()
+{
+    proto::ClientConfig config;
+
+    config.set_port(kDefaultHostTcpPort);
+    config.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+
+    proto::desktop::Config* desktop_session_config = config.mutable_desktop_session();
+
+    desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
+                                      proto::desktop::Config::ENABLE_CURSOR_SHAPE);
+    desktop_session_config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    desktop_session_config->set_update_interval(30);
+    desktop_session_config->set_compress_ratio(6);
+
+    ConvertToVideoPixelFormat(PixelFormat::RGB565(),
+                              desktop_session_config->mutable_pixel_format());
+
+    return config;
+}
+
 void MRU::AddItem(const proto::ClientConfig& client_config)
 {
+    if (client_config.address().empty())
+        return;
+
     for (int index = 0; index < mru_.client_config_size(); ++index)
     {
         if (client_config.address() == mru_.client_config(index).address())
         {
-            // The host is already in the list. We update session parameters.
-            mru_.mutable_client_config(index)->CopyFrom(client_config);
-            return;
+            // Item already in the list. Remove from current position.
+            mru_.mutable_client_config()->DeleteSubrange(index, 1);
+            break;
         }
     }
 
+    // Add item to end.
     mru_.add_client_config()->CopyFrom(client_config);
 
     if (mru_.client_config_size() > kMaxMRUItemCount)
@@ -158,6 +185,23 @@ const proto::ClientConfig& MRU::GetItem(int item_index) const
 {
     DCHECK(mru_.client_config_size() != 0 && item_index < mru_.client_config_size());
     return mru_.client_config(item_index);
+}
+
+const proto::ClientConfig& MRU::SetLastItem(int item_index)
+{
+    DCHECK(mru_.client_config_size() != 0 && item_index < mru_.client_config_size());
+
+    // Save item.
+    proto::ClientConfig client_config = mru_.client_config(item_index);
+
+    // Delete item from current position.
+    mru_.mutable_client_config()->DeleteSubrange(item_index, 1);
+
+    // Add item to end.
+    mru_.add_client_config()->CopyFrom(client_config);
+
+    // Get end item.
+    return GetItem(GetItemCount() - 1);
 }
 
 } // namespace aspia

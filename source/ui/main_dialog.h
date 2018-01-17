@@ -89,11 +89,8 @@ private:
     void UpdateIpList();
     void UpdateMRUList();
     void InitSessionTypesCombo();
-    proto::auth::SessionType GetSelectedSessionType() const;
-    int AddSessionType(CComboBox& combobox,
-                       UINT string_resource_id,
-                       proto::auth::SessionType session_type);
-    void UpdateSessionType();
+    void UpdateCurrentConfig(const proto::ClientConfig& client_config);
+    void UpdateCurrentSessionType(proto::auth::SessionType session_type);
     void StopHostMode();
     void CopySelectedIp();
 
