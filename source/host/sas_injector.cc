@@ -16,9 +16,13 @@
 
 namespace aspia {
 
-static const WCHAR kSasServiceShortName[] = L"aspia-sas-service";
-static const WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
-static const DWORD kInvalidSessionId = 0xFFFFFFFF;
+namespace {
+
+constexpr WCHAR kSasServiceShortName[] = L"aspia-sas-service";
+constexpr WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
+constexpr DWORD kInvalidSessionId = 0xFFFFFFFF;
+
+} // namespace
 
 SasInjector::SasInjector(const std::wstring& service_id)
     : Service(ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id))

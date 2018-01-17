@@ -15,9 +15,17 @@
 
 namespace aspia {
 
-static std::atomic_uint32_t _last_service_id = 0;
+namespace {
 
-ServiceManager::ServiceManager(const std::wstring& service_short_name) :
+uint32_t GetCurrentServiceId()
+{
+    static std::atomic_uint32_t last_service_id = 0;
+    return last_service_id++;
+}
+
+} // namespace
+
+ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
     sc_manager_(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS))
 {
     if (!sc_manager_.IsValid())
@@ -27,7 +35,7 @@ ServiceManager::ServiceManager(const std::wstring& service_short_name) :
     else
     {
         service_ = OpenServiceW(sc_manager_,
-                                service_short_name.c_str(),
+                                service_short_name.data(),
                                 SERVICE_ALL_ACCESS);
         if (!service_.IsValid())
         {
@@ -126,16 +134,13 @@ ServiceManager::Create(const std::wstring_view& command_line,
 std::wstring ServiceManager::GenerateUniqueServiceId()
 {
     uint32_t process_id = GetCurrentProcessId();
-    uint32_t last_service_id = _last_service_id;
 
     std::random_device device;
     std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
 
     uint32_t random = uniform(device);
 
-    ++_last_service_id;
-
-    return StringPrintf(L"%u.%u.%u", process_id, last_service_id, random);
+    return StringPrintf(L"%lu.%lu.%lu", process_id, GetCurrentServiceId(), random);
 }
 
 // static

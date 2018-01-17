@@ -20,7 +20,7 @@ class ServiceManager
 {
 public:
     ServiceManager() = default;
-    explicit ServiceManager(const std::wstring& service_short_name);
+    explicit ServiceManager(const std::wstring_view& service_short_name);
     ~ServiceManager();
 
     // Creates a service in the system and returns a pointer to the instance
