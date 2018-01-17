@@ -51,7 +51,7 @@ bool DeleteFile(const FilePath& path)
         return !!::DeleteFileW(path.c_str());
 
     // Handle a simple, single file delete.
-    return !!RemoveDirectory(path.c_str());
+    return !!RemoveDirectoryW(path.c_str());
 }
 
 time_t UnixTimeFromFileTime(const FILETIME& file_time)
@@ -172,7 +172,7 @@ bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error
 {
     // Try a simple move first.  It will only succeed when |to_path| doesn't
     // already exist.
-    if (::MoveFile(from_path.c_str(), to_path.c_str()))
+    if (::MoveFileW(from_path.c_str(), to_path.c_str()))
         return true;
     File::Error move_error = File::OSErrorToFileError(GetLastError());
 
@@ -180,8 +180,8 @@ bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error
     // succeed when |to_path| does exist. When writing to a network share, we may
     // not be able to change the ACLs. Ignore ACL errors then
     // (REPLACEFILE_IGNORE_MERGE_ERRORS).
-    if (::ReplaceFile(to_path.c_str(), from_path.c_str(), NULL,
-                      REPLACEFILE_IGNORE_MERGE_ERRORS, NULL, NULL))
+    if (::ReplaceFileW(to_path.c_str(), from_path.c_str(), nullptr,
+                       REPLACEFILE_IGNORE_MERGE_ERRORS, nullptr, nullptr))
     {
         return true;
     }
@@ -243,7 +243,7 @@ bool CreateDirectory(const FilePath& full_path, File::Error* error)
         return false;
     }
 
-    if (!::CreateDirectory(full_path_str, NULL))
+    if (!::CreateDirectoryW(full_path_str, nullptr))
     {
         DWORD error_code = ::GetLastError();
         if (error_code == ERROR_ALREADY_EXISTS && DirectoryExists(full_path))
