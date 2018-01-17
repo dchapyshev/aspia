@@ -16,38 +16,43 @@
 
 namespace aspia {
 
-static const WCHAR kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
-static const DWORD kPipeBufferSize = 512 * 1024; // 512 KB
+namespace {
 
-static std::atomic_uint32_t _last_channel_id = 0;
+constexpr WCHAR kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
+constexpr DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
-static bool IsFailureCode(const std::error_code& code)
+uint32_t GetCurrentChannelId()
+{
+    static std::atomic_uint32_t last_channel_id = 0;
+    return last_channel_id++;
+}
+
+bool IsFailureCode(const std::error_code& code)
 {
     return code.value() != 0;
 }
 
-static std::wstring GenerateUniqueRandomChannelID()
+std::wstring GenerateUniqueRandomChannelID()
 {
     uint32_t process_id = GetCurrentProcessId();
-    uint32_t last_channel_id = _last_channel_id;
 
     std::random_device device;
     std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
 
     uint32_t random = uniform(device);
 
-    ++_last_channel_id;
-
-    return StringPrintf(L"%u.%u.%u", process_id, last_channel_id, random);
+    return StringPrintf(L"%lu.%lu.%lu", process_id, GetCurrentChannelId(), random);
 }
 
-static std::wstring CreatePipeName(const std::wstring& channel_id)
+std::wstring CreatePipeName(const std::wstring& channel_id)
 {
     std::wstring pipe_name(kPipeNamePrefix);
     pipe_name.append(channel_id);
 
     return pipe_name;
 }
+
+} // namespace
 
 // static
 std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
