@@ -12,26 +12,25 @@
 
 namespace aspia {
 
-#define RGBA(r, g, b, a)          \
-    ((((a) << 24) & 0xFF000000) | \
-    (((b)  << 16) & 0xFF0000)   | \
-    (((g)  << 8)  & 0xFF00)     | \
-    ((r)          & 0xFF))
+namespace {
 
-static const int kBytesPerPixel = 4;
+constexpr uint32_t RGBA(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
+{
+    return (((a << 24) & 0xFF000000) | ((b << 16) & 0xFF0000) | ((g << 8) & 0xFF00) | (r & 0xFF));
+}
+
+constexpr int kBytesPerPixel = 4;
 
 // Pixel colors used when generating cursor outlines.
-static const uint32_t kPixelRgbaBlack       = RGBA(0,    0,    0,    0xFF);
-static const uint32_t kPixelRgbaWhite       = RGBA(0xFF, 0xFF, 0xFF, 0xFF);
-static const uint32_t kPixelRgbaTransparent = RGBA(0,    0,    0,    0);
+constexpr uint32_t kPixelRgbaBlack       = RGBA(0,    0,    0,    0xFF);
+constexpr uint32_t kPixelRgbaWhite       = RGBA(0xFF, 0xFF, 0xFF, 0xFF);
+constexpr uint32_t kPixelRgbaTransparent = RGBA(0,    0,    0,    0);
 
-static const uint32_t kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
+constexpr uint32_t kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
 
-//
 // Scans a 32bpp bitmap looking for any pixels with non-zero alpha component.
 // Returns true if non-zero alpha is found. |stride| is expressed in pixels.
-//
-static bool HasAlphaChannel(const uint32_t* data, int width, int height)
+bool HasAlphaChannel(const uint32_t* data, int width, int height)
 {
     const RGBQUAD* plane = reinterpret_cast<const RGBQUAD*>(data);
 
@@ -49,11 +48,9 @@ static bool HasAlphaChannel(const uint32_t* data, int width, int height)
     return false;
 }
 
-//
 // Expands the cursor shape to add a white outline for visibility against
 // dark backgrounds.
-//
-static void AddCursorOutline(int width, int height, uint32_t* data)
+void AddCursorOutline(int width, int height, uint32_t* data)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -80,11 +77,9 @@ static void AddCursorOutline(int width, int height, uint32_t* data)
     }
 }
 
-//
 // Premultiplies RGB components of the pixel data in the given image by
 // the corresponding alpha components.
-//
-static void AlphaMul(uint32_t* data, int width, int height)
+void AlphaMul(uint32_t* data, int width, int height)
 {
     static_assert(sizeof(uint32_t) == kBytesPerPixel,
         "size of uint32 should be the number of bytes per pixel");
@@ -99,6 +94,8 @@ static void AlphaMul(uint32_t* data, int width, int height)
         to->rgbRed   = (static_cast<uint16_t>(from->rgbRed)   * from->rgbReserved) / 0xFF;
     }
 }
+
+} // namespace
 
 // Converts an HCURSOR into a |MouseCursor| instance.
 std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
