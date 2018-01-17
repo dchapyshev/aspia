@@ -341,14 +341,14 @@ LRESULT ViewerWindow::OnKillFocus(
     return 0;
 }
 
-void ViewerWindow::ApplyConfig(const proto::DesktopSessionConfig& config)
+void ViewerWindow::ApplyConfig(const proto::SessionConfig& config)
 {
-    if (!(config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE))
     {
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }
 
-    if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
+    if (config.flags() & proto::SessionConfig::ENABLE_CLIPBOARD)
     {
         clipboard_.Start(std::bind(&ViewerWindow::Delegate::OnClipboardEvent,
                                    delegate_,

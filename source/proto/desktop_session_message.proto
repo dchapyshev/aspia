@@ -135,17 +135,6 @@ message VideoPacket
     bytes data = 4;
 }
 
-enum AudioEncoding
-{
-    AUDIO_ENCODING_INVALID = 0;
-    AUDIO_ENCODING_OPUS    = 1;
-}
-
-message AudioPacket
-{
-    AudioEncoding encoding = 1;
-}
-
 enum DesktopSessionFeatures
 {
     FEATURE_NONE         = 0;
@@ -153,30 +142,27 @@ enum DesktopSessionFeatures
     FEATURE_CLIPBOARD    = 2;
 }
 
-message DesktopSessionConfigRequest
+message SessionConfigRequest
 {
     uint32 video_encodings = 1;
     uint32 audio_encodings = 2;
     uint32 features = 3;
 }
 
-message DesktopSessionConfig
+message SessionConfig
 {
     enum Flags
     {
         ENABLE_NONE             = 0;
         ENABLE_CURSOR_SHAPE     = 1;
         ENABLE_CLIPBOARD        = 2;
-        ENABLE_AUDIO            = 3;
     }
 
     uint32 flags = 1;
 
     VideoEncoding video_encoding = 2;
-    AudioEncoding audio_encoding = 3;
+    VideoPixelFormat pixel_format = 3;
 
-    VideoPixelFormat pixel_format = 4;
-
-    uint32 update_interval = 5;
-    uint32 compress_ratio = 6;
+    uint32 update_interval = 4;
+    uint32 compress_ratio = 5;
 }

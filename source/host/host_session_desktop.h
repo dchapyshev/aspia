@@ -42,7 +42,7 @@ private:
     bool ReadPointerEvent(const proto::PointerEvent& event);
     bool ReadKeyEvent(const proto::KeyEvent& event);
     bool ReadClipboardEvent(std::shared_ptr<proto::ClipboardEvent> event);
-    bool ReadConfig(const proto::DesktopSessionConfig& config);
+    bool ReadConfig(const proto::SessionConfig& config);
 
     void SendClipboardEvent(proto::ClipboardEvent& event);
     void SendConfigRequest();

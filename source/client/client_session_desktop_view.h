@@ -26,7 +26,7 @@ public:
 
 protected:
     void WriteMessage(const proto::desktop::ClientToHost& message);
-    void ReadConfigRequest(const proto::DesktopSessionConfigRequest& config_request);
+    void ReadConfigRequest(const proto::SessionConfigRequest& config_request);
     bool ReadVideoPacket(const proto::VideoPacket& video_packet);
 
     std::unique_ptr<ViewerWindow> viewer_;
@@ -34,7 +34,7 @@ protected:
 private:
     // ViewerWindow::Delegate implementation.
     void OnWindowClose() override;
-    void OnConfigChange(const proto::DesktopSessionConfig& config) override;
+    void OnConfigChange(const proto::SessionConfig& config) override;
     void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
     void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) override;

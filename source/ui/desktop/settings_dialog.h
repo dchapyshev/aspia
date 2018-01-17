@@ -25,10 +25,10 @@ class SettingsDialog : public CDialogImpl<SettingsDialog>
 public:
     enum { IDD = IDD_SETTINGS };
 
-    SettingsDialog(proto::SessionType session_type,const proto::DesktopSessionConfig& config);
+    SettingsDialog(proto::SessionType session_type,const proto::SessionConfig& config);
     ~SettingsDialog() = default;
 
-    const proto::DesktopSessionConfig& Config() const { return config_; }
+    const proto::SessionConfig& Config() const { return config_; }
 
 private:
     BEGIN_MSG_MAP(SettingsDialog)
@@ -58,7 +58,7 @@ private:
     void SelectItemWithData(CComboBox& combobox, int item_data);
 
     proto::SessionType session_type_;
-    proto::DesktopSessionConfig config_;
+    proto::SessionConfig config_;
 
     DISALLOW_COPY_AND_ASSIGN(SettingsDialog);
 };

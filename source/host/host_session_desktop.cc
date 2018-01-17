@@ -217,7 +217,7 @@ void HostSessionDesktop::SendConfigRequest()
 {
     proto::desktop::HostToClient message;
 
-    proto::DesktopSessionConfigRequest* request = message.mutable_config_request();
+    proto::SessionConfigRequest* request = message.mutable_config_request();
     request->set_video_encodings(kSupportedVideoEncodings);
     request->set_audio_encodings(kSupportedAudioEncodings);
 
@@ -229,7 +229,7 @@ void HostSessionDesktop::SendConfigRequest()
     WriteMessage(message);
 }
 
-bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
+bool HostSessionDesktop::ReadConfig(const proto::SessionConfig& config)
 {
     screen_updater_.reset();
 
@@ -237,7 +237,7 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
 
     if (session_type_ == proto::SessionType::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE)
+        if (config.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE)
             enable_cursor_shape = true;
 
         if (enable_cursor_shape)
@@ -249,7 +249,7 @@ bool HostSessionDesktop::ReadConfig(const proto::DesktopSessionConfig& config)
             cursor_encoder_.reset();
         }
 
-        if (config.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD)
+        if (config.flags() & proto::SessionConfig::ENABLE_CLIPBOARD)
         {
             clipboard_thread_ = std::make_unique<ClipboardThread>();
 

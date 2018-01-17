@@ -61,10 +61,6 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
             if (message.has_cursor_shape())
                 ReadCursorShape(message.cursor_shape());
         }
-        else if (message.has_audio_packet())
-        {
-            LOG(WARNING) << "Audio not implemented yet";
-        }
         else if (message.has_clipboard_event())
         {
             std::shared_ptr<proto::ClipboardEvent> clipboard_event(

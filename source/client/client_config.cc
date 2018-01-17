@@ -23,8 +23,8 @@ ClientConfig::ClientConfig(const ClientConfig& other)
 void ClientConfig::SetDefaultDesktopSessionConfig()
 {
     desktop_session_config_.set_flags(
-        proto::DesktopSessionConfig::ENABLE_CLIPBOARD |
-        proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE);
+        proto::SessionConfig::ENABLE_CLIPBOARD |
+        proto::SessionConfig::ENABLE_CURSOR_SHAPE);
 
     desktop_session_config_.set_video_encoding(
         proto::VideoEncoding::VIDEO_ENCODING_ZLIB);
@@ -75,12 +75,12 @@ uint16_t ClientConfig::port() const
     return port_;
 }
 
-const proto::DesktopSessionConfig& ClientConfig::desktop_session_config() const
+const proto::SessionConfig& ClientConfig::desktop_session_config() const
 {
     return desktop_session_config_;
 }
 
-proto::DesktopSessionConfig* ClientConfig::mutable_desktop_session_config()
+proto::SessionConfig* ClientConfig::mutable_desktop_session_config()
 {
     return &desktop_session_config_;
 }

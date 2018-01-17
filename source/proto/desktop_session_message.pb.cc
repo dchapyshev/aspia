@@ -63,21 +63,16 @@ class VideoPacketDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<VideoPacket>
       _instance;
 } _VideoPacket_default_instance_;
-class AudioPacketDefaultTypeInternal {
+class SessionConfigRequestDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<AudioPacket>
+  ::google::protobuf::internal::ExplicitlyConstructed<SessionConfigRequest>
       _instance;
-} _AudioPacket_default_instance_;
-class DesktopSessionConfigRequestDefaultTypeInternal {
+} _SessionConfigRequest_default_instance_;
+class SessionConfigDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DesktopSessionConfigRequest>
+  ::google::protobuf::internal::ExplicitlyConstructed<SessionConfig>
       _instance;
-} _DesktopSessionConfigRequest_default_instance_;
-class DesktopSessionConfigDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<DesktopSessionConfig>
-      _instance;
-} _DesktopSessionConfig_default_instance_;
+} _SessionConfig_default_instance_;
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_desktop_5fsession_5fmessage_2eproto {
@@ -274,7 +269,7 @@ void InitDefaultsVideoPacket() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsVideoPacketImpl);
 }
 
-void InitDefaultsAudioPacketImpl() {
+void InitDefaultsSessionConfigRequestImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -283,40 +278,19 @@ void InitDefaultsAudioPacketImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_AudioPacket_default_instance_;
-    new (ptr) ::aspia::proto::AudioPacket();
+    void* ptr = &::aspia::proto::_SessionConfigRequest_default_instance_;
+    new (ptr) ::aspia::proto::SessionConfigRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::AudioPacket::InitAsDefaultInstance();
+  ::aspia::proto::SessionConfigRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsAudioPacket() {
+void InitDefaultsSessionConfigRequest() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsAudioPacketImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsSessionConfigRequestImpl);
 }
 
-void InitDefaultsDesktopSessionConfigRequestImpl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  {
-    void* ptr = &::aspia::proto::_DesktopSessionConfigRequest_default_instance_;
-    new (ptr) ::aspia::proto::DesktopSessionConfigRequest();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::aspia::proto::DesktopSessionConfigRequest::InitAsDefaultInstance();
-}
-
-void InitDefaultsDesktopSessionConfigRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDesktopSessionConfigRequestImpl);
-}
-
-void InitDefaultsDesktopSessionConfigImpl() {
+void InitDefaultsSessionConfigImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -326,16 +300,16 @@ void InitDefaultsDesktopSessionConfigImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsVideoPixelFormat();
   {
-    void* ptr = &::aspia::proto::_DesktopSessionConfig_default_instance_;
-    new (ptr) ::aspia::proto::DesktopSessionConfig();
+    void* ptr = &::aspia::proto::_SessionConfig_default_instance_;
+    new (ptr) ::aspia::proto::SessionConfig();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::DesktopSessionConfig::InitAsDefaultInstance();
+  ::aspia::proto::SessionConfig::InitAsDefaultInstance();
 }
 
-void InitDefaultsDesktopSessionConfig() {
+void InitDefaultsSessionConfig() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDesktopSessionConfigImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsSessionConfigImpl);
 }
 
 }  // namespace protobuf_desktop_5fsession_5fmessage_2eproto
@@ -408,12 +382,11 @@ const CursorShape_Flags CursorShape::Flags_MIN;
 const CursorShape_Flags CursorShape::Flags_MAX;
 const int CursorShape::Flags_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool DesktopSessionConfig_Flags_IsValid(int value) {
+bool SessionConfig_Flags_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
-    case 3:
       return true;
     default:
       return false;
@@ -421,13 +394,12 @@ bool DesktopSessionConfig_Flags_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DesktopSessionConfig_Flags DesktopSessionConfig::ENABLE_NONE;
-const DesktopSessionConfig_Flags DesktopSessionConfig::ENABLE_CURSOR_SHAPE;
-const DesktopSessionConfig_Flags DesktopSessionConfig::ENABLE_CLIPBOARD;
-const DesktopSessionConfig_Flags DesktopSessionConfig::ENABLE_AUDIO;
-const DesktopSessionConfig_Flags DesktopSessionConfig::Flags_MIN;
-const DesktopSessionConfig_Flags DesktopSessionConfig::Flags_MAX;
-const int DesktopSessionConfig::Flags_ARRAYSIZE;
+const SessionConfig_Flags SessionConfig::ENABLE_NONE;
+const SessionConfig_Flags SessionConfig::ENABLE_CURSOR_SHAPE;
+const SessionConfig_Flags SessionConfig::ENABLE_CLIPBOARD;
+const SessionConfig_Flags SessionConfig::Flags_MIN;
+const SessionConfig_Flags SessionConfig::Flags_MAX;
+const int SessionConfig::Flags_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool VideoEncoding_IsValid(int value) {
   switch (value) {
@@ -435,16 +407,6 @@ bool VideoEncoding_IsValid(int value) {
     case 1:
     case 2:
     case 4:
-      return true;
-    default:
-      return false;
-  }
-}
-
-bool AudioEncoding_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
       return true;
     default:
       return false;
@@ -3050,220 +3012,23 @@ void VideoPacket::InternalSwap(VideoPacket* other) {
 
 // ===================================================================
 
-void AudioPacket::InitAsDefaultInstance() {
+void SessionConfigRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AudioPacket::kEncodingFieldNumber;
+const int SessionConfigRequest::kVideoEncodingsFieldNumber;
+const int SessionConfigRequest::kAudioEncodingsFieldNumber;
+const int SessionConfigRequest::kFeaturesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-AudioPacket::AudioPacket()
+SessionConfigRequest::SessionConfigRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsAudioPacket();
+    ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfigRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.AudioPacket)
+  // @@protoc_insertion_point(constructor:aspia.proto.SessionConfigRequest)
 }
-AudioPacket::AudioPacket(const AudioPacket& from)
-  : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  encoding_ = from.encoding_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.AudioPacket)
-}
-
-void AudioPacket::SharedCtor() {
-  encoding_ = 0;
-  _cached_size_ = 0;
-}
-
-AudioPacket::~AudioPacket() {
-  // @@protoc_insertion_point(destructor:aspia.proto.AudioPacket)
-  SharedDtor();
-}
-
-void AudioPacket::SharedDtor() {
-}
-
-void AudioPacket::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const AudioPacket& AudioPacket::default_instance() {
-  ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsAudioPacket();
-  return *internal_default_instance();
-}
-
-AudioPacket* AudioPacket::New(::google::protobuf::Arena* arena) const {
-  AudioPacket* n = new AudioPacket;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void AudioPacket::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.AudioPacket)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  encoding_ = 0;
-  _internal_metadata_.Clear();
-}
-
-bool AudioPacket::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
-      &_internal_metadata_);
-  ::google::protobuf::io::StringOutputStream unknown_fields_output(
-      unknown_fields_setter.buffer());
-  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.AudioPacket)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.AudioEncoding encoding = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encoding(static_cast< ::aspia::proto::AudioEncoding >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
-            input, tag, &unknown_fields_stream));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.AudioPacket)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.AudioPacket)
-  return false;
-#undef DO_
-}
-
-void AudioPacket::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.AudioPacket)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // .aspia.proto.AudioEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encoding(), output);
-  }
-
-  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
-                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.AudioPacket)
-}
-
-size_t AudioPacket::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AudioPacket)
-  size_t total_size = 0;
-
-  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
-
-  // .aspia.proto.AudioEncoding encoding = 1;
-  if (this->encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->encoding());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void AudioPacket::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AudioPacket*>(&from));
-}
-
-void AudioPacket::MergeFrom(const AudioPacket& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AudioPacket)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.encoding() != 0) {
-    set_encoding(from.encoding());
-  }
-}
-
-void AudioPacket::CopyFrom(const AudioPacket& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AudioPacket)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool AudioPacket::IsInitialized() const {
-  return true;
-}
-
-void AudioPacket::Swap(AudioPacket* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void AudioPacket::InternalSwap(AudioPacket* other) {
-  using std::swap;
-  swap(encoding_, other->encoding_);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string AudioPacket::GetTypeName() const {
-  return "aspia.proto.AudioPacket";
-}
-
-
-// ===================================================================
-
-void DesktopSessionConfigRequest::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DesktopSessionConfigRequest::kVideoEncodingsFieldNumber;
-const int DesktopSessionConfigRequest::kAudioEncodingsFieldNumber;
-const int DesktopSessionConfigRequest::kFeaturesFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-DesktopSessionConfigRequest::DesktopSessionConfigRequest()
-  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfigRequest();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DesktopSessionConfigRequest)
-}
-DesktopSessionConfigRequest::DesktopSessionConfigRequest(const DesktopSessionConfigRequest& from)
+SessionConfigRequest::SessionConfigRequest(const SessionConfigRequest& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -3271,44 +3036,44 @@ DesktopSessionConfigRequest::DesktopSessionConfigRequest(const DesktopSessionCon
   ::memcpy(&video_encodings_, &from.video_encodings_,
     static_cast<size_t>(reinterpret_cast<char*>(&features_) -
     reinterpret_cast<char*>(&video_encodings_)) + sizeof(features_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.SessionConfigRequest)
 }
 
-void DesktopSessionConfigRequest::SharedCtor() {
+void SessionConfigRequest::SharedCtor() {
   ::memset(&video_encodings_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&features_) -
       reinterpret_cast<char*>(&video_encodings_)) + sizeof(features_));
   _cached_size_ = 0;
 }
 
-DesktopSessionConfigRequest::~DesktopSessionConfigRequest() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DesktopSessionConfigRequest)
+SessionConfigRequest::~SessionConfigRequest() {
+  // @@protoc_insertion_point(destructor:aspia.proto.SessionConfigRequest)
   SharedDtor();
 }
 
-void DesktopSessionConfigRequest::SharedDtor() {
+void SessionConfigRequest::SharedDtor() {
 }
 
-void DesktopSessionConfigRequest::SetCachedSize(int size) const {
+void SessionConfigRequest::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DesktopSessionConfigRequest& DesktopSessionConfigRequest::default_instance() {
-  ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfigRequest();
+const SessionConfigRequest& SessionConfigRequest::default_instance() {
+  ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfigRequest();
   return *internal_default_instance();
 }
 
-DesktopSessionConfigRequest* DesktopSessionConfigRequest::New(::google::protobuf::Arena* arena) const {
-  DesktopSessionConfigRequest* n = new DesktopSessionConfigRequest;
+SessionConfigRequest* SessionConfigRequest::New(::google::protobuf::Arena* arena) const {
+  SessionConfigRequest* n = new SessionConfigRequest;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DesktopSessionConfigRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DesktopSessionConfigRequest)
+void SessionConfigRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.SessionConfigRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3319,7 +3084,7 @@ void DesktopSessionConfigRequest::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DesktopSessionConfigRequest::MergePartialFromCodedStream(
+bool SessionConfigRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -3329,7 +3094,7 @@ bool DesktopSessionConfigRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.SessionConfigRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3389,17 +3154,17 @@ bool DesktopSessionConfigRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.SessionConfigRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.SessionConfigRequest)
   return false;
 #undef DO_
 }
 
-void DesktopSessionConfigRequest::SerializeWithCachedSizes(
+void SessionConfigRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.SessionConfigRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3420,11 +3185,11 @@ void DesktopSessionConfigRequest::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DesktopSessionConfigRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.SessionConfigRequest)
 }
 
-size_t DesktopSessionConfigRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DesktopSessionConfigRequest)
+size_t SessionConfigRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.SessionConfigRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -3457,13 +3222,13 @@ size_t DesktopSessionConfigRequest::ByteSizeLong() const {
   return total_size;
 }
 
-void DesktopSessionConfigRequest::CheckTypeAndMergeFrom(
+void SessionConfigRequest::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DesktopSessionConfigRequest*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const SessionConfigRequest*>(&from));
 }
 
-void DesktopSessionConfigRequest::MergeFrom(const DesktopSessionConfigRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DesktopSessionConfigRequest)
+void SessionConfigRequest::MergeFrom(const SessionConfigRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.SessionConfigRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3480,22 +3245,22 @@ void DesktopSessionConfigRequest::MergeFrom(const DesktopSessionConfigRequest& f
   }
 }
 
-void DesktopSessionConfigRequest::CopyFrom(const DesktopSessionConfigRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DesktopSessionConfigRequest)
+void SessionConfigRequest::CopyFrom(const SessionConfigRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.SessionConfigRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DesktopSessionConfigRequest::IsInitialized() const {
+bool SessionConfigRequest::IsInitialized() const {
   return true;
 }
 
-void DesktopSessionConfigRequest::Swap(DesktopSessionConfigRequest* other) {
+void SessionConfigRequest::Swap(SessionConfigRequest* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DesktopSessionConfigRequest::InternalSwap(DesktopSessionConfigRequest* other) {
+void SessionConfigRequest::InternalSwap(SessionConfigRequest* other) {
   using std::swap;
   swap(video_encodings_, other->video_encodings_);
   swap(audio_encodings_, other->audio_encodings_);
@@ -3504,35 +3269,34 @@ void DesktopSessionConfigRequest::InternalSwap(DesktopSessionConfigRequest* othe
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DesktopSessionConfigRequest::GetTypeName() const {
-  return "aspia.proto.DesktopSessionConfigRequest";
+::std::string SessionConfigRequest::GetTypeName() const {
+  return "aspia.proto.SessionConfigRequest";
 }
 
 
 // ===================================================================
 
-void DesktopSessionConfig::InitAsDefaultInstance() {
-  ::aspia::proto::_DesktopSessionConfig_default_instance_._instance.get_mutable()->pixel_format_ = const_cast< ::aspia::proto::VideoPixelFormat*>(
+void SessionConfig::InitAsDefaultInstance() {
+  ::aspia::proto::_SessionConfig_default_instance_._instance.get_mutable()->pixel_format_ = const_cast< ::aspia::proto::VideoPixelFormat*>(
       ::aspia::proto::VideoPixelFormat::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DesktopSessionConfig::kFlagsFieldNumber;
-const int DesktopSessionConfig::kVideoEncodingFieldNumber;
-const int DesktopSessionConfig::kAudioEncodingFieldNumber;
-const int DesktopSessionConfig::kPixelFormatFieldNumber;
-const int DesktopSessionConfig::kUpdateIntervalFieldNumber;
-const int DesktopSessionConfig::kCompressRatioFieldNumber;
+const int SessionConfig::kFlagsFieldNumber;
+const int SessionConfig::kVideoEncodingFieldNumber;
+const int SessionConfig::kPixelFormatFieldNumber;
+const int SessionConfig::kUpdateIntervalFieldNumber;
+const int SessionConfig::kCompressRatioFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-DesktopSessionConfig::DesktopSessionConfig()
+SessionConfig::SessionConfig()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfig();
+    ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfig();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(constructor:aspia.proto.SessionConfig)
 }
-DesktopSessionConfig::DesktopSessionConfig(const DesktopSessionConfig& from)
+SessionConfig::SessionConfig(const SessionConfig& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -3545,45 +3309,45 @@ DesktopSessionConfig::DesktopSessionConfig(const DesktopSessionConfig& from)
   ::memcpy(&flags_, &from.flags_,
     static_cast<size_t>(reinterpret_cast<char*>(&compress_ratio_) -
     reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.SessionConfig)
 }
 
-void DesktopSessionConfig::SharedCtor() {
+void SessionConfig::SharedCtor() {
   ::memset(&pixel_format_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&compress_ratio_) -
       reinterpret_cast<char*>(&pixel_format_)) + sizeof(compress_ratio_));
   _cached_size_ = 0;
 }
 
-DesktopSessionConfig::~DesktopSessionConfig() {
-  // @@protoc_insertion_point(destructor:aspia.proto.DesktopSessionConfig)
+SessionConfig::~SessionConfig() {
+  // @@protoc_insertion_point(destructor:aspia.proto.SessionConfig)
   SharedDtor();
 }
 
-void DesktopSessionConfig::SharedDtor() {
+void SessionConfig::SharedDtor() {
   if (this != internal_default_instance()) delete pixel_format_;
 }
 
-void DesktopSessionConfig::SetCachedSize(int size) const {
+void SessionConfig::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const DesktopSessionConfig& DesktopSessionConfig::default_instance() {
-  ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfig();
+const SessionConfig& SessionConfig::default_instance() {
+  ::protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfig();
   return *internal_default_instance();
 }
 
-DesktopSessionConfig* DesktopSessionConfig::New(::google::protobuf::Arena* arena) const {
-  DesktopSessionConfig* n = new DesktopSessionConfig;
+SessionConfig* SessionConfig::New(::google::protobuf::Arena* arena) const {
+  SessionConfig* n = new SessionConfig;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void DesktopSessionConfig::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.DesktopSessionConfig)
+void SessionConfig::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.SessionConfig)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3598,7 +3362,7 @@ void DesktopSessionConfig::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool DesktopSessionConfig::MergePartialFromCodedStream(
+bool SessionConfig::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -3608,7 +3372,7 @@ bool DesktopSessionConfig::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(parse_start:aspia.proto.SessionConfig)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3643,25 +3407,10 @@ bool DesktopSessionConfig::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.AudioEncoding audio_encoding = 3;
+      // .aspia.proto.VideoPixelFormat pixel_format = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_audio_encoding(static_cast< ::aspia::proto::AudioEncoding >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.VideoPixelFormat pixel_format = 4;
-      case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_pixel_format()));
         } else {
@@ -3670,10 +3419,10 @@ bool DesktopSessionConfig::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 update_interval = 5;
-      case 5: {
+      // uint32 update_interval = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -3684,10 +3433,10 @@ bool DesktopSessionConfig::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 compress_ratio = 6;
-      case 6: {
+      // uint32 compress_ratio = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -3710,17 +3459,17 @@ bool DesktopSessionConfig::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(parse_success:aspia.proto.SessionConfig)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.SessionConfig)
   return false;
 #undef DO_
 }
 
-void DesktopSessionConfig::SerializeWithCachedSizes(
+void SessionConfig::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.SessionConfig)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3735,40 +3484,34 @@ void DesktopSessionConfig::SerializeWithCachedSizes(
       2, this->video_encoding(), output);
   }
 
-  // .aspia.proto.AudioEncoding audio_encoding = 3;
-  if (this->audio_encoding() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->audio_encoding(), output);
-  }
-
-  // .aspia.proto.VideoPixelFormat pixel_format = 4;
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->pixel_format_, output);
+      3, *this->pixel_format_, output);
   }
 
-  // uint32 update_interval = 5;
+  // uint32 update_interval = 4;
   if (this->update_interval() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->update_interval(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->update_interval(), output);
   }
 
-  // uint32 compress_ratio = 6;
+  // uint32 compress_ratio = 5;
   if (this->compress_ratio() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->compress_ratio(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->compress_ratio(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.DesktopSessionConfig)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.SessionConfig)
 }
 
-size_t DesktopSessionConfig::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.DesktopSessionConfig)
+size_t SessionConfig::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.SessionConfig)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.VideoPixelFormat pixel_format = 4;
+  // .aspia.proto.VideoPixelFormat pixel_format = 3;
   if (this->has_pixel_format()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -3788,20 +3531,14 @@ size_t DesktopSessionConfig::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->video_encoding());
   }
 
-  // .aspia.proto.AudioEncoding audio_encoding = 3;
-  if (this->audio_encoding() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->audio_encoding());
-  }
-
-  // uint32 update_interval = 5;
+  // uint32 update_interval = 4;
   if (this->update_interval() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->update_interval());
   }
 
-  // uint32 compress_ratio = 6;
+  // uint32 compress_ratio = 5;
   if (this->compress_ratio() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -3815,13 +3552,13 @@ size_t DesktopSessionConfig::ByteSizeLong() const {
   return total_size;
 }
 
-void DesktopSessionConfig::CheckTypeAndMergeFrom(
+void SessionConfig::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const DesktopSessionConfig*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const SessionConfig*>(&from));
 }
 
-void DesktopSessionConfig::MergeFrom(const DesktopSessionConfig& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.DesktopSessionConfig)
+void SessionConfig::MergeFrom(const SessionConfig& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.SessionConfig)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3836,9 +3573,6 @@ void DesktopSessionConfig::MergeFrom(const DesktopSessionConfig& from) {
   if (from.video_encoding() != 0) {
     set_video_encoding(from.video_encoding());
   }
-  if (from.audio_encoding() != 0) {
-    set_audio_encoding(from.audio_encoding());
-  }
   if (from.update_interval() != 0) {
     set_update_interval(from.update_interval());
   }
@@ -3847,35 +3581,34 @@ void DesktopSessionConfig::MergeFrom(const DesktopSessionConfig& from) {
   }
 }
 
-void DesktopSessionConfig::CopyFrom(const DesktopSessionConfig& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.DesktopSessionConfig)
+void SessionConfig::CopyFrom(const SessionConfig& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.SessionConfig)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DesktopSessionConfig::IsInitialized() const {
+bool SessionConfig::IsInitialized() const {
   return true;
 }
 
-void DesktopSessionConfig::Swap(DesktopSessionConfig* other) {
+void SessionConfig::Swap(SessionConfig* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void DesktopSessionConfig::InternalSwap(DesktopSessionConfig* other) {
+void SessionConfig::InternalSwap(SessionConfig* other) {
   using std::swap;
   swap(pixel_format_, other->pixel_format_);
   swap(flags_, other->flags_);
   swap(video_encoding_, other->video_encoding_);
-  swap(audio_encoding_, other->audio_encoding_);
   swap(update_interval_, other->update_interval_);
   swap(compress_ratio_, other->compress_ratio_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string DesktopSessionConfig::GetTypeName() const {
-  return "aspia.proto.DesktopSessionConfig";
+::std::string SessionConfig::GetTypeName() const {
+  return "aspia.proto.SessionConfig";
 }
 
 

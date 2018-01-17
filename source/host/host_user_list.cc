@@ -149,7 +149,7 @@ bool HostUserList::LoadFromStorage()
     std::string string;
     string.resize(static_cast<size_t>(size));
 
-    file_stream.read(&string[0], size);
+    file_stream.read(string.data(), size);
 
     if (file_stream.fail())
     {

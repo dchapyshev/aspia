@@ -107,7 +107,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::VideoPacket& video_p
 }
 
 void ClientSessionDesktopView::ReadConfigRequest(
-    const proto::DesktopSessionConfigRequest& /* config_request */)
+    const proto::SessionConfigRequest& /* config_request */)
 {
     OnConfigChange(config_.desktop_session_config());
 }
@@ -123,10 +123,6 @@ void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
         if (message.has_video_packet())
         {
             success = ReadVideoPacket(message.video_packet());
-        }
-        else if (message.has_audio_packet())
-        {
-            DLOG(WARNING) << "Audio not implemented yet";
         }
         else if (message.has_config_request())
         {
@@ -159,7 +155,7 @@ void ClientSessionDesktopView::OnWindowClose()
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionDesktopView::OnConfigChange(const proto::DesktopSessionConfig& config)
+void ClientSessionDesktopView::OnConfigChange(const proto::SessionConfig& config)
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);

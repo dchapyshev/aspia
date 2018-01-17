@@ -29,7 +29,7 @@ public:
     public:
         virtual ~Delegate() = default;
         virtual void OnWindowClose() = 0;
-        virtual void OnConfigChange(const proto::DesktopSessionConfig& config) = 0;
+        virtual void OnConfigChange(const proto::SessionConfig& config) = 0;
         virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
         virtual void OnClipboardEvent(proto::ClipboardEvent& clipboard_event) = 0;
@@ -118,7 +118,7 @@ private:
 
     int DoAutoSize(const DesktopSize& video_frame_size);
     void DoFullScreen(bool fullscreen);
-    void ApplyConfig(const proto::DesktopSessionConfig& config);
+    void ApplyConfig(const proto::SessionConfig& config);
 
     MessageLoopThread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

@@ -33,7 +33,7 @@ static const int kMaxCompressRatio = 9;
 static const int kMinCompressRatio = 1;
 
 SettingsDialog::SettingsDialog(proto::SessionType session_type,
-                               const proto::DesktopSessionConfig& config)
+                               const proto::SessionConfig& config)
     : session_type_(session_type),
       config_(config)
 {
@@ -167,11 +167,11 @@ LRESULT SettingsDialog::OnInitDialog(
     else
     {
         CheckDlgButton(IDC_ENABLE_CURSOR_SHAPE_CHECK,
-            (config_.flags() & proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE) ?
+            (config_.flags() & proto::SessionConfig::ENABLE_CURSOR_SHAPE) ?
                 BST_CHECKED : BST_UNCHECKED);
 
         CheckDlgButton(IDC_ENABLE_CLIPBOARD_CHECK,
-            (config_.flags() & proto::DesktopSessionConfig::ENABLE_CLIPBOARD) ?
+            (config_.flags() & proto::SessionConfig::ENABLE_CLIPBOARD) ?
                 BST_CHECKED : BST_UNCHECKED);
     }
 
@@ -288,10 +288,10 @@ LRESULT SettingsDialog::OnOkButton(
     uint32_t flags = 0;
 
     if (IsDlgButtonChecked(IDC_ENABLE_CURSOR_SHAPE_CHECK) == BST_CHECKED)
-        flags |= proto::DesktopSessionConfig::ENABLE_CURSOR_SHAPE;
+        flags |= proto::SessionConfig::ENABLE_CURSOR_SHAPE;
 
     if (IsDlgButtonChecked(IDC_ENABLE_CLIPBOARD_CHECK) == BST_CHECKED)
-        flags |= proto::DesktopSessionConfig::ENABLE_CLIPBOARD;
+        flags |= proto::SessionConfig::ENABLE_CLIPBOARD;
 
     config_.set_flags(flags);
 

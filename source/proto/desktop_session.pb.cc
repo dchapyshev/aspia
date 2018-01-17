@@ -42,10 +42,9 @@ void InitDefaultsHostToClientImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsVideoPacket();
-  protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsAudioPacket();
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsCursorShape();
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsClipboardEvent();
-  protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfigRequest();
+  protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfigRequest();
   {
     void* ptr = &::aspia::proto::desktop::_HostToClient_default_instance_;
     new (ptr) ::aspia::proto::desktop::HostToClient();
@@ -70,7 +69,7 @@ void InitDefaultsClientToHostImpl() {
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsPointerEvent();
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsKeyEvent();
   protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsClipboardEvent();
-  protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsDesktopSessionConfig();
+  protobuf_desktop_5fsession_5fmessage_2eproto::InitDefaultsSessionConfig();
   {
     void* ptr = &::aspia::proto::desktop::_ClientToHost_default_instance_;
     new (ptr) ::aspia::proto::desktop::ClientToHost();
@@ -94,26 +93,18 @@ namespace desktop {
 void HostToClient::InitAsDefaultInstance() {
   ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->video_packet_ = const_cast< ::aspia::proto::VideoPacket*>(
       ::aspia::proto::VideoPacket::internal_default_instance());
-  ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->audio_packet_ = const_cast< ::aspia::proto::AudioPacket*>(
-      ::aspia::proto::AudioPacket::internal_default_instance());
   ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->cursor_shape_ = const_cast< ::aspia::proto::CursorShape*>(
       ::aspia::proto::CursorShape::internal_default_instance());
   ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->clipboard_event_ = const_cast< ::aspia::proto::ClipboardEvent*>(
       ::aspia::proto::ClipboardEvent::internal_default_instance());
-  ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->config_request_ = const_cast< ::aspia::proto::DesktopSessionConfigRequest*>(
-      ::aspia::proto::DesktopSessionConfigRequest::internal_default_instance());
+  ::aspia::proto::desktop::_HostToClient_default_instance_._instance.get_mutable()->config_request_ = const_cast< ::aspia::proto::SessionConfigRequest*>(
+      ::aspia::proto::SessionConfigRequest::internal_default_instance());
 }
 void HostToClient::clear_video_packet() {
   if (GetArenaNoVirtual() == NULL && video_packet_ != NULL) {
     delete video_packet_;
   }
   video_packet_ = NULL;
-}
-void HostToClient::clear_audio_packet() {
-  if (GetArenaNoVirtual() == NULL && audio_packet_ != NULL) {
-    delete audio_packet_;
-  }
-  audio_packet_ = NULL;
 }
 void HostToClient::clear_cursor_shape() {
   if (GetArenaNoVirtual() == NULL && cursor_shape_ != NULL) {
@@ -135,7 +126,6 @@ void HostToClient::clear_config_request() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int HostToClient::kVideoPacketFieldNumber;
-const int HostToClient::kAudioPacketFieldNumber;
 const int HostToClient::kCursorShapeFieldNumber;
 const int HostToClient::kClipboardEventFieldNumber;
 const int HostToClient::kConfigRequestFieldNumber;
@@ -159,11 +149,6 @@ HostToClient::HostToClient(const HostToClient& from)
   } else {
     video_packet_ = NULL;
   }
-  if (from.has_audio_packet()) {
-    audio_packet_ = new ::aspia::proto::AudioPacket(*from.audio_packet_);
-  } else {
-    audio_packet_ = NULL;
-  }
   if (from.has_cursor_shape()) {
     cursor_shape_ = new ::aspia::proto::CursorShape(*from.cursor_shape_);
   } else {
@@ -175,7 +160,7 @@ HostToClient::HostToClient(const HostToClient& from)
     clipboard_event_ = NULL;
   }
   if (from.has_config_request()) {
-    config_request_ = new ::aspia::proto::DesktopSessionConfigRequest(*from.config_request_);
+    config_request_ = new ::aspia::proto::SessionConfigRequest(*from.config_request_);
   } else {
     config_request_ = NULL;
   }
@@ -196,7 +181,6 @@ HostToClient::~HostToClient() {
 
 void HostToClient::SharedDtor() {
   if (this != internal_default_instance()) delete video_packet_;
-  if (this != internal_default_instance()) delete audio_packet_;
   if (this != internal_default_instance()) delete cursor_shape_;
   if (this != internal_default_instance()) delete clipboard_event_;
   if (this != internal_default_instance()) delete config_request_;
@@ -230,10 +214,6 @@ void HostToClient::Clear() {
     delete video_packet_;
   }
   video_packet_ = NULL;
-  if (GetArenaNoVirtual() == NULL && audio_packet_ != NULL) {
-    delete audio_packet_;
-  }
-  audio_packet_ = NULL;
   if (GetArenaNoVirtual() == NULL && cursor_shape_ != NULL) {
     delete cursor_shape_;
   }
@@ -277,22 +257,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.AudioPacket audio_packet = 2;
+      // .aspia.proto.CursorShape cursor_shape = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-               input, mutable_audio_packet()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.CursorShape cursor_shape = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_cursor_shape()));
         } else {
@@ -301,10 +269,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.ClipboardEvent clipboard_event = 4;
-      case 4: {
+      // .aspia.proto.ClipboardEvent clipboard_event = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_clipboard_event()));
         } else {
@@ -313,10 +281,10 @@ bool HostToClient::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
-      case 5: {
+      // .aspia.proto.SessionConfigRequest config_request = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_config_request()));
         } else {
@@ -357,28 +325,22 @@ void HostToClient::SerializeWithCachedSizes(
       1, *this->video_packet_, output);
   }
 
-  // .aspia.proto.AudioPacket audio_packet = 2;
-  if (this->has_audio_packet()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->audio_packet_, output);
-  }
-
-  // .aspia.proto.CursorShape cursor_shape = 3;
+  // .aspia.proto.CursorShape cursor_shape = 2;
   if (this->has_cursor_shape()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->cursor_shape_, output);
+      2, *this->cursor_shape_, output);
   }
 
-  // .aspia.proto.ClipboardEvent clipboard_event = 4;
+  // .aspia.proto.ClipboardEvent clipboard_event = 3;
   if (this->has_clipboard_event()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->clipboard_event_, output);
+      3, *this->clipboard_event_, output);
   }
 
-  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+  // .aspia.proto.SessionConfigRequest config_request = 4;
   if (this->has_config_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->config_request_, output);
+      4, *this->config_request_, output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -399,28 +361,21 @@ size_t HostToClient::ByteSizeLong() const {
         *this->video_packet_);
   }
 
-  // .aspia.proto.AudioPacket audio_packet = 2;
-  if (this->has_audio_packet()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->audio_packet_);
-  }
-
-  // .aspia.proto.CursorShape cursor_shape = 3;
+  // .aspia.proto.CursorShape cursor_shape = 2;
   if (this->has_cursor_shape()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->cursor_shape_);
   }
 
-  // .aspia.proto.ClipboardEvent clipboard_event = 4;
+  // .aspia.proto.ClipboardEvent clipboard_event = 3;
   if (this->has_clipboard_event()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->clipboard_event_);
   }
 
-  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+  // .aspia.proto.SessionConfigRequest config_request = 4;
   if (this->has_config_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -449,9 +404,6 @@ void HostToClient::MergeFrom(const HostToClient& from) {
   if (from.has_video_packet()) {
     mutable_video_packet()->::aspia::proto::VideoPacket::MergeFrom(from.video_packet());
   }
-  if (from.has_audio_packet()) {
-    mutable_audio_packet()->::aspia::proto::AudioPacket::MergeFrom(from.audio_packet());
-  }
   if (from.has_cursor_shape()) {
     mutable_cursor_shape()->::aspia::proto::CursorShape::MergeFrom(from.cursor_shape());
   }
@@ -459,7 +411,7 @@ void HostToClient::MergeFrom(const HostToClient& from) {
     mutable_clipboard_event()->::aspia::proto::ClipboardEvent::MergeFrom(from.clipboard_event());
   }
   if (from.has_config_request()) {
-    mutable_config_request()->::aspia::proto::DesktopSessionConfigRequest::MergeFrom(from.config_request());
+    mutable_config_request()->::aspia::proto::SessionConfigRequest::MergeFrom(from.config_request());
   }
 }
 
@@ -481,7 +433,6 @@ void HostToClient::Swap(HostToClient* other) {
 void HostToClient::InternalSwap(HostToClient* other) {
   using std::swap;
   swap(video_packet_, other->video_packet_);
-  swap(audio_packet_, other->audio_packet_);
   swap(cursor_shape_, other->cursor_shape_);
   swap(clipboard_event_, other->clipboard_event_);
   swap(config_request_, other->config_request_);
@@ -503,8 +454,8 @@ void ClientToHost::InitAsDefaultInstance() {
       ::aspia::proto::KeyEvent::internal_default_instance());
   ::aspia::proto::desktop::_ClientToHost_default_instance_._instance.get_mutable()->clipboard_event_ = const_cast< ::aspia::proto::ClipboardEvent*>(
       ::aspia::proto::ClipboardEvent::internal_default_instance());
-  ::aspia::proto::desktop::_ClientToHost_default_instance_._instance.get_mutable()->config_ = const_cast< ::aspia::proto::DesktopSessionConfig*>(
-      ::aspia::proto::DesktopSessionConfig::internal_default_instance());
+  ::aspia::proto::desktop::_ClientToHost_default_instance_._instance.get_mutable()->config_ = const_cast< ::aspia::proto::SessionConfig*>(
+      ::aspia::proto::SessionConfig::internal_default_instance());
 }
 void ClientToHost::clear_pointer_event() {
   if (GetArenaNoVirtual() == NULL && pointer_event_ != NULL) {
@@ -566,7 +517,7 @@ ClientToHost::ClientToHost(const ClientToHost& from)
     clipboard_event_ = NULL;
   }
   if (from.has_config()) {
-    config_ = new ::aspia::proto::DesktopSessionConfig(*from.config_);
+    config_ = new ::aspia::proto::SessionConfig(*from.config_);
   } else {
     config_ = NULL;
   }
@@ -687,7 +638,7 @@ bool ClientToHost::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.DesktopSessionConfig config = 4;
+      // .aspia.proto.SessionConfig config = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
@@ -743,7 +694,7 @@ void ClientToHost::SerializeWithCachedSizes(
       3, *this->clipboard_event_, output);
   }
 
-  // .aspia.proto.DesktopSessionConfig config = 4;
+  // .aspia.proto.SessionConfig config = 4;
   if (this->has_config()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       4, *this->config_, output);
@@ -781,7 +732,7 @@ size_t ClientToHost::ByteSizeLong() const {
         *this->clipboard_event_);
   }
 
-  // .aspia.proto.DesktopSessionConfig config = 4;
+  // .aspia.proto.SessionConfig config = 4;
   if (this->has_config()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -817,7 +768,7 @@ void ClientToHost::MergeFrom(const ClientToHost& from) {
     mutable_clipboard_event()->::aspia::proto::ClipboardEvent::MergeFrom(from.clipboard_event());
   }
   if (from.has_config()) {
-    mutable_config()->::aspia::proto::DesktopSessionConfig::MergeFrom(from.config());
+    mutable_config()->::aspia::proto::SessionConfig::MergeFrom(from.config());
   }
 }
 

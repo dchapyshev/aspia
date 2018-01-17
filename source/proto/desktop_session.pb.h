@@ -157,51 +157,41 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::VideoPacket* mutable_video_packet();
   void set_allocated_video_packet(::aspia::proto::VideoPacket* video_packet);
 
-  // .aspia.proto.AudioPacket audio_packet = 2;
-  bool has_audio_packet() const;
-  void clear_audio_packet();
-  static const int kAudioPacketFieldNumber = 2;
-  const ::aspia::proto::AudioPacket& audio_packet() const;
-  ::aspia::proto::AudioPacket* release_audio_packet();
-  ::aspia::proto::AudioPacket* mutable_audio_packet();
-  void set_allocated_audio_packet(::aspia::proto::AudioPacket* audio_packet);
-
-  // .aspia.proto.CursorShape cursor_shape = 3;
+  // .aspia.proto.CursorShape cursor_shape = 2;
   bool has_cursor_shape() const;
   void clear_cursor_shape();
-  static const int kCursorShapeFieldNumber = 3;
+  static const int kCursorShapeFieldNumber = 2;
   const ::aspia::proto::CursorShape& cursor_shape() const;
   ::aspia::proto::CursorShape* release_cursor_shape();
   ::aspia::proto::CursorShape* mutable_cursor_shape();
   void set_allocated_cursor_shape(::aspia::proto::CursorShape* cursor_shape);
 
-  // .aspia.proto.ClipboardEvent clipboard_event = 4;
+  // .aspia.proto.ClipboardEvent clipboard_event = 3;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 4;
+  static const int kClipboardEventFieldNumber = 3;
   const ::aspia::proto::ClipboardEvent& clipboard_event() const;
   ::aspia::proto::ClipboardEvent* release_clipboard_event();
   ::aspia::proto::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+  // .aspia.proto.SessionConfigRequest config_request = 4;
   bool has_config_request() const;
   void clear_config_request();
-  static const int kConfigRequestFieldNumber = 5;
-  const ::aspia::proto::DesktopSessionConfigRequest& config_request() const;
-  ::aspia::proto::DesktopSessionConfigRequest* release_config_request();
-  ::aspia::proto::DesktopSessionConfigRequest* mutable_config_request();
-  void set_allocated_config_request(::aspia::proto::DesktopSessionConfigRequest* config_request);
+  static const int kConfigRequestFieldNumber = 4;
+  const ::aspia::proto::SessionConfigRequest& config_request() const;
+  ::aspia::proto::SessionConfigRequest* release_config_request();
+  ::aspia::proto::SessionConfigRequest* mutable_config_request();
+  void set_allocated_config_request(::aspia::proto::SessionConfigRequest* config_request);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.HostToClient)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::aspia::proto::VideoPacket* video_packet_;
-  ::aspia::proto::AudioPacket* audio_packet_;
   ::aspia::proto::CursorShape* cursor_shape_;
   ::aspia::proto::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::DesktopSessionConfigRequest* config_request_;
+  ::aspia::proto::SessionConfigRequest* config_request_;
   mutable int _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
   friend void ::protobuf_desktop_5fsession_2eproto::InitDefaultsHostToClientImpl();
@@ -315,14 +305,14 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.DesktopSessionConfig config = 4;
+  // .aspia.proto.SessionConfig config = 4;
   bool has_config() const;
   void clear_config();
   static const int kConfigFieldNumber = 4;
-  const ::aspia::proto::DesktopSessionConfig& config() const;
-  ::aspia::proto::DesktopSessionConfig* release_config();
-  ::aspia::proto::DesktopSessionConfig* mutable_config();
-  void set_allocated_config(::aspia::proto::DesktopSessionConfig* config);
+  const ::aspia::proto::SessionConfig& config() const;
+  ::aspia::proto::SessionConfig* release_config();
+  ::aspia::proto::SessionConfig* mutable_config();
+  void set_allocated_config(::aspia::proto::SessionConfig* config);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ClientToHost)
  private:
@@ -331,7 +321,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::PointerEvent* pointer_event_;
   ::aspia::proto::KeyEvent* key_event_;
   ::aspia::proto::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::DesktopSessionConfig* config_;
+  ::aspia::proto::SessionConfig* config_;
   mutable int _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
   friend void ::protobuf_desktop_5fsession_2eproto::InitDefaultsClientToHostImpl();
@@ -391,51 +381,7 @@ inline void HostToClient::set_allocated_video_packet(::aspia::proto::VideoPacket
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.video_packet)
 }
 
-// .aspia.proto.AudioPacket audio_packet = 2;
-inline bool HostToClient::has_audio_packet() const {
-  return this != internal_default_instance() && audio_packet_ != NULL;
-}
-inline const ::aspia::proto::AudioPacket& HostToClient::audio_packet() const {
-  const ::aspia::proto::AudioPacket* p = audio_packet_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.audio_packet)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::AudioPacket*>(
-      &::aspia::proto::_AudioPacket_default_instance_);
-}
-inline ::aspia::proto::AudioPacket* HostToClient::release_audio_packet() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.audio_packet)
-  
-  ::aspia::proto::AudioPacket* temp = audio_packet_;
-  audio_packet_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::AudioPacket* HostToClient::mutable_audio_packet() {
-  
-  if (audio_packet_ == NULL) {
-    audio_packet_ = new ::aspia::proto::AudioPacket;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.audio_packet)
-  return audio_packet_;
-}
-inline void HostToClient::set_allocated_audio_packet(::aspia::proto::AudioPacket* audio_packet) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete reinterpret_cast< ::google::protobuf::MessageLite*>(audio_packet_);
-  }
-  if (audio_packet) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      audio_packet = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, audio_packet, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  audio_packet_ = audio_packet;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.audio_packet)
-}
-
-// .aspia.proto.CursorShape cursor_shape = 3;
+// .aspia.proto.CursorShape cursor_shape = 2;
 inline bool HostToClient::has_cursor_shape() const {
   return this != internal_default_instance() && cursor_shape_ != NULL;
 }
@@ -479,7 +425,7 @@ inline void HostToClient::set_allocated_cursor_shape(::aspia::proto::CursorShape
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.cursor_shape)
 }
 
-// .aspia.proto.ClipboardEvent clipboard_event = 4;
+// .aspia.proto.ClipboardEvent clipboard_event = 3;
 inline bool HostToClient::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -523,32 +469,32 @@ inline void HostToClient::set_allocated_clipboard_event(::aspia::proto::Clipboar
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.clipboard_event)
 }
 
-// .aspia.proto.DesktopSessionConfigRequest config_request = 5;
+// .aspia.proto.SessionConfigRequest config_request = 4;
 inline bool HostToClient::has_config_request() const {
   return this != internal_default_instance() && config_request_ != NULL;
 }
-inline const ::aspia::proto::DesktopSessionConfigRequest& HostToClient::config_request() const {
-  const ::aspia::proto::DesktopSessionConfigRequest* p = config_request_;
+inline const ::aspia::proto::SessionConfigRequest& HostToClient::config_request() const {
+  const ::aspia::proto::SessionConfigRequest* p = config_request_;
   // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::DesktopSessionConfigRequest*>(
-      &::aspia::proto::_DesktopSessionConfigRequest_default_instance_);
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::SessionConfigRequest*>(
+      &::aspia::proto::_SessionConfigRequest_default_instance_);
 }
-inline ::aspia::proto::DesktopSessionConfigRequest* HostToClient::release_config_request() {
+inline ::aspia::proto::SessionConfigRequest* HostToClient::release_config_request() {
   // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
   
-  ::aspia::proto::DesktopSessionConfigRequest* temp = config_request_;
+  ::aspia::proto::SessionConfigRequest* temp = config_request_;
   config_request_ = NULL;
   return temp;
 }
-inline ::aspia::proto::DesktopSessionConfigRequest* HostToClient::mutable_config_request() {
+inline ::aspia::proto::SessionConfigRequest* HostToClient::mutable_config_request() {
   
   if (config_request_ == NULL) {
-    config_request_ = new ::aspia::proto::DesktopSessionConfigRequest;
+    config_request_ = new ::aspia::proto::SessionConfigRequest;
   }
   // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
   return config_request_;
 }
-inline void HostToClient::set_allocated_config_request(::aspia::proto::DesktopSessionConfigRequest* config_request) {
+inline void HostToClient::set_allocated_config_request(::aspia::proto::SessionConfigRequest* config_request) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(config_request_);
@@ -703,32 +649,32 @@ inline void ClientToHost::set_allocated_clipboard_event(::aspia::proto::Clipboar
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.clipboard_event)
 }
 
-// .aspia.proto.DesktopSessionConfig config = 4;
+// .aspia.proto.SessionConfig config = 4;
 inline bool ClientToHost::has_config() const {
   return this != internal_default_instance() && config_ != NULL;
 }
-inline const ::aspia::proto::DesktopSessionConfig& ClientToHost::config() const {
-  const ::aspia::proto::DesktopSessionConfig* p = config_;
+inline const ::aspia::proto::SessionConfig& ClientToHost::config() const {
+  const ::aspia::proto::SessionConfig* p = config_;
   // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::DesktopSessionConfig*>(
-      &::aspia::proto::_DesktopSessionConfig_default_instance_);
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::SessionConfig*>(
+      &::aspia::proto::_SessionConfig_default_instance_);
 }
-inline ::aspia::proto::DesktopSessionConfig* ClientToHost::release_config() {
+inline ::aspia::proto::SessionConfig* ClientToHost::release_config() {
   // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
   
-  ::aspia::proto::DesktopSessionConfig* temp = config_;
+  ::aspia::proto::SessionConfig* temp = config_;
   config_ = NULL;
   return temp;
 }
-inline ::aspia::proto::DesktopSessionConfig* ClientToHost::mutable_config() {
+inline ::aspia::proto::SessionConfig* ClientToHost::mutable_config() {
   
   if (config_ == NULL) {
-    config_ = new ::aspia::proto::DesktopSessionConfig;
+    config_ = new ::aspia::proto::SessionConfig;
   }
   // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
   return config_;
 }
-inline void ClientToHost::set_allocated_config(::aspia::proto::DesktopSessionConfig* config) {
+inline void ClientToHost::set_allocated_config(::aspia::proto::SessionConfig* config) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(config_);
