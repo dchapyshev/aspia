@@ -24,7 +24,7 @@ static const std::wstring kEmptyStringWide;
 // Assuming that a pointer is the size of a "machine word", then
 // uintptr_t is an integer type that is also a machine word.
 using MachineWord = uintptr_t;
-const uintptr_t kMachineWordAlignmentMask = sizeof(MachineWord) - 1;
+constexpr uintptr_t kMachineWordAlignmentMask = sizeof(MachineWord) - 1;
 
 bool IsAlignedToMachineWord(const void* pointer)
 {
@@ -58,6 +58,91 @@ template<> struct NonASCIIMask<8, char>
 {
     static inline uint64_t value() { return 0x8080808080808080ULL; }
 };
+
+template <class Char>
+bool DoIsStringASCII(const Char* characters, size_t length)
+{
+    MachineWord all_char_bits = 0;
+    const Char* end = characters + length;
+
+    // Prologue: align the input.
+    while (!IsAlignedToMachineWord(characters) && characters != end)
+    {
+        all_char_bits |= *characters;
+        ++characters;
+    }
+
+    // Compare the values of CPU word size.
+    const Char* word_end = AlignToMachineWord(end);
+    const size_t loop_increment = sizeof(MachineWord) / sizeof(Char);
+
+    while (characters < word_end)
+    {
+        all_char_bits |= *(reinterpret_cast<const MachineWord*>(characters));
+        characters += loop_increment;
+    }
+
+    // Process the remaining bytes.
+    while (characters != end)
+    {
+        all_char_bits |= *characters;
+        ++characters;
+    }
+
+    MachineWord non_ascii_bit_mask = NonASCIIMask<sizeof(MachineWord), Char>::value();
+
+    return !(all_char_bits & non_ascii_bit_mask);
+}
+
+template<typename STR>
+STR CollapseWhitespaceT(const STR& text,
+                        bool trim_sequences_with_line_breaks)
+{
+    STR result;
+    result.resize(text.size());
+
+    // Set flags to pretend we're already in a trimmed whitespace sequence, so we
+    // will trim any leading whitespace.
+    bool in_whitespace = true;
+    bool already_trimmed = true;
+
+    int chars_written = 0;
+    for (typename STR::const_iterator i(text.begin()); i != text.end(); ++i)
+    {
+        if (IsUnicodeWhitespace(*i))
+        {
+            if (!in_whitespace)
+            {
+                // Reduce all whitespace sequences to a single space.
+                in_whitespace = true;
+                result[chars_written++] = L' ';
+            }
+            if (trim_sequences_with_line_breaks && !already_trimmed &&
+                ((*i == '\n') || (*i == '\r')))
+            {
+                // Whitespace sequences containing CR or LF are eliminated entirely.
+                already_trimmed = true;
+                --chars_written;
+            }
+        }
+        else
+        {
+            // Non-whitespace chracters are copied straight across.
+            in_whitespace = false;
+            already_trimmed = false;
+            result[chars_written++] = *i;
+        }
+    }
+
+    if (in_whitespace && !already_trimmed)
+    {
+        // Any trailing whitespace is eliminated.
+        --chars_written;
+    }
+
+    result.resize(chars_written);
+    return result;
+}
 
 } // namespace
 
@@ -166,41 +251,6 @@ bool IsStringUTF8(const std::string& string)
     return IsStringUTF8(string.data(), string.length());
 }
 
-template <class Char>
-bool DoIsStringASCII(const Char* characters, size_t length)
-{
-    MachineWord all_char_bits = 0;
-    const Char* end = characters + length;
-
-    // Prologue: align the input.
-    while (!IsAlignedToMachineWord(characters) && characters != end)
-    {
-        all_char_bits |= *characters;
-        ++characters;
-    }
-
-    // Compare the values of CPU word size.
-    const Char* word_end = AlignToMachineWord(end);
-    const size_t loop_increment = sizeof(MachineWord) / sizeof(Char);
-
-    while (characters < word_end)
-    {
-        all_char_bits |= *(reinterpret_cast<const MachineWord*>(characters));
-        characters += loop_increment;
-    }
-
-    // Process the remaining bytes.
-    while (characters != end)
-    {
-        all_char_bits |= *characters;
-        ++characters;
-    }
-
-    MachineWord non_ascii_bit_mask = NonASCIIMask<sizeof(MachineWord), Char>::value();
-
-    return !(all_char_bits & non_ascii_bit_mask);
-}
-
 bool IsStringASCII(const char* data, size_t length)
 {
     return DoIsStringASCII(data, length);
@@ -230,56 +280,6 @@ bool IsUnicodeWhitespace(wchar_t c)
             return true;
     }
     return false;
-}
-
-template<typename STR>
-STR CollapseWhitespaceT(const STR& text,
-                        bool trim_sequences_with_line_breaks)
-{
-    STR result;
-    result.resize(text.size());
-
-    // Set flags to pretend we're already in a trimmed whitespace sequence, so we
-    // will trim any leading whitespace.
-    bool in_whitespace = true;
-    bool already_trimmed = true;
-
-    int chars_written = 0;
-    for (typename STR::const_iterator i(text.begin()); i != text.end(); ++i)
-    {
-        if (IsUnicodeWhitespace(*i))
-        {
-            if (!in_whitespace)
-            {
-                // Reduce all whitespace sequences to a single space.
-                in_whitespace = true;
-                result[chars_written++] = L' ';
-            }
-            if (trim_sequences_with_line_breaks && !already_trimmed &&
-                ((*i == '\n') || (*i == '\r')))
-            {
-                // Whitespace sequences containing CR or LF are eliminated entirely.
-                already_trimmed = true;
-                --chars_written;
-            }
-        }
-        else
-        {
-            // Non-whitespace chracters are copied straight across.
-            in_whitespace = false;
-            already_trimmed = false;
-            result[chars_written++] = *i;
-        }
-    }
-
-    if (in_whitespace && !already_trimmed)
-    {
-        // Any trailing whitespace is eliminated.
-        --chars_written;
-    }
-
-    result.resize(chars_written);
-    return result;
 }
 
 std::wstring CollapseWhitespace(const std::wstring& text,

@@ -83,7 +83,7 @@ int File::ReadAtCurrentPos(char* data, int size)
         return -1;
 
     DWORD bytes_read;
-    if (::ReadFile(file_.Get(), data, size, &bytes_read, NULL))
+    if (::ReadFile(file_.Get(), data, size, &bytes_read, nullptr))
         return bytes_read;
     if (ERROR_HANDLE_EOF == GetLastError())
         return 0;
@@ -128,7 +128,7 @@ int File::WriteAtCurrentPos(const char* data, int size)
         return -1;
 
     DWORD bytes_written;
-    if (::WriteFile(file_.Get(), data, size, &bytes_written, NULL))
+    if (::WriteFile(file_.Get(), data, size, &bytes_written, nullptr))
         return bytes_written;
 
     return -1;
@@ -165,7 +165,7 @@ bool File::SetLength(int64_t length)
     length_li.QuadPart = length;
     // If length > file size, SetFilePointerEx() should extend the file
     // with zeroes on all Windows standard file systems (NTFS, FATxx).
-    if (!::SetFilePointerEx(file_.Get(), length_li, NULL, FILE_BEGIN))
+    if (!::SetFilePointerEx(file_.Get(), length_li, nullptr, FILE_BEGIN))
         return false;
 
     // Set the new file length and move the file pointer to its old position.
@@ -175,7 +175,7 @@ bool File::SetLength(int64_t length)
     // promised by the interface (nor was promised by PlatformFile). See if this
     // implementation detail can be removed.
     return ((::SetEndOfFile(file_.Get()) != FALSE) &&
-            (::SetFilePointerEx(file_.Get(), file_pointer, NULL, FILE_BEGIN) !=
+            (::SetFilePointerEx(file_.Get(), file_pointer, nullptr, FILE_BEGIN) !=
              FALSE));
 }
 
@@ -185,7 +185,7 @@ bool File::SetTimes(time_t last_access_time, time_t last_modified_time)
 
     FILETIME last_access_filetime = FileTimeFromUnixTime(last_access_time);
     FILETIME last_modified_filetime = FileTimeFromUnixTime(last_modified_time);
-    return (::SetFileTime(file_.Get(), NULL, &last_access_filetime,
+    return (::SetFileTime(file_.Get(), nullptr, &last_access_filetime,
                           &last_modified_filetime) != FALSE);
 }
 
@@ -366,8 +366,8 @@ void File::DoInitialize(const FilePath& path, uint32_t flags)
     if (flags & FLAG_SEQUENTIAL_SCAN)
         create_flags |= FILE_FLAG_SEQUENTIAL_SCAN;
 
-    file_.Reset(CreateFileW(path.c_str(), access, sharing, NULL,
-                            disposition, create_flags, NULL));
+    file_.Reset(CreateFileW(path.c_str(), access, sharing, nullptr,
+                            disposition, create_flags, nullptr));
 
     if (file_.IsValid())
     {

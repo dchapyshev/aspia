@@ -102,7 +102,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
         case WM_DESTROY:
         {
             SetLastError(ERROR_SUCCESS);
-            LONG_PTR result = SetWindowLongPtrW(window, GWLP_USERDATA, NULL);
+            LONG_PTR result = SetWindowLongPtrW(window, GWLP_USERDATA, 0);
             CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;

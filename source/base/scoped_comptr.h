@@ -53,10 +53,10 @@ public:
     // be confused with e.g. unique_ptr::release().
     void Release()
     {
-        if (this->ptr_ != NULL)
+        if (this->ptr_ != nullptr)
         {
             this->ptr_->Release();
-            this->ptr_ = NULL;
+            this->ptr_ = nullptr;
         }
     }
 
@@ -65,7 +65,7 @@ public:
     Interface* Detach()
     {
         Interface* p = this->ptr_;
-        this->ptr_ = NULL;
+        this->ptr_ = nullptr;
         return p;
     }
 
@@ -95,8 +95,8 @@ public:
     template <class Query>
     HRESULT QueryInterface(Query** p)
     {
-        DCHECK(p != NULL);
-        DCHECK(this->ptr_ != NULL);
+        DCHECK(p != nullptr);
+        DCHECK(this->ptr_ != nullptr);
         // IUnknown already has a template version of QueryInterface
         // so the iid parameter is implicit here. The only thing this
         // function adds are the DCHECKs.
@@ -106,8 +106,8 @@ public:
     // QI for times when the IID is not associated with the type.
     HRESULT QueryInterface(const IID& iid, void** obj)
     {
-        DCHECK(obj != NULL);
-        DCHECK(this->ptr_ != NULL);
+        DCHECK(obj != nullptr);
+        DCHECK(this->ptr_ != nullptr);
         return this->ptr_->QueryInterface(iid, obj);
     }
 
@@ -115,12 +115,12 @@ public:
     // error code from the other->QueryInterface operation.
     HRESULT QueryFrom(IUnknown* object)
     {
-        DCHECK(object != NULL);
+        DCHECK(object != nullptr);
         return object->QueryInterface(Receive());
     }
 
     // Convenience wrapper around CoCreateInstance
-    HRESULT CreateInstance(const CLSID& clsid, IUnknown* outer = NULL,
+    HRESULT CreateInstance(const CLSID& clsid, IUnknown* outer = nullptr,
                            DWORD context = CLSCTX_ALL)
     {
         DCHECK(!this->ptr_);
@@ -159,7 +159,7 @@ public:
     // and then making the call... but generally that shouldn't be necessary.
     BlockIUnknownMethods* operator->() const
     {
-        DCHECK(this->ptr_ != NULL);
+        DCHECK(this->ptr_ != nullptr);
         return reinterpret_cast<BlockIUnknownMethods*>(this->ptr_);
     }
 
