@@ -310,7 +310,7 @@ LRESULT MainDialog::OnAddressChanged(
     CComboBox combo(control);
 
     // Get current selected MRU index from combobox.
-    const int item_index = combo.GetItemData(combo.GetCurSel());
+    const int item_index = static_cast<int>(combo.GetItemData(combo.GetCurSel()));
 
     // Validate MRU cache index.
     if (item_index >= 0 && item_index < mru_.GetItemCount())
