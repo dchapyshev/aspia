@@ -216,15 +216,7 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
         if (!CreatePrivilegedToken(privileged_token))
             return false;
 
-        std::experimental::filesystem::path library_path;
-        if (!GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
-            return false;
-
-        library_path.append(L"wtsapi32.dll");
-
-        ScopedNativeLibrary wtsapi32_library(library_path.c_str());
-        if (!wtsapi32_library.IsLoaded())
-            return false;
+        ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
 
         typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
 

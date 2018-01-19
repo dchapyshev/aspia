@@ -15,31 +15,20 @@ namespace aspia {
 
 namespace {
 
-const wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
+constexpr wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
 
 } // namespace
 
 ConsoleSessionWatcher::ConsoleSessionWatcher()
+    : wtsapi32_library_(kWtsApi32LibraryName)
 {
-    std::experimental::filesystem::path library_path;
+    register_session_notification_ =
+        reinterpret_cast<WTSRegisterSessionNotificationFn>(
+           wtsapi32_library_.GetFunctionPointer("WTSRegisterSessionNotification"));
 
-    if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
-    {
-        library_path.append(kWtsApi32LibraryName);
-
-        wtsapi32_library_ = std::make_unique<ScopedNativeLibrary>(library_path.c_str());
-
-        if (wtsapi32_library_->IsLoaded())
-        {
-            register_session_notification_ =
-                reinterpret_cast<WTSRegisterSessionNotificationFn>(
-                    wtsapi32_library_->GetFunctionPointer("WTSRegisterSessionNotification"));
-
-            unregister_session_notification_ =
-                reinterpret_cast<WTSUnRegisterSessionNotificationFn>(
-                    wtsapi32_library_->GetFunctionPointer("WTSUnRegisterSessionNotification"));
-        }
-    }
+    unregister_session_notification_ =
+       reinterpret_cast<WTSUnRegisterSessionNotificationFn>(
+          wtsapi32_library_.GetFunctionPointer("WTSUnRegisterSessionNotification"));
 
     CHECK(register_session_notification_ && unregister_session_notification_);
 }

@@ -34,30 +34,23 @@ void FileStatusDialog::WaitForClose()
 
 void FileStatusDialog::OnBeforeThreadRunning()
 {
-    std::experimental::filesystem::path library_path;
+    // We need to load the library to work with RichEdit before creating a dialog.
+    richedit_library_ = std::make_unique<ScopedNativeLibrary>(kRichEditLibraryName);
 
-    if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
+    if (richedit_library_->IsLoaded())
     {
-        library_path.append(kRichEditLibraryName);
+        runner_ = ui_thread_.message_loop_proxy();
+        DCHECK(runner_);
 
-        // We need to load the library to work with RichEdit before creating a dialog.
-        richedit_library_ = std::make_unique<ScopedNativeLibrary>(library_path.c_str());
-
-        if (richedit_library_->IsLoaded())
+        HWND window = Create(nullptr);
+        if (window)
         {
-            runner_ = ui_thread_.message_loop_proxy();
-            DCHECK(runner_);
+            ShowWindow(SW_SHOWNORMAL);
 
-            HWND window = Create(nullptr);
-            if (window)
-            {
-                ShowWindow(SW_SHOWNORMAL);
-
-                edit_ = GetDlgItem(IDC_STATUS_EDIT);
-                // The default text limit is 64K characters. We increase this size.
-                edit_.LimitText(0xFFFFFFFF);
-                return;
-            }
+            edit_ = GetDlgItem(IDC_STATUS_EDIT);
+            // The default text limit is 64K characters. We increase this size.
+            edit_.LimitText(0xFFFFFFFF);
+            return;
         }
     }
 

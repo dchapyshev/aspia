@@ -42,7 +42,7 @@ private:
     typedef BOOL(WINAPI *WTSRegisterSessionNotificationFn)(HWND, DWORD);
     typedef BOOL(WINAPI *WTSUnRegisterSessionNotificationFn)(HWND);
 
-    std::unique_ptr<ScopedNativeLibrary> wtsapi32_library_;
+    ScopedNativeLibrary wtsapi32_library_;
     WTSRegisterSessionNotificationFn register_session_notification_ = nullptr;
     WTSUnRegisterSessionNotificationFn unregister_session_notification_ = nullptr;
 

@@ -35,9 +35,9 @@ void SasInjector::InjectSAS()
 {
     if (!IsWindowsVistaOrGreater())
     {
-        const wchar_t kWinlogonDesktopName[] = L"Winlogon";
-        const wchar_t kSasWindowClassName[] = L"SAS window class";
-        const wchar_t kSasWindowTitle[] = L"SAS window";
+        static constexpr wchar_t kWinlogonDesktopName[] = L"Winlogon";
+        static constexpr wchar_t kSasWindowClassName[] = L"SAS window class";
+        static constexpr wchar_t kSasWindowTitle[] = L"SAS window";
 
         Desktop winlogon_desktop(Desktop::GetDesktop(kWinlogonDesktopName));
 
@@ -102,15 +102,7 @@ void SasInjector::ExecuteService()
 
 void SasInjector::Worker()
 {
-    std::experimental::filesystem::path library_path;
-    if (!GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
-        return;
-
-    library_path.append(L"wmsgapi.dll");
-
-    ScopedNativeLibrary wmsgapi(library_path.c_str());
-    if (!wmsgapi.IsLoaded())
-        return;
+    ScopedNativeLibrary wmsgapi(L"wmsgapi.dll");
 
     typedef DWORD(WINAPI *WmsgSendMessageFn)(DWORD session_id, UINT msg,
                                              WPARAM wParam, LPARAM lParam);
