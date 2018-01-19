@@ -88,6 +88,7 @@ private:
     void InitIpList();
     void UpdateIpList();
     void UpdateMRUList();
+    void UpdateServerPort();
     void InitSessionTypesCombo();
     void UpdateCurrentConfig(const proto::ClientConfig& client_config);
     void UpdateCurrentSessionType(proto::auth::SessionType session_type);

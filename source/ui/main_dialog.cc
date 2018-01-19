@@ -116,6 +116,25 @@ void MainDialog::InitSessionTypesCombo()
     add_session(IDS_SESSION_TYPE_POWER_MANAGE, proto::auth::SESSION_TYPE_POWER_MANAGE);
 }
 
+void MainDialog::UpdateServerPort()
+{
+    CEdit port_edit = GetDlgItem(IDC_SERVER_PORT_EDIT);
+
+    port_edit.SetLimitText(5);
+    port_edit.SetWindowTextW(std::to_wstring(current_config_.port()).c_str());
+
+    if (current_config_.port() == kDefaultHostTcpPort)
+    {
+        CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
+        port_edit.SetReadOnly(TRUE);
+    }
+    else
+    {
+        CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_UNCHECKED);
+        port_edit.SetReadOnly(FALSE);
+    }
+}
+
 LRESULT MainDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
@@ -151,11 +170,9 @@ LRESULT MainDialog::OnInitDialog(
 
     InitIpList();
     UpdateIpList();
-
-    SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
-    CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
-
-    CEdit(GetDlgItem(IDC_SERVER_PORT_EDIT)).SetReadOnly(TRUE);
+    InitSessionTypesCombo();
+    UpdateMRUList();
+    UpdateServerPort();
 
     const bool host_service_installed = HostService::IsInstalled();
 
@@ -174,9 +191,6 @@ LRESULT MainDialog::OnInitDialog(
 
     if (host_service_installed)
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
-
-    InitSessionTypesCombo();
-    UpdateMRUList();
 
     const DWORD active_thread_id =
         GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
@@ -318,6 +332,7 @@ LRESULT MainDialog::OnAddressChanged(
         // Address found in MRU list. Copy config from cache.
         current_config_.CopyFrom(mru_.SetLastItem(item_index));
         UpdateMRUList();
+        UpdateServerPort();
     }
 
     return 0;
