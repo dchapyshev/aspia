@@ -31,7 +31,7 @@ FileManagerPanel::FileManagerPanel(Type type,
     // Nothing
 }
 
-FilePath FileManagerPanel::GetCurrentPath() const
+std::experimental::filesystem::path FileManagerPanel::GetCurrentPath() const
 {
     return drive_list_.CurrentPath();
 }
@@ -201,7 +201,7 @@ LRESULT FileManagerPanel::OnListDoubleClock(
 
     if (file_list_.IsDirectoryObject(object_index))
     {
-        FilePath path(drive_list_.CurrentPath());
+        std::experimental::filesystem::path path(drive_list_.CurrentPath());
         path.append(file_list_.ObjectName(object_index));
         sender_->SendFileListRequest(This(), path);
     }
@@ -211,7 +211,7 @@ LRESULT FileManagerPanel::OnListDoubleClock(
 
 void FileManagerPanel::FolderUp()
 {
-    FilePath path = drive_list_.CurrentPath();
+    std::experimental::filesystem::path path = drive_list_.CurrentPath();
 
     if (!path.has_parent_path() || path.parent_path() == path.root_name())
     {
@@ -300,7 +300,7 @@ void FileManagerPanel::MoveToDrive(int object_index)
         toolbar_.EnableButton(ID_HOME, FALSE);
 
         file_list_.Read(drive_list_.DriveList());
-        drive_list_.SetCurrentPath(FilePath());
+        drive_list_.SetCurrentPath(std::experimental::filesystem::path());
     }
     else
     {
@@ -325,7 +325,7 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int /* ctrl_id */, LPNMHDR hdr, BOO
         WCHAR buffer[MAX_PATH] = { 0 };
         edit.GetWindowTextW(buffer, _countof(buffer));
 
-        FilePath path = drive_list_.CurrentPath();
+        std::experimental::filesystem::path path = drive_list_.CurrentPath();
         path.append(buffer);
 
         sender_->SendCreateDirectoryRequest(This(), path);
@@ -338,10 +338,10 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int /* ctrl_id */, LPNMHDR hdr, BOO
         if (!disp_info->item.pszText)
             return 0;
 
-        FilePath old_name = drive_list_.CurrentPath();
+        std::experimental::filesystem::path old_name = drive_list_.CurrentPath();
         old_name.append(file_list_.ObjectName(object_index));
 
-        FilePath new_name = drive_list_.CurrentPath();
+        std::experimental::filesystem::path new_name = drive_list_.CurrentPath();
         new_name.append(disp_info->item.pszText);
 
         sender_->SendRenameRequest(This(), old_name, new_name);
@@ -445,7 +445,7 @@ LRESULT FileManagerPanel::OnLButtonUp(
 
 void FileManagerPanel::SendSelectedFiles()
 {
-    FilePath source_path = drive_list_.CurrentPath();
+    std::experimental::filesystem::path source_path = drive_list_.CurrentPath();
 
     // If the path is empty, the panel displays a list of drives.
     if (source_path.empty())
@@ -523,7 +523,8 @@ LRESULT FileManagerPanel::OnDriveEndEdit(int /* ctrl_id */, LPNMHDR hdr, BOOL& /
 
     if (end_edit->fChanged && end_edit->iWhy == CBENF_RETURN && end_edit->szText[0])
     {
-        sender_->SendFileListRequest(This(), FilePath(end_edit->szText));
+        sender_->SendFileListRequest(
+            This(), std::experimental::filesystem::path(end_edit->szText));
     }
 
     return 0;
@@ -568,7 +569,7 @@ void FileManagerPanel::OnDriveListReply(
     }
 }
 
-void FileManagerPanel::OnFileListReply(const FilePath& path,
+void FileManagerPanel::OnFileListReply(const std::experimental::filesystem::path& path,
                                        std::shared_ptr<proto::file_transfer::FileList> file_list,
                                        proto::file_transfer::Status status)
 {
@@ -591,7 +592,7 @@ void FileManagerPanel::OnFileListReply(const FilePath& path,
     }
 }
 
-void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path,
+void FileManagerPanel::OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
                                               proto::file_transfer::Status status)
 {
     if (status != proto::file_transfer::STATUS_SUCCESS)
@@ -608,8 +609,8 @@ void FileManagerPanel::OnCreateDirectoryReply(const FilePath& path,
     }
 }
 
-void FileManagerPanel::OnRenameReply(const FilePath& old_name,
-                                     const FilePath& new_name,
+void FileManagerPanel::OnRenameReply(const std::experimental::filesystem::path& old_name,
+                                     const std::experimental::filesystem::path& new_name,
                                      proto::file_transfer::Status status)
 {
     if (status != proto::file_transfer::STATUS_SUCCESS)

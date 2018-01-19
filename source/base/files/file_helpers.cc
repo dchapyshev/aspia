@@ -66,7 +66,7 @@ bool IsValidPathChar(wchar_t character)
 
 } // namespace
 
-bool IsValidFileName(const FilePath& path)
+bool IsValidFileName(const std::experimental::filesystem::path& path)
 {
     std::wstring native_path(path.wstring());
 
@@ -84,7 +84,7 @@ bool IsValidFileName(const FilePath& path)
     return true;
 }
 
-bool IsValidPathName(const FilePath& path)
+bool IsValidPathName(const std::experimental::filesystem::path& path)
 {
     std::wstring native_path(path.wstring());
 

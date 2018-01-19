@@ -34,7 +34,7 @@ void FileStatusDialog::WaitForClose()
 
 void FileStatusDialog::OnBeforeThreadRunning()
 {
-    FilePath library_path;
+    std::experimental::filesystem::path library_path;
 
     if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
     {
@@ -170,42 +170,43 @@ void FileStatusDialog::OnDriveListRequest()
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnFileListRequest(const FilePath& path)
+void FileStatusDialog::OnFileListRequest(const std::experimental::filesystem::path& path)
 {
     CString message;
     message.Format(IDS_FT_OP_BROWSE_FOLDERS, path.c_str());
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnCreateDirectoryRequest(const FilePath& path)
+void FileStatusDialog::OnCreateDirectoryRequest(const std::experimental::filesystem::path& path)
 {
     CString message;
     message.Format(IDS_FT_OP_CREATE_FOLDER, path.c_str());
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnRenameRequest(const FilePath& old_name, const FilePath& new_name)
+void FileStatusDialog::OnRenameRequest(const std::experimental::filesystem::path& old_name,
+                                       const std::experimental::filesystem::path& new_name)
 {
     CString message;
     message.Format(IDS_FT_OP_RENAME, old_name.c_str(), new_name.c_str());
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnRemoveRequest(const FilePath& path)
+void FileStatusDialog::OnRemoveRequest(const std::experimental::filesystem::path& path)
 {
     CString message;
     message.Format(IDS_FT_OP_REMOVE, path.c_str());
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnFileUploadRequest(const FilePath& file_path)
+void FileStatusDialog::OnFileUploadRequest(const std::experimental::filesystem::path& file_path)
 {
     CString message;
     message.Format(IDS_FT_OP_RECIEVE_FILE, file_path.c_str());
     WriteMessage(message);
 }
 
-void FileStatusDialog::OnFileDownloadRequest(const FilePath& file_path)
+void FileStatusDialog::OnFileDownloadRequest(const std::experimental::filesystem::path& file_path)
 {
     CString message;
     message.Format(IDS_FT_OP_SEND_FILE, file_path.c_str());

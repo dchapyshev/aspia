@@ -120,7 +120,7 @@ const proto::file_transfer::DriveList& DriveListCtrl::DriveList() const
     return *list_;
 }
 
-void DriveListCtrl::SetCurrentPath(const FilePath& path)
+void DriveListCtrl::SetCurrentPath(const std::experimental::filesystem::path& path)
 {
     current_path_ = path;
 
@@ -158,12 +158,12 @@ void DriveListCtrl::SetCurrentPath(const FilePath& path)
     SelectObject(known_object_index);
 }
 
-const FilePath& DriveListCtrl::CurrentPath() const
+const std::experimental::filesystem::path& DriveListCtrl::CurrentPath() const
 {
     return current_path_;
 }
 
-FilePath DriveListCtrl::ObjectPath(int object_index) const
+std::experimental::filesystem::path DriveListCtrl::ObjectPath(int object_index) const
 {
     switch (object_index)
     {
@@ -172,19 +172,19 @@ FilePath DriveListCtrl::ObjectPath(int object_index) const
             int item_index = GetItemIndexByObjectIndex(object_index);
 
             if (item_index == CB_ERR)
-                return FilePath();
+                return std::experimental::filesystem::path();
 
             WCHAR path[MAX_PATH];
 
             if (!GetItemText(item_index, path, _countof(path)))
-                return FilePath();
+                return std::experimental::filesystem::path();
 
             return path;
         }
 
         case kComputerObjectIndex:
         case kInvalidObjectIndex:
-            return FilePath();
+            return std::experimental::filesystem::path();
 
         default:
             return std::experimental::filesystem::u8path(list_->item(object_index).path());
@@ -205,7 +205,7 @@ int DriveListCtrl::GetItemIndexByObjectIndex(int object_index) const
     return CB_ERR;
 }
 
-int DriveListCtrl::GetKnownObjectIndex(const FilePath& path) const
+int DriveListCtrl::GetKnownObjectIndex(const std::experimental::filesystem::path& path) const
 {
     if (!HasDriveList())
         return kInvalidObjectIndex;
@@ -217,7 +217,7 @@ int DriveListCtrl::GetKnownObjectIndex(const FilePath& path) const
 
     for (int object_index = 0; object_index < count; ++object_index)
     {
-        FilePath known_path =
+        std::experimental::filesystem::path known_path =
             std::experimental::filesystem::u8path(list_->item(object_index).path());
 
         if (CompareCaseInsensitive(known_path, path) == 0)

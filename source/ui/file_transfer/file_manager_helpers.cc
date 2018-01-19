@@ -88,7 +88,7 @@ HICON GetDirectoryIcon()
     return icon_info.hIcon;
 }
 
-HICON GetFileIcon(const FilePath& file_name)
+HICON GetFileIcon(const std::experimental::filesystem::path& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
@@ -174,7 +174,7 @@ CString GetDriveDescription(proto::file_transfer::DriveList::Item::Type type)
     return desc;
 }
 
-CString GetFileTypeString(const FilePath& file_name)
+CString GetFileTypeString(const std::experimental::filesystem::path& file_name)
 {
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));

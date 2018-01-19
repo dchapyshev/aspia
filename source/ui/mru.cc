@@ -19,7 +19,7 @@ namespace {
 constexpr size_t kMaxMRUFileSize = 1024 * 1024; // 1 MB
 constexpr size_t kMaxMRUItemCount = 30;
 
-bool GetMRUFilePath(FilePath& path)
+bool GetMRUFilePath(std::experimental::filesystem::path& path)
 {
     if (!GetBasePath(BasePathKey::DIR_APP_DATA, path))
         return false;
@@ -32,7 +32,7 @@ bool GetMRUFilePath(FilePath& path)
 
 bool ReadMRUFile(std::string& mru)
 {
-    FilePath file_path;
+    std::experimental::filesystem::path file_path;
 
     if (!GetMRUFilePath(file_path))
         return false;
@@ -76,7 +76,7 @@ bool ReadMRUFile(std::string& mru)
 
 bool WriteMRUFile(const std::string& mru)
 {
-    FilePath file_path;
+    std::experimental::filesystem::path file_path;
 
     if (!GetMRUFilePath(file_path))
         return false;

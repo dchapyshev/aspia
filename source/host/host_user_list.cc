@@ -97,7 +97,7 @@ bool HostUserList::IsValidUserList()
     return true;
 }
 
-static bool GetUserListDirectoryPath(FilePath& path)
+static bool GetUserListDirectoryPath(std::experimental::filesystem::path& path)
 {
     if (!GetBasePath(BasePathKey::DIR_COMMON_APP_DATA, path))
         return false;
@@ -107,7 +107,7 @@ static bool GetUserListDirectoryPath(FilePath& path)
     return true;
 }
 
-static bool GetUserListFilePath(FilePath& path)
+static bool GetUserListFilePath(std::experimental::filesystem::path& path)
 {
     if (!GetUserListDirectoryPath(path))
         return false;
@@ -118,7 +118,7 @@ static bool GetUserListFilePath(FilePath& path)
 
 bool HostUserList::LoadFromStorage()
 {
-    FilePath file_path;
+    std::experimental::filesystem::path file_path;
 
     if (!GetUserListFilePath(file_path))
         return false;
@@ -182,7 +182,7 @@ bool HostUserList::SaveToStorage()
         return false;
     }
 
-    FilePath dir_path;
+    std::experimental::filesystem::path dir_path;
     if (!GetUserListDirectoryPath(dir_path))
         return false;
 
@@ -207,7 +207,7 @@ bool HostUserList::SaveToStorage()
         }
     }
 
-    FilePath file_path;
+    std::experimental::filesystem::path file_path;
     if (!GetUserListFilePath(file_path))
         return false;
 

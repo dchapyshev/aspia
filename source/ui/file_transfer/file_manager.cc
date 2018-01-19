@@ -85,11 +85,11 @@ bool FileManagerWindow::Dispatch(const NativeEvent& event)
 }
 
 void FileManagerWindow::SendFiles(FileManagerPanel::Type panel_type,
-                                  const FilePath& source_path,
+                                  const std::experimental::filesystem::path& source_path,
                                   const FileTaskQueueBuilder::FileList& file_list)
 {
     FileTransferDialog::Mode mode;
-    FilePath target_path;
+    std::experimental::filesystem::path target_path;
 
     if (panel_type == FileManagerPanel::Type::LOCAL)
     {

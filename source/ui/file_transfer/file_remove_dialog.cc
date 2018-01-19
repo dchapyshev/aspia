@@ -14,7 +14,7 @@
 namespace aspia {
 
 FileRemoveDialog::FileRemoveDialog(std::shared_ptr<FileRequestSenderProxy> sender,
-                                   const FilePath& path,
+                                   const std::experimental::filesystem::path& path,
                                    const FileTaskQueueBuilder::FileList& file_list)
     : sender_(sender),
       path_(path),
@@ -85,7 +85,7 @@ void FileRemoveDialog::OnRemovingComplete()
     PostMessageW(WM_CLOSE);
 }
 
-void FileRemoveDialog::OnRemoveObject(const FilePath& object_path)
+void FileRemoveDialog::OnRemoveObject(const std::experimental::filesystem::path& object_path)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -104,9 +104,10 @@ void FileRemoveDialog::OnRemoveObject(const FilePath& object_path)
     }
 }
 
-void FileRemoveDialog::OnRemoveObjectFailure(const FilePath& object_path,
-                                             proto::file_transfer::Status status,
-                                             FileRemover::ActionCallback callback)
+void FileRemoveDialog::OnRemoveObjectFailure(
+    const std::experimental::filesystem::path& object_path,
+    proto::file_transfer::Status status,
+    FileRemover::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())
     {

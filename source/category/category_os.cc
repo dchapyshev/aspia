@@ -23,7 +23,7 @@ namespace {
 
 std::string GetWindowVersion()
 {
-    FilePath kernel32_path;
+    std::experimental::filesystem::path kernel32_path;
 
     if (!GetBasePath(BasePathKey::DIR_SYSTEM, kernel32_path))
         return std::string();
@@ -243,7 +243,7 @@ std::string CategoryOS::Serialize()
             break;
     }
 
-    FilePath system_root;
+    std::experimental::filesystem::path system_root;
     if (GetBasePath(BasePathKey::DIR_WINDOWS, system_root))
     {
         message.set_system_root(system_root.u8string());

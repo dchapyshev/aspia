@@ -28,7 +28,7 @@ void FileRequestSenderRemote::SendDriveListRequest(
 
 void FileRequestSenderRemote::SendFileListRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_file_list_request()->set_path(path.u8string());
@@ -37,7 +37,7 @@ void FileRequestSenderRemote::SendFileListRequest(
 
 void FileRequestSenderRemote::SendCreateDirectoryRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_create_directory_request()->set_path(path.u8string());
@@ -46,24 +46,26 @@ void FileRequestSenderRemote::SendCreateDirectoryRequest(
 
 void FileRequestSenderRemote::SendDirectorySizeRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_directory_size_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                const FilePath& path)
+void FileRequestSenderRemote::SendRemoveRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const std::experimental::filesystem::path& path)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_remove_request()->set_path(path.u8string());
     SendRequest(receiver, std::move(request));
 }
 
-void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                                const FilePath& old_name,
-                                                const FilePath& new_name)
+void FileRequestSenderRemote::SendRenameRequest(
+    std::shared_ptr<FileReplyReceiverProxy> receiver,
+    const std::experimental::filesystem::path& old_name,
+    const std::experimental::filesystem::path& new_name)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_rename_request()->set_old_name(old_name.u8string());
@@ -73,7 +75,7 @@ void FileRequestSenderRemote::SendRenameRequest(std::shared_ptr<FileReplyReceive
 
 void FileRequestSenderRemote::SendFileUploadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path,
+    const std::experimental::filesystem::path& file_path,
     Overwrite overwrite)
 {
     proto::file_transfer::ClientToHost request;
@@ -87,7 +89,7 @@ void FileRequestSenderRemote::SendFileUploadRequest(
 
 void FileRequestSenderRemote::SendFileDownloadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path)
+    const std::experimental::filesystem::path& file_path)
 {
     proto::file_transfer::ClientToHost request;
     request.mutable_file_download_request()->set_file_path(file_path.u8string());

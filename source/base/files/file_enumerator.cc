@@ -18,11 +18,12 @@ namespace aspia {
 
 namespace {
 
-FilePath BuildSearchFilter(FileEnumerator::FolderSearchPolicy policy,
-                           const FilePath& root_path,
-                           const FilePath::string_type& pattern)
+std::experimental::filesystem::path BuildSearchFilter(
+    FileEnumerator::FolderSearchPolicy policy,
+    const std::experimental::filesystem::path& root_path,
+    const std::experimental::filesystem::path::string_type& pattern)
 {
-    FilePath path(root_path);
+    std::experimental::filesystem::path path(root_path);
 
     // MATCH_ONLY policy filters incoming files by pattern on OS side. ALL policy
     // collects all files and filters them manually.
@@ -58,9 +59,9 @@ bool FileEnumerator::FileInfo::IsDirectory() const
     return (find_data_.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
-FilePath FileEnumerator::FileInfo::GetName() const
+std::experimental::filesystem::path FileEnumerator::FileInfo::GetName() const
 {
-    return FilePath(find_data_.cFileName);
+    return std::experimental::filesystem::path(find_data_.cFileName);
 }
 
 int64_t FileEnumerator::FileInfo::GetSize() const
@@ -79,22 +80,22 @@ time_t FileEnumerator::FileInfo::GetLastModifiedTime() const
 
 // FileEnumerator --------------------------------------------------------------
 
-FileEnumerator::FileEnumerator(const FilePath& root_path,
+FileEnumerator::FileEnumerator(const std::experimental::filesystem::path& root_path,
                                bool recursive,
                                int file_type)
     : FileEnumerator(root_path,
                      recursive,
                      file_type,
-                     FilePath::string_type(),
+                     std::experimental::filesystem::path::string_type(),
                      FolderSearchPolicy::MATCH_ONLY)
 {
     // Nothing
 }
 
-FileEnumerator::FileEnumerator(const FilePath& root_path,
+FileEnumerator::FileEnumerator(const std::experimental::filesystem::path& root_path,
                                bool recursive,
                                int file_type,
-                               const FilePath::string_type& pattern)
+                               const std::experimental::filesystem::path::string_type& pattern)
     : FileEnumerator(root_path,
                      recursive,
                      file_type,
@@ -104,10 +105,10 @@ FileEnumerator::FileEnumerator(const FilePath& root_path,
     // Nothing
 }
 
-FileEnumerator::FileEnumerator(const FilePath& root_path,
+FileEnumerator::FileEnumerator(const std::experimental::filesystem::path& root_path,
                                bool recursive,
                                int file_type,
-                               const FilePath::string_type& pattern,
+                               const std::experimental::filesystem::path::string_type& pattern,
                                FolderSearchPolicy folder_search_policy)
     : recursive_(recursive),
       file_type_(file_type),
@@ -136,7 +137,7 @@ FileEnumerator::FileInfo FileEnumerator::GetInfo() const
     return ret;
 }
 
-FilePath FileEnumerator::Next()
+std::experimental::filesystem::path FileEnumerator::Next()
 {
     while (has_find_data_ || !pending_paths_.empty())
     {
@@ -147,7 +148,9 @@ FilePath FileEnumerator::Next()
             pending_paths_.pop();
 
             // Start a new find operation.
-            const FilePath src = BuildSearchFilter(folder_search_policy_, root_path_, pattern_);
+            const std::experimental::filesystem::path src =
+                BuildSearchFilter(folder_search_policy_, root_path_, pattern_);
+
             find_handle_ = FindFirstFileExW(src.c_str(),
                                             FindExInfoBasic,  // Omit short name.
                                             &find_data_, FindExSearchNameMatch,
@@ -183,12 +186,12 @@ FilePath FileEnumerator::Next()
             continue;
         }
 
-        const FilePath filename(find_data_.cFileName);
+        const std::experimental::filesystem::path filename(find_data_.cFileName);
         if (ShouldSkip(filename))
             continue;
 
         const bool is_dir = (find_data_.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
-        FilePath abs_path = root_path_;
+        std::experimental::filesystem::path abs_path = root_path_;
         abs_path.append(filename);
 
         // Check if directory should be processed recursive.
@@ -207,12 +210,12 @@ FilePath FileEnumerator::Next()
             return abs_path;
     }
 
-    return FilePath();
+    return std::experimental::filesystem::path();
 }
 
-bool FileEnumerator::ShouldSkip(const FilePath& path) const
+bool FileEnumerator::ShouldSkip(const std::experimental::filesystem::path& path) const
 {
-    FilePath::string_type basename = path.filename();
+    std::experimental::filesystem::path::string_type basename = path.filename();
     return basename == L"." || (basename == L".." && !(INCLUDE_DOT_DOT & file_type_));
 }
 
@@ -221,7 +224,7 @@ bool FileEnumerator::IsTypeMatched(bool is_dir) const
     return (file_type_ & (is_dir ? DIRECTORIES : FILES)) != 0;
 }
 
-bool FileEnumerator::IsPatternMatched(const FilePath& src) const
+bool FileEnumerator::IsPatternMatched(const std::experimental::filesystem::path& src) const
 {
     switch (folder_search_policy_)
     {

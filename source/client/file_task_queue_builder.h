@@ -27,24 +27,24 @@ public:
     using FileList = std::list<proto::file_transfer::FileList::Item>;
 
     void Start(std::shared_ptr<FileRequestSenderProxy> sender,
-               const FilePath& source_path,
-               const FilePath& target_path,
+               const std::experimental::filesystem::path& source_path,
+               const std::experimental::filesystem::path& target_path,
                const FileList& file_list,
                const FinishCallback& callback);
 
     void Start(std::shared_ptr<FileRequestSenderProxy> sender,
-               const FilePath& path,
+               const std::experimental::filesystem::path& path,
                const FileList& file_list,
                const FinishCallback& callback);
 
 private:
     // FileReplyReceiver implementation.
-    void OnFileListReply(const FilePath& path,
+    void OnFileListReply(const std::experimental::filesystem::path& path,
                          std::shared_ptr<proto::file_transfer::FileList> file_list,
                          proto::file_transfer::Status status) final;
 
-    void AddIncomingTask(const FilePath& source_path,
-                         const FilePath& target_path,
+    void AddIncomingTask(const std::experimental::filesystem::path& source_path,
+                         const std::experimental::filesystem::path& target_path,
                          const proto::file_transfer::FileList::Item& file);
     void FrontIncomingToBackPending();
     void ProcessNextIncommingTask();

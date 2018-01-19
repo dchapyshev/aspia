@@ -39,7 +39,7 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
     const std::wstring unique_full_name =
         ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
 
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;

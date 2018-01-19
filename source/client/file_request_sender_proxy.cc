@@ -35,7 +35,7 @@ bool FileRequestSenderProxy::SendDriveListRequest(
 
 bool FileRequestSenderProxy::SendFileListRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
@@ -48,7 +48,7 @@ bool FileRequestSenderProxy::SendFileListRequest(
 
 bool FileRequestSenderProxy::SendCreateDirectoryRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
@@ -61,7 +61,7 @@ bool FileRequestSenderProxy::SendCreateDirectoryRequest(
 
 bool FileRequestSenderProxy::SendDirectorySizeRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
@@ -74,7 +74,7 @@ bool FileRequestSenderProxy::SendDirectorySizeRequest(
 
 bool FileRequestSenderProxy::SendRemoveRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& path)
+    const std::experimental::filesystem::path& path)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
@@ -87,8 +87,8 @@ bool FileRequestSenderProxy::SendRemoveRequest(
 
 bool FileRequestSenderProxy::SendRenameRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& old_name,
-    const FilePath& new_name)
+    const std::experimental::filesystem::path& old_name,
+    const std::experimental::filesystem::path& new_name)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 
@@ -101,7 +101,7 @@ bool FileRequestSenderProxy::SendRenameRequest(
 
 bool FileRequestSenderProxy::SendFileUploadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path,
+    const std::experimental::filesystem::path& file_path,
     FileRequestSender::Overwrite overwrite)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
@@ -115,7 +115,7 @@ bool FileRequestSenderProxy::SendFileUploadRequest(
 
 bool FileRequestSenderProxy::SendFileDownloadRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
-    const FilePath& file_path)
+    const std::experimental::filesystem::path& file_path)
 {
     std::lock_guard<std::mutex> lock(sender_lock_);
 

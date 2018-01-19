@@ -8,7 +8,6 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_PANEL_H
 #define _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_PANEL_H
 
-#include "base/files/file_path.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
@@ -32,7 +31,7 @@ public:
         virtual ~Delegate() = default;
 
         virtual void SendFiles(Type type,
-                               const FilePath& source_path,
+                               const std::experimental::filesystem::path& source_path,
                                const FileTaskQueueBuilder::FileList& file_list) = 0;
 
         virtual bool GetPanelTypeInPoint(const CPoint& pt, Type& type) = 0;
@@ -43,7 +42,7 @@ public:
                      Delegate* delegate);
     virtual ~FileManagerPanel() = default;
 
-    FilePath GetCurrentPath() const;
+    std::experimental::filesystem::path GetCurrentPath() const;
     void Refresh();
     void Home();
     void FolderUp();
@@ -102,13 +101,13 @@ private:
     // FileReplyReceiver implementation.
     void OnDriveListReply(std::shared_ptr<proto::file_transfer::DriveList> drive_list,
                           proto::file_transfer::Status status) override;
-    void OnFileListReply(const FilePath& path,
+    void OnFileListReply(const std::experimental::filesystem::path& path,
                          std::shared_ptr<proto::file_transfer::FileList> file_list,
                          proto::file_transfer::Status status) override;
-    void OnCreateDirectoryReply(const FilePath& path,
+    void OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
                                 proto::file_transfer::Status status) override;
-    void OnRenameReply(const FilePath& old_name,
-                       const FilePath& new_name,
+    void OnRenameReply(const std::experimental::filesystem::path& old_name,
+                       const std::experimental::filesystem::path& new_name,
                        proto::file_transfer::Status status) override;
 
     void MoveToDrive(int object_index);

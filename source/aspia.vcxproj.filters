@@ -1295,9 +1295,6 @@
     <ClInclude Include="base\files\base_paths.h">
       <Filter>base\files</Filter>
     </ClInclude>
-    <ClInclude Include="base\files\file_path.h">
-      <Filter>base\files</Filter>
-    </ClInclude>
     <ClInclude Include="client\file_request_sender.h">
       <Filter>client</Filter>
     </ClInclude>

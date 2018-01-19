@@ -73,7 +73,7 @@ bool HostService::IsInstalled()
 // static
 bool HostService::Install()
 {
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;

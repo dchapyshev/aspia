@@ -289,7 +289,7 @@ File::Error File::OSErrorToFileError(DWORD last_error)
     }
 }
 
-void File::DoInitialize(const FilePath& path, uint32_t flags)
+void File::DoInitialize(const std::experimental::filesystem::path& path, uint32_t flags)
 {
     DCHECK(!IsValid());
 

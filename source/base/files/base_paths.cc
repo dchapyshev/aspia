@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-bool GetBasePath(BasePathKey key, FilePath& result)
+bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
 {
     WCHAR buffer[MAX_PATH] = { 0 };
 

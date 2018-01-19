@@ -22,27 +22,27 @@ public:
         std::shared_ptr<FileReplyReceiverProxy> receiver);
 
     bool SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                             const FilePath& path);
+                             const std::experimental::filesystem::path& path);
 
     bool SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                    const FilePath& path);
+                                    const std::experimental::filesystem::path& path);
 
     bool SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                  const FilePath& path);
+                                  const std::experimental::filesystem::path& path);
 
     bool SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& path);
+                           const std::experimental::filesystem::path& path);
 
     bool SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& old_name,
-                           const FilePath& new_name);
+                           const std::experimental::filesystem::path& old_name,
+                           const std::experimental::filesystem::path& new_name);
 
     bool SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                               const FilePath& file_path,
+                               const std::experimental::filesystem::path& file_path,
                                FileRequestSender::Overwrite overwrite);
 
     bool SendFileDownloadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                 const FilePath& file_path);
+                                 const std::experimental::filesystem::path& file_path);
 
     bool SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                         std::unique_ptr<proto::file_transfer::FilePacket> file_packet);

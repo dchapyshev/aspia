@@ -26,27 +26,27 @@ public:
     void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
     void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                             const FilePath& path) override;
+                             const std::experimental::filesystem::path& path) override;
 
     void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                    const FilePath& path) override;
+                                    const std::experimental::filesystem::path& path) override;
 
     void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                  const FilePath& path) override;
+                                  const std::experimental::filesystem::path& path) override;
 
     void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& path) override;
+                           const std::experimental::filesystem::path& path) override;
 
     void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                           const FilePath& old_name,
-                           const FilePath& new_name) override;
+                           const std::experimental::filesystem::path& old_name,
+                           const std::experimental::filesystem::path& new_name) override;
 
     void SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                               const FilePath& file_path,
+                               const std::experimental::filesystem::path& file_path,
                                Overwrite overwrite) override;
 
     void SendFileDownloadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                 const FilePath& file_path) override;
+                                 const std::experimental::filesystem::path& file_path) override;
 
     void SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                         std::unique_ptr<proto::file_transfer::FilePacket> file_packet) override;
@@ -61,21 +61,21 @@ private:
     void DriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver);
 
     void FileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                         const FilePath& path);
+                         const std::experimental::filesystem::path& path);
 
     void CreateDirectoryRequest(
         std::shared_ptr<FileReplyReceiverProxy> receiver,
-        const FilePath& path);
+        const std::experimental::filesystem::path& path);
 
     void DirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                              const FilePath& path);
+                              const std::experimental::filesystem::path& path);
 
     void RemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                       const FilePath& path);
+                       const std::experimental::filesystem::path& path);
 
     void RenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                       const FilePath& old_name,
-                       const FilePath& new_name);
+                       const std::experimental::filesystem::path& old_name,
+                       const std::experimental::filesystem::path& new_name);
 
     MessageLoopThread worker_thread_;
     std::shared_ptr<MessageLoopProxy> worker_;

@@ -176,7 +176,7 @@ bool CreateCommandLine(const std::wstring& run_mode,
                        const std::wstring& channel_id,
                        std::wstring& command_line)
 {
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
@@ -216,7 +216,7 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
         if (!CreatePrivilegedToken(privileged_token))
             return false;
 
-        FilePath library_path;
+        std::experimental::filesystem::path library_path;
         if (!GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
             return false;
 
@@ -335,7 +335,7 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
 bool LaunchSystemInfoProcess()
 {
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;

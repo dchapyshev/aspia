@@ -33,7 +33,8 @@ void FileRemover::OnAfterThreadRunning()
     delegate_->OnRemovingComplete();
 }
 
-void FileRemover::Start(const FilePath& path, const FileTaskQueueBuilder::FileList& file_list)
+void FileRemover::Start(const std::experimental::filesystem::path& path,
+                        const FileTaskQueueBuilder::FileList& file_list)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -113,7 +114,8 @@ void FileRemover::OnRemoveObjectFailureAction(FileAction action)
     }
 }
 
-void FileRemover::OnRemoveReply(const FilePath& path, proto::file_transfer::Status status)
+void FileRemover::OnRemoveReply(const std::experimental::filesystem::path& path,
+                                proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {

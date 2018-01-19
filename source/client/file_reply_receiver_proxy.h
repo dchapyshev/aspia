@@ -21,25 +21,29 @@ public:
     bool OnDriveListReply(std::shared_ptr<proto::file_transfer::DriveList> drive_list,
                           proto::file_transfer::Status status);
 
-    bool OnFileListReply(const FilePath& path,
+    bool OnFileListReply(const std::experimental::filesystem::path& path,
                          std::shared_ptr<proto::file_transfer::FileList> file_list,
                          proto::file_transfer::Status status);
 
-    bool OnDirectorySizeReply(const FilePath& path,
+    bool OnDirectorySizeReply(const std::experimental::filesystem::path& path,
                               uint64_t size,
                               proto::file_transfer::Status status);
 
-    bool OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status);
+    bool OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
+                                proto::file_transfer::Status status);
 
-    bool OnRemoveReply(const FilePath& path, proto::file_transfer::Status status);
-
-    bool OnRenameReply(const FilePath& old_name,
-                       const FilePath& new_name,
+    bool OnRemoveReply(const std::experimental::filesystem::path& path,
                        proto::file_transfer::Status status);
 
-    bool OnFileUploadReply(const FilePath& file_path, proto::file_transfer::Status status);
+    bool OnRenameReply(const std::experimental::filesystem::path& old_name,
+                       const std::experimental::filesystem::path& new_name,
+                       proto::file_transfer::Status status);
 
-    bool OnFileDownloadReply(const FilePath& file_path, proto::file_transfer::Status status);
+    bool OnFileUploadReply(const std::experimental::filesystem::path& file_path,
+                           proto::file_transfer::Status status);
+
+    bool OnFileDownloadReply(const std::experimental::filesystem::path& file_path,
+                             proto::file_transfer::Status status);
 
     bool OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status);
 

@@ -19,7 +19,7 @@ namespace aspia {
 
 bool ElevateProcess()
 {
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, path))
         return false;
@@ -36,8 +36,7 @@ bool ElevateProcess()
 
     if (!ShellExecuteExW(&sei))
     {
-        DLOG(WARNING) << "ShellExecuteExW() failed: "
-                      << GetLastSystemErrorString();
+        DLOG(WARNING) << "ShellExecuteExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -50,8 +49,7 @@ bool IsProcessElevated()
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -61,8 +59,7 @@ bool IsProcessElevated()
     if (!GetTokenInformation(token, TokenElevation, &elevation,
                              sizeof(elevation), &size))
     {
-        LOG(ERROR) << "GetTokenInformation() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "GetTokenInformation() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -81,8 +78,7 @@ bool IsCallerAdminGroupMember()
                                   0, 0, 0, 0, 0, 0,
                                   admin_group.Recieve()))
     {
-        LOG(ERROR) << "AllocateAndInitializeSid() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "AllocateAndInitializeSid() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -90,8 +86,7 @@ bool IsCallerAdminGroupMember()
 
     if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
     {
-        LOG(ERROR) << "CheckTokenMembership() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "CheckTokenMembership() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -122,8 +117,7 @@ bool IsRunningAsService()
 
     if (!sc_manager.IsValid())
     {
-        LOG(ERROR) << "OpenSCManagerW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -170,8 +164,7 @@ bool IsRunningAsService()
                                nullptr,
                                nullptr))
     {
-        LOG(ERROR) << "EnumServicesStatusExW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 

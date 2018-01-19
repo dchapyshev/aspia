@@ -24,7 +24,7 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
 
     for (;;)
     {
-        FilePath path = enumerator.Next();
+        std::experimental::filesystem::path path = enumerator.Next();
 
         if (path.empty())
             break;
@@ -67,7 +67,7 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
         }
     }
 
-    FilePath path;
+    std::experimental::filesystem::path path;
 
     if (GetBasePath(BasePathKey::DIR_USER_HOME, path))
     {
@@ -91,8 +91,9 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteFileListRequest(const FilePath& path,
-                                                    proto::file_transfer::FileList* file_list)
+proto::file_transfer::Status ExecuteFileListRequest(
+    const std::experimental::filesystem::path& path,
+    proto::file_transfer::FileList* file_list)
 {
     DCHECK(file_list);
 
@@ -104,7 +105,9 @@ proto::file_transfer::Status ExecuteFileListRequest(const FilePath& path,
 
     FileEnumerator enumerator(path, false, FileEnumerator::FILES | FileEnumerator::DIRECTORIES);
 
-    for (FilePath current = enumerator.Next(); !current.empty(); current = enumerator.Next())
+    for (std::experimental::filesystem::path current = enumerator.Next();
+         !current.empty();
+         current = enumerator.Next())
     {
         FileEnumerator::FileInfo info = enumerator.GetInfo();
         proto::file_transfer::FileList::Item* item = file_list->add_item();
@@ -118,7 +121,8 @@ proto::file_transfer::Status ExecuteFileListRequest(const FilePath& path,
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteCreateDirectoryRequest(const FilePath& path)
+proto::file_transfer::Status ExecuteCreateDirectoryRequest(
+    const std::experimental::filesystem::path& path)
 {
     if (!IsValidPathName(path))
         return proto::file_transfer::STATUS_INVALID_PATH_NAME;
@@ -134,7 +138,8 @@ proto::file_transfer::Status ExecuteCreateDirectoryRequest(const FilePath& path)
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteDirectorySizeRequest(const FilePath& path, uint64_t& size)
+proto::file_transfer::Status ExecuteDirectorySizeRequest(
+    const std::experimental::filesystem::path& path, uint64_t& size)
 {
     if (!IsValidPathName(path))
         return proto::file_transfer::STATUS_INVALID_PATH_NAME;
@@ -144,8 +149,9 @@ proto::file_transfer::Status ExecuteDirectorySizeRequest(const FilePath& path, u
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteRenameRequest(const FilePath& old_name,
-                                                  const FilePath& new_name)
+proto::file_transfer::Status ExecuteRenameRequest(
+    const std::experimental::filesystem::path& old_name,
+    const std::experimental::filesystem::path& new_name)
 {
     if (!IsValidPathName(old_name) || !IsValidPathName(new_name))
     {
@@ -164,7 +170,7 @@ proto::file_transfer::Status ExecuteRenameRequest(const FilePath& old_name,
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteRemoveRequest(const FilePath& path)
+proto::file_transfer::Status ExecuteRemoveRequest(const std::experimental::filesystem::path& path)
 {
     if (!IsValidPathName(path))
         return proto::file_transfer::STATUS_INVALID_PATH_NAME;

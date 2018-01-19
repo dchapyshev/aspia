@@ -17,8 +17,8 @@ FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
 }
 
 // static
-std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(const FilePath& file_path,
-                                                           bool overwrite)
+std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
+    const std::experimental::filesystem::path& file_path, bool overwrite)
 {
     std::ofstream::openmode mode = std::ofstream::binary;
 

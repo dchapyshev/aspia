@@ -23,7 +23,8 @@ class FileActionDialog : public CDialogImpl<FileActionDialog>
 public:
     enum { IDD = IDD_FILE_ACTION };
 
-    FileActionDialog(const FilePath& path, proto::file_transfer::Status status);
+    FileActionDialog(const std::experimental::filesystem::path& path,
+                     proto::file_transfer::Status status);
     ~FileActionDialog() = default;
 
     FileAction GetAction() const { return action_; }
@@ -48,7 +49,7 @@ private:
     LRESULT OnSkipAllButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    const FilePath path_;
+    const std::experimental::filesystem::path path_;
     const proto::file_transfer::Status status_;
     FileAction action_ = FileAction::ABORT;
 

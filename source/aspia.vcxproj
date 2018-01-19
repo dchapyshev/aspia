@@ -317,7 +317,6 @@
     <ClInclude Include="base\files\file.h" />
     <ClInclude Include="base\files\file_enumerator.h" />
     <ClInclude Include="base\files\file_helpers.h" />
-    <ClInclude Include="base\files\file_path.h" />
     <ClInclude Include="base\files\file_util.h" />
     <ClInclude Include="base\files\logical_drive_enumerator.h" />
     <ClInclude Include="base\files\platform_file.h" />

@@ -30,47 +30,53 @@ void FileReplyReceiver::OnDriveListReply(
 }
 
 void FileReplyReceiver::OnFileListReply(
-    const FilePath& /* path */,
+    const std::experimental::filesystem::path& /* path */,
     std::shared_ptr<proto::file_transfer::FileList> /* file_list */,
     proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file list";
 }
 
-void FileReplyReceiver::OnDirectorySizeReply(const FilePath& /* path */,
-                                             uint64_t /* size */,
-                                             proto::file_transfer::Status /* status */)
+void FileReplyReceiver::OnDirectorySizeReply(
+    const std::experimental::filesystem::path& /* path */,
+    uint64_t /* size */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: directory size";
 }
 
 void FileReplyReceiver::OnCreateDirectoryReply(
-    const FilePath& /* path */, proto::file_transfer::Status /* status */)
+    const std::experimental::filesystem::path& /* path */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: create directory";
 }
 
 void FileReplyReceiver::OnRemoveReply(
-    const FilePath& /* path */, proto::file_transfer::Status /* status */)
+    const std::experimental::filesystem::path& /* path */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: remove";
 }
 
-void FileReplyReceiver::OnRenameReply(const FilePath& /* old_name */,
-                                      const FilePath& /* new_name */,
-                                      proto::file_transfer::Status /* status */)
+void FileReplyReceiver::OnRenameReply(
+    const std::experimental::filesystem::path& /* old_name */,
+    const std::experimental::filesystem::path& /* new_name */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: rename";
 }
 
 void FileReplyReceiver::OnFileUploadReply(
-    const FilePath& /* file_path */, proto::file_transfer::Status /* status */)
+    const std::experimental::filesystem::path& /* file_path */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file upload";
 }
 
 void FileReplyReceiver::OnFileDownloadReply(
-    const FilePath& /* file_path */, proto::file_transfer::Status /* status */)
+    const std::experimental::filesystem::path& /* file_path */,
+    proto::file_transfer::Status /* status */)
 {
     DLOG(WARNING) << "Unhandled reply: file download";
 }

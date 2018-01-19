@@ -35,8 +35,8 @@ void FileTransferUploader::OnAfterThreadRunning()
     delegate_->OnTransferComplete();
 }
 
-void FileTransferUploader::Start(const FilePath& source_path,
-                                 const FilePath& target_path,
+void FileTransferUploader::Start(const std::experimental::filesystem::path& source_path,
+                                 const std::experimental::filesystem::path& target_path,
                                  const FileTaskQueueBuilder::FileList& file_list)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -122,8 +122,9 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(FileAction action)
     }
 }
 
-void FileTransferUploader::OnCreateDirectoryReply(const FilePath& path,
-                                                  proto::file_transfer::Status status)
+void FileTransferUploader::OnCreateDirectoryReply(
+    const std::experimental::filesystem::path& path,
+    proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -233,8 +234,9 @@ void FileTransferUploader::OnUnableToReadFileAction(FileAction action)
     }
 }
 
-void FileTransferUploader::OnFileUploadReply(const FilePath& file_path,
-                                             proto::file_transfer::Status status)
+void FileTransferUploader::OnFileUploadReply(
+    const std::experimental::filesystem::path& file_path,
+    proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {

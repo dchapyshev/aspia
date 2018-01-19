@@ -10,7 +10,8 @@
 
 namespace aspia {
 
-FileActionDialog::FileActionDialog(const FilePath& path, proto::file_transfer::Status status)
+FileActionDialog::FileActionDialog(const std::experimental::filesystem::path& path,
+                                   proto::file_transfer::Status status)
     : path_(path),
       status_(status)
 {

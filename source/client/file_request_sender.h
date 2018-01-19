@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__FILE_REQUEST_SENDER_H
 #define _ASPIA_CLIENT__FILE_REQUEST_SENDER_H
 
-#include "base/files/file_path.h"
 #include "client/file_reply_receiver_proxy.h"
 
 namespace aspia {
@@ -33,27 +32,27 @@ protected:
     virtual void SendDriveListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) = 0;
 
     virtual void SendFileListRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                     const FilePath& path) = 0;
+                                     const std::experimental::filesystem::path& path) = 0;
 
     virtual void SendCreateDirectoryRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                            const FilePath& path) = 0;
+                                            const std::experimental::filesystem::path& path) = 0;
 
     virtual void SendDirectorySizeRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                          const FilePath& path) = 0;
+                                          const std::experimental::filesystem::path& path) = 0;
 
     virtual void SendRemoveRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   const FilePath& path) = 0;
+                                   const std::experimental::filesystem::path& path) = 0;
 
     virtual void SendRenameRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                   const FilePath& old_name,
-                                   const FilePath& new_name) = 0;
+                                   const std::experimental::filesystem::path& old_name,
+                                   const std::experimental::filesystem::path& new_name) = 0;
 
     virtual void SendFileUploadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                       const FilePath& file_path,
+                                       const std::experimental::filesystem::path& file_path,
                                        Overwrite overwrite) = 0;
 
     virtual void SendFileDownloadRequest(std::shared_ptr<FileReplyReceiverProxy> receiver,
-                                         const FilePath& file_path) = 0;
+                                         const std::experimental::filesystem::path& file_path) = 0;
 
     virtual void SendFilePacket(std::shared_ptr<FileReplyReceiverProxy> receiver,
                                 std::unique_ptr<proto::file_transfer::FilePacket> file_packet) = 0;

@@ -26,8 +26,8 @@ public:
     ~FileTransferUploader();
 
     // FileTransfer implementation.
-    void Start(const FilePath& source_path,
-               const FilePath& target_path,
+    void Start(const std::experimental::filesystem::path& source_path,
+               const std::experimental::filesystem::path& target_path,
                const FileTaskQueueBuilder::FileList& file_list) final;
 
 private:
@@ -42,8 +42,10 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status) final;
-    void OnFileUploadReply(const FilePath& file_path, proto::file_transfer::Status status) final;
+    void OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
+                                proto::file_transfer::Status status) final;
+    void OnFileUploadReply(const std::experimental::filesystem::path& file_path,
+                           proto::file_transfer::Status status) final;
     void OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status) final;
 
     void OnUnableToCreateDirectoryAction(FileAction action);

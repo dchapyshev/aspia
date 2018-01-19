@@ -17,7 +17,7 @@ namespace aspia {
 //
 // This function is implemented using the FileEnumerator class so it is not
 // particularly speedy in any platform.
-int64_t ComputeDirectorySize(const FilePath& root_path);
+int64_t ComputeDirectorySize(const std::experimental::filesystem::path& root_path);
 
 // Deletes the given path, whether it's a file or a directory.
 // If it's a directory, it's perfectly happy to delete all of the
@@ -31,30 +31,31 @@ int64_t ComputeDirectorySize(const FilePath& root_path);
 //
 // WARNING: USING THIS WITH recursive==true IS EQUIVALENT
 //          TO "rm -rf", SO USE WITH CAUTION.
-bool DeleteFile(const FilePath& path);
+bool DeleteFile(const std::experimental::filesystem::path& path);
 
 time_t UnixTimeFromFileTime(const FILETIME& file_time);
 
 FILETIME FileTimeFromUnixTime(time_t time);
 
 // Returns information about the given file path.
-bool GetFileInfo(const FilePath& file_path, File::Info& info);
+bool GetFileInfo(const std::experimental::filesystem::path& file_path, File::Info& info);
 
-bool GetFileSize(const FilePath& file_path, int64_t& file_size);
+bool GetFileSize(const std::experimental::filesystem::path& file_path, int64_t& file_size);
 
 // Returns true if the given path exists on the local filesystem,
 // false otherwise.
-bool PathExists(const FilePath& path);
+bool PathExists(const std::experimental::filesystem::path& path);
 
 // Returns true if the given path is writable by the user, false otherwise.
-bool PathIsWritable(const FilePath& path);
+bool PathIsWritable(const std::experimental::filesystem::path& path);
 
 // Returns true if the given path exists and is a directory, false otherwise.
-bool DirectoryExists(const FilePath& path);
+bool DirectoryExists(const std::experimental::filesystem::path& path);
 
 // Returns true if the contents of the two files given are equal, false
 // otherwise.  If either file can't be read, returns false.
-bool ContentsEqual(const FilePath& filename1, const FilePath& filename2);
+bool ContentsEqual(const std::experimental::filesystem::path& filename1,
+                   const std::experimental::filesystem::path& filename2);
 
 // Renames file |from_path| to |to_path|. Both paths must be on the same
 // volume, or the function will fail. Destination file will be created
@@ -62,14 +63,16 @@ bool ContentsEqual(const FilePath& filename1, const FilePath& filename2);
 // temporary files. On Windows it preserves attributes of the target file.
 // Returns true on success, leaving *error unchanged.
 // Returns false on failure and sets *error appropriately, if it is non-NULL.
-bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error* error);
+bool ReplaceFile(const std::experimental::filesystem::path& from_path,
+                 const std::experimental::filesystem::path& to_path,
+                 File::Error* error);
 
 // Creates a directory, as well as creating any parent directories, if they
 // don't exist. Returns 'true' on successful creation, or if the directory
 // already exists.  The directory is only readable by the current user.
 // Returns true on success, leaving *error unchanged.
 // Returns false on failure and sets *error appropriately, if it is non-NULL.
-bool CreateDirectory(const FilePath& full_path, File::Error* error);
+bool CreateDirectory(const std::experimental::filesystem::path& full_path, File::Error* error);
 
 } // namespace aspia
 

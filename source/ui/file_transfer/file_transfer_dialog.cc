@@ -19,8 +19,8 @@ namespace aspia {
 FileTransferDialog::FileTransferDialog(Mode mode,
                                        std::shared_ptr<FileRequestSenderProxy> local_sender,
                                        std::shared_ptr<FileRequestSenderProxy> remote_sender,
-                                       const FilePath& source_path,
-                                       const FilePath& target_path,
+                                       const std::experimental::filesystem::path& source_path,
+                                       const std::experimental::filesystem::path& target_path,
                                        const FileTaskQueueBuilder::FileList& file_list)
     : mode_(mode),
       local_sender_(local_sender),
@@ -108,7 +108,8 @@ void FileTransferDialog::OnTransferComplete()
     PostMessageW(WM_CLOSE);
 }
 
-void FileTransferDialog::OnObjectTransferStarted(const FilePath& object_path, uint64_t object_size)
+void FileTransferDialog::OnObjectTransferStarted(
+    const std::experimental::filesystem::path& object_path, uint64_t object_size)
 {
     if (!runner_->BelongsToCurrentThread())
     {
@@ -151,9 +152,10 @@ void FileTransferDialog::OnObjectTransfer(uint64_t left_size)
     }
 }
 
-void FileTransferDialog::OnFileOperationFailure(const FilePath& file_path,
-                                                proto::file_transfer::Status status,
-                                                FileTransfer::ActionCallback callback)
+void FileTransferDialog::OnFileOperationFailure(
+    const std::experimental::filesystem::path& file_path,
+    proto::file_transfer::Status status,
+    FileTransfer::ActionCallback callback)
 {
     if (!runner_->BelongsToCurrentThread())
     {

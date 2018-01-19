@@ -9,10 +9,11 @@
 
 namespace aspia {
 
-FileTask::FileTask(const FilePath& source_object_path,
-         const FilePath& target_object_path,
-         uint64_t size,
-         bool is_directory)
+FileTask::FileTask(
+    const std::experimental::filesystem::path& source_object_path,
+    const std::experimental::filesystem::path& target_object_path,
+    uint64_t size,
+    bool is_directory)
     : source_object_path_(source_object_path),
       target_object_path_(target_object_path),
       size_(size),

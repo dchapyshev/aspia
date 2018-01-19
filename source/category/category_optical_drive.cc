@@ -1344,7 +1344,7 @@ std::string CategoryOpticalDrive::Serialize()
 
     for (;;)
     {
-        FilePath path = enumerator.Next();
+        std::experimental::filesystem::path path = enumerator.Next();
 
         if (path.empty())
             break;

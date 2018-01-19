@@ -21,7 +21,7 @@ const wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
 
 ConsoleSessionWatcher::ConsoleSessionWatcher()
 {
-    FilePath library_path;
+    std::experimental::filesystem::path library_path;
 
     if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
     {

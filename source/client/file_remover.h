@@ -30,8 +30,8 @@ public:
 
         virtual void OnRemovingStarted(int64_t object_count) = 0;
         virtual void OnRemovingComplete() = 0;
-        virtual void OnRemoveObject(const FilePath& object_path) = 0;
-        virtual void OnRemoveObjectFailure(const FilePath& object_path,
+        virtual void OnRemoveObject(const std::experimental::filesystem::path& object_path) = 0;
+        virtual void OnRemoveObjectFailure(const std::experimental::filesystem::path& object_path,
                                            proto::file_transfer::Status status,
                                            ActionCallback callback) = 0;
     };
@@ -39,7 +39,8 @@ public:
     FileRemover(std::shared_ptr<FileRequestSenderProxy> sender, Delegate* delegate);
     ~FileRemover();
 
-    void Start(const FilePath& path, const FileTaskQueueBuilder::FileList& file_list);
+    void Start(const std::experimental::filesystem::path& path,
+               const FileTaskQueueBuilder::FileList& file_list);
 
 private:
     // MessageLoopThread::Delegate implementation.
@@ -47,7 +48,8 @@ private:
     void OnAfterThreadRunning() final;
 
     // FileReplyReceiver implementation.
-    void OnRemoveReply(const FilePath& path, proto::file_transfer::Status status) final;
+    void OnRemoveReply(const std::experimental::filesystem::path& path,
+                       proto::file_transfer::Status status) final;
 
     void OnTaskQueueBuilded(FileTaskQueue& task_queue,
                             int64_t task_object_size,

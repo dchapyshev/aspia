@@ -8,10 +8,11 @@
 #ifndef _ASPIA_BASE__FILES__FILE_H
 #define _ASPIA_BASE__FILES__FILE_H
 
-#include "base/files/file_path.h"
 #include "base/files/platform_file.h"
 #include "base/files/scoped_file.h"
 #include "base/macros.h"
+
+#include <experimental/filesystem>
 
 namespace aspia {
 
@@ -136,7 +137,7 @@ public:
 
     // Creates or opens the given file. This will fail with 'access denied' if the
     // |path| contains path traversal ('..') components.
-    File(const FilePath& path, uint32_t flags);
+    File(const std::experimental::filesystem::path& path, uint32_t flags);
 
     // Takes ownership of |platform_file|.
     explicit File(PlatformFile platform_file);
@@ -154,7 +155,7 @@ public:
     File& operator=(File&& other) noexcept;
 
     // Creates or opens the given file.
-    void Initialize(const FilePath& path, uint32_t flags);
+    void Initialize(const std::experimental::filesystem::path& path, uint32_t flags);
 
     // Returns |true| if the handle / fd wrapped by this object is valid.  This
     // method doesn't interact with the file system (and is safe to be called from
@@ -288,7 +289,7 @@ public:
 private:
     // Creates or opens the given file. Only called if |path| has no
     // traversal ('..') components.
-    void DoInitialize(const FilePath& path, uint32_t flags);
+    void DoInitialize(const std::experimental::filesystem::path& path, uint32_t flags);
 
     void SetPlatformFile(PlatformFile file);
 

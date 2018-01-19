@@ -6,7 +6,6 @@
 //
 
 #include "base/files/file.h"
-#include "base/files/file_path.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -19,7 +18,7 @@ File::File()
     // Nothing
 }
 
-File::File(const FilePath& path, uint32_t flags)
+File::File(const std::experimental::filesystem::path& path, uint32_t flags)
     : error_details_(FILE_OK),
       created_(false),
       async_(false)
@@ -79,7 +78,7 @@ File& File::operator=(File&& other) noexcept
     return *this;
 }
 
-void File::Initialize(const FilePath& path, uint32_t flags)
+void File::Initialize(const std::experimental::filesystem::path& path, uint32_t flags)
 {
     DoInitialize(path, flags);
 }

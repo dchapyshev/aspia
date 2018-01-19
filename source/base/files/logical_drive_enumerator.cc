@@ -31,7 +31,7 @@ LogicalDriveEnumerator::LogicalDriveEnumerator()
     next_ = buffer_.data();
 }
 
-FilePath LogicalDriveEnumerator::Next()
+std::experimental::filesystem::path LogicalDriveEnumerator::Next()
 {
     if (!next_ || !next_[0])
         return std::wstring();
@@ -48,13 +48,13 @@ LogicalDriveEnumerator::DriveInfo LogicalDriveEnumerator::GetInfo() const
     return DriveInfo(current_);
 }
 
-LogicalDriveEnumerator::DriveInfo::DriveInfo(const FilePath& path) :
-    path_(path)
+LogicalDriveEnumerator::DriveInfo::DriveInfo(const std::experimental::filesystem::path& path)
+    : path_(path)
 {
     // Nothing
 }
 
-FilePath LogicalDriveEnumerator::DriveInfo::Path() const
+std::experimental::filesystem::path LogicalDriveEnumerator::DriveInfo::Path() const
 {
     return path_;
 }

@@ -9,9 +9,9 @@
 #define _ASPIA_CLIENT__FILE_REPLY_RECEIVER_H
 
 #include "base/macros.h"
-#include "base/files/file_path.h"
 #include "proto/file_transfer_session.pb.h"
 
+#include <experimental/filesystem>
 #include <memory>
 
 namespace aspia {
@@ -30,27 +30,28 @@ protected:
     virtual void OnDriveListReply(std::shared_ptr<proto::file_transfer::DriveList> drive_list,
                                   proto::file_transfer::Status status);
 
-    virtual void OnFileListReply(const FilePath& path,
+    virtual void OnFileListReply(const std::experimental::filesystem::path& path,
                                  std::shared_ptr<proto::file_transfer::FileList> file_list,
                                  proto::file_transfer::Status status);
 
-    virtual void OnDirectorySizeReply(const FilePath& path,
+    virtual void OnDirectorySizeReply(const std::experimental::filesystem::path& path,
                                       uint64_t size,
                                       proto::file_transfer::Status status);
 
-    virtual void OnCreateDirectoryReply(const FilePath& path,
+    virtual void OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
                                         proto::file_transfer::Status status);
 
-    virtual void OnRemoveReply(const FilePath& path, proto::file_transfer::Status status);
-
-    virtual void OnRenameReply(const FilePath& old_name,
-                               const FilePath& new_name,
+    virtual void OnRemoveReply(const std::experimental::filesystem::path& path,
                                proto::file_transfer::Status status);
 
-    virtual void OnFileUploadReply(const FilePath& file_path,
+    virtual void OnRenameReply(const std::experimental::filesystem::path& old_name,
+                               const std::experimental::filesystem::path& new_name,
+                               proto::file_transfer::Status status);
+
+    virtual void OnFileUploadReply(const std::experimental::filesystem::path& file_path,
                                    proto::file_transfer::Status status);
 
-    virtual void OnFileDownloadReply(const FilePath& file_path,
+    virtual void OnFileDownloadReply(const std::experimental::filesystem::path& file_path,
                                      proto::file_transfer::Status status);
 
     virtual void OnFilePacketSended(uint32_t flags, proto::file_transfer::Status status);

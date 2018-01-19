@@ -8,8 +8,9 @@
 #ifndef _ASPIA_BASE__DEVICES__DEVICE_H
 #define _ASPIA_BASE__DEVICES__DEVICE_H
 
-#include "base/files/file_path.h"
 #include "base/files/platform_file.h"
+
+#include <experimental/filesystem>
 
 namespace aspia {
 
@@ -19,8 +20,10 @@ public:
     Device() = default;
     virtual ~Device();
 
-    bool Open(const FilePath& device_path, DWORD desired_access, DWORD share_mode);
-    bool Open(const FilePath& device_path);
+    bool Open(const std::experimental::filesystem::path& device_path,
+              DWORD desired_access,
+              DWORD share_mode);
+    bool Open(const std::experimental::filesystem::path& device_path);
     void Close();
     bool IoControl(DWORD io_control_code,
                    LPVOID input_buffer,

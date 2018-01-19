@@ -9,7 +9,6 @@
 #define _ASPIA_UI__FILE_TRANSFER__FILE_STATUS_DIALOG_H
 
 #include "base/message_loop/message_loop_thread.h"
-#include "base/files/file_path.h"
 #include "base/scoped_native_library.h"
 #include "ui/resource.h"
 
@@ -18,6 +17,8 @@
 #include <atlwin.h>
 #include <atlctrls.h>
 #include <atlframe.h>
+
+#include <experimental/filesystem>
 
 namespace aspia {
 
@@ -37,12 +38,13 @@ public:
     void OnSessionStarted();
     void OnSessionTerminated();
     void OnDriveListRequest();
-    void OnFileListRequest(const FilePath& path);
-    void OnCreateDirectoryRequest(const FilePath& path);
-    void OnRenameRequest(const FilePath& old_name, const FilePath& new_name);
-    void OnRemoveRequest(const FilePath& path);
-    void OnFileUploadRequest(const FilePath& file_path);
-    void OnFileDownloadRequest(const FilePath& file_path);
+    void OnFileListRequest(const std::experimental::filesystem::path& path);
+    void OnCreateDirectoryRequest(const std::experimental::filesystem::path& path);
+    void OnRenameRequest(const std::experimental::filesystem::path& old_name,
+                         const std::experimental::filesystem::path& new_name);
+    void OnRemoveRequest(const std::experimental::filesystem::path& path);
+    void OnFileUploadRequest(const std::experimental::filesystem::path& file_path);
+    void OnFileDownloadRequest(const std::experimental::filesystem::path& file_path);
 
 private:
     BEGIN_MSG_MAP(FileStatusDialog)

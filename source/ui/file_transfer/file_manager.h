@@ -45,7 +45,7 @@ private:
 
     // FileManagerPanel::Delegate implementation.
     void SendFiles(FileManagerPanel::Type panel_type,
-                   const FilePath& source_path,
+                   const std::experimental::filesystem::path& source_path,
                    const FileTaskQueueBuilder::FileList& file_list) override;
     bool GetPanelTypeInPoint(const CPoint& pt, FileManagerPanel::Type& type) override;
 

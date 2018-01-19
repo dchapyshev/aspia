@@ -24,8 +24,8 @@ public:
                            FileTransfer::Delegate* delegate);
     ~FileTransferDownloader();
 
-    void Start(const FilePath& source_path,
-               const FilePath& target_path,
+    void Start(const std::experimental::filesystem::path& source_path,
+               const std::experimental::filesystem::path& target_path,
                const FileTaskQueueBuilder::FileList& file_list) final;
 
 private:
@@ -40,11 +40,13 @@ private:
     void RunNextTask();
 
     // FileReplyReceiver implementation.
-    void OnCreateDirectoryReply(const FilePath& path, proto::file_transfer::Status status) final;
-    void OnFileDownloadReply(const FilePath& file_path, proto::file_transfer::Status status) final;
+    void OnCreateDirectoryReply(const std::experimental::filesystem::path& path,
+                                proto::file_transfer::Status status) final;
+    void OnFileDownloadReply(const std::experimental::filesystem::path& file_path,
+                             proto::file_transfer::Status status) final;
     void OnFilePacketReceived(std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
                               proto::file_transfer::Status status) final;
-    void CreateDepacketizer(const FilePath& file_path, bool overwrite);
+    void CreateDepacketizer(const std::experimental::filesystem::path& file_path, bool overwrite);
 
     void OnUnableToCreateDirectoryAction(FileAction action);
     void OnUnableToCreateFileAction(FileAction action);

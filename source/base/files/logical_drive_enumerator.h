@@ -8,9 +8,9 @@
 #ifndef _ASPIA_BASE__FILES__LOGICAL_DRIVE_ENUMERATOR_H
 #define _ASPIA_BASE__FILES__LOGICAL_DRIVE_ENUMERATOR_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 
+#include <experimental/filesystem>
 #include <vector>
 
 namespace aspia {
@@ -36,7 +36,7 @@ public:
             RAM        // RAM drives.
         };
 
-        FilePath Path() const;
+        std::experimental::filesystem::path Path() const;
         DriveType Type() const;
         uint64_t TotalSpace() const;
         uint64_t FreeSpace() const;
@@ -47,12 +47,12 @@ public:
     private:
         friend class LogicalDriveEnumerator;
 
-        DriveInfo(const FilePath& path);
+        DriveInfo(const std::experimental::filesystem::path& path);
 
-        FilePath path_;
+        std::experimental::filesystem::path path_;
     };
 
-    FilePath Next();
+    std::experimental::filesystem::path Next();
 
     DriveInfo GetInfo() const;
 

@@ -11,8 +11,8 @@
 namespace aspia {
 
 void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
-                                 const FilePath& source_path,
-                                 const FilePath& target_path,
+                                 const std::experimental::filesystem::path& source_path,
+                                 const std::experimental::filesystem::path& target_path,
                                  const FileList& file_list,
                                  const FinishCallback& callback)
 {
@@ -31,15 +31,15 @@ void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
 }
 
 void FileTaskQueueBuilder::Start(std::shared_ptr<FileRequestSenderProxy> sender,
-                                 const FilePath& path,
+                                 const std::experimental::filesystem::path& path,
                                  const FileList& file_list,
                                  const FinishCallback& callback)
 {
-    Start(sender, path, FilePath(), file_list, callback);
+    Start(sender, path, std::experimental::filesystem::path(), file_list, callback);
 }
 
 void FileTaskQueueBuilder::OnFileListReply(
-    const FilePath& /* path */,
+    const std::experimental::filesystem::path& /* path */,
     std::shared_ptr<proto::file_transfer::FileList> file_list,
     proto::file_transfer::Status status)
 {
@@ -60,16 +60,17 @@ void FileTaskQueueBuilder::OnFileListReply(
     ProcessNextIncommingTask();
 }
 
-void FileTaskQueueBuilder::AddIncomingTask(const FilePath& source_path,
-                                           const FilePath& target_path,
+void FileTaskQueueBuilder::AddIncomingTask(const std::experimental::filesystem::path& source_path,
+                                           const std::experimental::filesystem::path& target_path,
                                            const proto::file_transfer::FileList::Item& file)
 {
-    FilePath object_name(std::experimental::filesystem::u8path(file.name()));
+    std::experimental::filesystem::path object_name(
+        std::experimental::filesystem::u8path(file.name()));
 
-    FilePath source_object_path(source_path);
+    std::experimental::filesystem::path source_object_path(source_path);
     source_object_path.append(object_name);
 
-    FilePath target_object_path(target_path);
+    std::experimental::filesystem::path target_object_path(target_path);
     target_object_path.append(object_name);
 
     incoming_task_queue_.emplace_back(source_object_path, target_object_path,

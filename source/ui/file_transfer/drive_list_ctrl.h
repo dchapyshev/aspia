@@ -8,7 +8,6 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_CTRL_H
 #define _ASPIA_UI__FILE_TRANSFER__DRIVE_LIST_CTRL_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
@@ -16,6 +15,8 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+
+#include <experimental/filesystem>
 #include <memory>
 
 namespace aspia {
@@ -40,9 +41,9 @@ public:
     int SelectedObject() const;
     const proto::file_transfer::DriveList::Item& Object(int object_index) const;
     const proto::file_transfer::DriveList& DriveList() const;
-    void SetCurrentPath(const FilePath& path);
-    const FilePath& CurrentPath() const;
-    FilePath ObjectPath(int object_index) const;
+    void SetCurrentPath(const std::experimental::filesystem::path& path);
+    const std::experimental::filesystem::path& CurrentPath() const;
+    std::experimental::filesystem::path ObjectPath(int object_index) const;
 
 private:
     BEGIN_MSG_MAP(DriveListCtrl)
@@ -50,11 +51,11 @@ private:
     END_MSG_MAP()
 
     int GetItemIndexByObjectIndex(int object_index) const;
-    int GetKnownObjectIndex(const FilePath& path) const;
+    int GetKnownObjectIndex(const std::experimental::filesystem::path& path) const;
 
     std::shared_ptr<proto::file_transfer::DriveList> list_;
     CImageListManaged imagelist_;
-    FilePath current_path_;
+    std::experimental::filesystem::path current_path_;
 
     DISALLOW_COPY_AND_ASSIGN(DriveListCtrl);
 };

@@ -71,7 +71,7 @@ typedef struct
 
 bool OpenDrive(Device& device, uint8_t device_number)
 {
-    const FilePath device_path =
+    const std::experimental::filesystem::path device_path =
         StringPrintf(L"\\\\.\\PhysicalDrive%u", device_number);
 
     if (!device.Open(device_path))

@@ -8,10 +8,10 @@
 #ifndef _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
 #define _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
+#include <experimental/filesystem>
 #include <fstream>
 #include <memory>
 
@@ -22,7 +22,8 @@ class FileDepacketizer
 public:
     ~FileDepacketizer() = default;
 
-    static std::unique_ptr<FileDepacketizer> Create(const FilePath& file_path, bool overwrite);
+    static std::unique_ptr<FileDepacketizer> Create(
+        const std::experimental::filesystem::path& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
     bool ReadNextPacket(const proto::file_transfer::FilePacket& packet);

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER__FILE_LIST_CTRL_H
 #define _ASPIA_UI__FILE_TRANSFER__FILE_LIST_CTRL_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
@@ -16,6 +15,8 @@
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
+
+#include <experimental/filesystem>
 #include <memory>
 
 namespace aspia {
@@ -37,7 +38,7 @@ public:
     bool IsValidObjectIndex(int object_index) const;
     bool HasFileList() const;
     const proto::file_transfer::FileList::Item& Object(int object_index) const;
-    FilePath ObjectName(int object_index) const;
+    std::experimental::filesystem::path ObjectName(int object_index) const;
     bool IsDirectoryObject(int object_index) const;
     proto::file_transfer::FileList::Item* FirstSelectedObject() const;
     int GetObjectUnderMousePointer() const;

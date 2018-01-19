@@ -34,8 +34,8 @@ public:
     FileTransferDialog(Mode mode,
                        std::shared_ptr<FileRequestSenderProxy> local_sender,
                        std::shared_ptr<FileRequestSenderProxy> remote_sender,
-                       const FilePath& source_path,
-                       const FilePath& target_path,
+                       const std::experimental::filesystem::path& source_path,
+                       const std::experimental::filesystem::path& target_path,
                        const FileTaskQueueBuilder::FileList& file_list);
     ~FileTransferDialog() = default;
 
@@ -54,18 +54,19 @@ private:
     // FileTransfer::Delegate implementation.
     void OnTransferStarted(uint64_t size) final;
     void OnTransferComplete() final;
-    void OnFileOperationFailure(const FilePath& file_path,
+    void OnFileOperationFailure(const std::experimental::filesystem::path& file_path,
                                 proto::file_transfer::Status status,
                                 FileTransfer::ActionCallback callback) final;
-    void OnObjectTransferStarted(const FilePath& object_path, uint64_t object_size) final;
+    void OnObjectTransferStarted(const std::experimental::filesystem::path& object_path,
+                                 uint64_t object_size) final;
     void OnObjectTransfer(uint64_t left_size) final;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::shared_ptr<FileRequestSenderProxy> local_sender_;
     std::shared_ptr<FileRequestSenderProxy> remote_sender_;
 
-    const FilePath& source_path_;
-    const FilePath& target_path_;
+    const std::experimental::filesystem::path& source_path_;
+    const std::experimental::filesystem::path& target_path_;
     uint64_t total_size_ = 0;
     uint64_t total_transferred_size_ = 0;
     uint64_t object_size_ = 0;

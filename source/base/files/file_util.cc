@@ -19,7 +19,7 @@ constexpr DWORD kFileShareAll = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_
 
 } // namespace
 
-int64_t ComputeDirectorySize(const FilePath& root_path)
+int64_t ComputeDirectorySize(const std::experimental::filesystem::path& root_path)
 {
     int64_t running_size = 0;
     FileEnumerator file_iter(root_path, true, FileEnumerator::FILES);
@@ -28,7 +28,7 @@ int64_t ComputeDirectorySize(const FilePath& root_path)
     return running_size;
 }
 
-bool DeleteFile(const FilePath& path)
+bool DeleteFile(const std::experimental::filesystem::path& path)
 {
     if (path.empty())
         return true;
@@ -76,7 +76,7 @@ FILETIME FileTimeFromUnixTime(time_t time)
     return file_time;
 }
 
-bool GetFileInfo(const FilePath& file_path, File::Info& results)
+bool GetFileInfo(const std::experimental::filesystem::path& file_path, File::Info& results)
 {
     WIN32_FILE_ATTRIBUTE_DATA attr;
     if (!GetFileAttributesExW(file_path.c_str(), GetFileExInfoStandard, &attr))
@@ -97,7 +97,7 @@ bool GetFileInfo(const FilePath& file_path, File::Info& results)
     return true;
 }
 
-bool GetFileSize(const FilePath& file_path, int64_t& file_size)
+bool GetFileSize(const std::experimental::filesystem::path& file_path, int64_t& file_size)
 {
     File::Info info;
     if (!GetFileInfo(file_path, info))
@@ -106,12 +106,12 @@ bool GetFileSize(const FilePath& file_path, int64_t& file_size)
     return true;
 }
 
-bool PathExists(const FilePath& path)
+bool PathExists(const std::experimental::filesystem::path& path)
 {
     return (GetFileAttributesW(path.c_str()) != INVALID_FILE_ATTRIBUTES);
 }
 
-bool PathIsWritable(const FilePath& path)
+bool PathIsWritable(const std::experimental::filesystem::path& path)
 {
     HANDLE dir =
         CreateFileW(path.c_str(), FILE_ADD_FILE, kFileShareAll,
@@ -124,7 +124,7 @@ bool PathIsWritable(const FilePath& path)
     return true;
 }
 
-bool DirectoryExists(const FilePath& path)
+bool DirectoryExists(const std::experimental::filesystem::path& path)
 {
     DWORD fileattr = GetFileAttributesW(path.c_str());
     if (fileattr != INVALID_FILE_ATTRIBUTES)
@@ -132,7 +132,8 @@ bool DirectoryExists(const FilePath& path)
     return false;
 }
 
-bool ContentsEqual(const FilePath& filename1, const FilePath& filename2)
+bool ContentsEqual(const std::experimental::filesystem::path& filename1,
+                   const std::experimental::filesystem::path& filename2)
 {
     // We open the file in binary format even if they are text files because
     // we are just comparing that bytes are exactly same in both files and not
@@ -168,7 +169,9 @@ bool ContentsEqual(const FilePath& filename1, const FilePath& filename2)
     return true;
 }
 
-bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error* error)
+bool ReplaceFile(const std::experimental::filesystem::path& from_path,
+                 const std::experimental::filesystem::path& to_path,
+                 File::Error* error)
 {
     // Try a simple move first.  It will only succeed when |to_path| doesn't
     // already exist.
@@ -197,7 +200,7 @@ bool ReplaceFile(const FilePath& from_path, const FilePath& to_path, File::Error
     return false;
 }
 
-bool CreateDirectory(const FilePath& full_path, File::Error* error)
+bool CreateDirectory(const std::experimental::filesystem::path& full_path, File::Error* error)
 {
     // If the path exists, we've succeeded if it's a directory, failed otherwise.
     const wchar_t* full_path_str = full_path.c_str();
@@ -224,7 +227,7 @@ bool CreateDirectory(const FilePath& full_path, File::Error* error)
     // Attempt to create the parent recursively.  This will immediately return
     // true if it already exists, otherwise will create all required parent
     // directories starting with the highest-level missing parent.
-    FilePath parent_path(full_path.parent_path());
+    std::experimental::filesystem::path parent_path(full_path.parent_path());
     if (parent_path == full_path)
     {
         if (error)

@@ -80,7 +80,8 @@ void FileListCtrl::Read(std::shared_ptr<proto::file_transfer::FileList> list)
         if (!item.is_directory())
             continue;
 
-        FilePath name = std::experimental::filesystem::u8path(item.name());
+        std::experimental::filesystem::path name =
+            std::experimental::filesystem::u8path(item.name());
 
         const int item_index = AddItem(GetItemCount(), 0, name.c_str(), icon_index);
         SetItemData(item_index, object_index);
@@ -96,7 +97,8 @@ void FileListCtrl::Read(std::shared_ptr<proto::file_transfer::FileList> list)
         if (object.is_directory())
             continue;
 
-        FilePath name = std::experimental::filesystem::u8path(object.name());
+        std::experimental::filesystem::path name =
+            std::experimental::filesystem::u8path(object.name());
 
         icon = GetFileIcon(name);
         icon_index = imagelist_.AddIcon(icon);
@@ -161,7 +163,7 @@ const proto::file_transfer::FileList::Item& FileListCtrl::Object(int object_inde
     return list_->item(object_index);
 }
 
-FilePath FileListCtrl::ObjectName(int object_index) const
+std::experimental::filesystem::path FileListCtrl::ObjectName(int object_index) const
 {
     DCHECK(HasFileList());
     DCHECK(IsValidObjectIndex(object_index));

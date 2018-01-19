@@ -36,8 +36,8 @@ void FileTransferDownloader::OnAfterThreadRunning()
     delegate_->OnTransferComplete();
 }
 
-void FileTransferDownloader::Start(const FilePath& source_path,
-                                   const FilePath& target_path,
+void FileTransferDownloader::Start(const std::experimental::filesystem::path& source_path,
+                                   const std::experimental::filesystem::path& target_path,
                                    const FileTaskQueueBuilder::FileList& file_list)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -128,7 +128,7 @@ void FileTransferDownloader::RunNextTask()
 }
 
 void FileTransferDownloader::OnCreateDirectoryReply(
-    const FilePath& /* path */, proto::file_transfer::Status status)
+    const std::experimental::filesystem::path& /* path */, proto::file_transfer::Status status)
 {
     if (status != proto::file_transfer::STATUS_SUCCESS)
     {
@@ -155,7 +155,8 @@ void FileTransferDownloader::OnCreateDirectoryReply(
     }
 }
 
-void FileTransferDownloader::CreateDepacketizer(const FilePath& file_path, bool overwrite)
+void FileTransferDownloader::CreateDepacketizer(
+    const std::experimental::filesystem::path& file_path, bool overwrite)
 {
     proto::file_transfer::Status status = proto::file_transfer::STATUS_SUCCESS;
 
@@ -264,8 +265,9 @@ void FileTransferDownloader::OnUnableToOpenFileAction(FileAction action)
     }
 }
 
-void FileTransferDownloader::OnFileDownloadReply(const FilePath& file_path,
-                                                 proto::file_transfer::Status status)
+void FileTransferDownloader::OnFileDownloadReply(
+    const std::experimental::filesystem::path& file_path,
+    proto::file_transfer::Status status)
 {
     if (!runner_->BelongsToCurrentThread())
     {

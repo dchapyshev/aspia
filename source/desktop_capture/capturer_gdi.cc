@@ -34,7 +34,7 @@ CapturerGDI::CapturerGDI()
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 
-    FilePath library_path;
+    std::experimental::filesystem::path library_path;
 
     if (GetBasePath(BasePathKey::DIR_SYSTEM, library_path))
     {

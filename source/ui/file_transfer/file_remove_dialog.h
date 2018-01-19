@@ -29,7 +29,7 @@ public:
     enum { IDD = IDD_FILE_PROGRESS };
 
     FileRemoveDialog(std::shared_ptr<FileRequestSenderProxy> sender,
-                     const FilePath& path,
+                     const std::experimental::filesystem::path& path,
                      const FileTaskQueueBuilder::FileList& file_list);
     ~FileRemoveDialog() = default;
 
@@ -48,15 +48,15 @@ private:
     // FileRemover::Delegate implementation.
     void OnRemovingStarted(int64_t object_count) final;
     void OnRemovingComplete() final;
-    void OnRemoveObject(const FilePath& object_path) final;
-    void OnRemoveObjectFailure(const FilePath& object_path,
-                                       proto::file_transfer::Status status,
-                                       FileRemover::ActionCallback callback) final;
+    void OnRemoveObject(const std::experimental::filesystem::path& object_path) final;
+    void OnRemoveObjectFailure(const std::experimental::filesystem::path& object_path,
+                               proto::file_transfer::Status status,
+                               FileRemover::ActionCallback callback) final;
 
     std::shared_ptr<MessageLoopProxy> runner_;
     std::shared_ptr<FileRequestSenderProxy> sender_;
 
-    const FilePath& path_;
+    const std::experimental::filesystem::path& path_;
     const FileTaskQueueBuilder::FileList& file_list_;
 
     std::unique_ptr<FileRemover> file_remover_;

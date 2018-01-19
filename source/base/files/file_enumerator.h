@@ -11,10 +11,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <experimental/filesystem>
 #include <stack>
 #include <vector>
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -45,7 +45,7 @@ public:
         // The name of the file. This will not include any path information. This
         // is in constrast to the value returned by FileEnumerator.Next() which
         // includes the |root_path| passed into the FileEnumerator constructor.
-        FilePath GetName() const;
+        std::experimental::filesystem::path GetName() const;
 
         int64_t GetSize() const;
         time_t GetLastModifiedTime() const;
@@ -97,15 +97,17 @@ public:
     // since the underlying code uses OS-specific matching routines.  In general,
     // Windows matching is less featureful than others, so test there first.
     // If unspecified, this will match all files.
-    FileEnumerator(const FilePath& root_path, bool recursive, int file_type);
-    FileEnumerator(const FilePath& root_path,
+    FileEnumerator(const std::experimental::filesystem::path& root_path,
+                   bool recursive,
+                   int file_type);
+    FileEnumerator(const std::experimental::filesystem::path& root_path,
                    bool recursive,
                    int file_type,
-                   const FilePath::string_type& pattern);
-    FileEnumerator(const FilePath& root_path,
+                   const std::experimental::filesystem::path::string_type& pattern);
+    FileEnumerator(const std::experimental::filesystem::path& root_path,
                    bool recursive,
                    int file_type,
-                   const FilePath::string_type& pattern,
+                   const std::experimental::filesystem::path::string_type& pattern,
                    FolderSearchPolicy folder_search_policy);
     ~FileEnumerator();
 
@@ -114,33 +116,33 @@ public:
     // The returned path will incorporate the |root_path| passed in the
     // constructor: "<root_path>/file_name.txt". If the |root_path| is absolute,
     // then so will be the result of Next().
-    FilePath Next();
+    std::experimental::filesystem::path Next();
 
     // Write the file info into |info|.
     FileInfo GetInfo() const;
 
 private:
     // Returns true if the given path should be skipped in enumeration.
-    bool ShouldSkip(const FilePath& path) const;
+    bool ShouldSkip(const std::experimental::filesystem::path& path) const;
 
     bool IsTypeMatched(bool is_dir) const;
 
-    bool IsPatternMatched(const FilePath& src) const;
+    bool IsPatternMatched(const std::experimental::filesystem::path& src) const;
 
     // True when find_data_ is valid.
     bool has_find_data_ = false;
     WIN32_FIND_DATA find_data_;
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
 
-    FilePath root_path_;
+    std::experimental::filesystem::path root_path_;
     const bool recursive_;
     const int file_type_;
-    FilePath::string_type pattern_;
+    std::experimental::filesystem::path::string_type pattern_;
     const FolderSearchPolicy folder_search_policy_;
 
     // A stack that keeps track of which subdirectories we still need to
     // enumerate in the breadth-first search.
-    std::stack<FilePath> pending_paths_;
+    std::stack<std::experimental::filesystem::path> pending_paths_;
 
     DISALLOW_COPY_AND_ASSIGN(FileEnumerator);
 };

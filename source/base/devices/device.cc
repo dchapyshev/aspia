@@ -15,7 +15,9 @@ Device::~Device()
     Close();
 }
 
-bool Device::Open(const FilePath& device_path, DWORD desired_access, DWORD share_mode)
+bool Device::Open(const std::experimental::filesystem::path& device_path,
+                  DWORD desired_access,
+                  DWORD share_mode)
 {
     device_.Reset(CreateFileW(device_path.c_str(),
                               desired_access,
@@ -27,7 +29,7 @@ bool Device::Open(const FilePath& device_path, DWORD desired_access, DWORD share
     return device_.IsValid();
 }
 
-bool Device::Open(const FilePath& device_path)
+bool Device::Open(const std::experimental::filesystem::path& device_path)
 {
     return Open(device_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE);
 }

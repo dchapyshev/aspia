@@ -8,10 +8,10 @@
 #ifndef _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 #define _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
+#include <experimental/filesystem>
 #include <fstream>
 #include <memory>
 
@@ -25,7 +25,8 @@ public:
     // Creates an instance of the class.
     // Parameter |file_path| contains the full path to the file.
     // If the specified file can not be opened for reading, then returns nullptr.
-    static std::unique_ptr<FilePacketizer> Create(const FilePath& file_path);
+    static std::unique_ptr<FilePacketizer> Create(
+        const std::experimental::filesystem::path& file_path);
 
     // Creates a packet for transferring.
     std::unique_ptr<proto::file_transfer::FilePacket> CreateNextPacket();

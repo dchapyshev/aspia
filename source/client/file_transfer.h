@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__FILE_TRANSFER_H
 #define _ASPIA_CLIENT__FILE_TRANSFER_H
 
-#include "base/files/file_path.h"
 #include "client/file_reply_receiver.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_task_queue_builder.h"
@@ -31,11 +30,11 @@ public:
 
         virtual void OnTransferComplete() = 0;
 
-        virtual void OnFileOperationFailure(const FilePath& file_path,
+        virtual void OnFileOperationFailure(const std::experimental::filesystem::path& file_path,
                                             proto::file_transfer::Status status,
                                             ActionCallback callback) = 0;
 
-        virtual void OnObjectTransferStarted(const FilePath& object_path,
+        virtual void OnObjectTransferStarted(const std::experimental::filesystem::path& object_path,
                                              uint64_t object_size) = 0;
 
         virtual void OnObjectTransfer(uint64_t left_object_size) = 0;
@@ -53,8 +52,8 @@ public:
 
     virtual ~FileTransfer() = default;
 
-    virtual void Start(const FilePath& source_path,
-                       const FilePath& target_path,
+    virtual void Start(const std::experimental::filesystem::path& source_path,
+                       const std::experimental::filesystem::path& target_path,
                        const FileTaskQueueBuilder::FileList& file_list) = 0;
 
 protected:

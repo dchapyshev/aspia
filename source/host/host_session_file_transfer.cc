@@ -156,7 +156,8 @@ void HostSessionFileTransfer::ReadFileListRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = std::experimental::filesystem::u8path(request.path());
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(request.path());
 
     reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
 
@@ -173,7 +174,8 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = std::experimental::filesystem::u8path(request.path());
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(request.path());
 
     reply.set_status(ExecuteCreateDirectoryRequest(path));
 
@@ -190,7 +192,8 @@ void HostSessionFileTransfer::ReadDirectorySizeRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = std::experimental::filesystem::u8path(request.path());
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(request.path());
 
     uint64_t directory_size = 0;
 
@@ -204,8 +207,10 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::file_transfer::Rena
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath old_name = std::experimental::filesystem::u8path(request.old_name());
-    FilePath new_name = std::experimental::filesystem::u8path(request.new_name());
+    std::experimental::filesystem::path old_name =
+        std::experimental::filesystem::u8path(request.old_name());
+    std::experimental::filesystem::path new_name =
+        std::experimental::filesystem::u8path(request.new_name());
 
     reply.set_status(ExecuteRenameRequest(old_name, new_name));
 
@@ -221,7 +226,8 @@ void HostSessionFileTransfer::ReadRemoveRequest(const proto::file_transfer::Remo
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath path = std::experimental::filesystem::u8path(request.path());
+    std::experimental::filesystem::path path =
+        std::experimental::filesystem::u8path(request.path());
 
     reply.set_status(ExecuteRemoveRequest(path));
 
@@ -238,7 +244,8 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
+    std::experimental::filesystem::path file_path =
+        std::experimental::filesystem::u8path(request.file_path());
 
     do
     {
@@ -309,7 +316,8 @@ void HostSessionFileTransfer::ReadFileDownloadRequest(
 {
     proto::file_transfer::HostToClient reply;
 
-    FilePath file_path = std::experimental::filesystem::u8path(request.file_path());
+    std::experimental::filesystem::path file_path =
+        std::experimental::filesystem::u8path(request.file_path());
 
     if (!IsValidPathName(file_path))
     {

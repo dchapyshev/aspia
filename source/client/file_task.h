@@ -8,8 +8,9 @@
 #ifndef _ASPIA_CLIENT__FILE_TASK_H
 #define _ASPIA_CLIENT__FILE_TASK_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
+
+#include <experimental/filesystem>
 #include <deque>
 
 namespace aspia {
@@ -19,8 +20,8 @@ class FileTask
 public:
     FileTask() = default;
 
-    FileTask(const FilePath& source_object_path,
-             const FilePath& target_object_path,
+    FileTask(const std::experimental::filesystem::path& source_object_path,
+             const std::experimental::filesystem::path& target_object_path,
              uint64_t size,
              bool is_directory);
 
@@ -29,15 +30,15 @@ public:
 
     ~FileTask() = default;
 
-    const FilePath& SourcePath() const { return source_object_path_; }
-    const FilePath& TargetPath() const { return target_object_path_; }
+    const std::experimental::filesystem::path& SourcePath() const { return source_object_path_; }
+    const std::experimental::filesystem::path& TargetPath() const { return target_object_path_; }
 
     uint64_t Size() const { return size_; }
     bool IsDirectory() const { return is_directory_; }
 
 private:
-    FilePath source_object_path_;
-    FilePath target_object_path_;
+    std::experimental::filesystem::path source_object_path_;
+    std::experimental::filesystem::path target_object_path_;
     uint64_t size_ = 0;
     bool is_directory_ = false;
 
