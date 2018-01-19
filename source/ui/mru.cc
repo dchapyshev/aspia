@@ -42,7 +42,7 @@ bool ReadMRUFile(std::string& mru)
     file_stream.open(file_path, std::ifstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "File not found: " << file_path;
+        DLOG(WARNING) << "File not found: " << file_path;
         return false;
     }
 
