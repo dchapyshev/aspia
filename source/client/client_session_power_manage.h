@@ -27,7 +27,10 @@ private:
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
+    void OnCommandSended();
+
     MessageLoopThread ui_thread_;
+    std::shared_ptr<MessageLoopProxy> runner_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionPowerManage);
 };

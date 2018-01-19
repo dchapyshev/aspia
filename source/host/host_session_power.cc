@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/process/process.h"
 #include "host/host_session_power.h"
 #include "host/power_injector.h"
 #include "ipc/pipe_channel_proxy.h"
@@ -14,22 +15,28 @@
 
 namespace aspia {
 
+namespace {
+
+constexpr std::chrono::seconds kTimeout{ 60 };
+
+} // namespace
+
 void HostSessionPower::Run(const std::wstring& channel_id)
 {
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
-    if (ipc_channel_)
+    if (!ipc_channel_)
+        return;
+
+    ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+
+    uint32_t user_data = Process::Current().Pid();
+
+    if (ipc_channel_->Connect(user_data))
     {
-        ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
+        OnIpcChannelConnect(user_data);
 
-        uint32_t user_data = GetCurrentProcessId();
-
-        if (ipc_channel_->Connect(user_data))
-        {
-            OnIpcChannelConnect(user_data);
-            ipc_channel_proxy_->WaitForDisconnect();
-        }
-
-        ipc_channel_.reset();
+        // Waiting for the connection to close.
+        ipc_channel_proxy_->WaitForDisconnect();
     }
 }
 
@@ -45,12 +52,16 @@ void HostSessionPower::OnIpcChannelConnect(uint32_t user_data)
         return;
     }
 
+    timer_.Start(kTimeout, std::bind(&HostSessionPower::OnSessionTimeout, this));
+
     ipc_channel_proxy_->Receive(std::bind(
         &HostSessionPower::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
 void HostSessionPower::OnIpcChannelMessage(const IOBuffer& buffer)
 {
+    timer_.Stop();
+
     proto::power::ClientToHost message;
 
     if (ParseMessage(buffer, message))
@@ -82,6 +93,11 @@ void HostSessionPower::OnIpcChannelMessage(const IOBuffer& buffer)
         }
     }
 
+    ipc_channel_proxy_->Disconnect();
+}
+
+void HostSessionPower::OnSessionTimeout()
+{
     ipc_channel_proxy_->Disconnect();
 }
 

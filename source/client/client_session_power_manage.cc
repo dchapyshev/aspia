@@ -17,21 +17,27 @@ ClientSessionPowerManage::ClientSessionPowerManage(
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
     : ClientSession(config, channel_proxy)
 {
-    ui_thread_.Start(MessageLoop::Type::TYPE_UI, this);
+    ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }
 
 ClientSessionPowerManage::~ClientSessionPowerManage()
 {
+    GUITHREADINFO thread_info;
+    thread_info.cbSize = sizeof(thread_info);
+
+    if (GetGUIThreadInfo(ui_thread_.thread_id(), &thread_info))
+    {
+        ::PostMessageW(thread_info.hwndActive, WM_CLOSE, 0, 0);
+    }
+
     ui_thread_.Stop();
 }
 
 void ClientSessionPowerManage::OnBeforeThreadRunning()
 {
-    ui_thread_.StopSoon();
-}
+    runner_ = ui_thread_.message_loop_proxy();
+    DCHECK(runner_);
 
-void ClientSessionPowerManage::OnAfterThreadRunning()
-{
     PowerManageDialog dialog;
 
     proto::power::Command command =
@@ -40,9 +46,28 @@ void ClientSessionPowerManage::OnAfterThreadRunning()
     if (command != proto::power::COMMAND_UNKNOWN)
     {
         proto::power::ClientToHost message;
+
         message.set_command(command);
 
-        channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
+        channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
+                             std::bind(&ClientSessionPowerManage::OnCommandSended, this));
+        return;
+    }
+
+    channel_proxy_->Disconnect();
+}
+
+void ClientSessionPowerManage::OnAfterThreadRunning()
+{
+    // Nothing
+}
+
+void ClientSessionPowerManage::OnCommandSended()
+{
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&ClientSessionPowerManage::OnCommandSended, this));
+        return;
     }
 
     channel_proxy_->Disconnect();
