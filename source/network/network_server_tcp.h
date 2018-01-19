@@ -8,6 +8,7 @@
 #ifndef _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 #define _ASPIA_NETWORK__NETWORK_SERVER_TCP_H
 
+#include "base/message_loop/message_loop_thread.h"
 #include "network/network_channel_tcp.h"
 #include "network/firewall_manager.h"
 #include "network/firewall_manager_legacy.h"
@@ -15,6 +16,7 @@
 namespace aspia {
 
 class NetworkServerTcp
+    : public MessageLoopThread::Delegate
 {
 public:
     using ConnectCallback = std::function<void(std::shared_ptr<NetworkChannel> channel)>;
@@ -23,10 +25,17 @@ public:
     ~NetworkServerTcp();
 
 private:
+    // MessageLoopThread::Delegate implementation.
+    void OnBeforeThreadRunning() override;
+    void OnAfterThreadRunning() override;
+
     void OnAccept(const std::error_code& code);
     void DoAccept();
     void DoStop();
     void AddFirewallRule();
+
+    MessageLoopThread thread_;
+    std::shared_ptr<MessageLoopProxy> runner_;
 
     ConnectCallback connect_callback_;
     uint16_t port_ = 0;

@@ -28,27 +28,12 @@ NetworkServerTcp::NetworkServerTcp(uint16_t port, ConnectCallback connect_callba
     : connect_callback_(std::move(connect_callback)),
       port_(port)
 {
-    AddFirewallRule();
-    DoAccept();
+    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
 }
 
 NetworkServerTcp::~NetworkServerTcp()
 {
-    {
-        std::lock_guard<std::mutex> lock(channel_lock_);
-
-        if (channel_)
-        {
-            channel_->io_service().dispatch(std::bind(&NetworkServerTcp::DoStop, this));
-            channel_.reset();
-        }
-    }
-
-    if (firewall_manager_)
-        firewall_manager_->DeleteRuleByName(kRuleName);
-
-    if (firewall_manager_legacy_)
-        firewall_manager_legacy_->DeleteRule();
+    thread_.Stop();
 }
 
 void NetworkServerTcp::AddFirewallRule()
@@ -91,10 +76,47 @@ void NetworkServerTcp::AddFirewallRule()
 }
 
 
+void NetworkServerTcp::OnBeforeThreadRunning()
+{
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
+
+    AddFirewallRule();
+    DoAccept();
+}
+
+void NetworkServerTcp::OnAfterThreadRunning()
+{
+    {
+        std::lock_guard<std::mutex> lock(channel_lock_);
+
+        if (channel_)
+        {
+            channel_->io_service().dispatch(std::bind(&NetworkServerTcp::DoStop, this));
+            channel_.reset();
+        }
+    }
+
+    if (firewall_manager_)
+        firewall_manager_->DeleteRuleByName(kRuleName);
+
+    if (firewall_manager_legacy_)
+        firewall_manager_legacy_->DeleteRule();
+}
+
 void NetworkServerTcp::OnAccept(const std::error_code& code)
 {
-    if (IsFailureCode(code))
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&NetworkServerTcp::OnAccept, this, code));
         return;
+    }
+
+    if (IsFailureCode(code))
+    {
+        DLOG(ERROR) << "accept failure: " << code.message();
+        return;
+    }
 
     if (!acceptor_ || !acceptor_->is_open())
         return;
@@ -113,6 +135,8 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
 
 void NetworkServerTcp::DoAccept()
 {
+    DCHECK(runner_->BelongsToCurrentThread());
+
     std::lock_guard<std::mutex> lock(channel_lock_);
 
     channel_ = std::make_unique<NetworkChannelTcp>(NetworkChannelTcp::Mode::SERVER);
