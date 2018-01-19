@@ -12,13 +12,13 @@ Currently supported
    - Remote desktop view
    - Remote power management
    - File transfer
+   - System information (for local and remote computers)
    - Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
    - Authorization (it is possible to add users with different access rights)
    - Work in service or application mode
 
 It is planned to implement
 --------------------------
-   - System information (for local and remote computers)
    - Audio transfer
    - Address book with encryption and master-password
    - Authorization with Windows credentials
