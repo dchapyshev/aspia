@@ -123,6 +123,7 @@ void NetworkChannelTcp::OnSendHelloSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
+        DLOG(WARNING) << "Unable to send hello size message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -139,6 +140,7 @@ void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
+        DLOG(WARNING) << "Unable to send hello message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -169,6 +171,7 @@ void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
+        DLOG(WARNING) << "Unable to receive hello size message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -197,6 +200,7 @@ void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
+        DLOG(WARNING) << "Unable to receive hello message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -234,6 +238,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
+        DLOG(WARNING) << "Unable to read message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -262,6 +267,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
+        DLOG(WARNING) << "Unable to read message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -356,6 +362,7 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
+        DLOG(WARNING) << "Unable to write message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -372,6 +379,7 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t byte
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
+        DLOG(WARNING) << "Unable to write message: " << code.message();
         DoDisconnect();
         return;
     }
