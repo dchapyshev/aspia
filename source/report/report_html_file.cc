@@ -84,7 +84,8 @@ ReportHtmlFile::ReportHtmlFile(std::ofstream file)
 }
 
 // static
-std::unique_ptr<ReportHtmlFile> ReportHtmlFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportHtmlFile> ReportHtmlFile::Create(
+    const std::experimental::filesystem::path& file_path)
 {
     std::ofstream file;
 

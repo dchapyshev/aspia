@@ -8,11 +8,11 @@
 #ifndef _ASPIA_REPORT__REPORT_HTML_FILE_H
 #define _ASPIA_REPORT__REPORT_HTML_FILE_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "report/report.h"
 
 #include <rapidxml.hpp>
+#include <experimental/filesystem>
 #include <fstream>
 
 namespace aspia {
@@ -22,7 +22,8 @@ class ReportHtmlFile : public Report
 public:
     ~ReportHtmlFile() = default;
 
-    static std::unique_ptr<ReportHtmlFile> Create(const FilePath& file_path);
+    static std::unique_ptr<ReportHtmlFile> Create(
+        const std::experimental::filesystem::path& file_path);
 
 protected:
     // Report implementation.

@@ -8,11 +8,11 @@
 #ifndef _ASPIA_REPORT__REPORT_XML_FILE_H
 #define _ASPIA_REPORT__REPORT_XML_FILE_H
 
-#include "base/files/file_path.h"
 #include "base/macros.h"
 #include "report/report.h"
 
 #include <rapidxml.hpp>
+#include <experimental/filesystem>
 #include <fstream>
 #include <stack>
 
@@ -23,7 +23,8 @@ class ReportXmlFile : public Report
 public:
     ~ReportXmlFile() = default;
 
-    static std::unique_ptr<ReportXmlFile> Create(const FilePath& file_path);
+    static std::unique_ptr<ReportXmlFile> Create(
+        const std::experimental::filesystem::path& file_path);
 
 protected:
     // Report implementation.

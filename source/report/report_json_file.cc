@@ -18,7 +18,8 @@ ReportJsonFile::ReportJsonFile(std::ofstream file)
 }
 
 // static
-std::unique_ptr<ReportJsonFile> ReportJsonFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportJsonFile> ReportJsonFile::Create(
+    const std::experimental::filesystem::path& file_path)
 {
     std::ofstream file;
 

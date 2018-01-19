@@ -21,7 +21,8 @@ ReportXmlFile::ReportXmlFile(std::ofstream file)
 }
 
 // static
-std::unique_ptr<ReportXmlFile> ReportXmlFile::Create(const FilePath& file_path)
+std::unique_ptr<ReportXmlFile> ReportXmlFile::Create(
+    const std::experimental::filesystem::path& file_path)
 {
     std::ofstream file;
 

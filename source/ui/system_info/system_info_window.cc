@@ -5,7 +5,6 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/files/file_path.h"
 #include "base/strings/unicode.h"
 #include "base/scoped_clipboard.h"
 #include "base/scoped_select_object.h"
@@ -21,6 +20,8 @@
 
 #include <atldlgs.h>
 #include <strsafe.h>
+
+#include <experimental/filesystem>
 
 namespace aspia {
 
@@ -529,8 +530,8 @@ void SystemInfoWindow::Save(CategoryList* category_list)
     if (save_dialog.DoModal() == IDCANCEL)
         return;
 
-    FilePath file_path = save_dialog.m_szFileName;
-    FilePath extension = file_path.extension();
+    std::experimental::filesystem::path file_path = save_dialog.m_szFileName;
+    std::experimental::filesystem::path extension = file_path.extension();
 
     std::unique_ptr<Report> report;
 
