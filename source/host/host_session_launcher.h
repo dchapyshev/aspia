@@ -14,13 +14,6 @@
 
 namespace aspia {
 
-extern const WCHAR kSessionLauncherSwitch[];
-extern const WCHAR kDesktopSessionSwitch[];
-extern const WCHAR kFileTransferSessionSwitch[];
-extern const WCHAR kPowerManageSessionSwitch[];
-extern const WCHAR kSystemInfoSessionSwitch[];
-extern const WCHAR kSystemInfoSwitch[];
-
 bool LaunchSessionProcessFromService(const std::wstring& run_mode,
                                      uint32_t session_id,
                                      const std::wstring& channel_id);

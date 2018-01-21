@@ -11,6 +11,7 @@
 #include <memory>
 #include <string>
 
+#include "base/command_line.h"
 #include "base/macros.h"
 #include "base/scoped_object.h"
 
@@ -26,7 +27,7 @@ public:
     // Creates a service in the system and returns a pointer to the instance
     // of the class to manage it.
     static std::unique_ptr<ServiceManager>
-    Create(const std::wstring_view& command_line,
+    Create(const CommandLine& command_line,
            const std::wstring_view& service_name,
            const std::wstring_view& service_short_name,
            const std::wstring_view& service_description);

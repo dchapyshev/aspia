@@ -6,6 +6,8 @@
 //
 
 #include "host/sas_injector.h"
+#include "host/host_main.h"
+#include "base/command_line.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/service_manager.h"
 #include "base/version_helpers.h"
@@ -57,9 +59,9 @@ void SasInjector::InjectSAS()
     }
     else // For Windows Vista and above.
     {
-        std::experimental::filesystem::path path;
+        std::experimental::filesystem::path program_path;
 
-        if (!GetBasePath(BasePathKey::FILE_EXE, path))
+        if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
             return;
 
         std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
@@ -70,14 +72,10 @@ void SasInjector::InjectSAS()
         std::wstring unique_full_name =
             ServiceManager::CreateUniqueServiceName(kSasServiceFullName, service_id);
 
-        std::wstring command_line;
+        CommandLine command_line(program_path);
 
-        command_line.assign(path);
-        command_line.append(L" --run_mode=");
-        command_line.append(kSasServiceSwitch);
-
-        command_line.append(L" --service_id=");
-        command_line.append(service_id);
+        command_line.AppendSwitch(kRunModeSwitch, kSasServiceSwitch);
+        command_line.AppendSwitch(kServiceIdSwitch, service_id);
 
         // Install the service in the system.
         std::unique_ptr<ServiceManager> manager =

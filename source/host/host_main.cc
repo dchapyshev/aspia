@@ -6,7 +6,6 @@
 //
 
 #include "base/process/process.h"
-#include "base/command_line.h"
 #include "host/host_main.h"
 #include "host/host_service.h"
 #include "host/sas_injector.h"
@@ -20,15 +19,22 @@
 
 namespace aspia {
 
-namespace {
+const CommandLine::CharType kRunModeSwitch[] = L"run_mode";
+const CommandLine::CharType kSessionIdSwitch[] = L"session_id";
+const CommandLine::CharType kChannelIdSwitch[] = L"channel_id";
+const CommandLine::CharType kServiceIdSwitch[] = L"service_id";
+const CommandLine::CharType kLauncherModeSwitch[] = L"launcher_mode";
 
-constexpr CommandLine::CharType kRunModeSwitch[] = L"run_mode";
-constexpr CommandLine::CharType kSessionIdSwitch[] = L"session_id";
-constexpr CommandLine::CharType kChannelIdSwitch[] = L"channel_id";
-constexpr CommandLine::CharType kServiceIdSwitch[] = L"service_id";
-constexpr CommandLine::CharType kLauncherModeSwitch[] = L"launcher_mode";
+const CommandLine::CharType kRunModeSessionLauncher[] = L"session-launcher";
+const CommandLine::CharType kRunModeDesktopSession[] = L"desktop-session";
+const CommandLine::CharType kRunModeFileTransferSession[] = L"file-transfer-session";
+const CommandLine::CharType kRunModePowerManageSession[] = L"power-manage-session";
+const CommandLine::CharType kRunModeSystemInfoSession[] = L"system-info-session";
+const CommandLine::CharType kRunModeSystemInfo[] = L"system-info";
+const CommandLine::CharType kRunModeHostService[] = L"host-service";
 
-} // namespace
+const CommandLine::CharType kInstallHostServiceSwitch[] = L"install-host-service";
+const CommandLine::CharType kRemoveHostServiceSwitch[] = L"remove-host-service";
 
 void RunHostMain(const CommandLine& command_line)
 {
@@ -42,7 +48,7 @@ void RunHostMain(const CommandLine& command_line)
         SasInjector injector(command_line.GetSwitchValue(kServiceIdSwitch));
         injector.ExecuteService();
     }
-    else if (run_mode == kHostServiceSwitch)
+    else if (run_mode == kRunModeHostService)
     {
         HostService().Run();
     }
@@ -54,7 +60,7 @@ void RunHostMain(const CommandLine& command_line)
     {
         HostService::Remove();
     }
-    else if (run_mode == kSessionLauncherSwitch)
+    else if (run_mode == kRunModeSessionLauncher)
     {
         DCHECK(command_line.HasSwitch(kLauncherModeSwitch) &&
                command_line.HasSwitch(kChannelIdSwitch) &&
@@ -67,7 +73,7 @@ void RunHostMain(const CommandLine& command_line)
                              command_line.GetSwitchValue(kSessionIdSwitch),
                              command_line.GetSwitchValue(kChannelIdSwitch));
     }
-    else if (run_mode == kSystemInfoSwitch)
+    else if (run_mode == kRunModeSystemInfo)
     {
         HostLocalSystemInfo().Run();
     }
@@ -77,19 +83,19 @@ void RunHostMain(const CommandLine& command_line)
 
         std::wstring channel_id = command_line.GetSwitchValue(kChannelIdSwitch);
 
-        if (run_mode == kDesktopSessionSwitch)
+        if (run_mode == kRunModeDesktopSession)
         {
             HostSessionDesktop().Run(channel_id);
         }
-        else if (run_mode == kFileTransferSessionSwitch)
+        else if (run_mode == kRunModeFileTransferSession)
         {
             HostSessionFileTransfer().Run(channel_id);
         }
-        else if (run_mode == kPowerManageSessionSwitch)
+        else if (run_mode == kRunModePowerManageSession)
         {
             HostSessionPower().Run(channel_id);
         }
-        else if (run_mode == kSystemInfoSessionSwitch)
+        else if (run_mode == kRunModeSystemInfoSession)
         {
             HostSessionSystemInfo().Run(channel_id);
         }

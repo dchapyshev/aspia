@@ -37,9 +37,13 @@ public:
     CommandLine(const CommandLine& other) = default;
     CommandLine& operator=(const CommandLine& other) = default;
 
+    CommandLine(CommandLine&& other);
+    CommandLine& operator=(CommandLine&& other);
+
     ~CommandLine() = default;
 
     static CommandLine FromString(const StringType& command_line);
+    static const CommandLine& ForCurrentProcess();
 
     // Initialize from an argv vector.
     void InitFromArgv(int argc, const CharType* const* argv);

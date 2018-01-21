@@ -19,6 +19,8 @@ constexpr CommandLine::CharType kSwitchTerminator[] = L"--";
 constexpr CommandLine::CharType kSwitchValueSeparator[] = L"=";
 constexpr CommandLine::CharType* const kSwitchPrefix = L"--";
 
+CommandLine current_process_command_line = CommandLine::FromString(GetCommandLineW());
+
 size_t GetSwitchPrefixLength(const CommandLine::StringType& string)
 {
     CommandLine::StringType prefix(kSwitchPrefix);
@@ -168,6 +170,22 @@ CommandLine::CommandLine(const StringVector& argv)
     InitFromArgv(argv);
 }
 
+CommandLine::CommandLine(CommandLine&& other)
+    : argv_(std::move(other.argv_)),
+      switches_(std::move(other.switches_)),
+      begin_args_(other.begin_args_)
+{
+    // Nothing
+}
+
+CommandLine& CommandLine::operator=(CommandLine&& other)
+{
+    argv_ = std::move(other.argv_);
+    switches_ = std::move(other.switches_);
+    begin_args_ = other.begin_args_;
+    return *this;
+}
+
 // static
 CommandLine CommandLine::FromString(const StringType& command_line)
 {
@@ -176,9 +194,16 @@ CommandLine CommandLine::FromString(const StringType& command_line)
     return cmd;
 }
 
+// static
+const CommandLine& CommandLine::ForCurrentProcess()
+{
+    return current_process_command_line;
+}
+
 void CommandLine::InitFromArgv(int argc, const CommandLine::CharType* const* argv)
 {
     StringVector new_argv;
+
     for (int i = 0; i < argc; ++i)
         new_argv.push_back(argv[i]);
 
@@ -296,7 +321,8 @@ void CommandLine::ParseFromString(const StringType& command_line)
 
 CommandLine::StringType CommandLine::GetCommandLineStringInternal(bool quote_placeholders) const
 {
-    StringType string = QuoteForCommandLineToArgvW(string, quote_placeholders);
+    StringType string(argv_[0]);
+    string = QuoteForCommandLineToArgvW(string, quote_placeholders);
     StringType params(GetArgumentsStringInternal(quote_placeholders));
 
     if (!params.empty())

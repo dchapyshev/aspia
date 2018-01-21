@@ -14,10 +14,6 @@
 
 namespace aspia {
 
-static const WCHAR kHostServiceSwitch[] = L"host-service";
-static const WCHAR kInstallHostServiceSwitch[] = L"install-host-service";
-static const WCHAR kRemoveHostServiceSwitch[] = L"remove-host-service";
-
 class HostService : public Service
 {
 public:

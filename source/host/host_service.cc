@@ -6,6 +6,7 @@
 //
 
 #include "host/host_service.h"
+#include "host/host_main.h"
 #include "base/service_manager.h"
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
@@ -73,16 +74,13 @@ bool HostService::IsInstalled()
 // static
 bool HostService::Install()
 {
-    std::experimental::filesystem::path path;
+    std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
 
-    std::wstring command_line;
-
-    command_line.assign(path);
-    command_line.append(L" --run_mode=");
-    command_line.append(kHostServiceSwitch);
+    CommandLine command_line(program_path);
+    command_line.AppendSwitch(kRunModeSwitch, kRunModeHostService);
 
     std::unique_ptr<ServiceManager> manager =
         ServiceManager::Create(command_line,

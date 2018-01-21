@@ -20,7 +20,7 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     google::InitGoogleLogging("aspia.exe");
     FLAGS_log_dir = "c:\\temp";
 
-    aspia::CommandLine command_line = aspia::CommandLine::FromString(GetCommandLineW());
+    const aspia::CommandLine& command_line = aspia::CommandLine::ForCurrentProcess();
 
     if (command_line.IsEmpty())
     {

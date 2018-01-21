@@ -6,7 +6,9 @@
 //
 
 #include "host/host_session_launcher_service.h"
+#include "host/host_main.h"
 #include "base/files/base_paths.h"
+#include "base/command_line.h"
 #include "base/service_manager.h"
 #include "base/logging.h"
 #include "host/host_session_launcher.h"
@@ -39,23 +41,18 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
     const std::wstring unique_full_name =
         ServiceManager::CreateUniqueServiceName(kServiceFullName, service_id);
 
-    std::experimental::filesystem::path path;
+    std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
 
-    std::wstring command_line(path);
+    CommandLine command_line(program_path);
 
-    command_line.append(L" --channel_id=");
-    command_line.append(channel_id);
-    command_line.append(L" --run_mode=");
-    command_line.append(kSessionLauncherSwitch);
-    command_line.append(L" --launcher_mode=");
-    command_line.append(launcher_mode);
-    command_line.append(L" --session_id=");
-    command_line.append(std::to_wstring(session_id));
-    command_line.append(L" --service_id=");
-    command_line.append(service_id);
+    command_line.AppendSwitch(kChannelIdSwitch, channel_id);
+    command_line.AppendSwitch(kRunModeSwitch, kRunModeSessionLauncher);
+    command_line.AppendSwitch(kLauncherModeSwitch, launcher_mode);
+    command_line.AppendSwitch(kSessionIdSwitch, std::to_wstring(session_id));
+    command_line.AppendSwitch(kServiceIdSwitch, service_id);
 
     // Install the service in the system.
     std::unique_ptr<ServiceManager> manager =
@@ -91,7 +88,7 @@ void HostSessionLauncherService::RunLauncher(const std::wstring& launcher_mode,
                                              const std::wstring& session_id,
                                              const std::wstring& channel_id)
 {
-    CHECK(launcher_mode == kDesktopSessionSwitch || launcher_mode == kSystemInfoSessionSwitch);
+    CHECK(launcher_mode == kRunModeDesktopSession || launcher_mode == kRunModeSystemInfoSession);
 
     launcher_mode_ = launcher_mode;
     session_id_ = std::stoul(session_id);

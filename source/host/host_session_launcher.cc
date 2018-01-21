@@ -7,7 +7,9 @@
 
 #include "host/host_session_launcher.h"
 #include "host/host_session_launcher_service.h"
+#include "host/host_main.h"
 #include "base/process/process_helpers.h"
+#include "base/command_line.h"
 #include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
 #include "base/scoped_impersonator.h"
@@ -18,13 +20,6 @@
 #include <string>
 
 namespace aspia {
-
-const WCHAR kSessionLauncherSwitch[] = L"session-launcher";
-const WCHAR kDesktopSessionSwitch[] = L"desktop-session";
-const WCHAR kFileTransferSessionSwitch[] = L"file-transfer-session";
-const WCHAR kPowerManageSessionSwitch[] = L"power-manage-session";
-const WCHAR kSystemInfoSessionSwitch[] = L"system-info-session";
-const WCHAR kSystemInfoSwitch[] = L"system-info";
 
 namespace {
 
@@ -128,7 +123,7 @@ bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
     return true;
 }
 
-bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
+bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -149,7 +144,7 @@ bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
 
     if (!CreateProcessAsUserW(user_token,
                               nullptr,
-                              const_cast<LPWSTR>(command_line.c_str()),
+                              const_cast<LPWSTR>(command_line.GetCommandLineString().c_str()),
                               nullptr,
                               nullptr,
                               FALSE,
@@ -172,30 +167,17 @@ bool CreateProcessWithToken(HANDLE user_token, const std::wstring& command_line)
     return true;
 }
 
-bool CreateCommandLine(const std::wstring& run_mode,
-                       const std::wstring& channel_id,
-                       std::wstring& command_line)
-{
-    std::experimental::filesystem::path path;
-
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
-        return false;
-
-    command_line.assign(path);
-    command_line.append(L" --run_mode=");
-    command_line.append(run_mode);
-    command_line.append(L" --channel_id=");
-    command_line.append(channel_id);
-
-    return true;
-}
-
 bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wstring& channel_id)
 {
-    std::wstring command_line;
+    std::experimental::filesystem::path program_path;
 
-    if (!CreateCommandLine(run_mode, channel_id, command_line))
+    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
+
+    CommandLine command_line(program_path);
+
+    command_line.AppendSwitch(kRunModeSwitch, run_mode);
+    command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle token;
 
@@ -245,10 +227,15 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
             }
         }
 
-        std::wstring command_line;
+        std::experimental::filesystem::path program_path;
 
-        if (!CreateCommandLine(run_mode, channel_id, command_line))
+        if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
             return false;
+
+        CommandLine command_line(program_path);
+
+        command_line.AppendSwitch(kRunModeSwitch, run_mode);
+        command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
         return CreateProcessWithToken(session_token, command_line);
     }
@@ -262,10 +249,15 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
                                      uint32_t session_id,
                                      const std::wstring& channel_id)
 {
-    std::wstring command_line;
+    std::experimental::filesystem::path program_path;
 
-    if (!CreateCommandLine(run_mode, channel_id, command_line))
+    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
+
+    CommandLine command_line(program_path);
+
+    command_line.AppendSwitch(kRunModeSwitch, run_mode);
+    command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle session_token;
 
@@ -285,10 +277,10 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
-            const WCHAR* launcher_mode = kDesktopSessionSwitch;
+            const WCHAR* launcher_mode = kRunModeDesktopSession;
 
             if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
-                launcher_mode = kSystemInfoSessionSwitch;
+                launcher_mode = kRunModeSystemInfoSession;
 
             if (!IsCallerHasAdminRights())
             {
@@ -309,12 +301,12 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
         {
-            return LaunchSessionProcess(kFileTransferSessionSwitch, session_id, channel_id);
+            return LaunchSessionProcess(kRunModeFileTransferSession, session_id, channel_id);
         }
 
         case proto::auth::SESSION_TYPE_POWER_MANAGE:
         {
-            return LaunchSessionProcess(kPowerManageSessionSwitch, session_id, channel_id);
+            return LaunchSessionProcess(kRunModePowerManageSession, session_id, channel_id);
         }
 
         default:
@@ -327,15 +319,13 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
 bool LaunchSystemInfoProcess()
 {
-    std::experimental::filesystem::path path;
+    std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
+    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
 
-    std::wstring command_line(path);
-
-    command_line.append(L" --run_mode=");
-    command_line.append(kSystemInfoSwitch);
+    CommandLine command_line(program_path);
+    command_line.AppendSwitch(kRunModeSwitch, kRunModeSystemInfo);
 
     ScopedHandle token;
 

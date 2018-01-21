@@ -61,7 +61,7 @@ ServiceManager::~ServiceManager()
 
 // static
 std::unique_ptr<ServiceManager>
-ServiceManager::Create(const std::wstring_view& command_line,
+ServiceManager::Create(const CommandLine& command_line,
                        const std::wstring_view& service_full_name,
                        const std::wstring_view& service_short_name,
                        const std::wstring_view& service_description)
@@ -82,7 +82,7 @@ ServiceManager::Create(const std::wstring_view& command_line,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
                                           SERVICE_ERROR_NORMAL,
-                                          command_line.data(),
+                                          command_line.GetCommandLineString().c_str(),
                                           nullptr,
                                           nullptr,
                                           nullptr,
