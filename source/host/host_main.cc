@@ -5,6 +5,8 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "base/process/process.h"
+#include "base/command_line.h"
 #include "host/host_main.h"
 #include "host/host_service.h"
 #include "host/sas_injector.h"
@@ -15,28 +17,29 @@
 #include "host/host_session_power.h"
 #include "host/host_session_system_info.h"
 #include "host/host_local_system_info.h"
-#include "base/strings/unicode.h"
-#include "base/process/process.h"
-
-#include <gflags/gflags.h>
 
 namespace aspia {
 
-DEFINE_uint32(session_id, 0xFFFFFFFF, "Session Id");
-DEFINE_string(channel_id, "", "Channel Id");
-DEFINE_string(service_id, "", "Service Id");
-DEFINE_string(launcher_mode, "", "Launcher Mode");
+namespace {
 
-void RunHostMain(const std::wstring& run_mode)
+constexpr CommandLine::CharType kRunModeSwitch[] = L"run_mode";
+constexpr CommandLine::CharType kSessionIdSwitch[] = L"session_id";
+constexpr CommandLine::CharType kChannelIdSwitch[] = L"channel_id";
+constexpr CommandLine::CharType kServiceIdSwitch[] = L"service_id";
+constexpr CommandLine::CharType kLauncherModeSwitch[] = L"launcher_mode";
+
+} // namespace
+
+void RunHostMain(const CommandLine& command_line)
 {
     Process::Current().SetPriority(Process::Priority::HIGH);
 
+    CommandLine::StringType run_mode = command_line.GetSwitchValue(kRunModeSwitch);
+
     if (run_mode == kSasServiceSwitch)
     {
-        std::wstring service_id;
-        CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
-
-        SasInjector injector(service_id);
+        DCHECK(command_line.HasSwitch(kServiceIdSwitch));
+        SasInjector injector(command_line.GetSwitchValue(kServiceIdSwitch));
         injector.ExecuteService();
     }
     else if (run_mode == kHostServiceSwitch)
@@ -53,17 +56,16 @@ void RunHostMain(const std::wstring& run_mode)
     }
     else if (run_mode == kSessionLauncherSwitch)
     {
-        std::wstring launcher_mode;
-        CHECK(ANSItoUNICODE(FLAGS_launcher_mode, launcher_mode));
+        DCHECK(command_line.HasSwitch(kLauncherModeSwitch) &&
+               command_line.HasSwitch(kChannelIdSwitch) &&
+               command_line.HasSwitch(kServiceIdSwitch) &&
+               command_line.HasSwitch(kSessionIdSwitch));
 
-        std::wstring channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
+        HostSessionLauncherService launcher(command_line.GetSwitchValue(kServiceIdSwitch));
 
-        std::wstring service_id;
-        CHECK(ANSItoUNICODE(FLAGS_service_id, service_id));
-
-        HostSessionLauncherService launcher(service_id);
-        launcher.RunLauncher(launcher_mode, FLAGS_session_id, channel_id);
+        launcher.RunLauncher(command_line.GetSwitchValue(kLauncherModeSwitch),
+                             command_line.GetSwitchValue(kSessionIdSwitch),
+                             command_line.GetSwitchValue(kChannelIdSwitch));
     }
     else if (run_mode == kSystemInfoSwitch)
     {
@@ -71,8 +73,9 @@ void RunHostMain(const std::wstring& run_mode)
     }
     else
     {
-        std::wstring channel_id;
-        CHECK(ANSItoUNICODE(FLAGS_channel_id, channel_id));
+        DCHECK(command_line.HasSwitch(kChannelIdSwitch));
+
+        std::wstring channel_id = command_line.GetSwitchValue(kChannelIdSwitch);
 
         if (run_mode == kDesktopSessionSwitch)
         {

@@ -907,6 +907,9 @@
     <ClCompile Include="ui\mru.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="base\command_line.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1846,6 +1849,9 @@
     </ClInclude>
     <ClInclude Include="ui\mru.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="base\command_line.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

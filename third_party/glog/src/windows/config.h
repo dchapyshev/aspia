@@ -13,7 +13,7 @@
 #define HAVE_SNPRINTF
 
 /* define if you have google gflags library */
-#define HAVE_LIB_GFLAGS
+// #define HAVE_LIB_GFLAGS
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H

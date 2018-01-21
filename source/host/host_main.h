@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-void RunHostMain(const std::wstring& run_mode);
+void RunHostMain(const CommandLine& command_line);
 
 } // namespace aspia
 

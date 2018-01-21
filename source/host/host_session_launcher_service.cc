@@ -88,13 +88,13 @@ void HostSessionLauncherService::OnStop()
 }
 
 void HostSessionLauncherService::RunLauncher(const std::wstring& launcher_mode,
-                                             uint32_t session_id,
+                                             const std::wstring& session_id,
                                              const std::wstring& channel_id)
 {
     CHECK(launcher_mode == kDesktopSessionSwitch || launcher_mode == kSystemInfoSessionSwitch);
 
     launcher_mode_ = launcher_mode;
-    session_id_ = session_id;
+    session_id_ = std::stoul(session_id);
     channel_id_ = channel_id;
 
     Run();

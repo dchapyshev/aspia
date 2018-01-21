@@ -9,7 +9,6 @@ The date of synchronization is indicated in the format DD-MM-YYYY.
 | Name      | Version   | Sync date  | License                    | URL                                             |
 |-----------|-----------|------------|----------------------------|-------------------------------------------------|
 | asio      | 1.10.8    | 17-07-2017 | Boost Software License 1.0 | https://github.com/chriskohlhoff/asio           |
-| gflags    | trunk     | 19-08-2017 | BSD 3-Clause License       | https://github.com/gflags/gflags                |
 | glog      | trunk     | 19-08-2017 | BSD 3-Clause License       | https://github.com/google/glog                  |
 | libvpx    | 1.6.1     | 12-07-2017 | BSD 3-Clause License       | https://chromium.googlesource.com/webm/libvpx   |
 | libyuv    | trunk     | 16-01-2018 | BSD 3-Clause License       | https://chromium.googlesource.com/libyuv/libyuv |

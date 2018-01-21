@@ -5,24 +5,24 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include <gflags/gflags.h>
+#include "base/command_line.h"
 #include "base/version_helpers.h"
 #include "base/process/process_helpers.h"
-#include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "host/host_main.h"
 #include "ui/ui_main.h"
 
-DEFINE_string(run_mode, "", "Run Mode");
-
-int main(int argc, char *argv[])
+int WINAPI wWinMain(HINSTANCE /* hInstance */,
+                    HINSTANCE /* hPrevInstance */,
+                    PWSTR /* pCmdLine */,
+                    int /* nCmdShow */)
 {
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
-    google::InitGoogleLogging(argv[0]);
-
+    google::InitGoogleLogging("aspia.exe");
     FLAGS_log_dir = "c:\\temp";
 
-    if (FLAGS_run_mode.empty())
+    aspia::CommandLine command_line = aspia::CommandLine::FromString(GetCommandLineW());
+
+    if (command_line.IsEmpty())
     {
         if (aspia::IsWindowsVistaOrGreater() && !aspia::IsProcessElevated())
         {
@@ -36,13 +36,10 @@ int main(int argc, char *argv[])
     }
     else
     {
-        std::wstring run_mode;
-        CHECK(aspia::ANSItoUNICODE(FLAGS_run_mode, run_mode));
-        aspia::RunHostMain(run_mode);
+        aspia::RunHostMain(command_line);
     }
 
     google::ShutdownGoogleLogging();
-    gflags::ShutDownCommandLineFlags();
 
     return 0;
 }
