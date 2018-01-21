@@ -76,7 +76,12 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
 
 void HostSessionLauncherService::Worker()
 {
-    LaunchSessionProcessFromService(launcher_mode_, session_id_, channel_id_);
+    const CommandLine& command_line = CommandLine::ForCurrentProcess();
+
+    LaunchSessionProcessFromService(
+        command_line.GetSwitchValue(kLauncherModeSwitch),
+        std::stoul(command_line.GetSwitchValue(kSessionIdSwitch)),
+        command_line.GetSwitchValue(kChannelIdSwitch));
 }
 
 void HostSessionLauncherService::OnStop()
@@ -84,16 +89,8 @@ void HostSessionLauncherService::OnStop()
     // Nothing
 }
 
-void HostSessionLauncherService::RunLauncher(const std::wstring& launcher_mode,
-                                             const std::wstring& session_id,
-                                             const std::wstring& channel_id)
+void HostSessionLauncherService::RunLauncher()
 {
-    CHECK(launcher_mode == kRunModeDesktopSession || launcher_mode == kRunModeSystemInfoSession);
-
-    launcher_mode_ = launcher_mode;
-    session_id_ = std::stoul(session_id);
-    channel_id_ = channel_id;
-
     Run();
 
     ServiceManager manager(ServiceName());

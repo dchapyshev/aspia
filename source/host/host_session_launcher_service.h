@@ -22,17 +22,11 @@ public:
                               uint32_t session_id,
                               const std::wstring& channel_id);
 
-    void RunLauncher(const std::wstring& launcher_mode,
-                     const std::wstring& session_id,
-                     const std::wstring& channel_id);
+    void RunLauncher();
 
 private:
     void Worker() override;
     void OnStop() override;
-
-    std::wstring launcher_mode_;
-    uint32_t session_id_;
-    std::wstring channel_id_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionLauncherService);
 };

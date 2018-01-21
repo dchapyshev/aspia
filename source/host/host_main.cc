@@ -69,9 +69,7 @@ void RunHostMain(const CommandLine& command_line)
 
         HostSessionLauncherService launcher(command_line.GetSwitchValue(kServiceIdSwitch));
 
-        launcher.RunLauncher(command_line.GetSwitchValue(kLauncherModeSwitch),
-                             command_line.GetSwitchValue(kSessionIdSwitch),
-                             command_line.GetSwitchValue(kChannelIdSwitch));
+        launcher.RunLauncher();
     }
     else if (run_mode == kRunModeSystemInfo)
     {
