@@ -8,6 +8,7 @@
 #ifndef _ASPIA_BASE__LOGGING_H
 #define _ASPIA_BASE__LOGGING_H
 
+#include <experimental/filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
@@ -79,8 +80,6 @@ namespace aspia {
 #define DCHECK_IS_ON() 1
 #endif
 
-using PathChar = wchar_t;
-
 // Where to record logging output? A flat file and/or system debug log via OutputDebugString.
 enum LoggingDestination
 {
@@ -132,7 +131,7 @@ struct LoggingSettings
 
     // The three settings below have an effect only when LOG_TO_FILE is
     // set in |logging_dest|.
-    const PathChar* log_file;
+    const std::experimental::filesystem::path::value_type* log_file;
     LogLockingState lock_log;
     OldFileDeletionState delete_old;
 };
@@ -677,7 +676,7 @@ void RawLog(int level, const char* message);
 bool IsLoggingToFileEnabled();
 
 // Returns the default log file path.
-std::wstring GetLogFileFullPath();
+std::experimental::filesystem::path GetLogFileFullPath();
 
 } // namespace aspia
 

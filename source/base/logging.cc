@@ -29,10 +29,6 @@ namespace {
 
 using FileHandle = HANDLE;
 
-// Which log file to use? This is initialized by InitLogging or will be lazily initialized to the
-// default value when it is first needed.
-using PathString = std::wstring;
-
 const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
 
 static_assert(LS_NUMBER == _countof(kLogSeverityNames));
@@ -47,10 +43,10 @@ const char* GetSeverityName(LoggingSeverity severity)
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
-// For LOG_ERROR and above, always print to stderr.
+// For LS_ERROR and above, always print to stderr.
 const int kAlwaysPrintErrorLevel = LS_ERROR;
 
-PathString* g_log_file_name = nullptr;
+std::experimental::filesystem::path g_log_file_name;
 
 // This file is lazily opened and the handle may be nullptr
 FileHandle g_log_file = nullptr;
@@ -65,22 +61,15 @@ int32_t CurrentProcessId()
     return GetCurrentProcessId();
 }
 
-void DeleteFilePath(const PathString& log_name)
-{
-    DeleteFileW(log_name.c_str());
-}
-
-PathString GetDefaultLogFile()
+std::experimental::filesystem::path GetDefaultLogFile()
 {
     // On Windows we use the same path as the exe.
     wchar_t module_name[MAX_PATH];
     GetModuleFileNameW(nullptr, module_name, MAX_PATH);
 
-    PathString log_name = module_name;
-    PathString::size_type last_backslash = log_name.rfind('\\', log_name.size());
-    if (last_backslash != PathString::npos)
-        log_name.erase(last_backslash + 1);
-    log_name += L"debug.log";
+    std::experimental::filesystem::path log_name = module_name;
+    log_name.append(L"debug.log");
+
     return log_name;
 }
 
@@ -92,11 +81,11 @@ bool InitializeLogFileHandle()
     if (g_log_file)
         return true;
 
-    if (!g_log_file_name)
+    if (g_log_file_name.empty())
     {
         // Nobody has called InitLogging to specify a debug log file, so here we
         // initialize the log file name to a default.
-        g_log_file_name = new PathString(GetDefaultLogFile());
+        g_log_file_name = GetDefaultLogFile();
     }
 
     if ((g_logging_destination & LOG_TO_FILE) != 0)
@@ -105,7 +94,7 @@ bool InitializeLogFileHandle()
         // appended to across accesses from multiple threads.
         // https://msdn.microsoft.com/en-us/library/windows/desktop/aa364399(v=vs.85).aspx
         // https://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx
-        g_log_file = CreateFileW(g_log_file_name->c_str(), FILE_APPEND_DATA,
+        g_log_file = CreateFileW(g_log_file_name.c_str(), FILE_APPEND_DATA,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                  OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
         if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
@@ -122,13 +111,10 @@ bool InitializeLogFileHandle()
             if (len == 0 || len > _countof(system_buffer))
                 return false;
 
-            *g_log_file_name = system_buffer;
-            // Append a trailing backslash if needed.
-            if (g_log_file_name->back() != L'\\')
-                *g_log_file_name += L"\\";
-            *g_log_file_name += L"debug.log";
+            g_log_file_name = system_buffer;
+            g_log_file_name.append(L"debug.log");
 
-            g_log_file = CreateFileW(g_log_file_name->c_str(), FILE_APPEND_DATA,
+            g_log_file = CreateFileW(g_log_file_name.c_str(), FILE_APPEND_DATA,
                                      FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                      OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
             if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
@@ -184,11 +170,13 @@ bool BaseInitLoggingImpl(const LoggingSettings& settings)
     // default log file will re-initialize to the new options.
     CloseLogFileUnlocked();
 
-    if (!g_log_file_name)
-        g_log_file_name = new PathString();
-    *g_log_file_name = settings.log_file;
+    g_log_file_name = settings.log_file;
+
     if (settings.delete_old == DELETE_OLD_LOG_FILE)
-        DeleteFilePath(*g_log_file_name);
+    {
+        std::error_code ignored_code;
+        std::experimental::filesystem::remove(g_log_file_name, ignored_code);
+    }
 
     return InitializeLogFileHandle();
 }
@@ -492,11 +480,9 @@ bool IsLoggingToFileEnabled()
     return g_logging_destination & LOG_TO_FILE;
 }
 
-std::wstring GetLogFileFullPath()
+std::experimental::filesystem::path GetLogFileFullPath()
 {
-    if (g_log_file_name)
-        return *g_log_file_name;
-    return std::wstring();
+    return g_log_file_name;
 }
 
 void LogErrorNotReached(const char* file, int line)
