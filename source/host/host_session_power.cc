@@ -48,7 +48,7 @@ void HostSessionPower::OnIpcChannelConnect(uint32_t user_data)
 
     if (session_type != proto::auth::SESSION_TYPE_POWER_MANAGE)
     {
-        LOG(FATAL) << "Invalid session type passed: " << session_type;
+        LOG(LS_FATAL) << "Invalid session type passed: " << session_type;
         return;
     }
 
@@ -87,7 +87,7 @@ void HostSessionPower::OnIpcChannelMessage(const IOBuffer& buffer)
 
             default:
             {
-                LOG(ERROR) << "Unknown power action: " << message.command();
+                LOG(LS_ERROR) << "Unknown power action: " << message.command();
             }
             break;
         }

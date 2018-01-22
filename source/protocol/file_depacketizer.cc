@@ -30,7 +30,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
     file_stream.open(file_path, mode);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "Unable to create file: " << file_path;
+        LOG(LS_ERROR) << "Unable to create file: " << file_path;
         return nullptr;
     }
 
@@ -54,7 +54,7 @@ bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::FilePacket& pa
     file_stream_.write(packet.data().data(), packet_size);
     if (file_stream_.fail())
     {
-        DLOG(WARNING) << "Unable to write file";
+        DLOG(LS_WARNING) << "Unable to write file";
         return false;
     }
 

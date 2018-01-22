@@ -36,7 +36,7 @@ bool ElevateProcess()
 
     if (!ShellExecuteExW(&sei))
     {
-        DLOG(WARNING) << "ShellExecuteExW() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "ShellExecuteExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -49,7 +49,7 @@ bool IsProcessElevated()
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -59,7 +59,7 @@ bool IsProcessElevated()
     if (!GetTokenInformation(token, TokenElevation, &elevation,
                              sizeof(elevation), &size))
     {
-        LOG(ERROR) << "GetTokenInformation() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "GetTokenInformation() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -78,7 +78,7 @@ bool IsCallerAdminGroupMember()
                                   0, 0, 0, 0, 0, 0,
                                   admin_group.Recieve()))
     {
-        LOG(ERROR) << "AllocateAndInitializeSid() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "AllocateAndInitializeSid() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -86,7 +86,7 @@ bool IsCallerAdminGroupMember()
 
     if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
     {
-        LOG(ERROR) << "CheckTokenMembership() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "CheckTokenMembership() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -117,7 +117,7 @@ bool IsRunningAsService()
 
     if (!sc_manager.IsValid())
     {
-        LOG(ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -139,14 +139,14 @@ bool IsRunningAsService()
 
         if (error_code != ERROR_MORE_DATA)
         {
-            LOG(ERROR) << "EnumServicesStatusExW() failed: "
-                       << SystemErrorCodeToString(error_code);
+            LOG(LS_ERROR) << "EnumServicesStatusExW() failed: "
+                          << SystemErrorCodeToString(error_code);
             return false;
         }
     }
     else
     {
-        LOG(ERROR) << "EnumServicesStatusExW() returns unexpected value";
+        LOG(LS_ERROR) << "EnumServicesStatusExW() returns unexpected value";
         return false;
     }
 
@@ -164,7 +164,7 @@ bool IsRunningAsService()
                                nullptr,
                                nullptr))
     {
-        LOG(ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
         return false;
     }
 

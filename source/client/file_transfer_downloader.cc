@@ -85,7 +85,7 @@ void FileTransferDownloader::OnUnableToCreateDirectoryAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -236,7 +236,7 @@ void FileTransferDownloader::OnUnableToCreateFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -260,7 +260,7 @@ void FileTransferDownloader::OnUnableToOpenFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -320,7 +320,7 @@ void FileTransferDownloader::OnUnableToReadFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -344,7 +344,7 @@ void FileTransferDownloader::OnUnableToWriteFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -362,7 +362,7 @@ void FileTransferDownloader::OnFilePacketReceived(
 
     if (!file_depacketizer_)
     {
-        LOG(ERROR) << "Unexpected file packet";
+        LOG(LS_ERROR) << "Unexpected file packet";
         runner_->PostQuit();
         return;
     }

@@ -38,7 +38,7 @@ std::experimental::filesystem::path BuildSearchFilter(
             break;
 
         default:
-            DLOG(FATAL) << "Unknown search policy: " << static_cast<int>(policy);
+            DLOG(LS_FATAL) << "Unknown search policy: " << static_cast<int>(policy);
             return {};
     }
 

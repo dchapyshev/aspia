@@ -109,7 +109,7 @@ void FileRemover::OnRemoveObjectFailureAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }

@@ -89,8 +89,7 @@ bool Process::SetPriority(Priority priority)
 {
     if (!SetPriorityClass(Handle(), static_cast<DWORD>(priority)))
     {
-        LOG(ERROR) << "SetPriorityClass() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "SetPriorityClass() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -115,12 +114,12 @@ bool Process::Terminate(uint32_t exit_code, bool wait)
     {
         if (WaitForSingleObject(Handle(), 60 * 1000) != WAIT_OBJECT_0)
         {
-            LOG(ERROR) << "Error waiting for process exit";
+            LOG(LS_ERROR) << "Error waiting for process exit";
         }
     }
     else if (!result)
     {
-        LOG(ERROR) << "Unable to terminate process";
+        LOG(LS_ERROR) << "Unable to terminate process";
     }
 
     return result;

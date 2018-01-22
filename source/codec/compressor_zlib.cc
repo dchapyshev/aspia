@@ -69,14 +69,14 @@ bool CompressorZLIB::Process(const uint8_t* input_data,
             break;
 
         default:
-            DLOG(ERROR) << "Unsupported flush mode";
+            DLOG(LS_ERROR) << "Unsupported flush mode";
             break;
     }
 
     int ret = deflate(&stream_, z_flush);
     if (ret == Z_STREAM_ERROR)
     {
-        DLOG(ERROR) << "zlib compression failed";
+        DLOG(LS_ERROR) << "zlib compression failed";
     }
 
     *consumed = input_size - stream_.avail_in;
@@ -99,7 +99,7 @@ bool CompressorZLIB::Process(const uint8_t* input_data,
             return stream_.avail_out == 0;
 
         default:
-            DLOG(ERROR) << "Unexpected zlib error: " << ret;
+            DLOG(LS_ERROR) << "Unexpected zlib error: " << ret;
             break;
     }
 

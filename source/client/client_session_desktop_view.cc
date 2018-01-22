@@ -30,7 +30,7 @@ std::unique_ptr<VideoDecoder> CreateVideoDecoder(proto::desktop::VideoEncoding e
             return VideoDecoderZLIB::Create();
 
         default:
-            LOG(ERROR) << "Unsupported encoding: " << encoding;
+            LOG(LS_ERROR) << "Unsupported encoding: " << encoding;
             return nullptr;
     }
 }
@@ -79,7 +79,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::desktop::VideoPacket
 
         if (!pixel_format.IsValid())
         {
-            LOG(ERROR) << "Wrong pixel format for frame";
+            LOG(LS_ERROR) << "Wrong pixel format for frame";
             return false;
         }
 
@@ -87,7 +87,7 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::desktop::VideoPacket
 
         if (size.IsEmpty())
         {
-            LOG(ERROR) << "Wrong size for frame";
+            LOG(LS_ERROR) << "Wrong size for frame";
             return false;
         }
 
@@ -131,7 +131,7 @@ void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
         else
         {
             // Unknown messages are ignored.
-            DLOG(WARNING) << "Unhandled message from host";
+            DLOG(LS_WARNING) << "Unhandled message from host";
         }
 
         if (success)

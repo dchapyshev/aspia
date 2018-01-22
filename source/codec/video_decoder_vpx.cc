@@ -39,7 +39,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
                 if (!frame_rect.ContainsRect(rect))
                 {
-                    LOG(ERROR) << "The rectangle is outside the screen area";
+                    LOG(LS_ERROR) << "The rectangle is outside the screen area";
                     return false;
                 }
 
@@ -68,7 +68,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
                 if (!frame_rect.ContainsRect(rect))
                 {
-                    LOG(ERROR) << "The rectangle is outside the screen area";
+                    LOG(LS_ERROR) << "The rectangle is outside the screen area";
                     return false;
                 }
 
@@ -89,7 +89,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
         default:
         {
-            LOG(ERROR) << "Unsupported image format: " << image->fmt;
+            LOG(LS_ERROR) << "Unsupported image format: " << image->fmt;
             return false;
         }
     }
@@ -136,7 +136,7 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
             break;
 
         default:
-            LOG(FATAL) << "Unsupported video encoding: " << encoding;
+            LOG(LS_FATAL) << "Unsupported video encoding: " << encoding;
             return;
     }
 
@@ -158,8 +158,8 @@ bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopF
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        LOG(ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
-                   << "Details: " << (error_detail ? error_detail : "(NULL)");
+        LOG(LS_ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
+                      << "Details: " << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 
@@ -169,13 +169,13 @@ bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopF
     vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
     if (!image)
     {
-        LOG(ERROR) << "No video frame decoded";
+        LOG(LS_ERROR) << "No video frame decoded";
         return false;
     }
 
     if (!DesktopSize(image->d_w, image->d_h).IsEqual(frame->Size()))
     {
-        LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
+        LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;
     }
 

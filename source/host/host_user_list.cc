@@ -128,7 +128,7 @@ bool HostUserList::LoadFromStorage()
     file_stream.open(file_path, std::ifstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "File not found: " << file_path;
+        LOG(LS_ERROR) << "File not found: " << file_path;
         return false;
     }
 
@@ -142,7 +142,7 @@ bool HostUserList::LoadFromStorage()
 
     if (size > kMaximumUserListSize)
     {
-        LOG(ERROR) << "User list is too large (>10MB)";
+        LOG(LS_ERROR) << "User list is too large (>10MB)";
         return false;
     }
 
@@ -153,7 +153,7 @@ bool HostUserList::LoadFromStorage()
 
     if (file_stream.fail())
     {
-        LOG(ERROR) << "Unable to read user list";
+        LOG(LS_ERROR) << "Unable to read user list";
         return false;
     }
 
@@ -161,13 +161,13 @@ bool HostUserList::LoadFromStorage()
 
     if (!list_.ParseFromString(string))
     {
-        LOG(ERROR) << "User list corrupted";
+        LOG(LS_ERROR) << "User list corrupted";
         return false;
     }
 
     if (!IsValidUserList())
     {
-        LOG(ERROR) << "User list contains incorrect entries";
+        LOG(LS_ERROR) << "User list contains incorrect entries";
         return false;
     }
 
@@ -178,7 +178,7 @@ bool HostUserList::SaveToStorage()
 {
     if (!IsValidUserList())
     {
-        LOG(ERROR) << "User list contains incorrect entries";
+        LOG(LS_ERROR) << "User list contains incorrect entries";
         return false;
     }
 
@@ -192,8 +192,8 @@ bool HostUserList::SaveToStorage()
 
         if (!std::experimental::filesystem::create_directories(dir_path, code))
         {
-            LOG(ERROR) << "Unable to create directory: '" << dir_path
-                       << "'. Error: " << code.message();
+            LOG(LS_ERROR) << "Unable to create directory: '" << dir_path
+                          << "'. Error: " << code.message();
             return false;
         }
     }
@@ -201,8 +201,8 @@ bool HostUserList::SaveToStorage()
     {
         if (!std::experimental::filesystem::is_directory(dir_path))
         {
-            LOG(ERROR) << "Path '" << dir_path
-                       << "' exist, not it is not a directory";
+            LOG(LS_ERROR) << "Path '" << dir_path
+                          << "' exist, not it is not a directory";
             return false;
         }
     }
@@ -216,7 +216,7 @@ bool HostUserList::SaveToStorage()
     file_stream.open(file_path, std::ofstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "Unable to create (or open) file: " << file_path;
+        LOG(LS_ERROR) << "Unable to create (or open) file: " << file_path;
         return false;
     }
 
@@ -225,7 +225,7 @@ bool HostUserList::SaveToStorage()
     file_stream.write(string.c_str(), string.size());
     if (file_stream.fail())
     {
-        LOG(ERROR) << "Unable to write user list";
+        LOG(LS_ERROR) << "Unable to write user list";
         return false;
     }
 

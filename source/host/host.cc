@@ -153,7 +153,7 @@ void Host::OnAuthResultSended(proto::auth::SessionType session_type, proto::auth
                 break;
 
             default:
-                LOG(ERROR) << "Unsupported session type: " << session_type;
+                LOG(LS_ERROR) << "Unsupported session type: " << session_type;
                 break;
         }
 

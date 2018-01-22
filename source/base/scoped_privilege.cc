@@ -18,8 +18,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const WCHAR* name)
                           TOKEN_ADJUST_PRIVILEGES,
                           process_token_.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -29,8 +28,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const WCHAR* name)
                                name,
                                &privileges_.Privileges[0].Luid))
     {
-        LOG(ERROR) << "LookupPrivilegeValueW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -44,8 +42,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const WCHAR* name)
                                nullptr,
                                nullptr))
     {
-        LOG(ERROR) << "AdjustTokenPrivileges() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -66,8 +63,8 @@ ScopedProcessPrivilege::~ScopedProcessPrivilege()
                                    nullptr,
                                    nullptr))
         {
-            LOG(ERROR) << "AdjustTokenPrivileges() failed: "
-                       << GetLastSystemErrorString();
+            LOG(LS_ERROR) << "AdjustTokenPrivileges() failed: "
+                          << GetLastSystemErrorString();
         }
     }
 }

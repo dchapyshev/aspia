@@ -153,7 +153,7 @@ std::string CategoryRAS::Serialize()
     DWORD error_code = RasEnumEntriesW(nullptr, nullptr, nullptr, &required_size, &total_entries);
     if (error_code != ERROR_BUFFER_TOO_SMALL)
     {
-        DLOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
+        DLOG(LS_WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
         return std::string();
     }
 
@@ -168,7 +168,7 @@ std::string CategoryRAS::Serialize()
     error_code = RasEnumEntriesW(nullptr, nullptr, entry_name, &required_size, &total_entries);
     if (error_code != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
+        DLOG(LS_WARNING) << "RasEnumEntriesW() failed: " << SystemErrorCodeToString(error_code);
         return std::string();
     }
 
@@ -191,8 +191,8 @@ std::string CategoryRAS::Serialize()
                                             nullptr);
         if (error_code != ERROR_SUCCESS)
         {
-            DLOG(WARNING) << "RasGetEntryPropertiesW() failed: "
-                          << SystemErrorCodeToString(error_code);
+            DLOG(LS_WARNING) << "RasGetEntryPropertiesW() failed: "
+                             << SystemErrorCodeToString(error_code);
             continue;
         }
 
@@ -206,7 +206,7 @@ std::string CategoryRAS::Serialize()
                                    entry_name[i].szEntryName);
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -215,8 +215,8 @@ std::string CategoryRAS::Serialize()
         error_code = RasGetEntryDialParamsW(entry_name[i].szPhonebookPath, &dial_params, &password);
         if (error_code != ERROR_SUCCESS)
         {
-            DLOG(WARNING) << "RasGetEntryDialParamsW() failed: "
-                          << SystemErrorCodeToString(error_code);
+            DLOG(LS_WARNING) << "RasGetEntryDialParamsW() failed: "
+                             << SystemErrorCodeToString(error_code);
             continue;
         }
 

@@ -63,7 +63,7 @@ void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
             break;
 
         default:
-            LOG(FATAL) << "Invalid session type passed: " << session_type_;
+            LOG(LS_FATAL) << "Invalid session type passed: " << session_type_;
             return;
     }
 
@@ -103,7 +103,7 @@ void HostSessionDesktop::OnIpcChannelMessage(const IOBuffer& buffer)
         else
         {
             // Unknown messages are ignored.
-            DLOG(WARNING) << "Unhandled message from client";
+            DLOG(LS_WARNING) << "Unhandled message from client";
         }
 
         if (success)
@@ -276,7 +276,7 @@ bool HostSessionDesktop::ReadConfig(const proto::desktop::Config& config)
             break;
 
         default:
-            LOG(ERROR) << "Unsupported video encoding: " << config.video_encoding();
+            LOG(LS_ERROR) << "Unsupported video encoding: " << config.video_encoding();
             video_encoder_.reset();
             break;
     }

@@ -23,7 +23,7 @@ std::unique_ptr<SMBios> SMBios::Create(std::unique_ptr<uint8_t[]> data, size_t d
 
     if (!GetTableCount(smbios->smbios_table_data, smbios->length))
     {
-        DLOG(WARNING) << "SMBios tables not found";
+        DLOG(LS_WARNING) << "SMBios tables not found";
         return nullptr;
     }
 
@@ -113,7 +113,7 @@ void SMBios::TableEnumerator::Advance()
             // If a short entry is found(less than 4 bytes), not only it is invalid, but we
             // cannot reliably locate the next entry. Better stop at this point, and let the
             // user know his / her table is broken.
-            DLOG(WARNING) << "Invalid SMBIOS table length: " << table_length;
+            DLOG(LS_WARNING) << "Invalid SMBIOS table length: " << table_length;
             break;
         }
 

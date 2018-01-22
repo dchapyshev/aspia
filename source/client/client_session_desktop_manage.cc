@@ -75,7 +75,7 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
         else
         {
             // Unknown messages are ignored.
-            DLOG(WARNING) << "Unhandled message from host";
+            DLOG(LS_WARNING) << "Unhandled message from host";
         }
 
         if (success)

@@ -37,7 +37,7 @@ bool AddApplication(proto::Application* message, const WCHAR* key_name, REGSAM a
     LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path.c_str(), access | KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
         return false;
     }
 

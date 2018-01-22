@@ -26,7 +26,7 @@ std::unique_ptr<ReportJsonFile> ReportJsonFile::Create(
     file.open(file_path, std::ofstream::out | std::ofstream::trunc);
     if (!file.is_open())
     {
-        LOG(WARNING) << "Unable to create report file: " << file_path;
+        LOG(LS_WARNING) << "Unable to create report file: " << file_path;
         return nullptr;
     }
 
@@ -195,7 +195,7 @@ void ReportJsonFile::WriteValue(const Value& value)
             break;
 
         default:
-            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            DLOG(LS_FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
             break;
     }
 }

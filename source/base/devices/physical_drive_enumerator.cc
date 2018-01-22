@@ -26,7 +26,7 @@ PhysicalDriveEnumerator::PhysicalDriveEnumerator()
     device_info_.Reset(SetupDiGetClassDevsW(&GUID_DEVINTERFACE_DISK, nullptr, nullptr, flags));
     if (!device_info_.IsValid())
     {
-        DLOG(WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
     }
 }
 
@@ -51,8 +51,8 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
             if (error_code != ERROR_NO_MORE_ITEMS)
             {
-                DLOG(WARNING) << "SetupDiEnumDeviceInfo() failed: "
-                              << SystemErrorCodeToString(error_code);
+                DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                                 << SystemErrorCodeToString(error_code);
             }
 
             return true;
@@ -68,7 +68,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
                                              nullptr) ||
             GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            DLOG(WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
+            DLOG(LS_WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
             ++device_index_;
             continue;
         }
@@ -86,8 +86,8 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
                                               &required_size,
                                               nullptr))
         {
-            DLOG(WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
-                          << GetLastSystemErrorString();
+            DLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
+                             << GetLastSystemErrorString();
             ++device_index_;
             continue;
         }
@@ -488,7 +488,7 @@ bool PhysicalDriveEnumerator::GetSmartData(SmartAttributeData& attributes,
         break;
 
         default:
-            LOG(WARNING) << "Unhandled bus type: " << bus_type;
+            LOG(LS_WARNING) << "Unhandled bus type: " << bus_type;
             break;
     }
 
@@ -518,7 +518,7 @@ bool PhysicalDriveEnumerator::GetDriveInfo(uint8_t device_number) const
             break;
 
         default:
-            LOG(WARNING) << "Unhandled bus type: " << bus_type;
+            LOG(LS_WARNING) << "Unhandled bus type: " << bus_type;
             break;
     }
 

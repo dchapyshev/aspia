@@ -117,7 +117,7 @@ void FileTransferUploader::OnUnableToCreateDirectoryAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -181,7 +181,7 @@ void FileTransferUploader::OnUnableToCreateFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -205,7 +205,7 @@ void FileTransferUploader::OnUnableToOpenFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -229,7 +229,7 @@ void FileTransferUploader::OnUnableToReadFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -327,7 +327,7 @@ void FileTransferUploader::OnUnableToWriteFileAction(FileAction action)
         break;
 
         default:
-            DLOG(FATAL) << "Unexpected action: " << static_cast<int>(action);
+            DLOG(LS_FATAL) << "Unexpected action: " << static_cast<int>(action);
             break;
     }
 }
@@ -342,7 +342,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::file_transf
 
     if (!file_packetizer_)
     {
-        LOG(ERROR) << "Unexpected reply: file upload data";
+        LOG(LS_ERROR) << "Unexpected reply: file upload data";
         runner_->PostQuit();
         return;
     }

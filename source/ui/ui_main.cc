@@ -33,8 +33,7 @@ void RunUIMain()
                             reinterpret_cast<WCHAR*>(&RunUIMain),
                             &instance))
     {
-        LOG(ERROR) << "GetModuleHandleExW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "GetModuleHandleExW() failed: " << GetLastSystemErrorString();
         return;
     }
 
@@ -42,16 +41,14 @@ void RunUIMain()
     HRESULT hr = module.Init(nullptr, instance);
     if (FAILED(hr))
     {
-        LOG(ERROR) << "Module initialization failure: "
-                   << SystemErrorCodeToString(hr);
+        LOG(LS_ERROR) << "Module initialization failure: " << SystemErrorCodeToString(hr);
         return;
     }
 
     MainDialog main_dialog;
     if (!main_dialog.Create(nullptr, 0))
     {
-        LOG(ERROR) << "Unable to create main dialog: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "Unable to create main dialog: " << GetLastSystemErrorString();
     }
     else
     {

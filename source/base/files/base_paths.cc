@@ -22,7 +22,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetModuleFileNameW() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "GetModuleFileNameW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -34,7 +34,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -46,7 +46,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -58,7 +58,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -70,7 +70,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -82,7 +82,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -92,7 +92,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetCurrentDirectoryW(_countof(buffer), buffer))
             {
-                LOG(ERROR) << "GetCurrentDirectoryW() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "GetCurrentDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -102,7 +102,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetWindowsDirectoryW() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "GetWindowsDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -112,7 +112,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetSystemDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(ERROR) << "GetSystemDirectoryW() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "GetSystemDirectoryW() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }

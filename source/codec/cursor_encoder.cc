@@ -108,8 +108,8 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
     if (size.Width() <= 0 || size.Width() > kMaxSize ||
         size.Height() <= 0 || size.Height() > kMaxSize)
     {
-        DLOG(ERROR) << "Wrong size of cursor: "
-                    << size.Width() << "x" << size.Height();
+        DLOG(LS_ERROR) << "Wrong size of cursor: "
+                       << size.Width() << "x" << size.Height();
         return nullptr;
     }
 

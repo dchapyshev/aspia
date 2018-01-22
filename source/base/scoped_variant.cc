@@ -276,7 +276,7 @@ void ScopedVariant::Set(const VARIANT& var)
 
     if (FAILED(::VariantCopy(&var_, &var)))
     {
-        DLOG(ERROR) << "VariantCopy failed";
+        DLOG(LS_ERROR) << "VariantCopy failed";
         var_.vt = VT_EMPTY;
     }
 }

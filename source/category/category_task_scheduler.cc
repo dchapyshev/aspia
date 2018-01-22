@@ -31,7 +31,7 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
     HRESULT hr = action->get_Type(&action_type);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "action->get_Type() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "action->get_Type() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -45,7 +45,8 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
                                         reinterpret_cast<void**>(exec_action.Receive()));
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "action->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "action->QueryInterface() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -54,7 +55,8 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
             hr = exec_action->get_Path(path.Receive());
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "exec_action->get_Path() failed: " << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "exec_action->get_Path() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -63,8 +65,8 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
             hr = exec_action->get_Arguments(arguments.Receive());
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "exec_action->get_Arguments() failed: "
-                              << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "exec_action->get_Arguments() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -73,8 +75,8 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
             hr = exec_action->get_WorkingDirectory(working_directory.Receive());
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "exec_action->get_WorkingDirectory() failed: "
-                              << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "exec_action->get_WorkingDirectory() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -106,7 +108,7 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
                                          reinterpret_cast<void**>(event_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -115,7 +117,7 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = event_trigger->get_Delay(delay.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "event_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "event_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -126,8 +128,8 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = event_trigger->get_ValueQueries(named_value_collection.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "event_trigger->get_ValueQueries() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "event_trigger->get_ValueQueries() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -136,8 +138,8 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = named_value_collection->get_Count(&count);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "named_value_collection->get_Count() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "named_value_collection->get_Count() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -148,8 +150,8 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
         hr = named_value_collection->get_Item(i + 1, named_value_pair.Receive());
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "named_value_collection->get_Item() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "named_value_collection->get_Item() failed: "
+                             << SystemErrorCodeToString(hr);
             break;
         }
 
@@ -158,8 +160,8 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
         hr = named_value_pair->get_Name(name.Receive());
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "named_value_pair->get_Name() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "named_value_pair->get_Name() failed: "
+                             << SystemErrorCodeToString(hr);
             break;
         }
 
@@ -168,8 +170,8 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
         hr = named_value_pair->get_Value(value.Receive());
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "named_value_pair->get_Value() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "named_value_pair->get_Value() failed: "
+                             << SystemErrorCodeToString(hr);
             break;
         }
 
@@ -193,7 +195,7 @@ bool AddTaskTriggerV2ForDaily(ITrigger* trigger, proto::TaskScheduler::Trigger* 
                                          reinterpret_cast<void**>(daily_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -202,8 +204,8 @@ bool AddTaskTriggerV2ForDaily(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = daily_trigger->get_DaysInterval(&days_interval);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "daily_trigger->get_DaysInterval() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "daily_trigger->get_DaysInterval() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -222,7 +224,7 @@ bool AddTaskTriggerV2ForWeekly(ITrigger* trigger, proto::TaskScheduler::Trigger*
                                          reinterpret_cast<void**>(weekly_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -231,8 +233,8 @@ bool AddTaskTriggerV2ForWeekly(ITrigger* trigger, proto::TaskScheduler::Trigger*
     hr = weekly_trigger->get_DaysOfWeek(&days_of_week);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "weekly_trigger->get_DaysOfWeek() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "weekly_trigger->get_DaysOfWeek() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -241,8 +243,8 @@ bool AddTaskTriggerV2ForWeekly(ITrigger* trigger, proto::TaskScheduler::Trigger*
     hr = weekly_trigger->get_WeeksInterval(&weeks_interval);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "weekly_trigger->get_DaysOfWeek() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "weekly_trigger->get_DaysOfWeek() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -262,7 +264,7 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
                                          reinterpret_cast<void**>(monthly_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -271,8 +273,8 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
     hr = monthly_trigger->get_DaysOfMonth(&days_of_month);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_DaysOfMonth() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_DaysOfMonth() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -281,8 +283,8 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
     hr = monthly_trigger->get_MonthsOfYear(&months_of_year);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_MonthsOfYear() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_MonthsOfYear() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -291,8 +293,8 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
     hr = monthly_trigger->get_RunOnLastDayOfMonth(&run_on_last_day_of_month);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_RunOnLastDayOfMonth() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_RunOnLastDayOfMonth() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -313,7 +315,7 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
                                          reinterpret_cast<void**>(monthly_dow_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -322,8 +324,8 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
     hr = monthly_dow_trigger->get_DaysOfWeek(&days_of_week);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_DaysOfMonth() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_DaysOfMonth() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -332,8 +334,8 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
     hr = monthly_dow_trigger->get_MonthsOfYear(&months_of_year);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_MonthsOfYear() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_MonthsOfYear() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -342,8 +344,8 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
     hr = monthly_dow_trigger->get_RunOnLastWeekOfMonth(&run_on_last_week_of_month);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_trigger->get_RunOnLastWeekOfMonth() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_trigger->get_RunOnLastWeekOfMonth() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -352,8 +354,8 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
     hr = monthly_dow_trigger->get_WeeksOfMonth(&weeks_of_month);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "monthly_dow_trigger->get_WeeksOfMonth() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "monthly_dow_trigger->get_WeeksOfMonth() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -375,7 +377,7 @@ bool AddTaskTriggerV2ForRegistration(ITrigger* trigger, proto::TaskScheduler::Tr
                                          reinterpret_cast<void**>(registration_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -384,8 +386,8 @@ bool AddTaskTriggerV2ForRegistration(ITrigger* trigger, proto::TaskScheduler::Tr
     hr = registration_trigger->get_Delay(delay.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registration_trigger->get_Delay() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registration_trigger->get_Delay() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -404,7 +406,7 @@ bool AddTaskTriggerV2ForBoot(ITrigger* trigger, proto::TaskScheduler::Trigger* i
                                          reinterpret_cast<void**>(boot_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -413,7 +415,7 @@ bool AddTaskTriggerV2ForBoot(ITrigger* trigger, proto::TaskScheduler::Trigger* i
     hr = boot_trigger->get_Delay(delay.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "boot_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "boot_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -432,7 +434,7 @@ bool AddTaskTriggerV2ForLogon(ITrigger* trigger, proto::TaskScheduler::Trigger* 
                                          reinterpret_cast<void**>(logon_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -441,7 +443,7 @@ bool AddTaskTriggerV2ForLogon(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = logon_trigger->get_UserId(user_id.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "logon_trigger->get_UserId() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "logon_trigger->get_UserId() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -450,7 +452,7 @@ bool AddTaskTriggerV2ForLogon(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     hr = logon_trigger->get_Delay(delay.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "logon_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "logon_trigger->get_Delay() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -470,7 +472,7 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
         reinterpret_cast<void**>(session_state_change_trigger.Receive()));
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->QueryInterface() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -479,8 +481,8 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
     hr = session_state_change_trigger->get_UserId(user_id.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "session_state_change_trigger->get_UserId() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "session_state_change_trigger->get_UserId() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -489,8 +491,8 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
     hr = session_state_change_trigger->get_Delay(delay.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "session_state_change_trigger->get_Delay() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "session_state_change_trigger->get_Delay() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -499,8 +501,8 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
     hr = session_state_change_trigger->get_StateChange(&change_type);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "session_state_change_trigger->get_StateChange() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "session_state_change_trigger->get_StateChange() failed: "
+                         << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -537,7 +539,7 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
             break;
 
         default:
-            DLOG(WARNING) << "Unknown session change type: " << change_type;
+            DLOG(LS_WARNING) << "Unknown session change type: " << change_type;
             return false;
     }
 
@@ -554,7 +556,7 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV2(ITrigger* trigger)
     HRESULT hr = trigger->get_Type(&trigger_type);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->get_Type() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->get_Type() failed: " << SystemErrorCodeToString(hr);
         return nullptr;
     }
 
@@ -563,7 +565,7 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV2(ITrigger* trigger)
     hr = trigger->get_Enabled(&enabled);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->get_Enabled() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->get_Enabled() failed: " << SystemErrorCodeToString(hr);
         return nullptr;
     }
 
@@ -572,7 +574,7 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV2(ITrigger* trigger)
     hr = trigger->get_StartBoundary(start_boundary.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "trigger->get_StartBoundary() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "trigger->get_StartBoundary() failed: " << SystemErrorCodeToString(hr);
         return nullptr;
     }
 
@@ -678,7 +680,7 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV2(ITrigger* trigger)
             break;
 
         default:
-            DLOG(WARNING) << "Unknown trigger type: " << trigger_type;
+            DLOG(LS_WARNING) << "Unknown trigger type: " << trigger_type;
             return nullptr;
     }
 
@@ -692,7 +694,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     HRESULT hr = registered_task->get_Name(name.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_Name() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_Name() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -701,7 +703,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_State(&task_state);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_State() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_State() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -710,8 +712,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_LastRunTime(&last_run_time);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_LastRunTime() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_LastRunTime() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -720,8 +722,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_NextRunTime(&next_run_time);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_NextRunTime() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_NextRunTime() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -730,8 +732,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_NumberOfMissedRuns(&number_of_missed_runs);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_NumberOfMissedRuns() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_NumberOfMissedRuns() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -740,8 +742,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_LastTaskResult(&last_task_result);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_LastTaskResult() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_LastTaskResult() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -780,8 +782,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = registered_task->get_Definition(task_definition.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "registered_task->get_Definition() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "registered_task->get_Definition() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -790,8 +792,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = task_definition->get_Principal(principal.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_definition->get_Principal() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_definition->get_Principal() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -800,7 +802,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
     hr = principal->get_LogonType(&logon_type);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "principal->get_LogonType() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "principal->get_LogonType() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -816,7 +818,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
             hr = principal->get_UserId(user_id.Receive());
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "principal->get_UserId() failed: " << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "principal->get_UserId() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -831,7 +834,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
             hr = principal->get_GroupId(group_id.Receive());
             if (FAILED(hr))
             {
-                DLOG(WARNING) << "principal->get_GroupId() failed: " << SystemErrorCodeToString(hr);
+                DLOG(LS_WARNING) << "principal->get_GroupId() failed: "
+                                 << SystemErrorCodeToString(hr);
                 return;
             }
 
@@ -859,8 +863,8 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
         }
         else
         {
-            DLOG(WARNING) << "registration_info->get_Author() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "registration_info->get_Author() failed: "
+                             << SystemErrorCodeToString(hr);
         }
 
         ScopedBstr description;
@@ -872,14 +876,14 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
         }
         else
         {
-            DLOG(WARNING) << "registration_info->get_Description() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "registration_info->get_Description() failed: "
+                             << SystemErrorCodeToString(hr);
         }
     }
     else
     {
-        DLOG(WARNING) << "task_definition->get_RegistrationInfo() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_definition->get_RegistrationInfo() failed: "
+                         << SystemErrorCodeToString(hr);
     }
 
     ScopedComPtr<IActionCollection> action_collection;
@@ -903,21 +907,21 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
                 }
                 else
                 {
-                    DLOG(WARNING) << "action_collection->get_Item() failed: "
-                                  << SystemErrorCodeToString(hr);
+                    DLOG(LS_WARNING) << "action_collection->get_Item() failed: "
+                                     << SystemErrorCodeToString(hr);
                 }
             }
         }
         else
         {
-            DLOG(WARNING) << "action_collection->get_Count() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "action_collection->get_Count() failed: "
+                             << SystemErrorCodeToString(hr);
         }
     }
     else
     {
-        DLOG(WARNING) << "task_definition->get_Actions() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_definition->get_Actions() failed: "
+                         << SystemErrorCodeToString(hr);
     }
 
     ScopedComPtr<ITriggerCollection> trigger_collection;
@@ -945,21 +949,21 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
                 }
                 else
                 {
-                    DLOG(WARNING) << "trigger_collection->get_Item failed: "
-                                  << SystemErrorCodeToString(hr);
+                    DLOG(LS_WARNING) << "trigger_collection->get_Item failed: "
+                                     << SystemErrorCodeToString(hr);
                 }
             }
         }
         else
         {
-            DLOG(WARNING) << "trigger_collection->get_Count() failed: "
-                          << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "trigger_collection->get_Count() failed: "
+                             << SystemErrorCodeToString(hr);
         }
     }
     else
     {
-        DLOG(WARNING) << "task_definition->get_Triggers() failed: "
-                      << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_definition->get_Triggers() failed: "
+                         << SystemErrorCodeToString(hr);
     }
 }
 
@@ -970,14 +974,15 @@ void AddTaskListV2(proto::TaskScheduler& message)
     HRESULT hr = task_service.CreateInstance(CLSID_TaskScheduler);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_service.CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_service.CreateInstance() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
     hr = task_service->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_service->Connect() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_service->Connect() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -986,7 +991,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
     hr = task_service->GetFolder(_bstr_t(L"\\"), task_folder.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_service->GetFolder() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_service->GetFolder() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -995,7 +1000,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
     hr = task_folder->GetTasks(0, task_collection.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_folder->GetTasks() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_folder->GetTasks() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -1004,7 +1009,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
     hr = task_collection->get_Count(&task_count);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_collection->get_Count() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_collection->get_Count() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -1015,7 +1020,8 @@ void AddTaskListV2(proto::TaskScheduler& message)
         hr = task_collection->get_Item(_variant_t(i + 1), registered_task.Receive());
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "task_collection->get_Item() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "task_collection->get_Item() failed: "
+                             << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -1116,7 +1122,8 @@ void AddTaskListV1(proto::TaskScheduler& message)
     HRESULT hr = task_scheduler.CreateInstance(CLSID_CTaskScheduler);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_scheduler.CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_scheduler.CreateInstance() failed: "
+                         << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -1125,7 +1132,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
     hr = task_scheduler->Enum(enum_work_items.Receive());
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "task_scheduler->Enum() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "task_scheduler->Enum() failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -1136,7 +1143,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
         hr = enum_work_items->Next(1, &name, nullptr);
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "enum_work_items->Next() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "enum_work_items->Next() failed: " << SystemErrorCodeToString(hr);
             break;
         }
 
@@ -1148,7 +1155,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
         hr = task_scheduler->Activate(*name, IID_ITask, reinterpret_cast<IUnknown**>(task.Receive()));
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "task_scheduler->Activate() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "task_scheduler->Activate() failed: " << SystemErrorCodeToString(hr);
             break;
         }
 
@@ -1156,7 +1163,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
         hr = task->GetStatus(&status);
         if (FAILED(hr))
         {
-            DLOG(WARNING) << "task->GetStatus() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_WARNING) << "task->GetStatus() failed: " << SystemErrorCodeToString(hr);
             break;
         }
 

@@ -49,7 +49,7 @@ bool DecompressorZLIB::Process(const uint8_t* input_data,
     int ret = inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
     {
-        DLOG(ERROR) << "zlib decompression failed: " << ret;
+        DLOG(LS_ERROR) << "zlib decompression failed: " << ret;
     }
 
     *consumed = input_size - stream_.avail_in;

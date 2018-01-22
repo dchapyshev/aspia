@@ -18,7 +18,7 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     HRESULT hr = firewall_manager.CreateInstance(CLSID_NetFwMgr);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -26,14 +26,14 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     hr = firewall_manager->get_LocalPolicy(firewall_policy.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_LocalPolicy() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "get_LocalPolicy() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
     hr = firewall_policy->get_CurrentProfile(current_profile_.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_CurrentProfile() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "get_CurrentProfile() failed: " << SystemErrorCodeToString(hr);
         current_profile_ = nullptr;
         return false;
     }
@@ -58,7 +58,7 @@ FirewallManagerLegacy::GetAuthorizedApplications()
     HRESULT hr = current_profile_->get_AuthorizedApplications(authorized_apps.Receive());
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "get_AuthorizedApplications() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "get_AuthorizedApplications() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplications>();
     }
 
@@ -73,7 +73,7 @@ FirewallManagerLegacy::CreateAuthorization(bool allow)
     HRESULT hr = application.CreateInstance(CLSID_NetFwAuthorizedApplication);
     if (FAILED(hr))
     {
-        DLOG(ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "CreateInstance() failed: " << SystemErrorCodeToString(hr);
         return ScopedComPtr<INetFwAuthorizedApplication>();
     }
 

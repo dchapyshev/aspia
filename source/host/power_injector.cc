@@ -23,7 +23,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
             }
         }
         break;
@@ -32,7 +32,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
             {
-                LOG(ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
             }
         }
         break;
@@ -41,7 +41,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!SetSystemPowerState(FALSE, TRUE))
             {
-                LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -51,7 +51,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!SetSystemPowerState(TRUE, TRUE))
             {
-                LOG(ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -59,7 +59,7 @@ bool InjectPowerCommand(proto::power::Command command)
 
         default:
         {
-            DLOG(WARNING) << "Unknown power control action requested: " << command;
+            DLOG(LS_WARNING) << "Unknown power control action requested: " << command;
             return false;
         }
     }

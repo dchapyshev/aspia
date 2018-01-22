@@ -22,7 +22,7 @@ static T SerializeMessage(const google::protobuf::MessageLite& message)
 
     if (!size)
     {
-        LOG(ERROR) << "Empty messages are not allowed";
+        LOG(LS_ERROR) << "Empty messages are not allowed";
         return T();
     }
 
@@ -36,7 +36,7 @@ bool ParseMessage(const IOBuffer& buffer, T& message)
 {
     if (!message.ParseFromArray(buffer.data(), static_cast<int>(buffer.size())))
     {
-        LOG(ERROR) << "Received message that is not a valid protocol buffer.";
+        LOG(LS_ERROR) << "Received message that is not a valid protocol buffer.";
         return false;
     }
 

@@ -8,6 +8,8 @@
 #ifndef _ASPIA_BUILD_CONFIG_H
 #define _ASPIA_BUILD_CONFIG_H
 
+#define OFFICIAL_BUILD 0
+
 // Compiler detection.
 #if defined(_MSC_VER)
 #define COMPILER_MSVC 1

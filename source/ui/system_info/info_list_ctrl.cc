@@ -247,7 +247,7 @@ std::wstring InfoListCtrl::ValueToString(const Value& value)
 
         default:
         {
-            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            DLOG(LS_FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
             return std::wstring();
         }
     }

@@ -128,13 +128,13 @@ void ClientSessionSystemInfo::OnReplyReceived(const IOBuffer& buffer)
                 }
 
                 default:
-                    LOG(ERROR) << "Unknown compressor: " << message.compressor();
+                    LOG(LS_ERROR) << "Unknown compressor: " << message.compressor();
                     break;
             }
         }
         else
         {
-            DLOG(ERROR) << "Invalid GUID: " << guid;
+            DLOG(LS_ERROR) << "Invalid GUID: " << guid;
         }
     }
 

@@ -23,7 +23,7 @@ bool FileListCtrl::CreateFileList(HWND parent, int control_id)
 
     if (!Create(parent, CWindow::rcDefault, nullptr, style, WS_EX_CLIENTEDGE, control_id))
     {
-        DLOG(ERROR) << "Unable to create file list window: " << GetLastSystemErrorString();
+        DLOG(LS_ERROR) << "Unable to create file list window: " << GetLastSystemErrorString();
         return false;
     }
 

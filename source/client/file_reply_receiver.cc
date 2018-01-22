@@ -26,7 +26,7 @@ void FileReplyReceiver::OnDriveListReply(
     std::shared_ptr<proto::file_transfer::DriveList> /* drive_list */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: drive list";
+    DLOG(LS_WARNING) << "Unhandled reply: drive list";
 }
 
 void FileReplyReceiver::OnFileListReply(
@@ -34,7 +34,7 @@ void FileReplyReceiver::OnFileListReply(
     std::shared_ptr<proto::file_transfer::FileList> /* file_list */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: file list";
+    DLOG(LS_WARNING) << "Unhandled reply: file list";
 }
 
 void FileReplyReceiver::OnDirectorySizeReply(
@@ -42,21 +42,21 @@ void FileReplyReceiver::OnDirectorySizeReply(
     uint64_t /* size */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: directory size";
+    DLOG(LS_WARNING) << "Unhandled reply: directory size";
 }
 
 void FileReplyReceiver::OnCreateDirectoryReply(
     const std::experimental::filesystem::path& /* path */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: create directory";
+    DLOG(LS_WARNING) << "Unhandled reply: create directory";
 }
 
 void FileReplyReceiver::OnRemoveReply(
     const std::experimental::filesystem::path& /* path */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: remove";
+    DLOG(LS_WARNING) << "Unhandled reply: remove";
 }
 
 void FileReplyReceiver::OnRenameReply(
@@ -64,34 +64,34 @@ void FileReplyReceiver::OnRenameReply(
     const std::experimental::filesystem::path& /* new_name */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: rename";
+    DLOG(LS_WARNING) << "Unhandled reply: rename";
 }
 
 void FileReplyReceiver::OnFileUploadReply(
     const std::experimental::filesystem::path& /* file_path */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: file upload";
+    DLOG(LS_WARNING) << "Unhandled reply: file upload";
 }
 
 void FileReplyReceiver::OnFileDownloadReply(
     const std::experimental::filesystem::path& /* file_path */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: file download";
+    DLOG(LS_WARNING) << "Unhandled reply: file download";
 }
 
 void FileReplyReceiver::OnFilePacketSended(
     uint32_t /* flags */, proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: file packet sended";
+    DLOG(LS_WARNING) << "Unhandled reply: file packet sended";
 }
 
 void FileReplyReceiver::OnFilePacketReceived(
     std::shared_ptr<proto::file_transfer::FilePacket> /* file_packet */,
     proto::file_transfer::Status /* status */)
 {
-    DLOG(WARNING) << "Unhandled reply: file packet received";
+    DLOG(LS_WARNING) << "Unhandled reply: file packet received";
 }
 
 } // namespace aspia

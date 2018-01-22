@@ -50,7 +50,7 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
 
     if (session_type != proto::auth::SESSION_TYPE_FILE_TRANSFER)
     {
-        LOG(FATAL) << "Invalid session type passed: " << session_type;
+        LOG(LS_FATAL) << "Invalid session type passed: " << session_type;
         return;
     }
 
@@ -119,7 +119,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const IOBuffer& buffer)
     }
     else
     {
-        LOG(ERROR) << "Unknown message from client";
+        LOG(LS_ERROR) << "Unknown message from client";
         ipc_channel_proxy_->Disconnect();
     }
 }
@@ -287,7 +287,7 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
 {
     if (!file_depacketizer_)
     {
-        LOG(ERROR) << "Unexpected file packet";
+        LOG(LS_ERROR) << "Unexpected file packet";
         return false;
     }
 
@@ -348,7 +348,7 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
 {
     if (!file_packetizer_)
     {
-        LOG(ERROR) << "Unexpected download data request";
+        LOG(LS_ERROR) << "Unexpected download data request";
         return false;
     }
 

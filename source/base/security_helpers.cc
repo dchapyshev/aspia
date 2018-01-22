@@ -44,8 +44,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -69,8 +68,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        LOG(ERROR) << "MakeAbsoluteSD() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "MakeAbsoluteSD() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -94,7 +92,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     ScopedSd relative_sd = ConvertSddlToSd(sddl);
     if (!relative_sd)
     {
-        LOG(ERROR) << "Failed to create a security descriptor";
+        LOG(LS_ERROR) << "Failed to create a security descriptor";
         return false;
     }
 
@@ -107,7 +105,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl,
                               group, owner, sacl))
     {
-        LOG(ERROR) << "MakeScopedAbsoluteSd() failed";
+        LOG(LS_ERROR) << "MakeScopedAbsoluteSd() failed";
         return false;
     }
 
@@ -129,7 +127,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        LOG(ERROR) << "CoInitializeSecurity() failed: " << result;
+        LOG(LS_ERROR) << "CoInitializeSecurity() failed: " << result;
         return false;
     }
 
@@ -175,8 +173,8 @@ ScopedSd ConvertSddlToSd(const std::wstring& sddl)
                                                               raw_sd.Recieve(),
                                                               &length))
     {
-        LOG(ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW() failed: "
-                   << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW() failed: "
+                      << GetLastSystemErrorString();
         return ScopedSd();
     }
 

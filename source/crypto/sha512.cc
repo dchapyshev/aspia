@@ -34,7 +34,7 @@ bool CreateSHA512(const std::string& data, std::string& data_hash, size_t iter_c
     {
         if (crypto_hash_sha512(hash_buffer, source_buffer, source_buffer_size) != 0)
         {
-            LOG(ERROR) << "crypto_hash_sha512() failed";
+            LOG(LS_ERROR) << "crypto_hash_sha512() failed";
             return false;
         }
 

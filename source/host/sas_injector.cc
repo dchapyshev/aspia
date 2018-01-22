@@ -110,7 +110,7 @@ void SasInjector::Worker()
 
     if (!send_message_func)
     {
-        LOG(ERROR) << "WmsgSendMessage() not found in wmsgapi.dll";
+        LOG(LS_ERROR) << "WmsgSendMessage() not found in wmsgapi.dll";
         return;
     }
 
@@ -123,14 +123,14 @@ void SasInjector::Worker()
             GetProcAddress(kernel32_module, "WTSGetActiveConsoleSessionId"));
     if (!get_active_console_session_id_func)
     {
-        LOG(ERROR) << "WTSGetActiveConsoleSessionId not found in kernel32.dll";
+        LOG(LS_ERROR) << "WTSGetActiveConsoleSessionId not found in kernel32.dll";
         return;
     }
 
     DWORD session_id = get_active_console_session_id_func();
     if (session_id == kInvalidSessionId)
     {
-        LOG(ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "WTSGetActiveConsoleSessionId() failed: " << GetLastSystemErrorString();
         return;
     }
 

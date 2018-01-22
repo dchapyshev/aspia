@@ -533,8 +533,8 @@ std::string CategoryPowerOptions::Serialize()
 
                 if (error_code != ERROR_NO_MORE_ITEMS)
                 {
-                    DLOG(WARNING) << "SetupDiEnumDeviceInfo() failed: "
-                                  << SystemErrorCodeToString(error_code);
+                    DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                                     << SystemErrorCodeToString(error_code);
                 }
 
                 break;
@@ -550,7 +550,7 @@ std::string CategoryPowerOptions::Serialize()
                                                  nullptr) ||
                 GetLastError() != ERROR_INSUFFICIENT_BUFFER)
             {
-                DLOG(WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
+                DLOG(LS_WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
                 break;
             }
 
@@ -567,8 +567,8 @@ std::string CategoryPowerOptions::Serialize()
                                                   &required_size,
                                                   nullptr))
             {
-                DLOG(WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
-                              << GetLastSystemErrorString();
+                DLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
+                                 << GetLastSystemErrorString();
                 break;
             }
 

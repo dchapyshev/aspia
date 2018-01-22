@@ -34,7 +34,7 @@ void GetCPUCount(uint32_t& package_count,
     if (GetLogicalProcessorInformation(nullptr, &returned_length) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        DLOG(ERROR) << "Unexpected return value";
+        DLOG(LS_ERROR) << "Unexpected return value";
         return;
     }
 
@@ -45,7 +45,7 @@ void GetCPUCount(uint32_t& package_count,
 
     if (!GetLogicalProcessorInformation(info, &returned_length))
     {
-        DLOG(ERROR) << "GetLogicalProcessorInformation() failed: " << GetLastSystemErrorString();
+        DLOG(LS_ERROR) << "GetLogicalProcessorInformation() failed: " << GetLastSystemErrorString();
         return;
     }
 

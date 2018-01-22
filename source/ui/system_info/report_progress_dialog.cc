@@ -65,7 +65,7 @@ void ReportProgressDialog::OnStateChanged(std::string_view category_name,
             break;
 
         default:
-            DLOG(ERROR) << "Unhandled state: " << static_cast<int>(state);
+            DLOG(LS_ERROR) << "Unhandled state: " << static_cast<int>(state);
             return;
     }
 

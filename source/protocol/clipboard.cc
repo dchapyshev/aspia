@@ -36,7 +36,7 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
                                    std::placeholders::_1, std::placeholders::_2,
                                    std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(ERROR) << "Couldn't create clipboard window.";
+        LOG(LS_ERROR) << "Couldn't create clipboard window.";
         return false;
     }
 
@@ -56,8 +56,8 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
     {
         if (!add_clipboard_format_listener_(window_->hwnd()))
         {
-            LOG(WARNING) << "AddClipboardFormatListener() failed: "
-                         << GetLastSystemErrorString();
+            LOG(LS_WARNING) << "AddClipboardFormatListener() failed: "
+                            << GetLastSystemErrorString();
             return false;
         }
     }
@@ -112,16 +112,16 @@ void Clipboard::OnClipboardUpdate()
 
             if (!clipboard.Init(window_->hwnd()))
             {
-                LOG(WARNING) << "Couldn't open the clipboard: "
-                             << GetLastSystemErrorString();
+                LOG(LS_WARNING) << "Couldn't open the clipboard: "
+                                << GetLastSystemErrorString();
                 return;
             }
 
             HGLOBAL text_global = clipboard.GetData(CF_UNICODETEXT);
             if (!text_global)
             {
-                LOG(WARNING) << "Couldn't get data from the clipboard: "
-                             << GetLastSystemErrorString();
+                LOG(LS_WARNING) << "Couldn't get data from the clipboard: "
+                                << GetLastSystemErrorString();
                 return;
             }
 
@@ -129,14 +129,14 @@ void Clipboard::OnClipboardUpdate()
                 ScopedHGlobal<WCHAR> text_lock(text_global);
                 if (!text_lock.Get())
                 {
-                    LOG(WARNING) << "Couldn't lock clipboard data: "
-                                 << GetLastSystemErrorString();
+                    LOG(LS_WARNING) << "Couldn't lock clipboard data: "
+                                    << GetLastSystemErrorString();
                     return;
                 }
 
                 if (!UNICODEtoUTF8(text_lock.Get(), data))
                 {
-                    LOG(WARNING) << "Couldn't convert data to utf8";
+                    LOG(LS_WARNING) << "Couldn't convert data to utf8";
                     return;
                 }
             }
@@ -220,13 +220,13 @@ void Clipboard::InjectClipboardEvent(
     // Currently we only handle UTF-8 text.
     if (clipboard_event->mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
+        LOG(LS_WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
         return;
     }
 
     if (!IsStringUTF8(clipboard_event->data()))
     {
-        LOG(WARNING) << "Clipboard data is not UTF-8 encoded";
+        LOG(LS_WARNING) << "Clipboard data is not UTF-8 encoded";
         return;
     }
 
@@ -238,7 +238,7 @@ void Clipboard::InjectClipboardEvent(
 
     if (!UTF8toUNICODE(ReplaceLfByCrLf(last_data_), text))
     {
-        LOG(WARNING) << "Couldn't convert data to unicode";
+        LOG(LS_WARNING) << "Couldn't convert data to unicode";
         return;
     }
 
@@ -246,7 +246,7 @@ void Clipboard::InjectClipboardEvent(
 
     if (!clipboard.Init(window_->hwnd()))
     {
-        LOG(WARNING) << "Couldn't open the clipboard." << GetLastSystemErrorString();
+        LOG(LS_WARNING) << "Couldn't open the clipboard." << GetLastSystemErrorString();
         return;
     }
 
@@ -255,14 +255,14 @@ void Clipboard::InjectClipboardEvent(
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
-        LOG(WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorString();
+        LOG(LS_WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorString();
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        LOG(WARNING) << "GlobalLock() failed: " << GetLastSystemErrorString();
+        LOG(LS_WARNING) << "GlobalLock() failed: " << GetLastSystemErrorString();
         GlobalFree(text_global);
         return;
     }

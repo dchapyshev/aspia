@@ -28,19 +28,19 @@ HANDLE OpenEventLogHandle(const WCHAR* source, DWORD* records_count, DWORD* firs
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
     if (!event_log.IsValid())
     {
-        DLOG(WARNING) << "OpenEventLogW() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "OpenEventLogW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
     if (!GetNumberOfEventLogRecords(event_log, records_count))
     {
-        DLOG(WARNING) << "GetNumberOfEventLogRecords() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "GetNumberOfEventLogRecords() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
     if (!GetOldestEventLogRecord(event_log, first_record))
     {
-        DLOG(WARNING) << "GetOldestEventLogRecord() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "GetOldestEventLogRecord() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -70,7 +70,7 @@ std::unique_ptr<uint8_t[]> GetEventLogRecord(
 
         if (error_code != ERROR_INSUFFICIENT_BUFFER)
         {
-            DLOG(WARNING) << "ReadEventLogW() failed: " << SystemErrorCodeToString(error_code);
+            DLOG(LS_WARNING) << "ReadEventLogW() failed: " << SystemErrorCodeToString(error_code);
             return nullptr;
         }
 
@@ -85,7 +85,7 @@ std::unique_ptr<uint8_t[]> GetEventLogRecord(
                            &bytes_read,
                            &bytes_needed))
         {
-            DLOG(WARNING) << "ReadEventLogW() failed: " << GetLastSystemErrorString();
+            DLOG(LS_WARNING) << "ReadEventLogW() failed: " << GetLastSystemErrorString();
             return nullptr;
         }
     }
@@ -103,7 +103,7 @@ bool GetEventLogMessageFileDLL(
                                  log_name, source);
     if (FAILED(hr))
     {
-        DLOG(WARNING) << "StringCbPrintfW() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_WARNING) << "StringCbPrintfW() failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
@@ -112,14 +112,14 @@ bool GetEventLogMessageFileDLL(
     LONG status = key.Open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "key.Open() failed: " << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "key.Open() failed: " << SystemErrorCodeToString(status);
         return false;
     }
 
     status = key.ReadValue(L"EventMessageFile", message_file);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "key.ReadValue() failed: " << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "key.ReadValue() failed: " << SystemErrorCodeToString(status);
         return false;
     }
 
@@ -247,7 +247,7 @@ void AddEventLogItems(const WCHAR* log_name, proto::EventLog::Log* log)
                     break;
 
                 default:
-                    DLOG(WARNING) << "Unknown event type: " << record->EventType;
+                    DLOG(LS_WARNING) << "Unknown event type: " << record->EventType;
                     break;
             }
 

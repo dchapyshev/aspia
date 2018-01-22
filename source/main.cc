@@ -17,8 +17,14 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
                     PWSTR /* pCmdLine */,
                     int /* nCmdShow */)
 {
-    google::InitGoogleLogging("aspia.exe");
-    FLAGS_log_dir = "c:\\temp";
+    aspia::LoggingSettings settings;
+
+    settings.logging_dest = aspia::LOG_TO_ALL;
+    settings.log_file     = L"debug.log";
+    settings.lock_log     = aspia::LOCK_LOG_FILE;
+    settings.delete_old   = aspia::DELETE_OLD_LOG_FILE;
+
+    aspia::InitLogging(settings);
 
     const aspia::CommandLine& command_line = aspia::CommandLine::ForCurrentProcess();
 
@@ -38,8 +44,6 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     {
         aspia::RunHostMain(command_line);
     }
-
-    google::ShutdownGoogleLogging();
 
     return 0;
 }

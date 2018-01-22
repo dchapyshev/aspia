@@ -31,7 +31,7 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet, Desktop
 
         if (!frame_rect.ContainsRect(rect))
         {
-            LOG(ERROR) << "The rectangle is outside the screen area";
+            LOG(LS_ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 

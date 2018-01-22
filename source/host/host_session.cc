@@ -160,7 +160,7 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
     bool ok = process_.IsValid();
     if (!ok)
     {
-        LOG(ERROR) << "Unable to open session process: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "Unable to open session process: " << GetLastSystemErrorString();
     }
 
     if (ok)
@@ -170,7 +170,7 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
 
         if (!ok)
         {
-            LOG(ERROR) << "Process watcher not started";
+            LOG(LS_ERROR) << "Process watcher not started";
             process_.Close();
         }
     }
@@ -233,7 +233,7 @@ void HostSession::OnSessionAttachTimeout()
             break;
 
         case State::ATTACHED:
-            LOG(FATAL) << "In the attached state, the timer must me stopped";
+            LOG(LS_FATAL) << "In the attached state, the timer must me stopped";
             break;
     }
 }

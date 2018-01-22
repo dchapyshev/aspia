@@ -209,12 +209,12 @@ bool CreateDirectory(const std::experimental::filesystem::path& full_path, File:
     {
         if ((fileattr & FILE_ATTRIBUTE_DIRECTORY) != 0)
         {
-            DLOG(WARNING) << "CreateDirectory(" << full_path_str << "), "
-                          << "directory already exists.";
+            DLOG(LS_WARNING) << "CreateDirectory(" << full_path_str << "), "
+                             << "directory already exists.";
             return true;
         }
-        DLOG(WARNING) << "CreateDirectory(" << full_path_str << "), "
-                      << "conflicts with existing file.";
+        DLOG(LS_WARNING) << "CreateDirectory(" << full_path_str << "), "
+                         << "conflicts with existing file.";
         if (error)
         {
             *error = File::FILE_ERROR_NOT_A_DIRECTORY;
@@ -238,7 +238,7 @@ bool CreateDirectory(const std::experimental::filesystem::path& full_path, File:
     }
     if (!CreateDirectory(parent_path, error))
     {
-        DLOG(WARNING) << "Failed to create one of the parent directories.";
+        DLOG(LS_WARNING) << "Failed to create one of the parent directories.";
         if (error)
         {
             DCHECK(*error != File::FILE_OK);
@@ -261,8 +261,8 @@ bool CreateDirectory(const std::experimental::filesystem::path& full_path, File:
         {
             if (error)
                 *error = File::OSErrorToFileError(error_code);
-            DLOG(WARNING) << "Failed to create directory " << full_path_str
-                          << ", last error is " << error_code << ".";
+            DLOG(LS_WARNING) << "Failed to create directory " << full_path_str
+                             << ", last error is " << error_code << ".";
             return false;
         }
     }

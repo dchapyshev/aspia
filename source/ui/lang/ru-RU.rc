@@ -360,7 +360,6 @@ BEGIN
                       • libvpx © 2010, The WebM Project authors, BSD 3-Clause License\r\n\
                       • libyuv © 2011 The LibYuv Project Authors, BSD 3-Clause License\r\n\
                       • protobuf © 2014 Google Inc., BSD 3-Clause License\r\n\
-                      • libglog © 2008 Google Inc., BSD 3-Clause License\r\n\
                       • zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License\r\n\
                       • libsodium © 2013-2017 Frank Denis, ISC License\r\n\
                       • WTL © 2015 Microsoft Corporation, WTL Team, Common Public License 1.0\r\n\

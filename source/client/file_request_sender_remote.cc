@@ -121,7 +121,7 @@ void FileRequestSenderRemote::SendRequest(
 
     if (last_receiver_)
     {
-        DLOG(ERROR) << "No response to previous request. New request ignored";
+        DLOG(LS_ERROR) << "No response to previous request. New request ignored";
         return;
     }
 
@@ -243,7 +243,7 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
     }
     else
     {
-        DLOG(ERROR) << "Unhandled request type";
+        DLOG(LS_ERROR) << "Unhandled request type";
         return false;
     }
 

@@ -61,7 +61,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!GetUserSidString(user_sid))
     {
-        LOG(ERROR) << "Failed to query the current user SID";
+        LOG(LS_ERROR) << "Failed to query the current user SID";
         return nullptr;
     }
 
@@ -76,7 +76,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
     ScopedSd sd = ConvertSddlToSd(security_descriptor);
     if (!sd.get())
     {
-        LOG(ERROR) << "Failed to create a security descriptor";
+        LOG(LS_ERROR) << "Failed to create a security descriptor";
         return nullptr;
     }
 
@@ -105,7 +105,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!pipe.IsValid())
     {
-        LOG(ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -126,7 +126,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& chann
                                   nullptr));
     if (!pipe.IsValid())
     {
-        LOG(ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -274,7 +274,7 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
     {
         if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
         {
-            LOG(ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
+            LOG(LS_ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
             return false;
         }
 

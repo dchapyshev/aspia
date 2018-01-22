@@ -31,7 +31,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
                               nullptr)
         || GetLastError() != ERROR_MORE_DATA)
     {
-        LOG(ERROR) << "Unexpected return value: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "Unexpected return value: " << GetLastSystemErrorString();
         return;
     }
 
@@ -48,7 +48,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
                                &resume_handle,
                                nullptr))
     {
-        LOG(ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
         services_buffer_.reset();
         services_count_ = 0;
     }
@@ -109,7 +109,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
                                 &bytes_needed)
             || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            LOG(ERROR) << "QueryServiceConfigW() failed: " << GetLastSystemErrorString();
+            LOG(LS_ERROR) << "QueryServiceConfigW() failed: " << GetLastSystemErrorString();
             return nullptr;
         }
 
@@ -121,7 +121,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
                                  bytes_needed,
                                  &bytes_needed))
         {
-            LOG(ERROR) << "QueryServiceConfigW() failed: " << GetLastSystemErrorString();
+            LOG(LS_ERROR) << "QueryServiceConfigW() failed: " << GetLastSystemErrorString();
             return nullptr;
         }
     }
@@ -162,7 +162,7 @@ std::wstring ServiceEnumerator::GetDescription() const
                              &bytes_needed)
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        LOG(WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
+        LOG(LS_WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
         return std::wstring();
     }
 
@@ -174,7 +174,7 @@ std::wstring ServiceEnumerator::GetDescription() const
                               bytes_needed,
                               &bytes_needed))
     {
-        LOG(WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
+        LOG(LS_WARNING) << "QueryServiceConfig2W() failed: " << GetLastSystemErrorString();
         return std::wstring();
     }
 

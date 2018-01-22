@@ -69,7 +69,7 @@ std::string ValueToString(const Value& value)
 
         default:
         {
-            DLOG(FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
+            DLOG(LS_FATAL) << "Unhandled value type: " << static_cast<int>(value.type());
             return std::string();
         }
     }
@@ -92,7 +92,7 @@ std::unique_ptr<ReportHtmlFile> ReportHtmlFile::Create(
     file.open(file_path, std::ofstream::out | std::ofstream::trunc);
     if (!file.is_open())
     {
-        LOG(WARNING) << "Unable to create report file: " << file_path;
+        LOG(LS_WARNING) << "Unable to create report file: " << file_path;
         return nullptr;
     }
 

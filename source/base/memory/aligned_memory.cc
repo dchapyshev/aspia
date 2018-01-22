@@ -23,7 +23,7 @@ void* AlignedAlloc(size_t size, size_t alignment)
     // consistent behavior with a normal allocation failure in Chrome.
     if (!ptr)
     {
-        DLOG(ERROR) << "Aligned allocation is incorrect: "
+        DLOG(LS_ERROR) << "Aligned allocation is incorrect: "
                     << "size=" << size << ", alignment=" << alignment;
         CHECK(false);
     }

@@ -24,14 +24,14 @@ std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
 
     if (!get_system_firmware_table_func)
     {
-        DLOG(WARNING) << "GetSystemFirmwareTable() function not found";
+        DLOG(LS_WARNING) << "GetSystemFirmwareTable() function not found";
         return nullptr;
     }
 
     UINT data_size = get_system_firmware_table_func('RSMB', 'PCAF', nullptr, 0);
     if (!data_size)
     {
-        DLOG(WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -39,7 +39,7 @@ std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
 
     if (!get_system_firmware_table_func('RSMB', 'PCAF', data.get(), data_size))
     {
-        DLOG(WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -54,7 +54,7 @@ std::unique_ptr<SMBios> ReadSMBiosFromWindowsRegistry()
     LONG status = key.Open(HKEY_LOCAL_MACHINE, kSMBiosPath, KEY_READ);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "Unable to open registry key: " << SystemErrorCodeToString(status);
         return nullptr;
     }
 
@@ -64,14 +64,14 @@ std::unique_ptr<SMBios> ReadSMBiosFromWindowsRegistry()
     status = key.ReadValue(L"SMBiosData", nullptr, &data_size, &type);
     if (status != ERROR_MORE_DATA)
     {
-        DLOG(WARNING) << "Unexpected return value or data not available: "
-                      << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "Unexpected return value or data not available: "
+                         << SystemErrorCodeToString(status);
         return nullptr;
     }
 
     if (type != REG_BINARY)
     {
-        DLOG(WARNING) << "Unexpected data type: " << type;
+        DLOG(LS_WARNING) << "Unexpected data type: " << type;
         return nullptr;
     }
 
@@ -80,8 +80,8 @@ std::unique_ptr<SMBios> ReadSMBiosFromWindowsRegistry()
     status = key.ReadValue(L"SMBiosData", data.get(), &data_size, &type);
     if (status != ERROR_SUCCESS)
     {
-        DLOG(WARNING) << "Unable to read SMBIOS data from registry: "
-                      << SystemErrorCodeToString(status);
+        DLOG(LS_WARNING) << "Unable to read SMBIOS data from registry: "
+                         << SystemErrorCodeToString(status);
         return nullptr;
     }
 

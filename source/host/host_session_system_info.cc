@@ -147,7 +147,7 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
 
             if (message_size > kMaxMessageSize)
             {
-                LOG(WARNING) << "Too much data: " << message_size;
+                LOG(LS_WARNING) << "Too much data: " << message_size;
                 reply.clear_data();
             }
 

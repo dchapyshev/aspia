@@ -53,7 +53,7 @@ void NetworkChannelTcp::DoConnect()
 
     if (IsFailureCode(code))
     {
-        LOG(ERROR) << "Failed to disable Nagle's algorithm: " << code.message();
+        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << code.message();
     }
 
     const Encryptor::Mode encryptor_mode = (mode_ == Mode::CLIENT) ?
@@ -95,7 +95,7 @@ void NetworkChannelTcp::DoSendHello()
     write_buffer_ = encryptor_->HelloMessage();
     if (write_buffer_.empty())
     {
-        DLOG(ERROR) << "Empty hello message";
+        DLOG(LS_ERROR) << "Empty hello message";
         DoDisconnect();
         return;
     }
@@ -103,7 +103,7 @@ void NetworkChannelTcp::DoSendHello()
     write_size_ = static_cast<MessageSizeType>(write_buffer_.size());
     if (write_size_ > kMaxMessageSize)
     {
-        DLOG(ERROR) << "Invalid message size: " << write_size_;
+        DLOG(LS_ERROR) << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
@@ -123,7 +123,7 @@ void NetworkChannelTcp::OnSendHelloSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(WARNING) << "Unable to send hello size message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to send hello size message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -140,7 +140,7 @@ void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        DLOG(WARNING) << "Unable to send hello message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to send hello message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -171,7 +171,7 @@ void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(WARNING) << "Unable to receive hello size message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to receive hello size message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -179,7 +179,7 @@ void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
     read_size_ = NetworkByteOrderToHost(read_size_);
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
-        DLOG(ERROR) << "Invalid message size: " << read_size_;
+        DLOG(LS_ERROR) << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
@@ -200,14 +200,14 @@ void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        DLOG(WARNING) << "Unable to receive hello message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to receive hello message: " << code.message();
         DoDisconnect();
         return;
     }
 
     if (!encryptor_->ReadHelloMessage(read_buffer_))
     {
-        DLOG(ERROR) << "Unable to read hello message";
+        DLOG(LS_ERROR) << "Unable to read hello message";
         DoDisconnect();
         return;
     }
@@ -238,7 +238,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(WARNING) << "Unable to read message size: " << code.message();
+        DLOG(LS_WARNING) << "Unable to read message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -247,7 +247,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
-        DLOG(ERROR) << "Invalid message size: " << read_size_;
+        DLOG(LS_ERROR) << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
@@ -267,7 +267,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        DLOG(WARNING) << "Unable to read message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to read message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -276,7 +276,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 
     if (decrypted_buffer.empty())
     {
-        DLOG(ERROR) << "Empty decrypted buffer";
+        DLOG(LS_ERROR) << "Empty decrypted buffer";
         DoDisconnect();
         return;
     }
@@ -326,7 +326,7 @@ void NetworkChannelTcp::DoNextWriteTask()
 
     if (source_buffer.empty())
     {
-        DLOG(ERROR) << "Empty source buffer";
+        DLOG(LS_ERROR) << "Empty source buffer";
         DoDisconnect();
         return;
     }
@@ -334,7 +334,7 @@ void NetworkChannelTcp::DoNextWriteTask()
     write_buffer_ = encryptor_->Encrypt(source_buffer);
     if (write_buffer_.empty())
     {
-        DLOG(ERROR) << "Empty encrypted buffer";
+        DLOG(LS_ERROR) << "Empty encrypted buffer";
         DoDisconnect();
         return;
     }
@@ -343,7 +343,7 @@ void NetworkChannelTcp::DoNextWriteTask()
 
     if (write_size_ > kMaxMessageSize)
     {
-        DLOG(ERROR) << "Invalid message size: " << write_size_;
+        DLOG(LS_ERROR) << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
@@ -362,7 +362,7 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(WARNING) << "Unable to write message size: " << code.message();
+        DLOG(LS_WARNING) << "Unable to write message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -379,7 +379,7 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t byte
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        DLOG(WARNING) << "Unable to write message: " << code.message();
+        DLOG(LS_WARNING) << "Unable to write message: " << code.message();
         DoDisconnect();
         return;
     }

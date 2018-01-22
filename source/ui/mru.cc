@@ -42,7 +42,7 @@ bool ReadMRUFile(std::string& mru)
     file_stream.open(file_path, std::ifstream::binary);
     if (!file_stream.is_open())
     {
-        DLOG(WARNING) << "File not found: " << file_path;
+        DLOG(LS_WARNING) << "File not found: " << file_path;
         return false;
     }
 
@@ -55,7 +55,7 @@ bool ReadMRUFile(std::string& mru)
 
     if (size > kMaxMRUFileSize)
     {
-        LOG(ERROR) << "MRU is too large (>1MB)";
+        LOG(LS_ERROR) << "MRU is too large (>1MB)";
         return false;
     }
 
@@ -65,7 +65,7 @@ bool ReadMRUFile(std::string& mru)
 
     if (file_stream.fail())
     {
-        LOG(ERROR) << "Unable to read MRU";
+        LOG(LS_ERROR) << "Unable to read MRU";
         return false;
     }
 
@@ -86,14 +86,14 @@ bool WriteMRUFile(const std::string& mru)
     file_stream.open(file_path, std::ofstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "Unable to create (or open) file: " << file_path;
+        LOG(LS_ERROR) << "Unable to create (or open) file: " << file_path;
         return false;
     }
 
     file_stream.write(mru.c_str(), mru.size());
     if (file_stream.fail())
     {
-        LOG(ERROR) << "Unable to write user list";
+        LOG(LS_ERROR) << "Unable to write user list";
         return false;
     }
 
@@ -113,7 +113,7 @@ MRU::MRU()
 
     if (!mru_.ParseFromString(string))
     {
-        LOG(ERROR) << "Unable to parse MRU file";
+        LOG(LS_ERROR) << "Unable to parse MRU file";
         return;
     }
 

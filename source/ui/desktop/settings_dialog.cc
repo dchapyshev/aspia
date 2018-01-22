@@ -273,7 +273,7 @@ LRESULT SettingsDialog::OnOkButton(
                 break;
 
             default:
-                DLOG(FATAL) << "Unexpected pixel format";
+                DLOG(LS_FATAL) << "Unexpected pixel format";
                 return 0;
         }
 

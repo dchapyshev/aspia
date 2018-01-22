@@ -65,7 +65,7 @@ LRESULT PowerSessionDialog::OnInitDialog(
             break;
 
         default:
-            DLOG(FATAL) << "Wrong power action: " << command_;
+            DLOG(LS_FATAL) << "Wrong power action: " << command_;
             break;
     }
 

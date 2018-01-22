@@ -61,7 +61,7 @@ void SystemInfoWindow::OnBeforeThreadRunning()
 
     if (!Create(nullptr, rcDefault, title, WS_OVERLAPPEDWINDOW))
     {
-        LOG(ERROR) << "System information window not created: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "System information window not created: " << GetLastSystemErrorString();
         runner_->PostQuit();
     }
     else
@@ -549,7 +549,7 @@ void SystemInfoWindow::Save(CategoryList* category_list)
     }
     else
     {
-        LOG(WARNING) << "Invalid file extension: " << extension;
+        LOG(LS_WARNING) << "Invalid file extension: " << extension;
         return;
     }
 

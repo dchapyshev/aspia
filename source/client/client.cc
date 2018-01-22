@@ -128,7 +128,7 @@ static std::unique_ptr<ClientSession> CreateSession(
             return std::make_unique<ClientSessionSystemInfo>(config, channel_proxy);
 
         default:
-            LOG(ERROR) << "Invalid session type: " << config.session_type();
+            LOG(LS_ERROR) << "Invalid session type: " << config.session_type();
             return nullptr;
     }
 }

@@ -93,7 +93,7 @@ bool CapturerGDI::PrepareCaptureResources()
         memory_dc_.Reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {
-            LOG(ERROR) << "CreateCompatibleDC() failed";
+            LOG(LS_ERROR) << "CreateCompatibleDC() failed";
             return false;
         }
 

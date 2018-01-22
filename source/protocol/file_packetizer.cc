@@ -43,7 +43,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(
     file_stream.open(file_path, std::ifstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(ERROR) << "Unable to open file: " << file_path;
+        LOG(LS_ERROR) << "Unable to open file: " << file_path;
         return nullptr;
     }
 
@@ -74,7 +74,7 @@ std::unique_ptr<proto::file_transfer::FilePacket> FilePacketizer::CreateNextPack
     file_stream_.read(packet_buffer, packet_buffer_size);
     if (file_stream_.fail())
     {
-        DLOG(ERROR) << "Unable to read file";
+        DLOG(LS_ERROR) << "Unable to read file";
         return nullptr;
     }
 

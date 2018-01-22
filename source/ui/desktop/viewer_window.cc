@@ -41,7 +41,7 @@ void ViewerWindow::OnBeforeThreadRunning()
 
     if (!Create(nullptr, rcDefault, nullptr, WS_OVERLAPPEDWINDOW))
     {
-        LOG(ERROR) << "Viewer window not created: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "Viewer window not created: " << GetLastSystemErrorString();
         runner_->PostQuit();
     }
     else

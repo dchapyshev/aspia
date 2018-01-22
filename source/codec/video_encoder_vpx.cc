@@ -323,7 +323,7 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
 
         default:
         {
-            DLOG(FATAL) << "Unsupported image format: " << image_.fmt;
+            DLOG(LS_FATAL) << "Unsupported image format: " << image_.fmt;
         }
         break;
     }

@@ -76,8 +76,8 @@ bool OpenDrive(Device& device, uint8_t device_number)
 
     if (!device.Open(device_path))
     {
-        DLOG(WARNING) << "Unable to open device: " << device_path
-                      << ". Error code: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "Unable to open device: " << device_path
+                         << ". Error code: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -99,7 +99,7 @@ STORAGE_BUS_TYPE GetDriveBusType(Device& device)
                           &device_descriptor, sizeof(device_descriptor),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return BusTypeUnknown;
     }
 
@@ -118,7 +118,7 @@ bool GetDriveNumber(Device& device, uint8_t& device_number)
                           &number, sizeof(number),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -135,7 +135,7 @@ bool GetDriveGeometry(Device& device, DISK_GEOMETRY& geometry)
                          &geometry, sizeof(DISK_GEOMETRY),
                          &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -165,7 +165,7 @@ std::unique_ptr<DriveIdentifyData>
                           &cmd_out, sizeof(cmd_out),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -200,7 +200,7 @@ bool EnableSmartPD(Device& device, uint8_t device_number)
                           &cmd_out, sizeof(cmd_out),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -233,7 +233,7 @@ bool GetSmartAttributesPD(Device& device, uint8_t device_number, SmartAttributeD
                           &bytes_returned) ||
         bytes_returned != sizeof(cmd_out))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -270,7 +270,7 @@ bool GetSmartThresholdsPD(Device& device, uint8_t device_number, SmartThresholdD
                           &bytes_returned) ||
         bytes_returned != sizeof(cmd_out))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -319,7 +319,7 @@ std::unique_ptr<DriveIdentifyData>
                           &scsi_cmd, sizeof(scsi_cmd),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return nullptr;
     }
 
@@ -366,7 +366,7 @@ bool EnableSmartSAT(Device& device, uint8_t device_number)
                           &cmd, sizeof(SCSI_PASS_THROUGH_WBUF),
                           &bytes_returned))
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -412,7 +412,7 @@ bool GetSmartAttributesSAT(Device& device, uint8_t device_number, SmartAttribute
                           &bytes_returned) ||
         bytes_returned != length)
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -460,7 +460,7 @@ bool GetSmartThresholdsSAT(Device& device, uint8_t device_number, SmartThreshold
                           &bytes_returned) ||
         bytes_returned != length)
     {
-        DLOG(WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
+        DLOG(LS_WARNING) << "IoControl() failed: " << GetLastSystemErrorString();
         return false;
     }
 

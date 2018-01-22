@@ -34,7 +34,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.Recieve()))
     {
-        LOG(ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -45,7 +45,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           TokenPrimary,
                           token_out.Recieve()))
     {
-        LOG(ERROR) << "DuplicateTokenEx() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "DuplicateTokenEx() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -69,7 +69,7 @@ bool CreatePrivilegedToken(ScopedHandle& token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        LOG(ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "LookupPrivilegeValueW() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -77,7 +77,7 @@ bool CreatePrivilegedToken(ScopedHandle& token_out)
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
                                nullptr, nullptr))
     {
-        LOG(ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "AdjustTokenPrivileges() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -114,7 +114,7 @@ bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
                                  &new_session_id,
                                  sizeof(new_session_id)))
         {
-            LOG(ERROR) << "SetTokenInformation() failed: " << GetLastSystemErrorString();
+            LOG(LS_ERROR) << "SetTokenInformation() failed: " << GetLastSystemErrorString();
             return false;
         }
     }
@@ -135,7 +135,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
 
     if (!CreateEnvironmentBlock(&environment, user_token, FALSE))
     {
-        LOG(ERROR) << "CreateEnvironmentBlock() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "CreateEnvironmentBlock() failed: " << GetLastSystemErrorString();
         return false;
     }
 
@@ -154,7 +154,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
                               &startup_info,
                               &process_info))
     {
-        LOG(ERROR) << "CreateProcessAsUserW() failed: " << GetLastSystemErrorString();
+        LOG(LS_ERROR) << "CreateProcessAsUserW() failed: " << GetLastSystemErrorString();
         DestroyEnvironmentBlock(environment);
         return false;
     }
@@ -208,7 +208,7 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
 
         if (!query_user_token_func)
         {
-            LOG(ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
+            LOG(LS_ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
             return false;
         }
 
@@ -222,7 +222,7 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
 
             if (!query_user_token_func(session_id, session_token.Recieve()))
             {
-                LOG(ERROR) << "WTSQueryUserToken() failed: " << GetLastSystemErrorString();
+                LOG(LS_ERROR) << "WTSQueryUserToken() failed: " << GetLastSystemErrorString();
                 return false;
             }
         }
@@ -311,7 +311,7 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
         default:
         {
-            DLOG(ERROR) << "Unknown session type: " << session_type;
+            DLOG(LS_ERROR) << "Unknown session type: " << session_type;
             return false;
         }
     }

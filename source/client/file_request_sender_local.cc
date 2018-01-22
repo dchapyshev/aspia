@@ -140,27 +140,27 @@ void FileRequestSenderLocal::SendFileUploadRequest(
     const std::experimental::filesystem::path& /* file_path */,
     Overwrite /* overwrite */)
 {
-    DLOG(FATAL) << "The request type is not allowed for local processing";
+    DLOG(LS_FATAL) << "The request type is not allowed for local processing";
 }
 
 void FileRequestSenderLocal::SendFileDownloadRequest(
     std::shared_ptr<FileReplyReceiverProxy> /* receiver */,
     const std::experimental::filesystem::path& /* file_path */)
 {
-    DLOG(FATAL) << "The request type is not allowed for local processing";
+    DLOG(LS_FATAL) << "The request type is not allowed for local processing";
 }
 
 void FileRequestSenderLocal::SendFilePacket(
     std::shared_ptr<FileReplyReceiverProxy> /* receiver */,
     std::unique_ptr<proto::file_transfer::FilePacket> /* file_packet */)
 {
-    DLOG(FATAL) << "The request type is not allowed for local processing";
+    DLOG(LS_FATAL) << "The request type is not allowed for local processing";
 }
 
 void FileRequestSenderLocal::SendFilePacketRequest(
     std::shared_ptr<FileReplyReceiverProxy> /* receiver */)
 {
-    DLOG(FATAL) << "The request type is not allowed for local processing";
+    DLOG(LS_FATAL) << "The request type is not allowed for local processing";
 }
 
 } // namespace aspia

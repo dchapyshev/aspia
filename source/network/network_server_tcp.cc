@@ -114,7 +114,7 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
 
     if (IsFailureCode(code))
     {
-        DLOG(ERROR) << "accept failure: " << code.message();
+        DLOG(LS_ERROR) << "accept failure: " << code.message();
         return;
     }
 

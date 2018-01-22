@@ -38,7 +38,7 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
     if (compression_ratio < Z_BEST_SPEED ||
         compression_ratio > Z_BEST_COMPRESSION)
     {
-        LOG(ERROR) << "Wrong compression ratio: " << compression_ratio;
+        LOG(LS_ERROR) << "Wrong compression ratio: " << compression_ratio;
         return nullptr;
     }
 
@@ -51,7 +51,7 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
             break;
 
         default:
-            LOG(ERROR) << "Unsupprted pixel format";
+            LOG(LS_ERROR) << "Unsupprted pixel format";
             return nullptr;
     }
 

@@ -125,7 +125,7 @@ std::string File::ErrorToString(Error error)
             break;
     }
 
-    DLOG(FATAL) << "Unknown error code: " << error;
+    DLOG(LS_FATAL) << "Unknown error code: " << error;
     return "";
 }
 
