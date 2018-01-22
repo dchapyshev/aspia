@@ -34,8 +34,7 @@ public:
         message_id_ = RegisterWindowMessageW(L"WM_TRAYICON");
         if (!message_id_)
         {
-            DLOG(LS_ERROR) << "RegisterWindowMessageW() failed: "
-                           << GetLastSystemErrorString();
+            DPLOG(LS_ERROR) << "RegisterWindowMessageW() failed";
         }
     }
 

@@ -23,7 +23,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
             {
-                LOG(LS_ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "ExitWindowsEx() failed";
             }
         }
         break;
@@ -32,7 +32,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
             {
-                LOG(LS_ERROR) << "ExitWindowsEx() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "ExitWindowsEx() failed";
             }
         }
         break;
@@ -41,7 +41,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!SetSystemPowerState(FALSE, TRUE))
             {
-                LOG(LS_ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "SetSystemPowerState() failed";
                 return false;
             }
         }
@@ -51,7 +51,7 @@ bool InjectPowerCommand(proto::power::Command command)
         {
             if (!SetSystemPowerState(TRUE, TRUE))
             {
-                LOG(LS_ERROR) << "SetSystemPowerState() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "SetSystemPowerState() failed";
                 return false;
             }
         }

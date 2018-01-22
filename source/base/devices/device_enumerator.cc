@@ -33,7 +33,7 @@ DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
     device_info_.Reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
     if (!device_info_.IsValid())
     {
-        DLOG(LS_WARNING) << "SetupDiGetClassDevsW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "SetupDiGetClassDevsW() failed";
     }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
@@ -77,8 +77,7 @@ std::string DeviceEnumerator::GetFriendlyName() const
                                            ARRAYSIZE(friendly_name),
                                            nullptr))
     {
-        DLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                         << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed";
         return std::string();
     }
 
@@ -97,8 +96,7 @@ std::string DeviceEnumerator::GetDescription() const
                                            ARRAYSIZE(description),
                                            nullptr))
     {
-        DLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                         << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed";
         return std::string();
     }
 
@@ -117,8 +115,7 @@ std::wstring DeviceEnumerator::GetDriverKeyPath() const
                                            ARRAYSIZE(driver),
                                            nullptr))
     {
-        DLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed: "
-                         << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "SetupDiGetDeviceRegistryPropertyW() failed";
         return std::wstring();
     }
 
@@ -135,7 +132,7 @@ std::wstring DeviceEnumerator::GetDriverRegistryString(const WCHAR* key_name) co
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.IsValid())
     {
-        DLOG(LS_WARNING) << "Unable to open registry key: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "Unable to open registry key";
         return std::wstring();
     }
 
@@ -159,7 +156,7 @@ DWORD DeviceEnumerator::GetDriverRegistryDW(const WCHAR* key_name) const
     RegistryKey driver_key(HKEY_LOCAL_MACHINE, driver_key_path.c_str(), KEY_READ);
     if (!driver_key.IsValid())
     {
-        DLOG(LS_WARNING) << "Unable to open registry key: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "Unable to open registry key";
         return 0;
     }
 
@@ -200,7 +197,7 @@ std::string DeviceEnumerator::GetDeviceID() const
                                      ARRAYSIZE(device_id),
                                      nullptr))
     {
-        DLOG(LS_WARNING) << "SetupDiGetDeviceInstanceIdW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "SetupDiGetDeviceInstanceIdW() failed";
         return std::string();
     }
 

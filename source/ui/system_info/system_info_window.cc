@@ -61,7 +61,7 @@ void SystemInfoWindow::OnBeforeThreadRunning()
 
     if (!Create(nullptr, rcDefault, title, WS_OVERLAPPEDWINDOW))
     {
-        LOG(LS_ERROR) << "System information window not created: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "System information window not created";
         runner_->PostQuit();
     }
     else

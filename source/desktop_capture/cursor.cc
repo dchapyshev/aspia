@@ -104,7 +104,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        LOG(LS_ERROR) << "GetIconInfo() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetIconInfo() failed";
         return nullptr;
     }
 
@@ -119,7 +119,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        LOG(LS_ERROR) << "GetObjectW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetObjectW() failed";
         return nullptr;
     }
 
@@ -151,7 +151,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        LOG(LS_ERROR) << "GetDIBits() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetDIBits() failed";
         return nullptr;
     }
 
@@ -176,7 +176,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            LOG(LS_ERROR) << "GetDIBits() failed: " << GetLastSystemErrorString();
+            PLOG(LS_ERROR) << "GetDIBits() failed";
             return nullptr;
         }
 
@@ -305,7 +305,7 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
         DIB_RGB_COLORS));
     if (!color_bitmap)
     {
-        LOG(LS_ERROR) << "CreateDIBitmap() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CreateDIBitmap() failed";
         return nullptr;
     }
 
@@ -313,7 +313,7 @@ HCURSOR CreateHCursorFromMouseCursor(HDC dc, const MouseCursor& mouse_cursor)
 
     if (!mask_bitmap)
     {
-        LOG(LS_ERROR) << "CreateBitmap() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CreateBitmap() failed";
         return nullptr;
     }
 

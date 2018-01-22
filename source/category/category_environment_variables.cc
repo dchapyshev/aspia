@@ -60,7 +60,7 @@ std::string CategoryEnvironmentVariables::Serialize()
     WCHAR* strings = GetEnvironmentStringsW();
     if (!strings)
     {
-        LOG(LS_WARNING) << "GetEnvironmentStringsW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_WARNING) << "GetEnvironmentStringsW() failed";
         return std::string();
     }
 

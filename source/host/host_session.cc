@@ -160,7 +160,7 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
     bool ok = process_.IsValid();
     if (!ok)
     {
-        LOG(LS_ERROR) << "Unable to open session process: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "Unable to open session process";
     }
 
     if (ok)

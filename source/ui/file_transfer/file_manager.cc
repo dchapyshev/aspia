@@ -52,7 +52,7 @@ void FileManagerWindow::OnBeforeThreadRunning()
 
     if (!Create(nullptr, rcDefault, title, WS_OVERLAPPEDWINDOW))
     {
-        LOG(LS_ERROR) << "File manager window not created: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "File manager window not created";
         runner_->PostQuit();
     }
     else

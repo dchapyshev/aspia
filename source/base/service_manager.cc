@@ -30,7 +30,7 @@ ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
 {
     if (!sc_manager_.IsValid())
     {
-        LOG(LS_ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "OpenSCManagerW() failed";
     }
     else
     {
@@ -39,7 +39,7 @@ ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
                                 SERVICE_ALL_ACCESS);
         if (!service_.IsValid())
         {
-            LOG(LS_ERROR) << "OpenServiceW() failed: " << GetLastSystemErrorString();
+            PLOG(LS_ERROR) << "OpenServiceW() failed";
             sc_manager_.Reset();
         }
     }
@@ -70,7 +70,7 @@ ServiceManager::Create(const CommandLine& command_line,
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager)
     {
-        LOG(LS_ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "OpenSCManagerW() failed";
         return nullptr;
     }
 
@@ -90,7 +90,7 @@ ServiceManager::Create(const CommandLine& command_line,
                                           nullptr));
     if (!service.IsValid())
     {
-        LOG(LS_ERROR) << "CreateServiceW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CreateServiceW() failed";
         return nullptr;
     }
 
@@ -104,7 +104,7 @@ ServiceManager::Create(const CommandLine& command_line,
                                    SERVICE_CONFIG_DESCRIPTION,
                                    &description))
         {
-            LOG(LS_WARNING) << "ChangeServiceConfig2W() failed: " << GetLastSystemErrorString();
+            PLOG(LS_WARNING) << "ChangeServiceConfig2W() failed";
         }
     }
 
@@ -123,7 +123,7 @@ ServiceManager::Create(const CommandLine& command_line,
                                SERVICE_CONFIG_FAILURE_ACTIONS,
                                &actions))
     {
-        LOG(LS_WARNING) << "ChangeServiceConfig2W() failed: " << GetLastSystemErrorString();
+        PLOG(LS_WARNING) << "ChangeServiceConfig2W() failed";
     }
 
     return std::unique_ptr<ServiceManager>(
@@ -162,7 +162,7 @@ bool ServiceManager::IsServiceInstalled(const std::wstring& service_name)
 
     if (!sc_manager.IsValid())
     {
-        LOG(LS_ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "OpenSCManagerW() failed";
         return false;
     }
 
@@ -188,7 +188,7 @@ bool ServiceManager::Start() const
 {
     if (!StartServiceW(service_, 0, nullptr))
     {
-        LOG(LS_ERROR) << "StartServiceW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "StartServiceW() failed";
         return false;
     }
 
@@ -201,7 +201,7 @@ bool ServiceManager::Stop() const
 
     if (!ControlService(service_, SERVICE_CONTROL_STOP, &status))
     {
-        DLOG(LS_ERROR) << "ControlService() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "ControlService() failed";
         return false;
     }
 
@@ -212,7 +212,7 @@ bool ServiceManager::Remove()
 {
     if (!DeleteService(service_))
     {
-        LOG(LS_ERROR) << "DeleteService() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "DeleteService() failed";
         return false;
     }
 

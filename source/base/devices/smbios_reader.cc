@@ -31,7 +31,7 @@ std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
     UINT data_size = get_system_firmware_table_func('RSMB', 'PCAF', nullptr, 0);
     if (!data_size)
     {
-        DLOG(LS_WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "GetSystemFirmwareTable() failed";
         return nullptr;
     }
 
@@ -39,7 +39,7 @@ std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
 
     if (!get_system_firmware_table_func('RSMB', 'PCAF', data.get(), data_size))
     {
-        DLOG(LS_WARNING) << "GetSystemFirmwareTable() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "GetSystemFirmwareTable() failed";
         return nullptr;
     }
 

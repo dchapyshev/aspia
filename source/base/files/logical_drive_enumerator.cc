@@ -16,7 +16,7 @@ LogicalDriveEnumerator::LogicalDriveEnumerator()
     DWORD size = GetLogicalDriveStringsW(0, nullptr);
     if (!size)
     {
-        LOG(LS_ERROR) << "GetLogicalDriveStringsW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetLogicalDriveStringsW() failed";
         return;
     }
 
@@ -24,7 +24,7 @@ LogicalDriveEnumerator::LogicalDriveEnumerator()
 
     if (!GetLogicalDriveStringsW(size, buffer_.data()))
     {
-        LOG(LS_ERROR) << "GetLogicalDriveStringsW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetLogicalDriveStringsW() failed";
         return;
     }
 
@@ -89,7 +89,7 @@ uint64_t LogicalDriveEnumerator::DriveInfo::TotalSpace() const
 
     if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, &total_space, nullptr))
     {
-        DLOG(LS_ERROR) << "GetDiskFreeSpaceExW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetDiskFreeSpaceExW() failed";
         return 0;
     }
 
@@ -102,7 +102,7 @@ uint64_t LogicalDriveEnumerator::DriveInfo::FreeSpace() const
 
     if (!GetDiskFreeSpaceExW(path_.c_str(), nullptr, nullptr, &free_space))
     {
-        DLOG(LS_ERROR) << "GetDiskFreeSpaceExW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetDiskFreeSpaceExW() failed";
         return 0;
     }
 
@@ -118,7 +118,7 @@ std::wstring LogicalDriveEnumerator::DriveInfo::FileSystem() const
                                nullptr, nullptr, nullptr,
                                fs, _countof(fs)))
     {
-        DLOG(LS_ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetVolumeInformationW() failed";
         return std::wstring();
     }
 
@@ -134,7 +134,7 @@ std::wstring LogicalDriveEnumerator::DriveInfo::VolumeName() const
                                nullptr, nullptr, nullptr,
                                nullptr, 0))
     {
-        DLOG(LS_ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetVolumeInformationW() failed";
         return std::wstring();
     }
 
@@ -147,7 +147,7 @@ std::string LogicalDriveEnumerator::DriveInfo::VolumeSerial() const
 
     if (!GetVolumeInformationW(path_.c_str(), nullptr, 0, &serial, nullptr, nullptr, nullptr, 0))
     {
-        DLOG(LS_ERROR) << "GetVolumeInformationW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetVolumeInformationW() failed";
         return std::string();
     }
 

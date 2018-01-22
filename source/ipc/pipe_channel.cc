@@ -105,7 +105,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!pipe.IsValid())
     {
-        LOG(LS_ERROR) << "CreateNamedPipeW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CreateNamedPipeW() failed";
         return nullptr;
     }
 
@@ -126,7 +126,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& chann
                                   nullptr));
     if (!pipe.IsValid())
     {
-        LOG(LS_ERROR) << "CreateFileW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CreateFileW() failed";
         return nullptr;
     }
 
@@ -274,7 +274,7 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
     {
         if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
         {
-            LOG(LS_ERROR) << "ConnectNamedPipe() failed: " << GetLastSystemErrorString();
+            PLOG(LS_ERROR) << "ConnectNamedPipe() failed";
             return false;
         }
 

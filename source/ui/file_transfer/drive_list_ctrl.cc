@@ -21,7 +21,7 @@ bool DriveListCtrl::CreateDriveList(HWND parent, int control_id)
 
     if (!Create(parent, drive_rect, nullptr, style, 0, control_id))
     {
-        DLOG(LS_ERROR) << "Unable to create drive list window: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "Unable to create drive list window";
         return false;
     }
 

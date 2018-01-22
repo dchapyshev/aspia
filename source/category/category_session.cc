@@ -114,7 +114,7 @@ std::string CategorySession::Serialize()
 
     if (!WTSEnumerateSessionsW(WTS_CURRENT_SERVER_HANDLE, 0, 1, session_info.Recieve(), &count))
     {
-        DLOG(LS_WARNING) << "WTSEnumerateSessionsW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "WTSEnumerateSessionsW() failed";
         return std::string();
     }
 

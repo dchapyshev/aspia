@@ -550,7 +550,7 @@ std::string CategoryPowerOptions::Serialize()
                                                  nullptr) ||
                 GetLastError() != ERROR_INSUFFICIENT_BUFFER)
             {
-                DLOG(LS_WARNING) << "Unexpected return value: " << GetLastSystemErrorString();
+                DPLOG(LS_WARNING) << "Unexpected return value";
                 break;
             }
 
@@ -567,8 +567,7 @@ std::string CategoryPowerOptions::Serialize()
                                                   &required_size,
                                                   nullptr))
             {
-                DLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed: "
-                                 << GetLastSystemErrorString();
+                DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed";
                 break;
             }
 

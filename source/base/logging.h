@@ -632,7 +632,6 @@ using SystemErrorCode = DWORD;
 // pull in windows.h just for GetLastError() and DWORD.
 SystemErrorCode GetLastSystemErrorCode();
 std::string SystemErrorCodeToString(SystemErrorCode error_code);
-std::string GetLastSystemErrorString();
 
 // Appends a formatted system message of the GetLastError() type.
 class Win32ErrorLogMessage

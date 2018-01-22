@@ -33,7 +33,7 @@ void RunUIMain()
                             reinterpret_cast<WCHAR*>(&RunUIMain),
                             &instance))
     {
-        LOG(LS_ERROR) << "GetModuleHandleExW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetModuleHandleExW() failed";
         return;
     }
 
@@ -48,7 +48,7 @@ void RunUIMain()
     MainDialog main_dialog;
     if (!main_dialog.Create(nullptr, 0))
     {
-        LOG(LS_ERROR) << "Unable to create main dialog: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "Unable to create main dialog";
     }
     else
     {

@@ -45,7 +45,7 @@ void GetCPUCount(uint32_t& package_count,
 
     if (!GetLogicalProcessorInformation(info, &returned_length))
     {
-        DLOG(LS_ERROR) << "GetLogicalProcessorInformation() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetLogicalProcessorInformation() failed";
         return;
     }
 

@@ -28,19 +28,19 @@ HANDLE OpenEventLogHandle(const WCHAR* source, DWORD* records_count, DWORD* firs
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
     if (!event_log.IsValid())
     {
-        DLOG(LS_WARNING) << "OpenEventLogW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "OpenEventLogW() failed";
         return nullptr;
     }
 
     if (!GetNumberOfEventLogRecords(event_log, records_count))
     {
-        DLOG(LS_WARNING) << "GetNumberOfEventLogRecords() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "GetNumberOfEventLogRecords() failed";
         return nullptr;
     }
 
     if (!GetOldestEventLogRecord(event_log, first_record))
     {
-        DLOG(LS_WARNING) << "GetOldestEventLogRecord() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "GetOldestEventLogRecord() failed";
         return nullptr;
     }
 
@@ -85,7 +85,7 @@ std::unique_ptr<uint8_t[]> GetEventLogRecord(
                            &bytes_read,
                            &bytes_needed))
         {
-            DLOG(LS_WARNING) << "ReadEventLogW() failed: " << GetLastSystemErrorString();
+            DPLOG(LS_WARNING) << "ReadEventLogW() failed";
             return nullptr;
         }
     }

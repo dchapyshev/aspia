@@ -103,7 +103,7 @@ std::string CategoryPrinter::Serialize()
     if (EnumPrintersW(flags, nullptr, 2, nullptr, 0, &bytes_needed, &count) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        DLOG(LS_ERROR) << "Unexpected return value: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "Unexpected return value";
         return std::string();
     }
 
@@ -112,7 +112,7 @@ std::string CategoryPrinter::Serialize()
     if (!EnumPrintersW(flags, nullptr, 2, printers_info_buffer.get(), bytes_needed,
                        &bytes_needed, &count))
     {
-        DLOG(LS_ERROR) << "EnumPrintersW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "EnumPrintersW() failed";
         return std::string();
     }
 
@@ -121,7 +121,7 @@ std::string CategoryPrinter::Serialize()
 
     if (!GetDefaultPrinterW(&default_printer_name[0], &characters_count))
     {
-        DLOG(LS_ERROR) << "GetDefaultPrinterW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "GetDefaultPrinterW() failed";
     }
 
     PPRINTER_INFO_2W printers_info =

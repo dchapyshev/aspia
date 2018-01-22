@@ -428,11 +428,6 @@ std::string SystemErrorCodeToString(SystemErrorCode error_code)
                                GetLastError(), error_code);
 }
 
-std::string GetLastSystemErrorString()
-{
-    return SystemErrorCodeToString(GetLastError());
-}
-
 Win32ErrorLogMessage::Win32ErrorLogMessage(const char* file,
                                            int line,
                                            LoggingSeverity severity,

@@ -56,8 +56,7 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
     {
         if (!add_clipboard_format_listener_(window_->hwnd()))
         {
-            LOG(LS_WARNING) << "AddClipboardFormatListener() failed: "
-                            << GetLastSystemErrorString();
+            PLOG(LS_WARNING) << "AddClipboardFormatListener() failed";
             return false;
         }
     }
@@ -112,16 +111,14 @@ void Clipboard::OnClipboardUpdate()
 
             if (!clipboard.Init(window_->hwnd()))
             {
-                LOG(LS_WARNING) << "Couldn't open the clipboard: "
-                                << GetLastSystemErrorString();
+                PLOG(LS_WARNING) << "Couldn't open the clipboard";
                 return;
             }
 
             HGLOBAL text_global = clipboard.GetData(CF_UNICODETEXT);
             if (!text_global)
             {
-                LOG(LS_WARNING) << "Couldn't get data from the clipboard: "
-                                << GetLastSystemErrorString();
+                PLOG(LS_WARNING) << "Couldn't get data from the clipboard";
                 return;
             }
 
@@ -129,8 +126,7 @@ void Clipboard::OnClipboardUpdate()
                 ScopedHGlobal<WCHAR> text_lock(text_global);
                 if (!text_lock.Get())
                 {
-                    LOG(LS_WARNING) << "Couldn't lock clipboard data: "
-                                    << GetLastSystemErrorString();
+                    PLOG(LS_WARNING) << "Couldn't lock clipboard data";
                     return;
                 }
 
@@ -246,7 +242,7 @@ void Clipboard::InjectClipboardEvent(
 
     if (!clipboard.Init(window_->hwnd()))
     {
-        LOG(LS_WARNING) << "Couldn't open the clipboard." << GetLastSystemErrorString();
+        PLOG(LS_WARNING) << "Couldn't open the clipboard";
         return;
     }
 
@@ -255,14 +251,14 @@ void Clipboard::InjectClipboardEvent(
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
-        LOG(LS_WARNING) << "GlobalAlloc() failed: " << GetLastSystemErrorString();
+        PLOG(LS_WARNING) << "GlobalAlloc() failed";
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        LOG(LS_WARNING) << "GlobalLock() failed: " << GetLastSystemErrorString();
+        PLOG(LS_WARNING) << "GlobalLock() failed";
         GlobalFree(text_global);
         return;
     }

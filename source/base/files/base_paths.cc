@@ -22,7 +22,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
             {
-                LOG(LS_ERROR) << "GetModuleFileNameW() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "GetModuleFileNameW() failed";
                 return false;
             }
         }
@@ -92,7 +92,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetCurrentDirectoryW(_countof(buffer), buffer))
             {
-                LOG(LS_ERROR) << "GetCurrentDirectoryW() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "GetCurrentDirectoryW() failed";
                 return false;
             }
         }
@@ -102,7 +102,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(LS_ERROR) << "GetWindowsDirectoryW() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "GetWindowsDirectoryW() failed";
                 return false;
             }
         }
@@ -112,7 +112,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetSystemDirectoryW(buffer, _countof(buffer)))
             {
-                LOG(LS_ERROR) << "GetSystemDirectoryW() failed: " << GetLastSystemErrorString();
+                PLOG(LS_ERROR) << "GetSystemDirectoryW() failed";
                 return false;
             }
         }

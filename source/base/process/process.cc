@@ -89,7 +89,7 @@ bool Process::SetPriority(Priority priority)
 {
     if (!SetPriorityClass(Handle(), static_cast<DWORD>(priority)))
     {
-        LOG(LS_ERROR) << "SetPriorityClass() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "SetPriorityClass() failed";
         return false;
     }
 

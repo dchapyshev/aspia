@@ -24,8 +24,7 @@ bool FileToolBar::CreateFileToolBar(HWND parent)
 
     if (!Create(parent, rcDefault, nullptr, style))
     {
-        DLOG(LS_ERROR) << "Unable to create file toolbar window: "
-                       << GetLastSystemErrorString();
+        DPLOG(LS_ERROR) << "Unable to create file toolbar window";
         return false;
     }
 

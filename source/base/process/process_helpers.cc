@@ -36,7 +36,7 @@ bool ElevateProcess()
 
     if (!ShellExecuteExW(&sei))
     {
-        DLOG(LS_WARNING) << "ShellExecuteExW() failed: " << GetLastSystemErrorString();
+        DPLOG(LS_WARNING) << "ShellExecuteExW() failed";
         return false;
     }
 
@@ -49,7 +49,7 @@ bool IsProcessElevated()
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
     {
-        LOG(LS_ERROR) << "OpenProcessToken() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "OpenProcessToken() failed";
         return false;
     }
 
@@ -59,7 +59,7 @@ bool IsProcessElevated()
     if (!GetTokenInformation(token, TokenElevation, &elevation,
                              sizeof(elevation), &size))
     {
-        LOG(LS_ERROR) << "GetTokenInformation() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "GetTokenInformation() failed";
         return false;
     }
 
@@ -78,7 +78,7 @@ bool IsCallerAdminGroupMember()
                                   0, 0, 0, 0, 0, 0,
                                   admin_group.Recieve()))
     {
-        LOG(LS_ERROR) << "AllocateAndInitializeSid() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "AllocateAndInitializeSid() failed";
         return false;
     }
 
@@ -86,7 +86,7 @@ bool IsCallerAdminGroupMember()
 
     if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
     {
-        LOG(LS_ERROR) << "CheckTokenMembership() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "CheckTokenMembership() failed";
         return false;
     }
 
@@ -117,7 +117,7 @@ bool IsRunningAsService()
 
     if (!sc_manager.IsValid())
     {
-        LOG(LS_ERROR) << "OpenSCManagerW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "OpenSCManagerW() failed";
         return false;
     }
 
@@ -164,7 +164,7 @@ bool IsRunningAsService()
                                nullptr,
                                nullptr))
     {
-        LOG(LS_ERROR) << "EnumServicesStatusExW() failed: " << GetLastSystemErrorString();
+        PLOG(LS_ERROR) << "EnumServicesStatusExW() failed";
         return false;
     }
 
