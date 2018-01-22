@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <ostream>
-#include <thread>
 #include <utility>
 
 #include "base/strings/string_util.h"
@@ -54,23 +53,47 @@ FileHandle g_log_file = nullptr;
 // A log message handler that gets notified of every log message we process.
 LogMessageHandlerFunction log_message_handler = nullptr;
 
-// Helper functions to wrap platform differences.
-
-int32_t CurrentProcessId()
+bool GetDefaultLogFilePath(std::experimental::filesystem::path& path)
 {
-    return GetCurrentProcessId();
-}
+    std::error_code code;
 
-std::experimental::filesystem::path GetDefaultLogFile()
-{
-    // On Windows we use the same path as the exe.
-    wchar_t module_name[MAX_PATH];
-    GetModuleFileNameW(nullptr, module_name, MAX_PATH);
+    path = std::experimental::filesystem::temp_directory_path(code);
+    if (code.value() != 0)
+        return false;
 
-    std::experimental::filesystem::path log_name = module_name;
-    log_name.append(L"debug.log");
+    path.append(L"aspia");
 
-    return log_name;
+    if (!std::experimental::filesystem::exists(path, code))
+    {
+        if (code.value() != 0)
+            return false;
+
+        if (!std::experimental::filesystem::create_directories(path, code))
+            return false;
+    }
+
+    SYSTEMTIME local_time;
+    GetLocalTime(&local_time);
+
+    std::ostringstream stream;
+
+    stream << std::setfill('0')
+           << std::setw(2) << local_time.wYear
+           << std::setw(2) << local_time.wMonth
+           << std::setw(2) << local_time.wDay
+           << '-'
+           << std::setw(2) << local_time.wHour
+           << std::setw(2) << local_time.wMinute
+           << std::setw(2) << local_time.wSecond
+           << '.'
+           << std::setw(3) << local_time.wMilliseconds
+           << '.'
+           << GetCurrentProcessId()
+           << ".log";
+
+    path.append(stream.str());
+
+    return true;
 }
 
 // Called by logging functions to ensure that |g_log_file| is initialized
@@ -83,9 +106,8 @@ bool InitializeLogFileHandle()
 
     if (g_log_file_name.empty())
     {
-        // Nobody has called InitLogging to specify a debug log file, so here we
-        // initialize the log file name to a default.
-        g_log_file_name = GetDefaultLogFile();
+        if (!GetDefaultLogFilePath(g_log_file_name))
+            return false;
     }
 
     if ((g_logging_destination & LOG_TO_FILE) != 0)
@@ -99,29 +121,8 @@ bool InitializeLogFileHandle()
                                  OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
         if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
         {
-            // We are intentionally not using FilePath or FileUtil here to reduce the
-            // dependencies of the logging implementation. For e.g. FilePath and
-            // FileUtil depend on shell32 and user32.dll. This is not acceptable for
-            // some consumers of base logging like chrome_elf, etc.
-            // Please don't change the code below to use FilePath.
-            // try the current directory
-            wchar_t system_buffer[MAX_PATH];
-            system_buffer[0] = 0;
-            DWORD len = ::GetCurrentDirectoryW(_countof(system_buffer), system_buffer);
-            if (len == 0 || len > _countof(system_buffer))
-                return false;
-
-            g_log_file_name = system_buffer;
-            g_log_file_name.append(L"debug.log");
-
-            g_log_file = CreateFileW(g_log_file_name.c_str(), FILE_APPEND_DATA,
-                                     FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
-                                     OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-            if (g_log_file == INVALID_HANDLE_VALUE || g_log_file == nullptr)
-            {
-                g_log_file = nullptr;
-                return false;
-            }
+            g_log_file = nullptr;
+            return false;
         }
     }
 
@@ -151,9 +152,7 @@ std::ostream* g_swallow_stream;
 
 LoggingSettings::LoggingSettings()
     : logging_dest(LOG_DEFAULT),
-      log_file(nullptr),
-      lock_log(LOCK_LOG_FILE),
-      delete_old(APPEND_TO_OLD_LOG_FILE)
+      lock_log(LOCK_LOG_FILE)
 {
     // Nothing
 }
@@ -169,14 +168,6 @@ bool BaseInitLoggingImpl(const LoggingSettings& settings)
     // Calling InitLogging twice or after some log call has already opened the
     // default log file will re-initialize to the new options.
     CloseLogFileUnlocked();
-
-    g_log_file_name = settings.log_file;
-
-    if (settings.delete_old == DELETE_OLD_LOG_FILE)
-    {
-        std::error_code ignored_code;
-        std::experimental::filesystem::remove(g_log_file_name, ignored_code);
-    }
 
     return InitializeLogFileHandle();
 }
@@ -369,8 +360,7 @@ void LogMessage::Init(const char* file, int line)
         filename.remove_prefix(last_slash_pos + 1);
 
     stream_ <<  '[';
-    stream_ << CurrentProcessId() << ':';
-    stream_ << std::this_thread::get_id() << ':';
+    stream_ << GetCurrentThreadId() << ':';
 
     SYSTEMTIME local_time;
     GetLocalTime(&local_time);

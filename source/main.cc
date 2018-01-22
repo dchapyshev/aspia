@@ -20,13 +20,9 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     aspia::LoggingSettings settings;
 
     settings.logging_dest = aspia::LOG_TO_ALL;
-    settings.log_file     = L"debug.log";
-    settings.lock_log     = aspia::LOCK_LOG_FILE;
-    settings.delete_old   = aspia::APPEND_TO_OLD_LOG_FILE;
+    settings.lock_log = aspia::LOCK_LOG_FILE;
 
     aspia::InitLogging(settings);
-
-    LOG(LS_INFO) << "Application started";
 
     const aspia::CommandLine& command_line = aspia::CommandLine::ForCurrentProcess();
 
@@ -46,8 +42,6 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     {
         aspia::RunHostMain(command_line);
     }
-
-    LOG(LS_INFO) << "Application terminated";
 
     return 0;
 }

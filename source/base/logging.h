@@ -102,10 +102,6 @@ enum LoggingDestination
 // work properly. Defaults to LOCK_LOG_FILE.
 enum LogLockingState { LOCK_LOG_FILE, DONT_LOCK_LOG_FILE };
 
-// On startup, should we delete or append to an existing log file (if any)?
-// Defaults to APPEND_TO_OLD_LOG_FILE.
-enum OldFileDeletionState { DELETE_OLD_LOG_FILE, APPEND_TO_OLD_LOG_FILE };
-
 enum LoggingSeverity : int
 {
     LS_INFO    = 0,
@@ -131,9 +127,7 @@ struct LoggingSettings
 
     // The three settings below have an effect only when LOG_TO_FILE is
     // set in |logging_dest|.
-    const std::experimental::filesystem::path::value_type* log_file;
     LogLockingState lock_log;
-    OldFileDeletionState delete_old;
 };
 
 // Define different names for the BaseInitLoggingImpl() function depending on
