@@ -124,7 +124,7 @@ bool FirewallManagerLegacy::SetAllowIncomingConnection(bool allow)
         return false;
 
     HRESULT hr = authorized_apps->Add(authorization.get());
-    DLOG_IF(ERROR, FAILED(hr)) << "Add() failed: " << SystemErrorCodeToString(hr);
+    DLOG_IF(LS_ERROR, FAILED(hr)) << "Add() failed: " << SystemErrorCodeToString(hr);
 
     return SUCCEEDED(hr);
 }

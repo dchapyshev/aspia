@@ -313,7 +313,7 @@ void CommandLine::ParseFromString(const StringType& command_line)
     wchar_t** args = nullptr;
 
     args = ::CommandLineToArgvW(command_line_string.c_str(), &num_args);
-    DLOG_IF(FATAL, !args) << "CommandLineToArgvW failed on command line: " << command_line;
+    DLOG_IF(LS_FATAL, !args) << "CommandLineToArgvW failed on command line: " << command_line;
 
     InitFromArgv(num_args, args);
     LocalFree(args);

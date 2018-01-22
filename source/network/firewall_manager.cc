@@ -137,7 +137,7 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
 
         hr = rules_enum->Next(1, rule_var.Receive(), nullptr);
 
-        DLOG_IF(ERROR, FAILED(hr)) << SystemErrorCodeToString(hr);
+        DLOG_IF(LS_ERROR, FAILED(hr)) << SystemErrorCodeToString(hr);
 
         if (hr != S_OK)
             break;

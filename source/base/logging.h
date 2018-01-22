@@ -384,9 +384,28 @@ MakeCheckOpValueString(std::ostream* os, const T& v)
 // We need an explicit overload for std::nullptr_t.
 void MakeCheckOpValueString(std::ostream* os, std::nullptr_t p);
 
+// Build the error message string.  This is separate from the "Impl"
+// function template because it is not performance critical and so can
+// be out of line, while the "Impl" code should be inline.  Caller
+// takes ownership of the returned string.
+template<class t1, class t2>
+std::string* MakeCheckOpString(const t1& v1, const t2& v2, const char* names)
+{
+    std::ostringstream ss;
+    ss << names << " (";
+    MakeCheckOpValueString(&ss, v1);
+    ss << " vs. ";
+    MakeCheckOpValueString(&ss, v2);
+    ss << ")";
+    std::string* msg = new std::string(ss.str());
+    return msg;
+}
+
 // Commonly used instantiations of MakeCheckOpString<>. Explicitly instantiated in logging.cc.
 std::string* MakeCheckOpString(const int& v1, const int& v2, const char* names);
 std::string* MakeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names);
+std::string* MakeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names);
+std::string* MakeCheckOpString(const unsigned long long& v1, const unsigned long long& v2, const char* names);
 std::string* MakeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names);
 std::string* MakeCheckOpString(const unsigned int& v1, const unsigned long& v2, const char* names);
 std::string* MakeCheckOpString(const std::string& v1, const std::string& v2, const char* names);
@@ -466,9 +485,9 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #if DCHECK_IS_ON()
 
 #define DCHECK(condition) \
-  LAZY_STREAM(LOG_STREAM(DCHECK), !(condition)) << "Check failed: " #condition ". "
+  LAZY_STREAM(LOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 #define DPCHECK(condition) \
-  LAZY_STREAM(PLOG_STREAM(DCHECK), !(condition)) << "Check failed: " #condition ". "
+  LAZY_STREAM(PLOG_STREAM(LS_DCHECK), !(condition)) << "Check failed: " #condition ". "
 
 #else  // DCHECK_IS_ON()
 
@@ -487,13 +506,13 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 
 #define DCHECK_OP(name, op, val1, val2)                                \
   switch (0) case 0: default:                                          \
-  if (::aspia::CheckOpResult true_if_passed =                          \
+  if (aspia::CheckOpResult true_if_passed =                            \
       DCHECK_IS_ON() ?                                                 \
       aspia::Check##name##Impl((val1), (val2),                         \
                                    #val1 " " #op " " #val2) : nullptr) \
    ;                                                                   \
   else                                                                 \
-    aspia::LogMessage(__FILE__, __LINE__, aspia::LOG_DCHECK,           \
+    aspia::LogMessage(__FILE__, __LINE__, aspia::LS_DCHECK,            \
                           true_if_passed.message()).stream()
 
 #else  // DCHECK_IS_ON()

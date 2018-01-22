@@ -23,7 +23,7 @@ public:
     explicit IOBuffer(size_t size) :
         data_size_(size)
     {
-        DCHECK_NE(data_size_, 0);
+        DCHECK_NE(data_size_, 0U);
         data_ = std::make_unique<uint8_t[]>(data_size_);
     }
 

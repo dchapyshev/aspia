@@ -209,23 +209,6 @@ void MakeCheckOpValueString(std::ostream* os, std::nullptr_t /* p */)
     (*os) << "nullptr";
 }
 
-// Build the error message string.  This is separate from the "Impl"
-// function template because it is not performance critical and so can
-// be out of line, while the "Impl" code should be inline.  Caller
-// takes ownership of the returned string.
-template<class t1, class t2>
-std::string* MakeCheckOpString(const t1& v1, const t2& v2, const char* names)
-{
-    std::ostringstream ss;
-    ss << names << " (";
-    MakeCheckOpValueString(&ss, v1);
-    ss << " vs. ";
-    MakeCheckOpValueString(&ss, v2);
-    ss << ")";
-    std::string* msg = new std::string(ss.str());
-    return msg;
-}
-
 std::string* MakeCheckOpString(const int& v1, const int& v2, const char* names)
 {
     return MakeCheckOpString<int, int>(v1, v2, names);
@@ -234,6 +217,18 @@ std::string* MakeCheckOpString(const int& v1, const int& v2, const char* names)
 std::string* MakeCheckOpString(const unsigned long& v1, const unsigned long& v2, const char* names)
 {
     return MakeCheckOpString<unsigned long, unsigned long>(v1, v2, names);
+}
+
+std::string* MakeCheckOpString(const unsigned int& v1, const unsigned int& v2, const char* names)
+{
+    return MakeCheckOpString<unsigned int, unsigned int>(v1, v2, names);
+}
+
+std::string* MakeCheckOpString(const unsigned long long& v1,
+                               const unsigned long long& v2,
+                               const char* names)
+{
+    return MakeCheckOpString<unsigned long long, unsigned long long>(v1, v2, names);
 }
 
 std::string* MakeCheckOpString(const unsigned long& v1, const unsigned int& v2, const char* names)

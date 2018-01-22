@@ -65,7 +65,7 @@ private:
         hr_ = CoInitializeEx(nullptr, init);
 #ifndef NDEBUG
         if (hr_ == S_FALSE)
-            LOG(ERROR) << "Multiple CoInitialize() calls for thread " << thread_id_;
+            LOG(LS_ERROR) << "Multiple CoInitialize() calls for thread " << thread_id_;
         else
             DCHECK_NE(RPC_E_CHANGED_MODE, hr_) << "Invalid COM thread model change";
 #endif
