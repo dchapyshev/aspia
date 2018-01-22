@@ -370,7 +370,7 @@ void FileTransferUploader::OnFilePacketSended(uint32_t flags, proto::file_transf
 
     delegate_->OnObjectTransfer(file_packetizer_->LeftSize());
 
-    if (flags & proto::file_transfer::FilePacket::LAST_PACKET)
+    if (flags & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
     {
         file_packetizer_.reset();
         RunNextTask();

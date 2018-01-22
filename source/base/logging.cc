@@ -8,25 +8,15 @@
 #include "base/logging.h"
 
 #include <io.h>
-#include <limits.h>
-
 #include <algorithm>
-#include <cstring>
-#include <cstdint>
-#include <ctime>
 #include <iomanip>
 #include <ostream>
-#include <string>
 #include <thread>
 #include <utility>
 
-#include "base/macros.h"
-#include "base/command_line.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-
-using FileHandle = HANDLE;
 
 // Windows warns on using write().  It prefers _write().
 #define write(fd, buf, count) _write(fd, buf, static_cast<unsigned int>(count))
@@ -37,39 +27,33 @@ namespace aspia {
 
 namespace {
 
-const char* const log_severity_names[] = {"INFO", "WARNING", "ERROR", "FATAL"};
+using FileHandle = HANDLE;
 
-static_assert(LS_NUMBER == _countof(log_severity_names));
+// Which log file to use? This is initialized by InitLogging or will be lazily initialized to the
+// default value when it is first needed.
+using PathString = std::wstring;
 
-const char* log_severity_name(LoggingSeverity severity)
+const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
+
+static_assert(LS_NUMBER == _countof(kLogSeverityNames));
+
+const char* GetSeverityName(LoggingSeverity severity)
 {
     if (severity >= 0 && severity < LS_NUMBER)
-        return log_severity_names[severity];
+        return kLogSeverityNames[severity];
     return "UNKNOWN";
 }
 
 LoggingSeverity g_min_log_level = LS_INFO;
-
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
 // For LOG_ERROR and above, always print to stderr.
 const int kAlwaysPrintErrorLevel = LS_ERROR;
 
-// Which log file to use? This is initialized by InitLogging or
-// will be lazily initialized to the default value when it is
-// first needed.
-typedef std::wstring PathString;
-
 PathString* g_log_file_name = nullptr;
 
 // This file is lazily opened and the handle may be nullptr
 FileHandle g_log_file = nullptr;
-
-// What should be prepended to each message?
-bool g_log_process_id = false;
-bool g_log_thread_id = false;
-bool g_log_timestamp = true;
-bool g_log_tickcount = false;
 
 // A log message handler that gets notified of every log message we process.
 LogMessageHandlerFunction log_message_handler = nullptr;
@@ -79,11 +63,6 @@ LogMessageHandlerFunction log_message_handler = nullptr;
 int32_t CurrentProcessId()
 {
     return GetCurrentProcessId();
-}
-
-uint64_t TickCount()
-{
-    return GetTickCount();
 }
 
 void DeleteFilePath(const PathString& log_name)
@@ -234,15 +213,6 @@ bool ShouldCreateLogMessage(LoggingSeverity severity)
     // when g_logging_destination is LOG_NONE.
     return g_logging_destination != LOG_NONE || log_message_handler ||
            severity >= kAlwaysPrintErrorLevel;
-}
-
-void SetLogItems(bool enable_process_id, bool enable_thread_id,
-                 bool enable_timestamp, bool enable_tickcount)
-{
-    g_log_process_id = enable_process_id;
-    g_log_thread_id = enable_thread_id;
-    g_log_timestamp = enable_timestamp;
-    g_log_tickcount = enable_tickcount;
 }
 
 void SetLogMessageHandler(LogMessageHandlerFunction handler)
@@ -410,42 +380,26 @@ void LogMessage::Init(const char* file, int line)
     if (last_slash_pos != std::string_view::npos)
         filename.remove_prefix(last_slash_pos + 1);
 
-    // TODO(darin): It might be nice if the columns were fixed width.
-
     stream_ <<  '[';
+    stream_ << CurrentProcessId() << ':';
+    stream_ << std::this_thread::get_id() << ':';
 
-    if (g_log_process_id)
-        stream_ << CurrentProcessId() << ':';
+    SYSTEMTIME local_time;
+    GetLocalTime(&local_time);
 
-    if (g_log_thread_id)
-        stream_ << std::this_thread::get_id() << ':';
+    stream_ << std::setfill('0')
+            << std::setw(2) << local_time.wMonth
+            << std::setw(2) << local_time.wDay
+            << '/'
+            << std::setw(2) << local_time.wHour
+            << std::setw(2) << local_time.wMinute
+            << std::setw(2) << local_time.wSecond
+            << '.'
+            << std::setw(3) << local_time.wMilliseconds
+            << ':';
 
-    if (g_log_timestamp)
-    {
-        SYSTEMTIME local_time;
-        GetLocalTime(&local_time);
-
-        stream_ << std::setfill('0')
-                << std::setw(2) << local_time.wMonth
-                << std::setw(2) << local_time.wDay
-                << '/'
-                << std::setw(2) << local_time.wHour
-                << std::setw(2) << local_time.wMinute
-                << std::setw(2) << local_time.wSecond
-                << '.'
-                << std::setw(3) << local_time.wMilliseconds
-                << ':';
-    }
-
-    if (g_log_tickcount)
-        stream_ << TickCount() << ':';
-
-    if (severity_ >= 0)
-        stream_ << log_severity_name(severity_);
-    else
-        stream_ << "VERBOSE" << -severity_;
-
-    stream_ << ":" << filename.data() << "(" << line << ")] ";
+    stream_ << GetSeverityName(severity_);
+    stream_ << ":" << filename.data() << ":" << line << "] ";
 
     message_start_ = stream_.str().length();
 }

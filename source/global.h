@@ -19,11 +19,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-// Remove the definition of ERROR. Prevents the use of GLOG.
-#ifdef ERROR
-#undef ERROR
-#endif // ERROR
-
 // Remove the min and max definitions. We use std::min and std::max.
 #ifdef min
 #undef min

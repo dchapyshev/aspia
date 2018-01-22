@@ -33,14 +33,14 @@ message DriveList
     {
         enum Type
         {
-            UNKNOWN        = 0;
-            CDROM          = 1;
-            REMOVABLE      = 2;
-            FIXED          = 3;
-            REMOTE         = 4;
-            RAM            = 5;
-            HOME_FOLDER    = 6;
-            DESKTOP_FOLDER = 7;
+            TYPE_UNKNOWN        = 0;
+            TYPE_CDROM          = 1;
+            TYPE_REMOVABLE      = 2;
+            TYPE_FIXED          = 3;
+            TYPE_REMOTE         = 4;
+            TYPE_RAM            = 5;
+            TYPE_HOME_FOLDER    = 6;
+            TYPE_DESKTOP_FOLDER = 7;
         }
 
         Type type          = 1;
@@ -106,10 +106,10 @@ message FilePacket
 {
     enum Flags
     {
-        ERROR        = 0;
-        PACKET       = 1;
-        FIRST_PACKET = 2;
-        LAST_PACKET  = 4;
+        FLAG_ERROR        = 0;
+        FLAG_PACKET       = 1;
+        FLAG_FIRST_PACKET = 2;
+        FLAG_LAST_PACKET  = 4;
     }
 
     uint32 flags = 1;

@@ -411,7 +411,7 @@ void FileTransferDownloader::OnFilePacketReceived(
 
     delegate_->OnObjectTransfer(file_depacketizer_->LeftSize());
 
-    if (file_packet->flags() & proto::file_transfer::FilePacket::LAST_PACKET)
+    if (file_packet->flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
     {
         file_depacketizer_.reset();
         RunNextTask();

@@ -21,31 +21,31 @@ HICON GetDriveIcon(proto::file_transfer::DriveList::Item::Type drive_type)
 
     switch (drive_type)
     {
-        case proto::file_transfer::DriveList::Item::CDROM:
+        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
             icon_id = SIID_DRIVECD;
             break;
 
-        case proto::file_transfer::DriveList::Item::FIXED:
+        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
             icon_id = SIID_DRIVEFIXED;
             break;
 
-        case proto::file_transfer::DriveList::Item::REMOVABLE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOVABLE:
             icon_id = SIID_DRIVEREMOVE;
             break;
 
-        case proto::file_transfer::DriveList::Item::REMOTE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
             icon_id = SIID_DRIVENET;
             break;
 
-        case proto::file_transfer::DriveList::Item::RAM:
+        case proto::file_transfer::DriveList::Item::TYPE_RAM:
             icon_id = SIID_DRIVERAM;
             break;
 
-        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             icon_id = SIID_DESKTOP;
             break;
 
-        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
         default:
             icon_id = SIID_FOLDER;
             break;
@@ -108,11 +108,11 @@ CString GetDriveDisplayName(const proto::file_transfer::DriveList::Item& item)
 
     switch (item.type())
     {
-        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
             name.LoadStringW(IDS_FT_HOME_FOLDER);
             return name;
 
-        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             name.LoadStringW(IDS_FT_DESKTOP_FOLDER);
             return name;
 
@@ -138,31 +138,31 @@ CString GetDriveDescription(proto::file_transfer::DriveList::Item::Type type)
 
     switch (type)
     {
-        case proto::file_transfer::DriveList::Item::HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_HOME);
             break;
 
-        case proto::file_transfer::DriveList::Item::DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_DESKTOP);
             break;
 
-        case proto::file_transfer::DriveList::Item::CDROM:
+        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_CDROM);
             break;
 
-        case proto::file_transfer::DriveList::Item::FIXED:
+        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_FIXED);
             break;
 
-        case proto::file_transfer::DriveList::Item::REMOVABLE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOVABLE:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOVABLE);
             break;
 
-        case proto::file_transfer::DriveList::Item::REMOTE:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_REMOTE);
             break;
 
-        case proto::file_transfer::DriveList::Item::RAM:
+        case proto::file_transfer::DriveList::Item::TYPE_RAM:
             desc.LoadStringW(IDS_FT_DRIVE_DESC_RAM);
             break;
 

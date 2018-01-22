@@ -157,33 +157,33 @@ namespace proto {
 namespace file_transfer {
 
 enum DriveList_Item_Type {
-  DriveList_Item_Type_UNKNOWN = 0,
-  DriveList_Item_Type_CDROM = 1,
-  DriveList_Item_Type_REMOVABLE = 2,
-  DriveList_Item_Type_FIXED = 3,
-  DriveList_Item_Type_REMOTE = 4,
-  DriveList_Item_Type_RAM = 5,
-  DriveList_Item_Type_HOME_FOLDER = 6,
-  DriveList_Item_Type_DESKTOP_FOLDER = 7,
+  DriveList_Item_Type_TYPE_UNKNOWN = 0,
+  DriveList_Item_Type_TYPE_CDROM = 1,
+  DriveList_Item_Type_TYPE_REMOVABLE = 2,
+  DriveList_Item_Type_TYPE_FIXED = 3,
+  DriveList_Item_Type_TYPE_REMOTE = 4,
+  DriveList_Item_Type_TYPE_RAM = 5,
+  DriveList_Item_Type_TYPE_HOME_FOLDER = 6,
+  DriveList_Item_Type_TYPE_DESKTOP_FOLDER = 7,
   DriveList_Item_Type_DriveList_Item_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   DriveList_Item_Type_DriveList_Item_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool DriveList_Item_Type_IsValid(int value);
-const DriveList_Item_Type DriveList_Item_Type_Type_MIN = DriveList_Item_Type_UNKNOWN;
-const DriveList_Item_Type DriveList_Item_Type_Type_MAX = DriveList_Item_Type_DESKTOP_FOLDER;
+const DriveList_Item_Type DriveList_Item_Type_Type_MIN = DriveList_Item_Type_TYPE_UNKNOWN;
+const DriveList_Item_Type DriveList_Item_Type_Type_MAX = DriveList_Item_Type_TYPE_DESKTOP_FOLDER;
 const int DriveList_Item_Type_Type_ARRAYSIZE = DriveList_Item_Type_Type_MAX + 1;
 
 enum FilePacket_Flags {
-  FilePacket_Flags_ERROR = 0,
-  FilePacket_Flags_PACKET = 1,
-  FilePacket_Flags_FIRST_PACKET = 2,
-  FilePacket_Flags_LAST_PACKET = 4,
+  FilePacket_Flags_FLAG_ERROR = 0,
+  FilePacket_Flags_FLAG_PACKET = 1,
+  FilePacket_Flags_FLAG_FIRST_PACKET = 2,
+  FilePacket_Flags_FLAG_LAST_PACKET = 4,
   FilePacket_Flags_FilePacket_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   FilePacket_Flags_FilePacket_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool FilePacket_Flags_IsValid(int value);
-const FilePacket_Flags FilePacket_Flags_Flags_MIN = FilePacket_Flags_ERROR;
-const FilePacket_Flags FilePacket_Flags_Flags_MAX = FilePacket_Flags_LAST_PACKET;
+const FilePacket_Flags FilePacket_Flags_Flags_MIN = FilePacket_Flags_FLAG_ERROR;
+const FilePacket_Flags FilePacket_Flags_Flags_MAX = FilePacket_Flags_FLAG_LAST_PACKET;
 const int FilePacket_Flags_Flags_ARRAYSIZE = FilePacket_Flags_Flags_MAX + 1;
 
 enum Status {
@@ -288,22 +288,22 @@ class DriveList_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
   // nested types ----------------------------------------------------
 
   typedef DriveList_Item_Type Type;
-  static const Type UNKNOWN =
-    DriveList_Item_Type_UNKNOWN;
-  static const Type CDROM =
-    DriveList_Item_Type_CDROM;
-  static const Type REMOVABLE =
-    DriveList_Item_Type_REMOVABLE;
-  static const Type FIXED =
-    DriveList_Item_Type_FIXED;
-  static const Type REMOTE =
-    DriveList_Item_Type_REMOTE;
-  static const Type RAM =
-    DriveList_Item_Type_RAM;
-  static const Type HOME_FOLDER =
-    DriveList_Item_Type_HOME_FOLDER;
-  static const Type DESKTOP_FOLDER =
-    DriveList_Item_Type_DESKTOP_FOLDER;
+  static const Type TYPE_UNKNOWN =
+    DriveList_Item_Type_TYPE_UNKNOWN;
+  static const Type TYPE_CDROM =
+    DriveList_Item_Type_TYPE_CDROM;
+  static const Type TYPE_REMOVABLE =
+    DriveList_Item_Type_TYPE_REMOVABLE;
+  static const Type TYPE_FIXED =
+    DriveList_Item_Type_TYPE_FIXED;
+  static const Type TYPE_REMOTE =
+    DriveList_Item_Type_TYPE_REMOTE;
+  static const Type TYPE_RAM =
+    DriveList_Item_Type_TYPE_RAM;
+  static const Type TYPE_HOME_FOLDER =
+    DriveList_Item_Type_TYPE_HOME_FOLDER;
+  static const Type TYPE_DESKTOP_FOLDER =
+    DriveList_Item_Type_TYPE_DESKTOP_FOLDER;
   static inline bool Type_IsValid(int value) {
     return DriveList_Item_Type_IsValid(value);
   }
@@ -1510,14 +1510,14 @@ class FilePacket : public ::google::protobuf::MessageLite /* @@protoc_insertion_
   // nested types ----------------------------------------------------
 
   typedef FilePacket_Flags Flags;
-  static const Flags ERROR =
-    FilePacket_Flags_ERROR;
-  static const Flags PACKET =
-    FilePacket_Flags_PACKET;
-  static const Flags FIRST_PACKET =
-    FilePacket_Flags_FIRST_PACKET;
-  static const Flags LAST_PACKET =
-    FilePacket_Flags_LAST_PACKET;
+  static const Flags FLAG_ERROR =
+    FilePacket_Flags_FLAG_ERROR;
+  static const Flags FLAG_PACKET =
+    FilePacket_Flags_FLAG_PACKET;
+  static const Flags FLAG_FIRST_PACKET =
+    FilePacket_Flags_FLAG_FIRST_PACKET;
+  static const Flags FLAG_LAST_PACKET =
+    FilePacket_Flags_FLAG_LAST_PACKET;
   static inline bool Flags_IsValid(int value) {
     return FilePacket_Flags_IsValid(value);
   }

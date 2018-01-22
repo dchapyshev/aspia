@@ -42,27 +42,27 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
         switch (drive_info.Type())
         {
             case LogicalDriveEnumerator::DriveInfo::DriveType::CDROM:
-                item->set_type(proto::file_transfer::DriveList::Item::CDROM);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_CDROM);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::REMOVABLE:
-                item->set_type(proto::file_transfer::DriveList::Item::REMOVABLE);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOVABLE);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::FIXED:
-                item->set_type(proto::file_transfer::DriveList::Item::FIXED);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_FIXED);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::RAM:
-                item->set_type(proto::file_transfer::DriveList::Item::RAM);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_RAM);
                 break;
 
             case LogicalDriveEnumerator::DriveInfo::DriveType::REMOTE:
-                item->set_type(proto::file_transfer::DriveList::Item::REMOTE);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_REMOTE);
                 break;
 
             default:
-                item->set_type(proto::file_transfer::DriveList::Item::UNKNOWN);
+                item->set_type(proto::file_transfer::DriveList::Item::TYPE_UNKNOWN);
                 break;
         }
     }
@@ -73,7 +73,7 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
-        item->set_type(proto::file_transfer::DriveList::Item::HOME_FOLDER);
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
         item->set_path(path.u8string());
     }
 
@@ -81,7 +81,7 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
-        item->set_type(proto::file_transfer::DriveList::Item::DESKTOP_FOLDER);
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
         item->set_path(path.u8string());
     }
 

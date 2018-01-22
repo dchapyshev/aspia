@@ -302,7 +302,7 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
         reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
 
-    if (file_packet.flags() & proto::file_transfer::FilePacket::LAST_PACKET)
+    if (file_packet.flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
     {
         file_depacketizer_.reset();
     }
@@ -362,7 +362,7 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
     }
     else
     {
-        if (packet->flags() & proto::file_transfer::FilePacket::LAST_PACKET)
+        if (packet->flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
         {
             file_packetizer_.reset();
         }

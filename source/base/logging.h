@@ -8,13 +8,7 @@
 #ifndef _ASPIA_BASE__LOGGING_H
 #define _ASPIA_BASE__LOGGING_H
 
-#include <stddef.h>
-
-#include <cassert>
-#include <cstring>
-#include <functional>
 #include <sstream>
-#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -191,13 +185,6 @@ LoggingSeverity GetMinLogLevel();
 // Used by LOG_IS_ON to lazy-evaluate stream arguments.
 bool ShouldCreateLogMessage(LoggingSeverity severity);
 
-// Sets the common items you want to be prepended to each log message.
-// process and thread IDs default to off, the timestamp defaults to on.
-// If this function is not called, logging defaults to writing the timestamp
-// only.
-void SetLogItems(bool enable_process_id, bool enable_thread_id,
-                 bool enable_timestamp, bool enable_tickcount);
-
 // Sets the Log Message Handler that gets passed every log message before
 // it's sent to other log destinations (if any).
 // Returns true to signal that it handled the message and the message
@@ -315,7 +302,7 @@ private:
 // We make sure CHECK et al. always evaluates their arguments, as
 // doing CHECK(FunctionWithSideEffect()) is a common idiom.
 
-#if defined(OFFICIAL_BUILD) && defined(NDEBUG)
+#if (OFFICIAL_BUILD == 1) && defined(NDEBUG)
 
 // Make all CHECK functions discard their log strings to reduce code bloat, and
 // improve performance, for official release builds.
@@ -336,7 +323,7 @@ private:
 
 #define CHECK_OP(name, op, val1, val2) CHECK((val1) op (val2))
 
-#else  // !(OFFICIAL_BUILD && NDEBUG)
+#else  // !(OFFICIAL_BUILD == 1 && NDEBUG)
 
 // Do as much work as possible out of line to reduce inline code size.
 #define CHECK(condition)                                                    \
@@ -358,7 +345,7 @@ private:
   else                                                                         \
       aspia::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
 
-#endif  // !(OFFICIAL_BUILD && NDEBUG)
+#endif  // !(OFFICIAL_BUILD == 1 && NDEBUG)
 
 template <typename T, typename = void>
 struct SupportsOstreamOperator : std::false_type {};
@@ -725,14 +712,13 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 #define NOTIMPLEMENTED_MSG "NOT IMPLEMENTED"
 
 #define NOTIMPLEMENTED() LOG(ERROR) << NOTIMPLEMENTED_MSG
-#define NOTIMPLEMENTED_LOG_ONCE()                      \
-  do {                                                 \
-    static bool logged_once = false;                   \
-    LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG; \
-    logged_once = true;                                \
-  } while (0);                                         \
-  EAT_STREAM_PARAMETERS
-
-#undef ERROR
+#define NOTIMPLEMENTED_LOG_ONCE()                          \
+    do                                                     \
+    {                                                      \
+        static bool logged_once = false;                   \
+        LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG; \
+        logged_once = true;                                \
+    } while (0);                                           \
+    EAT_STREAM_PARAMETERS
 
 #endif // _ASPIA_BASE__LOGGING_H

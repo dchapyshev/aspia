@@ -502,14 +502,14 @@ bool DriveList_Item_Type_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const DriveList_Item_Type DriveList_Item::UNKNOWN;
-const DriveList_Item_Type DriveList_Item::CDROM;
-const DriveList_Item_Type DriveList_Item::REMOVABLE;
-const DriveList_Item_Type DriveList_Item::FIXED;
-const DriveList_Item_Type DriveList_Item::REMOTE;
-const DriveList_Item_Type DriveList_Item::RAM;
-const DriveList_Item_Type DriveList_Item::HOME_FOLDER;
-const DriveList_Item_Type DriveList_Item::DESKTOP_FOLDER;
+const DriveList_Item_Type DriveList_Item::TYPE_UNKNOWN;
+const DriveList_Item_Type DriveList_Item::TYPE_CDROM;
+const DriveList_Item_Type DriveList_Item::TYPE_REMOVABLE;
+const DriveList_Item_Type DriveList_Item::TYPE_FIXED;
+const DriveList_Item_Type DriveList_Item::TYPE_REMOTE;
+const DriveList_Item_Type DriveList_Item::TYPE_RAM;
+const DriveList_Item_Type DriveList_Item::TYPE_HOME_FOLDER;
+const DriveList_Item_Type DriveList_Item::TYPE_DESKTOP_FOLDER;
 const DriveList_Item_Type DriveList_Item::Type_MIN;
 const DriveList_Item_Type DriveList_Item::Type_MAX;
 const int DriveList_Item::Type_ARRAYSIZE;
@@ -527,10 +527,10 @@ bool FilePacket_Flags_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const FilePacket_Flags FilePacket::ERROR;
-const FilePacket_Flags FilePacket::PACKET;
-const FilePacket_Flags FilePacket::FIRST_PACKET;
-const FilePacket_Flags FilePacket::LAST_PACKET;
+const FilePacket_Flags FilePacket::FLAG_ERROR;
+const FilePacket_Flags FilePacket::FLAG_PACKET;
+const FilePacket_Flags FilePacket::FLAG_FIRST_PACKET;
+const FilePacket_Flags FilePacket::FLAG_LAST_PACKET;
 const FilePacket_Flags FilePacket::Flags_MIN;
 const FilePacket_Flags FilePacket::Flags_MAX;
 const int FilePacket::Flags_ARRAYSIZE;

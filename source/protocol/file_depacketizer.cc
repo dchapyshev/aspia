@@ -42,7 +42,7 @@ bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::FilePacket& pa
     DCHECK(file_stream_.is_open());
 
     // The first packet must have the full file size.
-    if (packet.flags() & proto::file_transfer::FilePacket::FIRST_PACKET)
+    if (packet.flags() & proto::file_transfer::FilePacket::FLAG_FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = packet.file_size();
@@ -60,7 +60,7 @@ bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::FilePacket& pa
 
     left_size_ -= packet_size;
 
-    if (packet.flags() & proto::file_transfer::FilePacket::LAST_PACKET)
+    if (packet.flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();
