@@ -7,6 +7,8 @@
 
 #include "ui/address_book_window.h"
 #include "ui/about_dialog.h"
+#include "ui/computer_dialog.h"
+#include "ui/computer_group_dialog.h"
 
 namespace aspia {
 
@@ -238,6 +240,44 @@ LRESULT AddressBookWindow::OnExitButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     SendMessageW(WM_CLOSE);
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnAddComputerButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    ComputerDialog().DoModal();
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnAddGroupButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    ComputerGroupDialog().DoModal();
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnEditComputerButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnEditGroupButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnDeleteComputerButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnDeleteGroupButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
     return 0;
 }
 

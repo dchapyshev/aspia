@@ -51,6 +51,12 @@ private:
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_ADD_COMPUTER, OnAddComputerButton)
+        COMMAND_ID_HANDLER(ID_ADD_GROUP, OnAddGroupButton)
+        COMMAND_ID_HANDLER(ID_EDIT_COMPUTER, OnEditComputerButton)
+        COMMAND_ID_HANDLER(ID_EDIT_GROUP, OnEditGroupButton)
+        COMMAND_ID_HANDLER(ID_DELETE_COMPUTER, OnDeleteComputerButton)
+        COMMAND_ID_HANDLER(ID_DELETE_GROUP, OnDeleteGroupButton)
 
         COMMAND_ID_HANDLER(ID_DESKTOP_MANAGE_SESSION, OnSessionButton)
         COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION, OnSessionButton)
@@ -73,6 +79,12 @@ private:
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAddComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnAddGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnEditComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnEditGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnDeleteComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnDeleteGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void InitToolBar(const CSize& small_icon_size);

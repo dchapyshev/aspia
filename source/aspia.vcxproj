@@ -267,6 +267,8 @@
     <ClCompile Include="ui\address_book_window.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
+    <ClCompile Include="ui\computer_dialog.cc" />
+    <ClCompile Include="ui\computer_group_dialog.cc" />
     <ClCompile Include="ui\desktop\settings_dialog.cc" />
     <ClCompile Include="ui\desktop\video_window.cc" />
     <ClCompile Include="ui\desktop\viewer_toolbar.cc" />
@@ -585,6 +587,8 @@
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
     <ClInclude Include="ui\base\tray_icon.h" />
+    <ClInclude Include="ui\computer_dialog.h" />
+    <ClInclude Include="ui\computer_group_dialog.h" />
     <ClInclude Include="ui\desktop\settings_dialog.h" />
     <ClInclude Include="ui\desktop\video_window.h" />
     <ClInclude Include="ui\desktop\viewer_toolbar.h" />

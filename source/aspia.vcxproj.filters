@@ -914,6 +914,12 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="command_line_switches.cc" />
+    <ClCompile Include="ui\computer_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\computer_group_dialog.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1861,6 +1867,12 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="command_line_switches.h" />
+    <ClInclude Include="ui\computer_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\computer_group_dialog.h">
+      <Filter>ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

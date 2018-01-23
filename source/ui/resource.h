@@ -100,6 +100,8 @@
 #define IDD_POWER_HOST                             111
 #define IDD_CATEGORY_SELECT                        112
 #define IDD_REPORT_PROGRESS                        113
+#define IDD_COMPUTER                               114
+#define IDD_COMPUTER_GROUP                         115
 
 //
 // Controls
@@ -159,6 +161,9 @@
 #define IDC_SYSTEM_INFO_ACCELERATORS               152
 #define IDC_EXPAND_ALL                             153
 #define IDC_COLLAPSE_ALL                           154
+#define IDC_NAME_EDIT                              155
+#define IDC_SERVER_ADDRESS_EDIT                    156
+#define IDC_COMMENT_EDIT                           157
 
 //
 // Commands
@@ -201,6 +206,8 @@
 #define ID_ADD_GROUP                               535
 #define ID_DELETE_GROUP                            536
 #define ID_DELETE_COMPUTER                         537
+#define ID_EDIT_GROUP                              538
+#define ID_EDIT_COMPUTER                           539
 
 #define ID_KEY_FIRST                               600
 #define ID_KEY_CTRL_ESC                            600
