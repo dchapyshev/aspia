@@ -9,6 +9,8 @@
 #include "base/logging.h"
 #include "ui/system_info/report_progress_dialog.h"
 
+#include <atlctrls.h>
+
 namespace aspia {
 
 ReportProgressDialog::ReportProgressDialog(
@@ -22,6 +24,8 @@ LRESULT ReportProgressDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
     CenterWindow();
+
+    CProgressBarCtrl(GetDlgItem(IDC_REPORT_PROGRESS)).SetMarquee(TRUE, 30);
 
     report_creator_->Start(
         std::bind(&ReportProgressDialog::OnStateChanged, this,
