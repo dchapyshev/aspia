@@ -6,8 +6,6 @@
 //
 
 #include "host/sas_injector.h"
-#include "host/host_main.h"
-#include "base/command_line.h"
 #include "base/scoped_thread_desktop.h"
 #include "base/service_manager.h"
 #include "base/version_helpers.h"
@@ -15,6 +13,7 @@
 #include "base/logging.h"
 #include "base/scoped_native_library.h"
 #include "host/scoped_sas_police.h"
+#include "command_line_switches.h"
 
 namespace aspia {
 

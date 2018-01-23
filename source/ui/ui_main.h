@@ -10,7 +10,9 @@
 
 namespace aspia {
 
-void RunUIMain();
+enum class UI { MAIN_DIALOG, ADDRESS_BOOK };
+
+void RunUIMain(UI ui);
 
 } // namespace aspia
 

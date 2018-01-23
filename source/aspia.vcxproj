@@ -192,6 +192,7 @@
     <ClCompile Include="codec\video_decoder_zlib.cc" />
     <ClCompile Include="codec\video_encoder_vpx.cc" />
     <ClCompile Include="codec\video_encoder_zlib.cc" />
+    <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="crypto\encryptor.cc" />
     <ClCompile Include="crypto\secure_memory.cc" />
     <ClCompile Include="crypto\sha512.cc" />
@@ -263,6 +264,7 @@
     <ClCompile Include="report\table.cc" />
     <ClCompile Include="report\value.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
+    <ClCompile Include="ui\address_book_window.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
     <ClCompile Include="ui\desktop\settings_dialog.cc" />
@@ -501,6 +503,7 @@
     <ClInclude Include="codec\video_encoder_vpx.h" />
     <ClInclude Include="codec\video_encoder_zlib.h" />
     <ClInclude Include="codec\video_helpers.h" />
+    <ClInclude Include="command_line_switches.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\secure_memory.h" />
     <ClInclude Include="crypto\sha512.h" />
@@ -577,6 +580,7 @@
     <ClInclude Include="report\table.h" />
     <ClInclude Include="report\value.h" />
     <ClInclude Include="ui\about_dialog.h" />
+    <ClInclude Include="ui\address_book_window.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />

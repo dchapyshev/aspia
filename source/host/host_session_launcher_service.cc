@@ -6,12 +6,12 @@
 //
 
 #include "host/host_session_launcher_service.h"
-#include "host/host_main.h"
 #include "base/files/base_paths.h"
 #include "base/command_line.h"
 #include "base/service_manager.h"
 #include "base/logging.h"
 #include "host/host_session_launcher.h"
+#include "command_line_switches.h"
 
 namespace aspia {
 

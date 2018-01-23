@@ -7,7 +7,6 @@
 
 #include "host/host_session_launcher.h"
 #include "host/host_session_launcher_service.h"
-#include "host/host_main.h"
 #include "base/process/process_helpers.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
@@ -15,6 +14,7 @@
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
+#include "command_line_switches.h"
 
 #include <userenv.h>
 #include <string>

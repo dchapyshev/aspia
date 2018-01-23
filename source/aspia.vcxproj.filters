@@ -910,6 +910,10 @@
     <ClCompile Include="base\command_line.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\address_book_window.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="command_line_switches.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1853,6 +1857,10 @@
     <ClInclude Include="base\command_line.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="ui\address_book_window.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="command_line_switches.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">

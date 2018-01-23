@@ -7,6 +7,7 @@
 
 #include "ui/ui_main.h"
 #include "ui/main_dialog.h"
+#include "ui/address_book_window.h"
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_dispatcher.h"
 #include "base/scoped_com_initializer.h"
@@ -19,7 +20,7 @@
 
 namespace aspia {
 
-void RunUIMain()
+void RunUIMain(UI ui)
 {
     ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.IsSucceeded());
@@ -45,19 +46,42 @@ void RunUIMain()
         return;
     }
 
-    MainDialog main_dialog;
-    if (!main_dialog.Create(nullptr, 0))
+    if (ui == UI::MAIN_DIALOG)
     {
-        PLOG(LS_ERROR) << "Unable to create main dialog";
+        MainDialog main_dialog;
+
+        if (!main_dialog.Create(nullptr, 0))
+        {
+            PLOG(LS_ERROR) << "Unable to create main dialog";
+        }
+        else
+        {
+            main_dialog.ShowWindow(SW_SHOWNORMAL);
+            main_dialog.UpdateWindow();
+
+            MessageLoopForUI message_loop;
+            MessageDispatcherForDialog dispatcher(main_dialog);
+            message_loop.Run(&dispatcher);
+        }
     }
     else
     {
-        main_dialog.ShowWindow(SW_SHOWNORMAL);
-        main_dialog.UpdateWindow();
+        DCHECK_EQ(ui, UI::ADDRESS_BOOK);
 
-        MessageLoopForUI message_loop;
-        MessageDispatcherForDialog dispatcher(main_dialog);
-        message_loop.Run(&dispatcher);
+        AddressBookWindow address_book_window;
+
+        if (!address_book_window.Create(nullptr))
+        {
+            PLOG(LS_ERROR) << "Unable to create address book window";
+        }
+        else
+        {
+            address_book_window.ShowWindow(SW_SHOW);
+            address_book_window.UpdateWindow();
+
+            MessageLoopForUI message_loop;
+            message_loop.Run(&address_book_window);
+        }
     }
 
     module.Term();

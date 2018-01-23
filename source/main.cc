@@ -11,6 +11,7 @@
 #include "base/logging.h"
 #include "host/host_main.h"
 #include "ui/ui_main.h"
+#include "command_line_switches.h"
 
 int WINAPI wWinMain(HINSTANCE /* hInstance */,
                     HINSTANCE /* hPrevInstance */,
@@ -31,12 +32,16 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
         if (aspia::IsWindowsVistaOrGreater() && !aspia::IsProcessElevated())
         {
             if (!aspia::ElevateProcess())
-                aspia::RunUIMain();
+                aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
         }
         else
         {
-            aspia::RunUIMain();
+            aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
         }
+    }
+    else if (command_line.HasSwitch(aspia::kAddressBookSwitch))
+    {
+        aspia::RunUIMain(aspia::UI::ADDRESS_BOOK);
     }
     else
     {
