@@ -295,29 +295,6 @@ private:
 // We make sure CHECK et al. always evaluates their arguments, as
 // doing CHECK(FunctionWithSideEffect()) is a common idiom.
 
-#if (OFFICIAL_BUILD == 1) && defined(NDEBUG)
-
-// Make all CHECK functions discard their log strings to reduce code bloat, and
-// improve performance, for official release builds.
-//
-// This is not calling BreakDebugger since this is called frequently, and
-// calling an out-of-line function instead of a noreturn inline macro prevents
-// compiler optimizations.
-#define CHECK(condition) \
-    !(condition) ? IMMEDIATE_CRASH() : EAT_STREAM_PARAMETERS
-
-// PCHECK includes the system error code, which is useful for determining
-// why the condition failed. In official builds, preserve only the error code
-// message so that it is available in crash reports. The stringified
-// condition and any additional stream parameters are dropped.
-#define PCHECK(condition)                                  \
-  LAZY_STREAM(PLOG_STREAM(FATAL), UNLIKELY(!(condition))); \
-  EAT_STREAM_PARAMETERS
-
-#define CHECK_OP(name, op, val1, val2) CHECK((val1) op (val2))
-
-#else  // !(OFFICIAL_BUILD == 1 && NDEBUG)
-
 // Do as much work as possible out of line to reduce inline code size.
 #define CHECK(condition)                                                    \
     LAZY_STREAM(aspia::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
@@ -337,8 +314,6 @@ private:
       aspia::Check##name##Impl((val1), (val2), #val1 " " #op " " #val2));      \
   else                                                                         \
       aspia::LogMessage(__FILE__, __LINE__, true_if_passed.message()).stream()
-
-#endif  // !(OFFICIAL_BUILD == 1 && NDEBUG)
 
 template <typename T, typename = void>
 struct SupportsOstreamOperator : std::false_type {};
