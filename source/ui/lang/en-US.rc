@@ -336,6 +336,52 @@ BEGIN
     END
 END
 
+IDR_GROUP_TREE MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Add &Computer", ID_ADD_COMPUTER
+        MENUITEM "Add &Group", ID_ADD_GROUP
+    END
+END
+
+IDR_GROUP_TREE_ITEM MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "&Delete", ID_DELETE_GROUP
+        MENUITEM SEPARATOR
+        MENUITEM "Add &Computer", ID_ADD_COMPUTER
+        MENUITEM "Add &Group", ID_ADD_GROUP
+    END
+END
+
+IDR_COMPUTER_LIST MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Add &Computer", ID_ADD_COMPUTER
+        MENUITEM "Add &Group", ID_ADD_GROUP
+    END
+END
+
+IDR_COMPUTER_LIST_ITEM MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Desktop Manage", ID_DESKTOP_MANAGE_SESSION
+        MENUITEM "Desktop View", ID_DESKTOP_VIEW_SESSION
+        MENUITEM "File Transfer", ID_FILE_TRANSFER_SESSION
+        MENUITEM "System Information", ID_SYSTEM_INFO_SESSION
+        MENUITEM "Power Manage", ID_POWER_SESSION
+        MENUITEM SEPARATOR
+        MENUITEM "&Delete", ID_DELETE_COMPUTER
+        MENUITEM SEPARATOR
+        MENUITEM "Add &Computer", ID_ADD_COMPUTER
+        MENUITEM "Add &Group", ID_ADD_GROUP
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -491,6 +537,19 @@ BEGIN
     IDS_SI_FILTER_HTML                      "HTML File (*.html, *.htm)"
     IDS_SI_FILTER_JSON                      "JSON File (*.json)"
     IDS_SI_FILTER_XML                       "XML File (*.xml)"
+END
+
+// Address Book
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_ADDRESS_BOOK_TITLE                  "Aspia - Address Book"
+    IDS_COL_NAME                            "Name"
+    IDS_COL_ADDRESS                         "Address"
+    IDS_COL_PORT                            "Port"
+    IDS_TOOLTIP_OPEN                        "Open Address Book"
+    IDS_TOOLTIP_SAVE                        "Save Address Book"
+    IDS_TOOLTIP_ABOUT                       "About"
+    IDS_TOOLTIP_EXIT                        "Exit"
 END
 
 // Authorization Status

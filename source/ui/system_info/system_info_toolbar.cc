@@ -82,7 +82,7 @@ LRESULT SystemInfoToolbar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
             break;
 
         default:
-            return 0;
+            return FALSE;
     }
 
     AtlLoadString(string_id, header->szText, _countof(header->szText));

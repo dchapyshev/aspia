@@ -336,6 +336,52 @@ BEGIN
     END
 END
 
+IDR_GROUP_TREE MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
+        MENUITEM "Добавить &группу", ID_ADD_GROUP
+    END
+END
+
+IDR_GROUP_TREE_ITEM MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "&Удалить", ID_DELETE_GROUP
+        MENUITEM SEPARATOR
+        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
+        MENUITEM "Добавить &группу", ID_ADD_GROUP
+    END
+END
+
+IDR_COMPUTER_LIST MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
+        MENUITEM "Добавить &группу", ID_ADD_GROUP
+    END
+END
+
+IDR_COMPUTER_LIST_ITEM MENU
+BEGIN
+    POPUP "popup"
+    BEGIN
+        MENUITEM "Управление рабочим столом", ID_DESKTOP_MANAGE_SESSION
+        MENUITEM "Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION
+        MENUITEM "Передача файлов", ID_FILE_TRANSFER_SESSION
+        MENUITEM "Информация о системе", ID_SYSTEM_INFO_SESSION
+        MENUITEM "Управление питанием", ID_POWER_SESSION
+        MENUITEM SEPARATOR
+        MENUITEM "&Удалить", ID_DELETE_COMPUTER
+        MENUITEM SEPARATOR
+        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
+        MENUITEM "Добавить &группу", ID_ADD_GROUP
+    END
+END
+
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -491,6 +537,19 @@ BEGIN
     IDS_SI_FILTER_HTML                      "Файл HTML (*.html, *.htm)"
     IDS_SI_FILTER_JSON                      "Файл JSON (*.json)"
     IDS_SI_FILTER_XML                       "Файл XML (*.xml)"
+END
+
+// Address Book
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_ADDRESS_BOOK_TITLE                  "Aspia - Адресная книга"
+    IDS_COL_NAME                            "Имя"
+    IDS_COL_ADDRESS                         "Адрес"
+    IDS_COL_PORT                            "Порт"
+    IDS_TOOLTIP_OPEN                        "Открыть адресную книгу"
+    IDS_TOOLTIP_SAVE                        "Сохранить адресную книгу"
+    IDS_TOOLTIP_ABOUT                       "О программе"
+    IDS_TOOLTIP_EXIT                        "Выход"
 END
 
 // Authorization Status
