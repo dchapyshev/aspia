@@ -1,0 +1,39 @@
+//
+// PROJECT:         Aspia
+// FILE:            proto/address_book.proto
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "client_config.proto";
+
+package aspia.proto;
+
+message Computer
+{
+    ClientConfig client_config = 1;
+
+    string name = 2;
+    string comment = 3;
+}
+
+message ComputerGroup
+{
+    repeated Computer computer = 1;
+    repeated ComputerGroup computer_group = 2;
+
+    string name = 3;
+    string comment = 4;
+}
+
+message AddressBook
+{
+    repeated Computer computer = 1;
+    repeated ComputerGroup computer_group = 2;
+
+    string name = 3;
+}

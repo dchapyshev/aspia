@@ -244,6 +244,7 @@
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
+    <ClCompile Include="proto\address_book.pb.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\client_config.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
@@ -561,6 +562,7 @@
     <ClInclude Include="protocol\file_packetizer.h" />
     <ClInclude Include="protocol\io_buffer.h" />
     <ClInclude Include="protocol\message_serialization.h" />
+    <ClInclude Include="proto\address_book.pb.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
     <ClInclude Include="proto\client_config.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
@@ -665,6 +667,7 @@
     <None Include="category\category_video_adapter.proto" />
     <None Include="category\category_windows_device.proto" />
     <None Include="category\category_wsus.proto" />
+    <None Include="proto\address_book.proto" />
     <None Include="proto\auth_session.proto" />
     <None Include="proto\build.cmd" />
     <None Include="proto\client_config.proto" />

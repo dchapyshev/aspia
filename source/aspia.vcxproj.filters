@@ -920,6 +920,9 @@
     <ClCompile Include="ui\computer_group_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="proto\address_book.pb.cc">
+      <Filter>proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1873,6 +1876,9 @@
     <ClInclude Include="ui\computer_group_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="proto\address_book.pb.h">
+      <Filter>proto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -2032,6 +2038,9 @@
       <Filter>proto</Filter>
     </None>
     <None Include="proto\client_config.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\address_book.proto">
       <Filter>proto</Filter>
     </None>
   </ItemGroup>
