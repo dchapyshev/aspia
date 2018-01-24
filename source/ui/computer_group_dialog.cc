@@ -66,30 +66,24 @@ LRESULT ComputerGroupDialog::OnOkButton(
     CEdit name_edit(GetDlgItem(IDC_NAME_EDIT));
 
     int name_length = name_edit.GetWindowTextLengthW();
-
     if (name_length > kMaxNameLength)
     {
         CString message;
         message.LoadStringW(IDS_TOO_LONG_NAME_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
-
         return 0;
     }
     else if (name_length < kMinNameLength)
     {
         CString message;
         message.LoadStringW(IDS_NAME_CANT_BE_EMPTY_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
-
         return 0;
     }
     else
     {
         WCHAR name[kMaxNameLength + 1];
         name_edit.GetWindowTextW(name, _countof(name));
-
         computer_group_.set_name(UTF8fromUNICODE(name));
     }
 
@@ -98,16 +92,13 @@ LRESULT ComputerGroupDialog::OnOkButton(
     {
         CString message;
         message.LoadStringW(IDS_TOO_LONG_COMMENT_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
-
         return 0;
     }
     else
     {
         WCHAR comment[kMaxCommentLength + 1];
         comment_edit.GetWindowTextW(comment, _countof(comment));
-
         computer_group_.set_comment(UTF8fromUNICODE(comment));
     }
 
