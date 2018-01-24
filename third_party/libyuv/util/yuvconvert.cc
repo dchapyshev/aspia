@@ -37,7 +37,7 @@ int num_skip_org = 0;   // Number of frames to skip in original.
 int num_frames = 0;     // Number of frames to convert.
 int filter = 1;         // Bilinear filter for scaling.
 
-static __inline uint32 Abs(int32 v) {
+static __inline uint32_t Abs(int32_t v) {
   return v >= 0 ? v : -v;
 }
 
@@ -158,11 +158,11 @@ void ParseOptions(int argc, const char* argv[]) {
 static const int kTileX = 32;
 static const int kTileY = 32;
 
-static int TileARGBScale(const uint8* src_argb,
+static int TileARGBScale(const uint8_t* src_argb,
                          int src_stride_argb,
                          int src_width,
                          int src_height,
-                         uint8* dst_argb,
+                         uint8_t* dst_argb,
                          int dst_stride_argb,
                          int dst_width,
                          int dst_height,
@@ -242,9 +242,9 @@ int main(int argc, const char* argv[]) {
   fseek(file_org, num_skip_org * total_size, SEEK_SET);
 #endif
 
-  uint8* const ch_org = new uint8[org_size];
-  uint8* const ch_dst = new uint8[dst_size];
-  uint8* const ch_rec = new uint8[total_size];
+  uint8_t* const ch_org = new uint8_t[org_size];
+  uint8_t* const ch_dst = new uint8_t[dst_size];
+  uint8_t* const ch_rec = new uint8_t[total_size];
   if (ch_org == NULL || ch_rec == NULL) {
     fprintf(stderr, "No memory available\n");
     fclose(file_org);
@@ -270,7 +270,7 @@ int main(int argc, const char* argv[]) {
 
     // Load original YUV or ARGB frame.
     size_t bytes_org =
-        fread(ch_org, sizeof(uint8), static_cast<size_t>(org_size), file_org);
+        fread(ch_org, sizeof(uint8_t), static_cast<size_t>(org_size), file_org);
     if (bytes_org < static_cast<size_t>(org_size))
       break;
 
@@ -329,13 +329,13 @@ int main(int argc, const char* argv[]) {
       // Output YUV or ARGB frame.
       if (rec_is_yuv) {
         size_t bytes_rec =
-            fwrite(ch_rec, sizeof(uint8), static_cast<size_t>(total_size),
+            fwrite(ch_rec, sizeof(uint8_t), static_cast<size_t>(total_size),
                    file_rec[cur_rec]);
         if (bytes_rec < static_cast<size_t>(total_size))
           break;
       } else {
         size_t bytes_rec =
-            fwrite(ch_dst, sizeof(uint8), static_cast<size_t>(dst_size),
+            fwrite(ch_dst, sizeof(uint8_t), static_cast<size_t>(dst_size),
                    file_rec[cur_rec]);
         if (bytes_rec < static_cast<size_t>(dst_size))
           break;

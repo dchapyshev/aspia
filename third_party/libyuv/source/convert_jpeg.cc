@@ -22,18 +22,18 @@ extern "C" {
 
 #ifdef HAVE_JPEG
 struct I420Buffers {
-  uint8* y;
+  uint8_t* y;
   int y_stride;
-  uint8* u;
+  uint8_t* u;
   int u_stride;
-  uint8* v;
+  uint8_t* v;
   int v_stride;
   int w;
   int h;
 };
 
 static void JpegCopyI420(void* opaque,
-                         const uint8* const* data,
+                         const uint8_t* const* data,
                          const int* strides,
                          int rows) {
   I420Buffers* dest = (I420Buffers*)(opaque);
@@ -47,7 +47,7 @@ static void JpegCopyI420(void* opaque,
 }
 
 static void JpegI422ToI420(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   I420Buffers* dest = (I420Buffers*)(opaque);
@@ -61,7 +61,7 @@ static void JpegI422ToI420(void* opaque,
 }
 
 static void JpegI444ToI420(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   I420Buffers* dest = (I420Buffers*)(opaque);
@@ -75,7 +75,7 @@ static void JpegI444ToI420(void* opaque,
 }
 
 static void JpegI400ToI420(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   I420Buffers* dest = (I420Buffers*)(opaque);
@@ -89,7 +89,7 @@ static void JpegI400ToI420(void* opaque,
 
 // Query size of MJPG in pixels.
 LIBYUV_API
-int MJPGSize(const uint8* sample, size_t sample_size, int* width, int* height) {
+int MJPGSize(const uint8_t* sample, size_t sample_size, int* width, int* height) {
   MJpegDecoder mjpeg_decoder;
   LIBYUV_BOOL ret = mjpeg_decoder.LoadFrame(sample, sample_size);
   if (ret) {
@@ -103,13 +103,13 @@ int MJPGSize(const uint8* sample, size_t sample_size, int* width, int* height) {
 // MJPG (Motion JPeg) to I420
 // TODO(fbarchard): review w and h requirement. dw and dh may be enough.
 LIBYUV_API
-int MJPGToI420(const uint8* sample,
+int MJPGToI420(const uint8_t* sample,
                size_t sample_size,
-               uint8* y,
+               uint8_t* y,
                int y_stride,
-               uint8* u,
+               uint8_t* u,
                int u_stride,
-               uint8* v,
+               uint8_t* v,
                int v_stride,
                int w,
                int h,
@@ -183,14 +183,14 @@ int MJPGToI420(const uint8* sample,
 
 #ifdef HAVE_JPEG
 struct ARGBBuffers {
-  uint8* argb;
+  uint8_t* argb;
   int argb_stride;
   int w;
   int h;
 };
 
 static void JpegI420ToARGB(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   ARGBBuffers* dest = (ARGBBuffers*)(opaque);
@@ -201,7 +201,7 @@ static void JpegI420ToARGB(void* opaque,
 }
 
 static void JpegI422ToARGB(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   ARGBBuffers* dest = (ARGBBuffers*)(opaque);
@@ -212,7 +212,7 @@ static void JpegI422ToARGB(void* opaque,
 }
 
 static void JpegI444ToARGB(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   ARGBBuffers* dest = (ARGBBuffers*)(opaque);
@@ -223,7 +223,7 @@ static void JpegI444ToARGB(void* opaque,
 }
 
 static void JpegI400ToARGB(void* opaque,
-                           const uint8* const* data,
+                           const uint8_t* const* data,
                            const int* strides,
                            int rows) {
   ARGBBuffers* dest = (ARGBBuffers*)(opaque);
@@ -235,9 +235,9 @@ static void JpegI400ToARGB(void* opaque,
 // MJPG (Motion JPeg) to ARGB
 // TODO(fbarchard): review w and h requirement. dw and dh may be enough.
 LIBYUV_API
-int MJPGToARGB(const uint8* sample,
+int MJPGToARGB(const uint8_t* sample,
                size_t sample_size,
-               uint8* argb,
+               uint8_t* argb,
                int argb_stride,
                int w,
                int h,

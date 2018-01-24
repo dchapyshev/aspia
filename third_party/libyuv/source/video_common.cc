@@ -18,8 +18,8 @@ extern "C" {
 #define ARRAY_SIZE(x) (int)(sizeof(x) / sizeof(x[0]))
 
 struct FourCCAliasEntry {
-  uint32 alias;
-  uint32 canonical;
+  uint32_t alias;
+  uint32_t canonical;
 };
 
 static const struct FourCCAliasEntry kFourCCAliases[] = {
@@ -46,7 +46,7 @@ static const struct FourCCAliasEntry kFourCCAliases[] = {
 //  {FOURCC_BGRA, FOURCC_ARGB},  // kCMPixelFormat_32BGRA
 
 LIBYUV_API
-uint32 CanonicalFourCC(uint32 fourcc) {
+uint32_t CanonicalFourCC(uint32_t fourcc) {
   int i;
   for (i = 0; i < ARRAY_SIZE(kFourCCAliases); ++i) {
     if (kFourCCAliases[i].alias == fourcc) {

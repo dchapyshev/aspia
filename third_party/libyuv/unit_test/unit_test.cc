@@ -31,11 +31,11 @@ DEFINE_int32(libyuv_cpu_info,
              "cpu flags for benchmark code. 1 = C, -1 = SIMD");
 #else
 // Disable command line parameters if gflags disabled.
-static const int32 FLAGS_libyuv_width = 0;
-static const int32 FLAGS_libyuv_height = 0;
-static const int32 FLAGS_libyuv_repeat = 0;
-static const int32 FLAGS_libyuv_flags = 0;
-static const int32 FLAGS_libyuv_cpu_info = 0;
+static const int32_t FLAGS_libyuv_width = 0;
+static const int32_t FLAGS_libyuv_height = 0;
+static const int32_t FLAGS_libyuv_repeat = 0;
+static const int32_t FLAGS_libyuv_flags = 0;
+static const int32_t FLAGS_libyuv_cpu_info = 0;
 #endif
 
 // For quicker unittests, default is 128 x 72.  But when benchmarking,

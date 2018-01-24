@@ -29,9 +29,9 @@ extern "C" {
 // sample_size is measured in bytes and is the size of the frame.
 //   With MJPEG it is the compressed size of the frame.
 LIBYUV_API
-int ConvertToARGB(const uint8* sample,
+int ConvertToARGB(const uint8_t* sample,
                   size_t sample_size,
-                  uint8* crop_argb,
+                  uint8_t* crop_argb,
                   int argb_stride,
                   int crop_x,
                   int crop_y,
@@ -40,11 +40,11 @@ int ConvertToARGB(const uint8* sample,
                   int crop_width,
                   int crop_height,
                   enum RotationMode rotation,
-                  uint32 fourcc) {
-  uint32 format = CanonicalFourCC(fourcc);
+                  uint32_t fourcc) {
+  uint32_t format = CanonicalFourCC(fourcc);
   int aligned_src_width = (src_width + 1) & ~1;
-  const uint8* src;
-  const uint8* src_uv;
+  const uint8_t* src;
+  const uint8_t* src_uv;
   int abs_src_height = (src_height < 0) ? -src_height : src_height;
   int inv_crop_height = (crop_height < 0) ? -crop_height : crop_height;
   int r = 0;
@@ -56,9 +56,9 @@ int ConvertToARGB(const uint8* sample,
   // also enable temporary buffer.
   LIBYUV_BOOL need_buf =
       (rotation && format != FOURCC_ARGB) || crop_argb == sample;
-  uint8* dest_argb = crop_argb;
+  uint8_t* dest_argb = crop_argb;
   int dest_argb_stride = argb_stride;
-  uint8* rotate_buffer = NULL;
+  uint8_t* rotate_buffer = NULL;
   int abs_crop_height = (crop_height < 0) ? -crop_height : crop_height;
 
   if (crop_argb == NULL || sample == NULL || src_width <= 0 ||
@@ -71,7 +71,7 @@ int ConvertToARGB(const uint8* sample,
 
   if (need_buf) {
     int argb_size = crop_width * 4 * abs_crop_height;
-    rotate_buffer = (uint8*)malloc(argb_size); /* NOLINT */
+    rotate_buffer = (uint8_t*)malloc(argb_size); /* NOLINT */
     if (!rotate_buffer) {
       return 1;  // Out of memory runtime error.
     }
@@ -166,9 +166,9 @@ int ConvertToARGB(const uint8* sample,
     // Triplanar formats
     case FOURCC_I420:
     case FOURCC_YV12: {
-      const uint8* src_y = sample + (src_width * crop_y + crop_x);
-      const uint8* src_u;
-      const uint8* src_v;
+      const uint8_t* src_y = sample + (src_width * crop_y + crop_x);
+      const uint8_t* src_u;
+      const uint8_t* src_v;
       int halfwidth = (src_width + 1) / 2;
       int halfheight = (abs_src_height + 1) / 2;
       if (format == FOURCC_YV12) {
@@ -188,9 +188,9 @@ int ConvertToARGB(const uint8* sample,
     }
 
     case FOURCC_J420: {
-      const uint8* src_y = sample + (src_width * crop_y + crop_x);
-      const uint8* src_u;
-      const uint8* src_v;
+      const uint8_t* src_y = sample + (src_width * crop_y + crop_x);
+      const uint8_t* src_u;
+      const uint8_t* src_v;
       int halfwidth = (src_width + 1) / 2;
       int halfheight = (abs_src_height + 1) / 2;
       src_u = sample + src_width * abs_src_height +
@@ -204,9 +204,9 @@ int ConvertToARGB(const uint8* sample,
 
     case FOURCC_I422:
     case FOURCC_YV16: {
-      const uint8* src_y = sample + src_width * crop_y + crop_x;
-      const uint8* src_u;
-      const uint8* src_v;
+      const uint8_t* src_y = sample + src_width * crop_y + crop_x;
+      const uint8_t* src_u;
+      const uint8_t* src_v;
       int halfwidth = (src_width + 1) / 2;
       if (format == FOURCC_YV16) {
         src_v = sample + src_width * abs_src_height + halfwidth * crop_y +
@@ -225,9 +225,9 @@ int ConvertToARGB(const uint8* sample,
     }
     case FOURCC_I444:
     case FOURCC_YV24: {
-      const uint8* src_y = sample + src_width * crop_y + crop_x;
-      const uint8* src_u;
-      const uint8* src_v;
+      const uint8_t* src_y = sample + src_width * crop_y + crop_x;
+      const uint8_t* src_u;
+      const uint8_t* src_v;
       if (format == FOURCC_YV24) {
         src_v = sample + src_width * (abs_src_height + crop_y) + crop_x;
         src_u = sample + src_width * (abs_src_height * 2 + crop_y) + crop_x;

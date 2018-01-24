@@ -23,10 +23,10 @@ extern "C" {
     (defined(__x86_64__) || (defined(__i386__) && !defined(_MSC_VER)))
 
 #if defined(__x86_64__)
-uint32 HammingDistance_SSE42(const uint8* src_a,
-                             const uint8* src_b,
+uint32_t HammingDistance_SSE42(const uint8_t* src_a,
+                             const uint8_t* src_b,
                              int count) {
-  uint64 diff = 0u;
+  uint64_t diff = 0u;
 
   asm volatile(
       "xor        %3,%3                          \n"
@@ -68,13 +68,13 @@ uint32 HammingDistance_SSE42(const uint8* src_a,
       :
       : "memory", "cc", "rcx", "rdx", "rsi", "rdi", "r8", "r9", "r10");
 
-  return static_cast<uint32>(diff);
+  return static_cast<uint32_t>(diff);
 }
 #else
-uint32 HammingDistance_SSE42(const uint8* src_a,
-                             const uint8* src_b,
+uint32_t HammingDistance_SSE42(const uint8_t* src_a,
+                             const uint8_t* src_b,
                              int count) {
-  uint32 diff = 0u;
+  uint32_t diff = 0u;
 
   asm volatile(
       // Process 16 bytes per loop.
@@ -115,10 +115,10 @@ static const vec8 kNibbleMask = {15, 15, 15, 15, 15, 15, 15, 15,
                                  15, 15, 15, 15, 15, 15, 15, 15};
 static const vec8 kBitCount = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
-uint32 HammingDistance_SSSE3(const uint8* src_a,
-                             const uint8* src_b,
+uint32_t HammingDistance_SSSE3(const uint8_t* src_a,
+                             const uint8_t* src_b,
                              int count) {
-  uint32 diff = 0u;
+  uint32_t diff = 0u;
 
   asm volatile(
       "movdqa     %4,%%xmm2                      \n"
@@ -174,8 +174,8 @@ uint32 HammingDistance_SSSE3(const uint8* src_a,
 }
 
 #ifdef HAS_HAMMINGDISTANCE_AVX2
-uint32 HammingDistance_AVX2(const uint8* src_a, const uint8* src_b, int count) {
-  uint32 diff = 0u;
+uint32_t HammingDistance_AVX2(const uint8_t* src_a, const uint8_t* src_b, int count) {
+  uint32_t diff = 0u;
 
   asm volatile(
       "vbroadcastf128 %4,%%ymm2                  \n"
@@ -227,8 +227,8 @@ uint32 HammingDistance_AVX2(const uint8* src_a, const uint8* src_b, int count) {
 }
 #endif  // HAS_HAMMINGDISTANCE_AVX2
 
-uint32 SumSquareError_SSE2(const uint8* src_a, const uint8* src_b, int count) {
-  uint32 sse;
+uint32_t SumSquareError_SSE2(const uint8_t* src_a, const uint8_t* src_b, int count) {
+  uint32_t sse;
   asm volatile (
     "pxor      %%xmm0,%%xmm0                   \n"
     "pxor      %%xmm5,%%xmm5                   \n"
@@ -293,8 +293,8 @@ static const uvec32 kHashMul3 = {
     0x00000001,  // 33 ^ 0
 };
 
-uint32 HashDjb2_SSE41(const uint8* src, int count, uint32 seed) {
-  uint32 hash;
+uint32_t HashDjb2_SSE41(const uint8_t* src, int count, uint32_t seed) {
+  uint32_t hash;
   asm volatile (
     "movd      %2,%%xmm0                       \n"
     "pxor      %%xmm7,%%xmm7                   \n"

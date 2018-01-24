@@ -10,7 +10,7 @@ The date of synchronization is indicated in the format DD-MM-YYYY.
 |-----------|-----------|------------|----------------------------|-------------------------------------------------|
 | asio      | 1.10.8    | 17-07-2017 | Boost Software License 1.0 | https://github.com/chriskohlhoff/asio           |
 | libvpx    | 1.6.1     | 12-07-2017 | BSD 3-Clause License       | https://chromium.googlesource.com/webm/libvpx   |
-| libyuv    | trunk     | 16-01-2018 | BSD 3-Clause License       | https://chromium.googlesource.com/libyuv/libyuv |
+| libyuv    | trunk     | 24-01-2018 | BSD 3-Clause License       | https://chromium.googlesource.com/libyuv/libyuv |
 | libsodium | 1.0.16    | 23-09-2017 | ISC License                | https://github.com/jedisct1/libsodium/releases  |
 | protobuf  | 3.5.1     | 05-01-2018 | BSD 3-Clause License       | https://github.com/google/protobuf/releases     |
 | rapidjson | 1.1.0     | 20-10-2017 | BSD License                | https://github.com/Tencent/rapidjson            |

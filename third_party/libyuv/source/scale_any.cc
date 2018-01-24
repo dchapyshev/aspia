@@ -20,7 +20,7 @@ extern "C" {
 
 // Definition for ScaleFilterCols, ScaleARGBCols and ScaleARGBFilterCols
 #define CANY(NAMEANY, TERP_SIMD, TERP_C, BPP, MASK)                        \
-  void NAMEANY(uint8* dst_ptr, const uint8* src_ptr, int dst_width, int x, \
+  void NAMEANY(uint8_t* dst_ptr, const uint8_t* src_ptr, int dst_width, int x, \
                int dx) {                                                   \
     int r = dst_width & MASK;                                              \
     int n = dst_width & ~MASK;                                             \
@@ -61,7 +61,7 @@ CANY(ScaleARGBFilterCols_Any_MSA,
 // Fixed scale down.
 // Mask may be non-power of 2, so use MOD
 #define SDANY(NAMEANY, SCALEROWDOWN_SIMD, SCALEROWDOWN_C, FACTOR, BPP, MASK) \
-  void NAMEANY(const uint8* src_ptr, ptrdiff_t src_stride, uint8* dst_ptr,   \
+  void NAMEANY(const uint8_t* src_ptr, ptrdiff_t src_stride, uint8_t* dst_ptr,   \
                int dst_width) {                                              \
     int r = (int)((unsigned int)dst_width % (MASK + 1)); /* NOLINT */        \
     int n = dst_width - r;                                                   \
@@ -76,7 +76,7 @@ CANY(ScaleARGBFilterCols_Any_MSA,
 // Since dst_width is (width + 1) / 2, this function scales one less pixel
 // and copies the last pixel.
 #define SDODD(NAMEANY, SCALEROWDOWN_SIMD, SCALEROWDOWN_C, FACTOR, BPP, MASK) \
-  void NAMEANY(const uint8* src_ptr, ptrdiff_t src_stride, uint8* dst_ptr,   \
+  void NAMEANY(const uint8_t* src_ptr, ptrdiff_t src_stride, uint8_t* dst_ptr,   \
                int dst_width) {                                              \
     int r = (int)((unsigned int)(dst_width - 1) % (MASK + 1)); /* NOLINT */  \
     int n = (dst_width - 1) - r;                                             \
@@ -386,8 +386,8 @@ SDANY(ScaleARGBRowDown2Box_Any_MSA,
 
 // Scale down by even scale factor.
 #define SDAANY(NAMEANY, SCALEROWDOWN_SIMD, SCALEROWDOWN_C, BPP, MASK)      \
-  void NAMEANY(const uint8* src_ptr, ptrdiff_t src_stride, int src_stepx,  \
-               uint8* dst_ptr, int dst_width) {                            \
+  void NAMEANY(const uint8_t* src_ptr, ptrdiff_t src_stride, int src_stepx,  \
+               uint8_t* dst_ptr, int dst_width) {                            \
     int r = dst_width & MASK;                                              \
     int n = dst_width & ~MASK;                                             \
     if (n > 0) {                                                           \
@@ -436,7 +436,7 @@ SDAANY(ScaleARGBRowDownEvenBox_Any_MSA,
 
 // Add rows box filter scale down.
 #define SAANY(NAMEANY, SCALEADDROW_SIMD, SCALEADDROW_C, MASK)          \
-  void NAMEANY(const uint8* src_ptr, uint16* dst_ptr, int src_width) { \
+  void NAMEANY(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width) { \
     int n = src_width & ~MASK;                                         \
     if (n > 0) {                                                       \
       SCALEADDROW_SIMD(src_ptr, dst_ptr, n);                           \

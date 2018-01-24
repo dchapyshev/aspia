@@ -27,8 +27,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libyuv/basic_types.h"  // For CPU_X86
-
 #ifdef __cplusplus
 namespace libyuv {
 extern "C" {
@@ -218,7 +216,9 @@ static LIBYUV_BOOL TestEnv(const char*) {
 
 static SAFEBUFFERS int GetCpuFlags(void) {
   int cpu_info = 0;
-#if !defined(__pnacl__) && !defined(__CLR_VER) && defined(CPU_X86)
+#if !defined(__pnacl__) && !defined(__CLR_VER) &&                   \
+    (defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || \
+     defined(_M_IX86))
   int cpu_info0[4] = {0, 0, 0, 0};
   int cpu_info1[4] = {0, 0, 0, 0};
   int cpu_info7[4] = {0, 0, 0, 0};

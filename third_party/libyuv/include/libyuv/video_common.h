@@ -29,12 +29,12 @@ extern "C" {
 // constants are used in a switch.
 #ifdef __cplusplus
 #define FOURCC(a, b, c, d)                                    \
-  ((static_cast<uint32>(a)) | (static_cast<uint32>(b) << 8) | \
-   (static_cast<uint32>(c) << 16) | (static_cast<uint32>(d) << 24))
+  ((static_cast<uint32_t>(a)) | (static_cast<uint32_t>(b) << 8) | \
+   (static_cast<uint32_t>(c) << 16) | (static_cast<uint32_t>(d) << 24))
 #else
 #define FOURCC(a, b, c, d)                                 \
-  (((uint32)(a)) | ((uint32)(b) << 8) |       /* NOLINT */ \
-   ((uint32)(c) << 16) | ((uint32)(d) << 24)) /* NOLINT */
+  (((uint32_t)(a)) | ((uint32_t)(b) << 8) |       /* NOLINT */ \
+   ((uint32_t)(c) << 16) | ((uint32_t)(d) << 24)) /* NOLINT */
 #endif
 
 // Some pages discussing FourCC codes:
@@ -176,7 +176,7 @@ enum FourCCBpp {
 };
 
 // Converts fourcc aliases into canonical ones.
-LIBYUV_API uint32 CanonicalFourCC(uint32 fourcc);
+LIBYUV_API uint32_t CanonicalFourCC(uint32_t fourcc);
 
 #ifdef __cplusplus
 }  // extern "C"

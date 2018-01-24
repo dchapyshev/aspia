@@ -29,12 +29,12 @@ int main(int argc, char** argv) {
   FILE* fin2 = name2 ? fopen(name2, "rb") : NULL;
 
   const int kBlockSize = 32768;
-  uint8 buf1[kBlockSize];
-  uint8 buf2[kBlockSize];
-  uint32 hash1 = 5381;
-  uint32 hash2 = 5381;
-  uint64 sum_square_err = 0;
-  uint64 size_min = 0;
+  uint8_t buf1[kBlockSize];
+  uint8_t buf2[kBlockSize];
+  uint32_t hash1 = 5381;
+  uint32_t hash2 = 5381;
+  uint64_t sum_square_err = 0;
+  uint64_t size_min = 0;
   int amt1 = 0;
   int amt2 = 0;
   do {

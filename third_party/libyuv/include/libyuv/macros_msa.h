@@ -18,8 +18,8 @@
 #if (__mips_isa_rev >= 6)
 #define LW(psrc)                                    \
   ({                                                \
-    uint8* psrc_lw_m = (uint8*)(psrc); /* NOLINT */ \
-    uint32 val_m;                                   \
+    uint8_t* psrc_lw_m = (uint8_t*)(psrc); /* NOLINT */ \
+    uint32_t val_m;                                   \
     asm volatile("lw  %[val_m],  %[psrc_lw_m]  \n"  \
                  : [val_m] "=r"(val_m)              \
                  : [psrc_lw_m] "m"(*psrc_lw_m));    \
@@ -29,8 +29,8 @@
 #if (__mips == 64)
 #define LD(psrc)                                    \
   ({                                                \
-    uint8* psrc_ld_m = (uint8*)(psrc); /* NOLINT */ \
-    uint64 val_m = 0;                               \
+    uint8_t* psrc_ld_m = (uint8_t*)(psrc); /* NOLINT */ \
+    uint64_t val_m = 0;                               \
     asm volatile("ld  %[val_m],  %[psrc_ld_m]  \n"  \
                  : [val_m] "=r"(val_m)              \
                  : [psrc_ld_m] "m"(*psrc_ld_m));    \
@@ -39,14 +39,14 @@
 #else  // !(__mips == 64)
 #define LD(psrc)                                                       \
   ({                                                                   \
-    uint8* psrc_ld_m = (uint8*)(psrc); /* NOLINT */                    \
-    uint32 val0_m, val1_m;                                             \
-    uint64 val_m = 0;                                                  \
+    uint8_t* psrc_ld_m = (uint8_t*)(psrc); /* NOLINT */                    \
+    uint32_t val0_m, val1_m;                                             \
+    uint64_t val_m = 0;                                                  \
     val0_m = LW(psrc_ld_m);                                            \
     val1_m = LW(psrc_ld_m + 4);                                        \
-    val_m = (uint64)(val1_m);                             /* NOLINT */ \
-    val_m = (uint64)((val_m << 32) & 0xFFFFFFFF00000000); /* NOLINT */ \
-    val_m = (uint64)(val_m | (uint64)val0_m);             /* NOLINT */ \
+    val_m = (uint64_t)(val1_m);                             /* NOLINT */ \
+    val_m = (uint64_t)((val_m << 32) & 0xFFFFFFFF00000000); /* NOLINT */ \
+    val_m = (uint64_t)(val_m | (uint64_t)val0_m);             /* NOLINT */ \
     val_m;                                                             \
   })
 #endif  // (__mips == 64)
@@ -83,8 +83,8 @@
 #else   // !(__mips_isa_rev >= 6)
 #define LW(psrc)                                    \
   ({                                                \
-    uint8* psrc_lw_m = (uint8*)(psrc); /* NOLINT */ \
-    uint32 val_m;                                   \
+    uint8_t* psrc_lw_m = (uint8_t*)(psrc); /* NOLINT */ \
+    uint32_t val_m;                                   \
     asm volatile("ulw  %[val_m],  %[psrc_lw_m]  \n" \
                  : [val_m] "=r"(val_m)              \
                  : [psrc_lw_m] "m"(*psrc_lw_m));    \
@@ -94,8 +94,8 @@
 #if (__mips == 64)
 #define LD(psrc)                                    \
   ({                                                \
-    uint8* psrc_ld_m = (uint8*)(psrc); /* NOLINT */ \
-    uint64 val_m = 0;                               \
+    uint8_t* psrc_ld_m = (uint8_t*)(psrc); /* NOLINT */ \
+    uint64_t val_m = 0;                               \
     asm volatile("uld  %[val_m],  %[psrc_ld_m]  \n" \
                  : [val_m] "=r"(val_m)              \
                  : [psrc_ld_m] "m"(*psrc_ld_m));    \
@@ -104,14 +104,14 @@
 #else  // !(__mips == 64)
 #define LD(psrc)                                                       \
   ({                                                                   \
-    uint8* psrc_ld_m = (uint8*)(psrc); /* NOLINT */                    \
-    uint32 val0_m, val1_m;                                             \
-    uint64 val_m = 0;                                                  \
+    uint8_t* psrc_ld_m = (uint8_t*)(psrc); /* NOLINT */                    \
+    uint32_t val0_m, val1_m;                                             \
+    uint64_t val_m = 0;                                                  \
     val0_m = LW(psrc_ld_m);                                            \
     val1_m = LW(psrc_ld_m + 4);                                        \
-    val_m = (uint64)(val1_m);                             /* NOLINT */ \
-    val_m = (uint64)((val_m << 32) & 0xFFFFFFFF00000000); /* NOLINT */ \
-    val_m = (uint64)(val_m | (uint64)val0_m);             /* NOLINT */ \
+    val_m = (uint64_t)(val1_m);                             /* NOLINT */ \
+    val_m = (uint64_t)((val_m << 32) & 0xFFFFFFFF00000000); /* NOLINT */ \
+    val_m = (uint64_t)(val_m | (uint64_t)val0_m);             /* NOLINT */ \
     val_m;                                                             \
   })
 #endif  // (__mips == 64)

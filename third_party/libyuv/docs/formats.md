@@ -139,7 +139,7 @@ There are 2 RGB layouts - RGB24 (aka 24BG) and RAW
 RGB24 is B,G,R in memory
 RAW is R,G,B in memory
 
-# AR30
+# AR30 and XR30
 
 AR30 is 2 10 10 10 ARGB stored in little endian order.
 The 2 bit alpha has 4 values.  Here are the comparable 8 bit alpha values.
@@ -148,3 +148,14 @@ The 2 bit alpha has 4 values.  Here are the comparable 8 bit alpha values.
 2 - 66%.  10101010b = 0xaa = 170
 3 - 100%. 11111111b = 0xff = 255
 The 10 bit RGB values range from 0 to 1023.
+XR30 is the same as AR30 but with no alpha channel.
+
+# NV12 and NV21
+
+NV12 is a biplanar format with a full sized Y plane followed by a single
+chroma plane with weaved U and V values.
+NV21 is the same but with weaved V and U values.
+The 12 in NV12 refers to 12 bits per pixel.  NV12 has a half width and half
+height chroma channel, and therefore is a 420 subsampling.
+NV16 is 16 bits per pixel, with half width and full height.  aka 422.
+NV24 is 24 bits per pixel with full sized chroma channel. aka 444.
