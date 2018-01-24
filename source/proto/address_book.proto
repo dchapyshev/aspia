@@ -24,7 +24,7 @@ message Computer
 message ComputerGroup
 {
     repeated Computer computer = 1;
-    repeated ComputerGroup computer_group = 2;
+    repeated ComputerGroup group = 2;
 
     string name = 3;
     string comment = 4;
@@ -32,8 +32,5 @@ message ComputerGroup
 
 message AddressBook
 {
-    repeated Computer computer = 1;
-    repeated ComputerGroup computer_group = 2;
-
-    string name = 3;
+    ComputerGroup root_group = 1;
 }

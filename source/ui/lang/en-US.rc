@@ -593,6 +593,17 @@ BEGIN
     IDS_TOOLTIP_SAVE                        "Save Address Book"
     IDS_TOOLTIP_ABOUT                       "About"
     IDS_TOOLTIP_EXIT                        "Exit"
+    IDS_DEFAULT_ADDRESS_BOOK_NAME           "Address Book"
+    IDS_ADDRESS_BOOK_CHANGED                "Address book changed. Save changes?"
+    IDS_TOO_LONG_NAME_ERROR                 "Too long name. The maximum length of the name is 64 characters."
+    IDS_TOO_LONG_COMMENT_ERROR              "Too long comment. The maximum length of the comment is 2048 characters."
+    IDS_NAME_CANT_BE_EMPTY_ERROR            "Name can not be empty."
+    IDS_ADDRESS_BOOK_FILTER                 "Aspia Address Book (*.aad)"
+    IDS_UNABLE_TO_OPEN_FILE_ERROR           "Unable to create or open address book file."
+    IDS_UNABLE_TO_WRITE_FILE_ERROR          "Unable to write address book file."
+    IDS_UNABLE_TO_READ_FILE_ERROR           "Unable to read address book file."
+    IDS_GROUP_DELETE_CONFIRMATION           "Are you sure you want to delete computer group ""%s"" and all children items?"
+    IDS_COMPUTER_DELETE_CONFIRMATION        "Are you sure you want to delete computer ""%s""?"
 END
 
 // Authorization Status

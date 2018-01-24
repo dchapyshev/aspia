@@ -13,6 +13,7 @@
 #include <atlwin.h>
 #include <atlframe.h>
 
+#include "proto/address_book.pb.h"
 #include "ui/resource.h"
 
 namespace aspia {
@@ -25,6 +26,9 @@ public:
     enum { IDD = IDD_COMPUTER_GROUP };
 
     ComputerGroupDialog() = default;
+    ComputerGroupDialog(const proto::ComputerGroup& computer_group);
+
+    const proto::ComputerGroup& GetComputerGroup() const;
 
 private:
     BEGIN_MSG_MAP(ComputerGroupDialog)
@@ -48,6 +52,8 @@ private:
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    proto::ComputerGroup computer_group_;
 };
 
 } // namespace aspia

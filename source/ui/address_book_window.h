@@ -9,6 +9,7 @@
 #define _ASPIA_UI__ADDRESS_BOOK_WINDOW_H
 
 #include "base/message_loop/message_loop.h"
+#include "proto/address_book.pb.h"
 #include "ui/base/splitter.h"
 #include "ui/resource.h"
 
@@ -17,6 +18,8 @@
 #include <atlwin.h>
 #include <atlctrls.h>
 #include <atlmisc.h>
+
+#include <experimental/filesystem>
 
 namespace aspia {
 
@@ -51,6 +54,7 @@ private:
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
+        COMMAND_ID_HANDLER(ID_NEW, OnNewButton)
         COMMAND_ID_HANDLER(ID_ADD_COMPUTER, OnAddComputerButton)
         COMMAND_ID_HANDLER(ID_ADD_GROUP, OnAddGroupButton)
         COMMAND_ID_HANDLER(ID_EDIT_COMPUTER, OnEditComputerButton)
@@ -79,6 +83,7 @@ private:
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnNewButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAddComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAddGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnEditComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -88,18 +93,34 @@ private:
     LRESULT OnSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void InitToolBar(const CSize& small_icon_size);
-    void InitComputerList();
-    void InitGroupTree();
+    void InitComputerList(const CSize& small_icon_size);
+    void InitGroupTree(const CSize& small_icon_size);
+
+    void SetAddressBookChanged(bool is_changed);
+    void AddChildComputerGroups(HTREEITEM parent_item, proto::ComputerGroup* parent_computer_group);
+    void AddChildComputers(proto::ComputerGroup* parent_computer_group);
+    bool OpenAddressBook();
+    bool SaveAddressBook();
+    bool CloseAddressBook();
 
     CIcon small_icon_;
     CIcon big_icon_;
 
     VerticalSplitter splitter_;
-    CTreeViewCtrl group_tree_ctrl_;
-    CListViewCtrl computer_list_ctrl_;
     CStatusBarCtrl statusbar_;
+
+    CTreeViewCtrl group_tree_ctrl_;
+    CImageListManaged group_tree_imagelist_;
+
+    CListViewCtrl computer_list_ctrl_;
+    CImageListManaged computer_list_imagelist_;
+
     CToolBarCtrl toolbar_;
     CImageListManaged toolbar_imagelist_;
+
+    std::unique_ptr<proto::AddressBook> address_book_;
+    std::experimental::filesystem::path address_book_path_;
+    bool address_book_changed_ = false;
 };
 
 } // namespace aspia

@@ -293,17 +293,17 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
       computer() const;
 
-  // repeated .aspia.proto.ComputerGroup computer_group = 2;
-  int computer_group_size() const;
-  void clear_computer_group();
-  static const int kComputerGroupFieldNumber = 2;
-  const ::aspia::proto::ComputerGroup& computer_group(int index) const;
-  ::aspia::proto::ComputerGroup* mutable_computer_group(int index);
-  ::aspia::proto::ComputerGroup* add_computer_group();
+  // repeated .aspia.proto.ComputerGroup group = 2;
+  int group_size() const;
+  void clear_group();
+  static const int kGroupFieldNumber = 2;
+  const ::aspia::proto::ComputerGroup& group(int index) const;
+  ::aspia::proto::ComputerGroup* mutable_group(int index);
+  ::aspia::proto::ComputerGroup* add_group();
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-      mutable_computer_group();
+      mutable_group();
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-      computer_group() const;
+      group() const;
 
   // string name = 3;
   void clear_name();
@@ -338,7 +338,7 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer > computer_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup > computer_group_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup > group_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
   mutable int _cached_size_;
@@ -427,51 +427,20 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.Computer computer = 1;
-  int computer_size() const;
-  void clear_computer();
-  static const int kComputerFieldNumber = 1;
-  const ::aspia::proto::Computer& computer(int index) const;
-  ::aspia::proto::Computer* mutable_computer(int index);
-  ::aspia::proto::Computer* add_computer();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
-      mutable_computer();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
-      computer() const;
-
-  // repeated .aspia.proto.ComputerGroup computer_group = 2;
-  int computer_group_size() const;
-  void clear_computer_group();
-  static const int kComputerGroupFieldNumber = 2;
-  const ::aspia::proto::ComputerGroup& computer_group(int index) const;
-  ::aspia::proto::ComputerGroup* mutable_computer_group(int index);
-  ::aspia::proto::ComputerGroup* add_computer_group();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-      mutable_computer_group();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-      computer_group() const;
-
-  // string name = 3;
-  void clear_name();
-  static const int kNameFieldNumber = 3;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
+  // .aspia.proto.ComputerGroup root_group = 1;
+  bool has_root_group() const;
+  void clear_root_group();
+  static const int kRootGroupFieldNumber = 1;
+  const ::aspia::proto::ComputerGroup& root_group() const;
+  ::aspia::proto::ComputerGroup* release_root_group();
+  ::aspia::proto::ComputerGroup* mutable_root_group();
+  void set_allocated_root_group(::aspia::proto::ComputerGroup* root_group);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.AddressBook)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer > computer_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup > computer_group_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::aspia::proto::ComputerGroup* root_group_;
   mutable int _cached_size_;
   friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
   friend void ::protobuf_address_5fbook_2eproto::InitDefaultsAddressBookImpl();
@@ -671,34 +640,34 @@ ComputerGroup::computer() const {
   return computer_;
 }
 
-// repeated .aspia.proto.ComputerGroup computer_group = 2;
-inline int ComputerGroup::computer_group_size() const {
-  return computer_group_.size();
+// repeated .aspia.proto.ComputerGroup group = 2;
+inline int ComputerGroup::group_size() const {
+  return group_.size();
 }
-inline void ComputerGroup::clear_computer_group() {
-  computer_group_.Clear();
+inline void ComputerGroup::clear_group() {
+  group_.Clear();
 }
-inline const ::aspia::proto::ComputerGroup& ComputerGroup::computer_group(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.computer_group)
-  return computer_group_.Get(index);
+inline const ::aspia::proto::ComputerGroup& ComputerGroup::group(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.group)
+  return group_.Get(index);
 }
-inline ::aspia::proto::ComputerGroup* ComputerGroup::mutable_computer_group(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.computer_group)
-  return computer_group_.Mutable(index);
+inline ::aspia::proto::ComputerGroup* ComputerGroup::mutable_group(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.group)
+  return group_.Mutable(index);
 }
-inline ::aspia::proto::ComputerGroup* ComputerGroup::add_computer_group() {
-  // @@protoc_insertion_point(field_add:aspia.proto.ComputerGroup.computer_group)
-  return computer_group_.Add();
+inline ::aspia::proto::ComputerGroup* ComputerGroup::add_group() {
+  // @@protoc_insertion_point(field_add:aspia.proto.ComputerGroup.group)
+  return group_.Add();
 }
 inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-ComputerGroup::mutable_computer_group() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.ComputerGroup.computer_group)
-  return &computer_group_;
+ComputerGroup::mutable_group() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.ComputerGroup.group)
+  return &group_;
 }
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-ComputerGroup::computer_group() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.ComputerGroup.computer_group)
-  return computer_group_;
+ComputerGroup::group() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.ComputerGroup.group)
+  return group_;
 }
 
 // string name = 3;
@@ -811,117 +780,54 @@ inline void ComputerGroup::set_allocated_comment(::std::string* comment) {
 
 // AddressBook
 
-// repeated .aspia.proto.Computer computer = 1;
-inline int AddressBook::computer_size() const {
-  return computer_.size();
+// .aspia.proto.ComputerGroup root_group = 1;
+inline bool AddressBook::has_root_group() const {
+  return this != internal_default_instance() && root_group_ != NULL;
 }
-inline void AddressBook::clear_computer() {
-  computer_.Clear();
+inline void AddressBook::clear_root_group() {
+  if (GetArenaNoVirtual() == NULL && root_group_ != NULL) {
+    delete root_group_;
+  }
+  root_group_ = NULL;
 }
-inline const ::aspia::proto::Computer& AddressBook::computer(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.computer)
-  return computer_.Get(index);
+inline const ::aspia::proto::ComputerGroup& AddressBook::root_group() const {
+  const ::aspia::proto::ComputerGroup* p = root_group_;
+  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.root_group)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::ComputerGroup*>(
+      &::aspia::proto::_ComputerGroup_default_instance_);
 }
-inline ::aspia::proto::Computer* AddressBook::mutable_computer(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.computer)
-  return computer_.Mutable(index);
-}
-inline ::aspia::proto::Computer* AddressBook::add_computer() {
-  // @@protoc_insertion_point(field_add:aspia.proto.AddressBook.computer)
-  return computer_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
-AddressBook::mutable_computer() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.AddressBook.computer)
-  return &computer_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
-AddressBook::computer() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.AddressBook.computer)
-  return computer_;
-}
-
-// repeated .aspia.proto.ComputerGroup computer_group = 2;
-inline int AddressBook::computer_group_size() const {
-  return computer_group_.size();
-}
-inline void AddressBook::clear_computer_group() {
-  computer_group_.Clear();
-}
-inline const ::aspia::proto::ComputerGroup& AddressBook::computer_group(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.computer_group)
-  return computer_group_.Get(index);
-}
-inline ::aspia::proto::ComputerGroup* AddressBook::mutable_computer_group(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.computer_group)
-  return computer_group_.Mutable(index);
-}
-inline ::aspia::proto::ComputerGroup* AddressBook::add_computer_group() {
-  // @@protoc_insertion_point(field_add:aspia.proto.AddressBook.computer_group)
-  return computer_group_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-AddressBook::mutable_computer_group() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.AddressBook.computer_group)
-  return &computer_group_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-AddressBook::computer_group() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.AddressBook.computer_group)
-  return computer_group_;
-}
-
-// string name = 3;
-inline void AddressBook::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& AddressBook::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.name)
-  return name_.GetNoArena();
-}
-inline void AddressBook::set_name(const ::std::string& value) {
+inline ::aspia::proto::ComputerGroup* AddressBook::release_root_group() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AddressBook.root_group)
   
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.AddressBook.name)
+  ::aspia::proto::ComputerGroup* temp = root_group_;
+  root_group_ = NULL;
+  return temp;
 }
-#if LANG_CXX11
-inline void AddressBook::set_name(::std::string&& value) {
+inline ::aspia::proto::ComputerGroup* AddressBook::mutable_root_group() {
   
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AddressBook.name)
+  if (root_group_ == NULL) {
+    root_group_ = new ::aspia::proto::ComputerGroup;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.root_group)
+  return root_group_;
 }
-#endif
-inline void AddressBook::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.AddressBook.name)
-}
-inline void AddressBook::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AddressBook.name)
-}
-inline ::std::string* AddressBook::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* AddressBook::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AddressBook.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void AddressBook::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
+inline void AddressBook::set_allocated_root_group(::aspia::proto::ComputerGroup* root_group) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete root_group_;
+  }
+  if (root_group) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      root_group = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, root_group, submessage_arena);
+    }
     
   } else {
     
   }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AddressBook.name)
+  root_group_ = root_group;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AddressBook.root_group)
 }
 
 #ifdef __GNUC__

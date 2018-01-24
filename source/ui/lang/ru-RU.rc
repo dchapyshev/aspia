@@ -593,6 +593,17 @@ BEGIN
     IDS_TOOLTIP_SAVE                        "Сохранить адресную книгу"
     IDS_TOOLTIP_ABOUT                       "О программе"
     IDS_TOOLTIP_EXIT                        "Выход"
+    IDS_DEFAULT_ADDRESS_BOOK_NAME           "Адресная книга"
+    IDS_ADDRESS_BOOK_CHANGED                "Адресная книга изменена. Сохранить изменения?"
+    IDS_TOO_LONG_NAME_ERROR                 "Слишком длинное имя. Максимальная длинна имени 64 символа."
+    IDS_TOO_LONG_COMMENT_ERROR              "Слишком длинный коментарий. Максимальная длинна коментария 2048 символов."
+    IDS_NAME_CANT_BE_EMPTY_ERROR            "Имя не может быть пустым."
+    IDS_ADDRESS_BOOK_FILTER                 "Адресная книга Aspia (*.aad)"
+    IDS_UNABLE_TO_OPEN_FILE_ERROR           "Не удалось создать или открыть файл адресной книги."
+    IDS_UNABLE_TO_WRITE_FILE_ERROR          "Не удалось записать файл адресной книги."
+    IDS_UNABLE_TO_READ_FILE_ERROR           "Не удалось прочитать файл адресной книги."
+    IDS_GROUP_DELETE_CONFIRMATION           "Are you sure you want to delete computer group ""%s"" and all children items?"
+    IDS_COMPUTER_DELETE_CONFIRMATION        "Are you sure you want to delete computer ""%s""?"
 END
 
 // Authorization Status
