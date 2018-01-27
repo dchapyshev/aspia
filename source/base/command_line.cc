@@ -16,7 +16,7 @@ namespace aspia {
 namespace {
 
 constexpr CommandLine::CharType kSwitchTerminator[] = L"--";
-constexpr CommandLine::CharType kSwitchValueSeparator[] = L"=";
+constexpr CommandLine::CharType kSwitchValueSeparator = L'=';
 constexpr CommandLine::CharType* const kSwitchPrefix = L"--";
 
 CommandLine current_process_command_line = CommandLine::FromString(GetCommandLineW());
@@ -205,7 +205,7 @@ void CommandLine::InitFromArgv(int argc, const CommandLine::CharType* const* arg
     StringVector new_argv;
 
     for (int i = 0; i < argc; ++i)
-        new_argv.push_back(argv[i]);
+        new_argv.emplace_back(argv[i]);
 
     InitFromArgv(new_argv);
 }
@@ -298,7 +298,7 @@ void CommandLine::AppendArgPath(const std::experimental::filesystem::path& value
 
 void CommandLine::AppendArg(const StringType& value)
 {
-    argv_.push_back(value);
+    argv_.emplace_back(value);
 }
 
 void CommandLine::ParseFromString(const StringType& command_line)
@@ -310,9 +310,8 @@ void CommandLine::ParseFromString(const StringType& command_line)
         return;
 
     int num_args = 0;
-    wchar_t** args = nullptr;
 
-    args = ::CommandLineToArgvW(command_line_string.c_str(), &num_args);
+    wchar_t** args = ::CommandLineToArgvW(command_line_string.c_str(), &num_args);
     DLOG_IF(LS_FATAL, !args) << "CommandLineToArgvW failed on command line: " << command_line;
 
     InitFromArgv(num_args, args);
