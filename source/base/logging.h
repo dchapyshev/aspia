@@ -300,7 +300,7 @@ private:
     LAZY_STREAM(aspia::LogMessage(__FILE__, __LINE__, #condition).stream(), !(condition))
 
 #define PCHECK(condition)                                                   \
-    LAZY_STREAM(PLOG_STREAM(FATAL), !condition) << "Check failed: " #condition ". "
+    LAZY_STREAM(PLOG_STREAM(FATAL), !(condition)) << "Check failed: " #condition ". "
 
 // Helper macro for binary operators.
 // Don't use this macro directly in your code, use CHECK_EQ et al below.
