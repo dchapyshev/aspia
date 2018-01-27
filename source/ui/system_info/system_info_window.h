@@ -8,7 +8,7 @@
 #ifndef _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 #define _ASPIA_UI__SYSTEM_INFO__SYSTEM_INFO_WINDOW_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "report/report_creator.h"
 #include "ui/system_info/system_info_toolbar.h"
 #include "ui/system_info/category_tree_ctrl.h"
@@ -20,7 +20,7 @@ namespace aspia {
 
 class SystemInfoWindow
     : public CWindowImpl<SystemInfoWindow, CWindow, CFrameWinTraits>,
-      private MessageLoopThread::Delegate,
+      private Thread::Delegate,
       private MessageLoop::Dispatcher
 {
 public:
@@ -38,7 +38,7 @@ public:
     ~SystemInfoWindow();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnThreadRunning(MessageLoop* message_loop) override;
     void OnAfterThreadRunning() override;
@@ -103,7 +103,7 @@ private:
     void CopyTextToClipboard(const std::wstring& text);
     void OnRequest(std::string_view guid, std::shared_ptr<ReportCreatorProxy> report_creator);
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;

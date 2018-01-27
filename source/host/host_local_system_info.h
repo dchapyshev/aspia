@@ -8,14 +8,14 @@
 #ifndef _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H
 #define _ASPIA_HOST__HOST_LOCAL_SYSTEM_INFO_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "report/report_creator.h"
 #include "ui/system_info/system_info_window.h"
 
 namespace aspia {
 
 class HostLocalSystemInfo
-    : private MessageLoopThread::Delegate,
+    : private Thread::Delegate,
       private SystemInfoWindow::Delegate
 {
 public:
@@ -24,7 +24,7 @@ public:
     void Run();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -36,7 +36,7 @@ private:
     void ExecuteRequest(std::string_view guid,
                         std::shared_ptr<ReportCreatorProxy> report_creator);
 
-    MessageLoopThread thread_;
+    Thread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<SystemInfoWindow> window_;
     std::shared_ptr<ReportCreatorProxy> creater_;

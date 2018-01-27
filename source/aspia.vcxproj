@@ -45,7 +45,6 @@
     <ClCompile Include="base\memory\aligned_memory.cc" />
     <ClCompile Include="base\message_loop\message_loop.cc" />
     <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
-    <ClCompile Include="base\message_loop\message_loop_thread.cc" />
     <ClCompile Include="base\message_loop\message_pump_default.cc" />
     <ClCompile Include="base\message_loop\message_pump_ui.cc" />
     <ClCompile Include="base\message_loop\message_pump_win.cc" />
@@ -75,6 +74,7 @@
     <ClCompile Include="base\synchronization\waitable_event_watcher.cc" />
     <ClCompile Include="base\synchronization\waitable_timer.cc" />
     <ClCompile Include="base\threading\simple_thread.cc" />
+    <ClCompile Include="base\threading\thread.cc" />
     <ClCompile Include="base\threading\thread_checker.cc" />
     <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="category\category.cc" />
@@ -333,7 +333,6 @@
     <ClInclude Include="base\memory\aligned_memory.h" />
     <ClInclude Include="base\message_loop\message_loop.h" />
     <ClInclude Include="base\message_loop\message_loop_proxy.h" />
-    <ClInclude Include="base\message_loop\message_loop_thread.h" />
     <ClInclude Include="base\message_loop\message_pump.h" />
     <ClInclude Include="base\message_loop\message_pump_default.h" />
     <ClInclude Include="base\message_loop\message_pump_dispatcher.h" />
@@ -378,6 +377,7 @@
     <ClInclude Include="base\synchronization\waitable_event_watcher.h" />
     <ClInclude Include="base\synchronization\waitable_timer.h" />
     <ClInclude Include="base\threading\simple_thread.h" />
+    <ClInclude Include="base\threading\thread.h" />
     <ClInclude Include="base\threading\thread_checker.h" />
     <ClInclude Include="base\typed_buffer.h" />
     <ClInclude Include="base\version_helpers.h" />

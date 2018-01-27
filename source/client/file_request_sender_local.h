@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__FILE_REQUEST_SENDER_LOCAL_H
 #define _ASPIA_CLIENT__FILE_REQUEST_SENDER_LOCAL_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "client/file_request_sender.h"
 #include "client/file_reply_receiver.h"
 
@@ -16,7 +16,7 @@ namespace aspia {
 
 class FileRequestSenderLocal :
     public FileRequestSender,
-    private MessageLoopThread::Delegate
+    private Thread::Delegate
 {
 public:
     FileRequestSenderLocal();
@@ -54,7 +54,7 @@ public:
     void SendFilePacketRequest(std::shared_ptr<FileReplyReceiverProxy> receiver) override;
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -77,7 +77,7 @@ private:
                        const std::experimental::filesystem::path& old_name,
                        const std::experimental::filesystem::path& new_name);
 
-    MessageLoopThread worker_thread_;
+    Thread worker_thread_;
     std::shared_ptr<MessageLoopProxy> worker_;
 
     DISALLOW_COPY_AND_ASSIGN(FileRequestSenderLocal);

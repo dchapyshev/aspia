@@ -8,7 +8,7 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER__FILE_STATUS_DIALOG_H
 #define _ASPIA_UI__FILE_TRANSFER__FILE_STATUS_DIALOG_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "base/scoped_native_library.h"
 #include "ui/resource.h"
 
@@ -25,7 +25,7 @@ namespace aspia {
 class FileStatusDialog :
     public CDialogImpl<FileStatusDialog>,
     public CDialogResize<FileStatusDialog>,
-    private MessageLoopThread::Delegate
+    private Thread::Delegate
 {
 public:
     enum { IDD = IDD_FILE_STATUS };
@@ -63,7 +63,7 @@ private:
         DLGRESIZE_CONTROL(IDC_MINIMIZE_BUTTON, DLSZ_MOVE_X | DLSZ_MOVE_Y)
     END_DLGRESIZE_MAP()
 
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -74,7 +74,7 @@ private:
 
     void WriteMessage(const WCHAR* text);
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     std::unique_ptr<ScopedNativeLibrary> richedit_library_;

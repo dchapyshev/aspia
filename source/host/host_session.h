@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_H
 #define _ASPIA_HOST__HOST_SESSION_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "base/process/process_watcher.h"
 #include "base/synchronization/waitable_timer.h"
 #include "host/host_process_connector.h"
@@ -21,7 +21,7 @@ namespace aspia {
 
 class HostSession :
     private ConsoleSessionWatcher::Delegate,
-    private MessageLoopThread::Delegate
+    private Thread::Delegate
 {
 public:
     HostSession(proto::auth::SessionType session_type,
@@ -29,7 +29,7 @@ public:
     ~HostSession();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -46,7 +46,7 @@ private:
 
     proto::auth::SessionType session_type_;
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     enum class State { STARTING, DETACHED, ATTACHED };

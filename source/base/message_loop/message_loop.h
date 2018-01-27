@@ -17,7 +17,7 @@
 namespace aspia {
 
 class MessageLoopProxy;
-class MessageThread;
+class Thread;
 
 class MessageLoop : public MessagePump::Delegate
 {
@@ -37,7 +37,7 @@ public:
 
 protected:
     friend class MessageLoopProxy;
-    friend class MessageLoopThread;
+    friend class Thread;
 
     void PostTask(PendingTask::Callback callback);
     void PostDelayedTask(PendingTask::Callback callback, const PendingTask::TimeDelta& delay);

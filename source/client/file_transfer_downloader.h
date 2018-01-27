@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 #define _ASPIA_CLIENT__FILE_TRANSFER_DOWNLOADER_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "client/file_transfer.h"
 #include "protocol/file_depacketizer.h"
 
@@ -16,7 +16,7 @@ namespace aspia {
 
 class FileTransferDownloader
     : public FileTransfer,
-      private MessageLoopThread::Delegate
+      private Thread::Delegate
 {
 public:
     FileTransferDownloader(std::shared_ptr<FileRequestSenderProxy> local_sender,
@@ -29,7 +29,7 @@ public:
                const FileTaskQueueBuilder::FileList& file_list) final;
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -54,7 +54,7 @@ private:
     void OnUnableToReadFileAction(FileAction action);
     void OnUnableToWriteFileAction(FileAction action);
 
-    MessageLoopThread thread_;
+    Thread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     FileTaskQueueBuilder task_queue_builder_;

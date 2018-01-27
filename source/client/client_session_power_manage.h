@@ -9,13 +9,13 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_POWER_MANAGE_H
 
 #include "client/client_session.h"
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 
 namespace aspia {
 
 class ClientSessionPowerManage :
     public ClientSession,
-    private MessageLoopThread::Delegate
+    private Thread::Delegate
 {
 public:
     ClientSessionPowerManage(const proto::ClientConfig& config,
@@ -23,13 +23,13 @@ public:
     ~ClientSessionPowerManage();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
     void OnCommandSended();
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     DISALLOW_COPY_AND_ASSIGN(ClientSessionPowerManage);

@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__FILE_REMOVER_H
 #define _ASPIA_CLIENT__FILE_REMOVER_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "client/file_request_sender_proxy.h"
 #include "client/file_reply_receiver.h"
 #include "client/file_task_queue_builder.h"
@@ -18,7 +18,7 @@ namespace aspia {
 
 class FileRemover
     : private FileReplyReceiver,
-      private MessageLoopThread::Delegate
+      private Thread::Delegate
 {
 public:
     using ActionCallback = std::function<void(FileAction action)>;
@@ -60,7 +60,7 @@ private:
 
     Delegate* delegate_;
 
-    MessageLoopThread thread_;
+    Thread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     std::shared_ptr<FileRequestSenderProxy> sender_;

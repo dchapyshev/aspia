@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_H
 
 #include "client/client_session.h"
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "proto/auth_session.pb.h"
@@ -18,7 +18,7 @@
 namespace aspia {
 
 class Client :
-    private MessageLoopThread::Delegate,
+    private Thread::Delegate,
     private StatusDialog::Delegate
 {
 public:
@@ -38,7 +38,7 @@ public:
     bool IsTerminatedSession() const;
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -53,7 +53,7 @@ private:
 
     Delegate* delegate_;
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     proto::auth::Status status_;

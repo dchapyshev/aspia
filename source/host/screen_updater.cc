@@ -75,7 +75,7 @@ void ScreenUpdater::UpdateScreen()
 
 void ScreenUpdater::OnBeforeThreadRunning()
 {
-    thread_.SetPriority(MessageLoopThread::Priority::HIGHEST);
+    thread_.SetPriority(Thread::Priority::HIGHEST);
 
     runner_ = thread_.message_loop_proxy();
     DCHECK(runner_);

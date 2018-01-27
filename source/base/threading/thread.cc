@@ -1,23 +1,22 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/message_loop/message_loop_thread.cc
+// FILE:            base/threading/thread.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "base/scoped_com_initializer.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-MessageLoopThread::~MessageLoopThread()
+Thread::~Thread()
 {
     Stop();
 }
 
-void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
-                              Delegate* delegate)
+void Thread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
@@ -28,9 +27,7 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
     state_ = State::STARTING;
 
     start_event_.Reset();
-    thread_ = std::thread(&MessageLoopThread::ThreadMain,
-                          this,
-                          message_loop_type);
+    thread_ = std::thread(&Thread::ThreadMain, this, message_loop_type);
     start_event_.Wait();
 
     state_ = State::STARTED;
@@ -38,7 +35,7 @@ void MessageLoopThread::Start(MessageLoop::Type message_loop_type,
     DCHECK(message_loop_);
 }
 
-void MessageLoopThread::StopSoon()
+void Thread::StopSoon()
 {
     if (state_ == State::STOPPING || !message_loop_)
         return;
@@ -48,7 +45,7 @@ void MessageLoopThread::StopSoon()
     message_loop_->PostTask(message_loop_->QuitClosure());
 }
 
-void MessageLoopThread::Stop()
+void Thread::Stop()
 {
     if (state_ == State::STOPPED)
         return;
@@ -66,7 +63,7 @@ void MessageLoopThread::Stop()
     delegate_ = nullptr;
 }
 
-void MessageLoopThread::Join()
+void Thread::Join()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
@@ -81,12 +78,12 @@ void MessageLoopThread::Join()
     state_ = State::STOPPED;
 }
 
-void MessageLoopThread::Delegate::OnThreadRunning(MessageLoop* message_loop)
+void Thread::Delegate::OnThreadRunning(MessageLoop* message_loop)
 {
     message_loop->Run();
 }
 
-void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
+void Thread::ThreadMain(MessageLoop::Type message_loop_type)
 {
     // The message loop for this thread.
     MessageLoop message_loop(message_loop_type);
@@ -126,7 +123,7 @@ void MessageLoopThread::ThreadMain(MessageLoop::Type message_loop_type)
     message_loop_ = nullptr;
 }
 
-bool MessageLoopThread::SetPriority(Priority priority)
+bool Thread::SetPriority(Priority priority)
 {
     if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
     {

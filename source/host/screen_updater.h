@@ -8,13 +8,13 @@
 #ifndef _ASPIA_HOST__SCREEN_UPDATER_H
 #define _ASPIA_HOST__SCREEN_UPDATER_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "desktop_capture/capture_scheduler.h"
 #include "desktop_capture/capturer_gdi.h"
 
 namespace aspia {
 
-class ScreenUpdater : private MessageLoopThread::Delegate
+class ScreenUpdater : private Thread::Delegate
 {
 public:
     enum class Mode { SCREEN_WITH_CURSOR, SCREEN };
@@ -31,7 +31,7 @@ public:
     void PostUpdateRequest();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() final;
     void OnAfterThreadRunning() final;
 
@@ -39,7 +39,7 @@ private:
 
     ScreenUpdateCallback screen_update_callback_;
 
-    MessageLoopThread thread_;
+    Thread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
     std::unique_ptr<Capturer> capturer_;
     CaptureScheduler scheduler_;

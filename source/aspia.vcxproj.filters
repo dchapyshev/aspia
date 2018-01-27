@@ -280,9 +280,6 @@
     <ClCompile Include="host\clipboard_thread.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="base\message_loop\message_loop_thread.cc">
-      <Filter>base\message_loop</Filter>
-    </ClCompile>
     <ClCompile Include="proto\host_user.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -923,6 +920,9 @@
     <ClCompile Include="base\threading\simple_thread.cc">
       <Filter>base\threading</Filter>
     </ClCompile>
+    <ClCompile Include="base\threading\thread.cc">
+      <Filter>base\threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1199,9 +1199,6 @@
     </ClInclude>
     <ClInclude Include="host\clipboard_thread.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="base\message_loop\message_loop_thread.h">
-      <Filter>base\message_loop</Filter>
     </ClInclude>
     <ClInclude Include="proto\host_user.pb.h">
       <Filter>proto</Filter>
@@ -1874,6 +1871,9 @@
       <Filter>proto</Filter>
     </ClInclude>
     <ClInclude Include="base\threading\simple_thread.h">
+      <Filter>base\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="base\threading\thread.h">
       <Filter>base\threading</Filter>
     </ClInclude>
   </ItemGroup>

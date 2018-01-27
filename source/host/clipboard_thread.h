@@ -8,12 +8,12 @@
 #ifndef _ASPIA_HOST__CLIPBOARD_THREAD_H
 #define _ASPIA_HOST__CLIPBOARD_THREAD_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "protocol/clipboard.h"
 
 namespace aspia {
 
-class ClipboardThread : private MessageLoopThread::Delegate
+class ClipboardThread : private Thread::Delegate
 {
 public:
     ClipboardThread() = default;
@@ -23,12 +23,12 @@ public:
     void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event);
 
 private:
-    // MessageThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
     Clipboard::ClipboardEventCallback event_callback_;
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     Clipboard clipboard_;
     std::shared_ptr<MessageLoopProxy> runner_;
 

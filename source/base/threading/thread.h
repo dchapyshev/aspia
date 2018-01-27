@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/message_loop/message_loop_thread.h
+// FILE:            base/threading/thread.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_THREAD_H
-#define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_THREAD_H
+#ifndef _ASPIA_BASE__THREADING__THREAD_H
+#define _ASPIA_BASE__THREADING__THREAD_H
 
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_loop_proxy.h"
@@ -17,11 +17,11 @@
 
 namespace aspia {
 
-class MessageLoopThread
+class Thread
 {
 public:
-    MessageLoopThread() = default;
-    ~MessageLoopThread();
+    Thread() = default;
+    ~Thread();
 
     class Delegate
     {
@@ -102,9 +102,9 @@ private:
 
     MessageLoop* message_loop_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageLoopThread);
+    DISALLOW_COPY_AND_ASSIGN(Thread);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_LOOP_THREAD_H
+#endif // _ASPIA_BASE__THREADING__THREAD_H

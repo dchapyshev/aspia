@@ -8,7 +8,7 @@
 #ifndef _ASPIA_UI__DESKTOP__VIEWER_WINDOW_H
 #define _ASPIA_UI__DESKTOP__VIEWER_WINDOW_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "base/scoped_user_object.h"
 #include "proto/client_config.pb.h"
 #include "protocol/clipboard.h"
@@ -21,7 +21,7 @@ namespace aspia {
 class ViewerWindow :
     public CWindowImpl<ViewerWindow, CWindow>,
     private VideoWindow::Delegate,
-    private MessageLoopThread::Delegate
+    private Thread::Delegate
 {
 public:
     class Delegate
@@ -79,7 +79,7 @@ private:
         COMMAND_RANGE_HANDLER(ID_KEY_FIRST, ID_KEY_LAST, OnKeyButton)
     END_MSG_MAP()
 
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnAfterThreadRunning() override;
 
@@ -120,7 +120,7 @@ private:
     void DoFullScreen(bool fullscreen);
     void ApplyConfig(const proto::desktop::Config& config);
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;

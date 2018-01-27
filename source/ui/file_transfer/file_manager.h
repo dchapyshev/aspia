@@ -8,7 +8,7 @@
 #ifndef _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_H
 #define _ASPIA_UI__FILE_TRANSFER__FILE_MANAGER_H
 
-#include "base/message_loop/message_loop_thread.h"
+#include "base/threading/thread.h"
 #include "client/file_request_sender_proxy.h"
 #include "ui/base/splitter.h"
 #include "ui/file_transfer/file_manager_panel.h"
@@ -17,7 +17,7 @@ namespace aspia {
 
 class FileManagerWindow :
     public CWindowImpl<FileManagerWindow, CWindow, CFrameWinTraits>,
-    private MessageLoopThread::Delegate,
+    private Thread::Delegate,
     private MessageLoop::Dispatcher,
     private FileManagerPanel::Delegate
 {
@@ -35,7 +35,7 @@ public:
     ~FileManagerWindow();
 
 private:
-    // MessageLoopThread::Delegate implementation.
+    // Thread::Delegate implementation.
     void OnBeforeThreadRunning() override;
     void OnThreadRunning(MessageLoop* message_loop) override;
     void OnAfterThreadRunning() override;
@@ -77,7 +77,7 @@ private:
 
     bool GetFocusedPanelType(FileManagerPanel::Type& type);
 
-    MessageLoopThread ui_thread_;
+    Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     std::shared_ptr<FileRequestSenderProxy> local_sender_;
