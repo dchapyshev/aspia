@@ -352,7 +352,10 @@ int MJPGToI420(const uint8_t* sample,
 
 // Query size of MJPG in pixels.
 LIBYUV_API
-int MJPGSize(const uint8_t* sample, size_t sample_size, int* width, int* height);
+int MJPGSize(const uint8_t* sample,
+             size_t sample_size,
+             int* width,
+             int* height);
 #endif
 
 // Convert camera sample to I420 with cropping, rotation and vertical flip.

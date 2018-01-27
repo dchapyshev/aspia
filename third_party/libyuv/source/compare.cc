@@ -32,7 +32,8 @@ LIBYUV_API
 uint32_t HashDjb2(const uint8_t* src, uint64_t count, uint32_t seed) {
   const int kBlockSize = 1 << 15;  // 32768;
   int remainder;
-  uint32_t (*HashDjb2_SSE)(const uint8_t* src, int count, uint32_t seed) = HashDjb2_C;
+  uint32_t (*HashDjb2_SSE)(const uint8_t* src, int count, uint32_t seed) =
+      HashDjb2_C;
 #if defined(HAS_HASHDJB2_SSE41)
   if (TestCpuFlag(kCpuHasSSE41)) {
     HashDjb2_SSE = HashDjb2_SSE41;
@@ -93,7 +94,10 @@ static uint32_t ARGBDetectRow_C(const uint8_t* argb, int width) {
 // Scan an opaque argb image and return fourcc based on alpha offset.
 // Returns FOURCC_ARGB, FOURCC_BGRA, or 0 if unknown.
 LIBYUV_API
-uint32_t ARGBDetect(const uint8_t* argb, int stride_argb, int width, int height) {
+uint32_t ARGBDetect(const uint8_t* argb,
+                    int stride_argb,
+                    int width,
+                    int height) {
   uint32_t fourcc = 0;
   int h;
 
@@ -115,16 +119,16 @@ uint32_t ARGBDetect(const uint8_t* argb, int stride_argb, int width, int height)
 
 LIBYUV_API
 uint64_t ComputeHammingDistance(const uint8_t* src_a,
-                              const uint8_t* src_b,
-                              int count) {
+                                const uint8_t* src_b,
+                                int count) {
   const int kBlockSize = 1 << 15;  // 32768;
   const int kSimdSize = 64;
   // SIMD for multiple of 64, and C for remainder
   int remainder = count & (kBlockSize - 1) & ~(kSimdSize - 1);
   uint64_t diff = 0;
   int i;
-  uint32_t (*HammingDistance)(const uint8_t* src_a, const uint8_t* src_b, int count) =
-      HammingDistance_C;
+  uint32_t (*HammingDistance)(const uint8_t* src_a, const uint8_t* src_b,
+                              int count) = HammingDistance_C;
 #if defined(HAS_HAMMINGDISTANCE_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     HammingDistance = HammingDistance_NEON;
@@ -173,8 +177,8 @@ uint64_t ComputeHammingDistance(const uint8_t* src_a,
 // TODO(fbarchard): Refactor into row function.
 LIBYUV_API
 uint64_t ComputeSumSquareError(const uint8_t* src_a,
-                             const uint8_t* src_b,
-                             int count) {
+                               const uint8_t* src_b,
+                               int count) {
   // SumSquareError returns values 0 to 65535 for each squared difference.
   // Up to 65536 of those can be summed and remain within a uint32_t.
   // After each block of 65536 pixels, accumulate into a uint64_t.
@@ -182,8 +186,8 @@ uint64_t ComputeSumSquareError(const uint8_t* src_a,
   int remainder = count & (kBlockSize - 1) & ~31;
   uint64_t sse = 0;
   int i;
-  uint32_t (*SumSquareError)(const uint8_t* src_a, const uint8_t* src_b, int count) =
-      SumSquareError_C;
+  uint32_t (*SumSquareError)(const uint8_t* src_a, const uint8_t* src_b,
+                             int count) = SumSquareError_C;
 #if defined(HAS_SUMSQUAREERROR_NEON)
   if (TestCpuFlag(kCpuHasNEON)) {
     SumSquareError = SumSquareError_NEON;
@@ -228,11 +232,11 @@ uint64_t ComputeSumSquareError(const uint8_t* src_a,
 
 LIBYUV_API
 uint64_t ComputeSumSquareErrorPlane(const uint8_t* src_a,
-                                  int stride_a,
-                                  const uint8_t* src_b,
-                                  int stride_b,
-                                  int width,
-                                  int height) {
+                                    int stride_a,
+                                    const uint8_t* src_b,
+                                    int stride_b,
+                                    int width,
+                                    int height) {
   uint64_t sse = 0;
   int h;
   // Coalesce rows.
@@ -274,7 +278,7 @@ double CalcFramePsnr(const uint8_t* src_a,
                      int height) {
   const uint64_t samples = (uint64_t)width * (uint64_t)height;
   const uint64_t sse = ComputeSumSquareErrorPlane(src_a, stride_a, src_b,
-                                                stride_b, width, height);
+                                                  stride_b, width, height);
   return SumSquareErrorToPsnr(sse, samples);
 }
 
@@ -293,8 +297,8 @@ double I420Psnr(const uint8_t* src_y_a,
                 int stride_v_b,
                 int width,
                 int height) {
-  const uint64_t sse_y = ComputeSumSquareErrorPlane(src_y_a, stride_y_a, src_y_b,
-                                                  stride_y_b, width, height);
+  const uint64_t sse_y = ComputeSumSquareErrorPlane(
+      src_y_a, stride_y_a, src_y_b, stride_y_b, width, height);
   const int width_uv = (width + 1) >> 1;
   const int height_uv = (height + 1) >> 1;
   const uint64_t sse_u = ComputeSumSquareErrorPlane(
@@ -302,7 +306,7 @@ double I420Psnr(const uint8_t* src_y_a,
   const uint64_t sse_v = ComputeSumSquareErrorPlane(
       src_v_a, stride_v_a, src_v_b, stride_v_b, width_uv, height_uv);
   const uint64_t samples = (uint64_t)width * (uint64_t)height +
-                         2 * ((uint64_t)width_uv * (uint64_t)height_uv);
+                           2 * ((uint64_t)width_uv * (uint64_t)height_uv);
   const uint64_t sse = sse_y + sse_u + sse_v;
   return SumSquareErrorToPsnr(sse, samples);
 }
@@ -344,7 +348,7 @@ static double Ssim8x8_C(const uint8_t* src_a,
     const int64_t sum_a_x_sum_b = sum_a * sum_b;
 
     const int64_t ssim_n = (2 * sum_a_x_sum_b + c1) *
-                         (2 * count * sum_axb - 2 * sum_a_x_sum_b + c2);
+                           (2 * count * sum_axb - 2 * sum_a_x_sum_b + c2);
 
     const int64_t sum_a_sq = sum_a * sum_a;
     const int64_t sum_b_sq = sum_b * sum_b;

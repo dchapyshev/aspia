@@ -22,7 +22,9 @@ namespace libyuv {
 extern "C" {
 #endif
 
-uint32_t HammingDistance_MSA(const uint8_t* src_a, const uint8_t* src_b, int count) {
+uint32_t HammingDistance_MSA(const uint8_t* src_a,
+                             const uint8_t* src_b,
+                             int count) {
   uint32_t diff = 0u;
   int i;
   v16u8 src0, src1, src2, src3;
@@ -47,7 +49,9 @@ uint32_t HammingDistance_MSA(const uint8_t* src_a, const uint8_t* src_b, int cou
   return diff;
 }
 
-uint32_t SumSquareError_MSA(const uint8_t* src_a, const uint8_t* src_b, int count) {
+uint32_t SumSquareError_MSA(const uint8_t* src_a,
+                            const uint8_t* src_b,
+                            int count) {
   uint32_t sse = 0u;
   int i;
   v16u8 src0, src1, src2, src3;

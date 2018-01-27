@@ -776,8 +776,8 @@ static int I420AlphaToARGBMatrix(const uint8_t* src_y,
                              uint8_t* dst_argb,
                              const struct YuvConstants* yuvconstants,
                              int width) = I422AlphaToARGBRow_C;
-  void (*ARGBAttenuateRow)(const uint8_t* src_argb, uint8_t* dst_argb, int width) =
-      ARGBAttenuateRow_C;
+  void (*ARGBAttenuateRow)(const uint8_t* src_argb, uint8_t* dst_argb,
+                           int width) = ARGBAttenuateRow_C;
   if (!src_y || !src_u || !src_v || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1244,8 +1244,8 @@ int RGB565ToARGB(const uint8_t* src_rgb565,
                  int width,
                  int height) {
   int y;
-  void (*RGB565ToARGBRow)(const uint8_t* src_rgb565, uint8_t* dst_argb, int width) =
-      RGB565ToARGBRow_C;
+  void (*RGB565ToARGBRow)(const uint8_t* src_rgb565, uint8_t* dst_argb,
+                          int width) = RGB565ToARGBRow_C;
   if (!src_rgb565 || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1481,9 +1481,9 @@ static int NV12ToARGBMatrix(const uint8_t* src_y,
                             int width,
                             int height) {
   int y;
-  void (*NV12ToARGBRow)(const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
-                        const struct YuvConstants* yuvconstants, int width) =
-      NV12ToARGBRow_C;
+  void (*NV12ToARGBRow)(
+      const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
+      const struct YuvConstants* yuvconstants, int width) = NV12ToARGBRow_C;
   if (!src_y || !src_uv || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1548,9 +1548,9 @@ static int NV21ToARGBMatrix(const uint8_t* src_y,
                             int width,
                             int height) {
   int y;
-  void (*NV21ToARGBRow)(const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
-                        const struct YuvConstants* yuvconstants, int width) =
-      NV21ToARGBRow_C;
+  void (*NV21ToARGBRow)(
+      const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
+      const struct YuvConstants* yuvconstants, int width) = NV21ToARGBRow_C;
   if (!src_y || !src_uv || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1670,9 +1670,9 @@ int M420ToARGB(const uint8_t* src_m420,
                int width,
                int height) {
   int y;
-  void (*NV12ToARGBRow)(const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
-                        const struct YuvConstants* yuvconstants, int width) =
-      NV12ToARGBRow_C;
+  void (*NV12ToARGBRow)(
+      const uint8_t* y_buf, const uint8_t* uv_buf, uint8_t* rgb_buf,
+      const struct YuvConstants* yuvconstants, int width) = NV12ToARGBRow_C;
   if (!src_m420 || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }

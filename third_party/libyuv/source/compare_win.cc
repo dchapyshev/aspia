@@ -26,13 +26,13 @@ extern "C" {
 #if !defined(LIBYUV_DISABLE_X86) && defined(_M_IX86) && defined(_MSC_VER)
 
 uint32_t HammingDistance_SSE42(const uint8_t* src_a,
-                             const uint8_t* src_b,
-                             int count) {
+                               const uint8_t* src_b,
+                               int count) {
   uint32_t diff = 0u;
 
   int i;
   for (i = 0; i < count - 3; i += 4) {
-    uint32_t x = *((uint32_t*)src_a) ^ *((uint32_t*)src_b);
+    uint32_t x = *((uint32_t*)src_a) ^ *((uint32_t*)src_b);  // NOLINT
     src_a += 4;
     src_b += 4;
     diff += __popcnt(x);

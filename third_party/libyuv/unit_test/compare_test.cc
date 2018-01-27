@@ -22,7 +22,9 @@
 namespace libyuv {
 
 // hash seed of 5381 recommended.
-static uint32_t ReferenceHashDjb2(const uint8_t* src, uint64_t count, uint32_t seed) {
+static uint32_t ReferenceHashDjb2(const uint8_t* src,
+                                  uint64_t count,
+                                  uint32_t seed) {
   uint32_t hash = seed;
   if (count > 0) {
     do {

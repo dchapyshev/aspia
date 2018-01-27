@@ -262,7 +262,7 @@ double GetSSIMFullKernel(const uint8_t* org,
 
 #define ADD_AND_STORE_FOUR_EPI32(M, OUT)                    \
   do {                                                      \
-    uint32_t tmp[4];                                          \
+    uint32_t tmp[4];                                        \
     _mm_storeu_si128(reinterpret_cast<__m128i*>(tmp), (M)); \
     (OUT) = tmp[3] + tmp[2] + tmp[1] + tmp[0];              \
   } while (0)

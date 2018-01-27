@@ -302,7 +302,9 @@ void ScaleRowDown38_2_Box_16_C(const uint16_t* src_ptr,
                                uint16_t* dst_ptr,
                                int dst_width);
 void ScaleAddRow_C(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
-void ScaleAddRow_16_C(const uint16_t* src_ptr, uint32_t* dst_ptr, int src_width);
+void ScaleAddRow_16_C(const uint16_t* src_ptr,
+                      uint32_t* dst_ptr,
+                      int src_width);
 void ScaleARGBRowDown2_C(const uint8_t* src_argb,
                          ptrdiff_t src_stride,
                          uint8_t* dst_argb,
@@ -493,8 +495,12 @@ void ScaleRowDown38_2_Box_Any_SSSE3(const uint8_t* src_ptr,
 
 void ScaleAddRow_SSE2(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
 void ScaleAddRow_AVX2(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
-void ScaleAddRow_Any_SSE2(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
-void ScaleAddRow_Any_AVX2(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
+void ScaleAddRow_Any_SSE2(const uint8_t* src_ptr,
+                          uint16_t* dst_ptr,
+                          int src_width);
+void ScaleAddRow_Any_AVX2(const uint8_t* src_ptr,
+                          uint16_t* dst_ptr,
+                          int src_width);
 
 void ScaleFilterCols_SSSE3(uint8_t* dst_ptr,
                            const uint8_t* src_ptr,
@@ -810,7 +816,9 @@ void ScaleRowDown38_2_Box_Any_NEON(const uint8_t* src_ptr,
                                    int dst_width);
 
 void ScaleAddRow_NEON(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
-void ScaleAddRow_Any_NEON(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width);
+void ScaleAddRow_Any_NEON(const uint8_t* src_ptr,
+                          uint16_t* dst_ptr,
+                          int src_width);
 
 void ScaleFilterCols_NEON(uint8_t* dst_ptr,
                           const uint8_t* src_ptr,

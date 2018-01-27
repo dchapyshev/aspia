@@ -63,10 +63,10 @@ namespace libyuv {
                                                                                \
     /* The test is overall for color conversion matrix being reversible, so */ \
     /* this initializes the pixel with 2x2 blocks to eliminate subsampling. */ \
-    uint8_t* p = orig_y;                                                         \
+    uint8_t* p = orig_y;                                                       \
     for (int y = 0; y < benchmark_height_ - HS1; y += HS) {                    \
       for (int x = 0; x < benchmark_width_ - 1; x += 2) {                      \
-        uint8_t r = static_cast<uint8_t>(fastrand());                              \
+        uint8_t r = static_cast<uint8_t>(fastrand());                          \
         p[0] = r;                                                              \
         p[1] = r;                                                              \
         p[HN] = r;                                                             \
@@ -74,7 +74,7 @@ namespace libyuv {
         p += 2;                                                                \
       }                                                                        \
       if (benchmark_width_ & 1) {                                              \
-        uint8_t r = static_cast<uint8_t>(fastrand());                              \
+        uint8_t r = static_cast<uint8_t>(fastrand());                          \
         p[0] = r;                                                              \
         p[HN] = r;                                                             \
         p += 1;                                                                \
@@ -83,13 +83,13 @@ namespace libyuv {
     }                                                                          \
     if ((benchmark_height_ & 1) && HS == 2) {                                  \
       for (int x = 0; x < benchmark_width_ - 1; x += 2) {                      \
-        uint8_t r = static_cast<uint8_t>(fastrand());                              \
+        uint8_t r = static_cast<uint8_t>(fastrand());                          \
         p[0] = r;                                                              \
         p[1] = r;                                                              \
         p += 2;                                                                \
       }                                                                        \
       if (benchmark_width_ & 1) {                                              \
-        uint8_t r = static_cast<uint8_t>(fastrand());                              \
+        uint8_t r = static_cast<uint8_t>(fastrand());                          \
         p[0] = r;                                                              \
         p += 1;                                                                \
       }                                                                        \

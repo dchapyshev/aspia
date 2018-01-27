@@ -815,8 +815,8 @@ static void ScalePlaneBox(int src_width,
                          const uint16_t* src_ptr, uint8_t* dst_ptr) =
         (dx & 0xffff) ? ScaleAddCols2_C
                       : ((dx != 0x10000) ? ScaleAddCols1_C : ScaleAddCols0_C);
-    void (*ScaleAddRow)(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width) =
-        ScaleAddRow_C;
+    void (*ScaleAddRow)(const uint8_t* src_ptr, uint16_t* dst_ptr,
+                        int src_width) = ScaleAddRow_C;
 #if defined(HAS_SCALEADDROW_SSE2)
     if (TestCpuFlag(kCpuHasSSE2)) {
       ScaleAddRow = ScaleAddRow_Any_SSE2;
@@ -895,8 +895,8 @@ static void ScalePlaneBox_16(int src_width,
     void (*ScaleAddCols)(int dst_width, int boxheight, int x, int dx,
                          const uint32_t* src_ptr, uint16_t* dst_ptr) =
         (dx & 0xffff) ? ScaleAddCols2_16_C : ScaleAddCols1_16_C;
-    void (*ScaleAddRow)(const uint16_t* src_ptr, uint32_t* dst_ptr, int src_width) =
-        ScaleAddRow_16_C;
+    void (*ScaleAddRow)(const uint16_t* src_ptr, uint32_t* dst_ptr,
+                        int src_width) = ScaleAddRow_16_C;
 
 #if defined(HAS_SCALEADDROW_16_SSE2)
     if (TestCpuFlag(kCpuHasSSE2) && IS_ALIGNED(src_width, 16)) {
@@ -946,8 +946,8 @@ void ScalePlaneBilinearDown(int src_width,
 
   const int max_y = (src_height - 1) << 16;
   int j;
-  void (*ScaleFilterCols)(uint8_t * dst_ptr, const uint8_t* src_ptr, int dst_width,
-                          int x, int dx) =
+  void (*ScaleFilterCols)(uint8_t * dst_ptr, const uint8_t* src_ptr,
+                          int dst_width, int x, int dx) =
       (src_width >= 32768) ? ScaleFilterCols64_C : ScaleFilterCols_C;
   void (*InterpolateRow)(uint8_t * dst_ptr, const uint8_t* src_ptr,
                          ptrdiff_t src_stride, int dst_width,
@@ -1144,8 +1144,8 @@ void ScalePlaneBilinearUp(int src_width,
   void (*InterpolateRow)(uint8_t * dst_ptr, const uint8_t* src_ptr,
                          ptrdiff_t src_stride, int dst_width,
                          int source_y_fraction) = InterpolateRow_C;
-  void (*ScaleFilterCols)(uint8_t * dst_ptr, const uint8_t* src_ptr, int dst_width,
-                          int x, int dx) =
+  void (*ScaleFilterCols)(uint8_t * dst_ptr, const uint8_t* src_ptr,
+                          int dst_width, int x, int dx) =
       filtering ? ScaleFilterCols_C : ScaleCols_C;
   ScaleSlope(src_width, src_height, dst_width, dst_height, filtering, &x, &y,
              &dx, &dy);
@@ -1401,8 +1401,8 @@ static void ScalePlaneSimple(int src_width,
                              const uint8_t* src_ptr,
                              uint8_t* dst_ptr) {
   int i;
-  void (*ScaleCols)(uint8_t * dst_ptr, const uint8_t* src_ptr, int dst_width, int x,
-                    int dx) = ScaleCols_C;
+  void (*ScaleCols)(uint8_t * dst_ptr, const uint8_t* src_ptr, int dst_width,
+                    int x, int dx) = ScaleCols_C;
   // Initial source x/y coordinate and step values as 16.16 fixed point.
   int x = 0;
   int y = 0;
@@ -1759,8 +1759,9 @@ int ScaleOffset(const uint8_t* src,
   uint8_t* dst_y = dst + dst_yoffset_even * dst_width;
   uint8_t* dst_u =
       dst + dst_width * dst_height + (dst_yoffset_even >> 1) * dst_halfwidth;
-  uint8_t* dst_v = dst + dst_width * dst_height + dst_halfwidth * dst_halfheight +
-                 (dst_yoffset_even >> 1) * dst_halfwidth;
+  uint8_t* dst_v = dst + dst_width * dst_height +
+                   dst_halfwidth * dst_halfheight +
+                   (dst_yoffset_even >> 1) * dst_halfwidth;
   if (!src || src_width <= 0 || src_height <= 0 || !dst || dst_width <= 0 ||
       dst_height <= 0 || dst_yoffset_even < 0 ||
       dst_yoffset_even >= dst_height) {

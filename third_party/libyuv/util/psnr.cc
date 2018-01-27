@@ -39,8 +39,8 @@ typedef unsigned long long uint64_t;  // NOLINT
     !defined(__aarch64__)
 #define HAS_SUMSQUAREERROR_NEON
 static uint32_t SumSquareError_NEON(const uint8_t* src_a,
-                                  const uint8_t* src_b,
-                                  int count) {
+                                    const uint8_t* src_b,
+                                    int count) {
   volatile uint32_t sse;
   asm volatile(
       "vmov.u8    q7, #0                         \n"
@@ -74,8 +74,8 @@ static uint32_t SumSquareError_NEON(const uint8_t* src_a,
 #elif !defined(LIBYUV_DISABLE_NEON) && defined(__aarch64__)
 #define HAS_SUMSQUAREERROR_NEON
 static uint32_t SumSquareError_NEON(const uint8_t* src_a,
-                                  const uint8_t* src_b,
-                                  int count) {
+                                    const uint8_t* src_b,
+                                    int count) {
   volatile uint32_t sse;
   asm volatile(
       "eor        v16.16b, v16.16b, v16.16b      \n"
@@ -108,8 +108,8 @@ static uint32_t SumSquareError_NEON(const uint8_t* src_a,
 #elif !defined(LIBYUV_DISABLE_X86) && defined(_M_IX86) && defined(_MSC_VER)
 #define HAS_SUMSQUAREERROR_SSE2
 __declspec(naked) static uint32_t SumSquareError_SSE2(const uint8_t* /*src_a*/,
-                                                    const uint8_t* /*src_b*/,
-                                                    int /*count*/) {
+                                                      const uint8_t* /*src_b*/,
+                                                      int /*count*/) {
   __asm {
     mov        eax, [esp + 4]  // src_a
     mov        edx, [esp + 8]  // src_b
@@ -147,8 +147,8 @@ __declspec(naked) static uint32_t SumSquareError_SSE2(const uint8_t* /*src_a*/,
 #elif !defined(LIBYUV_DISABLE_X86) && (defined(__x86_64__) || defined(__i386__))
 #define HAS_SUMSQUAREERROR_SSE2
 static uint32_t SumSquareError_SSE2(const uint8_t* src_a,
-                                  const uint8_t* src_b,
-                                  int count) {
+                                    const uint8_t* src_b,
+                                    int count) {
   uint32_t sse;
   asm volatile(  // NOLINT
       "pxor      %%xmm0,%%xmm0                   \n"
@@ -229,8 +229,8 @@ static int CpuHasSSE2() {
 #endif  // HAS_SUMSQUAREERROR_SSE2
 
 static uint32_t SumSquareError_C(const uint8_t* src_a,
-                               const uint8_t* src_b,
-                               int count) {
+                                 const uint8_t* src_b,
+                                 int count) {
   uint32_t sse = 0u;
   for (int x = 0; x < count; ++x) {
     int diff = src_a[x] - src_b[x];
@@ -242,8 +242,8 @@ static uint32_t SumSquareError_C(const uint8_t* src_a,
 double ComputeSumSquareError(const uint8_t* src_a,
                              const uint8_t* src_b,
                              int count) {
-  uint32_t (*SumSquareError)(const uint8_t* src_a, const uint8_t* src_b, int count) =
-      SumSquareError_C;
+  uint32_t (*SumSquareError)(const uint8_t* src_a, const uint8_t* src_b,
+                             int count) = SumSquareError_C;
 #if defined(HAS_SUMSQUAREERROR_NEON)
   SumSquareError = SumSquareError_NEON;
 #endif

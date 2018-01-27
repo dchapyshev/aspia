@@ -28,27 +28,27 @@ extern "C" {
 #if defined(_M_X64)
 
 // Read 4 UV from 422, upsample to 8 UV.
-#define READYUV422                                      \
+#define READYUV422                                        \
   xmm0 = _mm_cvtsi32_si128(*(uint32_t*)u_buf);            \
   xmm1 = _mm_cvtsi32_si128(*(uint32_t*)(u_buf + offset)); \
-  xmm0 = _mm_unpacklo_epi8(xmm0, xmm1);                 \
-  xmm0 = _mm_unpacklo_epi16(xmm0, xmm0);                \
-  u_buf += 4;                                           \
-  xmm4 = _mm_loadl_epi64((__m128i*)y_buf);              \
-  xmm4 = _mm_unpacklo_epi8(xmm4, xmm4);                 \
+  xmm0 = _mm_unpacklo_epi8(xmm0, xmm1);                   \
+  xmm0 = _mm_unpacklo_epi16(xmm0, xmm0);                  \
+  u_buf += 4;                                             \
+  xmm4 = _mm_loadl_epi64((__m128i*)y_buf);                \
+  xmm4 = _mm_unpacklo_epi8(xmm4, xmm4);                   \
   y_buf += 8;
 
 // Read 4 UV from 422, upsample to 8 UV.  With 8 Alpha.
-#define READYUVA422                                     \
+#define READYUVA422                                       \
   xmm0 = _mm_cvtsi32_si128(*(uint32_t*)u_buf);            \
   xmm1 = _mm_cvtsi32_si128(*(uint32_t*)(u_buf + offset)); \
-  xmm0 = _mm_unpacklo_epi8(xmm0, xmm1);                 \
-  xmm0 = _mm_unpacklo_epi16(xmm0, xmm0);                \
-  u_buf += 4;                                           \
-  xmm4 = _mm_loadl_epi64((__m128i*)y_buf);              \
-  xmm4 = _mm_unpacklo_epi8(xmm4, xmm4);                 \
-  y_buf += 8;                                           \
-  xmm5 = _mm_loadl_epi64((__m128i*)a_buf);              \
+  xmm0 = _mm_unpacklo_epi8(xmm0, xmm1);                   \
+  xmm0 = _mm_unpacklo_epi16(xmm0, xmm0);                  \
+  u_buf += 4;                                             \
+  xmm4 = _mm_loadl_epi64((__m128i*)y_buf);                \
+  xmm4 = _mm_unpacklo_epi8(xmm4, xmm4);                   \
+  y_buf += 8;                                             \
+  xmm5 = _mm_loadl_epi64((__m128i*)a_buf);                \
   a_buf += 8;
 
 // Convert 8 pixels: 8 UV and 8 Y.
@@ -3022,7 +3022,9 @@ __declspec(naked) void MirrorRow_SSSE3(const uint8_t* src,
 #endif  // HAS_MIRRORROW_SSSE3
 
 #ifdef HAS_MIRRORROW_AVX2
-__declspec(naked) void MirrorRow_AVX2(const uint8_t* src, uint8_t* dst, int width) {
+__declspec(naked) void MirrorRow_AVX2(const uint8_t* src,
+                                      uint8_t* dst,
+                                      int width) {
   __asm {
     mov       eax, [esp + 4]  // src
     mov       edx, [esp + 8]  // dst
@@ -3274,7 +3276,9 @@ __declspec(naked) void MergeUVRow_AVX2(const uint8_t* src_u,
 
 #ifdef HAS_COPYROW_SSE2
 // CopyRow copys 'count' bytes using a 16 byte load/store, 32 bytes at time.
-__declspec(naked) void CopyRow_SSE2(const uint8_t* src, uint8_t* dst, int count) {
+__declspec(naked) void CopyRow_SSE2(const uint8_t* src,
+                                    uint8_t* dst,
+                                    int count) {
   __asm {
     mov        eax, [esp + 4]  // src
     mov        edx, [esp + 8]  // dst
@@ -3311,7 +3315,9 @@ __declspec(naked) void CopyRow_SSE2(const uint8_t* src, uint8_t* dst, int count)
 
 #ifdef HAS_COPYROW_AVX
 // CopyRow copys 'count' bytes using a 32 byte load/store, 64 bytes at time.
-__declspec(naked) void CopyRow_AVX(const uint8_t* src, uint8_t* dst, int count) {
+__declspec(naked) void CopyRow_AVX(const uint8_t* src,
+                                   uint8_t* dst,
+                                   int count) {
   __asm {
     mov        eax, [esp + 4]  // src
     mov        edx, [esp + 8]  // dst
@@ -3334,7 +3340,9 @@ __declspec(naked) void CopyRow_AVX(const uint8_t* src, uint8_t* dst, int count) 
 #endif  // HAS_COPYROW_AVX
 
 // Multiple of 1.
-__declspec(naked) void CopyRow_ERMS(const uint8_t* src, uint8_t* dst, int count) {
+__declspec(naked) void CopyRow_ERMS(const uint8_t* src,
+                                    uint8_t* dst,
+                                    int count) {
   __asm {
     mov        eax, esi
     mov        edx, edi
@@ -3582,7 +3590,9 @@ __declspec(naked) void SetRow_ERMS(uint8_t* dst, uint8_t v8, int count) {
 }
 
 // Write 'count' 32 bit values.
-__declspec(naked) void ARGBSetRow_X86(uint8_t* dst_argb, uint32_t v32, int count) {
+__declspec(naked) void ARGBSetRow_X86(uint8_t* dst_argb,
+                                      uint32_t v32,
+                                      int count) {
   __asm {
     mov        edx, edi
     mov        edi, [esp + 4]  // dst

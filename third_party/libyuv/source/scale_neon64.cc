@@ -807,9 +807,9 @@ void ScaleARGBRowDownEven_NEON(const uint8_t* src_argb,
       "subs       %w2, %w2, #4                   \n"  // 4 pixels per loop.
       "st1        {v0.16b}, [%1], #16            \n"
       "b.gt       1b                             \n"
-      : "+r"(src_argb),              // %0
-        "+r"(dst_argb),              // %1
-        "+r"(dst_width)              // %2
+      : "+r"(src_argb),                // %0
+        "+r"(dst_argb),                // %1
+        "+r"(dst_width)                // %2
       : "r"((int64_t)(src_stepx * 4))  // %3
       : "memory", "cc", "v0");
 }
@@ -851,10 +851,10 @@ void ScaleARGBRowDownEvenBox_NEON(const uint8_t* src_argb,
       "subs       %w3, %w3, #4                   \n"  // 4 pixels per loop.
       "st1     {v0.16b}, [%2], #16               \n"
       "b.gt       1b                             \n"
-      : "+r"(src_argb),              // %0
-        "+r"(src_stride),            // %1
-        "+r"(dst_argb),              // %2
-        "+r"(dst_width)              // %3
+      : "+r"(src_argb),                // %0
+        "+r"(src_stride),              // %1
+        "+r"(dst_argb),                // %2
+        "+r"(dst_width)                // %3
       : "r"((int64_t)(src_stepx * 4))  // %4
       : "memory", "cc", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v16");
 }

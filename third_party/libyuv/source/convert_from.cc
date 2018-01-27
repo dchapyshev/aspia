@@ -1123,7 +1123,7 @@ int I420ToRGB565Dither(const uint8_t* src_y,
       I422ToARGBRow(src_y, src_u, src_v, row_argb, &kYuvI601Constants, width);
       ARGBToRGB565DitherRow(row_argb, dst_rgb565,
                             *(uint32_t*)(dither4x4 + ((y & 3) << 2)),  // NOLINT
-                            width);                                  // NOLINT
+                            width);                                    // NOLINT
       dst_rgb565 += dst_stride_rgb565;
       src_y += src_stride_y;
       if (y & 1) {
@@ -1208,6 +1208,23 @@ int I420ToAR30(const uint8_t* src_y,
   return I420ToAR30Matrix(src_y, src_stride_y, src_u, src_stride_u, src_v,
                           src_stride_v, dst_ar30, dst_stride_ar30,
                           &kYuvI601Constants, width, height);
+}
+
+// Convert H420 to AR30.
+LIBYUV_API
+int H420ToAR30(const uint8_t* src_y,
+               int src_stride_y,
+               const uint8_t* src_u,
+               int src_stride_u,
+               const uint8_t* src_v,
+               int src_stride_v,
+               uint8_t* dst_ar30,
+               int dst_stride_ar30,
+               int width,
+               int height) {
+  return I420ToAR30Matrix(src_y, src_stride_y, src_u, src_stride_u, src_v,
+                          src_stride_v, dst_ar30, dst_stride_ar30,
+                          &kYvuH709Constants, width, height);
 }
 
 // Convert I420 to specified format

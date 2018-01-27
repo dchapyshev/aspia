@@ -28,11 +28,11 @@ extern "C" {
 // Needs to be a macro otherwise the OS X compiler complains when the kFormat*
 // constants are used in a switch.
 #ifdef __cplusplus
-#define FOURCC(a, b, c, d)                                    \
+#define FOURCC(a, b, c, d)                                        \
   ((static_cast<uint32_t>(a)) | (static_cast<uint32_t>(b) << 8) | \
    (static_cast<uint32_t>(c) << 16) | (static_cast<uint32_t>(d) << 24))
 #else
-#define FOURCC(a, b, c, d)                                 \
+#define FOURCC(a, b, c, d)                                     \
   (((uint32_t)(a)) | ((uint32_t)(b) << 8) |       /* NOLINT */ \
    ((uint32_t)(c) << 16) | ((uint32_t)(d) << 24)) /* NOLINT */
 #endif

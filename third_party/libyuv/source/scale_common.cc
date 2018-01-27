@@ -758,7 +758,9 @@ void ScaleAddRow_C(const uint8_t* src_ptr, uint16_t* dst_ptr, int src_width) {
   }
 }
 
-void ScaleAddRow_16_C(const uint16_t* src_ptr, uint32_t* dst_ptr, int src_width) {
+void ScaleAddRow_16_C(const uint16_t* src_ptr,
+                      uint32_t* dst_ptr,
+                      int src_width) {
   int x;
   assert(src_width > 0);
   for (x = 0; x < src_width - 1; x += 2) {

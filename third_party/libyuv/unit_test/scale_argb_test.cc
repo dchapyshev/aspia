@@ -48,7 +48,8 @@ static int ARGBTestFilter(int src_width,
   }
   MemRandomize(src_argb, src_argb_plane_size);
 
-  int64_t dst_argb_plane_size = (dst_width + b * 2) * (dst_height + b * 2) * 4LL;
+  int64_t dst_argb_plane_size =
+      (dst_width + b * 2) * (dst_height + b * 2) * 4LL;
   int dst_stride_argb = (b * 2 + dst_width) * 4;
 
   align_buffer_page_end(dst_argb_c, dst_argb_plane_size);
@@ -310,6 +311,7 @@ TEST_SCALETO(ARGBScale, 1280, 720)
 #undef TEST_SCALETO
 
 // Scale with YUV conversion to ARGB and clipping.
+// TODO(fbarchard): Add fourcc support.  All 4 ARGB formats is easy to support.
 LIBYUV_API
 int YUVToARGBScaleReference2(const uint8_t* src_y,
                              int src_stride_y,
@@ -317,12 +319,12 @@ int YUVToARGBScaleReference2(const uint8_t* src_y,
                              int src_stride_u,
                              const uint8_t* src_v,
                              int src_stride_v,
-                             uint32_t /* src_fourcc */,  // TODO: Add support.
+                             uint32 /* src_fourcc */,
                              int src_width,
                              int src_height,
                              uint8_t* dst_argb,
                              int dst_stride_argb,
-                             uint32_t /* dst_fourcc */,  // TODO: Add support.
+                             uint32 /* dst_fourcc */,
                              int dst_width,
                              int dst_height,
                              int clip_x,
@@ -330,7 +332,8 @@ int YUVToARGBScaleReference2(const uint8_t* src_y,
                              int clip_width,
                              int clip_height,
                              enum FilterMode filtering) {
-  uint8_t* argb_buffer = static_cast<uint8_t*>(malloc(src_width * src_height * 4));
+  uint8_t* argb_buffer =
+      static_cast<uint8_t*>(malloc(src_width * src_height * 4));
   int r;
   I420ToARGB(src_y, src_stride_y, src_u, src_stride_u, src_v, src_stride_v,
              argb_buffer, src_width * 4, src_width, src_height);
@@ -342,7 +345,12 @@ int YUVToARGBScaleReference2(const uint8_t* src_y,
   return r;
 }
 
-static void FillRamp(uint8_t* buf, int width, int height, int v, int dx, int dy) {
+static void FillRamp(uint8_t* buf,
+                     int width,
+                     int height,
+                     int v,
+                     int dx,
+                     int dy) {
   int rv = v;
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {

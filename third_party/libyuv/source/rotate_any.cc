@@ -19,8 +19,8 @@ extern "C" {
 #endif
 
 #define TANY(NAMEANY, TPOS_SIMD, MASK)                                        \
-  void NAMEANY(const uint8_t* src, int src_stride, uint8_t* dst, int dst_stride,  \
-               int width) {                                                   \
+  void NAMEANY(const uint8_t* src, int src_stride, uint8_t* dst,              \
+               int dst_stride, int width) {                                   \
     int r = width & MASK;                                                     \
     int n = width - r;                                                        \
     if (n > 0) {                                                              \
@@ -44,8 +44,9 @@ TANY(TransposeWx16_Any_MSA, TransposeWx16_MSA, 15)
 #undef TANY
 
 #define TUVANY(NAMEANY, TPOS_SIMD, MASK)                                       \
-  void NAMEANY(const uint8_t* src, int src_stride, uint8_t* dst_a,                 \
-               int dst_stride_a, uint8_t* dst_b, int dst_stride_b, int width) {  \
+  void NAMEANY(const uint8_t* src, int src_stride, uint8_t* dst_a,             \
+               int dst_stride_a, uint8_t* dst_b, int dst_stride_b,             \
+               int width) {                                                    \
     int r = width & MASK;                                                      \
     int n = width - r;                                                         \
     if (n > 0) {                                                               \

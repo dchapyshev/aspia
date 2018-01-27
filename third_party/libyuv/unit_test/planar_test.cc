@@ -2061,8 +2061,8 @@ int TestHalfFloatPlane(int benchmark_width,
   MaskCpuFlags(disable_cpu_flags);
   for (j = 0; j < benchmark_iterations; j++) {
     HalfFloatPlane(reinterpret_cast<uint16_t*>(orig_y), benchmark_width * 2,
-                   reinterpret_cast<uint16_t*>(dst_c), benchmark_width * 2, scale,
-                   benchmark_width, benchmark_height);
+                   reinterpret_cast<uint16_t*>(dst_c), benchmark_width * 2,
+                   scale, benchmark_width, benchmark_height);
   }
 
   // Enable optimizations.
@@ -2075,8 +2075,9 @@ int TestHalfFloatPlane(int benchmark_width,
 
   int max_diff = 0;
   for (i = 0; i < y_plane_size / 2; ++i) {
-    int abs_diff = abs(static_cast<int>(reinterpret_cast<uint16_t*>(dst_c)[i]) -
-                       static_cast<int>(reinterpret_cast<uint16_t*>(dst_opt)[i]));
+    int abs_diff =
+        abs(static_cast<int>(reinterpret_cast<uint16_t*>(dst_c)[i]) -
+            static_cast<int>(reinterpret_cast<uint16_t*>(dst_opt)[i]));
     if (abs_diff > max_diff) {
       max_diff = abs_diff;
     }
@@ -2788,8 +2789,9 @@ TEST_F(LibYUVPlanarTest, Convert8To16Plane) {
 
   MaskCpuFlags(disable_cpu_flags_);
   Convert8To16Plane(src_pixels_y, benchmark_width_,
-                    reinterpret_cast<uint16_t*>(dst_pixels_y_c), benchmark_width_,
-                    1024, benchmark_width_, benchmark_height_);
+                    reinterpret_cast<uint16_t*>(dst_pixels_y_c),
+                    benchmark_width_, 1024, benchmark_width_,
+                    benchmark_height_);
   MaskCpuFlags(benchmark_cpu_info_);
 
   for (int i = 0; i < benchmark_iterations_; ++i) {
@@ -3214,8 +3216,9 @@ TEST_F(LibYUVPlanarTest, TestGaussCol_Opt) {
     EXPECT_EQ(dst_pixels_c[i], dst_pixels_opt[i]);
   }
 
-  EXPECT_EQ(dst_pixels_c[0], static_cast<uint32_t>(0 * 1 + 640 * 4 + 640 * 2 * 6 +
-                                                 640 * 3 * 4 + 640 * 4 * 1));
+  EXPECT_EQ(dst_pixels_c[0],
+            static_cast<uint32_t>(0 * 1 + 640 * 4 + 640 * 2 * 6 + 640 * 3 * 4 +
+                                  640 * 4 * 1));
   EXPECT_EQ(dst_pixels_c[639], static_cast<uint32_t>(30704));
 }
 

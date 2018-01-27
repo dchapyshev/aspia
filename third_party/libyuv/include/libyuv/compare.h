@@ -25,25 +25,30 @@ uint32_t HashDjb2(const uint8_t* src, uint64_t count, uint32_t seed);
 // Hamming Distance
 LIBYUV_API
 uint64_t ComputeHammingDistance(const uint8_t* src_a,
-                              const uint8_t* src_b,
-                              int count);
+                                const uint8_t* src_b,
+                                int count);
 
 // Scan an opaque argb image and return fourcc based on alpha offset.
 // Returns FOURCC_ARGB, FOURCC_BGRA, or 0 if unknown.
 LIBYUV_API
-uint32_t ARGBDetect(const uint8_t* argb, int stride_argb, int width, int height);
+uint32_t ARGBDetect(const uint8_t* argb,
+                    int stride_argb,
+                    int width,
+                    int height);
 
 // Sum Square Error - used to compute Mean Square Error or PSNR.
 LIBYUV_API
-uint64_t ComputeSumSquareError(const uint8_t* src_a, const uint8_t* src_b, int count);
+uint64_t ComputeSumSquareError(const uint8_t* src_a,
+                               const uint8_t* src_b,
+                               int count);
 
 LIBYUV_API
 uint64_t ComputeSumSquareErrorPlane(const uint8_t* src_a,
-                                  int stride_a,
-                                  const uint8_t* src_b,
-                                  int stride_b,
-                                  int width,
-                                  int height);
+                                    int stride_a,
+                                    const uint8_t* src_b,
+                                    int stride_b,
+                                    int width,
+                                    int height);
 
 static const int kMaxPsnr = 128;
 

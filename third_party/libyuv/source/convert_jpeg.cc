@@ -89,7 +89,10 @@ static void JpegI400ToI420(void* opaque,
 
 // Query size of MJPG in pixels.
 LIBYUV_API
-int MJPGSize(const uint8_t* sample, size_t sample_size, int* width, int* height) {
+int MJPGSize(const uint8_t* sample,
+             size_t sample_size,
+             int* width,
+             int* height) {
   MJpegDecoder mjpeg_decoder;
   LIBYUV_BOOL ret = mjpeg_decoder.LoadFrame(sample, sample_size);
   if (ret) {

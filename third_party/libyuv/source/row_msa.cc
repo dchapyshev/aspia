@@ -37,14 +37,14 @@ extern "C" {
   }
 
 // Load YUV 422 pixel data
-#define READYUV422(psrc_y, psrc_u, psrc_v, out_y, out_u, out_v)  \
-  {                                                              \
+#define READYUV422(psrc_y, psrc_u, psrc_v, out_y, out_u, out_v)    \
+  {                                                                \
     uint64_t y_m;                                                  \
     uint32_t u_m, v_m;                                             \
-    v4i32 zero_m = {0};                                          \
-    y_m = LD(psrc_y);                                            \
-    u_m = LW(psrc_u);                                            \
-    v_m = LW(psrc_v);                                            \
+    v4i32 zero_m = {0};                                            \
+    y_m = LD(psrc_y);                                              \
+    u_m = LW(psrc_u);                                              \
+    v_m = LW(psrc_v);                                              \
     out_y = (v16u8)__msa_insert_d((v2i64)zero_m, 0, (int64_t)y_m); \
     out_u = (v16u8)__msa_insert_w(zero_m, 0, (int32_t)u_m);        \
     out_v = (v16u8)__msa_insert_w(zero_m, 0, (int32_t)v_m);        \
@@ -275,14 +275,14 @@ extern "C" {
 // Load I444 pixel data
 #define READI444(psrc_y, psrc_u, psrc_v, out_y, out_u, out_v) \
   {                                                           \
-    uint64_t y_m, u_m, v_m;                                     \
+    uint64_t y_m, u_m, v_m;                                   \
     v2i64 zero_m = {0};                                       \
     y_m = LD(psrc_y);                                         \
     u_m = LD(psrc_u);                                         \
     v_m = LD(psrc_v);                                         \
-    out_y = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)y_m);     \
-    out_u = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)u_m);     \
-    out_v = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)v_m);     \
+    out_y = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)y_m);   \
+    out_u = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)u_m);   \
+    out_v = (v16u8)__msa_insert_d(zero_m, 0, (int64_t)v_m);   \
   }
 
 void MirrorRow_MSA(const uint8_t* src, uint8_t* dst, int width) {
@@ -1014,7 +1014,9 @@ void ARGBToRGB565Row_MSA(const uint8_t* src_argb, uint8_t* dst_rgb, int width) {
   }
 }
 
-void ARGBToARGB1555Row_MSA(const uint8_t* src_argb, uint8_t* dst_rgb, int width) {
+void ARGBToARGB1555Row_MSA(const uint8_t* src_argb,
+                           uint8_t* dst_rgb,
+                           int width) {
   int x;
   v16u8 src0, src1, dst0;
   v16u8 vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7, vec8, vec9;
@@ -1054,7 +1056,9 @@ void ARGBToARGB1555Row_MSA(const uint8_t* src_argb, uint8_t* dst_rgb, int width)
   }
 }
 
-void ARGBToARGB4444Row_MSA(const uint8_t* src_argb, uint8_t* dst_rgb, int width) {
+void ARGBToARGB4444Row_MSA(const uint8_t* src_argb,
+                           uint8_t* dst_rgb,
+                           int width) {
   int x;
   v16u8 src0, src1;
   v16u8 vec0, vec1;
@@ -1230,7 +1234,9 @@ void ARGBSubtractRow_MSA(const uint8_t* src_argb0,
   }
 }
 
-void ARGBAttenuateRow_MSA(const uint8_t* src_argb, uint8_t* dst_argb, int width) {
+void ARGBAttenuateRow_MSA(const uint8_t* src_argb,
+                          uint8_t* dst_argb,
+                          int width) {
   int x;
   v16u8 src0, src1, dst0, dst1;
   v8u16 vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7, vec8, vec9;
@@ -1547,7 +1553,9 @@ void ARGB1555ToARGBRow_MSA(const uint8_t* src_argb1555,
   }
 }
 
-void RGB565ToARGBRow_MSA(const uint8_t* src_rgb565, uint8_t* dst_argb, int width) {
+void RGB565ToARGBRow_MSA(const uint8_t* src_rgb565,
+                         uint8_t* dst_argb,
+                         int width) {
   int x;
   v8u16 src0, src1, vec0, vec1, vec2, vec3, vec4, vec5;
   v8u16 reg0, reg1, reg2, reg3, reg4, reg5;
@@ -1592,7 +1600,9 @@ void RGB565ToARGBRow_MSA(const uint8_t* src_rgb565, uint8_t* dst_argb, int width
   }
 }
 
-void RGB24ToARGBRow_MSA(const uint8_t* src_rgb24, uint8_t* dst_argb, int width) {
+void RGB24ToARGBRow_MSA(const uint8_t* src_rgb24,
+                        uint8_t* dst_argb,
+                        int width) {
   int x;
   v16u8 src0, src1, src2;
   v16u8 vec0, vec1, vec2;
@@ -1642,7 +1652,9 @@ void RAWToARGBRow_MSA(const uint8_t* src_raw, uint8_t* dst_argb, int width) {
   }
 }
 
-void ARGB1555ToYRow_MSA(const uint8_t* src_argb1555, uint8_t* dst_y, int width) {
+void ARGB1555ToYRow_MSA(const uint8_t* src_argb1555,
+                        uint8_t* dst_y,
+                        int width) {
   int x;
   v8u16 src0, src1, vec0, vec1, vec2, vec3, vec4, vec5;
   v8u16 reg0, reg1, reg2, reg3, reg4, reg5;
@@ -2969,7 +2981,9 @@ void MergeUVRow_MSA(const uint8_t* src_u,
   }
 }
 
-void ARGBExtractAlphaRow_MSA(const uint8_t* src_argb, uint8_t* dst_a, int width) {
+void ARGBExtractAlphaRow_MSA(const uint8_t* src_argb,
+                             uint8_t* dst_a,
+                             int width) {
   int i;
   v16u8 src0, src1, src2, src3, vec0, vec1, dst0;
 
@@ -3429,7 +3443,10 @@ void SobelYRow_MSA(const uint8_t* src_y0,
   }
 }
 
-void HalfFloatRow_MSA(const uint16_t* src, uint16_t* dst, float scale, int width) {
+void HalfFloatRow_MSA(const uint16_t* src,
+                      uint16_t* dst,
+                      float scale,
+                      int width) {
   int i;
   v8u16 src0, src1, src2, src3, dst0, dst1, dst2, dst3;
   v4u32 vec0, vec1, vec2, vec3, vec4, vec5, vec6, vec7;

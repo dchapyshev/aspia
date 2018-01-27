@@ -733,7 +733,9 @@ void ARGBMirrorRow_NEON(const uint8_t* src, uint8_t* dst, int width) {
       : "cc", "memory", "v0");
 }
 
-void RGB24ToARGBRow_NEON(const uint8_t* src_rgb24, uint8_t* dst_argb, int width) {
+void RGB24ToARGBRow_NEON(const uint8_t* src_rgb24,
+                         uint8_t* dst_argb,
+                         int width) {
   asm volatile(
       "movi       v4.8b, #255                    \n"  // Alpha
       "1:                                        \n"
@@ -797,7 +799,9 @@ void RAWToRGB24Row_NEON(const uint8_t* src_raw, uint8_t* dst_rgb24, int width) {
   "orr        v0.16b, v0.16b, v2.16b         \n" /* R,B                  */ \
   "dup        v2.2D, v0.D[1]                 \n" /* R                    */
 
-void RGB565ToARGBRow_NEON(const uint8_t* src_rgb565, uint8_t* dst_argb, int width) {
+void RGB565ToARGBRow_NEON(const uint8_t* src_rgb565,
+                          uint8_t* dst_argb,
+                          int width) {
   asm volatile(
       "movi       v3.8b, #255                    \n"  // Alpha
       "1:                                        \n"
@@ -902,7 +906,9 @@ void ARGB4444ToARGBRow_NEON(const uint8_t* src_argb4444,
       );
 }
 
-void ARGBToRGB24Row_NEON(const uint8_t* src_argb, uint8_t* dst_rgb24, int width) {
+void ARGBToRGB24Row_NEON(const uint8_t* src_argb,
+                         uint8_t* dst_rgb24,
+                         int width) {
   asm volatile(
       "1:                                        \n"
       "ld4        {v1.8b,v2.8b,v3.8b,v4.8b}, [%0], #32 \n"  // load 8 ARGB
@@ -1126,7 +1132,9 @@ void I422ToUYVYRow_NEON(const uint8_t* src_y,
       : "cc", "memory", "v0", "v1", "v2", "v3");
 }
 
-void ARGBToRGB565Row_NEON(const uint8_t* src_argb, uint8_t* dst_rgb565, int width) {
+void ARGBToRGB565Row_NEON(const uint8_t* src_argb,
+                          uint8_t* dst_rgb565,
+                          int width) {
   asm volatile(
       "1:                                        \n"
       "ld4        {v20.8b,v21.8b,v22.8b,v23.8b}, [%0], #32 \n"  // load 8 pixels
@@ -1223,7 +1231,9 @@ void ARGBToYRow_NEON(const uint8_t* src_argb, uint8_t* dst_y, int width) {
       : "cc", "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7");
 }
 
-void ARGBExtractAlphaRow_NEON(const uint8_t* src_argb, uint8_t* dst_a, int width) {
+void ARGBExtractAlphaRow_NEON(const uint8_t* src_argb,
+                              uint8_t* dst_a,
+                              int width) {
   asm volatile(
       "1:                                        \n"
       "ld4        {v0.16b,v1.16b,v2.16b,v3.16b}, [%0], #64 \n"  // load row 16
@@ -1829,7 +1839,9 @@ void RGB565ToYRow_NEON(const uint8_t* src_rgb565, uint8_t* dst_y, int width) {
         "v27");
 }
 
-void ARGB1555ToYRow_NEON(const uint8_t* src_argb1555, uint8_t* dst_y, int width) {
+void ARGB1555ToYRow_NEON(const uint8_t* src_argb1555,
+                         uint8_t* dst_y,
+                         int width) {
   asm volatile(
       "movi       v4.8b, #13                     \n"  // B * 0.1016 coefficient
       "movi       v5.8b, #65                     \n"  // G * 0.5078 coefficient
@@ -1853,7 +1865,9 @@ void ARGB1555ToYRow_NEON(const uint8_t* src_argb1555, uint8_t* dst_y, int width)
       : "cc", "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7");
 }
 
-void ARGB4444ToYRow_NEON(const uint8_t* src_argb4444, uint8_t* dst_y, int width) {
+void ARGB4444ToYRow_NEON(const uint8_t* src_argb4444,
+                         uint8_t* dst_y,
+                         int width) {
   asm volatile(
       "movi       v24.8b, #13                    \n"  // B * 0.1016 coefficient
       "movi       v25.8b, #65                    \n"  // G * 0.5078 coefficient
@@ -2121,7 +2135,9 @@ void ARGBBlendRow_NEON(const uint8_t* src_argb0,
 }
 
 // Attenuate 8 pixels at a time.
-void ARGBAttenuateRow_NEON(const uint8_t* src_argb, uint8_t* dst_argb, int width) {
+void ARGBAttenuateRow_NEON(const uint8_t* src_argb,
+                           uint8_t* dst_argb,
+                           int width) {
   asm volatile(
       // Attenuate 8 pixels.
       "1:                                        \n"
@@ -2604,7 +2620,10 @@ void HalfFloat1Row_NEON(const uint16_t* src, uint16_t* dst, float, int width) {
       : "cc", "memory", "v1", "v2", "v3");
 }
 
-void HalfFloatRow_NEON(const uint16_t* src, uint16_t* dst, float scale, int width) {
+void HalfFloatRow_NEON(const uint16_t* src,
+                       uint16_t* dst,
+                       float scale,
+                       int width) {
   asm volatile(
       "1:                                        \n"
       "ld1        {v1.16b}, [%0], #16            \n"  // load 8 shorts

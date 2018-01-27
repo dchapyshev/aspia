@@ -772,8 +772,8 @@ static void ScaleARGBSimple(int src_width,
                             int y,
                             int dy) {
   int j;
-  void (*ScaleARGBCols)(uint8_t * dst_argb, const uint8_t* src_argb, int dst_width,
-                        int x, int dx) =
+  void (*ScaleARGBCols)(uint8_t * dst_argb, const uint8_t* src_argb,
+                        int dst_width, int x, int dx) =
       (src_width >= 32768) ? ScaleARGBCols64_C : ScaleARGBCols_C;
   (void)src_height;
 #if defined(HAS_SCALEARGBCOLS_SSE2)

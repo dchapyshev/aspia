@@ -430,8 +430,8 @@ void MergeUVPlane(const uint8_t* src_u,
                   int width,
                   int height) {
   int y;
-  void (*MergeUVRow)(const uint8_t* src_u, const uint8_t* src_v, uint8_t* dst_uv,
-                     int width) = MergeUVRow_C;
+  void (*MergeUVRow)(const uint8_t* src_u, const uint8_t* src_v,
+                     uint8_t* dst_uv, int width) = MergeUVRow_C;
   // Coalesce rows.
   // Negative height means invert the image.
   if (height < 0) {
@@ -673,8 +673,8 @@ int YUY2ToI422(const uint8_t* src_yuy2,
                int width,
                int height) {
   int y;
-  void (*YUY2ToUV422Row)(const uint8_t* src_yuy2, uint8_t* dst_u, uint8_t* dst_v,
-                         int width) = YUY2ToUV422Row_C;
+  void (*YUY2ToUV422Row)(const uint8_t* src_yuy2, uint8_t* dst_u,
+                         uint8_t* dst_v, int width) = YUY2ToUV422Row_C;
   void (*YUY2ToYRow)(const uint8_t* src_yuy2, uint8_t* dst_y, int width) =
       YUY2ToYRow_C;
   if (!src_yuy2 || !dst_y || !dst_u || !dst_v || width <= 0 || height == 0) {
@@ -759,8 +759,8 @@ int UYVYToI422(const uint8_t* src_uyvy,
                int width,
                int height) {
   int y;
-  void (*UYVYToUV422Row)(const uint8_t* src_uyvy, uint8_t* dst_u, uint8_t* dst_v,
-                         int width) = UYVYToUV422Row_C;
+  void (*UYVYToUV422Row)(const uint8_t* src_uyvy, uint8_t* dst_u,
+                         uint8_t* dst_v, int width) = UYVYToUV422Row_C;
   void (*UYVYToYRow)(const uint8_t* src_uyvy, uint8_t* dst_y, int width) =
       UYVYToYRow_C;
   if (!src_uyvy || !dst_y || !dst_u || !dst_v || width <= 0 || height == 0) {
@@ -1287,8 +1287,8 @@ int ARGBMultiply(const uint8_t* src_argb0,
                  int width,
                  int height) {
   int y;
-  void (*ARGBMultiplyRow)(const uint8_t* src0, const uint8_t* src1, uint8_t* dst,
-                          int width) = ARGBMultiplyRow_C;
+  void (*ARGBMultiplyRow)(const uint8_t* src0, const uint8_t* src1,
+                          uint8_t* dst, int width) = ARGBMultiplyRow_C;
   if (!src_argb0 || !src_argb1 || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1436,8 +1436,8 @@ int ARGBSubtract(const uint8_t* src_argb0,
                  int width,
                  int height) {
   int y;
-  void (*ARGBSubtractRow)(const uint8_t* src0, const uint8_t* src1, uint8_t* dst,
-                          int width) = ARGBSubtractRow_C;
+  void (*ARGBSubtractRow)(const uint8_t* src0, const uint8_t* src1,
+                          uint8_t* dst, int width) = ARGBSubtractRow_C;
   if (!src_argb0 || !src_argb1 || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -1822,7 +1822,8 @@ int ARGBRect(uint8_t* dst_argb,
              int height,
              uint32_t value) {
   int y;
-  void (*ARGBSetRow)(uint8_t * dst_argb, uint32_t value, int width) = ARGBSetRow_C;
+  void (*ARGBSetRow)(uint8_t * dst_argb, uint32_t value, int width) =
+      ARGBSetRow_C;
   if (!dst_argb || width <= 0 || height == 0 || dst_x < 0 || dst_y < 0) {
     return -1;
   }
@@ -1890,8 +1891,8 @@ int ARGBAttenuate(const uint8_t* src_argb,
                   int width,
                   int height) {
   int y;
-  void (*ARGBAttenuateRow)(const uint8_t* src_argb, uint8_t* dst_argb, int width) =
-      ARGBAttenuateRow_C;
+  void (*ARGBAttenuateRow)(const uint8_t* src_argb, uint8_t* dst_argb,
+                           int width) = ARGBAttenuateRow_C;
   if (!src_argb || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -2399,9 +2400,9 @@ int ARGBBlur(const uint8_t* src_argb,
   void (*ComputeCumulativeSumRow)(const uint8_t* row, int32_t* cumsum,
                                   const int32_t* previous_cumsum, int width) =
       ComputeCumulativeSumRow_C;
-  void (*CumulativeSumToAverageRow)(const int32_t* topleft, const int32_t* botleft,
-                                    int width, int area, uint8_t* dst,
-                                    int count) = CumulativeSumToAverageRow_C;
+  void (*CumulativeSumToAverageRow)(
+      const int32_t* topleft, const int32_t* botleft, int width, int area,
+      uint8_t* dst, int count) = CumulativeSumToAverageRow_C;
   int32_t* cumsum_bot_row;
   int32_t* max_cumsum_bot_row;
   int32_t* cumsum_top_row;
@@ -2752,8 +2753,8 @@ static int ARGBSobelize(const uint8_t* src_argb,
   int y;
   void (*ARGBToYJRow)(const uint8_t* src_argb, uint8_t* dst_g, int width) =
       ARGBToYJRow_C;
-  void (*SobelYRow)(const uint8_t* src_y0, const uint8_t* src_y1, uint8_t* dst_sobely,
-                    int width) = SobelYRow_C;
+  void (*SobelYRow)(const uint8_t* src_y0, const uint8_t* src_y1,
+                    uint8_t* dst_sobely, int width) = SobelYRow_C;
   void (*SobelXRow)(const uint8_t* src_y0, const uint8_t* src_y1,
                     const uint8_t* src_y2, uint8_t* dst_sobely, int width) =
       SobelXRow_C;
@@ -3052,8 +3053,8 @@ int HalfFloatPlane(const uint16_t* src_y,
                    int width,
                    int height) {
   int y;
-  void (*HalfFloatRow)(const uint16_t* src, uint16_t* dst, float scale, int width) =
-      HalfFloatRow_C;
+  void (*HalfFloatRow)(const uint16_t* src, uint16_t* dst, float scale,
+                       int width) = HalfFloatRow_C;
   if (!src_y || !dst_y || width <= 0 || height == 0) {
     return -1;
   }
@@ -3133,8 +3134,8 @@ int ARGBLumaColorTable(const uint8_t* src_argb,
                        int height) {
   int y;
   void (*ARGBLumaColorTableRow)(
-      const uint8_t* src_argb, uint8_t* dst_argb, int width, const uint8_t* luma,
-      const uint32_t lumacoeff) = ARGBLumaColorTableRow_C;
+      const uint8_t* src_argb, uint8_t* dst_argb, int width,
+      const uint8_t* luma, const uint32_t lumacoeff) = ARGBLumaColorTableRow_C;
   if (!src_argb || !dst_argb || !luma || width <= 0 || height == 0) {
     return -1;
   }
@@ -3173,8 +3174,8 @@ int ARGBCopyAlpha(const uint8_t* src_argb,
                   int width,
                   int height) {
   int y;
-  void (*ARGBCopyAlphaRow)(const uint8_t* src_argb, uint8_t* dst_argb, int width) =
-      ARGBCopyAlphaRow_C;
+  void (*ARGBCopyAlphaRow)(const uint8_t* src_argb, uint8_t* dst_argb,
+                           int width) = ARGBCopyAlphaRow_C;
   if (!src_argb || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
@@ -3238,8 +3239,8 @@ int ARGBExtractAlpha(const uint8_t* src_argb,
     height = 1;
     src_stride = dst_stride = 0;
   }
-  void (*ARGBExtractAlphaRow)(const uint8_t* src_argb, uint8_t* dst_a, int width) =
-      ARGBExtractAlphaRow_C;
+  void (*ARGBExtractAlphaRow)(const uint8_t* src_argb, uint8_t* dst_a,
+                              int width) = ARGBExtractAlphaRow_C;
 #if defined(HAS_ARGBEXTRACTALPHAROW_SSE2)
   if (TestCpuFlag(kCpuHasSSE2)) {
     ARGBExtractAlphaRow = IS_ALIGNED(width, 8) ? ARGBExtractAlphaRow_SSE2
@@ -3282,8 +3283,8 @@ int ARGBCopyYToAlpha(const uint8_t* src_y,
                      int width,
                      int height) {
   int y;
-  void (*ARGBCopyYToAlphaRow)(const uint8_t* src_y, uint8_t* dst_argb, int width) =
-      ARGBCopyYToAlphaRow_C;
+  void (*ARGBCopyYToAlphaRow)(const uint8_t* src_y, uint8_t* dst_argb,
+                              int width) = ARGBCopyYToAlphaRow_C;
   if (!src_y || !dst_argb || width <= 0 || height == 0) {
     return -1;
   }
