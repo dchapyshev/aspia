@@ -28,7 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "client_config.pb.h"
+#include "computer.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_address_5fbook_2eproto {
@@ -36,19 +36,16 @@ namespace protobuf_address_5fbook_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[3];
+  static const ::google::protobuf::internal::ParseTable schema[2];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsComputerImpl();
-void InitDefaultsComputer();
 void InitDefaultsComputerGroupImpl();
 void InitDefaultsComputerGroup();
 void InitDefaultsAddressBookImpl();
 void InitDefaultsAddressBook();
 inline void InitDefaults() {
-  InitDefaultsComputer();
   InitDefaultsComputerGroup();
   InitDefaultsAddressBook();
 }
@@ -58,9 +55,6 @@ namespace proto {
 class AddressBook;
 class AddressBookDefaultTypeInternal;
 extern AddressBookDefaultTypeInternal _AddressBook_default_instance_;
-class Computer;
-class ComputerDefaultTypeInternal;
-extern ComputerDefaultTypeInternal _Computer_default_instance_;
 class ComputerGroup;
 class ComputerGroupDefaultTypeInternal;
 extern ComputerGroupDefaultTypeInternal _ComputerGroup_default_instance_;
@@ -70,136 +64,6 @@ namespace aspia {
 namespace proto {
 
 // ===================================================================
-
-class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Computer) */ {
- public:
-  Computer();
-  virtual ~Computer();
-
-  Computer(const Computer& from);
-
-  inline Computer& operator=(const Computer& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Computer(Computer&& from) noexcept
-    : Computer() {
-    *this = ::std::move(from);
-  }
-
-  inline Computer& operator=(Computer&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Computer& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Computer* internal_default_instance() {
-    return reinterpret_cast<const Computer*>(
-               &_Computer_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
-
-  void Swap(Computer* other);
-  friend void swap(Computer& a, Computer& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Computer* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  Computer* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const Computer& from);
-  void MergeFrom(const Computer& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Computer* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string name = 2;
-  void clear_name();
-  static const int kNameFieldNumber = 2;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
-
-  // string comment = 3;
-  void clear_comment();
-  static const int kCommentFieldNumber = 3;
-  const ::std::string& comment() const;
-  void set_comment(const ::std::string& value);
-  #if LANG_CXX11
-  void set_comment(::std::string&& value);
-  #endif
-  void set_comment(const char* value);
-  void set_comment(const char* value, size_t size);
-  ::std::string* mutable_comment();
-  ::std::string* release_comment();
-  void set_allocated_comment(::std::string* comment);
-
-  // .aspia.proto.ClientConfig client_config = 1;
-  bool has_client_config() const;
-  void clear_client_config();
-  static const int kClientConfigFieldNumber = 1;
-  const ::aspia::proto::ClientConfig& client_config() const;
-  ::aspia::proto::ClientConfig* release_client_config();
-  ::aspia::proto::ClientConfig* mutable_client_config();
-  void set_allocated_client_config(::aspia::proto::ClientConfig* client_config);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.Computer)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::internal::ArenaStringPtr comment_;
-  ::aspia::proto::ClientConfig* client_config_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
-  friend void ::protobuf_address_5fbook_2eproto::InitDefaultsComputerImpl();
-};
-// -------------------------------------------------------------------
 
 class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.ComputerGroup) */ {
  public:
@@ -235,7 +99,7 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_ComputerGroup_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    0;
 
   void Swap(ComputerGroup* other);
   friend void swap(ComputerGroup& a, ComputerGroup& b) {
@@ -381,7 +245,7 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_AddressBook_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    1;
 
   void Swap(AddressBook* other);
   friend void swap(AddressBook& a, AddressBook& b) {
@@ -454,168 +318,11 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Computer
-
-// .aspia.proto.ClientConfig client_config = 1;
-inline bool Computer::has_client_config() const {
-  return this != internal_default_instance() && client_config_ != NULL;
-}
-inline const ::aspia::proto::ClientConfig& Computer::client_config() const {
-  const ::aspia::proto::ClientConfig* p = client_config_;
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.client_config)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::ClientConfig*>(
-      &::aspia::proto::_ClientConfig_default_instance_);
-}
-inline ::aspia::proto::ClientConfig* Computer::release_client_config() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.client_config)
-  
-  ::aspia::proto::ClientConfig* temp = client_config_;
-  client_config_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::ClientConfig* Computer::mutable_client_config() {
-  
-  if (client_config_ == NULL) {
-    client_config_ = new ::aspia::proto::ClientConfig;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.client_config)
-  return client_config_;
-}
-inline void Computer::set_allocated_client_config(::aspia::proto::ClientConfig* client_config) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete reinterpret_cast< ::google::protobuf::MessageLite*>(client_config_);
-  }
-  if (client_config) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      client_config = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, client_config, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  client_config_ = client_config;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.client_config)
-}
-
-// string name = 2;
-inline void Computer::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Computer::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.name)
-  return name_.GetNoArena();
-}
-inline void Computer::set_name(const ::std::string& value) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.name)
-}
-#if LANG_CXX11
-inline void Computer::set_name(::std::string&& value) {
-  
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.name)
-}
-#endif
-inline void Computer::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.name)
-}
-inline void Computer::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.name)
-}
-inline ::std::string* Computer::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Computer::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Computer::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
-    
-  } else {
-    
-  }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.name)
-}
-
-// string comment = 3;
-inline void Computer::clear_comment() {
-  comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Computer::comment() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.comment)
-  return comment_.GetNoArena();
-}
-inline void Computer::set_comment(const ::std::string& value) {
-  
-  comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.comment)
-}
-#if LANG_CXX11
-inline void Computer::set_comment(::std::string&& value) {
-  
-  comment_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.comment)
-}
-#endif
-inline void Computer::set_comment(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.comment)
-}
-inline void Computer::set_comment(const char* value, size_t size) {
-  
-  comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.comment)
-}
-inline ::std::string* Computer::mutable_comment() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.comment)
-  return comment_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Computer::release_comment() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.comment)
-  
-  return comment_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Computer::set_allocated_comment(::std::string* comment) {
-  if (comment != NULL) {
-    
-  } else {
-    
-  }
-  comment_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), comment);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.comment)
-}
-
-// -------------------------------------------------------------------
-
 // ComputerGroup
 
 // repeated .aspia.proto.Computer computer = 1;
 inline int ComputerGroup::computer_size() const {
   return computer_.size();
-}
-inline void ComputerGroup::clear_computer() {
-  computer_.Clear();
 }
 inline const ::aspia::proto::Computer& ComputerGroup::computer(int index) const {
   // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.computer)
@@ -833,8 +540,6 @@ inline void AddressBook::set_allocated_root_group(::aspia::proto::ComputerGroup*
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 

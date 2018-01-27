@@ -117,10 +117,10 @@ MRU::MRU()
         return;
     }
 
-    if (mru_.client_config_size() > kMaxMRUItemCount)
+    if (mru_.computer_size() > kMaxMRUItemCount)
     {
-        mru_.mutable_client_config()->DeleteSubrange(
-            0, mru_.client_config_size() - kMaxMRUFileSize);
+        mru_.mutable_computer()->DeleteSubrange(
+            0, mru_.computer_size() - kMaxMRUFileSize);
     }
 }
 
@@ -130,14 +130,14 @@ MRU::~MRU()
 }
 
 // static
-proto::ClientConfig MRU::GetDefaultConfig()
+proto::Computer MRU::GetDefaultConfig()
 {
-    proto::ClientConfig config;
+    proto::Computer computer;
 
-    config.set_port(kDefaultHostTcpPort);
-    config.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    computer.set_port(kDefaultHostTcpPort);
+    computer.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 
-    proto::desktop::Config* desktop_session_config = config.mutable_desktop_session();
+    proto::desktop::Config* desktop_session_config = computer.mutable_desktop_session();
 
     desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
                                       proto::desktop::Config::ENABLE_CURSOR_SHAPE);
@@ -148,57 +148,57 @@ proto::ClientConfig MRU::GetDefaultConfig()
     ConvertToVideoPixelFormat(PixelFormat::RGB565(),
                               desktop_session_config->mutable_pixel_format());
 
-    return config;
+    return computer;
 }
 
-void MRU::AddItem(const proto::ClientConfig& client_config)
+void MRU::AddItem(const proto::Computer& computer)
 {
-    if (client_config.address().empty())
+    if (computer.address().empty())
         return;
 
-    for (int index = 0; index < mru_.client_config_size(); ++index)
+    for (int index = 0; index < mru_.computer_size(); ++index)
     {
-        if (client_config.address() == mru_.client_config(index).address())
+        if (computer.address() == mru_.computer(index).address())
         {
             // Item already in the list. Remove from current position.
-            mru_.mutable_client_config()->DeleteSubrange(index, 1);
+            mru_.mutable_computer()->DeleteSubrange(index, 1);
             break;
         }
     }
 
     // Add item to end.
-    mru_.add_client_config()->CopyFrom(client_config);
+    mru_.add_computer()->CopyFrom(computer);
 
-    if (mru_.client_config_size() > kMaxMRUItemCount)
+    if (mru_.computer_size() > kMaxMRUItemCount)
     {
         // Remove first (oldest) item.
-        mru_.mutable_client_config()->DeleteSubrange(0, 1);
+        mru_.mutable_computer()->DeleteSubrange(0, 1);
     }
 }
 
 int MRU::GetItemCount() const
 {
-    return mru_.client_config_size();
+    return mru_.computer_size();
 }
 
-const proto::ClientConfig& MRU::GetItem(int item_index) const
+const proto::Computer& MRU::GetItem(int item_index) const
 {
-    DCHECK(mru_.client_config_size() != 0 && item_index < mru_.client_config_size());
-    return mru_.client_config(item_index);
+    DCHECK(mru_.computer_size() != 0 && item_index < mru_.computer_size());
+    return mru_.computer(item_index);
 }
 
-const proto::ClientConfig& MRU::SetLastItem(int item_index)
+const proto::Computer& MRU::SetLastItem(int item_index)
 {
-    DCHECK(mru_.client_config_size() != 0 && item_index < mru_.client_config_size());
+    DCHECK(mru_.computer_size() != 0 && item_index < mru_.computer_size());
 
     // Save item.
-    proto::ClientConfig client_config = mru_.client_config(item_index);
+    proto::Computer computer = mru_.computer(item_index);
 
     // Delete item from current position.
-    mru_.mutable_client_config()->DeleteSubrange(item_index, 1);
+    mru_.mutable_computer()->DeleteSubrange(item_index, 1);
 
     // Add item to end.
-    mru_.add_client_config()->CopyFrom(client_config);
+    mru_.add_computer()->CopyFrom(computer);
 
     // Get end item.
     return GetItem(GetItemCount() - 1);

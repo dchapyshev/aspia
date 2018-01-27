@@ -23,31 +23,31 @@ ClientPool::~ClientPool()
     session_list_.clear();
 }
 
-void ClientPool::Connect(HWND parent, const proto::ClientConfig& config)
+void ClientPool::Connect(HWND parent, const proto::Computer& computer)
 {
-    config_.CopyFrom(config);
+    computer_.CopyFrom(computer);
     status_dialog_.DoModal(parent);
     network_client_.reset();
 }
 
 void ClientPool::OnStatusDialogOpen()
 {
-    if (!NetworkClientTcp::IsValidHostName(config_.address()))
+    if (!NetworkClientTcp::IsValidHostName(computer_.address()))
     {
         status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::INVALID_ADDRESS);
     }
-    else if (!NetworkClientTcp::IsValidPort(config_.port()))
+    else if (!NetworkClientTcp::IsValidPort(computer_.port()))
     {
         status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::INVALID_PORT);
     }
     else
     {
-        status_dialog_.SetDestonation(config_.address(), config_.port());
+        status_dialog_.SetDestonation(computer_.address(), computer_.port());
         status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::CONNECTING);
 
         network_client_ = std::make_unique<NetworkClientTcp>(
-            config_.address(),
-            config_.port(),
+            computer_.address(),
+            computer_.port(),
             std::bind(&ClientPool::OnConnect, this, std::placeholders::_1));
     }
 }
@@ -66,7 +66,7 @@ void ClientPool::OnConnect(std::shared_ptr<NetworkChannel> channel)
         return;
     }
 
-    session_list_.emplace_back(new Client(channel, config_, this));
+    session_list_.emplace_back(new Client(channel, computer_, this));
 
     status_dialog_.EndDialog(0);
 }

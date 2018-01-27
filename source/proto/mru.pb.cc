@@ -34,7 +34,7 @@ void InitDefaultsMRUImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_client_5fconfig_2eproto::InitDefaultsClientConfig();
+  protobuf_computer_2eproto::InitDefaultsComputer();
   {
     void* ptr = &::aspia::proto::_MRU_default_instance_;
     new (ptr) ::aspia::proto::MRU();
@@ -56,11 +56,11 @@ namespace proto {
 
 void MRU::InitAsDefaultInstance() {
 }
-void MRU::clear_client_config() {
-  client_config_.Clear();
+void MRU::clear_computer() {
+  computer_.Clear();
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int MRU::kClientConfigFieldNumber;
+const int MRU::kComputerFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MRU::MRU()
@@ -74,7 +74,7 @@ MRU::MRU()
 MRU::MRU(const MRU& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      client_config_(from.client_config_),
+      computer_(from.computer_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:aspia.proto.MRU)
@@ -116,7 +116,7 @@ void MRU::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  client_config_.Clear();
+  computer_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -136,11 +136,11 @@ bool MRU::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.ClientConfig client_config = 1;
+      // repeated .aspia.proto.Computer computer = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_client_config()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_computer()));
         } else {
           goto handle_unusual;
         }
@@ -173,11 +173,11 @@ void MRU::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.ClientConfig client_config = 1;
+  // repeated .aspia.proto.Computer computer = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->client_config_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->computer_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->client_config(static_cast<int>(i)), output);
+      1, this->computer(static_cast<int>(i)), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -191,14 +191,14 @@ size_t MRU::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.ClientConfig client_config = 1;
+  // repeated .aspia.proto.Computer computer = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->client_config_size());
+    unsigned int count = static_cast<unsigned int>(this->computer_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->client_config(static_cast<int>(i)));
+          this->computer(static_cast<int>(i)));
     }
   }
 
@@ -221,7 +221,7 @@ void MRU::MergeFrom(const MRU& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  client_config_.MergeFrom(from.client_config_);
+  computer_.MergeFrom(from.computer_);
 }
 
 void MRU::CopyFrom(const MRU& from) {
@@ -241,7 +241,7 @@ void MRU::Swap(MRU* other) {
 }
 void MRU::InternalSwap(MRU* other) {
   using std::swap;
-  client_config_.InternalSwap(&other->client_config_);
+  computer_.InternalSwap(&other->computer_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

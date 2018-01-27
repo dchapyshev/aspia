@@ -244,8 +244,8 @@ LRESULT AddressBookWindow::OnComputerListDoubleClick(
         return 0;
     }
 
-    computer->mutable_client_config()->set_session_type(session_type);
-    Connect(computer->client_config());
+    computer->set_session_type(session_type);
+    Connect(*computer);
 
     return 0;
 }
@@ -460,10 +460,10 @@ LRESULT AddressBookWindow::OnEditComputerButton(
             UNICODEfromUTF8(computer->name()).c_str());
 
         computer_list_ctrl_.SetItemText(item_index, 1,
-            UNICODEfromUTF8(computer->client_config().address()).c_str());
+            UNICODEfromUTF8(computer->address()).c_str());
 
         computer_list_ctrl_.SetItemText(item_index, 2,
-            std::to_wstring(computer->client_config().port()).c_str());
+            std::to_wstring(computer->port()).c_str());
 
         SetAddressBookChanged(true);
     }
@@ -630,9 +630,9 @@ LRESULT AddressBookWindow::OnSessionButton(
             return 0;
     }
 
-    computer->mutable_client_config()->set_session_type(session_type);
+    computer->set_session_type(session_type);
 
-    Connect(computer->client_config());
+    Connect(*computer);
 
     return 0;
 }
@@ -828,10 +828,10 @@ void AddressBookWindow::AddChildComputers(proto::ComputerGroup* computer_group)
         computer_list_ctrl_.SetItemData(item_index, reinterpret_cast<DWORD_PTR>(computer));
 
         computer_list_ctrl_.SetItemText(item_index, 1,
-            UNICODEfromUTF8(computer->client_config().address()).c_str());
+            UNICODEfromUTF8(computer->address()).c_str());
 
         computer_list_ctrl_.SetItemText(item_index, 2,
-            std::to_wstring(computer->client_config().port()).c_str());
+            std::to_wstring(computer->port()).c_str());
     }
 }
 
@@ -1009,12 +1009,12 @@ bool AddressBookWindow::CloseAddressBook()
     return true;
 }
 
-void AddressBookWindow::Connect(const proto::ClientConfig& client_config)
+void AddressBookWindow::Connect(const proto::Computer& computer)
 {
     if (!client_pool_)
         client_pool_ = std::make_unique<ClientPool>(MessageLoopProxy::Current());
 
-    client_pool_->Connect(*this, client_config);
+    client_pool_->Connect(*this, computer);
 }
 
 } // namespace aspia

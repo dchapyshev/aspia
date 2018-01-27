@@ -10,9 +10,9 @@
 namespace aspia {
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(
-    const proto::ClientConfig& config,
+    const proto::Computer& computer,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
-    : ClientSession(config, channel_proxy)
+    : ClientSession(computer, channel_proxy)
 {
     remote_sender_ = std::make_unique<FileRequestSenderRemote>(channel_proxy);
     local_sender_ = std::make_unique<FileRequestSenderLocal>();

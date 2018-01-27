@@ -107,7 +107,7 @@ private:
     bool OpenAddressBook();
     bool SaveAddressBook();
     bool CloseAddressBook();
-    void Connect(const proto::ClientConfig& client_config);
+    void Connect(const proto::Computer& computer);
 
     CIcon small_icon_;
     CIcon big_icon_;

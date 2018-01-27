@@ -28,12 +28,10 @@ constexpr int kMaxCommentLength = 2048;
 ComputerDialog::ComputerDialog()
 {
     // Load default config.
-    proto::ClientConfig* client_config = computer_.mutable_client_config();
+    computer_.set_port(kDefaultHostTcpPort);
+    computer_.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 
-    client_config->set_port(kDefaultHostTcpPort);
-    client_config->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
-
-    proto::desktop::Config* desktop_session_config = client_config->mutable_desktop_session();
+    proto::desktop::Config* desktop_session_config = computer_.mutable_desktop_session();
 
     desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
                                       proto::desktop::Config::ENABLE_CURSOR_SHAPE);
@@ -67,9 +65,7 @@ LRESULT ComputerDialog::OnInitDialog(
             UNICODEfromUTF8(computer_.name()).c_str());
     }
 
-    const proto::ClientConfig& client_config = computer_.client_config();
-
-    if (!client_config.address().empty())
+    if (!computer_.address().empty())
     {
         GetDlgItem(IDC_SERVER_ADDRESS_EDIT).SetWindowTextW(
             UNICODEfromUTF8(computer_.name()).c_str());
@@ -78,9 +74,9 @@ LRESULT ComputerDialog::OnInitDialog(
     CEdit port_edit(GetDlgItem(IDC_SERVER_PORT_EDIT));
     port_edit.SetLimitText(5);
 
-    SetDlgItemInt(IDC_SERVER_PORT_EDIT, client_config.port(), FALSE);
+    SetDlgItemInt(IDC_SERVER_PORT_EDIT, computer_.port(), FALSE);
 
-    if (client_config.port() == kDefaultHostTcpPort)
+    if (computer_.port() == kDefaultHostTcpPort)
     {
         port_edit.SetReadOnly(TRUE);
         CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
@@ -102,7 +98,7 @@ LRESULT ComputerDialog::OnInitDialog(
         const int item_index = combobox.AddString(text);
         combobox.SetItemData(item_index, session_type);
 
-        if (session_type == computer_.client_config().session_type())
+        if (session_type == computer_.session_type())
             combobox.SetCurSel(item_index);
     };
 
@@ -112,7 +108,7 @@ LRESULT ComputerDialog::OnInitDialog(
     add_session(IDS_SESSION_TYPE_SYSTEM_INFO, proto::auth::SESSION_TYPE_SYSTEM_INFO);
     add_session(IDS_SESSION_TYPE_POWER_MANAGE, proto::auth::SESSION_TYPE_POWER_MANAGE);
 
-    UpdateCurrentSessionType(computer_.client_config().session_type());
+    UpdateCurrentSessionType(computer_.session_type());
 
     return FALSE;
 }
@@ -145,19 +141,16 @@ LRESULT ComputerDialog::OnDefaultPortClicked(
 LRESULT ComputerDialog::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    proto::ClientConfig* client_config = computer_.mutable_client_config();
-
-    switch (client_config->session_type())
+    switch (computer_.session_type())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            SettingsDialog dialog(client_config->session_type(),
-                                  client_config->desktop_session());
+            SettingsDialog dialog(computer_.session_type(), computer_.desktop_session());
 
             if (dialog.DoModal(*this) == IDOK)
             {
-                client_config->mutable_desktop_session()->CopyFrom(dialog.Config());
+                computer_.mutable_desktop_session()->CopyFrom(dialog.Config());
             }
         }
         break;
@@ -211,18 +204,17 @@ LRESULT ComputerDialog::OnOkButton(
     CEdit address_edit(GetDlgItem(IDC_SERVER_ADDRESS_EDIT));
     address_edit.GetWindowTextW(buffer, _countof(buffer));
 
-    computer_.mutable_client_config()->set_address(UTF8fromUNICODE(buffer));
+    computer_.set_address(UTF8fromUNICODE(buffer));
 
-    if (!NetworkClientTcp::IsValidHostName(computer_.client_config().address()))
+    if (!NetworkClientTcp::IsValidHostName(computer_.address()))
     {
         ShowErrorMessage(IDS_CONN_STATUS_INVALID_ADDRESS);
         return 0;
     }
 
-    computer_.mutable_client_config()->set_port(static_cast<uint32_t>(
-        GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
+    computer_.set_port(static_cast<uint32_t>(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
 
-    if (!NetworkClientTcp::IsValidPort(computer_.client_config().port()))
+    if (!NetworkClientTcp::IsValidPort(computer_.port()))
     {
         ShowErrorMessage(IDS_CONN_STATUS_INVALID_PORT);
         return 0;
@@ -250,7 +242,7 @@ LRESULT ComputerDialog::OnSessionTypeChanged(
 
 void ComputerDialog::UpdateCurrentSessionType(proto::auth::SessionType session_type)
 {
-    computer_.mutable_client_config()->set_session_type(session_type);
+    computer_.set_session_type(session_type);
 
     switch (session_type)
     {

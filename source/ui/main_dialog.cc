@@ -86,22 +86,22 @@ void MainDialog::UpdateMRUList()
 
     if (!item_count)
     {
-        UpdateCurrentConfig(MRU::GetDefaultConfig());
+        UpdateCurrentComputer(MRU::GetDefaultConfig());
         return;
     }
 
     for (int index = item_count - 1; index >= 0; --index)
     {
-        const proto::ClientConfig& client_config = mru_.GetItem(index);
+        const proto::Computer& computer = mru_.GetItem(index);
 
         // Add address to combobox.
-        const int item_index = combo.AddString(UNICODEfromUTF8(client_config.address()).c_str());
+        const int item_index = combo.AddString(UNICODEfromUTF8(computer.address()).c_str());
 
         combo.SetItemData(item_index, index);
 
         if (index == item_count - 1)
         {
-            UpdateCurrentConfig(client_config);
+            UpdateCurrentComputer(computer);
             combo.SetCurSel(item_index);
         }
     }
@@ -132,9 +132,9 @@ void MainDialog::UpdateServerPort()
     CEdit port_edit = GetDlgItem(IDC_SERVER_PORT_EDIT);
 
     port_edit.SetLimitText(5);
-    port_edit.SetWindowTextW(std::to_wstring(current_config_.port()).c_str());
+    port_edit.SetWindowTextW(std::to_wstring(current_computer_.port()).c_str());
 
-    if (current_config_.port() == kDefaultHostTcpPort)
+    if (current_computer_.port() == kDefaultHostTcpPort)
     {
         CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
         port_edit.SetReadOnly(TRUE);
@@ -285,18 +285,18 @@ LRESULT MainDialog::OnUpdateIpListButton(
     return 0;
 }
 
-void MainDialog::UpdateCurrentConfig(const proto::ClientConfig& client_config)
+void MainDialog::UpdateCurrentComputer(const proto::Computer& computer)
 {
-    current_config_.CopyFrom(client_config);
+    current_computer_.CopyFrom(computer);
 
     CComboBox combo(GetDlgItem(IDC_SESSION_TYPE_COMBO));
 
     for (int i = combo.GetCount() - 1; i >= 0; --i)
     {
         if (static_cast<proto::auth::SessionType>(combo.GetItemData(i)) ==
-            client_config.session_type())
+            computer.session_type())
         {
-            UpdateCurrentSessionType(client_config.session_type());
+            UpdateCurrentSessionType(computer.session_type());
             combo.SetCurSel(i);
             break;
         }
@@ -305,7 +305,7 @@ void MainDialog::UpdateCurrentConfig(const proto::ClientConfig& client_config)
 
 void MainDialog::UpdateCurrentSessionType(proto::auth::SessionType session_type)
 {
-    current_config_.set_session_type(session_type);
+    current_computer_.set_session_type(session_type);
 
     switch (session_type)
     {
@@ -341,7 +341,7 @@ LRESULT MainDialog::OnAddressChanged(
     if (item_index >= 0 && item_index < mru_.GetItemCount())
     {
         // Address found in MRU list. Copy config from cache.
-        current_config_.CopyFrom(mru_.SetLastItem(item_index));
+        current_computer_.CopyFrom(mru_.SetLastItem(item_index));
         UpdateMRUList();
         UpdateServerPort();
     }
@@ -352,17 +352,17 @@ LRESULT MainDialog::OnAddressChanged(
 LRESULT MainDialog::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    switch (current_config_.session_type())
+    switch (current_computer_.session_type())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            SettingsDialog dialog(current_config_.session_type(),
-                                  current_config_.desktop_session());
+            SettingsDialog dialog(current_computer_.session_type(),
+                                  current_computer_.desktop_session());
 
             if (dialog.DoModal(*this) == IDOK)
             {
-                current_config_.mutable_desktop_session()->CopyFrom(dialog.Config());
+                current_computer_.mutable_desktop_session()->CopyFrom(dialog.Config());
             }
         }
         break;
@@ -377,18 +377,18 @@ LRESULT MainDialog::OnSettingsButton(
 LRESULT MainDialog::OnConnectButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    if (current_config_.session_type() != proto::auth::SESSION_TYPE_UNKNOWN)
+    if (current_computer_.session_type() != proto::auth::SESSION_TYPE_UNKNOWN)
     {
         WCHAR buffer[128] = { 0 };
         GetDlgItemTextW(IDC_SERVER_ADDRESS_COMBO, buffer, _countof(buffer));
 
         // Update address and port in current config.
-        current_config_.set_address(UTF8fromUNICODE(buffer));
-        current_config_.set_port(static_cast<uint32_t>(
+        current_computer_.set_address(UTF8fromUNICODE(buffer));
+        current_computer_.set_port(static_cast<uint32_t>(
             GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
 
         // Add current config to MRU list.
-        mru_.AddItem(current_config_);
+        mru_.AddItem(current_computer_);
 
         // Reload MRU list to combobox.
         UpdateMRUList();
@@ -396,7 +396,7 @@ LRESULT MainDialog::OnConnectButton(
         if (!client_pool_)
             client_pool_ = std::make_unique<ClientPool>(MessageLoopProxy::Current());
 
-        client_pool_->Connect(*this, current_config_);
+        client_pool_->Connect(*this, current_computer_);
     }
 
     return 0;

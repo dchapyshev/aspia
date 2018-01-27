@@ -13,9 +13,9 @@
 namespace aspia {
 
 ClientSessionPowerManage::ClientSessionPowerManage(
-    const proto::ClientConfig& config,
+    const proto::Computer& computer,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
-    : ClientSession(config, channel_proxy)
+    : ClientSession(computer, channel_proxy)
 {
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
 }

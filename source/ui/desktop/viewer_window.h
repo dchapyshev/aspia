@@ -10,7 +10,7 @@
 
 #include "base/threading/thread.h"
 #include "base/scoped_user_object.h"
-#include "proto/client_config.pb.h"
+#include "proto/computer.pb.h"
 #include "protocol/clipboard.h"
 #include "ui/desktop/viewer_toolbar.h"
 #include "ui/desktop/video_window.h"
@@ -35,7 +35,7 @@ public:
         virtual void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) = 0;
     };
 
-    ViewerWindow(proto::ClientConfig* config, Delegate* delegate);
+    ViewerWindow(proto::Computer* computer, Delegate* delegate);
     ~ViewerWindow();
 
     DesktopFrame* Frame();
@@ -124,7 +124,7 @@ private:
     std::shared_ptr<MessageLoopProxy> runner_;
 
     Delegate* delegate_;
-    proto::ClientConfig* config_;
+    proto::Computer* computer_;
 
     ViewerToolBar toolbar_;
     VideoWindow video_window_;

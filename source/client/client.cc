@@ -17,10 +17,10 @@
 namespace aspia {
 
 Client::Client(std::shared_ptr<NetworkChannel> channel,
-               const proto::ClientConfig& config,
+               const proto::Computer& computer,
                Delegate* delegate)
     : channel_(std::move(channel)),
-      config_(config),
+      computer_(computer),
       delegate_(delegate),
       status_dialog_(this)
 {
@@ -71,7 +71,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         proto::auth::ClientToHost request;
 
         request.set_method(proto::auth::METHOD_BASIC);
-        request.set_session_type(config_.session_type());
+        request.set_session_type(computer_.session_type());
         request.set_username(auth_dialog.UserName());
         request.set_password(auth_dialog.Password());
 
@@ -92,7 +92,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
 void Client::OnStatusDialogOpen()
 {
-    status_dialog_.SetDestonation(config_.address(), config_.port());
+    status_dialog_.SetDestonation(computer_.address(), computer_.port());
     status_dialog_.SetAuthorizationStatus(status_);
 }
 
@@ -107,28 +107,28 @@ void Client::OnAuthRequestSended()
 }
 
 static std::unique_ptr<ClientSession> CreateSession(
-    const proto::ClientConfig& config,
+    const proto::Computer& computer,
     std::shared_ptr<NetworkChannelProxy> channel_proxy)
 {
-    switch (config.session_type())
+    switch (computer.session_type())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            return std::make_unique<ClientSessionDesktopManage>(config, channel_proxy);
+            return std::make_unique<ClientSessionDesktopManage>(computer, channel_proxy);
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            return std::make_unique<ClientSessionDesktopView>(config, channel_proxy);
+            return std::make_unique<ClientSessionDesktopView>(computer, channel_proxy);
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
-            return std::make_unique<ClientSessionFileTransfer>(config, channel_proxy);
+            return std::make_unique<ClientSessionFileTransfer>(computer, channel_proxy);
 
         case proto::auth::SESSION_TYPE_POWER_MANAGE:
-            return std::make_unique<ClientSessionPowerManage>(config, channel_proxy);
+            return std::make_unique<ClientSessionPowerManage>(computer, channel_proxy);
 
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
-            return std::make_unique<ClientSessionSystemInfo>(config, channel_proxy);
+            return std::make_unique<ClientSessionSystemInfo>(computer, channel_proxy);
 
         default:
-            LOG(LS_ERROR) << "Invalid session type: " << config.session_type();
+            LOG(LS_ERROR) << "Invalid session type: " << computer.session_type();
             return nullptr;
     }
 }
@@ -143,7 +143,7 @@ void Client::DoAuthorize(const IOBuffer& buffer)
 
         if (status_ == proto::auth::STATUS_SUCCESS)
         {
-            session_ = CreateSession(config_, channel_proxy_);
+            session_ = CreateSession(computer_, channel_proxy_);
             if (session_)
                 return;
         }

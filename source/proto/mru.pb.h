@@ -28,7 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "client_config.pb.h"
+#include "computer.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_mru_2eproto {
@@ -139,23 +139,23 @@ class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(c
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.ClientConfig client_config = 1;
-  int client_config_size() const;
-  void clear_client_config();
-  static const int kClientConfigFieldNumber = 1;
-  const ::aspia::proto::ClientConfig& client_config(int index) const;
-  ::aspia::proto::ClientConfig* mutable_client_config(int index);
-  ::aspia::proto::ClientConfig* add_client_config();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ClientConfig >*
-      mutable_client_config();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ClientConfig >&
-      client_config() const;
+  // repeated .aspia.proto.Computer computer = 1;
+  int computer_size() const;
+  void clear_computer();
+  static const int kComputerFieldNumber = 1;
+  const ::aspia::proto::Computer& computer(int index) const;
+  ::aspia::proto::Computer* mutable_computer(int index);
+  ::aspia::proto::Computer* add_computer();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
+      mutable_computer();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
+      computer() const;
 
   // @@protoc_insertion_point(class_scope:aspia.proto.MRU)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ClientConfig > client_config_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer > computer_;
   mutable int _cached_size_;
   friend struct ::protobuf_mru_2eproto::TableStruct;
   friend void ::protobuf_mru_2eproto::InitDefaultsMRUImpl();
@@ -171,31 +171,31 @@ class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(c
 #endif  // __GNUC__
 // MRU
 
-// repeated .aspia.proto.ClientConfig client_config = 1;
-inline int MRU::client_config_size() const {
-  return client_config_.size();
+// repeated .aspia.proto.Computer computer = 1;
+inline int MRU::computer_size() const {
+  return computer_.size();
 }
-inline const ::aspia::proto::ClientConfig& MRU::client_config(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.MRU.client_config)
-  return client_config_.Get(index);
+inline const ::aspia::proto::Computer& MRU::computer(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.MRU.computer)
+  return computer_.Get(index);
 }
-inline ::aspia::proto::ClientConfig* MRU::mutable_client_config(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.MRU.client_config)
-  return client_config_.Mutable(index);
+inline ::aspia::proto::Computer* MRU::mutable_computer(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.MRU.computer)
+  return computer_.Mutable(index);
 }
-inline ::aspia::proto::ClientConfig* MRU::add_client_config() {
-  // @@protoc_insertion_point(field_add:aspia.proto.MRU.client_config)
-  return client_config_.Add();
+inline ::aspia::proto::Computer* MRU::add_computer() {
+  // @@protoc_insertion_point(field_add:aspia.proto.MRU.computer)
+  return computer_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::ClientConfig >*
-MRU::mutable_client_config() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.MRU.client_config)
-  return &client_config_;
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
+MRU::mutable_computer() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.MRU.computer)
+  return &computer_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ClientConfig >&
-MRU::client_config() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.MRU.client_config)
-  return client_config_;
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
+MRU::computer() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.MRU.computer)
+  return computer_;
 }
 
 #ifdef __GNUC__

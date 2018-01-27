@@ -30,7 +30,7 @@ public:
     };
 
     Client(std::shared_ptr<NetworkChannel> channel,
-           const proto::ClientConfig& config,
+           const proto::Computer& computer,
            Delegate* delegate);
 
     ~Client();
@@ -62,7 +62,7 @@ private:
     std::shared_ptr<NetworkChannel> channel_;
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
 
-    proto::ClientConfig config_;
+    proto::Computer computer_;
     std::unique_ptr<ClientSession> session_;
 
     DISALLOW_COPY_AND_ASSIGN(Client);

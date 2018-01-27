@@ -19,7 +19,7 @@ class ClientSessionSystemInfo
       private SystemInfoWindow::Delegate
 {
 public:
-    ClientSessionSystemInfo(const proto::ClientConfig& config,
+    ClientSessionSystemInfo(const proto::Computer& computer,
                             std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionSystemInfo();
 

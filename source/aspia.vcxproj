@@ -248,7 +248,7 @@
     <ClCompile Include="protocol\file_packetizer.cc" />
     <ClCompile Include="proto\address_book.pb.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
-    <ClCompile Include="proto\client_config.pb.cc" />
+    <ClCompile Include="proto\computer.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\file_transfer_session.pb.cc" />
     <ClCompile Include="proto\host_user.pb.cc" />
@@ -565,7 +565,7 @@
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\address_book.pb.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
-    <ClInclude Include="proto\client_config.pb.h" />
+    <ClInclude Include="proto\computer.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\file_transfer_session.pb.h" />
     <ClInclude Include="proto\host_user.pb.h" />
@@ -671,7 +671,7 @@
     <None Include="proto\address_book.proto" />
     <None Include="proto\auth_session.proto" />
     <None Include="proto\build.cmd" />
-    <None Include="proto\client_config.proto" />
+    <None Include="proto\computer.proto" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\file_transfer_session.proto" />
     <None Include="proto\host_user.proto" />

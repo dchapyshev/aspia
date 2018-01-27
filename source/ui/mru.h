@@ -18,12 +18,12 @@ public:
     MRU();
     ~MRU();
 
-    static proto::ClientConfig GetDefaultConfig();
+    static proto::Computer GetDefaultConfig();
 
-    void AddItem(const proto::ClientConfig& client_config);
+    void AddItem(const proto::Computer& computer);
     int GetItemCount() const;
-    const proto::ClientConfig& GetItem(int item_index) const;
-    const proto::ClientConfig& SetLastItem(int item_index);
+    const proto::Computer& GetItem(int item_index) const;
+    const proto::Computer& SetLastItem(int item_index);
 
 private:
     proto::MRU mru_;

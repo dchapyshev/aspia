@@ -18,12 +18,12 @@ static const DWORD kKeyExtendedFlag = 0x1000000;
 
 static const DesktopSize kVideoWindowSize(400, 280);
 
-ViewerWindow::ViewerWindow(proto::ClientConfig* config, Delegate* delegate)
-    : config_(config),
+ViewerWindow::ViewerWindow(proto::Computer* computer, Delegate* delegate)
+    : computer_(computer),
       delegate_(delegate),
       video_window_(this)
 {
-    DCHECK(config_);
+    DCHECK(computer_);
     DCHECK(delegate_);
 
     ui_thread_.Start(MessageLoop::TYPE_UI, this);
@@ -152,18 +152,18 @@ LRESULT ViewerWindow::OnCreate(
     CString app_name;
     app_name.LoadStringW(IDS_APPLICATION_NAME);
 
-    CString title(config_->address().c_str());
+    CString title(computer_->address().c_str());
     title += L" - ";
     title += app_name;
 
     SetWindowTextW(title);
 
-    toolbar_.CreateViewerToolBar(*this, config_->session_type());
+    toolbar_.CreateViewerToolBar(*this, computer_->session_type());
     video_window_.Create(*this, rcDefault, nullptr, WS_CHILD | WS_VISIBLE);
 
     DoAutoSize(kVideoWindowSize);
 
-    ApplyConfig(config_->desktop_session());
+    ApplyConfig(computer_->desktop_session());
 
     return 0;
 }
@@ -363,14 +363,14 @@ void ViewerWindow::ApplyConfig(const proto::desktop::Config& config)
 LRESULT ViewerWindow::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SettingsDialog dialog(config_->session_type(), config_->desktop_session());
+    SettingsDialog dialog(computer_->session_type(), computer_->desktop_session());
 
     if (dialog.DoModal(*this) == IDOK)
     {
-        config_->mutable_desktop_session()->CopyFrom(dialog.Config());
+        computer_->mutable_desktop_session()->CopyFrom(dialog.Config());
 
-        ApplyConfig(config_->desktop_session());
-        delegate_->OnConfigChange(config_->desktop_session());
+        ApplyConfig(computer_->desktop_session());
+        delegate_->OnConfigChange(computer_->desktop_session());
     }
 
     return 0;

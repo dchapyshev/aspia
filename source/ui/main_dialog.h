@@ -10,7 +10,6 @@
 
 #include "host/host_pool.h"
 #include "client/client_pool.h"
-#include "proto/client_config.pb.h"
 #include "ui/base/tray_icon.h"
 #include "ui/mru.h"
 #include "ui/resource.h"
@@ -94,7 +93,7 @@ private:
     void UpdateMRUList();
     void UpdateServerPort();
     void InitSessionTypesCombo();
-    void UpdateCurrentConfig(const proto::ClientConfig& client_config);
+    void UpdateCurrentComputer(const proto::Computer& computer);
     void UpdateCurrentSessionType(proto::auth::SessionType session_type);
     void StopHostMode();
     void CopySelectedIp();
@@ -107,7 +106,7 @@ private:
 
     std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
-    proto::ClientConfig current_config_;
+    proto::Computer current_computer_;
     MRU mru_;
 
     DISALLOW_COPY_AND_ASSIGN(MainDialog);

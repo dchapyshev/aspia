@@ -9,11 +9,11 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "client_config.proto";
+import "computer.proto";
 
 package aspia.proto;
 
 message MRU
 {
-    repeated ClientConfig client_config = 1;
+    repeated Computer computer = 1;
 }

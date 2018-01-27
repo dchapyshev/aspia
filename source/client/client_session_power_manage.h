@@ -18,7 +18,7 @@ class ClientSessionPowerManage :
     private Thread::Delegate
 {
 public:
-    ClientSessionPowerManage(const proto::ClientConfig& config,
+    ClientSessionPowerManage(const proto::Computer& computer,
                              std::shared_ptr<NetworkChannelProxy> channel_proxy);
     ~ClientSessionPowerManage();
 

@@ -9,17 +9,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "client_config.proto";
+import "computer.proto";
 
 package aspia.proto;
-
-message Computer
-{
-    ClientConfig client_config = 1;
-
-    string name = 2;
-    string comment = 3;
-}
 
 message ComputerGroup
 {
