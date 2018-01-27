@@ -55,7 +55,7 @@ private:
     ScopedDeviceInfo device_info_;
     mutable DWORD device_index_ = 0;
     mutable Device device_;
-    mutable uint8_t device_number_;
+    mutable uint8_t device_number_ = 0;
     mutable std::unique_ptr<DriveIdentifyData> id_data_;
     mutable DISK_GEOMETRY geometry_;
 
