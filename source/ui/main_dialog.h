@@ -24,7 +24,8 @@ namespace aspia {
 
 class MainDialog :
     public CDialogImpl<MainDialog>,
-    public TrayIcon<MainDialog>
+    public TrayIcon<MainDialog>,
+    public MessageLoop::Dispatcher
 {
 public:
     enum { IDD = IDD_MAIN };
@@ -33,6 +34,9 @@ public:
     ~MainDialog() = default;
 
 private:
+    // MessageLoop::Dispatcher implementation.
+    bool Dispatch(const NativeEvent& event) override;
+
     BEGIN_MSG_MAP(MainDialog)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)

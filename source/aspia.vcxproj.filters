@@ -1305,9 +1305,6 @@
     <ClInclude Include="ui\base\splitter.h">
       <Filter>ui\base</Filter>
     </ClInclude>
-    <ClInclude Include="base\message_loop\message_dispatcher.h">
-      <Filter>base\message_loop</Filter>
-    </ClInclude>
     <ClInclude Include="base\files\base_paths.h">
       <Filter>base\files</Filter>
     </ClInclude>

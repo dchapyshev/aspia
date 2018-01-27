@@ -23,6 +23,17 @@
 
 namespace aspia {
 
+bool MainDialog::Dispatch(const NativeEvent& event)
+{
+    if (!IsDialogMessageW(const_cast<MSG*>(&event)))
+    {
+        TranslateMessage(&event);
+        DispatchMessageW(&event);
+    }
+
+    return true;
+}
+
 void MainDialog::InitIpList()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));

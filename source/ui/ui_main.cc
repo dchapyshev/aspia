@@ -9,7 +9,6 @@
 #include "ui/main_dialog.h"
 #include "ui/address_book_window.h"
 #include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_dispatcher.h"
 #include "base/scoped_com_initializer.h"
 
 #include <atlbase.h>
@@ -60,8 +59,7 @@ void RunUIMain(UI ui)
             main_dialog.UpdateWindow();
 
             MessageLoopForUI message_loop;
-            MessageDispatcherForDialog dispatcher(main_dialog);
-            message_loop.Run(&dispatcher);
+            message_loop.Run(&main_dialog);
         }
     }
     else
