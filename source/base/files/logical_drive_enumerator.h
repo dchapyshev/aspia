@@ -47,7 +47,7 @@ public:
     private:
         friend class LogicalDriveEnumerator;
 
-        DriveInfo(const std::experimental::filesystem::path& path);
+        explicit DriveInfo(const std::experimental::filesystem::path& path);
 
         std::experimental::filesystem::path path_;
     };

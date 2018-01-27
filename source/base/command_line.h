@@ -28,7 +28,7 @@ public:
     explicit CommandLine(NoProgram no_program);
 
     // Construct a new command line with |program| as argv[0].
-    CommandLine(const std::experimental::filesystem::path& program);
+    explicit CommandLine(const std::experimental::filesystem::path& program);
 
     // Construct a new command line from an argument list.
     CommandLine(int argc, const CharType* const* argv);

@@ -34,7 +34,7 @@ public:
                                std::shared_ptr<ReportCreatorProxy> report_creater) = 0;
     };
 
-    SystemInfoWindow(Delegate* delegate);
+    explicit SystemInfoWindow(Delegate* delegate);
     ~SystemInfoWindow();
 
 private:

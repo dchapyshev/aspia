@@ -17,7 +17,7 @@ class CPUID
 {
 public:
     CPUID() = default;
-    CPUID(int leaf) { get(leaf); }
+    explicit CPUID(int leaf) { get(leaf); }
     CPUID(int leaf, int subleaf) { get(leaf, subleaf); }
     virtual ~CPUID() = default;
 

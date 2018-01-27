@@ -15,7 +15,7 @@ namespace aspia {
 class ScopedProcessPrivilege
 {
 public:
-    ScopedProcessPrivilege(const WCHAR* name);
+    explicit ScopedProcessPrivilege(const WCHAR* name);
     ~ScopedProcessPrivilege();
 
     bool IsSuccessed() const { return is_enabled_; }

@@ -39,7 +39,7 @@ public:
     class IpAddressEnumerator
     {
     public:
-        IpAddressEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit IpAddressEnumerator(const NetworkAdapterEnumerator& adapter);
 
         bool IsAtEnd() const { return address_ == nullptr; }
         void Advance();
@@ -56,7 +56,7 @@ public:
     class GatewayEnumerator
     {
     public:
-        GatewayEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit GatewayEnumerator(const NetworkAdapterEnumerator& adapter);
 
         bool IsAtEnd() const { return address_ == nullptr; }
         void Advance();
@@ -71,7 +71,7 @@ public:
     class DhcpEnumerator
     {
     public:
-        DhcpEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit DhcpEnumerator(const NetworkAdapterEnumerator& adapter);
 
         bool IsAtEnd() const { return address_ == nullptr; }
         void Advance();
@@ -86,7 +86,7 @@ public:
     class DnsEnumerator
     {
     public:
-        DnsEnumerator(const NetworkAdapterEnumerator& adapter);
+        explicit DnsEnumerator(const NetworkAdapterEnumerator& adapter);
 
         bool IsAtEnd() const { return address_ == nullptr; }
         void Advance();

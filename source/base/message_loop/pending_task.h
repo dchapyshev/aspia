@@ -23,7 +23,7 @@ public:
     using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
     using TimeDelta = std::chrono::milliseconds;
 
-    PendingTask(Callback callback);
+    explicit PendingTask(Callback callback);
     PendingTask(Callback callback, const TimePoint& delayed_run_time);
     ~PendingTask() = default;
 

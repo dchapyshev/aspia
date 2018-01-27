@@ -20,7 +20,7 @@ class ServiceEnumerator
 public:
     enum class Type { SERVICES = 0, DRIVERS = 1 };
 
-    ServiceEnumerator(Type type);
+    explicit ServiceEnumerator(Type type);
     ~ServiceEnumerator() = default;
 
     bool IsAtEnd() const;
