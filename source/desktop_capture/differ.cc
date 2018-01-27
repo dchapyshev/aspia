@@ -17,7 +17,7 @@ constexpr int kBytesPerPixel = 4;
 constexpr int kBlockSize = 16;
 constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
-INLINE uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
     for (int y = 0; y < kBlockSize; ++y)
     {
@@ -39,7 +39,7 @@ INLINE uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int
 // Note that if we force the capturer to always return images whose width and
 // height are multiples of kBlockSize, then this will never be called.
 //
-INLINE uint8_t DiffPartialBlock(const uint8_t* prev_image,
+uint8_t DiffPartialBlock(const uint8_t* prev_image,
                                 const uint8_t* curr_image,
                                 int bytes_per_row,
                                 int bytes_per_block,

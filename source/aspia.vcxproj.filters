@@ -923,6 +923,12 @@
     <ClCompile Include="base\threading\thread.cc">
       <Filter>base\threading</Filter>
     </ClCompile>
+    <ClCompile Include="codec\video_helpers.cc">
+      <Filter>codec</Filter>
+    </ClCompile>
+    <ClCompile Include="desktop_capture\diff_block_sse2.cc">
+      <Filter>desktop_capture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">

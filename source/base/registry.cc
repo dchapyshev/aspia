@@ -20,7 +20,7 @@ constexpr DWORD MAX_REGISTRY_NAME_SIZE = 16384;
 // Registry values are read as BYTE* but can have wchar_t* data whose last
 // wchar_t is truncated. This function converts the reported |byte_size| to
 // a size in wchar_t that can store a truncated wchar_t if necessary.
-INLINE DWORD to_wchar_size(DWORD byte_size)
+DWORD to_wchar_size(DWORD byte_size)
 {
     return (byte_size + sizeof(WCHAR) - 1) / sizeof(WCHAR);
 }

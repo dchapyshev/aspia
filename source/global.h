@@ -28,6 +28,4 @@
 #undef max
 #endif // max
 
-#define INLINE   __forceinline
-
 #endif // _ASPIA_GLOBAL_H

@@ -192,6 +192,7 @@
     <ClCompile Include="codec\video_decoder_zlib.cc" />
     <ClCompile Include="codec\video_encoder_vpx.cc" />
     <ClCompile Include="codec\video_encoder_zlib.cc" />
+    <ClCompile Include="codec\video_helpers.cc" />
     <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="crypto\encryptor.cc" />
     <ClCompile Include="crypto\secure_memory.cc" />
@@ -205,6 +206,7 @@
     <ClCompile Include="desktop_capture\desktop_geometry.cc" />
     <ClCompile Include="desktop_capture\desktop_region.cc" />
     <ClCompile Include="desktop_capture\differ.cc" />
+    <ClCompile Include="desktop_capture\diff_block_sse2.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor.cc" />
     <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
     <ClCompile Include="desktop_capture\pixel_format.cc" />
