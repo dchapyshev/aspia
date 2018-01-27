@@ -9,6 +9,7 @@
 #define _ASPIA_UI__ADDRESS_BOOK_WINDOW_H
 
 #include "base/message_loop/message_loop.h"
+#include "client/client_pool.h"
 #include "proto/address_book.pb.h"
 #include "ui/base/splitter.h"
 #include "ui/resource.h"
@@ -47,7 +48,9 @@ private:
 
         NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
 
+        NOTIFY_HANDLER(kComputerListCtrl, NM_DBLCLK, OnComputerListDoubleClick)
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
+        NOTIFY_HANDLER(kGroupTreeCtrl, TVN_SELCHANGED, OnGroupSelected)
         NOTIFY_HANDLER(kGroupTreeCtrl, NM_RCLICK, OnGroupTreeRightClick)
 
         COMMAND_ID_HANDLER(ID_OPEN, OnOpenButton)
@@ -66,7 +69,7 @@ private:
         COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION, OnSessionButton)
         COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION, OnSessionButton)
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION, OnSessionButton)
-        COMMAND_ID_HANDLER(ID_POWER_SESSION, OnSessionButton)
+        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION, OnSessionButton)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -76,7 +79,9 @@ private:
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
     LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnComputerListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnGroupSelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnOpenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -102,6 +107,7 @@ private:
     bool OpenAddressBook();
     bool SaveAddressBook();
     bool CloseAddressBook();
+    void Connect(const proto::ClientConfig& client_config);
 
     CIcon small_icon_;
     CIcon big_icon_;
@@ -121,6 +127,8 @@ private:
     std::unique_ptr<proto::AddressBook> address_book_;
     std::experimental::filesystem::path address_book_path_;
     bool address_book_changed_ = false;
+
+    std::unique_ptr<ClientPool> client_pool_;
 };
 
 } // namespace aspia

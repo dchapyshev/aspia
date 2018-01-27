@@ -192,7 +192,7 @@ LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
             string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
             break;
 
-        case ID_POWER_SESSION:
+        case ID_POWER_MANAGE_SESSION:
             string_id = IDS_SESSION_TYPE_POWER_MANAGE;
             break;
 
@@ -202,6 +202,52 @@ LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
 
     AtlLoadString(string_id, header->szText, _countof(header->szText));
     return TRUE;
+}
+
+LRESULT AddressBookWindow::OnComputerListDoubleClick(
+    int /*control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
+{
+    int item_index = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
+    if (item_index == -1)
+        return 0;
+
+    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
+        computer_list_ctrl_.GetItemData(item_index));
+
+    if (!computer)
+        return 0;
+
+    proto::auth::SessionType session_type;
+
+    if (toolbar_.IsButtonChecked(ID_DESKTOP_MANAGE_SESSION_TB))
+    {
+        session_type = proto::auth::SESSION_TYPE_DESKTOP_MANAGE;
+    }
+    else if (toolbar_.IsButtonChecked(ID_DESKTOP_VIEW_SESSION_TB))
+    {
+        session_type = proto::auth::SESSION_TYPE_DESKTOP_VIEW;
+    }
+    else if (toolbar_.IsButtonChecked(ID_FILE_TRANSFER_SESSION_TB))
+    {
+        session_type = proto::auth::SESSION_TYPE_FILE_TRANSFER;
+    }
+    else if (toolbar_.IsButtonChecked(ID_SYSTEM_INFO_SESSION_TB))
+    {
+        session_type = proto::auth::SESSION_TYPE_SYSTEM_INFO;
+    }
+    else if (toolbar_.IsButtonChecked(ID_POWER_MANAGE_SESSION_TB))
+    {
+        session_type = proto::auth::SESSION_TYPE_POWER_MANAGE;
+    }
+    else
+    {
+        return 0;
+    }
+
+    computer->mutable_client_config()->set_session_type(session_type);
+    Connect(computer->client_config());
+
+    return 0;
 }
 
 LRESULT AddressBookWindow::OnComputerListRightClick(
@@ -221,6 +267,23 @@ LRESULT AddressBookWindow::OnComputerListRightClick(
 
     CMenuHandle popup_menu(menu.GetSubMenu(0));
     popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
+
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    computer_list_ctrl_.DeleteAllItems();
+
+    LPNMTREEVIEWW header = reinterpret_cast<LPNMTREEVIEWW>(hdr);
+
+    proto::ComputerGroup* group = reinterpret_cast<proto::ComputerGroup*>(
+        group_tree_ctrl_.GetItemData(header->itemNew.hItem));
+
+    if (!group)
+        AddChildComputers(address_book_->mutable_root_group());
+    else
+        AddChildComputers(group);
 
     return 0;
 }
@@ -310,7 +373,29 @@ LRESULT AddressBookWindow::OnNewButton(
 LRESULT AddressBookWindow::OnAddComputerButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    ComputerDialog().DoModal();
+    HTREEITEM parent_item = group_tree_ctrl_.GetSelectedItem();
+    if (!parent_item)
+        return 0;
+
+    ComputerDialog dialog;
+
+    if (dialog.DoModal() == IDOK)
+    {
+        proto::ComputerGroup* parent_group =
+            reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
+
+        proto::Computer* computer;
+
+        if (!parent_group)
+            computer = address_book_->mutable_root_group()->add_computer();
+        else
+            computer = parent_group->add_computer();
+
+        computer->CopyFrom(dialog.GetComputer());
+
+        SetAddressBookChanged(true);
+    }
+
     return 0;
 }
 
@@ -355,6 +440,34 @@ LRESULT AddressBookWindow::OnAddGroupButton(
 LRESULT AddressBookWindow::OnEditComputerButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
+    int item_index = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
+    if (item_index == -1)
+        return 0;
+
+    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
+        computer_list_ctrl_.GetItemData(item_index));
+
+    if (!computer)
+        return 0;
+
+    ComputerDialog dialog(*computer);
+
+    if (dialog.DoModal() == IDOK)
+    {
+        computer->CopyFrom(dialog.GetComputer());
+
+        computer_list_ctrl_.SetItemText(item_index, 0,
+            UNICODEfromUTF8(computer->name()).c_str());
+
+        computer_list_ctrl_.SetItemText(item_index, 1,
+            UNICODEfromUTF8(computer->client_config().address()).c_str());
+
+        computer_list_ctrl_.SetItemText(item_index, 2,
+            std::to_wstring(computer->client_config().port()).c_str());
+
+        SetAddressBookChanged(true);
+    }
+
     return 0;
 }
 
@@ -386,6 +499,47 @@ LRESULT AddressBookWindow::OnEditGroupButton(
 LRESULT AddressBookWindow::OnDeleteComputerButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
+    int item_index = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
+    if (item_index == -1)
+        return 0;
+
+    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
+        computer_list_ctrl_.GetItemData(item_index));
+
+    if (!computer)
+        return 0;
+
+    CString title;
+    title.LoadStringW(IDS_CONFIRMATION);
+
+    CString message;
+    message.Format(IDS_COMPUTER_DELETE_CONFIRMATION, UNICODEfromUTF8(computer->name()).c_str());
+
+    if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
+    {
+        HTREEITEM parent_group_item = group_tree_ctrl_.GetSelectedItem();
+        if (!parent_group_item)
+            return 0;
+
+        proto::ComputerGroup* parent_group = reinterpret_cast<proto::ComputerGroup*>(
+            group_tree_ctrl_.GetItemData(parent_group_item));
+        if (!parent_group)
+            return 0;
+
+        computer_list_ctrl_.DeleteItem(item_index);
+
+        for (int i = 0; i < parent_group->computer_size(); ++i)
+        {
+            if (parent_group->mutable_computer(i) == computer)
+            {
+                parent_group->mutable_computer()->DeleteSubrange(i, 1);
+                break;
+            }
+        }
+
+        SetAddressBookChanged(true);
+    }
+
     return 0;
 }
 
@@ -398,6 +552,8 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
 
     proto::ComputerGroup* selected_group =
         reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(selected_item));
+    if (!selected_group)
+        return 0;
 
     CString title;
     title.LoadStringW(IDS_CONFIRMATION);
@@ -415,6 +571,8 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
 
         proto::ComputerGroup* parent_group =
             reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
+        if (!parent_group)
+            parent_group = address_book_->mutable_root_group();
 
         for (int i = 0; i < parent_group->group_size(); ++i)
         {
@@ -432,8 +590,50 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
 }
 
 LRESULT AddressBookWindow::OnSessionButton(
-    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+    WORD /* notify_code */, WORD control_id, HWND /* control */, BOOL& /* handled */)
 {
+    int item_index = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
+    if (item_index == -1)
+        return 0;
+
+    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
+        computer_list_ctrl_.GetItemData(item_index));
+
+    if (!computer)
+        return 0;
+
+    proto::auth::SessionType session_type;
+
+    switch (control_id)
+    {
+        case ID_DESKTOP_MANAGE_SESSION:
+            session_type = proto::auth::SESSION_TYPE_DESKTOP_MANAGE;
+            break;
+
+        case ID_DESKTOP_VIEW_SESSION:
+            session_type = proto::auth::SESSION_TYPE_DESKTOP_VIEW;
+            break;
+
+        case ID_FILE_TRANSFER_SESSION:
+            session_type = proto::auth::SESSION_TYPE_FILE_TRANSFER;
+            break;
+
+        case ID_SYSTEM_INFO_SESSION:
+            session_type = proto::auth::SESSION_TYPE_SYSTEM_INFO;
+            break;
+
+        case ID_POWER_MANAGE_SESSION:
+            session_type = proto::auth::SESSION_TYPE_POWER_MANAGE;
+            break;
+
+        default:
+            return 0;
+    }
+
+    computer->mutable_client_config()->set_session_type(session_type);
+
+    Connect(computer->client_config());
+
     return 0;
 }
 
@@ -450,18 +650,18 @@ void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_NEW,                    TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  1, ID_OPEN,                   TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  2, ID_SAVE,                   TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        { -1, 0,                         TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
-        {  3, ID_DESKTOP_MANAGE_SESSION, TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  4, ID_DESKTOP_VIEW_SESSION,   TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  5, ID_FILE_TRANSFER_SESSION,  TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  6, ID_SYSTEM_INFO_SESSION,    TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  7, ID_POWER_SESSION,          TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        { -1, 0,                         TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
-        {  8, ID_ABOUT,                  TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  9, ID_EXIT,                   TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        {  0, ID_NEW,                       TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        {  1, ID_OPEN,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        {  2, ID_SAVE,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        { -1, 0,                            TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
+        {  3, ID_DESKTOP_MANAGE_SESSION_TB, TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
+        {  4, ID_DESKTOP_VIEW_SESSION_TB,   TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
+        {  5, ID_FILE_TRANSFER_SESSION_TB,  TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
+        {  6, ID_SYSTEM_INFO_SESSION_TB,    TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
+        {  7, ID_POWER_MANAGE_SESSION_TB,   TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
+        { -1, 0,                            TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
+        {  8, ID_ABOUT,                     TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        {  9, ID_EXIT,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
     };
 
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
@@ -495,7 +695,7 @@ void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
         add_icon(IDI_EXIT);
     }
 
-    toolbar_.CheckButton(ID_DESKTOP_MANAGE_SESSION, TRUE);
+    toolbar_.CheckButton(ID_DESKTOP_MANAGE_SESSION_TB, TRUE);
 }
 
 void AddressBookWindow::InitComputerList(const CSize& small_icon_size)
@@ -807,6 +1007,14 @@ bool AddressBookWindow::CloseAddressBook()
     SetAddressBookChanged(false);
 
     return true;
+}
+
+void AddressBookWindow::Connect(const proto::ClientConfig& client_config)
+{
+    if (!client_pool_)
+        client_pool_ = std::make_unique<ClientPool>(MessageLoopProxy::Current());
+
+    client_pool_->Connect(*this, client_config);
 }
 
 } // namespace aspia

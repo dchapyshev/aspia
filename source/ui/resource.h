@@ -201,13 +201,18 @@
 #define ID_DESKTOP_VIEW_SESSION                    530
 #define ID_FILE_TRANSFER_SESSION                   531
 #define ID_SYSTEM_INFO_SESSION                     532
-#define ID_POWER_SESSION                           533
-#define ID_ADD_COMPUTER                            534
-#define ID_ADD_GROUP                               535
-#define ID_DELETE_GROUP                            536
-#define ID_DELETE_COMPUTER                         537
-#define ID_EDIT_GROUP                              538
-#define ID_EDIT_COMPUTER                           539
+#define ID_POWER_MANAGE_SESSION                    533
+#define ID_DESKTOP_MANAGE_SESSION_TB               534
+#define ID_DESKTOP_VIEW_SESSION_TB                 535
+#define ID_FILE_TRANSFER_SESSION_TB                536
+#define ID_SYSTEM_INFO_SESSION_TB                  537
+#define ID_POWER_MANAGE_SESSION_TB                 538
+#define ID_ADD_COMPUTER                            539
+#define ID_ADD_GROUP                               540
+#define ID_DELETE_GROUP                            541
+#define ID_DELETE_COMPUTER                         542
+#define ID_EDIT_GROUP                              543
+#define ID_EDIT_COMPUTER                           544
 
 #define ID_KEY_FIRST                               600
 #define ID_KEY_CTRL_ESC                            600

@@ -25,7 +25,7 @@ class ComputerDialog :
 public:
     enum { IDD = IDD_COMPUTER };
 
-    ComputerDialog() = default;
+    ComputerDialog();
     ComputerDialog(const proto::Computer& computer);
 
     const proto::Computer& GetComputer() const;
@@ -35,8 +35,12 @@ private:
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
+        COMMAND_ID_HANDLER(IDC_SERVER_DEFAULT_PORT_CHECK, OnDefaultPortClicked)
+        COMMAND_ID_HANDLER(IDC_SETTINGS_BUTTON, OnSettingsButton)
         COMMAND_ID_HANDLER(IDOK, OnOkButton)
         COMMAND_ID_HANDLER(IDCANCEL, OnCancelButton)
+
+        COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
 
         CHAIN_MSG_MAP(CDialogResize<ComputerDialog>)
     END_MSG_MAP()
@@ -54,8 +58,15 @@ private:
 
     LRESULT OnInitDialog(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+
+    LRESULT OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    void UpdateCurrentSessionType(proto::auth::SessionType session_type);
+    void ShowErrorMessage(UINT string_id);
 
     proto::Computer computer_;
 };

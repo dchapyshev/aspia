@@ -415,7 +415,7 @@ BEGIN
         MENUITEM "Desktop View", ID_DESKTOP_VIEW_SESSION
         MENUITEM "File Transfer", ID_FILE_TRANSFER_SESSION
         MENUITEM "System Information", ID_SYSTEM_INFO_SESSION
-        MENUITEM "Power Manage", ID_POWER_SESSION
+        MENUITEM "Power Manage", ID_POWER_MANAGE_SESSION
         MENUITEM SEPARATOR
        
         MENUITEM "&Delete", ID_DELETE_COMPUTER

@@ -11,6 +11,9 @@
 #include <atlmisc.h>
 
 #include "base/strings/unicode.h"
+#include "codec/video_helpers.h"
+#include "network/network_client_tcp.h"
+#include "ui/desktop/settings_dialog.h"
 
 namespace aspia {
 
@@ -21,6 +24,26 @@ constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
 
 } // namespace
+
+ComputerDialog::ComputerDialog()
+{
+    // Load default config.
+    proto::ClientConfig* client_config = computer_.mutable_client_config();
+
+    client_config->set_port(kDefaultHostTcpPort);
+    client_config->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+
+    proto::desktop::Config* desktop_session_config = client_config->mutable_desktop_session();
+
+    desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
+                                      proto::desktop::Config::ENABLE_CURSOR_SHAPE);
+    desktop_session_config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    desktop_session_config->set_update_interval(30);
+    desktop_session_config->set_compress_ratio(6);
+
+    ConvertToVideoPixelFormat(PixelFormat::RGB565(),
+                              desktop_session_config->mutable_pixel_format());
+}
 
 ComputerDialog::ComputerDialog(const proto::Computer& computer)
     : computer_(computer)
@@ -52,17 +75,15 @@ LRESULT ComputerDialog::OnInitDialog(
             UNICODEfromUTF8(computer_.name()).c_str());
     }
 
-    if (client_config.port() == 0)
-    {
-        SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort, FALSE);
-        CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
-    }
-    else
-    {
-        SetDlgItemInt(IDC_SERVER_PORT_EDIT, client_config.port(), FALSE);
+    CEdit port_edit(GetDlgItem(IDC_SERVER_PORT_EDIT));
+    port_edit.SetLimitText(5);
 
-        if (client_config.port() == kDefaultHostTcpPort)
-            CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
+    SetDlgItemInt(IDC_SERVER_PORT_EDIT, client_config.port(), FALSE);
+
+    if (client_config.port() == kDefaultHostTcpPort)
+    {
+        port_edit.SetReadOnly(TRUE);
+        CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
     }
 
     if (!computer_.comment().empty())
@@ -80,6 +101,9 @@ LRESULT ComputerDialog::OnInitDialog(
 
         const int item_index = combobox.AddString(text);
         combobox.SetItemData(item_index, session_type);
+
+        if (session_type == computer_.client_config().session_type())
+            combobox.SetCurSel(item_index);
     };
 
     add_session(IDS_SESSION_TYPE_DESKTOP_MANAGE, proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
@@ -88,8 +112,7 @@ LRESULT ComputerDialog::OnInitDialog(
     add_session(IDS_SESSION_TYPE_SYSTEM_INFO, proto::auth::SESSION_TYPE_SYSTEM_INFO);
     add_session(IDS_SESSION_TYPE_POWER_MANAGE, proto::auth::SESSION_TYPE_POWER_MANAGE);
 
-    // Select first item.
-    combobox.SetCurSel(0);
+    UpdateCurrentSessionType(computer_.client_config().session_type());
 
     return FALSE;
 }
@@ -101,6 +124,51 @@ LRESULT ComputerDialog::OnClose(
     return 0;
 }
 
+LRESULT ComputerDialog::OnDefaultPortClicked(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    CEdit port(GetDlgItem(IDC_SERVER_PORT_EDIT));
+
+    if (IsDlgButtonChecked(IDC_SERVER_DEFAULT_PORT_CHECK) == BST_CHECKED)
+    {
+        SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort);
+        port.SetReadOnly(TRUE);
+    }
+    else
+    {
+        port.SetReadOnly(FALSE);
+    }
+
+    return 0;
+}
+
+LRESULT ComputerDialog::OnSettingsButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    proto::ClientConfig* client_config = computer_.mutable_client_config();
+
+    switch (client_config->session_type())
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            SettingsDialog dialog(client_config->session_type(),
+                                  client_config->desktop_session());
+
+            if (dialog.DoModal(*this) == IDOK)
+            {
+                client_config->mutable_desktop_session()->CopyFrom(dialog.Config());
+            }
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    return 0;
+}
+
 LRESULT ComputerDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
@@ -109,16 +177,12 @@ LRESULT ComputerDialog::OnOkButton(
     int name_length = name_edit.GetWindowTextLengthW();
     if (name_length > kMaxNameLength)
     {
-        CString message;
-        message.LoadStringW(IDS_TOO_LONG_NAME_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_TOO_LONG_NAME_ERROR);
         return 0;
     }
     else if (name_length < kMinNameLength)
     {
-        CString message;
-        message.LoadStringW(IDS_NAME_CANT_BE_EMPTY_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_NAME_CANT_BE_EMPTY_ERROR);
         return 0;
     }
     else
@@ -132,9 +196,7 @@ LRESULT ComputerDialog::OnOkButton(
     CEdit comment_edit(GetDlgItem(IDC_COMMENT_EDIT));
     if (comment_edit.GetWindowTextLengthW() > kMaxCommentLength)
     {
-        CString message;
-        message.LoadStringW(IDS_TOO_LONG_COMMENT_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_TOO_LONG_COMMENT_ERROR);
         return 0;
     }
     else
@@ -142,6 +204,28 @@ LRESULT ComputerDialog::OnOkButton(
         WCHAR comment[kMaxCommentLength + 1];
         comment_edit.GetWindowTextW(comment, _countof(comment));
         computer_.set_comment(UTF8fromUNICODE(comment));
+    }
+
+    WCHAR buffer[128] = { 0 };
+
+    CEdit address_edit(GetDlgItem(IDC_SERVER_ADDRESS_EDIT));
+    address_edit.GetWindowTextW(buffer, _countof(buffer));
+
+    computer_.mutable_client_config()->set_address(UTF8fromUNICODE(buffer));
+
+    if (!NetworkClientTcp::IsValidHostName(computer_.client_config().address()))
+    {
+        ShowErrorMessage(IDS_CONN_STATUS_INVALID_ADDRESS);
+        return 0;
+    }
+
+    computer_.mutable_client_config()->set_port(static_cast<uint32_t>(
+        GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
+
+    if (!NetworkClientTcp::IsValidPort(computer_.client_config().port()))
+    {
+        ShowErrorMessage(IDS_CONN_STATUS_INVALID_PORT);
+        return 0;
     }
 
     EndDialog(IDOK);
@@ -153,6 +237,39 @@ LRESULT ComputerDialog::OnCancelButton(
 {
     EndDialog(IDCANCEL);
     return 0;
+}
+
+LRESULT ComputerDialog::OnSessionTypeChanged(
+    WORD /* notify_code */, WORD /* control_id */, HWND control, BOOL& /* handled */)
+{
+    CComboBox combo(control);
+    UpdateCurrentSessionType(static_cast<proto::auth::SessionType>(
+        combo.GetItemData(combo.GetCurSel())));
+    return 0;
+}
+
+void ComputerDialog::UpdateCurrentSessionType(proto::auth::SessionType session_type)
+{
+    computer_.mutable_client_config()->set_session_type(session_type);
+
+    switch (session_type)
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+            GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(TRUE);
+            break;
+
+        default:
+            GetDlgItem(IDC_SETTINGS_BUTTON).EnableWindow(FALSE);
+            break;
+    }
+}
+
+void ComputerDialog::ShowErrorMessage(UINT string_id)
+{
+    CString message;
+    message.LoadStringW(string_id);
+    MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
 }
 
 } // namespace aspia

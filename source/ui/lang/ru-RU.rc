@@ -415,7 +415,7 @@ BEGIN
         MENUITEM "Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION
         MENUITEM "Передача файлов", ID_FILE_TRANSFER_SESSION
         MENUITEM "Информация о системе", ID_SYSTEM_INFO_SESSION
-        MENUITEM "Управление питанием", ID_POWER_SESSION
+        MENUITEM "Управление питанием", ID_POWER_MANAGE_SESSION
         MENUITEM SEPARATOR
         MENUITEM "&Изменить", ID_EDIT_COMPUTER
         MENUITEM "&Удалить", ID_DELETE_COMPUTER
