@@ -409,9 +409,6 @@
     <ClCompile Include="base\byte_order.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\threading\thread.cc">
-      <Filter>base\threading</Filter>
-    </ClCompile>
     <ClCompile Include="base\threading\thread_checker.cc">
       <Filter>base\threading</Filter>
     </ClCompile>
@@ -923,6 +920,9 @@
     <ClCompile Include="proto\address_book.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
+    <ClCompile Include="base\threading\simple_thread.cc">
+      <Filter>base\threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1343,9 +1343,6 @@
     </ClInclude>
     <ClInclude Include="base\byte_order.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\threading\thread.h">
-      <Filter>base\threading</Filter>
     </ClInclude>
     <ClInclude Include="base\threading\thread_checker.h">
       <Filter>base\threading</Filter>
@@ -1875,6 +1872,9 @@
     </ClInclude>
     <ClInclude Include="proto\address_book.pb.h">
       <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\threading\simple_thread.h">
+      <Filter>base\threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

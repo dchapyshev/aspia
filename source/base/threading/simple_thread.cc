@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/threading/thread.cc
+// FILE:            base/threading/simple_thread.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/threading/thread.h"
+#include "base/threading/simple_thread.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-void Thread::ThreadMain()
+void SimpleThread::ThreadMain()
 {
     running_ = true;
     start_event_.Signal();
@@ -20,18 +20,18 @@ void Thread::ThreadMain()
     running_ = false;
 }
 
-void Thread::StopSoon()
+void SimpleThread::StopSoon()
 {
     state_ = State::STOPPING;
 }
 
-void Thread::Stop()
+void SimpleThread::Stop()
 {
     StopSoon();
     Join();
 }
 
-void Thread::Join()
+void SimpleThread::Join()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
@@ -46,17 +46,17 @@ void Thread::Join()
     state_ = State::STOPPED;
 }
 
-bool Thread::IsStopping() const
+bool SimpleThread::IsStopping() const
 {
     return state_ == State::STOPPING;
 }
 
-bool Thread::IsRunning() const
+bool SimpleThread::IsRunning() const
 {
     return running_;
 }
 
-void Thread::Start()
+void SimpleThread::Start()
 {
     std::lock_guard<std::mutex> lock(thread_lock_);
 
@@ -66,13 +66,13 @@ void Thread::Start()
     state_ = State::STARTING;
 
     start_event_.Reset();
-    thread_ = std::thread(&Thread::ThreadMain, this);
+    thread_ = std::thread(&SimpleThread::ThreadMain, this);
     start_event_.Wait();
 
     state_ = State::STARTED;
 }
 
-bool Thread::SetPriority(Priority priority)
+bool SimpleThread::SetPriority(Priority priority)
 {
     DCHECK(IsRunning());
     return !!SetThreadPriority(thread_.native_handle(),

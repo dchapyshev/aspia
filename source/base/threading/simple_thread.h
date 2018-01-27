@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/threading/thread.h
+// FILE:            base/threading/simple_thread.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__THREADING__THREAD_H
-#define _ASPIA_BASE__THREADING__THREAD_H
+#ifndef _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
+#define _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 
 #include <atomic>
 #include <mutex>
@@ -17,11 +17,11 @@
 
 namespace aspia {
 
-class Thread
+class SimpleThread
 {
 public:
-    Thread() = default;
-    virtual ~Thread() = default;
+    SimpleThread() = default;
+    virtual ~SimpleThread() = default;
 
     // Starts the thread and waits for its real start
     void Start();
@@ -77,9 +77,9 @@ private:
     WaitableEvent start_event_ { WaitableEvent::ResetPolicy::MANUAL,
                                  WaitableEvent::InitialState::NOT_SIGNALED };
 
-    DISALLOW_COPY_AND_ASSIGN(Thread);
+    DISALLOW_COPY_AND_ASSIGN(SimpleThread);
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__THREADING__THREAD_H
+#endif // _ASPIA_BASE__THREADING__SIMPLE_THREAD_H

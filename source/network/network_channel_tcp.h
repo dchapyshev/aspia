@@ -8,7 +8,7 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_TCP_H
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_TCP_H
 
-#include "base/threading/thread.h"
+#include "base/threading/simple_thread.h"
 #include "crypto/encryptor.h"
 #include "network/network_channel.h"
 
@@ -44,7 +44,7 @@ class NetworkClientTcp;
 
 class NetworkChannelTcp
     : public NetworkChannel,
-      private Thread
+      private SimpleThread
 {
 public:
     using MessageSizeType = uint32_t;

@@ -8,8 +8,7 @@
 #ifndef _ASPIA_IPC__PIPE_CHANNEL_H
 #define _ASPIA_IPC__PIPE_CHANNEL_H
 
-#include "base/threading/thread.h"
-#include "base/macros.h"
+#include "base/threading/simple_thread.h"
 #include "protocol/io_buffer.h"
 
 #define ASIO_STANDALONE
@@ -43,7 +42,7 @@ namespace aspia {
 
 class PipeChannelProxy;
 
-class PipeChannel : protected Thread
+class PipeChannel : protected SimpleThread
 {
 public:
     virtual ~PipeChannel();
