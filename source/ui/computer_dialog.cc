@@ -44,22 +44,24 @@ LRESULT ComputerDialog::OnInitDialog(
             UNICODEfromUTF8(computer_.name()).c_str());
     }
 
-    if (!computer_.client_config().address().empty())
+    const proto::ClientConfig& client_config = computer_.client_config();
+
+    if (!client_config.address().empty())
     {
         GetDlgItem(IDC_SERVER_ADDRESS_EDIT).SetWindowTextW(
             UNICODEfromUTF8(computer_.name()).c_str());
     }
 
-    if (computer_.client_config().port() == 0)
+    if (client_config.port() == 0)
     {
         SetDlgItemInt(IDC_SERVER_PORT_EDIT, kDefaultHostTcpPort, FALSE);
         CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
     }
     else
     {
-        SetDlgItemInt(IDC_SERVER_PORT_EDIT, computer_.client_config().port(), FALSE);
+        SetDlgItemInt(IDC_SERVER_PORT_EDIT, client_config.port(), FALSE);
 
-        if (computer_.client_config().port() == kDefaultHostTcpPort)
+        if (client_config.port() == kDefaultHostTcpPort)
             CheckDlgButton(IDC_SERVER_DEFAULT_PORT_CHECK, BST_CHECKED);
     }
 

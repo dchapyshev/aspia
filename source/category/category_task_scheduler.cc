@@ -298,9 +298,11 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
         return false;
     }
 
-    item->mutable_monthly()->set_days_of_month(days_of_month);
-    item->mutable_monthly()->set_months_of_year(months_of_year);
-    item->mutable_monthly()->set_last_day(run_on_last_day_of_month != 0);
+    proto::TaskScheduler::Trigger::Monthly* monthly = item->mutable_monthly();
+
+    monthly->set_days_of_month(days_of_month);
+    monthly->set_months_of_year(months_of_year);
+    monthly->set_last_day(run_on_last_day_of_month != 0);
 
     return true;
 }
@@ -359,10 +361,12 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
         return false;
     }
 
-    item->mutable_monthly_dow()->set_days_of_week(days_of_week);
-    item->mutable_monthly_dow()->set_months_of_year(months_of_year);
-    item->mutable_monthly_dow()->set_last_week(run_on_last_week_of_month != 0);
-    item->mutable_monthly_dow()->set_weeks_of_month(weeks_of_month);
+    proto::TaskScheduler::Trigger::MonthlyDow* monthly_dow = item->mutable_monthly_dow();
+
+    monthly_dow->set_days_of_week(days_of_week);
+    monthly_dow->set_months_of_year(months_of_year);
+    monthly_dow->set_last_week(run_on_last_week_of_month != 0);
+    monthly_dow->set_weeks_of_month(weeks_of_month);
 
     return true;
 }
@@ -1074,25 +1078,34 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV1(const TASK_TRIGGER& trigger)
         case TASK_TIME_TRIGGER_WEEKLY:
         {
             item->set_type(proto::TaskScheduler::Trigger::TYPE_WEEKLY);
-            item->mutable_weekly()->set_days_of_week(trigger.Type.Weekly.rgfDaysOfTheWeek);
-            item->mutable_weekly()->set_weeks_interval(trigger.Type.Weekly.WeeksInterval);
+
+            proto::TaskScheduler::Trigger::Weekly* weekly = item->mutable_weekly();
+
+            weekly->set_days_of_week(trigger.Type.Weekly.rgfDaysOfTheWeek);
+            weekly->set_weeks_interval(trigger.Type.Weekly.WeeksInterval);
         }
         break;
 
         case TASK_TIME_TRIGGER_MONTHLYDATE:
         {
             item->set_type(proto::TaskScheduler::Trigger::TYPE_MONTHLY);
-            item->mutable_monthly()->set_months_of_year(trigger.Type.MonthlyDate.rgfMonths);
-            item->mutable_monthly()->set_days_of_month(trigger.Type.MonthlyDate.rgfDays);
+
+            proto::TaskScheduler::Trigger::Monthly* monthly = item->mutable_monthly();
+
+            monthly->set_months_of_year(trigger.Type.MonthlyDate.rgfMonths);
+            monthly->set_days_of_month(trigger.Type.MonthlyDate.rgfDays);
         }
         break;
 
         case TASK_TIME_TRIGGER_MONTHLYDOW:
         {
             item->set_type(proto::TaskScheduler::Trigger::TYPE_MONTHLYDOW);
-            item->mutable_monthly_dow()->set_months_of_year(trigger.Type.MonthlyDOW.rgfMonths);
-            item->mutable_monthly_dow()->set_weeks_of_month(trigger.Type.MonthlyDOW.wWhichWeek);
-            item->mutable_monthly_dow()->set_days_of_week(trigger.Type.MonthlyDOW.rgfDaysOfTheWeek);
+
+            proto::TaskScheduler::Trigger::MonthlyDow* monthly_dow = item->mutable_monthly_dow();
+
+            monthly_dow->set_months_of_year(trigger.Type.MonthlyDOW.rgfMonths);
+            monthly_dow->set_weeks_of_month(trigger.Type.MonthlyDOW.wWhichWeek);
+            monthly_dow->set_days_of_week(trigger.Type.MonthlyDOW.rgfDaysOfTheWeek);
         }
         break;
 
@@ -1495,19 +1508,20 @@ void AddTrigger(Group& group, const proto::TaskScheduler::Trigger& trigger)
 
     {
         Group repetition_group = group.AddGroup("Repetition");
+        const proto::TaskScheduler::Trigger::Repetition& repetition = trigger.repetition();
 
-        if (trigger.repetition().duration().empty())
+        if (repetition.duration().empty())
             repetition_group.AddParam("Duration", Value::String("<None>"));
         else
-            repetition_group.AddParam("Duration", Value::String(trigger.repetition().duration()));
+            repetition_group.AddParam("Duration", Value::String(repetition.duration()));
 
-        if (trigger.repetition().interval().empty())
+        if (repetition.interval().empty())
             repetition_group.AddParam("Interval", Value::String("<None>"));
         else
-            repetition_group.AddParam("Interval", Value::String(trigger.repetition().interval()));
+            repetition_group.AddParam("Interval", Value::String(repetition.interval()));
 
         repetition_group.AddParam("Stop at Duration End",
-                                  Value::Bool(trigger.repetition().stop_at_duration_end()));
+                                  Value::Bool(repetition.stop_at_duration_end()));
     }
 
     if (!trigger.start_time().empty())
@@ -1527,20 +1541,22 @@ void AddTrigger(Group& group, const proto::TaskScheduler::Trigger& trigger)
     {
         case proto::TaskScheduler::Trigger::TYPE_EVENT:
         {
-            if (trigger.event().delay().empty())
+            const proto::TaskScheduler::Trigger::Event& event = trigger.event();
+
+            if (event.delay().empty())
                 group.AddParam("Delay", Value::String("<None>"));
             else
-                group.AddParam("Delay", Value::String(trigger.event().delay()));
+                group.AddParam("Delay", Value::String(event.delay()));
 
-            if (trigger.event().named_value_size())
+            if (event.named_value_size())
             {
                 Group named_value_group = group.AddGroup("Log / Source");
 
-                for (int i = 0; i < trigger.event().named_value_size(); ++i)
+                for (int i = 0; i < event.named_value_size(); ++i)
                 {
                     named_value_group.AddParam(
-                        trigger.event().named_value(i).name(),
-                        Value::String(trigger.event().named_value(i).value()));
+                        event.named_value(i).name(),
+                        Value::String(event.named_value(i).value()));
                 }
             }
         }
@@ -1558,23 +1574,29 @@ void AddTrigger(Group& group, const proto::TaskScheduler::Trigger& trigger)
 
         case proto::TaskScheduler::Trigger::TYPE_WEEKLY:
         {
-            group.AddParam("Weeks Interval", Value::Number(trigger.weekly().weeks_interval()));
-            AddDaysOfWeek(group, trigger.weekly().days_of_week());
+            const proto::TaskScheduler::Trigger::Weekly& weekly = trigger.weekly();
+
+            group.AddParam("Weeks Interval", Value::Number(weekly.weeks_interval()));
+            AddDaysOfWeek(group, weekly.days_of_week());
         }
         break;
 
         case proto::TaskScheduler::Trigger::TYPE_MONTHLY:
         {
-            AddDaysOfMonth(group, trigger.monthly().days_of_month(), trigger.monthly().last_day());
-            AddMonthsOfYear(group, trigger.monthly().months_of_year());
+            const proto::TaskScheduler::Trigger::Monthly& monthly = trigger.monthly();
+
+            AddDaysOfMonth(group, monthly.days_of_month(), monthly.last_day());
+            AddMonthsOfYear(group, monthly.months_of_year());
         }
         break;
 
         case proto::TaskScheduler::Trigger::TYPE_MONTHLYDOW:
         {
-            AddDaysOfWeek(group, trigger.monthly_dow().days_of_week());
-            AddMonthsOfYear(group, trigger.monthly_dow().months_of_year());
-            AddWeeksOfMonth(group, trigger.monthly_dow().weeks_of_month(), trigger.monthly_dow().last_week());
+            const proto::TaskScheduler::Trigger::MonthlyDow& monthly_dow = trigger.monthly_dow();
+
+            AddDaysOfWeek(group, monthly_dow.days_of_week());
+            AddMonthsOfYear(group, monthly_dow.months_of_year());
+            AddWeeksOfMonth(group, monthly_dow.weeks_of_month(), monthly_dow.last_week());
         }
         break;
 
@@ -1602,32 +1624,37 @@ void AddTrigger(Group& group, const proto::TaskScheduler::Trigger& trigger)
 
         case proto::TaskScheduler::Trigger::TYPE_LOGON:
         {
-            if (trigger.logon().user_id().empty())
+            const proto::TaskScheduler::Trigger::Logon& logon = trigger.logon();
+
+            if (logon.user_id().empty())
                 group.AddParam("User", Value::String("<Any>"));
             else
-                group.AddParam("User", Value::String(trigger.logon().user_id()));
+                group.AddParam("User", Value::String(logon.user_id()));
 
-            if (trigger.logon().delay().empty())
+            if (logon.delay().empty())
                 group.AddParam("Delay", Value::String("<None>"));
             else
-                group.AddParam("Delay", Value::String(trigger.logon().delay()));
+                group.AddParam("Delay", Value::String(logon.delay()));
         }
         break;
 
         case proto::TaskScheduler::Trigger::TYPE_SESSION_STATE_CHANGE:
         {
-            group.AddParam("Change Type", Value::String(
-                SessionChangeTypeToString(trigger.session_state_change().change_type())));
+            const proto::TaskScheduler::Trigger::SessionStateChange& session_state_change =
+                trigger.session_state_change();
 
-            if (trigger.session_state_change().user_id().empty())
+            group.AddParam("Change Type", Value::String(
+                SessionChangeTypeToString(session_state_change.change_type())));
+
+            if (session_state_change.user_id().empty())
                 group.AddParam("User", Value::String("<Any>"));
             else
-                group.AddParam("User", Value::String(trigger.session_state_change().user_id()));
+                group.AddParam("User", Value::String(session_state_change.user_id()));
 
-            if (trigger.session_state_change().delay().empty())
+            if (session_state_change.delay().empty())
                 group.AddParam("Delay", Value::String("<None>"));
             else
-                group.AddParam("Delay", Value::String(trigger.session_state_change().delay()));
+                group.AddParam("Delay", Value::String(session_state_change.delay()));
         }
         break;
     }
