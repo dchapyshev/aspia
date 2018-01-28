@@ -22,7 +22,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
             {
-                PLOG(LS_ERROR) << "GetModuleFileNameW() failed";
+                PLOG(LS_ERROR) << "GetModuleFileNameW failed";
                 return false;
             }
         }
@@ -34,7 +34,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -46,7 +46,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -58,7 +58,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -70,7 +70,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           nullptr, SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -82,7 +82,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
                                           SHGFP_TYPE_CURRENT, buffer);
             if (FAILED(hr))
             {
-                LOG(LS_ERROR) << "SHGetFolderPathW() failed: " << SystemErrorCodeToString(hr);
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
                 return false;
             }
         }
@@ -92,7 +92,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetCurrentDirectoryW(_countof(buffer), buffer))
             {
-                PLOG(LS_ERROR) << "GetCurrentDirectoryW() failed";
+                PLOG(LS_ERROR) << "GetCurrentDirectoryW failed";
                 return false;
             }
         }
@@ -102,7 +102,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
             {
-                PLOG(LS_ERROR) << "GetWindowsDirectoryW() failed";
+                PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
                 return false;
             }
         }
@@ -112,7 +112,7 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         {
             if (!GetSystemDirectoryW(buffer, _countof(buffer)))
             {
-                PLOG(LS_ERROR) << "GetSystemDirectoryW() failed";
+                PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
                 return false;
             }
         }

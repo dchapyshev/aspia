@@ -23,7 +23,7 @@ bool ScopedImpersonator::ImpersonateLoggedOnUser(HANDLE user_token)
 {
     if (!::ImpersonateLoggedOnUser(user_token))
     {
-        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser() failed";
+        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
         return false;
     }
 
@@ -35,7 +35,7 @@ bool ScopedImpersonator::ImpersonateAnonymous()
 {
     if (!ImpersonateAnonymousToken(GetCurrentThread()))
     {
-        PLOG(LS_ERROR) << "ImpersonateAnonymousToken() failed";
+        PLOG(LS_ERROR) << "ImpersonateAnonymousToken failed";
         return false;
     }
 
@@ -47,7 +47,7 @@ bool ScopedImpersonator::ImpersonateNamedPipeClient(HANDLE named_pipe)
 {
     if (!::ImpersonateNamedPipeClient(named_pipe))
     {
-        PLOG(LS_ERROR) << "ImpersonateNamedPipeClient() failed";
+        PLOG(LS_ERROR) << "ImpersonateNamedPipeClient failed";
         return false;
     }
 

@@ -56,7 +56,7 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
     {
         if (!add_clipboard_format_listener_(window_->hwnd()))
         {
-            PLOG(LS_WARNING) << "AddClipboardFormatListener() failed";
+            PLOG(LS_WARNING) << "AddClipboardFormatListener failed";
             return false;
         }
     }
@@ -251,14 +251,14 @@ void Clipboard::InjectClipboardEvent(
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
     if (!text_global)
     {
-        PLOG(LS_WARNING) << "GlobalAlloc() failed";
+        PLOG(LS_WARNING) << "GlobalAlloc failed";
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        PLOG(LS_WARNING) << "GlobalLock() failed";
+        PLOG(LS_WARNING) << "GlobalLock failed";
         GlobalFree(text_global);
         return;
     }

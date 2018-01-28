@@ -112,7 +112,7 @@ std::string CategoryPrinter::Serialize()
     if (!EnumPrintersW(flags, nullptr, 2, printers_info_buffer.get(), bytes_needed,
                        &bytes_needed, &count))
     {
-        DPLOG(LS_ERROR) << "EnumPrintersW() failed";
+        DPLOG(LS_ERROR) << "EnumPrintersW failed";
         return std::string();
     }
 
@@ -121,7 +121,7 @@ std::string CategoryPrinter::Serialize()
 
     if (!GetDefaultPrinterW(&default_printer_name[0], &characters_count))
     {
-        DPLOG(LS_ERROR) << "GetDefaultPrinterW() failed";
+        DPLOG(LS_ERROR) << "GetDefaultPrinterW failed";
     }
 
     PPRINTER_INFO_2W printers_info =

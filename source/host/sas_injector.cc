@@ -129,7 +129,7 @@ void SasInjector::Worker()
     DWORD session_id = get_active_console_session_id_func();
     if (session_id == kInvalidSessionId)
     {
-        PLOG(LS_ERROR) << "WTSGetActiveConsoleSessionId() failed";
+        PLOG(LS_ERROR) << "WTSGetActiveConsoleSessionId failed";
         return;
     }
 

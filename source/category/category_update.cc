@@ -73,7 +73,7 @@ std::string CategoryUpdate::Serialize()
 
         if (ret != ERROR_SUCCESS)
         {
-            DLOG(LS_WARNING) << "MsiEnumProductsW() failed: " << SystemErrorCodeToString(ret);
+            DLOG(LS_WARNING) << "MsiEnumProductsW failed: " << SystemErrorCodeToString(ret);
             break;
         }
 
@@ -92,7 +92,7 @@ std::string CategoryUpdate::Serialize()
 
             if (ret != ERROR_SUCCESS)
             {
-                DLOG(LS_WARNING) << "MsiEnumPatchesW() failed: " << SystemErrorCodeToString(ret);
+                DLOG(LS_WARNING) << "MsiEnumPatchesW failed: " << SystemErrorCodeToString(ret);
                 break;
             }
 

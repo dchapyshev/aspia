@@ -26,7 +26,7 @@ PhysicalDriveEnumerator::PhysicalDriveEnumerator()
     device_info_.Reset(SetupDiGetClassDevsW(&GUID_DEVINTERFACE_DISK, nullptr, nullptr, flags));
     if (!device_info_.IsValid())
     {
-        DPLOG(LS_WARNING) << "SetupDiGetClassDevsW() failed";
+        DPLOG(LS_WARNING) << "SetupDiGetClassDevsW failed";
     }
 }
 
@@ -51,7 +51,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
 
             if (error_code != ERROR_NO_MORE_ITEMS)
             {
-                DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
                                  << SystemErrorCodeToString(error_code);
             }
 
@@ -68,7 +68,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
                                              nullptr) ||
             GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed";
+            DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW failed";
             ++device_index_;
             continue;
         }
@@ -86,7 +86,7 @@ bool PhysicalDriveEnumerator::IsAtEnd() const
                                               &required_size,
                                               nullptr))
         {
-            DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed";
+            DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW failed";
             ++device_index_;
             continue;
         }

@@ -24,7 +24,7 @@ ScopedSasPolice::ScopedSasPolice()
     LONG status = key_.Create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "Create() failed: " << status;
+        LOG(LS_WARNING) << "Create failed: " << status;
         return;
     }
 
@@ -45,7 +45,7 @@ ScopedSasPolice::ScopedSasPolice()
     status = key_.WriteValue(kSoftwareSASGeneration, STATE_SERVICES);
     if (status != ERROR_SUCCESS)
     {
-        LOG(LS_WARNING) << "WriteValue() failed: " << status;
+        LOG(LS_WARNING) << "WriteValue failed: " << status;
         key_.Close();
     }
 }
@@ -57,7 +57,7 @@ ScopedSasPolice::~ScopedSasPolice()
         LONG status = key_.WriteValue(kSoftwareSASGeneration, old_state_);
         if (status != ERROR_SUCCESS)
         {
-            LOG(LS_WARNING) << "WriteValue() failed: " << status;
+            LOG(LS_WARNING) << "WriteValue failed: " << status;
         }
     }
 }

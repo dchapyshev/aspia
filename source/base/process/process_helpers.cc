@@ -38,7 +38,7 @@ bool ElevateProcessInternal(const WCHAR* command_line)
 
     if (!ShellExecuteExW(&sei))
     {
-        DPLOG(LS_WARNING) << "ShellExecuteExW() failed";
+        DPLOG(LS_WARNING) << "ShellExecuteExW failed";
         return false;
     }
 
@@ -63,7 +63,7 @@ bool IsProcessElevated()
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken() failed";
+        PLOG(LS_ERROR) << "OpenProcessToken failed";
         return false;
     }
 
@@ -73,7 +73,7 @@ bool IsProcessElevated()
     if (!GetTokenInformation(token, TokenElevation, &elevation,
                              sizeof(elevation), &size))
     {
-        PLOG(LS_ERROR) << "GetTokenInformation() failed";
+        PLOG(LS_ERROR) << "GetTokenInformation failed";
         return false;
     }
 
@@ -92,7 +92,7 @@ bool IsCallerAdminGroupMember()
                                   0, 0, 0, 0, 0, 0,
                                   admin_group.Recieve()))
     {
-        PLOG(LS_ERROR) << "AllocateAndInitializeSid() failed";
+        PLOG(LS_ERROR) << "AllocateAndInitializeSid failed";
         return false;
     }
 
@@ -100,7 +100,7 @@ bool IsCallerAdminGroupMember()
 
     if (!CheckTokenMembership(nullptr, admin_group, &is_admin))
     {
-        PLOG(LS_ERROR) << "CheckTokenMembership() failed";
+        PLOG(LS_ERROR) << "CheckTokenMembership failed";
         return false;
     }
 
@@ -131,7 +131,7 @@ bool IsRunningAsService()
 
     if (!sc_manager.IsValid())
     {
-        PLOG(LS_ERROR) << "OpenSCManagerW() failed";
+        PLOG(LS_ERROR) << "OpenSCManagerW failed";
         return false;
     }
 
@@ -153,7 +153,7 @@ bool IsRunningAsService()
 
         if (error_code != ERROR_MORE_DATA)
         {
-            LOG(LS_ERROR) << "EnumServicesStatusExW() failed: "
+            LOG(LS_ERROR) << "EnumServicesStatusExW failed: "
                           << SystemErrorCodeToString(error_code);
             return false;
         }
@@ -178,7 +178,7 @@ bool IsRunningAsService()
                                nullptr,
                                nullptr))
     {
-        PLOG(LS_ERROR) << "EnumServicesStatusExW() failed";
+        PLOG(LS_ERROR) << "EnumServicesStatusExW failed";
         return false;
     }
 

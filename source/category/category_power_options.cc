@@ -533,7 +533,7 @@ std::string CategoryPowerOptions::Serialize()
 
                 if (error_code != ERROR_NO_MORE_ITEMS)
                 {
-                    DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo() failed: "
+                    DLOG(LS_WARNING) << "SetupDiEnumDeviceInfo failed: "
                                      << SystemErrorCodeToString(error_code);
                 }
 
@@ -567,7 +567,7 @@ std::string CategoryPowerOptions::Serialize()
                                                   &required_size,
                                                   nullptr))
             {
-                DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW() failed";
+                DPLOG(LS_WARNING) << "SetupDiGetDeviceInterfaceDetailW failed";
                 break;
             }
 

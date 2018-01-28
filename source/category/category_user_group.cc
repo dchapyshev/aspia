@@ -71,7 +71,7 @@ std::string CategoryUserGroup::Serialize()
                                          nullptr);
     if (error_code != NERR_Success)
     {
-        DLOG(LS_WARNING) << "NetUserEnum() failed: " << SystemErrorCodeToString(error_code);
+        DLOG(LS_WARNING) << "NetUserEnum failed: " << SystemErrorCodeToString(error_code);
         return std::string();
     }
 

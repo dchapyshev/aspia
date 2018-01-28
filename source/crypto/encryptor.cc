@@ -25,7 +25,7 @@ Encryptor::Encryptor(Mode mode)
 {
     if (sodium_init() == -1)
     {
-        LOG(LS_ERROR) << "sodium_init() failed";
+        LOG(LS_ERROR) << "sodium_init failed";
         return;
     }
 
@@ -37,7 +37,7 @@ Encryptor::Encryptor(Mode mode)
 
     if (crypto_kx_keypair(public_key->data(), secret_key->data()) != 0)
     {
-        LOG(LS_ERROR) << "crypto_kx_keypair() failed";
+        LOG(LS_ERROR) << "crypto_kx_keypair failed";
         return;
     }
 
@@ -84,7 +84,7 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
                                           reinterpret_cast<const uint8_t*>(
                                               message.public_key().data())) != 0)
         {
-            LOG(LS_ERROR) << "crypto_kx_server_session_keys() failed";
+            LOG(LS_ERROR) << "crypto_kx_server_session_keys failed";
             return false;
         }
     }
@@ -99,7 +99,7 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
                                           reinterpret_cast<const uint8_t*>(
                                               message.public_key().data())) != 0)
         {
-            LOG(LS_ERROR) << "crypto_kx_client_session_keys() failed";
+            LOG(LS_ERROR) << "crypto_kx_client_session_keys failed";
             return false;
         }
     }
@@ -167,7 +167,7 @@ IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
                               encrypt_nonce_->data(),
                               encrypt_key_->data()) != 0)
     {
-        LOG(LS_ERROR) << "crypto_secretbox_easy() failed";
+        LOG(LS_ERROR) << "crypto_secretbox_easy failed";
         return IOBuffer();
     }
 
@@ -193,7 +193,7 @@ IOBuffer Encryptor::Decrypt(const IOBuffer& source_buffer)
                                    decrypt_nonce_->data(),
                                    decrypt_key_->data()) != 0)
     {
-        LOG(LS_ERROR) << "crypto_secretbox_open_easy() failed";
+        LOG(LS_ERROR) << "crypto_secretbox_open_easy failed";
         return IOBuffer();
     }
 

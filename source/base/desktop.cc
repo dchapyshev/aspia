@@ -42,7 +42,7 @@ Desktop Desktop::GetDesktop(const WCHAR* desktop_name)
     HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
     if (!desktop)
     {
-        DPLOG(LS_ERROR) << "OpenDesktopW() failed";
+        DPLOG(LS_ERROR) << "OpenDesktopW failed";
         return Desktop();
     }
 
@@ -57,7 +57,7 @@ Desktop Desktop::GetInputDesktop()
     HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
     if (!desktop)
     {
-        DPLOG(LS_ERROR) << "OpenInputDesktop() failed";
+        DPLOG(LS_ERROR) << "OpenInputDesktop failed";
         return Desktop();
     }
 
@@ -70,7 +70,7 @@ Desktop Desktop::GetThreadDesktop()
     HDESK desktop = ::GetThreadDesktop(GetCurrentThreadId());
     if (!desktop)
     {
-        DPLOG(LS_ERROR) << "GetThreadDesktop() failed";
+        DPLOG(LS_ERROR) << "GetThreadDesktop failed";
         return Desktop();
     }
 
@@ -110,7 +110,7 @@ bool Desktop::SetThreadDesktop() const
 {
     if (!::SetThreadDesktop(desktop_))
     {
-        DPLOG(LS_ERROR) << "SetThreadDesktop() failed";
+        DPLOG(LS_ERROR) << "SetThreadDesktop failed";
         return false;
     }
 
@@ -128,7 +128,7 @@ void Desktop::Close()
     {
         if (!CloseDesktop(desktop_))
         {
-            DPLOG(LS_ERROR) << "CloseDesktop() failed";
+            DPLOG(LS_ERROR) << "CloseDesktop failed";
         }
     }
 

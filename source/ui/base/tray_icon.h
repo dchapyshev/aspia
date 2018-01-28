@@ -34,7 +34,7 @@ public:
         message_id_ = RegisterWindowMessageW(L"WM_TRAYICON");
         if (!message_id_)
         {
-            DPLOG(LS_ERROR) << "RegisterWindowMessageW() failed";
+            DPLOG(LS_ERROR) << "RegisterWindowMessageW failed";
         }
     }
 
@@ -56,7 +56,7 @@ public:
         HRESULT hr = StringCbCopyW(nid_.szTip, sizeof(nid_.szTip), tooltip);
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_ERROR) << "StringCbCopyW failed: " << SystemErrorCodeToString(hr);
             return FALSE;
         }
 
@@ -88,7 +88,7 @@ public:
         HRESULT hr = StringCbCopyW(nid_.szTip, sizeof(nid_.szTip), tooltip);
         if (FAILED(hr))
         {
-            DLOG(ERROR) << "StringCbCopyW() failed: " << SystemErrorCodeToString(hr);
+            DLOG(ERROR) << "StringCbCopyW failed: " << SystemErrorCodeToString(hr);
             return false;
         }
 

@@ -34,7 +34,7 @@ std::string GetWindowVersion()
     DWORD size = GetFileVersionInfoSizeW(kernel32_path.c_str(), &handle);
     if (!size)
     {
-        DPLOG(LS_WARNING) << "GetFileVersionInfoSizeW() failed";
+        DPLOG(LS_WARNING) << "GetFileVersionInfoSizeW failed";
         return std::string();
     }
 
@@ -42,7 +42,7 @@ std::string GetWindowVersion()
 
     if (!GetFileVersionInfoW(kernel32_path.c_str(), handle, size, buffer.get()))
     {
-        DPLOG(LS_WARNING) << "GetFileVersionInfoW() failed";
+        DPLOG(LS_WARNING) << "GetFileVersionInfoW failed";
         return std::string();
     }
 
@@ -57,7 +57,7 @@ std::string GetWindowVersion()
     if (!VerQueryValueW(buffer.get(), L"\\VarFileInfo\\Translation",
                         reinterpret_cast<void**>(&translate), &length))
     {
-        DPLOG(LS_WARNING) << "VerQueryValueW() failed";
+        DPLOG(LS_WARNING) << "VerQueryValueW failed";
         return std::string();
     }
 
@@ -68,7 +68,7 @@ std::string GetWindowVersion()
 
     if (!VerQueryValueW(buffer.get(), subblock.c_str(), reinterpret_cast<void**>(&version), &length))
     {
-        DPLOG(LS_WARNING) << "VerQueryValueW() failed";
+        DPLOG(LS_WARNING) << "VerQueryValueW failed";
         return std::string();
     }
 

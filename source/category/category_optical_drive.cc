@@ -1366,7 +1366,7 @@ std::string CategoryOpticalDrive::Serialize()
 
         if (!device.GetInquiryData(&inquiry_data))
         {
-            DPLOG(LS_WARNING) << "device.Inquiry() failed";
+            DPLOG(LS_WARNING) << "device.Inquiry failed";
             continue;
         }
 

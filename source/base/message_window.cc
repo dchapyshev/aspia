@@ -43,7 +43,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                             reinterpret_cast<WCHAR*>(&WindowProc),
                             &instance))
     {
-        PLOG(LS_ERROR) << "GetModuleHandleExW() failed";
+        PLOG(LS_ERROR) << "GetModuleHandleExW failed";
         return false;
     }
 
@@ -59,7 +59,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                           this);
     if (!hwnd_)
     {
-        PLOG(LS_ERROR) << "CreateWindowW() failed";
+        PLOG(LS_ERROR) << "CreateWindowW failed";
         return false;
     }
 
@@ -139,7 +139,7 @@ bool MessageWindow::RegisterWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        PLOG(LS_ERROR) << "RegisterClassExW() failed";
+        PLOG(LS_ERROR) << "RegisterClassExW failed";
         return false;
     }
 

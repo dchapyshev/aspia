@@ -86,7 +86,7 @@ DesktopFrameDIB::Create(const DesktopSize& size,
                                       0);
     if (!bitmap)
     {
-        LOG(LS_ERROR) << "CreateDIBSection() failed";
+        LOG(LS_ERROR) << "CreateDIBSection failed";
         return nullptr;
     }
 

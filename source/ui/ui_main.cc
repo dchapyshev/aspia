@@ -33,7 +33,7 @@ void RunUIMain(UI ui)
                             reinterpret_cast<WCHAR*>(&RunUIMain),
                             &instance))
     {
-        PLOG(LS_ERROR) << "GetModuleHandleExW() failed";
+        PLOG(LS_ERROR) << "GetModuleHandleExW failed";
         return;
     }
 

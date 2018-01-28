@@ -70,7 +70,7 @@ bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate
                                      timeout,
                                      wait_flags))
     {
-        PLOG(LS_ERROR) << "RegisterWaitForSingleObject() failed";
+        PLOG(LS_ERROR) << "RegisterWaitForSingleObject failed";
         object_ = nullptr;
         wait_object_ = nullptr;
         delegate_ = nullptr;
@@ -87,7 +87,7 @@ bool ObjectWatcher::StopWatching()
 
     if (!UnregisterWaitEx(wait_object_, INVALID_HANDLE_VALUE))
     {
-        PLOG(LS_ERROR) << "UnregisterWaitEx() failed";
+        PLOG(LS_ERROR) << "UnregisterWaitEx failed";
         return false;
     }
 

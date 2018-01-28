@@ -44,7 +44,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_ERROR) << "MakeAbsoluteSD() failed";
+        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -68,7 +68,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        PLOG(LS_ERROR) << "MakeAbsoluteSD() failed";
+        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
         return false;
     }
 
@@ -105,7 +105,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl,
                               group, owner, sacl))
     {
-        LOG(LS_ERROR) << "MakeScopedAbsoluteSd() failed";
+        LOG(LS_ERROR) << "MakeScopedAbsoluteSd failed";
         return false;
     }
 
@@ -127,7 +127,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        LOG(LS_ERROR) << "CoInitializeSecurity() failed: " << result;
+        LOG(LS_ERROR) << "CoInitializeSecurity failed: " << result;
         return false;
     }
 
@@ -173,7 +173,7 @@ ScopedSd ConvertSddlToSd(const std::wstring& sddl)
                                                               raw_sd.Recieve(),
                                                               &length))
     {
-        PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW() failed";
+        PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
         return ScopedSd();
     }
 

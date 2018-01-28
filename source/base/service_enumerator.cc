@@ -48,7 +48,7 @@ ServiceEnumerator::ServiceEnumerator(Type type)
                                &resume_handle,
                                nullptr))
     {
-        PLOG(LS_ERROR) << "EnumServicesStatusExW() failed";
+        PLOG(LS_ERROR) << "EnumServicesStatusExW failed";
         services_buffer_.reset();
         services_count_ = 0;
     }
@@ -109,7 +109,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
                                 &bytes_needed)
             || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            PLOG(LS_ERROR) << "QueryServiceConfigW() failed";
+            PLOG(LS_ERROR) << "QueryServiceConfigW failed";
             return nullptr;
         }
 
@@ -121,7 +121,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
                                  bytes_needed,
                                  &bytes_needed))
         {
-            PLOG(LS_ERROR) << "QueryServiceConfigW() failed";
+            PLOG(LS_ERROR) << "QueryServiceConfigW failed";
             return nullptr;
         }
     }
@@ -162,7 +162,7 @@ std::wstring ServiceEnumerator::GetDescription() const
                              &bytes_needed)
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_WARNING) << "QueryServiceConfig2W() failed";
+        PLOG(LS_WARNING) << "QueryServiceConfig2W failed";
         return std::wstring();
     }
 
@@ -174,7 +174,7 @@ std::wstring ServiceEnumerator::GetDescription() const
                               bytes_needed,
                               &bytes_needed))
     {
-        PLOG(LS_WARNING) << "QueryServiceConfig2W() failed";
+        PLOG(LS_WARNING) << "QueryServiceConfig2W failed";
         return std::wstring();
     }
 

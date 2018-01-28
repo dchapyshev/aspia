@@ -26,7 +26,7 @@ void AddUpdates(proto::WSUS& message)
     HRESULT hr = update_session.CreateInstance(CLSID_UpdateSession);
     if (FAILED(hr))
     {
-        DLOG(LS_ERROR) << "update_session.CreateInstance() failed: "
+        DLOG(LS_ERROR) << "update_session.CreateInstance failed: "
                        << SystemErrorCodeToString(hr);
         return;
     }
@@ -36,7 +36,7 @@ void AddUpdates(proto::WSUS& message)
     hr = update_session->CreateUpdateSearcher(update_searcher.Receive());
     if (FAILED(hr))
     {
-        DLOG(LS_ERROR) << "update_session->CreateUpdateSearcher() failed: "
+        DLOG(LS_ERROR) << "update_session->CreateUpdateSearcher failed: "
                        << SystemErrorCodeToString(hr);
         return;
     }
@@ -46,7 +46,7 @@ void AddUpdates(proto::WSUS& message)
     hr = update_searcher->GetTotalHistoryCount(&count);
     if (FAILED(hr))
     {
-        DLOG(LS_ERROR) << "update_searcher->GetTotalHistoryCount() failed: "
+        DLOG(LS_ERROR) << "update_searcher->GetTotalHistoryCount failed: "
                        << SystemErrorCodeToString(hr);
         return;
     }
@@ -56,7 +56,7 @@ void AddUpdates(proto::WSUS& message)
     hr = update_searcher->QueryHistory(0, count, history.Receive());
     if (FAILED(hr))
     {
-        DLOG(LS_ERROR) << "update_searcher->QueryHistory() failed: "
+        DLOG(LS_ERROR) << "update_searcher->QueryHistory failed: "
                        << SystemErrorCodeToString(hr);
         return;
     }
@@ -64,7 +64,7 @@ void AddUpdates(proto::WSUS& message)
     hr = history->get_Count(&count);
     if (FAILED(hr))
     {
-        DLOG(LS_ERROR) << "history->get_Count() failed: " << SystemErrorCodeToString(hr);
+        DLOG(LS_ERROR) << "history->get_Count failed: " << SystemErrorCodeToString(hr);
         return;
     }
 
@@ -75,7 +75,7 @@ void AddUpdates(proto::WSUS& message)
         hr = history->get_Item(i, entry.Receive());
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "history->get_Item() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_ERROR) << "history->get_Item failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -84,7 +84,7 @@ void AddUpdates(proto::WSUS& message)
         hr = entry->get_Title(description.Receive());
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "entry->get_Title() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_ERROR) << "entry->get_Title failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
@@ -97,7 +97,7 @@ void AddUpdates(proto::WSUS& message)
         hr = entry->get_Date(&date);
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "entry->get_Date() failed: " << SystemErrorCodeToString(hr);
+            DLOG(LS_ERROR) << "entry->get_Date failed: " << SystemErrorCodeToString(hr);
             continue;
         }
 
