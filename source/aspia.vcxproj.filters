@@ -929,6 +929,9 @@
     <ClCompile Include="proto\computer.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
+    <ClCompile Include="base\shortcut.cc">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1881,6 +1884,9 @@
     </ClInclude>
     <ClInclude Include="proto\computer.pb.h">
       <Filter>proto</Filter>
+    </ClInclude>
+    <ClInclude Include="base\shortcut.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

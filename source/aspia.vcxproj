@@ -66,6 +66,7 @@
     <ClCompile Include="base\service.cc" />
     <ClCompile Include="base\service_enumerator.cc" />
     <ClCompile Include="base\service_manager.cc" />
+    <ClCompile Include="base\shortcut.cc" />
     <ClCompile Include="base\strings\string_printf.cc" />
     <ClCompile Include="base\strings\string_util.cc" />
     <ClCompile Include="base\strings\string_util_constants.cc" />
@@ -371,6 +372,7 @@
     <ClInclude Include="base\service.h" />
     <ClInclude Include="base\service_enumerator.h" />
     <ClInclude Include="base\service_manager.h" />
+    <ClInclude Include="base\shortcut.h" />
     <ClInclude Include="base\strings\string_printf.h" />
     <ClInclude Include="base\strings\string_util.h" />
     <ClInclude Include="base\strings\string_util_constants.h" />
