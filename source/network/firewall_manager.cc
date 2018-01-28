@@ -20,7 +20,8 @@ bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app
     firewall_rules_ = nullptr;
 
     // Retrieve INetFwPolicy2
-    HRESULT hr = firewall_policy_.CreateInstance(CLSID_NetFwPolicy2);
+    HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(firewall_policy_.GetAddressOf()));
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "CreateInstance failed: " << SystemErrorCodeToString(hr);
@@ -28,7 +29,7 @@ bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app
         return false;
     }
 
-    hr = firewall_policy_->get_Rules(firewall_rules_.Receive());
+    hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "get_Rules failed: " << SystemErrorCodeToString(hr);
@@ -83,7 +84,8 @@ bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
 
     ScopedComPtr<INetFwRule> rule;
 
-    HRESULT hr = rule.CreateInstance(CLSID_NetFwRule);
+    HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(rule.GetAddressOf()));
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "CoCreateInstance failed: " << SystemErrorCodeToString(hr);
@@ -101,7 +103,7 @@ bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
-    firewall_rules_->Add(rule.get());
+    firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "Add failed: " << SystemErrorCodeToString(hr);
@@ -115,7 +117,7 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
 {
     ScopedComPtr<IUnknown> rules_enum_unknown;
 
-    HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.Receive());
+    HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "get__NewEnum failed: " << SystemErrorCodeToString(hr);
@@ -124,7 +126,7 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
 
     ScopedComPtr<IEnumVARIANT> rules_enum;
 
-    hr = rules_enum.QueryFrom(rules_enum_unknown.get());
+    hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -146,7 +148,7 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
 
         ScopedComPtr<INetFwRule> rule;
 
-        hr = rule.QueryFrom(V_DISPATCH(&rule_var));
+        hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
         {
             DLOG(LS_ERROR) << "QueryInterface failed: " << SystemErrorCodeToString(hr);

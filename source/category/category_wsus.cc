@@ -23,7 +23,8 @@ void AddUpdates(proto::WSUS& message)
 {
     ScopedComPtr<IUpdateSession> update_session;
 
-    HRESULT hr = update_session.CreateInstance(CLSID_UpdateSession);
+    HRESULT hr = CoCreateInstance(CLSID_UpdateSession, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(update_session.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "update_session.CreateInstance failed: "
@@ -33,7 +34,7 @@ void AddUpdates(proto::WSUS& message)
 
     ScopedComPtr<IUpdateSearcher> update_searcher;
 
-    hr = update_session->CreateUpdateSearcher(update_searcher.Receive());
+    hr = update_session->CreateUpdateSearcher(update_searcher.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "update_session->CreateUpdateSearcher failed: "
@@ -53,7 +54,7 @@ void AddUpdates(proto::WSUS& message)
 
     ScopedComPtr<IUpdateHistoryEntryCollection> history;
 
-    hr = update_searcher->QueryHistory(0, count, history.Receive());
+    hr = update_searcher->QueryHistory(0, count, history.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "update_searcher->QueryHistory failed: "
@@ -72,7 +73,7 @@ void AddUpdates(proto::WSUS& message)
     {
         ScopedComPtr<IUpdateHistoryEntry> entry;
 
-        hr = history->get_Item(i, entry.Receive());
+        hr = history->get_Item(i, entry.GetAddressOf());
         if (FAILED(hr))
         {
             DLOG(LS_ERROR) << "history->get_Item failed: " << SystemErrorCodeToString(hr);

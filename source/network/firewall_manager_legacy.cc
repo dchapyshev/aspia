@@ -15,7 +15,8 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
 {
     ScopedComPtr<INetFwMgr> firewall_manager;
 
-    HRESULT hr = firewall_manager.CreateInstance(CLSID_NetFwMgr);
+    HRESULT hr = CoCreateInstance(CLSID_NetFwMgr, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(firewall_manager.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "CreateInstance failed: " << SystemErrorCodeToString(hr);
@@ -23,14 +24,14 @@ bool FirewallManagerLegacy::Init(const std::wstring& app_name, const std::wstrin
     }
 
     ScopedComPtr<INetFwPolicy> firewall_policy;
-    hr = firewall_manager->get_LocalPolicy(firewall_policy.Receive());
+    hr = firewall_manager->get_LocalPolicy(firewall_policy.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "get_LocalPolicy failed: " << SystemErrorCodeToString(hr);
         return false;
     }
 
-    hr = firewall_policy->get_CurrentProfile(current_profile_.Receive());
+    hr = firewall_policy->get_CurrentProfile(current_profile_.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "get_CurrentProfile failed: " << SystemErrorCodeToString(hr);
@@ -55,7 +56,7 @@ FirewallManagerLegacy::GetAuthorizedApplications()
 {
     ScopedComPtr<INetFwAuthorizedApplications> authorized_apps;
 
-    HRESULT hr = current_profile_->get_AuthorizedApplications(authorized_apps.Receive());
+    HRESULT hr = current_profile_->get_AuthorizedApplications(authorized_apps.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "get_AuthorizedApplications failed: " << SystemErrorCodeToString(hr);
@@ -70,7 +71,8 @@ FirewallManagerLegacy::CreateAuthorization(bool allow)
 {
     ScopedComPtr<INetFwAuthorizedApplication> application;
 
-    HRESULT hr = application.CreateInstance(CLSID_NetFwAuthorizedApplication);
+    HRESULT hr = CoCreateInstance(CLSID_NetFwAuthorizedApplication, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(application.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_ERROR) << "CreateInstance failed: " << SystemErrorCodeToString(hr);
@@ -93,11 +95,11 @@ bool FirewallManagerLegacy::GetAllowIncomingConnection(bool& value)
     // this chrome.exe.
     ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(
         GetAuthorizedApplications());
-    if (!authorized_apps.get())
+    if (!authorized_apps.Get())
         return false;
 
     ScopedComPtr<INetFwAuthorizedApplication> application;
-    HRESULT hr = authorized_apps->Item(ScopedBstr(app_path_.c_str()), application.Receive());
+    HRESULT hr = authorized_apps->Item(ScopedBstr(app_path_.c_str()), application.GetAddressOf());
     if (FAILED(hr))
         return false;
 
@@ -115,15 +117,15 @@ bool FirewallManagerLegacy::GetAllowIncomingConnection(bool& value)
 bool FirewallManagerLegacy::SetAllowIncomingConnection(bool allow)
 {
     ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(GetAuthorizedApplications());
-    if (!authorized_apps.get())
+    if (!authorized_apps.Get())
         return false;
 
     // Authorize.
     ScopedComPtr<INetFwAuthorizedApplication> authorization = CreateAuthorization(allow);
-    if (!authorization.get())
+    if (!authorization.Get())
         return false;
 
-    HRESULT hr = authorized_apps->Add(authorization.get());
+    HRESULT hr = authorized_apps->Add(authorization.Get());
     DLOG_IF(LS_ERROR, FAILED(hr)) << "Add failed: " << SystemErrorCodeToString(hr);
 
     return SUCCEEDED(hr);
@@ -132,7 +134,7 @@ bool FirewallManagerLegacy::SetAllowIncomingConnection(bool allow)
 void FirewallManagerLegacy::DeleteRule()
 {
     ScopedComPtr<INetFwAuthorizedApplications> authorized_apps(GetAuthorizedApplications());
-    if (!authorized_apps.get())
+    if (!authorized_apps.Get())
         return;
 
     authorized_apps->Remove(ScopedBstr(app_path_.c_str()));

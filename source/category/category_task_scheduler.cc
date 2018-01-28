@@ -42,7 +42,7 @@ void AddTaskActionV2(proto::TaskScheduler::Task* task, IAction* action)
             ScopedComPtr<IExecAction> exec_action;
 
             hr = action->QueryInterface(IID_IExecAction,
-                                        reinterpret_cast<void**>(exec_action.Receive()));
+                                        reinterpret_cast<void**>(exec_action.GetAddressOf()));
             if (FAILED(hr))
             {
                 DLOG(LS_WARNING) << "action->QueryInterface failed: "
@@ -105,7 +105,7 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     ScopedComPtr<IEventTrigger> event_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IEventTrigger,
-                                         reinterpret_cast<void**>(event_trigger.Receive()));
+                                         reinterpret_cast<void**>(event_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -125,7 +125,7 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
 
     ScopedComPtr<ITaskNamedValueCollection> named_value_collection;
 
-    hr = event_trigger->get_ValueQueries(named_value_collection.Receive());
+    hr = event_trigger->get_ValueQueries(named_value_collection.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "event_trigger->get_ValueQueries failed: "
@@ -147,7 +147,7 @@ bool AddTaskTriggerV2ForEvent(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     {
         ScopedComPtr<ITaskNamedValuePair> named_value_pair;
 
-        hr = named_value_collection->get_Item(i + 1, named_value_pair.Receive());
+        hr = named_value_collection->get_Item(i + 1, named_value_pair.GetAddressOf());
         if (FAILED(hr))
         {
             DLOG(LS_WARNING) << "named_value_collection->get_Item failed: "
@@ -192,7 +192,7 @@ bool AddTaskTriggerV2ForDaily(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     ScopedComPtr<IDailyTrigger> daily_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IDailyTrigger,
-                                         reinterpret_cast<void**>(daily_trigger.Receive()));
+                                         reinterpret_cast<void**>(daily_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -221,7 +221,7 @@ bool AddTaskTriggerV2ForWeekly(ITrigger* trigger, proto::TaskScheduler::Trigger*
     ScopedComPtr<IWeeklyTrigger> weekly_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IWeeklyTrigger,
-                                         reinterpret_cast<void**>(weekly_trigger.Receive()));
+                                         reinterpret_cast<void**>(weekly_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -261,7 +261,7 @@ bool AddTaskTriggerV2ForMonthly(ITrigger* trigger, proto::TaskScheduler::Trigger
     ScopedComPtr<IMonthlyTrigger> monthly_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IMonthlyTrigger,
-                                         reinterpret_cast<void**>(monthly_trigger.Receive()));
+                                         reinterpret_cast<void**>(monthly_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -314,7 +314,7 @@ bool AddTaskTriggerV2ForMonthlyDow(ITrigger* trigger, proto::TaskScheduler::Trig
     ScopedComPtr<IMonthlyDOWTrigger> monthly_dow_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IMonthlyDOWTrigger,
-                                         reinterpret_cast<void**>(monthly_dow_trigger.Receive()));
+                                         reinterpret_cast<void**>(monthly_dow_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -378,7 +378,7 @@ bool AddTaskTriggerV2ForRegistration(ITrigger* trigger, proto::TaskScheduler::Tr
     ScopedComPtr<IRegistrationTrigger> registration_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IRegistrationTrigger,
-                                         reinterpret_cast<void**>(registration_trigger.Receive()));
+                                         reinterpret_cast<void**>(registration_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -407,7 +407,7 @@ bool AddTaskTriggerV2ForBoot(ITrigger* trigger, proto::TaskScheduler::Trigger* i
     ScopedComPtr<IBootTrigger> boot_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_IBootTrigger,
-                                         reinterpret_cast<void**>(boot_trigger.Receive()));
+                                         reinterpret_cast<void**>(boot_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -435,7 +435,7 @@ bool AddTaskTriggerV2ForLogon(ITrigger* trigger, proto::TaskScheduler::Trigger* 
     ScopedComPtr<ILogonTrigger> logon_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_ILogonTrigger,
-                                         reinterpret_cast<void**>(logon_trigger.Receive()));
+                                         reinterpret_cast<void**>(logon_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -473,7 +473,7 @@ bool AddTaskTriggerV2ForSessionStateChange(ITrigger* trigger, proto::TaskSchedul
     ScopedComPtr<ISessionStateChangeTrigger> session_state_change_trigger;
 
     HRESULT hr = trigger->QueryInterface(IID_ISessionStateChangeTrigger,
-        reinterpret_cast<void**>(session_state_change_trigger.Receive()));
+        reinterpret_cast<void**>(session_state_change_trigger.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "trigger->QueryInterface failed: " << SystemErrorCodeToString(hr);
@@ -606,7 +606,7 @@ proto::TaskScheduler::Trigger* AddTaskTriggerV2(ITrigger* trigger)
 
     ScopedComPtr<IRepetitionPattern> repetition_pattern;
 
-    hr = trigger->get_Repetition(repetition_pattern.Receive());
+    hr = trigger->get_Repetition(repetition_pattern.GetAddressOf());
     if (SUCCEEDED(hr))
     {
         ScopedBstr duration;
@@ -783,7 +783,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
 
     ScopedComPtr<ITaskDefinition> task_definition;
 
-    hr = registered_task->get_Definition(task_definition.Receive());
+    hr = registered_task->get_Definition(task_definition.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "registered_task->get_Definition failed: "
@@ -793,7 +793,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
 
     ScopedComPtr<IPrincipal> principal;
 
-    hr = task_definition->get_Principal(principal.Receive());
+    hr = task_definition->get_Principal(principal.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_definition->get_Principal failed: "
@@ -855,7 +855,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
 
     ScopedComPtr<IRegistrationInfo> registration_info;
 
-    hr = task_definition->get_RegistrationInfo(registration_info.Receive());
+    hr = task_definition->get_RegistrationInfo(registration_info.GetAddressOf());
     if (SUCCEEDED(hr))
     {
         ScopedBstr author;
@@ -892,7 +892,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
 
     ScopedComPtr<IActionCollection> action_collection;
 
-    hr = task_definition->get_Actions(action_collection.Receive());
+    hr = task_definition->get_Actions(action_collection.GetAddressOf());
     if (SUCCEEDED(hr))
     {
         LONG action_count = 0;
@@ -904,10 +904,10 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
             {
                 ScopedComPtr<IAction> action;
 
-                hr = action_collection->get_Item(i + 1, action.Receive());
+                hr = action_collection->get_Item(i + 1, action.GetAddressOf());
                 if (SUCCEEDED(hr))
                 {
-                    AddTaskActionV2(item, action.get());
+                    AddTaskActionV2(item, action.Get());
                 }
                 else
                 {
@@ -930,7 +930,7 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
 
     ScopedComPtr<ITriggerCollection> trigger_collection;
 
-    hr = task_definition->get_Triggers(trigger_collection.Receive());
+    hr = task_definition->get_Triggers(trigger_collection.GetAddressOf());
     if (SUCCEEDED(hr))
     {
         LONG trigger_count = 0;
@@ -942,11 +942,11 @@ void AddTaskV2(proto::TaskScheduler& message, IRegisteredTask* registered_task)
             {
                 ScopedComPtr<ITrigger> trigger;
 
-                hr = trigger_collection->get_Item(i + 1, trigger.Receive());
+                hr = trigger_collection->get_Item(i + 1, trigger.GetAddressOf());
                 if (SUCCEEDED(hr))
                 {
                     std::unique_ptr<proto::TaskScheduler::Trigger> trigger_item(
-                        AddTaskTriggerV2(trigger.get()));
+                        AddTaskTriggerV2(trigger.Get()));
 
                     if (trigger_item)
                         item->add_trigger()->CopyFrom(*trigger_item);
@@ -975,7 +975,8 @@ void AddTaskListV2(proto::TaskScheduler& message)
 {
     ScopedComPtr<ITaskService> task_service;
 
-    HRESULT hr = task_service.CreateInstance(CLSID_TaskScheduler);
+    HRESULT hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(task_service.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_service.CreateInstance failed: "
@@ -992,7 +993,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
 
     ScopedComPtr<ITaskFolder> task_folder;
 
-    hr = task_service->GetFolder(_bstr_t(L"\\"), task_folder.Receive());
+    hr = task_service->GetFolder(_bstr_t(L"\\"), task_folder.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_service->GetFolder failed: " << SystemErrorCodeToString(hr);
@@ -1001,7 +1002,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
 
     ScopedComPtr<IRegisteredTaskCollection> task_collection;
 
-    hr = task_folder->GetTasks(0, task_collection.Receive());
+    hr = task_folder->GetTasks(0, task_collection.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_folder->GetTasks failed: " << SystemErrorCodeToString(hr);
@@ -1021,7 +1022,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
     {
         ScopedComPtr<IRegisteredTask> registered_task;
 
-        hr = task_collection->get_Item(_variant_t(i + 1), registered_task.Receive());
+        hr = task_collection->get_Item(_variant_t(i + 1), registered_task.GetAddressOf());
         if (FAILED(hr))
         {
             DLOG(LS_WARNING) << "task_collection->get_Item failed: "
@@ -1029,7 +1030,7 @@ void AddTaskListV2(proto::TaskScheduler& message)
             continue;
         }
 
-        AddTaskV2(message, registered_task.get());
+        AddTaskV2(message, registered_task.Get());
     }
 }
 
@@ -1132,7 +1133,8 @@ void AddTaskListV1(proto::TaskScheduler& message)
 {
     ScopedComPtr<ITaskScheduler> task_scheduler;
 
-    HRESULT hr = task_scheduler.CreateInstance(CLSID_CTaskScheduler);
+    HRESULT hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_ALL,
+                                  IID_PPV_ARGS(task_scheduler.GetAddressOf()));
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_scheduler.CreateInstance failed: "
@@ -1142,7 +1144,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
 
     ScopedComPtr<IEnumWorkItems> enum_work_items;
 
-    hr = task_scheduler->Enum(enum_work_items.Receive());
+    hr = task_scheduler->Enum(enum_work_items.GetAddressOf());
     if (FAILED(hr))
     {
         DLOG(LS_WARNING) << "task_scheduler->Enum failed: " << SystemErrorCodeToString(hr);
@@ -1165,7 +1167,8 @@ void AddTaskListV1(proto::TaskScheduler& message)
 
         ScopedComPtr<ITask> task;
 
-        hr = task_scheduler->Activate(*name, IID_ITask, reinterpret_cast<IUnknown**>(task.Receive()));
+        hr = task_scheduler->Activate(*name, IID_ITask,
+                                      reinterpret_cast<IUnknown**>(task.GetAddressOf()));
         if (FAILED(hr))
         {
             DLOG(LS_WARNING) << "task_scheduler->Activate failed: " << SystemErrorCodeToString(hr);
@@ -1282,7 +1285,7 @@ void AddTaskListV1(proto::TaskScheduler& message)
             {
                 ScopedComPtr<ITaskTrigger> task_trigger;
 
-                hr = task->GetTrigger(i, task_trigger.Receive());
+                hr = task->GetTrigger(i, task_trigger.GetAddressOf());
                 if (FAILED(hr))
                     break;
 

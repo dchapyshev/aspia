@@ -15,13 +15,19 @@
 
 namespace aspia {
 
-// A fairly minimalistic smart class for COM interface pointers.
-// Uses scoped_refptr for the basic smart pointer functionality
-// and adds a few IUnknown specific services.
-template <class Interface, const IID* interface_id = &__uuidof(Interface)>
-class ScopedComPtr : public scoped_refptr<Interface>
+namespace details {
+
+template <typename T>
+class ScopedComPtrRef;
+
+} // details
+
+template <class Interface>
+class ScopedComPtr
 {
 public:
+    using InterfaceType = Interface;
+
     // Utility template to prevent users of ScopedComPtr from calling AddRef
     // and/or Release() without going through the ScopedComPtr class.
     class BlockIUnknownMethods : public Interface
@@ -32,119 +38,94 @@ public:
         STDMETHOD_(ULONG, Release)() = 0;
     };
 
-    typedef scoped_refptr<Interface> ParentClass;
+    ScopedComPtr() {}
 
-    ScopedComPtr() = default;
+    ScopedComPtr(std::nullptr_t) : ptr_(nullptr) {}
 
-    explicit ScopedComPtr(Interface* p) : ParentClass(p) {}
-    ScopedComPtr(const ScopedComPtr<Interface, interface_id>& p) : ParentClass(p) {}
+    explicit ScopedComPtr(Interface* p) : ptr_(p)
+    {
+        if (ptr_)
+            ptr_->AddRef();
+    }
+
+    ScopedComPtr(const ScopedComPtr<Interface>& p) : ptr_(p.Get())
+    {
+        if (ptr_)
+            ptr_->AddRef();
+    }
 
     ~ScopedComPtr()
     {
         // We don't want the smart pointer class to be bigger than the pointer
         // it wraps.
-        static_assert(sizeof(ScopedComPtr<Interface, interface_id>) == sizeof(Interface*),
+        static_assert(sizeof(ScopedComPtr<Interface>) == sizeof(Interface*),
                       "ScopedComPtrSize");
+        Reset();
     }
+
+    Interface* Get() const { return ptr_; }
+
+    explicit operator bool() const { return ptr_ != nullptr; }
 
     // Explicit Release() of the held object.  Useful for reuse of the
     // ScopedComPtr instance.
     // Note that this function equates to IUnknown::Release and should not
     // be confused with e.g. unique_ptr::release().
-    void Release()
+    unsigned long Reset()
     {
-        if (this->ptr_ != nullptr)
+        unsigned long ref = 0;
+        Interface* temp = ptr_;
+        if (temp)
         {
-            this->ptr_->Release();
-            this->ptr_ = nullptr;
+            ptr_ = nullptr;
+            ref = temp->Release();
         }
+        return ref;
     }
 
     // Sets the internal pointer to NULL and returns the held object without
     // releasing the reference.
     Interface* Detach()
     {
-        Interface* p = this->ptr_;
-        this->ptr_ = nullptr;
+        Interface* p = ptr_;
+        ptr_ = nullptr;
         return p;
     }
 
     // Accepts an interface pointer that has already been addref-ed.
     void Attach(Interface* p)
     {
-        DCHECK(!this->ptr_);
-        this->ptr_ = p;
+        DCHECK(!ptr_);
+        ptr_ = p;
     }
 
     // Retrieves the pointer address.
     // Used to receive object pointers as out arguments (and take ownership).
     // The function DCHECKs on the current value being NULL.
-    // Usage: Foo(p.Receive());
-    Interface** Receive()
+    // Usage: Foo(p.GetAddressOf());
+    Interface** GetAddressOf()
     {
-        DCHECK(!this->ptr_) << "Object leak. Pointer must be NULL";
-        return &this->ptr_;
-    }
-
-    // A convenience for whenever a void pointer is needed as an out argument.
-    void** ReceiveVoid()
-    {
-        return reinterpret_cast<void**>(Receive());
+        DCHECK(!ptr_) << "Object leak. Pointer must be NULL";
+        return &ptr_;
     }
 
     template <class Query>
-    HRESULT QueryInterface(Query** p)
+    HRESULT CopyTo(Query** p)
     {
-        DCHECK(p != nullptr);
-        DCHECK(this->ptr_ != nullptr);
+        DCHECK(p);
+        DCHECK(ptr_);
         // IUnknown already has a template version of QueryInterface
         // so the iid parameter is implicit here. The only thing this
         // function adds are the DCHECKs.
-        return this->ptr_->QueryInterface(p);
+        return ptr_->QueryInterface(IID_PPV_ARGS(p));
     }
 
     // QI for times when the IID is not associated with the type.
-    HRESULT QueryInterface(const IID& iid, void** obj)
+    HRESULT CopyTo(const IID& iid, void** obj)
     {
-        DCHECK(obj != nullptr);
-        DCHECK(this->ptr_ != nullptr);
-        return this->ptr_->QueryInterface(iid, obj);
-    }
-
-    // Queries |other| for the interface this object wraps and returns the
-    // error code from the other->QueryInterface operation.
-    HRESULT QueryFrom(IUnknown* object)
-    {
-        DCHECK(object != nullptr);
-        return object->QueryInterface(Receive());
-    }
-
-    // Convenience wrapper around CoCreateInstance
-    HRESULT CreateInstance(const CLSID& clsid, IUnknown* outer = nullptr,
-                           DWORD context = CLSCTX_ALL)
-    {
-        DCHECK(!this->ptr_);
-        HRESULT hr = ::CoCreateInstance(clsid, outer, context, *interface_id,
-                                        reinterpret_cast<void**>(&this->ptr_));
-        return hr;
-    }
-
-    // Checks if the identity of |other| and this object is the same.
-    bool IsSameObject(IUnknown* other)
-    {
-        if (!other && !this->ptr_)
-            return true;
-
-        if (!other || !this->ptr_)
-            return false;
-
-        ScopedComPtr<IUnknown> my_identity;
-        QueryInterface(my_identity.Receive());
-
-        ScopedComPtr<IUnknown> other_identity;
-        other->QueryInterface(other_identity.Receive());
-
-        return my_identity == other_identity;
+        DCHECK(obj);
+        DCHECK(ptr_);
+        return ptr_->QueryInterface(iid, obj);
     }
 
     // Provides direct access to the interface.
@@ -159,19 +140,87 @@ public:
     // and then making the call... but generally that shouldn't be necessary.
     BlockIUnknownMethods* operator->() const
     {
-        DCHECK(this->ptr_ != nullptr);
-        return reinterpret_cast<BlockIUnknownMethods*>(this->ptr_);
+        DCHECK(ptr_);
+        return reinterpret_cast<BlockIUnknownMethods*>(ptr_);
     }
 
-    // Pull in operator=() from the parent class.
-    using scoped_refptr<Interface>::operator=;
-
-    // static methods
-
-    static const IID& iid()
+    ScopedComPtr<Interface>& operator=(std::nullptr_t)
     {
-        return *interface_id;
+        Reset();
+        return *this;
     }
+
+    ScopedComPtr<Interface>& operator=(Interface* rhs)
+    {
+        // AddRef first so that self assignment should work
+        if (rhs)
+            rhs->AddRef();
+        Interface* old_ptr = ptr_;
+        ptr_ = rhs;
+        if (old_ptr)
+            old_ptr->Release();
+        return *this;
+    }
+
+    ScopedComPtr<Interface>& operator=(const ScopedComPtr<Interface>& rhs)
+    {
+        return *this = rhs.ptr_;
+    }
+
+    Interface& operator*() const
+    {
+        DCHECK(ptr_);
+        return *ptr_;
+    }
+
+    bool operator==(const ScopedComPtr<Interface>& rhs) const
+    {
+        return ptr_ == rhs.Get();
+    }
+
+    template <typename U>
+    bool operator==(const ScopedComPtr<U>& rhs) const
+    {
+        return ptr_ == rhs.Get();
+    }
+
+    template <typename U>
+    bool operator==(const U* rhs) const
+    {
+        return ptr_ == rhs;
+    }
+
+    bool operator!=(const ScopedComPtr<Interface>& rhs) const
+    {
+        return ptr_ != rhs.Get();
+    }
+
+    template <typename U>
+    bool operator!=(const ScopedComPtr<U>& rhs) const
+    {
+        return ptr_ != rhs.Get();
+    }
+
+    template <typename U>
+    bool operator!=(const U* rhs) const
+    {
+        return ptr_ != rhs;
+    }
+
+    details::ScopedComPtrRef<ScopedComPtr<Interface>> operator&()
+    {
+        return details::ScopedComPtrRef<ScopedComPtr<Interface>>(this);
+    }
+
+    void Swap(ScopedComPtr<Interface>& r)
+    {
+        Interface* tmp = ptr_;
+        ptr_ = r.ptr_;
+        r.ptr_ = tmp;
+    }
+
+private:
+    Interface* ptr_ = nullptr;
 };
 
 }  // namespace aspia
