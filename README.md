@@ -8,21 +8,51 @@ Remote desktop and system information tool.
 
 Currently supported
 -------------------
-   - Remote desktop management
-   - Remote desktop view
-   - Remote power management
-   - File transfer
-   - System information (for local and remote computers)
-   - Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
-   - Authorization (it is possible to add users with different access rights)
-   - Work in service or application mode
+- Remote desktop management
+- Remote desktop view
+- Remote power management
+- File transfer
+- System information (for local and remote computers)
+    + Hardware
+        * DMI
+        * Central Processor
+        * Memory
+        * Storage (logical drives, optical drives, ATA devices, SMART)
+        * Display (video adapters, monitors)
+        * Power Options
+        * Printers
+        * Windows Devices
+    + Software
+        * Applications
+        * Updates
+        * Services
+        * Drivers
+        * Processes
+        * Licenses
+    + Network
+        * Network Cards
+        * RAS Connections
+        * Open Connections
+        * Shared Resources
+        * Open Files
+        * Routes
+    + Operating System
+        * Operating System (version, architecture, uptime)
+        * Task Scheduler
+        * Users (users, user groups, active sessions)
+        * Environment Variables
+        * Event Logs
+        * Windows Update
+- Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
+- Authorization (it is possible to add users with different access rights)
+- Work in service or application mode
 
 It is planned to implement
 --------------------------
-   - Audio transfer
-   - Address book with encryption and master-password
-   - Authorization with Windows credentials
-   - NAT traversal
+- Audio transfer
+- Address book with encryption and master-password
+- Authorization with Windows credentials
+- NAT traversal
 
 Building
 --------
