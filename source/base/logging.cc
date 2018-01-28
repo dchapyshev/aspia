@@ -129,18 +129,24 @@ bool InitializeLogFileHandle()
     return true;
 }
 
-void CloseFile(FileHandle log)
-{
-    CloseHandle(log);
-}
-
 void CloseLogFileUnlocked()
 {
     if (!g_log_file)
         return;
 
-    CloseFile(g_log_file);
+    LARGE_INTEGER file_size;
+
+    BOOL ret = GetFileSizeEx(g_log_file, &file_size);
+
+    CloseHandle(g_log_file);
     g_log_file = nullptr;
+
+    if (ret && !file_size.QuadPart)
+    {
+        // If the file size was successfully received and nothing was written to the file,
+        // then delete it.
+        DeleteFileW(g_log_file_name.c_str());
+    }
 }
 
 } // namespace
@@ -416,7 +422,7 @@ Win32ErrorLogMessage::~Win32ErrorLogMessage()
     stream() << ": " << SystemErrorCodeToString(err_);
 }
 
-void CloseLogFile()
+void ShutdownLogging()
 {
     CloseLogFileUnlocked();
 }

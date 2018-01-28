@@ -48,5 +48,7 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
         aspia::RunHostMain(command_line);
     }
 
+    aspia::ShutdownLogging();
+
     return 0;
 }
