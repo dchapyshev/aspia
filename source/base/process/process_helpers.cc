@@ -6,22 +6,24 @@
 //
 
 #include "base/process/process_helpers.h"
+#include "base/files/base_paths.h"
 #include "base/version_helpers.h"
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/logging.h"
-#include "base/files/base_paths.h"
 
 #include <shellapi.h>
 #include <memory>
 
 namespace aspia {
 
-bool ElevateProcess()
-{
-    std::experimental::filesystem::path path;
+namespace {
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, path))
+bool ElevateProcessInternal(const WCHAR* command_line)
+{
+    std::experimental::filesystem::path program_path;
+
+    if (!GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
         return false;
 
     SHELLEXECUTEINFOW sei;
@@ -29,10 +31,10 @@ bool ElevateProcess()
 
     sei.cbSize       = sizeof(sei);
     sei.lpVerb       = L"runas";
-    sei.lpFile       = path.c_str();
+    sei.lpFile       = program_path.c_str();
     sei.hwnd         = nullptr;
     sei.nShow        = SW_SHOW;
-    sei.lpParameters = nullptr;
+    sei.lpParameters = command_line;
 
     if (!ShellExecuteExW(&sei))
     {
@@ -41,6 +43,18 @@ bool ElevateProcess()
     }
 
     return true;
+}
+
+} // namespace
+
+bool ElevateProcess(const CommandLine& command_line)
+{
+    return ElevateProcessInternal(command_line.GetCommandLineString().c_str());
+}
+
+bool ElevateProcess()
+{
+    return ElevateProcessInternal(nullptr);
 }
 
 bool IsProcessElevated()

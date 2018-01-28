@@ -8,6 +8,7 @@
 #include "host/host_session_launcher.h"
 #include "host/host_session_launcher_service.h"
 #include "base/process/process_helpers.h"
+#include "base/version_helpers.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
@@ -319,13 +320,22 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
 bool LaunchSystemInfoProcess()
 {
+    CommandLine command_line(CommandLine::NO_PROGRAM);
+
+    command_line.AppendSwitch(kRunModeSwitch, kRunModeSystemInfo);
+
+    if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+    {
+        if (ElevateProcess(command_line))
+            return true;
+    }
+
     std::experimental::filesystem::path program_path;
 
     if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
         return false;
 
-    CommandLine command_line(program_path);
-    command_line.AppendSwitch(kRunModeSwitch, kRunModeSystemInfo);
+    command_line.SetProgram(program_path);
 
     ScopedHandle token;
 

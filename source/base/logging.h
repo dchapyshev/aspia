@@ -645,7 +645,7 @@ private:
 // NOTE: Since the log file is opened as necessary by the action of logging
 //       statements, there's no guarantee that it will stay closed
 //       after this call.
-void CloseLogFile();
+void ShutdownLogging();
 
 // Async signal safe logging mechanism.
 void RawLog(int level, const char* message);

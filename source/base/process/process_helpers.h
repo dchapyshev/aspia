@@ -8,8 +8,11 @@
 #ifndef _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H
 #define _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H
 
+#include "base/command_line.h"
+
 namespace aspia {
 
+bool ElevateProcess(const CommandLine& command_line);
 bool ElevateProcess();
 bool IsProcessElevated();
 
