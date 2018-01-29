@@ -101,8 +101,10 @@ END
 
 IDC_ADDRESS_BOOK_ACCELERATORS ACCELERATORS
 BEGIN
-    VK_F1, ID_ABOUT, VIRTKEY // F1
-    "^N",  ID_NEW  // Ctrl+N
-    "^O",  ID_OPEN // Ctrl+O
-    "^S",  ID_SAVE // Ctrl+S
+    VK_F1, ID_ABOUT, VIRTKEY                 // F1
+    "N",   ID_NEW, CONTROL, VIRTKEY          // Ctrl+N
+    "O",   ID_OPEN, CONTROL, VIRTKEY         // Ctrl+O
+    "S",   ID_SAVE, CONTROL, VIRTKEY         // Ctrl+S
+    "S",   ID_SAVE_AS, CONTROL, ALT, VIRTKEY // Ctrl+Alt+S
+    "W",   ID_CLOSE, CONTROL, VIRTKEY        // Ctrl+W
 END

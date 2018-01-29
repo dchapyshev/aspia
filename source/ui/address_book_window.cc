@@ -68,6 +68,11 @@ LRESULT AddressBookWindow::OnCreate(
 
     main_menu_ = AtlLoadMenu(IDR_ADDRESS_BOOK_MAIN);
 
+    CMenuHandle file_menu(main_menu_.GetSubMenu(0));
+    file_menu.EnableMenuItem(ID_SAVE, MF_BYCOMMAND | MF_DISABLED);
+    file_menu.EnableMenuItem(ID_SAVE_AS, MF_BYCOMMAND | MF_DISABLED);
+    file_menu.EnableMenuItem(ID_CLOSE, MF_BYCOMMAND | MF_DISABLED);
+
     CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
     edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_DISABLED);
     edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
@@ -161,7 +166,7 @@ LRESULT AddressBookWindow::OnClose(
 {
     if (address_book_changed_)
     {
-        if (!SaveAddressBook())
+        if (!SaveAddressBook(address_book_path_))
             return 0;
     }
 
@@ -466,7 +471,15 @@ LRESULT AddressBookWindow::OnSaveButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     if (address_book_changed_)
-        SaveAddressBook();
+        SaveAddressBook(address_book_path_);
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnSaveAsButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    if (address_book_changed_)
+        SaveAddressBook(std::experimental::filesystem::path());
     return 0;
 }
 
@@ -503,6 +516,13 @@ LRESULT AddressBookWindow::OnNewButton(
 
     SetAddressBookChanged(true);
 
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnCloseButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    CloseAddressBook();
     return 0;
 }
 
@@ -1108,15 +1128,21 @@ bool AddressBookWindow::OpenAddressBook()
     group_tree_ctrl_.EnableWindow(TRUE);
     computer_list_ctrl_.EnableWindow(TRUE);
 
+    CMenuHandle file_menu(main_menu_.GetSubMenu(0));
+    file_menu.EnableMenuItem(ID_SAVE_AS, MF_BYCOMMAND | MF_ENABLED);
+    file_menu.EnableMenuItem(ID_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+
     return true;
 }
 
-bool AddressBookWindow::SaveAddressBook()
+bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::path& path)
 {
     if (!address_book_)
         return false;
 
-    if (address_book_path_.empty())
+    std::experimental::filesystem::path address_book_path(path);
+
+    if (address_book_path.empty())
     {
         WCHAR filter[256] = { 0 };
         int length = 0;
@@ -1129,7 +1155,7 @@ bool AddressBookWindow::SaveAddressBook()
         if (dialog.DoModal() == IDCANCEL)
             return false;
 
-        address_book_path_ = dialog.m_szFileName;
+        address_book_path = dialog.m_szFileName;
     }
 
     std::ofstream file;
@@ -1156,6 +1182,7 @@ bool AddressBookWindow::SaveAddressBook()
         return false;
     }
 
+    address_book_path_ = address_book_path;
     SetAddressBookChanged(false);
     return true;
 }
@@ -1175,7 +1202,7 @@ bool AddressBookWindow::CloseAddressBook()
             switch (MessageBoxW(message, title, MB_YESNOCANCEL | MB_ICONQUESTION))
             {
                 case IDYES:
-                    if (!SaveAddressBook())
+                    if (!SaveAddressBook(address_book_path_))
                         return false;
                     break;
 
@@ -1204,8 +1231,11 @@ bool AddressBookWindow::CloseAddressBook()
     toolbar_.EnableButton(ID_DELETE_COMPUTER, FALSE);
     toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
 
-    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
+    CMenuHandle file_menu(main_menu_.GetSubMenu(0));
+    file_menu.EnableMenuItem(ID_SAVE_AS, MF_BYCOMMAND | MF_DISABLED);
+    file_menu.EnableMenuItem(ID_CLOSE, MF_BYCOMMAND | MF_DISABLED);
 
+    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
     edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_DISABLED);
     edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
     edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);

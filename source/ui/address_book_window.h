@@ -57,9 +57,11 @@ private:
 
         COMMAND_ID_HANDLER(ID_OPEN, OnOpenButton)
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
+        COMMAND_ID_HANDLER(ID_SAVE_AS, OnSaveAsButton)
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
         COMMAND_ID_HANDLER(ID_NEW, OnNewButton)
+        COMMAND_ID_HANDLER(ID_CLOSE, OnCloseButton)
         COMMAND_ID_HANDLER(ID_ADD_COMPUTER, OnAddComputerButton)
         COMMAND_ID_HANDLER(ID_ADD_GROUP, OnAddGroupButton)
         COMMAND_ID_HANDLER(ID_EDIT_COMPUTER, OnEditComputerButton)
@@ -98,9 +100,11 @@ private:
 
     LRESULT OnOpenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSaveAsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnNewButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnCloseButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAddComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAddGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnEditComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -118,7 +122,7 @@ private:
     void AddChildComputerGroups(HTREEITEM parent_item, proto::ComputerGroup* parent_computer_group);
     void AddChildComputers(proto::ComputerGroup* parent_computer_group);
     bool OpenAddressBook();
-    bool SaveAddressBook();
+    bool SaveAddressBook(const std::experimental::filesystem::path& path);
     bool CloseAddressBook();
     void Connect(const proto::Computer& computer);
 

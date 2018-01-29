@@ -342,7 +342,7 @@ BEGIN
     END
     POPUP "&Помощь"
     BEGIN
-        MENUITEM "&Онлайн справка...\tF1", ID_HELP
+        MENUITEM "Онлайн &справка...\tF1", ID_HELP
         MENUITEM SEPARATOR
         MENUITEM "&О программе...", ID_ABOUT
     END
@@ -380,37 +380,39 @@ END
 
 IDR_ADDRESS_BOOK_MAIN MENU
 BEGIN
-    POPUP "&File"
+    POPUP "&Файл"
     BEGIN
-        MENUITEM "&New\tCtrl+N", ID_NEW
-        MENUITEM "&Open...\tCtrl+O", ID_OPEN
-        MENUITEM "&Save\tCtrl+S", ID_SAVE
+        MENUITEM "Соз&дать\tCtrl+N", ID_NEW
+        MENUITEM "&Открыть\tCtrl+O", ID_OPEN
+        MENUITEM "&Сохранить\tCtrl+S", ID_SAVE
+        MENUITEM "Сохранить &как...\tCtrl+Alt+S", ID_SAVE_AS
+        MENUITEM "&Закрыть\tCtrl+W", ID_CLOSE
         MENUITEM SEPARATOR
-        MENUITEM "&Exit\tAlt+F4", ID_EXIT
+        MENUITEM "&Выход\tAlt+F4", ID_EXIT
     END
-    POPUP "&Edit"
+    POPUP "&Правка"
     BEGIN
-        MENUITEM "Add Computer Group", ID_ADD_GROUP
-        MENUITEM "Delete Computer Group", ID_DELETE_GROUP
-        MENUITEM "Edit Computer Group", ID_EDIT_GROUP
+        MENUITEM "Добавить группу компьютеров", ID_ADD_GROUP
+        MENUITEM "Удалить группу компьютеров", ID_DELETE_GROUP
+        MENUITEM "Изменить группу компьютеров", ID_EDIT_GROUP
         MENUITEM SEPARATOR
-        MENUITEM "Add Computer", ID_ADD_COMPUTER
-        MENUITEM "Delete Computer", ID_DELETE_COMPUTER
-        MENUITEM "Edit Computer", ID_EDIT_COMPUTER
+        MENUITEM "Добавить компьютер", ID_ADD_COMPUTER
+        MENUITEM "Удалить компьютер", ID_DELETE_COMPUTER
+        MENUITEM "Изменить компьютер", ID_EDIT_COMPUTER
     END
-    POPUP "&Session Type"
+    POPUP "&Тип сессии"
     BEGIN
-        MENUITEM "Desktop &Manage", ID_DESKTOP_MANAGE_SESSION_TB
-        MENUITEM "Desktop &View", ID_DESKTOP_VIEW_SESSION_TB
-        MENUITEM "&File Transfer", ID_FILE_TRANSFER_SESSION_TB
-        MENUITEM "&System Information", ID_SYSTEM_INFO_SESSION_TB
-        MENUITEM "&Power Manage", ID_POWER_MANAGE_SESSION_TB
+        MENUITEM "Управление &рабочим столом", ID_DESKTOP_MANAGE_SESSION_TB
+        MENUITEM "&Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION_TB
+        MENUITEM "Передача &файлов", ID_FILE_TRANSFER_SESSION_TB
+        MENUITEM "&Информация о системе", ID_SYSTEM_INFO_SESSION_TB
+        MENUITEM "Управление &питанием", ID_POWER_MANAGE_SESSION_TB
     END
-    POPUP "&Help"
+    POPUP "&Помощь"
     BEGIN
-        MENUITEM "&Online Help...\tF1", ID_HELP
+        MENUITEM "Онлайн &справка...\tF1", ID_HELP
         MENUITEM SEPARATOR
-        MENUITEM "&About...", ID_ABOUT
+        MENUITEM "&О программе...", ID_ABOUT
     END
 END
 
