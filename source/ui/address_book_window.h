@@ -12,13 +12,10 @@
 #include "client/client_pool.h"
 #include "proto/address_book.pb.h"
 #include "ui/base/splitter.h"
+#include "ui/address_book_toolbar.h"
+#include "ui/computer_group_tree_ctrl.h"
+#include "ui/computer_list_ctrl.h"
 #include "ui/resource.h"
-
-#include <atlbase.h>
-#include <atlapp.h>
-#include <atlwin.h>
-#include <atlctrls.h>
-#include <atlmisc.h>
 
 #include <experimental/filesystem>
 
@@ -45,8 +42,8 @@ private:
         MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-
-        NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnGetDispInfo)
+        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
+        MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
 
         NOTIFY_HANDLER(kComputerListCtrl, NM_DBLCLK, OnComputerListDoubleClick)
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
@@ -54,6 +51,7 @@ private:
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_SELCHANGED, OnGroupSelected)
         NOTIFY_HANDLER(kGroupTreeCtrl, NM_RCLICK, OnGroupTreeRightClick)
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_ITEMEXPANDED, OnGroupTreeItemExpanded)
+        NOTIFY_HANDLER(kGroupTreeCtrl, TVN_BEGINDRAG, OnGroupTreeBeginDrag)
 
         COMMAND_ID_HANDLER(ID_OPEN, OnOpenButton)
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
@@ -89,14 +87,16 @@ private:
     LRESULT OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnGetMinMaxInfo(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
     LRESULT OnClose(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnMouseMove(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
+    LRESULT OnLButtonUp(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
 
-    LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupSelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeItemExpanded(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnGroupTreeBeginDrag(int control_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnOpenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -114,13 +114,8 @@ private:
     LRESULT OnOpenSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSelectSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    void InitToolBar(const CSize& small_icon_size);
-    void InitComputerList(const CSize& small_icon_size);
-    void InitGroupTree(const CSize& small_icon_size);
-
+    bool MoveGroup(HTREEITEM target_item, HTREEITEM source_item);
     void SetAddressBookChanged(bool is_changed);
-    void AddChildComputerGroups(HTREEITEM parent_item, proto::ComputerGroup* parent_computer_group);
-    void AddChildComputers(proto::ComputerGroup* parent_computer_group);
     bool OpenAddressBook();
     bool SaveAddressBook(const std::experimental::filesystem::path& path);
     bool CloseAddressBook();
@@ -135,15 +130,14 @@ private:
     VerticalSplitter splitter_;
     CStatusBarCtrl statusbar_;
 
-    CTreeViewCtrl group_tree_ctrl_;
-    CImageListManaged group_tree_imagelist_;
+    ComputerGroupTreeCtrl group_tree_ctrl_;
+    CImageListManaged group_tree_drag_imagelist_;
+    bool group_tree_dragging_ = false;
     HTREEITEM group_tree_edited_item_ = nullptr;
 
-    CListViewCtrl computer_list_ctrl_;
-    CImageListManaged computer_list_imagelist_;
+    ComputerListCtrl computer_list_ctrl_;
 
-    CToolBarCtrl toolbar_;
-    CImageListManaged toolbar_imagelist_;
+    AddressBookToolbar toolbar_;
 
     std::unique_ptr<proto::AddressBook> address_book_;
     std::experimental::filesystem::path address_book_path_;

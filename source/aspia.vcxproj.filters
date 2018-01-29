@@ -932,6 +932,15 @@
     <ClCompile Include="base\shortcut.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="ui\computer_group_tree_ctrl.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book_toolbar.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\computer_list_ctrl.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1887,6 +1896,15 @@
     </ClInclude>
     <ClInclude Include="base\shortcut.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\computer_group_tree_ctrl.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book_toolbar.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\computer_list_ctrl.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

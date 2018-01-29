@@ -9,6 +9,7 @@
 
 #include <atldlgs.h>
 #include <strsafe.h>
+#include <functional>
 #include <fstream>
 
 #include "base/strings/unicode.h"
@@ -23,9 +24,33 @@ namespace {
 
 const WCHAR kAddressBookFileExtension[] = L"*.aad";
 
-const int kComputerIcon = 0;
-const int kAddressBookIcon = 0;
-const int kComputerGroupIcon = 1;
+bool DeleteChildComputer(proto::ComputerGroup* parent_group, proto::Computer* computer)
+{
+    for (int i = 0; i < parent_group->computer_size(); ++i)
+    {
+        if (parent_group->mutable_computer(i) == computer)
+        {
+            parent_group->mutable_computer()->DeleteSubrange(i, 1);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool DeleteChildGroup(proto::ComputerGroup* parent_group, proto::ComputerGroup* child_group)
+{
+    for (int i = 0; i < parent_group->group_size(); ++i)
+    {
+        if (parent_group->mutable_group(i) == child_group)
+        {
+            parent_group->mutable_group()->DeleteSubrange(i, 1);
+            return true;
+        }
+    }
+
+    return false;
+}
 
 } // namespace
 
@@ -43,9 +68,6 @@ bool AddressBookWindow::Dispatch(const NativeEvent& event)
 LRESULT AddressBookWindow::OnCreate(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    SetWindowPos(nullptr, 0, 0, 980, 700, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
-    CenterWindow();
-
     accelerator_.LoadAcceleratorsW(IDC_ADDRESS_BOOK_ACCELERATORS);
 
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
@@ -107,19 +129,22 @@ LRESULT AddressBookWindow::OnCreate(
 
     splitter_.SetSplitterExtendedStyle(splitter_.GetSplitterExtendedStyle() &~SPLIT_PROPORTIONAL);
 
-    InitGroupTree(small_icon_size);
-    InitComputerList(small_icon_size);
+    group_tree_ctrl_.Create(splitter_, kGroupTreeCtrl);
+    computer_list_ctrl_.Create(splitter_, kComputerListCtrl);
 
     splitter_.SetSplitterPane(SPLIT_PANE_LEFT, group_tree_ctrl_);
     splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, computer_list_ctrl_);
 
-    InitToolBar(small_icon_size);
+    toolbar_.Create(*this);
 
     if (!address_book_)
     {
         group_tree_ctrl_.EnableWindow(FALSE);
         computer_list_ctrl_.EnableWindow(FALSE);
     }
+
+    SetWindowPos(nullptr, 0, 0, 980, 700, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
+    CenterWindow();
 
     return 0;
 }
@@ -166,7 +191,7 @@ LRESULT AddressBookWindow::OnClose(
 {
     if (address_book_changed_)
     {
-        if (!SaveAddressBook(address_book_path_))
+        if (!CloseAddressBook())
             return 0;
     }
 
@@ -182,83 +207,107 @@ LRESULT AddressBookWindow::OnClose(
     return 0;
 }
 
-LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+LRESULT AddressBookWindow::OnMouseMove(
+    UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
-    LPNMTTDISPINFOW header = reinterpret_cast<LPNMTTDISPINFOW>(hdr);
-    UINT string_id;
+    CPoint pos(lparam);
 
-    switch (header->hdr.idFrom)
+    if (group_tree_dragging_)
     {
-        case ID_NEW:
-            string_id = IDS_TOOLTIP_NEW;
-            break;
+        ClientToScreen(&pos);
 
-        case ID_OPEN:
-            string_id = IDS_TOOLTIP_OPEN;
-            break;
+        group_tree_drag_imagelist_.DragMove(pos.x + 15, pos.y + 15);
+        group_tree_drag_imagelist_.DragShowNolock(FALSE);
 
-        case ID_SAVE:
-            string_id = IDS_TOOLTIP_SAVE;
-            break;
+        group_tree_ctrl_.GetParent().ScreenToClient(&pos);
 
-        case ID_ABOUT:
-            string_id = IDS_TOOLTIP_ABOUT;
-            break;
+        TVHITTESTINFO hit_test_info;
+        hit_test_info.pt.x = pos.x;
+        hit_test_info.pt.y = pos.y;
 
-        case ID_EXIT:
-            string_id = IDS_TOOLTIP_EXIT;
-            break;
+        HTREEITEM target_item = group_tree_ctrl_.HitTest(&hit_test_info);
 
-        case ID_ADD_GROUP:
-            string_id = IDS_TOOLTIP_ADD_GROUP;
-            break;
+        if (target_item &&
+            // A moved element can not be moved to a child element.
+            !group_tree_ctrl_.IsItemContainsChild(group_tree_edited_item_, target_item))
+        {
+            group_tree_ctrl_.SendMessageW(TVM_SELECTITEM,
+                                          TVGN_DROPHILITE,
+                                          reinterpret_cast<LPARAM>(target_item));
+        }
 
-        case ID_DELETE_GROUP:
-            string_id = IDS_TOOLTIP_DELETE_GROUP;
-            break;
-
-        case ID_EDIT_GROUP:
-            string_id = IDS_TOOLTIP_EDIT_GROUP;
-            break;
-
-        case ID_ADD_COMPUTER:
-            string_id = IDS_TOOLTIP_ADD_COMPUTER;
-            break;
-
-        case ID_DELETE_COMPUTER:
-            string_id = IDS_TOOLTIP_DELETE_COMPUTER;
-            break;
-
-        case ID_EDIT_COMPUTER:
-            string_id = IDS_TOOLTIP_EDIT_COMPUTER;
-            break;
-
-        case ID_DESKTOP_MANAGE_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_DESKTOP_MANAGE;
-            break;
-
-        case ID_DESKTOP_VIEW_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_DESKTOP_VIEW;
-            break;
-
-        case ID_FILE_TRANSFER_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_FILE_TRANSFER;
-            break;
-
-        case ID_SYSTEM_INFO_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
-            break;
-
-        case ID_POWER_MANAGE_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_POWER_MANAGE;
-            break;
-
-        default:
-            return FALSE;
+        group_tree_drag_imagelist_.DragShowNolock(TRUE);
     }
 
-    AtlLoadString(string_id, header->szText, _countof(header->szText));
-    return TRUE;
+    return 0;
+}
+
+bool AddressBookWindow::MoveGroup(HTREEITEM target_item, HTREEITEM source_item)
+{
+    HTREEITEM old_parent_item = group_tree_ctrl_.GetParentItem(source_item);
+    if (!old_parent_item || old_parent_item == target_item)
+        return false;
+
+    if (group_tree_ctrl_.IsItemContainsChild(source_item, target_item))
+        return false;
+
+    proto::ComputerGroup* old_parent_group = group_tree_ctrl_.GetComputerGroup(old_parent_item);
+    proto::ComputerGroup* new_parent_group = group_tree_ctrl_.GetComputerGroup(target_item);
+    proto::ComputerGroup* group_to_move = group_tree_ctrl_.GetComputerGroup(source_item);
+
+    if (!old_parent_group || !new_parent_group || !group_to_move)
+        return false;
+
+    proto::ComputerGroup temp(*group_to_move);
+
+    if (DeleteChildGroup(old_parent_group, group_to_move))
+    {
+        group_tree_ctrl_.DeleteItem(source_item);
+
+        proto::ComputerGroup* group = new_parent_group->add_group();
+        group->CopyFrom(temp);
+
+        HTREEITEM item = group_tree_ctrl_.AddComputerGroupTree(target_item, group);
+
+        group_tree_ctrl_.Expand(target_item, TVE_EXPAND);
+        group_tree_ctrl_.SelectItem(item);
+
+        SetAddressBookChanged(true);
+    }
+
+    return true;
+}
+
+LRESULT AddressBookWindow::OnLButtonUp(
+    UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
+{
+    if (group_tree_dragging_)
+    {
+        group_tree_dragging_ = false;
+
+        group_tree_drag_imagelist_.DragLeave(group_tree_ctrl_);
+        group_tree_drag_imagelist_.EndDrag();
+        group_tree_drag_imagelist_.Destroy();
+
+        POINT cursor_pos;
+        GetCursorPos(&cursor_pos);
+
+        group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
+
+        TVHITTESTINFO hit_test_info;
+        hit_test_info.pt = cursor_pos;
+
+        HTREEITEM target_item = group_tree_ctrl_.HitTest(&hit_test_info);
+
+        group_tree_ctrl_.SendMessageW(TVM_SELECTITEM, TVGN_DROPHILITE, 0);
+
+        if (target_item && target_item != TVI_ROOT)
+            MoveGroup(target_item, group_tree_edited_item_);
+
+        ReleaseCapture();
+    }
+
+    return 0;
 }
 
 LRESULT AddressBookWindow::OnComputerListDoubleClick(
@@ -268,9 +317,7 @@ LRESULT AddressBookWindow::OnComputerListDoubleClick(
     if (item_index == -1)
         return 0;
 
-    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
-        computer_list_ctrl_.GetItemData(item_index));
-
+    proto::Computer* computer = computer_list_ctrl_.GetComputer(item_index);
     if (!computer)
         return 0;
 
@@ -369,9 +416,6 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
 
     group_tree_edited_item_ = header->itemNew.hItem;
 
-    proto::ComputerGroup* group =
-        reinterpret_cast<proto::ComputerGroup*>(header->itemNew.lParam);
-
     CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
 
     toolbar_.EnableButton(ID_ADD_GROUP, TRUE);
@@ -380,15 +424,13 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
     edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_ENABLED);
     edit_menu.EnableMenuItem(ID_ADD_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
 
-    if (!group)
+    if (group_tree_ctrl_.GetFirstVisibleItem() == header->itemNew.hItem)
     {
         toolbar_.EnableButton(ID_EDIT_GROUP, FALSE);
         toolbar_.EnableButton(ID_DELETE_GROUP, FALSE);
 
         edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);
         edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
-
-        group = address_book_->mutable_root_group();
     }
     else
     {
@@ -400,7 +442,11 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
     }
 
     computer_list_ctrl_.DeleteAllItems();
-    AddChildComputers(group);
+
+    proto::ComputerGroup* group =
+        reinterpret_cast<proto::ComputerGroup*>(header->itemNew.lParam);
+    if (group)
+        computer_list_ctrl_.AddChildComputers(group);
 
     return 0;
 }
@@ -414,8 +460,7 @@ LRESULT AddressBookWindow::OnGroupTreeRightClick(
     group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
 
     TVHITTESTINFO hit_test_info;
-    hit_test_info.pt.x = cursor_pos.x;
-    hit_test_info.pt.y = cursor_pos.y;
+    hit_test_info.pt = cursor_pos;
 
     group_tree_edited_item_ = group_tree_ctrl_.HitTest(&hit_test_info);
     if (!group_tree_edited_item_)
@@ -457,6 +502,24 @@ LRESULT AddressBookWindow::OnGroupTreeItemExpanded(
         SetAddressBookChanged(true);
     }
 
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnGroupTreeBeginDrag(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    LPNMTREEVIEWW pnmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
+
+    group_tree_drag_imagelist_ = group_tree_ctrl_.CreateDragImage(pnmtv->itemNew.hItem);
+    if (group_tree_drag_imagelist_.IsNull())
+        return 0;
+
+    group_tree_drag_imagelist_.BeginDrag(0, 0, 0);
+    group_tree_drag_imagelist_.DragEnter(GetDesktopWindow(), pnmtv->ptDrag.x, pnmtv->ptDrag.y);
+    SetCapture();
+
+    group_tree_edited_item_ = pnmtv->itemNew.hItem;
+    group_tree_dragging_ = true;
     return 0;
 }
 
@@ -509,10 +572,10 @@ LRESULT AddressBookWindow::OnNewButton(
     CString name;
     name.LoadStringW(IDS_DEFAULT_ADDRESS_BOOK_NAME);
 
-    group_tree_ctrl_.InsertItem(name, kAddressBookIcon, kAddressBookIcon, TVI_ROOT, TVI_LAST);
-
     address_book_ = std::make_unique<proto::AddressBook>();
     address_book_->mutable_root_group()->set_name(UTF8fromUNICODE(name));
+
+    group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, address_book_->mutable_root_group());
 
     SetAddressBookChanged(true);
 
@@ -536,16 +599,11 @@ LRESULT AddressBookWindow::OnAddComputerButton(
     if (dialog.DoModal() == IDOK)
     {
         proto::ComputerGroup* parent_group =
-            reinterpret_cast<proto::ComputerGroup*>(
-                group_tree_ctrl_.GetItemData(group_tree_edited_item_));
-
-        proto::Computer* computer;
-
+            group_tree_ctrl_.GetComputerGroup(group_tree_edited_item_);
         if (!parent_group)
-            computer = address_book_->mutable_root_group()->add_computer();
-        else
-            computer = parent_group->add_computer();
+            return 0;
 
+        proto::Computer* computer = parent_group->add_computer();
         computer->CopyFrom(dialog.GetComputer());
 
         if (group_tree_edited_item_ != group_tree_ctrl_.GetSelectedItem())
@@ -554,18 +612,7 @@ LRESULT AddressBookWindow::OnAddComputerButton(
         }
         else
         {
-            int item_index = computer_list_ctrl_.AddItem(
-                computer_list_ctrl_.GetItemCount(),
-                0,
-                UNICODEfromUTF8(computer->name()).c_str(), kComputerIcon);
-
-            computer_list_ctrl_.SetItemData(item_index, reinterpret_cast<DWORD_PTR>(computer));
-
-            computer_list_ctrl_.SetItemText(
-                item_index, 1, UNICODEfromUTF8(computer->address()).c_str());
-
-            computer_list_ctrl_.SetItemText(
-                item_index, 2, std::to_wstring(computer->port()).c_str());
+            computer_list_ctrl_.AddComputer(computer);
         }
 
         SetAddressBookChanged(true);
@@ -588,24 +635,15 @@ LRESULT AddressBookWindow::OnAddGroupButton(
     if (dialog.DoModal() == IDOK)
     {
         proto::ComputerGroup* parent_group =
-            reinterpret_cast<proto::ComputerGroup*>(
-                group_tree_ctrl_.GetItemData(group_tree_edited_item_));
-
-        proto::ComputerGroup* new_group;
-
+            group_tree_ctrl_.GetComputerGroup(group_tree_edited_item_);
         if (!parent_group)
-            new_group = address_book_->mutable_root_group()->add_group();
-        else
-            new_group = parent_group->add_group();
+            return 0;
 
+        proto::ComputerGroup* new_group = parent_group->add_group();
         new_group->CopyFrom(dialog.GetComputerGroup());
 
-        HTREEITEM item = group_tree_ctrl_.InsertItem(UNICODEfromUTF8(new_group->name()).c_str(),
-                                                     kComputerGroupIcon,
-                                                     kComputerGroupIcon,
-                                                     group_tree_edited_item_,
-                                                     TVI_LAST);
-        group_tree_ctrl_.SetItemData(item, reinterpret_cast<DWORD_PTR>(new_group));
+        HTREEITEM item = group_tree_ctrl_.AddComputerGroup(group_tree_edited_item_, new_group);
+
         group_tree_ctrl_.Expand(group_tree_edited_item_, TVE_EXPAND);
         group_tree_ctrl_.SelectItem(item);
 
@@ -622,27 +660,15 @@ LRESULT AddressBookWindow::OnEditComputerButton(
     if (item_index == -1)
         return 0;
 
-    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
-        computer_list_ctrl_.GetItemData(item_index));
-
+    proto::Computer* computer = computer_list_ctrl_.GetComputer(item_index);
     if (!computer)
         return 0;
 
     ComputerDialog dialog(*computer);
-
     if (dialog.DoModal() == IDOK)
     {
         computer->CopyFrom(dialog.GetComputer());
-
-        computer_list_ctrl_.SetItemText(item_index, 0,
-            UNICODEfromUTF8(computer->name()).c_str());
-
-        computer_list_ctrl_.SetItemText(item_index, 1,
-            UNICODEfromUTF8(computer->address()).c_str());
-
-        computer_list_ctrl_.SetItemText(item_index, 2,
-            std::to_wstring(computer->port()).c_str());
-
+        computer_list_ctrl_.UpdateComputer(item_index, computer);
         SetAddressBookChanged(true);
     }
 
@@ -659,20 +685,15 @@ LRESULT AddressBookWindow::OnEditGroupButton(
         return 0;
 
     proto::ComputerGroup* selected_group =
-        reinterpret_cast<proto::ComputerGroup*>(
-            group_tree_ctrl_.GetItemData(group_tree_edited_item_));
+        group_tree_ctrl_.GetComputerGroup(group_tree_edited_item_);
     if (!selected_group)
         return 0;
 
     ComputerGroupDialog dialog(*selected_group);
-
     if (dialog.DoModal() == IDOK)
     {
         selected_group->CopyFrom(dialog.GetComputerGroup());
-
-        group_tree_ctrl_.SetItemText(
-            group_tree_edited_item_, UNICODEfromUTF8(selected_group->name()).c_str());
-
+        group_tree_ctrl_.UpdateComputerGroup(group_tree_edited_item_, selected_group);
         SetAddressBookChanged(true);
     }
 
@@ -686,9 +707,7 @@ LRESULT AddressBookWindow::OnDeleteComputerButton(
     if (item_index == -1)
         return 0;
 
-    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
-        computer_list_ctrl_.GetItemData(item_index));
-
+    proto::Computer* computer = computer_list_ctrl_.GetComputer(item_index);
     if (!computer)
         return 0;
 
@@ -704,23 +723,15 @@ LRESULT AddressBookWindow::OnDeleteComputerButton(
         if (!parent_group_item)
             return 0;
 
-        proto::ComputerGroup* parent_group = reinterpret_cast<proto::ComputerGroup*>(
-            group_tree_ctrl_.GetItemData(parent_group_item));
+        proto::ComputerGroup* parent_group = group_tree_ctrl_.GetComputerGroup(parent_group_item);
         if (!parent_group)
             return 0;
 
-        computer_list_ctrl_.DeleteItem(item_index);
-
-        for (int i = 0; i < parent_group->computer_size(); ++i)
+        if (DeleteChildComputer(parent_group, computer))
         {
-            if (parent_group->mutable_computer(i) == computer)
-            {
-                parent_group->mutable_computer()->DeleteSubrange(i, 1);
-                break;
-            }
+            computer_list_ctrl_.DeleteItem(item_index);
+            SetAddressBookChanged(true);
         }
-
-        SetAddressBookChanged(true);
     }
 
     return 0;
@@ -736,8 +747,7 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
         return 0;
 
     proto::ComputerGroup* selected_group =
-        reinterpret_cast<proto::ComputerGroup*>(
-            group_tree_ctrl_.GetItemData(group_tree_edited_item_));
+        group_tree_ctrl_.GetComputerGroup(group_tree_edited_item_);
     if (!selected_group)
         return 0;
 
@@ -753,23 +763,15 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
         if (!parent_item)
             return 0;
 
-        group_tree_ctrl_.DeleteItem(group_tree_edited_item_);
-
-        proto::ComputerGroup* parent_group =
-            reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
+        proto::ComputerGroup* parent_group = group_tree_ctrl_.GetComputerGroup(parent_item);
         if (!parent_group)
-            parent_group = address_book_->mutable_root_group();
+            return 0;
 
-        for (int i = 0; i < parent_group->group_size(); ++i)
+        if (DeleteChildGroup(parent_group, selected_group))
         {
-            if (parent_group->mutable_group(i) == selected_group)
-            {
-                parent_group->mutable_group()->DeleteSubrange(i, 1);
-                break;
-            }
+            group_tree_ctrl_.DeleteItem(group_tree_edited_item_);
+            SetAddressBookChanged(true);
         }
-
-        SetAddressBookChanged(true);
     }
 
     return 0;
@@ -782,9 +784,7 @@ LRESULT AddressBookWindow::OnOpenSessionButton(
     if (item_index == -1)
         return 0;
 
-    proto::Computer* computer = reinterpret_cast<proto::Computer*>(
-        computer_list_ctrl_.GetItemData(item_index));
-
+    proto::Computer* computer = computer_list_ctrl_.GetComputer(item_index);
     if (!computer)
         return 0;
 
@@ -837,158 +837,6 @@ LRESULT AddressBookWindow::OnSelectSessionButton(
     return 0;
 }
 
-void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
-{
-    const DWORD kStyle = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS;
-
-    toolbar_.Create(*this, rcDefault, nullptr, kStyle);
-    toolbar_.SetExtendedStyle(TBSTYLE_EX_DOUBLEBUFFER);
-
-    const BYTE kSessionButtonStyle = BTNS_BUTTON | BTNS_AUTOSIZE | BTNS_CHECKGROUP;
-    const BYTE kButtonStyle = BTNS_BUTTON | BTNS_AUTOSIZE;
-
-    TBBUTTON kButtons[] =
-    {
-        // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_NEW,                       TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
-        {  1, ID_OPEN,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
-        {  2, ID_SAVE,                      0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
-        {  3, ID_ADD_GROUP,                 0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        {  4, ID_DELETE_GROUP,              0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        {  5, ID_EDIT_GROUP,                0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        {  6, ID_ADD_COMPUTER,              0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        {  7, ID_DELETE_COMPUTER,           0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        {  8, ID_EDIT_COMPUTER,             0,                                 kButtonStyle,        { 0 }, 0, -1 },
-        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
-        {  9, ID_DESKTOP_MANAGE_SESSION_TB, TBSTATE_ENABLED | TBSTATE_CHECKED, kSessionButtonStyle, { 0 }, 0, -1 },
-        { 10, ID_DESKTOP_VIEW_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
-        { 11, ID_FILE_TRANSFER_SESSION_TB,  TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
-        { 12, ID_SYSTEM_INFO_SESSION_TB,    TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
-        { 13, ID_POWER_MANAGE_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
-        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
-        { 14, ID_ABOUT,                     TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
-        { 15, ID_EXIT,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
-    };
-
-    toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
-    toolbar_.AddButtons(_countof(kButtons), kButtons);
-
-    if (toolbar_imagelist_.Create(small_icon_size.cx,
-                                  small_icon_size.cy,
-                                  ILC_MASK | ILC_COLOR32,
-                                  1, 1))
-    {
-        toolbar_.SetImageList(toolbar_imagelist_);
-
-        auto add_icon = [&](UINT icon_id)
-        {
-            CIcon icon(AtlLoadIconImage(icon_id,
-                                        LR_CREATEDIBSECTION,
-                                        small_icon_size.cx,
-                                        small_icon_size.cy));
-            toolbar_imagelist_.AddIcon(icon);
-        };
-
-        add_icon(IDI_DOCUMENT);
-        add_icon(IDI_OPEN);
-        add_icon(IDI_DISK);
-        add_icon(IDI_FOLDER_ADD);
-        add_icon(IDI_FOLDER_MINUS);
-        add_icon(IDI_FOLDER_PENCIL);
-        add_icon(IDI_COMPUTER_PLUS);
-        add_icon(IDI_COMPUTER_MINUS);
-        add_icon(IDI_COMPUTER_PENCIL);
-        add_icon(IDI_MONITOR_WITH_KEYBOARD);
-        add_icon(IDI_MONITOR);
-        add_icon(IDI_FOLDER_STAND);
-        add_icon(IDI_SYSTEM_MONITOR);
-        add_icon(IDI_CONTROL_POWER);
-        add_icon(IDI_ABOUT);
-        add_icon(IDI_EXIT);
-    }
-}
-
-void AddressBookWindow::InitComputerList(const CSize& small_icon_size)
-{
-    const DWORD style = WS_CHILD | WS_VISIBLE | LVS_REPORT | WS_TABSTOP | LVS_SHOWSELALWAYS;
-
-    computer_list_ctrl_.Create(splitter_, rcDefault, nullptr, style,
-                               WS_EX_CLIENTEDGE, kComputerListCtrl);
-
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(computer_list_ctrl_, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    computer_list_ctrl_.SetExtendedListViewStyle(ex_style);
-
-    computer_list_imagelist_.Create(small_icon_size.cx,
-                                    small_icon_size.cy,
-                                    ILC_MASK | ILC_COLOR32,
-                                    1, 1);
-
-    CIcon computer_icon = AtlLoadIconImage(IDI_COMPUTER,
-                                           LR_CREATEDIBSECTION,
-                                           small_icon_size.cx,
-                                           small_icon_size.cy);
-    computer_list_imagelist_.AddIcon(computer_icon);
-
-    computer_list_ctrl_.SetImageList(computer_list_imagelist_, LVSIL_SMALL);
-
-    auto add_column = [&](UINT resource_id, int column_index, int width)
-    {
-        CString text;
-        text.LoadStringW(resource_id);
-
-        computer_list_ctrl_.AddColumn(text, column_index);
-        computer_list_ctrl_.SetColumnWidth(column_index, width);
-    };
-
-    add_column(IDS_COL_NAME, 0, 250);
-    add_column(IDS_COL_ADDRESS, 1, 200);
-    add_column(IDS_COL_PORT, 2, 100);
-}
-
-void AddressBookWindow::InitGroupTree(const CSize& small_icon_size)
-{
-    const DWORD style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASLINES |
-        TVS_SHOWSELALWAYS | TVS_HASBUTTONS | TVS_LINESATROOT;
-
-    group_tree_ctrl_.Create(splitter_, rcDefault, nullptr, style,
-                            WS_EX_CLIENTEDGE, kGroupTreeCtrl);
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(group_tree_ctrl_, L"explorer", nullptr);
-        static const DWORD kDoubleBuffer = 0x0004;
-        group_tree_ctrl_.SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
-    }
-
-    group_tree_imagelist_.Create(small_icon_size.cx,
-                                 small_icon_size.cy,
-                                 ILC_MASK | ILC_COLOR32,
-                                 1, 1);
-
-    CIcon address_book_icon = AtlLoadIconImage(IDI_BOOKS_STACK,
-                                               LR_CREATEDIBSECTION,
-                                               small_icon_size.cx,
-                                               small_icon_size.cy);
-
-    CIcon group_icon = AtlLoadIconImage(IDI_FOLDER,
-                                        LR_CREATEDIBSECTION,
-                                        small_icon_size.cx,
-                                        small_icon_size.cy);
-
-    group_tree_imagelist_.AddIcon(address_book_icon);
-    group_tree_imagelist_.AddIcon(group_icon);
-
-    group_tree_ctrl_.SetImageList(group_tree_imagelist_);
-}
-
 void AddressBookWindow::SetAddressBookChanged(bool is_changed)
 {
     address_book_changed_ = is_changed;
@@ -1004,49 +852,6 @@ void AddressBookWindow::SetAddressBookChanged(bool is_changed)
     {
         toolbar_.EnableButton(ID_SAVE, FALSE);
         file_menu.EnableMenuItem(ID_SAVE, MF_BYCOMMAND | MF_DISABLED);
-    }
-}
-
-void AddressBookWindow::AddChildComputerGroups(
-    HTREEITEM parent_item, proto::ComputerGroup* parent_computer_group)
-{
-    for (int i = 0; i < parent_computer_group->group_size(); ++i)
-    {
-        proto::ComputerGroup* child_group = parent_computer_group->mutable_group(i);
-
-        HTREEITEM item = group_tree_ctrl_.InsertItem(
-            UNICODEfromUTF8(child_group->name()).c_str(),
-            kComputerGroupIcon,
-            kComputerGroupIcon,
-            parent_item,
-            TVI_LAST);
-
-        // Each element in the tree contains a pointer to the computer group.
-        group_tree_ctrl_.SetItemData(item, reinterpret_cast<DWORD_PTR>(child_group));
-
-        AddChildComputerGroups(item, child_group);
-
-        if (child_group->expanded())
-            group_tree_ctrl_.Expand(item, TVE_EXPAND);
-    }
-}
-
-void AddressBookWindow::AddChildComputers(proto::ComputerGroup* computer_group)
-{
-    for (int i = 0; i < computer_group->computer_size(); ++i)
-    {
-        proto::Computer* computer = computer_group->mutable_computer(i);
-
-        int item_index = computer_list_ctrl_.AddItem(
-            i, 0, UNICODEfromUTF8(computer->name()).c_str(), kComputerIcon);
-
-        computer_list_ctrl_.SetItemData(item_index, reinterpret_cast<DWORD_PTR>(computer));
-
-        computer_list_ctrl_.SetItemText(item_index, 1,
-            UNICODEfromUTF8(computer->address()).c_str());
-
-        computer_list_ctrl_.SetItemText(item_index, 2,
-            std::to_wstring(computer->port()).c_str());
     }
 }
 
@@ -1078,7 +883,6 @@ bool AddressBookWindow::OpenAddressBook()
     {
         CString message;
         message.LoadStringW(IDS_UNABLE_TO_OPEN_FILE_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1095,7 +899,6 @@ bool AddressBookWindow::OpenAddressBook()
     {
         CString message;
         message.LoadStringW(IDS_UNABLE_TO_READ_FILE_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1108,20 +911,14 @@ bool AddressBookWindow::OpenAddressBook()
 
         CString message;
         message.LoadStringW(IDS_UNABLE_TO_READ_FILE_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
 
-    HTREEITEM root_item = group_tree_ctrl_.InsertItem(
-        UNICODEfromUTF8(address_book_->root_group().name()).c_str(),
-        kAddressBookIcon,
-        kAddressBookIcon,
-        TVI_ROOT,
-        TVI_LAST);
+    HTREEITEM root_item = group_tree_ctrl_.AddComputerGroupTree(
+        TVI_ROOT, address_book_->mutable_root_group());
 
-    AddChildComputerGroups(root_item, address_book_->mutable_root_group());
-    AddChildComputers(address_book_->mutable_root_group());
+    computer_list_ctrl_.AddChildComputers(address_book_->mutable_root_group());
 
     group_tree_ctrl_.Expand(root_item, TVE_EXPAND);
 
@@ -1160,12 +957,11 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
 
     std::ofstream file;
 
-    file.open(address_book_path_, std::ofstream::binary | std::ofstream::trunc);
+    file.open(address_book_path, std::ofstream::binary | std::ofstream::trunc);
     if (!file.is_open())
     {
         CString message;
         message.LoadStringW(IDS_UNABLE_TO_OPEN_FILE_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1177,7 +973,6 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
     {
         CString message;
         message.LoadStringW(IDS_UNABLE_TO_WRITE_FILE_ERROR);
-
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
