@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/address_book_toolbar.h
+// FILE:            ui/address_book/address_book_toolbar.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__ADDRESS_BOOK_TOOLBAR_H
-#define _ASPIA_UI__ADDRESS_BOOK_TOOLBAR_H
+#ifndef _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_TOOLBAR_H
+#define _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_TOOLBAR_H
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -35,4 +35,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__ADDRESS_BOOK_TOOLBAR_H
+#endif // _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_TOOLBAR_H

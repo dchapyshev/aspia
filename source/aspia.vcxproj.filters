@@ -82,6 +82,9 @@
     <Filter Include="category">
       <UniqueIdentifier>{7d8c84d5-e6e0-4c30-a70f-0a40b358cd86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\address_book">
+      <UniqueIdentifier>{b448f021-0243-4c2b-a721-90dcc334a9f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
@@ -901,16 +904,7 @@
     <ClCompile Include="base\command_line.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\address_book_window.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="command_line_switches.cc" />
-    <ClCompile Include="ui\computer_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\computer_group_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="proto\address_book.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
@@ -932,14 +926,23 @@
     <ClCompile Include="base\shortcut.cc">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="ui\computer_group_tree_ctrl.cc">
-      <Filter>ui</Filter>
+    <ClCompile Include="ui\address_book\address_book_toolbar.cc">
+      <Filter>ui\address_book</Filter>
     </ClCompile>
-    <ClCompile Include="ui\address_book_toolbar.cc">
-      <Filter>ui</Filter>
+    <ClCompile Include="ui\address_book\address_book_window.cc">
+      <Filter>ui\address_book</Filter>
     </ClCompile>
-    <ClCompile Include="ui\computer_list_ctrl.cc">
-      <Filter>ui</Filter>
+    <ClCompile Include="ui\address_book\computer_dialog.cc">
+      <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book\computer_group_dialog.cc">
+      <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book\computer_group_tree_ctrl.cc">
+      <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book\computer_list_ctrl.cc">
+      <Filter>ui\address_book</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1872,16 +1875,7 @@
     <ClInclude Include="base\command_line.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\address_book_window.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="command_line_switches.h" />
-    <ClInclude Include="ui\computer_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\computer_group_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="proto\address_book.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
@@ -1897,14 +1891,23 @@
     <ClInclude Include="base\shortcut.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="ui\computer_group_tree_ctrl.h">
-      <Filter>ui</Filter>
+    <ClInclude Include="ui\address_book\address_book_toolbar.h">
+      <Filter>ui\address_book</Filter>
     </ClInclude>
-    <ClInclude Include="ui\address_book_toolbar.h">
-      <Filter>ui</Filter>
+    <ClInclude Include="ui\address_book\address_book_window.h">
+      <Filter>ui\address_book</Filter>
     </ClInclude>
-    <ClInclude Include="ui\computer_list_ctrl.h">
-      <Filter>ui</Filter>
+    <ClInclude Include="ui\address_book\computer_dialog.h">
+      <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book\computer_group_dialog.h">
+      <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book\computer_group_tree_ctrl.h">
+      <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book\computer_list_ctrl.h">
+      <Filter>ui\address_book</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

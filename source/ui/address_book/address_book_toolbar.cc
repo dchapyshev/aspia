@@ -1,12 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/address_book_toolbar.cc
+// FILE:            ui/address_book/address_book_toolbar.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/address_book_toolbar.h"
-
+#include "ui/address_book/address_book_toolbar.h"
 #include "ui/resource.h"
 
 namespace aspia {

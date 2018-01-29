@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/computer_dialog.h
+// FILE:            ui/address_book/computer_dialog.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__COMPUTER_DIALOG_H
-#define _ASPIA_UI__COMPUTER_DIALOG_H
+#ifndef _ASPIA_UI__ADDRESS_BOOK__COMPUTER_DIALOG_H
+#define _ASPIA_UI__ADDRESS_BOOK__COMPUTER_DIALOG_H
 
 #include <atlbase.h>
 #include <atlapp.h>
@@ -73,4 +73,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__COMPUTER_DIALOG_H
+#endif // _ASPIA_UI__ADDRESS_BOOK__COMPUTER_DIALOG_H

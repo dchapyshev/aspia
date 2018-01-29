@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/computer_dialog.cc
+// FILE:            ui/address_book/computer_dialog.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/computer_dialog.h"
+#include "ui/address_book/computer_dialog.h"
 
 #include <atlctrls.h>
 #include <atlmisc.h>

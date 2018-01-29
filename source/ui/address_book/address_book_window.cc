@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/address_book_window.cc
+// FILE:            ui/address_book/address_book_window.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/address_book_window.h"
+#include "ui/address_book/address_book_window.h"
 
 #include <atldlgs.h>
 #include <strsafe.h>
@@ -15,8 +15,8 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "ui/about_dialog.h"
-#include "ui/computer_dialog.h"
-#include "ui/computer_group_dialog.h"
+#include "ui/address_book/computer_dialog.h"
+#include "ui/address_book/computer_group_dialog.h"
 
 namespace aspia {
 

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/computer_list_ctrl.cc
+// FILE:            ui/address_book/computer_list_ctrl.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/computer_list_ctrl.h"
+#include "ui/address_book/computer_list_ctrl.h"
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"

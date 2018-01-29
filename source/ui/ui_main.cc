@@ -7,7 +7,7 @@
 
 #include "ui/ui_main.h"
 #include "ui/main_dialog.h"
-#include "ui/address_book_window.h"
+#include "ui/address_book/address_book_window.h"
 #include "base/message_loop/message_loop.h"
 #include "base/scoped_com_initializer.h"
 

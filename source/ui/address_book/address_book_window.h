@@ -1,20 +1,20 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/address_book_window.h
+// FILE:            ui/address_book/address_book_window.h
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_UI__ADDRESS_BOOK_WINDOW_H
-#define _ASPIA_UI__ADDRESS_BOOK_WINDOW_H
+#ifndef _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_WINDOW_H
+#define _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_WINDOW_H
 
 #include "base/message_loop/message_loop.h"
 #include "client/client_pool.h"
 #include "proto/address_book.pb.h"
 #include "ui/base/splitter.h"
-#include "ui/address_book_toolbar.h"
-#include "ui/computer_group_tree_ctrl.h"
-#include "ui/computer_list_ctrl.h"
+#include "ui/address_book/address_book_toolbar.h"
+#include "ui/address_book/computer_group_tree_ctrl.h"
+#include "ui/address_book/computer_list_ctrl.h"
 #include "ui/resource.h"
 
 #include <experimental/filesystem>
@@ -148,4 +148,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_UI__ADDRESS_BOOK_WINDOW_H
+#endif // _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_WINDOW_H

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            ui/computer_group_tree_ctrl.cc
+// FILE:            ui/address_book/computer_group_tree_ctrl.cc
 // LICENSE:         Mozilla Public License Version 2.0
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "ui/computer_group_tree_ctrl.h"
+#include "ui/address_book/computer_group_tree_ctrl.h"
 
 #include <functional>
 
