@@ -91,6 +91,7 @@ const int ComputerGroup::kComputerFieldNumber;
 const int ComputerGroup::kGroupFieldNumber;
 const int ComputerGroup::kNameFieldNumber;
 const int ComputerGroup::kCommentFieldNumber;
+const int ComputerGroup::kExpandedFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ComputerGroup::ComputerGroup()
@@ -116,12 +117,14 @@ ComputerGroup::ComputerGroup(const ComputerGroup& from)
   if (from.comment().size() > 0) {
     comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
   }
+  expanded_ = from.expanded_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.ComputerGroup)
 }
 
 void ComputerGroup::SharedCtor() {
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   comment_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  expanded_ = false;
   _cached_size_ = 0;
 }
 
@@ -163,6 +166,7 @@ void ComputerGroup::Clear() {
   group_.Clear();
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  expanded_ = false;
   _internal_metadata_.Clear();
 }
 
@@ -236,6 +240,20 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
+      // bool expanded = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &expanded_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -296,6 +314,11 @@ void ComputerGroup::SerializeWithCachedSizes(
       4, this->comment(), output);
   }
 
+  // bool expanded = 5;
+  if (this->expanded() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->expanded(), output);
+  }
+
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.ComputerGroup)
@@ -343,6 +366,11 @@ size_t ComputerGroup::ByteSizeLong() const {
         this->comment());
   }
 
+  // bool expanded = 5;
+  if (this->expanded() != 0) {
+    total_size += 1 + 1;
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -372,6 +400,9 @@ void ComputerGroup::MergeFrom(const ComputerGroup& from) {
 
     comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
   }
+  if (from.expanded() != 0) {
+    set_expanded(from.expanded());
+  }
 }
 
 void ComputerGroup::CopyFrom(const ComputerGroup& from) {
@@ -395,6 +426,7 @@ void ComputerGroup::InternalSwap(ComputerGroup* other) {
   group_.InternalSwap(&other->group_);
   name_.Swap(&other->name_);
   comment_.Swap(&other->comment_);
+  swap(expanded_, other->expanded_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

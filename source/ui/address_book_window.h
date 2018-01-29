@@ -52,6 +52,7 @@ private:
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_SELCHANGED, OnGroupSelected)
         NOTIFY_HANDLER(kGroupTreeCtrl, NM_RCLICK, OnGroupTreeRightClick)
+        NOTIFY_HANDLER(kGroupTreeCtrl, TVN_ITEMEXPANDED, OnGroupTreeItemExpanded)
 
         COMMAND_ID_HANDLER(ID_OPEN, OnOpenButton)
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
@@ -83,6 +84,7 @@ private:
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupSelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnGroupTreeItemExpanded(int control_id, LPNMHDR hdr, BOOL& handled);
 
     LRESULT OnOpenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -117,6 +119,7 @@ private:
 
     CTreeViewCtrl group_tree_ctrl_;
     CImageListManaged group_tree_imagelist_;
+    HTREEITEM group_tree_edited_item_ = nullptr;
 
     CListViewCtrl computer_list_ctrl_;
     CImageListManaged computer_list_imagelist_;

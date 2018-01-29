@@ -20,6 +20,7 @@ message ComputerGroup
 
     string name = 3;
     string comment = 4;
+    bool expanded = 5;
 }
 
 message AddressBook

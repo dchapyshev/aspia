@@ -197,6 +197,12 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::std::string* release_comment();
   void set_allocated_comment(::std::string* comment);
 
+  // bool expanded = 5;
+  void clear_expanded();
+  static const int kExpandedFieldNumber = 5;
+  bool expanded() const;
+  void set_expanded(bool value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.ComputerGroup)
  private:
 
@@ -205,6 +211,7 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup > group_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
+  bool expanded_;
   mutable int _cached_size_;
   friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
   friend void ::protobuf_address_5fbook_2eproto::InitDefaultsComputerGroupImpl();
@@ -481,6 +488,20 @@ inline void ComputerGroup::set_allocated_comment(::std::string* comment) {
   }
   comment_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), comment);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.ComputerGroup.comment)
+}
+
+// bool expanded = 5;
+inline void ComputerGroup::clear_expanded() {
+  expanded_ = false;
+}
+inline bool ComputerGroup::expanded() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.expanded)
+  return expanded_;
+}
+inline void ComputerGroup::set_expanded(bool value) {
+  
+  expanded_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.ComputerGroup.expanded)
 }
 
 // -------------------------------------------------------------------

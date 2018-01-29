@@ -295,14 +295,23 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
 LRESULT AddressBookWindow::OnGroupTreeRightClick(
     int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
 {
-    HTREEITEM selected_item = group_tree_ctrl_.GetSelectedItem();
-    if (!selected_item)
+    POINT cursor_pos;
+    GetCursorPos(&cursor_pos);
+
+    group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
+
+    TVHITTESTINFO hit_test_info;
+    hit_test_info.pt.x = cursor_pos.x;
+    hit_test_info.pt.y = cursor_pos.y;
+
+    group_tree_edited_item_ = group_tree_ctrl_.HitTest(&hit_test_info);
+    if (!group_tree_edited_item_)
         return 0;
 
     CMenu menu;
 
     // First visible item is always the title of the address book.
-    if (group_tree_ctrl_.GetFirstVisibleItem() != selected_item)
+    if (group_tree_edited_item_ != group_tree_ctrl_.GetFirstVisibleItem())
     {
         // Load menu for selected group.
         menu = AtlLoadMenu(IDR_GROUP_TREE_ITEM);
@@ -313,13 +322,27 @@ LRESULT AddressBookWindow::OnGroupTreeRightClick(
         menu = AtlLoadMenu(IDR_GROUP_TREE);
     }
 
-    POINT cursor_pos;
-    GetCursorPos(&cursor_pos);
+    group_tree_ctrl_.GetParent().ClientToScreen(&cursor_pos);
 
     SetForegroundWindow(*this);
 
     CMenuHandle popup_menu(menu.GetSubMenu(0));
     popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
+
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnGroupTreeItemExpanded(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    LPNMTREEVIEWW pnmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
+
+    proto::ComputerGroup* group = reinterpret_cast<proto::ComputerGroup*>(pnmtv->itemNew.lParam);
+    if (group)
+    {
+        group->set_expanded((pnmtv->action == TVE_EXPAND) ? true : false);
+        SetAddressBookChanged(true);
+    }
 
     return 0;
 }
@@ -377,16 +400,15 @@ LRESULT AddressBookWindow::OnNewButton(
 LRESULT AddressBookWindow::OnAddComputerButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    HTREEITEM parent_item = group_tree_ctrl_.GetSelectedItem();
-    if (!parent_item)
-        return 0;
+    DCHECK(group_tree_edited_item_ != nullptr);
 
     ComputerDialog dialog;
 
     if (dialog.DoModal() == IDOK)
     {
         proto::ComputerGroup* parent_group =
-            reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
+            reinterpret_cast<proto::ComputerGroup*>(
+                group_tree_ctrl_.GetItemData(group_tree_edited_item_));
 
         proto::Computer* computer;
 
@@ -397,6 +419,26 @@ LRESULT AddressBookWindow::OnAddComputerButton(
 
         computer->CopyFrom(dialog.GetComputer());
 
+        if (group_tree_edited_item_ != group_tree_ctrl_.GetSelectedItem())
+        {
+            group_tree_ctrl_.SelectItem(group_tree_edited_item_);
+        }
+        else
+        {
+            int item_index = computer_list_ctrl_.AddItem(
+                computer_list_ctrl_.GetItemCount(),
+                0,
+                UNICODEfromUTF8(computer->name()).c_str(), kComputerIcon);
+
+            computer_list_ctrl_.SetItemData(item_index, reinterpret_cast<DWORD_PTR>(computer));
+
+            computer_list_ctrl_.SetItemText(
+                item_index, 1, UNICODEfromUTF8(computer->address()).c_str());
+
+            computer_list_ctrl_.SetItemText(
+                item_index, 2, std::to_wstring(computer->port()).c_str());
+        }
+
         SetAddressBookChanged(true);
     }
 
@@ -406,16 +448,15 @@ LRESULT AddressBookWindow::OnAddComputerButton(
 LRESULT AddressBookWindow::OnAddGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    HTREEITEM parent_item = group_tree_ctrl_.GetSelectedItem();
-    if (!parent_item)
-        return 0;
+    DCHECK(group_tree_edited_item_ != nullptr);
 
     ComputerGroupDialog dialog;
 
     if (dialog.DoModal() == IDOK)
     {
         proto::ComputerGroup* parent_group =
-            reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
+            reinterpret_cast<proto::ComputerGroup*>(
+                group_tree_ctrl_.GetItemData(group_tree_edited_item_));
 
         proto::ComputerGroup* new_group;
 
@@ -429,11 +470,11 @@ LRESULT AddressBookWindow::OnAddGroupButton(
         HTREEITEM item = group_tree_ctrl_.InsertItem(UNICODEfromUTF8(new_group->name()).c_str(),
                                                      kComputerGroupIcon,
                                                      kComputerGroupIcon,
-                                                     parent_item,
+                                                     group_tree_edited_item_,
                                                      TVI_LAST);
         group_tree_ctrl_.SetItemData(item, reinterpret_cast<DWORD_PTR>(new_group));
-        group_tree_ctrl_.Expand(parent_item, TVE_EXPAND);
-        group_tree_ctrl_.Select(item, TVGN_CARET);
+        group_tree_ctrl_.Expand(group_tree_edited_item_, TVE_EXPAND);
+        group_tree_ctrl_.SelectItem(item);
 
         SetAddressBookChanged(true);
     }
@@ -478,12 +519,11 @@ LRESULT AddressBookWindow::OnEditComputerButton(
 LRESULT AddressBookWindow::OnEditGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    HTREEITEM selected_item = group_tree_ctrl_.GetSelectedItem();
-    if (!selected_item)
-        return 0;
+    DCHECK(group_tree_edited_item_ != nullptr);
 
     proto::ComputerGroup* selected_group =
-        reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(selected_item));
+        reinterpret_cast<proto::ComputerGroup*>(
+            group_tree_ctrl_.GetItemData(group_tree_edited_item_));
 
     ComputerGroupDialog dialog(*selected_group);
 
@@ -492,7 +532,7 @@ LRESULT AddressBookWindow::OnEditGroupButton(
         selected_group->CopyFrom(dialog.GetComputerGroup());
 
         group_tree_ctrl_.SetItemText(
-            selected_item, UNICODEfromUTF8(selected_group->name()).c_str());
+            group_tree_edited_item_, UNICODEfromUTF8(selected_group->name()).c_str());
 
         SetAddressBookChanged(true);
     }
@@ -550,12 +590,11 @@ LRESULT AddressBookWindow::OnDeleteComputerButton(
 LRESULT AddressBookWindow::OnDeleteGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    HTREEITEM selected_item = group_tree_ctrl_.GetSelectedItem();
-    if (!selected_item)
-        return 0;
+    DCHECK(group_tree_edited_item_ != nullptr);
 
     proto::ComputerGroup* selected_group =
-        reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(selected_item));
+        reinterpret_cast<proto::ComputerGroup*>(
+            group_tree_ctrl_.GetItemData(group_tree_edited_item_));
     if (!selected_group)
         return 0;
 
@@ -567,11 +606,11 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        HTREEITEM parent_item = group_tree_ctrl_.GetParentItem(selected_item);
+        HTREEITEM parent_item = group_tree_ctrl_.GetParentItem(group_tree_edited_item_);
         if (!parent_item)
             return 0;
 
-        group_tree_ctrl_.DeleteItem(selected_item);
+        group_tree_ctrl_.DeleteItem(group_tree_edited_item_);
 
         proto::ComputerGroup* parent_group =
             reinterpret_cast<proto::ComputerGroup*>(group_tree_ctrl_.GetItemData(parent_item));
@@ -784,18 +823,6 @@ void AddressBookWindow::InitGroupTree(const CSize& small_icon_size)
 
 void AddressBookWindow::SetAddressBookChanged(bool is_changed)
 {
-    if (address_book_)
-    {
-        HTREEITEM item = group_tree_ctrl_.GetFirstVisibleItem();
-
-        std::wstring title = UNICODEfromUTF8(address_book_->root_group().name());
-
-        if (is_changed)
-            title += L" *";
-
-        group_tree_ctrl_.SetItemText(item, title.c_str());
-    }
-
     address_book_changed_ = is_changed;
 }
 
@@ -817,6 +844,9 @@ void AddressBookWindow::AddChildComputerGroups(
         group_tree_ctrl_.SetItemData(item, reinterpret_cast<DWORD_PTR>(child_group));
 
         AddChildComputerGroups(item, child_group);
+
+        if (child_group->expanded())
+            group_tree_ctrl_.Expand(item, TVE_EXPAND);
     }
 }
 
