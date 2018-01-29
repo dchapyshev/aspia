@@ -31,8 +31,12 @@ const int kComputerGroupIcon = 1;
 
 bool AddressBookWindow::Dispatch(const NativeEvent& event)
 {
-    TranslateMessage(&event);
-    DispatchMessageW(&event);
+    if (!accelerator_.TranslateAcceleratorW(*this, const_cast<NativeEvent*>(&event)))
+    {
+        TranslateMessage(&event);
+        DispatchMessageW(&event);
+    }
+
     return true;
 }
 
@@ -41,6 +45,8 @@ LRESULT AddressBookWindow::OnCreate(
 {
     SetWindowPos(nullptr, 0, 0, 980, 700, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
+
+    accelerator_.LoadAcceleratorsW(IDC_ADDRESS_BOOK_ACCELERATORS);
 
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
@@ -59,6 +65,24 @@ LRESULT AddressBookWindow::OnCreate(
     CString title;
     title.LoadStringW(IDS_ADDRESS_BOOK_TITLE);
     SetWindowTextW(title);
+
+    main_menu_ = AtlLoadMenu(IDR_ADDRESS_BOOK_MAIN);
+
+    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
+    edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_ADD_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+
+    CMenuHandle session_type_menu(main_menu_.GetSubMenu(2));
+    session_type_menu.CheckMenuRadioItem(ID_DESKTOP_MANAGE_SESSION_TB,
+                                         ID_POWER_MANAGE_SESSION_TB,
+                                         ID_DESKTOP_MANAGE_SESSION_TB,
+                                         MF_BYCOMMAND);
+
+    SetMenu(main_menu_);
 
     statusbar_.Create(*this, rcDefault, nullptr, WS_CHILD | WS_VISIBLE | SBARS_SIZEGRIP);
     int part_width = 240;
@@ -180,6 +204,30 @@ LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
             string_id = IDS_TOOLTIP_EXIT;
             break;
 
+        case ID_ADD_GROUP:
+            string_id = IDS_TOOLTIP_ADD_GROUP;
+            break;
+
+        case ID_DELETE_GROUP:
+            string_id = IDS_TOOLTIP_DELETE_GROUP;
+            break;
+
+        case ID_EDIT_GROUP:
+            string_id = IDS_TOOLTIP_EDIT_GROUP;
+            break;
+
+        case ID_ADD_COMPUTER:
+            string_id = IDS_TOOLTIP_ADD_COMPUTER;
+            break;
+
+        case ID_DELETE_COMPUTER:
+            string_id = IDS_TOOLTIP_DELETE_COMPUTER;
+            break;
+
+        case ID_EDIT_COMPUTER:
+            string_id = IDS_TOOLTIP_EDIT_COMPUTER;
+            break;
+
         case ID_DESKTOP_MANAGE_SESSION_TB:
             string_id = IDS_SESSION_TYPE_DESKTOP_MANAGE;
             break;
@@ -275,19 +323,79 @@ LRESULT AddressBookWindow::OnComputerListRightClick(
     return 0;
 }
 
+LRESULT AddressBookWindow::OnComputerListItemChanged(
+    int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
+{
+    int selected_count = computer_list_ctrl_.GetSelectedCount();
+
+    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
+
+    if (selected_count <= 0)
+    {
+        toolbar_.EnableButton(ID_DELETE_COMPUTER, FALSE);
+        toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
+
+        edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+        edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    }
+    else if (selected_count == 1)
+    {
+        toolbar_.EnableButton(ID_DELETE_COMPUTER, TRUE);
+        toolbar_.EnableButton(ID_EDIT_COMPUTER, TRUE);
+
+        edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
+        edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
+    }
+    else
+    {
+        toolbar_.EnableButton(ID_DELETE_COMPUTER, TRUE);
+        toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
+
+        edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
+        edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    }
+
+    return 0;
+}
+
 LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
 {
-    computer_list_ctrl_.DeleteAllItems();
-
     LPNMTREEVIEWW header = reinterpret_cast<LPNMTREEVIEWW>(hdr);
 
-    proto::ComputerGroup* group = reinterpret_cast<proto::ComputerGroup*>(
-        group_tree_ctrl_.GetItemData(header->itemNew.hItem));
+    group_tree_edited_item_ = header->itemNew.hItem;
+
+    proto::ComputerGroup* group =
+        reinterpret_cast<proto::ComputerGroup*>(header->itemNew.lParam);
+
+    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
+
+    toolbar_.EnableButton(ID_ADD_GROUP, TRUE);
+    toolbar_.EnableButton(ID_ADD_COMPUTER, TRUE);
+
+    edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_ENABLED);
+    edit_menu.EnableMenuItem(ID_ADD_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
 
     if (!group)
-        AddChildComputers(address_book_->mutable_root_group());
+    {
+        toolbar_.EnableButton(ID_EDIT_GROUP, FALSE);
+        toolbar_.EnableButton(ID_DELETE_GROUP, FALSE);
+
+        edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);
+        edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
+
+        group = address_book_->mutable_root_group();
+    }
     else
-        AddChildComputers(group);
+    {
+        toolbar_.EnableButton(ID_EDIT_GROUP, TRUE);
+        toolbar_.EnableButton(ID_DELETE_GROUP, TRUE);
+
+        edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_ENABLED);
+        edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_ENABLED);
+    }
+
+    computer_list_ctrl_.DeleteAllItems();
+    AddChildComputers(group);
 
     return 0;
 }
@@ -379,7 +487,8 @@ LRESULT AddressBookWindow::OnExitButton(
 LRESULT AddressBookWindow::OnNewButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CloseAddressBook();
+    if (!CloseAddressBook())
+        return 0;
 
     computer_list_ctrl_.EnableWindow(TRUE);
     group_tree_ctrl_.EnableWindow(TRUE);
@@ -448,7 +557,11 @@ LRESULT AddressBookWindow::OnAddComputerButton(
 LRESULT AddressBookWindow::OnAddGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    DCHECK(group_tree_edited_item_ != nullptr);
+    if (!group_tree_edited_item_)
+        group_tree_edited_item_ = group_tree_ctrl_.GetSelectedItem();
+
+    if (!group_tree_edited_item_)
+        return 0;
 
     ComputerGroupDialog dialog;
 
@@ -519,11 +632,17 @@ LRESULT AddressBookWindow::OnEditComputerButton(
 LRESULT AddressBookWindow::OnEditGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    DCHECK(group_tree_edited_item_ != nullptr);
+    if (!group_tree_edited_item_)
+        group_tree_edited_item_ = group_tree_ctrl_.GetSelectedItem();
+
+    if (!group_tree_edited_item_)
+        return 0;
 
     proto::ComputerGroup* selected_group =
         reinterpret_cast<proto::ComputerGroup*>(
             group_tree_ctrl_.GetItemData(group_tree_edited_item_));
+    if (!selected_group)
+        return 0;
 
     ComputerGroupDialog dialog(*selected_group);
 
@@ -590,7 +709,11 @@ LRESULT AddressBookWindow::OnDeleteComputerButton(
 LRESULT AddressBookWindow::OnDeleteGroupButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    DCHECK(group_tree_edited_item_ != nullptr);
+    if (!group_tree_edited_item_)
+        group_tree_edited_item_ = group_tree_ctrl_.GetSelectedItem();
+
+    if (!group_tree_edited_item_)
+        return 0;
 
     proto::ComputerGroup* selected_group =
         reinterpret_cast<proto::ComputerGroup*>(
@@ -632,7 +755,7 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
     return 0;
 }
 
-LRESULT AddressBookWindow::OnSessionButton(
+LRESULT AddressBookWindow::OnOpenSessionButton(
     WORD /* notify_code */, WORD control_id, HWND /* control */, BOOL& /* handled */)
 {
     int item_index = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
@@ -680,6 +803,20 @@ LRESULT AddressBookWindow::OnSessionButton(
     return 0;
 }
 
+LRESULT AddressBookWindow::OnSelectSessionButton(
+    WORD /* notify_code */, WORD control_id, HWND /* control */, BOOL& /* handled */)
+{
+    CMenuHandle session_type_menu(main_menu_.GetSubMenu(2));
+
+    session_type_menu.CheckMenuRadioItem(ID_DESKTOP_MANAGE_SESSION_TB,
+                                         ID_POWER_MANAGE_SESSION_TB,
+                                         control_id,
+                                         MF_BYCOMMAND);
+
+    toolbar_.CheckButton(control_id, TRUE);
+    return 0;
+}
+
 void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
 {
     const DWORD kStyle = WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS;
@@ -693,18 +830,25 @@ void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
     TBBUTTON kButtons[] =
     {
         // iBitmap, idCommand, fsState, fsStyle, bReserved[2], dwData, iString
-        {  0, ID_NEW,                       TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  1, ID_OPEN,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  2, ID_SAVE,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        { -1, 0,                            TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
-        {  3, ID_DESKTOP_MANAGE_SESSION_TB, TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  4, ID_DESKTOP_VIEW_SESSION_TB,   TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  5, ID_FILE_TRANSFER_SESSION_TB,  TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  6, ID_SYSTEM_INFO_SESSION_TB,    TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        {  7, ID_POWER_MANAGE_SESSION_TB,   TBSTATE_ENABLED, kSessionButtonStyle, { 0 }, 0, -1 },
-        { -1, 0,                            TBSTATE_ENABLED, BTNS_SEP,            { 0 }, 0, -1 },
-        {  8, ID_ABOUT,                     TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
-        {  9, ID_EXIT,                      TBSTATE_ENABLED, kButtonStyle,        { 0 }, 0, -1 },
+        {  0, ID_NEW,                       TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
+        {  1, ID_OPEN,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
+        {  2, ID_SAVE,                      0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
+        {  3, ID_ADD_GROUP,                 0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        {  4, ID_DELETE_GROUP,              0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        {  5, ID_EDIT_GROUP,                0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        {  6, ID_ADD_COMPUTER,              0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        {  7, ID_DELETE_COMPUTER,           0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        {  8, ID_EDIT_COMPUTER,             0,                                 kButtonStyle,        { 0 }, 0, -1 },
+        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
+        {  9, ID_DESKTOP_MANAGE_SESSION_TB, TBSTATE_ENABLED | TBSTATE_CHECKED, kSessionButtonStyle, { 0 }, 0, -1 },
+        { 10, ID_DESKTOP_VIEW_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
+        { 11, ID_FILE_TRANSFER_SESSION_TB,  TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
+        { 12, ID_SYSTEM_INFO_SESSION_TB,    TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
+        { 13, ID_POWER_MANAGE_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
+        { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
+        { 14, ID_ABOUT,                     TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
+        { 15, ID_EXIT,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
     };
 
     toolbar_.SetButtonStructSize(sizeof(kButtons[0]));
@@ -729,6 +873,12 @@ void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
         add_icon(IDI_DOCUMENT);
         add_icon(IDI_OPEN);
         add_icon(IDI_DISK);
+        add_icon(IDI_FOLDER_ADD);
+        add_icon(IDI_FOLDER_MINUS);
+        add_icon(IDI_FOLDER_PENCIL);
+        add_icon(IDI_COMPUTER_PLUS);
+        add_icon(IDI_COMPUTER_MINUS);
+        add_icon(IDI_COMPUTER_PENCIL);
         add_icon(IDI_MONITOR_WITH_KEYBOARD);
         add_icon(IDI_MONITOR);
         add_icon(IDI_FOLDER_STAND);
@@ -737,8 +887,6 @@ void AddressBookWindow::InitToolBar(const CSize& small_icon_size)
         add_icon(IDI_ABOUT);
         add_icon(IDI_EXIT);
     }
-
-    toolbar_.CheckButton(ID_DESKTOP_MANAGE_SESSION_TB, TRUE);
 }
 
 void AddressBookWindow::InitComputerList(const CSize& small_icon_size)
@@ -824,6 +972,19 @@ void AddressBookWindow::InitGroupTree(const CSize& small_icon_size)
 void AddressBookWindow::SetAddressBookChanged(bool is_changed)
 {
     address_book_changed_ = is_changed;
+
+    CMenuHandle file_menu(main_menu_.GetSubMenu(0));
+
+    if (address_book_changed_)
+    {
+        toolbar_.EnableButton(ID_SAVE, TRUE);
+        file_menu.EnableMenuItem(ID_SAVE, MF_BYCOMMAND | MF_ENABLED);
+    }
+    else
+    {
+        toolbar_.EnableButton(ID_SAVE, FALSE);
+        file_menu.EnableMenuItem(ID_SAVE, MF_BYCOMMAND | MF_DISABLED);
+    }
 }
 
 void AddressBookWindow::AddChildComputerGroups(
@@ -871,7 +1032,8 @@ void AddressBookWindow::AddChildComputers(proto::ComputerGroup* computer_group)
 
 bool AddressBookWindow::OpenAddressBook()
 {
-    CloseAddressBook();
+    if (!CloseAddressBook())
+        return false;
 
     if (address_book_path_.empty())
     {
@@ -965,10 +1127,7 @@ bool AddressBookWindow::SaveAddressBook()
 
         CFileDialog dialog(FALSE, L"aad", L"", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
         if (dialog.DoModal() == IDCANCEL)
-        {
-            // The user decided not to save the file. Returns true.
-            return true;
-        }
+            return false;
 
         address_book_path_ = dialog.m_szFileName;
     }
@@ -1037,6 +1196,22 @@ bool AddressBookWindow::CloseAddressBook()
 
     group_tree_ctrl_.DeleteAllItems();
     group_tree_ctrl_.EnableWindow(FALSE);
+
+    toolbar_.EnableButton(ID_ADD_GROUP, FALSE);
+    toolbar_.EnableButton(ID_DELETE_GROUP, FALSE);
+    toolbar_.EnableButton(ID_EDIT_GROUP, FALSE);
+    toolbar_.EnableButton(ID_ADD_COMPUTER, FALSE);
+    toolbar_.EnableButton(ID_DELETE_COMPUTER, FALSE);
+    toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
+
+    CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
+
+    edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_ADD_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
 
     SetAddressBookChanged(false);
 

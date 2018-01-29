@@ -25,6 +25,9 @@ IDI_CHIP                    ICON "resource/chip.ico"
 IDI_CLIPBOARD_PASTE_IMAGE   ICON "resource/clipboard-paste-image.ico"
 IDI_CLOCK                   ICON "resource/clock.ico"
 IDI_COMPUTER                ICON "resource/computer.ico"
+IDI_COMPUTER_MINUS          ICON "resource/computer-minus.ico"
+IDI_COMPUTER_PENCIL         ICON "resource/computer-pencil.ico"
+IDI_COMPUTER_PLUS           ICON "resource/computer-plus.ico"
 IDI_CONTROL_POWER           ICON "resource/control-power.ico"
 IDI_DELETE                  ICON "resource/delete.ico"
 IDI_DISK                    ICON "resource/disk.ico"
@@ -35,7 +38,9 @@ IDI_EXIT                    ICON "resource/exit.ico"
 IDI_FOLDER                  ICON "resource/folder.ico"
 IDI_FOLDER_ADD              ICON "resource/folder_add.ico"
 IDI_FOLDER_UP               ICON "resource/folder_up.ico"
+IDI_FOLDER_MINUS            ICON "resource/folder-minus.ico"
 IDI_FOLDER_NETWORK          ICON "resource/folder-network.ico"
+IDI_FOLDER_PENCIL           ICON "resource/folder-pencil.ico"
 IDI_FOLDER_STAND            ICON "resource/folder-stand.ico"
 IDI_FULLSCREEN              ICON "resource/fullscreen.ico"
 IDI_GEAR                    ICON "resource/gear.ico"
@@ -82,14 +87,22 @@ IDI_USERS                   ICON "resource/users.ico"
 
 IDC_FILE_MANAGER_ACCELERATORS ACCELERATORS
 BEGIN
-    VK_F5, ID_REFRESH, VIRTKEY         // F5
-    VK_BACK, ID_HOME, CONTROL, VIRTKEY // Ctrl + Backspace
-    VK_BACK, ID_FOLDER_UP, VIRTKEY     // Backspace
-    VK_DELETE, ID_DELETE, VIRTKEY      // Delete
-    VK_F11, ID_SEND, VIRTKEY           // F11
+    VK_F5,     ID_REFRESH, VIRTKEY       // F5
+    VK_BACK,   ID_HOME, CONTROL, VIRTKEY // Ctrl + Backspace
+    VK_BACK,   ID_FOLDER_UP, VIRTKEY     // Backspace
+    VK_DELETE, ID_DELETE, VIRTKEY        // Delete
+    VK_F11,    ID_SEND, VIRTKEY          // F11
 END
 
 IDC_SYSTEM_INFO_ACCELERATORS ACCELERATORS
 BEGIN
     VK_F5, ID_REFRESH, VIRTKEY         // F5
+END
+
+IDC_ADDRESS_BOOK_ACCELERATORS ACCELERATORS
+BEGIN
+    VK_F1, ID_ABOUT, VIRTKEY // F1
+    "^N",  ID_NEW  // Ctrl+N
+    "^O",  ID_OPEN // Ctrl+O
+    "^S",  ID_SAVE // Ctrl+S
 END

@@ -50,6 +50,7 @@ private:
 
         NOTIFY_HANDLER(kComputerListCtrl, NM_DBLCLK, OnComputerListDoubleClick)
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
+        NOTIFY_HANDLER(kComputerListCtrl, LVN_ITEMCHANGED, OnComputerListItemChanged)
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_SELCHANGED, OnGroupSelected)
         NOTIFY_HANDLER(kGroupTreeCtrl, NM_RCLICK, OnGroupTreeRightClick)
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_ITEMEXPANDED, OnGroupTreeItemExpanded)
@@ -66,11 +67,19 @@ private:
         COMMAND_ID_HANDLER(ID_DELETE_COMPUTER, OnDeleteComputerButton)
         COMMAND_ID_HANDLER(ID_DELETE_GROUP, OnDeleteGroupButton)
 
-        COMMAND_ID_HANDLER(ID_DESKTOP_MANAGE_SESSION, OnSessionButton)
-        COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION, OnSessionButton)
-        COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION, OnSessionButton)
-        COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION, OnSessionButton)
-        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION, OnSessionButton)
+        // Session select from popup menu.
+        COMMAND_ID_HANDLER(ID_DESKTOP_MANAGE_SESSION, OnOpenSessionButton)
+        COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION, OnOpenSessionButton)
+        COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION, OnOpenSessionButton)
+        COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION, OnOpenSessionButton)
+        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION, OnOpenSessionButton)
+
+        // Session select from main menu or toolbar.
+        COMMAND_ID_HANDLER(ID_DESKTOP_MANAGE_SESSION_TB, OnSelectSessionButton)
+        COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION_TB, OnSelectSessionButton)
+        COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION_TB, OnSelectSessionButton)
+        COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION_TB, OnSelectSessionButton)
+        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION_TB, OnSelectSessionButton)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
@@ -82,6 +91,7 @@ private:
     LRESULT OnGetDispInfo(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnComputerListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupSelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeItemExpanded(int control_id, LPNMHDR hdr, BOOL& handled);
@@ -97,7 +107,8 @@ private:
     LRESULT OnEditGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnDeleteComputerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnDeleteGroupButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnOpenSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnSelectSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     void InitToolBar(const CSize& small_icon_size);
     void InitComputerList(const CSize& small_icon_size);
@@ -113,6 +124,9 @@ private:
 
     CIcon small_icon_;
     CIcon big_icon_;
+
+    CAccelerator accelerator_;
+    CMenu main_menu_;
 
     VerticalSplitter splitter_;
     CStatusBarCtrl statusbar_;
