@@ -55,7 +55,8 @@ bool DeviceSPTI::GetInquiryData(InquiryData* inquiry_data)
                   &cmd, sizeof(cmd),
                   &bytes_returned))
     {
-        memcpy(inquiry_data, &cmd.data_buffer[0], sizeof(InquiryData));
+        static_assert(sizeof(cmd.data_buffer) >= sizeof(InquiryData));
+        memcpy(inquiry_data, cmd.data_buffer, sizeof(InquiryData));
         return true;
     }
 
@@ -92,7 +93,8 @@ bool DeviceSPTI::GetConfiguration(FeatureCode feature_code, Feature* feature)
                   &cmd, sizeof(cmd),
                   &bytes_returned))
     {
-        memcpy(feature, &cmd.data_buffer[0], sizeof(Feature));
+        static_assert(sizeof(cmd.data_buffer) >= sizeof(Feature));
+        memcpy(feature, cmd.data_buffer, sizeof(Feature));
         return true;
     }
 
@@ -128,7 +130,8 @@ bool DeviceSPTI::GetReportKeyData(ReportKeyData* report_key_data)
                   &cmd, sizeof(cmd),
                   &bytes_returned))
     {
-        memcpy(report_key_data, &cmd.data_buffer[0], sizeof(ReportKeyData));
+        static_assert(sizeof(cmd.data_buffer) >= sizeof(ReportKeyData));
+        memcpy(report_key_data, cmd.data_buffer, sizeof(ReportKeyData));
         return true;
     }
 
@@ -165,7 +168,8 @@ bool DeviceSPTI::GetModeSenseData(uint8_t page, ModeSenseData* mode_sense_data)
                   &cmd, length,
                   &bytes_returned))
     {
-        memcpy(mode_sense_data, &cmd.data_buffer[0], sizeof(ModeSenseData));
+        static_assert(sizeof(cmd.data_buffer) >= sizeof(ModeSenseData));
+        memcpy(mode_sense_data, cmd.data_buffer, sizeof(ModeSenseData));
         return true;
     }
 
