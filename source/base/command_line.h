@@ -55,6 +55,11 @@ public:
         return GetCommandLineStringInternal(false);
     }
 
+    StringType GetArgumentsString() const
+    {
+        return GetArgumentsStringInternal(false);
+    }
+
     // Get and Set the program part of the command line string (the first item).
     std::experimental::filesystem::path GetProgram() const;
     void SetProgram(const std::experimental::filesystem::path& program);
