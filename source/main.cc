@@ -5,9 +5,9 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/command_line.h"
-#include "base/version_helpers.h"
+#include "base/files/base_paths.h"
 #include "base/process/process_helpers.h"
+#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "host/host_main.h"
 #include "ui/ui_main.h"
@@ -31,8 +31,13 @@ int WINAPI wWinMain(HINSTANCE /* hInstance */,
     {
         if (aspia::IsWindowsVistaOrGreater() && !aspia::IsProcessElevated())
         {
-            if (!aspia::ElevateProcess())
-                aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
+            std::experimental::filesystem::path program_path;
+
+            if (aspia::GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
+            {
+                if (!aspia::LaunchProcessWithElevate(program_path))
+                    aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
+            }
         }
         else
         {

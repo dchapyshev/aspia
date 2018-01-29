@@ -320,22 +320,20 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
 bool LaunchSystemInfoProcess()
 {
-    CommandLine command_line(CommandLine::NO_PROGRAM);
+    std::experimental::filesystem::path program_path;
+
+    if (!GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
+        return false;
+
+    CommandLine command_line(program_path);
 
     command_line.AppendSwitch(kRunModeSwitch, kRunModeSystemInfo);
 
     if (IsWindowsVistaOrGreater() && !IsProcessElevated())
     {
-        if (ElevateProcess(command_line))
+        if (LaunchProcessWithElevate(command_line))
             return true;
     }
-
-    std::experimental::filesystem::path program_path;
-
-    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
-        return false;
-
-    command_line.SetProgram(program_path);
 
     ScopedHandle token;
 

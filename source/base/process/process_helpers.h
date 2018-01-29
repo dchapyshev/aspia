@@ -12,9 +12,13 @@
 
 namespace aspia {
 
-bool ElevateProcess(const CommandLine& command_line);
-bool ElevateProcess();
 bool IsProcessElevated();
+
+bool LaunchProcessWithElevate(const std::experimental::filesystem::path& program_path);
+bool LaunchProcessWithElevate(const CommandLine& command_line);
+
+bool LaunchProcess(const std::experimental::filesystem::path& program_path);
+bool LaunchProcess(const CommandLine& command_line);
 
 bool IsCallerAdminGroupMember();
 bool IsCallerHasAdminRights();

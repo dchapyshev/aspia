@@ -19,22 +19,17 @@ namespace aspia {
 
 namespace {
 
-bool ElevateProcessInternal(const WCHAR* command_line)
+bool LaunchProcessInternal(const WCHAR* program_path, const WCHAR* arguments, bool elevate)
 {
-    std::experimental::filesystem::path program_path;
-
-    if (!GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
-        return false;
-
     SHELLEXECUTEINFOW sei;
     memset(&sei, 0, sizeof(sei));
 
     sei.cbSize       = sizeof(sei);
-    sei.lpVerb       = L"runas";
-    sei.lpFile       = program_path.c_str();
+    sei.lpVerb       = elevate ? L"runas" : L"open";
+    sei.lpFile       = program_path;
     sei.hwnd         = nullptr;
     sei.nShow        = SW_SHOW;
-    sei.lpParameters = command_line;
+    sei.lpParameters = arguments;
 
     if (!ShellExecuteExW(&sei))
     {
@@ -47,14 +42,28 @@ bool ElevateProcessInternal(const WCHAR* command_line)
 
 } // namespace
 
-bool ElevateProcess(const CommandLine& command_line)
+bool LaunchProcessWithElevate(const std::experimental::filesystem::path& program_path)
 {
-    return ElevateProcessInternal(command_line.GetCommandLineString().c_str());
+    return LaunchProcessInternal(program_path.c_str(), nullptr, true);
 }
 
-bool ElevateProcess()
+bool LaunchProcessWithElevate(const CommandLine& command_line)
 {
-    return ElevateProcessInternal(nullptr);
+    return LaunchProcessInternal(command_line.GetProgram().c_str(),
+                                 command_line.GetArgumentsString().c_str(),
+                                 true);
+}
+
+bool LaunchProcess(const std::experimental::filesystem::path& program_path)
+{
+    return LaunchProcessInternal(program_path.c_str(), nullptr, false);
+}
+
+bool LaunchProcess(const CommandLine& command_line)
+{
+    return LaunchProcessInternal(command_line.GetProgram().c_str(),
+                                 command_line.GetArgumentsString().c_str(),
+                                 false);
 }
 
 bool IsProcessElevated()

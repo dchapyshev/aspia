@@ -213,6 +213,7 @@
 #define ID_DELETE_COMPUTER                         542
 #define ID_EDIT_GROUP                              543
 #define ID_EDIT_COMPUTER                           544
+#define ID_ADDRESS_BOOK                            545
 
 #define ID_KEY_FIRST                               600
 #define ID_KEY_CTRL_ESC                            600
@@ -375,21 +376,22 @@
 #define IDS_COL_NAME                                5001
 #define IDS_COL_ADDRESS                             5002
 #define IDS_COL_PORT                                5003
-#define IDS_TOOLTIP_OPEN                            5004
-#define IDS_TOOLTIP_SAVE                            5005
-#define IDS_TOOLTIP_ABOUT                           5006
-#define IDS_TOOLTIP_EXIT                            5007
-#define IDS_DEFAULT_ADDRESS_BOOK_NAME               5008
-#define IDS_ADDRESS_BOOK_CHANGED                    5009
-#define IDS_TOO_LONG_NAME_ERROR                     5010
-#define IDS_TOO_LONG_COMMENT_ERROR                  5011
-#define IDS_NAME_CANT_BE_EMPTY_ERROR                5012
-#define IDS_ADDRESS_BOOK_FILTER                     5013
-#define IDS_UNABLE_TO_OPEN_FILE_ERROR               5014
-#define IDS_UNABLE_TO_WRITE_FILE_ERROR              5015
-#define IDS_UNABLE_TO_READ_FILE_ERROR               5016
-#define IDS_GROUP_DELETE_CONFIRMATION               5017
-#define IDS_COMPUTER_DELETE_CONFIRMATION            5018
+#define IDS_TOOLTIP_NEW                             5004
+#define IDS_TOOLTIP_OPEN                            5005
+#define IDS_TOOLTIP_SAVE                            5006
+#define IDS_TOOLTIP_ABOUT                           5007
+#define IDS_TOOLTIP_EXIT                            5008
+#define IDS_DEFAULT_ADDRESS_BOOK_NAME               5009
+#define IDS_ADDRESS_BOOK_CHANGED                    5010
+#define IDS_TOO_LONG_NAME_ERROR                     5011
+#define IDS_TOO_LONG_COMMENT_ERROR                  5012
+#define IDS_NAME_CANT_BE_EMPTY_ERROR                5013
+#define IDS_ADDRESS_BOOK_FILTER                     5014
+#define IDS_UNABLE_TO_OPEN_FILE_ERROR               5015
+#define IDS_UNABLE_TO_WRITE_FILE_ERROR              5016
+#define IDS_UNABLE_TO_READ_FILE_ERROR               5017
+#define IDS_GROUP_DELETE_CONFIRMATION               5018
+#define IDS_COMPUTER_DELETE_CONFIRMATION            5019
 
 // Authorization Status
 #define IDS_AUTH_STATUS_UNKNOWN                     10000

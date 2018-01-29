@@ -337,6 +337,7 @@ BEGIN
     END
     POPUP "&Инструменты"
     BEGIN
+        MENUITEM "&Адресная книга", ID_ADDRESS_BOOK
         MENUITEM "&Информация о системе", ID_SYSTEM_INFO
     END
     POPUP "&Помощь"
@@ -589,6 +590,7 @@ BEGIN
     IDS_COL_NAME                            "Имя"
     IDS_COL_ADDRESS                         "Адрес"
     IDS_COL_PORT                            "Порт"
+    IDS_TOOLTIP_NEW                         "Создать новую адресную книгу"
     IDS_TOOLTIP_OPEN                        "Открыть адресную книгу"
     IDS_TOOLTIP_SAVE                        "Сохранить адресную книгу"
     IDS_TOOLTIP_ABOUT                       "О программе"

@@ -10,9 +10,10 @@
 #include <atlmisc.h>
 #include <uxtheme.h>
 
-#include "base/version_helpers.h"
+#include "base/files/base_paths.h"
 #include "base/process/process_helpers.h"
 #include "base/strings/unicode.h"
+#include "base/version_helpers.h"
 #include "base/scoped_clipboard.h"
 #include "host/host_session_launcher.h"
 #include "host/host_service.h"
@@ -20,6 +21,7 @@
 #include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
+#include "command_line_switches.h"
 
 namespace aspia {
 
@@ -532,6 +534,21 @@ LRESULT MainDialog::OnIpListRightClick(
                 popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
             }
         }
+    }
+
+    return 0;
+}
+
+LRESULT MainDialog::OnAddressBookButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    std::experimental::filesystem::path program_path;
+
+    if (GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
+    {
+        CommandLine command_line(program_path);
+        command_line.AppendSwitch(kAddressBookSwitch);
+        LaunchProcess(command_line);
     }
 
     return 0;

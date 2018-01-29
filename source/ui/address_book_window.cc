@@ -160,6 +160,10 @@ LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
 
     switch (header->hdr.idFrom)
     {
+        case ID_NEW:
+            string_id = IDS_TOOLTIP_NEW;
+            break;
+
         case ID_OPEN:
             string_id = IDS_TOOLTIP_OPEN;
             break;
@@ -176,23 +180,23 @@ LRESULT AddressBookWindow::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOOL
             string_id = IDS_TOOLTIP_EXIT;
             break;
 
-        case ID_DESKTOP_MANAGE_SESSION:
+        case ID_DESKTOP_MANAGE_SESSION_TB:
             string_id = IDS_SESSION_TYPE_DESKTOP_MANAGE;
             break;
 
-        case ID_DESKTOP_VIEW_SESSION:
+        case ID_DESKTOP_VIEW_SESSION_TB:
             string_id = IDS_SESSION_TYPE_DESKTOP_VIEW;
             break;
 
-        case ID_FILE_TRANSFER_SESSION:
+        case ID_FILE_TRANSFER_SESSION_TB:
             string_id = IDS_SESSION_TYPE_FILE_TRANSFER;
             break;
 
-        case ID_SYSTEM_INFO_SESSION:
+        case ID_SYSTEM_INFO_SESSION_TB:
             string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
             break;
 
-        case ID_POWER_MANAGE_SESSION:
+        case ID_POWER_MANAGE_SESSION_TB:
             string_id = IDS_SESSION_TYPE_POWER_MANAGE;
             break;
 

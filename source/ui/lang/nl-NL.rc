@@ -337,6 +337,7 @@ BEGIN
     END
     POPUP "&Tools"
     BEGIN
+        MENUITEM "&Address Book", ID_ADDRESS_BOOK
         MENUITEM "&System Information", ID_SYSTEM_INFO
     END
     POPUP "&Help"
@@ -589,6 +590,7 @@ BEGIN
     IDS_COL_NAME                            "Name"
     IDS_COL_ADDRESS                         "Address"
     IDS_COL_PORT                            "Port"
+    IDS_TOOLTIP_NEW                         "Create new address book"
     IDS_TOOLTIP_OPEN                        "Open Address Book"
     IDS_TOOLTIP_SAVE                        "Save Address Book"
     IDS_TOOLTIP_ABOUT                       "About"
