@@ -221,20 +221,10 @@ LRESULT AddressBookWindow::OnMouseMove(
 
         group_tree_ctrl_.GetParent().ScreenToClient(&pos);
 
-        TVHITTESTINFO hit_test_info;
-        hit_test_info.pt.x = pos.x;
-        hit_test_info.pt.y = pos.y;
+        HTREEITEM target_item = group_tree_ctrl_.HitTest(pos, 0);
 
-        HTREEITEM target_item = group_tree_ctrl_.HitTest(&hit_test_info);
-
-        if (target_item &&
-            // A moved element can not be moved to a child element.
-            !group_tree_ctrl_.IsItemContainsChild(group_tree_edited_item_, target_item))
-        {
-            group_tree_ctrl_.SendMessageW(TVM_SELECTITEM,
-                                          TVGN_DROPHILITE,
-                                          reinterpret_cast<LPARAM>(target_item));
-        }
+        if (group_tree_ctrl_.IsAllowedDropTarget(target_item, group_tree_edited_item_))
+            group_tree_ctrl_.SelectDropTarget(target_item);
 
         group_tree_drag_imagelist_.DragShowNolock(TRUE);
     }
@@ -245,34 +235,42 @@ LRESULT AddressBookWindow::OnMouseMove(
 bool AddressBookWindow::MoveGroup(HTREEITEM target_item, HTREEITEM source_item)
 {
     HTREEITEM old_parent_item = group_tree_ctrl_.GetParentItem(source_item);
-    if (!old_parent_item || old_parent_item == target_item)
+    if (!old_parent_item)
         return false;
 
-    if (group_tree_ctrl_.IsItemContainsChild(source_item, target_item))
+    // The previous parent group matches the new (the position of the element has not changed).
+    if (old_parent_item == target_item)
+        return false;
+
+    if (!group_tree_ctrl_.IsAllowedDropTarget(target_item, source_item))
         return false;
 
     proto::ComputerGroup* old_parent_group = group_tree_ctrl_.GetComputerGroup(old_parent_item);
     proto::ComputerGroup* new_parent_group = group_tree_ctrl_.GetComputerGroup(target_item);
-    proto::ComputerGroup* group_to_move = group_tree_ctrl_.GetComputerGroup(source_item);
+    proto::ComputerGroup* old_group = group_tree_ctrl_.GetComputerGroup(source_item);
 
-    if (!old_parent_group || !new_parent_group || !group_to_move)
+    if (!old_parent_group || !new_parent_group || !old_group)
         return false;
 
-    proto::ComputerGroup temp(*group_to_move);
+    // Create group in new place.
+    proto::ComputerGroup* new_group = new_parent_group->add_group();
 
-    if (DeleteChildGroup(old_parent_group, group_to_move))
+    // Move source group to destonation group.
+    *new_group = std::move(*old_group);
+
+    // Add group tree to UI control.
+    HTREEITEM item = group_tree_ctrl_.AddComputerGroupTree(target_item, new_group);
+    if (item)
     {
-        group_tree_ctrl_.DeleteItem(source_item);
-
-        proto::ComputerGroup* group = new_parent_group->add_group();
-        group->CopyFrom(temp);
-
-        HTREEITEM item = group_tree_ctrl_.AddComputerGroupTree(target_item, group);
-
         group_tree_ctrl_.Expand(target_item, TVE_EXPAND);
         group_tree_ctrl_.SelectItem(item);
 
-        SetAddressBookChanged(true);
+        // Now we can remove the group from the previous place.
+        if (DeleteChildGroup(old_parent_group, old_group))
+        {
+            // Remove group from UI control.
+            group_tree_ctrl_.DeleteItem(source_item);
+        }
     }
 
     return true;
@@ -294,15 +292,15 @@ LRESULT AddressBookWindow::OnLButtonUp(
 
         group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
 
-        TVHITTESTINFO hit_test_info;
-        hit_test_info.pt = cursor_pos;
+        HTREEITEM target_item = group_tree_ctrl_.HitTest(cursor_pos, 0);
 
-        HTREEITEM target_item = group_tree_ctrl_.HitTest(&hit_test_info);
+        group_tree_ctrl_.SelectDropTarget(nullptr);
 
-        group_tree_ctrl_.SendMessageW(TVM_SELECTITEM, TVGN_DROPHILITE, 0);
-
-        if (target_item && target_item != TVI_ROOT)
-            MoveGroup(target_item, group_tree_edited_item_);
+        if (MoveGroup(target_item, group_tree_edited_item_))
+        {
+            // Mark the address book as changed.
+            SetAddressBookChanged(true);
+        }
 
         ReleaseCapture();
     }
@@ -459,10 +457,7 @@ LRESULT AddressBookWindow::OnGroupTreeRightClick(
 
     group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
 
-    TVHITTESTINFO hit_test_info;
-    hit_test_info.pt = cursor_pos;
-
-    group_tree_edited_item_ = group_tree_ctrl_.HitTest(&hit_test_info);
+    group_tree_edited_item_ = group_tree_ctrl_.HitTest(cursor_pos, 0);
     if (!group_tree_edited_item_)
         return 0;
 
@@ -832,7 +827,6 @@ LRESULT AddressBookWindow::OnSelectSessionButton(
                                          ID_POWER_MANAGE_SESSION_TB,
                                          control_id,
                                          MF_BYCOMMAND);
-
     toolbar_.CheckButton(control_id, TRUE);
     return 0;
 }
@@ -917,10 +911,9 @@ bool AddressBookWindow::OpenAddressBook()
 
     HTREEITEM root_item = group_tree_ctrl_.AddComputerGroupTree(
         TVI_ROOT, address_book_->mutable_root_group());
+    group_tree_ctrl_.Expand(root_item, TVE_EXPAND);
 
     computer_list_ctrl_.AddChildComputers(address_book_->mutable_root_group());
-
-    group_tree_ctrl_.Expand(root_item, TVE_EXPAND);
 
     group_tree_ctrl_.EnableWindow(TRUE);
     computer_list_ctrl_.EnableWindow(TRUE);

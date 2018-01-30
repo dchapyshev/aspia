@@ -75,6 +75,10 @@ HTREEITEM ComputerGroupTreeCtrl::AddComputerGroup(HTREEITEM parent_item,
 HTREEITEM ComputerGroupTreeCtrl::AddComputerGroupTree(
     HTREEITEM item, proto::ComputerGroup* computer_group)
 {
+    HTREEITEM root = AddComputerGroup(item, computer_group);
+    if (!root)
+        return nullptr;
+
     std::function<void(HTREEITEM, proto::ComputerGroup*)> add_child_items =
         [&](HTREEITEM parent_item, proto::ComputerGroup* parent_group)
     {
@@ -82,22 +86,18 @@ HTREEITEM ComputerGroupTreeCtrl::AddComputerGroupTree(
         {
             proto::ComputerGroup* child_group = parent_group->mutable_group(i);
 
-            HTREEITEM item = AddComputerGroup(parent_item, child_group);
-
-            if (item)
+            HTREEITEM new_item = AddComputerGroup(parent_item, child_group);
+            if (new_item)
             {
-                add_child_items(item, child_group);
+                add_child_items(new_item, child_group);
 
                 if (child_group->expanded())
-                    Expand(item, TVE_EXPAND);
+                    Expand(new_item, TVE_EXPAND);
             }
         }
     };
 
-    HTREEITEM root = AddComputerGroup(item, computer_group);
-    if (root)
-        add_child_items(root, computer_group);
-
+    add_child_items(root, computer_group);
     return root;
 }
 
@@ -113,24 +113,37 @@ void ComputerGroupTreeCtrl::UpdateComputerGroup(
     SetItemText(item, UNICODEfromUTF8(computer_group->name()).c_str());
 }
 
-bool ComputerGroupTreeCtrl::IsItemContainsChild(HTREEITEM item, HTREEITEM child_item)
+bool ComputerGroupTreeCtrl::IsAllowedDropTarget(HTREEITEM target_item, HTREEITEM item)
 {
-    std::function<bool(HTREEITEM _item)> is_contains = [&](HTREEITEM _item)
+    if (!target_item || target_item == TVI_ROOT)
+        return false;
+
+    // The group can not be moved to itself.
+    if (target_item == item)
+        return false;
+
+    std::function<bool(HTREEITEM, HTREEITEM)> is_child_item =
+        [&](HTREEITEM parent_item, HTREEITEM child_item)
     {
-        for (HTREEITEM current = GetChildItem(_item);
+        for (HTREEITEM current = GetChildItem(parent_item);
              current != nullptr;
              current = GetNextSiblingItem(current))
         {
             if (current == child_item)
                 return true;
 
-            return is_contains(current);
+            if (is_child_item(current, child_item))
+                return true;
         }
 
         return false;
     };
 
-    return is_contains(item);
+    // We can not move the group to the child group.
+    if (is_child_item(item, target_item))
+        return false;
+
+    return true;
 }
 
 } // namespace aspia

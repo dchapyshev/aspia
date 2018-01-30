@@ -29,7 +29,7 @@ public:
     HTREEITEM AddComputerGroupTree(HTREEITEM parent_item, proto::ComputerGroup* computer_group);
     proto::ComputerGroup* GetComputerGroup(HTREEITEM item);
     void UpdateComputerGroup(HTREEITEM item, proto::ComputerGroup* computer_group);
-    bool IsItemContainsChild(HTREEITEM item, HTREEITEM child_item);
+    bool IsAllowedDropTarget(HTREEITEM target_item, HTREEITEM item);
 
 private:
     BEGIN_MSG_MAP(ComputerGroupTreeCtrl)
