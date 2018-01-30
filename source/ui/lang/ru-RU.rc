@@ -437,15 +437,6 @@ BEGIN
     END
 END
 
-IDR_COMPUTER_LIST MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
-        MENUITEM "Добавить &группу", ID_ADD_GROUP
-    END
-END
-
 IDR_COMPUTER_LIST_ITEM MENU
 BEGIN
     POPUP "popup"
@@ -458,9 +449,6 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Изменить", ID_EDIT_COMPUTER
         MENUITEM "&Удалить", ID_DELETE_COMPUTER
-        MENUITEM SEPARATOR
-        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
-        MENUITEM "Добавить &группу", ID_ADD_GROUP
     END
 END
 

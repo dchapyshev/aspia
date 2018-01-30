@@ -437,15 +437,6 @@ BEGIN
     END
 END
 
-IDR_COMPUTER_LIST MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-        MENUITEM "Add &Group", ID_ADD_GROUP
-    END
-END
-
 IDR_COMPUTER_LIST_ITEM MENU
 BEGIN
     POPUP "popup"
@@ -456,11 +447,8 @@ BEGIN
         MENUITEM "System Information", ID_SYSTEM_INFO_SESSION
         MENUITEM "Power Manage", ID_POWER_MANAGE_SESSION
         MENUITEM SEPARATOR
-       
+        MENUITEM "&Edit", ID_EDIT_COMPUTER
         MENUITEM "&Delete", ID_DELETE_COMPUTER
-        MENUITEM SEPARATOR
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-        MENUITEM "Add &Group", ID_ADD_GROUP
     END
 END
 

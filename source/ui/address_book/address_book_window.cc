@@ -355,12 +355,10 @@ LRESULT AddressBookWindow::OnComputerListDoubleClick(
 LRESULT AddressBookWindow::OnComputerListRightClick(
     int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
 {
-    CMenu menu;
+    if (computer_list_ctrl_.GetSelectedCount() <= 0)
+        return 0;
 
-    if (computer_list_ctrl_.GetSelectedCount() != 0)
-        menu = AtlLoadMenu(IDR_COMPUTER_LIST_ITEM);
-    else
-        menu = AtlLoadMenu(IDR_COMPUTER_LIST);
+    CMenu menu(AtlLoadMenu(IDR_COMPUTER_LIST_ITEM));
 
     POINT cursor_pos;
     GetCursorPos(&cursor_pos);
