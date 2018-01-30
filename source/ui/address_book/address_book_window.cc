@@ -418,9 +418,13 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
 
     toolbar_.EnableButton(ID_ADD_GROUP, TRUE);
     toolbar_.EnableButton(ID_ADD_COMPUTER, TRUE);
+    toolbar_.EnableButton(ID_DELETE_COMPUTER, FALSE);
+    toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
 
     edit_menu.EnableMenuItem(ID_ADD_GROUP, MF_BYCOMMAND | MF_ENABLED);
     edit_menu.EnableMenuItem(ID_ADD_COMPUTER, MF_BYCOMMAND | MF_ENABLED);
+    edit_menu.EnableMenuItem(ID_DELETE_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
+    edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
 
     if (group_tree_ctrl_.GetFirstVisibleItem() == header->itemNew.hItem)
     {
