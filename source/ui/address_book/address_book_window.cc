@@ -427,6 +427,14 @@ LRESULT AddressBookWindow::OnComputerListRightClick(
     return 0;
 }
 
+LRESULT AddressBookWindow::OnComputerListColumnClick(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(hdr);
+    computer_list_ctrl_.SortItemsByColumn(pnmv->iSubItem);
+    return 0;
+}
+
 LRESULT AddressBookWindow::OnComputerListItemChanged(
     int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
 {

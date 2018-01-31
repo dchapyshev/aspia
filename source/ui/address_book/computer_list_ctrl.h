@@ -29,13 +29,23 @@ public:
     void AddChildComputers(proto::ComputerGroup* computer_group);
     proto::Computer* GetComputer(int item_index);
     void UpdateComputer(int item_index, proto::Computer* computer);
+    void SortItemsByColumn(int column_index);
 
 private:
     BEGIN_MSG_MAP(ComputerListCtrl)
         // Nothing
     END_MSG_MAP()
 
+    struct SortingContext
+    {
+        ComputerListCtrl* list;
+        int column_index;
+    };
+
+    static int CALLBACK SortingCompare(LPARAM lparam1, LPARAM lparam2, LPARAM lparam_sort);
+
     CImageListManaged imagelist_;
+    bool sorting_ascending_ = false;
 };
 
 } // namespace aspia

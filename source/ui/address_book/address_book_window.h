@@ -47,6 +47,7 @@ private:
 
         NOTIFY_HANDLER(kComputerListCtrl, NM_DBLCLK, OnComputerListDoubleClick)
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
+        NOTIFY_HANDLER(kComputerListCtrl, LVN_COLUMNCLICK, OnComputerListColumnClick)
         NOTIFY_HANDLER(kComputerListCtrl, LVN_ITEMCHANGED, OnComputerListItemChanged)
         NOTIFY_HANDLER(kComputerListCtrl, LVN_BEGINDRAG, OnComputerListBeginDrag)
 
@@ -94,6 +95,7 @@ private:
 
     LRESULT OnComputerListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnComputerListColumnClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListBeginDrag(int control_id, LPNMHDR hdr, BOOL& handled);
 
