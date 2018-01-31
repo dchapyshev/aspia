@@ -254,6 +254,7 @@
 #define IDR_ADDRESS_BOOK_MAIN                      107
 #define IDR_GROUP_TREE                             108
 #define IDR_GROUP_TREE_ITEM                        109
+#define IDR_COMPUTER_LIST                          110
 #define IDR_COMPUTER_LIST_ITEM                     111
 
 //

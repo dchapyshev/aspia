@@ -411,10 +411,21 @@ LRESULT AddressBookWindow::OnComputerListDoubleClick(
 LRESULT AddressBookWindow::OnComputerListRightClick(
     int /* control_id */, LPNMHDR /* hdr */, BOOL& /* handled */)
 {
-    if (computer_list_ctrl_.GetSelectedCount() <= 0)
-        return 0;
+    CMenu menu;
 
-    CMenu menu(AtlLoadMenu(IDR_COMPUTER_LIST_ITEM));
+    switch (computer_list_ctrl_.GetSelectedCount())
+    {
+        case 0:
+            menu = AtlLoadMenu(IDR_COMPUTER_LIST);
+            break;
+
+        case 1:
+            menu = AtlLoadMenu(IDR_COMPUTER_LIST_ITEM);
+            break;
+
+        default:
+            return 0;
+    }
 
     POINT cursor_pos;
     GetCursorPos(&cursor_pos);
