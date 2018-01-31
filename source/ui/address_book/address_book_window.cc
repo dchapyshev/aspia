@@ -638,16 +638,14 @@ LRESULT AddressBookWindow::OnOpenButton(
 LRESULT AddressBookWindow::OnSaveButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    if (address_book_changed_)
-        SaveAddressBook(address_book_path_);
+    SaveAddressBook(address_book_path_);
     return 0;
 }
 
 LRESULT AddressBookWindow::OnSaveAsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    if (address_book_changed_)
-        SaveAddressBook(std::experimental::filesystem::path());
+    SaveAddressBook(std::experimental::filesystem::path());
     return 0;
 }
 
