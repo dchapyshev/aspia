@@ -383,7 +383,7 @@ BEGIN
     POPUP "&File"
     BEGIN
         MENUITEM "&New\tCtrl+N", ID_NEW
-        MENUITEM "&Open\tCtrl+O", ID_OPEN
+        MENUITEM "&Open...\tCtrl+O", ID_OPEN
         MENUITEM "&Save\tCtrl+S", ID_SAVE
         MENUITEM "Save &As...\tCtrl+Alt+S", ID_SAVE_AS
         MENUITEM "&Close\tCtrl+W", ID_CLOSE

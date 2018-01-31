@@ -22,7 +22,8 @@ namespace aspia {
 
 namespace {
 
-const WCHAR kAddressBookFileExtension[] = L"*.aad";
+const WCHAR kAddressBookFileExtensionFilter[] = L"*.aab";
+const WCHAR kAddressBookFileExtension[] = L"aab";
 
 bool DeleteChildComputer(proto::ComputerGroup* parent_group, proto::Computer* computer)
 {
@@ -968,8 +969,8 @@ bool AddressBookWindow::OpenAddressBook()
         int length = 0;
 
         length += AtlLoadString(IDS_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
-        StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtension);
-        length += ARRAYSIZE(kAddressBookFileExtension);
+        StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtensionFilter);
+        length += ARRAYSIZE(kAddressBookFileExtensionFilter);
 
         CFileDialog dialog(TRUE, kAddressBookFileExtension, L"", OFN_HIDEREADONLY, filter);
         if (dialog.DoModal() == IDCANCEL)
@@ -1049,10 +1050,11 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
         int length = 0;
 
         length += AtlLoadString(IDS_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
-        StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtension);
-        length += ARRAYSIZE(kAddressBookFileExtension);
+        StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtensionFilter);
+        length += ARRAYSIZE(kAddressBookFileExtensionFilter);
 
-        CFileDialog dialog(FALSE, L"aad", L"", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
+        CFileDialog dialog(FALSE, kAddressBookFileExtension, L"",
+                           OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter);
         if (dialog.DoModal() == IDCANCEL)
             return false;
 
