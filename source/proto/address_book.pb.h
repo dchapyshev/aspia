@@ -28,6 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_util.h>
 #include "computer.pb.h"
 // @@protoc_insertion_point(includes)
 
@@ -62,6 +63,17 @@ extern ComputerGroupDefaultTypeInternal _ComputerGroup_default_instance_;
 }  // namespace aspia
 namespace aspia {
 namespace proto {
+
+enum AddressBook_EncryptionType {
+  AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE = 0,
+  AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 1,
+  AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool AddressBook_EncryptionType_IsValid(int value);
+const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MIN = AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE;
+const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MAX = AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305;
+const int AddressBook_EncryptionType_EncryptionType_ARRAYSIZE = AddressBook_EncryptionType_EncryptionType_MAX + 1;
 
 // ===================================================================
 
@@ -296,22 +308,49 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // nested types ----------------------------------------------------
 
+  typedef AddressBook_EncryptionType EncryptionType;
+  static const EncryptionType ENCRYPTION_TYPE_NONE =
+    AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE;
+  static const EncryptionType ENCRYPTION_TYPE_XCHACHA20_POLY1305 =
+    AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305;
+  static inline bool EncryptionType_IsValid(int value) {
+    return AddressBook_EncryptionType_IsValid(value);
+  }
+  static const EncryptionType EncryptionType_MIN =
+    AddressBook_EncryptionType_EncryptionType_MIN;
+  static const EncryptionType EncryptionType_MAX =
+    AddressBook_EncryptionType_EncryptionType_MAX;
+  static const int EncryptionType_ARRAYSIZE =
+    AddressBook_EncryptionType_EncryptionType_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.ComputerGroup root_group = 1;
-  bool has_root_group() const;
-  void clear_root_group();
-  static const int kRootGroupFieldNumber = 1;
-  const ::aspia::proto::ComputerGroup& root_group() const;
-  ::aspia::proto::ComputerGroup* release_root_group();
-  ::aspia::proto::ComputerGroup* mutable_root_group();
-  void set_allocated_root_group(::aspia::proto::ComputerGroup* root_group);
+  // bytes data = 2;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  #if LANG_CXX11
+  void set_data(::std::string&& value);
+  #endif
+  void set_data(const char* value);
+  void set_data(const void* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
+
+  // .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
+  void clear_encryption_type();
+  static const int kEncryptionTypeFieldNumber = 1;
+  ::aspia::proto::AddressBook_EncryptionType encryption_type() const;
+  void set_encryption_type(::aspia::proto::AddressBook_EncryptionType value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.AddressBook)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::ComputerGroup* root_group_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
+  int encryption_type_;
   mutable int _cached_size_;
   friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
   friend void ::protobuf_address_5fbook_2eproto::InitDefaultsAddressBookImpl();
@@ -508,54 +547,71 @@ inline void ComputerGroup::set_expanded(bool value) {
 
 // AddressBook
 
-// .aspia.proto.ComputerGroup root_group = 1;
-inline bool AddressBook::has_root_group() const {
-  return this != internal_default_instance() && root_group_ != NULL;
+// .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
+inline void AddressBook::clear_encryption_type() {
+  encryption_type_ = 0;
 }
-inline void AddressBook::clear_root_group() {
-  if (GetArenaNoVirtual() == NULL && root_group_ != NULL) {
-    delete root_group_;
-  }
-  root_group_ = NULL;
+inline ::aspia::proto::AddressBook_EncryptionType AddressBook::encryption_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.encryption_type)
+  return static_cast< ::aspia::proto::AddressBook_EncryptionType >(encryption_type_);
 }
-inline const ::aspia::proto::ComputerGroup& AddressBook::root_group() const {
-  const ::aspia::proto::ComputerGroup* p = root_group_;
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.root_group)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::ComputerGroup*>(
-      &::aspia::proto::_ComputerGroup_default_instance_);
-}
-inline ::aspia::proto::ComputerGroup* AddressBook::release_root_group() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AddressBook.root_group)
+inline void AddressBook::set_encryption_type(::aspia::proto::AddressBook_EncryptionType value) {
   
-  ::aspia::proto::ComputerGroup* temp = root_group_;
-  root_group_ = NULL;
-  return temp;
+  encryption_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.AddressBook.encryption_type)
 }
-inline ::aspia::proto::ComputerGroup* AddressBook::mutable_root_group() {
+
+// bytes data = 2;
+inline void AddressBook::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& AddressBook::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.data)
+  return data_.GetNoArena();
+}
+inline void AddressBook::set_data(const ::std::string& value) {
   
-  if (root_group_ == NULL) {
-    root_group_ = new ::aspia::proto::ComputerGroup;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.root_group)
-  return root_group_;
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.AddressBook.data)
 }
-inline void AddressBook::set_allocated_root_group(::aspia::proto::ComputerGroup* root_group) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete root_group_;
-  }
-  if (root_group) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      root_group = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, root_group, submessage_arena);
-    }
+#if LANG_CXX11
+inline void AddressBook::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AddressBook.data)
+}
+#endif
+inline void AddressBook::set_data(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.AddressBook.data)
+}
+inline void AddressBook::set_data(const void* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AddressBook.data)
+}
+inline ::std::string* AddressBook::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* AddressBook::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.AddressBook.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void AddressBook::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
     
   } else {
     
   }
-  root_group_ = root_group;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AddressBook.root_group)
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AddressBook.data)
 }
 
 #ifdef __GNUC__
@@ -568,6 +624,14 @@ inline void AddressBook::set_allocated_root_group(::aspia::proto::ComputerGroup*
 
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::AddressBook_EncryptionType> : ::google::protobuf::internal::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

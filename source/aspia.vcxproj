@@ -197,7 +197,8 @@
     <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="crypto\encryptor.cc" />
     <ClCompile Include="crypto\secure_memory.cc" />
-    <ClCompile Include="crypto\sha512.cc" />
+    <ClCompile Include="crypto\sha.cc" />
+    <ClCompile Include="crypto\string_encryptor.cc" />
     <ClCompile Include="desktop_capture\capturer_gdi.cc" />
     <ClCompile Include="desktop_capture\capture_scheduler.cc" />
     <ClCompile Include="desktop_capture\cursor.cc" />
@@ -268,6 +269,8 @@
     <ClCompile Include="report\table.cc" />
     <ClCompile Include="report\value.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
+    <ClCompile Include="ui\address_book\address_book_dialog.cc" />
+    <ClCompile Include="ui\address_book\address_book_secure_util.cc" />
     <ClCompile Include="ui\address_book\address_book_toolbar.cc" />
     <ClCompile Include="ui\address_book\address_book_window.cc" />
     <ClCompile Include="ui\address_book\computer_dialog.cc" />
@@ -515,7 +518,8 @@
     <ClInclude Include="command_line_switches.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\secure_memory.h" />
-    <ClInclude Include="crypto\sha512.h" />
+    <ClInclude Include="crypto\sha.h" />
+    <ClInclude Include="crypto\string_encryptor.h" />
     <ClInclude Include="desktop_capture\capturer.h" />
     <ClInclude Include="desktop_capture\capturer_gdi.h" />
     <ClInclude Include="desktop_capture\capture_scheduler.h" />
@@ -590,6 +594,8 @@
     <ClInclude Include="report\table.h" />
     <ClInclude Include="report\value.h" />
     <ClInclude Include="ui\about_dialog.h" />
+    <ClInclude Include="ui\address_book\address_book_dialog.h" />
+    <ClInclude Include="ui\address_book\address_book_secure_util.h" />
     <ClInclude Include="ui\address_book\address_book_toolbar.h" />
     <ClInclude Include="ui\address_book\address_book_window.h" />
     <ClInclude Include="ui\address_book\computer_dialog.h" />

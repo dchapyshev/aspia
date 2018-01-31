@@ -107,6 +107,7 @@
 #define IDD_REPORT_PROGRESS                        113
 #define IDD_COMPUTER                               114
 #define IDD_COMPUTER_GROUP                         115
+#define IDD_ADDRESS_BOOK                           116
 
 //
 // Controls
@@ -170,6 +171,7 @@
 #define IDC_SERVER_ADDRESS_EDIT                    156
 #define IDC_COMMENT_EDIT                           157
 #define IDC_ADDRESS_BOOK_ACCELERATORS              158
+#define IDC_ENCRYPTION_TYPE_COMBO                  159
 
 //
 // Commands
@@ -407,6 +409,8 @@
 #define IDS_AB_UNABLE_TO_READ_FILE_ERROR            5023
 #define IDS_AB_GROUP_DELETE_CONFIRMATION            5024
 #define IDS_AB_COMPUTER_DELETE_CONFIRMATION         5025
+#define IDS_AB_ENCRYPTION_NONE                      5026
+#define IDS_AB_ENCRYPTION_XCHACHA20_POLY1305        5027
 
 // Authorization Status
 #define IDS_AUTH_STATUS_UNKNOWN                     10000

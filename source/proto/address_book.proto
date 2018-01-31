@@ -25,5 +25,12 @@ message ComputerGroup
 
 message AddressBook
 {
-    ComputerGroup root_group = 1;
+    enum EncryptionType
+    {
+        ENCRYPTION_TYPE_NONE               = 0;
+        ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 1;
+    }
+
+    EncryptionType encryption_type = 1;
+    bytes data = 2;
 }

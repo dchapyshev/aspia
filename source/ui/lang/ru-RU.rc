@@ -286,6 +286,30 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 171, 153, 60, 14
 END
 
+IDD_ADDRESS_BOOK DIALOGEX 100, 100, 240, 202
+STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Свойства адресной книги"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Имя:", -1, 10, 13, 77, 10
+    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
+
+    LTEXT "Шифрование:", -1, 10, 35, 77, 10
+    COMBOBOX IDC_ENCRYPTION_TYPE_COMBO, 100, 31, 130, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
+
+    LTEXT "Пароль:", -1, 10, 55, 77, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 100, 53, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    LTEXT "Пароль (повторить):", -1, 10, 77, 77, 10
+    EDITTEXT IDC_PASSWORD_RETRY_EDIT, 100, 75, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    LTEXT "Коментарий:", -1, 10, 97, 77, 10
+    EDITTEXT IDC_COMMENT_EDIT, 10, 109, 220, 65, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
+
+    PUSHBUTTON "&OK", IDOK, 106, 181, 60, 14
+    PUSHBUTTON "&Отмена", IDCANCEL, 171, 181, 60, 14
+END
+
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -640,12 +664,14 @@ BEGIN
     IDS_AB_TOO_LONG_NAME_ERROR              "Слишком длинное имя. Максимальная длинна имени 64 символа."
     IDS_AB_TOO_LONG_COMMENT_ERROR           "Слишком длинный коментарий. Максимальная длинна коментария 2048 символов."
     IDS_AB_NAME_CANT_BE_EMPTY_ERROR         "Имя не может быть пустым."
-    IDS_AB_ADDRESS_BOOK_FILTER              "Адресная книга Aspia (*.aad)"
+    IDS_AB_ADDRESS_BOOK_FILTER              "Адресная книга Aspia (*.aab)"
     IDS_AB_UNABLE_TO_OPEN_FILE_ERROR        "Не удалось создать или открыть файл адресной книги."
     IDS_AB_UNABLE_TO_WRITE_FILE_ERROR       "Не удалось записать файл адресной книги."
     IDS_AB_UNABLE_TO_READ_FILE_ERROR        "Не удалось прочитать файл адресной книги."
     IDS_AB_GROUP_DELETE_CONFIRMATION        "Вы действительно хотите удалить группу компьютеров ""%s"" и все дочерние элементы?"
     IDS_AB_COMPUTER_DELETE_CONFIRMATION     "Вы действительно хотите удалить компьютер ""%s""?"
+    IDS_AB_ENCRYPTION_NONE                  "Without encryption"
+    IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-bit key)"
 END
 
 // Authorization Status

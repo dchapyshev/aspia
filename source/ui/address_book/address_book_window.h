@@ -156,6 +156,8 @@ private:
     std::experimental::filesystem::path address_book_path_;
     bool address_book_changed_ = false;
 
+    proto::ComputerGroup root_group_;
+
     std::unique_ptr<ClientPool> client_pool_;
 };
 

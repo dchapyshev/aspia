@@ -10,7 +10,7 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "crypto/secure_memory.h"
-#include "crypto/sha512.h"
+#include "crypto/sha.h"
 
 #include <filesystem>
 #include <fstream>
@@ -76,9 +76,7 @@ bool HostUserList::CreatePasswordHash(const std::string& password,
     std::wstring password_unicode = UNICODEfromUTF8(password);
     if (IsValidPassword(password_unicode))
     {
-        result = CreateSHA512(password,
-                              password_hash,
-                              kPasswordHashIterCount);
+        result = SHA512(password, password_hash, kPasswordHashIterCount);
     }
 
     SecureMemZero(password_unicode);

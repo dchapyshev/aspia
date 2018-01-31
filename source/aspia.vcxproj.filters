@@ -289,9 +289,6 @@
     <ClCompile Include="ui\user_prop_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="crypto\sha512.cc">
-      <Filter>crypto</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_main.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -944,6 +941,18 @@
     <ClCompile Include="ui\address_book\computer_list_ctrl.cc">
       <Filter>ui\address_book</Filter>
     </ClCompile>
+    <ClCompile Include="crypto\string_encryptor.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book\address_book_dialog.cc">
+      <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\address_book\address_book_secure_util.cc">
+      <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\sha.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1226,9 +1235,6 @@
     </ClInclude>
     <ClInclude Include="ui\user_prop_dialog.h">
       <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="crypto\sha512.h">
-      <Filter>crypto</Filter>
     </ClInclude>
     <ClInclude Include="ui\base\tray_icon.h">
       <Filter>ui\base</Filter>
@@ -1908,6 +1914,18 @@
     </ClInclude>
     <ClInclude Include="ui\address_book\computer_list_ctrl.h">
       <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\string_encryptor.h">
+      <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book\address_book_dialog.h">
+      <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\address_book\address_book_secure_util.h">
+      <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\sha.h">
+      <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

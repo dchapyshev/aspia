@@ -14,9 +14,11 @@
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
-#include "ui/about_dialog.h"
+#include "crypto/secure_memory.h"
+#include "ui/address_book/address_book_dialog.h"
 #include "ui/address_book/computer_dialog.h"
 #include "ui/address_book/computer_group_dialog.h"
+#include "ui/about_dialog.h"
 
 namespace aspia {
 
@@ -670,6 +672,11 @@ LRESULT AddressBookWindow::OnNewButton(
     if (!CloseAddressBook())
         return 0;
 
+    AddressBookDialog dialog;
+
+    if (dialog.DoModal() == IDCANCEL)
+        return 0;
+
     computer_list_ctrl_.EnableWindow(TRUE);
     group_tree_ctrl_.EnableWindow(TRUE);
 
@@ -677,9 +684,11 @@ LRESULT AddressBookWindow::OnNewButton(
     name.LoadStringW(IDS_AB_DEFAULT_ADDRESS_BOOK_NAME);
 
     address_book_ = std::make_unique<proto::AddressBook>();
-    address_book_->mutable_root_group()->set_name(UTF8fromUNICODE(name));
 
-    group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, address_book_->mutable_root_group());
+    root_group_.Clear();
+    root_group_.set_name(UTF8fromUNICODE(name));
+
+    group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, &root_group_);
 
     SetAddressBookChanged(true);
 
@@ -1020,11 +1029,25 @@ bool AddressBookWindow::OpenAddressBook()
         return false;
     }
 
-    HTREEITEM root_item = group_tree_ctrl_.AddComputerGroupTree(
-        TVI_ROOT, address_book_->mutable_root_group());
+    switch (address_book_->encryption_type())
+    {
+        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+            root_group_.ParseFromString(address_book_->data());
+            break;
+
+        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+            // TODO
+            break;
+
+        default:
+            // TODO Unsupported encryption type
+            break;
+    }
+
+    HTREEITEM root_item = group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, &root_group_);
     group_tree_ctrl_.Expand(root_item, TVE_EXPAND);
 
-    computer_list_ctrl_.AddChildComputers(address_book_->mutable_root_group());
+    computer_list_ctrl_.AddChildComputers(&root_group_);
 
     group_tree_ctrl_.EnableWindow(TRUE);
     computer_list_ctrl_.EnableWindow(TRUE);
@@ -1073,6 +1096,9 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
+
+    address_book_->set_encryption_type(proto::AddressBook::ENCRYPTION_TYPE_NONE);
+    address_book_->set_data(root_group_.SerializeAsString());
 
     std::string buffer = address_book_->SerializeAsString();
 
