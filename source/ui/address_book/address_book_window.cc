@@ -210,24 +210,31 @@ LRESULT AddressBookWindow::OnClose(
 LRESULT AddressBookWindow::OnMouseMove(
     UINT /* message */, WPARAM /* wparam */, LPARAM lparam, BOOL& /* handled */)
 {
+    if (drag_source_ == DragSource::NONE)
+        return 0;
+
     CPoint pos(lparam);
+    ClientToScreen(&pos);
 
-    if (group_tree_dragging_)
+    drag_imagelist_.DragMove(pos.x + 15, pos.y + 15);
+    drag_imagelist_.DragShowNolock(FALSE);
+
+    group_tree_ctrl_.GetParent().ScreenToClient(&pos);
+
+    HTREEITEM target_item = group_tree_ctrl_.HitTest(pos, 0);
+
+    if (drag_source_ == DragSource::GROUP_TREE)
     {
-        ClientToScreen(&pos);
-
-        group_tree_drag_imagelist_.DragMove(pos.x + 15, pos.y + 15);
-        group_tree_drag_imagelist_.DragShowNolock(FALSE);
-
-        group_tree_ctrl_.GetParent().ScreenToClient(&pos);
-
-        HTREEITEM target_item = group_tree_ctrl_.HitTest(pos, 0);
-
         if (group_tree_ctrl_.IsAllowedDropTarget(target_item, group_tree_edited_item_))
             group_tree_ctrl_.SelectDropTarget(target_item);
-
-        group_tree_drag_imagelist_.DragShowNolock(TRUE);
     }
+    else
+    {
+        DCHECK_EQ(drag_source_, DragSource::COMPUTER_LIST);
+        group_tree_ctrl_.SelectDropTarget(target_item);
+    }
+
+    drag_imagelist_.DragShowNolock(TRUE);
 
     return 0;
 }
@@ -276,34 +283,83 @@ bool AddressBookWindow::MoveGroup(HTREEITEM target_item, HTREEITEM source_item)
     return true;
 }
 
+bool AddressBookWindow::MoveComputer(
+    HTREEITEM target_item, proto::ComputerGroup* old_parent_group, int computer_index)
+{
+    if (!target_item || target_item == TVI_ROOT || !old_parent_group || computer_index == -1)
+        return false;
+
+    proto::ComputerGroup* new_parent_group = group_tree_ctrl_.GetComputerGroup(target_item);
+    if (!new_parent_group)
+        return false;
+
+    proto::Computer* old_computer = computer_list_ctrl_.GetComputer(computer_index);
+    if (!old_computer)
+        return false;
+
+    proto::Computer* new_computer = new_parent_group->add_computer();
+
+    *new_computer = std::move(*old_computer);
+
+    if (DeleteChildComputer(old_parent_group, old_computer))
+    {
+        computer_list_ctrl_.DeleteItem(computer_index);
+    }
+
+    return true;
+}
+
 LRESULT AddressBookWindow::OnLButtonUp(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    if (group_tree_dragging_)
+    if (drag_source_ == DragSource::NONE)
+        return 0;
+
+    DragSource source = drag_source_;
+    drag_source_ = DragSource::NONE;
+
+    if (source == DragSource::GROUP_TREE)
     {
-        group_tree_dragging_ = false;
+        drag_imagelist_.DragLeave(group_tree_ctrl_);
+    }
+    else
+    {
+        DCHECK_EQ(source, DragSource::COMPUTER_LIST);
+        drag_imagelist_.DragLeave(computer_list_ctrl_);
+    }
 
-        group_tree_drag_imagelist_.DragLeave(group_tree_ctrl_);
-        group_tree_drag_imagelist_.EndDrag();
-        group_tree_drag_imagelist_.Destroy();
+    drag_imagelist_.EndDrag();
+    drag_imagelist_.Destroy();
 
-        POINT cursor_pos;
-        GetCursorPos(&cursor_pos);
+    CPoint cursor_pos;
+    GetCursorPos(&cursor_pos);
 
-        group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
+    group_tree_ctrl_.GetParent().ScreenToClient(&cursor_pos);
 
-        HTREEITEM target_item = group_tree_ctrl_.HitTest(cursor_pos, 0);
+    HTREEITEM target_item = group_tree_ctrl_.HitTest(cursor_pos, 0);
 
-        group_tree_ctrl_.SelectDropTarget(nullptr);
+    group_tree_ctrl_.SelectDropTarget(nullptr);
 
+    if (source == DragSource::GROUP_TREE)
+    {
         if (MoveGroup(target_item, group_tree_edited_item_))
         {
             // Mark the address book as changed.
             SetAddressBookChanged(true);
         }
-
-        ReleaseCapture();
     }
+    else
+    {
+        DCHECK_EQ(source, DragSource::COMPUTER_LIST);
+
+        if (MoveComputer(target_item, drag_computer_group_, drag_computer_index_))
+        {
+            // Mark the address book as changed.
+            SetAddressBookChanged(true);
+        }
+    }
+
+    ReleaseCapture();
 
     return 0;
 }
@@ -403,6 +459,39 @@ LRESULT AddressBookWindow::OnComputerListItemChanged(
         edit_menu.EnableMenuItem(ID_EDIT_COMPUTER, MF_BYCOMMAND | MF_DISABLED);
     }
 
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnComputerListBeginDrag(
+    int /* control_id */, LPNMHDR hdr, BOOL& /* handled */)
+{
+    drag_computer_index_ = computer_list_ctrl_.GetNextItem(-1, LVNI_SELECTED);
+    if (drag_computer_index_ == -1)
+        return 0;
+
+    HTREEITEM parent_item = group_tree_ctrl_.GetSelectedItem();
+    if (!parent_item)
+        return 0;
+
+    drag_computer_group_ = group_tree_ctrl_.GetComputerGroup(parent_item);
+    if (!drag_computer_group_)
+        return 0;
+
+    CPoint p(0, 0);
+
+    drag_imagelist_ = computer_list_ctrl_.CreateDragImage(drag_computer_index_, &p);
+    if (drag_imagelist_.IsNull())
+        return 0;
+
+    CPoint action_point = reinterpret_cast<LPNMLISTVIEW>(hdr)->ptAction;
+
+    computer_list_ctrl_.ClientToScreen(&action_point);
+
+    drag_imagelist_.BeginDrag(0, 0, 0);
+    drag_imagelist_.DragEnter(GetDesktopWindow(), action_point);
+    SetCapture();
+
+    drag_source_ = DragSource::COMPUTER_LIST;
     return 0;
 }
 
@@ -507,16 +596,16 @@ LRESULT AddressBookWindow::OnGroupTreeBeginDrag(
 {
     LPNMTREEVIEWW pnmtv = reinterpret_cast<LPNMTREEVIEWW>(hdr);
 
-    group_tree_drag_imagelist_ = group_tree_ctrl_.CreateDragImage(pnmtv->itemNew.hItem);
-    if (group_tree_drag_imagelist_.IsNull())
+    drag_imagelist_ = group_tree_ctrl_.CreateDragImage(pnmtv->itemNew.hItem);
+    if (drag_imagelist_.IsNull())
         return 0;
 
-    group_tree_drag_imagelist_.BeginDrag(0, 0, 0);
-    group_tree_drag_imagelist_.DragEnter(GetDesktopWindow(), pnmtv->ptDrag.x, pnmtv->ptDrag.y);
+    drag_imagelist_.BeginDrag(0, 0, 0);
+    drag_imagelist_.DragEnter(GetDesktopWindow(), pnmtv->ptDrag.x, pnmtv->ptDrag.y);
     SetCapture();
 
     group_tree_edited_item_ = pnmtv->itemNew.hItem;
-    group_tree_dragging_ = true;
+    drag_source_ = DragSource::GROUP_TREE;
     return 0;
 }
 
@@ -923,6 +1012,9 @@ bool AddressBookWindow::OpenAddressBook()
     CMenuHandle file_menu(main_menu_.GetSubMenu(0));
     file_menu.EnableMenuItem(ID_SAVE_AS, MF_BYCOMMAND | MF_ENABLED);
     file_menu.EnableMenuItem(ID_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+
+    group_tree_ctrl_.SelectItem(root_item);
+    group_tree_ctrl_.SetFocus();
 
     return true;
 }

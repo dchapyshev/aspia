@@ -48,6 +48,8 @@ private:
         NOTIFY_HANDLER(kComputerListCtrl, NM_DBLCLK, OnComputerListDoubleClick)
         NOTIFY_HANDLER(kComputerListCtrl, NM_RCLICK, OnComputerListRightClick)
         NOTIFY_HANDLER(kComputerListCtrl, LVN_ITEMCHANGED, OnComputerListItemChanged)
+        NOTIFY_HANDLER(kComputerListCtrl, LVN_BEGINDRAG, OnComputerListBeginDrag)
+
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_SELCHANGED, OnGroupSelected)
         NOTIFY_HANDLER(kGroupTreeCtrl, NM_RCLICK, OnGroupTreeRightClick)
         NOTIFY_HANDLER(kGroupTreeCtrl, TVN_ITEMEXPANDED, OnGroupTreeItemExpanded)
@@ -93,6 +95,8 @@ private:
     LRESULT OnComputerListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnComputerListItemChanged(int control_id, LPNMHDR hdr, BOOL& handled);
+    LRESULT OnComputerListBeginDrag(int control_id, LPNMHDR hdr, BOOL& handled);
+
     LRESULT OnGroupSelected(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeRightClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnGroupTreeItemExpanded(int control_id, LPNMHDR hdr, BOOL& handled);
@@ -115,6 +119,9 @@ private:
     LRESULT OnSelectSessionButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     bool MoveGroup(HTREEITEM target_item, HTREEITEM source_item);
+    bool MoveComputer(HTREEITEM target_item,
+                      proto::ComputerGroup* old_parent_group,
+                      int computer_index);
     void SetAddressBookChanged(bool is_changed);
     bool OpenAddressBook();
     bool SaveAddressBook(const std::experimental::filesystem::path& path);
@@ -128,16 +135,20 @@ private:
     CMenu main_menu_;
 
     VerticalSplitter splitter_;
+    AddressBookToolbar toolbar_;
     CStatusBarCtrl statusbar_;
 
     ComputerGroupTreeCtrl group_tree_ctrl_;
-    CImageListManaged group_tree_drag_imagelist_;
-    bool group_tree_dragging_ = false;
     HTREEITEM group_tree_edited_item_ = nullptr;
 
     ComputerListCtrl computer_list_ctrl_;
+    proto::ComputerGroup* drag_computer_group_ = nullptr;
+    int drag_computer_index_ = -1;
 
-    AddressBookToolbar toolbar_;
+    enum class DragSource { NONE, GROUP_TREE, COMPUTER_LIST };
+
+    DragSource drag_source_;
+    CImageListManaged drag_imagelist_;
 
     std::unique_ptr<proto::AddressBook> address_book_;
     std::experimental::filesystem::path address_book_path_;
