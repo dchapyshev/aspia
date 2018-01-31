@@ -68,7 +68,7 @@ LRESULT ComputerDialog::OnInitDialog(
     if (!computer_.address().empty())
     {
         GetDlgItem(IDC_SERVER_ADDRESS_EDIT).SetWindowTextW(
-            UNICODEfromUTF8(computer_.name()).c_str());
+            UNICODEfromUTF8(computer_.address()).c_str());
     }
 
     CEdit port_edit(GetDlgItem(IDC_SERVER_PORT_EDIT));
