@@ -170,12 +170,12 @@ LRESULT ComputerDialog::OnOkButton(
     int name_length = name_edit.GetWindowTextLengthW();
     if (name_length > kMaxNameLength)
     {
-        ShowErrorMessage(IDS_TOO_LONG_NAME_ERROR);
+        ShowErrorMessage(IDS_AB_TOO_LONG_NAME_ERROR);
         return 0;
     }
     else if (name_length < kMinNameLength)
     {
-        ShowErrorMessage(IDS_NAME_CANT_BE_EMPTY_ERROR);
+        ShowErrorMessage(IDS_AB_NAME_CANT_BE_EMPTY_ERROR);
         return 0;
     }
     else
@@ -189,7 +189,7 @@ LRESULT ComputerDialog::OnOkButton(
     CEdit comment_edit(GetDlgItem(IDC_COMMENT_EDIT));
     if (comment_edit.GetWindowTextLengthW() > kMaxCommentLength)
     {
-        ShowErrorMessage(IDS_TOO_LONG_COMMENT_ERROR);
+        ShowErrorMessage(IDS_AB_TOO_LONG_COMMENT_ERROR);
         return 0;
     }
     else

@@ -99,47 +99,47 @@ LRESULT AddressBookToolbar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOO
     switch (header->hdr.idFrom)
     {
         case ID_NEW:
-            string_id = IDS_TOOLTIP_NEW;
+            string_id = IDS_AB_TOOLTIP_NEW;
             break;
 
         case ID_OPEN:
-            string_id = IDS_TOOLTIP_OPEN;
+            string_id = IDS_AB_TOOLTIP_OPEN;
             break;
 
         case ID_SAVE:
-            string_id = IDS_TOOLTIP_SAVE;
+            string_id = IDS_AB_TOOLTIP_SAVE;
             break;
 
         case ID_ABOUT:
-            string_id = IDS_TOOLTIP_ABOUT;
+            string_id = IDS_AB_TOOLTIP_ABOUT;
             break;
 
         case ID_EXIT:
-            string_id = IDS_TOOLTIP_EXIT;
+            string_id = IDS_AB_TOOLTIP_EXIT;
             break;
 
         case ID_ADD_GROUP:
-            string_id = IDS_TOOLTIP_ADD_GROUP;
+            string_id = IDS_AB_TOOLTIP_ADD_GROUP;
             break;
 
         case ID_DELETE_GROUP:
-            string_id = IDS_TOOLTIP_DELETE_GROUP;
+            string_id = IDS_AB_TOOLTIP_DELETE_GROUP;
             break;
 
         case ID_EDIT_GROUP:
-            string_id = IDS_TOOLTIP_EDIT_GROUP;
+            string_id = IDS_AB_TOOLTIP_EDIT_GROUP;
             break;
 
         case ID_ADD_COMPUTER:
-            string_id = IDS_TOOLTIP_ADD_COMPUTER;
+            string_id = IDS_AB_TOOLTIP_ADD_COMPUTER;
             break;
 
         case ID_DELETE_COMPUTER:
-            string_id = IDS_TOOLTIP_DELETE_COMPUTER;
+            string_id = IDS_AB_TOOLTIP_DELETE_COMPUTER;
             break;
 
         case ID_EDIT_COMPUTER:
-            string_id = IDS_TOOLTIP_EDIT_COMPUTER;
+            string_id = IDS_AB_TOOLTIP_EDIT_COMPUTER;
             break;
 
         case ID_DESKTOP_MANAGE_SESSION_TB:

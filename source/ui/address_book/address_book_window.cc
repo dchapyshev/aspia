@@ -86,7 +86,7 @@ LRESULT AddressBookWindow::OnCreate(
     SetIcon(big_icon_, TRUE);
 
     CString title;
-    title.LoadStringW(IDS_ADDRESS_BOOK_TITLE);
+    title.LoadStringW(IDS_AB_TITLE);
     SetWindowTextW(title);
 
     main_menu_ = AtlLoadMenu(IDR_ADDRESS_BOOK_MAIN);
@@ -674,7 +674,7 @@ LRESULT AddressBookWindow::OnNewButton(
     group_tree_ctrl_.EnableWindow(TRUE);
 
     CString name;
-    name.LoadStringW(IDS_DEFAULT_ADDRESS_BOOK_NAME);
+    name.LoadStringW(IDS_AB_DEFAULT_ADDRESS_BOOK_NAME);
 
     address_book_ = std::make_unique<proto::AddressBook>();
     address_book_->mutable_root_group()->set_name(UTF8fromUNICODE(name));
@@ -819,7 +819,8 @@ LRESULT AddressBookWindow::OnDeleteComputerButton(
     title.LoadStringW(IDS_CONFIRMATION);
 
     CString message;
-    message.Format(IDS_COMPUTER_DELETE_CONFIRMATION, UNICODEfromUTF8(computer->name()).c_str());
+    message.Format(IDS_AB_COMPUTER_DELETE_CONFIRMATION,
+                   UNICODEfromUTF8(computer->name()).c_str());
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
@@ -859,7 +860,8 @@ LRESULT AddressBookWindow::OnDeleteGroupButton(
     title.LoadStringW(IDS_CONFIRMATION);
 
     CString message;
-    message.Format(IDS_GROUP_DELETE_CONFIRMATION, UNICODEfromUTF8(selected_group->name()).c_str());
+    message.Format(IDS_AB_GROUP_DELETE_CONFIRMATION,
+                   UNICODEfromUTF8(selected_group->name()).c_str());
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
@@ -968,7 +970,7 @@ bool AddressBookWindow::OpenAddressBook()
         WCHAR filter[256] = { 0 };
         int length = 0;
 
-        length += AtlLoadString(IDS_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
+        length += AtlLoadString(IDS_AB_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
         StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtensionFilter);
         length += ARRAYSIZE(kAddressBookFileExtensionFilter);
 
@@ -985,7 +987,7 @@ bool AddressBookWindow::OpenAddressBook()
     if (!file.is_open())
     {
         CString message;
-        message.LoadStringW(IDS_UNABLE_TO_OPEN_FILE_ERROR);
+        message.LoadStringW(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1001,7 +1003,7 @@ bool AddressBookWindow::OpenAddressBook()
     if (file.fail())
     {
         CString message;
-        message.LoadStringW(IDS_UNABLE_TO_READ_FILE_ERROR);
+        message.LoadStringW(IDS_AB_UNABLE_TO_READ_FILE_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1013,7 +1015,7 @@ bool AddressBookWindow::OpenAddressBook()
         address_book_.reset();
 
         CString message;
-        message.LoadStringW(IDS_UNABLE_TO_READ_FILE_ERROR);
+        message.LoadStringW(IDS_AB_UNABLE_TO_READ_FILE_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1049,7 +1051,7 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
         WCHAR filter[256] = { 0 };
         int length = 0;
 
-        length += AtlLoadString(IDS_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
+        length += AtlLoadString(IDS_AB_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
         StringCbCatW(filter + length, ARRAYSIZE(filter) - length, kAddressBookFileExtensionFilter);
         length += ARRAYSIZE(kAddressBookFileExtensionFilter);
 
@@ -1067,7 +1069,7 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
     if (!file.is_open())
     {
         CString message;
-        message.LoadStringW(IDS_UNABLE_TO_OPEN_FILE_ERROR);
+        message.LoadStringW(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1078,7 +1080,7 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
     if (file.fail())
     {
         CString message;
-        message.LoadStringW(IDS_UNABLE_TO_WRITE_FILE_ERROR);
+        message.LoadStringW(IDS_AB_UNABLE_TO_WRITE_FILE_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return false;
     }
@@ -1098,7 +1100,7 @@ bool AddressBookWindow::CloseAddressBook()
             title.LoadStringW(IDS_CONFIRMATION);
 
             CString message;
-            message.LoadStringW(IDS_ADDRESS_BOOK_CHANGED);
+            message.LoadStringW(IDS_AB_ADDRESS_BOOK_CHANGED);
 
             switch (MessageBoxW(message, title, MB_YESNOCANCEL | MB_ICONQUESTION))
             {

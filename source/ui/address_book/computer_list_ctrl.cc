@@ -63,9 +63,9 @@ bool ComputerListCtrl::Create(HWND parent, UINT control_id)
             SetColumnWidth(column_index, width);
         };
 
-        add_column(IDS_COL_NAME, 0, 250);
-        add_column(IDS_COL_ADDRESS, 1, 200);
-        add_column(IDS_COL_PORT, 2, 100);
+        add_column(IDS_AB_COL_NAME, 0, 250);
+        add_column(IDS_AB_COL_ADDRESS, 1, 200);
+        add_column(IDS_AB_COL_PORT, 2, 100);
     }
 
     return true;

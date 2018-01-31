@@ -69,14 +69,14 @@ LRESULT ComputerGroupDialog::OnOkButton(
     if (name_length > kMaxNameLength)
     {
         CString message;
-        message.LoadStringW(IDS_TOO_LONG_NAME_ERROR);
+        message.LoadStringW(IDS_AB_TOO_LONG_NAME_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return 0;
     }
     else if (name_length < kMinNameLength)
     {
         CString message;
-        message.LoadStringW(IDS_NAME_CANT_BE_EMPTY_ERROR);
+        message.LoadStringW(IDS_AB_NAME_CANT_BE_EMPTY_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return 0;
     }
@@ -91,7 +91,7 @@ LRESULT ComputerGroupDialog::OnOkButton(
     if (comment_edit.GetWindowTextLengthW() > kMaxCommentLength)
     {
         CString message;
-        message.LoadStringW(IDS_TOO_LONG_COMMENT_ERROR);
+        message.LoadStringW(IDS_AB_TOO_LONG_COMMENT_ERROR);
         MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
         return 0;
     }
