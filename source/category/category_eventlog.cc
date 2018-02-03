@@ -126,6 +126,59 @@ bool GetEventLogMessageFileDLL(
     return true;
 }
 
+WCHAR* LoadMessageFromDLL(const WCHAR* module_name, DWORD event_id, WCHAR** arguments)
+{
+    HINSTANCE module = LoadLibraryExW(module_name, nullptr,
+                                      DONT_RESOLVE_DLL_REFERENCES |
+                                      LOAD_LIBRARY_AS_DATAFILE);
+    if (!module)
+        return nullptr;
+
+    DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                  FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY |
+                  FORMAT_MESSAGE_MAX_WIDTH_MASK;
+
+    WCHAR* message_buffer = nullptr;
+    DWORD length = 0;
+
+    __try
+    {
+        // SEH to protect from invalid string parameters.
+        __try
+        {
+            length = FormatMessageW(flags,
+                                    module,
+                                    event_id,
+                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                    reinterpret_cast<LPWSTR>(&message_buffer),
+                                    0,
+                                    reinterpret_cast<va_list*>(arguments));
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            flags &= ~FORMAT_MESSAGE_ARGUMENT_ARRAY;
+            flags |= FORMAT_MESSAGE_IGNORE_INSERTS;
+
+            length = FormatMessageW(flags,
+                                    module,
+                                    event_id,
+                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                    reinterpret_cast<LPWSTR>(&message_buffer),
+                                    0,
+                                    nullptr);
+        }
+    }
+    __finally
+    {
+        FreeLibrary(module);
+    }
+
+    if (!length)
+        return nullptr;
+
+    return message_buffer;
+}
+
 bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstring* message)
 {
     WCHAR* source = reinterpret_cast<WCHAR*>(record + 1);
@@ -163,34 +216,14 @@ bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstr
 
         if (ExpandEnvironmentStringsW(file, module_name, _countof(module_name)) != 0)
         {
-            HINSTANCE module = LoadLibraryExW(module_name, nullptr,
-                                              DONT_RESOLVE_DLL_REFERENCES |
-                                                  LOAD_LIBRARY_AS_DATAFILE);
-            if (module)
+            WCHAR* message_buffer =
+                LoadMessageFromDLL(module_name, record->EventID, arguments.data());
+
+            if (message_buffer)
             {
-                WCHAR* message_buffer = nullptr;
-
-                if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                                   FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY |
-                                   FORMAT_MESSAGE_MAX_WIDTH_MASK,
-                                   module,
-                                   record->EventID,
-                                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                                   reinterpret_cast<LPWSTR>(&message_buffer),
-                                   0,
-                                   reinterpret_cast<va_list*>(arguments.data())))
-                {
-                    if (message_buffer)
-                    {
-                        message->assign(message_buffer);
-                        LocalFree(message_buffer);
-                    }
-
-                    FreeLibrary(module);
-                    return true;
-                }
-
-                FreeLibrary(module);
+                message->assign(message_buffer);
+                LocalFree(message_buffer);
+                return true;
             }
         }
 
