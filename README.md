@@ -64,7 +64,7 @@ For more information, see BUILDING.md.
 
 System requirements
 -------------------
-x86 or x86_64 CPU with SSE2 support, Windows XP SP3 or higher.
+x86 or x86_64 CPU with SSE2 support, Windows XP SP3/2003 or higher.
 
 Other information
 -----------------
