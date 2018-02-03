@@ -154,6 +154,7 @@ std::string CategoryShare::Serialize()
                 break;
         }
 
+        item->set_description(UTF8fromUNICODE(share_info[i].shi502_remark));
         item->set_local_path(UTF8fromUNICODE(share_info[i].shi502_path));
         item->set_current_uses(share_info[i].shi502_current_uses);
         item->set_maximum_uses(share_info[i].shi502_max_uses);
