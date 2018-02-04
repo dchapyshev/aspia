@@ -28,7 +28,7 @@ constexpr size_t kPasswordHashLength = 64; // 512 bits
 constexpr size_t kMaximumUserListSize = 10 * 1024 * 1024; // 10MB
 
 // Number of iterations for hashing a user's password.
-constexpr size_t kPasswordHashIterCount = 100;
+constexpr size_t kPasswordHashIterCount = 1000;
 
 } // namespace
 
