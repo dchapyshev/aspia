@@ -32,9 +32,6 @@ std::string EncryptString(const std::string& string, const std::string& key)
 {
     DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
-    if (string.empty())
-        return std::string();
-
     std::string encrypted_string;
     encrypted_string.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
 
@@ -53,7 +50,6 @@ std::string EncryptString(const std::string& string, const std::string& key)
     do
     {
         size_t consumed = std::min(string.size() - input_pos, kChunkSize);
-
         uint8_t tag = 0;
 
         if (consumed < kChunkSize)
@@ -71,11 +67,10 @@ std::string EncryptString(const std::string& string, const std::string& key)
                                                    nullptr, 0,
                                                    tag);
 
-        encrypted_string.resize(encrypted_string.size() + static_cast<size_t>(output_length));
+        size_t old_size = encrypted_string.size();
 
-        memcpy(encrypted_string.data() - output_length,
-               output_buffer,
-               static_cast<size_t>(output_length));
+        encrypted_string.resize(old_size + static_cast<size_t>(output_length));
+        memcpy(&encrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
 
         SecureMemZero(output_buffer, sizeof(output_buffer));
 
@@ -86,12 +81,14 @@ std::string EncryptString(const std::string& string, const std::string& key)
     return encrypted_string;
 }
 
-std::string DecryptString(const std::string& string, const std::string& key)
+bool DecryptString(const std::string& string, const std::string& key, std::string& decrypted_string)
 {
     DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
+    decrypted_string.clear();
+
     if (string.size() < crypto_secretstream_xchacha20poly1305_HEADERBYTES)
-        return std::string();
+        return false;
 
     crypto_secretstream_xchacha20poly1305_state state;
 
@@ -101,19 +98,20 @@ std::string DecryptString(const std::string& string, const std::string& key)
             reinterpret_cast<const uint8_t*>(key.c_str())) != 0)
     {
         LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_init_pull failed";
-        return std::string();
+        return false;
     }
 
     const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(string.c_str()) +
                                   crypto_secretstream_xchacha20poly1305_HEADERBYTES;
+    size_t input_size = string.size() - crypto_secretstream_xchacha20poly1305_HEADERBYTES;
     size_t input_pos = 0;
 
-    std::string decrypted_string;
     bool end_of_buffer = false;
 
     do
     {
-        size_t consumed = std::min(string.size() - input_pos, kChunkSize);
+        size_t consumed = std::min(input_size - input_pos,
+                                   kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES);
 
         uint8_t output_buffer[kChunkSize];
         uint64_t output_length;
@@ -130,37 +128,36 @@ std::string DecryptString(const std::string& string, const std::string& key)
             SecureMemZero(output_buffer, sizeof(output_buffer));
             SecureMemZero(decrypted_string);
 
-            return std::string();
+            return false;
         }
 
         input_pos += consumed;
 
         if (tag == crypto_secretstream_xchacha20poly1305_TAG_FINAL)
         {
-            if (input_pos != string.size())
+            if (input_pos != input_size)
             {
                 LOG(LS_ERROR) << "Unexpected end of buffer";
 
                 SecureMemZero(output_buffer, sizeof(output_buffer));
                 SecureMemZero(decrypted_string);
 
-                return std::string();
+                return false;
             }
 
             end_of_buffer = true;
         }
 
-        decrypted_string.resize(decrypted_string.size() + static_cast<size_t>(output_length));
+        size_t old_size = decrypted_string.size();
 
-        memcpy(decrypted_string.data() - output_length,
-               output_buffer,
-               static_cast<size_t>(output_length));
+        decrypted_string.resize(old_size + static_cast<size_t>(output_length));
+        memcpy(&decrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
 
         SecureMemZero(output_buffer, sizeof(output_buffer));
 
     } while (!end_of_buffer);
 
-    return decrypted_string;
+    return true;
 }
 
 } // namespace aspia

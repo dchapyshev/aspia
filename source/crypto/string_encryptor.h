@@ -13,7 +13,9 @@
 namespace aspia {
 
 std::string EncryptString(const std::string& string, const std::string& key);
-std::string DecryptString(const std::string& string, const std::string& key);
+
+bool DecryptString(
+    const std::string& string, const std::string& key, std::string& decrypted_string);
 
 } // namespace aspia
 

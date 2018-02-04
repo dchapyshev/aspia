@@ -277,6 +277,7 @@
     <ClCompile Include="ui\address_book\computer_group_dialog.cc" />
     <ClCompile Include="ui\address_book\computer_group_tree_ctrl.cc" />
     <ClCompile Include="ui\address_book\computer_list_ctrl.cc" />
+    <ClCompile Include="ui\address_book\open_address_book_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
     <ClCompile Include="ui\desktop\settings_dialog.cc" />
@@ -602,6 +603,7 @@
     <ClInclude Include="ui\address_book\computer_group_dialog.h" />
     <ClInclude Include="ui\address_book\computer_group_tree_ctrl.h" />
     <ClInclude Include="ui\address_book\computer_list_ctrl.h" />
+    <ClInclude Include="ui\address_book\open_address_book_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />

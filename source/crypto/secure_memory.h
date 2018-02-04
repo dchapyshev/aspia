@@ -31,13 +31,48 @@ public:
         // Nothing
     }
 
-    ~SecureString()
+    SecureString(SecureString&& other)
+        : string_(std::move(other.string_))
     {
-        SecureMemZero(string_);
+        // Nothing
     }
+
+    SecureString& operator=(SecureString&& other)
+    {
+        reset();
+        string_ = std::move(other.string_);
+        return *this;
+    }
+
+    SecureString(StringType&& other_string)
+        : string_(std::move(other_string))
+    {
+        // Nothing
+    }
+
+    SecureString& operator=(StringType&& other_string)
+    {
+        reset();
+        string_ = std::move(other_string);
+        return *this;
+    }
+
+    ~SecureString() { reset(); }
 
     const StringType& string() const { return string_; }
     StringType& mutable_string() { return string_; }
+
+    void reset()
+    {
+        SecureMemZero(string_);
+        string_.clear();
+    }
+
+    void reset(const StringType& string)
+    {
+        reset();
+        string_ = string;
+    }
 
 private:
     typename StringType string_;

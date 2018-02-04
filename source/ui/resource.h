@@ -108,6 +108,7 @@
 #define IDD_COMPUTER                               114
 #define IDD_COMPUTER_GROUP                         115
 #define IDD_ADDRESS_BOOK                           116
+#define IDD_OPEN_ADDRESS_BOOK                      117
 
 //
 // Controls
@@ -254,10 +255,9 @@
 #define IDR_SAVE_REPORT                            105
 #define IDR_LIST_COPY                              106
 #define IDR_ADDRESS_BOOK_MAIN                      107
-#define IDR_GROUP_TREE                             108
-#define IDR_GROUP_TREE_ITEM                        109
-#define IDR_COMPUTER_LIST                          110
-#define IDR_COMPUTER_LIST_ITEM                     111
+#define IDR_GROUP_TREE_ITEM                        108
+#define IDR_COMPUTER_LIST                          109
+#define IDR_COMPUTER_LIST_ITEM                     110
 
 //
 // Strings
@@ -411,6 +411,9 @@
 #define IDS_AB_COMPUTER_DELETE_CONFIRMATION         5025
 #define IDS_AB_ENCRYPTION_NONE                      5026
 #define IDS_AB_ENCRYPTION_XCHACHA20_POLY1305        5027
+#define IDS_AB_CORRUPTED_FILE_ERROR                 5028
+#define IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR        5029
+#define IDS_AB_UNABLE_TO_DECRYPT_ERROR              5030
 
 // Authorization Status
 #define IDS_AUTH_STATUS_UNKNOWN                     10000

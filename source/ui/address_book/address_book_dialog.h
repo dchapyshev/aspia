@@ -13,6 +13,7 @@
 #include <atlwin.h>
 #include <atlframe.h>
 
+#include "crypto/secure_memory.h"
 #include "proto/address_book.pb.h"
 #include "ui/resource.h"
 
@@ -26,12 +27,14 @@ public:
     enum { IDD = IDD_ADDRESS_BOOK };
 
     AddressBookDialog() = default;
-    AddressBookDialog(const proto::AddressBook& address_book,
-                      const proto::ComputerGroup& root_group);
+    AddressBookDialog(proto::AddressBook::EncryptionType encryption_type,
+                      const proto::ComputerGroup& root_group,
+                      const std::string& key);
     ~AddressBookDialog();
 
-    const proto::AddressBook& GetAddressBook() const;
+    proto::AddressBook::EncryptionType GetEncryptionType() const;
     const proto::ComputerGroup& GetRootComputerGroup() const;
+    const std::string& GetKey() const;
 
 private:
     BEGIN_MSG_MAP(AddressBookDialog)
@@ -64,8 +67,23 @@ private:
 
     LRESULT OnEncryptionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    proto::AddressBook address_book_;
+    void ShowErrorMessage(UINT string_id);
+    void OnPasswordEditDblClick();
+
+    static LRESULT CALLBACK PasswordEditWindowProc(HWND hwnd,
+                                                   UINT msg,
+                                                   WPARAM wparam,
+                                                   LPARAM lparam,
+                                                   UINT_PTR subclass_id,
+                                                   DWORD_PTR ref_data);
+
+    proto::AddressBook::EncryptionType encryption_type_ =
+        proto::AddressBook::ENCRYPTION_TYPE_NONE;
+
     proto::ComputerGroup root_group_;
+    SecureString<std::string> key_;
+
+    bool password_changed_ = true;
 };
 
 } // namespace aspia

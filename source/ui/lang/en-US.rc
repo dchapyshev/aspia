@@ -310,6 +310,18 @@ BEGIN
     PUSHBUTTON "&Cancel", IDCANCEL, 171, 181, 60, 14
 END
 
+IDD_OPEN_ADDRESS_BOOK DIALOGEX 100, 100, 181, 59
+STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Open Address Book"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Password:", -1, 8, 8, 165, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 8, 20, 165, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    DEFPUSHBUTTON "&OK", IDOK, 48, 39, 60, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 114, 39, 60, 14
+END
+
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -437,15 +449,6 @@ BEGIN
         MENUITEM "&Online Help...\tF1", ID_HELP
         MENUITEM SEPARATOR
         MENUITEM "&About...", ID_ABOUT
-    END
-END
-
-IDR_GROUP_TREE MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-        MENUITEM "Add &Group", ID_ADD_GROUP
     END
 END
 
@@ -670,8 +673,11 @@ BEGIN
     IDS_AB_UNABLE_TO_READ_FILE_ERROR        "Unable to read address book file."
     IDS_AB_GROUP_DELETE_CONFIRMATION        "Are you sure you want to delete computer group ""%s"" and all child items?"
     IDS_AB_COMPUTER_DELETE_CONFIRMATION     "Are you sure you want to delete computer ""%s""?"
-    IDS_AB_ENCRYPTION_NONE                  "Without encryption"
+    IDS_AB_ENCRYPTION_NONE                  "Without Encryption"
     IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-bit key)"
+    IDS_AB_CORRUPTED_FILE_ERROR             "The address book file is corrupted or has an unknown format."
+    IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR    "The address book file is encrypted with an unsupported encryption type."
+    IDS_AB_UNABLE_TO_DECRYPT_ERROR          "Unable to decrypt the address book with the specified password."
 END
 
 // Authorization Status

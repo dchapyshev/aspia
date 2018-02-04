@@ -9,6 +9,7 @@
 #define _ASPIA_UI__ADDRESS_BOOK__ADDRESS_BOOK_WINDOW_H
 
 #include "base/message_loop/message_loop.h"
+#include "crypto/secure_memory.h"
 #include "client/client_pool.h"
 #include "proto/address_book.pb.h"
 #include "ui/base/splitter.h"
@@ -27,7 +28,7 @@ class AddressBookWindow
 {
 public:
     AddressBookWindow() = default;
-    ~AddressBookWindow() = default;
+    ~AddressBookWindow();
 
 private:
     // MessageLoop::Dispatcher implementation.
@@ -129,6 +130,7 @@ private:
     bool SaveAddressBook(const std::experimental::filesystem::path& path);
     bool CloseAddressBook();
     void Connect(const proto::Computer& computer);
+    void ShowErrorMessage(UINT string_id);
 
     CIcon small_icon_;
     CIcon big_icon_;
@@ -152,11 +154,14 @@ private:
     DragSource drag_source_;
     CImageListManaged drag_imagelist_;
 
-    std::unique_ptr<proto::AddressBook> address_book_;
-    std::experimental::filesystem::path address_book_path_;
-    bool address_book_changed_ = false;
+    enum class State { CLOSED, OPENED_NOT_CHANGED, OPENED_CHANGED };
 
+    State state_ = State::CLOSED;
+
+    std::experimental::filesystem::path address_book_path_;
+    proto::AddressBook::EncryptionType encryption_type_;
     proto::ComputerGroup root_group_;
+    SecureString<std::string> key_;
 
     std::unique_ptr<ClientPool> client_pool_;
 };

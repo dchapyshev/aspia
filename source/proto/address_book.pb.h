@@ -65,13 +65,14 @@ namespace aspia {
 namespace proto {
 
 enum AddressBook_EncryptionType {
-  AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE = 0,
-  AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 1,
+  AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN = 0,
+  AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE = 1,
+  AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2,
   AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool AddressBook_EncryptionType_IsValid(int value);
-const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MIN = AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE;
+const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MIN = AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN;
 const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MAX = AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305;
 const int AddressBook_EncryptionType_EncryptionType_ARRAYSIZE = AddressBook_EncryptionType_EncryptionType_MAX + 1;
 
@@ -309,6 +310,8 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
   // nested types ----------------------------------------------------
 
   typedef AddressBook_EncryptionType EncryptionType;
+  static const EncryptionType ENCRYPTION_TYPE_UNKNOWN =
+    AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN;
   static const EncryptionType ENCRYPTION_TYPE_NONE =
     AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE;
   static const EncryptionType ENCRYPTION_TYPE_XCHACHA20_POLY1305 =

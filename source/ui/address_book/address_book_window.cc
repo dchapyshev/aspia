@@ -14,10 +14,13 @@
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
-#include "crypto/secure_memory.h"
+#include "crypto/sha.h"
+#include "crypto/string_encryptor.h"
 #include "ui/address_book/address_book_dialog.h"
+#include "ui/address_book/address_book_secure_util.h"
 #include "ui/address_book/computer_dialog.h"
 #include "ui/address_book/computer_group_dialog.h"
+#include "ui/address_book/open_address_book_dialog.h"
 #include "ui/about_dialog.h"
 
 namespace aspia {
@@ -33,6 +36,7 @@ bool DeleteChildComputer(proto::ComputerGroup* parent_group, proto::Computer* co
     {
         if (parent_group->mutable_computer(i) == computer)
         {
+            SecureClearComputer(computer);
             parent_group->mutable_computer()->DeleteSubrange(i, 1);
             return true;
         }
@@ -47,6 +51,7 @@ bool DeleteChildGroup(proto::ComputerGroup* parent_group, proto::ComputerGroup* 
     {
         if (parent_group->mutable_group(i) == child_group)
         {
+            SecureClearComputerGroup(child_group);
             parent_group->mutable_group()->DeleteSubrange(i, 1);
             return true;
         }
@@ -56,6 +61,11 @@ bool DeleteChildGroup(proto::ComputerGroup* parent_group, proto::ComputerGroup* 
 }
 
 } // namespace
+
+AddressBookWindow::~AddressBookWindow()
+{
+    SecureClearComputerGroup(&root_group_);
+}
 
 bool AddressBookWindow::Dispatch(const NativeEvent& event)
 {
@@ -140,11 +150,8 @@ LRESULT AddressBookWindow::OnCreate(
 
     toolbar_.Create(*this);
 
-    if (!address_book_)
-    {
-        group_tree_ctrl_.EnableWindow(FALSE);
-        computer_list_ctrl_.EnableWindow(FALSE);
-    }
+    group_tree_ctrl_.EnableWindow(FALSE);
+    computer_list_ctrl_.EnableWindow(FALSE);
 
     SetWindowPos(nullptr, 0, 0, 980, 700, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
@@ -192,7 +199,7 @@ LRESULT AddressBookWindow::OnGetMinMaxInfo(
 LRESULT AddressBookWindow::OnClose(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    if (address_book_changed_)
+    if (state_ == State::OPENED_CHANGED)
     {
         if (!CloseAddressBook())
             return 0;
@@ -526,6 +533,7 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
     CMenuHandle edit_menu(main_menu_.GetSubMenu(1));
 
     toolbar_.EnableButton(ID_ADD_GROUP, TRUE);
+    toolbar_.EnableButton(ID_EDIT_GROUP, TRUE);
     toolbar_.EnableButton(ID_ADD_COMPUTER, TRUE);
     toolbar_.EnableButton(ID_DELETE_COMPUTER, FALSE);
     toolbar_.EnableButton(ID_EDIT_COMPUTER, FALSE);
@@ -537,7 +545,6 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
 
     if (group_tree_ctrl_.GetFirstVisibleItem() == header->itemNew.hItem)
     {
-        toolbar_.EnableButton(ID_EDIT_GROUP, FALSE);
         toolbar_.EnableButton(ID_DELETE_GROUP, FALSE);
 
         edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_DISABLED);
@@ -545,7 +552,6 @@ LRESULT AddressBookWindow::OnGroupSelected(int /* control_id */, LPNMHDR hdr, BO
     }
     else
     {
-        toolbar_.EnableButton(ID_EDIT_GROUP, TRUE);
         toolbar_.EnableButton(ID_DELETE_GROUP, TRUE);
 
         edit_menu.EnableMenuItem(ID_EDIT_GROUP, MF_BYCOMMAND | MF_ENABLED);
@@ -574,25 +580,15 @@ LRESULT AddressBookWindow::OnGroupTreeRightClick(
     if (!group_tree_edited_item_)
         return 0;
 
-    CMenu menu;
-
-    // First visible item is always the title of the address book.
-    if (group_tree_edited_item_ != group_tree_ctrl_.GetFirstVisibleItem())
-    {
-        // Load menu for selected group.
-        menu = AtlLoadMenu(IDR_GROUP_TREE_ITEM);
-    }
-    else
-    {
-        // Load menu for address book title.
-        menu = AtlLoadMenu(IDR_GROUP_TREE);
-    }
-
     group_tree_ctrl_.GetParent().ClientToScreen(&cursor_pos);
-
     SetForegroundWindow(*this);
 
+    CMenu menu = AtlLoadMenu(IDR_GROUP_TREE_ITEM);
     CMenuHandle popup_menu(menu.GetSubMenu(0));
+
+    if (group_tree_edited_item_ == group_tree_ctrl_.GetFirstVisibleItem())
+        popup_menu.EnableMenuItem(ID_DELETE_GROUP, MF_BYCOMMAND | MF_DISABLED);
+
     popup_menu.TrackPopupMenu(0, cursor_pos.x, cursor_pos.y, *this, nullptr);
 
     return 0;
@@ -673,21 +669,16 @@ LRESULT AddressBookWindow::OnNewButton(
         return 0;
 
     AddressBookDialog dialog;
-
     if (dialog.DoModal() == IDCANCEL)
         return 0;
 
+    root_group_.CopyFrom(dialog.GetRootComputerGroup());
+    encryption_type_ = dialog.GetEncryptionType();
+
+    key_.reset(dialog.GetKey());
+
     computer_list_ctrl_.EnableWindow(TRUE);
     group_tree_ctrl_.EnableWindow(TRUE);
-
-    CString name;
-    name.LoadStringW(IDS_AB_DEFAULT_ADDRESS_BOOK_NAME);
-
-    address_book_ = std::make_unique<proto::AddressBook>();
-
-    root_group_.Clear();
-    root_group_.set_name(UTF8fromUNICODE(name));
-
     group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, &root_group_);
 
     SetAddressBookChanged(true);
@@ -780,6 +771,8 @@ LRESULT AddressBookWindow::OnEditComputerButton(
     ComputerDialog dialog(*computer);
     if (dialog.DoModal() == IDOK)
     {
+        SecureClearComputer(computer);
+
         computer->CopyFrom(dialog.GetComputer());
         computer_list_ctrl_.UpdateComputer(item_index, computer);
         SetAddressBookChanged(true);
@@ -802,12 +795,33 @@ LRESULT AddressBookWindow::OnEditGroupButton(
     if (!selected_group)
         return 0;
 
-    ComputerGroupDialog dialog(*selected_group);
-    if (dialog.DoModal() == IDOK)
+    if (group_tree_edited_item_ == group_tree_ctrl_.GetFirstVisibleItem())
     {
-        selected_group->CopyFrom(dialog.GetComputerGroup());
-        group_tree_ctrl_.UpdateComputerGroup(group_tree_edited_item_, selected_group);
-        SetAddressBookChanged(true);
+        AddressBookDialog dialog(encryption_type_, root_group_, key_.string());
+
+        if (dialog.DoModal() == IDOK)
+        {
+            SecureClearComputerGroup(selected_group);
+
+            encryption_type_ = dialog.GetEncryptionType();
+            key_.reset(dialog.GetKey());
+
+            selected_group->CopyFrom(dialog.GetRootComputerGroup());
+            group_tree_ctrl_.UpdateComputerGroup(group_tree_edited_item_, selected_group);
+            SetAddressBookChanged(true);
+        }
+    }
+    else
+    {
+        ComputerGroupDialog dialog(*selected_group);
+        if (dialog.DoModal() == IDOK)
+        {
+            SecureClearComputerGroup(selected_group);
+
+            selected_group->CopyFrom(dialog.GetComputerGroup());
+            group_tree_ctrl_.UpdateComputerGroup(group_tree_edited_item_, selected_group);
+            SetAddressBookChanged(true);
+        }
     }
 
     return 0;
@@ -953,11 +967,11 @@ LRESULT AddressBookWindow::OnSelectSessionButton(
 
 void AddressBookWindow::SetAddressBookChanged(bool is_changed)
 {
-    address_book_changed_ = is_changed;
+    state_ = is_changed ? State::OPENED_CHANGED : State::OPENED_NOT_CHANGED;
 
     CMenuHandle file_menu(main_menu_.GetSubMenu(0));
 
-    if (address_book_changed_)
+    if (state_ == State::OPENED_CHANGED)
     {
         toolbar_.EnableButton(ID_SAVE, TRUE);
         file_menu.EnableMenuItem(ID_SAVE, MF_BYCOMMAND | MF_ENABLED);
@@ -995,9 +1009,7 @@ bool AddressBookWindow::OpenAddressBook()
     file.open(address_book_path_, std::ifstream::binary);
     if (!file.is_open())
     {
-        CString message;
-        message.LoadStringW(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
         return false;
     }
 
@@ -1005,43 +1017,71 @@ bool AddressBookWindow::OpenAddressBook()
     std::streamsize file_size = file.tellg();
     file.seekg(0);
 
-    std::string buffer;
-    buffer.resize(static_cast<size_t>(file_size));
+    SecureString<std::string> buffer;
+    buffer.mutable_string().resize(static_cast<size_t>(file_size));
 
-    file.read(buffer.data(), file_size);
+    file.read(buffer.mutable_string().data(), file_size);
     if (file.fail())
     {
-        CString message;
-        message.LoadStringW(IDS_AB_UNABLE_TO_READ_FILE_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_AB_UNABLE_TO_READ_FILE_ERROR);
         return false;
     }
 
-    address_book_ = std::make_unique<proto::AddressBook>();
+    proto::AddressBook address_book;
 
-    if (!address_book_->ParseFromString(buffer))
+    if (!address_book.ParseFromString(buffer.string()))
     {
-        address_book_.reset();
-
-        CString message;
-        message.LoadStringW(IDS_AB_UNABLE_TO_READ_FILE_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_AB_CORRUPTED_FILE_ERROR);
         return false;
     }
 
-    switch (address_book_->encryption_type())
+    encryption_type_ = address_book.encryption_type();
+
+    switch (encryption_type_)
     {
         case proto::AddressBook::ENCRYPTION_TYPE_NONE:
-            root_group_.ParseFromString(address_book_->data());
-            break;
+        {
+            if (!root_group_.ParseFromString(address_book.data()))
+            {
+                ShowErrorMessage(IDS_AB_CORRUPTED_FILE_ERROR);
+                return false;
+            }
+        }
+        break;
 
         case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
-            // TODO
-            break;
+        {
+            OpenAddressBookDialog dialog;
+
+            if (dialog.DoModal() == IDCANCEL)
+                return false;
+
+            if (!SHA256(dialog.GetPassword(), key_.mutable_string(), 1000))
+                return false;
+
+            SecureString<std::string> decrypted;
+
+            if (!DecryptString(address_book.data(), key_.string(), decrypted.mutable_string()))
+            {
+                ShowErrorMessage(IDS_AB_UNABLE_TO_DECRYPT_ERROR);
+                return false;
+            }
+
+            if (!root_group_.ParseFromString(decrypted.string()))
+            {
+                ShowErrorMessage(IDS_AB_CORRUPTED_FILE_ERROR);
+                return false;
+            }
+        }
+        break;
 
         default:
-            // TODO Unsupported encryption type
-            break;
+        {
+            LOG(LS_WARNING) << "An attempt to open an address book with an unknown"
+                            << " type of encryption: " << encryption_type_;
+            ShowErrorMessage(IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR);
+            return false;
+        }
     }
 
     HTREEITEM root_item = group_tree_ctrl_.AddComputerGroupTree(TVI_ROOT, &root_group_);
@@ -1064,7 +1104,7 @@ bool AddressBookWindow::OpenAddressBook()
 
 bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::path& path)
 {
-    if (!address_book_)
+    if (state_ == State::CLOSED)
         return false;
 
     std::experimental::filesystem::path address_book_path(path);
@@ -1091,23 +1131,40 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
     file.open(address_book_path, std::ofstream::binary | std::ofstream::trunc);
     if (!file.is_open())
     {
-        CString message;
-        message.LoadStringW(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_AB_UNABLE_TO_OPEN_FILE_ERROR);
         return false;
     }
 
-    address_book_->set_encryption_type(proto::AddressBook::ENCRYPTION_TYPE_NONE);
-    address_book_->set_data(root_group_.SerializeAsString());
+    proto::AddressBook address_book;
+    address_book.set_encryption_type(encryption_type_);
 
-    std::string buffer = address_book_->SerializeAsString();
+    SecureString<std::string> serialized(root_group_.SerializeAsString());
 
-    file.write(buffer.c_str(), buffer.size());
+    switch (encryption_type_)
+    {
+        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+        {
+            address_book.set_data(serialized.string());
+        }
+        break;
+
+        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        {
+            address_book.set_data(EncryptString(serialized.string(), key_.string()));
+        }
+        break;
+
+        default:
+            DLOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type_;
+            break;
+    }
+
+    SecureString<std::string> buffer = address_book.SerializeAsString();
+
+    file.write(buffer.string().c_str(), buffer.string().size());
     if (file.fail())
     {
-        CString message;
-        message.LoadStringW(IDS_AB_UNABLE_TO_WRITE_FILE_ERROR);
-        MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
+        ShowErrorMessage(IDS_AB_UNABLE_TO_WRITE_FILE_ERROR);
         return false;
     }
 
@@ -1118,9 +1175,9 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
 
 bool AddressBookWindow::CloseAddressBook()
 {
-    if (address_book_)
+    if (state_ != State::CLOSED)
     {
-        if (address_book_changed_)
+        if (state_ == State::OPENED_CHANGED)
         {
             CString title;
             title.LoadStringW(IDS_CONFIRMATION);
@@ -1144,8 +1201,11 @@ bool AddressBookWindow::CloseAddressBook()
         }
 
         address_book_path_.clear();
-        address_book_.reset();
+        state_ = State::CLOSED;
     }
+
+    SecureClearComputerGroup(&root_group_);
+    key_.reset();
 
     computer_list_ctrl_.DeleteAllItems();
     computer_list_ctrl_.EnableWindow(FALSE);
@@ -1183,6 +1243,13 @@ void AddressBookWindow::Connect(const proto::Computer& computer)
         client_pool_ = std::make_unique<ClientPool>(MessageLoopProxy::Current());
 
     client_pool_->Connect(*this, computer);
+}
+
+void AddressBookWindow::ShowErrorMessage(UINT string_id)
+{
+    CString message;
+    message.LoadStringW(string_id);
+    MessageBoxW(message, nullptr, MB_OK | MB_ICONWARNING);
 }
 
 } // namespace aspia

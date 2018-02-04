@@ -310,6 +310,18 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 171, 181, 60, 14
 END
 
+IDD_OPEN_ADDRESS_BOOK DIALOGEX 100, 100, 181, 59
+STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
+CAPTION "Открытие адресной книги"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT "Пароль:", -1, 8, 8, 165, 10
+    EDITTEXT IDC_PASSWORD_EDIT, 8, 20, 165, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
+
+    DEFPUSHBUTTON "&OK", IDOK, 48, 39, 60, 14
+    PUSHBUTTON "&Отмена", IDCANCEL, 114, 39, 60, 14
+END
+
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -437,15 +449,6 @@ BEGIN
         MENUITEM "Онлайн &справка...\tF1", ID_HELP
         MENUITEM SEPARATOR
         MENUITEM "&О программе...", ID_ABOUT
-    END
-END
-
-IDR_GROUP_TREE MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
-        MENUITEM "Добавить &группу", ID_ADD_GROUP
     END
 END
 
@@ -670,8 +673,11 @@ BEGIN
     IDS_AB_UNABLE_TO_READ_FILE_ERROR        "Не удалось прочитать файл адресной книги."
     IDS_AB_GROUP_DELETE_CONFIRMATION        "Вы действительно хотите удалить группу компьютеров ""%s"" и все дочерние элементы?"
     IDS_AB_COMPUTER_DELETE_CONFIRMATION     "Вы действительно хотите удалить компьютер ""%s""?"
-    IDS_AB_ENCRYPTION_NONE                  "Without encryption"
-    IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-bit key)"
+    IDS_AB_ENCRYPTION_NONE                  "Без шифрования"
+    IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-битный ключ)"
+    IDS_AB_CORRUPTED_FILE_ERROR             "Файл адресной книги поврежден или имеет неизвестный формат."
+    IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR    "Файл адресной книги зашифрован неподдерживаемым типом шифрования."
+    IDS_AB_UNABLE_TO_DECRYPT_ERROR          "Не удалось расшифровать адресную книгу с указанным паролем."
 END
 
 // Authorization Status

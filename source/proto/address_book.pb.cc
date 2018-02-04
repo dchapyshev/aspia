@@ -81,6 +81,7 @@ bool AddressBook_EncryptionType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -88,6 +89,7 @@ bool AddressBook_EncryptionType_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_UNKNOWN;
 const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_NONE;
 const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305;
 const AddressBook_EncryptionType AddressBook::EncryptionType_MIN;

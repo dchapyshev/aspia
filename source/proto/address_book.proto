@@ -27,8 +27,9 @@ message AddressBook
 {
     enum EncryptionType
     {
-        ENCRYPTION_TYPE_NONE               = 0;
-        ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 1;
+        ENCRYPTION_TYPE_UNKNOWN            = 0;
+        ENCRYPTION_TYPE_NONE               = 1;
+        ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
     }
 
     EncryptionType encryption_type = 1;
