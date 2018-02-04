@@ -45,12 +45,12 @@ Currently supported
         * Windows Update
 - Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
 - Authorization (it is possible to add users with different access rights)
+- Address book with encryption and master-password
 - Work in service or application mode
 
 It is planned to implement
 --------------------------
 - Audio transfer
-- Address book with encryption and master-password
 - Authorization with Windows credentials
 - NAT traversal
 
