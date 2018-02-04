@@ -11,7 +11,6 @@
 #include <atlmisc.h>
 
 #include "base/strings/unicode.h"
-#include "base/scoped_bstr.h"
 #include "base/logging.h"
 #include "crypto/sha.h"
 #include "ui/address_book/address_book_secure_util.h"
@@ -205,17 +204,20 @@ LRESULT AddressBookDialog::OnOkButton(
                 CEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
                 CEdit password_repeat_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
 
-                ScopedBstr password;
-                password_edit.GetWindowTextW(password.Receive());
-                if (password.Length() < kMinPasswordLength)
+                SecureArray<WCHAR, 256> password;
+
+                password_edit.GetWindowTextW(password.get(), static_cast<int>(password.count()));
+                if (wcslen(password.get()) < kMinPasswordLength)
                 {
                     ShowErrorMessage(IDS_INVALID_PASSWORD);
                     return 0;
                 }
 
-                ScopedBstr password_repeat;
-                password_repeat_edit.GetWindowTextW(password_repeat.Receive());
-                if (wcscmp(password_repeat, password) != 0)
+                SecureArray<WCHAR, 256> password_repeat;
+
+                password_repeat_edit.GetWindowTextW(password_repeat.get(),
+                                                    static_cast<int>(password_repeat.count()));
+                if (wcscmp(password_repeat.get(), password.get()) != 0)
                 {
                     ShowErrorMessage(IDS_PASSWORDS_NOT_MATCH);
                     return 0;
@@ -223,7 +225,7 @@ LRESULT AddressBookDialog::OnOkButton(
 
                 key_.reset();
 
-                SHA256(UTF8fromUNICODE(password), key_.mutable_string(), 1000);
+                SHA256(UTF8fromUNICODE(password.get()), key_.mutable_string(), 1000);
             }
         }
         break;

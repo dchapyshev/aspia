@@ -35,7 +35,7 @@ LRESULT OpenAddressBookDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     SecureArray<WCHAR, 256> buffer;
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), buffer.count());
+    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
     password_ = UTF8fromUNICODE(buffer.get());
 
     EndDialog(IDOK);
