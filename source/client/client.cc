@@ -78,7 +78,8 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
                              std::bind(&Client::OnAuthRequestSended, this));
 
-        SecureMemZero(*request.mutable_password());
+        SecureMemZero(request.mutable_username());
+        SecureMemZero(request.mutable_password());
     }
     else
     {

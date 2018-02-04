@@ -126,7 +126,7 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
             LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_pull failed";
 
             SecureMemZero(output_buffer, sizeof(output_buffer));
-            SecureMemZero(decrypted_string);
+            SecureMemZero(&decrypted_string);
 
             return false;
         }
@@ -140,7 +140,7 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
                 LOG(LS_ERROR) << "Unexpected end of buffer";
 
                 SecureMemZero(output_buffer, sizeof(output_buffer));
-                SecureMemZero(decrypted_string);
+                SecureMemZero(&decrypted_string);
 
                 return false;
             }

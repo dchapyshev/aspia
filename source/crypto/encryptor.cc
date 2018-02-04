@@ -104,8 +104,8 @@ bool Encryptor::ReadHelloMessage(const IOBuffer& message_buffer)
         }
     }
 
-    SecureMemZero(*message.mutable_public_key());
-    SecureMemZero(*message.mutable_nonce());
+    SecureMemZero(message.mutable_public_key());
+    SecureMemZero(message.mutable_nonce());
 
     if (mode_ == Mode::CLIENT)
     {
@@ -136,8 +136,8 @@ IOBuffer Encryptor::HelloMessage()
 
     IOBuffer message_buffer = SerializeMessage<IOBuffer>(message);
 
-    SecureMemZero(*message.mutable_public_key());
-    SecureMemZero(*message.mutable_nonce());
+    SecureMemZero(message.mutable_public_key());
+    SecureMemZero(message.mutable_nonce());
 
     if (mode_ == Mode::SERVER)
     {

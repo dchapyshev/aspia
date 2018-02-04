@@ -16,8 +16,8 @@
 namespace aspia {
 
 void SecureMemZero(void* buffer, size_t size);
-void SecureMemZero(std::string& str);
-void SecureMemZero(std::wstring& str);
+void SecureMemZero(std::string* str);
+void SecureMemZero(std::wstring* str);
 
 template<class StringType>
 class SecureString
@@ -64,7 +64,7 @@ public:
 
     void reset()
     {
-        SecureMemZero(string_);
+        SecureMemZero(&string_);
         string_.clear();
     }
 

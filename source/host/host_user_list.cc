@@ -38,8 +38,8 @@ HostUserList::~HostUserList()
     {
         proto::HostUser* user = list_.mutable_user_list(i);
 
-        SecureMemZero(*user->mutable_username());
-        SecureMemZero(*user->mutable_password_hash());
+        SecureMemZero(user->mutable_username());
+        SecureMemZero(user->mutable_password_hash());
 
         user->set_session_types(0);
         user->set_enabled(false);
@@ -79,7 +79,7 @@ bool HostUserList::CreatePasswordHash(const std::string& password,
         result = SHA512(password, password_hash, kPasswordHashIterCount);
     }
 
-    SecureMemZero(password_unicode);
+    SecureMemZero(&password_unicode);
 
     return result;
 }
@@ -100,7 +100,7 @@ static bool GetUserListDirectoryPath(std::experimental::filesystem::path& path)
     if (!GetBasePath(BasePathKey::DIR_COMMON_APP_DATA, path))
         return false;
 
-    path.append(L"Aspia");
+    path.append(L"aspia");
 
     return true;
 }

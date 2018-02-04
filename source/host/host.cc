@@ -127,7 +127,8 @@ void Host::DoAuthorize(IOBuffer& buffer)
             break;
     }
 
-    SecureMemZero(*request.mutable_password());
+    SecureMemZero(request.mutable_username());
+    SecureMemZero(request.mutable_password());
 
     channel_proxy_->Send(
         SerializeMessage<IOBuffer>(reply),

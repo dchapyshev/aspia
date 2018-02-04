@@ -16,10 +16,10 @@ void SecureClearComputer(proto::Computer* computer)
 {
     DCHECK(computer);
 
-    SecureMemZero(*computer->mutable_name());
-    SecureMemZero(*computer->mutable_address());
-    SecureMemZero(*computer->mutable_comment());
-    SecureMemZero(*computer->mutable_username());
+    SecureMemZero(computer->mutable_name());
+    SecureMemZero(computer->mutable_address());
+    SecureMemZero(computer->mutable_comment());
+    SecureMemZero(computer->mutable_username());
 
     computer->Clear();
 }
@@ -38,8 +38,8 @@ void SecureClearComputerGroup(proto::ComputerGroup* computer_group)
         SecureClearComputerGroup(computer_group->mutable_group(i));
     }
 
-    SecureMemZero(*computer_group->mutable_name());
-    SecureMemZero(*computer_group->mutable_comment());
+    SecureMemZero(computer_group->mutable_name());
+    SecureMemZero(computer_group->mutable_comment());
 
     computer_group->Clear();
 }
