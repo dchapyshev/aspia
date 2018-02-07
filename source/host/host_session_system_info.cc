@@ -153,7 +153,7 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
 
             // Sending response to the request.
             ipc_channel_proxy_->Send(
-                SerializeMessage<IOBuffer>(reply),
+                SerializeMessage(reply),
                 std::bind(&HostSessionSystemInfo::OnIpcChannelMessageSended, this));
             return;
         }

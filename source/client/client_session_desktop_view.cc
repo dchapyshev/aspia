@@ -147,7 +147,7 @@ void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)
 
 void ClientSessionDesktopView::WriteMessage(const proto::desktop::ClientToHost& message)
 {
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(message));
+    channel_proxy_->Send(SerializeMessage(message));
 }
 
 void ClientSessionDesktopView::OnWindowClose()

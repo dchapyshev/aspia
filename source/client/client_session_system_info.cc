@@ -86,7 +86,7 @@ void ClientSessionSystemInfo::OnRequest(
     proto::system_info::ClientToHost message;
     message.set_guid(guid.data());
 
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
+    channel_proxy_->Send(SerializeMessage(message),
                          std::bind(&ClientSessionSystemInfo::OnRequestSended, this));
 }
 

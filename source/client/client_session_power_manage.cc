@@ -49,7 +49,7 @@ void ClientSessionPowerManage::OnBeforeThreadRunning()
 
         message.set_command(command);
 
-        channel_proxy_->Send(SerializeMessage<IOBuffer>(message),
+        channel_proxy_->Send(SerializeMessage(message),
                              std::bind(&ClientSessionPowerManage::OnCommandSended, this));
         return;
     }

@@ -128,7 +128,7 @@ void FileRequestSenderRemote::SendRequest(
     last_request_ = std::move(request);
     last_receiver_ = std::move(receiver);
 
-    channel_proxy_->Send(SerializeMessage<IOBuffer>(last_request_),
+    channel_proxy_->Send(SerializeMessage(last_request_),
                          std::bind(&FileRequestSenderRemote::OnRequestSended, this));
 }
 

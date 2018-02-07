@@ -159,7 +159,7 @@ void HostSessionDesktop::OnScreenUpdated()
 void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& message,
                                       PipeChannel::SendCompleteHandler handler)
 {
-    IOBuffer buffer = SerializeMessage<IOBuffer>(message);
+    IOBuffer buffer = SerializeMessage(message);
     ipc_channel_proxy_->Send(std::move(buffer), std::move(handler));
 }
 

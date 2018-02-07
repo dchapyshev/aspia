@@ -127,7 +127,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const IOBuffer& buffer)
 void HostSessionFileTransfer::SendReply(const proto::file_transfer::HostToClient& reply)
 {
     ipc_channel_proxy_->Send(
-        SerializeMessage<IOBuffer>(reply),
+        SerializeMessage(reply),
         std::bind(&HostSessionFileTransfer::OnReplySended, this));
 }
 

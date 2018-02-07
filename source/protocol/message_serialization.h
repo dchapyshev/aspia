@@ -15,18 +15,17 @@
 
 namespace aspia {
 
-template <class T>
-static T SerializeMessage(const google::protobuf::MessageLite& message)
+static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
 {
     size_t size = message.ByteSizeLong();
 
     if (!size)
     {
         LOG(LS_ERROR) << "Empty messages are not allowed";
-        return T();
+        return IOBuffer();
     }
 
-    T buffer(size);
+    IOBuffer buffer(size);
     message.SerializeWithCachedSizesToArray(buffer.data());
     return buffer;
 }

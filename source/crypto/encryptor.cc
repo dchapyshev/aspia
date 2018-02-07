@@ -134,7 +134,7 @@ IOBuffer Encryptor::HelloMessage()
     message.set_public_key(local_public_key_->data(), local_public_key_->size());
     message.set_nonce(encrypt_nonce_->data(), encrypt_nonce_->size());
 
-    IOBuffer message_buffer = SerializeMessage<IOBuffer>(message);
+    IOBuffer message_buffer = SerializeMessage(message);
 
     SecureMemZero(message.mutable_public_key());
     SecureMemZero(message.mutable_nonce());

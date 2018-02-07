@@ -131,7 +131,7 @@ void Host::DoAuthorize(IOBuffer& buffer)
     SecureMemZero(request.mutable_password());
 
     channel_proxy_->Send(
-        SerializeMessage<IOBuffer>(reply),
+        SerializeMessage(reply),
         std::bind(&Host::OnAuthResultSended, this, request.session_type(), reply.status()));
 }
 

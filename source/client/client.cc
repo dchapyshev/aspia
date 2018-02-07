@@ -75,7 +75,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         request.set_username(auth_dialog.UserName());
         request.set_password(auth_dialog.Password());
 
-        channel_proxy_->Send(SerializeMessage<IOBuffer>(request),
+        channel_proxy_->Send(SerializeMessage(request),
                              std::bind(&Client::OnAuthRequestSended, this));
 
         SecureMemZero(request.mutable_username());
