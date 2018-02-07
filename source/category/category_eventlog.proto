@@ -28,10 +28,10 @@ message EventLog
             LEVEL_UNKNOWN       = 0;
             LEVEL_SUCCESS       = 1;
             LEVEL_INFORMATION   = 2;
-            LEVEL_WARNING       = 3;
-            LEVEL_ERROR         = 4;
-            LEVEL_AUDIT_SUCCESS = 5;
-            LEVEL_AUDIT_FAILURE = 6;
+            LEVEL_WARNING       = 4;
+            LEVEL_ERROR         = 8;
+            LEVEL_AUDIT_SUCCESS = 16;
+            LEVEL_AUDIT_FAILURE = 32;
         }
 
         message Item

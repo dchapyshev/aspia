@@ -86,10 +86,10 @@ enum EventLog_Log_Level {
   EventLog_Log_Level_LEVEL_UNKNOWN = 0,
   EventLog_Log_Level_LEVEL_SUCCESS = 1,
   EventLog_Log_Level_LEVEL_INFORMATION = 2,
-  EventLog_Log_Level_LEVEL_WARNING = 3,
-  EventLog_Log_Level_LEVEL_ERROR = 4,
-  EventLog_Log_Level_LEVEL_AUDIT_SUCCESS = 5,
-  EventLog_Log_Level_LEVEL_AUDIT_FAILURE = 6,
+  EventLog_Log_Level_LEVEL_WARNING = 4,
+  EventLog_Log_Level_LEVEL_ERROR = 8,
+  EventLog_Log_Level_LEVEL_AUDIT_SUCCESS = 16,
+  EventLog_Log_Level_LEVEL_AUDIT_FAILURE = 32,
   EventLog_Log_Level_EventLog_Log_Level_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EventLog_Log_Level_EventLog_Log_Level_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };

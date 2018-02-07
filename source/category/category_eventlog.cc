@@ -23,6 +23,9 @@ namespace aspia {
 
 namespace {
 
+constexpr WORD kAllowedEventTypes =
+    EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_AUDIT_FAILURE;
+
 HANDLE OpenEventLogHandle(const WCHAR* source, DWORD* records_count, DWORD* first_record)
 {
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
@@ -251,6 +254,9 @@ void AddEventLogItems(const WCHAR* log_name, proto::EventLog::Log* log)
         std::unique_ptr<uint8_t[]> record_buffer = GetEventLogRecord(event_log, i, &record);
         if (record_buffer)
         {
+            if (!(kAllowedEventTypes & record->EventType))
+                continue;
+
             proto::EventLog::Log::Item* item = log->add_item();
 
             switch (record->EventType)

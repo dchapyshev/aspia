@@ -130,10 +130,10 @@ bool EventLog_Log_Level_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 3:
     case 4:
-    case 5:
-    case 6:
+    case 8:
+    case 16:
+    case 32:
       return true;
     default:
       return false;
