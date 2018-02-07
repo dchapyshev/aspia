@@ -8,20 +8,33 @@
 #include "crypto/sha.h"
 #include "base/logging.h"
 
-extern "C" {
-#define SODIUM_STATIC
-
-#pragma warning(push, 3)
-#include <sodium.h>
-#pragma warning(pop)
-} // extern "C"
-
 namespace aspia {
 
-bool SHA512(const std::string& data, std::string& data_hash, size_t iter_count)
+StreamSHA512::StreamSHA512()
 {
-    if (!iter_count)
-        return false;
+    crypto_hash_sha512_init(&state_);
+}
+
+void StreamSHA512::AppendData(const std::string& data)
+{
+    crypto_hash_sha512_update(&state_,
+                              reinterpret_cast<const uint8_t*>(data.c_str()),
+                              data.size());
+}
+
+std::string StreamSHA512::Final()
+{
+    std::string hash;
+    hash.resize(crypto_hash_sha512_BYTES);
+
+    crypto_hash_sha512_final(&state_, reinterpret_cast<uint8_t*>(hash.data()));
+
+    return hash;
+}
+
+std::string SHA512(const std::string& data, size_t iter_count)
+{
+    DCHECK_NE(iter_count, 0);
 
     uint8_t hash_buffer[crypto_hash_sha512_BYTES];
     sodium_memzero(hash_buffer, sizeof(hash_buffer));
@@ -31,29 +44,24 @@ bool SHA512(const std::string& data, std::string& data_hash, size_t iter_count)
 
     for (size_t i = 0; i < iter_count; ++i)
     {
-        if (crypto_hash_sha512(hash_buffer, source_buffer, source_buffer_size) != 0)
-        {
-            LOG(LS_ERROR) << "crypto_hash_sha512 failed";
-            sodium_memzero(hash_buffer, crypto_hash_sha256_BYTES);
-            return false;
-        }
+        crypto_hash_sha512(hash_buffer, source_buffer, source_buffer_size);
 
         source_buffer_size = crypto_hash_sha512_BYTES;
         source_buffer = hash_buffer;
     }
 
+    std::string data_hash;
     data_hash.resize(crypto_hash_sha512_BYTES);
     memcpy(&data_hash[0], hash_buffer, crypto_hash_sha512_BYTES);
 
     sodium_memzero(hash_buffer, crypto_hash_sha512_BYTES);
 
-    return true;
+    return data_hash;
 }
 
-bool SHA256(const std::string& data, std::string& data_hash, size_t iter_count)
+std::string SHA256(const std::string& data, size_t iter_count)
 {
-    if (!iter_count)
-        return false;
+    DCHECK_NE(iter_count, 0);
 
     uint8_t hash_buffer[crypto_hash_sha256_BYTES];
     sodium_memzero(hash_buffer, sizeof(hash_buffer));
@@ -63,23 +71,19 @@ bool SHA256(const std::string& data, std::string& data_hash, size_t iter_count)
 
     for (size_t i = 0; i < iter_count; ++i)
     {
-        if (crypto_hash_sha256(hash_buffer, source_buffer, source_buffer_size) != 0)
-        {
-            LOG(LS_ERROR) << "crypto_hash_sha256 failed";
-            sodium_memzero(hash_buffer, crypto_hash_sha256_BYTES);
-            return false;
-        }
+        crypto_hash_sha256(hash_buffer, source_buffer, source_buffer_size);
 
         source_buffer_size = crypto_hash_sha256_BYTES;
         source_buffer = hash_buffer;
     }
 
+    std::string data_hash;
     data_hash.resize(crypto_hash_sha256_BYTES);
     memcpy(&data_hash[0], hash_buffer, crypto_hash_sha256_BYTES);
 
     sodium_memzero(hash_buffer, crypto_hash_sha256_BYTES);
 
-    return true;
+    return data_hash;
 }
 
 } // namespace aspia

@@ -7,7 +7,9 @@
 
 #include "host/host.h"
 #include "host/host_user_list.h"
+#include "crypto/random.h"
 #include "crypto/secure_memory.h"
+#include "crypto/sha.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
 
@@ -16,6 +18,52 @@ namespace aspia {
 namespace {
 
 constexpr std::chrono::seconds kAuthTimeout{ 60 };
+constexpr size_t kNonceSize = 512;
+
+std::string CreateUserKey(const std::string& username,
+                          const std::string& password_hash,
+                          const std::string& nonce)
+{
+    DCHECK_EQ(nonce.size(), kNonceSize);
+
+    StreamSHA512 sha512;
+
+    sha512.AppendData(nonce);
+    sha512.AppendData(username);
+    sha512.AppendData(password_hash);
+
+    return sha512.Final();
+}
+
+proto::auth::Status DoBasicAuthorization(proto::auth::SessionType session_type,
+                                         const std::string& key,
+                                         const std::string& nonce)
+{
+    HostUserList user_list;
+
+    if (!user_list.LoadFromStorage())
+        return proto::auth::STATUS_ACCESS_DENIED;
+
+    for (int i = 0; i < user_list.size(); ++i)
+    {
+        const proto::HostUser& user = user_list.host_user(i);
+
+        std::string current_key = CreateUserKey(user.username(), user.password_hash(), nonce);
+
+        if (current_key != key)
+            continue;
+
+        if (!user.enabled())
+            return proto::auth::STATUS_ACCESS_DENIED;
+
+        if (!(user.session_types() & session_type))
+            return proto::auth::STATUS_ACCESS_DENIED;
+
+        return proto::auth::STATUS_SUCCESS;
+    }
+
+    return proto::auth::STATUS_ACCESS_DENIED;
+}
 
 } // namespace
 
@@ -48,7 +96,14 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         auth_timer_.Start(kAuthTimeout,
                           std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
 
-        channel_proxy_->Receive(std::bind(&Host::DoAuthorize, this, std::placeholders::_1));
+        nonce_ = CreateRandomBuffer(kNonceSize);
+
+        proto::auth::Request request;
+
+        request.set_method(proto::auth::METHOD_BASIC);
+        request.set_nonce(nonce_);
+
+        channel_proxy_->Send(SerializeMessage(request), std::bind(&Host::OnRequestSended, this));
     }
     else
     {
@@ -61,108 +116,61 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
-static proto::auth::Status DoBasicAuthorization(const std::string& username,
-                                                const std::string& password,
-                                                proto::auth::SessionType session_type)
+void Host::OnRequestSended()
 {
-    HostUserList user_list;
-
-    if (!user_list.LoadFromStorage())
-        return proto::auth::STATUS_ACCESS_DENIED;
-
-    const int size = user_list.size();
-
-    for (int i = 0; i < size; ++i)
-    {
-        const proto::HostUser& user = user_list.host_user(i);
-
-        if (user.username() != username)
-            continue;
-
-        if (!user.enabled())
-            return proto::auth::STATUS_ACCESS_DENIED;
-
-        SecureString<std::string> password_hash;
-
-        if (!HostUserList::CreatePasswordHash(password, password_hash.mutable_string()))
-            return proto::auth::STATUS_ACCESS_DENIED;
-
-        if (user.password_hash() != password_hash.string())
-            return proto::auth::STATUS_ACCESS_DENIED;
-
-        if (!(user.session_types() & session_type))
-            return proto::auth::STATUS_ACCESS_DENIED;
-
-        return proto::auth::STATUS_SUCCESS;
-    }
-
-    return proto::auth::STATUS_ACCESS_DENIED;
+    channel_proxy_->Receive(std::bind(&Host::OnResponseReceived, this, std::placeholders::_1));
 }
 
-void Host::DoAuthorize(IOBuffer& buffer)
+void Host::OnResponseReceived(const IOBuffer& buffer)
 {
-    proto::auth::ClientToHost request;
+    proto::auth::Response response;
 
-    if (!ParseMessage(buffer, request))
+    if (!ParseMessage(buffer, response))
     {
         channel_proxy_->Disconnect();
         return;
     }
 
-    proto::auth::HostToClient reply;
+    proto::auth::Status status =
+        DoBasicAuthorization(response.session_type(), response.key(), nonce_);
 
-    switch (request.method())
-    {
-        case proto::auth::METHOD_BASIC:
-        {
-            reply.set_status(
-                DoBasicAuthorization(request.username(),
-                                     request.password(),
-                                     request.session_type()));
-        }
-        break;
+    proto::auth::Result result;
+    result.set_status(status);
 
-        default:
-            reply.set_status(proto::auth::STATUS_ACCESS_DENIED);
-            break;
-    }
-
-    SecureMemZero(request.mutable_username());
-    SecureMemZero(request.mutable_password());
-
-    channel_proxy_->Send(
-        SerializeMessage(reply),
-        std::bind(&Host::OnAuthResultSended, this, request.session_type(), reply.status()));
+    channel_proxy_->Send(SerializeMessage(result),
+                         std::bind(&Host::OnResultSended, this, response.session_type(), status));
 }
 
-void Host::OnAuthResultSended(proto::auth::SessionType session_type, proto::auth::Status status)
+void Host::OnResultSended(proto::auth::SessionType session_type, proto::auth::Status status)
 {
     // Authorization result sended, stop the timer.
     auth_timer_.Stop();
 
-    // If authorization was successful, then start the session.
-    if (status == proto::auth::STATUS_SUCCESS)
+    if (status != proto::auth::STATUS_SUCCESS)
     {
-        switch (session_type)
-        {
-            case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            case proto::auth::SESSION_TYPE_FILE_TRANSFER:
-            case proto::auth::SESSION_TYPE_POWER_MANAGE:
-            case proto::auth::SESSION_TYPE_SYSTEM_INFO:
-                session_ = std::make_unique<HostSession>(session_type, channel_proxy_);
-                break;
-
-            default:
-                LOG(LS_ERROR) << "Unsupported session type: " << session_type;
-                break;
-        }
-
-        if (session_)
-            return;
+        channel_proxy_->Disconnect();
+        return;
     }
 
-    channel_proxy_->Disconnect();
+    switch (session_type)
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+        case proto::auth::SESSION_TYPE_POWER_MANAGE:
+        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+        {
+            session_ = std::make_unique<HostSession>(session_type, channel_proxy_);
+        }
+        break;
+
+        default:
+        {
+            LOG(LS_ERROR) << "Unsupported session type: " << session_type;
+            channel_proxy_->Disconnect();
+        }
+        break;
+    }
 }
 
 } // namespace aspia

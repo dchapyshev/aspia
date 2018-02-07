@@ -8,6 +8,7 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_H
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
+#include "base/macros.h"
 #include "protocol/io_buffer.h"
 
 #include <functional>

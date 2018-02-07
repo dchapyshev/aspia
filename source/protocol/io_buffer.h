@@ -8,9 +8,6 @@
 #ifndef _ASPIA_PROTOCOL__IO_BUFFER_H
 #define _ASPIA_PROTOCOL__IO_BUFFER_H
 
-#include "base/macros.h"
-#include "base/logging.h"
-
 #include <memory>
 
 namespace aspia {
@@ -20,39 +17,26 @@ class IOBuffer
 public:
     IOBuffer() = default;
 
-    explicit IOBuffer(size_t size) :
-        data_size_(size)
-    {
-        DCHECK_NE(data_size_, 0U);
-        data_ = std::make_unique<uint8_t[]>(data_size_);
-    }
+    IOBuffer(const IOBuffer& other);
+    IOBuffer& operator=(const IOBuffer& other);
 
-    IOBuffer(IOBuffer&& other) noexcept
-    {
-        data_ = std::move(other.data_);
-        data_size_ = other.data_size_;
-        other.data_size_ = 0;
-    }
-
-    IOBuffer& operator=(IOBuffer&& other) noexcept
-    {
-        data_ = std::move(other.data_);
-        data_size_ = other.data_size_;
-        other.data_size_ = 0;
-        return *this;
-    }
+    IOBuffer(IOBuffer&& other) noexcept;
+    IOBuffer& operator=(IOBuffer&& other) noexcept;
 
     virtual ~IOBuffer() = default;
 
-    uint8_t* data() const { return data_.get(); }
-    size_t size() const { return data_size_; }
-    bool empty() const { return data_size_ == 0 || data_ == nullptr; }
+    static IOBuffer Create(size_t size);
+
+    uint8_t* Data() const { return data_.get(); }
+    size_t Size() const { return data_size_; }
+    bool IsEmpty() const { return data_size_ == 0 || data_ == nullptr; }
+    void CopyFrom(const IOBuffer& other);
 
 private:
+    explicit IOBuffer(size_t size);
+
     std::unique_ptr<uint8_t[]> data_;
     size_t data_size_ = 0;
-
-    DISALLOW_COPY_AND_ASSIGN(IOBuffer);
 };
 
 } // namespace aspia

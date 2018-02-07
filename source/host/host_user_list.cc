@@ -71,17 +71,15 @@ bool HostUserList::IsValidUser(const proto::HostUser& user)
 bool HostUserList::CreatePasswordHash(const std::string& password,
                                       std::string& password_hash)
 {
-    bool result = false;
+    SecureString<std::wstring> password_unicode(UNICODEfromUTF8(password));
 
-    std::wstring password_unicode = UNICODEfromUTF8(password);
-    if (IsValidPassword(password_unicode))
+    if (IsValidPassword(password_unicode.string()))
     {
-        result = SHA512(password, password_hash, kPasswordHashIterCount);
+        password_hash = SHA512(password, kPasswordHashIterCount);
+        return true;
     }
 
-    SecureMemZero(&password_unicode);
-
-    return result;
+    return false;
 }
 
 bool HostUserList::IsValidUserList()

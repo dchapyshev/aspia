@@ -7,6 +7,8 @@
 
 #include "client/client_pool.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 ClientPool::ClientPool(std::shared_ptr<MessageLoopProxy> runner)

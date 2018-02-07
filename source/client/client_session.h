@@ -26,6 +26,9 @@ public:
 
     virtual ~ClientSession() = default;
 
+    static std::unique_ptr<ClientSession> Create(
+        const proto::Computer& computer, std::shared_ptr<NetworkChannelProxy> channel_proxy);
+
 protected:
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
     proto::Computer computer_;

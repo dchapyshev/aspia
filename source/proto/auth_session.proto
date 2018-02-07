@@ -14,9 +14,7 @@ package aspia.proto.auth;
 enum Method
 {
     METHOD_UNKNOWN = 0;
-
-    // Means of protocol (user name, password).
-    METHOD_BASIC = 1;
+    METHOD_BASIC   = 1;
 }
 
 enum SessionType
@@ -36,15 +34,22 @@ enum Status
     STATUS_ACCESS_DENIED = 2;
 }
 
-message HostToClient
+// Host to client.
+message Request
 {
-    Status status = 1;
+    Method method = 1;
+    bytes nonce = 2;
 }
 
-message ClientToHost
+// Client to host.
+message Response
 {
     SessionType session_type = 1;
-    Method method            = 2;
-    string username          = 3;
-    bytes password           = 4;
+    bytes key = 10;
+}
+
+// Host to client.
+message Result
+{
+    Status status = 1;
 }

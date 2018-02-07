@@ -7,6 +7,8 @@
 
 #include "network/network_client_tcp.h"
 
+#include "base/logging.h"
+
 namespace aspia {
 
 namespace {

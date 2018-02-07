@@ -186,13 +186,13 @@ void PipeChannel::DoNextWriteTask()
 {
     write_buffer_ = std::move(work_write_queue_.front().first);
 
-    if (write_buffer_.empty())
+    if (write_buffer_.IsEmpty())
     {
         DoDisconnect();
         return;
     }
 
-    write_size_ = static_cast<uint32_t>(write_buffer_.size());
+    write_size_ = static_cast<uint32_t>(write_buffer_.Size());
 
     asio::async_write(stream_,
                       asio::buffer(&write_size_, sizeof(uint32_t)),
@@ -211,7 +211,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code, size_t bytes_
     }
 
     asio::async_write(stream_,
-                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
+                      asio::buffer(write_buffer_.Data(), write_buffer_.Size()),
                       std::bind(&PipeChannel::OnWriteComplete,
                                 this,
                                 std::placeholders::_1,
@@ -220,7 +220,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code, size_t bytes_
 
 void PipeChannel::OnWriteComplete(const std::error_code& code, size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_.Size())
     {
         DoDisconnect();
         return;
@@ -331,10 +331,10 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code, size_t bytes_t
         return;
     }
 
-    read_buffer_ = IOBuffer(read_size_);
+    read_buffer_ = IOBuffer::Create(read_size_);
 
     asio::async_read(stream_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
+                     asio::buffer(read_buffer_.Data(), read_buffer_.Size()),
                      std::bind(&PipeChannel::OnReadComplete,
                                this,
                                std::placeholders::_1,
@@ -343,7 +343,7 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code, size_t bytes_t
 
 void PipeChannel::OnReadComplete(const std::error_code& code, size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_.Size())
     {
         DoDisconnect();
         return;

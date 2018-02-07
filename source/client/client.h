@@ -47,8 +47,10 @@ private:
     // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
-    void OnAuthRequestSended();
-    void DoAuthorize(const IOBuffer& buffer);
+    void OnRequestReceived(const IOBuffer& buffer);
+    void OnResponseSended();
+    void OnResultReceived(const IOBuffer& buffer);
+
     void OpenStatusDialog();
 
     Delegate* delegate_;

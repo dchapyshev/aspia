@@ -226,7 +226,7 @@ LRESULT AddressBookDialog::OnOkButton(
                 key_.reset();
 
                 SecureString<std::string> password_utf8(UTF8fromUNICODE(password.get()));
-                SHA256(password_utf8.string(), key_.mutable_string(), 1000);
+                key_.mutable_string().assign(SHA256(password_utf8.string(), 1000));
             }
         }
         break;

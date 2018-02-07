@@ -14,6 +14,7 @@
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
+#include "base/logging.h"
 #include "crypto/sha.h"
 #include "crypto/string_encryptor.h"
 #include "ui/address_book/address_book_dialog.h"
@@ -1056,8 +1057,7 @@ bool AddressBookWindow::OpenAddressBook()
             if (dialog.DoModal() == IDCANCEL)
                 return false;
 
-            if (!SHA256(dialog.GetPassword(), key_.mutable_string(), 1000))
-                return false;
+            key_.mutable_string().assign(SHA256(dialog.GetPassword(), 1000));
 
             SecureString<std::string> decrypted;
 

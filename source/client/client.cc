@@ -6,15 +6,33 @@
 //
 
 #include "client/client.h"
-#include "client/client_session_desktop_manage.h"
-#include "client/client_session_file_transfer.h"
-#include "client/client_session_power_manage.h"
-#include "client/client_session_system_info.h"
 #include "crypto/secure_memory.h"
+#include "crypto/sha.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
 
 namespace aspia {
+
+namespace {
+
+constexpr size_t kNonceSize = 512;
+
+std::string CreateUserKey(const std::string& username,
+                          const std::string& password_hash,
+                          const std::string& nonce)
+{
+    DCHECK_EQ(nonce.size(), kNonceSize);
+
+    StreamSHA512 sha512;
+
+    sha512.AppendData(nonce);
+    sha512.AppendData(username);
+    sha512.AppendData(password_hash);
+
+    return sha512.Final();
+}
+
+} // namespace
 
 Client::Client(std::shared_ptr<NetworkChannel> channel,
                const proto::Computer& computer,
@@ -60,26 +78,7 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
     if (status == NetworkChannel::Status::CONNECTED)
     {
-        AuthDialog auth_dialog;
-
-        if (auth_dialog.DoModal(nullptr) != IDOK)
-        {
-            channel_proxy_->Disconnect();
-            return;
-        }
-
-        proto::auth::ClientToHost request;
-
-        request.set_method(proto::auth::METHOD_BASIC);
-        request.set_session_type(computer_.session_type());
-        request.set_username(auth_dialog.UserName());
-        request.set_password(auth_dialog.Password());
-
-        channel_proxy_->Send(SerializeMessage(request),
-                             std::bind(&Client::OnAuthRequestSended, this));
-
-        SecureMemZero(request.mutable_username());
-        SecureMemZero(request.mutable_password());
+        channel_proxy_->Receive(std::bind(&Client::OnRequestReceived, this, std::placeholders::_1));
     }
     else
     {
@@ -91,60 +90,61 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
-void Client::OnStatusDialogOpen()
+void Client::OnRequestReceived(const IOBuffer& buffer)
 {
-    status_dialog_.SetDestonation(computer_.address(), computer_.port());
-    status_dialog_.SetAuthorizationStatus(status_);
-}
-
-void Client::OpenStatusDialog()
-{
-    status_dialog_.DoModal(nullptr);
-}
-
-void Client::OnAuthRequestSended()
-{
-    channel_proxy_->Receive(std::bind(&Client::DoAuthorize, this, std::placeholders::_1));
-}
-
-static std::unique_ptr<ClientSession> CreateSession(
-    const proto::Computer& computer,
-    std::shared_ptr<NetworkChannelProxy> channel_proxy)
-{
-    switch (computer.session_type())
+    if (!runner_->BelongsToCurrentThread())
     {
-        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            return std::make_unique<ClientSessionDesktopManage>(computer, channel_proxy);
-
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            return std::make_unique<ClientSessionDesktopView>(computer, channel_proxy);
-
-        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
-            return std::make_unique<ClientSessionFileTransfer>(computer, channel_proxy);
-
-        case proto::auth::SESSION_TYPE_POWER_MANAGE:
-            return std::make_unique<ClientSessionPowerManage>(computer, channel_proxy);
-
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
-            return std::make_unique<ClientSessionSystemInfo>(computer, channel_proxy);
-
-        default:
-            LOG(LS_ERROR) << "Invalid session type: " << computer.session_type();
-            return nullptr;
+        runner_->PostTask(std::bind(&Client::OnRequestReceived, this, buffer));
+        return;
     }
+
+    proto::auth::Request request;
+
+    if (!ParseMessage(buffer, request))
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    if (request.method() != proto::auth::METHOD_BASIC)
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    AuthDialog auth_dialog;
+
+    if (auth_dialog.DoModal(nullptr) != IDOK)
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    proto::auth::Response response;
+    response.set_session_type(computer_.session_type());
+    response.set_key(CreateUserKey(auth_dialog.UserName(),
+                                   SHA512(auth_dialog.Password(), 1000),
+                                   request.nonce()));
+
+    channel_proxy_->Send(SerializeMessage(response), std::bind(&Client::OnResponseSended, this));
 }
 
-void Client::DoAuthorize(const IOBuffer& buffer)
+void Client::OnResponseSended()
 {
-    proto::auth::HostToClient reply;
+    channel_proxy_->Receive(std::bind(&Client::OnResultReceived, this, std::placeholders::_1));
+}
 
-    if (ParseMessage(buffer, reply))
+void Client::OnResultReceived(const IOBuffer& buffer)
+{
+    proto::auth::Result result;
+
+    if (ParseMessage(buffer, result))
     {
-        status_ = reply.status();
+        status_ = result.status();
 
         if (status_ == proto::auth::STATUS_SUCCESS)
         {
-            session_ = CreateSession(computer_, channel_proxy_);
+            session_ = ClientSession::Create(computer_, channel_proxy_);
             if (session_)
                 return;
         }
@@ -155,6 +155,17 @@ void Client::DoAuthorize(const IOBuffer& buffer)
     }
 
     channel_proxy_->Disconnect();
+}
+
+void Client::OnStatusDialogOpen()
+{
+    status_dialog_.SetDestonation(computer_.address(), computer_.port());
+    status_dialog_.SetAuthorizationStatus(status_);
+}
+
+void Client::OpenStatusDialog()
+{
+    status_dialog_.DoModal(nullptr);
 }
 
 } // namespace aspia

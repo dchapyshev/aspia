@@ -956,6 +956,15 @@
     <ClCompile Include="ui\address_book\open_address_book_dialog.cc">
       <Filter>ui\address_book</Filter>
     </ClCompile>
+    <ClCompile Include="crypto\random.cc">
+      <Filter>crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="client\client_session.cc">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol\io_buffer.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1932,6 +1941,9 @@
     </ClInclude>
     <ClInclude Include="ui\address_book\open_address_book_dialog.h">
       <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\random.h">
+      <Filter>crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -167,6 +167,7 @@
     <ClCompile Include="category\category_wsus.pb.cc" />
     <ClCompile Include="client\client.cc" />
     <ClCompile Include="client\client_pool.cc" />
+    <ClCompile Include="client\client_session.cc" />
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_file_transfer.cc" />
@@ -196,6 +197,7 @@
     <ClCompile Include="codec\video_helpers.cc" />
     <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="crypto\encryptor.cc" />
+    <ClCompile Include="crypto\random.cc" />
     <ClCompile Include="crypto\secure_memory.cc" />
     <ClCompile Include="crypto\sha.cc" />
     <ClCompile Include="crypto\string_encryptor.cc" />
@@ -248,6 +250,7 @@
     <ClCompile Include="protocol\filesystem.cc" />
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
+    <ClCompile Include="protocol\io_buffer.cc" />
     <ClCompile Include="proto\address_book.pb.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\computer.pb.cc" />
@@ -518,6 +521,7 @@
     <ClInclude Include="codec\video_helpers.h" />
     <ClInclude Include="command_line_switches.h" />
     <ClInclude Include="crypto\encryptor.h" />
+    <ClInclude Include="crypto\random.h" />
     <ClInclude Include="crypto\secure_memory.h" />
     <ClInclude Include="crypto\sha.h" />
     <ClInclude Include="crypto\string_encryptor.h" />

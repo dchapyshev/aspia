@@ -10,13 +10,36 @@
 
 #include <string>
 
+extern "C" {
+#define SODIUM_STATIC
+
+#pragma warning(push, 3)
+#include <sodium.h>
+#pragma warning(pop)
+} // extern "C"
+
+struct crypto_hash_sha512_state;
+
 namespace aspia {
+
+class StreamSHA512
+{
+public:
+    StreamSHA512();
+    ~StreamSHA512() = default;
+
+    void AppendData(const std::string& data);
+    std::string Final();
+
+private:
+    crypto_hash_sha512_state state_;
+};
 
 // Creates a hash of the content |data| and saves it to the |data_hash|.
 // Parameter |iter_count| specifies how many iterations must be done.
-bool SHA512(const std::string& data, std::string& data_hash, size_t iter_count);
+std::string SHA512(const std::string& data, size_t iter_count);
 
-bool SHA256(const std::string& data, std::string& data_hash, size_t iter_count);
+std::string SHA256(const std::string& data, size_t iter_count);
 
 } // namespace aspia
 

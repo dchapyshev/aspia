@@ -158,12 +158,12 @@ IOBuffer Encryptor::Encrypt(const IOBuffer& source_buffer)
 
     sodium_increment(encrypt_nonce_->data(), crypto_secretbox_NONCEBYTES);
 
-    IOBuffer encrypted_buffer(source_buffer.size() + crypto_secretbox_MACBYTES);
+    IOBuffer encrypted_buffer = IOBuffer::Create(source_buffer.Size() + crypto_secretbox_MACBYTES);
 
     // Encrypt message.
-    if (crypto_secretbox_easy(encrypted_buffer.data(),
-                              source_buffer.data(),
-                              source_buffer.size(),
+    if (crypto_secretbox_easy(encrypted_buffer.Data(),
+                              source_buffer.Data(),
+                              source_buffer.Size(),
                               encrypt_nonce_->data(),
                               encrypt_key_->data()) != 0)
     {
@@ -184,12 +184,12 @@ IOBuffer Encryptor::Decrypt(const IOBuffer& source_buffer)
 
     sodium_increment(decrypt_nonce_->data(), crypto_secretbox_NONCEBYTES);
 
-    IOBuffer decrypted_buffer(source_buffer.size() - crypto_secretbox_MACBYTES);
+    IOBuffer decrypted_buffer = IOBuffer::Create(source_buffer.Size() - crypto_secretbox_MACBYTES);
 
     // Decrypt message.
-    if (crypto_secretbox_open_easy(decrypted_buffer.data(),
-                                   source_buffer.data(),
-                                   source_buffer.size(),
+    if (crypto_secretbox_open_easy(decrypted_buffer.Data(),
+                                   source_buffer.Data(),
+                                   source_buffer.Size(),
                                    decrypt_nonce_->data(),
                                    decrypt_key_->data()) != 0)
     {
