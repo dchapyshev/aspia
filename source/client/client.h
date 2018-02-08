@@ -47,6 +47,8 @@ private:
     // StatusDialog::Delegate implementation.
     void OnStatusDialogOpen() override;
 
+    void OnAllowMethodsReceived(const IOBuffer& buffer);
+    void OnSelectMethodSended();
     void OnRequestReceived(const IOBuffer& buffer);
     void OnResponseSended();
     void OnResultReceived(const IOBuffer& buffer);

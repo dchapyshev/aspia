@@ -35,21 +35,32 @@ enum Status
 }
 
 // Host to client.
-message Request
+message AllowMethods
 {
-    Method method = 1;
-    bytes nonce = 2;
+    uint32 methods = 1;
 }
 
 // Client to host.
-message Response
+message SelectMethod
+{
+    Method method = 1;
+}
+
+// Host to client.
+message BasicRequest
+{
+    bytes nonce = 1;
+}
+
+// Client to host.
+message BasicResponse
 {
     SessionType session_type = 1;
     bytes key = 10;
 }
 
 // Host to client.
-message Result
+message BasicResult
 {
     Status status = 1;
 }

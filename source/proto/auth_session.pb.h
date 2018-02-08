@@ -36,35 +36,47 @@ namespace protobuf_auth_5fsession_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[3];
+  static const ::google::protobuf::internal::ParseTable schema[5];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsRequestImpl();
-void InitDefaultsRequest();
-void InitDefaultsResponseImpl();
-void InitDefaultsResponse();
-void InitDefaultsResultImpl();
-void InitDefaultsResult();
+void InitDefaultsAllowMethodsImpl();
+void InitDefaultsAllowMethods();
+void InitDefaultsSelectMethodImpl();
+void InitDefaultsSelectMethod();
+void InitDefaultsBasicRequestImpl();
+void InitDefaultsBasicRequest();
+void InitDefaultsBasicResponseImpl();
+void InitDefaultsBasicResponse();
+void InitDefaultsBasicResultImpl();
+void InitDefaultsBasicResult();
 inline void InitDefaults() {
-  InitDefaultsRequest();
-  InitDefaultsResponse();
-  InitDefaultsResult();
+  InitDefaultsAllowMethods();
+  InitDefaultsSelectMethod();
+  InitDefaultsBasicRequest();
+  InitDefaultsBasicResponse();
+  InitDefaultsBasicResult();
 }
 }  // namespace protobuf_auth_5fsession_2eproto
 namespace aspia {
 namespace proto {
 namespace auth {
-class Request;
-class RequestDefaultTypeInternal;
-extern RequestDefaultTypeInternal _Request_default_instance_;
-class Response;
-class ResponseDefaultTypeInternal;
-extern ResponseDefaultTypeInternal _Response_default_instance_;
-class Result;
-class ResultDefaultTypeInternal;
-extern ResultDefaultTypeInternal _Result_default_instance_;
+class AllowMethods;
+class AllowMethodsDefaultTypeInternal;
+extern AllowMethodsDefaultTypeInternal _AllowMethods_default_instance_;
+class BasicRequest;
+class BasicRequestDefaultTypeInternal;
+extern BasicRequestDefaultTypeInternal _BasicRequest_default_instance_;
+class BasicResponse;
+class BasicResponseDefaultTypeInternal;
+extern BasicResponseDefaultTypeInternal _BasicResponse_default_instance_;
+class BasicResult;
+class BasicResultDefaultTypeInternal;
+extern BasicResultDefaultTypeInternal _BasicResult_default_instance_;
+class SelectMethod;
+class SelectMethodDefaultTypeInternal;
+extern SelectMethodDefaultTypeInternal _SelectMethod_default_instance_;
 }  // namespace auth
 }  // namespace proto
 }  // namespace aspia
@@ -112,24 +124,24 @@ const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================
 
-class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Request) */ {
+class AllowMethods : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.AllowMethods) */ {
  public:
-  Request();
-  virtual ~Request();
+  AllowMethods();
+  virtual ~AllowMethods();
 
-  Request(const Request& from);
+  AllowMethods(const AllowMethods& from);
 
-  inline Request& operator=(const Request& from) {
+  inline AllowMethods& operator=(const AllowMethods& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Request(Request&& from) noexcept
-    : Request() {
+  AllowMethods(AllowMethods&& from) noexcept
+    : AllowMethods() {
     *this = ::std::move(from);
   }
 
-  inline Request& operator=(Request&& from) noexcept {
+  inline AllowMethods& operator=(AllowMethods&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -138,30 +150,30 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
     return *this;
   }
   #endif
-  static const Request& default_instance();
+  static const AllowMethods& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Request* internal_default_instance() {
-    return reinterpret_cast<const Request*>(
-               &_Request_default_instance_);
+  static inline const AllowMethods* internal_default_instance() {
+    return reinterpret_cast<const AllowMethods*>(
+               &_AllowMethods_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     0;
 
-  void Swap(Request* other);
-  friend void swap(Request& a, Request& b) {
+  void Swap(AllowMethods* other);
+  friend void swap(AllowMethods& a, AllowMethods& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Request* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline AllowMethods* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Request* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  AllowMethods* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Request& from);
-  void MergeFrom(const Request& from);
+  void CopyFrom(const AllowMethods& from);
+  void MergeFrom(const AllowMethods& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -176,7 +188,7 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Request* other);
+  void InternalSwap(AllowMethods* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -192,56 +204,41 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes nonce = 2;
-  void clear_nonce();
-  static const int kNonceFieldNumber = 2;
-  const ::std::string& nonce() const;
-  void set_nonce(const ::std::string& value);
-  #if LANG_CXX11
-  void set_nonce(::std::string&& value);
-  #endif
-  void set_nonce(const char* value);
-  void set_nonce(const void* value, size_t size);
-  ::std::string* mutable_nonce();
-  ::std::string* release_nonce();
-  void set_allocated_nonce(::std::string* nonce);
+  // uint32 methods = 1;
+  void clear_methods();
+  static const int kMethodsFieldNumber = 1;
+  ::google::protobuf::uint32 methods() const;
+  void set_methods(::google::protobuf::uint32 value);
 
-  // .aspia.proto.auth.Method method = 1;
-  void clear_method();
-  static const int kMethodFieldNumber = 1;
-  ::aspia::proto::auth::Method method() const;
-  void set_method(::aspia::proto::auth::Method value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Request)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.AllowMethods)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr nonce_;
-  int method_;
+  ::google::protobuf::uint32 methods_;
   mutable int _cached_size_;
   friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
-  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsRequestImpl();
+  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsAllowMethodsImpl();
 };
 // -------------------------------------------------------------------
 
-class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Response) */ {
+class SelectMethod : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.SelectMethod) */ {
  public:
-  Response();
-  virtual ~Response();
+  SelectMethod();
+  virtual ~SelectMethod();
 
-  Response(const Response& from);
+  SelectMethod(const SelectMethod& from);
 
-  inline Response& operator=(const Response& from) {
+  inline SelectMethod& operator=(const SelectMethod& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Response(Response&& from) noexcept
-    : Response() {
+  SelectMethod(SelectMethod&& from) noexcept
+    : SelectMethod() {
     *this = ::std::move(from);
   }
 
-  inline Response& operator=(Response&& from) noexcept {
+  inline SelectMethod& operator=(SelectMethod&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -250,30 +247,30 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
     return *this;
   }
   #endif
-  static const Response& default_instance();
+  static const SelectMethod& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Response* internal_default_instance() {
-    return reinterpret_cast<const Response*>(
-               &_Response_default_instance_);
+  static inline const SelectMethod* internal_default_instance() {
+    return reinterpret_cast<const SelectMethod*>(
+               &_SelectMethod_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     1;
 
-  void Swap(Response* other);
-  friend void swap(Response& a, Response& b) {
+  void Swap(SelectMethod* other);
+  friend void swap(SelectMethod& a, SelectMethod& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Response* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline SelectMethod* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Response* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  SelectMethod* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Response& from);
-  void MergeFrom(const Response& from);
+  void CopyFrom(const SelectMethod& from);
+  void MergeFrom(const SelectMethod& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -288,7 +285,209 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Response* other);
+  void InternalSwap(SelectMethod* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .aspia.proto.auth.Method method = 1;
+  void clear_method();
+  static const int kMethodFieldNumber = 1;
+  ::aspia::proto::auth::Method method() const;
+  void set_method(::aspia::proto::auth::Method value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.SelectMethod)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  int method_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
+  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsSelectMethodImpl();
+};
+// -------------------------------------------------------------------
+
+class BasicRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicRequest) */ {
+ public:
+  BasicRequest();
+  virtual ~BasicRequest();
+
+  BasicRequest(const BasicRequest& from);
+
+  inline BasicRequest& operator=(const BasicRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  BasicRequest(BasicRequest&& from) noexcept
+    : BasicRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline BasicRequest& operator=(BasicRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const BasicRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BasicRequest* internal_default_instance() {
+    return reinterpret_cast<const BasicRequest*>(
+               &_BasicRequest_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(BasicRequest* other);
+  friend void swap(BasicRequest& a, BasicRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BasicRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  BasicRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const BasicRequest& from);
+  void MergeFrom(const BasicRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(BasicRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bytes nonce = 1;
+  void clear_nonce();
+  static const int kNonceFieldNumber = 1;
+  const ::std::string& nonce() const;
+  void set_nonce(const ::std::string& value);
+  #if LANG_CXX11
+  void set_nonce(::std::string&& value);
+  #endif
+  void set_nonce(const char* value);
+  void set_nonce(const void* value, size_t size);
+  ::std::string* mutable_nonce();
+  ::std::string* release_nonce();
+  void set_allocated_nonce(::std::string* nonce);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr nonce_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
+  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicRequestImpl();
+};
+// -------------------------------------------------------------------
+
+class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicResponse) */ {
+ public:
+  BasicResponse();
+  virtual ~BasicResponse();
+
+  BasicResponse(const BasicResponse& from);
+
+  inline BasicResponse& operator=(const BasicResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  BasicResponse(BasicResponse&& from) noexcept
+    : BasicResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline BasicResponse& operator=(BasicResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const BasicResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BasicResponse* internal_default_instance() {
+    return reinterpret_cast<const BasicResponse*>(
+               &_BasicResponse_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    3;
+
+  void Swap(BasicResponse* other);
+  friend void swap(BasicResponse& a, BasicResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BasicResponse* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  BasicResponse* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const BasicResponse& from);
+  void MergeFrom(const BasicResponse& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(BasicResponse* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -324,7 +523,7 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::aspia::proto::auth::SessionType session_type() const;
   void set_session_type(::aspia::proto::auth::SessionType value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Response)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicResponse)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -332,28 +531,28 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   int session_type_;
   mutable int _cached_size_;
   friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
-  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsResponseImpl();
+  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicResponseImpl();
 };
 // -------------------------------------------------------------------
 
-class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Result) */ {
+class BasicResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicResult) */ {
  public:
-  Result();
-  virtual ~Result();
+  BasicResult();
+  virtual ~BasicResult();
 
-  Result(const Result& from);
+  BasicResult(const BasicResult& from);
 
-  inline Result& operator=(const Result& from) {
+  inline BasicResult& operator=(const BasicResult& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Result(Result&& from) noexcept
-    : Result() {
+  BasicResult(BasicResult&& from) noexcept
+    : BasicResult() {
     *this = ::std::move(from);
   }
 
-  inline Result& operator=(Result&& from) noexcept {
+  inline BasicResult& operator=(BasicResult&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -362,30 +561,30 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
     return *this;
   }
   #endif
-  static const Result& default_instance();
+  static const BasicResult& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Result* internal_default_instance() {
-    return reinterpret_cast<const Result*>(
-               &_Result_default_instance_);
+  static inline const BasicResult* internal_default_instance() {
+    return reinterpret_cast<const BasicResult*>(
+               &_BasicResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    4;
 
-  void Swap(Result* other);
-  friend void swap(Result& a, Result& b) {
+  void Swap(BasicResult* other);
+  friend void swap(BasicResult& a, BasicResult& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Result* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline BasicResult* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Result* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  BasicResult* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Result& from);
-  void MergeFrom(const Result& from);
+  void CopyFrom(const BasicResult& from);
+  void MergeFrom(const BasicResult& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -400,7 +599,7 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Result* other);
+  void InternalSwap(BasicResult* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -422,14 +621,14 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::aspia::proto::auth::Status status() const;
   void set_status(::aspia::proto::auth::Status value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Result)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   int status_;
   mutable int _cached_size_;
   friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
-  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsResultImpl();
+  friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicResultImpl();
 };
 // ===================================================================
 
@@ -440,167 +639,193 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Request
+// AllowMethods
+
+// uint32 methods = 1;
+inline void AllowMethods::clear_methods() {
+  methods_ = 0u;
+}
+inline ::google::protobuf::uint32 AllowMethods::methods() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.AllowMethods.methods)
+  return methods_;
+}
+inline void AllowMethods::set_methods(::google::protobuf::uint32 value) {
+  
+  methods_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.AllowMethods.methods)
+}
+
+// -------------------------------------------------------------------
+
+// SelectMethod
 
 // .aspia.proto.auth.Method method = 1;
-inline void Request::clear_method() {
+inline void SelectMethod::clear_method() {
   method_ = 0;
 }
-inline ::aspia::proto::auth::Method Request::method() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.method)
+inline ::aspia::proto::auth::Method SelectMethod::method() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.SelectMethod.method)
   return static_cast< ::aspia::proto::auth::Method >(method_);
 }
-inline void Request::set_method(::aspia::proto::auth::Method value) {
+inline void SelectMethod::set_method(::aspia::proto::auth::Method value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.method)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.SelectMethod.method)
 }
 
-// bytes nonce = 2;
-inline void Request::clear_nonce() {
+// -------------------------------------------------------------------
+
+// BasicRequest
+
+// bytes nonce = 1;
+inline void BasicRequest::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Request::nonce() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.nonce)
+inline const ::std::string& BasicRequest::nonce() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicRequest.nonce)
   return nonce_.GetNoArena();
 }
-inline void Request::set_nonce(const ::std::string& value) {
+inline void BasicRequest::set_nonce(const ::std::string& value) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicRequest.nonce)
 }
 #if LANG_CXX11
-inline void Request::set_nonce(::std::string&& value) {
+inline void BasicRequest::set_nonce(::std::string&& value) {
   
   nonce_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicRequest.nonce)
 }
 #endif
-inline void Request::set_nonce(const char* value) {
+inline void BasicRequest::set_nonce(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicRequest.nonce)
 }
-inline void Request::set_nonce(const void* value, size_t size) {
+inline void BasicRequest::set_nonce(const void* value, size_t size) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicRequest.nonce)
 }
-inline ::std::string* Request::mutable_nonce() {
+inline ::std::string* BasicRequest::mutable_nonce() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicRequest.nonce)
   return nonce_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_nonce() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.Request.nonce)
+inline ::std::string* BasicRequest::release_nonce() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicRequest.nonce)
   
   return nonce_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_nonce(::std::string* nonce) {
+inline void BasicRequest::set_allocated_nonce(::std::string* nonce) {
   if (nonce != NULL) {
     
   } else {
     
   }
   nonce_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nonce);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicRequest.nonce)
 }
 
 // -------------------------------------------------------------------
 
-// Response
+// BasicResponse
 
 // .aspia.proto.auth.SessionType session_type = 1;
-inline void Response::clear_session_type() {
+inline void BasicResponse::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType Response::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Response.session_type)
+inline ::aspia::proto::auth::SessionType BasicResponse::session_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.session_type)
   return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
 }
-inline void Response::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void BasicResponse::set_session_type(::aspia::proto::auth::SessionType value) {
   
   session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Response.session_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.session_type)
 }
 
 // bytes key = 10;
-inline void Response::clear_key() {
+inline void BasicResponse::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Response::key() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Response.key)
+inline const ::std::string& BasicResponse::key() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.key)
   return key_.GetNoArena();
 }
-inline void Response::set_key(const ::std::string& value) {
+inline void BasicResponse::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.key)
 }
 #if LANG_CXX11
-inline void Response::set_key(::std::string&& value) {
+inline void BasicResponse::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicResponse.key)
 }
 #endif
-inline void Response::set_key(const char* value) {
+inline void BasicResponse::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicResponse.key)
 }
-inline void Response::set_key(const void* value, size_t size) {
+inline void BasicResponse::set_key(const void* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicResponse.key)
 }
-inline ::std::string* Response::mutable_key() {
+inline ::std::string* BasicResponse::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicResponse.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Response::release_key() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.Response.key)
+inline ::std::string* BasicResponse::release_key() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicResponse.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Response::set_allocated_key(::std::string* key) {
+inline void BasicResponse::set_allocated_key(::std::string* key) {
   if (key != NULL) {
     
   } else {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicResponse.key)
 }
 
 // -------------------------------------------------------------------
 
-// Result
+// BasicResult
 
 // .aspia.proto.auth.Status status = 1;
-inline void Result::clear_status() {
+inline void BasicResult::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::auth::Status Result::status() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Result.status)
+inline ::aspia::proto::auth::Status BasicResult::status() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResult.status)
   return static_cast< ::aspia::proto::auth::Status >(status_);
 }
-inline void Result::set_status(::aspia::proto::auth::Status value) {
+inline void BasicResult::set_status(::aspia::proto::auth::Status value) {
   
   status_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Result.status)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResult.status)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

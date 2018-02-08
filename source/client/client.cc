@@ -78,7 +78,8 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
 
     if (status == NetworkChannel::Status::CONNECTED)
     {
-        channel_proxy_->Receive(std::bind(&Client::OnRequestReceived, this, std::placeholders::_1));
+        channel_proxy_->Receive(
+            std::bind(&Client::OnAllowMethodsReceived, this, std::placeholders::_1));
     }
     else
     {
@@ -90,6 +91,35 @@ void Client::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
+void Client::OnAllowMethodsReceived(const IOBuffer& buffer)
+{
+    proto::auth::AllowMethods allow_methods;
+
+    if (!ParseMessage(buffer, allow_methods))
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    if (!(allow_methods.methods() & proto::auth::METHOD_BASIC))
+    {
+        LOG(LS_WARNING) << "No supported authorization methods: " << allow_methods.methods();
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    proto::auth::SelectMethod select_method;
+    select_method.set_method(proto::auth::METHOD_BASIC);
+
+    channel_proxy_->Send(SerializeMessage(select_method),
+                         std::bind(&Client::OnSelectMethodSended, this));
+}
+
+void Client::OnSelectMethodSended()
+{
+    channel_proxy_->Receive(std::bind(&Client::OnRequestReceived, this, std::placeholders::_1));
+}
+
 void Client::OnRequestReceived(const IOBuffer& buffer)
 {
     if (!runner_->BelongsToCurrentThread())
@@ -98,15 +128,9 @@ void Client::OnRequestReceived(const IOBuffer& buffer)
         return;
     }
 
-    proto::auth::Request request;
+    proto::auth::BasicRequest request;
 
     if (!ParseMessage(buffer, request))
-    {
-        channel_proxy_->Disconnect();
-        return;
-    }
-
-    if (request.method() != proto::auth::METHOD_BASIC)
     {
         channel_proxy_->Disconnect();
         return;
@@ -120,7 +144,8 @@ void Client::OnRequestReceived(const IOBuffer& buffer)
         return;
     }
 
-    proto::auth::Response response;
+    proto::auth::BasicResponse response;
+
     response.set_session_type(computer_.session_type());
     response.set_key(CreateUserKey(auth_dialog.UserName(),
                                    SHA512(auth_dialog.Password(), 1000),
@@ -136,7 +161,7 @@ void Client::OnResponseSended()
 
 void Client::OnResultReceived(const IOBuffer& buffer)
 {
-    proto::auth::Result result;
+    proto::auth::BasicResult result;
 
     if (ParseMessage(buffer, result))
     {

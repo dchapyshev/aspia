@@ -34,6 +34,8 @@ public:
 private:
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
 
+    void OnAllowMethodsSended();
+    void OnSelectMethodReceived(const IOBuffer& buffer);
     void OnRequestSended();
     void OnResponseReceived(const IOBuffer& buffer);
     void OnResultSended(proto::auth::SessionType session_type, proto::auth::Status status);

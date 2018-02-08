@@ -18,6 +18,7 @@ namespace aspia {
 namespace {
 
 constexpr std::chrono::seconds kAuthTimeout{ 60 };
+constexpr uint32_t kAllowedMethods = proto::auth::METHOD_BASIC;
 constexpr size_t kNonceSize = 512;
 
 std::string CreateUserKey(const std::string& username,
@@ -96,14 +97,12 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         auth_timer_.Start(kAuthTimeout,
                           std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
 
-        nonce_ = CreateRandomBuffer(kNonceSize);
+        proto::auth::AllowMethods allow_methods;
 
-        proto::auth::Request request;
+        allow_methods.set_methods(kAllowedMethods);
 
-        request.set_method(proto::auth::METHOD_BASIC);
-        request.set_nonce(nonce_);
-
-        channel_proxy_->Send(SerializeMessage(request), std::bind(&Host::OnRequestSended, this));
+        channel_proxy_->Send(SerializeMessage(allow_methods),
+                             std::bind(&Host::OnAllowMethodsSended, this));
     }
     else
     {
@@ -116,6 +115,35 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
+void Host::OnAllowMethodsSended()
+{
+    channel_proxy_->Receive(std::bind(&Host::OnSelectMethodReceived, this, std::placeholders::_1));
+}
+
+void Host::OnSelectMethodReceived(const IOBuffer& buffer)
+{
+    proto::auth::SelectMethod select_method;
+
+    if (!ParseMessage(buffer, select_method))
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    if (!(select_method.method() & kAllowedMethods))
+    {
+        channel_proxy_->Disconnect();
+        return;
+    }
+
+    nonce_ = CreateRandomBuffer(kNonceSize);
+
+    proto::auth::BasicRequest request;
+    request.set_nonce(nonce_);
+
+    channel_proxy_->Send(SerializeMessage(request), std::bind(&Host::OnRequestSended, this));
+}
+
 void Host::OnRequestSended()
 {
     channel_proxy_->Receive(std::bind(&Host::OnResponseReceived, this, std::placeholders::_1));
@@ -123,7 +151,7 @@ void Host::OnRequestSended()
 
 void Host::OnResponseReceived(const IOBuffer& buffer)
 {
-    proto::auth::Response response;
+    proto::auth::BasicResponse response;
 
     if (!ParseMessage(buffer, response))
     {
@@ -134,7 +162,7 @@ void Host::OnResponseReceived(const IOBuffer& buffer)
     proto::auth::Status status =
         DoBasicAuthorization(response.session_type(), response.key(), nonce_);
 
-    proto::auth::Result result;
+    proto::auth::BasicResult result;
     result.set_status(status);
 
     channel_proxy_->Send(SerializeMessage(result),
