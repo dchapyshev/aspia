@@ -1057,7 +1057,7 @@ bool AddressBookWindow::OpenAddressBook()
             if (dialog.DoModal() == IDCANCEL)
                 return false;
 
-            key_.mutable_string().assign(SHA256(dialog.GetPassword(), 1000));
+            key_ = SHA256(dialog.GetPassword(), 1000);
 
             SecureString<std::string> decrypted;
 

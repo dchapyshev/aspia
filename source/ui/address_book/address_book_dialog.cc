@@ -223,10 +223,7 @@ LRESULT AddressBookDialog::OnOkButton(
                     return 0;
                 }
 
-                key_.reset();
-
-                SecureString<std::string> password_utf8(UTF8fromUNICODE(password.get()));
-                key_.mutable_string().assign(SHA256(password_utf8.string(), 1000));
+                key_ = SHA256(password.get(), 1000);
             }
         }
         break;

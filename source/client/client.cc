@@ -129,7 +129,7 @@ void Client::OnRequestReceived(const IOBuffer& buffer)
 
     response.set_session_type(computer_.session_type());
     response.set_key(CreateUserKey(auth_dialog.UserName(),
-                                   SHA512(auth_dialog.Password(), 1000),
+                                   CreatePasswordHash(auth_dialog.Password()),
                                    request.nonce()));
 
     channel_proxy_->Send(SerializeMessage(response), std::bind(&Client::OnResponseSended, this));

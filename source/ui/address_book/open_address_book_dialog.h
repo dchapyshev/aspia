@@ -26,7 +26,7 @@ public:
 
     OpenAddressBookDialog() = default;
 
-    const std::string& GetPassword() const;
+    const std::wstring& GetPassword() const;
 
 private:
     BEGIN_MSG_MAP(OpenAddressBookDialog)
@@ -43,7 +43,7 @@ private:
     LRESULT OnOkButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    SecureString<std::string> password_;
+    SecureString<std::wstring> password_;
 };
 
 } // namespace aspia

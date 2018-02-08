@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-const std::string& OpenAddressBookDialog::GetPassword() const
+const std::wstring& OpenAddressBookDialog::GetPassword() const
 {
     return password_.string();
 }
@@ -36,7 +36,7 @@ LRESULT OpenAddressBookDialog::OnOkButton(
 {
     SecureArray<WCHAR, 256> buffer;
     GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
-    password_ = UTF8fromUNICODE(buffer.get());
+    password_.mutable_string().assign(buffer.get());
 
     EndDialog(IDOK);
     return 0;

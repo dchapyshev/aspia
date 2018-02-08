@@ -39,13 +39,14 @@ LRESULT AuthDialog::OnClose(
 LRESULT AuthDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SecureArray<WCHAR, 128> buffer;
+    SecureArray<WCHAR, 128> username;
+    GetDlgItemTextW(IDC_USERNAME_EDIT, username.get(), static_cast<int>(username.count()));
 
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), static_cast<int>(buffer.count()));
-    UNICODEtoUTF8(buffer.get(), username_);
+    SecureArray<WCHAR, 128> password;
+    GetDlgItemTextW(IDC_PASSWORD_EDIT, password.get(), static_cast<int>(password.count()));
 
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
-    UNICODEtoUTF8(buffer.get(), password_.mutable_string());
+    username_.assign(username.get());
+    password_.mutable_string().assign(password.get());
 
     EndDialog(IDOK);
     return 0;
@@ -58,12 +59,12 @@ LRESULT AuthDialog::OnCancelButton(
     return 0;
 }
 
-const std::string& AuthDialog::UserName() const
+const std::wstring& AuthDialog::UserName() const
 {
     return username_;
 }
 
-const std::string& AuthDialog::Password() const
+const std::wstring& AuthDialog::Password() const
 {
     return password_.string();
 }

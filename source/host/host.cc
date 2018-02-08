@@ -7,6 +7,7 @@
 
 #include "host/host.h"
 
+#include "base/strings/unicode.h"
 #include "host/host_user_list.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/authorization.h"
@@ -32,9 +33,7 @@ proto::auth::Status DoBasicAuthorization(proto::auth::SessionType session_type,
     {
         const proto::HostUser& user = user_list.host_user(i);
 
-        std::string current_key = CreateUserKey(user.username(), user.password_hash(), nonce);
-
-        if (current_key != key)
+        if (CreateUserKey(UNICODEfromUTF8(user.username()), user.password_hash(), nonce) != key)
             continue;
 
         if (!user.enabled())

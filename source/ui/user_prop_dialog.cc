@@ -236,7 +236,7 @@ LRESULT UserPropDialog::OnOkButton(
                         password_repeat.get(),
                         static_cast<int>(password_repeat.count()));
 
-        if (wcscmp(password.get(), password_repeat.get()) == 0)
+        if (wcscmp(password.get(), password_repeat.get()) != 0)
         {
             ShowErrorMessage(IDS_PASSWORDS_NOT_MATCH);
             return 0;

@@ -25,8 +25,8 @@ public:
 
     AuthDialog() = default;
 
-    const std::string& UserName() const;
-    const std::string& Password() const;
+    const std::wstring& UserName() const;
+    const std::wstring& Password() const;
 
 private:
     BEGIN_MSG_MAP(AuthDialog)
@@ -43,8 +43,8 @@ private:
     LRESULT OnCancelButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
 private:
-    std::string username_;
-    SecureString<std::string> password_;
+    std::wstring username_;
+    SecureString<std::wstring> password_;
 
     DISALLOW_COPY_AND_ASSIGN(AuthDialog);
 };

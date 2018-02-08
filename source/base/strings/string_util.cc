@@ -397,16 +397,6 @@ std::string ToLowerASCII(std::string_view in)
     return out;
 }
 
-std::string ToUpperUTF8(std::string_view in)
-{
-    return UTF8fromUNICODE(ToUpper(UNICODEfromUTF8(in.data())));
-}
-
-std::string ToLowerUTF8(std::string_view in)
-{
-    return UTF8fromUNICODE(ToLower(UNICODEfromUTF8(in.data())));
-}
-
 const std::string& EmptyString()
 {
     return kEmptyString;

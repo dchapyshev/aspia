@@ -77,9 +77,6 @@ std::wstring ToLower(std::wstring_view in);
 std::string ToUpperASCII(std::string_view in);
 std::string ToLowerASCII(std::string_view in);
 
-std::string ToUpperUTF8(std::string_view in);
-std::string ToLowerUTF8(std::string_view in);
-
 const std::string& EmptyString();
 const std::wstring& EmptyStringW();
 
