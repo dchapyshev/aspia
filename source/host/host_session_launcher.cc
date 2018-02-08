@@ -177,7 +177,7 @@ bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wst
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kRunModeSwitch, run_mode);
+    command_line.AppendSwitch(kModeSwitch, run_mode);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle token;
@@ -235,7 +235,7 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
 
         CommandLine command_line(program_path);
 
-        command_line.AppendSwitch(kRunModeSwitch, run_mode);
+        command_line.AppendSwitch(kModeSwitch, run_mode);
         command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
         return CreateProcessWithToken(session_token, command_line);
@@ -257,7 +257,7 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kRunModeSwitch, run_mode);
+    command_line.AppendSwitch(kModeSwitch, run_mode);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle session_token;
@@ -278,10 +278,10 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
-            const WCHAR* launcher_mode = kRunModeDesktopSession;
+            const WCHAR* launcher_mode = kModeDesktopSession;
 
             if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
-                launcher_mode = kRunModeSystemInfoSession;
+                launcher_mode = kModeSystemInfoSession;
 
             if (!IsCallerHasAdminRights())
             {
@@ -302,12 +302,12 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
         {
-            return LaunchSessionProcess(kRunModeFileTransferSession, session_id, channel_id);
+            return LaunchSessionProcess(kModeFileTransferSession, session_id, channel_id);
         }
 
         case proto::auth::SESSION_TYPE_POWER_MANAGE:
         {
-            return LaunchSessionProcess(kRunModePowerManageSession, session_id, channel_id);
+            return LaunchSessionProcess(kModePowerManageSession, session_id, channel_id);
         }
 
         default:
@@ -327,7 +327,7 @@ bool LaunchSystemInfoProcess()
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kRunModeSwitch, kRunModeSystemInfo);
+    command_line.AppendSwitch(kModeSwitch, kModeSystemInfo);
 
     if (IsWindowsVistaOrGreater() && !IsProcessElevated())
     {

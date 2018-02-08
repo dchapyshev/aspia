@@ -12,19 +12,19 @@
 
 namespace aspia {
 
-extern const CommandLine::CharType kRunModeSwitch[];
+extern const CommandLine::CharType kModeSwitch[];
 extern const CommandLine::CharType kSessionIdSwitch[];
 extern const CommandLine::CharType kChannelIdSwitch[];
 extern const CommandLine::CharType kServiceIdSwitch[];
 extern const CommandLine::CharType kLauncherModeSwitch[];
 
-extern const CommandLine::CharType kRunModeSessionLauncher[];
-extern const CommandLine::CharType kRunModeDesktopSession[];
-extern const CommandLine::CharType kRunModeFileTransferSession[];
-extern const CommandLine::CharType kRunModePowerManageSession[];
-extern const CommandLine::CharType kRunModeSystemInfoSession[];
-extern const CommandLine::CharType kRunModeSystemInfo[];
-extern const CommandLine::CharType kRunModeHostService[];
+extern const CommandLine::CharType kModeSessionLauncher[];
+extern const CommandLine::CharType kModeDesktopSession[];
+extern const CommandLine::CharType kModeFileTransferSession[];
+extern const CommandLine::CharType kModePowerManageSession[];
+extern const CommandLine::CharType kModeSystemInfoSession[];
+extern const CommandLine::CharType kModeSystemInfo[];
+extern const CommandLine::CharType kModeHostService[];
 
 extern const CommandLine::CharType kInstallHostServiceSwitch[];
 extern const CommandLine::CharType kRemoveHostServiceSwitch[];

@@ -16,16 +16,6 @@
 
 namespace aspia {
 
-namespace {
-
-uint32_t GetCurrentServiceId()
-{
-    static std::atomic_uint32_t last_service_id = 0;
-    return last_service_id++;
-}
-
-} // namespace
-
 ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
     sc_manager_(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS))
 {
@@ -134,9 +124,11 @@ ServiceManager::Create(const CommandLine& command_line,
 // static
 std::wstring ServiceManager::GenerateUniqueServiceId()
 {
+    static std::atomic_uint32_t last_service_id = 0;
+
     return StringPrintf(L"%lu.%lu.%lu",
                         GetCurrentProcessId(),
-                        GetCurrentServiceId(),
+                        last_service_id++,
                         CreateRandomNumber());
 }
 

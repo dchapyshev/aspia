@@ -21,12 +21,6 @@ namespace {
 constexpr WCHAR kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
 constexpr DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
-uint32_t GetCurrentChannelId()
-{
-    static std::atomic_uint32_t last_channel_id = 0;
-    return last_channel_id++;
-}
-
 bool IsFailureCode(const std::error_code& code)
 {
     return code.value() != 0;
@@ -34,9 +28,11 @@ bool IsFailureCode(const std::error_code& code)
 
 std::wstring GenerateUniqueRandomChannelID()
 {
+    static std::atomic_uint32_t last_channel_id = 0;
+
     return StringPrintf(L"%lu.%lu.%lu",
                         GetCurrentProcessId(),
-                        GetCurrentChannelId(),
+                        last_channel_id++,
                         CreateRandomNumber());
 }
 

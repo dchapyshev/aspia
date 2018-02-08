@@ -24,7 +24,7 @@ void RunHostMain(const CommandLine& command_line)
 {
     Process::Current().SetPriority(Process::Priority::HIGH);
 
-    CommandLine::StringType run_mode = command_line.GetSwitchValue(kRunModeSwitch);
+    CommandLine::StringType run_mode = command_line.GetSwitchValue(kModeSwitch);
 
     if (run_mode == kSasServiceSwitch)
     {
@@ -32,7 +32,7 @@ void RunHostMain(const CommandLine& command_line)
         SasInjector injector(command_line.GetSwitchValue(kServiceIdSwitch));
         injector.ExecuteService();
     }
-    else if (run_mode == kRunModeHostService)
+    else if (run_mode == kModeHostService)
     {
         HostService().Run();
     }
@@ -44,7 +44,7 @@ void RunHostMain(const CommandLine& command_line)
     {
         HostService::Remove();
     }
-    else if (run_mode == kRunModeSessionLauncher)
+    else if (run_mode == kModeSessionLauncher)
     {
         DCHECK(command_line.HasSwitch(kLauncherModeSwitch) &&
                command_line.HasSwitch(kChannelIdSwitch) &&
@@ -55,7 +55,7 @@ void RunHostMain(const CommandLine& command_line)
 
         launcher.RunLauncher();
     }
-    else if (run_mode == kRunModeSystemInfo)
+    else if (run_mode == kModeSystemInfo)
     {
         HostLocalSystemInfo().Run();
     }
@@ -65,19 +65,19 @@ void RunHostMain(const CommandLine& command_line)
 
         std::wstring channel_id = command_line.GetSwitchValue(kChannelIdSwitch);
 
-        if (run_mode == kRunModeDesktopSession)
+        if (run_mode == kModeDesktopSession)
         {
             HostSessionDesktop().Run(channel_id);
         }
-        else if (run_mode == kRunModeFileTransferSession)
+        else if (run_mode == kModeFileTransferSession)
         {
             HostSessionFileTransfer().Run(channel_id);
         }
-        else if (run_mode == kRunModePowerManageSession)
+        else if (run_mode == kModePowerManageSession)
         {
             HostSessionPower().Run(channel_id);
         }
-        else if (run_mode == kRunModeSystemInfoSession)
+        else if (run_mode == kModeSystemInfoSession)
         {
             HostSessionSystemInfo().Run(channel_id);
         }

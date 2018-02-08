@@ -73,7 +73,7 @@ void SasInjector::InjectSAS()
 
         CommandLine command_line(program_path);
 
-        command_line.AppendSwitch(kRunModeSwitch, kSasServiceSwitch);
+        command_line.AppendSwitch(kModeSwitch, kSasServiceSwitch);
         command_line.AppendSwitch(kServiceIdSwitch, service_id);
 
         // Install the service in the system.

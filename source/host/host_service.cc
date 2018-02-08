@@ -80,7 +80,7 @@ bool HostService::Install()
         return false;
 
     CommandLine command_line(program_path);
-    command_line.AppendSwitch(kRunModeSwitch, kRunModeHostService);
+    command_line.AppendSwitch(kModeSwitch, kModeHostService);
 
     std::unique_ptr<ServiceManager> manager =
         ServiceManager::Create(command_line,

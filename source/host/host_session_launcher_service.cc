@@ -49,7 +49,7 @@ bool HostSessionLauncherService::CreateStarted(const std::wstring& launcher_mode
     CommandLine command_line(program_path);
 
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
-    command_line.AppendSwitch(kRunModeSwitch, kRunModeSessionLauncher);
+    command_line.AppendSwitch(kModeSwitch, kModeSessionLauncher);
     command_line.AppendSwitch(kLauncherModeSwitch, launcher_mode);
     command_line.AppendSwitch(kSessionIdSwitch, std::to_wstring(session_id));
     command_line.AppendSwitch(kServiceIdSwitch, service_id);
