@@ -84,6 +84,8 @@ template<typename Type, size_t kArraySize>
 class SecureArray
 {
 public:
+    static_assert(kArraySize != 0);
+
     SecureArray() = default;
     ~SecureArray() { reset(); }
 
