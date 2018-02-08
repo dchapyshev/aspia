@@ -50,7 +50,7 @@ std::string StreamSHA512::Final()
 
 std::string SHA512(std::wstring_view data, size_t iter_count)
 {
-    DCHECK_NE(iter_count, 0);
+    DCHECK_NE(iter_count, 0U);
 
     uint8_t hash_buffer[crypto_hash_sha512_BYTES];
     sodium_memzero(hash_buffer, sizeof(hash_buffer));
@@ -77,7 +77,7 @@ std::string SHA512(std::wstring_view data, size_t iter_count)
 
 std::string SHA256(std::wstring_view data, size_t iter_count)
 {
-    DCHECK_NE(iter_count, 0);
+    DCHECK_NE(iter_count, 0U);
 
     uint8_t hash_buffer[crypto_hash_sha256_BYTES];
     sodium_memzero(hash_buffer, sizeof(hash_buffer));
