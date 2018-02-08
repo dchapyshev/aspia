@@ -130,14 +130,12 @@ LRESULT UserPropDialog::OnInitDialog(
 
     if (mode_ == Mode::EDIT)
     {
+        username_edit.SetWindowTextW(UNICODEfromUTF8(user_->username()).c_str());
+
         password_changed_ = false;
 
         CEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
         CEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
-
-        std::wstring username;
-        CHECK(UTF8toUNICODE(user_->username(), username));
-        username_edit.SetWindowTextW(username.c_str());
 
         const WCHAR kNotChangedPassword[] = L"******";
         password_edit.SetWindowTextW(kNotChangedPassword);
