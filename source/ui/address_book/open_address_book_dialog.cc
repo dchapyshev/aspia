@@ -9,6 +9,7 @@
 
 #include "base/strings/unicode.h"
 #include "crypto/secure_memory.h"
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -34,9 +35,7 @@ LRESULT OpenAddressBookDialog::OnClose(
 LRESULT OpenAddressBookDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SecureArray<WCHAR, 256> buffer;
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
-    password_.mutable_string().assign(buffer.get());
+    password_ = GetWindowString(GetDlgItem(IDC_PASSWORD_EDIT));
 
     EndDialog(IDOK);
     return 0;
