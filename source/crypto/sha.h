@@ -18,8 +18,6 @@ extern "C" {
 #pragma warning(pop)
 } // extern "C"
 
-struct crypto_hash_sha512_state;
-
 namespace aspia {
 
 class StreamSHA512

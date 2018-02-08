@@ -6,13 +6,13 @@
 //
 
 #include "ipc/pipe_channel.h"
-#include "ipc/pipe_channel_proxy.h"
+
 #include "base/version_helpers.h"
 #include "base/security_helpers.h"
 #include "base/strings/string_printf.h"
 #include "base/logging.h"
-
-#include <random>
+#include "crypto/random.h"
+#include "ipc/pipe_channel_proxy.h"
 
 namespace aspia {
 
@@ -34,14 +34,10 @@ bool IsFailureCode(const std::error_code& code)
 
 std::wstring GenerateUniqueRandomChannelID()
 {
-    uint32_t process_id = GetCurrentProcessId();
-
-    std::random_device device;
-    std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
-
-    uint32_t random = uniform(device);
-
-    return StringPrintf(L"%lu.%lu.%lu", process_id, GetCurrentChannelId(), random);
+    return StringPrintf(L"%lu.%lu.%lu",
+                        GetCurrentProcessId(),
+                        GetCurrentChannelId(),
+                        CreateRandomNumber());
 }
 
 std::wstring CreatePipeName(const std::wstring& channel_id)

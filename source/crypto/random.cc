@@ -27,4 +27,9 @@ std::string CreateRandomBuffer(size_t size)
     return buffer;
 }
 
+uint32_t CreateRandomNumber()
+{
+    return randombytes_random();
+}
+
 } // namespace aspia

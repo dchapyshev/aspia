@@ -6,12 +6,13 @@
 //
 
 #include "base/service_manager.h"
+
+#include <atomic>
+
 #include "base/strings/unicode.h"
 #include "base/strings/string_printf.h"
 #include "base/logging.h"
-
-#include <atomic>
-#include <random>
+#include "crypto/random.h"
 
 namespace aspia {
 
@@ -133,14 +134,10 @@ ServiceManager::Create(const CommandLine& command_line,
 // static
 std::wstring ServiceManager::GenerateUniqueServiceId()
 {
-    uint32_t process_id = GetCurrentProcessId();
-
-    std::random_device device;
-    std::uniform_int_distribution<uint32_t> uniform(0, std::numeric_limits<uint32_t>::max());
-
-    uint32_t random = uniform(device);
-
-    return StringPrintf(L"%lu.%lu.%lu", process_id, GetCurrentServiceId(), random);
+    return StringPrintf(L"%lu.%lu.%lu",
+                        GetCurrentProcessId(),
+                        GetCurrentServiceId(),
+                        CreateRandomNumber());
 }
 
 // static

@@ -14,6 +14,8 @@ namespace aspia {
 
 std::string CreateRandomBuffer(size_t size);
 
+uint32_t CreateRandomNumber();
+
 } // namespace aspia
 
 #endif // _ASPIA_CRYPTO__RANDOM_H
