@@ -15,15 +15,23 @@ StreamSHA512::StreamSHA512()
     crypto_hash_sha512_init(&state_);
 }
 
-void StreamSHA512::AppendData(const std::string& data)
+void StreamSHA512::AppendData(std::string_view data)
 {
+#ifndef NDEBUG
+    DCHECK(!final_called_);
+#endif // NDEBUG
+
     crypto_hash_sha512_update(&state_,
-                              reinterpret_cast<const uint8_t*>(data.c_str()),
+                              reinterpret_cast<const uint8_t*>(data.data()),
                               data.size());
 }
 
 std::string StreamSHA512::Final()
 {
+#ifndef NDEBUG
+    final_called_ = true;
+#endif // NDEBUG
+
     std::string hash;
     hash.resize(crypto_hash_sha512_BYTES);
 
@@ -32,7 +40,7 @@ std::string StreamSHA512::Final()
     return hash;
 }
 
-std::string SHA512(const std::string& data, size_t iter_count)
+std::string SHA512(std::string_view data, size_t iter_count)
 {
     DCHECK_NE(iter_count, 0);
 
@@ -59,7 +67,7 @@ std::string SHA512(const std::string& data, size_t iter_count)
     return data_hash;
 }
 
-std::string SHA256(const std::string& data, size_t iter_count)
+std::string SHA256(std::string_view data, size_t iter_count)
 {
     DCHECK_NE(iter_count, 0);
 

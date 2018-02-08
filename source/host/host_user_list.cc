@@ -6,29 +6,22 @@
 //
 
 #include "host/host_user_list.h"
+
+#include <fstream>
+#include <memory>
+
 #include "base/strings/unicode.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "crypto/secure_memory.h"
 #include "crypto/sha.h"
-
-#include <filesystem>
-#include <fstream>
-#include <memory>
+#include "protocol/authorization.h"
 
 namespace aspia {
 
 namespace {
 
-constexpr size_t kMaximumUserNameLength = 64;
-constexpr size_t kMinimumPasswordLength = 6;
-constexpr size_t kMaximumPasswordLength = 64;
-constexpr size_t kPasswordHashLength = 64; // 512 bits
-
 constexpr size_t kMaximumUserListSize = 10 * 1024 * 1024; // 10MB
-
-// Number of iterations for hashing a user's password.
-constexpr size_t kPasswordHashIterCount = 1000;
 
 } // namespace
 
@@ -46,40 +39,15 @@ HostUserList::~HostUserList()
     }
 }
 
-static bool IsValidPasswordHash(const std::string& password_hash)
-{
-    return password_hash.size() == kPasswordHashLength;
-}
-
 bool HostUserList::IsValidUser(const proto::HostUser& user)
 {
-    std::wstring username;
-
-    if (!UTF8toUNICODE(user.username(), username))
-        return false;
-
-    if (!IsValidUserName(username))
+    if (!IsValidUserNameUTF8(user.username()))
         return false;
 
     if (!IsValidPasswordHash(user.password_hash()))
         return false;
 
     return true;
-}
-
-// static
-bool HostUserList::CreatePasswordHash(const std::string& password,
-                                      std::string& password_hash)
-{
-    SecureString<std::wstring> password_unicode(UNICODEfromUTF8(password));
-
-    if (IsValidPassword(password_unicode.string()))
-    {
-        password_hash = SHA512(password, kPasswordHashIterCount);
-        return true;
-    }
-
-    return false;
 }
 
 bool HostUserList::IsValidUserList()
@@ -253,52 +221,6 @@ void HostUserList::Add(std::unique_ptr<proto::HostUser> user)
 void HostUserList::Delete(int index)
 {
     list_.mutable_user_list()->DeleteSubrange(index, 1);
-}
-
-static bool IsValidUserNameChar(wchar_t username_char)
-{
-    if (iswalpha(username_char))
-        return true;
-
-    if (iswdigit(username_char))
-        return true;
-
-    if (username_char == L'.' ||
-        username_char == L'_' ||
-        username_char == L'-')
-    {
-        return true;
-    }
-
-    return false;
-}
-
-// static
-bool HostUserList::IsValidUserName(const std::wstring& username)
-{
-    size_t length = username.length();
-
-    if (!length || length > kMaximumUserNameLength)
-        return false;
-
-    for (size_t i = 0; i < length; ++i)
-    {
-        if (!IsValidUserNameChar(username[i]))
-            return false;
-    }
-
-    return true;
-}
-
-// static
-bool HostUserList::IsValidPassword(const std::wstring& password)
-{
-    size_t length = password.length();
-
-    if (length < kMinimumPasswordLength || length > kMaximumPasswordLength)
-        return false;
-
-    return true;
 }
 
 bool HostUserList::IsUniqueUserName(const std::wstring& username) const

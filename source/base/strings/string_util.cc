@@ -6,13 +6,15 @@
 //
 
 #include "base/strings/string_util.h"
-#include "base/strings/string_util_constants.h"
-#include "base/logging.h"
 
 #include <algorithm>
 #include <cwctype>
 #include <cctype>
 #include <strsafe.h>
+
+#include "base/strings/string_util_constants.h"
+#include "base/strings/unicode.h"
+#include "base/logging.h"
 
 namespace aspia {
 
@@ -294,7 +296,7 @@ std::string CollapseWhitespaceASCII(const std::string& text,
     return CollapseWhitespaceT(text, trim_sequences_with_line_breaks);
 }
 
-int CompareCaseInsensitive(const std::string& first, const std::string& second)
+int CompareCaseInsensitiveASCII(const std::string& first, const std::string& second)
 {
     return _stricmp(first.c_str(), second.c_str());
 }
@@ -365,21 +367,21 @@ TrimPositions TrimWhitespaceASCII(const std::string& input,
     return TrimStringT(input, kWhitespaceASCII, positions, output);
 }
 
-std::wstring ToUpper(const std::wstring& in)
+std::wstring ToUpper(std::wstring_view in)
 {
     std::wstring out(in);
     std::transform(out.begin(), out.end(), out.begin(), std::towupper);
     return out;
 }
 
-std::wstring ToLower(const std::wstring& in)
+std::wstring ToLower(std::wstring_view in)
 {
     std::wstring out(in);
     std::transform(out.begin(), out.end(), out.begin(), std::towlower);
     return out;
 }
 
-std::string ToUpperASCII(const std::string& in)
+std::string ToUpperASCII(std::string_view in)
 {
     std::string out(in);
     std::transform(out.begin(), out.end(), out.begin(),
@@ -387,12 +389,22 @@ std::string ToUpperASCII(const std::string& in)
     return out;
 }
 
-std::string ToLowerASCII(const std::string& in)
+std::string ToLowerASCII(std::string_view in)
 {
     std::string out(in);
     std::transform(out.begin(), out.end(), out.begin(),
         [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
     return out;
+}
+
+std::string ToUpperUTF8(std::string_view in)
+{
+    return UTF8fromUNICODE(ToUpper(UNICODEfromUTF8(in.data())));
+}
+
+std::string ToLowerUTF8(std::string_view in)
+{
+    return UTF8fromUNICODE(ToLower(UNICODEfromUTF8(in.data())));
 }
 
 const std::string& EmptyString()

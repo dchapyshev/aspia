@@ -26,18 +26,22 @@ public:
     StreamSHA512();
     ~StreamSHA512() = default;
 
-    void AppendData(const std::string& data);
+    void AppendData(std::string_view data);
     std::string Final();
 
 private:
+#ifndef NDEBUG
+    bool final_called_ = false;
+#endif // NDEBUG
+
     crypto_hash_sha512_state state_;
 };
 
 // Creates a hash of the content |data| and saves it to the |data_hash|.
 // Parameter |iter_count| specifies how many iterations must be done.
-std::string SHA512(const std::string& data, size_t iter_count);
+std::string SHA512(std::string_view data, size_t iter_count);
 
-std::string SHA256(const std::string& data, size_t iter_count);
+std::string SHA256(std::string_view data, size_t iter_count);
 
 } // namespace aspia
 

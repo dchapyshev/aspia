@@ -13,7 +13,6 @@
 namespace aspia {
 
 std::string ReplaceLfByCrLf(const std::string& in);
-
 std::string ReplaceCrLfByLf(const std::string& in);
 
 bool IsStringUTF8(const char* data, size_t length);
@@ -38,7 +37,7 @@ std::wstring CollapseWhitespace(const std::wstring& text,
 std::string CollapseWhitespaceASCII(const std::string& text,
                                     bool trim_sequences_with_line_breaks);
 
-int CompareCaseInsensitive(const std::string& first, const std::string& second);
+int CompareCaseInsensitiveASCII(const std::string& first, const std::string& second);
 int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second);
 
 enum TrimPositions
@@ -72,11 +71,14 @@ TrimPositions TrimWhitespaceASCII(const std::string& input,
                                   TrimPositions positions,
                                   std::string& output);
 
-std::wstring ToUpper(const std::wstring& in);
-std::wstring ToLower(const std::wstring& in);
+std::wstring ToUpper(std::wstring_view in);
+std::wstring ToLower(std::wstring_view in);
 
-std::string ToUpperASCII(const std::string& in);
-std::string ToLowerASCII(const std::string& in);
+std::string ToUpperASCII(std::string_view in);
+std::string ToLowerASCII(std::string_view in);
+
+std::string ToUpperUTF8(std::string_view in);
+std::string ToLowerUTF8(std::string_view in);
 
 const std::string& EmptyString();
 const std::wstring& EmptyStringW();

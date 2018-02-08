@@ -965,6 +965,9 @@
     <ClCompile Include="protocol\io_buffer.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="protocol\authorization.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1944,6 +1947,9 @@
     </ClInclude>
     <ClInclude Include="crypto\random.h">
       <Filter>crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol\authorization.h">
+      <Filter>protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

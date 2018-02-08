@@ -6,14 +6,17 @@
 //
 
 #include "ui/user_prop_dialog.h"
+
+#include <atlmisc.h>
+#include <uxtheme.h>
+
+#include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
 #include "host/host_user_list.h"
 #include "crypto/secure_memory.h"
-
-#include <atlmisc.h>
-#include <uxtheme.h>
+#include "protocol/authorization.h"
 
 namespace aspia {
 
@@ -196,14 +199,10 @@ void UserPropDialog::ShowErrorMessage(UINT string_id)
 LRESULT UserPropDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    // TODO: Clear memory.
+    WCHAR username[128] = { 0 };
+    GetDlgItemTextW(IDC_USERNAME_EDIT, username, _countof(username));
 
-    SecureArray<WCHAR, 128> buffer;
-    GetDlgItemTextW(IDC_USERNAME_EDIT, buffer.get(), static_cast<int>(buffer.count()));
-
-    std::wstring username(buffer.get());
-
-    if (!HostUserList::IsValidUserName(username))
+    if (!IsValidUserName(username))
     {
         ShowErrorMessage(IDS_INVALID_USERNAME);
         return 0;
@@ -212,11 +211,9 @@ LRESULT UserPropDialog::OnOkButton(
     std::wstring prev_username;
 
     if (!user_->username().empty())
-    {
-        CHECK(UTF8toUNICODE(user_->username(), prev_username));
-    }
+        prev_username = UNICODEfromUTF8(user_->username());
 
-    if (username != prev_username)
+    if (CompareCaseInsensitive(username, prev_username) != 0)
     {
         if (!user_list_.IsUniqueUserName(username))
         {
@@ -227,32 +224,27 @@ LRESULT UserPropDialog::OnOkButton(
 
     if (mode_ == Mode::ADD || password_changed_)
     {
-        GetDlgItemTextW(IDC_PASSWORD_EDIT, buffer.get(), static_cast<int>(buffer.count()));
+        SecureArray<WCHAR, 128> password;
+        GetDlgItemTextW(IDC_PASSWORD_EDIT, password.get(), static_cast<int>(password.count()));
 
-        SecureString<std::wstring> password(buffer.get());
-
-        if (!HostUserList::IsValidPassword(password.string()))
+        if (!IsValidPassword(password.get()))
         {
             ShowErrorMessage(IDS_INVALID_PASSWORD);
             return 0;
         }
 
-        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT, buffer.get(), static_cast<int>(buffer.count()));
+        SecureArray<WCHAR, 128> password_repeat;
+        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT,
+                        password_repeat.get(),
+                        static_cast<int>(password_repeat.count()));
 
-        SecureString<std::wstring> password_retry(buffer.get());
-
-        if (password.string() != password_retry.string())
+        if (wcscmp(password.get(), password_repeat.get()) == 0)
         {
             ShowErrorMessage(IDS_PASSWORDS_NOT_MATCH);
             return 0;
         }
 
-        SecureString<std::string> password_in_utf8;
-        CHECK(UNICODEtoUTF8(password.string(), password_in_utf8.mutable_string()));
-
-        bool ret = HostUserList::CreatePasswordHash(password_in_utf8.mutable_string(),
-                                                    *user_->mutable_password_hash());
-        DCHECK(ret);
+        user_->set_password_hash(CreatePasswordHash(password.get()));
     }
 
     uint32_t session_types = 0;
@@ -268,8 +260,7 @@ LRESULT UserPropDialog::OnOkButton(
 
     bool is_enabled = IsDlgButtonChecked(IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
 
-    CHECK(UNICODEtoUTF8(username, *user_->mutable_username()));
-
+    user_->set_username(UTF8fromUNICODE(username));
     user_->set_enabled(is_enabled);
     user_->set_session_types(session_types);
 

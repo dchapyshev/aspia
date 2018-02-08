@@ -6,33 +6,14 @@
 //
 
 #include "client/client.h"
+
 #include "crypto/secure_memory.h"
 #include "crypto/sha.h"
+#include "protocol/authorization.h"
 #include "protocol/message_serialization.h"
 #include "ui/auth_dialog.h"
 
 namespace aspia {
-
-namespace {
-
-constexpr size_t kNonceSize = 512;
-
-std::string CreateUserKey(const std::string& username,
-                          const std::string& password_hash,
-                          const std::string& nonce)
-{
-    DCHECK_EQ(nonce.size(), kNonceSize);
-
-    StreamSHA512 sha512;
-
-    sha512.AppendData(nonce);
-    sha512.AppendData(username);
-    sha512.AppendData(password_hash);
-
-    return sha512.Final();
-}
-
-} // namespace
 
 Client::Client(std::shared_ptr<NetworkChannel> channel,
                const proto::Computer& computer,

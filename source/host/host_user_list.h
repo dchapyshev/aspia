@@ -33,12 +33,7 @@ public:
 
     bool IsUniqueUserName(const std::wstring& username) const;
 
-    static bool IsValidUserName(const std::wstring& username);
-    static bool IsValidPassword(const std::wstring& password);
     static bool IsValidUser(const proto::HostUser& user);
-
-    static bool CreatePasswordHash(const std::string& password,
-                                   std::string& password_hash);
 
 private:
     bool IsValidUserList();

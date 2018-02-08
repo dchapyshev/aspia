@@ -6,11 +6,10 @@
 //
 
 #include "host/host.h"
+
 #include "host/host_user_list.h"
-#include "crypto/random.h"
-#include "crypto/secure_memory.h"
-#include "crypto/sha.h"
 #include "proto/auth_session.pb.h"
+#include "protocol/authorization.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
@@ -19,22 +18,6 @@ namespace {
 
 constexpr std::chrono::seconds kAuthTimeout{ 60 };
 constexpr uint32_t kAllowedMethods = proto::auth::METHOD_BASIC;
-constexpr size_t kNonceSize = 512;
-
-std::string CreateUserKey(const std::string& username,
-                          const std::string& password_hash,
-                          const std::string& nonce)
-{
-    DCHECK_EQ(nonce.size(), kNonceSize);
-
-    StreamSHA512 sha512;
-
-    sha512.AppendData(nonce);
-    sha512.AppendData(username);
-    sha512.AppendData(password_hash);
-
-    return sha512.Final();
-}
 
 proto::auth::Status DoBasicAuthorization(proto::auth::SessionType session_type,
                                          const std::string& key,
@@ -136,7 +119,7 @@ void Host::OnSelectMethodReceived(const IOBuffer& buffer)
         return;
     }
 
-    nonce_ = CreateRandomBuffer(kNonceSize);
+    nonce_ = CreateNonce();
 
     proto::auth::BasicRequest request;
     request.set_nonce(nonce_);
