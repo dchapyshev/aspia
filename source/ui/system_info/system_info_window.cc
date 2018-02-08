@@ -589,6 +589,7 @@ void SystemInfoWindow::Refresh(Category* category)
                                     std::bind(&SystemInfoWindow::OnRequest, this,
                                               std::placeholders::_1, std::placeholders::_2));
         dialog.DoModal();
+        tree_.SetFocus();
     }
     else
     {
