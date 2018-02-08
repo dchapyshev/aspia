@@ -31,12 +31,12 @@ void SecureMemZeroT(StringType* str)
     if (!str)
         return;
 
-    const size_t memory_size = str->size();
+    const size_t memory_size = str->length() * sizeof(StringType::value_type);
 
     if (!memory_size)
         return;
 
-    sodium_memzero(const_cast<StringType::value_type*>(str->data()), memory_size);
+    sodium_memzero(str->data(), memory_size);
 }
 
 void SecureMemZero(std::string* str)
