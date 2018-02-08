@@ -7,6 +7,7 @@
 
 #include "client/client_pool.h"
 
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -34,7 +35,9 @@ void ClientPool::Connect(HWND parent, const proto::Computer& computer)
 
 void ClientPool::OnStatusDialogOpen()
 {
-    if (!NetworkClientTcp::IsValidHostName(computer_.address()))
+    std::wstring address = UNICODEfromUTF8(computer_.address());
+
+    if (!NetworkClientTcp::IsValidHostName(address))
     {
         status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::INVALID_ADDRESS);
     }
@@ -48,8 +51,7 @@ void ClientPool::OnStatusDialogOpen()
         status_dialog_.SetConnectionStatus(StatusDialog::ConnectionStatus::CONNECTING);
 
         network_client_ = std::make_unique<NetworkClientTcp>(
-            computer_.address(),
-            computer_.port(),
+            address, computer_.port(),
             std::bind(&ClientPool::OnConnect, this, std::placeholders::_1));
     }
 }

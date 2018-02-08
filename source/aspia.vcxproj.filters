@@ -968,6 +968,9 @@
     <ClCompile Include="protocol\authorization.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="ui\ui_util.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1950,6 +1953,9 @@
     </ClInclude>
     <ClInclude Include="protocol\authorization.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_util.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

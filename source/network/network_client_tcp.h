@@ -17,10 +17,10 @@ class NetworkClientTcp
 public:
     using ConnectCallback = std::function<void(std::shared_ptr<NetworkChannel> channel)>;
 
-    NetworkClientTcp(const std::string& address, uint32_t port, ConnectCallback connect_callback);
+    NetworkClientTcp(const std::wstring& address, uint32_t port, ConnectCallback connect_callback);
     ~NetworkClientTcp();
 
-    static bool IsValidHostName(const std::string& hostname);
+    static bool IsValidHostName(const std::wstring& hostname);
     static bool IsValidPort(uint32_t port);
 
 private:

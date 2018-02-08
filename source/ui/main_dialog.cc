@@ -21,6 +21,7 @@
 #include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
+#include "ui/ui_util.h"
 #include "command_line_switches.h"
 
 namespace aspia {
@@ -381,11 +382,10 @@ LRESULT MainDialog::OnConnectButton(
 {
     if (current_computer_.session_type() != proto::auth::SESSION_TYPE_UNKNOWN)
     {
-        WCHAR buffer[128] = { 0 };
-        GetDlgItemTextW(IDC_SERVER_ADDRESS_COMBO, buffer, _countof(buffer));
-
         // Update address and port in current config.
-        current_computer_.set_address(UTF8fromUNICODE(buffer));
+        current_computer_.set_address(
+            UTF8fromUNICODE(GetWindowString(GetDlgItem(IDC_SERVER_ADDRESS_COMBO))));
+
         current_computer_.set_port(static_cast<uint32_t>(
             GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
 

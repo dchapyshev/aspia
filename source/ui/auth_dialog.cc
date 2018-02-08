@@ -6,8 +6,10 @@
 //
 
 #include "ui/auth_dialog.h"
+
 #include "base/strings/unicode.h"
 #include "crypto/secure_memory.h"
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -39,14 +41,8 @@ LRESULT AuthDialog::OnClose(
 LRESULT AuthDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SecureArray<WCHAR, 128> username;
-    GetDlgItemTextW(IDC_USERNAME_EDIT, username.get(), static_cast<int>(username.count()));
-
-    SecureArray<WCHAR, 128> password;
-    GetDlgItemTextW(IDC_PASSWORD_EDIT, password.get(), static_cast<int>(password.count()));
-
-    username_.assign(username.get());
-    password_.mutable_string().assign(password.get());
+    username_ = GetWindowString(GetDlgItem(IDC_USERNAME_EDIT));
+    password_ = GetWindowString(GetDlgItem(IDC_PASSWORD_EDIT));
 
     EndDialog(IDOK);
     return 0;

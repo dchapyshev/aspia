@@ -17,6 +17,7 @@
 #include "host/host_user_list.h"
 #include "crypto/secure_memory.h"
 #include "protocol/authorization.h"
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -197,9 +198,7 @@ void UserPropDialog::ShowErrorMessage(UINT string_id)
 LRESULT UserPropDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    WCHAR username[128] = { 0 };
-    GetDlgItemTextW(IDC_USERNAME_EDIT, username, _countof(username));
-
+    std::wstring username = GetWindowString(GetDlgItem(IDC_USERNAME_EDIT));
     if (!IsValidUserName(username))
     {
         ShowErrorMessage(IDS_INVALID_USERNAME);
@@ -222,27 +221,24 @@ LRESULT UserPropDialog::OnOkButton(
 
     if (mode_ == Mode::ADD || password_changed_)
     {
-        SecureArray<WCHAR, 128> password;
-        GetDlgItemTextW(IDC_PASSWORD_EDIT, password.get(), static_cast<int>(password.count()));
+        SecureString<std::wstring> password(
+            GetWindowString(GetDlgItem(IDC_PASSWORD_EDIT)));
+        SecureString<std::wstring> password_repeat(
+            GetWindowString(GetDlgItem(IDC_PASSWORD_RETRY_EDIT)));
 
-        if (!IsValidPassword(password.get()))
+        if (!IsValidPassword(password.string()))
         {
             ShowErrorMessage(IDS_INVALID_PASSWORD);
             return 0;
         }
 
-        SecureArray<WCHAR, 128> password_repeat;
-        GetDlgItemTextW(IDC_PASSWORD_RETRY_EDIT,
-                        password_repeat.get(),
-                        static_cast<int>(password_repeat.count()));
-
-        if (wcscmp(password.get(), password_repeat.get()) != 0)
+        if (password.string() != password_repeat.string())
         {
             ShowErrorMessage(IDS_PASSWORDS_NOT_MATCH);
             return 0;
         }
 
-        user_->set_password_hash(CreatePasswordHash(password.get()));
+        user_->set_password_hash(CreatePasswordHash(password.string()));
     }
 
     uint32_t session_types = 0;

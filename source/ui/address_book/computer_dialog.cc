@@ -14,6 +14,7 @@
 #include "codec/video_helpers.h"
 #include "network/network_client_tcp.h"
 #include "ui/desktop/settings_dialog.h"
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -165,60 +166,49 @@ LRESULT ComputerDialog::OnSettingsButton(
 LRESULT ComputerDialog::OnOkButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CEdit name_edit(GetDlgItem(IDC_NAME_EDIT));
-
-    int name_length = name_edit.GetWindowTextLengthW();
-    if (name_length > kMaxNameLength)
+    std::wstring name = GetWindowString(GetDlgItem(IDC_NAME_EDIT));
+    if (name.length() > kMaxNameLength)
     {
         ShowErrorMessage(IDS_AB_TOO_LONG_NAME_ERROR);
         return 0;
     }
-    else if (name_length < kMinNameLength)
+    else if (name.length() < kMinNameLength)
     {
         ShowErrorMessage(IDS_AB_NAME_CANT_BE_EMPTY_ERROR);
         return 0;
     }
     else
     {
-        WCHAR name[kMaxNameLength + 1];
-        name_edit.GetWindowTextW(name, _countof(name));
-
         computer_.set_name(UTF8fromUNICODE(name));
     }
 
-    CEdit comment_edit(GetDlgItem(IDC_COMMENT_EDIT));
-    if (comment_edit.GetWindowTextLengthW() > kMaxCommentLength)
+    std::wstring comment = GetWindowString(GetDlgItem(IDC_COMMENT_EDIT));
+    if (comment.length() > kMaxCommentLength)
     {
         ShowErrorMessage(IDS_AB_TOO_LONG_COMMENT_ERROR);
         return 0;
     }
     else
     {
-        WCHAR comment[kMaxCommentLength + 1];
-        comment_edit.GetWindowTextW(comment, _countof(comment));
         computer_.set_comment(UTF8fromUNICODE(comment));
     }
 
-    WCHAR buffer[128] = { 0 };
-
-    CEdit address_edit(GetDlgItem(IDC_SERVER_ADDRESS_EDIT));
-    address_edit.GetWindowTextW(buffer, _countof(buffer));
-
-    computer_.set_address(UTF8fromUNICODE(buffer));
-
-    if (!NetworkClientTcp::IsValidHostName(computer_.address()))
+    std::wstring address = GetWindowString(GetDlgItem(IDC_SERVER_ADDRESS_EDIT));
+    if (!NetworkClientTcp::IsValidHostName(address))
     {
         ShowErrorMessage(IDS_CONN_STATUS_INVALID_ADDRESS);
         return 0;
     }
 
-    computer_.set_port(static_cast<uint32_t>(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE)));
-
-    if (!NetworkClientTcp::IsValidPort(computer_.port()))
+    uint32_t port = static_cast<uint32_t>(GetDlgItemInt(IDC_SERVER_PORT_EDIT, nullptr, FALSE));
+    if (!NetworkClientTcp::IsValidPort(port))
     {
         ShowErrorMessage(IDS_CONN_STATUS_INVALID_PORT);
         return 0;
     }
+
+    computer_.set_address(UTF8fromUNICODE(address));
+    computer_.set_port(port);
 
     EndDialog(IDOK);
     return 0;

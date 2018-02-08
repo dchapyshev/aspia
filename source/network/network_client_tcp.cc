@@ -7,6 +7,7 @@
 
 #include "network/network_client_tcp.h"
 
+#include "base/strings/unicode.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -20,12 +21,12 @@ bool IsFailureCode(const std::error_code& code)
     return code.value() != 0;
 }
 
-bool IsValidHostNameChar(char c)
+bool IsValidHostNameChar(wchar_t c)
 {
-    if (isalnum(c) != 0)
+    if (iswalnum(c) != 0)
         return true;
 
-    if (c == '.' || c == ' ' || c == '_' || c == '-')
+    if (c == L'.' || c == L' ' || c == L'_' || c == L'-')
         return true;
 
     return false;
@@ -34,7 +35,7 @@ bool IsValidHostNameChar(char c)
 } // namespace
 
 // static
-bool NetworkClientTcp::IsValidHostName(const std::string& hostname)
+bool NetworkClientTcp::IsValidHostName(const std::wstring& hostname)
 {
     if (hostname.empty())
         return false;
@@ -62,7 +63,7 @@ bool NetworkClientTcp::IsValidPort(uint32_t port)
     return true;
 }
 
-NetworkClientTcp::NetworkClientTcp(const std::string& address,
+NetworkClientTcp::NetworkClientTcp(const std::wstring& address,
                                    uint32_t port,
                                    ConnectCallback connect_callback)
     : connect_callback_(std::move(connect_callback))
@@ -70,7 +71,7 @@ NetworkClientTcp::NetworkClientTcp(const std::string& address,
     DCHECK(IsValidHostName(address));
     DCHECK(IsValidPort(port));
 
-    asio::ip::tcp::resolver::query query(address, std::to_string(port));
+    asio::ip::tcp::resolver::query query(UTF8fromUNICODE(address), std::to_string(port));
 
     channel_ = std::make_unique<NetworkChannelTcp>(NetworkChannelTcp::Mode::CLIENT);
 
