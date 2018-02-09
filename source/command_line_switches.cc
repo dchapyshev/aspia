@@ -18,7 +18,6 @@ const CommandLine::CharType kLauncherModeSwitch[] = L"launcher-mode";
 const CommandLine::CharType kModeSessionLauncher[] = L"session-launcher";
 const CommandLine::CharType kModeDesktopSession[] = L"desktop-session";
 const CommandLine::CharType kModeFileTransferSession[] = L"file-transfer-session";
-const CommandLine::CharType kModePowerManageSession[] = L"power-manage-session";
 const CommandLine::CharType kModeSystemInfoSession[] = L"system-info-session";
 const CommandLine::CharType kModeSystemInfo[] = L"system-info";
 const CommandLine::CharType kModeHostService[] = L"host-service";

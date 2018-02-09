@@ -174,7 +174,6 @@ bool SessionType_IsValid(int value) {
     case 2:
     case 4:
     case 8:
-    case 16:
       return true;
     default:
       return false;

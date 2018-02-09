@@ -143,38 +143,6 @@ BEGIN
     PUSHBUTTON "&Cancel", IDCANCEL, 164, 152, 60, 14
 END
 
-IDD_POWER DIALOGEX 100, 100, 138, 126
-STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "Power Manage"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
-
-    LTEXT "Select an action:", -1, 50, 15, 150, 10
-
-    AUTORADIOBUTTON "&Shutdown",  ID_POWER_SHUTDOWN,  56, 29, 77, 14
-    AUTORADIOBUTTON "&Reboot",    ID_POWER_REBOOT,    56, 46, 77, 14
-    AUTORADIOBUTTON "&Hibernate", ID_POWER_HIBERNATE, 56, 63, 77, 14
-    AUTORADIOBUTTON "S&uspend",   ID_POWER_SUSPEND,   56, 79, 77, 14
-
-    DEFPUSHBUTTON "&OK", IDOK, 6, 107, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 72, 107, 60, 14
-END
-
-IDD_POWER_HOST DIALOGEX 100, 100, 293, 59
-STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Aspia"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
-
-    LTEXT "", IDC_POWER_ACTION, 55, 8, 234, 10
-    LTEXT "", IDC_POWER_TIME, 55, 24, 234, 10
-
-    DEFPUSHBUTTON "&Execute now", IDOK, 164, 40, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 228, 40, 60, 14
-END
-
 IDD_FILE_PROGRESS DIALOGEX 100, 100, 315, 115
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "Progress"
@@ -442,7 +410,6 @@ BEGIN
         MENUITEM "Desktop &View", ID_DESKTOP_VIEW_SESSION_TB
         MENUITEM "&File Transfer", ID_FILE_TRANSFER_SESSION_TB
         MENUITEM "&System Information", ID_SYSTEM_INFO_SESSION_TB
-        MENUITEM "&Power Manage", ID_POWER_MANAGE_SESSION_TB
     END
     POPUP "&Help"
     BEGIN
@@ -480,7 +447,6 @@ BEGIN
         MENUITEM "Desktop View", ID_DESKTOP_VIEW_SESSION
         MENUITEM "File Transfer", ID_FILE_TRANSFER_SESSION
         MENUITEM "System Information", ID_SYSTEM_INFO_SESSION
-        MENUITEM "Power Manage", ID_POWER_MANAGE_SESSION
         MENUITEM SEPARATOR
         MENUITEM "&Edit", ID_EDIT_COMPUTER
         MENUITEM "&Delete", ID_DELETE_COMPUTER
@@ -528,7 +494,6 @@ BEGIN
     IDS_PASSWORDS_NOT_MATCH               "The passwords you entered do not match."
     IDS_SESSION_TYPE_DESKTOP_MANAGE       "Desktop Manage"
     IDS_SESSION_TYPE_DESKTOP_VIEW         "Desktop View"
-    IDS_SESSION_TYPE_POWER_MANAGE         "Power Manage"
     IDS_SESSION_TYPE_FILE_TRANSFER        "File Transfer"
     IDS_SESSION_TYPE_SYSTEM_INFO          "System Information"
     IDS_DELETE_USER_CONFORMATION          "Are you sure you want to delete the user ""%s""?"
@@ -614,16 +579,6 @@ BEGIN
     IDS_FT_CLOSE_WINDOW                   "Close window"
     IDS_FT_OP_FAILURE                     "An error occurred during the operation with object ""%s"": %s."
     IDS_FT_FILE_LIST_BUILDING             "Building a list of files..."
-END
-
-// Power Manage
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_PM_SHUTDOWN_COMMAND               "A command to shutdown the computer has been received."
-    IDS_PM_REBOOT_COMMAND                 "A command to reboot the computer has been received."
-    IDS_PM_HIBERNATE_COMMAND              "A command to hibernate the computer has been received."
-    IDS_PM_SUSPEND_COMMAND                "A command to suspend the computer has been received."
-    IDS_PM_TIME_LEFT                      "Time left before execution: %d seconds."
 END
 
 // System Information

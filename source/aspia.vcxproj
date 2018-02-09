@@ -171,7 +171,6 @@
     <ClCompile Include="client\client_session_desktop_manage.cc" />
     <ClCompile Include="client\client_session_desktop_view.cc" />
     <ClCompile Include="client\client_session_file_transfer.cc" />
-    <ClCompile Include="client\client_session_power_manage.cc" />
     <ClCompile Include="client\client_session_system_info.cc" />
     <ClCompile Include="client\file_remover.cc" />
     <ClCompile Include="client\file_reply_receiver.cc" />
@@ -227,11 +226,9 @@
     <ClCompile Include="host\host_session_file_transfer.cc" />
     <ClCompile Include="host\host_session_launcher.cc" />
     <ClCompile Include="host\host_session_launcher_service.cc" />
-    <ClCompile Include="host\host_session_power.cc" />
     <ClCompile Include="host\host_session_system_info.cc" />
     <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
-    <ClCompile Include="host\power_injector.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
@@ -260,7 +257,6 @@
     <ClCompile Include="proto\host_user.pb.cc" />
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\mru.pb.cc" />
-    <ClCompile Include="proto\power_session.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
     <ClCompile Include="report\column_list.cc" />
     <ClCompile Include="report\group.cc" />
@@ -302,8 +298,6 @@
     <ClCompile Include="ui\get_stock_icon.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\mru.cc" />
-    <ClCompile Include="ui\power\power_manage_dialog.cc" />
-    <ClCompile Include="ui\power\power_session_dialog.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
     <ClCompile Include="ui\system_info\category_select_dialog.cc" />
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
@@ -491,7 +485,6 @@
     <ClInclude Include="client\client_session_desktop_manage.h" />
     <ClInclude Include="client\client_session_desktop_view.h" />
     <ClInclude Include="client\client_session_file_transfer.h" />
-    <ClInclude Include="client\client_session_power_manage.h" />
     <ClInclude Include="client\client_session_system_info.h" />
     <ClInclude Include="client\file_constants.h" />
     <ClInclude Include="client\file_remover.h" />
@@ -555,11 +548,9 @@
     <ClInclude Include="host\host_session_file_transfer.h" />
     <ClInclude Include="host\host_session_launcher.h" />
     <ClInclude Include="host\host_session_launcher_service.h" />
-    <ClInclude Include="host\host_session_power.h" />
     <ClInclude Include="host\host_session_system_info.h" />
     <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
-    <ClInclude Include="host\power_injector.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />
@@ -588,7 +579,6 @@
     <ClInclude Include="proto\host_user.pb.h" />
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\mru.pb.h" />
-    <ClInclude Include="proto\power_session.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
     <ClInclude Include="report\column_list.h" />
     <ClInclude Include="report\group.h" />
@@ -633,8 +623,6 @@
     <ClInclude Include="ui\get_stock_icon.h" />
     <ClInclude Include="ui\main_dialog.h" />
     <ClInclude Include="ui\mru.h" />
-    <ClInclude Include="ui\power\power_manage_dialog.h" />
-    <ClInclude Include="ui\power\power_session_dialog.h" />
     <ClInclude Include="ui\resource.h" />
     <ClInclude Include="ui\status_dialog.h" />
     <ClInclude Include="ui\system_info\category_select_dialog.h" />
@@ -701,7 +689,6 @@
     <None Include="proto\host_user.proto" />
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\mru.proto" />
-    <None Include="proto\power_session.proto" />
     <None Include="proto\system_info_session.proto" />
   </ItemGroup>
   <ItemGroup>

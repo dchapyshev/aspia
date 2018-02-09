@@ -67,9 +67,6 @@
     <Filter Include="ui\desktop">
       <UniqueIdentifier>{53d032b1-0b58-4546-9933-b480b286ecbd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui\power">
-      <UniqueIdentifier>{ee7dcae2-69be-4771-a30e-9368e0432fe0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ui\system_info">
       <UniqueIdentifier>{0d8f4bac-ac29-4549-8ce0-65565c17fdc1}</UniqueIdentifier>
     </Filter>
@@ -88,9 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="proto\desktop_session.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="proto\power_session.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
     <ClCompile Include="ipc\pipe_channel.cc">
@@ -201,9 +195,6 @@
     <ClCompile Include="host\input_injector.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\power_injector.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\sas_injector.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -300,9 +291,6 @@
     </ClCompile>
     <ClCompile Include="network\network_channel_proxy.cc">
       <Filter>network</Filter>
-    </ClCompile>
-    <ClCompile Include="client\client_session_power_manage.cc">
-      <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="client\client_session_desktop_manage.cc">
       <Filter>client</Filter>
@@ -430,9 +418,6 @@
     <ClCompile Include="host\host_session_file_transfer.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="host\host_session_power.cc">
-      <Filter>host</Filter>
-    </ClCompile>
     <ClCompile Include="host\host_session_launcher.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -501,12 +486,6 @@
     </ClCompile>
     <ClCompile Include="ui\desktop\viewer_window.cc">
       <Filter>ui\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\power\power_manage_dialog.cc">
-      <Filter>ui\power</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\power\power_session_dialog.cc">
-      <Filter>ui\power</Filter>
     </ClCompile>
     <ClCompile Include="ui\system_info\system_info_toolbar.cc">
       <Filter>ui\system_info</Filter>
@@ -1081,9 +1060,6 @@
     <ClInclude Include="base\scoped_hglobal.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="host\power_injector.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="protocol\clipboard.h">
       <Filter>protocol</Filter>
     </ClInclude>
@@ -1124,9 +1100,6 @@
       <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="proto\desktop_session.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
-    <ClInclude Include="proto\power_session.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
     <ClInclude Include="base\object_watcher.h">
@@ -1275,9 +1248,6 @@
     <ClInclude Include="network\network_channel_proxy.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="client\client_session_power_manage.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="client\client_session_desktop_manage.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -1410,9 +1380,6 @@
     <ClInclude Include="host\host_session_file_transfer.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session_power.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1487,12 +1454,6 @@
     </ClInclude>
     <ClInclude Include="ui\desktop\viewer_window.h">
       <Filter>ui\desktop</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\power\power_manage_dialog.h">
-      <Filter>ui\power</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\power\power_session_dialog.h">
-      <Filter>ui\power</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_window.h">
       <Filter>ui\system_info</Filter>
@@ -1960,9 +1921,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\power_session.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\auth_session.proto">

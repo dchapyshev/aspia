@@ -21,7 +21,6 @@ extern const CommandLine::CharType kLauncherModeSwitch[];
 extern const CommandLine::CharType kModeSessionLauncher[];
 extern const CommandLine::CharType kModeDesktopSession[];
 extern const CommandLine::CharType kModeFileTransferSession[];
-extern const CommandLine::CharType kModePowerManageSession[];
 extern const CommandLine::CharType kModeSystemInfoSession[];
 extern const CommandLine::CharType kModeSystemInfo[];
 extern const CommandLine::CharType kModeHostService[];

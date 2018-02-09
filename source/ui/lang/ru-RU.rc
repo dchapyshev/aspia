@@ -143,38 +143,6 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 164, 152, 60, 14
 END
 
-IDD_POWER DIALOGEX 100, 100, 138, 126
-STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
-CAPTION "Управление питанием"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
-
-    LTEXT "Выбирите действие:", -1, 50, 15, 150, 10
-
-    AUTORADIOBUTTON "&Выключение",   ID_POWER_SHUTDOWN,  56, 29, 77, 14
-    AUTORADIOBUTTON "&Перезагрузка", ID_POWER_REBOOT,    56, 46, 77, 14
-    AUTORADIOBUTTON "&Гибернация",   ID_POWER_HIBERNATE, 56, 63, 77, 14
-    AUTORADIOBUTTON "&Сон",          ID_POWER_SUSPEND,   56, 79, 77, 14
-
-    DEFPUSHBUTTON "&OK", IDOK, 6, 107, 60, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 72, 107, 60, 14
-END
-
-IDD_POWER_HOST DIALOGEX 100, 100, 293, 59
-STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Aspia"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL -1, IDC_POWER_ICON, "STATIC", SS_ICON | SS_CENTERIMAGE | SS_REALSIZEIMAGE, 8, 4, 32, 32
-
-    LTEXT "", IDC_POWER_ACTION, 55, 8, 234, 10
-    LTEXT "", IDC_POWER_TIME, 55, 24, 234, 10
-
-    DEFPUSHBUTTON "&Выполнить сейчас", IDOK, 146, 40, 78, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 228, 40, 60, 14
-END
-
 IDD_FILE_PROGRESS DIALOGEX 100, 100, 315, 115
 STYLE DS_SHELLFONT | WS_BORDER | WS_DLGFRAME | WS_SYSMENU | DS_MODALFRAME
 CAPTION "Прогресс"
@@ -442,7 +410,6 @@ BEGIN
         MENUITEM "&Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION_TB
         MENUITEM "Передача &файлов", ID_FILE_TRANSFER_SESSION_TB
         MENUITEM "&Информация о системе", ID_SYSTEM_INFO_SESSION_TB
-        MENUITEM "Управление &питанием", ID_POWER_MANAGE_SESSION_TB
     END
     POPUP "&Помощь"
     BEGIN
@@ -480,7 +447,6 @@ BEGIN
         MENUITEM "Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION
         MENUITEM "Передача файлов", ID_FILE_TRANSFER_SESSION
         MENUITEM "Информация о системе", ID_SYSTEM_INFO_SESSION
-        MENUITEM "Управление питанием", ID_POWER_MANAGE_SESSION
         MENUITEM SEPARATOR
         MENUITEM "&Изменить", ID_EDIT_COMPUTER
         MENUITEM "&Удалить", ID_DELETE_COMPUTER
@@ -528,7 +494,6 @@ BEGIN
     IDS_PASSWORDS_NOT_MATCH               "Введенные пароли не совпадают."
     IDS_SESSION_TYPE_DESKTOP_MANAGE       "Управление рабочим столом"
     IDS_SESSION_TYPE_DESKTOP_VIEW         "Просмотр рабочего стола"
-    IDS_SESSION_TYPE_POWER_MANAGE         "Управление питанием"
     IDS_SESSION_TYPE_FILE_TRANSFER        "Передача файлов"
     IDS_SESSION_TYPE_SYSTEM_INFO          "Информация о системе"
     IDS_DELETE_USER_CONFORMATION          "Вы действительно хотите удалить пользователя ""%s""?"
@@ -614,16 +579,6 @@ BEGIN
     IDS_FT_CLOSE_WINDOW                   "Закрыть окно"
     IDS_FT_OP_FAILURE                     "Произошла ошибка при операции с объектом ""%s"": %s."
     IDS_FT_FILE_LIST_BUILDING             "Построение списка файлов..."
-END
-
-// Power Manage
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_PM_SHUTDOWN_COMMAND               "Получена команда выключения компьютера."
-    IDS_PM_REBOOT_COMMAND                 "Получена команда перезагрузки компьютера."
-    IDS_PM_HIBERNATE_COMMAND              "Получена команда перевода компьютера в режим гибернации."
-    IDS_PM_SUSPEND_COMMAND                "Получена команда перевода компьютера в режим сна."
-    IDS_PM_TIME_LEFT                      "Осталось времени до выполнения: %d секунд."
 END
 
 // System Information

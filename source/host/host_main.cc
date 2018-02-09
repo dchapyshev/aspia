@@ -13,7 +13,6 @@
 #include "host/host_session_launcher.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
-#include "host/host_session_power.h"
 #include "host/host_session_system_info.h"
 #include "host/host_local_system_info.h"
 #include "command_line_switches.h"
@@ -72,10 +71,6 @@ void RunHostMain(const CommandLine& command_line)
         else if (run_mode == kModeFileTransferSession)
         {
             HostSessionFileTransfer().Run(channel_id);
-        }
-        else if (run_mode == kModePowerManageSession)
-        {
-            HostSessionPower().Run(channel_id);
         }
         else if (run_mode == kModeSystemInfoSession)
         {

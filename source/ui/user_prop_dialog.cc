@@ -116,10 +116,6 @@ LRESULT UserPropDialog::OnInitDialog(
                       IDS_SESSION_TYPE_DESKTOP_VIEW);
 
     InsertSessionType(list,
-                      proto::auth::SESSION_TYPE_POWER_MANAGE,
-                      IDS_SESSION_TYPE_POWER_MANAGE);
-
-    InsertSessionType(list,
                       proto::auth::SESSION_TYPE_FILE_TRANSFER,
                       IDS_SESSION_TYPE_FILE_TRANSFER);
 

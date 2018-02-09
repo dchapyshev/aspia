@@ -44,10 +44,9 @@ bool AddressBookToolbar::Create(HWND parent)
         { 10, ID_DESKTOP_VIEW_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
         { 11, ID_FILE_TRANSFER_SESSION_TB,  TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
         { 12, ID_SYSTEM_INFO_SESSION_TB,    TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
-        { 13, ID_POWER_MANAGE_SESSION_TB,   TBSTATE_ENABLED,                   kSessionButtonStyle, { 0 }, 0, -1 },
         { -1, 0,                            TBSTATE_ENABLED,                   BTNS_SEP,            { 0 }, 0, -1 },
-        { 14, ID_ABOUT,                     TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
-        { 15, ID_EXIT,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
+        { 13, ID_ABOUT,                     TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
+        { 14, ID_EXIT,                      TBSTATE_ENABLED,                   kButtonStyle,        { 0 }, 0, -1 },
     };
 
     SetButtonStructSize(sizeof(kButtons[0]));
@@ -83,7 +82,6 @@ bool AddressBookToolbar::Create(HWND parent)
         add_icon(IDI_MONITOR);
         add_icon(IDI_FOLDER_STAND);
         add_icon(IDI_SYSTEM_MONITOR);
-        add_icon(IDI_CONTROL_POWER);
         add_icon(IDI_ABOUT);
         add_icon(IDI_EXIT);
     }
@@ -156,10 +154,6 @@ LRESULT AddressBookToolbar::OnGetDispInfo(int /* control_id */, LPNMHDR hdr, BOO
 
         case ID_SYSTEM_INFO_SESSION_TB:
             string_id = IDS_SESSION_TYPE_SYSTEM_INFO;
-            break;
-
-        case ID_POWER_MANAGE_SESSION_TB:
-            string_id = IDS_SESSION_TYPE_POWER_MANAGE;
             break;
 
         default:

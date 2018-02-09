@@ -9,7 +9,6 @@
 
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_file_transfer.h"
-#include "client/client_session_power_manage.h"
 #include "client/client_session_system_info.h"
 
 namespace aspia {
@@ -28,9 +27,6 @@ std::unique_ptr<ClientSession> ClientSession::Create(
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
             return std::make_unique<ClientSessionFileTransfer>(computer, channel_proxy);
-
-        case proto::auth::SESSION_TYPE_POWER_MANAGE:
-            return std::make_unique<ClientSessionPowerManage>(computer, channel_proxy);
 
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
             return std::make_unique<ClientSessionSystemInfo>(computer, channel_proxy);

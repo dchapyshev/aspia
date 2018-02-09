@@ -119,7 +119,7 @@ LRESULT AddressBookWindow::OnCreate(
 
     CMenuHandle session_type_menu(main_menu_.GetSubMenu(2));
     session_type_menu.CheckMenuRadioItem(ID_DESKTOP_MANAGE_SESSION_TB,
-                                         ID_POWER_MANAGE_SESSION_TB,
+                                         ID_SYSTEM_INFO_SESSION_TB,
                                          ID_DESKTOP_MANAGE_SESSION_TB,
                                          MF_BYCOMMAND);
 
@@ -403,10 +403,6 @@ LRESULT AddressBookWindow::OnComputerListDoubleClick(
     else if (toolbar_.IsButtonChecked(ID_SYSTEM_INFO_SESSION_TB))
     {
         session_type = proto::auth::SESSION_TYPE_SYSTEM_INFO;
-    }
-    else if (toolbar_.IsButtonChecked(ID_POWER_MANAGE_SESSION_TB))
-    {
-        session_type = proto::auth::SESSION_TYPE_POWER_MANAGE;
     }
     else
     {
@@ -938,10 +934,6 @@ LRESULT AddressBookWindow::OnOpenSessionButton(
             session_type = proto::auth::SESSION_TYPE_SYSTEM_INFO;
             break;
 
-        case ID_POWER_MANAGE_SESSION:
-            session_type = proto::auth::SESSION_TYPE_POWER_MANAGE;
-            break;
-
         default:
             return 0;
     }
@@ -959,7 +951,7 @@ LRESULT AddressBookWindow::OnSelectSessionButton(
     CMenuHandle session_type_menu(main_menu_.GetSubMenu(2));
 
     session_type_menu.CheckMenuRadioItem(ID_DESKTOP_MANAGE_SESSION_TB,
-                                         ID_POWER_MANAGE_SESSION_TB,
+                                         ID_SYSTEM_INFO_SESSION_TB,
                                          control_id,
                                          MF_BYCOMMAND);
     toolbar_.CheckButton(control_id, TRUE);

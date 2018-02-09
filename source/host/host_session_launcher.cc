@@ -305,11 +305,6 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
             return LaunchSessionProcess(kModeFileTransferSession, session_id, channel_id);
         }
 
-        case proto::auth::SESSION_TYPE_POWER_MANAGE:
-        {
-            return LaunchSessionProcess(kModePowerManageSession, session_id, channel_id);
-        }
-
         default:
         {
             DLOG(LS_ERROR) << "Unknown session type: " << session_type;

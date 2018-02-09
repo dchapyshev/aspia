@@ -76,14 +76,12 @@ private:
         COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION, OnOpenSessionButton)
         COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION, OnOpenSessionButton)
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION, OnOpenSessionButton)
-        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION, OnOpenSessionButton)
 
         // Session select from main menu or toolbar.
         COMMAND_ID_HANDLER(ID_DESKTOP_MANAGE_SESSION_TB, OnSelectSessionButton)
         COMMAND_ID_HANDLER(ID_DESKTOP_VIEW_SESSION_TB, OnSelectSessionButton)
         COMMAND_ID_HANDLER(ID_FILE_TRANSFER_SESSION_TB, OnSelectSessionButton)
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO_SESSION_TB, OnSelectSessionButton)
-        COMMAND_ID_HANDLER(ID_POWER_MANAGE_SESSION_TB, OnSelectSessionButton)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL& handled);
