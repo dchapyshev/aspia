@@ -104,6 +104,7 @@ private:
     CIcon big_icon_;
     CIcon refresh_icon_;
 
+    CAccelerator accelerator_;
     CMenu main_menu_;
 
     std::unique_ptr<HostPool> host_pool_;

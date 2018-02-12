@@ -166,6 +166,7 @@
 #define IDC_COMMENT_EDIT                           154
 #define IDC_ADDRESS_BOOK_ACCELERATORS              155
 #define IDC_ENCRYPTION_TYPE_COMBO                  156
+#define IDC_MAIN_DIALOG_ACCELERATORS               157
 
 //
 // Commands

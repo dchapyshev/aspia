@@ -7,10 +7,10 @@
 
 #include "ui/address_book/address_book_window.h"
 
-#include <atldlgs.h>
-#include <strsafe.h>
 #include <functional>
 #include <fstream>
+#include <atldlgs.h>
+#include <strsafe.h>
 
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
@@ -23,6 +23,7 @@
 #include "ui/address_book/computer_group_dialog.h"
 #include "ui/address_book/open_address_book_dialog.h"
 #include "ui/about_dialog.h"
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -642,6 +643,13 @@ LRESULT AddressBookWindow::OnSaveAsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     SaveAddressBook(std::experimental::filesystem::path());
+    return 0;
+}
+
+LRESULT AddressBookWindow::OnHelpButton(
+    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
+{
+    OpenLink(LinkTypeKey::HELP);
     return 0;
 }
 

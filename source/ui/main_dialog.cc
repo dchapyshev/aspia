@@ -28,10 +28,13 @@ namespace aspia {
 
 bool MainDialog::Dispatch(const NativeEvent& event)
 {
-    if (!IsDialogMessageW(const_cast<MSG*>(&event)))
+    if (!accelerator_.TranslateAcceleratorW(*this, const_cast<NativeEvent*>(&event)))
     {
-        TranslateMessage(&event);
-        DispatchMessageW(&event);
+        if (!IsDialogMessageW(const_cast<MSG*>(&event)))
+        {
+            TranslateMessage(&event);
+            DispatchMessageW(&event);
+        }
     }
 
     return true;
@@ -151,6 +154,8 @@ void MainDialog::UpdateServerPort()
 LRESULT MainDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
+    accelerator_.LoadAcceleratorsW(IDC_MAIN_DIALOG_ACCELERATORS);
+
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON),
                                 GetSystemMetrics(SM_CYSMICON));
 
@@ -406,9 +411,7 @@ LRESULT MainDialog::OnConnectButton(
 LRESULT MainDialog::OnHelpButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CString url;
-    url.LoadStringW(IDS_HELP_LINK);
-    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
+    OpenLink(LinkTypeKey::HELP);
     return 0;
 }
 

@@ -9,7 +9,8 @@
 
 #include <atlctrls.h>
 #include <atlmisc.h>
-#include <shellapi.h>
+
+#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -70,18 +71,14 @@ LRESULT AboutDialog::OnCloseButton(
 LRESULT AboutDialog::OnDonateButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CString url;
-    url.LoadStringW(IDS_DONATE_LINK);
-    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
+    OpenLink(LinkTypeKey::DONATE);
     return 0;
 }
 
 LRESULT AboutDialog::OnSiteButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    CString url;
-    url.LoadStringW(IDS_SITE_LINK);
-    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
+    OpenLink(LinkTypeKey::SITE);
     return 0;
 }
 

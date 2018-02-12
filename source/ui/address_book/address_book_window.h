@@ -60,6 +60,7 @@ private:
         COMMAND_ID_HANDLER(ID_OPEN, OnOpenButton)
         COMMAND_ID_HANDLER(ID_SAVE, OnSaveButton)
         COMMAND_ID_HANDLER(ID_SAVE_AS, OnSaveAsButton)
+        COMMAND_ID_HANDLER(ID_HELP, OnHelpButton)
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_EXIT, OnExitButton)
         COMMAND_ID_HANDLER(ID_NEW, OnNewButton)
@@ -106,6 +107,7 @@ private:
     LRESULT OnOpenButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSaveAsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAboutButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnExitButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnNewButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);

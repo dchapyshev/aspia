@@ -17,6 +17,10 @@ namespace aspia {
 
 std::wstring GetWindowString(const CWindow& window);
 
+enum class LinkTypeKey { SITE, HELP, DONATE };
+
+void OpenLink(LinkTypeKey key);
+
 } // namespace aspia
 
 #endif // _ASPIA_UI__UI_UTIL_H

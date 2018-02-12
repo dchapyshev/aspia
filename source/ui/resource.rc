@@ -83,6 +83,11 @@ IDI_USER                    ICON "resource/user.ico"
 IDI_USER_DISABLED           ICON "resource/user_disabled.ico"
 IDI_USERS                   ICON "resource/users.ico"
 
+IDC_MAIN_DIALOG_ACCELERATORS ACCELERATORS
+BEGIN
+    VK_F1, ID_HELP, VIRTKEY // F1
+END
+
 IDC_FILE_MANAGER_ACCELERATORS ACCELERATORS
 BEGIN
     VK_F5,     ID_REFRESH, VIRTKEY       // F5
@@ -99,7 +104,7 @@ END
 
 IDC_ADDRESS_BOOK_ACCELERATORS ACCELERATORS
 BEGIN
-    VK_F1, ID_ABOUT, VIRTKEY                 // F1
+    VK_F1, ID_HELP, VIRTKEY                  // F1
     "N",   ID_NEW, CONTROL, VIRTKEY          // Ctrl+N
     "O",   ID_OPEN, CONTROL, VIRTKEY         // Ctrl+O
     "S",   ID_SAVE, CONTROL, VIRTKEY         // Ctrl+S
