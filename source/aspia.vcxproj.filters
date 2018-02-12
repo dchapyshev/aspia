@@ -950,6 +950,9 @@
     <ClCompile Include="ui\ui_util.cc">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="network\url.cc">
+      <Filter>network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1917,6 +1920,9 @@
     </ClInclude>
     <ClInclude Include="ui\ui_util.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="network\url.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

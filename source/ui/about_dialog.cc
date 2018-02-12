@@ -10,7 +10,7 @@
 #include <atlctrls.h>
 #include <atlmisc.h>
 
-#include "ui/ui_util.h"
+#include "network/url.h"
 
 namespace aspia {
 
@@ -71,14 +71,18 @@ LRESULT AboutDialog::OnCloseButton(
 LRESULT AboutDialog::OnDonateButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    OpenLink(LinkTypeKey::DONATE);
+    CString url;
+    url.LoadStringW(IDS_DONATE_LINK);
+    URL::FromCString(url).Open();
     return 0;
 }
 
 LRESULT AboutDialog::OnSiteButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    OpenLink(LinkTypeKey::SITE);
+    CString url;
+    url.LoadStringW(IDS_SITE_LINK);
+    URL::FromCString(url).Open();
     return 0;
 }
 

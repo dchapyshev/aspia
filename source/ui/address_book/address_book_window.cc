@@ -17,13 +17,13 @@
 #include "base/logging.h"
 #include "crypto/sha.h"
 #include "crypto/string_encryptor.h"
+#include "network/url.h"
 #include "ui/address_book/address_book_dialog.h"
 #include "ui/address_book/address_book_secure_util.h"
 #include "ui/address_book/computer_dialog.h"
 #include "ui/address_book/computer_group_dialog.h"
 #include "ui/address_book/open_address_book_dialog.h"
 #include "ui/about_dialog.h"
-#include "ui/ui_util.h"
 
 namespace aspia {
 
@@ -649,7 +649,9 @@ LRESULT AddressBookWindow::OnSaveAsButton(
 LRESULT AddressBookWindow::OnHelpButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    OpenLink(LinkTypeKey::HELP);
+    CString url;
+    url.LoadStringW(IDS_HELP_LINK);
+    URL::FromCString(url).Open();
     return 0;
 }
 

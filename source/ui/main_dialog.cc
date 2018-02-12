@@ -18,6 +18,7 @@
 #include "host/host_session_launcher.h"
 #include "host/host_service.h"
 #include "network/network_adapter_enumerator.h"
+#include "network/url.h"
 #include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
@@ -411,7 +412,9 @@ LRESULT MainDialog::OnConnectButton(
 LRESULT MainDialog::OnHelpButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    OpenLink(LinkTypeKey::HELP);
+    CString url;
+    url.LoadStringW(IDS_HELP_LINK);
+    URL::FromCString(url).Open();
     return 0;
 }
 
