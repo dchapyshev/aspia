@@ -78,8 +78,8 @@ bool URL::Open() const
     if (!IsValid())
         return false;
 
-    int ret = reinterpret_cast<int>(
-        ShellExecuteW(nullptr, L"open", url_.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
+    int ret = static_cast<int>(reinterpret_cast<intptr_t>(
+        ShellExecuteW(nullptr, L"open", url_.c_str(), nullptr, nullptr, SW_SHOWNORMAL)));
     if (ret <= 32)
     {
         DLOG(LS_WARNING) << "ShellExecuteW failed: " << ret;
