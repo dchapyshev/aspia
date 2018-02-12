@@ -8,13 +8,14 @@
 #ifndef _ASPIA_UI__AUTH_DIALOG_H
 #define _ASPIA_UI__AUTH_DIALOG_H
 
-#include "crypto/secure_memory.h"
-#include "ui/resource.h"
-
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
 #include <string>
+
+#include "crypto/secure_memory.h"
+#include "proto/computer.pb.h"
+#include "ui/resource.h"
 
 namespace aspia {
 
@@ -23,7 +24,7 @@ class AuthDialog : public CDialogImpl<AuthDialog>
 public:
     enum { IDD = IDD_AUTH };
 
-    AuthDialog() = default;
+    AuthDialog(const proto::Computer& computer);
 
     const std::wstring& UserName() const;
     const std::wstring& Password() const;

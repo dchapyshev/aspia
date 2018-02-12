@@ -13,6 +13,7 @@
 #include "base/strings/unicode.h"
 #include "codec/video_helpers.h"
 #include "network/network_client_tcp.h"
+#include "protocol/authorization.h"
 #include "ui/desktop/settings_dialog.h"
 #include "ui/ui_util.h"
 
@@ -76,6 +77,12 @@ LRESULT ComputerDialog::OnInitDialog(
     port_edit.SetLimitText(5);
 
     SetDlgItemInt(IDC_SERVER_PORT_EDIT, computer_.port(), FALSE);
+
+    if (!computer_.username().empty())
+    {
+        GetDlgItem(IDC_USERNAME_EDIT).SetWindowTextW(
+            UNICODEfromUTF8(computer_.username()).c_str());
+    }
 
     if (computer_.port() == kDefaultHostTcpPort)
     {
@@ -179,6 +186,19 @@ LRESULT ComputerDialog::OnOkButton(
     else
     {
         computer_.set_name(UTF8fromUNICODE(name));
+    }
+
+    std::wstring username = GetWindowString(GetDlgItem(IDC_USERNAME_EDIT));
+
+    // The user can leave the username blank.
+    if (!username.empty() && !IsValidUserName(username))
+    {
+        ShowErrorMessage(IDS_INVALID_USERNAME);
+        return 0;
+    }
+    else
+    {
+        computer_.set_username(UTF8fromUNICODE(username));
     }
 
     std::wstring comment = GetWindowString(GetDlgItem(IDC_COMMENT_EDIT));

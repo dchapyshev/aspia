@@ -117,7 +117,7 @@ void Client::OnRequestReceived(const IOBuffer& buffer)
         return;
     }
 
-    AuthDialog auth_dialog;
+    AuthDialog auth_dialog(computer_);
 
     if (auth_dialog.DoModal(nullptr) != IDOK)
     {

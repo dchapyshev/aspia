@@ -13,6 +13,12 @@
 
 namespace aspia {
 
+AuthDialog::AuthDialog(const proto::Computer& computer)
+    : username_(UNICODEfromUTF8(computer.username()))
+{
+    // Nothing
+}
+
 LRESULT AuthDialog::OnInitDialog(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
@@ -28,7 +34,17 @@ LRESULT AuthDialog::OnInitDialog(
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    return TRUE;
+    if (!username_.empty())
+    {
+        GetDlgItem(IDC_USERNAME_EDIT).SetWindowTextW(username_.c_str());
+        GetDlgItem(IDC_PASSWORD_EDIT).SetFocus();
+    }
+    else
+    {
+        GetDlgItem(IDC_USERNAME_EDIT).SetFocus();
+    }
+
+    return FALSE;
 }
 
 LRESULT AuthDialog::OnClose(
