@@ -30,7 +30,7 @@ public:
         virtual ~Delegate() = default;
         virtual void OnWindowClose() = 0;
         virtual void OnConfigChange(const proto::desktop::Config& config) = 0;
-        virtual void OnKeyEvent(uint32_t keycode, uint32_t flags) = 0;
+        virtual void OnKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
         virtual void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) = 0;
     };

@@ -136,8 +136,7 @@ enum KeyEvent_Flags {
   KeyEvent_Flags_UNKNOWN = 0,
   KeyEvent_Flags_CAPSLOCK = 1,
   KeyEvent_Flags_NUMLOCK = 2,
-  KeyEvent_Flags_EXTENDED = 4,
-  KeyEvent_Flags_PRESSED = 8,
+  KeyEvent_Flags_PRESSED = 4,
   KeyEvent_Flags_KeyEvent_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   KeyEvent_Flags_KeyEvent_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -297,8 +296,6 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
     KeyEvent_Flags_CAPSLOCK;
   static const Flags NUMLOCK =
     KeyEvent_Flags_NUMLOCK;
-  static const Flags EXTENDED =
-    KeyEvent_Flags_EXTENDED;
   static const Flags PRESSED =
     KeyEvent_Flags_PRESSED;
   static inline bool Flags_IsValid(int value) {
@@ -313,11 +310,11 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // uint32 keycode = 1;
-  void clear_keycode();
-  static const int kKeycodeFieldNumber = 1;
-  ::google::protobuf::uint32 keycode() const;
-  void set_keycode(::google::protobuf::uint32 value);
+  // uint32 usb_keycode = 1;
+  void clear_usb_keycode();
+  static const int kUsbKeycodeFieldNumber = 1;
+  ::google::protobuf::uint32 usb_keycode() const;
+  void set_usb_keycode(::google::protobuf::uint32 value);
 
   // uint32 flags = 2;
   void clear_flags();
@@ -329,7 +326,7 @@ class KeyEvent : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::uint32 keycode_;
+  ::google::protobuf::uint32 usb_keycode_;
   ::google::protobuf::uint32 flags_;
   mutable int _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
@@ -1872,18 +1869,18 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
 #endif  // __GNUC__
 // KeyEvent
 
-// uint32 keycode = 1;
-inline void KeyEvent::clear_keycode() {
-  keycode_ = 0u;
+// uint32 usb_keycode = 1;
+inline void KeyEvent::clear_usb_keycode() {
+  usb_keycode_ = 0u;
 }
-inline ::google::protobuf::uint32 KeyEvent::keycode() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.KeyEvent.keycode)
-  return keycode_;
+inline ::google::protobuf::uint32 KeyEvent::usb_keycode() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.KeyEvent.usb_keycode)
+  return usb_keycode_;
 }
-inline void KeyEvent::set_keycode(::google::protobuf::uint32 value) {
+inline void KeyEvent::set_usb_keycode(::google::protobuf::uint32 value) {
   
-  keycode_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.KeyEvent.keycode)
+  usb_keycode_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.KeyEvent.usb_keycode)
 }
 
 // uint32 flags = 2;

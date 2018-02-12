@@ -6,12 +6,25 @@
 //
 
 #include "ui/desktop/viewer_window.h"
+
+#include "base/strings/unicode.h"
+#include "base/bitset.h"
+#include "desktop_capture/cursor.h"
+#include "protocol/keycode_converter.h"
 #include "ui/about_dialog.h"
 #include "ui/resource.h"
-#include "base/strings/unicode.h"
-#include "desktop_capture/cursor.h"
+
 
 namespace aspia {
+
+const uint32_t kUsbCodeDelete = 0x07004c;
+const uint32_t kUsbCodeLeftAlt = 0x0700e2;
+const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
+const uint32_t kUsbCodeEscape = 0x070029;
+const uint32_t kUsbCodeTab = 0x07002b;
+const uint32_t kUsbCodeLeftShift = 0x0700e1;
+const uint32_t kUsbCodePrintScreen = 0x070046;
+const uint32_t kUsbCodeF12 = 0x070045;
 
 static const DWORD kKeyUpFlag = 0x80000000;
 static const DWORD kKeyExtendedFlag = 0x1000000;
@@ -299,22 +312,24 @@ LRESULT ViewerWindow::OnActivate(
 LRESULT ViewerWindow::OnKeyboard(
     UINT /* message */, WPARAM wparam, LPARAM lparam, BOOL& /* handled */)
 {
-    const uint8_t key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
+    const uint8_t virtual_key_code = static_cast<uint8_t>(static_cast<uint32_t>(wparam) & 255);
 
     // We do not pass CapsLock and NoLock directly. Instead, when sending each
     // keystroke event, a flag is set that indicates the status of these keys.
-    if (key_code != VK_CAPITAL && key_code != VK_NUMLOCK)
+    if (virtual_key_code != VK_CAPITAL && virtual_key_code != VK_NUMLOCK)
     {
-        const uint32_t key_data = static_cast<uint32_t>(lparam);
+        const BitSet<uint32_t> key_data(static_cast<uint32_t>(lparam));
+        //const uint32_t key_data = static_cast<uint32_t>(lparam);
 
         uint32_t flags = 0;
 
-        flags |= ((key_data & kKeyUpFlag) == 0) ? proto::desktop::KeyEvent::PRESSED : 0;
-        flags |= ((key_data & kKeyExtendedFlag) != 0) ? proto::desktop::KeyEvent::EXTENDED : 0;
+        flags |= (key_data.Test(31) == 0) ? proto::desktop::KeyEvent::PRESSED : 0;
         flags |= (GetKeyState(VK_CAPITAL) != 0) ? proto::desktop::KeyEvent::CAPSLOCK : 0;
         flags |= (GetKeyState(VK_NUMLOCK) != 0) ? proto::desktop::KeyEvent::NUMLOCK : 0;
 
-        delegate_->OnKeyEvent(key_code, flags);
+        delegate_->OnKeyEvent(
+            // Bits 16:23 contain scancode.
+            KeycodeConverter::NativeKeycodeToUsbKeycode(key_data.Range(16, 23)), flags);
     }
 
     return 0;
@@ -550,14 +565,13 @@ LRESULT ViewerWindow::OnDropDownButton(
 LRESULT ViewerWindow::OnCADButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
-    delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
-    delegate_->OnKeyEvent(VK_DELETE, proto::desktop::KeyEvent::EXTENDED |
-                                     proto::desktop::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(kUsbCodeLeftCtrl, proto::desktop::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(kUsbCodeLeftAlt, proto::desktop::KeyEvent::PRESSED);
+    delegate_->OnKeyEvent(kUsbCodeDelete, proto::desktop::KeyEvent::PRESSED);
 
-    delegate_->OnKeyEvent(VK_CONTROL, 0);
-    delegate_->OnKeyEvent(VK_MENU, 0);
-    delegate_->OnKeyEvent(VK_DELETE, proto::desktop::KeyEvent::EXTENDED);
+    delegate_->OnKeyEvent(kUsbCodeLeftCtrl, 0);
+    delegate_->OnKeyEvent(kUsbCodeLeftAlt, 0);
+    delegate_->OnKeyEvent(kUsbCodeDelete, 0);
 
     return 0;
 }
@@ -569,79 +583,79 @@ LRESULT ViewerWindow::OnKeyButton(
     {
         case ID_KEY_CTRL_ESC:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_ESCAPE, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeEscape, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_CONTROL, 0);
-            delegate_->OnKeyEvent(VK_ESCAPE, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, 0);
+            delegate_->OnKeyEvent(kUsbCodeEscape, 0);
         }
         break;
 
         case ID_KEY_ALT_TAB:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_TAB, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeTab, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_TAB, 0);
-            delegate_->OnKeyEvent(VK_MENU, 0);
+            delegate_->OnKeyEvent(kUsbCodeTab, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, 0);
         }
         break;
 
         case ID_KEY_ALT_SHIFT_TAB:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_SHIFT, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_TAB, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftShift, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeTab, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_TAB, 0);
-            delegate_->OnKeyEvent(VK_SHIFT, 0);
-            delegate_->OnKeyEvent(VK_MENU, 0);
+            delegate_->OnKeyEvent(kUsbCodeTab, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftShift, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, 0);
         }
         break;
 
         case ID_KEY_PRINTSCREEN:
         {
-            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_SNAPSHOT, 0);
+            delegate_->OnKeyEvent(kUsbCodePrintScreen, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodePrintScreen, 0);
         }
         break;
 
         case ID_KEY_ALT_PRINTSCREEN:
         {
-            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_SNAPSHOT, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodePrintScreen, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_SNAPSHOT, 0);
-            delegate_->OnKeyEvent(VK_MENU, 0);
+            delegate_->OnKeyEvent(kUsbCodePrintScreen, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, 0);
         }
         break;
 
         case ID_KEY_CTRL_ALT_F12:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_MENU, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeF12, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_F12, 0);
-            delegate_->OnKeyEvent(VK_MENU, 0);
-            delegate_->OnKeyEvent(VK_CONTROL, 0);
+            delegate_->OnKeyEvent(kUsbCodeF12, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftAlt, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, 0);
         }
         break;
 
         case ID_KEY_F12:
         {
-            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_F12, 0);
+            delegate_->OnKeyEvent(kUsbCodeF12, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeF12, 0);
         }
         break;
 
         case ID_KEY_CTRL_F12:
         {
-            delegate_->OnKeyEvent(VK_CONTROL, proto::desktop::KeyEvent::PRESSED);
-            delegate_->OnKeyEvent(VK_F12, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, proto::desktop::KeyEvent::PRESSED);
+            delegate_->OnKeyEvent(kUsbCodeF12, proto::desktop::KeyEvent::PRESSED);
 
-            delegate_->OnKeyEvent(VK_F12, 0);
-            delegate_->OnKeyEvent(VK_CONTROL, 0);
+            delegate_->OnKeyEvent(kUsbCodeF12, 0);
+            delegate_->OnKeyEvent(kUsbCodeLeftCtrl, 0);
         }
         break;
 

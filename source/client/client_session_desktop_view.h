@@ -35,7 +35,7 @@ private:
     // ViewerWindow::Delegate implementation.
     void OnWindowClose() override;
     void OnConfigChange(const proto::desktop::Config& config) override;
-    void OnKeyEvent(uint32_t keycode, uint32_t flags) override;
+    void OnKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
     void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) override;
 

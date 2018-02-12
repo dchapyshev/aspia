@@ -250,6 +250,7 @@
     <ClCompile Include="protocol\file_depacketizer.cc" />
     <ClCompile Include="protocol\file_packetizer.cc" />
     <ClCompile Include="protocol\io_buffer.cc" />
+    <ClCompile Include="protocol\keycode_converter.cc" />
     <ClCompile Include="proto\address_book.pb.cc" />
     <ClCompile Include="proto\auth_session.pb.cc" />
     <ClCompile Include="proto\computer.pb.cc" />
@@ -572,6 +573,7 @@
     <ClInclude Include="protocol\file_depacketizer.h" />
     <ClInclude Include="protocol\file_packetizer.h" />
     <ClInclude Include="protocol\io_buffer.h" />
+    <ClInclude Include="protocol\keycode_converter.h" />
     <ClInclude Include="protocol\message_serialization.h" />
     <ClInclude Include="proto\address_book.pb.h" />
     <ClInclude Include="proto\auth_session.pb.h" />
@@ -682,6 +684,7 @@
     <None Include="category\category_video_adapter.proto" />
     <None Include="category\category_windows_device.proto" />
     <None Include="category\category_wsus.proto" />
+    <None Include="protocol\keycode_converter_data.inc" />
     <None Include="proto\address_book.proto" />
     <None Include="proto\auth_session.proto" />
     <None Include="proto\build.cmd" />

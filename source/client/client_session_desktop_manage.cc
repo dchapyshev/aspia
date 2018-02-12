@@ -89,12 +89,12 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
     channel_proxy_->Disconnect();
 }
 
-void ClientSessionDesktopManage::OnKeyEvent(uint32_t keycode, uint32_t flags)
+void ClientSessionDesktopManage::OnKeyEvent(uint32_t usb_keycode, uint32_t flags)
 {
     proto::desktop::ClientToHost message;
 
     proto::desktop::KeyEvent* event = message.mutable_key_event();
-    event->set_keycode(keycode);
+    event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
     WriteMessage(message);

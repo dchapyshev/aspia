@@ -19,11 +19,10 @@ message KeyEvent
         UNKNOWN  = 0;
         CAPSLOCK = 1;
         NUMLOCK  = 2;
-        EXTENDED = 4;
-        PRESSED  = 8;
+        PRESSED  = 4;
     }
 
-    uint32 keycode = 1; // Windows virtual key code.
+    uint32 usb_keycode = 1;
     uint32 flags = 2;
 }
 

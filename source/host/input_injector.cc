@@ -6,29 +6,50 @@
 //
 
 #include "host/input_injector.h"
+
 #include "base/logging.h"
 #include "host/sas_injector.h"
+#include "protocol/keycode_converter.h"
 
 namespace aspia {
 
 namespace {
 
-void SendKeyboardInput(WORD key_code, DWORD flags)
+void SendKeyboardScancode(WORD scancode, DWORD flags)
 {
     INPUT input;
+    memset(&input, 0, sizeof(input));
 
-    input.type           = INPUT_KEYBOARD;
-    input.ki.wVk         = key_code;
-    input.ki.dwFlags     = flags;
-    input.ki.wScan       = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
-    input.ki.time        = 0;
-    input.ki.dwExtraInfo = 0;
+    input.type       = INPUT_KEYBOARD;
+    input.ki.dwFlags = flags;
+    input.ki.wScan   = scancode;
+
+    if (!(flags & KEYEVENTF_UNICODE))
+    {
+        input.ki.wScan &= 0xFF;
+
+        if ((scancode & 0xFF00) != 0x0000)
+            input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+    }
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-    {
         PLOG(LS_WARNING) << "SendInput failed";
-    }
+}
+
+void SendKeyboardVirtualKey(WORD key_code, DWORD flags)
+{
+    INPUT input;
+    memset(&input, 0, sizeof(input));
+
+    input.type       = INPUT_KEYBOARD;
+    input.ki.wVk     = key_code;
+    input.ki.dwFlags = flags;
+    input.ki.wScan   = static_cast<WORD>(MapVirtualKeyW(key_code, MAPVK_VK_TO_VSC));
+
+    // Do the keyboard event.
+    if (!SendInput(1, &input, sizeof(input)))
+        PLOG(LS_WARNING) << "SendInput failed";
 }
 
 } // namespace
@@ -110,20 +131,17 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
     }
 
     INPUT input;
+    memset(&input, 0, sizeof(input));
 
-    input.type           = INPUT_MOUSE;
-    input.mi.dx          = pos.x();
-    input.mi.dy          = pos.y();
-    input.mi.mouseData   = wheel_movement;
-    input.mi.dwFlags     = flags;
-    input.mi.time        = 0;
-    input.mi.dwExtraInfo = 0;
+    input.type         = INPUT_MOUSE;
+    input.mi.dx        = pos.x();
+    input.mi.dy        = pos.y();
+    input.mi.mouseData = wheel_movement;
+    input.mi.dwFlags   = flags;
 
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
-    {
         PLOG(LS_WARNING) << "SendInput failed";
-    }
 
     prev_mouse_button_mask_ = mask;
 }
@@ -132,8 +150,10 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     SwitchToInputDesktop();
 
+    const uint32_t kUsbCodeDelete = 0x07004c;
+
     // If the combination Ctrl + Alt + Delete is pressed.
-    if ((event.flags() & proto::desktop::KeyEvent::PRESSED) && event.keycode() == VK_DELETE &&
+    if ((event.flags() & proto::desktop::KeyEvent::PRESSED) && event.usb_keycode() &&
         (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
         (GetAsyncKeyState(VK_MENU) & 0x8000))
     {
@@ -141,13 +161,17 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
         return;
     }
 
+    int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(event.usb_keycode());
+    if (scancode == KeycodeConverter::InvalidNativeKeycode())
+        return;
+
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
     bool curr_state = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
 
     if (prev_state != curr_state)
     {
-        SendKeyboardInput(VK_CAPITAL, 0);
-        SendKeyboardInput(VK_CAPITAL, KEYEVENTF_KEYUP);
+        SendKeyboardVirtualKey(VK_CAPITAL, 0);
+        SendKeyboardVirtualKey(VK_CAPITAL, KEYEVENTF_KEYUP);
     }
 
     prev_state = GetKeyState(VK_NUMLOCK) != 0;
@@ -155,16 +179,15 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 
     if (prev_state != curr_state)
     {
-        SendKeyboardInput(VK_NUMLOCK, 0);
-        SendKeyboardInput(VK_NUMLOCK, KEYEVENTF_KEYUP);
+        SendKeyboardVirtualKey(VK_NUMLOCK, 0);
+        SendKeyboardVirtualKey(VK_NUMLOCK, KEYEVENTF_KEYUP);
     }
 
-    DWORD flags = 0;
+    DWORD flags = KEYEVENTF_SCANCODE;
 
-    flags |= ((event.flags() & proto::desktop::KeyEvent::EXTENDED) ? KEYEVENTF_EXTENDEDKEY : 0);
     flags |= ((event.flags() & proto::desktop::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
 
-    SendKeyboardInput(static_cast<WORD>(event.keycode()), flags);
+    SendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
 } // namespace aspia

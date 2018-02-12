@@ -162,7 +162,7 @@ void ClientSessionDesktopView::OnConfigChange(const proto::desktop::Config& conf
     WriteMessage(message);
 }
 
-void ClientSessionDesktopView::OnKeyEvent(uint32_t /* keycode */, uint32_t /* flags */)
+void ClientSessionDesktopView::OnKeyEvent(uint32_t /* usb_keycode */, uint32_t /* flags */)
 {
     // Nothing
 }

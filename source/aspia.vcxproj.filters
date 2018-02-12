@@ -953,6 +953,9 @@
     <ClCompile Include="network\url.cc">
       <Filter>network</Filter>
     </ClCompile>
+    <ClCompile Include="protocol\keycode_converter.cc">
+      <Filter>protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1924,6 +1927,9 @@
     <ClInclude Include="network\url.h">
       <Filter>network</Filter>
     </ClInclude>
+    <ClInclude Include="protocol\keycode_converter.h">
+      <Filter>protocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
@@ -2084,6 +2090,9 @@
     </None>
     <None Include="proto\computer.proto">
       <Filter>proto</Filter>
+    </None>
+    <None Include="protocol\keycode_converter_data.inc">
+      <Filter>protocol</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

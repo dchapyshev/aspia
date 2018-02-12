@@ -384,7 +384,6 @@ bool KeyEvent_Flags_IsValid(int value) {
     case 1:
     case 2:
     case 4:
-    case 8:
       return true;
     default:
       return false;
@@ -395,7 +394,6 @@ bool KeyEvent_Flags_IsValid(int value) {
 const KeyEvent_Flags KeyEvent::UNKNOWN;
 const KeyEvent_Flags KeyEvent::CAPSLOCK;
 const KeyEvent_Flags KeyEvent::NUMLOCK;
-const KeyEvent_Flags KeyEvent::EXTENDED;
 const KeyEvent_Flags KeyEvent::PRESSED;
 const KeyEvent_Flags KeyEvent::Flags_MIN;
 const KeyEvent_Flags KeyEvent::Flags_MAX;
@@ -493,7 +491,7 @@ bool Features_IsValid(int value) {
 void KeyEvent::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int KeyEvent::kKeycodeFieldNumber;
+const int KeyEvent::kUsbKeycodeFieldNumber;
 const int KeyEvent::kFlagsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -510,16 +508,16 @@ KeyEvent::KeyEvent(const KeyEvent& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&keycode_, &from.keycode_,
+  ::memcpy(&usb_keycode_, &from.usb_keycode_,
     static_cast<size_t>(reinterpret_cast<char*>(&flags_) -
-    reinterpret_cast<char*>(&keycode_)) + sizeof(flags_));
+    reinterpret_cast<char*>(&usb_keycode_)) + sizeof(flags_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.KeyEvent)
 }
 
 void KeyEvent::SharedCtor() {
-  ::memset(&keycode_, 0, static_cast<size_t>(
+  ::memset(&usb_keycode_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&flags_) -
-      reinterpret_cast<char*>(&keycode_)) + sizeof(flags_));
+      reinterpret_cast<char*>(&usb_keycode_)) + sizeof(flags_));
   _cached_size_ = 0;
 }
 
@@ -555,9 +553,9 @@ void KeyEvent::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&keycode_, 0, static_cast<size_t>(
+  ::memset(&usb_keycode_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&flags_) -
-      reinterpret_cast<char*>(&keycode_)) + sizeof(flags_));
+      reinterpret_cast<char*>(&usb_keycode_)) + sizeof(flags_));
   _internal_metadata_.Clear();
 }
 
@@ -577,14 +575,14 @@ bool KeyEvent::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 keycode = 1;
+      // uint32 usb_keycode = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &keycode_)));
+                 input, &usb_keycode_)));
         } else {
           goto handle_unusual;
         }
@@ -631,9 +629,9 @@ void KeyEvent::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 keycode = 1;
-  if (this->keycode() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->keycode(), output);
+  // uint32 usb_keycode = 1;
+  if (this->usb_keycode() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->usb_keycode(), output);
   }
 
   // uint32 flags = 2;
@@ -652,11 +650,11 @@ size_t KeyEvent::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // uint32 keycode = 1;
-  if (this->keycode() != 0) {
+  // uint32 usb_keycode = 1;
+  if (this->usb_keycode() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->keycode());
+        this->usb_keycode());
   }
 
   // uint32 flags = 2;
@@ -685,8 +683,8 @@ void KeyEvent::MergeFrom(const KeyEvent& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.keycode() != 0) {
-    set_keycode(from.keycode());
+  if (from.usb_keycode() != 0) {
+    set_usb_keycode(from.usb_keycode());
   }
   if (from.flags() != 0) {
     set_flags(from.flags());
@@ -710,7 +708,7 @@ void KeyEvent::Swap(KeyEvent* other) {
 }
 void KeyEvent::InternalSwap(KeyEvent* other) {
   using std::swap;
-  swap(keycode_, other->keycode_);
+  swap(usb_keycode_, other->usb_keycode_);
   swap(flags_, other->flags_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
