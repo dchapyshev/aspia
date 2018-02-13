@@ -684,7 +684,6 @@
     <None Include="category\category_video_adapter.proto" />
     <None Include="category\category_windows_device.proto" />
     <None Include="category\category_wsus.proto" />
-    <None Include="protocol\keycode_converter_data.inc" />
     <None Include="proto\address_book.proto" />
     <None Include="proto\auth_session.proto" />
     <None Include="proto\build.cmd" />

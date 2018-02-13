@@ -2091,9 +2091,6 @@
     <None Include="proto\computer.proto">
       <Filter>proto</Filter>
     </None>
-    <None Include="protocol\keycode_converter_data.inc">
-      <Filter>protocol</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ui\lang\en-US.rc">

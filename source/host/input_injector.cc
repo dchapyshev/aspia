@@ -15,6 +15,12 @@ namespace aspia {
 
 namespace {
 
+const uint32_t kUsbCodeDelete = 0x07004c;
+const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
+const uint32_t kUsbCodeRightCtrl = 0x0700e4;
+const uint32_t kUsbCodeLeftAlt = 0x0700e2;
+const uint32_t kUsbCodeRightAlt = 0x0700e6;
+
 void SendKeyboardScancode(WORD scancode, DWORD flags)
 {
     INPUT input;
@@ -53,6 +59,19 @@ void SendKeyboardVirtualKey(WORD key_code, DWORD flags)
 }
 
 } // namespace
+
+InputInjector::~InputInjector()
+{
+    for (auto iter = pressed_keys.begin(); iter != pressed_keys.end(); ++iter)
+    {
+        int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(*iter);
+        if (scancode != KeycodeConverter::InvalidNativeKeycode())
+        {
+            SendKeyboardScancode(static_cast<WORD>(scancode),
+                                 KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        }
+    }
+}
 
 void InputInjector::SwitchToInputDesktop()
 {
@@ -150,12 +169,24 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     SwitchToInputDesktop();
 
-    const uint32_t kUsbCodeDelete = 0x07004c;
+    if (event.flags() & proto::desktop::KeyEvent::PRESSED)
+    {
+        if (!IsKeyPressed(event.usb_keycode()))
+            pressed_keys.push_back(event.usb_keycode());
+    }
+    else
+    {
+        for (auto iter = pressed_keys.begin(); iter != pressed_keys.end(); ++iter)
+        {
+            if (*iter == event.usb_keycode())
+            {
+                pressed_keys.erase(iter);
+                break;
+            }
+        }
+    }
 
-    // If the combination Ctrl + Alt + Delete is pressed.
-    if ((event.flags() & proto::desktop::KeyEvent::PRESSED) && event.usb_keycode() &&
-        (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
-        (GetAsyncKeyState(VK_MENU) & 0x8000))
+    if (IsCtrlAltDeletePressed())
     {
         SasInjector::InjectSAS();
         return;
@@ -188,6 +219,36 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
     flags |= ((event.flags() & proto::desktop::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
 
     SendKeyboardScancode(static_cast<WORD>(scancode), flags);
+}
+
+bool InputInjector::IsKeyPressed(uint32_t usb_keycode)
+{
+    for (const auto& key : pressed_keys)
+    {
+        if (key == usb_keycode)
+            return true;
+    }
+
+    return false;
+}
+
+bool InputInjector::IsCtrlAltDeletePressed()
+{
+    bool ctrl_pressed = false;
+    bool alt_pressed = false;
+    bool delete_pressed = false;
+
+    for (const auto& key : pressed_keys)
+    {
+        if (key == kUsbCodeLeftCtrl || key == kUsbCodeRightCtrl)
+            ctrl_pressed = true;
+        else if (key == kUsbCodeLeftAlt || key == kUsbCodeRightAlt)
+            alt_pressed = true;
+        else if (key == kUsbCodeDelete)
+            delete_pressed = true;
+    }
+
+    return ctrl_pressed && alt_pressed && delete_pressed;
 }
 
 } // namespace aspia

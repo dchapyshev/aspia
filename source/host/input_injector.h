@@ -8,6 +8,8 @@
 #ifndef _ASPIA_HOST__INPUT_INJECTOR_H
 #define _ASPIA_HOST__INPUT_INJECTOR_H
 
+#include <vector>
+
 #include "base/scoped_thread_desktop.h"
 #include "proto/desktop_session.pb.h"
 #include "desktop_capture/desktop_geometry.h"
@@ -18,7 +20,7 @@ class InputInjector
 {
 public:
     InputInjector() = default;
-    ~InputInjector() = default;
+    ~InputInjector();
 
     // The calling thread should not own any windows.
     void InjectPointerEvent(const proto::desktop::PointerEvent& event);
@@ -26,6 +28,12 @@ public:
 
 private:
     void SwitchToInputDesktop();
+    bool IsKeyPressed(uint32_t usb_keycode);
+    bool IsCtrlAltDeletePressed();
+
+    using PressedKeys = std::vector<uint32_t>;
+
+    PressedKeys pressed_keys;
 
     ScopedThreadDesktop desktop_;
 
