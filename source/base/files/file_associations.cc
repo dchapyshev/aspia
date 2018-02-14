@@ -7,6 +7,10 @@
 
 #include "base/files/file_associations.h"
 
+#include <algorithm>
+#include <cwctype>
+#include <shlobj.h>
+
 #include "base/strings/string_printf.h"
 #include "base/registry.h"
 #include "base/logging.h"
@@ -14,6 +18,13 @@
 namespace aspia {
 
 namespace {
+
+std::wstring EraseSpaces(std::wstring_view str)
+{
+    std::wstring nospace_str(str);
+    nospace_str.erase(std::remove_if(nospace_str.begin(), nospace_str.end(), std::iswspace));
+    return nospace_str;
+}
 
 bool WriteKey(HKEY root_key, const WCHAR* subkey_path,
               const WCHAR* key_name, const WCHAR* key_value)
@@ -57,23 +68,37 @@ bool DeleteKeyRecursive(HKEY root_key, const WCHAR* subkey)
 } // namespace
 
 // static
-bool FileAssociations::Add(const Info& info)
+bool FileAssociations::Add(const CommandLine& command_line,
+                           const WCHAR* extension,
+                           const WCHAR* description,
+                           int icon_index)
 {
-    DCHECK(info.extension && info.description && info.icon_index != -1);
+    DCHECK(extension && description && icon_index != -1);
 
-    if (!WriteKey(HKEY_CLASSES_ROOT, info.extension, L"", info.description))
-        return false;
+    if (WriteKey(HKEY_CLASSES_ROOT, extension, L"", description))
+    {
+        std::wstring key_name = EraseSpaces(description);
+        std::wstring key_path = StringPrintf(L"%s\\shell\\open\\command", key_name.c_str());
+        std::wstring value = StringPrintf(L"%s \"%1\"", command_line.GetCommandLineString().c_str());
 
-    std::wstring key_path = StringPrintf(L"%s\\shell\\open\\command", info.extension);
-    std::wstring value = StringPrintf(L"%s \"%1\"", info.command_line.GetCommandLineString().c_str());
+        if (WriteKey(HKEY_CLASSES_ROOT, key_path.c_str(), L"", value.c_str()))
+        {
+            key_path = StringPrintf(L"%s\\DefaultIcon", key_name.c_str());
+            value = StringPrintf(L"%s,-%d", command_line.GetProgram().c_str(), icon_index);
 
-    if (!WriteKey(HKEY_CLASSES_ROOT, key_path.c_str(), L"", value.c_str()))
-        return false;
+            if (WriteKey(HKEY_CLASSES_ROOT, key_path.c_str(), L"", value.c_str()))
+            {
+                SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+                return true;
+            }
 
-    key_path = StringPrintf(L"%s\\DefaultIcon", info.extension);
-    value = StringPrintf(L"%s,-%d", info.command_line.GetProgram().c_str(), info.icon_index);
+            DeleteKeyRecursive(HKEY_CLASSES_ROOT, key_path.c_str());
+        }
 
-    return WriteKey(HKEY_CLASSES_ROOT, key_path.c_str(), L"", value.c_str());
+        DeleteKeyRecursive(HKEY_CLASSES_ROOT, extension);
+    }
+
+    return false;
 }
 
 // static
@@ -81,7 +106,11 @@ bool FileAssociations::Remove(const WCHAR* extension)
 {
     DCHECK(extension);
 
-    return DeleteKeyRecursive(HKEY_CLASSES_ROOT, extension);
+    if (!DeleteKeyRecursive(HKEY_CLASSES_ROOT, extension))
+        return false;
+
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+    return true;
 }
 
 } // namespace aspia

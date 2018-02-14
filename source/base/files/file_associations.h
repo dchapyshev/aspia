@@ -16,15 +16,11 @@ namespace aspia {
 class FileAssociations
 {
 public:
-    struct Info
-    {
-        CommandLine command_line;
-        const WCHAR* extension;
-        const WCHAR* description;
-        int icon_index = -1;
-    };
+    static bool Add(const CommandLine& command_line,
+                    const WCHAR* extension,
+                    const WCHAR* description,
+                    int icon_index);
 
-    static bool Add(const Info& info);
     static bool Remove(const WCHAR* extension);
 
 private:
