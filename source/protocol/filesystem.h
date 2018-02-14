@@ -8,30 +8,38 @@
 #ifndef _ASPIA_PROTOCOL__FILESYSTEM_H
 #define _ASPIA_PROTOCOL__FILESYSTEM_H
 
-#include "proto/file_transfer_session.pb.h"
-
 #include <experimental/filesystem>
+
+#include "base/macros.h"
+#include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
 
-proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::DriveList* drive_list);
+class FileSystemRequest
+{
+public:
+    static proto::file_transfer::Status GetDriveList(proto::file_transfer::DriveList* drive_list);
 
-proto::file_transfer::Status ExecuteFileListRequest(
-    const std::experimental::filesystem::path& path,
-    proto::file_transfer::FileList* file_list);
+    static proto::file_transfer::Status GetFileList(
+        const std::experimental::filesystem::path& path,
+        proto::file_transfer::FileList* file_list);
 
-proto::file_transfer::Status ExecuteCreateDirectoryRequest(
-    const std::experimental::filesystem::path& path);
+    static proto::file_transfer::Status CreateDirectory(
+        const std::experimental::filesystem::path& path);
 
-proto::file_transfer::Status ExecuteDirectorySizeRequest(
-    const std::experimental::filesystem::path& path, uint64_t& size);
+    static proto::file_transfer::Status GetDirectorySize(
+        const std::experimental::filesystem::path& path, uint64_t& size);
 
-proto::file_transfer::Status ExecuteRenameRequest(
-    const std::experimental::filesystem::path& old_name,
-    const std::experimental::filesystem::path& new_name);
+    static proto::file_transfer::Status Rename(
+        const std::experimental::filesystem::path& old_name,
+        const std::experimental::filesystem::path& new_name);
 
-proto::file_transfer::Status ExecuteRemoveRequest(
-    const std::experimental::filesystem::path& request);
+    static proto::file_transfer::Status Remove(
+        const std::experimental::filesystem::path& request);
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(FileSystemRequest);
+};
 
 } // namespace aspia
 

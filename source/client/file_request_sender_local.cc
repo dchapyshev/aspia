@@ -39,7 +39,7 @@ void FileRequestSenderLocal::DriveListRequest(std::shared_ptr<FileReplyReceiverP
     std::unique_ptr<proto::file_transfer::DriveList> drive_list =
         std::make_unique<proto::file_transfer::DriveList>();
 
-    proto::file_transfer::Status status = ExecuteDriveListRequest(drive_list.get());
+    proto::file_transfer::Status status = FileSystemRequest::GetDriveList(drive_list.get());
 
     receiver->OnDriveListReply(std::move(drive_list), status);
 }
@@ -58,7 +58,7 @@ void FileRequestSenderLocal::FileListRequest(
     std::unique_ptr<proto::file_transfer::FileList> file_list =
         std::make_unique<proto::file_transfer::FileList>();
 
-    proto::file_transfer::Status status = ExecuteFileListRequest(path, file_list.get());
+    proto::file_transfer::Status status = FileSystemRequest::GetFileList(path, file_list.get());
 
     receiver->OnFileListReply(path, std::move(file_list), status);
 }
@@ -75,7 +75,7 @@ void FileRequestSenderLocal::CreateDirectoryRequest(
     const std::experimental::filesystem::path& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
-    receiver->OnCreateDirectoryReply(path, ExecuteCreateDirectoryRequest(path));
+    receiver->OnCreateDirectoryReply(path, FileSystemRequest::CreateDirectory(path));
 }
 
 void FileRequestSenderLocal::SendCreateDirectoryRequest(
@@ -104,7 +104,7 @@ void FileRequestSenderLocal::RemoveRequest(std::shared_ptr<FileReplyReceiverProx
                                            const std::experimental::filesystem::path& path)
 {
     DCHECK(worker_->BelongsToCurrentThread());
-    receiver->OnRemoveReply(path, ExecuteRemoveRequest(path));
+    receiver->OnRemoveReply(path, FileSystemRequest::Remove(path));
 }
 
 void FileRequestSenderLocal::SendRemoveRequest(
@@ -120,7 +120,7 @@ void FileRequestSenderLocal::RenameRequest(
     const std::experimental::filesystem::path& new_name)
 {
     DCHECK(worker_->BelongsToCurrentThread());
-    receiver->OnRenameReply(old_name, new_name, ExecuteRenameRequest(old_name, new_name));
+    receiver->OnRenameReply(old_name, new_name, FileSystemRequest::Rename(old_name, new_name));
 }
 
 void FileRequestSenderLocal::SendRenameRequest(

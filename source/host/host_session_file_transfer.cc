@@ -141,7 +141,7 @@ void HostSessionFileTransfer::OnReplySended()
 void HostSessionFileTransfer::ReadDriveListRequest()
 {
     proto::file_transfer::HostToClient reply;
-    reply.set_status(ExecuteDriveListRequest(reply.mutable_drive_list()));
+    reply.set_status(FileSystemRequest::GetDriveList(reply.mutable_drive_list()));
 
     if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
@@ -159,7 +159,7 @@ void HostSessionFileTransfer::ReadFileListRequest(
     std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(request.path());
 
-    reply.set_status(ExecuteFileListRequest(path, reply.mutable_file_list()));
+    reply.set_status(FileSystemRequest::GetFileList(path, reply.mutable_file_list()));
 
     if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
@@ -177,7 +177,7 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(request.path());
 
-    reply.set_status(ExecuteCreateDirectoryRequest(path));
+    reply.set_status(FileSystemRequest::CreateDirectory(path));
 
     if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
@@ -197,7 +197,7 @@ void HostSessionFileTransfer::ReadDirectorySizeRequest(
 
     uint64_t directory_size = 0;
 
-    reply.set_status(ExecuteDirectorySizeRequest(path, directory_size));
+    reply.set_status(FileSystemRequest::GetDirectorySize(path, directory_size));
     reply.mutable_directory_size()->set_size(directory_size);
 
     SendReply(reply);
@@ -212,7 +212,7 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::file_transfer::Rena
     std::experimental::filesystem::path new_name =
         std::experimental::filesystem::u8path(request.new_name());
 
-    reply.set_status(ExecuteRenameRequest(old_name, new_name));
+    reply.set_status(FileSystemRequest::Rename(old_name, new_name));
 
     if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {
@@ -229,7 +229,7 @@ void HostSessionFileTransfer::ReadRemoveRequest(const proto::file_transfer::Remo
     std::experimental::filesystem::path path =
         std::experimental::filesystem::u8path(request.path());
 
-    reply.set_status(ExecuteRemoveRequest(path));
+    reply.set_status(FileSystemRequest::Remove(path));
 
     if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
     {

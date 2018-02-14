@@ -16,7 +16,9 @@
 
 namespace aspia {
 
-proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::DriveList* drive_list)
+// static
+proto::file_transfer::Status FileSystemRequest::GetDriveList(
+    proto::file_transfer::DriveList* drive_list)
 {
     DCHECK(drive_list);
 
@@ -91,7 +93,8 @@ proto::file_transfer::Status ExecuteDriveListRequest(proto::file_transfer::Drive
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteFileListRequest(
+// static
+proto::file_transfer::Status FileSystemRequest::GetFileList(
     const std::experimental::filesystem::path& path,
     proto::file_transfer::FileList* file_list)
 {
@@ -121,13 +124,14 @@ proto::file_transfer::Status ExecuteFileListRequest(
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteCreateDirectoryRequest(
+// static
+proto::file_transfer::Status FileSystemRequest::CreateDirectory(
     const std::experimental::filesystem::path& path)
 {
     if (!IsValidPathName(path))
         return proto::file_transfer::STATUS_INVALID_PATH_NAME;
 
-    if (!CreateDirectory(path, nullptr))
+    if (!aspia::CreateDirectory(path, nullptr))
     {
         if (PathExists(path))
             return proto::file_transfer::STATUS_PATH_ALREADY_EXISTS;
@@ -138,7 +142,8 @@ proto::file_transfer::Status ExecuteCreateDirectoryRequest(
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteDirectorySizeRequest(
+// static
+proto::file_transfer::Status FileSystemRequest::GetDirectorySize(
     const std::experimental::filesystem::path& path, uint64_t& size)
 {
     if (!IsValidPathName(path))
@@ -149,7 +154,8 @@ proto::file_transfer::Status ExecuteDirectorySizeRequest(
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteRenameRequest(
+// static
+proto::file_transfer::Status FileSystemRequest::Rename(
     const std::experimental::filesystem::path& old_name,
     const std::experimental::filesystem::path& new_name)
 {
@@ -170,7 +176,9 @@ proto::file_transfer::Status ExecuteRenameRequest(
     return proto::file_transfer::STATUS_SUCCESS;
 }
 
-proto::file_transfer::Status ExecuteRemoveRequest(const std::experimental::filesystem::path& path)
+// static
+proto::file_transfer::Status FileSystemRequest::Remove(
+    const std::experimental::filesystem::path& path)
 {
     if (!IsValidPathName(path))
         return proto::file_transfer::STATUS_INVALID_PATH_NAME;
