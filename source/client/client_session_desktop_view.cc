@@ -173,7 +173,7 @@ void ClientSessionDesktopView::OnPointerEvent(const DesktopPoint& /* pos */, uin
 }
 
 void ClientSessionDesktopView::OnClipboardEvent(
-    proto::desktop::ClipboardEvent& /* clipboard_event */)
+    const proto::desktop::ClipboardEvent& /* clipboard_event */)
 {
     // Nothing
 }

@@ -40,7 +40,7 @@ void ClientSessionDesktopManage::ReadCursorShape(const proto::desktop::CursorSha
 }
 
 void ClientSessionDesktopManage::ReadClipboardEvent(
-    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
+    const proto::desktop::ClipboardEvent& clipboard_event)
 {
     viewer_->InjectClipboardEvent(clipboard_event);
 }
@@ -63,10 +63,7 @@ void ClientSessionDesktopManage::OnMessageReceived(const IOBuffer& buffer)
         }
         else if (message.has_clipboard_event())
         {
-            std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event(
-                message.release_clipboard_event());
-
-            ReadClipboardEvent(clipboard_event);
+            ReadClipboardEvent(message.clipboard_event());
         }
         else if (message.has_config_request())
         {
@@ -112,10 +109,11 @@ void ClientSessionDesktopManage::OnPointerEvent(const DesktopPoint& pos, uint32_
     WriteMessage(message);
 }
 
-void ClientSessionDesktopManage::OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event)
+void ClientSessionDesktopManage::OnClipboardEvent(
+    const proto::desktop::ClipboardEvent& clipboard_event)
 {
     proto::desktop::ClientToHost message;
-    message.mutable_clipboard_event()->Swap(&clipboard_event);
+    message.mutable_clipboard_event()->CopyFrom(clipboard_event);
     WriteMessage(message);
 }
 

@@ -24,12 +24,12 @@ private:
     // ViewerWindow::Delegate implementation.
     void OnKeyEvent(uint32_t usb_keycode, uint32_t flags) override;
     void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) override;
-    void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) override;
+    void OnClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event) override;
 
     void OnMessageReceived(const IOBuffer& buffer) override;
 
     void ReadCursorShape(const proto::desktop::CursorShape& cursor_shape);
-    void ReadClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event);
+    void ReadClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
 
     std::unique_ptr<CursorDecoder> cursor_decoder_;
 

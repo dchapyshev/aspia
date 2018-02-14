@@ -23,13 +23,12 @@ void ClipboardThread::Start(Clipboard::ClipboardEventCallback event_callback)
 }
 
 void ClipboardThread::InjectClipboardEvent(
-    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
+    const proto::desktop::ClipboardEvent& clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {
-        runner_->PostTask(std::bind(&ClipboardThread::InjectClipboardEvent,
-                                    this,
-                                    clipboard_event));
+        runner_->PostTask(
+            std::bind(&ClipboardThread::InjectClipboardEvent, this, clipboard_event));
         return;
     }
 

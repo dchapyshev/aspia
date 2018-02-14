@@ -29,10 +29,11 @@ bool IsFailureCode(const std::error_code& code)
 std::wstring GenerateUniqueRandomChannelID()
 {
     static std::atomic_uint32_t last_channel_id = 0;
+    uint32_t channel_id = last_channel_id++;
 
     return StringPrintf(L"%lu.%lu.%lu",
                         GetCurrentProcessId(),
-                        last_channel_id++,
+                        channel_id,
                         CreateRandomNumber());
 }
 

@@ -91,10 +91,7 @@ void HostSessionDesktop::OnIpcChannelMessage(const IOBuffer& buffer)
         }
         else if (message.has_clipboard_event())
         {
-            std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event(
-                message.release_clipboard_event());
-
-            success = ReadClipboardEvent(clipboard_event);
+            success = ReadClipboardEvent(message.clipboard_event());
         }
         else if (message.has_config())
         {
@@ -192,8 +189,7 @@ bool HostSessionDesktop::ReadKeyEvent(const proto::desktop::KeyEvent& event)
     return true;
 }
 
-bool HostSessionDesktop::ReadClipboardEvent(
-    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
+bool HostSessionDesktop::ReadClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
     if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         return false;

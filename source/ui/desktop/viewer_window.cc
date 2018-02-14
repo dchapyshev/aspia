@@ -132,8 +132,7 @@ void ViewerWindow::InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor)
                      reinterpret_cast<LONG_PTR>(cursor.Get()));
 }
 
-void ViewerWindow::InjectClipboardEvent(
-    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
+void ViewerWindow::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
     if (!runner_->BelongsToCurrentThread())
     {

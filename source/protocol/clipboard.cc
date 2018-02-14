@@ -207,28 +207,27 @@ bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& r
     return true;
 }
 
-void Clipboard::InjectClipboardEvent(
-    std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event)
+void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (!window_ || !clipboard_event)
+    if (!window_)
         return;
 
     // Currently we only handle UTF-8 text.
-    if (clipboard_event->mime_type() != kMimeTypeTextUtf8)
+    if (clipboard_event.mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(LS_WARNING) << "Unsupported mime type: " << clipboard_event->mime_type();
+        LOG(LS_WARNING) << "Unsupported mime type: " << clipboard_event.mime_type();
         return;
     }
 
-    if (!IsStringUTF8(clipboard_event->data()))
+    if (!IsStringUTF8(clipboard_event.data()))
     {
         LOG(LS_WARNING) << "Clipboard data is not UTF-8 encoded";
         return;
     }
 
     // Store last injected data.
-    last_mime_type_ = std::move(*clipboard_event->mutable_mime_type());
-    last_data_ = std::move(*clipboard_event->mutable_data());
+    last_mime_type_ = clipboard_event.mime_type();
+    last_data_ = clipboard_event.data();
 
     std::wstring text;
 

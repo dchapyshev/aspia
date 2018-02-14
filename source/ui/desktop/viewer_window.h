@@ -32,7 +32,7 @@ public:
         virtual void OnConfigChange(const proto::desktop::Config& config) = 0;
         virtual void OnKeyEvent(uint32_t usb_keycode, uint32_t flags) = 0;
         virtual void OnPointerEvent(const DesktopPoint& pos, uint32_t mask) = 0;
-        virtual void OnClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event) = 0;
+        virtual void OnClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event) = 0;
     };
 
     ViewerWindow(proto::Computer* computer, Delegate* delegate);
@@ -42,7 +42,7 @@ public:
     void DrawFrame();
     void ResizeFrame(const DesktopSize& size, const PixelFormat& format);
     void InjectMouseCursor(std::shared_ptr<MouseCursor> mouse_cursor);
-    void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> clipboard_event);
+    void InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
 
 private:
     static const UINT kResizeFrameMessage = WM_APP + 1;

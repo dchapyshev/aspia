@@ -125,10 +125,11 @@ ServiceManager::Create(const CommandLine& command_line,
 std::wstring ServiceManager::GenerateUniqueServiceId()
 {
     static std::atomic_uint32_t last_service_id = 0;
+    uint32_t service_id = last_service_id++;
 
     return StringPrintf(L"%lu.%lu.%lu",
                         GetCurrentProcessId(),
-                        last_service_id++,
+                        service_id,
                         CreateRandomNumber());
 }
 

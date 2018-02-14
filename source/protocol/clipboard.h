@@ -29,7 +29,7 @@ public:
     void Stop();
 
     // Receiving the incoming clipboard.
-    void InjectClipboardEvent(std::shared_ptr<proto::desktop::ClipboardEvent> event);
+    void InjectClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
     // Handles messages received by |window_|.
