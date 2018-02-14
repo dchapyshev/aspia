@@ -47,6 +47,16 @@ void RunUIMain(UI ui)
 
     if (ui == UI::MAIN_DIALOG)
     {
+        static const WCHAR kMutexName[] = L"aspia.mutex.main_dialog";
+
+        ScopedHandle mutex(CreateMutexW(nullptr, FALSE, kMutexName));
+        if (!mutex.IsValid() || GetLastError() == ERROR_ALREADY_EXISTS)
+        {
+            DLOG(LS_WARNING) << "The application is already running.";
+            module.Term();
+            return;
+        }
+
         MainDialog main_dialog;
 
         if (!main_dialog.Create(nullptr, 0))
