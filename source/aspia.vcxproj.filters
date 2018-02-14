@@ -956,6 +956,9 @@
     <ClCompile Include="protocol\keycode_converter.cc">
       <Filter>protocol</Filter>
     </ClCompile>
+    <ClCompile Include="base\files\file_associations.cc">
+      <Filter>base\files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1929,6 +1932,9 @@
     </ClInclude>
     <ClInclude Include="protocol\keycode_converter.h">
       <Filter>protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="base\files\file_associations.h">
+      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
