@@ -7,6 +7,7 @@
 
 #include "host/input_injector.h"
 
+#include "base/scoped_thread_desktop.h"
 #include "base/logging.h"
 #include "host/sas_injector.h"
 #include "protocol/keycode_converter.h"
@@ -60,7 +61,25 @@ void SendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
+InputInjector::InputInjector()
+{
+    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
+}
+
 InputInjector::~InputInjector()
+{
+    thread_.Stop();
+}
+
+void InputInjector::OnBeforeThreadRunning()
+{
+    runner_ = thread_.message_loop_proxy();
+    DCHECK(runner_);
+
+    desktop_ = std::make_unique<ScopedThreadDesktop>();
+}
+
+void InputInjector::OnAfterThreadRunning()
 {
     for (auto iter = pressed_keys.begin(); iter != pressed_keys.end(); ++iter)
     {
@@ -77,9 +96,9 @@ void InputInjector::SwitchToInputDesktop()
 {
     Desktop input_desktop(Desktop::GetInputDesktop());
 
-    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
+    if (input_desktop.IsValid() && !desktop_->IsSame(input_desktop))
     {
-        desktop_.SetThreadDesktop(std::move(input_desktop));
+        desktop_->SetThreadDesktop(std::move(input_desktop));
     }
 
     // We send a notification to the system that it is used to prevent
@@ -89,6 +108,12 @@ void InputInjector::SwitchToInputDesktop()
 
 void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event)
 {
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&InputInjector::InjectPointerEvent, this, event));
+        return;
+    }
+
     SwitchToInputDesktop();
 
     DesktopRect screen_rect =
@@ -167,34 +192,32 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
 
 void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 {
-    SwitchToInputDesktop();
+    if (!runner_->BelongsToCurrentThread())
+    {
+        runner_->PostTask(std::bind(&InputInjector::InjectKeyEvent, this, event));
+        return;
+    }
 
     if (event.flags() & proto::desktop::KeyEvent::PRESSED)
     {
-        if (!IsKeyPressed(event.usb_keycode()))
-            pressed_keys.push_back(event.usb_keycode());
+        pressed_keys.insert(event.usb_keycode());
+
+        if (event.usb_keycode() == kUsbCodeDelete && IsCtrlAndAltPressed())
+        {
+            SasInjector::InjectSAS();
+            return;
+        }
     }
     else
     {
-        for (auto iter = pressed_keys.begin(); iter != pressed_keys.end(); ++iter)
-        {
-            if (*iter == event.usb_keycode())
-            {
-                pressed_keys.erase(iter);
-                break;
-            }
-        }
-    }
-
-    if (IsCtrlAltDeletePressed())
-    {
-        SasInjector::InjectSAS();
-        return;
+        pressed_keys.erase(event.usb_keycode());
     }
 
     int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(event.usb_keycode());
     if (scancode == KeycodeConverter::InvalidNativeKeycode())
         return;
+
+    SwitchToInputDesktop();
 
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
     bool curr_state = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
@@ -221,34 +244,15 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
     SendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
-bool InputInjector::IsKeyPressed(uint32_t usb_keycode)
+bool InputInjector::IsCtrlAndAltPressed()
 {
-    for (const auto& key : pressed_keys)
-    {
-        if (key == usb_keycode)
-            return true;
-    }
+    size_t ctrl_keys = pressed_keys.count(kUsbCodeLeftCtrl) +
+                       pressed_keys.count(kUsbCodeRightCtrl);
 
-    return false;
-}
+    size_t alt_keys = pressed_keys.count(kUsbCodeLeftAlt) +
+                      pressed_keys.count(kUsbCodeRightAlt);
 
-bool InputInjector::IsCtrlAltDeletePressed()
-{
-    bool ctrl_pressed = false;
-    bool alt_pressed = false;
-    bool delete_pressed = false;
-
-    for (const auto& key : pressed_keys)
-    {
-        if (key == kUsbCodeLeftCtrl || key == kUsbCodeRightCtrl)
-            ctrl_pressed = true;
-        else if (key == kUsbCodeLeftAlt || key == kUsbCodeRightAlt)
-            alt_pressed = true;
-        else if (key == kUsbCodeDelete)
-            delete_pressed = true;
-    }
-
-    return ctrl_pressed && alt_pressed && delete_pressed;
+    return ctrl_keys != 0 && alt_keys != 0;
 }
 
 } // namespace aspia

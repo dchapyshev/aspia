@@ -8,7 +8,6 @@
 #include "ui/desktop/viewer_window.h"
 
 #include "base/strings/unicode.h"
-#include "base/bitset.h"
 #include "desktop_capture/cursor.h"
 #include "protocol/keycode_converter.h"
 #include "ui/about_dialog.h"
@@ -318,18 +317,18 @@ LRESULT ViewerWindow::OnKeyboard(
     // keystroke event, a flag is set that indicates the status of these keys.
     if (virtual_key_code != VK_CAPITAL && virtual_key_code != VK_NUMLOCK)
     {
-        const BitSet<uint32_t> key_data(static_cast<uint32_t>(lparam));
-        //const uint32_t key_data = static_cast<uint32_t>(lparam);
+        const uint32_t key_data = static_cast<uint32_t>(lparam);
 
         uint32_t flags = 0;
 
-        flags |= (key_data.Test(31) == 0) ? proto::desktop::KeyEvent::PRESSED : 0;
+        flags |= ((key_data & kKeyUpFlag) == 0) ? proto::desktop::KeyEvent::PRESSED : 0;
         flags |= (GetKeyState(VK_CAPITAL) != 0) ? proto::desktop::KeyEvent::CAPSLOCK : 0;
         flags |= (GetKeyState(VK_NUMLOCK) != 0) ? proto::desktop::KeyEvent::NUMLOCK : 0;
 
-        delegate_->OnKeyEvent(
-            // Bits 16:23 contain scancode.
-            KeycodeConverter::NativeKeycodeToUsbKeycode(key_data.Range(16, 23)), flags);
+        uint32_t usb_keycode = KeycodeConverter::NativeKeycodeToUsbKeycode(
+            MapVirtualKeyW(virtual_key_code, MAPVK_VK_TO_VSC));
+
+        delegate_->OnKeyEvent(usb_keycode, flags);
     }
 
     return 0;
