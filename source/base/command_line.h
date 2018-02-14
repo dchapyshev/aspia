@@ -85,6 +85,9 @@ public:
                           const std::experimental::filesystem::path& path);
     void AppendSwitch(const StringType& switch_string, const StringType& value);
 
+    // Get the remaining arguments to the command.
+    StringVector GetArgs() const;
+
     // Append an argument to the command line. Note that the argument is quoted
     // properly such that it is interpreted as one argument to the target command.
     void AppendArgPath(const std::experimental::filesystem::path& value);

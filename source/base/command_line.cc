@@ -291,6 +291,21 @@ void CommandLine::AppendSwitch(const StringType& switch_string, const StringType
     argv_.insert(argv_.begin() + begin_args_++, combined_switch_string);
 }
 
+CommandLine::StringVector CommandLine::GetArgs() const
+{
+    // Gather all arguments after the last switch (may include kSwitchTerminator).
+    StringVector args(argv_.begin() + begin_args_, argv_.end());
+
+    // Erase only the first kSwitchTerminator (maybe "--" is a legitimate page?)
+    StringVector::iterator switch_terminator =
+        std::find(args.begin(), args.end(), kSwitchTerminator);
+
+    if (switch_terminator != args.end())
+        args.erase(switch_terminator);
+
+    return args;
+}
+
 void CommandLine::AppendArgPath(const std::experimental::filesystem::path& value)
 {
     AppendArg(value.native());

@@ -27,7 +27,7 @@ class AddressBookWindow
       public MessageLoop::Dispatcher
 {
 public:
-    AddressBookWindow() = default;
+    AddressBookWindow(const std::experimental::filesystem::path& address_book_path);
     ~AddressBookWindow();
 
 private:

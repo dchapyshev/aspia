@@ -6,16 +6,17 @@
 //
 
 #include "ui/ui_main.h"
-#include "ui/main_dialog.h"
-#include "ui/address_book/address_book_window.h"
-#include "base/message_loop/message_loop.h"
-#include "base/scoped_com_initializer.h"
 
 #include <atlbase.h>
 #include <atlapp.h>
-
 #include <atlwin.h>
 #include <commctrl.h>
+
+#include "base/command_line.h"
+#include "base/message_loop/message_loop.h"
+#include "base/scoped_com_initializer.h"
+#include "ui/address_book/address_book_window.h"
+#include "ui/main_dialog.h"
 
 namespace aspia {
 
@@ -76,7 +77,13 @@ void RunUIMain(UI ui)
     {
         DCHECK_EQ(ui, UI::ADDRESS_BOOK);
 
-        AddressBookWindow address_book_window;
+        std::experimental::filesystem::path address_book_path;
+
+        CommandLine::StringVector args = CommandLine::ForCurrentProcess().GetArgs();
+        if (!args.empty())
+            address_book_path = args.front();
+
+        AddressBookWindow address_book_window(address_book_path);
 
         if (!address_book_window.Create(nullptr))
         {

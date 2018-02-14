@@ -64,6 +64,12 @@ bool DeleteChildGroup(proto::ComputerGroup* parent_group, proto::ComputerGroup* 
 
 } // namespace
 
+AddressBookWindow::AddressBookWindow(const std::experimental::filesystem::path& address_book_path)
+    : address_book_path_(address_book_path)
+{
+    // Nothing
+}
+
 AddressBookWindow::~AddressBookWindow()
 {
     SecureClearComputerGroup(&root_group_);
@@ -157,6 +163,9 @@ LRESULT AddressBookWindow::OnCreate(
 
     SetWindowPos(nullptr, 0, 0, 980, 700, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     CenterWindow();
+
+    if (!address_book_path_.empty())
+        OpenAddressBook();
 
     return 0;
 }
