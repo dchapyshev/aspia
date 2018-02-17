@@ -101,7 +101,6 @@ LRESULT UsersDialog::OnInitDialog(
     }
 
     list.SetExtendedListViewStyle(ex_style);
-
     list.SetImageList(imagelist_, LVSIL_SMALL);
 
     CString title;

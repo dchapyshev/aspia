@@ -35,11 +35,11 @@ void RunHostMain(const CommandLine& command_line)
     {
         HostService().Run();
     }
-    else if (run_mode == kInstallHostServiceSwitch)
+    else if (run_mode == kInstallServiceSwitch)
     {
         HostService::Install();
     }
-    else if (run_mode == kRemoveHostServiceSwitch)
+    else if (run_mode == kRemoveServiceSwitch)
     {
         HostService::Remove();
     }

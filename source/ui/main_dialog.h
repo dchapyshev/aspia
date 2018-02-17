@@ -50,8 +50,6 @@ private:
         COMMAND_ID_HANDLER(ID_ABOUT, OnAboutButton)
         COMMAND_ID_HANDLER(ID_USERS, OnUsersButton)
         COMMAND_ID_HANDLER(ID_SHOWHIDE, OnShowHideButton)
-        COMMAND_ID_HANDLER(ID_INSTALL_SERVICE, OnInstallServiceButton)
-        COMMAND_ID_HANDLER(ID_REMOVE_SERVICE, OnRemoveServiceButton)
         COMMAND_ID_HANDLER(ID_COPY, OnCopyButton)
         COMMAND_ID_HANDLER(ID_ADDRESS_BOOK, OnAddressBookButton)
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO, OnSystemInfoButton)
@@ -83,8 +81,6 @@ private:
     LRESULT OnUsersButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnShowHideButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnInstallServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnRemoveServiceButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     LRESULT OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);

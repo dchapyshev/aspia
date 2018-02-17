@@ -11,49 +11,58 @@
 #include "base/logging.h"
 #include "host/host_main.h"
 #include "ui/ui_main.h"
+#include "ui/resource.h"
 #include "command_line_switches.h"
+
+namespace aspia {
+
+void Main()
+{
+    LoggingSettings settings;
+
+    settings.logging_dest = LOG_TO_ALL;
+    settings.lock_log = LOCK_LOG_FILE;
+
+    InitLogging(settings);
+
+    const CommandLine& command_line = CommandLine::ForCurrentProcess();
+
+    if (command_line.IsEmpty())
+    {
+        if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+        {
+            std::experimental::filesystem::path program_path;
+
+            if (GetBasePath(BasePathKey::FILE_EXE, program_path))
+            {
+                if (!LaunchProcessWithElevate(program_path))
+                    RunUIMain(UI::MAIN_DIALOG);
+            }
+        }
+        else
+        {
+            RunUIMain(UI::MAIN_DIALOG);
+        }
+    }
+    else if (command_line.HasSwitch(kAddressBookSwitch))
+    {
+        RunUIMain(UI::ADDRESS_BOOK);
+    }
+    else
+    {
+        RunHostMain(command_line);
+    }
+
+    ShutdownLogging();
+}
+
+} // namespace aspia
 
 int WINAPI wWinMain(HINSTANCE /* hInstance */,
                     HINSTANCE /* hPrevInstance */,
                     PWSTR /* pCmdLine */,
                     int /* nCmdShow */)
 {
-    aspia::LoggingSettings settings;
-
-    settings.logging_dest = aspia::LOG_TO_ALL;
-    settings.lock_log = aspia::LOCK_LOG_FILE;
-
-    aspia::InitLogging(settings);
-
-    const aspia::CommandLine& command_line = aspia::CommandLine::ForCurrentProcess();
-
-    if (command_line.IsEmpty())
-    {
-        if (aspia::IsWindowsVistaOrGreater() && !aspia::IsProcessElevated())
-        {
-            std::experimental::filesystem::path program_path;
-
-            if (aspia::GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
-            {
-                if (!aspia::LaunchProcessWithElevate(program_path))
-                    aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
-            }
-        }
-        else
-        {
-            aspia::RunUIMain(aspia::UI::MAIN_DIALOG);
-        }
-    }
-    else if (command_line.HasSwitch(aspia::kAddressBookSwitch))
-    {
-        aspia::RunUIMain(aspia::UI::ADDRESS_BOOK);
-    }
-    else
-    {
-        aspia::RunHostMain(command_line);
-    }
-
-    aspia::ShutdownLogging();
-
+    aspia::Main();
     return 0;
 }

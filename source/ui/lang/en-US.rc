@@ -332,11 +332,6 @@ IDR_MAIN MENU
 BEGIN
     POPUP "&Aspia"
     BEGIN
-        POPUP "Service"
-        BEGIN
-            MENUITEM "&Install", ID_INSTALL_SERVICE
-            MENUITEM "&Remove", ID_REMOVE_SERVICE
-        END
         MENUITEM "&Users...", ID_USERS
         MENUITEM SEPARATOR
         MENUITEM "&Hide", ID_SHOWHIDE

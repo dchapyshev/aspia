@@ -899,9 +899,6 @@
     <ClCompile Include="proto\computer.pb.cc">
       <Filter>proto</Filter>
     </ClCompile>
-    <ClCompile Include="base\shortcut.cc">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="ui\address_book\address_book_toolbar.cc">
       <Filter>ui\address_book</Filter>
     </ClCompile>
@@ -955,9 +952,6 @@
     </ClCompile>
     <ClCompile Include="protocol\keycode_converter.cc">
       <Filter>protocol</Filter>
-    </ClCompile>
-    <ClCompile Include="base\files\file_associations.cc">
-      <Filter>base\files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1128,9 +1122,6 @@
     </ClInclude>
     <ClInclude Include="host\screen_updater.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="base\typed_buffer.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\scoped_com_initializer.h">
       <Filter>base</Filter>
@@ -1882,9 +1873,6 @@
     <ClInclude Include="proto\computer.pb.h">
       <Filter>proto</Filter>
     </ClInclude>
-    <ClInclude Include="base\shortcut.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="ui\address_book\address_book_toolbar.h">
       <Filter>ui\address_book</Filter>
     </ClInclude>
@@ -1932,9 +1920,6 @@
     </ClInclude>
     <ClInclude Include="protocol\keycode_converter.h">
       <Filter>protocol</Filter>
-    </ClInclude>
-    <ClInclude Include="base\files\file_associations.h">
-      <Filter>base\files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

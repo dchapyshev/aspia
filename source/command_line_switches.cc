@@ -22,8 +22,8 @@ const CommandLine::CharType kModeSystemInfoSession[] = L"system-info-session";
 const CommandLine::CharType kModeSystemInfo[] = L"system-info";
 const CommandLine::CharType kModeHostService[] = L"host-service";
 
-const CommandLine::CharType kInstallHostServiceSwitch[] = L"install-host-service";
-const CommandLine::CharType kRemoveHostServiceSwitch[] = L"remove-host-service";
+const CommandLine::CharType kInstallServiceSwitch[] = L"install-service";
+const CommandLine::CharType kRemoveServiceSwitch[] = L"remove-service";
 
 const CommandLine::CharType kAddressBookSwitch[] = L"address-book";
 

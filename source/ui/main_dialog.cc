@@ -193,22 +193,7 @@ LRESULT MainDialog::OnInitDialog(
     UpdateMRUList();
     UpdateServerPort();
 
-    const bool host_service_installed = HostService::IsInstalled();
-
-    if (!IsCallerHasAdminRights())
-    {
-        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-    }
-    else
-    {
-        if (host_service_installed)
-            main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        else
-            main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-    }
-
-    if (host_service_installed)
+    if (HostService::IsInstalled())
         GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
 
     const DWORD active_thread_id =
@@ -425,37 +410,6 @@ LRESULT MainDialog::OnShowHideButton(
         ShowWindow(SW_HIDE);
     else
         ShowWindow(SW_SHOWNORMAL);
-
-    return 0;
-}
-
-LRESULT MainDialog::OnInstallServiceButton(
-    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
-{
-    if (host_pool_)
-    {
-        StopHostMode();
-    }
-
-    if (HostService::Install())
-    {
-        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
-    }
-
-    return 0;
-}
-
-LRESULT MainDialog::OnRemoveServiceButton(
-    WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
-{
-    if (HostService::Remove())
-    {
-        main_menu_.EnableMenuItem(ID_INSTALL_SERVICE, MF_BYCOMMAND | MF_ENABLED);
-        main_menu_.EnableMenuItem(ID_REMOVE_SERVICE, MF_BYCOMMAND | MF_GRAYED);
-        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(TRUE);
-    }
 
     return 0;
 }
