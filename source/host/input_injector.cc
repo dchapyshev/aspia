@@ -61,29 +61,11 @@ void SendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
 } // namespace
 
-InputInjector::InputInjector()
-{
-    thread_.Start(MessageLoop::TYPE_DEFAULT, this);
-}
-
 InputInjector::~InputInjector()
 {
-    thread_.Stop();
-}
-
-void InputInjector::OnBeforeThreadRunning()
-{
-    runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
-
-    desktop_ = std::make_unique<ScopedThreadDesktop>();
-}
-
-void InputInjector::OnAfterThreadRunning()
-{
-    for (auto iter = pressed_keys.begin(); iter != pressed_keys.end(); ++iter)
+    for (auto usb_keycode : pressed_keys_)
     {
-        int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(*iter);
+        int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(usb_keycode);
         if (scancode != KeycodeConverter::InvalidNativeKeycode())
         {
             SendKeyboardScancode(static_cast<WORD>(scancode),
@@ -96,9 +78,9 @@ void InputInjector::SwitchToInputDesktop()
 {
     Desktop input_desktop(Desktop::GetInputDesktop());
 
-    if (input_desktop.IsValid() && !desktop_->IsSame(input_desktop))
+    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
     {
-        desktop_->SetThreadDesktop(std::move(input_desktop));
+        desktop_.SetThreadDesktop(std::move(input_desktop));
     }
 
     // We send a notification to the system that it is used to prevent
@@ -108,12 +90,6 @@ void InputInjector::SwitchToInputDesktop()
 
 void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&InputInjector::InjectPointerEvent, this, event));
-        return;
-    }
-
     SwitchToInputDesktop();
 
     DesktopRect screen_rect =
@@ -192,15 +168,9 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
 
 void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 {
-    if (!runner_->BelongsToCurrentThread())
-    {
-        runner_->PostTask(std::bind(&InputInjector::InjectKeyEvent, this, event));
-        return;
-    }
-
     if (event.flags() & proto::desktop::KeyEvent::PRESSED)
     {
-        pressed_keys.insert(event.usb_keycode());
+        pressed_keys_.insert(event.usb_keycode());
 
         if (event.usb_keycode() == kUsbCodeDelete && IsCtrlAndAltPressed())
         {
@@ -210,7 +180,7 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
     }
     else
     {
-        pressed_keys.erase(event.usb_keycode());
+        pressed_keys_.erase(event.usb_keycode());
     }
 
     int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(event.usb_keycode());
@@ -239,18 +209,19 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 
     DWORD flags = KEYEVENTF_SCANCODE;
 
-    flags |= ((event.flags() & proto::desktop::KeyEvent::PRESSED) ? 0 : KEYEVENTF_KEYUP);
+    if (!(event.flags() & proto::desktop::KeyEvent::PRESSED))
+        flags |= KEYEVENTF_KEYUP;
 
     SendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
 bool InputInjector::IsCtrlAndAltPressed()
 {
-    size_t ctrl_keys = pressed_keys.count(kUsbCodeLeftCtrl) +
-                       pressed_keys.count(kUsbCodeRightCtrl);
+    size_t ctrl_keys = pressed_keys_.count(kUsbCodeLeftCtrl) +
+                       pressed_keys_.count(kUsbCodeRightCtrl);
 
-    size_t alt_keys = pressed_keys.count(kUsbCodeLeftAlt) +
-                      pressed_keys.count(kUsbCodeRightAlt);
+    size_t alt_keys = pressed_keys_.count(kUsbCodeLeftAlt) +
+                      pressed_keys_.count(kUsbCodeRightAlt);
 
     return ctrl_keys != 0 && alt_keys != 0;
 }

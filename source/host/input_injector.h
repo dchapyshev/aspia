@@ -10,37 +10,28 @@
 
 #include <set>
 
-#include "base/threading/thread.h"
+#include "base/scoped_thread_desktop.h"
 #include "desktop_capture/desktop_geometry.h"
 #include "proto/desktop_session.pb.h"
 
 namespace aspia {
 
-class ScopedThreadDesktop;
-
-class InputInjector : private Thread::Delegate
+class InputInjector
 {
 public:
-    InputInjector();
+    InputInjector() = default;
     ~InputInjector();
 
     void InjectPointerEvent(const proto::desktop::PointerEvent& event);
     void InjectKeyEvent(const proto::desktop::KeyEvent& event);
 
 private:
-    // Thread::Delegate implementation.
-    void OnBeforeThreadRunning() override;
-    void OnAfterThreadRunning() override;
-
     void SwitchToInputDesktop();
     bool IsCtrlAndAltPressed();
 
-    Thread thread_;
-    std::shared_ptr<MessageLoopProxy> runner_;
+    ScopedThreadDesktop desktop_;
 
-    std::unique_ptr<ScopedThreadDesktop> desktop_;
-
-    std::set<uint32_t> pressed_keys;
+    std::set<uint32_t> pressed_keys_;
 
     DesktopPoint prev_mouse_pos_;
     uint32_t prev_mouse_button_mask_ = 0;

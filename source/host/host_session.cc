@@ -167,8 +167,8 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
 
     if (ok)
     {
-        ok = process_watcher_.StartWatching(process_,
-                                            std::bind(&HostSession::OnProcessClose, this));
+        ok = process_watcher_.StartWatching(
+            process_, std::bind(&HostSession::OnProcessClose, this));
 
         if (!ok)
         {
