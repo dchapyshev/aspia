@@ -52,6 +52,18 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         }
         break;
 
+        case BasePathKey::DIR_COMMON_START_MENU:
+        {
+            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_PROGRAMS,
+                                          nullptr, SHGFP_TYPE_CURRENT, buffer);
+            if (FAILED(hr))
+            {
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
+                return false;
+            }
+        }
+        break;
+
         case BasePathKey::DIR_APP_DATA:
         {
             HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_APPDATA,
@@ -117,10 +129,21 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
             }
         }
         break;
+
+        case BasePathKey::DIR_PROGRAM_FILES:
+        {
+            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_PROGRAM_FILES, nullptr,
+                                         SHGFP_TYPE_CURRENT, buffer);
+            if (FAILED(hr))
+            {
+                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
+                return false;
+            }
+        }
+        break;
     }
 
     result.assign(buffer);
-
     return true;
 }
 
