@@ -15,6 +15,7 @@
 #include "base/command_line.h"
 #include "base/message_loop/message_loop.h"
 #include "base/scoped_com_initializer.h"
+#include "base/settings_manager.h"
 #include "ui/address_book/address_book_window.h"
 #include "ui/main_dialog.h"
 
@@ -45,6 +46,8 @@ void RunUIMain(UI ui)
         LOG(LS_ERROR) << "Module initialization failure: " << SystemErrorCodeToString(hr);
         return;
     }
+
+    SetThreadUILanguage(SettingsManager().GetUILanguage());
 
     if (ui == UI::MAIN_DIALOG)
     {

@@ -10,7 +10,6 @@
 #include <atlmisc.h>
 #include <shellapi.h>
 
-#include "base/logging.h"
 #include "ui/resource.h"
 
 namespace aspia {

@@ -13,7 +13,6 @@
 #include "ui/about_dialog.h"
 #include "ui/resource.h"
 
-
 namespace aspia {
 
 const uint32_t kUsbCodeDelete = 0x07004c;
