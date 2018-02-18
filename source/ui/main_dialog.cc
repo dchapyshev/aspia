@@ -15,6 +15,7 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/scoped_clipboard.h"
+#include "base/settings_manager.h"
 #include "host/host_session_launcher.h"
 #include "host/host_service.h"
 #include "network/network_adapter_enumerator.h"
@@ -26,6 +27,43 @@
 #include "command_line_switches.h"
 
 namespace aspia {
+
+namespace {
+
+struct LangList
+{
+    LANGID langid;
+    UINT command_id;
+} constexpr kLangList[] =
+{
+    { MAKELANGID(LANG_DUTCH, SUBLANG_DUTCH),            ID_DUTCH_LANGUAGE   },
+    { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),     ID_ENGLISH_LANGUAGE },
+    { MAKELANGID(LANG_RUSSIAN, SUBLANG_RUSSIAN_RUSSIA), ID_RUSSIAN_LANGUAGE }
+};
+
+LANGID CommandIdToLangId(UINT command_id)
+{
+    for (size_t i = 0; i < _countof(kLangList); ++i)
+    {
+        if (kLangList[i].command_id == command_id)
+            return kLangList[i].langid;
+    }
+
+    return 0;
+}
+
+UINT LangIdToCommandId(LANGID langid)
+{
+    for (size_t i = 0; i < _countof(kLangList); ++i)
+    {
+        if (kLangList[i].langid == langid)
+            return kLangList[i].command_id;
+    }
+
+    return 0;
+}
+
+} // namespace
 
 bool MainDialog::Dispatch(const NativeEvent& event)
 {
@@ -179,6 +217,12 @@ LRESULT MainDialog::OnInitDialog(
     CButton(GetDlgItem(IDC_UPDATE_IP_LIST_BUTTON)).SetIcon(refresh_icon_);
 
     main_menu_ = AtlLoadMenu(IDR_MAIN);
+
+    CMenuHandle lang_menu(main_menu_.GetSubMenu(2));
+    lang_menu.CheckMenuRadioItem(ID_FIRST_LANGUAGE,
+                                 ID_LAST_LANGUAGE,
+                                 LangIdToCommandId(SettingsManager().GetUILanguage()),
+                                 MF_BYCOMMAND);
     SetMenu(main_menu_);
 
     CString tray_tooltip;
@@ -459,6 +503,33 @@ LRESULT MainDialog::OnCopyButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     CopySelectedIp();
+    return 0;
+}
+
+LRESULT MainDialog::OnSelectLanguageButton(
+    WORD /* notify_code */, WORD control_id, HWND /* control */, BOOL& /* handled */)
+{
+    LANGID langid = CommandIdToLangId(control_id);
+    if (langid != 0)
+    {
+        CMenuHandle lang_menu(main_menu_.GetSubMenu(2));
+
+        lang_menu.CheckMenuRadioItem(ID_FIRST_LANGUAGE,
+                                     ID_LAST_LANGUAGE,
+                                     control_id,
+                                     MF_BYCOMMAND);
+
+        SettingsManager().SetUILanguage(langid);
+
+        CString title;
+        title.LoadStringW(IDS_INFORMATION);
+
+        CString message;
+        message.LoadStringW(IDS_LANG_CHANGE_INFORMATION);
+
+        MessageBoxW(message, title, MB_OK | MB_ICONINFORMATION);
+    }
+
     return 0;
 }
 

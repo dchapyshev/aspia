@@ -54,6 +54,10 @@ private:
         COMMAND_ID_HANDLER(ID_ADDRESS_BOOK, OnAddressBookButton)
         COMMAND_ID_HANDLER(ID_SYSTEM_INFO, OnSystemInfoButton)
 
+        COMMAND_ID_HANDLER(ID_DUTCH_LANGUAGE, OnSelectLanguageButton)
+        COMMAND_ID_HANDLER(ID_ENGLISH_LANGUAGE, OnSelectLanguageButton)
+        COMMAND_ID_HANDLER(ID_RUSSIAN_LANGUAGE, OnSelectLanguageButton)
+
         COMMAND_HANDLER(IDC_SESSION_TYPE_COMBO, CBN_SELCHANGE, OnSessionTypeChanged)
         COMMAND_HANDLER(IDC_SERVER_ADDRESS_COMBO, CBN_SELCHANGE, OnAddressChanged)
 
@@ -82,6 +86,8 @@ private:
     LRESULT OnHelpButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnShowHideButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnCopyButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+
+    LRESULT OnSelectLanguageButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
     LRESULT OnIpListDoubleClick(int control_id, LPNMHDR hdr, BOOL& handled);
     LRESULT OnIpListRightClick(int control_id, LPNMHDR hdr, BOOL& handled);

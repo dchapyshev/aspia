@@ -342,6 +342,12 @@ BEGIN
         MENUITEM "&Адресная книга", ID_ADDRESS_BOOK
         MENUITEM "&Информация о системе", ID_SYSTEM_INFO
     END
+    POPUP "&Язык"
+    BEGIN
+        MENUITEM "Dutch", ID_DUTCH_LANGUAGE
+        MENUITEM "English", ID_ENGLISH_LANGUAGE
+        MENUITEM "Russian", ID_RUSSIAN_LANGUAGE
+    END
     POPUP "&Помощь"
     BEGIN
         MENUITEM "Онлайн &справка...\tF1", ID_HELP
@@ -496,6 +502,8 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "Информация о системе"
     IDS_DELETE_USER_CONFORMATION          "Вы действительно хотите удалить пользователя ""%s""?"
     IDS_USER_LIST                         "Список пользователей"
+    IDS_INFORMATION                       "Информация"
+    IDS_LANG_CHANGE_INFORMATION           "Язык будет изменен после перезапуска приложения."
 END
 
 // Desktop Manage

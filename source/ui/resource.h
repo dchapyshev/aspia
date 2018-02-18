@@ -231,6 +231,12 @@
 
 #define ID_SYSTEM_INFO                             700
 
+#define ID_FIRST_LANGUAGE                          1000
+#define ID_DUTCH_LANGUAGE                          1000
+#define ID_ENGLISH_LANGUAGE                        1001
+#define ID_RUSSIAN_LANGUAGE                        1002
+#define ID_LAST_LANGUAGE                           1002
+
 //
 // Menu
 //
@@ -270,6 +276,8 @@
 #define IDS_SESSION_TYPE_SYSTEM_INFO                17
 #define IDS_DELETE_USER_CONFORMATION                18
 #define IDS_USER_LIST                               19
+#define IDS_INFORMATION                             20
+#define IDS_LANG_CHANGE_INFORMATION                 21
 
 // Desktop Manage
 #define IDS_DM_TOOLTIP_AUTO_SIZE                    500

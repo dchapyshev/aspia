@@ -342,6 +342,12 @@ BEGIN
         MENUITEM "&Address Book", ID_ADDRESS_BOOK
         MENUITEM "&System Information", ID_SYSTEM_INFO
     END
+    POPUP "&Language"
+    BEGIN
+        MENUITEM "Dutch", ID_DUTCH_LANGUAGE
+        MENUITEM "English", ID_ENGLISH_LANGUAGE
+        MENUITEM "Russian", ID_RUSSIAN_LANGUAGE
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&Online Help...\tF1", ID_HELP
@@ -496,6 +502,8 @@ BEGIN
     IDS_SESSION_TYPE_SYSTEM_INFO          "System Information"
     IDS_DELETE_USER_CONFORMATION          "Are you sure you want to delete the user ""%s""?"
     IDS_USER_LIST                         "User List"
+    IDS_INFORMATION                       "Information"
+    IDS_LANG_CHANGE_INFORMATION           "The language will be changed after the application is restarted."
 END
 
 // Desktop Manage
