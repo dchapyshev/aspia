@@ -97,7 +97,7 @@ bool WriteUserInfo(const UsersStorage::User& user)
 
     LONG status = key.WriteValue(kUserPassword,
                                  user.password.c_str(),
-                                 user.password.size(),
+                                 static_cast<DWORD>(user.password.size()),
                                  REG_BINARY);
     if (status != ERROR_SUCCESS)
     {
