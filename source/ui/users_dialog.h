@@ -8,14 +8,15 @@
 #ifndef _ASPIA_UI__USERS_DIALOG_H
 #define _ASPIA_UI__USERS_DIALOG_H
 
-#include "host/host_user_list.h"
-#include "ui/resource.h"
-
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlctrls.h>
 #include <atlframe.h>
+
+#include "base/macros.h"
+#include "host/users_storage.h"
+#include "ui/resource.h"
 
 namespace aspia {
 
@@ -71,14 +72,12 @@ private:
     LRESULT OnUserListItemChanged(int ctrl_id, LPNMHDR hdr, BOOL& handled);
 
     void UpdateUserList();
-    int GetSelectedUserIndex();
+    std::wstring GetSelectedUserName();
     void ShowUserPopupMenu();
     void UpdateButtonsState();
-    void SetUserListModified();
     void DeleteSelectedUser();
     void EditSelectedUser();
 
-    HostUserList user_list_;
     CImageListManaged imagelist_;
     CIcon add_icon_;
     CIcon edit_icon_;

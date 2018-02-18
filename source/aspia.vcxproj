@@ -229,11 +229,12 @@
     <ClCompile Include="host\host_session_launcher.cc" />
     <ClCompile Include="host\host_session_launcher_service.cc" />
     <ClCompile Include="host\host_session_system_info.cc" />
-    <ClCompile Include="host\host_user_list.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
+    <ClCompile Include="host\users_storage.cc" />
+    <ClCompile Include="host\users_storage_registry.cc" />
     <ClCompile Include="ipc\pipe_channel.cc" />
     <ClCompile Include="ipc\pipe_channel_proxy.cc" />
     <ClCompile Include="main.cc" />
@@ -258,7 +259,6 @@
     <ClCompile Include="proto\computer.pb.cc" />
     <ClCompile Include="proto\desktop_session.pb.cc" />
     <ClCompile Include="proto\file_transfer_session.pb.cc" />
-    <ClCompile Include="proto\host_user.pb.cc" />
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\mru.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
@@ -554,11 +554,12 @@
     <ClInclude Include="host\host_session_launcher.h" />
     <ClInclude Include="host\host_session_launcher_service.h" />
     <ClInclude Include="host\host_session_system_info.h" />
-    <ClInclude Include="host\host_user_list.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />
+    <ClInclude Include="host\users_storage.h" />
+    <ClInclude Include="host\users_storage_registry.h" />
     <ClInclude Include="ipc\pipe_channel.h" />
     <ClInclude Include="ipc\pipe_channel_proxy.h" />
     <ClInclude Include="network\firewall_manager.h" />
@@ -583,7 +584,6 @@
     <ClInclude Include="proto\computer.pb.h" />
     <ClInclude Include="proto\desktop_session.pb.h" />
     <ClInclude Include="proto\file_transfer_session.pb.h" />
-    <ClInclude Include="proto\host_user.pb.h" />
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\mru.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
@@ -693,7 +693,6 @@
     <None Include="proto\computer.proto" />
     <None Include="proto\desktop_session.proto" />
     <None Include="proto\file_transfer_session.proto" />
-    <None Include="proto\host_user.proto" />
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\mru.proto" />
     <None Include="proto\system_info_session.proto" />

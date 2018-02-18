@@ -162,13 +162,33 @@ LONG RegistryKey::ReadValueDW(const WCHAR* name, DWORD* out_value) const
     DWORD local_value = 0;
 
     LONG result = ReadValue(name, &local_value, &size, &type);
-
     if (result == ERROR_SUCCESS)
     {
         if ((type == REG_DWORD || type == REG_BINARY) && size == sizeof(DWORD))
             *out_value = local_value;
         else
             result = ERROR_CANTREAD;
+    }
+
+    return result;
+}
+
+LONG RegistryKey::ReadValueBIN(const WCHAR* name, std::string* out_value) const
+{
+    DCHECK(out_value);
+
+    DWORD type = REG_BINARY;
+    DWORD size = 0;
+
+    LONG result = ReadValue(name, nullptr, &size, &type);
+    if (result == ERROR_SUCCESS)
+    {
+        if (type != REG_BINARY || !size)
+            return ERROR_CANTREAD;
+
+        out_value->resize(size);
+
+        result = ReadValue(name, out_value->data(), &size, &type);
     }
 
     return result;

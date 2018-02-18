@@ -74,17 +74,6 @@ bool IsValidPassword(std::wstring_view password)
     return true;
 }
 
-bool IsValidUserNameUTF8(std::string_view username)
-{
-    return IsValidUserName(UNICODEfromUTF8(username.data()));
-}
-
-bool IsValidPasswordUTF8(std::string_view password)
-{
-    SecureString<std::wstring> password_unicode(UNICODEfromUTF8(password.data()));
-    return IsValidPassword(password_unicode.string());
-}
-
 std::string CreatePasswordHash(const std::wstring& password)
 {
     std::string password_hash = SHA512(password, kPasswordHashIterCount);
@@ -102,16 +91,13 @@ std::string CreateNonce()
     return CreateRandomBuffer(kNonceSize);
 }
 
-std::string CreateUserKey(const std::wstring& username,
-                          const std::string& password_hash,
-                          const std::string& nonce)
+std::string CreateUserKey(const std::string& password_hash, const std::string& nonce)
 {
     DCHECK_EQ(nonce.size(), kNonceSize);
 
     StreamSHA512 sha512;
 
     sha512.AppendData(nonce);
-    sha512.AppendString(ToUpper(username));
     sha512.AppendData(password_hash);
 
     return sha512.Final();

@@ -495,7 +495,6 @@ BEGIN
     IDS_SESSION_TYPE_FILE_TRANSFER        "Bestandsoverdracht"
     IDS_SESSION_TYPE_SYSTEM_INFO          "Systeem informatie"
     IDS_DELETE_USER_CONFORMATION          "Weet u zeker dat u de gebruiker ""%s"" wilt verwijderen?"
-    IDS_USER_LIST_MODIFIED                "Gebruikers Beheer (*aangepast)"
     IDS_USER_LIST                         "Gebruikerslijst"
 END
 

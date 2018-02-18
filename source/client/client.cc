@@ -7,6 +7,7 @@
 
 #include "client/client.h"
 
+#include "base/strings/unicode.h"
 #include "crypto/secure_memory.h"
 #include "crypto/sha.h"
 #include "protocol/authorization.h"
@@ -128,9 +129,8 @@ void Client::OnRequestReceived(const IOBuffer& buffer)
     proto::auth::BasicResponse response;
 
     response.set_session_type(computer_.session_type());
-    response.set_key(CreateUserKey(auth_dialog.UserName(),
-                                   CreatePasswordHash(auth_dialog.Password()),
-                                   request.nonce()));
+    response.set_username(UTF8fromUNICODE(auth_dialog.UserName()));
+    response.set_key(CreateUserKey(CreatePasswordHash(auth_dialog.Password()), request.nonce()));
 
     channel_proxy_->Send(SerializeMessage(response), std::bind(&Client::OnResponseSended, this));
 }

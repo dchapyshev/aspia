@@ -8,7 +8,7 @@
 #include "host/host.h"
 
 #include "base/strings/unicode.h"
-#include "host/host_user_list.h"
+#include "host/users_storage.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/authorization.h"
 #include "protocol/message_serialization.h"
@@ -20,32 +20,27 @@ namespace {
 constexpr std::chrono::seconds kAuthTimeout{ 60 };
 constexpr uint32_t kAllowedMethods = proto::auth::METHOD_BASIC;
 
-proto::auth::Status DoBasicAuthorization(proto::auth::SessionType session_type,
+proto::auth::Status DoBasicAuthorization(const std::string& username,
                                          const std::string& key,
-                                         const std::string& nonce)
+                                         const std::string& nonce,
+                                         proto::auth::SessionType session_type)
 {
-    HostUserList user_list;
+    UsersStorage::User user;
+    user.name = UNICODEfromUTF8(username);
 
-    if (!user_list.LoadFromStorage())
+    if (!UsersStorage::Open()->ReadUser(user))
         return proto::auth::STATUS_ACCESS_DENIED;
 
-    for (int i = 0; i < user_list.size(); ++i)
-    {
-        const proto::HostUser& user = user_list.host_user(i);
+    if (CreateUserKey(user.password, nonce) != key)
+        return proto::auth::STATUS_ACCESS_DENIED;
 
-        if (CreateUserKey(UNICODEfromUTF8(user.username()), user.password_hash(), nonce) != key)
-            continue;
+    if (!(user.flags & UsersStorage::USER_FLAG_ENABLED))
+        return proto::auth::STATUS_ACCESS_DENIED;
 
-        if (!user.enabled())
-            return proto::auth::STATUS_ACCESS_DENIED;
+    if (!(user.sessions & session_type))
+        return proto::auth::STATUS_ACCESS_DENIED;
 
-        if (!(user.session_types() & session_type))
-            return proto::auth::STATUS_ACCESS_DENIED;
-
-        return proto::auth::STATUS_SUCCESS;
-    }
-
-    return proto::auth::STATUS_ACCESS_DENIED;
+    return proto::auth::STATUS_SUCCESS;
 }
 
 } // namespace
@@ -142,7 +137,7 @@ void Host::OnResponseReceived(const IOBuffer& buffer)
     }
 
     proto::auth::Status status =
-        DoBasicAuthorization(response.session_type(), response.key(), nonce_);
+        DoBasicAuthorization(response.username(), response.key(), nonce_, response.session_type());
 
     proto::auth::BasicResult result;
     result.set_status(status);

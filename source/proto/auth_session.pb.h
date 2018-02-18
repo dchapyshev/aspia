@@ -502,9 +502,23 @@ class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // bytes key = 10;
+  // string username = 2;
+  void clear_username();
+  static const int kUsernameFieldNumber = 2;
+  const ::std::string& username() const;
+  void set_username(const ::std::string& value);
+  #if LANG_CXX11
+  void set_username(::std::string&& value);
+  #endif
+  void set_username(const char* value);
+  void set_username(const char* value, size_t size);
+  ::std::string* mutable_username();
+  ::std::string* release_username();
+  void set_allocated_username(::std::string* username);
+
+  // bytes key = 3;
   void clear_key();
-  static const int kKeyFieldNumber = 10;
+  static const int kKeyFieldNumber = 3;
   const ::std::string& key() const;
   void set_key(const ::std::string& value);
   #if LANG_CXX11
@@ -526,6 +540,7 @@ class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_inserti
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr username_;
   ::google::protobuf::internal::ArenaStringPtr key_;
   int session_type_;
   mutable int _cached_size_;
@@ -747,7 +762,60 @@ inline void BasicResponse::set_session_type(::aspia::proto::auth::SessionType va
   // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.session_type)
 }
 
-// bytes key = 10;
+// string username = 2;
+inline void BasicResponse::clear_username() {
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& BasicResponse::username() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.username)
+  return username_.GetNoArena();
+}
+inline void BasicResponse::set_username(const ::std::string& value) {
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.username)
+}
+#if LANG_CXX11
+inline void BasicResponse::set_username(::std::string&& value) {
+  
+  username_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicResponse.username)
+}
+#endif
+inline void BasicResponse::set_username(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicResponse.username)
+}
+inline void BasicResponse::set_username(const char* value, size_t size) {
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicResponse.username)
+}
+inline ::std::string* BasicResponse::mutable_username() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicResponse.username)
+  return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* BasicResponse::release_username() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicResponse.username)
+  
+  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void BasicResponse::set_allocated_username(::std::string* username) {
+  if (username != NULL) {
+    
+  } else {
+    
+  }
+  username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicResponse.username)
+}
+
+// bytes key = 3;
 inline void BasicResponse::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

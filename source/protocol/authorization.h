@@ -14,16 +14,12 @@ namespace aspia {
 
 bool IsValidUserName(std::wstring_view username);
 bool IsValidPassword(std::wstring_view password);
-bool IsValidUserNameUTF8(std::string_view username);
-bool IsValidPasswordUTF8(std::string_view password);
 
 std::string CreatePasswordHash(const std::wstring& password);
 bool IsValidPasswordHash(const std::string& password_hash);
 
 std::string CreateNonce();
-std::string CreateUserKey(const std::wstring& username,
-                          const std::string& password_hash,
-                          const std::string& nonce);
+std::string CreateUserKey(const std::string& password_hash, const std::string& nonce);
 
 } // namespace aspia
 

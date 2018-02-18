@@ -274,9 +274,6 @@
     <ClCompile Include="host\clipboard_thread.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="proto\host_user.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
     <ClCompile Include="ui\user_prop_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
@@ -309,9 +306,6 @@
     </ClCompile>
     <ClCompile Include="proto\key_exchange.pb.cc">
       <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="host\host_user_list.cc">
-      <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="client\client_session_file_transfer.cc">
       <Filter>client</Filter>
@@ -962,6 +956,12 @@
     <ClCompile Include="base\settings_manager.cc">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="host\users_storage.cc">
+      <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="host\users_storage_registry.cc">
+      <Filter>host</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\logging.h">
@@ -1230,9 +1230,6 @@
     <ClInclude Include="host\clipboard_thread.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="proto\host_user.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
     <ClInclude Include="ui\user_prop_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -1271,9 +1268,6 @@
     </ClInclude>
     <ClInclude Include="proto\key_exchange.pb.h">
       <Filter>proto</Filter>
-    </ClInclude>
-    <ClInclude Include="host\host_user_list.h">
-      <Filter>host</Filter>
     </ClInclude>
     <ClInclude Include="client\client_session_file_transfer.h">
       <Filter>client</Filter>
@@ -1939,15 +1933,18 @@
     <ClInclude Include="base\settings_manager.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="host\users_storage.h">
+      <Filter>host</Filter>
+    </ClInclude>
+    <ClInclude Include="host\users_storage_registry.h">
+      <Filter>host</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\desktop_session.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\auth_session.proto">
-      <Filter>proto</Filter>
-    </None>
-    <None Include="proto\host_user.proto">
       <Filter>proto</Filter>
     </None>
     <None Include="proto\key_exchange.proto">

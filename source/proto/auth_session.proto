@@ -55,7 +55,8 @@ message BasicRequest
 message BasicResponse
 {
     SessionType session_type = 1;
-    bytes key = 10;
+    string username = 2;
+    bytes key = 3;
 }
 
 // Host to client.

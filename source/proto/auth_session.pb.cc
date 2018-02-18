@@ -791,6 +791,7 @@ void BasicResponse::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int BasicResponse::kSessionTypeFieldNumber;
+const int BasicResponse::kUsernameFieldNumber;
 const int BasicResponse::kKeyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -807,6 +808,10 @@ BasicResponse::BasicResponse(const BasicResponse& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.username().size() > 0) {
+    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
+  }
   key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.key().size() > 0) {
     key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
@@ -816,6 +821,7 @@ BasicResponse::BasicResponse(const BasicResponse& from)
 }
 
 void BasicResponse::SharedCtor() {
+  username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   session_type_ = 0;
   _cached_size_ = 0;
@@ -827,6 +833,7 @@ BasicResponse::~BasicResponse() {
 }
 
 void BasicResponse::SharedDtor() {
+  username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   key_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -854,6 +861,7 @@ void BasicResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   session_type_ = 0;
   _internal_metadata_.Clear();
@@ -890,10 +898,26 @@ bool BasicResponse::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes key = 10;
-      case 10: {
+      // string username = 2;
+      case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(82u /* 82 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_username()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->username().data(), static_cast<int>(this->username().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.auth.BasicResponse.username"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes key = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_key()));
         } else {
@@ -934,10 +958,20 @@ void BasicResponse::SerializeWithCachedSizes(
       1, this->session_type(), output);
   }
 
-  // bytes key = 10;
+  // string username = 2;
+  if (this->username().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->username().data(), static_cast<int>(this->username().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.auth.BasicResponse.username");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->username(), output);
+  }
+
+  // bytes key = 3;
   if (this->key().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      10, this->key(), output);
+      3, this->key(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -951,7 +985,14 @@ size_t BasicResponse::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // bytes key = 10;
+  // string username = 2;
+  if (this->username().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->username());
+  }
+
+  // bytes key = 3;
   if (this->key().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -983,6 +1024,10 @@ void BasicResponse::MergeFrom(const BasicResponse& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.username().size() > 0) {
+
+    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
+  }
   if (from.key().size() > 0) {
 
     key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
@@ -1009,6 +1054,7 @@ void BasicResponse::Swap(BasicResponse* other) {
 }
 void BasicResponse::InternalSwap(BasicResponse* other) {
   using std::swap;
+  username_.Swap(&other->username_);
   key_.Swap(&other->key_);
   swap(session_type_, other->session_type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);

@@ -6,15 +6,16 @@
 //
 
 #include "ui/users_dialog.h"
-#include "ui/user_prop_dialog.h"
+
+#include <atlmisc.h>
+#include <uxtheme.h>
+
 #include "base/process/process_helpers.h"
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/secure_memory.h"
-
-#include <atlmisc.h>
-#include <uxtheme.h>
+#include "ui/user_prop_dialog.h"
 
 namespace aspia {
 
@@ -24,21 +25,12 @@ void UsersDialog::UpdateUserList()
 
     list.DeleteAllItems();
 
-    const int size = user_list_.size();
-
-    for (int i = 0; i < size; ++i)
+    for (const auto& user : UsersStorage::Open()->ReadUserList())
     {
-        const proto::HostUser& user = user_list_.host_user(i);
-
-        std::wstring username;
-        CHECK(UTF8toUNICODE(user.username(), username));
-
-        const int item_index = list.AddItem(list.GetItemCount(),
-                                            0,
-                                            username.c_str(),
-                                            user.enabled() ? 0 : 1);
-
-        list.SetItemData(item_index, i);
+        list.AddItem(list.GetItemCount(),
+                     0,
+                     user.name.c_str(),
+                     (user.flags & UsersStorage::USER_FLAG_ENABLED) ? 0 : 1);
     }
 
     UpdateButtonsState();
@@ -113,8 +105,7 @@ LRESULT UsersDialog::OnInitDialog(
         GetDlgItem(ID_ADD).EnableWindow(FALSE);
     }
 
-    if (user_list_.LoadFromStorage())
-        UpdateUserList();
+    UpdateUserList();
 
     return TRUE;
 }
@@ -146,39 +137,43 @@ LRESULT UsersDialog::OnSize(UINT message, WPARAM wparam, LPARAM lparam, BOOL& /*
 LRESULT UsersDialog::OnAddButton(
     WORD /* code */, WORD /* ctrl_id */, HWND /* ctrl */, BOOL& /* handled */)
 {
-    std::unique_ptr<proto::HostUser> user(std::make_unique<proto::HostUser>());
+    UsersStorage::User user;
 
-    UserPropDialog dialog(UserPropDialog::Mode::ADD, user.get(), user_list_);
+    UserPropDialog dialog(UserPropDialog::Mode::ADD, &user);
     if (dialog.DoModal(*this) == IDOK)
     {
-        user_list_.Add(std::move(user));
+        UsersStorage::Open()->AddUser(user);
         UpdateUserList();
-        SetUserListModified();
     }
 
     return 0;
 }
 
-int UsersDialog::GetSelectedUserIndex()
+std::wstring UsersDialog::GetSelectedUserName()
 {
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
-    return static_cast<int>(list.GetItemData(list.GetNextItem(-1, LVNI_SELECTED)));
+
+    wchar_t username[128] = { 0 };
+    if (!list.GetItemText(list.GetNextItem(-1, LVNI_SELECTED), 0, username, _countof(username)))
+        return std::wstring();
+
+    return username;
 }
 
 void UsersDialog::EditSelectedUser()
 {
-    const int user_index = GetSelectedUserIndex();
+    UsersStorage::User user;
+    user.name = GetSelectedUserName();
 
-    if (user_index < 0 || user_index >= user_list_.size())
+    std::unique_ptr<UsersStorage> storage = UsersStorage::Open();
+    if (!storage->ReadUser(user))
         return;
 
-    proto::HostUser* user = user_list_.mutable_host_user(user_index);
-
-    UserPropDialog dialog(UserPropDialog::Mode::EDIT, user, user_list_);
+    UserPropDialog dialog(UserPropDialog::Mode::EDIT, &user);
     if (dialog.DoModal(*this) == IDOK)
     {
+        storage->ModifyUser(user);
         UpdateUserList();
-        SetUserListModified();
     }
 }
 
@@ -191,13 +186,9 @@ LRESULT UsersDialog::OnEditButton(
 
 void UsersDialog::DeleteSelectedUser()
 {
-    int user_index = GetSelectedUserIndex();
-
-    if (user_index < 0 || user_index >= user_list_.size())
+    std::wstring username = GetSelectedUserName();
+    if (username.empty())
         return;
-
-    std::wstring username;
-    CHECK(UTF8toUNICODE(user_list_.host_user(user_index).username(), username));
 
     CString title;
     title.LoadStringW(IDS_CONFIRMATION);
@@ -207,9 +198,8 @@ void UsersDialog::DeleteSelectedUser()
 
     if (MessageBoxW(message, title, MB_YESNO | MB_ICONQUESTION) == IDYES)
     {
-        user_list_.Delete(user_index);
+        UsersStorage::Open()->RemoveUser(username);
         UpdateUserList();
-        SetUserListModified();
     }
 }
 
@@ -223,7 +213,6 @@ LRESULT UsersDialog::OnDeleteButton(
 LRESULT UsersDialog::OnOkButton(
     WORD /* code */, WORD /* ctrl_id */, HWND /* ctrl */, BOOL& /* handled */)
 {
-    user_list_.SaveToStorage();
     EndDialog(IDOK);
     return 0;
 }
@@ -262,13 +251,6 @@ void UsersDialog::ShowUserPopupMenu()
             }
         }
     }
-}
-
-void UsersDialog::SetUserListModified()
-{
-    CString text;
-    text.LoadStringW(IDS_USER_LIST_MODIFIED);
-    SetWindowTextW(text);
 }
 
 LRESULT UsersDialog::OnUserListDoubleClick(

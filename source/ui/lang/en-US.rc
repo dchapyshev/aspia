@@ -495,7 +495,6 @@ BEGIN
     IDS_SESSION_TYPE_FILE_TRANSFER        "File Transfer"
     IDS_SESSION_TYPE_SYSTEM_INFO          "System Information"
     IDS_DELETE_USER_CONFORMATION          "Are you sure you want to delete the user ""%s""?"
-    IDS_USER_LIST_MODIFIED                "User Management (*modified)"
     IDS_USER_LIST                         "User List"
 END
 

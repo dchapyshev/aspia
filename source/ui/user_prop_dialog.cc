@@ -14,17 +14,15 @@
 #include "base/strings/unicode.h"
 #include "base/version_helpers.h"
 #include "base/logging.h"
-#include "host/host_user_list.h"
 #include "crypto/secure_memory.h"
 #include "protocol/authorization.h"
 #include "ui/ui_util.h"
 
 namespace aspia {
 
-UserPropDialog::UserPropDialog(Mode mode, proto::HostUser* user, const HostUserList& user_list)
+UserPropDialog::UserPropDialog(Mode mode, UsersStorage::User* user)
     : mode_(mode),
-      user_(user),
-      user_list_(user_list)
+      user_(user)
 {
     DCHECK(user_);
 }
@@ -36,11 +34,10 @@ void UserPropDialog::InsertSessionType(CListViewCtrl& list,
     CString text;
     text.LoadStringW(string_id);
 
-    int item_index = list.AddItem(list.GetItemCount(), 0, text);
+    const int item_index = list.AddItem(list.GetItemCount(), 0, text);
 
     list.SetItemData(item_index, session_type);
-    list.SetCheckState(item_index,
-                       (user_->session_types() & session_type));
+    list.SetCheckState(item_index, (user_->sessions & session_type));
 }
 
 void UserPropDialog::OnPasswordEditDblClick()
@@ -127,7 +124,7 @@ LRESULT UserPropDialog::OnInitDialog(
 
     if (mode_ == Mode::EDIT)
     {
-        username_edit.SetWindowTextW(UNICODEfromUTF8(user_->username()).c_str());
+        username_edit.SetWindowTextW(user_->name.c_str());
 
         password_changed_ = false;
 
@@ -153,7 +150,8 @@ LRESULT UserPropDialog::OnInitDialog(
         password_retry_edit.SetReadOnly(true);
 
         CheckDlgButton(IDC_DISABLE_USER_CHECK,
-                       user_->enabled() ? BST_UNCHECKED : BST_CHECKED);
+                       (user_->flags & UsersStorage::USER_FLAG_ENABLED)
+                           ? BST_UNCHECKED : BST_CHECKED);
     }
 
     username_edit.SetFocus();
@@ -201,14 +199,9 @@ LRESULT UserPropDialog::OnOkButton(
         return 0;
     }
 
-    std::wstring prev_username;
-
-    if (!user_->username().empty())
-        prev_username = UNICODEfromUTF8(user_->username());
-
-    if (CompareCaseInsensitive(username, prev_username) != 0)
+    for (const auto& user : UsersStorage::Open()->ReadUserList())
     {
-        if (!user_list_.IsUniqueUserName(username))
+        if (CompareCaseInsensitive(user.name, username) == 0)
         {
             ShowErrorMessage(IDS_USER_ALREADY_EXISTS);
             return 0;
@@ -234,7 +227,7 @@ LRESULT UserPropDialog::OnOkButton(
             return 0;
         }
 
-        user_->set_password_hash(CreatePasswordHash(password.string()));
+        user_->password = CreatePasswordHash(password.string());
     }
 
     uint32_t session_types = 0;
@@ -250,9 +243,9 @@ LRESULT UserPropDialog::OnOkButton(
 
     bool is_enabled = IsDlgButtonChecked(IDC_DISABLE_USER_CHECK) == BST_UNCHECKED;
 
-    user_->set_username(UTF8fromUNICODE(username));
-    user_->set_enabled(is_enabled);
-    user_->set_session_types(session_types);
+    user_->name = username;
+    user_->flags = is_enabled ? UsersStorage::USER_FLAG_ENABLED : 0;
+    user_->sessions = session_types;
 
     EndDialog(IDOK);
     return 0;

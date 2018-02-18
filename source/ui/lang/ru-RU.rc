@@ -495,7 +495,6 @@ BEGIN
     IDS_SESSION_TYPE_FILE_TRANSFER        "Передача файлов"
     IDS_SESSION_TYPE_SYSTEM_INFO          "Информация о системе"
     IDS_DELETE_USER_CONFORMATION          "Вы действительно хотите удалить пользователя ""%s""?"
-    IDS_USER_LIST_MODIFIED                "Управление пользователями (*изменено)"
     IDS_USER_LIST                         "Список пользователей"
 END
 

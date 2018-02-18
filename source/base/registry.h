@@ -53,6 +53,12 @@ public:
     LONG ReadValueDW(const WCHAR* name, DWORD* out_value) const;
 
     //
+    // Reads a REG_BINARY (array of chars) into |out_value|. If |name| is null or empty,
+    // reads the key's default value, if any.
+    //
+    LONG ReadValueBIN(const WCHAR* name, std::string* out_value) const;
+
+    //
     // Reads a string into |out_value|. If |name| is null or empty, reads
     // the key's default value, if any.
     //

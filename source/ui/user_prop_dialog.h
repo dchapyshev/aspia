@@ -8,15 +8,16 @@
 #ifndef _ASPIA_UI__USER_PROP_DIALOG_H
 #define _ASPIA_UI__USER_PROP_DIALOG_H
 
-#include "host/host_user_list.h"
-#include "proto/auth_session.pb.h"
-#include "ui/resource.h"
-
 #include <atlbase.h>
 #include <atlapp.h>
 #include <atlwin.h>
 #include <atlframe.h>
 #include <atlctrls.h>
+
+#include "base/macros.h"
+#include "host/users_storage.h"
+#include "proto/auth_session.pb.h"
+#include "ui/resource.h"
 
 namespace aspia {
 
@@ -29,7 +30,7 @@ public:
 
     enum class Mode { ADD, EDIT };
 
-    UserPropDialog(Mode mode, proto::HostUser* user, const HostUserList& user_list);
+    UserPropDialog(Mode mode, UsersStorage::User* user);
 
 private:
     BEGIN_MSG_MAP(UserPropDialog)
@@ -70,8 +71,7 @@ private:
                                                    UINT_PTR subclass_id,
                                                    DWORD_PTR ref_data);
     const Mode mode_;
-    proto::HostUser* user_;
-    const HostUserList& user_list_;
+    UsersStorage::User* user_;
     bool password_changed_ = true;
 
     DISALLOW_COPY_AND_ASSIGN(UserPropDialog);
