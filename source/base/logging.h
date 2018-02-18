@@ -22,21 +22,21 @@
 // Make a bunch of macros for logging.  The way to log things is to stream
 // things to LOG(<a particular severity level>).  E.g.,
 //
-//   LOG(INFO) << "Found " << num_cookies << " cookies";
+//   LOG(LS_INFO) << "Found " << num_cookies << " cookies";
 //
 // You can also do conditional logging:
 //
-//   LOG_IF(INFO, num_cookies > 10) << "Got lots of cookies";
+//   LOG_IF(LS_INFO, num_cookies > 10) << "Got lots of cookies";
 //
 // The CHECK(condition) macro is active in both debug and release builds and
-// effectively performs a LOG(FATAL) which terminates the process and
+// effectively performs a LOG(LS_FATAL) which terminates the process and
 // generates a crashdump unless a debugger is attached.
 //
 // There are also "debug mode" logging macros like the ones above:
 //
-//   DLOG(INFO) << "Found cookies";
+//   DLOG(LS_INFO) << "Found cookies";
 //
-//   DLOG_IF(INFO, num_cookies > 10) << "Got lots of cookies";
+//   DLOG_IF(LS_INFO, num_cookies > 10) << "Got lots of cookies";
 //
 // All "debug mode" logging is compiled away to nothing for non-debug mode
 // compiles.  LOG_IF and development flags also work well together
@@ -47,16 +47,16 @@
 //   LOG_ASSERT(assertion);
 //   DLOG_ASSERT(assertion);
 //
-// which is syntactic sugar for {,D}LOG_IF(FATAL, assert fails) << assertion;
+// which is syntactic sugar for {,D}LOG_IF(LS_FATAL, assert fails) << assertion;
 //
 // We also override the standard 'assert' to use 'DLOG_ASSERT'.
 //
 // Lastly, there is:
 //
-//   PLOG(ERROR) << "Couldn't do foo";
-//   DPLOG(ERROR) << "Couldn't do foo";
-//   PLOG_IF(ERROR, cond) << "Couldn't do foo";
-//   DPLOG_IF(ERROR, cond) << "Couldn't do foo";
+//   PLOG(LS_ERROR) << "Couldn't do foo";
+//   DPLOG(LS_ERROR) << "Couldn't do foo";
+//   PLOG_IF(LS_ERROR, cond) << "Couldn't do foo";
+//   DPLOG_IF(LS_ERROR, cond) << "Couldn't do foo";
 //   PCHECK(condition) << "Couldn't do foo";
 //   DPCHECK(condition) << "Couldn't do foo";
 //
@@ -64,13 +64,13 @@
 // GetLastError() on Windows and errno on POSIX).
 //
 // The supported severity levels for macros that allow you to specify one
-// are (in increasing order of severity) INFO, WARNING, ERROR, and FATAL.
+// are (in increasing order of severity) LS_INFO, LS_WARNING, LS_ERROR, and LS_FATAL.
 //
-// Very important: logging a message at the FATAL severity level causes
+// Very important: logging a message at the LS_FATAL severity level causes
 // the program to terminate (after the message is logged).
 //
-// There is the special severity of DFATAL, which logs FATAL in debug mode,
-// ERROR in normal mode.
+// There is the special severity of DFATAL, which logs LS_FATAL in debug mode,
+// LS_ERROR in normal mode.
 
 namespace aspia {
 
@@ -211,8 +211,8 @@ LogMessageHandlerFunction GetLogMessageHandler();
 #define COMPACT_LOG_LS_DFATAL  COMPACT_LOG_EX_LS_DFATAL(LogMessage)
 #define COMPACT_LOG_LS_DCHECK  COMPACT_LOG_EX_LS_DCHECK(LogMessage)
 
-// As special cases, we can assume that LOG_IS_ON(FATAL) always holds. Also,
-// LOG_IS_ON(DFATAL) always holds in debug mode. In particular, CHECK()s will
+// As special cases, we can assume that LOG_IS_ON(LS_FATAL) always holds. Also,
+// LOG_IS_ON(LS_DFATAL) always holds in debug mode. In particular, CHECK()s will
 // always fire if they fail.
 #define LOG_IS_ON(severity) \
   (aspia::ShouldCreateLogMessage(aspia::##severity))
@@ -223,7 +223,7 @@ LogMessageHandlerFunction GetLogMessageHandler();
   !(condition) ? (void) 0 : aspia::LogMessageVoidify() & (stream)
 
 // We use the preprocessor's merging operator, "##", so that, e.g.,
-// LOG(INFO) becomes the token COMPACT_LOG_LS_INFO.  There's some funny
+// LOG(LS_INFO) becomes the token COMPACT_LOG_LS_INFO.  There's some funny
 // subtle difference between ostream member streaming functions (e.g.,
 // ostream::operator<<(int) and ostream non-member streaming functions
 // (e.g., ::operator<<(ostream&, string&): it turns out that it's
@@ -266,8 +266,7 @@ extern std::ostream* g_swallow_stream;
 #define EAT_STREAM_PARAMETERS \
   true ? (void)0 : aspia::LogMessageVoidify() & (*aspia::g_swallow_stream)
 
-// Captures the result of a CHECK_EQ (for example) and facilitates testing as a
-// boolean.
+// Captures the result of a CHECK_EQ (for example) and facilitates testing as a boolean.
 class CheckOpResult
 {
 public:
@@ -697,14 +696,14 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr)
 // NOTIMPLEMENTED_LOG_ONCE can be used.
 #define NOTIMPLEMENTED_MSG "NOT IMPLEMENTED"
 
-#define NOTIMPLEMENTED() LOG(ERROR) << NOTIMPLEMENTED_MSG
-#define NOTIMPLEMENTED_LOG_ONCE()                          \
-    do                                                     \
-    {                                                      \
-        static bool logged_once = false;                   \
-        LOG_IF(ERROR, !logged_once) << NOTIMPLEMENTED_MSG; \
-        logged_once = true;                                \
-    } while (0);                                           \
+#define NOTIMPLEMENTED() LOG(LS_ERROR) << NOTIMPLEMENTED_MSG
+#define NOTIMPLEMENTED_LOG_ONCE()                             \
+    do                                                        \
+    {                                                         \
+        static bool logged_once = false;                      \
+        LOG_IF(LS_ERROR, !logged_once) << NOTIMPLEMENTED_MSG; \
+        logged_once = true;                                   \
+    } while (0);                                              \
     EAT_STREAM_PARAMETERS
 
 #endif // _ASPIA_BASE__LOGGING_H

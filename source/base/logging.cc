@@ -28,17 +28,6 @@ namespace {
 
 using FileHandle = HANDLE;
 
-const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
-
-static_assert(LS_NUMBER == _countof(kLogSeverityNames));
-
-const char* GetSeverityName(LoggingSeverity severity)
-{
-    if (severity >= 0 && severity < LS_NUMBER)
-        return kLogSeverityNames[severity];
-    return "UNKNOWN";
-}
-
 LoggingSeverity g_min_log_level = LS_INFO;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
@@ -52,6 +41,16 @@ FileHandle g_log_file = nullptr;
 
 // A log message handler that gets notified of every log message we process.
 LogMessageHandlerFunction log_message_handler = nullptr;
+
+const char* GetSeverityName(LoggingSeverity severity)
+{
+    static const char* const kLogSeverityNames[] = {"INFO", "WARNING", "ERROR", "FATAL"};
+    static_assert(LS_NUMBER == _countof(kLogSeverityNames));
+
+    if (severity >= 0 && severity < LS_NUMBER)
+        return kLogSeverityNames[severity];
+    return "UNKNOWN";
+}
 
 bool GetDefaultLogFilePath(std::experimental::filesystem::path& path)
 {
