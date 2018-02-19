@@ -22,7 +22,7 @@
     <ClCompile Include="ui\system_info\system_info_entry_point.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ui\ui_main_resource.rc" />
+    <ResourceCompile Include="ui\system_info\system_info_resources.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5474AE80-D783-4667-B71F-67B7399978EE}</ProjectGuid>

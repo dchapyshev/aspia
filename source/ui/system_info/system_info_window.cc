@@ -98,13 +98,13 @@ LRESULT SystemInfoWindow::OnCreate(
 {
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
-    small_icon_ = AtlLoadIconImage(IDI_MAIN,
+    small_icon_ = AtlLoadIconImage(IDI_SYSTEM_MONITOR,
                                    LR_CREATEDIBSECTION,
                                    small_icon_size.cx,
                                    small_icon_size.cy);
     SetIcon(small_icon_, FALSE);
 
-    big_icon_ = AtlLoadIconImage(IDI_MAIN,
+    big_icon_ = AtlLoadIconImage(IDI_SYSTEM_MONITOR,
                                  LR_CREATEDIBSECTION,
                                  GetSystemMetrics(SM_CXICON),
                                  GetSystemMetrics(SM_CYICON));
