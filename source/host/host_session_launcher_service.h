@@ -15,7 +15,7 @@ namespace aspia {
 class HostSessionLauncherService : private Service
 {
 public:
-    HostSessionLauncherService(const std::wstring& service_id);
+    HostSessionLauncherService();
     ~HostSessionLauncherService() = default;
 
     static bool CreateStarted(const std::wstring& launcher_mode,

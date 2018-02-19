@@ -22,8 +22,10 @@ constexpr WCHAR kServiceFullName[] = L"Aspia Session Launcher";
 
 } // namespace
 
-HostSessionLauncherService::HostSessionLauncherService(const std::wstring& service_id)
-    : Service(ServiceManager::CreateUniqueServiceName(kServiceShortName, service_id))
+HostSessionLauncherService::HostSessionLauncherService()
+    : Service(ServiceManager::CreateUniqueServiceName(
+        kServiceShortName,
+        CommandLine::ForCurrentProcess().GetSwitchValue(kServiceIdSwitch)))
 {
     // Nothing
 }

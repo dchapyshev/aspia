@@ -20,10 +20,6 @@ const CommandLine::CharType kModeDesktopSession[] = L"desktop-session";
 const CommandLine::CharType kModeFileTransferSession[] = L"file-transfer-session";
 const CommandLine::CharType kModeSystemInfoSession[] = L"system-info-session";
 const CommandLine::CharType kModeSystemInfo[] = L"system-info";
-const CommandLine::CharType kModeHostService[] = L"host-service";
-
-const CommandLine::CharType kInstallServiceSwitch[] = L"install-service";
-const CommandLine::CharType kRemoveServiceSwitch[] = L"remove-service";
 
 const CommandLine::CharType kAddressBookSwitch[] = L"address-book";
 

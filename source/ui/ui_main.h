@@ -8,12 +8,8 @@
 #ifndef _ASPIA_UI__UI_MAIN_H
 #define _ASPIA_UI__UI_MAIN_H
 
-namespace aspia {
+#include "ui/ui_export.h"
 
-enum class UI { MAIN_DIALOG, ADDRESS_BOOK };
-
-void RunUIMain(UI ui);
-
-} // namespace aspia
+void UI_EXPORT UIMain();
 
 #endif // _ASPIA_UI__UI_MAIN_H

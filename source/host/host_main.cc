@@ -5,78 +5,62 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/process/process.h"
 #include "host/host_main.h"
-#include "host/host_service.h"
-#include "host/sas_injector.h"
-#include "host/host_session_launcher_service.h"
-#include "host/host_session_launcher.h"
+
+#include "base/command_line.h"
+#include "base/process/process.h"
+//#include "host/sas_injector.h"
+//#include "host/host_session_launcher.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_system_info.h"
-#include "host/host_local_system_info.h"
-#include "command_line_switches.h"
+//#include "host/host_local_system_info.h"
+
+#include "base/logging.h"
 
 namespace aspia {
 
-void RunHostMain(const CommandLine& command_line)
+namespace {
+
+const wchar_t kSessionTypeSwitch[] = L"session-type";
+const wchar_t kChannelIdSwitch[] = L"channel-id";
+
+const wchar_t kSessionTypeDesktop[] = L"desktop";
+const wchar_t kSessionTypeFileTransfer[] = L"file-transfer";
+const wchar_t kSessionTypeSystemInfo[] = L"system-info";
+
+} // namespace
+
+void HostMain()
 {
+    LoggingSettings settings;
+
+    settings.logging_dest = LOG_TO_ALL;
+    settings.lock_log = LOCK_LOG_FILE;
+
+    InitLogging(settings);
+
     Process::Current().SetPriority(Process::Priority::HIGH);
 
-    CommandLine::StringType run_mode = command_line.GetSwitchValue(kModeSwitch);
+    std::wstring channel_id =
+        CommandLine::ForCurrentProcess().GetSwitchValue(kChannelIdSwitch);
+    std::wstring session_type =
+        CommandLine::ForCurrentProcess().GetSwitchValue(kSessionTypeSwitch);
 
-    if (run_mode == kSasServiceSwitch)
+    if (session_type == kSessionTypeDesktop)
     {
-        DCHECK(command_line.HasSwitch(kServiceIdSwitch));
-        SasInjector injector(command_line.GetSwitchValue(kServiceIdSwitch));
-        injector.ExecuteService();
+        HostSessionDesktop().Run(channel_id);
     }
-    else if (run_mode == kModeHostService)
+    else if (session_type == kSessionTypeFileTransfer)
     {
-        HostService().Run();
+        HostSessionFileTransfer().Run(channel_id);
     }
-    else if (run_mode == kInstallServiceSwitch)
+    else if (session_type == kSessionTypeSystemInfo)
     {
-        HostService::Install();
+        HostSessionSystemInfo().Run(channel_id);
     }
-    else if (run_mode == kRemoveServiceSwitch)
-    {
-        HostService::Remove();
-    }
-    else if (run_mode == kModeSessionLauncher)
-    {
-        DCHECK(command_line.HasSwitch(kLauncherModeSwitch) &&
-               command_line.HasSwitch(kChannelIdSwitch) &&
-               command_line.HasSwitch(kServiceIdSwitch) &&
-               command_line.HasSwitch(kSessionIdSwitch));
 
-        HostSessionLauncherService launcher(command_line.GetSwitchValue(kServiceIdSwitch));
-
-        launcher.RunLauncher();
-    }
-    else if (run_mode == kModeSystemInfo)
-    {
-        HostLocalSystemInfo().Run();
-    }
-    else
-    {
-        DCHECK(command_line.HasSwitch(kChannelIdSwitch));
-
-        std::wstring channel_id = command_line.GetSwitchValue(kChannelIdSwitch);
-
-        if (run_mode == kModeDesktopSession)
-        {
-            HostSessionDesktop().Run(channel_id);
-        }
-        else if (run_mode == kModeFileTransferSession)
-        {
-            HostSessionFileTransfer().Run(channel_id);
-        }
-        else if (run_mode == kModeSystemInfoSession)
-        {
-            HostSessionSystemInfo().Run(channel_id);
-        }
-    }
+    ShutdownLogging();
 }
 
 } // namespace aspia

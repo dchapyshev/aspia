@@ -17,7 +17,7 @@ static const WCHAR kSasServiceSwitch[] = L"sas-service";
 class SasInjector : private Service
 {
 public:
-    SasInjector(const std::wstring& service_id);
+    SasInjector();
     ~SasInjector() = default;
 
     void ExecuteService();

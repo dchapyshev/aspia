@@ -1,0 +1,955 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\bitset.h" />
+    <ClInclude Include="base\byte_order.h" />
+    <ClInclude Include="base\command_line.h" />
+    <ClInclude Include="base\cpuid.h" />
+    <ClInclude Include="base\cpu_info.h" />
+    <ClInclude Include="base\datetime.h" />
+    <ClInclude Include="base\desktop.h" />
+    <ClInclude Include="base\devices\device.h" />
+    <ClInclude Include="base\devices\device_enumerator.h" />
+    <ClInclude Include="base\devices\device_spti.h" />
+    <ClInclude Include="base\devices\edid.h" />
+    <ClInclude Include="base\devices\monitor_enumerator.h" />
+    <ClInclude Include="base\devices\physical_drive_enumerator.h" />
+    <ClInclude Include="base\devices\physical_drive_smart.h" />
+    <ClInclude Include="base\devices\physical_drive_util.h" />
+    <ClInclude Include="base\devices\smbios.h" />
+    <ClInclude Include="base\devices\smbios_reader.h" />
+    <ClInclude Include="base\devices\video_adapter_enumarator.h" />
+    <ClInclude Include="base\files\base_paths.h" />
+    <ClInclude Include="base\files\file.h" />
+    <ClInclude Include="base\files\file_enumerator.h" />
+    <ClInclude Include="base\files\file_helpers.h" />
+    <ClInclude Include="base\files\file_util.h" />
+    <ClInclude Include="base\files\logical_drive_enumerator.h" />
+    <ClInclude Include="base\files\platform_file.h" />
+    <ClInclude Include="base\files\scoped_file.h" />
+    <ClInclude Include="base\logging.h" />
+    <ClInclude Include="base\macros.h" />
+    <ClInclude Include="base\memory\aligned_memory.h" />
+    <ClInclude Include="base\message_loop\message_loop.h" />
+    <ClInclude Include="base\message_loop\message_loop_proxy.h" />
+    <ClInclude Include="base\message_loop\message_pump.h" />
+    <ClInclude Include="base\message_loop\message_pump_default.h" />
+    <ClInclude Include="base\message_loop\message_pump_dispatcher.h" />
+    <ClInclude Include="base\message_loop\message_pump_ui.h" />
+    <ClInclude Include="base\message_loop\message_pump_win.h" />
+    <ClInclude Include="base\message_loop\pending_task.h" />
+    <ClInclude Include="base\message_window.h" />
+    <ClInclude Include="base\object_watcher.h" />
+    <ClInclude Include="base\process\process.h" />
+    <ClInclude Include="base\process\process_enumerator.h" />
+    <ClInclude Include="base\process\process_helpers.h" />
+    <ClInclude Include="base\process\process_watcher.h" />
+    <ClInclude Include="base\registry.h" />
+    <ClInclude Include="base\scoped_bstr.h" />
+    <ClInclude Include="base\scoped_clipboard.h" />
+    <ClInclude Include="base\scoped_comptr.h" />
+    <ClInclude Include="base\scoped_com_initializer.h" />
+    <ClInclude Include="base\scoped_device_info.h" />
+    <ClInclude Include="base\scoped_gdi_object.h" />
+    <ClInclude Include="base\scoped_hdc.h" />
+    <ClInclude Include="base\scoped_hglobal.h" />
+    <ClInclude Include="base\scoped_impersonator.h" />
+    <ClInclude Include="base\scoped_local.h" />
+    <ClInclude Include="base\scoped_native_library.h" />
+    <ClInclude Include="base\scoped_object.h" />
+    <ClInclude Include="base\scoped_privilege.h" />
+    <ClInclude Include="base\scoped_refptr.h" />
+    <ClInclude Include="base\scoped_select_object.h" />
+    <ClInclude Include="base\scoped_thread_desktop.h" />
+    <ClInclude Include="base\scoped_user_object.h" />
+    <ClInclude Include="base\scoped_variant.h" />
+    <ClInclude Include="base\scoped_wts_memory.h" />
+    <ClInclude Include="base\security_helpers.h" />
+    <ClInclude Include="base\service.h" />
+    <ClInclude Include="base\service_enumerator.h" />
+    <ClInclude Include="base\service_manager.h" />
+    <ClInclude Include="base\settings.h" />
+    <ClInclude Include="base\settings_manager.h" />
+    <ClInclude Include="base\settings_registry.h" />
+    <ClInclude Include="base\strings\string_printf.h" />
+    <ClInclude Include="base\strings\string_util.h" />
+    <ClInclude Include="base\strings\string_util_constants.h" />
+    <ClInclude Include="base\strings\unicode.h" />
+    <ClInclude Include="base\synchronization\waitable_event.h" />
+    <ClInclude Include="base\synchronization\waitable_event_watcher.h" />
+    <ClInclude Include="base\synchronization\waitable_timer.h" />
+    <ClInclude Include="base\threading\simple_thread.h" />
+    <ClInclude Include="base\threading\thread.h" />
+    <ClInclude Include="base\threading\thread_checker.h" />
+    <ClInclude Include="base\typed_buffer.h" />
+    <ClInclude Include="base\version_helpers.h" />
+    <ClInclude Include="category\category.h" />
+    <ClInclude Include="category\category_application.h" />
+    <ClInclude Include="category\category_application.pb.h" />
+    <ClInclude Include="category\category_ata.h" />
+    <ClInclude Include="category\category_ata.pb.h" />
+    <ClInclude Include="category\category_connection.h" />
+    <ClInclude Include="category\category_connection.pb.h" />
+    <ClInclude Include="category\category_cpu.h" />
+    <ClInclude Include="category\category_cpu.pb.h" />
+    <ClInclude Include="category\category_dmi_baseboard.h" />
+    <ClInclude Include="category\category_dmi_baseboard.pb.h" />
+    <ClInclude Include="category\category_dmi_bios.h" />
+    <ClInclude Include="category\category_dmi_bios.pb.h" />
+    <ClInclude Include="category\category_dmi_cache.h" />
+    <ClInclude Include="category\category_dmi_cache.pb.h" />
+    <ClInclude Include="category\category_dmi_chassis.h" />
+    <ClInclude Include="category\category_dmi_chassis.pb.h" />
+    <ClInclude Include="category\category_dmi_memory_device.h" />
+    <ClInclude Include="category\category_dmi_memory_device.pb.h" />
+    <ClInclude Include="category\category_dmi_onboard_device.h" />
+    <ClInclude Include="category\category_dmi_onboard_device.pb.h" />
+    <ClInclude Include="category\category_dmi_pointing_device.h" />
+    <ClInclude Include="category\category_dmi_pointing_device.pb.h" />
+    <ClInclude Include="category\category_dmi_portable_battery.h" />
+    <ClInclude Include="category\category_dmi_portable_battery.pb.h" />
+    <ClInclude Include="category\category_dmi_port_connector.h" />
+    <ClInclude Include="category\category_dmi_port_connector.pb.h" />
+    <ClInclude Include="category\category_dmi_processor.h" />
+    <ClInclude Include="category\category_dmi_processor.pb.h" />
+    <ClInclude Include="category\category_dmi_system.h" />
+    <ClInclude Include="category\category_dmi_system.pb.h" />
+    <ClInclude Include="category\category_dmi_system_slot.h" />
+    <ClInclude Include="category\category_dmi_system_slot.pb.h" />
+    <ClInclude Include="category\category_driver.h" />
+    <ClInclude Include="category\category_driver.pb.h" />
+    <ClInclude Include="category\category_environment_variables.h" />
+    <ClInclude Include="category\category_environment_variables.pb.h" />
+    <ClInclude Include="category\category_eventlog.h" />
+    <ClInclude Include="category\category_eventlog.pb.h" />
+    <ClInclude Include="category\category_license.h" />
+    <ClInclude Include="category\category_license.pb.h" />
+    <ClInclude Include="category\category_logical_drive.h" />
+    <ClInclude Include="category\category_logical_drive.pb.h" />
+    <ClInclude Include="category\category_memory.h" />
+    <ClInclude Include="category\category_memory.pb.h" />
+    <ClInclude Include="category\category_monitor.h" />
+    <ClInclude Include="category\category_monitor.pb.h" />
+    <ClInclude Include="category\category_network_card.h" />
+    <ClInclude Include="category\category_network_card.pb.h" />
+    <ClInclude Include="category\category_open_files.h" />
+    <ClInclude Include="category\category_open_files.pb.h" />
+    <ClInclude Include="category\category_optical_drive.h" />
+    <ClInclude Include="category\category_optical_drive.pb.h" />
+    <ClInclude Include="category\category_os.h" />
+    <ClInclude Include="category\category_os.pb.h" />
+    <ClInclude Include="category\category_power_options.h" />
+    <ClInclude Include="category\category_power_options.pb.h" />
+    <ClInclude Include="category\category_printer.h" />
+    <ClInclude Include="category\category_printer.pb.h" />
+    <ClInclude Include="category\category_process.h" />
+    <ClInclude Include="category\category_process.pb.h" />
+    <ClInclude Include="category\category_ras.h" />
+    <ClInclude Include="category\category_ras.pb.h" />
+    <ClInclude Include="category\category_route.h" />
+    <ClInclude Include="category\category_route.pb.h" />
+    <ClInclude Include="category\category_service.h" />
+    <ClInclude Include="category\category_service.pb.h" />
+    <ClInclude Include="category\category_session.h" />
+    <ClInclude Include="category\category_session.pb.h" />
+    <ClInclude Include="category\category_share.h" />
+    <ClInclude Include="category\category_share.pb.h" />
+    <ClInclude Include="category\category_smart.h" />
+    <ClInclude Include="category\category_smart.pb.h" />
+    <ClInclude Include="category\category_task_scheduler.h" />
+    <ClInclude Include="category\category_task_scheduler.pb.h" />
+    <ClInclude Include="category\category_update.h" />
+    <ClInclude Include="category\category_update.pb.h" />
+    <ClInclude Include="category\category_user.h" />
+    <ClInclude Include="category\category_user.pb.h" />
+    <ClInclude Include="category\category_user_group.h" />
+    <ClInclude Include="category\category_user_group.pb.h" />
+    <ClInclude Include="category\category_video_adapter.h" />
+    <ClInclude Include="category\category_video_adapter.pb.h" />
+    <ClInclude Include="category\category_windows_device.h" />
+    <ClInclude Include="category\category_windows_device.pb.h" />
+    <ClInclude Include="category\category_wsus.h" />
+    <ClInclude Include="category\category_wsus.pb.h" />
+    <ClInclude Include="client\client.h" />
+    <ClInclude Include="client\client_pool.h" />
+    <ClInclude Include="client\client_session.h" />
+    <ClInclude Include="client\client_session_desktop_manage.h" />
+    <ClInclude Include="client\client_session_desktop_view.h" />
+    <ClInclude Include="client\client_session_file_transfer.h" />
+    <ClInclude Include="client\client_session_system_info.h" />
+    <ClInclude Include="client\file_constants.h" />
+    <ClInclude Include="client\file_remover.h" />
+    <ClInclude Include="client\file_reply_receiver.h" />
+    <ClInclude Include="client\file_reply_receiver_proxy.h" />
+    <ClInclude Include="client\file_request_sender.h" />
+    <ClInclude Include="client\file_request_sender_local.h" />
+    <ClInclude Include="client\file_request_sender_proxy.h" />
+    <ClInclude Include="client\file_request_sender_remote.h" />
+    <ClInclude Include="client\file_task.h" />
+    <ClInclude Include="client\file_task_queue_builder.h" />
+    <ClInclude Include="client\file_transfer.h" />
+    <ClInclude Include="client\file_transfer_downloader.h" />
+    <ClInclude Include="client\file_transfer_uploader.h" />
+    <ClInclude Include="codec\compressor.h" />
+    <ClInclude Include="codec\compressor_zlib.h" />
+    <ClInclude Include="codec\cursor_decoder.h" />
+    <ClInclude Include="codec\cursor_encoder.h" />
+    <ClInclude Include="codec\decompressor.h" />
+    <ClInclude Include="codec\decompressor_zlib.h" />
+    <ClInclude Include="codec\pixel_translator.h" />
+    <ClInclude Include="codec\scoped_vpx_codec.h" />
+    <ClInclude Include="codec\video_decoder.h" />
+    <ClInclude Include="codec\video_decoder_vpx.h" />
+    <ClInclude Include="codec\video_decoder_zlib.h" />
+    <ClInclude Include="codec\video_encoder.h" />
+    <ClInclude Include="codec\video_encoder_vpx.h" />
+    <ClInclude Include="codec\video_encoder_zlib.h" />
+    <ClInclude Include="codec\video_helpers.h" />
+    <ClInclude Include="command_line_switches.h" />
+    <ClInclude Include="crypto\encryptor.h" />
+    <ClInclude Include="crypto\random.h" />
+    <ClInclude Include="crypto\secure_memory.h" />
+    <ClInclude Include="crypto\sha.h" />
+    <ClInclude Include="crypto\string_encryptor.h" />
+    <ClInclude Include="desktop_capture\capturer.h" />
+    <ClInclude Include="desktop_capture\capturer_gdi.h" />
+    <ClInclude Include="desktop_capture\capture_scheduler.h" />
+    <ClInclude Include="desktop_capture\cursor.h" />
+    <ClInclude Include="desktop_capture\desktop_frame.h" />
+    <ClInclude Include="desktop_capture\desktop_frame_basic.h" />
+    <ClInclude Include="desktop_capture\desktop_frame_dib.h" />
+    <ClInclude Include="desktop_capture\desktop_geometry.h" />
+    <ClInclude Include="desktop_capture\desktop_region.h" />
+    <ClInclude Include="desktop_capture\differ.h" />
+    <ClInclude Include="desktop_capture\diff_block_sse2.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor.h" />
+    <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
+    <ClInclude Include="desktop_capture\pixel_format.h" />
+    <ClInclude Include="host\clipboard_thread.h" />
+    <ClInclude Include="host\console_session_watcher.h" />
+    <ClInclude Include="host\host.h" />
+    <ClInclude Include="host\host_export.h" />
+    <ClInclude Include="host\host_launcher_main.h" />
+    <ClInclude Include="host\host_local_system_info.h" />
+    <ClInclude Include="host\host_main.h" />
+    <ClInclude Include="host\host_pool.h" />
+    <ClInclude Include="host\host_process_connector.h" />
+    <ClInclude Include="host\host_service.h" />
+    <ClInclude Include="host\host_service_main.h" />
+    <ClInclude Include="host\host_session.h" />
+    <ClInclude Include="host\host_session_desktop.h" />
+    <ClInclude Include="host\host_session_file_transfer.h" />
+    <ClInclude Include="host\host_session_launcher.h" />
+    <ClInclude Include="host\host_session_launcher_service.h" />
+    <ClInclude Include="host\host_session_system_info.h" />
+    <ClInclude Include="host\input_injector.h" />
+    <ClInclude Include="host\sas_injector.h" />
+    <ClInclude Include="host\sas_injector_main.h" />
+    <ClInclude Include="host\scoped_sas_police.h" />
+    <ClInclude Include="host\screen_updater.h" />
+    <ClInclude Include="host\users_storage.h" />
+    <ClInclude Include="host\users_storage_registry.h" />
+    <ClInclude Include="ipc\pipe_channel.h" />
+    <ClInclude Include="ipc\pipe_channel_proxy.h" />
+    <ClInclude Include="network\firewall_manager.h" />
+    <ClInclude Include="network\firewall_manager_legacy.h" />
+    <ClInclude Include="network\network_adapter_enumerator.h" />
+    <ClInclude Include="network\network_channel.h" />
+    <ClInclude Include="network\network_channel_proxy.h" />
+    <ClInclude Include="network\network_channel_tcp.h" />
+    <ClInclude Include="network\network_client_tcp.h" />
+    <ClInclude Include="network\network_server_tcp.h" />
+    <ClInclude Include="network\url.h" />
+    <ClInclude Include="protocol\authorization.h" />
+    <ClInclude Include="protocol\clipboard.h" />
+    <ClInclude Include="protocol\filesystem.h" />
+    <ClInclude Include="protocol\file_depacketizer.h" />
+    <ClInclude Include="protocol\file_packetizer.h" />
+    <ClInclude Include="protocol\io_buffer.h" />
+    <ClInclude Include="protocol\keycode_converter.h" />
+    <ClInclude Include="protocol\message_serialization.h" />
+    <ClInclude Include="proto\address_book.pb.h" />
+    <ClInclude Include="proto\auth_session.pb.h" />
+    <ClInclude Include="proto\computer.pb.h" />
+    <ClInclude Include="proto\desktop_session.pb.h" />
+    <ClInclude Include="proto\file_transfer_session.pb.h" />
+    <ClInclude Include="proto\key_exchange.pb.h" />
+    <ClInclude Include="proto\mru.pb.h" />
+    <ClInclude Include="proto\system_info_session.pb.h" />
+    <ClInclude Include="report\column_list.h" />
+    <ClInclude Include="report\group.h" />
+    <ClInclude Include="report\report.h" />
+    <ClInclude Include="report\report_creator.h" />
+    <ClInclude Include="report\report_creator_proxy.h" />
+    <ClInclude Include="report\report_html_file.h" />
+    <ClInclude Include="report\report_json_file.h" />
+    <ClInclude Include="report\report_xml_file.h" />
+    <ClInclude Include="report\row.h" />
+    <ClInclude Include="report\table.h" />
+    <ClInclude Include="report\value.h" />
+    <ClInclude Include="ui\about_dialog.h" />
+    <ClInclude Include="ui\address_book\address_book_dialog.h" />
+    <ClInclude Include="ui\address_book\address_book_main.h" />
+    <ClInclude Include="ui\address_book\address_book_secure_util.h" />
+    <ClInclude Include="ui\address_book\address_book_toolbar.h" />
+    <ClInclude Include="ui\address_book\address_book_window.h" />
+    <ClInclude Include="ui\address_book\computer_dialog.h" />
+    <ClInclude Include="ui\address_book\computer_group_dialog.h" />
+    <ClInclude Include="ui\address_book\computer_group_tree_ctrl.h" />
+    <ClInclude Include="ui\address_book\computer_list_ctrl.h" />
+    <ClInclude Include="ui\address_book\open_address_book_dialog.h" />
+    <ClInclude Include="ui\auth_dialog.h" />
+    <ClInclude Include="ui\base\splitter.h" />
+    <ClInclude Include="ui\base\timer.h" />
+    <ClInclude Include="ui\base\tray_icon.h" />
+    <ClInclude Include="ui\desktop\settings_dialog.h" />
+    <ClInclude Include="ui\desktop\video_window.h" />
+    <ClInclude Include="ui\desktop\viewer_toolbar.h" />
+    <ClInclude Include="ui\desktop\viewer_window.h" />
+    <ClInclude Include="ui\file_transfer\drive_list_ctrl.h" />
+    <ClInclude Include="ui\file_transfer\file_action_dialog.h" />
+    <ClInclude Include="ui\file_transfer\file_list_ctrl.h" />
+    <ClInclude Include="ui\file_transfer\file_manager.h" />
+    <ClInclude Include="ui\file_transfer\file_manager_helpers.h" />
+    <ClInclude Include="ui\file_transfer\file_manager_panel.h" />
+    <ClInclude Include="ui\file_transfer\file_remove_dialog.h" />
+    <ClInclude Include="ui\file_transfer\file_status_code.h" />
+    <ClInclude Include="ui\file_transfer\file_status_dialog.h" />
+    <ClInclude Include="ui\file_transfer\file_toolbar.h" />
+    <ClInclude Include="ui\file_transfer\file_transfer_dialog.h" />
+    <ClInclude Include="ui\get_stock_icon.h" />
+    <ClInclude Include="ui\main_dialog.h" />
+    <ClInclude Include="ui\mru.h" />
+    <ClInclude Include="ui\resource.h" />
+    <ClInclude Include="ui\status_dialog.h" />
+    <ClInclude Include="ui\system_info\category_select_dialog.h" />
+    <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
+    <ClInclude Include="ui\system_info\info_list_ctrl.h" />
+    <ClInclude Include="ui\system_info\report_progress_dialog.h" />
+    <ClInclude Include="ui\system_info\system_info_toolbar.h" />
+    <ClInclude Include="ui\system_info\system_info_window.h" />
+    <ClInclude Include="ui\ui_export.h" />
+    <ClInclude Include="ui\ui_main.h" />
+    <ClInclude Include="ui\ui_util.h" />
+    <ClInclude Include="ui\users_dialog.h" />
+    <ClInclude Include="ui\user_prop_dialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\byte_order.cc" />
+    <ClCompile Include="base\command_line.cc" />
+    <ClCompile Include="base\cpu_info.cc" />
+    <ClCompile Include="base\datetime.cc" />
+    <ClCompile Include="base\desktop.cc" />
+    <ClCompile Include="base\devices\device.cc" />
+    <ClCompile Include="base\devices\device_enumerator.cc" />
+    <ClCompile Include="base\devices\device_spti.cc" />
+    <ClCompile Include="base\devices\edid.cc" />
+    <ClCompile Include="base\devices\monitor_enumerator.cc" />
+    <ClCompile Include="base\devices\physical_drive_enumerator.cc" />
+    <ClCompile Include="base\devices\physical_drive_util.cc" />
+    <ClCompile Include="base\devices\smbios.cc" />
+    <ClCompile Include="base\devices\smbios_reader.cc" />
+    <ClCompile Include="base\devices\video_adapter_enumerator.cc" />
+    <ClCompile Include="base\files\base_paths.cc" />
+    <ClCompile Include="base\files\file.cc" />
+    <ClCompile Include="base\files\file_enumerator.cc" />
+    <ClCompile Include="base\files\file_helpers.cc" />
+    <ClCompile Include="base\files\file_util.cc" />
+    <ClCompile Include="base\files\file_win.cc" />
+    <ClCompile Include="base\files\logical_drive_enumerator.cc" />
+    <ClCompile Include="base\logging.cc" />
+    <ClCompile Include="base\memory\aligned_memory.cc" />
+    <ClCompile Include="base\message_loop\message_loop.cc" />
+    <ClCompile Include="base\message_loop\message_loop_proxy.cc" />
+    <ClCompile Include="base\message_loop\message_pump_default.cc" />
+    <ClCompile Include="base\message_loop\message_pump_ui.cc" />
+    <ClCompile Include="base\message_loop\message_pump_win.cc" />
+    <ClCompile Include="base\message_loop\pending_task.cc" />
+    <ClCompile Include="base\message_window.cc" />
+    <ClCompile Include="base\object_watcher.cc" />
+    <ClCompile Include="base\process\process.cc" />
+    <ClCompile Include="base\process\process_enumerator.cc" />
+    <ClCompile Include="base\process\process_helpers.cc" />
+    <ClCompile Include="base\process\process_watcher.cc" />
+    <ClCompile Include="base\registry.cc" />
+    <ClCompile Include="base\scoped_bstr.cc" />
+    <ClCompile Include="base\scoped_clipboard.cc" />
+    <ClCompile Include="base\scoped_impersonator.cc" />
+    <ClCompile Include="base\scoped_privilege.cc" />
+    <ClCompile Include="base\scoped_thread_desktop.cc" />
+    <ClCompile Include="base\scoped_variant.cc" />
+    <ClCompile Include="base\security_helpers.cc" />
+    <ClCompile Include="base\service.cc" />
+    <ClCompile Include="base\service_enumerator.cc" />
+    <ClCompile Include="base\service_manager.cc" />
+    <ClCompile Include="base\settings.cc" />
+    <ClCompile Include="base\settings_manager.cc" />
+    <ClCompile Include="base\settings_registry.cc" />
+    <ClCompile Include="base\strings\string_printf.cc" />
+    <ClCompile Include="base\strings\string_util.cc" />
+    <ClCompile Include="base\strings\string_util_constants.cc" />
+    <ClCompile Include="base\strings\unicode.cc" />
+    <ClCompile Include="base\synchronization\waitable_event.cc" />
+    <ClCompile Include="base\synchronization\waitable_event_watcher.cc" />
+    <ClCompile Include="base\synchronization\waitable_timer.cc" />
+    <ClCompile Include="base\threading\simple_thread.cc" />
+    <ClCompile Include="base\threading\thread.cc" />
+    <ClCompile Include="base\threading\thread_checker.cc" />
+    <ClCompile Include="base\version_helpers.cc" />
+    <ClCompile Include="category\category.cc" />
+    <ClCompile Include="category\category_application.cc" />
+    <ClCompile Include="category\category_application.pb.cc" />
+    <ClCompile Include="category\category_ata.cc" />
+    <ClCompile Include="category\category_ata.pb.cc" />
+    <ClCompile Include="category\category_connection.cc" />
+    <ClCompile Include="category\category_connection.pb.cc" />
+    <ClCompile Include="category\category_cpu.cc" />
+    <ClCompile Include="category\category_cpu.pb.cc" />
+    <ClCompile Include="category\category_dmi_baseboard.cc" />
+    <ClCompile Include="category\category_dmi_baseboard.pb.cc" />
+    <ClCompile Include="category\category_dmi_bios.cc" />
+    <ClCompile Include="category\category_dmi_bios.pb.cc" />
+    <ClCompile Include="category\category_dmi_cache.cc" />
+    <ClCompile Include="category\category_dmi_cache.pb.cc" />
+    <ClCompile Include="category\category_dmi_chassis.cc" />
+    <ClCompile Include="category\category_dmi_chassis.pb.cc" />
+    <ClCompile Include="category\category_dmi_memory_device.cc" />
+    <ClCompile Include="category\category_dmi_memory_device.pb.cc" />
+    <ClCompile Include="category\category_dmi_onboard_device.cc" />
+    <ClCompile Include="category\category_dmi_onboard_device.pb.cc" />
+    <ClCompile Include="category\category_dmi_pointing_device.cc" />
+    <ClCompile Include="category\category_dmi_pointing_device.pb.cc" />
+    <ClCompile Include="category\category_dmi_portable_battery.cc" />
+    <ClCompile Include="category\category_dmi_portable_battery.pb.cc" />
+    <ClCompile Include="category\category_dmi_port_connector.cc" />
+    <ClCompile Include="category\category_dmi_port_connector.pb.cc" />
+    <ClCompile Include="category\category_dmi_processor.cc" />
+    <ClCompile Include="category\category_dmi_processor.pb.cc" />
+    <ClCompile Include="category\category_dmi_system.cc" />
+    <ClCompile Include="category\category_dmi_system.pb.cc" />
+    <ClCompile Include="category\category_dmi_system_slot.cc" />
+    <ClCompile Include="category\category_dmi_system_slot.pb.cc" />
+    <ClCompile Include="category\category_driver.cc" />
+    <ClCompile Include="category\category_driver.pb.cc" />
+    <ClCompile Include="category\category_environment_variables.cc" />
+    <ClCompile Include="category\category_environment_variables.pb.cc" />
+    <ClCompile Include="category\category_eventlog.cc" />
+    <ClCompile Include="category\category_eventlog.pb.cc" />
+    <ClCompile Include="category\category_license.cc" />
+    <ClCompile Include="category\category_license.pb.cc" />
+    <ClCompile Include="category\category_logical_drive.cc" />
+    <ClCompile Include="category\category_logical_drive.pb.cc" />
+    <ClCompile Include="category\category_memory.cc" />
+    <ClCompile Include="category\category_memory.pb.cc" />
+    <ClCompile Include="category\category_monitor.cc" />
+    <ClCompile Include="category\category_monitor.pb.cc" />
+    <ClCompile Include="category\category_network_card.cc" />
+    <ClCompile Include="category\category_network_card.pb.cc" />
+    <ClCompile Include="category\category_open_files.cc" />
+    <ClCompile Include="category\category_open_files.pb.cc" />
+    <ClCompile Include="category\category_optical_drive.cc" />
+    <ClCompile Include="category\category_optical_drive.pb.cc" />
+    <ClCompile Include="category\category_os.cc" />
+    <ClCompile Include="category\category_os.pb.cc" />
+    <ClCompile Include="category\category_power_options.cc" />
+    <ClCompile Include="category\category_power_options.pb.cc" />
+    <ClCompile Include="category\category_printer.cc" />
+    <ClCompile Include="category\category_printer.pb.cc" />
+    <ClCompile Include="category\category_process.cc" />
+    <ClCompile Include="category\category_process.pb.cc" />
+    <ClCompile Include="category\category_ras.cc" />
+    <ClCompile Include="category\category_ras.pb.cc" />
+    <ClCompile Include="category\category_route.cc" />
+    <ClCompile Include="category\category_route.pb.cc" />
+    <ClCompile Include="category\category_service.cc" />
+    <ClCompile Include="category\category_service.pb.cc" />
+    <ClCompile Include="category\category_session.cc" />
+    <ClCompile Include="category\category_session.pb.cc" />
+    <ClCompile Include="category\category_share.cc" />
+    <ClCompile Include="category\category_share.pb.cc" />
+    <ClCompile Include="category\category_smart.cc" />
+    <ClCompile Include="category\category_smart.pb.cc" />
+    <ClCompile Include="category\category_task_scheduler.cc" />
+    <ClCompile Include="category\category_task_scheduler.pb.cc" />
+    <ClCompile Include="category\category_update.cc" />
+    <ClCompile Include="category\category_update.pb.cc" />
+    <ClCompile Include="category\category_user.cc" />
+    <ClCompile Include="category\category_user.pb.cc" />
+    <ClCompile Include="category\category_user_group.cc" />
+    <ClCompile Include="category\category_user_group.pb.cc" />
+    <ClCompile Include="category\category_video_adapter.cc" />
+    <ClCompile Include="category\category_video_adapter.pb.cc" />
+    <ClCompile Include="category\category_windows_device.cc" />
+    <ClCompile Include="category\category_windows_device.pb.cc" />
+    <ClCompile Include="category\category_wsus.cc" />
+    <ClCompile Include="category\category_wsus.pb.cc" />
+    <ClCompile Include="client\client.cc" />
+    <ClCompile Include="client\client_pool.cc" />
+    <ClCompile Include="client\client_session.cc" />
+    <ClCompile Include="client\client_session_desktop_manage.cc" />
+    <ClCompile Include="client\client_session_desktop_view.cc" />
+    <ClCompile Include="client\client_session_file_transfer.cc" />
+    <ClCompile Include="client\client_session_system_info.cc" />
+    <ClCompile Include="client\file_remover.cc" />
+    <ClCompile Include="client\file_reply_receiver.cc" />
+    <ClCompile Include="client\file_reply_receiver_proxy.cc" />
+    <ClCompile Include="client\file_request_sender.cc" />
+    <ClCompile Include="client\file_request_sender_local.cc" />
+    <ClCompile Include="client\file_request_sender_proxy.cc" />
+    <ClCompile Include="client\file_request_sender_remote.cc" />
+    <ClCompile Include="client\file_task.cc" />
+    <ClCompile Include="client\file_task_queue_builder.cc" />
+    <ClCompile Include="client\file_transfer_downloader.cc" />
+    <ClCompile Include="client\file_transfer_uploader.cc" />
+    <ClCompile Include="codec\compressor_zlib.cc" />
+    <ClCompile Include="codec\cursor_decoder.cc" />
+    <ClCompile Include="codec\cursor_encoder.cc" />
+    <ClCompile Include="codec\decompressor_zlib.cc" />
+    <ClCompile Include="codec\pixel_translator.cc" />
+    <ClCompile Include="codec\scoped_vpx_codec.cc" />
+    <ClCompile Include="codec\video_decoder_vpx.cc" />
+    <ClCompile Include="codec\video_decoder_zlib.cc" />
+    <ClCompile Include="codec\video_encoder_vpx.cc" />
+    <ClCompile Include="codec\video_encoder_zlib.cc" />
+    <ClCompile Include="codec\video_helpers.cc" />
+    <ClCompile Include="command_line_switches.cc" />
+    <ClCompile Include="crypto\encryptor.cc" />
+    <ClCompile Include="crypto\random.cc" />
+    <ClCompile Include="crypto\secure_memory.cc" />
+    <ClCompile Include="crypto\sha.cc" />
+    <ClCompile Include="crypto\string_encryptor.cc" />
+    <ClCompile Include="desktop_capture\capturer_gdi.cc" />
+    <ClCompile Include="desktop_capture\capture_scheduler.cc" />
+    <ClCompile Include="desktop_capture\cursor.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame_basic.cc" />
+    <ClCompile Include="desktop_capture\desktop_frame_dib.cc" />
+    <ClCompile Include="desktop_capture\desktop_geometry.cc" />
+    <ClCompile Include="desktop_capture\desktop_region.cc" />
+    <ClCompile Include="desktop_capture\differ.cc" />
+    <ClCompile Include="desktop_capture\diff_block_sse2.cc" />
+    <ClCompile Include="desktop_capture\mouse_cursor.cc" />
+    <ClCompile Include="desktop_capture\mouse_cursor_cache.cc" />
+    <ClCompile Include="desktop_capture\pixel_format.cc" />
+    <ClCompile Include="host\clipboard_thread.cc" />
+    <ClCompile Include="host\console_session_watcher.cc" />
+    <ClCompile Include="host\host.cc" />
+    <ClCompile Include="host\host_launcher_main.cc" />
+    <ClCompile Include="host\host_local_system_info.cc" />
+    <ClCompile Include="host\host_main.cc" />
+    <ClCompile Include="host\host_pool.cc" />
+    <ClCompile Include="host\host_process_connector.cc" />
+    <ClCompile Include="host\host_service.cc" />
+    <ClCompile Include="host\host_service_main.cc" />
+    <ClCompile Include="host\host_session.cc" />
+    <ClCompile Include="host\host_session_desktop.cc" />
+    <ClCompile Include="host\host_session_file_transfer.cc" />
+    <ClCompile Include="host\host_session_launcher.cc" />
+    <ClCompile Include="host\host_session_launcher_service.cc" />
+    <ClCompile Include="host\host_session_system_info.cc" />
+    <ClCompile Include="host\input_injector.cc" />
+    <ClCompile Include="host\sas_injector.cc" />
+    <ClCompile Include="host\sas_injector_main.cc" />
+    <ClCompile Include="host\scoped_sas_police.cc" />
+    <ClCompile Include="host\screen_updater.cc" />
+    <ClCompile Include="host\users_storage.cc" />
+    <ClCompile Include="host\users_storage_registry.cc" />
+    <ClCompile Include="ipc\pipe_channel.cc" />
+    <ClCompile Include="ipc\pipe_channel_proxy.cc" />
+    <ClCompile Include="network\firewall_manager.cc" />
+    <ClCompile Include="network\firewall_manager_legacy.cc" />
+    <ClCompile Include="network\network_adapter_enumerator.cc" />
+    <ClCompile Include="network\network_channel.cc" />
+    <ClCompile Include="network\network_channel_proxy.cc" />
+    <ClCompile Include="network\network_channel_tcp.cc" />
+    <ClCompile Include="network\network_client_tcp.cc" />
+    <ClCompile Include="network\network_server_tcp.cc" />
+    <ClCompile Include="network\url.cc" />
+    <ClCompile Include="protocol\authorization.cc" />
+    <ClCompile Include="protocol\clipboard.cc" />
+    <ClCompile Include="protocol\filesystem.cc" />
+    <ClCompile Include="protocol\file_depacketizer.cc" />
+    <ClCompile Include="protocol\file_packetizer.cc" />
+    <ClCompile Include="protocol\io_buffer.cc" />
+    <ClCompile Include="protocol\keycode_converter.cc" />
+    <ClCompile Include="proto\address_book.pb.cc" />
+    <ClCompile Include="proto\auth_session.pb.cc" />
+    <ClCompile Include="proto\computer.pb.cc" />
+    <ClCompile Include="proto\desktop_session.pb.cc" />
+    <ClCompile Include="proto\file_transfer_session.pb.cc" />
+    <ClCompile Include="proto\key_exchange.pb.cc" />
+    <ClCompile Include="proto\mru.pb.cc" />
+    <ClCompile Include="proto\system_info_session.pb.cc" />
+    <ClCompile Include="report\column_list.cc" />
+    <ClCompile Include="report\group.cc" />
+    <ClCompile Include="report\report_creator.cc" />
+    <ClCompile Include="report\report_creator_proxy.cc" />
+    <ClCompile Include="report\report_html_file.cc" />
+    <ClCompile Include="report\report_json_file.cc" />
+    <ClCompile Include="report\report_xml_file.cc" />
+    <ClCompile Include="report\row.cc" />
+    <ClCompile Include="report\table.cc" />
+    <ClCompile Include="report\value.cc" />
+    <ClCompile Include="ui\about_dialog.cc" />
+    <ClCompile Include="ui\address_book\address_book_dialog.cc" />
+    <ClCompile Include="ui\address_book\address_book_main.cc" />
+    <ClCompile Include="ui\address_book\address_book_secure_util.cc" />
+    <ClCompile Include="ui\address_book\address_book_toolbar.cc" />
+    <ClCompile Include="ui\address_book\address_book_window.cc" />
+    <ClCompile Include="ui\address_book\computer_dialog.cc" />
+    <ClCompile Include="ui\address_book\computer_group_dialog.cc" />
+    <ClCompile Include="ui\address_book\computer_group_tree_ctrl.cc" />
+    <ClCompile Include="ui\address_book\computer_list_ctrl.cc" />
+    <ClCompile Include="ui\address_book\open_address_book_dialog.cc" />
+    <ClCompile Include="ui\auth_dialog.cc" />
+    <ClCompile Include="ui\base\timer.cc" />
+    <ClCompile Include="ui\desktop\settings_dialog.cc" />
+    <ClCompile Include="ui\desktop\video_window.cc" />
+    <ClCompile Include="ui\desktop\viewer_toolbar.cc" />
+    <ClCompile Include="ui\desktop\viewer_window.cc" />
+    <ClCompile Include="ui\file_transfer\drive_list_ctrl.cc" />
+    <ClCompile Include="ui\file_transfer\file_action_dialog.cc" />
+    <ClCompile Include="ui\file_transfer\file_list_ctrl.cc" />
+    <ClCompile Include="ui\file_transfer\file_manager.cc" />
+    <ClCompile Include="ui\file_transfer\file_manager_helpers.cc" />
+    <ClCompile Include="ui\file_transfer\file_manager_panel.cc" />
+    <ClCompile Include="ui\file_transfer\file_remove_dialog.cc" />
+    <ClCompile Include="ui\file_transfer\file_status_code.cc" />
+    <ClCompile Include="ui\file_transfer\file_status_dialog.cc" />
+    <ClCompile Include="ui\file_transfer\file_toolbar.cc" />
+    <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc" />
+    <ClCompile Include="ui\get_stock_icon.cc" />
+    <ClCompile Include="ui\main_dialog.cc" />
+    <ClCompile Include="ui\mru.cc" />
+    <ClCompile Include="ui\status_dialog.cc" />
+    <ClCompile Include="ui\system_info\category_select_dialog.cc" />
+    <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
+    <ClCompile Include="ui\system_info\info_list_ctrl.cc" />
+    <ClCompile Include="ui\system_info\report_progress_dialog.cc" />
+    <ClCompile Include="ui\system_info\system_info_toolbar.cc" />
+    <ClCompile Include="ui\system_info\system_info_window.cc" />
+    <ClCompile Include="ui\ui_main.cc" />
+    <ClCompile Include="ui\ui_util.cc" />
+    <ClCompile Include="ui\users_dialog.cc" />
+    <ClCompile Include="ui\user_prop_dialog.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="category\category_application.proto" />
+    <None Include="category\category_ata.proto" />
+    <None Include="category\category_connection.proto" />
+    <None Include="category\category_cpu.proto" />
+    <None Include="category\category_dmi_baseboard.proto" />
+    <None Include="category\category_dmi_bios.proto" />
+    <None Include="category\category_dmi_cache.proto" />
+    <None Include="category\category_dmi_chassis.proto" />
+    <None Include="category\category_dmi_memory_device.proto" />
+    <None Include="category\category_dmi_onboard_device.proto" />
+    <None Include="category\category_dmi_pointing_device.proto" />
+    <None Include="category\category_dmi_portable_battery.proto" />
+    <None Include="category\category_dmi_port_connector.proto" />
+    <None Include="category\category_dmi_processor.proto" />
+    <None Include="category\category_dmi_system.proto" />
+    <None Include="category\category_dmi_system_slot.proto" />
+    <None Include="category\category_driver.proto" />
+    <None Include="category\category_environment_variables.proto" />
+    <None Include="category\category_eventlog.proto" />
+    <None Include="category\category_license.proto" />
+    <None Include="category\category_logical_drive.proto" />
+    <None Include="category\category_memory.proto" />
+    <None Include="category\category_monitor.proto" />
+    <None Include="category\category_network_card.proto" />
+    <None Include="category\category_open_files.proto" />
+    <None Include="category\category_optical_drive.proto" />
+    <None Include="category\category_os.proto" />
+    <None Include="category\category_power_options.proto" />
+    <None Include="category\category_printer.proto" />
+    <None Include="category\category_process.proto" />
+    <None Include="category\category_ras.proto" />
+    <None Include="category\category_route.proto" />
+    <None Include="category\category_service.proto" />
+    <None Include="category\category_session.proto" />
+    <None Include="category\category_share.proto" />
+    <None Include="category\category_smart.proto" />
+    <None Include="category\category_task_scheduler.proto" />
+    <None Include="category\category_update.proto" />
+    <None Include="category\category_user.proto" />
+    <None Include="category\category_user_group.proto" />
+    <None Include="category\category_video_adapter.proto" />
+    <None Include="category\category_windows_device.proto" />
+    <None Include="category\category_wsus.proto" />
+    <None Include="proto\address_book.proto" />
+    <None Include="proto\auth_session.proto" />
+    <None Include="proto\computer.proto" />
+    <None Include="proto\desktop_session.proto" />
+    <None Include="proto\file_transfer_session.proto" />
+    <None Include="proto\key_exchange.proto" />
+    <None Include="proto\mru.proto" />
+    <None Include="proto\system_info_session.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="ui\common-controls.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ui\lang\en-US.rc" />
+    <ResourceCompile Include="ui\lang\nl-NL.rc" />
+    <ResourceCompile Include="ui\lang\ru-RU.rc" />
+    <ResourceCompile Include="ui\resource.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6CFEB6F2-0742-40D2-AE4C-1840D087062B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libaspia</RootNamespace>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+    <ProjectName>aspia_core</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+    <EnableCppCoreCheck>true</EnableCppCoreCheck>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <EnableCppCoreCheck>true</EnableCppCoreCheck>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <GenerateManifest>true</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;BASE_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4146</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>ui/common-controls.manifest</AdditionalManifestFiles>
+    </Manifest>
+    <ResourceCompile />
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4146</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+      <AdditionalManifestFiles>ui/common-controls.manifest</AdditionalManifestFiles>
+    </Manifest>
+    <ResourceCompile />
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/Zm160 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4146</DisableSpecificWarnings>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <StringPooling>true</StringPooling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <CompileAsManaged>false</CompileAsManaged>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <Manifest>
+      <AssemblyIdentity>
+      </AssemblyIdentity>
+    </Manifest>
+    <ResourceCompile />
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/Zm160 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4146</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <StringPooling>true</StringPooling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <CompileAsManaged>false</CompileAsManaged>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
+      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <Manifest>
+      <AssemblyIdentity>
+      </AssemblyIdentity>
+      <AdditionalManifestFiles>ui/common-controls.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
+    <ResourceCompile />
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party/wtl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

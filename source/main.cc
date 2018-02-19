@@ -36,21 +36,21 @@ void Main()
             if (GetBasePath(BasePathKey::FILE_EXE, program_path))
             {
                 if (!LaunchProcessWithElevate(program_path))
-                    RunUIMain(UI::MAIN_DIALOG);
+                    UIMain();
             }
         }
         else
         {
-            RunUIMain(UI::MAIN_DIALOG);
+            UIMain();
         }
     }
     else if (command_line.HasSwitch(kAddressBookSwitch))
     {
-        RunUIMain(UI::ADDRESS_BOOK);
+        AddressBookMain();
     }
     else
     {
-        RunHostMain(command_line);
+        HostMain();
     }
 
     ShutdownLogging();

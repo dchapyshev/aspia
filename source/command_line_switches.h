@@ -23,10 +23,6 @@ extern const CommandLine::CharType kModeDesktopSession[];
 extern const CommandLine::CharType kModeFileTransferSession[];
 extern const CommandLine::CharType kModeSystemInfoSession[];
 extern const CommandLine::CharType kModeSystemInfo[];
-extern const CommandLine::CharType kModeHostService[];
-
-extern const CommandLine::CharType kInstallServiceSwitch[];
-extern const CommandLine::CharType kRemoveServiceSwitch[];
 
 extern const CommandLine::CharType kAddressBookSwitch[];
 

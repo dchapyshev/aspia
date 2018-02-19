@@ -8,11 +8,11 @@
 #ifndef _ASPIA_HOST__HOST_MAIN_H
 #define _ASPIA_HOST__HOST_MAIN_H
 
-#include "base/command_line.h"
+#include "host/host_export.h"
 
 namespace aspia {
 
-void RunHostMain(const CommandLine& command_line);
+void HOST_EXPORT HostMain();
 
 } // namespace aspia
 

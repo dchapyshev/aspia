@@ -25,8 +25,10 @@ constexpr DWORD kInvalidSessionId = 0xFFFFFFFF;
 
 } // namespace
 
-SasInjector::SasInjector(const std::wstring& service_id)
-    : Service(ServiceManager::CreateUniqueServiceName(kSasServiceShortName, service_id))
+SasInjector::SasInjector()
+    : Service(ServiceManager::CreateUniqueServiceName(
+        kSasServiceShortName,
+        CommandLine::ForCurrentProcess().GetSwitchValue(kServiceIdSwitch)))
 {
     // Nothing
 }

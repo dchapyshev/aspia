@@ -1,0 +1,15 @@
+//
+// PROJECT:         Aspia
+// FILE:            ui/address_book/address_book_resource.rc
+// LICENSE:         Mozilla Public License Version 2.0
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include "ui/resource.h"
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+// UTF-8
+#pragma code_page(65001)
+
+IDI_ADDRESS_BOOK ICON "ui/resource/address-book.ico"
