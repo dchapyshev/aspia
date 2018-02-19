@@ -24,7 +24,6 @@
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
 #include "ui/ui_util.h"
-#include "command_line_switches.h"
 
 namespace aspia {
 
@@ -576,9 +575,9 @@ LRESULT MainDialog::OnAddressBookButton(
 
     if (GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
     {
-        CommandLine command_line(program_path);
-        command_line.AppendSwitch(kAddressBookSwitch);
-        LaunchProcess(command_line);
+        //CommandLine command_line(program_path);
+        //command_line.AppendSwitch(kAddressBookSwitch);
+        //LaunchProcess(command_line);
     }
 
     return 0;

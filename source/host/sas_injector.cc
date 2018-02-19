@@ -13,7 +13,6 @@
 #include "base/logging.h"
 #include "base/scoped_native_library.h"
 #include "host/scoped_sas_police.h"
-#include "command_line_switches.h"
 
 namespace aspia {
 
@@ -22,6 +21,8 @@ namespace {
 constexpr WCHAR kSasServiceShortName[] = L"aspia-sas-service";
 constexpr WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
 constexpr DWORD kInvalidSessionId = 0xFFFFFFFF;
+
+const wchar_t kServiceIdSwitch[] = L"service-id";
 
 } // namespace
 
@@ -75,7 +76,7 @@ void SasInjector::InjectSAS()
 
         CommandLine command_line(program_path);
 
-        command_line.AppendSwitch(kModeSwitch, kSasServiceSwitch);
+        //command_line.AppendSwitch(kModeSwitch, kSasServiceSwitch);
         command_line.AppendSwitch(kServiceIdSwitch, service_id);
 
         // Install the service in the system.

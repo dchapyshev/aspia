@@ -10,7 +10,6 @@
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/files/base_paths.h"
-#include "command_line_switches.h"
 
 #include <sddl.h>
 

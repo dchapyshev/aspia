@@ -10,6 +10,10 @@
 
 #include "ui/ui_export.h"
 
+namespace aspia {
+
 void UI_EXPORT UIMain();
+
+} // namespace aspia
 
 #endif // _ASPIA_UI__UI_MAIN_H

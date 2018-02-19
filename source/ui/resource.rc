@@ -13,6 +13,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(65001)
 
 IDI_MAIN                    ICON "resource/main.ico"
+IDI_ADDRESS_BOOK            ICON "resource/address-book.ico"
 
 IDI_ABOUT                   ICON "resource/about.ico"
 IDI_APPLICATIONS            ICON "resource/applications.ico"

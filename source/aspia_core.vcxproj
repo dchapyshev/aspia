@@ -223,7 +223,6 @@
     <ClInclude Include="codec\video_encoder_vpx.h" />
     <ClInclude Include="codec\video_encoder_zlib.h" />
     <ClInclude Include="codec\video_helpers.h" />
-    <ClInclude Include="command_line_switches.h" />
     <ClInclude Include="crypto\encryptor.h" />
     <ClInclude Include="crypto\random.h" />
     <ClInclude Include="crypto\secure_memory.h" />
@@ -344,6 +343,7 @@
     <ClInclude Include="ui\system_info\category_tree_ctrl.h" />
     <ClInclude Include="ui\system_info\info_list_ctrl.h" />
     <ClInclude Include="ui\system_info\report_progress_dialog.h" />
+    <ClInclude Include="ui\system_info\system_info_main.h" />
     <ClInclude Include="ui\system_info\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info\system_info_window.h" />
     <ClInclude Include="ui\ui_export.h" />
@@ -530,7 +530,6 @@
     <ClCompile Include="codec\video_encoder_vpx.cc" />
     <ClCompile Include="codec\video_encoder_zlib.cc" />
     <ClCompile Include="codec\video_helpers.cc" />
-    <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="crypto\encryptor.cc" />
     <ClCompile Include="crypto\random.cc" />
     <ClCompile Include="crypto\secure_memory.cc" />
@@ -644,6 +643,7 @@
     <ClCompile Include="ui\system_info\category_tree_ctrl.cc" />
     <ClCompile Include="ui\system_info\info_list_ctrl.cc" />
     <ClCompile Include="ui\system_info\report_progress_dialog.cc" />
+    <ClCompile Include="ui\system_info\system_info_main.cc" />
     <ClCompile Include="ui\system_info\system_info_toolbar.cc" />
     <ClCompile Include="ui\system_info\system_info_window.cc" />
     <ClCompile Include="ui\ui_main.cc" />

@@ -15,7 +15,6 @@
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
-#include "command_line_switches.h"
 
 #include <userenv.h>
 #include <string>
@@ -26,6 +25,15 @@ namespace {
 
 // Name of the default session desktop.
 constexpr WCHAR kDefaultDesktopName[] = L"winsta0\\default";
+
+const wchar_t kSessionTypeSwitch[] = L"session-type";
+const wchar_t kChannelIdSwitch[] = L"channel-id";
+const wchar_t kServiceIdSwitch[] = L"service-id";
+const wchar_t kSessionIdSwitch[] = L"session-id";
+
+const wchar_t kSessionTypeDesktop[] = L"desktop";
+const wchar_t kSessionTypeFileTransfer[] = L"file-transfer";
+const wchar_t kSessionTypeSystemInfo[] = L"system-info";
 
 bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 {
@@ -168,7 +176,8 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
     return true;
 }
 
-bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wstring& channel_id)
+bool LaunchProcessWithCurrentRights(const std::wstring& session_type,
+                                    const std::wstring& channel_id)
 {
     std::experimental::filesystem::path program_path;
 
@@ -177,7 +186,7 @@ bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wst
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kModeSwitch, run_mode);
+    command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle token;
@@ -188,7 +197,7 @@ bool LaunchProcessWithCurrentRights(const std::wstring& run_mode, const std::wst
     return CreateProcessWithToken(token, command_line);
 }
 
-bool LaunchSessionProcess(const std::wstring& run_mode,
+bool LaunchSessionProcess(const std::wstring& session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id)
 {
@@ -235,18 +244,18 @@ bool LaunchSessionProcess(const std::wstring& run_mode,
 
         CommandLine command_line(program_path);
 
-        command_line.AppendSwitch(kModeSwitch, run_mode);
+        command_line.AppendSwitch(kSessionTypeSwitch, session_type);
         command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
         return CreateProcessWithToken(session_token, command_line);
     }
 
-    return LaunchProcessWithCurrentRights(run_mode, channel_id);
+    return LaunchProcessWithCurrentRights(session_type, channel_id);
 }
 
 } // namespace
 
-bool LaunchSessionProcessFromService(const std::wstring& run_mode,
+bool LaunchSessionProcessFromService(const std::wstring& session_type,
                                      uint32_t session_id,
                                      const std::wstring& channel_id)
 {
@@ -257,7 +266,7 @@ bool LaunchSessionProcessFromService(const std::wstring& run_mode,
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kModeSwitch, run_mode);
+    command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle session_token;
@@ -278,31 +287,31 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
-            const WCHAR* launcher_mode = kModeDesktopSession;
+            const WCHAR* session_type_switch = kSessionTypeDesktop;
 
             if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
-                launcher_mode = kModeSystemInfoSession;
+                session_type_switch = kSessionTypeSystemInfo;
 
             if (!IsCallerHasAdminRights())
             {
-                return LaunchProcessWithCurrentRights(launcher_mode, channel_id);
+                return LaunchProcessWithCurrentRights(session_type_switch, channel_id);
             }
 
             if (!IsRunningAsService())
             {
-                return HostSessionLauncherService::CreateStarted(launcher_mode,
+                return HostSessionLauncherService::CreateStarted(session_type_switch,
                                                                  session_id,
                                                                  channel_id);
             }
 
             // The code is executed from the service.
             // Start the process directly.
-            return LaunchSessionProcessFromService(launcher_mode, session_id, channel_id);
+            return LaunchSessionProcessFromService(session_type_switch, session_id, channel_id);
         }
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
         {
-            return LaunchSessionProcess(kModeFileTransferSession, session_id, channel_id);
+            return LaunchSessionProcess(kSessionTypeFileTransfer, session_id, channel_id);
         }
 
         default:
@@ -322,7 +331,7 @@ bool LaunchSystemInfoProcess()
 
     CommandLine command_line(program_path);
 
-    command_line.AppendSwitch(kModeSwitch, kModeSystemInfo);
+    //command_line.AppendSwitch(kModeSwitch, kModeSystemInfo);
 
     if (IsWindowsVistaOrGreater() && !IsProcessElevated())
     {

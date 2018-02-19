@@ -13,13 +13,16 @@
 #include <commctrl.h>
 
 #include "base/command_line.h"
+#include "base/files/base_paths.h"
 #include "base/message_loop/message_loop.h"
+#include "base/process/process_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/settings_manager.h"
+#include "base/version_helpers.h"
 #include "ui/address_book/address_book_window.h"
 #include "ui/main_dialog.h"
 
-using namespace aspia;
+namespace aspia {
 
 namespace {
 
@@ -57,35 +60,60 @@ bool InitUIModule(CAppModule& module)
 
 void UIMain()
 {
+    LoggingSettings settings;
+
+    settings.logging_dest = LOG_TO_ALL;
+    settings.lock_log = LOCK_LOG_FILE;
+
+    InitLogging(settings);
+
+    if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+    {
+        std::experimental::filesystem::path program_path;
+
+        if (GetBasePath(BasePathKey::FILE_EXE, program_path))
+        {
+            if (LaunchProcessWithElevate(program_path))
+            {
+                ShutdownLogging();
+                return;
+            }
+        }
+    }
+
     CAppModule module;
 
-    if (!InitUIModule(module))
-        return;
-
-    static const WCHAR kMutexName[] = L"aspia.mutex.main_dialog";
-
-    ScopedHandle mutex(CreateMutexW(nullptr, FALSE, kMutexName));
-    if (!mutex.IsValid() || GetLastError() == ERROR_ALREADY_EXISTS)
+    if (InitUIModule(module))
     {
-        DLOG(LS_WARNING) << "The application is already running.";
+        static const WCHAR kMutexName[] = L"aspia.mutex.main_dialog";
+
+        ScopedHandle mutex(CreateMutexW(nullptr, FALSE, kMutexName));
+        if (!mutex.IsValid() || GetLastError() == ERROR_ALREADY_EXISTS)
+        {
+            DLOG(LS_WARNING) << "The application is already running.";
+        }
+        else
+        {
+            MainDialog main_dialog;
+
+            if (!main_dialog.Create(nullptr, 0))
+            {
+                PLOG(LS_ERROR) << "Unable to create main dialog";
+            }
+            else
+            {
+                main_dialog.ShowWindow(SW_SHOWNORMAL);
+                main_dialog.UpdateWindow();
+
+                MessageLoopForUI message_loop;
+                message_loop.Run(&main_dialog);
+            }
+        }
+
         module.Term();
-        return;
     }
 
-    MainDialog main_dialog;
-
-    if (!main_dialog.Create(nullptr, 0))
-    {
-        PLOG(LS_ERROR) << "Unable to create main dialog";
-    }
-    else
-    {
-        main_dialog.ShowWindow(SW_SHOWNORMAL);
-        main_dialog.UpdateWindow();
-
-        MessageLoopForUI message_loop;
-        message_loop.Run(&main_dialog);
-    }
-
-    module.Term();
+    ShutdownLogging();
 }
+
+} // namespace aspia

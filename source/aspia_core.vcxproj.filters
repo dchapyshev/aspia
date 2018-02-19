@@ -1059,7 +1059,6 @@
     <ClInclude Include="ui\system_info\system_info_window.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="command_line_switches.h" />
     <ClInclude Include="ui\ui_export.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -1077,6 +1076,9 @@
     </ClInclude>
     <ClInclude Include="ui\address_book\address_book_main.h">
       <Filter>ui\address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\system_info\system_info_main.h">
+      <Filter>ui\system_info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1956,7 +1958,6 @@
     <ClCompile Include="ui\system_info\system_info_window.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
-    <ClCompile Include="command_line_switches.cc" />
     <ClCompile Include="host\host_service_main.cc">
       <Filter>host</Filter>
     </ClCompile>
@@ -1968,6 +1969,9 @@
     </ClCompile>
     <ClCompile Include="ui\address_book\address_book_main.cc">
       <Filter>ui\address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\system_info\system_info_main.cc">
+      <Filter>ui\system_info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
