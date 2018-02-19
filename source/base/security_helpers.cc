@@ -153,7 +153,7 @@ bool GetUserSidString(std::wstring& user_sid)
         return false;
 
     // Convert the data to a string.
-    ScopedLocal<WCHAR*> sid_string;
+    ScopedLocal<wchar_t*> sid_string;
 
     if (!ConvertSidToStringSidW(user->User.Sid, sid_string.Recieve()))
         return false;

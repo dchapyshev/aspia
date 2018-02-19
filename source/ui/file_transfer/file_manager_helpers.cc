@@ -195,7 +195,7 @@ std::wstring SizeToString(uint64_t size)
     static const uint64_t kMB = 1024ULL * 1024ULL;
     static const uint64_t kKB = 1024ULL;
 
-    WCHAR units[128];
+    wchar_t units[128];
     uint64_t divider;
 
     if (size >= kTB)

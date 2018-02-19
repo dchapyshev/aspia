@@ -25,7 +25,7 @@ public:
     //
     // NOTE: Do not pass a BSTR to this constructor expecting ownership to
     // be transferred - even though it compiles! ;-)
-    explicit ScopedBstr(const WCHAR* non_bstr);
+    explicit ScopedBstr(const wchar_t* non_bstr);
     ~ScopedBstr();
 
     // Give ScopedBstr ownership over an already allocated BSTR or NULL.
@@ -41,7 +41,7 @@ public:
     // ScopedBstr instance, call |reset| instead.
     //
     // Returns a pointer to the new BSTR, or NULL if allocation failed.
-    BSTR Allocate(const WCHAR* str);
+    BSTR Allocate(const wchar_t* str);
 
     // Allocates a new BSTR with the specified number of bytes.
     // Returns a pointer to the new BSTR, or NULL if allocation failed.

@@ -29,8 +29,8 @@ namespace aspia {
 
 namespace {
 
-const WCHAR kAddressBookFileExtensionFilter[] = L"*.aab";
-const WCHAR kAddressBookFileExtension[] = L"aab";
+const wchar_t kAddressBookFileExtensionFilter[] = L"*.aab";
+const wchar_t kAddressBookFileExtension[] = L"aab";
 
 bool DeleteChildComputer(proto::ComputerGroup* parent_group, proto::Computer* computer)
 {
@@ -1002,7 +1002,7 @@ bool AddressBookWindow::OpenAddressBook()
 
     if (address_book_path_.empty())
     {
-        WCHAR filter[256] = { 0 };
+        wchar_t filter[256] = { 0 };
         int length = 0;
 
         length += AtlLoadString(IDS_AB_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;
@@ -1122,7 +1122,7 @@ bool AddressBookWindow::SaveAddressBook(const std::experimental::filesystem::pat
 
     if (address_book_path.empty())
     {
-        WCHAR filter[256] = { 0 };
+        wchar_t filter[256] = { 0 };
         int length = 0;
 
         length += AtlLoadString(IDS_AB_ADDRESS_BOOK_FILTER, filter, ARRAYSIZE(filter)) + 1;

@@ -417,7 +417,7 @@ LRESULT SystemInfoWindow::OnCopyButton(
 
     for (int column_index = 0; column_index < column_count; ++column_index)
     {
-        WCHAR buffer[256] = { 0 };
+        wchar_t buffer[256] = { 0 };
 
         if (list_.GetItemText(item.iItem, column_index, buffer, ARRAYSIZE(buffer)))
         {
@@ -448,7 +448,7 @@ LRESULT SystemInfoWindow::OnCopyAllButton(
     {
         for (int column_index = 0; column_index < column_count; ++column_index)
         {
-            WCHAR buffer[256] = { 0 };
+            wchar_t buffer[256] = { 0 };
 
             if (list_.GetItemText(item_index, column_index, buffer, ARRAYSIZE(buffer)))
             {
@@ -477,7 +477,7 @@ LRESULT SystemInfoWindow::OnCopyValueButton(
     if (!list_.GetSelectedItem(&item))
         return 0;
 
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (list_.GetItemText(item.iItem, 1, buffer, ARRAYSIZE(buffer)))
     {
@@ -503,11 +503,11 @@ LRESULT SystemInfoWindow::OnExitButton(
 
 void SystemInfoWindow::Save(CategoryList* category_list)
 {
-    static const WCHAR html_files[] = L"*.html;*.htm";
-    static const WCHAR json_files[] = L"*.json";
-    static const WCHAR xml_files[] = L"*.xml";
+    static const wchar_t html_files[] = L"*.html;*.htm";
+    static const wchar_t json_files[] = L"*.json";
+    static const wchar_t xml_files[] = L"*.xml";
 
-    WCHAR filter[256] = { 0 };
+    wchar_t filter[256] = { 0 };
     int length = 0;
 
     length += AtlLoadString(IDS_SI_FILTER_HTML, filter, ARRAYSIZE(filter)) + 1;
@@ -521,7 +521,7 @@ void SystemInfoWindow::Save(CategoryList* category_list)
     length += AtlLoadString(IDS_SI_FILTER_XML, filter + length, ARRAYSIZE(filter) - length) + 1;
     StringCbCatW(filter + length, ARRAYSIZE(filter) - length, xml_files);
 
-    WCHAR computer_name[256] = { 0 };
+    wchar_t computer_name[256] = { 0 };
     DWORD computer_name_length = ARRAYSIZE(computer_name);
     GetComputerNameW(computer_name, &computer_name_length);
 
@@ -607,7 +607,7 @@ std::wstring SystemInfoWindow::GetListHeaderText()
 
     for (int column_index = 0; column_index < column_count; ++column_index)
     {
-        WCHAR buffer[256] = { 0 };
+        wchar_t buffer[256] = { 0 };
         HDITEMW header_item;
 
         memset(&header_item, 0, sizeof(header_item));
@@ -635,7 +635,7 @@ void SystemInfoWindow::CopyTextToClipboard(const std::wstring& text)
 
     clipboard.Empty();
 
-    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.length() + 1) * sizeof(WCHAR));
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.length() + 1) * sizeof(wchar_t));
     if (!text_global)
         return;
 
@@ -646,7 +646,7 @@ void SystemInfoWindow::CopyTextToClipboard(const std::wstring& text)
         return;
     }
 
-    memcpy(text_global_locked, text.data(), text.length() * sizeof(WCHAR));
+    memcpy(text_global_locked, text.data(), text.length() * sizeof(wchar_t));
     text_global_locked[text.length()] = 0;
 
     GlobalUnlock(text_global);

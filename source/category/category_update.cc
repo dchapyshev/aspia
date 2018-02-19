@@ -65,7 +65,7 @@ std::string CategoryUpdate::Serialize()
 
     for (;;)
     {
-        WCHAR product_guid[38 + 1];
+        wchar_t product_guid[38 + 1];
 
         UINT ret = MsiEnumProductsW(product_index, product_guid);
         if (ret == ERROR_NO_MORE_ITEMS)
@@ -81,8 +81,8 @@ std::string CategoryUpdate::Serialize()
 
         for (;;)
         {
-            WCHAR patch_guid[38 + 1];
-            WCHAR patch_transforms[256];
+            wchar_t patch_guid[38 + 1];
+            wchar_t patch_transforms[256];
             DWORD patch_transforms_length = ARRAYSIZE(patch_transforms);
 
             ret = MsiEnumPatchesW(product_guid, patch_index, patch_guid,
@@ -96,7 +96,7 @@ std::string CategoryUpdate::Serialize()
                 break;
             }
 
-            WCHAR value[256];
+            wchar_t value[256];
             DWORD value_length = ARRAYSIZE(value);
 
             ret = MsiGetPatchInfoExW(patch_guid, product_guid, nullptr, MSIINSTALLCONTEXT_MACHINE,

@@ -37,10 +37,10 @@ public:
     // Constructor to create a new VT_BSTR VARIANT.
     // NOTE: Do not pass a BSTR to this constructor expecting ownership to
     // be transferred
-    explicit ScopedVariant(const WCHAR* str);
+    explicit ScopedVariant(const wchar_t* str);
 
     // Creates a new VT_BSTR variant of a specified length.
-    ScopedVariant(const WCHAR* str, UINT length);
+    ScopedVariant(const wchar_t* str, UINT length);
 
     // Creates a new integral type variant and assigns the value to
     // VARIANT.lVal (32 bit sized field).

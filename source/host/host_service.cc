@@ -17,12 +17,12 @@ namespace aspia {
 
 namespace {
 
-static const WCHAR kHostServiceShortName[] = L"aspia-host";
-static const WCHAR kHostServiceFullName[] = L"Aspia Host";
+static const wchar_t kHostServiceShortName[] = L"aspia-host";
+static const wchar_t kHostServiceFullName[] = L"Aspia Host";
 
 // Security descriptor allowing local processes running under SYSTEM or
 // LocalService accounts to call COM methods exposed by the daemon.
-const WCHAR kComProcessSd[] =
+const wchar_t kComProcessSd[] =
     SDDL_OWNER L":" SDDL_LOCAL_SYSTEM
     SDDL_GROUP L":" SDDL_LOCAL_SYSTEM
     SDDL_DACL L":"
@@ -32,7 +32,7 @@ const WCHAR kComProcessSd[] =
 // Appended to |kComProcessSd| to specify that only callers running at medium
 // or higher integrity level are allowed to call COM methods exposed by the
 // daemon.
-const WCHAR kComProcessMandatoryLabel[] =
+const wchar_t kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 

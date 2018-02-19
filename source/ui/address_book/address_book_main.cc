@@ -35,7 +35,7 @@ bool InitUIModule(CAppModule& module)
 
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                             GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                            reinterpret_cast<WCHAR*>(&InitUIModule),
+                            reinterpret_cast<wchar_t*>(&InitUIModule),
                             &instance))
     {
         PLOG(LS_ERROR) << "GetModuleHandleExW failed";

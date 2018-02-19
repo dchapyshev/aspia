@@ -123,7 +123,7 @@ void Clipboard::OnClipboardUpdate()
             }
 
             {
-                ScopedHGlobal<WCHAR> text_lock(text_global);
+                ScopedHGlobal<wchar_t> text_lock(text_global);
                 if (!text_lock.Get())
                 {
                     PLOG(LS_WARNING) << "Couldn't lock clipboard data";
@@ -247,7 +247,7 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
 
     clipboard.Empty();
 
-    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(WCHAR));
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
     if (!text_global)
     {
         PLOG(LS_WARNING) << "GlobalAlloc failed";
@@ -262,7 +262,7 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
         return;
     }
 
-    memcpy(text_global_locked, text.data(), text.size() * sizeof(WCHAR));
+    memcpy(text_global_locked, text.data(), text.size() * sizeof(wchar_t));
     text_global_locked[text.size()] = 0;
 
     GlobalUnlock(text_global);

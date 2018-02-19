@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-static const WCHAR kSasServiceSwitch[] = L"sas-service";
+static const wchar_t kSasServiceSwitch[] = L"sas-service";
 
 class SasInjector : private Service
 {

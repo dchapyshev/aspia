@@ -18,7 +18,7 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
+constexpr wchar_t kPipeNamePrefix[] = L"\\\\.\\pipe\\aspia.";
 constexpr DWORD kPipeBufferSize = 512 * 1024; // 512 kB
 
 bool IsFailureCode(const std::error_code& code)

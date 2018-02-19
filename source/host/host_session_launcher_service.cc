@@ -16,8 +16,8 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kServiceShortName[] = L"aspia-session-launcher";
-constexpr WCHAR kServiceFullName[] = L"Aspia Session Launcher";
+constexpr wchar_t kServiceShortName[] = L"aspia-session-launcher";
+constexpr wchar_t kServiceFullName[] = L"Aspia Session Launcher";
 
 const wchar_t kSessionTypeSwitch[] = L"session-type";
 const wchar_t kChannelIdSwitch[] = L"channel-id";

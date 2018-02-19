@@ -156,7 +156,7 @@ LRESULT FileManagerPanel::OnDrawItem(
     HBRUSH background_brush = GetSysColorBrush(COLOR_WINDOW);
     FillRect(dis->hDC, &dis->rcItem, background_brush);
 
-    WCHAR label[256] = { 0 };
+    wchar_t label[256] = { 0 };
     ::GetWindowTextW(dis->hwndItem, label, _countof(label));
 
     if (label[0])
@@ -322,7 +322,7 @@ LRESULT FileManagerPanel::OnListEndLabelEdit(int /* ctrl_id */, LPNMHDR hdr, BOO
     {
         CEdit edit(file_list_.GetEditControl());
 
-        WCHAR buffer[MAX_PATH] = { 0 };
+        wchar_t buffer[MAX_PATH] = { 0 };
         edit.GetWindowTextW(buffer, _countof(buffer));
 
         std::experimental::filesystem::path path = drive_list_.CurrentPath();
@@ -488,13 +488,13 @@ int CALLBACK FileManagerPanel::CompareFunc(LPARAM lparam1, LPARAM lparam2, LPARA
     find_info.lParam = lparam1;
     int index = list.FindItem(&find_info, -1);
 
-    WCHAR item1[MAX_PATH] = { 0 };
+    wchar_t item1[MAX_PATH] = { 0 };
     list.GetItemText(index, context->column_index, item1, _countof(item1));
 
     find_info.lParam = lparam2;
     index = list.FindItem(&find_info, -1);
 
-    WCHAR item2[MAX_PATH] = { 0 };
+    wchar_t item2[MAX_PATH] = { 0 };
     list.GetItemText(index, context->column_index, item2, _countof(item2));
 
     if (context->self->sort_ascending_)

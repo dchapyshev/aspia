@@ -174,7 +174,7 @@ std::experimental::filesystem::path DriveListCtrl::ObjectPath(int object_index) 
             if (item_index == CB_ERR)
                 return std::experimental::filesystem::path();
 
-            WCHAR path[MAX_PATH];
+            wchar_t path[MAX_PATH];
 
             if (!GetItemText(item_index, path, _countof(path)))
                 return std::experimental::filesystem::path();

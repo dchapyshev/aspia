@@ -96,7 +96,7 @@ std::string ProcessEnumerator::GetFilePath() const
     if (!current_process_.IsValid())
         return std::string();
 
-    WCHAR file_path[MAX_PATH];
+    wchar_t file_path[MAX_PATH];
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
     {
@@ -112,7 +112,7 @@ std::string ProcessEnumerator::GetFileDescription() const
     if (!current_process_.IsValid())
         return std::string();
 
-    WCHAR file_path[MAX_PATH];
+    wchar_t file_path[MAX_PATH];
 
     if (!GetModuleFileNameExW(current_process_.Get(), nullptr, file_path, _countof(file_path)))
     {
@@ -157,7 +157,7 @@ std::string ProcessEnumerator::GetFileDescription() const
                                          translate->language,
                                          translate->code_page);
 
-    WCHAR* description = nullptr;
+    wchar_t* description = nullptr;
 
     if (!VerQueryValueW(buffer.get(),
                         subblock.c_str(),

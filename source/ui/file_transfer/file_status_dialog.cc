@@ -15,7 +15,7 @@
 
 namespace aspia {
 
-static const WCHAR kRichEditLibraryName[] = L"msftedit.dll";
+static const wchar_t kRichEditLibraryName[] = L"msftedit.dll";
 
 FileStatusDialog::FileStatusDialog()
 {
@@ -111,9 +111,9 @@ LRESULT FileStatusDialog::OnStopButton(
     return 0;
 }
 
-void FileStatusDialog::WriteMessage(const WCHAR* message)
+void FileStatusDialog::WriteMessage(const wchar_t* message)
 {
-    WCHAR time[128];
+    wchar_t time[128];
 
     if (GetTimeFormatW(LOCALE_USER_DEFAULT, 0, nullptr, nullptr, time, _countof(time)))
     {

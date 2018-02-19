@@ -43,7 +43,7 @@ public:
         RemoveTrayIcon();
     }
 
-    BOOL AddTrayIcon(HICON icon, const WCHAR* tooltip, UINT menu_id)
+    BOOL AddTrayIcon(HICON icon, const wchar_t* tooltip, UINT menu_id)
     {
         T* pT = static_cast<T*>(this);
 
@@ -78,7 +78,7 @@ public:
         default_menu_item_ = menu_item;
     }
 
-    BOOL SetTrayTooltip(const WCHAR *tooltip)
+    BOOL SetTrayTooltip(const wchar_t* tooltip)
     {
         if (!tooltip)
             return FALSE;

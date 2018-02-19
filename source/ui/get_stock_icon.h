@@ -125,7 +125,7 @@ typedef struct _SHSTOCKICONINFO
     HICON hIcon;
     int   iSysImageIndex;
     int   iIcon;
-    WCHAR szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH];
 } SHSTOCKICONINFO;
 
 #define SHGSI_ICONLOCATION      0 // you always get the icon location

@@ -62,7 +62,7 @@ void NetworkAdapterEnumerator::Advance()
 
 static std::wstring GetAdapterRegistryPath(const char* adapter_name)
 {
-    static constexpr WCHAR kFormat[] =
+    static constexpr wchar_t kFormat[] =
         L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\%S\\Connection";
 
     return StringPrintf(kFormat, adapter_name);
@@ -102,7 +102,7 @@ std::string NetworkAdapterEnumerator::GetAdapterName() const
     {
         ++device_index;
 
-        WCHAR device_id[MAX_PATH] = { 0 };
+        wchar_t device_id[MAX_PATH] = { 0 };
 
         if (!SetupDiGetDeviceInstanceIdW(device_info,
                                          &device_info_data,
@@ -115,7 +115,7 @@ std::string NetworkAdapterEnumerator::GetAdapterName() const
 
         if (_wcsicmp(adapter_id.c_str(), device_id) == 0)
         {
-            WCHAR device_name[MAX_PATH] = { 0 };
+            wchar_t device_name[MAX_PATH] = { 0 };
 
             if (SetupDiGetDeviceRegistryPropertyW(device_info,
                                                   &device_info_data,

@@ -38,7 +38,7 @@ bool InitUIModule(CAppModule& module)
 
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                             GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                            reinterpret_cast<WCHAR*>(&InitUIModule),
+                            reinterpret_cast<wchar_t*>(&InitUIModule),
                             &instance))
     {
         PLOG(LS_ERROR) << "GetModuleHandleExW failed";
@@ -85,7 +85,7 @@ void UIMain()
 
     if (InitUIModule(module))
     {
-        static const WCHAR kMutexName[] = L"aspia.mutex.main_dialog";
+        static const wchar_t kMutexName[] = L"aspia.mutex.main_dialog";
 
         ScopedHandle mutex(CreateMutexW(nullptr, FALSE, kMutexName));
         if (!mutex.IsValid() || GetLastError() == ERROR_ALREADY_EXISTS)

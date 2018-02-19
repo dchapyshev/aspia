@@ -14,10 +14,10 @@
 
 namespace aspia {
 
-static const WCHAR kShellIcons[] =
+static const wchar_t kShellIcons[] =
     L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons";
 
-static const WCHAR kShell32LibraryName[] = L"shell32.dll";
+static const wchar_t kShell32LibraryName[] = L"shell32.dll";
 
 HRESULT GetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO* sii)
 {
@@ -54,7 +54,7 @@ HRESULT GetStockIconInfo(SHSTOCKICONID id, UINT flags, SHSTOCKICONINFO* sii)
     sii->hIcon          = nullptr;
     sii->szPath[0]      = 0;
 
-    WCHAR value_name[12];
+    wchar_t value_name[12];
 
     if (SUCCEEDED(StringCchPrintfW(value_name, ARRAYSIZE(value_name), L"%d", id)))
     {

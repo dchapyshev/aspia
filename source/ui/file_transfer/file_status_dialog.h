@@ -72,7 +72,7 @@ private:
     LRESULT OnMinimizeButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStopButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
 
-    void WriteMessage(const WCHAR* text);
+    void WriteMessage(const wchar_t* text);
 
     Thread ui_thread_;
     std::shared_ptr<MessageLoopProxy> runner_;

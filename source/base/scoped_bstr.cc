@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-ScopedBstr::ScopedBstr(const WCHAR* non_bstr) :
+ScopedBstr::ScopedBstr(const wchar_t* non_bstr) :
     bstr_(SysAllocString(non_bstr))
 {
     // Nothing
@@ -52,7 +52,7 @@ BSTR* ScopedBstr::Receive()
     return &bstr_;
 }
 
-BSTR ScopedBstr::Allocate(const WCHAR* str)
+BSTR ScopedBstr::Allocate(const wchar_t* str)
 {
     Reset(SysAllocString(str));
     return bstr_;

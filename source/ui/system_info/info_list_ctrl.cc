@@ -90,13 +90,13 @@ int CALLBACK InfoListCtrl::SortingCompare(LPARAM lparam1, LPARAM lparam2, LPARAM
     find_info.lParam = lparam1;
     int item_index = context->list->FindItem(&find_info, -1);
 
-    WCHAR item1[256] = { 0 };
+    wchar_t item1[256] = { 0 };
     context->list->GetItemText(item_index, context->column_index, item1, ARRAYSIZE(item1));
 
     find_info.lParam = lparam2;
     item_index = context->list->FindItem(&find_info, -1);
 
-    WCHAR item2[256] = { 0 };
+    wchar_t item2[256] = { 0 };
     context->list->GetItemText(item_index, context->column_index, item2, ARRAYSIZE(item2));
 
     if (context->list->sorting_ascending_)

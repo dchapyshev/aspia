@@ -86,7 +86,7 @@ bool GetBatteryStatus(Device& battery, ULONG tag, BATTERY_STATUS& status)
 
 std::string GetBatteryName(Device& battery, ULONG tag)
 {
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (!GetBatteryInformation(battery, tag, BatteryDeviceName, buffer, sizeof(buffer)))
         return std::string();
@@ -96,7 +96,7 @@ std::string GetBatteryName(Device& battery, ULONG tag)
 
 std::string GetBatteryManufacturer(Device& battery, ULONG tag)
 {
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (!GetBatteryInformation(battery, tag, BatteryManufactureName, buffer, sizeof(buffer)))
         return std::string();
@@ -118,7 +118,7 @@ std::string GetBatteryManufactureDate(Device& battery, ULONG tag)
 
 std::string GetBatteryUniqueId(Device& battery, ULONG tag)
 {
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (!GetBatteryInformation(battery, tag, BatteryUniqueID, buffer, sizeof(buffer)))
         return std::string();
@@ -128,7 +128,7 @@ std::string GetBatteryUniqueId(Device& battery, ULONG tag)
 
 std::string GetBatterySerialNumber(Device& battery, ULONG tag)
 {
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (!GetBatteryInformation(battery, tag, BatterySerialNumber, buffer, sizeof(buffer)))
         return std::string();
@@ -138,7 +138,7 @@ std::string GetBatterySerialNumber(Device& battery, ULONG tag)
 
 std::string GetBatteryTemperature(Device& battery, ULONG tag)
 {
-    WCHAR buffer[256] = { 0 };
+    wchar_t buffer[256] = { 0 };
 
     if (!GetBatteryInformation(battery, tag, BatteryTemperature, buffer, sizeof(buffer)))
         return std::string();
@@ -220,7 +220,7 @@ int GetBatteryDepreciation(Device& battery, ULONG tag)
     return (percent >= 0) ? percent : 0;
 }
 
-void AddBattery(proto::PowerOptions& message, const WCHAR* device_path)
+void AddBattery(proto::PowerOptions& message, const wchar_t* device_path)
 {
     Device battery;
     if (!battery.Open(device_path))

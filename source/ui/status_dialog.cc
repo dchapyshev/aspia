@@ -154,7 +154,7 @@ static std::wstring GetCurrentDateTime()
         // Set the locale obtained from system.
         std::setlocale(LC_TIME, "");
 
-        WCHAR string[128];
+        wchar_t string[128];
         if (std::wcsftime(string, _countof(string), L"%x %X", local_time))
         {
             return string;

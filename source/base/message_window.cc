@@ -14,8 +14,8 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kWindowClassName[] = L"Aspia_MessageWindowClass";
-constexpr WCHAR kWindowName[] = L"Aspia_MessageWindow";
+constexpr wchar_t kWindowClassName[] = L"Aspia_MessageWindowClass";
+constexpr wchar_t kWindowName[] = L"Aspia_MessageWindow";
 
 static std::atomic_bool _class_registered = false;
 
@@ -40,7 +40,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
 
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                                 GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                            reinterpret_cast<WCHAR*>(&WindowProc),
+                            reinterpret_cast<wchar_t*>(&WindowProc),
                             &instance))
     {
         PLOG(LS_ERROR) << "GetModuleHandleExW failed";

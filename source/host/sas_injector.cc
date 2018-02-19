@@ -18,8 +18,8 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kSasServiceShortName[] = L"aspia-sas-service";
-constexpr WCHAR kSasServiceFullName[] = L"Aspia SAS Injector";
+constexpr wchar_t kSasServiceShortName[] = L"aspia-sas-service";
+constexpr wchar_t kSasServiceFullName[] = L"Aspia SAS Injector";
 constexpr DWORD kInvalidSessionId = 0xFFFFFFFF;
 
 const wchar_t kServiceIdSwitch[] = L"service-id";

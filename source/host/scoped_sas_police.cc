@@ -12,10 +12,10 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kSoftwareSASGenerationPath[] =
+constexpr wchar_t kSoftwareSASGenerationPath[] =
     L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 
-constexpr WCHAR kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
+constexpr wchar_t kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
 } // namespace
 

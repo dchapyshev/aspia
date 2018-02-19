@@ -64,7 +64,7 @@ std::string GetWindowVersion()
     std::wstring subblock = StringPrintf(L"\\StringFileInfo\\%04x%04x\\ProductVersion",
                                          translate->language, translate->code_page);
 
-    WCHAR* version = nullptr;
+    wchar_t* version = nullptr;
 
     if (!VerQueryValueW(buffer.get(), subblock.c_str(), reinterpret_cast<void**>(&version), &length))
     {
@@ -257,7 +257,7 @@ std::string CategoryOS::Serialize()
         message.set_uptime(counter.QuadPart / frequency.QuadPart);
     }
 
-    WCHAR computer_name[MAX_COMPUTERNAME_LENGTH + 1];
+    wchar_t computer_name[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD computer_name_size = ARRAYSIZE(computer_name);
 
     if (GetComputerNameW(computer_name, &computer_name_size))

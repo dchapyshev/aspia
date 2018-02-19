@@ -131,7 +131,7 @@ LRESULT UserPropDialog::OnInitDialog(
         CEdit password_edit(GetDlgItem(IDC_PASSWORD_EDIT));
         CEdit password_retry_edit(GetDlgItem(IDC_PASSWORD_RETRY_EDIT));
 
-        const WCHAR kNotChangedPassword[] = L"******";
+        const wchar_t kNotChangedPassword[] = L"******";
         password_edit.SetWindowTextW(kNotChangedPassword);
         password_retry_edit.SetWindowTextW(kNotChangedPassword);
 

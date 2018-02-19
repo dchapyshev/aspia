@@ -48,7 +48,7 @@ std::unique_ptr<SMBios> ReadSMBiosFromFirmwareTable()
 
 std::unique_ptr<SMBios> ReadSMBiosFromWindowsRegistry()
 {
-    const WCHAR kSMBiosPath[] = L"SYSTEM\\CurrentControlSet\\services\\mssmbios\\Data";
+    static const wchar_t kSMBiosPath[] = L"SYSTEM\\CurrentControlSet\\services\\mssmbios\\Data";
     RegistryKey key;
 
     LONG status = key.Open(HKEY_LOCAL_MACHINE, kSMBiosPath, KEY_READ);

@@ -24,7 +24,7 @@ namespace aspia {
 namespace {
 
 // Name of the default session desktop.
-constexpr WCHAR kDefaultDesktopName[] = L"winsta0\\default";
+constexpr wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 const wchar_t kSessionTypeSwitch[] = L"session-type";
 const wchar_t kChannelIdSwitch[] = L"channel-id";
@@ -138,7 +138,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
     memset(&startup_info, 0, sizeof(startup_info));
 
     startup_info.cb = sizeof(startup_info);
-    startup_info.lpDesktop = const_cast<WCHAR*>(kDefaultDesktopName);
+    startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
     PVOID environment = nullptr;
 
@@ -287,7 +287,7 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
-            const WCHAR* session_type_switch = kSessionTypeDesktop;
+            const wchar_t* session_type_switch = kSessionTypeDesktop;
 
             if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
                 session_type_switch = kSessionTypeSystemInfo;

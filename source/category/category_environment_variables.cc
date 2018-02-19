@@ -57,7 +57,7 @@ void CategoryEnvironmentVariables::Parse(Table& table, const std::string& data)
 
 std::string CategoryEnvironmentVariables::Serialize()
 {
-    WCHAR* strings = GetEnvironmentStringsW();
+    wchar_t* strings = GetEnvironmentStringsW();
     if (!strings)
     {
         PLOG(LS_WARNING) << "GetEnvironmentStringsW failed";
@@ -66,14 +66,14 @@ std::string CategoryEnvironmentVariables::Serialize()
 
     proto::EnvironmentVariable message;
 
-    for (WCHAR* current = strings; *current != 0; current++)
+    for (wchar_t* current = strings; *current != 0; current++)
     {
-        WCHAR* context;
+        wchar_t* context;
 
-        WCHAR* name = std::wcstok(current, L"=", &context);
+        wchar_t* name = std::wcstok(current, L"=", &context);
         if (name != nullptr && std::wcsncmp(name, L"::", 2) != 0)
         {
-            WCHAR* value = std::wcstok(nullptr, L"=", &context);
+            wchar_t* value = std::wcstok(nullptr, L"=", &context);
             if (value != nullptr)
             {
                 proto::EnvironmentVariable::Item* item = message.add_item();

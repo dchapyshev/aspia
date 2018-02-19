@@ -19,13 +19,13 @@ ScopedVariant::~ScopedVariant()
     ::VariantClear(&var_);
 }
 
-ScopedVariant::ScopedVariant(const WCHAR* str)
+ScopedVariant::ScopedVariant(const wchar_t* str)
 {
     var_.vt = VT_EMPTY;
     Set(str);
 }
 
-ScopedVariant::ScopedVariant(const WCHAR* str, UINT length)
+ScopedVariant::ScopedVariant(const wchar_t* str, UINT length)
 {
     var_.vt = VT_BSTR;
     var_.bstrVal = ::SysAllocStringLen(str, length);
@@ -131,7 +131,7 @@ int ScopedVariant::Compare(const VARIANT& var, bool ignore_case) const
     return ret;
 }
 
-void ScopedVariant::Set(const WCHAR* str)
+void ScopedVariant::Set(const wchar_t* str)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 

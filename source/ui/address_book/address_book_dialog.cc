@@ -26,7 +26,7 @@ constexpr int kMinPasswordLength = 6;
 constexpr int kMaxPasswordLength = 64;
 constexpr int kMaxCommentLength = 2048;
 
-constexpr WCHAR kStarString[] = L"******";
+constexpr wchar_t kStarString[] = L"******";
 
 } // namespace
 

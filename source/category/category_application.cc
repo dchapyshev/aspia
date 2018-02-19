@@ -17,18 +17,18 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kUninstallKeyPath[] =
+constexpr wchar_t kUninstallKeyPath[] =
     L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
 
-constexpr WCHAR kDisplayName[] = L"DisplayName";
-constexpr WCHAR kDisplayVersion[] = L"DisplayVersion";
-constexpr WCHAR kPublisher[] = L"Publisher";
-constexpr WCHAR kInstallDate[] = L"InstallDate";
-constexpr WCHAR kInstallLocation[] = L"InstallLocation";
-constexpr WCHAR kSystemComponent[] = L"SystemComponent";
-constexpr WCHAR kParentKeyName[] = L"ParentKeyName";
+constexpr wchar_t kDisplayName[] = L"DisplayName";
+constexpr wchar_t kDisplayVersion[] = L"DisplayVersion";
+constexpr wchar_t kPublisher[] = L"Publisher";
+constexpr wchar_t kInstallDate[] = L"InstallDate";
+constexpr wchar_t kInstallLocation[] = L"InstallLocation";
+constexpr wchar_t kSystemComponent[] = L"SystemComponent";
+constexpr wchar_t kParentKeyName[] = L"ParentKeyName";
 
-bool AddApplication(proto::Application* message, const WCHAR* key_name, REGSAM access)
+bool AddApplication(proto::Application* message, const wchar_t* key_name, REGSAM access)
 {
     std::wstring key_path = StringPrintf(L"%s\\%s", kUninstallKeyPath, key_name);
 

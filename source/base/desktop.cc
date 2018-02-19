@@ -31,7 +31,7 @@ Desktop::~Desktop()
 }
 
 // static
-Desktop Desktop::GetDesktop(const WCHAR* desktop_name)
+Desktop Desktop::GetDesktop(const wchar_t* desktop_name)
 {
     const ACCESS_MASK desired_access =
         DESKTOP_CREATEMENU | DESKTOP_CREATEWINDOW |
@@ -77,7 +77,7 @@ Desktop Desktop::GetThreadDesktop()
     return Desktop(desktop, false);
 }
 
-bool Desktop::GetName(WCHAR* name, DWORD length) const
+bool Desktop::GetName(wchar_t* name, DWORD length) const
 {
     if (!desktop_)
         return false;
@@ -93,12 +93,12 @@ bool Desktop::GetName(WCHAR* name, DWORD length) const
 
 bool Desktop::IsSame(const Desktop& other) const
 {
-    WCHAR name[128];
+    wchar_t name[128];
 
     if (!GetName(name, sizeof(name)))
         return false;
 
-    WCHAR other_name[128];
+    wchar_t other_name[128];
 
     if (!other.GetName(other_name, sizeof(other_name)))
         return false;

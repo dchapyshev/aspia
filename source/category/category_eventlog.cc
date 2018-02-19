@@ -26,7 +26,7 @@ namespace {
 constexpr WORD kAllowedEventTypes =
     EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_AUDIT_FAILURE;
 
-HANDLE OpenEventLogHandle(const WCHAR* source, DWORD* records_count, DWORD* first_record)
+HANDLE OpenEventLogHandle(const wchar_t* source, DWORD* records_count, DWORD* first_record)
 {
     ScopedEventLog event_log(OpenEventLogW(nullptr, source));
     if (!event_log.IsValid())
@@ -97,9 +97,9 @@ std::unique_ptr<uint8_t[]> GetEventLogRecord(
 }
 
 bool GetEventLogMessageFileDLL(
-    const WCHAR* log_name, const WCHAR* source, std::wstring* message_file)
+    const wchar_t* log_name, const wchar_t* source, std::wstring* message_file)
 {
-    WCHAR key_path[MAX_PATH];
+    wchar_t key_path[MAX_PATH];
 
     HRESULT hr = StringCbPrintfW(key_path, sizeof(key_path),
                                  L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\%s\\%s",
@@ -129,7 +129,7 @@ bool GetEventLogMessageFileDLL(
     return true;
 }
 
-WCHAR* LoadMessageFromDLL(const WCHAR* module_name, DWORD event_id, WCHAR** arguments)
+wchar_t* LoadMessageFromDLL(const wchar_t* module_name, DWORD event_id, wchar_t** arguments)
 {
     HINSTANCE module = LoadLibraryExW(module_name, nullptr,
                                       DONT_RESOLVE_DLL_REFERENCES |
@@ -141,7 +141,7 @@ WCHAR* LoadMessageFromDLL(const WCHAR* module_name, DWORD event_id, WCHAR** argu
                   FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY |
                   FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    WCHAR* message_buffer = nullptr;
+    wchar_t* message_buffer = nullptr;
     DWORD length = 0;
 
     __try
@@ -182,19 +182,19 @@ WCHAR* LoadMessageFromDLL(const WCHAR* module_name, DWORD event_id, WCHAR** argu
     return message_buffer;
 }
 
-bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstring* message)
+bool GetEventLogMessage(const wchar_t* log_name, EVENTLOGRECORD* record, std::wstring* message)
 {
-    WCHAR* source = reinterpret_cast<WCHAR*>(record + 1);
+    wchar_t* source = reinterpret_cast<wchar_t*>(record + 1);
 
     std::wstring message_file;
 
     if (!GetEventLogMessageFileDLL(log_name, source, &message_file))
         return false;
 
-    WCHAR* argument = reinterpret_cast<WCHAR*>(
+    wchar_t* argument = reinterpret_cast<wchar_t*>(
         reinterpret_cast<LPBYTE>(record) + record->StringOffset);
 
-    std::vector<WCHAR*> arguments;
+    std::vector<wchar_t*> arguments;
     arguments.resize(record->NumStrings);
 
     for (WORD i = 0; i < record->NumStrings; ++i)
@@ -203,11 +203,11 @@ bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstr
         argument += lstrlenW(argument) + 1;
     }
 
-    WCHAR* file = &message_file[0];
+    wchar_t* file = &message_file[0];
 
     while (file)
     {
-        WCHAR* next_file = wcschr(file, L';');
+        wchar_t* next_file = wcschr(file, L';');
 
         if (next_file != nullptr)
         {
@@ -215,11 +215,11 @@ bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstr
             ++next_file;
         }
 
-        WCHAR module_name[MAX_PATH];
+        wchar_t module_name[MAX_PATH];
 
         if (ExpandEnvironmentStringsW(file, module_name, _countof(module_name)) != 0)
         {
-            WCHAR* message_buffer =
+            wchar_t* message_buffer =
                 LoadMessageFromDLL(module_name, record->EventID, arguments.data());
 
             if (message_buffer)
@@ -236,7 +236,7 @@ bool GetEventLogMessage(const WCHAR* log_name, EVENTLOGRECORD* record, std::wstr
     return false;
 }
 
-void AddEventLogItems(const WCHAR* log_name, proto::EventLog::Log* log)
+void AddEventLogItems(const wchar_t* log_name, proto::EventLog::Log* log)
 {
     DWORD records_count = 0;
     DWORD first_record = 0;
@@ -293,7 +293,7 @@ void AddEventLogItems(const WCHAR* log_name, proto::EventLog::Log* log)
             item->set_time(record->TimeGenerated);
             item->set_category(record->EventCategory);
             item->set_event_id(record->EventID & 0xFFFF);
-            item->set_source(UTF8fromUNICODE(reinterpret_cast<WCHAR*>(record + 1)));
+            item->set_source(UTF8fromUNICODE(reinterpret_cast<wchar_t*>(record + 1)));
 
             std::wstring description;
 
@@ -408,7 +408,7 @@ std::string CategoryEventLog::Serialize()
 {
     struct Logs
     {
-        const WCHAR* name;
+        const wchar_t* name;
         proto::EventLog::Log::Type type;
     } static const kLogs[] =
     {

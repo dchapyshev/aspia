@@ -15,7 +15,7 @@ namespace aspia {
 class ScopedNativeLibrary
 {
 public:
-    explicit ScopedNativeLibrary(const WCHAR* lib_name)
+    explicit ScopedNativeLibrary(const wchar_t* lib_name)
     {
         lib_ = LoadLibraryW(lib_name);
     }

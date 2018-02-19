@@ -33,8 +33,8 @@ public:
 protected:
     DeviceEnumerator(const GUID* class_guid, DWORD flags);
 
-    std::wstring GetDriverRegistryString(const WCHAR* key_name) const;
-    DWORD GetDriverRegistryDW(const WCHAR* key_name) const;
+    std::wstring GetDriverRegistryString(const wchar_t* key_name) const;
+    DWORD GetDriverRegistryDW(const wchar_t* key_name) const;
 
 private:
     std::wstring GetDriverKeyPath() const;

@@ -116,7 +116,7 @@ std::string CategoryPrinter::Serialize()
         return std::string();
     }
 
-    WCHAR default_printer_name[256] = { 0 };
+    wchar_t default_printer_name[256] = { 0 };
     DWORD characters_count = ARRAYSIZE(default_printer_name);
 
     if (!GetDefaultPrinterW(&default_printer_name[0], &characters_count))

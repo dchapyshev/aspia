@@ -22,13 +22,13 @@ constexpr DWORD MAX_REGISTRY_NAME_SIZE = 16384;
 // a size in wchar_t that can store a truncated wchar_t if necessary.
 DWORD to_wchar_size(DWORD byte_size)
 {
-    return (byte_size + sizeof(WCHAR) - 1) / sizeof(WCHAR);
+    return (byte_size + sizeof(wchar_t) - 1) / sizeof(wchar_t);
 }
 
 // Mask to pull WOW64 access flags out of REGSAM access.
 constexpr REGSAM kWow64AccessMask = KEY_WOW64_32KEY | KEY_WOW64_64KEY;
 
-WCHAR* WriteInto(std::wstring* str, size_t length_with_null)
+wchar_t* WriteInto(std::wstring* str, size_t length_with_null)
 {
     DCHECK_GT(length_with_null, 1u);
     str->reserve(length_with_null);
@@ -44,7 +44,7 @@ RegistryKey::RegistryKey(HKEY key) :
     // Nothing
 }
 
-RegistryKey::RegistryKey(HKEY rootkey, const WCHAR *subkey, REGSAM access)
+RegistryKey::RegistryKey(HKEY rootkey, const wchar_t* subkey, REGSAM access)
 {
     if (rootkey)
     {
@@ -70,14 +70,14 @@ bool RegistryKey::IsValid() const
     return (key_ != nullptr);
 }
 
-LONG RegistryKey::Create(HKEY rootkey, const WCHAR* subkey, REGSAM access)
+LONG RegistryKey::Create(HKEY rootkey, const wchar_t* subkey, REGSAM access)
 {
     DWORD disposition_value;
 
     return CreateWithDisposition(rootkey, subkey, &disposition_value, access);
 }
 
-LONG RegistryKey::CreateWithDisposition(HKEY rootkey, const WCHAR* subkey,
+LONG RegistryKey::CreateWithDisposition(HKEY rootkey, const wchar_t* subkey,
                                         DWORD* disposition, REGSAM access)
 {
     DCHECK(rootkey && subkey && access && disposition);
@@ -103,7 +103,7 @@ LONG RegistryKey::CreateWithDisposition(HKEY rootkey, const WCHAR* subkey,
     return result;
 }
 
-LONG RegistryKey::Open(HKEY rootkey, const WCHAR* subkey, REGSAM access)
+LONG RegistryKey::Open(HKEY rootkey, const wchar_t* subkey, REGSAM access)
 {
     DCHECK(rootkey && subkey && access);
 
@@ -130,7 +130,7 @@ void RegistryKey::Close()
     }
 }
 
-bool RegistryKey::HasValue(const WCHAR* name) const
+bool RegistryKey::HasValue(const wchar_t* name) const
 {
     return (RegQueryValueExW(key_,
                              name,
@@ -140,7 +140,7 @@ bool RegistryKey::HasValue(const WCHAR* name) const
                              nullptr) == ERROR_SUCCESS);
 }
 
-LONG RegistryKey::ReadValue(const WCHAR* name,
+LONG RegistryKey::ReadValue(const wchar_t* name,
                             void* data,
                             DWORD* dsize,
                             DWORD* dtype) const
@@ -153,7 +153,7 @@ LONG RegistryKey::ReadValue(const WCHAR* name,
                             dsize);
 }
 
-LONG RegistryKey::ReadValueDW(const WCHAR* name, DWORD* out_value) const
+LONG RegistryKey::ReadValueDW(const wchar_t* name, DWORD* out_value) const
 {
     DCHECK(out_value);
 
@@ -173,7 +173,7 @@ LONG RegistryKey::ReadValueDW(const WCHAR* name, DWORD* out_value) const
     return result;
 }
 
-LONG RegistryKey::ReadValueBIN(const WCHAR* name, std::string* out_value) const
+LONG RegistryKey::ReadValueBIN(const wchar_t* name, std::string* out_value) const
 {
     DCHECK(out_value);
 
@@ -194,13 +194,13 @@ LONG RegistryKey::ReadValueBIN(const WCHAR* name, std::string* out_value) const
     return result;
 }
 
-LONG RegistryKey::ReadValue(const WCHAR* name, std::wstring* out_value) const
+LONG RegistryKey::ReadValue(const wchar_t* name, std::wstring* out_value) const
 {
     DCHECK(out_value);
 
     const size_t kMaxStringLength = 1024;  // This is after expansion.
     // Use the one of the other forms of ReadValue if 1024 is too small for you.
-    WCHAR raw_value[kMaxStringLength] = { 0 };
+    wchar_t raw_value[kMaxStringLength] = { 0 };
     DWORD type = REG_SZ;
     DWORD size = sizeof(raw_value);
 
@@ -213,7 +213,7 @@ LONG RegistryKey::ReadValue(const WCHAR* name, std::wstring* out_value) const
         }
         else if (type == REG_EXPAND_SZ)
         {
-            WCHAR expanded[kMaxStringLength];
+            wchar_t expanded[kMaxStringLength];
 
             size = ExpandEnvironmentStringsW(raw_value, expanded, kMaxStringLength);
 
@@ -241,7 +241,7 @@ LONG RegistryKey::ReadValue(const WCHAR* name, std::wstring* out_value) const
     return result;
 }
 
-LONG RegistryKey::WriteValue(const WCHAR* name,
+LONG RegistryKey::WriteValue(const wchar_t* name,
                              const void* data,
                              DWORD dsize,
                              DWORD dtype)
@@ -256,7 +256,7 @@ LONG RegistryKey::WriteValue(const WCHAR* name,
                           dsize);
 }
 
-LONG RegistryKey::WriteValue(const WCHAR* name, DWORD in_value)
+LONG RegistryKey::WriteValue(const wchar_t* name, DWORD in_value)
 {
     return WriteValue(name,
                       &in_value,
@@ -264,7 +264,7 @@ LONG RegistryKey::WriteValue(const WCHAR* name, DWORD in_value)
                       REG_DWORD);
 }
 
-LONG RegistryKey::WriteValue(const WCHAR* name, const WCHAR* in_value)
+LONG RegistryKey::WriteValue(const wchar_t* name, const wchar_t* in_value)
 {
     return WriteValue(name,
                       in_value,
@@ -275,7 +275,7 @@ LONG RegistryKey::WriteValue(const WCHAR* name, const WCHAR* in_value)
 // RegistryValueIterator ------------------------------------------------------
 
 RegistryValueIterator::RegistryValueIterator(HKEY root_key,
-                                             const WCHAR* folder_key,
+                                             const wchar_t* folder_key,
                                              REGSAM wow64access) :
     name_(MAX_PATH, L'\0'),
     value_(MAX_PATH, L'\0')
@@ -283,7 +283,7 @@ RegistryValueIterator::RegistryValueIterator(HKEY root_key,
     Initialize(root_key, folder_key, wow64access);
 }
 
-RegistryValueIterator::RegistryValueIterator(HKEY root_key, const WCHAR* folder_key) :
+RegistryValueIterator::RegistryValueIterator(HKEY root_key, const wchar_t* folder_key) :
     name_(MAX_PATH, L'\0'),
     value_(MAX_PATH, L'\0')
 {
@@ -291,7 +291,7 @@ RegistryValueIterator::RegistryValueIterator(HKEY root_key, const WCHAR* folder_
 }
 
 void RegistryValueIterator::Initialize(HKEY root_key,
-                                       const WCHAR* folder_key,
+                                       const wchar_t* folder_key,
                                        REGSAM wow64access)
 {
     DCHECK_EQ(wow64access & ~kWow64AccessMask, static_cast<REGSAM>(0));
@@ -360,7 +360,7 @@ bool RegistryValueIterator::Read()
         DWORD name_size = capacity;
 
         // |value_size_| is in bytes. Reserve the last character for a NUL.
-        value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
+        value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(wchar_t));
 
         LONG result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size),
                                     &name_size, nullptr, &type_,
@@ -380,7 +380,7 @@ bool RegistryValueIterator::Read()
             if (value_size_in_wchars + 1 > value_.size())
                 value_.resize(value_size_in_wchars + 1, L'\0');
 
-            value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(WCHAR));
+            value_size_ = static_cast<DWORD>((value_.size() - 1) * sizeof(wchar_t));
             name_size = name_size == capacity ? MAX_REGISTRY_NAME_SIZE : capacity;
 
             result = RegEnumValueW(key_, index_, WriteInto(&name_, name_size),
@@ -406,13 +406,13 @@ bool RegistryValueIterator::Read()
 
 // RegistryKeyIterator --------------------------------------------------------
 
-RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const WCHAR* folder_key)
+RegistryKeyIterator::RegistryKeyIterator(HKEY root_key, const wchar_t* folder_key)
 {
     Initialize(root_key, folder_key, 0);
 }
 
 RegistryKeyIterator::RegistryKeyIterator(HKEY root_key,
-                                         const WCHAR* folder_key,
+                                         const wchar_t* folder_key,
                                          REGSAM wow64access)
 {
     Initialize(root_key, folder_key, wow64access);
@@ -465,7 +465,7 @@ bool RegistryKeyIterator::Read()
 }
 
 void RegistryKeyIterator::Initialize(HKEY root_key,
-                                     const WCHAR* folder_key,
+                                     const wchar_t* folder_key,
                                      REGSAM wow64access)
 {
     DCHECK_EQ(wow64access & ~kWow64AccessMask, static_cast<REGSAM>(0));

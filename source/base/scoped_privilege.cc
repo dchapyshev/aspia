@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-ScopedProcessPrivilege::ScopedProcessPrivilege(const WCHAR* name)
+ScopedProcessPrivilege::ScopedProcessPrivilege(const wchar_t* name)
 {
     DCHECK(name);
 

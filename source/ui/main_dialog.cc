@@ -465,7 +465,7 @@ void MainDialog::CopySelectedIp()
     if (selected_item == -1)
         return;
 
-    WCHAR text[128] = { 0 };
+    wchar_t text[128] = { 0 };
     if (!list.GetItemText(selected_item, 0, text, _countof(text)))
         return;
 
@@ -479,7 +479,7 @@ void MainDialog::CopySelectedIp()
 
     clipboard.Empty();
 
-    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (length + 1) * sizeof(WCHAR));
+    HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (length + 1) * sizeof(wchar_t));
     if (!text_global)
         return;
 
@@ -490,7 +490,7 @@ void MainDialog::CopySelectedIp()
         return;
     }
 
-    memcpy(text_global_locked, text, length * sizeof(WCHAR));
+    memcpy(text_global_locked, text, length * sizeof(wchar_t));
     text_global_locked[length] = 0;
 
     GlobalUnlock(text_global);

@@ -28,7 +28,7 @@ public:
     //
     // Returns the desktop by its name or NULL if an error occurs.
     //
-    static Desktop GetDesktop(const WCHAR* desktop_name);
+    static Desktop GetDesktop(const wchar_t* desktop_name);
 
     //
     // Returns the desktop currently assigned to the calling thread or NULL if
@@ -40,7 +40,7 @@ public:
     // Returns the name of the desktop represented by the object. Return false if
     // quering the name failed for any reason.
     //
-    bool GetName(WCHAR* name, DWORD length) const;
+    bool GetName(wchar_t* name, DWORD length) const;
 
     //
     // Returns true if |other| has the same name as this desktop. Returns false

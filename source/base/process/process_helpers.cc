@@ -19,7 +19,7 @@ namespace aspia {
 
 namespace {
 
-bool LaunchProcessInternal(const WCHAR* program_path, const WCHAR* arguments, bool elevate)
+bool LaunchProcessInternal(const wchar_t* program_path, const wchar_t* arguments, bool elevate)
 {
     SHELLEXECUTEINFOW sei;
     memset(&sei, 0, sizeof(sei));

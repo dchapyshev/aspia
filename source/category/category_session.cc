@@ -127,7 +127,7 @@ std::string CategorySession::Serialize()
 
         proto::Session::Item* item = message.add_item();
 
-        ScopedWtsMemory<WCHAR*> string_buffer;
+        ScopedWtsMemory<wchar_t*> string_buffer;
         DWORD bytes_returned;
 
         if (WTSQuerySessionInformationW(WTS_CURRENT_SERVER_HANDLE,

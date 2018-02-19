@@ -15,10 +15,10 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kClassRootPath[] = L"SYSTEM\\CurrentControlSet\\Control\\Class\\";
-constexpr WCHAR kDriverVersionKey[] = L"DriverVersion";
-constexpr WCHAR kDriverDateKey[] = L"DriverDate";
-constexpr WCHAR kProviderNameKey[] = L"ProviderName";
+constexpr wchar_t kClassRootPath[] = L"SYSTEM\\CurrentControlSet\\Control\\Class\\";
+constexpr wchar_t kDriverVersionKey[] = L"DriverVersion";
+constexpr wchar_t kDriverDateKey[] = L"DriverDate";
+constexpr wchar_t kProviderNameKey[] = L"ProviderName";
 
 } // namespace
 
@@ -67,7 +67,7 @@ void DeviceEnumerator::Advance()
 
 std::string DeviceEnumerator::GetFriendlyName() const
 {
-    WCHAR friendly_name[MAX_PATH] = { 0 };
+    wchar_t friendly_name[MAX_PATH] = { 0 };
 
     if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
@@ -86,7 +86,7 @@ std::string DeviceEnumerator::GetFriendlyName() const
 
 std::string DeviceEnumerator::GetDescription() const
 {
-    WCHAR description[MAX_PATH] = { 0 };
+    wchar_t description[MAX_PATH] = { 0 };
 
     if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
@@ -105,7 +105,7 @@ std::string DeviceEnumerator::GetDescription() const
 
 std::wstring DeviceEnumerator::GetDriverKeyPath() const
 {
-    WCHAR driver[MAX_PATH] = { 0 };
+    wchar_t driver[MAX_PATH] = { 0 };
 
     if (!SetupDiGetDeviceRegistryPropertyW(device_info_.Get(),
                                            &device_info_data_,
@@ -125,7 +125,7 @@ std::wstring DeviceEnumerator::GetDriverKeyPath() const
     return driver_key_path;
 }
 
-std::wstring DeviceEnumerator::GetDriverRegistryString(const WCHAR* key_name) const
+std::wstring DeviceEnumerator::GetDriverRegistryString(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = GetDriverKeyPath();
 
@@ -136,7 +136,7 @@ std::wstring DeviceEnumerator::GetDriverRegistryString(const WCHAR* key_name) co
         return std::wstring();
     }
 
-    WCHAR value[MAX_PATH] = { 0 };
+    wchar_t value[MAX_PATH] = { 0 };
     DWORD value_size = ARRAYSIZE(value);
 
     LONG status = driver_key.ReadValue(key_name, value, &value_size, nullptr);
@@ -149,7 +149,7 @@ std::wstring DeviceEnumerator::GetDriverRegistryString(const WCHAR* key_name) co
     return value;
 }
 
-DWORD DeviceEnumerator::GetDriverRegistryDW(const WCHAR* key_name) const
+DWORD DeviceEnumerator::GetDriverRegistryDW(const wchar_t* key_name) const
 {
     std::wstring driver_key_path = GetDriverKeyPath();
 
@@ -189,7 +189,7 @@ std::string DeviceEnumerator::GetDriverVendor() const
 
 std::string DeviceEnumerator::GetDeviceID() const
 {
-    WCHAR device_id[MAX_PATH] = { 0 };
+    wchar_t device_id[MAX_PATH] = { 0 };
 
     if (!SetupDiGetDeviceInstanceIdW(device_info_.Get(),
                                      &device_info_data_,

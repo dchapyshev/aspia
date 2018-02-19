@@ -13,9 +13,9 @@ namespace aspia {
 
 namespace {
 
-constexpr WCHAR kAppName[] = L"Aspia";
-constexpr WCHAR kRuleName[] = L"Aspia Host";
-constexpr WCHAR kRuleDesc[] = L"Allow incoming connections";
+constexpr wchar_t kAppName[] = L"Aspia";
+constexpr wchar_t kRuleName[] = L"Aspia Host";
+constexpr wchar_t kRuleDesc[] = L"Allow incoming connections";
 
 bool IsFailureCode(const std::error_code& code)
 {

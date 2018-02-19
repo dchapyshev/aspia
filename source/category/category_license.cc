@@ -129,7 +129,7 @@ void AddMsProduct(proto::License& message, const std::wstring& product_name, con
     }
 }
 
-bool GetMsProductName(const WCHAR* id, std::wstring* product_name, REGSAM access)
+bool GetMsProductName(const wchar_t* id, std::wstring* product_name, REGSAM access)
 {
     std::wstring key_path =
         StringPrintf(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\%s", id);
@@ -163,7 +163,7 @@ void AddMsProducts(proto::License& message, REGSAM access)
             AddMsProduct(message, product_name, key);
     }
 
-    static const WCHAR* kMsProducts[] =
+    static const wchar_t* kMsProducts[] =
     {
         L"SOFTWARE\\Microsoft\\Microsoft SQL Server",
         L"SOFTWARE\\Microsoft\\MSDN",
@@ -208,7 +208,7 @@ void AddMsProducts(proto::License& message, REGSAM access)
 
 void AddVisualStudio(proto::License& message, REGSAM access)
 {
-    static const WCHAR kVisualStudioPath[] = L"SOFTWARE\\Microsoft\\VisualStudio";
+    static const wchar_t kVisualStudioPath[] = L"SOFTWARE\\Microsoft\\VisualStudio";
     static const int kProductKeyLength = 25;
     static const int kGroupLength = 5;
 
@@ -312,7 +312,7 @@ void AddVMWareProduct(proto::License& message, const RegistryKey& key)
 
 void AddVMWareProducts(proto::License& message, REGSAM access)
 {
-    static const WCHAR kKeyPath[] = L"Software\\VMware, Inc.";
+    static const wchar_t kKeyPath[] = L"Software\\VMware, Inc.";
 
     RegistryKeyIterator key_iterator(HKEY_LOCAL_MACHINE, kKeyPath, access);
 
