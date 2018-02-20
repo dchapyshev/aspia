@@ -40,7 +40,7 @@ protected:
     friend class Thread;
 
     void PostTask(PendingTask::Callback callback);
-    void PostDelayedTask(PendingTask::Callback callback, const PendingTask::TimeDelta& delay);
+    void PostDelayedTask(PendingTask::Callback callback, const std::chrono::milliseconds& delay);
 
     PendingTask::Callback QuitClosure();
 
@@ -69,11 +69,13 @@ protected:
     void DeletePendingTasks();
 
     // Calculates the time at which a PendingTask should run.
-    static PendingTask::TimePoint CalculateDelayedRuntime(const PendingTask::TimeDelta& delay);
+    static std::chrono::time_point<std::chrono::high_resolution_clock>
+        CalculateDelayedRuntime(const std::chrono::milliseconds& delay);
 
     // MessagePump::Delegate methods:
     bool DoWork() override;
-    bool DoDelayedWork(PendingTask::TimePoint& next_delayed_work_time) override;
+    bool DoDelayedWork(
+        std::chrono::time_point<std::chrono::high_resolution_clock>& next_delayed_work_time) override;
 
     const Type type_;
 
@@ -81,7 +83,7 @@ protected:
     DelayedTaskQueue delayed_work_queue_;
 
     // A recent snapshot of Time::Now(), used to check delayed_work_queue_.
-    PendingTask::TimePoint recent_time_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> recent_time_;
 
     // A list of tasks that need to be processed by this instance.  Note that
     // this queue is only accessed (push/pop) by our current thread.

@@ -20,11 +20,10 @@ class PendingTask
 {
 public:
     using Callback = std::function<void()>;
-    using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-    using TimeDelta = std::chrono::milliseconds;
 
     explicit PendingTask(Callback callback);
-    PendingTask(Callback callback, const TimePoint& delayed_run_time);
+    PendingTask(Callback callback,
+                const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_run_time);
     ~PendingTask() = default;
 
     // Used to support sorting.
@@ -33,7 +32,7 @@ public:
     // Secondary sort key for run time.
     int sequence_num = 0;
 
-    TimePoint delayed_run_time;
+    std::chrono::time_point<std::chrono::high_resolution_clock> delayed_run_time;
 
     // The task to run.
     Callback callback;

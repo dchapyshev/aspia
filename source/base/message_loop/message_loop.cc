@@ -85,12 +85,12 @@ void MessageLoop::PostTask(PendingTask::Callback callback)
     DCHECK(callback != nullptr);
 
     PendingTask pending_task(std::move(callback),
-                             CalculateDelayedRuntime(PendingTask::TimeDelta::zero()));
+                             CalculateDelayedRuntime(std::chrono::milliseconds::zero()));
     AddToIncomingQueue(pending_task);
 }
 
 void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
-                                  const PendingTask::TimeDelta& delay)
+                                  const std::chrono::milliseconds& delay)
 {
     DCHECK(callback != nullptr);
 
@@ -173,11 +173,12 @@ void MessageLoop::DeletePendingTasks()
 }
 
 // static
-PendingTask::TimePoint MessageLoop::CalculateDelayedRuntime(const PendingTask::TimeDelta& delay)
+std::chrono::time_point<std::chrono::high_resolution_clock>
+MessageLoop::CalculateDelayedRuntime(const std::chrono::milliseconds& delay)
 {
-    PendingTask::TimePoint delayed_run_time;
+    std::chrono::time_point<std::chrono::high_resolution_clock> delayed_run_time;
 
-    if (delay > PendingTask::TimeDelta::zero())
+    if (delay > std::chrono::milliseconds::zero())
     {
         delayed_run_time = std::chrono::high_resolution_clock::now() + delay;
     }
@@ -203,7 +204,8 @@ bool MessageLoop::DoWork()
         PendingTask pending_task = work_queue_.front();
         work_queue_.pop();
 
-        if (pending_task.delayed_run_time != PendingTask::TimePoint())
+        if (pending_task.delayed_run_time !=
+            std::chrono::time_point<std::chrono::high_resolution_clock>())
         {
             bool reschedule = delayed_work_queue_.empty();
 
@@ -223,11 +225,13 @@ bool MessageLoop::DoWork()
     return true;
 }
 
-bool MessageLoop::DoDelayedWork(PendingTask::TimePoint& next_delayed_work_time)
+bool MessageLoop::DoDelayedWork(
+    std::chrono::time_point<std::chrono::high_resolution_clock>& next_delayed_work_time)
 {
     if (!nestable_tasks_allowed_ || delayed_work_queue_.empty())
     {
-        recent_time_ = next_delayed_work_time = PendingTask::TimePoint();
+        recent_time_ = next_delayed_work_time =
+            std::chrono::time_point<std::chrono::high_resolution_clock>();
         return false;
     }
 
@@ -237,7 +241,8 @@ bool MessageLoop::DoDelayedWork(PendingTask::TimePoint& next_delayed_work_time)
     // As a result, the more we fall behind (and have a lot of ready-to-run delayed tasks), the more
     // efficient we'll be at handling the tasks.
 
-    PendingTask::TimePoint next_run_time = delayed_work_queue_.top().delayed_run_time;
+    std::chrono::time_point<std::chrono::high_resolution_clock> next_run_time =
+        delayed_work_queue_.top().delayed_run_time;
 
     if (next_run_time > recent_time_)
     {

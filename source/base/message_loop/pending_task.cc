@@ -15,7 +15,9 @@ PendingTask::PendingTask(Callback callback)
     // Nothing
 }
 
-PendingTask::PendingTask(Callback callback, const TimePoint& delayed_run_time)
+PendingTask::PendingTask(
+    Callback callback,
+    const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_run_time)
     : callback(std::move(callback)),
       delayed_run_time(delayed_run_time)
 {

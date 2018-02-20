@@ -20,7 +20,7 @@ public:
 
     bool PostTask(PendingTask::Callback callback);
     bool PostDelayedTask(PendingTask::Callback callback,
-                         const PendingTask::TimeDelta& delay);
+                         const std::chrono::milliseconds& delay);
     bool PostQuit();
     bool BelongsToCurrentThread() const;
 

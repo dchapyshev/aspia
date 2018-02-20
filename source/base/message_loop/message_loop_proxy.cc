@@ -34,7 +34,7 @@ bool MessageLoopProxy::PostTask(PendingTask::Callback callback)
 }
 
 bool MessageLoopProxy::PostDelayedTask(PendingTask::Callback callback,
-                                       const PendingTask::TimeDelta& delay)
+                                       const std::chrono::milliseconds& delay)
 {
     std::scoped_lock<std::mutex> lock(loop_lock_);
 
