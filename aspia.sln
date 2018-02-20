@@ -46,18 +46,39 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_core", "source\aspia_
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_host_service", "source\aspia_host_service.vcxproj", "{5AD94EF6-8D39-4AFB-A4B3-9227ADD54752}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_host", "source\aspia_host.vcxproj", "{B024F1AA-6BC8-4B95-AB98-82FB60175D6E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_host_launcher", "source\aspia_host_launcher.vcxproj", "{492D2457-3DAF-4CC2-AB93-21ECAE19B55D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_sas_injector", "source\aspia_sas_injector.vcxproj", "{7C309F8E-494B-43AE-B1D6-96846D4AF9DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_address_book", "source\aspia_address_book.vcxproj", "{7C63CF0B-4C0A-4607-9699-69F56F8C890E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia", "source\aspia.vcxproj", "{C7CE1FBA-4BC3-4D51-8DD2-8DCCF5E0A0BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aspia_system_info", "source\aspia_system_info.vcxproj", "{5474AE80-D783-4667-B71F-67B7399978EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6CFEB6F2-0742-40D2-AE4C-1840D087062B} = {6CFEB6F2-0742-40D2-AE4C-1840D087062B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
