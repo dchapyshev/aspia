@@ -294,12 +294,6 @@
     <ClInclude Include="base\threading\thread_checker.h">
       <Filter>base\threading</Filter>
     </ClInclude>
-    <ClInclude Include="base\synchronization\waitable_event.h">
-      <Filter>base\synchronization</Filter>
-    </ClInclude>
-    <ClInclude Include="base\synchronization\waitable_event_watcher.h">
-      <Filter>base\synchronization</Filter>
-    </ClInclude>
     <ClInclude Include="base\synchronization\waitable_timer.h">
       <Filter>base\synchronization</Filter>
     </ClInclude>
@@ -1212,12 +1206,6 @@
     </ClCompile>
     <ClCompile Include="base\threading\thread_checker.cc">
       <Filter>base\threading</Filter>
-    </ClCompile>
-    <ClCompile Include="base\synchronization\waitable_event.cc">
-      <Filter>base\synchronization</Filter>
-    </ClCompile>
-    <ClCompile Include="base\synchronization\waitable_event_watcher.cc">
-      <Filter>base\synchronization</Filter>
     </ClCompile>
     <ClCompile Include="base\synchronization\waitable_timer.cc">
       <Filter>base\synchronization</Filter>

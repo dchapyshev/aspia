@@ -93,8 +93,6 @@
     <ClInclude Include="base\strings\string_util.h" />
     <ClInclude Include="base\strings\string_util_constants.h" />
     <ClInclude Include="base\strings\unicode.h" />
-    <ClInclude Include="base\synchronization\waitable_event.h" />
-    <ClInclude Include="base\synchronization\waitable_event_watcher.h" />
     <ClInclude Include="base\synchronization\waitable_timer.h" />
     <ClInclude Include="base\threading\simple_thread.h" />
     <ClInclude Include="base\threading\thread.h" />
@@ -403,8 +401,6 @@
     <ClCompile Include="base\strings\string_util.cc" />
     <ClCompile Include="base\strings\string_util_constants.cc" />
     <ClCompile Include="base\strings\unicode.cc" />
-    <ClCompile Include="base\synchronization\waitable_event.cc" />
-    <ClCompile Include="base\synchronization\waitable_event_watcher.cc" />
     <ClCompile Include="base\synchronization\waitable_timer.cc" />
     <ClCompile Include="base\threading\simple_thread.cc" />
     <ClCompile Include="base\threading\thread.cc" />
