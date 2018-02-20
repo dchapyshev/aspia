@@ -159,7 +159,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
                               nullptr,
                               nullptr,
                               FALSE,
-                              CREATE_UNICODE_ENVIRONMENT,
+                              CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
                               environment,
                               nullptr,
                               &startup_info,

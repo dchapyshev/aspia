@@ -8,7 +8,6 @@
 #include "host/host_main.h"
 
 #include "base/command_line.h"
-#include "base/process/process.h"
 #include "base/logging.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
@@ -25,8 +24,6 @@ void HostMain()
     settings.lock_log = LOCK_LOG_FILE;
 
     InitLogging(settings);
-
-    Process::Current().SetPriority(Process::Priority::HIGH);
 
     std::wstring channel_id =
         CommandLine::ForCurrentProcess().GetSwitchValue(kChannelIdSwitch);

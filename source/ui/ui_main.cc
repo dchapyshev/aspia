@@ -17,6 +17,7 @@
 #include "base/message_loop/message_loop.h"
 #include "base/process/process_helpers.h"
 #include "base/scoped_com_initializer.h"
+#include "base/scoped_object.h"
 #include "base/settings_manager.h"
 #include "ui/address_book/address_book_window.h"
 #include "ui/main_dialog.h"
