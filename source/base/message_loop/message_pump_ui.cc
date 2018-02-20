@@ -57,7 +57,8 @@ void MessagePumpForUI::ScheduleWork()
     InterlockedExchange(&work_state_, READY);
 }
 
-void MessagePumpForUI::ScheduleDelayedWork(const TimePoint& delayed_work_time)
+void MessagePumpForUI::ScheduleDelayedWork(
+    const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_work_time)
 {
     //
     // We would *like* to provide high resolution timers.  Windows timers using
@@ -162,12 +163,17 @@ void MessagePumpForUI::DoRunLoop()
             break;
 
         more_work_is_plausible |= state_->delegate->DoDelayedWork(delayed_work_time_);
+
         // If we did not process any delayed work, then we can assume that our
         // existing WM_TIMER if any will fire when delayed work should run.  We
         // don't want to disturb that timer if it is already in flight.  However,
         // if we did do all remaining delayed work, then lets kill the WM_TIMER.
-        if (more_work_is_plausible && delayed_work_time_ == TimePoint())
+        if (more_work_is_plausible && delayed_work_time_ ==
+            std::chrono::time_point<std::chrono::high_resolution_clock>())
+        {
             KillTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this));
+        }
+
         if (state_->should_quit)
             break;
 
@@ -256,7 +262,7 @@ void MessagePumpForUI::HandleTimerMessage()
         return;
 
     state_->delegate->DoDelayedWork(delayed_work_time_);
-    if (delayed_work_time_ != TimePoint())
+    if (delayed_work_time_ != std::chrono::time_point<std::chrono::high_resolution_clock>())
     {
         // A bit gratuitous to set delayed_work_time_ again, but oh well.
         ScheduleDelayedWork(delayed_work_time_);
@@ -350,7 +356,7 @@ bool MessagePumpForUI::ProcessPumpReplacementMessage()
 
 int MessagePumpForUI::GetCurrentDelay() const
 {
-    if (delayed_work_time_ == TimePoint())
+    if (delayed_work_time_ == std::chrono::time_point<std::chrono::high_resolution_clock>())
         return -1;
 
     // Be careful here.  TimeDelta has a precision of microseconds, but we want

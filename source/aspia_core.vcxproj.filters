@@ -279,9 +279,6 @@
     <ClInclude Include="base\message_loop\message_pump_ui.h">
       <Filter>base\message_loop</Filter>
     </ClInclude>
-    <ClInclude Include="base\message_loop\message_pump_win.h">
-      <Filter>base\message_loop</Filter>
-    </ClInclude>
     <ClInclude Include="base\message_loop\pending_task.h">
       <Filter>base\message_loop</Filter>
     </ClInclude>
@@ -1190,9 +1187,6 @@
       <Filter>base\message_loop</Filter>
     </ClCompile>
     <ClCompile Include="base\message_loop\message_pump_ui.cc">
-      <Filter>base\message_loop</Filter>
-    </ClCompile>
-    <ClCompile Include="base\message_loop\message_pump_win.cc">
       <Filter>base\message_loop</Filter>
     </ClCompile>
     <ClCompile Include="base\message_loop\pending_task.cc">

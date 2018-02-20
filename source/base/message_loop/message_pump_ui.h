@@ -25,7 +25,8 @@ public:
     void Run(Delegate* delegate) override;
     void Quit() override;
     void ScheduleWork() override;
-    void ScheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void ScheduleDelayedWork(
+        const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_work_time) override;
 
     void RunWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher);
 
@@ -63,7 +64,7 @@ private:
     MessageWindow message_window_;
 
     // The time at which delayed work should run.
-    TimePoint delayed_work_time_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> delayed_work_time_;
 
     // A value used to indicate if there is a kMsgDoWork message pending
     // in the Windows Message queue.  There is at most one such message, and it

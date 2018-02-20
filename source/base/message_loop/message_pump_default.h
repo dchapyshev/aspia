@@ -26,7 +26,8 @@ public:
     void Run(Delegate* delegate) override;
     void Quit() override;
     void ScheduleWork() override;
-    void ScheduleDelayedWork(const TimePoint& delayed_work_time) override;
+    void ScheduleDelayedWork(
+        const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_work_time) override;
 
 private:
     // This flag is set to false when Run should return.
@@ -39,7 +40,7 @@ private:
     std::mutex have_work_lock_;
 
     // The time at which we should call DoDelayedWork.
-    TimePoint delayed_work_time_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> delayed_work_time_;
 
     DISALLOW_COPY_AND_ASSIGN(MessagePumpDefault);
 };

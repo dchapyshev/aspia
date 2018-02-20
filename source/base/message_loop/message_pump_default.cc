@@ -27,7 +27,7 @@ void MessagePumpDefault::Run(Delegate* delegate)
         if (did_work)
             continue;
 
-        if (delayed_work_time_ == TimePoint())
+        if (delayed_work_time_ == std::chrono::time_point<std::chrono::high_resolution_clock>())
         {
             std::unique_lock<std::mutex> lock(have_work_lock_);
 
@@ -38,12 +38,14 @@ void MessagePumpDefault::Run(Delegate* delegate)
         }
         else
         {
-            TimePoint current_time = std::chrono::high_resolution_clock::now();
+            std::chrono::time_point<std::chrono::high_resolution_clock> current_time =
+                std::chrono::high_resolution_clock::now();
 
-            TimeDelta delay = std::chrono::duration_cast<TimeDelta>(
-                delayed_work_time_ - current_time);
+            std::chrono::milliseconds delay =
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    delayed_work_time_ - current_time);
 
-            if (delay > TimeDelta::zero())
+            if (delay > std::chrono::milliseconds::zero())
             {
                 std::unique_lock<std::mutex> lock(have_work_lock_);
 
@@ -59,7 +61,7 @@ void MessagePumpDefault::Run(Delegate* delegate)
             {
                 // It looks like delayed_work_time_ indicates a time in the
                 // past, so we need to call DoDelayedWork now.
-                delayed_work_time_ = TimePoint();
+                delayed_work_time_ = std::chrono::time_point<std::chrono::high_resolution_clock>();
             }
         }
     }
@@ -83,7 +85,8 @@ void MessagePumpDefault::ScheduleWork()
     event_.notify_one();
 }
 
-void MessagePumpDefault::ScheduleDelayedWork(const TimePoint& delayed_work_time)
+void MessagePumpDefault::ScheduleDelayedWork(
+    const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_work_time)
 {
     // We know that we can't be blocked on Wait right now since this method can
     // only be called on the same thread as Run, so we only need to update our

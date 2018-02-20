@@ -15,9 +15,6 @@ namespace aspia {
 class MessagePump
 {
 public:
-    using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-    using TimeDelta = std::chrono::milliseconds;
-
     class Delegate
     {
     public:
@@ -37,7 +34,8 @@ public:
         // |next_delayed_work_time| is null (per Time::is_null), then the queue of
         // future delayed work (timer events) is currently empty, and no additional
         // calls to this function need to be scheduled.
-        virtual bool DoDelayedWork(TimePoint& next_delayed_work_time) = 0;
+        virtual bool DoDelayedWork(
+            std::chrono::time_point<std::chrono::high_resolution_clock>& next_delayed_work_time) = 0;
     };
 
     virtual ~MessagePump() = default;
@@ -45,7 +43,8 @@ public:
     virtual void Run(Delegate* delegate) = 0;
     virtual void Quit() = 0;
     virtual void ScheduleWork() = 0;
-    virtual void ScheduleDelayedWork(const TimePoint& delayed_work_time) = 0;
+    virtual void ScheduleDelayedWork(
+        const std::chrono::time_point<std::chrono::high_resolution_clock>& delayed_work_time) = 0;
 };
 
 } // namespace aspia
