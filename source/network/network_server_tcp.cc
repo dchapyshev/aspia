@@ -39,7 +39,7 @@ void NetworkServerTcp::AddFirewallRule()
 {
     std::experimental::filesystem::path exe_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
+    if (!BasePaths::GetCurrentExecutableFile(exe_path))
         return;
 
     firewall_manager_ = std::make_unique<FirewallManager>();

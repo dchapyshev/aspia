@@ -584,7 +584,7 @@ LRESULT MainDialog::OnAddressBookButton(
 {
     std::experimental::filesystem::path program_path;
 
-    if (GetBasePath(aspia::BasePathKey::DIR_EXE, program_path))
+    if (BasePaths::GetCurrentExecutableDirectory(program_path))
     {
         program_path.append(L"aspia_address_book.exe");
         LaunchProcess(program_path);

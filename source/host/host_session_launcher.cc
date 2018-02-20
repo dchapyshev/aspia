@@ -204,7 +204,7 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
 
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
+    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
         return false;
 
     program_path.append(kProcessNameHost);
@@ -223,7 +223,7 @@ bool LaunchSessionProcessAsSystem(const std::wstring& session_type,
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
+    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
         return false;
 
     program_path.append(kProcessNameHost);
@@ -278,7 +278,7 @@ bool LaunchSystemInfoProcess()
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(aspia::BasePathKey::DIR_EXE, program_path))
+    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
         return false;
 
     program_path.append(kProcessNameSystemInfo);

@@ -12,89 +12,108 @@
 
 namespace aspia {
 
-bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
+// static
+bool BasePaths::GetWindowsDirectory(std::experimental::filesystem::path& result)
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    switch (key)
+    if (!::GetWindowsDirectoryW(buffer, _countof(buffer)))
     {
-        case BasePathKey::FILE_EXE:
-        {
-            if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
-            {
-                PLOG(LS_ERROR) << "GetModuleFileNameW failed";
-                return false;
-            }
-        }
-        break;
+        PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
+        return false;
+    }
 
-        case BasePathKey::DIR_EXE:
-        {
-            std::experimental::filesystem::path exe_path;
+    result.assign(buffer);
+    return true;
+}
 
-            if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
-                return false;
+// static
+bool BasePaths::GetSystemDirectory(std::experimental::filesystem::path& result)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
 
-            result = exe_path.parent_path();
-            return true;
-        }
-        break;
+    if (!::GetSystemDirectoryW(buffer, _countof(buffer)))
+    {
+        PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
+        return false;
+    }
 
-        case BasePathKey::DIR_APP_DATA:
-        {
-            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_APPDATA,
-                                          nullptr, SHGFP_TYPE_CURRENT, buffer);
-            if (FAILED(hr))
-            {
-                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-                return false;
-            }
-        }
-        break;
+    result.assign(buffer);
+    return true;
+}
 
-        case BasePathKey::DIR_USER_DESKTOP:
-        {
-            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY,
-                                          nullptr, SHGFP_TYPE_CURRENT, buffer);
-            if (FAILED(hr))
-            {
-                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-                return false;
-            }
-        }
-        break;
+// static
+bool BasePaths::GetAppDataDirectory(std::experimental::filesystem::path& result)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
 
-        case BasePathKey::DIR_USER_HOME:
-        {
-            HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_PROFILE, nullptr,
-                                          SHGFP_TYPE_CURRENT, buffer);
-            if (FAILED(hr))
-            {
-                LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-                return false;
-            }
-        }
-        break;
+    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_APPDATA,
+                                  nullptr, SHGFP_TYPE_CURRENT, buffer);
+    if (FAILED(hr))
+    {
+        LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
+        return false;
+    }
 
-        case BasePathKey::DIR_WINDOWS:
-        {
-            if (!GetWindowsDirectoryW(buffer, _countof(buffer)))
-            {
-                PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
-                return false;
-            }
-        }
-        break;
+    result.assign(buffer);
+    return true;
+}
 
-        case BasePathKey::DIR_SYSTEM:
-        {
-            if (!GetSystemDirectoryW(buffer, _countof(buffer)))
-            {
-                PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
-                return false;
-            }
-        }
-        break;
+// static
+bool BasePaths::GetUserDesktopDirectory(std::experimental::filesystem::path& result)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY,
+                                  nullptr, SHGFP_TYPE_CURRENT, buffer);
+    if (FAILED(hr))
+    {
+        LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
+        return false;
+    }
+
+    result.assign(buffer);
+    return true;
+}
+
+// static
+bool BasePaths::GetUserHomeDirectory(std::experimental::filesystem::path& result)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_PROFILE, nullptr,
+                                  SHGFP_TYPE_CURRENT, buffer);
+    if (FAILED(hr))
+    {
+        LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
+        return false;
+    }
+
+    result.assign(buffer);
+    return true;
+}
+
+// static
+bool BasePaths::GetCurrentExecutableDirectory(std::experimental::filesystem::path& result)
+{
+    std::experimental::filesystem::path exe_path;
+
+    if (!GetCurrentExecutableFile(exe_path))
+        return false;
+
+    result = exe_path.parent_path();
+    return true;
+}
+
+// static
+bool BasePaths::GetCurrentExecutableFile(std::experimental::filesystem::path& result)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
+    {
+        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        return false;
     }
 
     result.assign(buffer);

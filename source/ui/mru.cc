@@ -21,7 +21,7 @@ constexpr size_t kMaxMRUItemCount = 30;
 
 bool GetMRUFilePath(std::experimental::filesystem::path& path)
 {
-    if (!GetBasePath(BasePathKey::DIR_APP_DATA, path))
+    if (!BasePaths::GetAppDataDirectory(path))
         return false;
 
     path.append(L"Aspia");

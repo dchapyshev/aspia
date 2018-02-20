@@ -10,23 +10,34 @@
 
 #include <experimental/filesystem>
 
+#include "base/macros.h"
+
 namespace aspia {
 
-enum class BasePathKey
+class BasePaths
 {
-    DIR_WINDOWS,           // Windows directory, usually "c:\windows"
-    DIR_SYSTEM,            // Usually c:\windows\system32"
+public:
+    // Windows directory, usually "c:\windows"
+    static bool GetWindowsDirectory(std::experimental::filesystem::path& result);
 
-    DIR_APP_DATA,          // Application Data directory under the user profile.
+    // Usually c:\windows\system32"
+    static bool GetSystemDirectory(std::experimental::filesystem::path& result);
 
-    DIR_USER_DESKTOP,      // The current user's Desktop.
-    DIR_USER_HOME,         // The current user's Home.
+    // Application Data directory under the user profile.
+    static bool GetAppDataDirectory(std::experimental::filesystem::path& result);
 
-    DIR_EXE,
-    FILE_EXE
+    // The current user's Desktop.
+    static bool GetUserDesktopDirectory(std::experimental::filesystem::path& result);
+
+    // The current user's Home.
+    static bool GetUserHomeDirectory(std::experimental::filesystem::path& result);
+
+    static bool GetCurrentExecutableDirectory(std::experimental::filesystem::path& result);
+    static bool GetCurrentExecutableFile(std::experimental::filesystem::path& result);
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(BasePaths);
 };
-
-bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result);
 
 } // namespace aspia
 

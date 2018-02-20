@@ -85,7 +85,7 @@ bool HostService::Install()
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
+    if (!BasePaths::GetCurrentExecutableFile(program_path))
         return false;
 
     CommandLine command_line(program_path);

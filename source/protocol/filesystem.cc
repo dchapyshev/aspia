@@ -71,7 +71,7 @@ proto::file_transfer::Status FileSystemRequest::GetDriveList(
 
     std::experimental::filesystem::path path;
 
-    if (GetBasePath(BasePathKey::DIR_USER_HOME, path))
+    if (BasePaths::GetUserHomeDirectory(path))
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
@@ -79,7 +79,7 @@ proto::file_transfer::Status FileSystemRequest::GetDriveList(
         item->set_path(path.u8string());
     }
 
-    if (GetBasePath(BasePathKey::DIR_USER_DESKTOP, path))
+    if (BasePaths::GetUserDesktopDirectory(path))
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 

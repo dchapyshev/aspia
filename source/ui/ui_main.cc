@@ -71,13 +71,11 @@ void UIMain()
     {
         std::experimental::filesystem::path program_path;
 
-        if (GetBasePath(BasePathKey::FILE_EXE, program_path))
+        if (BasePaths::GetCurrentExecutableFile(program_path) &&
+            LaunchProcessWithElevate(program_path))
         {
-            if (LaunchProcessWithElevate(program_path))
-            {
-                ShutdownLogging();
-                return;
-            }
+            ShutdownLogging();
+            return;
         }
     }
 
