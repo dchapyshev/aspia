@@ -17,26 +17,33 @@ PipeChannelProxy::PipeChannelProxy(PipeChannel* channel) :
 
 void PipeChannelProxy::WillDestroyCurrentChannel()
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
-    channel_ = nullptr;
-    stop_event_.Signal();
+    {
+        std::scoped_lock<std::mutex> lock(channel_lock_);
+        channel_ = nullptr;
+    }
+
+    stop_event_.notify_one();
 }
 
 bool PipeChannelProxy::Disconnect()
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    {
+        std::scoped_lock<std::mutex> lock(channel_lock_);
 
-    if (!channel_)
-        return false;
+        if (!channel_)
+            return false;
 
-    channel_->Disconnect();
-    stop_event_.Signal();
+        channel_->Disconnect();
+        channel_ = nullptr;
+    }
+
+    stop_event_.notify_one();
     return true;
 }
 
 bool PipeChannelProxy::IsDisconnecting() const
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (!channel_)
         return true;
@@ -47,7 +54,7 @@ bool PipeChannelProxy::IsDisconnecting() const
 bool PipeChannelProxy::Send(IOBuffer&& buffer,
                             PipeChannel::SendCompleteHandler handler)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -60,7 +67,7 @@ bool PipeChannelProxy::Send(IOBuffer&& buffer,
 
 bool PipeChannelProxy::Send(IOBuffer&& buffer)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -73,7 +80,7 @@ bool PipeChannelProxy::Send(IOBuffer&& buffer)
 
 bool PipeChannelProxy::Receive(PipeChannel::ReceiveCompleteHandler handler)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -86,7 +93,10 @@ bool PipeChannelProxy::Receive(PipeChannel::ReceiveCompleteHandler handler)
 
 void PipeChannelProxy::WaitForDisconnect()
 {
-    stop_event_.Wait();
+    std::unique_lock<std::mutex> lock(channel_lock_);
+
+    while (channel_)
+        stop_event_.wait(lock);
 }
 
 } // namespace aspia

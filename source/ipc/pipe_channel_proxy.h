@@ -8,7 +8,9 @@
 #ifndef _ASPIA_IPC__PIPE_CHANNEL_PROXY_H
 #define _ASPIA_IPC__PIPE_CHANNEL_PROXY_H
 
-#include "base/synchronization/waitable_event.h"
+#include <condition_variable>
+#include <mutex>
+
 #include "ipc/pipe_channel.h"
 
 namespace aspia {
@@ -34,8 +36,7 @@ private:
     PipeChannel* channel_;
     mutable std::mutex channel_lock_;
 
-    WaitableEvent stop_event_ { WaitableEvent::ResetPolicy::AUTOMATIC,
-                                WaitableEvent::InitialState::NOT_SIGNALED };
+    std::condition_variable stop_event_;
 
     DISALLOW_COPY_AND_ASSIGN(PipeChannelProxy);
 };

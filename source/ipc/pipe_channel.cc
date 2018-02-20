@@ -8,6 +8,7 @@
 #include "ipc/pipe_channel.h"
 
 #include "base/security_helpers.h"
+#include "base/scoped_object.h"
 #include "base/strings/string_printf.h"
 #include "base/logging.h"
 #include "crypto/random.h"
