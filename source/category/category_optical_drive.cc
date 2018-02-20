@@ -1167,35 +1167,35 @@ void AddFeatures(proto::OpticalDrive::Features* features, DeviceSPTI& device)
     }
 }
 
-const char* InterfaceToString(proto::OpticalDrive::Interface value)
+const char* InterfaceToString(proto::OpticalDrive::InterfaceType value)
 {
     switch (value)
     {
-        case proto::OpticalDrive::INTERFACE_UNSPECIFIED:
+        case proto::OpticalDrive::INTERFACE_TYPE_UNSPECIFIED:
             return "Unspecified";
 
-        case proto::OpticalDrive::INTERFACE_SCSI:
+        case proto::OpticalDrive::INTERFACE_TYPE_SCSI:
             return "SCSI";
 
-        case proto::OpticalDrive::INTERFACE_ATAPI:
+        case proto::OpticalDrive::INTERFACE_TYPE_ATAPI:
             return "ATAPI";
 
-        case proto::OpticalDrive::INTERFACE_IEEE1394_1995:
+        case proto::OpticalDrive::INTERFACE_TYPE_IEEE1394_1995:
             return "IEEE 1394 (1995)";
 
-        case proto::OpticalDrive::INTERFACE_IEEE1394A:
+        case proto::OpticalDrive::INTERFACE_TYPE_IEEE1394A:
             return "IEEE 1394A";
 
-        case proto::OpticalDrive::INTERFACE_FIBRE_CHANNEL:
+        case proto::OpticalDrive::INTERFACE_TYPE_FIBRE_CHANNEL:
             return "Fibre Channel";
 
-        case proto::OpticalDrive::INTERFACE_IEEE1394B:
+        case proto::OpticalDrive::INTERFACE_TYPE_IEEE1394B:
             return "IEEE 1394B";
 
-        case proto::OpticalDrive::INTERFACE_SERIAL_ATAPI:
+        case proto::OpticalDrive::INTERFACE_TYPE_SERIAL_ATAPI:
             return "Serial ATAPI";
 
-        case proto::OpticalDrive::INTERFACE_USB:
+        case proto::OpticalDrive::INTERFACE_TYPE_USB:
             return "USB";
 
         default:
@@ -1263,7 +1263,7 @@ void CategoryOpticalDrive::Parse(Table& table, const std::string& data)
         group.AddParam("Vendor Code", Value::String(item.vendor_code()));
         group.AddParam("Vendor Name", Value::String(VendorCodeToName(item.vendor_code().c_str())));
         group.AddParam("Firmware Revision", Value::String(item.firmware_version()));
-        group.AddParam("Interface", Value::String(InterfaceToString(item.interface())));
+        group.AddParam("Interface", Value::String(InterfaceToString(item.interface_type())));
         group.AddParam("Buffer Size", Value::MemorySize(item.buffer_size()));
 
         group.AddParam("Region Code", item.region_code() != 0 ?
@@ -1393,39 +1393,39 @@ std::string CategoryOpticalDrive::Serialize()
             switch (ByteSwap(feature.table.core.physical_interface_standard))
             {
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_UNSPECIFIED:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_UNSPECIFIED);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_UNSPECIFIED);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_SCSI_FAMILY:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_SCSI);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_SCSI);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_ATAPI:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_ATAPI);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_ATAPI);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_IEEE_1394_1995:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_IEEE1394_1995);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_IEEE1394_1995);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_IEEE_1394A:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_IEEE1394A);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_IEEE1394A);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_FIBRE_CHANNEL:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_FIBRE_CHANNEL);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_FIBRE_CHANNEL);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_IEEE_1394B:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_IEEE1394B);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_IEEE1394B);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_SERIAL_ATAPI:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_SERIAL_ATAPI);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_SERIAL_ATAPI);
                     break;
 
                 case DeviceSPTI::PHYSICAL_INTERFACE_STANDARD_USB:
-                    item->set_interface(proto::OpticalDrive::INTERFACE_USB);
+                    item->set_interface_type(proto::OpticalDrive::INTERFACE_TYPE_USB);
                     break;
             }
         }

@@ -13,18 +13,18 @@ package aspia.proto;
 
 message OpticalDrive
 {
-    enum Interface
+    enum InterfaceType
     {
-        INTERFACE_UNKNOWN          = 0;
-        INTERFACE_UNSPECIFIED      = 1;
-        INTERFACE_SCSI             = 2;
-        INTERFACE_ATAPI            = 3;
-        INTERFACE_IEEE1394_1995    = 4;
-        INTERFACE_IEEE1394A        = 5;
-        INTERFACE_FIBRE_CHANNEL    = 6;
-        INTERFACE_IEEE1394B        = 7;
-        INTERFACE_SERIAL_ATAPI     = 8;
-        INTERFACE_USB              = 9;
+        INTERFACE_TYPE_UNKNOWN          = 0;
+        INTERFACE_TYPE_UNSPECIFIED      = 1;
+        INTERFACE_TYPE_SCSI             = 2;
+        INTERFACE_TYPE_ATAPI            = 3;
+        INTERFACE_TYPE_IEEE1394_1995    = 4;
+        INTERFACE_TYPE_IEEE1394A        = 5;
+        INTERFACE_TYPE_FIBRE_CHANNEL    = 6;
+        INTERFACE_TYPE_IEEE1394B        = 7;
+        INTERFACE_TYPE_SERIAL_ATAPI     = 8;
+        INTERFACE_TYPE_USB              = 9;
     }
 
     message Features
@@ -78,7 +78,7 @@ message OpticalDrive
         string device_name                = 1;
         string vendor_code                = 2;
         string firmware_version           = 3;
-        Interface interface               = 4;
+        InterfaceType interface_type      = 4;
         uint64 buffer_size                = 5;
         uint32 region_code                = 6;
         uint32 region_code_vendor_changes = 7;

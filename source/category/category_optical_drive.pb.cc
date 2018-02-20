@@ -150,7 +150,7 @@ const OpticalDrive_Media_Mode OpticalDrive_Media::Mode_MIN;
 const OpticalDrive_Media_Mode OpticalDrive_Media::Mode_MAX;
 const int OpticalDrive_Media::Mode_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool OpticalDrive_Interface_IsValid(int value) {
+bool OpticalDrive_InterfaceType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -169,19 +169,19 @@ bool OpticalDrive_Interface_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const OpticalDrive_Interface OpticalDrive::INTERFACE_UNKNOWN;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_UNSPECIFIED;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_SCSI;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_ATAPI;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_IEEE1394_1995;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_IEEE1394A;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_FIBRE_CHANNEL;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_IEEE1394B;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_SERIAL_ATAPI;
-const OpticalDrive_Interface OpticalDrive::INTERFACE_USB;
-const OpticalDrive_Interface OpticalDrive::Interface_MIN;
-const OpticalDrive_Interface OpticalDrive::Interface_MAX;
-const int OpticalDrive::Interface_ARRAYSIZE;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_UNKNOWN;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_UNSPECIFIED;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_SCSI;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_ATAPI;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_IEEE1394_1995;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_IEEE1394A;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_FIBRE_CHANNEL;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_IEEE1394B;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_SERIAL_ATAPI;
+const OpticalDrive_InterfaceType OpticalDrive::INTERFACE_TYPE_USB;
+const OpticalDrive_InterfaceType OpticalDrive::InterfaceType_MIN;
+const OpticalDrive_InterfaceType OpticalDrive::InterfaceType_MAX;
+const int OpticalDrive::InterfaceType_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
@@ -1475,7 +1475,7 @@ void OpticalDrive_Item::InitAsDefaultInstance() {
 const int OpticalDrive_Item::kDeviceNameFieldNumber;
 const int OpticalDrive_Item::kVendorCodeFieldNumber;
 const int OpticalDrive_Item::kFirmwareVersionFieldNumber;
-const int OpticalDrive_Item::kInterfaceFieldNumber;
+const int OpticalDrive_Item::kInterfaceTypeFieldNumber;
 const int OpticalDrive_Item::kBufferSizeFieldNumber;
 const int OpticalDrive_Item::kRegionCodeFieldNumber;
 const int OpticalDrive_Item::kRegionCodeVendorChangesFieldNumber;
@@ -1653,7 +1653,7 @@ bool OpticalDrive_Item::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.OpticalDrive.Interface interface = 4;
+      // .aspia.proto.OpticalDrive.InterfaceType interface_type = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
@@ -1661,7 +1661,7 @@ bool OpticalDrive_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_interface(static_cast< ::aspia::proto::OpticalDrive_Interface >(value));
+          set_interface_type(static_cast< ::aspia::proto::OpticalDrive_InterfaceType >(value));
         } else {
           goto handle_unusual;
         }
@@ -1804,10 +1804,10 @@ void OpticalDrive_Item::SerializeWithCachedSizes(
       3, this->firmware_version(), output);
   }
 
-  // .aspia.proto.OpticalDrive.Interface interface = 4;
-  if (this->interface() != 0) {
+  // .aspia.proto.OpticalDrive.InterfaceType interface_type = 4;
+  if (this->interface_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      4, this->interface(), output);
+      4, this->interface_type(), output);
   }
 
   // uint64 buffer_size = 5;
@@ -1895,10 +1895,10 @@ size_t OpticalDrive_Item::ByteSizeLong() const {
         this->buffer_size());
   }
 
-  // .aspia.proto.OpticalDrive.Interface interface = 4;
-  if (this->interface() != 0) {
+  // .aspia.proto.OpticalDrive.InterfaceType interface_type = 4;
+  if (this->interface_type() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->interface());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->interface_type());
   }
 
   // uint32 region_code = 6;
@@ -1962,8 +1962,8 @@ void OpticalDrive_Item::MergeFrom(const OpticalDrive_Item& from) {
   if (from.buffer_size() != 0) {
     set_buffer_size(from.buffer_size());
   }
-  if (from.interface() != 0) {
-    set_interface(from.interface());
+  if (from.interface_type() != 0) {
+    set_interface_type(from.interface_type());
   }
   if (from.region_code() != 0) {
     set_region_code(from.region_code());
@@ -1999,7 +1999,7 @@ void OpticalDrive_Item::InternalSwap(OpticalDrive_Item* other) {
   swap(features_, other->features_);
   swap(media_, other->media_);
   swap(buffer_size_, other->buffer_size_);
-  swap(interface_, other->interface_);
+  swap(interface_type_, other->interface_type_);
   swap(region_code_, other->region_code_);
   swap(region_code_vendor_changes_, other->region_code_vendor_changes_);
   swap(region_code_user_changes_, other->region_code_user_changes_);

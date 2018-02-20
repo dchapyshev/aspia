@@ -8,7 +8,11 @@
 #include "base/devices/device_spti.h"
 
 #include <winioctl.h>
+
+#pragma warning(push)
+#pragma warning(disable:4091)
 #include <ntddscsi.h>
+#pragma warning(pop)
 
 namespace aspia {
 

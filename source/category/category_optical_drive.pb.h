@@ -87,24 +87,24 @@ const OpticalDrive_Media_Mode OpticalDrive_Media_Mode_Mode_MIN = OpticalDrive_Me
 const OpticalDrive_Media_Mode OpticalDrive_Media_Mode_Mode_MAX = OpticalDrive_Media_Mode_MODE_WRITE;
 const int OpticalDrive_Media_Mode_Mode_ARRAYSIZE = OpticalDrive_Media_Mode_Mode_MAX + 1;
 
-enum OpticalDrive_Interface {
-  OpticalDrive_Interface_INTERFACE_UNKNOWN = 0,
-  OpticalDrive_Interface_INTERFACE_UNSPECIFIED = 1,
-  OpticalDrive_Interface_INTERFACE_SCSI = 2,
-  OpticalDrive_Interface_INTERFACE_ATAPI = 3,
-  OpticalDrive_Interface_INTERFACE_IEEE1394_1995 = 4,
-  OpticalDrive_Interface_INTERFACE_IEEE1394A = 5,
-  OpticalDrive_Interface_INTERFACE_FIBRE_CHANNEL = 6,
-  OpticalDrive_Interface_INTERFACE_IEEE1394B = 7,
-  OpticalDrive_Interface_INTERFACE_SERIAL_ATAPI = 8,
-  OpticalDrive_Interface_INTERFACE_USB = 9,
-  OpticalDrive_Interface_OpticalDrive_Interface_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  OpticalDrive_Interface_OpticalDrive_Interface_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum OpticalDrive_InterfaceType {
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_UNKNOWN = 0,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_UNSPECIFIED = 1,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_SCSI = 2,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_ATAPI = 3,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394_1995 = 4,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394A = 5,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_FIBRE_CHANNEL = 6,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394B = 7,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_SERIAL_ATAPI = 8,
+  OpticalDrive_InterfaceType_INTERFACE_TYPE_USB = 9,
+  OpticalDrive_InterfaceType_OpticalDrive_InterfaceType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  OpticalDrive_InterfaceType_OpticalDrive_InterfaceType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool OpticalDrive_Interface_IsValid(int value);
-const OpticalDrive_Interface OpticalDrive_Interface_Interface_MIN = OpticalDrive_Interface_INTERFACE_UNKNOWN;
-const OpticalDrive_Interface OpticalDrive_Interface_Interface_MAX = OpticalDrive_Interface_INTERFACE_USB;
-const int OpticalDrive_Interface_Interface_ARRAYSIZE = OpticalDrive_Interface_Interface_MAX + 1;
+bool OpticalDrive_InterfaceType_IsValid(int value);
+const OpticalDrive_InterfaceType OpticalDrive_InterfaceType_InterfaceType_MIN = OpticalDrive_InterfaceType_INTERFACE_TYPE_UNKNOWN;
+const OpticalDrive_InterfaceType OpticalDrive_InterfaceType_InterfaceType_MAX = OpticalDrive_InterfaceType_INTERFACE_TYPE_USB;
+const int OpticalDrive_InterfaceType_InterfaceType_ARRAYSIZE = OpticalDrive_InterfaceType_InterfaceType_MAX + 1;
 
 // ===================================================================
 
@@ -668,11 +668,11 @@ class OpticalDrive_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::google::protobuf::uint64 buffer_size() const;
   void set_buffer_size(::google::protobuf::uint64 value);
 
-  // .aspia.proto.OpticalDrive.Interface interface = 4;
-  void clear_interface();
-  static const int kInterfaceFieldNumber = 4;
-  ::aspia::proto::OpticalDrive_Interface interface() const;
-  void set_interface(::aspia::proto::OpticalDrive_Interface value);
+  // .aspia.proto.OpticalDrive.InterfaceType interface_type = 4;
+  void clear_interface_type();
+  static const int kInterfaceTypeFieldNumber = 4;
+  ::aspia::proto::OpticalDrive_InterfaceType interface_type() const;
+  void set_interface_type(::aspia::proto::OpticalDrive_InterfaceType value);
 
   // uint32 region_code = 6;
   void clear_region_code();
@@ -702,7 +702,7 @@ class OpticalDrive_Item : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::aspia::proto::OpticalDrive_Features* features_;
   ::aspia::proto::OpticalDrive_Media* media_;
   ::google::protobuf::uint64 buffer_size_;
-  int interface_;
+  int interface_type_;
   ::google::protobuf::uint32 region_code_;
   ::google::protobuf::uint32 region_code_vendor_changes_;
   ::google::protobuf::uint32 region_code_user_changes_;
@@ -794,36 +794,36 @@ class OpticalDrive : public ::google::protobuf::MessageLite /* @@protoc_insertio
   typedef OpticalDrive_Media Media;
   typedef OpticalDrive_Item Item;
 
-  typedef OpticalDrive_Interface Interface;
-  static const Interface INTERFACE_UNKNOWN =
-    OpticalDrive_Interface_INTERFACE_UNKNOWN;
-  static const Interface INTERFACE_UNSPECIFIED =
-    OpticalDrive_Interface_INTERFACE_UNSPECIFIED;
-  static const Interface INTERFACE_SCSI =
-    OpticalDrive_Interface_INTERFACE_SCSI;
-  static const Interface INTERFACE_ATAPI =
-    OpticalDrive_Interface_INTERFACE_ATAPI;
-  static const Interface INTERFACE_IEEE1394_1995 =
-    OpticalDrive_Interface_INTERFACE_IEEE1394_1995;
-  static const Interface INTERFACE_IEEE1394A =
-    OpticalDrive_Interface_INTERFACE_IEEE1394A;
-  static const Interface INTERFACE_FIBRE_CHANNEL =
-    OpticalDrive_Interface_INTERFACE_FIBRE_CHANNEL;
-  static const Interface INTERFACE_IEEE1394B =
-    OpticalDrive_Interface_INTERFACE_IEEE1394B;
-  static const Interface INTERFACE_SERIAL_ATAPI =
-    OpticalDrive_Interface_INTERFACE_SERIAL_ATAPI;
-  static const Interface INTERFACE_USB =
-    OpticalDrive_Interface_INTERFACE_USB;
-  static inline bool Interface_IsValid(int value) {
-    return OpticalDrive_Interface_IsValid(value);
+  typedef OpticalDrive_InterfaceType InterfaceType;
+  static const InterfaceType INTERFACE_TYPE_UNKNOWN =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_UNKNOWN;
+  static const InterfaceType INTERFACE_TYPE_UNSPECIFIED =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_UNSPECIFIED;
+  static const InterfaceType INTERFACE_TYPE_SCSI =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_SCSI;
+  static const InterfaceType INTERFACE_TYPE_ATAPI =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_ATAPI;
+  static const InterfaceType INTERFACE_TYPE_IEEE1394_1995 =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394_1995;
+  static const InterfaceType INTERFACE_TYPE_IEEE1394A =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394A;
+  static const InterfaceType INTERFACE_TYPE_FIBRE_CHANNEL =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_FIBRE_CHANNEL;
+  static const InterfaceType INTERFACE_TYPE_IEEE1394B =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_IEEE1394B;
+  static const InterfaceType INTERFACE_TYPE_SERIAL_ATAPI =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_SERIAL_ATAPI;
+  static const InterfaceType INTERFACE_TYPE_USB =
+    OpticalDrive_InterfaceType_INTERFACE_TYPE_USB;
+  static inline bool InterfaceType_IsValid(int value) {
+    return OpticalDrive_InterfaceType_IsValid(value);
   }
-  static const Interface Interface_MIN =
-    OpticalDrive_Interface_Interface_MIN;
-  static const Interface Interface_MAX =
-    OpticalDrive_Interface_Interface_MAX;
-  static const int Interface_ARRAYSIZE =
-    OpticalDrive_Interface_Interface_ARRAYSIZE;
+  static const InterfaceType InterfaceType_MIN =
+    OpticalDrive_InterfaceType_InterfaceType_MIN;
+  static const InterfaceType InterfaceType_MAX =
+    OpticalDrive_InterfaceType_InterfaceType_MAX;
+  static const int InterfaceType_ARRAYSIZE =
+    OpticalDrive_InterfaceType_InterfaceType_ARRAYSIZE;
 
   // accessors -------------------------------------------------------
 
@@ -1460,18 +1460,18 @@ inline void OpticalDrive_Item::set_allocated_firmware_version(::std::string* fir
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.OpticalDrive.Item.firmware_version)
 }
 
-// .aspia.proto.OpticalDrive.Interface interface = 4;
-inline void OpticalDrive_Item::clear_interface() {
-  interface_ = 0;
+// .aspia.proto.OpticalDrive.InterfaceType interface_type = 4;
+inline void OpticalDrive_Item::clear_interface_type() {
+  interface_type_ = 0;
 }
-inline ::aspia::proto::OpticalDrive_Interface OpticalDrive_Item::interface() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.interface)
-  return static_cast< ::aspia::proto::OpticalDrive_Interface >(interface_);
+inline ::aspia::proto::OpticalDrive_InterfaceType OpticalDrive_Item::interface_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.OpticalDrive.Item.interface_type)
+  return static_cast< ::aspia::proto::OpticalDrive_InterfaceType >(interface_type_);
 }
-inline void OpticalDrive_Item::set_interface(::aspia::proto::OpticalDrive_Interface value) {
+inline void OpticalDrive_Item::set_interface_type(::aspia::proto::OpticalDrive_InterfaceType value) {
   
-  interface_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.interface)
+  interface_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.OpticalDrive.Item.interface_type)
 }
 
 // uint64 buffer_size = 5;
@@ -1683,7 +1683,7 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::OpticalDrive_Media_Mode> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::OpticalDrive_Interface> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::OpticalDrive_InterfaceType> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google
