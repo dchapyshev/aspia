@@ -10,6 +10,7 @@
 #include "ui/resource.h"
 
 #include <iphlpapi.h>
+#include <ws2tcpip.h>
 #include <winsock2.h>
 #include <memory>
 
@@ -19,11 +20,9 @@ namespace {
 
 std::string IpToString(DWORD ip)
 {
-    in_addr ip_address;
-    ip_address.S_un.S_addr = ip;
+    char buffer[46 + 1];
 
-    char* buffer = inet_ntoa(ip_address);
-    if (!buffer)
+    if (!inet_ntop(AF_INET, &ip, buffer, _countof(buffer)))
         return std::string();
 
     return buffer;
