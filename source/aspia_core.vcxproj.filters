@@ -1080,6 +1080,9 @@
     <ClInclude Include="ui\system_info\system_info_main.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
+    <ClInclude Include="host\host_switches.h">
+      <Filter>host</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\byte_order.cc">
@@ -1972,6 +1975,9 @@
     </ClCompile>
     <ClCompile Include="ui\system_info\system_info_main.cc">
       <Filter>ui\system_info</Filter>
+    </ClCompile>
+    <ClCompile Include="host\host_switches.cc">
+      <Filter>host</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

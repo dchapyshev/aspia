@@ -259,6 +259,7 @@
     <ClInclude Include="host\host_session_launcher.h" />
     <ClInclude Include="host\host_session_launcher_service.h" />
     <ClInclude Include="host\host_session_system_info.h" />
+    <ClInclude Include="host\host_switches.h" />
     <ClInclude Include="host\input_injector.h" />
     <ClInclude Include="host\sas_injector.h" />
     <ClInclude Include="host\sas_injector_main.h" />
@@ -564,6 +565,7 @@
     <ClCompile Include="host\host_session_launcher.cc" />
     <ClCompile Include="host\host_session_launcher_service.cc" />
     <ClCompile Include="host\host_session_system_info.cc" />
+    <ClCompile Include="host\host_switches.cc" />
     <ClCompile Include="host\input_injector.cc" />
     <ClCompile Include="host\sas_injector.cc" />
     <ClCompile Include="host\sas_injector_main.cc" />

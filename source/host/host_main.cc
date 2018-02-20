@@ -9,27 +9,13 @@
 
 #include "base/command_line.h"
 #include "base/process/process.h"
-//#include "host/sas_injector.h"
-//#include "host/host_session_launcher.h"
+#include "base/logging.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "host/host_session_system_info.h"
-//#include "host/host_local_system_info.h"
-
-#include "base/logging.h"
+#include "host/host_switches.h"
 
 namespace aspia {
-
-namespace {
-
-const wchar_t kSessionTypeSwitch[] = L"session-type";
-const wchar_t kChannelIdSwitch[] = L"channel-id";
-
-const wchar_t kSessionTypeDesktop[] = L"desktop";
-const wchar_t kSessionTypeFileTransfer[] = L"file-transfer";
-const wchar_t kSessionTypeSystemInfo[] = L"system-info";
-
-} // namespace
 
 void HostMain()
 {

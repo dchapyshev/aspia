@@ -28,6 +28,18 @@ bool GetBasePath(BasePathKey key, std::experimental::filesystem::path& result)
         }
         break;
 
+        case BasePathKey::DIR_EXE:
+        {
+            std::experimental::filesystem::path exe_path;
+
+            if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
+                return false;
+
+            result = exe_path.parent_path();
+            return true;
+        }
+        break;
+
         case BasePathKey::DIR_COMMON_APP_DATA:
         {
             HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA,

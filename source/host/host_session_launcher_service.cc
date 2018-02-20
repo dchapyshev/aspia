@@ -6,11 +6,13 @@
 //
 
 #include "host/host_session_launcher_service.h"
+
 #include "base/files/base_paths.h"
 #include "base/command_line.h"
 #include "base/service_manager.h"
 #include "base/logging.h"
 #include "host/host_session_launcher.h"
+#include "host/host_switches.h"
 
 namespace aspia {
 
@@ -18,15 +20,6 @@ namespace {
 
 constexpr wchar_t kServiceShortName[] = L"aspia-session-launcher";
 constexpr wchar_t kServiceFullName[] = L"Aspia Session Launcher";
-
-const wchar_t kSessionTypeSwitch[] = L"session-type";
-const wchar_t kChannelIdSwitch[] = L"channel-id";
-const wchar_t kServiceIdSwitch[] = L"service-id";
-const wchar_t kSessionIdSwitch[] = L"session-id";
-
-const wchar_t kSessionTypeDesktop[] = L"desktop";
-const wchar_t kSessionTypeFileTransfer[] = L"file-transfer";
-const wchar_t kSessionTypeSystemInfo[] = L"system-info";
 
 } // namespace
 

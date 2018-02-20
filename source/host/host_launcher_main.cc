@@ -13,15 +13,6 @@
 
 namespace aspia {
 
-namespace {
-
-const wchar_t kSessionTypeSwitch[] = L"session-type";
-const wchar_t kChannelIdSwitch[] = L"channel-id";
-const wchar_t kServiceIdSwitch[] = L"service-id";
-const wchar_t kSessionIdSwitch[] = L"session-id";
-
-} // namespace
-
 void HostLauncherMain()
 {
     LoggingSettings settings;

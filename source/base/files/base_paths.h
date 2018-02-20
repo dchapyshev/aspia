@@ -32,6 +32,7 @@ enum class BasePathKey
     DIR_USER_DESKTOP,      // The current user's Desktop.
     DIR_USER_HOME,         // The current user's Home.
 
+    DIR_EXE,
     FILE_EXE
 };
 

@@ -17,8 +17,8 @@ namespace aspia {
 
 namespace {
 
-static const wchar_t kHostServiceShortName[] = L"aspia-host";
-static const wchar_t kHostServiceFullName[] = L"Aspia Host";
+static const wchar_t kHostServiceShortName[] = L"aspia-host-service";
+static const wchar_t kHostServiceFullName[] = L"Aspia Host Service";
 
 // Security descriptor allowing local processes running under SYSTEM or
 // LocalService accounts to call COM methods exposed by the daemon.
@@ -38,8 +38,8 @@ const wchar_t kComProcessMandatoryLabel[] =
 
 } // namespace
 
-HostService::HostService() :
-    Service(kHostServiceShortName)
+HostService::HostService()
+    : Service(kHostServiceShortName)
 {
     // Nothing
 }

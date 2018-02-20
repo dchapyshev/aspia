@@ -6,7 +6,10 @@
 //
 
 #include "host/host_session_launcher.h"
-#include "host/host_session_launcher_service.h"
+
+#include <userenv.h>
+#include <string>
+
 #include "base/process/process_helpers.h"
 #include "base/version_helpers.h"
 #include "base/command_line.h"
@@ -15,25 +18,18 @@
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
-
-#include <userenv.h>
-#include <string>
+#include "host/host_session_launcher_service.h"
+#include "host/host_switches.h"
 
 namespace aspia {
 
 namespace {
 
+constexpr wchar_t kProcessNameSystemInfo[] = L"aspia_system_info.exe";
+constexpr wchar_t kProcessNameHost[] = L"aspia_host.exe";
+
 // Name of the default session desktop.
 constexpr wchar_t kDefaultDesktopName[] = L"winsta0\\default";
-
-const wchar_t kSessionTypeSwitch[] = L"session-type";
-const wchar_t kChannelIdSwitch[] = L"channel-id";
-const wchar_t kServiceIdSwitch[] = L"service-id";
-const wchar_t kSessionIdSwitch[] = L"session-id";
-
-const wchar_t kSessionTypeDesktop[] = L"desktop";
-const wchar_t kSessionTypeFileTransfer[] = L"file-transfer";
-const wchar_t kSessionTypeSystemInfo[] = L"system-info";
 
 bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 {
@@ -181,8 +177,10 @@ bool LaunchProcessWithCurrentRights(const std::wstring& session_type,
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
+    if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
         return false;
+
+    program_path.append(kProcessNameHost);
 
     CommandLine command_line(program_path);
 
@@ -239,8 +237,10 @@ bool LaunchSessionProcess(const std::wstring& session_type,
 
         std::experimental::filesystem::path program_path;
 
-        if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
+        if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
             return false;
+
+        program_path.append(kProcessNameHost);
 
         CommandLine command_line(program_path);
 
@@ -261,8 +261,10 @@ bool LaunchSessionProcessFromService(const std::wstring& session_type,
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
+    if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
         return false;
+
+    program_path.append(kProcessNameHost);
 
     CommandLine command_line(program_path);
 
@@ -326,16 +328,14 @@ bool LaunchSystemInfoProcess()
 {
     std::experimental::filesystem::path program_path;
 
-    if (!GetBasePath(aspia::BasePathKey::FILE_EXE, program_path))
+    if (!GetBasePath(aspia::BasePathKey::DIR_EXE, program_path))
         return false;
 
-    CommandLine command_line(program_path);
-
-    //command_line.AppendSwitch(kModeSwitch, kModeSystemInfo);
+    program_path.append(kProcessNameSystemInfo);
 
     if (IsWindowsVistaOrGreater() && !IsProcessElevated())
     {
-        if (LaunchProcessWithElevate(command_line))
+        if (LaunchProcessWithElevate(program_path))
             return true;
     }
 
@@ -344,7 +344,7 @@ bool LaunchSystemInfoProcess()
     if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
         return false;
 
-    return CreateProcessWithToken(token, command_line);
+    return CreateProcessWithToken(token, CommandLine(program_path));
 }
 
 } // namespace aspia
