@@ -32,11 +32,6 @@ public:
            const std::wstring_view& service_short_name,
            const std::wstring_view& service_description);
 
-    static std::wstring GenerateUniqueServiceId();
-
-    static std::wstring CreateUniqueServiceName(const std::wstring_view& service_name,
-                                                const std::wstring_view& service_id);
-
     enum ServiceStatus
     {
         SERVICE_STATUS_INSTALLED = 1,

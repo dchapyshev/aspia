@@ -6,13 +6,7 @@
 //
 
 #include "base/service_manager.h"
-
-#include <atomic>
-
-#include "base/strings/unicode.h"
-#include "base/strings/string_printf.h"
 #include "base/logging.h"
-#include "crypto/random.h"
 
 namespace aspia {
 
@@ -119,30 +113,6 @@ ServiceManager::Create(const CommandLine& command_line,
 
     return std::unique_ptr<ServiceManager>(
         new ServiceManager(sc_manager.Release(), service.Release()));
-}
-
-// static
-std::wstring ServiceManager::GenerateUniqueServiceId()
-{
-    static std::atomic_uint32_t last_service_id = 0;
-    uint32_t service_id = last_service_id++;
-
-    return StringPrintf(L"%lu.%lu.%lu",
-                        GetCurrentProcessId(),
-                        service_id,
-                        CreateRandomNumber());
-}
-
-// static
-std::wstring ServiceManager::CreateUniqueServiceName(const std::wstring_view& service_name,
-                                                     const std::wstring_view& service_id)
-{
-    std::wstring unique_name(service_name);
-
-    unique_name.append(L".");
-    unique_name.append(service_id);
-
-    return unique_name;
 }
 
 // static
