@@ -8,10 +8,10 @@
 #include "host/host_session_launcher.h"
 
 #include <userenv.h>
+#include <wtsapi32.h>
 #include <string>
 
 #include "base/process/process_helpers.h"
-#include "base/version_helpers.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
@@ -180,20 +180,6 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
     if (!CreatePrivilegedToken(privileged_token))
         return false;
 
-    ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
-
-    typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
-
-    WTSQueryUserTokenFunc query_user_token_func =
-        reinterpret_cast<WTSQueryUserTokenFunc>(
-            wtsapi32_library.GetFunctionPointer("WTSQueryUserToken"));
-
-    if (!query_user_token_func)
-    {
-        LOG(LS_ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
-        return false;
-    }
-
     ScopedHandle session_token;
 
     {
@@ -202,7 +188,7 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
         if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
             return false;
 
-        if (!query_user_token_func(session_id, session_token.Recieve()))
+        if (!WTSQueryUserToken(session_id, session_token.Recieve()))
         {
             PLOG(LS_ERROR) << "WTSQueryUserToken failed";
             return false;
@@ -290,7 +276,7 @@ bool LaunchSystemInfoProcess()
 
     program_path.append(kProcessNameSystemInfo);
 
-    if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+    if (!IsProcessElevated())
     {
         if (LaunchProcessWithElevate(program_path))
             return true;

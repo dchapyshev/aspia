@@ -33,9 +33,6 @@ private:
     CapturerGDI();
     bool PrepareCaptureResources();
 
-    ScopedNativeLibrary dwmapi_library_;
-    DwmEnableCompositionFunc composition_func_ = nullptr;
-
     ScopedThreadDesktop desktop_;
     DesktopRect desktop_dc_rect_;
 

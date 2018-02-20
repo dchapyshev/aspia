@@ -7,7 +7,6 @@
 
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "ui/system_info/info_list_ctrl.h"
 
@@ -20,15 +19,8 @@ LRESULT InfoListCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, BOOL&
 {
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(*this, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    SetExtendedListViewStyle(ex_style);
+    ::SetWindowTheme(*this, L"explorer", nullptr);
+    SetExtendedListViewStyle(LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
 
     small_icon_size_.SetSize(GetSystemMetrics(SM_CXSMICON),
                              GetSystemMetrics(SM_CYSMICON));

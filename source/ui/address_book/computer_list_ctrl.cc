@@ -8,7 +8,6 @@
 #include "ui/address_book/computer_list_ctrl.h"
 
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "ui/resource.h"
 
@@ -30,15 +29,8 @@ bool ComputerListCtrl::Create(HWND parent, UINT control_id)
         return false;
     }
 
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(*this, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    SetExtendedListViewStyle(ex_style);
+    ::SetWindowTheme(*this, L"explorer", nullptr);
+    SetExtendedListViewStyle(LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
 
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 

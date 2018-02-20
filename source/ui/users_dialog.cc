@@ -12,7 +12,6 @@
 
 #include "base/process/process_helpers.h"
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/secure_memory.h"
 #include "ui/user_prop_dialog.h"
@@ -84,15 +83,8 @@ LRESULT UsersDialog::OnInitDialog(
 
     CListViewCtrl list(GetDlgItem(IDC_USER_LIST));
 
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        SetWindowTheme(list, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    list.SetExtendedListViewStyle(ex_style);
+    ::SetWindowTheme(list, L"explorer", nullptr);
+    list.SetExtendedListViewStyle(LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
     list.SetImageList(imagelist_, LVSIL_SMALL);
 
     CString title;

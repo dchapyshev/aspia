@@ -6,32 +6,13 @@
 //
 
 #include "host/console_session_watcher.h"
-#include "base/files/base_paths.h"
-#include "base/logging.h"
 
 #include <wtsapi32.h>
 
+#include "base/files/base_paths.h"
+#include "base/logging.h"
+
 namespace aspia {
-
-namespace {
-
-constexpr wchar_t kWtsApi32LibraryName[] = L"wtsapi32.dll";
-
-} // namespace
-
-ConsoleSessionWatcher::ConsoleSessionWatcher()
-    : wtsapi32_library_(kWtsApi32LibraryName)
-{
-    register_session_notification_ =
-        reinterpret_cast<WTSRegisterSessionNotificationFn>(
-           wtsapi32_library_.GetFunctionPointer("WTSRegisterSessionNotification"));
-
-    unregister_session_notification_ =
-       reinterpret_cast<WTSUnRegisterSessionNotificationFn>(
-          wtsapi32_library_.GetFunctionPointer("WTSUnRegisterSessionNotification"));
-
-    CHECK(register_session_notification_ && unregister_session_notification_);
-}
 
 ConsoleSessionWatcher::~ConsoleSessionWatcher()
 {
@@ -52,7 +33,7 @@ bool ConsoleSessionWatcher::StartWatching(Delegate* delegate)
         return false;
     }
 
-    if (!register_session_notification_(window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
+    if (!WTSRegisterSessionNotification(window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
     {
         PLOG(LS_ERROR) << "WTSRegisterSessionNotification failed";
         window_.reset();
@@ -66,7 +47,7 @@ void ConsoleSessionWatcher::StopWatching()
 {
     if (window_)
     {
-        unregister_session_notification_(window_->hwnd());
+        WTSUnRegisterSessionNotification(window_->hwnd());
         window_.reset();
         delegate_ = nullptr;
     }

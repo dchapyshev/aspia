@@ -18,7 +18,6 @@
 #include "base/process/process_helpers.h"
 #include "base/scoped_com_initializer.h"
 #include "base/settings_manager.h"
-#include "base/version_helpers.h"
 #include "ui/address_book/address_book_window.h"
 #include "ui/main_dialog.h"
 
@@ -67,7 +66,7 @@ void UIMain()
 
     InitLogging(settings);
 
-    if (IsWindowsVistaOrGreater() && !IsProcessElevated())
+    if (!IsProcessElevated())
     {
         std::experimental::filesystem::path program_path;
 

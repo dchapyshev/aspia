@@ -12,7 +12,6 @@
 
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/secure_memory.h"
 #include "protocol/authorization.h"
@@ -93,15 +92,8 @@ LRESULT UserPropDialog::OnInitDialog(
 
     CListViewCtrl list(GetDlgItem(IDC_SESSION_TYPES_LIST));
 
-    DWORD ex_style = LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        SetWindowTheme(list, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    list.SetExtendedListViewStyle(ex_style);
+    SetWindowTheme(list, L"explorer", nullptr);
+    list.SetExtendedListViewStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
     list.AddColumn(L"", 0);
 
     InsertSessionType(list,

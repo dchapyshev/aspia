@@ -40,29 +40,10 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
         return false;
     }
 
-    HMODULE user32_module = GetModuleHandleW(L"user32.dll");
-    if (user32_module)
+    if (!AddClipboardFormatListener(window_->hwnd()))
     {
-        add_clipboard_format_listener_ =
-            reinterpret_cast<AddClipboardFormatListenerFn*>(
-                GetProcAddress(user32_module, "AddClipboardFormatListener"));
-
-        remove_clipboard_format_listener_ =
-            reinterpret_cast<RemoveClipboardFormatListenerFn*>(
-                GetProcAddress(user32_module, "RemoveClipboardFormatListener"));
-    }
-
-    if (HaveClipboardListenerApi())
-    {
-        if (!add_clipboard_format_listener_(window_->hwnd()))
-        {
-            PLOG(LS_WARNING) << "AddClipboardFormatListener failed";
-            return false;
-        }
-    }
-    else
-    {
-        next_viewer_window_ = SetClipboardViewer(window_->hwnd());
+        PLOG(LS_ERROR) << "AddClipboardFormatListener failed";
+        return false;
     }
 
     return true;
@@ -72,14 +53,7 @@ void Clipboard::Stop()
 {
     if (window_)
     {
-        if (HaveClipboardListenerApi())
-        {
-            remove_clipboard_format_listener_(window_->hwnd());
-        }
-        else
-        {
-            ChangeClipboardChain(window_->hwnd(), next_viewer_window_);
-        }
+        RemoveClipboardFormatListener(window_->hwnd());
 
         window_.reset();
 
@@ -87,15 +61,7 @@ void Clipboard::Stop()
         last_data_.clear();
 
         clipboard_event_callback_ = nullptr;
-
-        remove_clipboard_format_listener_ = nullptr;
-        add_clipboard_format_listener_ = nullptr;
     }
-}
-
-bool Clipboard::HaveClipboardListenerApi() const
-{
-    return add_clipboard_format_listener_ && remove_clipboard_format_listener_;
 }
 
 void Clipboard::OnClipboardUpdate()
@@ -155,49 +121,13 @@ void Clipboard::OnClipboardUpdate()
     }
 }
 
-bool Clipboard::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
+bool Clipboard::OnMessage(UINT message, WPARAM /* wParam */, LPARAM /* lParam */, LRESULT& result)
 {
     switch (message)
     {
         case WM_CLIPBOARDUPDATE:
-        {
-            if (!HaveClipboardListenerApi())
-                return false;
-
             OnClipboardUpdate();
-        }
-        break;
-
-        case WM_DRAWCLIPBOARD:
-        {
-            if (HaveClipboardListenerApi())
-                return false;
-
-            OnClipboardUpdate();
-        }
-        break;
-
-        case WM_CHANGECBCHAIN:
-        {
-            if (HaveClipboardListenerApi())
-                return false;
-
-            // wParam - A handle to the window being removed from the clipboard
-            // viewer chain.
-            // lParam - A handle to the next window in the chain following the
-            // window being removed. This parameter is NULL if the window being
-            // removed is the last window in the chain.
-
-            if (reinterpret_cast<HWND>(wParam) == next_viewer_window_)
-            {
-                next_viewer_window_ = reinterpret_cast<HWND>(lParam);
-            }
-            else if (next_viewer_window_)
-            {
-                SendMessageW(next_viewer_window_, message, wParam, lParam);
-            }
-        }
-        break;
+            break;
 
         default:
             return false;

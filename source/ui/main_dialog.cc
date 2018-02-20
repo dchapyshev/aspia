@@ -13,7 +13,6 @@
 #include "base/files/base_paths.h"
 #include "base/process/process_helpers.h"
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/scoped_clipboard.h"
 #include "base/settings_manager.h"
 #include "host/host_session_launcher.h"
@@ -82,15 +81,8 @@ void MainDialog::InitIpList()
 {
     CListViewCtrl list(GetDlgItem(IDC_IP_LIST));
 
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        SetWindowTheme(list, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    list.SetExtendedListViewStyle(ex_style);
+    SetWindowTheme(list, L"explorer", nullptr);
+    list.SetExtendedListViewStyle(LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
 
     const int column_index = list.AddColumn(L"", 0);
 

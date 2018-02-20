@@ -13,7 +13,6 @@
 #include <strsafe.h>
 
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "crypto/sha.h"
 #include "crypto/string_encryptor.h"

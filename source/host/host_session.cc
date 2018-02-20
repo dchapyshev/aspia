@@ -8,7 +8,6 @@
 #include "host/host_session.h"
 
 #include "base/scoped_privilege.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "host/host_session_launcher.h"
 
@@ -41,13 +40,8 @@ void HostSession::OnBeforeThreadRunning()
 
     OnSessionAttached(WTSGetActiveConsoleSessionId());
 
-    // In Windows XP/2003, the console session always has a ID equal to 0.
-    // We do not need to watch the session.
-    if (IsWindowsVistaOrGreater())
-    {
-        bool ret = session_watcher_.StartWatching(this);
-        DCHECK(ret);
-    }
+    bool ret = session_watcher_.StartWatching(this);
+    DCHECK(ret);
 }
 
 void HostSession::OnAfterThreadRunning()

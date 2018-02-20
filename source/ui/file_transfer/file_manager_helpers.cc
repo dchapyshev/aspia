@@ -6,17 +6,20 @@
 //
 
 #include "ui/file_transfer/file_manager_helpers.h"
-#include "ui/get_stock_icon.h"
 #include "ui/resource.h"
 #include "base/strings/string_printf.h"
 #include "base/strings/unicode.h"
 
+#include <shellapi.h>
 #include <clocale>
 
 namespace aspia {
 
 HICON GetDriveIcon(proto::file_transfer::DriveList::Item::Type drive_type)
 {
+    // Desktop (not present in official header)
+    static const SHSTOCKICONID SIID_DESKTOP = static_cast<SHSTOCKICONID>(34);
+
     SHSTOCKICONID icon_id;
 
     switch (drive_type)
@@ -56,7 +59,7 @@ HICON GetDriveIcon(proto::file_transfer::DriveList::Item::Type drive_type)
     memset(&icon_info, 0, sizeof(icon_info));
     icon_info.cbSize = sizeof(icon_info);
 
-    if (FAILED(GetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    if (FAILED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
         return nullptr;
 
     return icon_info.hIcon;
@@ -69,7 +72,7 @@ HICON GetComputerIcon()
     memset(&icon_info, 0, sizeof(icon_info));
     icon_info.cbSize = sizeof(icon_info);
 
-    if (FAILED(GetStockIconInfo(SIID_DESKTOPPC, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    if (FAILED(SHGetStockIconInfo(SIID_DESKTOPPC, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
         return nullptr;
 
     return icon_info.hIcon;
@@ -82,7 +85,7 @@ HICON GetDirectoryIcon()
     memset(&icon_info, 0, sizeof(icon_info));
     icon_info.cbSize = sizeof(icon_info);
 
-    if (FAILED(GetStockIconInfo(SIID_FOLDER, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    if (FAILED(SHGetStockIconInfo(SIID_FOLDER, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
         return nullptr;
 
     return icon_info.hIcon;

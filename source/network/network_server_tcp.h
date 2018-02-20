@@ -11,7 +11,6 @@
 #include "base/threading/thread.h"
 #include "network/network_channel_tcp.h"
 #include "network/firewall_manager.h"
-#include "network/firewall_manager_legacy.h"
 
 namespace aspia {
 
@@ -40,11 +39,7 @@ private:
     ConnectCallback connect_callback_;
     uint16_t port_ = 0;
 
-    // For Vista and later.
     std::unique_ptr<FirewallManager> firewall_manager_;
-
-    // For XP/2003.
-    std::unique_ptr<FirewallManagerLegacy> firewall_manager_legacy_;
 
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     std::unique_ptr<NetworkChannelTcp> channel_;

@@ -7,7 +7,6 @@
 
 #include "base/process/process_helpers.h"
 #include "base/files/base_paths.h"
-#include "base/version_helpers.h"
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/logging.h"
@@ -118,18 +117,7 @@ bool IsCallerAdminGroupMember()
 
 bool IsCallerHasAdminRights()
 {
-    if (IsWindowsVistaOrGreater())
-    {
-        if (IsProcessElevated())
-            return true;
-    }
-    else
-    {
-        if (IsCallerAdminGroupMember())
-            return true;
-    }
-
-    return false;
+    return IsProcessElevated();
 }
 
 } // namespace aspia

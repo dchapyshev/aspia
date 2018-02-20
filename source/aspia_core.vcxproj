@@ -100,7 +100,7 @@
     <ClInclude Include="base\threading\thread.h" />
     <ClInclude Include="base\threading\thread_checker.h" />
     <ClInclude Include="base\typed_buffer.h" />
-    <ClInclude Include="base\version_helpers.h" />
+    <ClInclude Include="build_config.h" />
     <ClInclude Include="category\category.h" />
     <ClInclude Include="category\category_application.h" />
     <ClInclude Include="category\category_application.pb.h" />
@@ -242,6 +242,7 @@
     <ClInclude Include="desktop_capture\mouse_cursor.h" />
     <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
     <ClInclude Include="desktop_capture\pixel_format.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="host\clipboard_thread.h" />
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\host.h" />
@@ -268,7 +269,6 @@
     <ClInclude Include="ipc\pipe_channel.h" />
     <ClInclude Include="ipc\pipe_channel_proxy.h" />
     <ClInclude Include="network\firewall_manager.h" />
-    <ClInclude Include="network\firewall_manager_legacy.h" />
     <ClInclude Include="network\network_adapter_enumerator.h" />
     <ClInclude Include="network\network_channel.h" />
     <ClInclude Include="network\network_channel_proxy.h" />
@@ -333,7 +333,6 @@
     <ClInclude Include="ui\file_transfer\file_status_dialog.h" />
     <ClInclude Include="ui\file_transfer\file_toolbar.h" />
     <ClInclude Include="ui\file_transfer\file_transfer_dialog.h" />
-    <ClInclude Include="ui\get_stock_icon.h" />
     <ClInclude Include="ui\main_dialog.h" />
     <ClInclude Include="ui\mru.h" />
     <ClInclude Include="ui\resource.h" />
@@ -412,7 +411,6 @@
     <ClCompile Include="base\threading\simple_thread.cc" />
     <ClCompile Include="base\threading\thread.cc" />
     <ClCompile Include="base\threading\thread_checker.cc" />
-    <ClCompile Include="base\version_helpers.cc" />
     <ClCompile Include="category\category.cc" />
     <ClCompile Include="category\category_application.cc" />
     <ClCompile Include="category\category_application.pb.cc" />
@@ -572,7 +570,6 @@
     <ClCompile Include="ipc\pipe_channel.cc" />
     <ClCompile Include="ipc\pipe_channel_proxy.cc" />
     <ClCompile Include="network\firewall_manager.cc" />
-    <ClCompile Include="network\firewall_manager_legacy.cc" />
     <ClCompile Include="network\network_adapter_enumerator.cc" />
     <ClCompile Include="network\network_channel.cc" />
     <ClCompile Include="network\network_channel_proxy.cc" />
@@ -633,7 +630,6 @@
     <ClCompile Include="ui\file_transfer\file_status_dialog.cc" />
     <ClCompile Include="ui\file_transfer\file_toolbar.cc" />
     <ClCompile Include="ui\file_transfer\file_transfer_dialog.cc" />
-    <ClCompile Include="ui\get_stock_icon.cc" />
     <ClCompile Include="ui\main_dialog.cc" />
     <ClCompile Include="ui\mru.cc" />
     <ClCompile Include="ui\status_dialog.cc" />
@@ -806,7 +802,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -838,7 +834,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -885,7 +881,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
@@ -932,7 +928,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>

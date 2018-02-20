@@ -6,7 +6,6 @@
 //
 
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "ui/system_info/category_select_dialog.h"
 
@@ -98,12 +97,8 @@ LRESULT CategorySelectDialog::OnInitDialog(
 
     CTreeViewCtrl treeview(GetDlgItem(IDC_CATEGORY_TREE));
 
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(treeview, L"explorer", nullptr);
-        static const DWORD kDoubleBuffer = 0x0004;
-        treeview.SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
-    }
+    ::SetWindowTheme(treeview, L"explorer", nullptr);
+    treeview.SetExtendedStyle(TVS_EX_DOUBLEBUFFER, TVS_EX_DOUBLEBUFFER);
 
     if (imagelist_.Create(small_icon_size.cx,
                           small_icon_size.cy,

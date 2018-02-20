@@ -6,7 +6,6 @@
 //
 
 #include "base/strings/unicode.h"
-#include "base/version_helpers.h"
 #include "base/logging.h"
 #include "ui/system_info/category_tree_ctrl.h"
 #include "ui/resource.h"
@@ -65,12 +64,8 @@ LRESULT CategoryTreeCtrl::OnCreate(UINT message, WPARAM wparam, LPARAM lparam, B
 {
     LRESULT ret = DefWindowProcW(message, wparam, lparam);
 
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(*this, L"explorer", nullptr);
-        static const DWORD kDoubleBuffer = 0x0004;
-        SetExtendedStyle(kDoubleBuffer, kDoubleBuffer);
-    }
+    ::SetWindowTheme(*this, L"explorer", nullptr);
+    SetExtendedStyle(TVS_EX_DOUBLEBUFFER, TVS_EX_DOUBLEBUFFER);
 
     const CSize small_icon_size(GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 

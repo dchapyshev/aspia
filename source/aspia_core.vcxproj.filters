@@ -201,9 +201,6 @@
     <ClInclude Include="base\typed_buffer.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\version_helpers.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="base\devices\device.h">
       <Filter>base\devices</Filter>
     </ClInclude>
@@ -894,9 +891,6 @@
     <ClInclude Include="network\firewall_manager.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="network\firewall_manager_legacy.h">
-      <Filter>network</Filter>
-    </ClInclude>
     <ClInclude Include="network\network_adapter_enumerator.h">
       <Filter>network</Filter>
     </ClInclude>
@@ -928,9 +922,6 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\auth_dialog.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\get_stock_icon.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="ui\main_dialog.h">
@@ -1077,6 +1068,8 @@
     <ClInclude Include="host\host_switches.h">
       <Filter>host</Filter>
     </ClInclude>
+    <ClInclude Include="build_config.h" />
+    <ClInclude Include="global.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\byte_order.cc">
@@ -1143,9 +1136,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\settings_registry.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\version_helpers.cc">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\devices\device.cc">
@@ -1799,9 +1789,6 @@
     <ClCompile Include="network\firewall_manager.cc">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="network\firewall_manager_legacy.cc">
-      <Filter>network</Filter>
-    </ClCompile>
     <ClCompile Include="network\network_adapter_enumerator.cc">
       <Filter>network</Filter>
     </ClCompile>
@@ -1833,9 +1820,6 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="ui\auth_dialog.cc">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\get_stock_icon.cc">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="ui\main_dialog.cc">

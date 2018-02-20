@@ -8,7 +8,6 @@
 #include "ui/file_transfer/file_list_ctrl.h"
 #include "ui/file_transfer/file_manager_helpers.h"
 #include "ui/resource.h"
-#include "base/version_helpers.h"
 #include "base/strings/unicode.h"
 #include "base/datetime.h"
 #include "base/logging.h"
@@ -27,15 +26,8 @@ bool FileListCtrl::CreateFileList(HWND parent, int control_id)
         return false;
     }
 
-    DWORD ex_style = LVS_EX_FULLROWSELECT;
-
-    if (IsWindowsVistaOrGreater())
-    {
-        ::SetWindowTheme(*this, L"explorer", nullptr);
-        ex_style |= LVS_EX_DOUBLEBUFFER;
-    }
-
-    SetExtendedListViewStyle(ex_style);
+    ::SetWindowTheme(*this, L"explorer", nullptr);
+    SetExtendedListViewStyle(LVS_EX_DOUBLEBUFFER | LVS_EX_FULLROWSELECT);
 
     if (imagelist_.Create(GetSystemMetrics(SM_CXSMICON),
                           GetSystemMetrics(SM_CYSMICON),

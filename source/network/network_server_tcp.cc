@@ -6,7 +6,6 @@
 //
 
 #include "network/network_server_tcp.h"
-#include "base/version_helpers.h"
 #include "base/files/base_paths.h"
 
 namespace aspia {
@@ -43,35 +42,17 @@ void NetworkServerTcp::AddFirewallRule()
     if (!GetBasePath(BasePathKey::FILE_EXE, exe_path))
         return;
 
-    if (IsWindowsVistaOrGreater())
+    firewall_manager_ = std::make_unique<FirewallManager>();
+
+    if (!firewall_manager_->Init(kAppName, exe_path))
     {
-        firewall_manager_ = std::make_unique<FirewallManager>();
-
-        if (!firewall_manager_->Init(kAppName, exe_path))
-        {
-            firewall_manager_.reset();
-            return;
-        }
-
-        if (!firewall_manager_->AddTCPRule(kRuleName, kRuleDesc, port_))
-        {
-            firewall_manager_.reset();
-        }
+        firewall_manager_.reset();
+        return;
     }
-    else
+
+    if (!firewall_manager_->AddTCPRule(kRuleName, kRuleDesc, port_))
     {
-        firewall_manager_legacy_ = std::make_unique<FirewallManagerLegacy>();
-
-        if (!firewall_manager_legacy_->Init(kAppName, exe_path))
-        {
-            firewall_manager_legacy_.reset();
-            return;
-        }
-
-        if (!firewall_manager_legacy_->SetAllowIncomingConnection(true))
-        {
-            firewall_manager_legacy_.reset();
-        }
+        firewall_manager_.reset();
     }
 }
 
@@ -99,9 +80,6 @@ void NetworkServerTcp::OnAfterThreadRunning()
 
     if (firewall_manager_)
         firewall_manager_->DeleteRuleByName(kRuleName);
-
-    if (firewall_manager_legacy_)
-        firewall_manager_legacy_->DeleteRule();
 }
 
 void NetworkServerTcp::OnAccept(const std::error_code& code)
