@@ -283,18 +283,7 @@ bool LaunchSystemInfoProcess()
 
     program_path.append(kProcessNameSystemInfo);
 
-    if (!IsProcessElevated())
-    {
-        if (LaunchProcessWithElevate(program_path))
-            return true;
-    }
-
-    ScopedHandle token;
-
-    if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
-        return false;
-
-    return CreateProcessWithToken(token, CommandLine(program_path));
+    return LaunchProcess(program_path);
 }
 
 } // namespace aspia
