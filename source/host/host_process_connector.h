@@ -8,7 +8,9 @@
 #ifndef _ASPIA_HOST__HOST_PROCESS_CONNECTOR_H
 #define _ASPIA_HOST__HOST_PROCESS_CONNECTOR_H
 
-#include "base/synchronization/waitable_event.h"
+#include <condition_variable>
+#include <mutex>
+
 #include "network/network_channel_proxy.h"
 #include "ipc/pipe_channel_proxy.h"
 
@@ -37,8 +39,9 @@ private:
     std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
     std::mutex ipc_channel_proxy_lock_;
 
-    WaitableEvent ready_event_{ WaitableEvent::ResetPolicy::MANUAL,
-                                WaitableEvent::InitialState::NOT_SIGNALED };
+    std::condition_variable ready_event_;
+    std::mutex ready_lock_;
+    bool ready_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(HostProcessConnector);
 };

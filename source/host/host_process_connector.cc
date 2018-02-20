@@ -23,11 +23,11 @@ HostProcessConnector::~HostProcessConnector()
     Disconnect();
 
     {
-        std::lock_guard<std::mutex> lock(ipc_channel_proxy_lock_);
+        std::scoped_lock<std::mutex> lock(ipc_channel_proxy_lock_);
         ipc_channel_proxy_ = nullptr;
     }
 
-    ready_event_.Signal();
+    ready_event_.notify_one();
 }
 
 bool HostProcessConnector::StartServer(std::wstring& channel_id)
@@ -46,12 +46,17 @@ bool HostProcessConnector::Accept(uint32_t& user_data,
     if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
     {
         {
-            std::lock_guard<std::mutex> lock(ipc_channel_proxy_lock_);
+            std::scoped_lock<std::mutex> lock(ipc_channel_proxy_lock_);
             ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
         }
 
+        {
+            std::scoped_lock<std::mutex> lock(ready_lock_);
+            ready_ = true;
+        }
+
         // The channel is ready to receive incoming messages.
-        ready_event_.Signal();
+        ready_event_.notify_one();
 
         // Start receiving messages from the IPC channel.
         ipc_channel_proxy_->Receive(std::bind(
@@ -67,7 +72,11 @@ bool HostProcessConnector::Accept(uint32_t& user_data,
 void HostProcessConnector::Disconnect()
 {
     // Now the channel is not ready to receive incoming messages.
-    ready_event_.Reset();
+    {
+        std::scoped_lock<std::mutex> lock(ready_lock_);
+        ready_ = false;
+    }
+
     ipc_channel_.reset();
 }
 
@@ -75,7 +84,7 @@ void HostProcessConnector::OnIpcChannelMessage(IOBuffer& buffer)
 {
     network_channel_proxy_->Send(std::move(buffer));
 
-    std::lock_guard<std::mutex> lock(ipc_channel_proxy_lock_);
+    std::scoped_lock<std::mutex> lock(ipc_channel_proxy_lock_);
 
     if (!ipc_channel_proxy_)
         return;
@@ -90,10 +99,15 @@ void HostProcessConnector::OnNetworkChannelMessage(IOBuffer& buffer)
     // A network channel can start receiving messages before connecting IPC
     // channel. We are waiting for the connection of IPC channel. If the
     // channel is already connected, the call returns immediately.
-    ready_event_.Wait();
+    {
+        std::unique_lock<std::mutex> lock(ready_lock_);
+
+        while (!ready_)
+            ready_event_.wait(lock);
+    }
 
     {
-        std::lock_guard<std::mutex> lock(ipc_channel_proxy_lock_);
+        std::scoped_lock<std::mutex> lock(ipc_channel_proxy_lock_);
 
         if (!ipc_channel_proxy_)
             return;
