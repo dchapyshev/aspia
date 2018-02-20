@@ -260,8 +260,6 @@
     <ClInclude Include="host\host_session_system_info.h" />
     <ClInclude Include="host\host_switches.h" />
     <ClInclude Include="host\input_injector.h" />
-    <ClInclude Include="host\sas_injector.h" />
-    <ClInclude Include="host\sas_injector_main.h" />
     <ClInclude Include="host\scoped_sas_police.h" />
     <ClInclude Include="host\screen_updater.h" />
     <ClInclude Include="host\users_storage.h" />
@@ -561,8 +559,6 @@
     <ClCompile Include="host\host_session_system_info.cc" />
     <ClCompile Include="host\host_switches.cc" />
     <ClCompile Include="host\input_injector.cc" />
-    <ClCompile Include="host\sas_injector.cc" />
-    <ClCompile Include="host\sas_injector_main.cc" />
     <ClCompile Include="host\scoped_sas_police.cc" />
     <ClCompile Include="host\screen_updater.cc" />
     <ClCompile Include="host\users_storage.cc" />

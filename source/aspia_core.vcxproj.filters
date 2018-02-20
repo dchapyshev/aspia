@@ -426,9 +426,6 @@
     <ClInclude Include="host\input_injector.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\sas_injector.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\scoped_sas_police.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1056,9 +1053,6 @@
     <ClInclude Include="host\host_service_main.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\sas_injector_main.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="ui\address_book\address_book_main.h">
       <Filter>ui\address_book</Filter>
     </ClInclude>
@@ -1346,9 +1340,6 @@
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\input_injector.cc">
-      <Filter>host</Filter>
-    </ClCompile>
-    <ClCompile Include="host\sas_injector.cc">
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\scoped_sas_police.cc">
@@ -1937,9 +1928,6 @@
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="host\host_service_main.cc">
-      <Filter>host</Filter>
-    </ClCompile>
-    <ClCompile Include="host\sas_injector_main.cc">
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="ui\address_book\address_book_main.cc">

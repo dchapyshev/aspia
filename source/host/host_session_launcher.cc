@@ -123,6 +123,13 @@ bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
         }
     }
 
+    DWORD ui_access = 1;
+    if (!SetTokenInformation(session_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
+    {
+        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        return false;
+    }
+
     token_out.Reset(session_token.Release());
     return true;
 }

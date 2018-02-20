@@ -7,9 +7,11 @@
 
 #include "host/input_injector.h"
 
+#include <sas.h>
+
 #include "base/scoped_thread_desktop.h"
 #include "base/logging.h"
-#include "host/sas_injector.h"
+#include "host/scoped_sas_police.h"
 #include "protocol/keycode_converter.h"
 
 namespace aspia {
@@ -174,7 +176,8 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 
         if (event.usb_keycode() == kUsbCodeDelete && IsCtrlAndAltPressed())
         {
-            SasInjector::InjectSAS();
+            ScopedSasPolice sas_police;
+            SendSAS(FALSE);
             return;
         }
     }
