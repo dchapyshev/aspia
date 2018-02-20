@@ -14,18 +14,8 @@ namespace aspia {
 
 enum class BasePathKey
 {
-    DIR_CURRENT,
     DIR_WINDOWS,           // Windows directory, usually "c:\windows"
     DIR_SYSTEM,            // Usually c:\windows\system32"
-
-    //                         32-bit     32-bit on 64-bit   64-bit on 64-bit
-    // DIR_PROGRAM_FILES         1               2                  1
-    // 1 - C:\Program Files   2 - C:\Program Files (x86)
-    DIR_PROGRAM_FILES,     // See table above.
-
-    DIR_COMMON_APP_DATA,   // Usually "C:\ProgramData".
-    DIR_COMMON_DESKTOP,    // Directory for the common desktop (visible on all user's Desktop).
-    DIR_COMMON_START_MENU, // Usually "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
 
     DIR_APP_DATA,          // Application Data directory under the user profile.
 
