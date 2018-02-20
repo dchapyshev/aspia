@@ -213,7 +213,7 @@ LRESULT MainDialog::OnInitDialog(
                                      LR_CREATEDIBSECTION,
                                      small_icon_size.cx,
                                      small_icon_size.cy);
-    CButton(GetDlgItem(IDC_UPDATE_IP_LIST_BUTTON)).SetIcon(refresh_icon_);
+    CButton(GetDlgItem(IDC_REFRESH_BUTTON)).SetIcon(refresh_icon_);
 
     main_menu_ = AtlLoadMenu(IDR_MAIN);
 
@@ -236,8 +236,16 @@ LRESULT MainDialog::OnInitDialog(
     UpdateMRUList();
     UpdateServerPort();
 
-    if (HostService::IsInstalled())
-        GetDlgItem(IDC_START_SERVER_BUTTON).EnableWindow(FALSE);
+    uint32_t service_status = HostService::GetStatus();
+
+    CButton button(GetDlgItem(IDC_START_SERVER_BUTTON));
+
+    button.EnableWindow(
+        IsProcessElevated() && (service_status & HostService::STATUS_INSTALLED) ? TRUE : FALSE);
+
+    CString text;
+    text.LoadStringW((service_status & HostService::STATUS_STARTED) ? IDS_STOP : IDS_START);
+    button.SetWindowTextW(text);
 
     const DWORD active_thread_id =
         GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
@@ -277,47 +285,58 @@ LRESULT MainDialog::OnDefaultPortClicked(
 LRESULT MainDialog::OnClose(
     UINT /* message */, WPARAM /* wparam */, LPARAM /* lparam */, BOOL& /* handled */)
 {
-    host_pool_.reset();
     client_pool_.reset();
     DestroyWindow();
     PostQuitMessage(0);
     return 0;
 }
 
-void MainDialog::StopHostMode()
-{
-    if (host_pool_)
-    {
-        CString text;
-        text.LoadStringW(IDS_START);
-        SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
-
-        host_pool_.reset();
-    }
-}
-
 LRESULT MainDialog::OnStartServerButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    if (host_pool_)
-    {
-        StopHostMode();
+    uint32_t service_status = HostService::GetStatus();
+
+    if (!(service_status & HostService::STATUS_INSTALLED))
         return 0;
+
+    if (service_status & HostService::STATUS_STARTED)
+    {
+        if (HostService::Stop())
+        {
+            CString text;
+            text.LoadStringW(IDS_START);
+            SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
+        }
     }
-
-    host_pool_ = std::make_unique<HostPool>(MessageLoopProxy::Current());
-
-    CString text;
-    text.LoadStringW(IDS_STOP);
-    SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
+    else
+    {
+        if (HostService::Start())
+        {
+            CString text;
+            text.LoadStringW(IDS_STOP);
+            SetDlgItemTextW(IDC_START_SERVER_BUTTON, text);
+        }
+    }
 
     return 0;
 }
 
-LRESULT MainDialog::OnUpdateIpListButton(
+LRESULT MainDialog::OnRefreshButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
     UpdateIpList();
+
+    uint32_t service_status = HostService::GetStatus();
+
+    CButton button(GetDlgItem(IDC_START_SERVER_BUTTON));
+
+    button.EnableWindow(
+        IsProcessElevated() && (service_status & HostService::STATUS_INSTALLED) ? TRUE : FALSE);
+
+    CString text;
+    text.LoadStringW((service_status & HostService::STATUS_STARTED) ? IDS_STOP : IDS_START);
+    button.SetWindowTextW(text);
+
     return 0;
 }
 

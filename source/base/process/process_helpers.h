@@ -23,8 +23,6 @@ bool LaunchProcess(const CommandLine& command_line);
 bool IsCallerAdminGroupMember();
 bool IsCallerHasAdminRights();
 
-bool IsRunningAsService();
-
 } // namespace aspia
 
 #endif // _ASPIA_BASE__PROCESS__PROCESS_HELPERS_H

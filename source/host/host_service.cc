@@ -65,9 +65,19 @@ void HostService::OnStop()
 }
 
 // static
-bool HostService::IsInstalled()
+uint32_t HostService::GetStatus()
 {
-    return ServiceManager::IsServiceInstalled(kHostServiceShortName);
+    uint32_t status = ServiceManager::GetServiceStatus(kHostServiceShortName);
+
+    if (status & ServiceManager::SERVICE_STATUS_INSTALLED)
+    {
+        if (status & ServiceManager::SERVICE_STATUS_STARTED)
+            return STATUS_INSTALLED | STATUS_STARTED;
+
+        return STATUS_INSTALLED;
+    }
+
+    return 0;
 }
 
 // static
@@ -97,6 +107,18 @@ bool HostService::Remove()
     ServiceManager manager(kHostServiceShortName);
     manager.Stop();
     return manager.Remove();
+}
+
+// static
+bool HostService::Start()
+{
+    return ServiceManager(kHostServiceShortName).Start();
+}
+
+// static
+bool HostService::Stop()
+{
+    return ServiceManager(kHostServiceShortName).Stop();
 }
 
 } // namespace aspia

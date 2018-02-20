@@ -423,9 +423,6 @@
     <ClInclude Include="host\host_session_launcher.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_session_launcher_service.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_session_system_info.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1068,9 +1065,6 @@
     <ClInclude Include="host\host_service_main.h">
       <Filter>host</Filter>
     </ClInclude>
-    <ClInclude Include="host\host_launcher_main.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\sas_injector_main.h">
       <Filter>host</Filter>
     </ClInclude>
@@ -1356,9 +1350,6 @@
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\host_session_launcher.cc">
-      <Filter>host</Filter>
-    </ClCompile>
-    <ClCompile Include="host\host_session_launcher_service.cc">
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\host_session_system_info.cc">
@@ -1962,9 +1953,6 @@
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="host\host_service_main.cc">
-      <Filter>host</Filter>
-    </ClCompile>
-    <ClCompile Include="host\host_launcher_main.cc">
       <Filter>host</Filter>
     </ClCompile>
     <ClCompile Include="host\sas_injector_main.cc">

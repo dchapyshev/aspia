@@ -8,7 +8,6 @@
 #ifndef _ASPIA_UI__MAIN_DIALOG_H
 #define _ASPIA_UI__MAIN_DIALOG_H
 
-#include "host/host_pool.h"
 #include "client/client_pool.h"
 #include "ui/base/tray_icon.h"
 #include "ui/mru.h"
@@ -41,7 +40,7 @@ private:
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
 
         COMMAND_ID_HANDLER(IDC_START_SERVER_BUTTON, OnStartServerButton)
-        COMMAND_ID_HANDLER(IDC_UPDATE_IP_LIST_BUTTON, OnUpdateIpListButton)
+        COMMAND_ID_HANDLER(IDC_REFRESH_BUTTON, OnRefreshButton)
         COMMAND_ID_HANDLER(IDC_SETTINGS_BUTTON, OnSettingsButton)
         COMMAND_ID_HANDLER(IDC_CONNECT_BUTTON, OnConnectButton)
         COMMAND_ID_HANDLER(IDC_SERVER_DEFAULT_PORT_CHECK, OnDefaultPortClicked)
@@ -72,7 +71,7 @@ private:
 
     LRESULT OnDefaultPortClicked(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnStartServerButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
-    LRESULT OnUpdateIpListButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
+    LRESULT OnRefreshButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSessionTypeChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnAddressChanged(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
     LRESULT OnSettingsButton(WORD notify_code, WORD control_id, HWND control, BOOL& handled);
@@ -99,7 +98,6 @@ private:
     void InitSessionTypesCombo();
     void UpdateCurrentComputer(const proto::Computer& computer);
     void UpdateCurrentSessionType(proto::auth::SessionType session_type);
-    void StopHostMode();
     void CopySelectedIp();
 
     CIcon small_icon_;
@@ -109,7 +107,6 @@ private:
     CAccelerator accelerator_;
     CMenu main_menu_;
 
-    std::unique_ptr<HostPool> host_pool_;
     std::unique_ptr<ClientPool> client_pool_;
     proto::Computer current_computer_;
     MRU mru_;

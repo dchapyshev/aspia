@@ -37,7 +37,13 @@ public:
     static std::wstring CreateUniqueServiceName(const std::wstring_view& service_name,
                                                 const std::wstring_view& service_id);
 
-    static bool IsServiceInstalled(const std::wstring& service_name);
+    enum ServiceStatus
+    {
+        SERVICE_STATUS_INSTALLED = 1,
+        SERVICE_STATUS_STARTED = 2
+    };
+
+    static uint32_t GetServiceStatus(const std::wstring& service_name);
 
     // Starts the service.
     // If the service is successfully started, it returns true, if not,

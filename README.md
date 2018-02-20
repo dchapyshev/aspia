@@ -46,7 +46,7 @@ Currently supported
 - Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
-- Work in service or application mode
+- Work in service mode
 
 It is planned to implement
 --------------------------

@@ -18,7 +18,6 @@
 #include "base/scoped_impersonator.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
-#include "host/host_session_launcher_service.h"
 #include "host/host_switches.h"
 
 namespace aspia {
@@ -172,9 +171,44 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
     return true;
 }
 
-bool LaunchProcessWithCurrentRights(const std::wstring& session_type,
-                                    const std::wstring& channel_id)
+bool LaunchSessionProcessAsUser(const std::wstring& session_type,
+                                uint32_t session_id,
+                                const std::wstring& channel_id)
 {
+    ScopedHandle privileged_token;
+
+    if (!CreatePrivilegedToken(privileged_token))
+        return false;
+
+    ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
+
+    typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
+
+    WTSQueryUserTokenFunc query_user_token_func =
+        reinterpret_cast<WTSQueryUserTokenFunc>(
+            wtsapi32_library.GetFunctionPointer("WTSQueryUserToken"));
+
+    if (!query_user_token_func)
+    {
+        LOG(LS_ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
+        return false;
+    }
+
+    ScopedHandle session_token;
+
+    {
+        ScopedImpersonator impersonator;
+
+        if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
+            return false;
+
+        if (!query_user_token_func(session_id, session_token.Recieve()))
+        {
+            PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+            return false;
+        }
+    }
+
     std::experimental::filesystem::path program_path;
 
     if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
@@ -187,77 +221,12 @@ bool LaunchProcessWithCurrentRights(const std::wstring& session_type,
     command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
-    ScopedHandle token;
-
-    if (!CopyProcessToken(TOKEN_ALL_ACCESS, token))
-        return false;
-
-    return CreateProcessWithToken(token, command_line);
+    return CreateProcessWithToken(session_token, command_line);
 }
 
-bool LaunchSessionProcess(const std::wstring& session_type,
-                          uint32_t session_id,
-                          const std::wstring& channel_id)
-{
-    if (IsRunningAsService())
-    {
-        ScopedHandle privileged_token;
-
-        if (!CreatePrivilegedToken(privileged_token))
-            return false;
-
-        ScopedNativeLibrary wtsapi32_library(L"wtsapi32.dll");
-
-        typedef BOOL(WINAPI * WTSQueryUserTokenFunc)(ULONG, PHANDLE);
-
-        WTSQueryUserTokenFunc query_user_token_func =
-            reinterpret_cast<WTSQueryUserTokenFunc>(
-                wtsapi32_library.GetFunctionPointer("WTSQueryUserToken"));
-
-        if (!query_user_token_func)
-        {
-            LOG(LS_ERROR) << "WTSQueryUserToken function not found in wtsapi32.dll";
-            return false;
-        }
-
-        ScopedHandle session_token;
-
-        {
-            ScopedImpersonator impersonator;
-
-            if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
-                return false;
-
-            if (!query_user_token_func(session_id, session_token.Recieve()))
-            {
-                PLOG(LS_ERROR) << "WTSQueryUserToken failed";
-                return false;
-            }
-        }
-
-        std::experimental::filesystem::path program_path;
-
-        if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
-            return false;
-
-        program_path.append(kProcessNameHost);
-
-        CommandLine command_line(program_path);
-
-        command_line.AppendSwitch(kSessionTypeSwitch, session_type);
-        command_line.AppendSwitch(kChannelIdSwitch, channel_id);
-
-        return CreateProcessWithToken(session_token, command_line);
-    }
-
-    return LaunchProcessWithCurrentRights(session_type, channel_id);
-}
-
-} // namespace
-
-bool LaunchSessionProcessFromService(const std::wstring& session_type,
-                                     uint32_t session_id,
-                                     const std::wstring& channel_id)
+bool LaunchSessionProcessAsSystem(const std::wstring& session_type,
+                                  uint32_t session_id,
+                                  const std::wstring& channel_id)
 {
     std::experimental::filesystem::path program_path;
 
@@ -279,6 +248,8 @@ bool LaunchSessionProcessFromService(const std::wstring& session_type,
     return CreateProcessWithToken(session_token, command_line);
 }
 
+} // namespace
+
 bool LaunchSessionProcess(proto::auth::SessionType session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id)
@@ -294,26 +265,12 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
             if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
                 session_type_switch = kSessionTypeSystemInfo;
 
-            if (!IsCallerHasAdminRights())
-            {
-                return LaunchProcessWithCurrentRights(session_type_switch, channel_id);
-            }
-
-            if (!IsRunningAsService())
-            {
-                return HostSessionLauncherService::CreateStarted(session_type_switch,
-                                                                 session_id,
-                                                                 channel_id);
-            }
-
-            // The code is executed from the service.
-            // Start the process directly.
-            return LaunchSessionProcessFromService(session_type_switch, session_id, channel_id);
+            return LaunchSessionProcessAsSystem(session_type_switch, session_id, channel_id);
         }
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
         {
-            return LaunchSessionProcess(kSessionTypeFileTransfer, session_id, channel_id);
+            return LaunchSessionProcessAsUser(kSessionTypeFileTransfer, session_id, channel_id);
         }
 
         default:

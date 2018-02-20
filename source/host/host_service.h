@@ -19,9 +19,17 @@ class HostService : public Service
 public:
     HostService();
 
-    static bool IsInstalled();
+    enum Status
+    {
+        STATUS_INSTALLED = 1,
+        STATUS_STARTED = 2
+    };
+
+    static uint32_t GetStatus();
     static bool Install();
     static bool Remove();
+    static bool Start();
+    static bool Stop();
 
 private:
     // Service implementation.

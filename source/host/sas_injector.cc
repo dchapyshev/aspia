@@ -63,8 +63,10 @@ void SasInjector::InjectSAS()
     {
         std::experimental::filesystem::path program_path;
 
-        if (!GetBasePath(BasePathKey::FILE_EXE, program_path))
+        if (!GetBasePath(BasePathKey::DIR_EXE, program_path))
             return;
+
+        program_path.append(L"aspia_sas_injector.exe");
 
         std::wstring service_id = ServiceManager::GenerateUniqueServiceId();
 
@@ -75,8 +77,6 @@ void SasInjector::InjectSAS()
             ServiceManager::CreateUniqueServiceName(kSasServiceFullName, service_id);
 
         CommandLine command_line(program_path);
-
-        //command_line.AppendSwitch(kModeSwitch, kSasServiceSwitch);
         command_line.AppendSwitch(kServiceIdSwitch, service_id);
 
         // Install the service in the system.

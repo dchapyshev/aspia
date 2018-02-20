@@ -246,7 +246,6 @@
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\host.h" />
     <ClInclude Include="host\host_export.h" />
-    <ClInclude Include="host\host_launcher_main.h" />
     <ClInclude Include="host\host_local_system_info.h" />
     <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />
@@ -257,7 +256,6 @@
     <ClInclude Include="host\host_session_desktop.h" />
     <ClInclude Include="host\host_session_file_transfer.h" />
     <ClInclude Include="host\host_session_launcher.h" />
-    <ClInclude Include="host\host_session_launcher_service.h" />
     <ClInclude Include="host\host_session_system_info.h" />
     <ClInclude Include="host\host_switches.h" />
     <ClInclude Include="host\input_injector.h" />
@@ -552,7 +550,6 @@
     <ClCompile Include="host\clipboard_thread.cc" />
     <ClCompile Include="host\console_session_watcher.cc" />
     <ClCompile Include="host\host.cc" />
-    <ClCompile Include="host\host_launcher_main.cc" />
     <ClCompile Include="host\host_local_system_info.cc" />
     <ClCompile Include="host\host_main.cc" />
     <ClCompile Include="host\host_pool.cc" />
@@ -563,7 +560,6 @@
     <ClCompile Include="host\host_session_desktop.cc" />
     <ClCompile Include="host\host_session_file_transfer.cc" />
     <ClCompile Include="host\host_session_launcher.cc" />
-    <ClCompile Include="host\host_session_launcher_service.cc" />
     <ClCompile Include="host\host_session_system_info.cc" />
     <ClCompile Include="host\host_switches.cc" />
     <ClCompile Include="host\input_injector.cc" />

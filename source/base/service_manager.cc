@@ -146,14 +146,14 @@ std::wstring ServiceManager::CreateUniqueServiceName(const std::wstring_view& se
 }
 
 // static
-bool ServiceManager::IsServiceInstalled(const std::wstring& service_name)
+uint32_t ServiceManager::GetServiceStatus(const std::wstring& service_name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
 
     if (!sc_manager.IsValid())
     {
         PLOG(LS_ERROR) << "OpenSCManagerW failed";
-        return false;
+        return 0;
     }
 
     ScopedScHandle service(OpenServiceW(sc_manager,
@@ -168,10 +168,33 @@ bool ServiceManager::IsServiceInstalled(const std::wstring& service_name)
             LOG(LS_ERROR) << "OpenServiceW failed: " << SystemErrorCodeToString(error);
         }
 
-        return false;
+        return 0;
     }
 
-    return true;
+    SERVICE_STATUS_PROCESS status;
+    memset(&status, 0, sizeof(status));
+
+    DWORD bytes_needed;
+
+    if (QueryServiceStatusEx(service,
+                             SC_STATUS_PROCESS_INFO,
+                             reinterpret_cast<LPBYTE>(&status),
+                             sizeof(status),
+                             &bytes_needed))
+    {
+        switch (status.dwCurrentState)
+        {
+            case SERVICE_RUNNING:
+            case SERVICE_START_PENDING:
+            case SERVICE_CONTINUE_PENDING:
+                return SERVICE_STATUS_INSTALLED | SERVICE_STATUS_STARTED;
+
+            default:
+                break;
+        }
+    }
+
+    return SERVICE_STATUS_INSTALLED;
 }
 
 bool ServiceManager::Start() const

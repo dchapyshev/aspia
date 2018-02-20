@@ -153,7 +153,7 @@
 #define IDC_MINIMIZE_BUTTON                        139
 #define IDC_BUTTON_GROUP                           140
 #define IDC_FILE_MANAGER_ACCELERATORS              141
-#define IDC_UPDATE_IP_LIST_BUTTON                  142
+#define IDC_REFRESH_BUTTON                         142
 #define IDC_CATEGORY_TREE                          143
 #define IDC_SELECT_ALL                             144
 #define IDC_UNSELECT_ALL                           145
