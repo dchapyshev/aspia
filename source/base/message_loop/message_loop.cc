@@ -62,7 +62,7 @@ void MessageLoop::Run(Dispatcher *dispatcher)
 
     if (dispatcher && type() == TYPE_UI)
     {
-        pump_win()->RunWithDispatcher(this, dispatcher);
+        pump_ui()->RunWithDispatcher(this, dispatcher);
         return;
     }
 
@@ -98,9 +98,9 @@ void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
     AddToIncomingQueue(pending_task);
 }
 
-MessagePumpWin* MessageLoop::pump_win() const
+MessagePumpForUI* MessageLoop::pump_ui() const
 {
-    return static_cast<MessagePumpWin*>(pump_.get());
+    return static_cast<MessagePumpForUI*>(pump_.get());
 }
 
 void MessageLoop::RunTask(const PendingTask& pending_task)

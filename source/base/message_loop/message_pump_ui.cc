@@ -24,6 +24,17 @@ MessagePumpForUI::MessagePumpForUI()
     DCHECK(succeeded);
 }
 
+void MessagePumpForUI::Run(Delegate* delegate)
+{
+    RunWithDispatcher(delegate, nullptr);
+}
+
+void MessagePumpForUI::Quit()
+{
+    DCHECK(state_);
+    state_->should_quit = true;
+}
+
 void MessagePumpForUI::ScheduleWork()
 {
     if (InterlockedExchange(&work_state_, HAVE_WORK) != READY)
@@ -78,6 +89,23 @@ void MessagePumpForUI::ScheduleDelayedWork(const TimePoint& delayed_work_time)
     // Create a WM_TIMER event that will wake us up to check for any pending
     // timers (in case we are running within a nested, external sub-pump).
     SetTimer(message_window_.hwnd(), reinterpret_cast<UINT_PTR>(this), delay_msec, nullptr);
+}
+
+void MessagePumpForUI::RunWithDispatcher(Delegate* delegate, MessagePumpDispatcher* dispatcher)
+{
+    RunState state;
+
+    state.delegate    = delegate;
+    state.dispatcher  = dispatcher;
+    state.should_quit = false;
+    state.run_depth   = state_ ? state_->run_depth + 1 : 1;
+
+    RunState* previous_state = state_;
+    state_ = &state;
+
+    DoRunLoop();
+
+    state_ = previous_state;
 }
 
 bool MessagePumpForUI::OnMessage(
@@ -318,6 +346,28 @@ bool MessagePumpForUI::ProcessPumpReplacementMessage()
     ScheduleWork();
 
     return ProcessMessageHelper(msg);
+}
+
+int MessagePumpForUI::GetCurrentDelay() const
+{
+    if (delayed_work_time_ == TimePoint())
+        return -1;
+
+    // Be careful here.  TimeDelta has a precision of microseconds, but we want
+    // a value in milliseconds.  If there are 5.5ms left, should the delay be 5
+    // or 6?  It should be 6 to avoid executing delayed work too early.
+    std::chrono::time_point<std::chrono::high_resolution_clock> current_time =
+        std::chrono::high_resolution_clock::now();
+
+    int64_t timeout = std::chrono::duration_cast<std::chrono::milliseconds>(
+        delayed_work_time_ - current_time).count();
+
+    // If this value is negative, then we need to run delayed work soon.
+    int delay = static_cast<int>(timeout);
+    if (delay < 0)
+        delay = 0;
+
+    return delay;
 }
 
 } // namespace aspia

@@ -44,7 +44,7 @@ protected:
 
     PendingTask::Callback QuitClosure();
 
-    MessagePumpWin* pump_win() const;
+    MessagePumpForUI* pump_ui() const;
     std::shared_ptr<MessageLoopProxy> message_loop_proxy() const;
 
     // Runs the specified PendingTask.
