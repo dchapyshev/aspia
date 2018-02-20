@@ -12,12 +12,19 @@ namespace aspia {
 
 void SimpleThread::ThreadMain()
 {
-    running_ = true;
-    start_event_.Signal();
+    {
+        std::unique_lock<std::mutex> lock(running_lock_);
+        running_ = true;
+    }
+
+    running_event_.notify_one();
 
     Run();
 
-    running_ = false;
+    {
+        std::unique_lock<std::mutex> lock(running_lock_);
+        running_ = false;
+    }
 }
 
 void SimpleThread::StopSoon()
@@ -33,8 +40,6 @@ void SimpleThread::Stop()
 
 void SimpleThread::Join()
 {
-    std::lock_guard<std::mutex> lock(thread_lock_);
-
     if (state_ == State::STOPPED)
         return;
 
@@ -58,25 +63,18 @@ bool SimpleThread::IsRunning() const
 
 void SimpleThread::Start()
 {
-    std::lock_guard<std::mutex> lock(thread_lock_);
-
     if (state_ != State::STOPPED)
         return;
 
     state_ = State::STARTING;
 
-    start_event_.Reset();
     thread_ = std::thread(&SimpleThread::ThreadMain, this);
-    start_event_.Wait();
+
+    std::unique_lock<std::mutex> lock(running_lock_);
+    while (!running_)
+        running_event_.wait(lock);
 
     state_ = State::STARTED;
-}
-
-bool SimpleThread::SetPriority(Priority priority)
-{
-    DCHECK(IsRunning());
-    return !!SetThreadPriority(thread_.native_handle(),
-                               static_cast<int>(priority));
 }
 
 } // namespace aspia

@@ -20,17 +20,16 @@ Thread::~Thread()
 
 void Thread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
 {
-    std::lock_guard<std::mutex> lock(thread_lock_);
-
     DCHECK(!message_loop_);
 
     delegate_ = delegate;
-
     state_ = State::STARTING;
 
-    start_event_.Reset();
     thread_ = std::thread(&Thread::ThreadMain, this, message_loop_type);
-    start_event_.Wait();
+
+    std::unique_lock<std::mutex> lock(running_lock_);
+    while (!running_)
+        running_event_.wait(lock);
 
     state_ = State::STARTED;
 
@@ -67,8 +66,6 @@ void Thread::Stop()
 
 void Thread::Join()
 {
-    std::lock_guard<std::mutex> lock(thread_lock_);
-
     if (state_ == State::STOPPED)
         return;
 
@@ -106,8 +103,12 @@ void Thread::ThreadMain(MessageLoop::Type message_loop_type)
     if (delegate_)
         delegate_->OnBeforeThreadRunning();
 
-    running_ = true;
-    start_event_.Signal();
+    {
+        std::unique_lock<std::mutex> lock(running_lock_);
+        running_ = true;
+    }
+
+    running_event_.notify_one();
 
     if (delegate_)
     {
@@ -118,7 +119,10 @@ void Thread::ThreadMain(MessageLoop::Type message_loop_type)
         message_loop_->Run();
     }
 
-    running_ = false;
+    {
+        std::unique_lock<std::mutex> lock(running_lock_);
+        running_ = false;
+    }
 
     // Let the thread do extra cleanup.
     if (delegate_)

@@ -9,10 +9,10 @@
 #define _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 
 #include <atomic>
+#include <condition_variable>
 #include <mutex>
 #include <thread>
 
-#include "base/synchronization/waitable_event.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -46,18 +46,6 @@ public:
     // Returns if the Run method is running.
     bool IsRunning() const;
 
-    enum class Priority
-    {
-        ABOVE_NORMAL = THREAD_PRIORITY_ABOVE_NORMAL,
-        BELOW_NORMAL = THREAD_PRIORITY_BELOW_NORMAL,
-        HIGHEST      = THREAD_PRIORITY_HIGHEST,
-        IDLE         = THREAD_PRIORITY_IDLE,
-        LOWEST       = THREAD_PRIORITY_LOWEST,
-        NORMAL       = THREAD_PRIORITY_NORMAL
-    };
-
-    bool SetPriority(Priority priority);
-
 protected:
     virtual void Run() = 0;
 
@@ -65,17 +53,15 @@ private:
     void ThreadMain();
 
     std::thread thread_;
-    std::mutex thread_lock_;
 
     enum class State { STARTING, STARTED, STOPPING, STOPPED };
 
     std::atomic<State> state_ = State::STOPPED;
 
     // True while inside of Run().
-    std::atomic_bool running_ = false;
-
-    WaitableEvent start_event_ { WaitableEvent::ResetPolicy::MANUAL,
-                                 WaitableEvent::InitialState::NOT_SIGNALED };
+    bool running_ = false;
+    std::mutex running_lock_;
+    std::condition_variable running_event_;
 
     DISALLOW_COPY_AND_ASSIGN(SimpleThread);
 };

@@ -10,9 +10,9 @@
 
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_loop_proxy.h"
-#include "base/synchronization/waitable_event.h"
 
 #include <atomic>
+#include <condition_variable>
 #include <thread>
 
 namespace aspia {
@@ -91,14 +91,12 @@ private:
     std::atomic<State> state_ = State::STOPPED;
 
     std::thread thread_;
-    std::mutex thread_lock_;
     uint32_t thread_id_ = 0;
 
     // True while inside of Run().
-    std::atomic_bool running_ = false;
-
-    WaitableEvent start_event_ { WaitableEvent::ResetPolicy::MANUAL,
-                                 WaitableEvent::InitialState::NOT_SIGNALED };
+    bool running_ = false;
+    std::mutex running_lock_;
+    std::condition_variable running_event_;
 
     MessageLoop* message_loop_ = nullptr;
 
