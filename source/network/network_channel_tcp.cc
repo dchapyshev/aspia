@@ -297,7 +297,7 @@ bool NetworkChannelTcp::ReloadWriteQueue()
         return false;
 
     {
-        std::lock_guard<std::mutex> lock(incoming_write_queue_lock_);
+        std::scoped_lock<std::mutex> lock(incoming_write_queue_lock_);
 
         if (incoming_write_queue_.empty())
             return false;
@@ -403,7 +403,7 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t byte
 void NetworkChannelTcp::Send(IOBuffer&& buffer, SendCompleteHandler handler)
 {
     {
-        std::lock_guard<std::mutex> lock(incoming_write_queue_lock_);
+        std::scoped_lock<std::mutex> lock(incoming_write_queue_lock_);
 
         bool schedule_write = incoming_write_queue_.empty();
 

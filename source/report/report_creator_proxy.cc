@@ -17,13 +17,13 @@ ReportCreatorProxy::ReportCreatorProxy(ReportCreator* creator)
 
 void ReportCreatorProxy::WillDestroyCurrentReportCreator()
 {
-    std::lock_guard<std::mutex> lock(creator_lock_);
+    std::scoped_lock<std::mutex> lock(creator_lock_);
     creator_ = nullptr;
 }
 
 bool ReportCreatorProxy::Parse(const std::string& data)
 {
-    std::lock_guard<std::mutex> lock(creator_lock_);
+    std::scoped_lock<std::mutex> lock(creator_lock_);
 
     if (!creator_)
         return false;

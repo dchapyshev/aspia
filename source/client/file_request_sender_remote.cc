@@ -117,7 +117,7 @@ void FileRequestSenderRemote::SendRequest(
     std::shared_ptr<FileReplyReceiverProxy> receiver,
     proto::file_transfer::ClientToHost&& request)
 {
-    std::lock_guard<std::mutex> lock(send_lock_);
+    std::scoped_lock<std::mutex> lock(send_lock_);
 
     if (last_receiver_)
     {
@@ -160,7 +160,7 @@ bool FileRequestSenderRemote::ProcessNextReply(proto::file_transfer::HostToClien
     std::shared_ptr<FileReplyReceiverProxy> receiver;
 
     {
-        std::lock_guard<std::mutex> lock(send_lock_);
+        std::scoped_lock<std::mutex> lock(send_lock_);
 
         DCHECK(last_receiver_);
 

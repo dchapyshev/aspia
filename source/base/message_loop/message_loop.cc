@@ -130,7 +130,7 @@ void MessageLoop::AddToIncomingQueue(PendingTask& pending_task)
     std::shared_ptr<MessagePump> pump;
 
     {
-        std::lock_guard<std::mutex> lock(incoming_queue_lock_);
+        std::scoped_lock<std::mutex> lock(incoming_queue_lock_);
 
         bool empty = incoming_queue_.empty();
 
@@ -153,7 +153,7 @@ void MessageLoop::ReloadWorkQueue()
         return;
 
     {
-        std::lock_guard<std::mutex> lock(incoming_queue_lock_);
+        std::scoped_lock<std::mutex> lock(incoming_queue_lock_);
 
         if (incoming_queue_.empty())
             return;

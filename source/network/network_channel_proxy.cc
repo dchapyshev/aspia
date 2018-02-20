@@ -17,14 +17,14 @@ NetworkChannelProxy::NetworkChannelProxy(NetworkChannel* channel) :
 
 void NetworkChannelProxy::WillDestroyCurrentChannel()
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
     channel_ = nullptr;
 }
 
 bool NetworkChannelProxy::Send(IOBuffer&& buffer,
                                NetworkChannel::SendCompleteHandler handler)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -37,7 +37,7 @@ bool NetworkChannelProxy::Send(IOBuffer&& buffer,
 
 bool NetworkChannelProxy::Send(IOBuffer&& buffer)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -50,7 +50,7 @@ bool NetworkChannelProxy::Send(IOBuffer&& buffer)
 
 bool NetworkChannelProxy::Receive(NetworkChannel::ReceiveCompleteHandler handler)
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -63,7 +63,7 @@ bool NetworkChannelProxy::Receive(NetworkChannel::ReceiveCompleteHandler handler
 
 bool NetworkChannelProxy::Disconnect()
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (!channel_)
         return false;
@@ -74,7 +74,7 @@ bool NetworkChannelProxy::Disconnect()
 
 bool NetworkChannelProxy::IsDiconnecting() const
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (!channel_)
         return true;

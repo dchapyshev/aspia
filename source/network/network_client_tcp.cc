@@ -84,7 +84,7 @@ NetworkClientTcp::NetworkClientTcp(const std::wstring& address,
 
 NetworkClientTcp::~NetworkClientTcp()
 {
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (channel_)
     {
@@ -103,7 +103,7 @@ void NetworkClientTcp::OnResolve(const std::error_code& code,
         return;
     }
 
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (!channel_)
         return;
@@ -123,7 +123,7 @@ void NetworkClientTcp::OnConnect(const std::error_code& code)
         return;
     }
 
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     if (!channel_)
         return;

@@ -17,7 +17,7 @@ FileReplyReceiverProxy::FileReplyReceiverProxy(FileReplyReceiver* receiver)
 
 void FileReplyReceiverProxy::WillDestroyCurrentReplyReceiver()
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
     receiver_ = nullptr;
 }
 
@@ -25,7 +25,7 @@ bool FileReplyReceiverProxy::OnDriveListReply(
     std::shared_ptr<proto::file_transfer::DriveList> drive_list,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -39,7 +39,7 @@ bool FileReplyReceiverProxy::OnFileListReply(
     std::shared_ptr<proto::file_transfer::FileList> file_list,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -53,7 +53,7 @@ bool FileReplyReceiverProxy::OnDirectorySizeReply(
     uint64_t size,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -66,7 +66,7 @@ bool FileReplyReceiverProxy::OnCreateDirectoryReply(
     const std::experimental::filesystem::path& path,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -79,7 +79,7 @@ bool FileReplyReceiverProxy::OnRemoveReply(
     const std::experimental::filesystem::path& path,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -93,7 +93,7 @@ bool FileReplyReceiverProxy::OnRenameReply(
     const std::experimental::filesystem::path& new_name,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -106,7 +106,7 @@ bool FileReplyReceiverProxy::OnFileUploadReply(
     const std::experimental::filesystem::path& file_path,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -119,7 +119,7 @@ bool FileReplyReceiverProxy::OnFileDownloadReply(
     const std::experimental::filesystem::path& file_path,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -131,7 +131,7 @@ bool FileReplyReceiverProxy::OnFileDownloadReply(
 bool FileReplyReceiverProxy::OnFilePacketSended(uint32_t flags,
                                                 proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;
@@ -144,7 +144,7 @@ bool FileReplyReceiverProxy::OnFilePacketReceived(
     std::shared_ptr<proto::file_transfer::FilePacket> file_packet,
     proto::file_transfer::Status status)
 {
-    std::lock_guard<std::mutex> lock(receiver_lock_);
+    std::scoped_lock<std::mutex> lock(receiver_lock_);
 
     if (!receiver_)
         return false;

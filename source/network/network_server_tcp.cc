@@ -69,7 +69,7 @@ void NetworkServerTcp::OnBeforeThreadRunning()
 void NetworkServerTcp::OnAfterThreadRunning()
 {
     {
-        std::lock_guard<std::mutex> lock(channel_lock_);
+        std::scoped_lock<std::mutex> lock(channel_lock_);
 
         if (channel_)
         {
@@ -100,7 +100,7 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
         return;
 
     {
-        std::lock_guard<std::mutex> lock(channel_lock_);
+        std::scoped_lock<std::mutex> lock(channel_lock_);
 
         if (!channel_)
             return;
@@ -115,7 +115,7 @@ void NetworkServerTcp::DoAccept()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
-    std::lock_guard<std::mutex> lock(channel_lock_);
+    std::scoped_lock<std::mutex> lock(channel_lock_);
 
     channel_ = std::make_unique<NetworkChannelTcp>(NetworkChannelTcp::Mode::SERVER);
 
