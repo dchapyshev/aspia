@@ -17,7 +17,6 @@ void MessagePumpDefault::Run(Delegate* delegate)
     for (;;)
     {
         bool did_work = delegate->DoWork();
-
         if (!keep_running_)
             break;
 
@@ -30,7 +29,12 @@ void MessagePumpDefault::Run(Delegate* delegate)
 
         if (delayed_work_time_ == TimePoint())
         {
-            event_.Wait();
+            std::unique_lock<std::mutex> lock(have_work_lock_);
+
+            while (!have_work_)
+                event_.wait(lock);
+
+            have_work_ = false;
         }
         else
         {
@@ -41,7 +45,15 @@ void MessagePumpDefault::Run(Delegate* delegate)
 
             if (delay > TimeDelta::zero())
             {
-                event_.TimedWait(delay);
+                std::unique_lock<std::mutex> lock(have_work_lock_);
+
+                while (!have_work_)
+                {
+                    if (event_.wait_for(lock, delay) == std::cv_status::timeout)
+                        break;
+                }
+
+                have_work_ = false;
             }
             else
             {
@@ -62,9 +74,13 @@ void MessagePumpDefault::Quit()
 
 void MessagePumpDefault::ScheduleWork()
 {
-    // Since this can be called on any thread, we need to ensure that our Run
-    // loop wakes up.
-    event_.Signal();
+    {
+        std::scoped_lock<std::mutex> lock(have_work_lock_);
+        have_work_ = true;
+    }
+
+    // Since this can be called on any thread, we need to ensure that our Run loop wakes up.
+    event_.notify_one();
 }
 
 void MessagePumpDefault::ScheduleDelayedWork(const TimePoint& delayed_work_time)

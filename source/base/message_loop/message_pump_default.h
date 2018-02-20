@@ -8,8 +8,11 @@
 #ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 
+#include <condition_variable>
+#include <mutex>
+
+#include "base/macros.h"
 #include "base/message_loop/message_pump.h"
-#include "base/synchronization/waitable_event.h"
 
 namespace aspia {
 
@@ -30,8 +33,10 @@ private:
     bool keep_running_ = true;
 
     // Used to sleep until there is more work to do.
-    WaitableEvent event_ { WaitableEvent::ResetPolicy::AUTOMATIC,
-                           WaitableEvent::InitialState::NOT_SIGNALED };
+    std::condition_variable event_;
+
+    bool have_work_ = false;
+    std::mutex have_work_lock_;
 
     // The time at which we should call DoDelayedWork.
     TimePoint delayed_work_time_;
