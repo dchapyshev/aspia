@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/host_session_launcher.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -202,14 +202,13 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
         }
     }
 
-    std::experimental::filesystem::path program_path;
-
-    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
+    auto program_path = BasePaths::GetCurrentExecutableDirectory();
+    if (!program_path.has_value())
         return false;
 
-    program_path.append(kProcessNameHost);
+    program_path->append(kProcessNameHost);
 
-    CommandLine command_line(program_path);
+    CommandLine command_line(program_path.value());
 
     command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
@@ -221,14 +220,13 @@ bool LaunchSessionProcessAsSystem(const std::wstring& session_type,
                                   uint32_t session_id,
                                   const std::wstring& channel_id)
 {
-    std::experimental::filesystem::path program_path;
-
-    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
+    auto program_path = BasePaths::GetCurrentExecutableDirectory();
+    if (!program_path.has_value())
         return false;
 
-    program_path.append(kProcessNameHost);
+    program_path->append(kProcessNameHost);
 
-    CommandLine command_line(program_path);
+    CommandLine command_line(program_path.value());
 
     command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
@@ -276,14 +274,13 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
 bool LaunchSystemInfoProcess()
 {
-    std::experimental::filesystem::path program_path;
-
-    if (!BasePaths::GetCurrentExecutableDirectory(program_path))
+    auto program_path = BasePaths::GetCurrentExecutableDirectory();
+    if (!program_path.has_value())
         return false;
 
-    program_path.append(kProcessNameSystemInfo);
+    program_path->append(kProcessNameSystemInfo);
 
-    return LaunchProcess(program_path);
+    return LaunchProcess(program_path.value());
 }
 
 } // namespace aspia

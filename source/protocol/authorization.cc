@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            protocol/authorization.cc
-// LICENSE:         See top-level directory
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -22,7 +22,7 @@ namespace {
 constexpr size_t kPasswordHashIterCount = 1000;
 
 constexpr size_t kMaxUserNameLength = 64;
-constexpr size_t kMinPasswordLength = 6;
+constexpr size_t kMinPasswordLength = 8;
 constexpr size_t kMaxPasswordLength = 64;
 constexpr size_t kPasswordHashLength = 64; // 512 bits
 
@@ -48,7 +48,7 @@ bool IsValidUserNameChar(wchar_t username_char)
 
 } // namespace
 
-bool IsValidUserName(std::wstring_view username)
+bool IsValidUserName(const std::wstring& username)
 {
     size_t length = username.length();
 
@@ -64,7 +64,7 @@ bool IsValidUserName(std::wstring_view username)
     return true;
 }
 
-bool IsValidPassword(std::wstring_view password)
+bool IsValidPassword(const std::wstring& password)
 {
     size_t length = password.length();
 

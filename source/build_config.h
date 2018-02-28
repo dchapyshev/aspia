@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            build_config.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -38,6 +38,10 @@
 #define WINVER           _WIN32_WINNT
 #define _WIN32_WINDOWS   _WIN32_WINNT
 
-static const unsigned short kDefaultHostTcpPort = 8050;
+namespace aspia {
+
+extern const unsigned short kDefaultHostTcpPort;
+
+} // namespace
 
 #endif // _ASPIA_BUILD_CONFIG_H

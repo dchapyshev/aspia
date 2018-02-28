@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            network/network_server_tcp.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -37,14 +37,13 @@ NetworkServerTcp::~NetworkServerTcp()
 
 void NetworkServerTcp::AddFirewallRule()
 {
-    std::experimental::filesystem::path exe_path;
-
-    if (!BasePaths::GetCurrentExecutableFile(exe_path))
+    auto exe_path = BasePaths::GetCurrentExecutableFile();
+    if (!exe_path.has_value())
         return;
 
     firewall_manager_ = std::make_unique<FirewallManager>();
 
-    if (!firewall_manager_->Init(kAppName, exe_path))
+    if (!firewall_manager_->Init(kAppName, exe_path.value()))
     {
         firewall_manager_.reset();
         return;

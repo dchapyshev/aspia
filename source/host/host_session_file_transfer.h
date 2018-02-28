@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/host_session_file_transfer.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

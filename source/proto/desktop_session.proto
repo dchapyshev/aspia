@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            proto/desktop_session.proto
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -9,7 +9,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package aspia.proto.desktop;
+package proto.desktop;
 
 message KeyEvent
 {

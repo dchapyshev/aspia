@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/system_info/system_info_toolbar.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

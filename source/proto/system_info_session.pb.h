@@ -50,7 +50,6 @@ inline void InitDefaults() {
   InitDefaultsClientToHost();
 }
 }  // namespace protobuf_system_5finfo_5fsession_2eproto
-namespace aspia {
 namespace proto {
 namespace system_info {
 class ClientToHost;
@@ -61,8 +60,6 @@ class HostToClientDefaultTypeInternal;
 extern HostToClientDefaultTypeInternal _HostToClient_default_instance_;
 }  // namespace system_info
 }  // namespace proto
-}  // namespace aspia
-namespace aspia {
 namespace proto {
 namespace system_info {
 
@@ -79,7 +76,7 @@ const int HostToClient_Compressor_Compressor_ARRAYSIZE = HostToClient_Compressor
 
 // ===================================================================
 
-class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.system_info.HostToClient) */ {
+class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.system_info.HostToClient) */ {
  public:
   HostToClient();
   virtual ~HostToClient();
@@ -202,13 +199,13 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
-  // .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
+  // .proto.system_info.HostToClient.Compressor compressor = 2;
   void clear_compressor();
   static const int kCompressorFieldNumber = 2;
-  ::aspia::proto::system_info::HostToClient_Compressor compressor() const;
-  void set_compressor(::aspia::proto::system_info::HostToClient_Compressor value);
+  ::proto::system_info::HostToClient_Compressor compressor() const;
+  void set_compressor(::proto::system_info::HostToClient_Compressor value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.system_info.HostToClient)
+  // @@protoc_insertion_point(class_scope:proto.system_info.HostToClient)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -221,7 +218,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.system_info.ClientToHost) */ {
+class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.system_info.ClientToHost) */ {
  public:
   ClientToHost();
   virtual ~ClientToHost();
@@ -315,7 +312,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_guid();
   void set_allocated_guid(::std::string* guid);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.system_info.ClientToHost)
+  // @@protoc_insertion_point(class_scope:proto.system_info.ClientToHost)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -340,41 +337,41 @@ inline void HostToClient::clear_guid() {
   guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& HostToClient::guid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_get:proto.system_info.HostToClient.guid)
   return guid_.GetNoArena();
 }
 inline void HostToClient::set_guid(const ::std::string& value) {
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_set:proto.system_info.HostToClient.guid)
 }
 #if LANG_CXX11
 inline void HostToClient::set_guid(::std::string&& value) {
   
   guid_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_set_rvalue:proto.system_info.HostToClient.guid)
 }
 #endif
 inline void HostToClient::set_guid(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_set_char:proto.system_info.HostToClient.guid)
 }
 inline void HostToClient::set_guid(const char* value, size_t size) {
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_set_pointer:proto.system_info.HostToClient.guid)
 }
 inline ::std::string* HostToClient::mutable_guid() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_mutable:proto.system_info.HostToClient.guid)
   return guid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* HostToClient::release_guid() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_release:proto.system_info.HostToClient.guid)
   
   return guid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -385,21 +382,21 @@ inline void HostToClient::set_allocated_guid(::std::string* guid) {
     
   }
   guid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), guid);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.HostToClient.guid)
+  // @@protoc_insertion_point(field_set_allocated:proto.system_info.HostToClient.guid)
 }
 
-// .aspia.proto.system_info.HostToClient.Compressor compressor = 2;
+// .proto.system_info.HostToClient.Compressor compressor = 2;
 inline void HostToClient::clear_compressor() {
   compressor_ = 0;
 }
-inline ::aspia::proto::system_info::HostToClient_Compressor HostToClient::compressor() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.HostToClient.compressor)
-  return static_cast< ::aspia::proto::system_info::HostToClient_Compressor >(compressor_);
+inline ::proto::system_info::HostToClient_Compressor HostToClient::compressor() const {
+  // @@protoc_insertion_point(field_get:proto.system_info.HostToClient.compressor)
+  return static_cast< ::proto::system_info::HostToClient_Compressor >(compressor_);
 }
-inline void HostToClient::set_compressor(::aspia::proto::system_info::HostToClient_Compressor value) {
+inline void HostToClient::set_compressor(::proto::system_info::HostToClient_Compressor value) {
   
   compressor_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.HostToClient.compressor)
+  // @@protoc_insertion_point(field_set:proto.system_info.HostToClient.compressor)
 }
 
 // bytes data = 3;
@@ -407,41 +404,41 @@ inline void HostToClient::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& HostToClient::data() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_get:proto.system_info.HostToClient.data)
   return data_.GetNoArena();
 }
 inline void HostToClient::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_set:proto.system_info.HostToClient.data)
 }
 #if LANG_CXX11
 inline void HostToClient::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_set_rvalue:proto.system_info.HostToClient.data)
 }
 #endif
 inline void HostToClient::set_data(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_set_char:proto.system_info.HostToClient.data)
 }
 inline void HostToClient::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_set_pointer:proto.system_info.HostToClient.data)
 }
 inline ::std::string* HostToClient::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_mutable:proto.system_info.HostToClient.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* HostToClient::release_data() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_release:proto.system_info.HostToClient.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -452,7 +449,7 @@ inline void HostToClient::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.HostToClient.data)
+  // @@protoc_insertion_point(field_set_allocated:proto.system_info.HostToClient.data)
 }
 
 // -------------------------------------------------------------------
@@ -464,41 +461,41 @@ inline void ClientToHost::clear_guid() {
   guid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ClientToHost::guid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_get:proto.system_info.ClientToHost.guid)
   return guid_.GetNoArena();
 }
 inline void ClientToHost::set_guid(const ::std::string& value) {
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_set:proto.system_info.ClientToHost.guid)
 }
 #if LANG_CXX11
 inline void ClientToHost::set_guid(::std::string&& value) {
   
   guid_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_set_rvalue:proto.system_info.ClientToHost.guid)
 }
 #endif
 inline void ClientToHost::set_guid(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_set_char:proto.system_info.ClientToHost.guid)
 }
 inline void ClientToHost::set_guid(const char* value, size_t size) {
   
   guid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_set_pointer:proto.system_info.ClientToHost.guid)
 }
 inline ::std::string* ClientToHost::mutable_guid() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_mutable:proto.system_info.ClientToHost.guid)
   return guid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientToHost::release_guid() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_release:proto.system_info.ClientToHost.guid)
   
   return guid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -509,7 +506,7 @@ inline void ClientToHost::set_allocated_guid(::std::string* guid) {
     
   }
   guid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), guid);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.ClientToHost.guid)
+  // @@protoc_insertion_point(field_set_allocated:proto.system_info.ClientToHost.guid)
 }
 
 #ifdef __GNUC__
@@ -522,12 +519,11 @@ inline void ClientToHost::set_allocated_guid(::std::string* guid) {
 
 }  // namespace system_info
 }  // namespace proto
-}  // namespace aspia
 
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::system_info::HostToClient_Compressor> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::system_info::HostToClient_Compressor> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

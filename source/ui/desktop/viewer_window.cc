@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/desktop/viewer_window.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -173,7 +173,15 @@ LRESULT ViewerWindow::OnCreate(
 
     DoAutoSize(kVideoWindowSize);
 
-    ApplyConfig(computer_->desktop_session());
+    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        ApplyConfig(computer_->desktop_manage_session());
+    }
+    else
+    {
+        DCHECK(computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        ApplyConfig(computer_->desktop_view_session());
+    }
 
     return 0;
 }
@@ -375,14 +383,31 @@ void ViewerWindow::ApplyConfig(const proto::desktop::Config& config)
 LRESULT ViewerWindow::OnSettingsButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    SettingsDialog dialog(computer_->session_type(), computer_->desktop_session());
-
-    if (dialog.DoModal(*this) == IDOK)
+    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        computer_->mutable_desktop_session()->CopyFrom(dialog.Config());
+        SettingsDialog dialog(computer_->session_type(), computer_->desktop_manage_session());
 
-        ApplyConfig(computer_->desktop_session());
-        delegate_->OnConfigChange(computer_->desktop_session());
+        if (dialog.DoModal(*this) == IDOK)
+        {
+            computer_->mutable_desktop_manage_session()->CopyFrom(dialog.Config());
+
+            ApplyConfig(computer_->desktop_manage_session());
+            delegate_->OnConfigChange(computer_->desktop_manage_session());
+        }
+    }
+    else
+    {
+        DCHECK(computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+
+        SettingsDialog dialog(computer_->session_type(), computer_->desktop_view_session());
+
+        if (dialog.DoModal(*this) == IDOK)
+        {
+            computer_->mutable_desktop_view_session()->CopyFrom(dialog.Config());
+
+            ApplyConfig(computer_->desktop_view_session());
+            delegate_->OnConfigChange(computer_->desktop_view_session());
+        }
     }
 
     return 0;

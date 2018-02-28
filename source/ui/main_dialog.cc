@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/main_dialog.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -402,14 +402,25 @@ LRESULT MainDialog::OnSettingsButton(
     switch (current_computer_.session_type())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
             SettingsDialog dialog(current_computer_.session_type(),
-                                  current_computer_.desktop_session());
+                                  current_computer_.desktop_manage_session());
 
             if (dialog.DoModal(*this) == IDOK)
             {
-                current_computer_.mutable_desktop_session()->CopyFrom(dialog.Config());
+                current_computer_.mutable_desktop_manage_session()->CopyFrom(dialog.Config());
+            }
+        }
+        break;
+
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            SettingsDialog dialog(current_computer_.session_type(),
+                                  current_computer_.desktop_view_session());
+
+            if (dialog.DoModal(*this) == IDOK)
+            {
+                current_computer_.mutable_desktop_view_session()->CopyFrom(dialog.Config());
             }
         }
         break;
@@ -582,12 +593,11 @@ LRESULT MainDialog::OnIpListRightClick(
 LRESULT MainDialog::OnAddressBookButton(
     WORD /* notify_code */, WORD /* control_id */, HWND /* control */, BOOL& /* handled */)
 {
-    std::experimental::filesystem::path program_path;
-
-    if (BasePaths::GetCurrentExecutableDirectory(program_path))
+    auto program_path = BasePaths::GetCurrentExecutableDirectory();
+    if (program_path.has_value())
     {
-        program_path.append(L"aspia_address_book.exe");
-        LaunchProcess(program_path);
+        program_path->append(L"aspia_address_book.exe");
+        LaunchProcess(program_path.value());
     }
 
     return 0;

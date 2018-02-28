@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/resource.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -17,7 +17,6 @@
 // Icons
 //
 #define IDI_MAIN                                   100
-#define IDI_ADDRESS_BOOK                           101
 
 #define IDI_ABOUT                                  200
 #define IDI_APPLICATIONS                           201
@@ -30,11 +29,7 @@
 #define IDI_CLIPBOARD_PASTE_IMAGE                  208
 #define IDI_CLOCK                                  209
 #define IDI_COMPUTER                               210
-#define IDI_COMPUTER_MINUS                         211
-#define IDI_COMPUTER_PENCIL                        212
-#define IDI_COMPUTER_PLUS                          213
 #define IDI_DELETE                                 214
-#define IDI_DOCUMENT                               215
 #define IDI_DISK                                   216
 #define IDI_DRIVE                                  217
 #define IDI_DRIVE_DISK                             218
@@ -42,10 +37,7 @@
 #define IDI_FOLDER                                 220
 #define IDI_FOLDER_ADD                             221
 #define IDI_FOLDER_UP                              222
-#define IDI_FOLDER_MINUS                           223
 #define IDI_FOLDER_NETWORK                         224
-#define IDI_FOLDER_PENCIL                          225
-#define IDI_FOLDER_STAND                           226
 #define IDI_FULLSCREEN                             227
 #define IDI_GEAR                                   228
 #define IDI_HARDWARE                               229
@@ -56,12 +48,10 @@
 #define IDI_MEMORY                                 234
 #define IDI_MINUS                                  235
 #define IDI_MONITOR                                236
-#define IDI_MONITOR_WITH_KEYBOARD                  237
 #define IDI_MOTHERBOARD                            238
 #define IDI_MOUSE                                  239
 #define IDI_NETWORK                                240
 #define IDI_NETWORK_ADAPTER                        241
-#define IDI_OPEN                                   242
 #define IDI_OS                                     243
 #define IDI_PCI                                    244
 #define IDI_PENCIL                                 245
@@ -103,10 +93,6 @@
 #define IDD_FILE_STATUS                            109
 #define IDD_CATEGORY_SELECT                        110
 #define IDD_REPORT_PROGRESS                        111
-#define IDD_COMPUTER                               112
-#define IDD_COMPUTER_GROUP                         113
-#define IDD_ADDRESS_BOOK                           114
-#define IDD_OPEN_ADDRESS_BOOK                      115
 
 //
 // Controls
@@ -163,11 +149,7 @@
 #define IDC_SYSTEM_INFO_ACCELERATORS               149
 #define IDC_EXPAND_ALL                             150
 #define IDC_COLLAPSE_ALL                           151
-#define IDC_NAME_EDIT                              152
 #define IDC_SERVER_ADDRESS_EDIT                    153
-#define IDC_COMMENT_EDIT                           154
-#define IDC_ADDRESS_BOOK_ACCELERATORS              155
-#define IDC_ENCRYPTION_TYPE_COMBO                  156
 #define IDC_MAIN_DIALOG_ACCELERATORS               157
 
 //
@@ -198,25 +180,11 @@
 #define ID_COPY_ALL                                522
 #define ID_COPY_VALUE                              523
 #define ID_SCREENSHOT                              524
-#define ID_OPEN                                    525
-#define ID_SAVE_AS                                 526
-#define ID_NEW                                     527
-#define ID_CLOSE                                   528
 #define ID_DESKTOP_MANAGE_SESSION                  529
 #define ID_DESKTOP_VIEW_SESSION                    530
 #define ID_FILE_TRANSFER_SESSION                   531
 #define ID_SYSTEM_INFO_SESSION                     532
-#define ID_DESKTOP_MANAGE_SESSION_TB               533
-#define ID_DESKTOP_VIEW_SESSION_TB                 534
-#define ID_FILE_TRANSFER_SESSION_TB                535
-#define ID_SYSTEM_INFO_SESSION_TB                  536
-#define ID_ADD_COMPUTER                            537
-#define ID_ADD_GROUP                               538
-#define ID_DELETE_GROUP                            539
-#define ID_DELETE_COMPUTER                         540
-#define ID_EDIT_GROUP                              541
-#define ID_EDIT_COMPUTER                           542
-#define ID_ADDRESS_BOOK                            543
+#define ID_ADDRESS_BOOK                            533
 
 #define ID_KEY_FIRST                               600
 #define ID_KEY_CTRL_ESC                            600
@@ -247,10 +215,6 @@
 #define IDR_IP_LIST                                104
 #define IDR_SAVE_REPORT                            105
 #define IDR_LIST_COPY                              106
-#define IDR_ADDRESS_BOOK_MAIN                      107
-#define IDR_GROUP_TREE_ITEM                        108
-#define IDR_COMPUTER_LIST                          109
-#define IDR_COMPUTER_LIST_ITEM                     110
 
 //
 // Strings
@@ -367,39 +331,6 @@
 #define IDS_SI_FILTER_HTML                          3010
 #define IDS_SI_FILTER_JSON                          3011
 #define IDS_SI_FILTER_XML                           3012
-
-// Address Book
-#define IDS_AB_TITLE                                5000
-#define IDS_AB_COL_NAME                             5001
-#define IDS_AB_COL_ADDRESS                          5002
-#define IDS_AB_COL_PORT                             5003
-#define IDS_AB_TOOLTIP_NEW                          5004
-#define IDS_AB_TOOLTIP_OPEN                         5005
-#define IDS_AB_TOOLTIP_SAVE                         5006
-#define IDS_AB_TOOLTIP_ABOUT                        5007
-#define IDS_AB_TOOLTIP_EXIT                         5008
-#define IDS_AB_TOOLTIP_ADD_GROUP                    5009
-#define IDS_AB_TOOLTIP_DELETE_GROUP                 5010
-#define IDS_AB_TOOLTIP_EDIT_GROUP                   5011
-#define IDS_AB_TOOLTIP_ADD_COMPUTER                 5012
-#define IDS_AB_TOOLTIP_DELETE_COMPUTER              5013
-#define IDS_AB_TOOLTIP_EDIT_COMPUTER                5014
-#define IDS_AB_DEFAULT_ADDRESS_BOOK_NAME            5015
-#define IDS_AB_ADDRESS_BOOK_CHANGED                 5016
-#define IDS_AB_TOO_LONG_NAME_ERROR                  5017
-#define IDS_AB_TOO_LONG_COMMENT_ERROR               5018
-#define IDS_AB_NAME_CANT_BE_EMPTY_ERROR             5019
-#define IDS_AB_ADDRESS_BOOK_FILTER                  5020
-#define IDS_AB_UNABLE_TO_OPEN_FILE_ERROR            5021
-#define IDS_AB_UNABLE_TO_WRITE_FILE_ERROR           5022
-#define IDS_AB_UNABLE_TO_READ_FILE_ERROR            5023
-#define IDS_AB_GROUP_DELETE_CONFIRMATION            5024
-#define IDS_AB_COMPUTER_DELETE_CONFIRMATION         5025
-#define IDS_AB_ENCRYPTION_NONE                      5026
-#define IDS_AB_ENCRYPTION_XCHACHA20_POLY1305        5027
-#define IDS_AB_CORRUPTED_FILE_ERROR                 5028
-#define IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR        5029
-#define IDS_AB_UNABLE_TO_DECRYPT_ERROR              5030
 
 // Authorization Status
 #define IDS_AUTH_STATUS_UNKNOWN                     10000

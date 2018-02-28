@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/ui_main.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -19,7 +19,6 @@
 #include "base/scoped_com_initializer.h"
 #include "base/scoped_object.h"
 #include "base/settings_manager.h"
-#include "ui/address_book/address_book_window.h"
 #include "ui/main_dialog.h"
 
 namespace aspia {
@@ -69,10 +68,9 @@ void UIMain()
 
     if (!IsProcessElevated())
     {
-        std::experimental::filesystem::path program_path;
+        auto program_path = BasePaths::GetCurrentExecutableFile();
 
-        if (BasePaths::GetCurrentExecutableFile(program_path) &&
-            LaunchProcessWithElevate(program_path))
+        if (program_path.has_value() && LaunchProcessWithElevate(program_path.value()))
         {
             ShutdownLogging();
             return;

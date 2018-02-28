@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            client/client_session_desktop_view.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -109,7 +109,15 @@ bool ClientSessionDesktopView::ReadVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::ReadConfigRequest(
     const proto::desktop::ConfigRequest& /* config_request */)
 {
-    OnConfigChange(computer_.desktop_session());
+    if (computer_.session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        OnConfigChange(computer_.desktop_manage_session());
+    }
+    else
+    {
+        DCHECK(computer_.session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        OnConfigChange(computer_.desktop_view_session());
+    }
 }
 
 void ClientSessionDesktopView::OnMessageReceived(const IOBuffer& buffer)

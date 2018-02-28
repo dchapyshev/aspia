@@ -16,7 +16,6 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
-namespace aspia {
 namespace proto {
 class HelloMessageDefaultTypeInternal {
  public:
@@ -24,7 +23,6 @@ class HelloMessageDefaultTypeInternal {
       _instance;
 } _HelloMessage_default_instance_;
 }  // namespace proto
-}  // namespace aspia
 namespace protobuf_key_5fexchange_2eproto {
 void InitDefaultsHelloMessageImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -35,11 +33,11 @@ void InitDefaultsHelloMessageImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_HelloMessage_default_instance_;
-    new (ptr) ::aspia::proto::HelloMessage();
+    void* ptr = &::proto::_HelloMessage_default_instance_;
+    new (ptr) ::proto::HelloMessage();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::HelloMessage::InitAsDefaultInstance();
+  ::proto::HelloMessage::InitAsDefaultInstance();
 }
 
 void InitDefaultsHelloMessage() {
@@ -48,7 +46,6 @@ void InitDefaultsHelloMessage() {
 }
 
 }  // namespace protobuf_key_5fexchange_2eproto
-namespace aspia {
 namespace proto {
 
 // ===================================================================
@@ -66,7 +63,7 @@ HelloMessage::HelloMessage()
     ::protobuf_key_5fexchange_2eproto::InitDefaultsHelloMessage();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(constructor:proto.HelloMessage)
 }
 HelloMessage::HelloMessage(const HelloMessage& from)
   : ::google::protobuf::MessageLite(),
@@ -81,7 +78,7 @@ HelloMessage::HelloMessage(const HelloMessage& from)
   if (from.nonce().size() > 0) {
     nonce_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.nonce_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(copy_constructor:proto.HelloMessage)
 }
 
 void HelloMessage::SharedCtor() {
@@ -91,7 +88,7 @@ void HelloMessage::SharedCtor() {
 }
 
 HelloMessage::~HelloMessage() {
-  // @@protoc_insertion_point(destructor:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(destructor:proto.HelloMessage)
   SharedDtor();
 }
 
@@ -119,7 +116,7 @@ HelloMessage* HelloMessage::New(::google::protobuf::Arena* arena) const {
 }
 
 void HelloMessage::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.HelloMessage)
+// @@protoc_insertion_point(message_clear_start:proto.HelloMessage)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -139,7 +136,7 @@ bool HelloMessage::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(parse_start:proto.HelloMessage)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -181,17 +178,17 @@ bool HelloMessage::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(parse_success:proto.HelloMessage)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(parse_failure:proto.HelloMessage)
   return false;
 #undef DO_
 }
 
 void HelloMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(serialize_start:proto.HelloMessage)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -209,11 +206,11 @@ void HelloMessage::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(serialize_end:proto.HelloMessage)
 }
 
 size_t HelloMessage::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.HelloMessage)
+// @@protoc_insertion_point(message_byte_size_start:proto.HelloMessage)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -245,7 +242,7 @@ void HelloMessage::CheckTypeAndMergeFrom(
 }
 
 void HelloMessage::MergeFrom(const HelloMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.HelloMessage)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.HelloMessage)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -262,7 +259,7 @@ void HelloMessage::MergeFrom(const HelloMessage& from) {
 }
 
 void HelloMessage::CopyFrom(const HelloMessage& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.HelloMessage)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.HelloMessage)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -285,12 +282,11 @@ void HelloMessage::InternalSwap(HelloMessage* other) {
 }
 
 ::std::string HelloMessage::GetTypeName() const {
-  return "aspia.proto.HelloMessage";
+  return "proto.HelloMessage";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

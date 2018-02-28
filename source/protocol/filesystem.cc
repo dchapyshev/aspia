@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            protocol/filesystem.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -69,22 +69,22 @@ proto::file_transfer::Status FileSystemRequest::GetDriveList(
         }
     }
 
-    std::experimental::filesystem::path path;
-
-    if (BasePaths::GetUserHomeDirectory(path))
+    auto path = BasePaths::GetUserHomeDirectory();
+    if (path.has_value())
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(path.u8string());
+        item->set_path(path->u8string());
     }
 
-    if (BasePaths::GetUserDesktopDirectory(path))
+    path = BasePaths::GetUserDesktopDirectory();
+    if (path.has_value())
     {
         proto::file_transfer::DriveList::Item* item = drive_list->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(path.u8string());
+        item->set_path(path->u8string());
     }
 
     if (!drive_list->item_size())

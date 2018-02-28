@@ -46,19 +46,16 @@ inline void InitDefaults() {
   InitDefaultsHelloMessage();
 }
 }  // namespace protobuf_key_5fexchange_2eproto
-namespace aspia {
 namespace proto {
 class HelloMessage;
 class HelloMessageDefaultTypeInternal;
 extern HelloMessageDefaultTypeInternal _HelloMessage_default_instance_;
 }  // namespace proto
-}  // namespace aspia
-namespace aspia {
 namespace proto {
 
 // ===================================================================
 
-class HelloMessage : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.HelloMessage) */ {
+class HelloMessage : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.HelloMessage) */ {
  public:
   HelloMessage();
   virtual ~HelloMessage();
@@ -166,7 +163,7 @@ class HelloMessage : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_nonce();
   void set_allocated_nonce(::std::string* nonce);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.HelloMessage)
+  // @@protoc_insertion_point(class_scope:proto.HelloMessage)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -192,41 +189,41 @@ inline void HelloMessage::clear_public_key() {
   public_key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& HelloMessage::public_key() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_get:proto.HelloMessage.public_key)
   return public_key_.GetNoArena();
 }
 inline void HelloMessage::set_public_key(const ::std::string& value) {
   
   public_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_set:proto.HelloMessage.public_key)
 }
 #if LANG_CXX11
 inline void HelloMessage::set_public_key(::std::string&& value) {
   
   public_key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_set_rvalue:proto.HelloMessage.public_key)
 }
 #endif
 inline void HelloMessage::set_public_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   public_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_set_char:proto.HelloMessage.public_key)
 }
 inline void HelloMessage::set_public_key(const void* value, size_t size) {
   
   public_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_set_pointer:proto.HelloMessage.public_key)
 }
 inline ::std::string* HelloMessage::mutable_public_key() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_mutable:proto.HelloMessage.public_key)
   return public_key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* HelloMessage::release_public_key() {
-  // @@protoc_insertion_point(field_release:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_release:proto.HelloMessage.public_key)
   
   return public_key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -237,7 +234,7 @@ inline void HelloMessage::set_allocated_public_key(::std::string* public_key) {
     
   }
   public_key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), public_key);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.HelloMessage.public_key)
+  // @@protoc_insertion_point(field_set_allocated:proto.HelloMessage.public_key)
 }
 
 // bytes nonce = 2;
@@ -245,41 +242,41 @@ inline void HelloMessage::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& HelloMessage::nonce() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_get:proto.HelloMessage.nonce)
   return nonce_.GetNoArena();
 }
 inline void HelloMessage::set_nonce(const ::std::string& value) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_set:proto.HelloMessage.nonce)
 }
 #if LANG_CXX11
 inline void HelloMessage::set_nonce(::std::string&& value) {
   
   nonce_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_set_rvalue:proto.HelloMessage.nonce)
 }
 #endif
 inline void HelloMessage::set_nonce(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_set_char:proto.HelloMessage.nonce)
 }
 inline void HelloMessage::set_nonce(const void* value, size_t size) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_set_pointer:proto.HelloMessage.nonce)
 }
 inline ::std::string* HelloMessage::mutable_nonce() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_mutable:proto.HelloMessage.nonce)
   return nonce_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* HelloMessage::release_nonce() {
-  // @@protoc_insertion_point(field_release:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_release:proto.HelloMessage.nonce)
   
   return nonce_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -290,7 +287,7 @@ inline void HelloMessage::set_allocated_nonce(::std::string* nonce) {
     
   }
   nonce_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nonce);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.HelloMessage.nonce)
+  // @@protoc_insertion_point(field_set_allocated:proto.HelloMessage.nonce)
 }
 
 #ifdef __GNUC__
@@ -300,7 +297,6 @@ inline void HelloMessage::set_allocated_nonce(::std::string* nonce) {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)
 

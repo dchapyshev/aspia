@@ -59,7 +59,6 @@ inline void InitDefaults() {
   InitDefaultsBasicResult();
 }
 }  // namespace protobuf_auth_5fsession_2eproto
-namespace aspia {
 namespace proto {
 namespace auth {
 class AllowMethods;
@@ -79,8 +78,6 @@ class SelectMethodDefaultTypeInternal;
 extern SelectMethodDefaultTypeInternal _SelectMethod_default_instance_;
 }  // namespace auth
 }  // namespace proto
-}  // namespace aspia
-namespace aspia {
 namespace proto {
 namespace auth {
 
@@ -123,7 +120,7 @@ const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================
 
-class AllowMethods : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.AllowMethods) */ {
+class AllowMethods : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.auth.AllowMethods) */ {
  public:
   AllowMethods();
   virtual ~AllowMethods();
@@ -209,7 +206,7 @@ class AllowMethods : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::google::protobuf::uint32 methods() const;
   void set_methods(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(class_scope:proto.auth.AllowMethods)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -220,7 +217,7 @@ class AllowMethods : public ::google::protobuf::MessageLite /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class SelectMethod : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.SelectMethod) */ {
+class SelectMethod : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.auth.SelectMethod) */ {
  public:
   SelectMethod();
   virtual ~SelectMethod();
@@ -300,13 +297,13 @@ class SelectMethod : public ::google::protobuf::MessageLite /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.auth.Method method = 1;
+  // .proto.auth.Method method = 1;
   void clear_method();
   static const int kMethodFieldNumber = 1;
-  ::aspia::proto::auth::Method method() const;
-  void set_method(::aspia::proto::auth::Method value);
+  ::proto::auth::Method method() const;
+  void set_method(::proto::auth::Method value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(class_scope:proto.auth.SelectMethod)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -317,7 +314,7 @@ class SelectMethod : public ::google::protobuf::MessageLite /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class BasicRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicRequest) */ {
+class BasicRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.auth.BasicRequest) */ {
  public:
   BasicRequest();
   virtual ~BasicRequest();
@@ -411,7 +408,7 @@ class BasicRequest : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::std::string* release_nonce();
   void set_allocated_nonce(::std::string* nonce);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(class_scope:proto.auth.BasicRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -422,7 +419,7 @@ class BasicRequest : public ::google::protobuf::MessageLite /* @@protoc_insertio
 };
 // -------------------------------------------------------------------
 
-class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicResponse) */ {
+class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.auth.BasicResponse) */ {
  public:
   BasicResponse();
   virtual ~BasicResponse();
@@ -530,13 +527,13 @@ class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .proto.auth.SessionType session_type = 1;
   void clear_session_type();
   static const int kSessionTypeFieldNumber = 1;
-  ::aspia::proto::auth::SessionType session_type() const;
-  void set_session_type(::aspia::proto::auth::SessionType value);
+  ::proto::auth::SessionType session_type() const;
+  void set_session_type(::proto::auth::SessionType value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(class_scope:proto.auth.BasicResponse)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -549,7 +546,7 @@ class BasicResponse : public ::google::protobuf::MessageLite /* @@protoc_inserti
 };
 // -------------------------------------------------------------------
 
-class BasicResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.BasicResult) */ {
+class BasicResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.auth.BasicResult) */ {
  public:
   BasicResult();
   virtual ~BasicResult();
@@ -629,13 +626,13 @@ class BasicResult : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.auth.Status status = 1;
+  // .proto.auth.Status status = 1;
   void clear_status();
   static const int kStatusFieldNumber = 1;
-  ::aspia::proto::auth::Status status() const;
-  void set_status(::aspia::proto::auth::Status value);
+  ::proto::auth::Status status() const;
+  void set_status(::proto::auth::Status value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(class_scope:proto.auth.BasicResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -660,31 +657,31 @@ inline void AllowMethods::clear_methods() {
   methods_ = 0u;
 }
 inline ::google::protobuf::uint32 AllowMethods::methods() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.AllowMethods.methods)
+  // @@protoc_insertion_point(field_get:proto.auth.AllowMethods.methods)
   return methods_;
 }
 inline void AllowMethods::set_methods(::google::protobuf::uint32 value) {
   
   methods_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.AllowMethods.methods)
+  // @@protoc_insertion_point(field_set:proto.auth.AllowMethods.methods)
 }
 
 // -------------------------------------------------------------------
 
 // SelectMethod
 
-// .aspia.proto.auth.Method method = 1;
+// .proto.auth.Method method = 1;
 inline void SelectMethod::clear_method() {
   method_ = 0;
 }
-inline ::aspia::proto::auth::Method SelectMethod::method() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.SelectMethod.method)
-  return static_cast< ::aspia::proto::auth::Method >(method_);
+inline ::proto::auth::Method SelectMethod::method() const {
+  // @@protoc_insertion_point(field_get:proto.auth.SelectMethod.method)
+  return static_cast< ::proto::auth::Method >(method_);
 }
-inline void SelectMethod::set_method(::aspia::proto::auth::Method value) {
+inline void SelectMethod::set_method(::proto::auth::Method value) {
   
   method_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.SelectMethod.method)
+  // @@protoc_insertion_point(field_set:proto.auth.SelectMethod.method)
 }
 
 // -------------------------------------------------------------------
@@ -696,41 +693,41 @@ inline void BasicRequest::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& BasicRequest::nonce() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_get:proto.auth.BasicRequest.nonce)
   return nonce_.GetNoArena();
 }
 inline void BasicRequest::set_nonce(const ::std::string& value) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_set:proto.auth.BasicRequest.nonce)
 }
 #if LANG_CXX11
 inline void BasicRequest::set_nonce(::std::string&& value) {
   
   nonce_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_set_rvalue:proto.auth.BasicRequest.nonce)
 }
 #endif
 inline void BasicRequest::set_nonce(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_set_char:proto.auth.BasicRequest.nonce)
 }
 inline void BasicRequest::set_nonce(const void* value, size_t size) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_set_pointer:proto.auth.BasicRequest.nonce)
 }
 inline ::std::string* BasicRequest::mutable_nonce() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_mutable:proto.auth.BasicRequest.nonce)
   return nonce_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* BasicRequest::release_nonce() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_release:proto.auth.BasicRequest.nonce)
   
   return nonce_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -741,25 +738,25 @@ inline void BasicRequest::set_allocated_nonce(::std::string* nonce) {
     
   }
   nonce_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nonce);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicRequest.nonce)
+  // @@protoc_insertion_point(field_set_allocated:proto.auth.BasicRequest.nonce)
 }
 
 // -------------------------------------------------------------------
 
 // BasicResponse
 
-// .aspia.proto.auth.SessionType session_type = 1;
+// .proto.auth.SessionType session_type = 1;
 inline void BasicResponse::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType BasicResponse::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.session_type)
-  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
+inline ::proto::auth::SessionType BasicResponse::session_type() const {
+  // @@protoc_insertion_point(field_get:proto.auth.BasicResponse.session_type)
+  return static_cast< ::proto::auth::SessionType >(session_type_);
 }
-inline void BasicResponse::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void BasicResponse::set_session_type(::proto::auth::SessionType value) {
   
   session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.session_type)
+  // @@protoc_insertion_point(field_set:proto.auth.BasicResponse.session_type)
 }
 
 // string username = 2;
@@ -767,41 +764,41 @@ inline void BasicResponse::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& BasicResponse::username() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_get:proto.auth.BasicResponse.username)
   return username_.GetNoArena();
 }
 inline void BasicResponse::set_username(const ::std::string& value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_set:proto.auth.BasicResponse.username)
 }
 #if LANG_CXX11
 inline void BasicResponse::set_username(::std::string&& value) {
   
   username_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_set_rvalue:proto.auth.BasicResponse.username)
 }
 #endif
 inline void BasicResponse::set_username(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_set_char:proto.auth.BasicResponse.username)
 }
 inline void BasicResponse::set_username(const char* value, size_t size) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_set_pointer:proto.auth.BasicResponse.username)
 }
 inline ::std::string* BasicResponse::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_mutable:proto.auth.BasicResponse.username)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* BasicResponse::release_username() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_release:proto.auth.BasicResponse.username)
   
   return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -812,7 +809,7 @@ inline void BasicResponse::set_allocated_username(::std::string* username) {
     
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicResponse.username)
+  // @@protoc_insertion_point(field_set_allocated:proto.auth.BasicResponse.username)
 }
 
 // bytes key = 3;
@@ -820,41 +817,41 @@ inline void BasicResponse::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& BasicResponse::key() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_get:proto.auth.BasicResponse.key)
   return key_.GetNoArena();
 }
 inline void BasicResponse::set_key(const ::std::string& value) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_set:proto.auth.BasicResponse.key)
 }
 #if LANG_CXX11
 inline void BasicResponse::set_key(::std::string&& value) {
   
   key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_set_rvalue:proto.auth.BasicResponse.key)
 }
 #endif
 inline void BasicResponse::set_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_set_char:proto.auth.BasicResponse.key)
 }
 inline void BasicResponse::set_key(const void* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_set_pointer:proto.auth.BasicResponse.key)
 }
 inline ::std::string* BasicResponse::mutable_key() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_mutable:proto.auth.BasicResponse.key)
   return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* BasicResponse::release_key() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_release:proto.auth.BasicResponse.key)
   
   return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -865,25 +862,25 @@ inline void BasicResponse::set_allocated_key(::std::string* key) {
     
   }
   key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.BasicResponse.key)
+  // @@protoc_insertion_point(field_set_allocated:proto.auth.BasicResponse.key)
 }
 
 // -------------------------------------------------------------------
 
 // BasicResult
 
-// .aspia.proto.auth.Status status = 1;
+// .proto.auth.Status status = 1;
 inline void BasicResult::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::auth::Status BasicResult::status() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.BasicResult.status)
-  return static_cast< ::aspia::proto::auth::Status >(status_);
+inline ::proto::auth::Status BasicResult::status() const {
+  // @@protoc_insertion_point(field_get:proto.auth.BasicResult.status)
+  return static_cast< ::proto::auth::Status >(status_);
 }
-inline void BasicResult::set_status(::aspia::proto::auth::Status value) {
+inline void BasicResult::set_status(::proto::auth::Status value) {
   
   status_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.BasicResult.status)
+  // @@protoc_insertion_point(field_set:proto.auth.BasicResult.status)
 }
 
 #ifdef __GNUC__
@@ -902,14 +899,13 @@ inline void BasicResult::set_status(::aspia::proto::auth::Status value) {
 
 }  // namespace auth
 }  // namespace proto
-}  // namespace aspia
 
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::auth::Method> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::auth::Method> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto::auth::Status> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

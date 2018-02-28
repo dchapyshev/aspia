@@ -19,6 +19,138 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="address_book\address_book_dialog.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <ClInclude Include="address_book\address_book.h" />
+    <ClInclude Include="address_book\address_book_main.h" />
+    <CustomBuild Include="address_book\address_book_window.h">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing address_book_window.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing address_book_window.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing address_book_window.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing address_book_window.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_dialog.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing computer_group_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing computer_group_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing computer_group_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing computer_group_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_dialog.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing computer_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing computer_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing computer_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing computer_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <ClInclude Include="address_book\computer.h" />
+    <ClInclude Include="address_book\computer_group.h" />
+    <CustomBuild Include="address_book\open_address_book_dialog.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing open_address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing open_address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing open_address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE  "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing open_address_book_dialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_tree.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing computer_group_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing computer_group_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing computer_group_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing computer_group_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_tree.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing computer_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing computer_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -D_DEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing computer_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DCORE_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(QTDIR)\include" "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated" "-I.\address_book"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing computer_tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\qt_generated\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DNDEBUG -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ATL_NO_EXCEPTIONS -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING -DHOST_IMPLEMENTATION -DUI_IMPLEMENTATION -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HELP_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -D_WINDLL -D_UNICODE -DUNICODE "-I$(SolutionDir)third_party\libvpx" "-I$(SolutionDir)third_party\libyuv\include" "-I$(SolutionDir)third_party\zlib-ng" "-I$(SolutionDir)third_party\protobuf\src" "-I$(SolutionDir)third_party\libsodium\src\libsodium\include" "-I$(SolutionDir)third_party\wtl\include" "-I$(SolutionDir)third_party\asio\include" "-I$(SolutionDir)third_party\rapidjson\include" "-I$(SolutionDir)third_party\rapidxml" "-I$(SolutionDir)source" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtHelp" "-I$(QTDIR)\include\QtPrintSupport" "-I$(QTDIR)\include\QtWidgets" "-I." "-I.\address_book" "-I.\qt_generated\$(ConfigurationName)\." "-I.\qt_generated"</Command>
+    </CustomBuild>
+    <ClInclude Include="address_book\computer_group_drag.h" />
+    <ClInclude Include="address_book\computer_group_mime_data.h" />
     <ClInclude Include="base\bitset.h" />
     <ClInclude Include="base\byte_order.h" />
     <ClInclude Include="base\command_line.h" />
@@ -239,11 +371,11 @@
     <ClInclude Include="desktop_capture\mouse_cursor.h" />
     <ClInclude Include="desktop_capture\mouse_cursor_cache.h" />
     <ClInclude Include="desktop_capture\pixel_format.h" />
+    <ClInclude Include="export.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="host\clipboard_thread.h" />
     <ClInclude Include="host\console_session_watcher.h" />
     <ClInclude Include="host\host.h" />
-    <ClInclude Include="host\host_export.h" />
     <ClInclude Include="host\host_local_system_info.h" />
     <ClInclude Include="host\host_main.h" />
     <ClInclude Include="host\host_pool.h" />
@@ -287,6 +419,11 @@
     <ClInclude Include="proto\key_exchange.pb.h" />
     <ClInclude Include="proto\mru.pb.h" />
     <ClInclude Include="proto\system_info_session.pb.h" />
+    <ClInclude Include="qt_generated\ui_address_book_dialog.h" />
+    <ClInclude Include="qt_generated\ui_address_book_window.h" />
+    <ClInclude Include="qt_generated\ui_computer_dialog.h" />
+    <ClInclude Include="qt_generated\ui_computer_group_dialog.h" />
+    <ClInclude Include="qt_generated\ui_open_address_book_dialog.h" />
     <ClInclude Include="report\column_list.h" />
     <ClInclude Include="report\group.h" />
     <ClInclude Include="report\report.h" />
@@ -299,16 +436,6 @@
     <ClInclude Include="report\table.h" />
     <ClInclude Include="report\value.h" />
     <ClInclude Include="ui\about_dialog.h" />
-    <ClInclude Include="ui\address_book\address_book_dialog.h" />
-    <ClInclude Include="ui\address_book\address_book_main.h" />
-    <ClInclude Include="ui\address_book\address_book_secure_util.h" />
-    <ClInclude Include="ui\address_book\address_book_toolbar.h" />
-    <ClInclude Include="ui\address_book\address_book_window.h" />
-    <ClInclude Include="ui\address_book\computer_dialog.h" />
-    <ClInclude Include="ui\address_book\computer_group_dialog.h" />
-    <ClInclude Include="ui\address_book\computer_group_tree_ctrl.h" />
-    <ClInclude Include="ui\address_book\computer_list_ctrl.h" />
-    <ClInclude Include="ui\address_book\open_address_book_dialog.h" />
     <ClInclude Include="ui\auth_dialog.h" />
     <ClInclude Include="ui\base\splitter.h" />
     <ClInclude Include="ui\base\timer.h" />
@@ -339,13 +466,23 @@
     <ClInclude Include="ui\system_info\system_info_main.h" />
     <ClInclude Include="ui\system_info\system_info_toolbar.h" />
     <ClInclude Include="ui\system_info\system_info_window.h" />
-    <ClInclude Include="ui\ui_export.h" />
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\ui_util.h" />
     <ClInclude Include="ui\users_dialog.h" />
     <ClInclude Include="ui\user_prop_dialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="address_book\address_book.cc" />
+    <ClCompile Include="address_book\address_book_dialog.cc" />
+    <ClCompile Include="address_book\address_book_main.cc" />
+    <ClCompile Include="address_book\address_book_window.cc" />
+    <ClCompile Include="address_book\computer_dialog.cc" />
+    <ClCompile Include="address_book\computer_group.cc" />
+    <ClCompile Include="address_book\computer_group_dialog.cc" />
+    <ClCompile Include="address_book\computer.cc" />
+    <ClCompile Include="address_book\computer_group_tree.cc" />
+    <ClCompile Include="address_book\computer_tree.cc" />
+    <ClCompile Include="address_book\open_address_book_dialog.cc" />
     <ClCompile Include="base\byte_order.cc" />
     <ClCompile Include="base\command_line.cc" />
     <ClCompile Include="base\cpu_info.cc" />
@@ -403,6 +540,7 @@
     <ClCompile Include="base\threading\simple_thread.cc" />
     <ClCompile Include="base\threading\thread.cc" />
     <ClCompile Include="base\threading\thread_checker.cc" />
+    <ClCompile Include="build_config.cc" />
     <ClCompile Include="category\category.cc" />
     <ClCompile Include="category\category_application.cc" />
     <ClCompile Include="category\category_application.pb.cc" />
@@ -582,6 +720,72 @@
     <ClCompile Include="proto\key_exchange.pb.cc" />
     <ClCompile Include="proto\mru.pb.cc" />
     <ClCompile Include="proto\system_info_session.pb.cc" />
+    <ClCompile Include="qt_generated\Debug\moc_address_book_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_address_book_window.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_group_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_group_tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_open_address_book_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\qrc_resources.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_address_book_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_address_book_window.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_group_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_group_tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_open_address_book_dialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="report\column_list.cc" />
     <ClCompile Include="report\group.cc" />
     <ClCompile Include="report\report_creator.cc" />
@@ -593,16 +797,6 @@
     <ClCompile Include="report\table.cc" />
     <ClCompile Include="report\value.cc" />
     <ClCompile Include="ui\about_dialog.cc" />
-    <ClCompile Include="ui\address_book\address_book_dialog.cc" />
-    <ClCompile Include="ui\address_book\address_book_main.cc" />
-    <ClCompile Include="ui\address_book\address_book_secure_util.cc" />
-    <ClCompile Include="ui\address_book\address_book_toolbar.cc" />
-    <ClCompile Include="ui\address_book\address_book_window.cc" />
-    <ClCompile Include="ui\address_book\computer_dialog.cc" />
-    <ClCompile Include="ui\address_book\computer_group_dialog.cc" />
-    <ClCompile Include="ui\address_book\computer_group_tree_ctrl.cc" />
-    <ClCompile Include="ui\address_book\computer_list_ctrl.cc" />
-    <ClCompile Include="ui\address_book\open_address_book_dialog.cc" />
     <ClCompile Include="ui\auth_dialog.cc" />
     <ClCompile Include="ui\base\timer.cc" />
     <ClCompile Include="ui\desktop\settings_dialog.cc" />
@@ -636,6 +830,96 @@
     <ClCompile Include="ui\user_prop_dialog.cc" />
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="address_book\address_book_window.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_dialog.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\address_book_dialog.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_dialog.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild Include="address_book\open_address_book_dialog.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\qt_generated\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
     <None Include="category\category_application.proto" />
     <None Include="category\category_ata.proto" />
     <None Include="category\category_connection.proto" />
@@ -687,6 +971,24 @@
     <None Include="proto\key_exchange.proto" />
     <None Include="proto\mru.proto" />
     <None Include="proto\system_info_session.proto" />
+    <CustomBuild Include="resources\resources.qrc">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath);.\resources\lifebuoy.png;.\resources\about.png;.\resources\folder-stand.png;.\resources\monitor.png;.\resources\monitor-keyboard.png;.\resources\system-monitor.png;.\resources\exit.png;.\resources\computer.png;.\resources\computer-minus.png;.\resources\computer-pencil.png;.\resources\computer-plus.png;.\resources\folder-minus.png;.\resources\folder-pencil.png;.\resources\folder-plus.png;.\resources\document.png;.\resources\open.png;.\resources\disk.png;.\resources\address-book.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\qt_generated\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\qt_generated\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath);.\resources\lifebuoy.png;.\resources\about.png;.\resources\folder-stand.png;.\resources\monitor.png;.\resources\monitor-keyboard.png;.\resources\system-monitor.png;.\resources\exit.png;.\resources\computer.png;.\resources\computer-minus.png;.\resources\computer-pencil.png;.\resources\computer-plus.png;.\resources\folder-minus.png;.\resources\folder-pencil.png;.\resources\folder-plus.png;.\resources\document.png;.\resources\open.png;.\resources\disk.png;.\resources\address-book.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\qt_generated\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\qt_generated\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath);.\resources\lifebuoy.png;.\resources\about.png;.\resources\folder-stand.png;.\resources\monitor.png;.\resources\monitor-keyboard.png;.\resources\system-monitor.png;.\resources\exit.png;.\resources\computer.png;.\resources\computer-minus.png;.\resources\computer-pencil.png;.\resources\computer-plus.png;.\resources\folder-minus.png;.\resources\folder-pencil.png;.\resources\folder-plus.png;.\resources\document.png;.\resources\open.png;.\resources\disk.png;.\resources\address-book.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\qt_generated\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\qt_generated\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath);.\resources\lifebuoy.png;.\resources\about.png;.\resources\folder-stand.png;.\resources\monitor.png;.\resources\monitor-keyboard.png;.\resources\system-monitor.png;.\resources\exit.png;.\resources\computer.png;.\resources\computer-minus.png;.\resources\computer-pencil.png;.\resources\computer-plus.png;.\resources\folder-minus.png;.\resources\folder-pencil.png;.\resources\folder-plus.png;.\resources\document.png;.\resources\open.png;.\resources\disk.png;.\resources\address-book.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\qt_generated\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\qt_generated\qrc_%(Filename).cpp</Command>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="ui\common-controls.manifest" />
@@ -697,9 +999,34 @@
     <ResourceCompile Include="ui\lang\ru-RU.rc" />
     <ResourceCompile Include="ui\resource.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\about.png" />
+    <Image Include="resources\address-book.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Image>
+    <Image Include="resources\computer-minus.png" />
+    <Image Include="resources\computer-pencil.png" />
+    <Image Include="resources\computer-plus.png" />
+    <Image Include="resources\computer.png" />
+    <Image Include="resources\disk.png" />
+    <Image Include="resources\document.png" />
+    <Image Include="resources\exit.png" />
+    <Image Include="resources\folder-minus.png" />
+    <Image Include="resources\folder-pencil.png" />
+    <Image Include="resources\folder-plus.png" />
+    <Image Include="resources\folder-stand.png" />
+    <Image Include="resources\lifebuoy.png" />
+    <Image Include="resources\monitor-keyboard.png" />
+    <Image Include="resources\monitor.png" />
+    <Image Include="resources\open.png" />
+    <Image Include="resources\system-monitor.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6CFEB6F2-0742-40D2-AE4C-1840D087062B}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
+    <Keyword>Qt4VSv1.0</Keyword>
     <RootNamespace>libaspia</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>aspia_core</ProjectName>
@@ -777,9 +1104,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_PRINTSUPPORT_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party\libvpx;$(SolutionDir)third_party\libyuv\include;$(SolutionDir)third_party\zlib-ng;$(SolutionDir)third_party\protobuf\src;$(SolutionDir)third_party\libsodium\src\libsodium\include;$(SolutionDir)third_party\wtl\include;$(SolutionDir)third_party\asio\include;$(SolutionDir)third_party\rapidjson\include;$(SolutionDir)third_party\rapidxml;$(SolutionDir)source;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtHelp;$(QTDIR)\include\QtPrintSupport;$(QTDIR)\include\QtWidgets;.;.\address_book;.\qt_generated\$(ConfigurationName);.\qt_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -792,7 +1119,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5PrintSupportd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -809,9 +1136,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_PRINTSUPPORT_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party\libvpx;$(SolutionDir)third_party\libyuv\include;$(SolutionDir)third_party\zlib-ng;$(SolutionDir)third_party\protobuf\src;$(SolutionDir)third_party\libsodium\src\libsodium\include;$(SolutionDir)third_party\wtl\include;$(SolutionDir)third_party\asio\include;$(SolutionDir)third_party\rapidjson\include;$(SolutionDir)third_party\rapidxml;$(SolutionDir)source;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtHelp;$(QTDIR)\include\QtPrintSupport;$(QTDIR)\include\QtWidgets;.;.\address_book;.\qt_generated\$(ConfigurationName);.\qt_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <CompileAs>CompileAsCpp</CompileAs>
       <ForcedIncludeFiles>global.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -824,7 +1151,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5PrintSupportd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -839,11 +1166,11 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;CORE_IMPLEMENTATION;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_PRINTSUPPORT_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(QTDIR)\include;$(SolutionDir)third_party\libvpx;$(SolutionDir)third_party\libyuv\include;$(SolutionDir)third_party\zlib-ng;$(SolutionDir)third_party\protobuf\src;$(SolutionDir)third_party\libsodium\src\libsodium\include;$(SolutionDir)third_party\wtl\include;$(SolutionDir)third_party\asio\include;$(SolutionDir)third_party\rapidjson\include;$(SolutionDir)third_party\rapidxml;$(SolutionDir)source;.\qt_generated\$(ConfigurationName);.\qt_generated;.\address_book;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -870,8 +1197,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)/lib;$(QTDIR)/plugins/platforms;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5PrintSupport.lib;Qt5AccessibilitySupport.lib;Qt5EventDispatcherSupport.lib;Qt5FontDatabaseSupport.lib;Qt5ThemeSupport.lib;qwindows.lib;qtfreetype.lib;qtharfbuzz.lib;qtlibpng.lib;qtpcre2.lib;imm32.lib;sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;Qt5Help.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
@@ -890,8 +1217,8 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)third_party/libvpx;$(SolutionDir)third_party/libyuv/include;$(SolutionDir)third_party/zlib-ng;$(SolutionDir)third_party/protobuf/src;$(SolutionDir)third_party/libsodium/src/libsodium/include;$(SolutionDir)third_party/wtl/include;$(SolutionDir)third_party/asio/include;$(SolutionDir)third_party/rapidjson/include;$(SolutionDir)third_party/rapidxml;$(SolutionDir)source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_ATL_NO_EXCEPTIONS;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;HOST_IMPLEMENTATION;UI_IMPLEMENTATION;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_PRINTSUPPORT_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)third_party\libvpx;$(SolutionDir)third_party\libyuv\include;$(SolutionDir)third_party\zlib-ng;$(SolutionDir)third_party\protobuf\src;$(SolutionDir)third_party\libsodium\src\libsodium\include;$(SolutionDir)third_party\wtl\include;$(SolutionDir)third_party\asio\include;$(SolutionDir)third_party\rapidjson\include;$(SolutionDir)third_party\rapidxml;$(SolutionDir)source;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtHelp;$(QTDIR)\include\QtPrintSupport;$(QTDIR)\include\QtWidgets;.;.\address_book;.\qt_generated\$(ConfigurationName);.\qt_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -918,7 +1245,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sas.lib;rasapi32.lib;taskschd.lib;mstask.lib;dbghelp.lib;comctl32.lib;shlwapi.lib;userenv.lib;secur32.lib;crypt32.lib;ws2_32.lib;iphlpapi.lib;wtsapi32.lib;winmm.lib;dwmapi.lib;uxtheme.lib;netapi32.lib;setupapi.lib;version.lib;psapi.lib;msi.lib;libvpx.lib;libyuv.lib;zlib-ng.lib;libprotobuf-lite.lib;libsodium.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Help.lib;Qt5PrintSupport.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
@@ -933,4 +1260,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties MocDir=".\qt_generated\$(ConfigurationName)" UicDir=".\qt_generated" RccDir=".\qt_generated" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_Win32="x86" MocOptions="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

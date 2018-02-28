@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            protocol/authorization.h
-// LICENSE:         See top-level directory
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -12,8 +12,8 @@
 
 namespace aspia {
 
-bool IsValidUserName(std::wstring_view username);
-bool IsValidPassword(std::wstring_view password);
+bool IsValidUserName(const std::wstring& username);
+bool IsValidPassword(const std::wstring& password);
 
 std::string CreatePasswordHash(const std::wstring& password);
 bool IsValidPasswordHash(const std::string& password_hash);

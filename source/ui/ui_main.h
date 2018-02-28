@@ -1,18 +1,18 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/ui_main.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #ifndef _ASPIA_UI__UI_MAIN_H
 #define _ASPIA_UI__UI_MAIN_H
 
-#include "ui/ui_export.h"
+#include "export.h"
 
 namespace aspia {
 
-void UI_EXPORT UIMain();
+void CORE_EXPORT UIMain();
 
 } // namespace aspia
 

@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/lang/ru-RU.rc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -213,86 +213,6 @@ BEGIN
     PUSHBUTTON "&Отмена", IDCANCEL, 178, 74, 70, 14
 END
 
-IDD_COMPUTER DIALOGEX 100, 100, 240, 264
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Свойства компьютера"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Имя:", -1, 10, 15, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Адрес:", -1, 10, 35, 77, 10
-    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 100, 31, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Порт:", -1, 10, 55, 77, 10
-    EDITTEXT IDC_SERVER_PORT_EDIT, 100, 51, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-    AUTOCHECKBOX "По умолчанию", IDC_SERVER_DEFAULT_PORT_CHECK, 107, 67, 122, 8
-
-    LTEXT "Имя пользователя:", -1, 10, 85, 77, 10
-    EDITTEXT IDC_USERNAME_EDIT, 100, 82, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Тип сессии:", -1, 10, 106, 77, 10
-    COMBOBOX IDC_SESSION_TYPE_COMBO, 100, 103, 110, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
-    PUSHBUTTON "...", IDC_SETTINGS_BUTTON, 214, 103, 16, 13
-
-    LTEXT "Коментарий:", -1, 10, 125, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 136, 220, 101, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 244, 60, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 171, 244, 60, 14
-END
-
-IDD_COMPUTER_GROUP DIALOGEX 100, 100, 240, 173
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Свойства группы компьютеров"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Имя:", -1, 10, 15, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Коментарий:", -1, 10, 32, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 45, 220, 101, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 153, 60, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 171, 153, 60, 14
-END
-
-IDD_ADDRESS_BOOK DIALOGEX 100, 100, 240, 202
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Свойства адресной книги"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Имя:", -1, 10, 13, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Шифрование:", -1, 10, 35, 77, 10
-    COMBOBOX IDC_ENCRYPTION_TYPE_COMBO, 100, 31, 130, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
-
-    LTEXT "Пароль:", -1, 10, 55, 77, 10
-    EDITTEXT IDC_PASSWORD_EDIT, 100, 53, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    LTEXT "Пароль (повторить):", -1, 10, 77, 77, 10
-    EDITTEXT IDC_PASSWORD_RETRY_EDIT, 100, 75, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    LTEXT "Коментарий:", -1, 10, 97, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 109, 220, 65, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 181, 60, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 171, 181, 60, 14
-END
-
-IDD_OPEN_ADDRESS_BOOK DIALOGEX 100, 100, 181, 59
-STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Открытие адресной книги"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Пароль:", -1, 8, 8, 165, 10
-    EDITTEXT IDC_PASSWORD_EDIT, 8, 20, 165, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    DEFPUSHBUTTON "&OK", IDOK, 48, 39, 60, 14
-    PUSHBUTTON "&Отмена", IDCANCEL, 114, 39, 60, 14
-END
-
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -386,77 +306,6 @@ BEGIN
     END
 END
 
-IDR_ADDRESS_BOOK_MAIN MENU
-BEGIN
-    POPUP "&Файл"
-    BEGIN
-        MENUITEM "Соз&дать\tCtrl+N", ID_NEW
-        MENUITEM "&Открыть...\tCtrl+O", ID_OPEN
-        MENUITEM "&Сохранить\tCtrl+S", ID_SAVE
-        MENUITEM "Сохранить &как...\tCtrl+Alt+S", ID_SAVE_AS
-        MENUITEM "&Закрыть\tCtrl+W", ID_CLOSE
-        MENUITEM SEPARATOR
-        MENUITEM "&Выход\tAlt+F4", ID_EXIT
-    END
-    POPUP "&Правка"
-    BEGIN
-        MENUITEM "Добавить группу компьютеров", ID_ADD_GROUP
-        MENUITEM "Удалить группу компьютеров", ID_DELETE_GROUP
-        MENUITEM "Изменить группу компьютеров", ID_EDIT_GROUP
-        MENUITEM SEPARATOR
-        MENUITEM "Добавить компьютер", ID_ADD_COMPUTER
-        MENUITEM "Удалить компьютер", ID_DELETE_COMPUTER
-        MENUITEM "Изменить компьютер", ID_EDIT_COMPUTER
-    END
-    POPUP "&Тип сессии"
-    BEGIN
-        MENUITEM "Управление &рабочим столом", ID_DESKTOP_MANAGE_SESSION_TB
-        MENUITEM "&Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION_TB
-        MENUITEM "Передача &файлов", ID_FILE_TRANSFER_SESSION_TB
-        MENUITEM "&Информация о системе", ID_SYSTEM_INFO_SESSION_TB
-    END
-    POPUP "&Помощь"
-    BEGIN
-        MENUITEM "Онлайн &справка...\tF1", ID_HELP
-        MENUITEM SEPARATOR
-        MENUITEM "&О программе...", ID_ABOUT
-    END
-END
-
-IDR_GROUP_TREE_ITEM MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "&Изменить", ID_EDIT_GROUP
-        MENUITEM "&Удалить", ID_DELETE_GROUP
-        MENUITEM SEPARATOR
-        MENUITEM "Добавить &компьютер", ID_ADD_COMPUTER
-        MENUITEM "Добавить &группу", ID_ADD_GROUP
-    END
-END
-
-IDR_COMPUTER_LIST MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-    END
-END
-
-IDR_COMPUTER_LIST_ITEM MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Управление рабочим столом", ID_DESKTOP_MANAGE_SESSION
-        MENUITEM "Просмотр рабочего стола", ID_DESKTOP_VIEW_SESSION
-        MENUITEM "Передача файлов", ID_FILE_TRANSFER_SESSION
-        MENUITEM "Информация о системе", ID_SYSTEM_INFO_SESSION
-        MENUITEM SEPARATOR
-        MENUITEM "&Изменить", ID_EDIT_COMPUTER
-        MENUITEM "&Удалить", ID_DELETE_COMPUTER
-    END
-END
-
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -467,7 +316,7 @@ BEGIN
     IDS_SITE_LINK                 "https://aspia.org"
     IDS_HELP_LINK                 "https://aspia.org/help"
 
-    IDS_ABOUT_STRING "Aspia - свободное программное обеспечение, распространяющеся по лицензии Mozilla Public License Version 2.0.\r\n\
+    IDS_ABOUT_STRING "Aspia - свободное программное обеспечение, распространяющеся по лицензии GNU Lesser General Public License 2.1.\r\n\
                       Вы можете получить копию лицензии по адресу:\r\n\
                       https://www.mozilla.org/en-US/MPL/2.0\r\n\r\n\
                       Разработчики:\r\n\
@@ -602,42 +451,6 @@ BEGIN
     IDS_SI_FILTER_HTML                      "Файл HTML (*.html, *.htm)"
     IDS_SI_FILTER_JSON                      "Файл JSON (*.json)"
     IDS_SI_FILTER_XML                       "Файл XML (*.xml)"
-END
-
-// Address Book
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_AB_TITLE                            "Адресная книга Aspia"
-    IDS_AB_COL_NAME                         "Имя"
-    IDS_AB_COL_ADDRESS                      "Адрес"
-    IDS_AB_COL_PORT                         "Порт"
-    IDS_AB_TOOLTIP_NEW                      "Создать новую адресную книгу"
-    IDS_AB_TOOLTIP_OPEN                     "Открыть адресную книгу"
-    IDS_AB_TOOLTIP_SAVE                     "Сохранить адресную книгу"
-    IDS_AB_TOOLTIP_ABOUT                    "О программе"
-    IDS_AB_TOOLTIP_EXIT                     "Выход"
-    IDS_AB_TOOLTIP_ADD_GROUP                "Добавить группу компьютеров"
-    IDS_AB_TOOLTIP_DELETE_GROUP             "Удалить группу компьютеров"
-    IDS_AB_TOOLTIP_EDIT_GROUP               "Редактировать группу компьютеров"
-    IDS_AB_TOOLTIP_ADD_COMPUTER             "Добавить компьютер"
-    IDS_AB_TOOLTIP_DELETE_COMPUTER          "Удалить компьютер"
-    IDS_AB_TOOLTIP_EDIT_COMPUTER            "Редактировать компьютер"
-    IDS_AB_DEFAULT_ADDRESS_BOOK_NAME        "Адресная книга"
-    IDS_AB_ADDRESS_BOOK_CHANGED             "Адресная книга изменена. Сохранить изменения?"
-    IDS_AB_TOO_LONG_NAME_ERROR              "Слишком длинное имя. Максимальная длинна имени 64 символа."
-    IDS_AB_TOO_LONG_COMMENT_ERROR           "Слишком длинный коментарий. Максимальная длинна коментария 2048 символов."
-    IDS_AB_NAME_CANT_BE_EMPTY_ERROR         "Имя не может быть пустым."
-    IDS_AB_ADDRESS_BOOK_FILTER              "Адресная книга Aspia (*.aab)"
-    IDS_AB_UNABLE_TO_OPEN_FILE_ERROR        "Не удалось создать или открыть файл адресной книги."
-    IDS_AB_UNABLE_TO_WRITE_FILE_ERROR       "Не удалось записать файл адресной книги."
-    IDS_AB_UNABLE_TO_READ_FILE_ERROR        "Не удалось прочитать файл адресной книги."
-    IDS_AB_GROUP_DELETE_CONFIRMATION        "Вы действительно хотите удалить группу компьютеров ""%s"" и все дочерние элементы?"
-    IDS_AB_COMPUTER_DELETE_CONFIRMATION     "Вы действительно хотите удалить компьютер ""%s""?"
-    IDS_AB_ENCRYPTION_NONE                  "Без шифрования"
-    IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-битный ключ)"
-    IDS_AB_CORRUPTED_FILE_ERROR             "Файл адресной книги поврежден или имеет неизвестный формат."
-    IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR    "Файл адресной книги зашифрован неподдерживаемым типом шифрования."
-    IDS_AB_UNABLE_TO_DECRYPT_ERROR          "Не удалось расшифровать адресную книгу с указанным паролем."
 END
 
 // Authorization Status

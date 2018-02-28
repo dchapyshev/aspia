@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/file_request_sender_local.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// FILE:            client/file_request_sender_local.cc
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

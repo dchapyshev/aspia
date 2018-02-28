@@ -16,7 +16,6 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
-namespace aspia {
 namespace proto {
 class MRUDefaultTypeInternal {
  public:
@@ -24,7 +23,6 @@ class MRUDefaultTypeInternal {
       _instance;
 } _MRU_default_instance_;
 }  // namespace proto
-}  // namespace aspia
 namespace protobuf_mru_2eproto {
 void InitDefaultsMRUImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -36,11 +34,11 @@ void InitDefaultsMRUImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_computer_2eproto::InitDefaultsComputer();
   {
-    void* ptr = &::aspia::proto::_MRU_default_instance_;
-    new (ptr) ::aspia::proto::MRU();
+    void* ptr = &::proto::_MRU_default_instance_;
+    new (ptr) ::proto::MRU();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::MRU::InitAsDefaultInstance();
+  ::proto::MRU::InitAsDefaultInstance();
 }
 
 void InitDefaultsMRU() {
@@ -49,7 +47,6 @@ void InitDefaultsMRU() {
 }
 
 }  // namespace protobuf_mru_2eproto
-namespace aspia {
 namespace proto {
 
 // ===================================================================
@@ -69,7 +66,7 @@ MRU::MRU()
     ::protobuf_mru_2eproto::InitDefaultsMRU();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.MRU)
+  // @@protoc_insertion_point(constructor:proto.MRU)
 }
 MRU::MRU(const MRU& from)
   : ::google::protobuf::MessageLite(),
@@ -77,7 +74,7 @@ MRU::MRU(const MRU& from)
       computer_(from.computer_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.MRU)
+  // @@protoc_insertion_point(copy_constructor:proto.MRU)
 }
 
 void MRU::SharedCtor() {
@@ -85,7 +82,7 @@ void MRU::SharedCtor() {
 }
 
 MRU::~MRU() {
-  // @@protoc_insertion_point(destructor:aspia.proto.MRU)
+  // @@protoc_insertion_point(destructor:proto.MRU)
   SharedDtor();
 }
 
@@ -111,7 +108,7 @@ MRU* MRU::New(::google::protobuf::Arena* arena) const {
 }
 
 void MRU::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.MRU)
+// @@protoc_insertion_point(message_clear_start:proto.MRU)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -130,13 +127,13 @@ bool MRU::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.MRU)
+  // @@protoc_insertion_point(parse_start:proto.MRU)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .aspia.proto.Computer computer = 1;
+      // repeated .proto.Computer computer = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -159,21 +156,21 @@ bool MRU::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.MRU)
+  // @@protoc_insertion_point(parse_success:proto.MRU)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.MRU)
+  // @@protoc_insertion_point(parse_failure:proto.MRU)
   return false;
 #undef DO_
 }
 
 void MRU::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.MRU)
+  // @@protoc_insertion_point(serialize_start:proto.MRU)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .aspia.proto.Computer computer = 1;
+  // repeated .proto.Computer computer = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->computer_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -182,16 +179,16 @@ void MRU::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.MRU)
+  // @@protoc_insertion_point(serialize_end:proto.MRU)
 }
 
 size_t MRU::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.MRU)
+// @@protoc_insertion_point(message_byte_size_start:proto.MRU)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.Computer computer = 1;
+  // repeated .proto.Computer computer = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->computer_size());
     total_size += 1UL * count;
@@ -215,7 +212,7 @@ void MRU::CheckTypeAndMergeFrom(
 }
 
 void MRU::MergeFrom(const MRU& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.MRU)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.MRU)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -225,7 +222,7 @@ void MRU::MergeFrom(const MRU& from) {
 }
 
 void MRU::CopyFrom(const MRU& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.MRU)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.MRU)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -247,12 +244,11 @@ void MRU::InternalSwap(MRU* other) {
 }
 
 ::std::string MRU::GetTypeName() const {
-  return "aspia.proto.MRU";
+  return "proto.MRU";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

@@ -48,19 +48,16 @@ inline void InitDefaults() {
   InitDefaultsComputer();
 }
 }  // namespace protobuf_computer_2eproto
-namespace aspia {
 namespace proto {
 class Computer;
 class ComputerDefaultTypeInternal;
 extern ComputerDefaultTypeInternal _Computer_default_instance_;
 }  // namespace proto
-}  // namespace aspia
-namespace aspia {
 namespace proto {
 
 // ===================================================================
 
-class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.Computer) */ {
+class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.Computer) */ {
  public:
   Computer();
   virtual ~Computer();
@@ -196,14 +193,37 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // .aspia.proto.desktop.Config desktop_session = 7;
-  bool has_desktop_session() const;
-  void clear_desktop_session();
-  static const int kDesktopSessionFieldNumber = 7;
-  const ::aspia::proto::desktop::Config& desktop_session() const;
-  ::aspia::proto::desktop::Config* release_desktop_session();
-  ::aspia::proto::desktop::Config* mutable_desktop_session();
-  void set_allocated_desktop_session(::aspia::proto::desktop::Config* desktop_session);
+  // string password = 6;
+  void clear_password();
+  static const int kPasswordFieldNumber = 6;
+  const ::std::string& password() const;
+  void set_password(const ::std::string& value);
+  #if LANG_CXX11
+  void set_password(::std::string&& value);
+  #endif
+  void set_password(const char* value);
+  void set_password(const char* value, size_t size);
+  ::std::string* mutable_password();
+  ::std::string* release_password();
+  void set_allocated_password(::std::string* password);
+
+  // .proto.desktop.Config desktop_manage_session = 8;
+  bool has_desktop_manage_session() const;
+  void clear_desktop_manage_session();
+  static const int kDesktopManageSessionFieldNumber = 8;
+  const ::proto::desktop::Config& desktop_manage_session() const;
+  ::proto::desktop::Config* release_desktop_manage_session();
+  ::proto::desktop::Config* mutable_desktop_manage_session();
+  void set_allocated_desktop_manage_session(::proto::desktop::Config* desktop_manage_session);
+
+  // .proto.desktop.Config desktop_view_session = 9;
+  bool has_desktop_view_session() const;
+  void clear_desktop_view_session();
+  static const int kDesktopViewSessionFieldNumber = 9;
+  const ::proto::desktop::Config& desktop_view_session() const;
+  ::proto::desktop::Config* release_desktop_view_session();
+  ::proto::desktop::Config* mutable_desktop_view_session();
+  void set_allocated_desktop_view_session(::proto::desktop::Config* desktop_view_session);
 
   // uint32 port = 4;
   void clear_port();
@@ -211,13 +231,13 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::uint32 port() const;
   void set_port(::google::protobuf::uint32 value);
 
-  // .aspia.proto.auth.SessionType session_type = 6;
+  // .proto.auth.SessionType session_type = 7;
   void clear_session_type();
-  static const int kSessionTypeFieldNumber = 6;
-  ::aspia::proto::auth::SessionType session_type() const;
-  void set_session_type(::aspia::proto::auth::SessionType value);
+  static const int kSessionTypeFieldNumber = 7;
+  ::proto::auth::SessionType session_type() const;
+  void set_session_type(::proto::auth::SessionType value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.Computer)
+  // @@protoc_insertion_point(class_scope:proto.Computer)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -225,7 +245,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::internal::ArenaStringPtr comment_;
   ::google::protobuf::internal::ArenaStringPtr address_;
   ::google::protobuf::internal::ArenaStringPtr username_;
-  ::aspia::proto::desktop::Config* desktop_session_;
+  ::google::protobuf::internal::ArenaStringPtr password_;
+  ::proto::desktop::Config* desktop_manage_session_;
+  ::proto::desktop::Config* desktop_view_session_;
   ::google::protobuf::uint32 port_;
   int session_type_;
   mutable int _cached_size_;
@@ -248,41 +270,41 @@ inline void Computer::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Computer::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_get:proto.Computer.name)
   return name_.GetNoArena();
 }
 inline void Computer::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_set:proto.Computer.name)
 }
 #if LANG_CXX11
 inline void Computer::set_name(::std::string&& value) {
   
   name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_set_rvalue:proto.Computer.name)
 }
 #endif
 inline void Computer::set_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_set_char:proto.Computer.name)
 }
 inline void Computer::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_set_pointer:proto.Computer.name)
 }
 inline ::std::string* Computer::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_mutable:proto.Computer.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Computer::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_release:proto.Computer.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -293,7 +315,7 @@ inline void Computer::set_allocated_name(::std::string* name) {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.name)
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.name)
 }
 
 // string comment = 2;
@@ -301,41 +323,41 @@ inline void Computer::clear_comment() {
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Computer::comment() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_get:proto.Computer.comment)
   return comment_.GetNoArena();
 }
 inline void Computer::set_comment(const ::std::string& value) {
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_set:proto.Computer.comment)
 }
 #if LANG_CXX11
 inline void Computer::set_comment(::std::string&& value) {
   
   comment_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_set_rvalue:proto.Computer.comment)
 }
 #endif
 inline void Computer::set_comment(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_set_char:proto.Computer.comment)
 }
 inline void Computer::set_comment(const char* value, size_t size) {
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_set_pointer:proto.Computer.comment)
 }
 inline ::std::string* Computer::mutable_comment() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_mutable:proto.Computer.comment)
   return comment_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Computer::release_comment() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_release:proto.Computer.comment)
   
   return comment_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -346,7 +368,7 @@ inline void Computer::set_allocated_comment(::std::string* comment) {
     
   }
   comment_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), comment);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.comment)
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.comment)
 }
 
 // string address = 3;
@@ -354,41 +376,41 @@ inline void Computer::clear_address() {
   address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Computer::address() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_get:proto.Computer.address)
   return address_.GetNoArena();
 }
 inline void Computer::set_address(const ::std::string& value) {
   
   address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_set:proto.Computer.address)
 }
 #if LANG_CXX11
 inline void Computer::set_address(::std::string&& value) {
   
   address_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_set_rvalue:proto.Computer.address)
 }
 #endif
 inline void Computer::set_address(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_set_char:proto.Computer.address)
 }
 inline void Computer::set_address(const char* value, size_t size) {
   
   address_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_set_pointer:proto.Computer.address)
 }
 inline ::std::string* Computer::mutable_address() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_mutable:proto.Computer.address)
   return address_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Computer::release_address() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_release:proto.Computer.address)
   
   return address_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -399,7 +421,7 @@ inline void Computer::set_allocated_address(::std::string* address) {
     
   }
   address_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), address);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.address)
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.address)
 }
 
 // uint32 port = 4;
@@ -407,13 +429,13 @@ inline void Computer::clear_port() {
   port_ = 0u;
 }
 inline ::google::protobuf::uint32 Computer::port() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.port)
+  // @@protoc_insertion_point(field_get:proto.Computer.port)
   return port_;
 }
 inline void Computer::set_port(::google::protobuf::uint32 value) {
   
   port_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.port)
+  // @@protoc_insertion_point(field_set:proto.Computer.port)
 }
 
 // string username = 5;
@@ -421,41 +443,41 @@ inline void Computer::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Computer::username() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_get:proto.Computer.username)
   return username_.GetNoArena();
 }
 inline void Computer::set_username(const ::std::string& value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_set:proto.Computer.username)
 }
 #if LANG_CXX11
 inline void Computer::set_username(::std::string&& value) {
   
   username_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_set_rvalue:proto.Computer.username)
 }
 #endif
 inline void Computer::set_username(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_set_char:proto.Computer.username)
 }
 inline void Computer::set_username(const char* value, size_t size) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_set_pointer:proto.Computer.username)
 }
 inline ::std::string* Computer::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_mutable:proto.Computer.username)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Computer::release_username() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_release:proto.Computer.username)
   
   return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -466,65 +488,162 @@ inline void Computer::set_allocated_username(::std::string* username) {
     
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.username)
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.username)
 }
 
-// .aspia.proto.auth.SessionType session_type = 6;
+// string password = 6;
+inline void Computer::clear_password() {
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Computer::password() const {
+  // @@protoc_insertion_point(field_get:proto.Computer.password)
+  return password_.GetNoArena();
+}
+inline void Computer::set_password(const ::std::string& value) {
+  
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.Computer.password)
+}
+#if LANG_CXX11
+inline void Computer::set_password(::std::string&& value) {
+  
+  password_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:proto.Computer.password)
+}
+#endif
+inline void Computer::set_password(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.Computer.password)
+}
+inline void Computer::set_password(const char* value, size_t size) {
+  
+  password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:proto.Computer.password)
+}
+inline ::std::string* Computer::mutable_password() {
+  
+  // @@protoc_insertion_point(field_mutable:proto.Computer.password)
+  return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Computer::release_password() {
+  // @@protoc_insertion_point(field_release:proto.Computer.password)
+  
+  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Computer::set_allocated_password(::std::string* password) {
+  if (password != NULL) {
+    
+  } else {
+    
+  }
+  password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.password)
+}
+
+// .proto.auth.SessionType session_type = 7;
 inline void Computer::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType Computer::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.session_type)
-  return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
+inline ::proto::auth::SessionType Computer::session_type() const {
+  // @@protoc_insertion_point(field_get:proto.Computer.session_type)
+  return static_cast< ::proto::auth::SessionType >(session_type_);
 }
-inline void Computer::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void Computer::set_session_type(::proto::auth::SessionType value) {
   
   session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.Computer.session_type)
+  // @@protoc_insertion_point(field_set:proto.Computer.session_type)
 }
 
-// .aspia.proto.desktop.Config desktop_session = 7;
-inline bool Computer::has_desktop_session() const {
-  return this != internal_default_instance() && desktop_session_ != NULL;
+// .proto.desktop.Config desktop_manage_session = 8;
+inline bool Computer::has_desktop_manage_session() const {
+  return this != internal_default_instance() && desktop_manage_session_ != NULL;
 }
-inline const ::aspia::proto::desktop::Config& Computer::desktop_session() const {
-  const ::aspia::proto::desktop::Config* p = desktop_session_;
-  // @@protoc_insertion_point(field_get:aspia.proto.Computer.desktop_session)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Config*>(
-      &::aspia::proto::desktop::_Config_default_instance_);
+inline const ::proto::desktop::Config& Computer::desktop_manage_session() const {
+  const ::proto::desktop::Config* p = desktop_manage_session_;
+  // @@protoc_insertion_point(field_get:proto.Computer.desktop_manage_session)
+  return p != NULL ? *p : *reinterpret_cast<const ::proto::desktop::Config*>(
+      &::proto::desktop::_Config_default_instance_);
 }
-inline ::aspia::proto::desktop::Config* Computer::release_desktop_session() {
-  // @@protoc_insertion_point(field_release:aspia.proto.Computer.desktop_session)
+inline ::proto::desktop::Config* Computer::release_desktop_manage_session() {
+  // @@protoc_insertion_point(field_release:proto.Computer.desktop_manage_session)
   
-  ::aspia::proto::desktop::Config* temp = desktop_session_;
-  desktop_session_ = NULL;
+  ::proto::desktop::Config* temp = desktop_manage_session_;
+  desktop_manage_session_ = NULL;
   return temp;
 }
-inline ::aspia::proto::desktop::Config* Computer::mutable_desktop_session() {
+inline ::proto::desktop::Config* Computer::mutable_desktop_manage_session() {
   
-  if (desktop_session_ == NULL) {
-    desktop_session_ = new ::aspia::proto::desktop::Config;
+  if (desktop_manage_session_ == NULL) {
+    desktop_manage_session_ = new ::proto::desktop::Config;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.Computer.desktop_session)
-  return desktop_session_;
+  // @@protoc_insertion_point(field_mutable:proto.Computer.desktop_manage_session)
+  return desktop_manage_session_;
 }
-inline void Computer::set_allocated_desktop_session(::aspia::proto::desktop::Config* desktop_session) {
+inline void Computer::set_allocated_desktop_manage_session(::proto::desktop::Config* desktop_manage_session) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete reinterpret_cast< ::google::protobuf::MessageLite*>(desktop_session_);
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(desktop_manage_session_);
   }
-  if (desktop_session) {
+  if (desktop_manage_session) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      desktop_session = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, desktop_session, submessage_arena);
+      desktop_manage_session = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, desktop_manage_session, submessage_arena);
     }
     
   } else {
     
   }
-  desktop_session_ = desktop_session;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.Computer.desktop_session)
+  desktop_manage_session_ = desktop_manage_session;
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.desktop_manage_session)
+}
+
+// .proto.desktop.Config desktop_view_session = 9;
+inline bool Computer::has_desktop_view_session() const {
+  return this != internal_default_instance() && desktop_view_session_ != NULL;
+}
+inline const ::proto::desktop::Config& Computer::desktop_view_session() const {
+  const ::proto::desktop::Config* p = desktop_view_session_;
+  // @@protoc_insertion_point(field_get:proto.Computer.desktop_view_session)
+  return p != NULL ? *p : *reinterpret_cast<const ::proto::desktop::Config*>(
+      &::proto::desktop::_Config_default_instance_);
+}
+inline ::proto::desktop::Config* Computer::release_desktop_view_session() {
+  // @@protoc_insertion_point(field_release:proto.Computer.desktop_view_session)
+  
+  ::proto::desktop::Config* temp = desktop_view_session_;
+  desktop_view_session_ = NULL;
+  return temp;
+}
+inline ::proto::desktop::Config* Computer::mutable_desktop_view_session() {
+  
+  if (desktop_view_session_ == NULL) {
+    desktop_view_session_ = new ::proto::desktop::Config;
+  }
+  // @@protoc_insertion_point(field_mutable:proto.Computer.desktop_view_session)
+  return desktop_view_session_;
+}
+inline void Computer::set_allocated_desktop_view_session(::proto::desktop::Config* desktop_view_session) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(desktop_view_session_);
+  }
+  if (desktop_view_session) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      desktop_view_session = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, desktop_view_session, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  desktop_view_session_ = desktop_view_session;
+  // @@protoc_insertion_point(field_set_allocated:proto.Computer.desktop_view_session)
 }
 
 #ifdef __GNUC__
@@ -534,7 +653,6 @@ inline void Computer::set_allocated_desktop_session(::aspia::proto::desktop::Con
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)
 

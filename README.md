@@ -73,6 +73,6 @@ If you have any questions, you can email me: dmitry@aspia.ru
 
 Licensing
 ---------
-Project code is available under the Mozilla Public License Version 2.0.
+Project code is available under the GNU Lesser General Public License 2.1.
 
 For more information, see LICENSE.md.

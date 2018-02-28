@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            base/files/base_paths.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -13,37 +13,35 @@
 namespace aspia {
 
 // static
-bool BasePaths::GetWindowsDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetWindowsDirectory()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (!::GetWindowsDirectoryW(buffer, _countof(buffer)))
     {
         PLOG(LS_ERROR) << "GetWindowsDirectoryW failed";
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 // static
-bool BasePaths::GetSystemDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetSystemDirectory()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (!::GetSystemDirectoryW(buffer, _countof(buffer)))
     {
         PLOG(LS_ERROR) << "GetSystemDirectoryW failed";
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 // static
-bool BasePaths::GetAppDataDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetAppDataDirectory()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
@@ -52,15 +50,14 @@ bool BasePaths::GetAppDataDirectory(std::experimental::filesystem::path& result)
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 // static
-bool BasePaths::GetUserDesktopDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetUserDesktopDirectory()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
@@ -69,15 +66,14 @@ bool BasePaths::GetUserDesktopDirectory(std::experimental::filesystem::path& res
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 // static
-bool BasePaths::GetUserHomeDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetUserHomeDirectory()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
@@ -86,38 +82,34 @@ bool BasePaths::GetUserHomeDirectory(std::experimental::filesystem::path& result
     if (FAILED(hr))
     {
         LOG(LS_ERROR) << "SHGetFolderPathW failed: " << SystemErrorCodeToString(hr);
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 // static
-bool BasePaths::GetCurrentExecutableDirectory(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetCurrentExecutableDirectory()
 {
-    std::experimental::filesystem::path exe_path;
+    auto exe_path = GetCurrentExecutableFile();
+    if (!exe_path.has_value())
+        return {};
 
-    if (!GetCurrentExecutableFile(exe_path))
-        return false;
-
-    result = exe_path.parent_path();
-    return true;
+    return exe_path->parent_path();
 }
 
 // static
-bool BasePaths::GetCurrentExecutableFile(std::experimental::filesystem::path& result)
+std::optional<std::experimental::filesystem::path> BasePaths::GetCurrentExecutableFile()
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
     if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
     {
         PLOG(LS_ERROR) << "GetModuleFileNameW failed";
-        return false;
+        return {};
     }
 
-    result.assign(buffer);
-    return true;
+    return buffer;
 }
 
 } // namespace aspia

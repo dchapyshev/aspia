@@ -47,19 +47,16 @@ inline void InitDefaults() {
   InitDefaultsMRU();
 }
 }  // namespace protobuf_mru_2eproto
-namespace aspia {
 namespace proto {
 class MRU;
 class MRUDefaultTypeInternal;
 extern MRUDefaultTypeInternal _MRU_default_instance_;
 }  // namespace proto
-}  // namespace aspia
-namespace aspia {
 namespace proto {
 
 // ===================================================================
 
-class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.MRU) */ {
+class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:proto.MRU) */ {
  public:
   MRU();
   virtual ~MRU();
@@ -139,23 +136,23 @@ class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(c
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.Computer computer = 1;
+  // repeated .proto.Computer computer = 1;
   int computer_size() const;
   void clear_computer();
   static const int kComputerFieldNumber = 1;
-  const ::aspia::proto::Computer& computer(int index) const;
-  ::aspia::proto::Computer* mutable_computer(int index);
-  ::aspia::proto::Computer* add_computer();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
+  const ::proto::Computer& computer(int index) const;
+  ::proto::Computer* mutable_computer(int index);
+  ::proto::Computer* add_computer();
+  ::google::protobuf::RepeatedPtrField< ::proto::Computer >*
       mutable_computer();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
+  const ::google::protobuf::RepeatedPtrField< ::proto::Computer >&
       computer() const;
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.MRU)
+  // @@protoc_insertion_point(class_scope:proto.MRU)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer > computer_;
+  ::google::protobuf::RepeatedPtrField< ::proto::Computer > computer_;
   mutable int _cached_size_;
   friend struct ::protobuf_mru_2eproto::TableStruct;
   friend void ::protobuf_mru_2eproto::InitDefaultsMRUImpl();
@@ -171,30 +168,30 @@ class MRU : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(c
 #endif  // __GNUC__
 // MRU
 
-// repeated .aspia.proto.Computer computer = 1;
+// repeated .proto.Computer computer = 1;
 inline int MRU::computer_size() const {
   return computer_.size();
 }
-inline const ::aspia::proto::Computer& MRU::computer(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.MRU.computer)
+inline const ::proto::Computer& MRU::computer(int index) const {
+  // @@protoc_insertion_point(field_get:proto.MRU.computer)
   return computer_.Get(index);
 }
-inline ::aspia::proto::Computer* MRU::mutable_computer(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.MRU.computer)
+inline ::proto::Computer* MRU::mutable_computer(int index) {
+  // @@protoc_insertion_point(field_mutable:proto.MRU.computer)
   return computer_.Mutable(index);
 }
-inline ::aspia::proto::Computer* MRU::add_computer() {
-  // @@protoc_insertion_point(field_add:aspia.proto.MRU.computer)
+inline ::proto::Computer* MRU::add_computer() {
+  // @@protoc_insertion_point(field_add:proto.MRU.computer)
   return computer_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
+inline ::google::protobuf::RepeatedPtrField< ::proto::Computer >*
 MRU::mutable_computer() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.MRU.computer)
+  // @@protoc_insertion_point(field_mutable_list:proto.MRU.computer)
   return &computer_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
+inline const ::google::protobuf::RepeatedPtrField< ::proto::Computer >&
 MRU::computer() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.MRU.computer)
+  // @@protoc_insertion_point(field_list:proto.MRU.computer)
   return computer_;
 }
 
@@ -205,7 +202,6 @@ MRU::computer() const {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)
 

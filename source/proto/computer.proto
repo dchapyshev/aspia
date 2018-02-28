@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            proto/computer.proto
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -12,15 +12,17 @@ option optimize_for = LITE_RUNTIME;
 import "auth_session.proto";
 import "desktop_session.proto";
 
-package aspia.proto;
+package proto;
 
 message Computer
 {
-    string name                    = 1;
-    string comment                 = 2;
-    string address                 = 3;
-    uint32 port                    = 4;
-    string username                = 5;
-    auth.SessionType session_type  = 6;
-    desktop.Config desktop_session = 7;
+    string name                           = 1;
+    string comment                        = 2;
+    string address                        = 3;
+    uint32 port                           = 4;
+    string username                       = 5;
+    string password                       = 6;
+    auth.SessionType session_type         = 7;
+    desktop.Config desktop_manage_session = 8;
+    desktop.Config desktop_view_session   = 9;
 }

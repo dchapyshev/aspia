@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            protocol/file_depacketizer.cc
-// LICENSE:         See top-level directory
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            base/files/base_paths.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -9,6 +9,7 @@
 #define _ASPIA_BASE__FILES__BASE_PATHS_H
 
 #include <experimental/filesystem>
+#include <optional>
 
 #include "base/macros.h"
 
@@ -18,22 +19,22 @@ class BasePaths
 {
 public:
     // Windows directory, usually "c:\windows"
-    static bool GetWindowsDirectory(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetWindowsDirectory();
 
     // Usually c:\windows\system32"
-    static bool GetSystemDirectory(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetSystemDirectory();
 
     // Application Data directory under the user profile.
-    static bool GetAppDataDirectory(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetAppDataDirectory();
 
     // The current user's Desktop.
-    static bool GetUserDesktopDirectory(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetUserDesktopDirectory();
 
     // The current user's Home.
-    static bool GetUserHomeDirectory(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetUserHomeDirectory();
 
-    static bool GetCurrentExecutableDirectory(std::experimental::filesystem::path& result);
-    static bool GetCurrentExecutableFile(std::experimental::filesystem::path& result);
+    static std::optional<std::experimental::filesystem::path> GetCurrentExecutableDirectory();
+    static std::optional<std::experimental::filesystem::path> GetCurrentExecutableFile();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(BasePaths);

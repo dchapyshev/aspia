@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/users_storage_registry.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -160,7 +160,7 @@ bool UsersStorageRegistry::ModifyUser(const User& user)
 
 bool UsersStorageRegistry::RemoveUser(const std::wstring& name)
 {
-    LONG status = RegDeleteKeyW(HKEY_LOCAL_MACHINE, GetUserKeyPath(name).c_str());
+    LONG status = RegDeleteTreeW(HKEY_LOCAL_MACHINE, GetUserKeyPath(name).c_str());
     if (status != ERROR_SUCCESS)
     {
         LOG(LS_WARNING) << "Unabel to delete user: " << SystemErrorCodeToString(status);

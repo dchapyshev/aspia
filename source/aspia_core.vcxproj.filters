@@ -64,9 +64,6 @@
     <Filter Include="ui">
       <UniqueIdentifier>{14d053ea-1b7f-45f1-82a0-a7287713b378}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui\address_book">
-      <UniqueIdentifier>{82068af0-b904-43bb-bf81-4565ae42231b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ui\base">
       <UniqueIdentifier>{83b40ea1-3357-469e-9bb2-cef7a127245e}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,17 @@
     </Filter>
     <Filter Include="ui\system_info">
       <UniqueIdentifier>{32e1f0e8-2685-4dcd-91cf-6f08970490e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="address_book">
+      <UniqueIdentifier>{2d170f68-ac32-49f6-be71-86ea515ef3f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{ccda44b0-8606-47b7-8e28-983c488a93eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qt_generated">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <ParseFiles>true</ParseFiles>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -936,33 +944,6 @@
     <ClInclude Include="ui\users_dialog.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\address_book\address_book_dialog.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\address_book_secure_util.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\address_book_toolbar.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\address_book_window.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\computer_dialog.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\computer_group_dialog.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\computer_group_tree_ctrl.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\computer_list_ctrl.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\open_address_book_dialog.h">
-      <Filter>ui\address_book</Filter>
-    </ClInclude>
     <ClInclude Include="ui\base\splitter.h">
       <Filter>ui\base</Filter>
     </ClInclude>
@@ -1035,17 +1016,8 @@
     <ClInclude Include="ui\system_info\system_info_window.h">
       <Filter>ui\system_info</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_export.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="host\host_export.h">
-      <Filter>host</Filter>
-    </ClInclude>
     <ClInclude Include="host\host_service_main.h">
       <Filter>host</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\address_book\address_book_main.h">
-      <Filter>ui\address_book</Filter>
     </ClInclude>
     <ClInclude Include="ui\system_info\system_info_main.h">
       <Filter>ui\system_info</Filter>
@@ -1055,6 +1027,40 @@
     </ClInclude>
     <ClInclude Include="build_config.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="address_book\address_book_main.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_generated\ui_address_book_window.h">
+      <Filter>qt_generated</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_generated\ui_computer_group_dialog.h">
+      <Filter>qt_generated</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_generated\ui_address_book_dialog.h">
+      <Filter>qt_generated</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_generated\ui_computer_dialog.h">
+      <Filter>qt_generated</Filter>
+    </ClInclude>
+    <ClInclude Include="qt_generated\ui_open_address_book_dialog.h">
+      <Filter>qt_generated</Filter>
+    </ClInclude>
+    <ClInclude Include="export.h" />
+    <ClInclude Include="address_book\computer.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="address_book\computer_group.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="address_book\address_book.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="address_book\computer_group_mime_data.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
+    <ClInclude Include="address_book\computer_group_drag.h">
+      <Filter>address_book</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base\byte_order.cc">
@@ -1816,33 +1822,6 @@
     <ClCompile Include="ui\users_dialog.cc">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="ui\address_book\address_book_dialog.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\address_book_secure_util.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\address_book_toolbar.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\address_book_window.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\computer_dialog.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\computer_group_dialog.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\computer_group_tree_ctrl.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\computer_list_ctrl.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\address_book\open_address_book_dialog.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
     <ClCompile Include="ui\base\timer.cc">
       <Filter>ui\base</Filter>
     </ClCompile>
@@ -1912,14 +1891,90 @@
     <ClCompile Include="host\host_service_main.cc">
       <Filter>host</Filter>
     </ClCompile>
-    <ClCompile Include="ui\address_book\address_book_main.cc">
-      <Filter>ui\address_book</Filter>
-    </ClCompile>
     <ClCompile Include="ui\system_info\system_info_main.cc">
       <Filter>ui\system_info</Filter>
     </ClCompile>
     <ClCompile Include="host\host_switches.cc">
       <Filter>host</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\address_book_main.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\address_book_window.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_address_book_window.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_address_book_window.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\qrc_resources.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="build_config.cc" />
+    <ClCompile Include="qt_generated\Debug\moc_computer_group_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_group_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer_group_dialog.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_address_book_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_address_book_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\address_book_dialog.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer_dialog.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_open_address_book_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_open_address_book_dialog.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\open_address_book_dialog.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer_group.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\address_book.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_group_tree.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_group_tree.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer_group_tree.cc">
+      <Filter>address_book</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Debug\moc_computer_tree.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="qt_generated\Release\moc_computer_tree.cpp">
+      <Filter>qt_generated</Filter>
+    </ClCompile>
+    <ClCompile Include="address_book\computer_tree.cc">
+      <Filter>address_book</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2095,5 +2150,102 @@
     <ResourceCompile Include="ui\lang\ru-RU.rc">
       <Filter>ui\lang</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="address_book\address_book_window.ui">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\address_book_window.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="resources\resources.qrc">
+      <Filter>resources</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_dialog.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_dialog.ui">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\address_book_dialog.ui">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\address_book_dialog.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_dialog.ui">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_dialog.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\open_address_book_dialog.ui">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\open_address_book_dialog.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_group_tree.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+    <CustomBuild Include="address_book\computer_tree.h">
+      <Filter>address_book</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\address-book.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\about.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\computer.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\computer-minus.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\computer-pencil.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\computer-plus.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\disk.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\document.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\exit.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\folder-minus.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\folder-pencil.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\folder-plus.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\folder-stand.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\lifebuoy.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\monitor.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\monitor-keyboard.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\open.png">
+      <Filter>resources</Filter>
+    </Image>
+    <Image Include="resources\system-monitor.png">
+      <Filter>resources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

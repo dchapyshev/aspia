@@ -1,18 +1,18 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/host_service_main.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
 #ifndef _ASPIA_HOST__HOST_SERVICE_MAIN_H
 #define _ASPIA_HOST__HOST_SERVICE_MAIN_H
 
-#include "host/host_export.h"
+#include "export.h"
 
 namespace aspia {
 
-void HOST_EXPORT HostServiceMain();
+void CORE_EXPORT HostServiceMain();
 
 } // namespace aspia
 

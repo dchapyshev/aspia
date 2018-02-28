@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/mru.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -19,31 +19,31 @@ namespace {
 constexpr size_t kMaxMRUFileSize = 1024 * 1024; // 1 MB
 constexpr size_t kMaxMRUItemCount = 30;
 
-bool GetMRUFilePath(std::experimental::filesystem::path& path)
+std::optional<std::experimental::filesystem::path> GetMRUFilePath()
 {
-    if (!BasePaths::GetAppDataDirectory(path))
-        return false;
+    auto path = BasePaths::GetAppDataDirectory();
+    if (!path.has_value())
+        return {};
 
-    path.append(L"Aspia");
-    path.append(L"mru.dat");
+    path->append(L"Aspia");
+    path->append(L"mru.dat");
 
-    return true;
+    return path;
 }
 
-bool ReadMRUFile(std::string& mru)
+std::optional<std::string> ReadMRUFile()
 {
-    std::experimental::filesystem::path file_path;
-
-    if (!GetMRUFilePath(file_path))
-        return false;
+    auto file_path = GetMRUFilePath();
+    if (!file_path.has_value())
+        return {};
 
     std::ifstream file_stream;
 
-    file_stream.open(file_path, std::ifstream::binary);
+    file_stream.open(file_path.value(), std::ifstream::binary);
     if (!file_stream.is_open())
     {
-        DLOG(LS_WARNING) << "File not found: " << file_path;
-        return false;
+        DLOG(LS_WARNING) << "File not found: " << *file_path;
+        return {};
     }
 
     file_stream.seekg(0, file_stream.end);
@@ -51,14 +51,15 @@ bool ReadMRUFile(std::string& mru)
     file_stream.seekg(0);
 
     if (!size)
-        return false;
+        return {};
 
     if (size > kMaxMRUFileSize)
     {
         LOG(LS_ERROR) << "MRU is too large (>1MB)";
-        return false;
+        return {};
     }
 
+    std::string mru;
     mru.resize(static_cast<size_t>(size));
 
     file_stream.read(mru.data(), size);
@@ -66,27 +67,25 @@ bool ReadMRUFile(std::string& mru)
     if (file_stream.fail())
     {
         LOG(LS_ERROR) << "Unable to read MRU";
-        return false;
+        return {};
     }
 
     file_stream.close();
-
-    return true;
+    return mru;
 }
 
 bool WriteMRUFile(const std::string& mru)
 {
-    std::experimental::filesystem::path file_path;
-
-    if (!GetMRUFilePath(file_path))
+    auto file_path = GetMRUFilePath();
+    if (!file_path.has_value())
         return false;
 
     std::ofstream file_stream;
 
-    file_stream.open(file_path, std::ofstream::binary);
+    file_stream.open(file_path.value(), std::ofstream::binary);
     if (!file_stream.is_open())
     {
-        LOG(LS_ERROR) << "Unable to create (or open) file: " << file_path;
+        LOG(LS_ERROR) << "Unable to create (or open) file: " << *file_path;
         return false;
     }
 
@@ -98,7 +97,6 @@ bool WriteMRUFile(const std::string& mru)
     }
 
     file_stream.close();
-
     return true;
 }
 
@@ -106,12 +104,11 @@ bool WriteMRUFile(const std::string& mru)
 
 MRU::MRU()
 {
-    std::string string;
-
-    if (!ReadMRUFile(string))
+    std::optional<std::string> string = ReadMRUFile();
+    if (!string.has_value())
         return;
 
-    if (!mru_.ParseFromString(string))
+    if (!mru_.ParseFromString(string.value()))
     {
         LOG(LS_ERROR) << "Unable to parse MRU file";
         return;
@@ -137,16 +134,26 @@ proto::Computer MRU::GetDefaultConfig()
     computer.set_port(kDefaultHostTcpPort);
     computer.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 
-    proto::desktop::Config* desktop_session_config = computer.mutable_desktop_session();
+    proto::desktop::Config* desktop_manage_session = computer.mutable_desktop_manage_session();
 
-    desktop_session_config->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
+    desktop_manage_session->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
                                       proto::desktop::Config::ENABLE_CURSOR_SHAPE);
-    desktop_session_config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    desktop_session_config->set_update_interval(30);
-    desktop_session_config->set_compress_ratio(6);
+    desktop_manage_session->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    desktop_manage_session->set_update_interval(30);
+    desktop_manage_session->set_compress_ratio(6);
 
     ConvertToVideoPixelFormat(PixelFormat::RGB565(),
-                              desktop_session_config->mutable_pixel_format());
+                              desktop_manage_session->mutable_pixel_format());
+
+    proto::desktop::Config* desktop_view_session = computer.mutable_desktop_view_session();
+
+    desktop_view_session->set_flags(0);
+    desktop_view_session->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
+    desktop_view_session->set_update_interval(30);
+    desktop_view_session->set_compress_ratio(6);
+
+    ConvertToVideoPixelFormat(PixelFormat::RGB565(),
+                              desktop_view_session->mutable_pixel_format());
 
     return computer;
 }

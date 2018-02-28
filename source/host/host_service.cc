@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/host_service.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -83,12 +83,11 @@ uint32_t HostService::GetStatus()
 // static
 bool HostService::Install()
 {
-    std::experimental::filesystem::path program_path;
-
-    if (!BasePaths::GetCurrentExecutableFile(program_path))
+    auto program_path = BasePaths::GetCurrentExecutableFile();
+    if (!program_path.has_value())
         return false;
 
-    CommandLine command_line(program_path);
+    CommandLine command_line(program_path.value());
 
     std::unique_ptr<ServiceManager> manager =
         ServiceManager::Create(command_line,

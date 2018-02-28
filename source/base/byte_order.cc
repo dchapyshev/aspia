@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            base/byte_order.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/lang/nl-NL.rc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // TRANSLATOR:      Mark Jansen
 //
 
@@ -213,86 +213,6 @@ BEGIN
     PUSHBUTTON "&Cancel", IDCANCEL, 178, 74, 70, 14
 END
 
-IDD_COMPUTER DIALOGEX 100, 100, 240, 264
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Computer Properties"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Name:", -1, 10, 15, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Address:", -1, 10, 35, 77, 10
-    EDITTEXT IDC_SERVER_ADDRESS_EDIT, 100, 31, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Port:", -1, 10, 55, 77, 10
-    EDITTEXT IDC_SERVER_PORT_EDIT, 100, 51, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-    AUTOCHECKBOX "Use default", IDC_SERVER_DEFAULT_PORT_CHECK, 107, 67, 122, 8
-
-    LTEXT "User Name:", -1, 10, 85, 77, 10
-    EDITTEXT IDC_USERNAME_EDIT, 100, 82, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Session Type:", -1, 10, 106, 77, 10
-    COMBOBOX IDC_SESSION_TYPE_COMBO, 100, 103, 110, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
-    PUSHBUTTON "...", IDC_SETTINGS_BUTTON, 214, 103, 16, 13
-
-    LTEXT "Comment:", -1, 10, 125, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 136, 220, 101, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 244, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 171, 244, 60, 14
-END
-
-IDD_COMPUTER_GROUP DIALOGEX 100, 100, 240, 173
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Computer Group Properties"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Name:", -1, 10, 15, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Comment:", -1, 10, 32, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 45, 220, 101, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 153, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 171, 153, 60, 14
-END
-
-IDD_ADDRESS_BOOK DIALOGEX 100, 100, 240, 202
-STYLE DS_SHELLFONT | WS_BORDER | WS_THICKFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Address Book Properties"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Name:", -1, 10, 13, 77, 10
-    EDITTEXT IDC_NAME_EDIT, 100, 11, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP
-
-    LTEXT "Encryption:", -1, 10, 35, 77, 10
-    COMBOBOX IDC_ENCRYPTION_TYPE_COMBO, 100, 31, 130, 150, CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL
-
-    LTEXT "Password:", -1, 10, 55, 77, 10
-    EDITTEXT IDC_PASSWORD_EDIT, 100, 53, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    LTEXT "Password (repeat):", -1, 10, 77, 77, 10
-    EDITTEXT IDC_PASSWORD_RETRY_EDIT, 100, 75, 130, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    LTEXT "Comment:", -1, 10, 97, 77, 10
-    EDITTEXT IDC_COMMENT_EDIT, 10, 109, 220, 65, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_MULTILINE
-
-    PUSHBUTTON "&OK", IDOK, 106, 181, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 171, 181, 60, 14
-END
-
-IDD_OPEN_ADDRESS_BOOK DIALOGEX 100, 100, 181, 59
-STYLE DS_SHELLFONT | WS_BORDER | DS_MODALFRAME | WS_SYSMENU | DS_MODALFRAME | DS_CENTER
-CAPTION "Open Address Book"
-FONT 8, "MS Shell Dlg"
-BEGIN
-    LTEXT "Password:", -1, 8, 8, 165, 10
-    EDITTEXT IDC_PASSWORD_EDIT, 8, 20, 165, 12, WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | ES_PASSWORD
-
-    DEFPUSHBUTTON "&OK", IDOK, 48, 39, 60, 14
-    PUSHBUTTON "&Cancel", IDCANCEL, 114, 39, 60, 14
-END
-
 IDR_SHORTCUTS MENU
 BEGIN
     POPUP "popup"
@@ -386,77 +306,6 @@ BEGIN
     END
 END
 
-IDR_ADDRESS_BOOK_MAIN MENU
-BEGIN
-    POPUP "&File"
-    BEGIN
-        MENUITEM "&New\tCtrl+N", ID_NEW
-        MENUITEM "&Open...\tCtrl+O", ID_OPEN
-        MENUITEM "&Save\tCtrl+S", ID_SAVE
-        MENUITEM "Save &As...\tCtrl+Alt+S", ID_SAVE_AS
-        MENUITEM "&Close\tCtrl+W", ID_CLOSE
-        MENUITEM SEPARATOR
-        MENUITEM "&Exit\tAlt+F4", ID_EXIT
-    END
-    POPUP "&Edit"
-    BEGIN
-        MENUITEM "Add Computer Group", ID_ADD_GROUP
-        MENUITEM "Delete Computer Group", ID_DELETE_GROUP
-        MENUITEM "Edit Computer Group", ID_EDIT_GROUP
-        MENUITEM SEPARATOR
-        MENUITEM "Add Computer", ID_ADD_COMPUTER
-        MENUITEM "Delete Computer", ID_DELETE_COMPUTER
-        MENUITEM "Edit Computer", ID_EDIT_COMPUTER
-    END
-    POPUP "&Session Type"
-    BEGIN
-        MENUITEM "Desktop &Manage", ID_DESKTOP_MANAGE_SESSION_TB
-        MENUITEM "Desktop &View", ID_DESKTOP_VIEW_SESSION_TB
-        MENUITEM "&File Transfer", ID_FILE_TRANSFER_SESSION_TB
-        MENUITEM "&System Information", ID_SYSTEM_INFO_SESSION_TB
-    END
-    POPUP "&Help"
-    BEGIN
-        MENUITEM "&Online Help...\tF1", ID_HELP
-        MENUITEM SEPARATOR
-        MENUITEM "&About...", ID_ABOUT
-    END
-END
-
-IDR_GROUP_TREE_ITEM MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "&Edit", ID_EDIT_GROUP
-        MENUITEM "&Delete", ID_DELETE_GROUP
-        MENUITEM SEPARATOR
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-        MENUITEM "Add &Group", ID_ADD_GROUP
-    END
-END
-
-IDR_COMPUTER_LIST MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Add &Computer", ID_ADD_COMPUTER
-    END
-END
-
-IDR_COMPUTER_LIST_ITEM MENU
-BEGIN
-    POPUP "popup"
-    BEGIN
-        MENUITEM "Desktop Manage", ID_DESKTOP_MANAGE_SESSION
-        MENUITEM "Desktop View", ID_DESKTOP_VIEW_SESSION
-        MENUITEM "File Transfer", ID_FILE_TRANSFER_SESSION
-        MENUITEM "System Information", ID_SYSTEM_INFO_SESSION
-        MENUITEM SEPARATOR
-        MENUITEM "&Edit", ID_EDIT_COMPUTER
-        MENUITEM "&Delete", ID_DELETE_COMPUTER
-    END
-END
-
 // General
 STRINGTABLE DISCARDABLE
 BEGIN
@@ -467,7 +316,7 @@ BEGIN
     IDS_SITE_LINK                 "https://aspia.org"
     IDS_HELP_LINK                 "https://aspia.org/help"
 
-    IDS_ABOUT_STRING "Aspia is vrije software, gereleased met de Mozilla Public License Version 2.0.\r\n\
+    IDS_ABOUT_STRING "Aspia is vrije software, gereleased met de GNU Lesser General Public License 2.1.\r\n\
                       Hier kunt u een kopie van de bekijken:\r\n\
                       https://www.mozilla.org/en-US/MPL/2.0\r\n\r\n\
                       Ontwikkelaars:\r\n\
@@ -602,42 +451,6 @@ BEGIN
     IDS_SI_FILTER_HTML                      "HTML File (*.html, *.htm)"
     IDS_SI_FILTER_JSON                      "JSON File (*.json)"
     IDS_SI_FILTER_XML                       "XML File (*.xml)"
-END
-
-// Address Book
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_AB_TITLE                            "Aspia Address Book"
-    IDS_AB_COL_NAME                         "Name"
-    IDS_AB_COL_ADDRESS                      "Address"
-    IDS_AB_COL_PORT                         "Port"
-    IDS_AB_TOOLTIP_NEW                      "Create new address book"
-    IDS_AB_TOOLTIP_OPEN                     "Open address book"
-    IDS_AB_TOOLTIP_SAVE                     "Save address book"
-    IDS_AB_TOOLTIP_ABOUT                    "About"
-    IDS_AB_TOOLTIP_EXIT                     "Exit"
-    IDS_AB_TOOLTIP_ADD_GROUP                "Add computer group"
-    IDS_AB_TOOLTIP_DELETE_GROUP             "Delete computer group"
-    IDS_AB_TOOLTIP_EDIT_GROUP               "Edit computer group"
-    IDS_AB_TOOLTIP_ADD_COMPUTER             "Add computer"
-    IDS_AB_TOOLTIP_DELETE_COMPUTER          "Delete computer"
-    IDS_AB_TOOLTIP_EDIT_COMPUTER            "Edit computer"
-    IDS_AB_DEFAULT_ADDRESS_BOOK_NAME        "Address Book"
-    IDS_AB_ADDRESS_BOOK_CHANGED             "Address book changed. Save changes?"
-    IDS_AB_TOO_LONG_NAME_ERROR              "Too long name. The maximum length of the name is 64 characters."
-    IDS_AB_TOO_LONG_COMMENT_ERROR           "Too long comment. The maximum length of the comment is 2048 characters."
-    IDS_AB_NAME_CANT_BE_EMPTY_ERROR         "Name can not be empty."
-    IDS_AB_ADDRESS_BOOK_FILTER              "Aspia Address Book (*.aab)"
-    IDS_AB_UNABLE_TO_OPEN_FILE_ERROR        "Unable to create or open address book file."
-    IDS_AB_UNABLE_TO_WRITE_FILE_ERROR       "Unable to write address book file."
-    IDS_AB_UNABLE_TO_READ_FILE_ERROR        "Unable to read address book file."
-    IDS_AB_GROUP_DELETE_CONFIRMATION        "Are you sure you want to delete computer group ""%s"" and all child items?"
-    IDS_AB_COMPUTER_DELETE_CONFIRMATION     "Are you sure you want to delete computer ""%s""?"
-    IDS_AB_ENCRYPTION_NONE                  "Without Encryption"
-    IDS_AB_ENCRYPTION_XCHACHA20_POLY1305    "XChaCha20 + Poly1305 (256-bit key)"
-    IDS_AB_CORRUPTED_FILE_ERROR             "The address book file is corrupted or has an unknown format."
-    IDS_AB_UNKNOWN_ENCRYPTION_TYPE_ERROR    "The address book file is encrypted with an unsupported encryption type."
-    IDS_AB_UNABLE_TO_DECRYPT_ERROR          "Unable to decrypt the address book with the specified password."
 END
 
 // Authorization Status

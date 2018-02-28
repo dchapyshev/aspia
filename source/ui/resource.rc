@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/resource.rc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -13,7 +13,6 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(65001)
 
 IDI_MAIN                    ICON "resource/main.ico"
-IDI_ADDRESS_BOOK            ICON "resource/address-book.ico"
 
 IDI_ABOUT                   ICON "resource/about.ico"
 IDI_APPLICATIONS            ICON "resource/applications.ico"
@@ -26,22 +25,15 @@ IDI_CHIP                    ICON "resource/chip.ico"
 IDI_CLIPBOARD_PASTE_IMAGE   ICON "resource/clipboard-paste-image.ico"
 IDI_CLOCK                   ICON "resource/clock.ico"
 IDI_COMPUTER                ICON "resource/computer.ico"
-IDI_COMPUTER_MINUS          ICON "resource/computer-minus.ico"
-IDI_COMPUTER_PENCIL         ICON "resource/computer-pencil.ico"
-IDI_COMPUTER_PLUS           ICON "resource/computer-plus.ico"
 IDI_DELETE                  ICON "resource/delete.ico"
 IDI_DISK                    ICON "resource/disk.ico"
-IDI_DOCUMENT                ICON "resource/document.ico"
 IDI_DRIVE                   ICON "resource/drive.ico"
 IDI_DRIVE_DISK              ICON "resource/drive-disk.ico"
 IDI_EXIT                    ICON "resource/exit.ico"
 IDI_FOLDER                  ICON "resource/folder.ico"
 IDI_FOLDER_ADD              ICON "resource/folder_add.ico"
 IDI_FOLDER_UP               ICON "resource/folder_up.ico"
-IDI_FOLDER_MINUS            ICON "resource/folder-minus.ico"
 IDI_FOLDER_NETWORK          ICON "resource/folder-network.ico"
-IDI_FOLDER_PENCIL           ICON "resource/folder-pencil.ico"
-IDI_FOLDER_STAND            ICON "resource/folder-stand.ico"
 IDI_FULLSCREEN              ICON "resource/fullscreen.ico"
 IDI_GEAR                    ICON "resource/gear.ico"
 IDI_HARDWARE                ICON "resource/hardware.ico"
@@ -52,12 +44,10 @@ IDI_LIST                    ICON "resource/list.ico"
 IDI_MEMORY                  ICON "resource/memory.ico"
 IDI_MINUS                   ICON "resource/minus.ico"
 IDI_MONITOR                 ICON "resource/monitor.ico"
-IDI_MONITOR_WITH_KEYBOARD   ICON "resource/monitor-with-keyboard.ico"
 IDI_MOTHERBOARD             ICON "resource/motherboard.ico"
 IDI_MOUSE                   ICON "resource/mouse.ico"
 IDI_NETWORK                 ICON "resource/network.ico"
 IDI_NETWORK_ADAPTER         ICON "resource/network-adapter.ico"
-IDI_OPEN                    ICON "resource/open.ico"
 IDI_OS                      ICON "resource/os.ico"
 IDI_PCI                     ICON "resource/pci.ico"
 IDI_PENCIL                  ICON "resource/pencil.ico"
@@ -101,14 +91,4 @@ END
 IDC_SYSTEM_INFO_ACCELERATORS ACCELERATORS
 BEGIN
     VK_F5, ID_REFRESH, VIRTKEY         // F5
-END
-
-IDC_ADDRESS_BOOK_ACCELERATORS ACCELERATORS
-BEGIN
-    VK_F1, ID_HELP, VIRTKEY                  // F1
-    "N",   ID_NEW, CONTROL, VIRTKEY          // Ctrl+N
-    "O",   ID_OPEN, CONTROL, VIRTKEY         // Ctrl+O
-    "S",   ID_SAVE, CONTROL, VIRTKEY         // Ctrl+S
-    "S",   ID_SAVE_AS, CONTROL, ALT, VIRTKEY // Ctrl+Alt+S
-    "W",   ID_CLOSE, CONTROL, VIRTKEY        // Ctrl+W
 END

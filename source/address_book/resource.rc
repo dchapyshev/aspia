@@ -1,0 +1,15 @@
+//
+// PROJECT:         Aspia
+// FILE:            address_book/resource.rc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include <windows.h>
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+// UTF-8
+#pragma code_page(65001)
+
+1 ICON "ui/resource/address-book.ico"

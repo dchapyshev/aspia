@@ -16,7 +16,6 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
-namespace aspia {
 namespace proto {
 namespace auth {
 class AllowMethodsDefaultTypeInternal {
@@ -46,7 +45,6 @@ class BasicResultDefaultTypeInternal {
 } _BasicResult_default_instance_;
 }  // namespace auth
 }  // namespace proto
-}  // namespace aspia
 namespace protobuf_auth_5fsession_2eproto {
 void InitDefaultsAllowMethodsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -57,11 +55,11 @@ void InitDefaultsAllowMethodsImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::auth::_AllowMethods_default_instance_;
-    new (ptr) ::aspia::proto::auth::AllowMethods();
+    void* ptr = &::proto::auth::_AllowMethods_default_instance_;
+    new (ptr) ::proto::auth::AllowMethods();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::auth::AllowMethods::InitAsDefaultInstance();
+  ::proto::auth::AllowMethods::InitAsDefaultInstance();
 }
 
 void InitDefaultsAllowMethods() {
@@ -78,11 +76,11 @@ void InitDefaultsSelectMethodImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::auth::_SelectMethod_default_instance_;
-    new (ptr) ::aspia::proto::auth::SelectMethod();
+    void* ptr = &::proto::auth::_SelectMethod_default_instance_;
+    new (ptr) ::proto::auth::SelectMethod();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::auth::SelectMethod::InitAsDefaultInstance();
+  ::proto::auth::SelectMethod::InitAsDefaultInstance();
 }
 
 void InitDefaultsSelectMethod() {
@@ -99,11 +97,11 @@ void InitDefaultsBasicRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::auth::_BasicRequest_default_instance_;
-    new (ptr) ::aspia::proto::auth::BasicRequest();
+    void* ptr = &::proto::auth::_BasicRequest_default_instance_;
+    new (ptr) ::proto::auth::BasicRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::auth::BasicRequest::InitAsDefaultInstance();
+  ::proto::auth::BasicRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsBasicRequest() {
@@ -120,11 +118,11 @@ void InitDefaultsBasicResponseImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::auth::_BasicResponse_default_instance_;
-    new (ptr) ::aspia::proto::auth::BasicResponse();
+    void* ptr = &::proto::auth::_BasicResponse_default_instance_;
+    new (ptr) ::proto::auth::BasicResponse();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::auth::BasicResponse::InitAsDefaultInstance();
+  ::proto::auth::BasicResponse::InitAsDefaultInstance();
 }
 
 void InitDefaultsBasicResponse() {
@@ -141,11 +139,11 @@ void InitDefaultsBasicResultImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::auth::_BasicResult_default_instance_;
-    new (ptr) ::aspia::proto::auth::BasicResult();
+    void* ptr = &::proto::auth::_BasicResult_default_instance_;
+    new (ptr) ::proto::auth::BasicResult();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::auth::BasicResult::InitAsDefaultInstance();
+  ::proto::auth::BasicResult::InitAsDefaultInstance();
 }
 
 void InitDefaultsBasicResult() {
@@ -154,7 +152,6 @@ void InitDefaultsBasicResult() {
 }
 
 }  // namespace protobuf_auth_5fsession_2eproto
-namespace aspia {
 namespace proto {
 namespace auth {
 bool Method_IsValid(int value) {
@@ -206,7 +203,7 @@ AllowMethods::AllowMethods()
     ::protobuf_auth_5fsession_2eproto::InitDefaultsAllowMethods();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(constructor:proto.auth.AllowMethods)
 }
 AllowMethods::AllowMethods(const AllowMethods& from)
   : ::google::protobuf::MessageLite(),
@@ -214,7 +211,7 @@ AllowMethods::AllowMethods(const AllowMethods& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   methods_ = from.methods_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(copy_constructor:proto.auth.AllowMethods)
 }
 
 void AllowMethods::SharedCtor() {
@@ -223,7 +220,7 @@ void AllowMethods::SharedCtor() {
 }
 
 AllowMethods::~AllowMethods() {
-  // @@protoc_insertion_point(destructor:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(destructor:proto.auth.AllowMethods)
   SharedDtor();
 }
 
@@ -249,7 +246,7 @@ AllowMethods* AllowMethods::New(::google::protobuf::Arena* arena) const {
 }
 
 void AllowMethods::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.auth.AllowMethods)
+// @@protoc_insertion_point(message_clear_start:proto.auth.AllowMethods)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -268,7 +265,7 @@ bool AllowMethods::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(parse_start:proto.auth.AllowMethods)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -300,17 +297,17 @@ bool AllowMethods::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(parse_success:proto.auth.AllowMethods)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(parse_failure:proto.auth.AllowMethods)
   return false;
 #undef DO_
 }
 
 void AllowMethods::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(serialize_start:proto.auth.AllowMethods)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -321,11 +318,11 @@ void AllowMethods::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.auth.AllowMethods)
+  // @@protoc_insertion_point(serialize_end:proto.auth.AllowMethods)
 }
 
 size_t AllowMethods::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.AllowMethods)
+// @@protoc_insertion_point(message_byte_size_start:proto.auth.AllowMethods)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -350,7 +347,7 @@ void AllowMethods::CheckTypeAndMergeFrom(
 }
 
 void AllowMethods::MergeFrom(const AllowMethods& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.auth.AllowMethods)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.auth.AllowMethods)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -362,7 +359,7 @@ void AllowMethods::MergeFrom(const AllowMethods& from) {
 }
 
 void AllowMethods::CopyFrom(const AllowMethods& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.auth.AllowMethods)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.auth.AllowMethods)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -384,7 +381,7 @@ void AllowMethods::InternalSwap(AllowMethods* other) {
 }
 
 ::std::string AllowMethods::GetTypeName() const {
-  return "aspia.proto.auth.AllowMethods";
+  return "proto.auth.AllowMethods";
 }
 
 
@@ -402,7 +399,7 @@ SelectMethod::SelectMethod()
     ::protobuf_auth_5fsession_2eproto::InitDefaultsSelectMethod();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(constructor:proto.auth.SelectMethod)
 }
 SelectMethod::SelectMethod(const SelectMethod& from)
   : ::google::protobuf::MessageLite(),
@@ -410,7 +407,7 @@ SelectMethod::SelectMethod(const SelectMethod& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   method_ = from.method_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(copy_constructor:proto.auth.SelectMethod)
 }
 
 void SelectMethod::SharedCtor() {
@@ -419,7 +416,7 @@ void SelectMethod::SharedCtor() {
 }
 
 SelectMethod::~SelectMethod() {
-  // @@protoc_insertion_point(destructor:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(destructor:proto.auth.SelectMethod)
   SharedDtor();
 }
 
@@ -445,7 +442,7 @@ SelectMethod* SelectMethod::New(::google::protobuf::Arena* arena) const {
 }
 
 void SelectMethod::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.auth.SelectMethod)
+// @@protoc_insertion_point(message_clear_start:proto.auth.SelectMethod)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -464,13 +461,13 @@ bool SelectMethod::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(parse_start:proto.auth.SelectMethod)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.auth.Method method = 1;
+      // .proto.auth.Method method = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -478,7 +475,7 @@ bool SelectMethod::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_method(static_cast< ::aspia::proto::auth::Method >(value));
+          set_method(static_cast< ::proto::auth::Method >(value));
         } else {
           goto handle_unusual;
         }
@@ -497,21 +494,21 @@ bool SelectMethod::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(parse_success:proto.auth.SelectMethod)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(parse_failure:proto.auth.SelectMethod)
   return false;
 #undef DO_
 }
 
 void SelectMethod::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(serialize_start:proto.auth.SelectMethod)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.auth.Method method = 1;
+  // .proto.auth.Method method = 1;
   if (this->method() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->method(), output);
@@ -519,16 +516,16 @@ void SelectMethod::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.auth.SelectMethod)
+  // @@protoc_insertion_point(serialize_end:proto.auth.SelectMethod)
 }
 
 size_t SelectMethod::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.SelectMethod)
+// @@protoc_insertion_point(message_byte_size_start:proto.auth.SelectMethod)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.auth.Method method = 1;
+  // .proto.auth.Method method = 1;
   if (this->method() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->method());
@@ -547,7 +544,7 @@ void SelectMethod::CheckTypeAndMergeFrom(
 }
 
 void SelectMethod::MergeFrom(const SelectMethod& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.auth.SelectMethod)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.auth.SelectMethod)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -559,7 +556,7 @@ void SelectMethod::MergeFrom(const SelectMethod& from) {
 }
 
 void SelectMethod::CopyFrom(const SelectMethod& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.auth.SelectMethod)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.auth.SelectMethod)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -581,7 +578,7 @@ void SelectMethod::InternalSwap(SelectMethod* other) {
 }
 
 ::std::string SelectMethod::GetTypeName() const {
-  return "aspia.proto.auth.SelectMethod";
+  return "proto.auth.SelectMethod";
 }
 
 
@@ -599,7 +596,7 @@ BasicRequest::BasicRequest()
     ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(constructor:proto.auth.BasicRequest)
 }
 BasicRequest::BasicRequest(const BasicRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -610,7 +607,7 @@ BasicRequest::BasicRequest(const BasicRequest& from)
   if (from.nonce().size() > 0) {
     nonce_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.nonce_);
   }
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(copy_constructor:proto.auth.BasicRequest)
 }
 
 void BasicRequest::SharedCtor() {
@@ -619,7 +616,7 @@ void BasicRequest::SharedCtor() {
 }
 
 BasicRequest::~BasicRequest() {
-  // @@protoc_insertion_point(destructor:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(destructor:proto.auth.BasicRequest)
   SharedDtor();
 }
 
@@ -646,7 +643,7 @@ BasicRequest* BasicRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void BasicRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.auth.BasicRequest)
+// @@protoc_insertion_point(message_clear_start:proto.auth.BasicRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -665,7 +662,7 @@ bool BasicRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(parse_start:proto.auth.BasicRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -695,17 +692,17 @@ bool BasicRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(parse_success:proto.auth.BasicRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(parse_failure:proto.auth.BasicRequest)
   return false;
 #undef DO_
 }
 
 void BasicRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(serialize_start:proto.auth.BasicRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -717,11 +714,11 @@ void BasicRequest::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.auth.BasicRequest)
+  // @@protoc_insertion_point(serialize_end:proto.auth.BasicRequest)
 }
 
 size_t BasicRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.BasicRequest)
+// @@protoc_insertion_point(message_byte_size_start:proto.auth.BasicRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -746,7 +743,7 @@ void BasicRequest::CheckTypeAndMergeFrom(
 }
 
 void BasicRequest::MergeFrom(const BasicRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.auth.BasicRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.auth.BasicRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -759,7 +756,7 @@ void BasicRequest::MergeFrom(const BasicRequest& from) {
 }
 
 void BasicRequest::CopyFrom(const BasicRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.auth.BasicRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.auth.BasicRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -781,7 +778,7 @@ void BasicRequest::InternalSwap(BasicRequest* other) {
 }
 
 ::std::string BasicRequest::GetTypeName() const {
-  return "aspia.proto.auth.BasicRequest";
+  return "proto.auth.BasicRequest";
 }
 
 
@@ -801,7 +798,7 @@ BasicResponse::BasicResponse()
     ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicResponse();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(constructor:proto.auth.BasicResponse)
 }
 BasicResponse::BasicResponse(const BasicResponse& from)
   : ::google::protobuf::MessageLite(),
@@ -817,7 +814,7 @@ BasicResponse::BasicResponse(const BasicResponse& from)
     key_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.key_);
   }
   session_type_ = from.session_type_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(copy_constructor:proto.auth.BasicResponse)
 }
 
 void BasicResponse::SharedCtor() {
@@ -828,7 +825,7 @@ void BasicResponse::SharedCtor() {
 }
 
 BasicResponse::~BasicResponse() {
-  // @@protoc_insertion_point(destructor:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(destructor:proto.auth.BasicResponse)
   SharedDtor();
 }
 
@@ -856,7 +853,7 @@ BasicResponse* BasicResponse::New(::google::protobuf::Arena* arena) const {
 }
 
 void BasicResponse::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.auth.BasicResponse)
+// @@protoc_insertion_point(message_clear_start:proto.auth.BasicResponse)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -877,13 +874,13 @@ bool BasicResponse::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(parse_start:proto.auth.BasicResponse)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.auth.SessionType session_type = 1;
+      // .proto.auth.SessionType session_type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -891,7 +888,7 @@ bool BasicResponse::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::aspia::proto::auth::SessionType >(value));
+          set_session_type(static_cast< ::proto::auth::SessionType >(value));
         } else {
           goto handle_unusual;
         }
@@ -907,7 +904,7 @@ bool BasicResponse::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->username().data(), static_cast<int>(this->username().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.auth.BasicResponse.username"));
+            "proto.auth.BasicResponse.username"));
         } else {
           goto handle_unusual;
         }
@@ -938,21 +935,21 @@ bool BasicResponse::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(parse_success:proto.auth.BasicResponse)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(parse_failure:proto.auth.BasicResponse)
   return false;
 #undef DO_
 }
 
 void BasicResponse::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(serialize_start:proto.auth.BasicResponse)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .proto.auth.SessionType session_type = 1;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->session_type(), output);
@@ -963,7 +960,7 @@ void BasicResponse::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), static_cast<int>(this->username().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.auth.BasicResponse.username");
+      "proto.auth.BasicResponse.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->username(), output);
   }
@@ -976,11 +973,11 @@ void BasicResponse::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.auth.BasicResponse)
+  // @@protoc_insertion_point(serialize_end:proto.auth.BasicResponse)
 }
 
 size_t BasicResponse::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.BasicResponse)
+// @@protoc_insertion_point(message_byte_size_start:proto.auth.BasicResponse)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -999,7 +996,7 @@ size_t BasicResponse::ByteSizeLong() const {
         this->key());
   }
 
-  // .aspia.proto.auth.SessionType session_type = 1;
+  // .proto.auth.SessionType session_type = 1;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
@@ -1018,7 +1015,7 @@ void BasicResponse::CheckTypeAndMergeFrom(
 }
 
 void BasicResponse::MergeFrom(const BasicResponse& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.auth.BasicResponse)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.auth.BasicResponse)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1038,7 +1035,7 @@ void BasicResponse::MergeFrom(const BasicResponse& from) {
 }
 
 void BasicResponse::CopyFrom(const BasicResponse& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.auth.BasicResponse)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.auth.BasicResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1062,7 +1059,7 @@ void BasicResponse::InternalSwap(BasicResponse* other) {
 }
 
 ::std::string BasicResponse::GetTypeName() const {
-  return "aspia.proto.auth.BasicResponse";
+  return "proto.auth.BasicResponse";
 }
 
 
@@ -1080,7 +1077,7 @@ BasicResult::BasicResult()
     ::protobuf_auth_5fsession_2eproto::InitDefaultsBasicResult();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(constructor:proto.auth.BasicResult)
 }
 BasicResult::BasicResult(const BasicResult& from)
   : ::google::protobuf::MessageLite(),
@@ -1088,7 +1085,7 @@ BasicResult::BasicResult(const BasicResult& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   status_ = from.status_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(copy_constructor:proto.auth.BasicResult)
 }
 
 void BasicResult::SharedCtor() {
@@ -1097,7 +1094,7 @@ void BasicResult::SharedCtor() {
 }
 
 BasicResult::~BasicResult() {
-  // @@protoc_insertion_point(destructor:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(destructor:proto.auth.BasicResult)
   SharedDtor();
 }
 
@@ -1123,7 +1120,7 @@ BasicResult* BasicResult::New(::google::protobuf::Arena* arena) const {
 }
 
 void BasicResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.auth.BasicResult)
+// @@protoc_insertion_point(message_clear_start:proto.auth.BasicResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1142,13 +1139,13 @@ bool BasicResult::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(parse_start:proto.auth.BasicResult)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.auth.Status status = 1;
+      // .proto.auth.Status status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -1156,7 +1153,7 @@ bool BasicResult::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::aspia::proto::auth::Status >(value));
+          set_status(static_cast< ::proto::auth::Status >(value));
         } else {
           goto handle_unusual;
         }
@@ -1175,21 +1172,21 @@ bool BasicResult::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(parse_success:proto.auth.BasicResult)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(parse_failure:proto.auth.BasicResult)
   return false;
 #undef DO_
 }
 
 void BasicResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(serialize_start:proto.auth.BasicResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.auth.Status status = 1;
+  // .proto.auth.Status status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->status(), output);
@@ -1197,16 +1194,16 @@ void BasicResult::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.auth.BasicResult)
+  // @@protoc_insertion_point(serialize_end:proto.auth.BasicResult)
 }
 
 size_t BasicResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.auth.BasicResult)
+// @@protoc_insertion_point(message_byte_size_start:proto.auth.BasicResult)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.auth.Status status = 1;
+  // .proto.auth.Status status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -1225,7 +1222,7 @@ void BasicResult::CheckTypeAndMergeFrom(
 }
 
 void BasicResult::MergeFrom(const BasicResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.auth.BasicResult)
+// @@protoc_insertion_point(class_specific_merge_from_start:proto.auth.BasicResult)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1237,7 +1234,7 @@ void BasicResult::MergeFrom(const BasicResult& from) {
 }
 
 void BasicResult::CopyFrom(const BasicResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.auth.BasicResult)
+// @@protoc_insertion_point(class_specific_copy_from_start:proto.auth.BasicResult)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1259,13 +1256,12 @@ void BasicResult::InternalSwap(BasicResult* other) {
 }
 
 ::std::string BasicResult::GetTypeName() const {
-  return "aspia.proto.auth.BasicResult";
+  return "proto.auth.BasicResult";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace auth
 }  // namespace proto
-}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

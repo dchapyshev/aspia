@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            ui/desktop/settings_dialog.h
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -25,7 +25,7 @@ class SettingsDialog : public CDialogImpl<SettingsDialog>
 public:
     enum { IDD = IDD_SETTINGS };
 
-    SettingsDialog(proto::auth::SessionType session_type,const proto::desktop::Config& config);
+    SettingsDialog(proto::auth::SessionType session_type, const proto::desktop::Config& config);
     ~SettingsDialog() = default;
 
     const proto::desktop::Config& Config() const { return config_; }

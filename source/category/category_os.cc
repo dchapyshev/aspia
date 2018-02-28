@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            category/category_os.cc
-// LICENSE:         Mozilla Public License Version 2.0
+// LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
@@ -23,15 +23,14 @@ namespace {
 
 std::string GetWindowVersion()
 {
-    std::experimental::filesystem::path kernel32_path;
-
-    if (!BasePaths::GetSystemDirectory(kernel32_path))
+    auto kernel32_path = BasePaths::GetSystemDirectory();
+    if (!kernel32_path.has_value())
         return std::string();
 
-    kernel32_path.append(L"kernel32.dll");
+    kernel32_path->append(L"kernel32.dll");
 
     DWORD handle = 0;
-    DWORD size = GetFileVersionInfoSizeW(kernel32_path.c_str(), &handle);
+    DWORD size = GetFileVersionInfoSizeW(kernel32_path->c_str(), &handle);
     if (!size)
     {
         DPLOG(LS_WARNING) << "GetFileVersionInfoSizeW failed";
@@ -40,7 +39,7 @@ std::string GetWindowVersion()
 
     std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(size);
 
-    if (!GetFileVersionInfoW(kernel32_path.c_str(), handle, size, buffer.get()))
+    if (!GetFileVersionInfoW(kernel32_path->c_str(), handle, size, buffer.get()))
     {
         DPLOG(LS_WARNING) << "GetFileVersionInfoW failed";
         return std::string();
@@ -243,11 +242,9 @@ std::string CategoryOS::Serialize()
             break;
     }
 
-    std::experimental::filesystem::path system_root;
-    if (BasePaths::GetWindowsDirectory(system_root))
-    {
-        message.set_system_root(system_root.u8string());
-    }
+    auto system_root = BasePaths::GetWindowsDirectory();
+    if (system_root.has_value())
+        message.set_system_root(system_root->u8string());
 
     LARGE_INTEGER counter;
     LARGE_INTEGER frequency;
