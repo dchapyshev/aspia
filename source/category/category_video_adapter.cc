@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/devices/video_adapter_enumarator.h"
+#include "base/devices/video_adapter_enumerator.h"
 #include "category/category_video_adapter.h"
 #include "category/category_video_adapter.pb.h"
 #include "ui/resource.h"

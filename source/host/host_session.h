@@ -10,7 +10,7 @@
 
 #include "base/threading/thread.h"
 #include "base/process/process_watcher.h"
-#include "base/synchronization/waitable_timer.h"
+#include "base/waitable_timer.h"
 #include "host/host_process_connector.h"
 #include "host/console_session_watcher.h"
 #include "ipc/pipe_channel.h"

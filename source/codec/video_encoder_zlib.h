@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "base/macros.h"
-#include "base/memory/aligned_memory.h"
+#include "base/aligned_memory.h"
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
 #include "codec/pixel_translator.h"

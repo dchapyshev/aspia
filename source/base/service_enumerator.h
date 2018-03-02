@@ -59,9 +59,9 @@ public:
     std::wstring GetStartName() const;
 
 private:
-    ENUM_SERVICE_STATUS_PROCESS* GetCurrentService() const;
+    ENUM_SERVICE_STATUS_PROCESSW* GetCurrentService() const;
     SC_HANDLE GetCurrentServiceHandle() const;
-    LPQUERY_SERVICE_CONFIG GetCurrentServiceConfig() const;
+    LPQUERY_SERVICE_CONFIGW GetCurrentServiceConfig() const;
 
     mutable ScopedScHandle manager_handle_;
 

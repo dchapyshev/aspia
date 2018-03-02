@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/devices/video_adapter_enumarator.h"
+#include "base/devices/video_adapter_enumerator.h"
 #include "base/strings/unicode.h"
 
 #include <devguid.h>

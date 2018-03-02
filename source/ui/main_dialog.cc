@@ -22,7 +22,7 @@
 #include "ui/desktop/viewer_window.h"
 #include "ui/about_dialog.h"
 #include "ui/users_dialog.h"
-#include "ui/ui_util.h"
+#include "ui/misc.h"
 
 namespace aspia {
 

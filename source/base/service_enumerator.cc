@@ -66,13 +66,13 @@ void ServiceEnumerator::Advance()
     ++current_service_index_;
 }
 
-ENUM_SERVICE_STATUS_PROCESS* ServiceEnumerator::GetCurrentService() const
+ENUM_SERVICE_STATUS_PROCESSW* ServiceEnumerator::GetCurrentService() const
 {
     if (!services_buffer_ || !services_count_ || IsAtEnd())
         return nullptr;
 
-    ENUM_SERVICE_STATUS_PROCESS* services =
-        reinterpret_cast<ENUM_SERVICE_STATUS_PROCESS*>(services_buffer_.get());
+    ENUM_SERVICE_STATUS_PROCESSW* services =
+        reinterpret_cast<ENUM_SERVICE_STATUS_PROCESSW*>(services_buffer_.get());
 
     return &services[current_service_index_];
 }
@@ -81,8 +81,8 @@ SC_HANDLE ServiceEnumerator::GetCurrentServiceHandle() const
 {
     if (!current_service_handle_.IsValid())
     {
-        ENUM_SERVICE_STATUS_PROCESS* services =
-            reinterpret_cast<ENUM_SERVICE_STATUS_PROCESS*>(services_buffer_.get());
+        ENUM_SERVICE_STATUS_PROCESSW* services =
+            reinterpret_cast<ENUM_SERVICE_STATUS_PROCESSW*>(services_buffer_.get());
 
         const DWORD desired_access =
             SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS | SERVICE_ENUMERATE_DEPENDENTS;
@@ -95,7 +95,7 @@ SC_HANDLE ServiceEnumerator::GetCurrentServiceHandle() const
     return current_service_handle_;
 }
 
-LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
+LPQUERY_SERVICE_CONFIGW ServiceEnumerator::GetCurrentServiceConfig() const
 {
     if (!current_service_config_)
     {
@@ -116,7 +116,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
         current_service_config_ = std::make_unique<uint8_t[]>(bytes_needed);
 
         if (!QueryServiceConfigW(service_handle,
-                                 reinterpret_cast<LPQUERY_SERVICE_CONFIG>(
+                                 reinterpret_cast<LPQUERY_SERVICE_CONFIGW>(
                                      current_service_config_.get()),
                                  bytes_needed,
                                  &bytes_needed))
@@ -126,12 +126,12 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::GetCurrentServiceConfig() const
         }
     }
 
-    return reinterpret_cast<LPQUERY_SERVICE_CONFIG>(current_service_config_.get());
+    return reinterpret_cast<LPQUERY_SERVICE_CONFIGW>(current_service_config_.get());
 }
 
 std::wstring ServiceEnumerator::GetName() const
 {
-    ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
+    ENUM_SERVICE_STATUS_PROCESSW* service = GetCurrentService();
 
     if (!service || !service->lpServiceName)
         return std::wstring();
@@ -141,7 +141,7 @@ std::wstring ServiceEnumerator::GetName() const
 
 std::wstring ServiceEnumerator::GetDisplayName() const
 {
-    ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
+    ENUM_SERVICE_STATUS_PROCESSW* service = GetCurrentService();
 
     if (!service || !service->lpDisplayName)
         return std::wstring();
@@ -178,7 +178,7 @@ std::wstring ServiceEnumerator::GetDescription() const
         return std::wstring();
     }
 
-    SERVICE_DESCRIPTION* description = reinterpret_cast<SERVICE_DESCRIPTION*>(result.get());
+    SERVICE_DESCRIPTIONW* description = reinterpret_cast<SERVICE_DESCRIPTIONW*>(result.get());
     if (!description->lpDescription)
         return std::wstring();
 
@@ -187,7 +187,7 @@ std::wstring ServiceEnumerator::GetDescription() const
 
 ServiceEnumerator::Status ServiceEnumerator::GetStatus() const
 {
-    ENUM_SERVICE_STATUS_PROCESS* service = GetCurrentService();
+    ENUM_SERVICE_STATUS_PROCESSW* service = GetCurrentService();
 
     if (!service)
         return Status::UNKNOWN;
@@ -222,7 +222,7 @@ ServiceEnumerator::Status ServiceEnumerator::GetStatus() const
 
 ServiceEnumerator::StartupType ServiceEnumerator::GetStartupType() const
 {
-    LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
+    LPQUERY_SERVICE_CONFIGW config = GetCurrentServiceConfig();
 
     if (!config)
         return StartupType::UNKNOWN;
@@ -251,7 +251,7 @@ ServiceEnumerator::StartupType ServiceEnumerator::GetStartupType() const
 
 std::wstring ServiceEnumerator::GetBinaryPath() const
 {
-    LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
+    LPQUERY_SERVICE_CONFIGW config = GetCurrentServiceConfig();
 
     if (!config || !config->lpBinaryPathName)
         return std::wstring();
@@ -261,7 +261,7 @@ std::wstring ServiceEnumerator::GetBinaryPath() const
 
 std::wstring ServiceEnumerator::GetStartName() const
 {
-    LPQUERY_SERVICE_CONFIG config = GetCurrentServiceConfig();
+    LPQUERY_SERVICE_CONFIGW config = GetCurrentServiceConfig();
 
     if (!config || !config->lpServiceStartName)
         return std::wstring();
