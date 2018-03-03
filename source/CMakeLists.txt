@@ -90,29 +90,44 @@ target_link_libraries(aspia_core
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
-    Qt5AccessibilitySupport
-    Qt5EventDispatcherSupport
-    Qt5FontDatabaseSupport
-    Qt5ThemeSupport
+    Qt5::WinMain
+    debug Qt5AccessibilitySupportd
+    debug Qt5EventDispatcherSupportd
+    debug Qt5FontDatabaseSupportd
+    debug Qt5ThemeSupportd
+    debug libprotobuf-lited
+    debug libsodiumd
+    debug libvpxd
+    debug libyuvd
+    debug qtfreetyped
+    debug qtharfbuzzd
+    debug qtlibpngd
+    debug qtpcre2d
+    debug qwindowsd
+    debug zlib-ngd
+    optimized Qt5AccessibilitySupport
+    optimized Qt5EventDispatcherSupport
+    optimized Qt5FontDatabaseSupport
+    optimized Qt5ThemeSupport
+    optimized libprotobuf-lite
+    optimized libsodium
+    optimized libvpx
+    optimized libyuv
+    optimized qtfreetype
+    optimized qtharfbuzz
+    optimized qtlibpng
+    optimized qtpcre2
+    optimized qwindows
+    optimized zlib-ng
     comctl32
     crypt32
     dbghelp
     dwmapi
     imm32
     iphlpapi
-    libprotobuf-lite
-    libsodium
-    libvpx
-    libyuv
     msi
     netapi32
     psapi
-    qtfreetype
-    qtharfbuzz
-    qtlibpng
-    qtmain
-    qtpcre2
-    qwindows
     rasapi32
     sas
     secur32
@@ -124,8 +139,7 @@ target_link_libraries(aspia_core
     version
     winmm
     ws2_32
-    wtsapi32
-    zlib-ng)
+    wtsapi32)
 
 add_executable(aspia_address_book ${PROJECT_SOURCE_DIR}/address_book/entry_point.cc ${PROJECT_SOURCE_DIR}/address_book/resource.rc)
 set_target_properties(aspia_address_book PROPERTIES WIN32_EXECUTABLE TRUE)
