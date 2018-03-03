@@ -9,7 +9,11 @@
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-// UTF-8
-#pragma code_page(65001)
-
 1 ICON "ui/resource/address-book.ico"
+
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0\0"
+#define VER_ORIGINALFILENAME_STR    "aspia_address_book.exe\0"
+#define VER_FILEDESCRIPTION_STR     "Aspia Address Book"
+
+#include "version.rc"

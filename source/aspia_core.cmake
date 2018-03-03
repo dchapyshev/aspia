@@ -742,4 +742,5 @@ list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/build_config.cc
     ${PROJECT_SOURCE_DIR}/build_config.h
     ${PROJECT_SOURCE_DIR}/export.h
-    ${PROJECT_SOURCE_DIR}/global.h)
+    ${PROJECT_SOURCE_DIR}/global.h
+    ${PROJECT_SOURCE_DIR}/aspia_core.rc)

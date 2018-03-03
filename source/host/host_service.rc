@@ -1,0 +1,15 @@
+//
+// PROJECT:         Aspia
+// FILE:            host/host_service.rc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include <winuser.h>
+
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0\0"
+#define VER_ORIGINALFILENAME_STR    "aspia_host_service.exe\0"
+#define VER_FILEDESCRIPTION_STR     "Aspia Host Service"
+
+#include "version.rc"

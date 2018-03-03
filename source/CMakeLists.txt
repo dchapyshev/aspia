@@ -141,12 +141,13 @@ target_link_libraries(aspia_core
     ws2_32
     wtsapi32)
 
-add_executable(aspia_address_book ${PROJECT_SOURCE_DIR}/address_book/entry_point.cc ${PROJECT_SOURCE_DIR}/address_book/resource.rc)
+add_executable(aspia_address_book ${PROJECT_SOURCE_DIR}/address_book/entry_point.cc ${PROJECT_SOURCE_DIR}/address_book/address_book.rc)
 set_target_properties(aspia_address_book PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(aspia_address_book aspia_core)
 
-add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/host_service_entry_point.cc)
+add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/host_service_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_service.rc)
 target_link_libraries(aspia_host_service aspia_core)
 
-add_executable(aspia_host WIN32 ${PROJECT_SOURCE_DIR}/host/host_entry_point.cc)
+add_executable(aspia_host WIN32 ${PROJECT_SOURCE_DIR}/host/host_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host.rc)
+set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_core)
