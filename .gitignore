@@ -1,3 +1,9 @@
 # VS build folders
 /.vs/
 /build/
+
+# VS generated files
+*.obj
+*.pdb
+*.res
+*.exe
