@@ -7,10 +7,9 @@
 
 #include "address_book/address_book_dialog.h"
 
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 
 #include "base/logging.h"
-#include "crypto/sha.h"
 
 namespace aspia {
 

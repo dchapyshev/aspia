@@ -12,7 +12,7 @@
 
 #include "base/macros.h"
 #include "proto/address_book.pb.h"
-#include "qt_generated/ui_open_address_book_dialog.h"
+#include "qt/ui_open_address_book_dialog.h"
 
 namespace aspia {
 

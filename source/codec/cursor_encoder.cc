@@ -43,8 +43,8 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
 {
     compressor_.Reset();
 
-    int width = mouse_cursor->Size().Width();
-    int height = mouse_cursor->Size().Height();
+    int width = mouse_cursor->size().width();
+    int height = mouse_cursor->size().height();
 
     const size_t row_size = width * sizeof(uint32_t);
 
@@ -52,7 +52,7 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
     packet_size += packet_size / 100 + 16;
 
     uint8_t* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
-    const uint8_t* source_pos = mouse_cursor->Data();
+    const uint8_t* source_pos = mouse_cursor->data();
 
     size_t filled = 0;
     size_t row_pos = 0; // Position in the current row in bytes.
@@ -102,14 +102,14 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
     if (!mouse_cursor)
         return nullptr;
 
-    const DesktopSize& size = mouse_cursor->Size();
+    const QSize& size = mouse_cursor->size();
     const int32_t kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
-    if (size.Width() <= 0 || size.Width() > kMaxSize ||
-        size.Height() <= 0 || size.Height() > kMaxSize)
+    if (size.width() <= 0 || size.width() > kMaxSize ||
+        size.height() <= 0 || size.height() > kMaxSize)
     {
         DLOG(LS_ERROR) << "Wrong size of cursor: "
-                       << size.Width() << "x" << size.Height();
+                       << size.width() << "x" << size.height();
         return nullptr;
     }
 
@@ -121,10 +121,10 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
     // The cursor is not found in the cache.
     if (index == MouseCursorCache::kInvalidIndex)
     {
-        cursor_shape->set_width(size.Width());
-        cursor_shape->set_height(size.Height());
-        cursor_shape->set_hotspot_x(mouse_cursor->Hotspot().x());
-        cursor_shape->set_hotspot_y(mouse_cursor->Hotspot().y());
+        cursor_shape->set_width(size.width());
+        cursor_shape->set_height(size.height());
+        cursor_shape->set_hotspot_x(mouse_cursor->hotSpot().x());
+        cursor_shape->set_hotspot_y(mouse_cursor->hotSpot().y());
 
         CompressCursor(cursor_shape.get(), mouse_cursor.get());
 

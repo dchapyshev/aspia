@@ -6,7 +6,9 @@
 //
 
 #include "codec/video_decoder_zlib.h"
+
 #include "codec/video_helpers.h"
+#include "desktop_capture/desktop_frame_aligned.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -17,26 +19,44 @@ std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::Create()
     return std::unique_ptr<VideoDecoderZLIB>(new VideoDecoderZLIB());
 }
 
-bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet,
+                              DesktopFrame* target_frame)
 {
+    if (packet.has_format())
+    {
+        source_frame_ = DesktopFrameAligned::Create(
+            ConvertFromVideoSize(packet.format().screen_size()),
+            ConvertFromVideoPixelFormat(packet.format().pixel_format()));
+
+        translator_ = PixelTranslator::Create(source_frame_->format(), target_frame->format());
+    }
+
+    DCHECK(source_frame_->size() == target_frame->size());
+
+    if (!source_frame_ || !translator_)
+    {
+        LOG(LS_ERROR) << "A packet with image information was not received";
+        return false;
+    }
+
     const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
     const size_t src_size = packet.data().size();
     size_t used = 0;
 
-    DesktopRect frame_rect(DesktopRect::MakeSize(frame->Size()));
+    QRect frame_rect = QRect(QPoint(), source_frame_->size());
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        DesktopRect rect(ConvertFromVideoRect(packet.dirty_rect(i)));
+        QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
 
-        if (!frame_rect.ContainsRect(rect))
+        if (!frame_rect.contains(rect))
         {
             LOG(LS_ERROR) << "The rectangle is outside the screen area";
             return false;
         }
 
-        uint8_t* dst = frame->GetFrameDataAtPos(rect.x(), rect.y());
-        const size_t row_size = rect.Width() * frame->Format().BytesPerPixel();
+        uint8_t* dst = source_frame_->GetFrameDataAtPos(rect.x(), rect.y());
+        const size_t row_size = rect.width() * source_frame_->format().BytesPerPixel();
 
         // Consume all the data in the message.
         bool decompress_again = true;
@@ -48,7 +68,7 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet, Desktop
         {
             // If we have reached the end of the current rectangle, then
             // proceed to the next one.
-            if (row_y > rect.Height() - 1)
+            if (row_y > rect.height() - 1)
                 break;
 
             size_t written = 0;
@@ -68,9 +88,16 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet, Desktop
             {
                 ++row_y;
                 row_pos = 0;
-                dst += frame->Stride();
+                dst += source_frame_->stride();
             }
         }
+
+        translator_->Translate(source_frame_->GetFrameDataAtPos(rect.topLeft()),
+                               source_frame_->stride(),
+                               target_frame->GetFrameDataAtPos(rect.topLeft()),
+                               target_frame->stride(),
+                               rect.width(),
+                               rect.height());
     }
 
     decompressor_.Reset();

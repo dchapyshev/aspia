@@ -19,26 +19,6 @@ uint64_t ByteSwap(uint64_t value);
 void ChangeByteOrder(uint8_t* data, size_t data_size);
 void ChangeByteOrder(char* data, size_t data_size);
 
-template <typename T>
-T NetworkByteOrderToHost(T value)
-{
-#if (ARCH_CPU_LITTLE_ENDIAN == 1)
-    return ByteSwap(value);
-#else
-    return value;
-#endif
-}
-
-template <typename T>
-T HostByteOrderToNetwork(T value)
-{
-#if (ARCH_CPU_LITTLE_ENDIAN == 1)
-    return ByteSwap(value);
-#else
-    return value;
-#endif
-}
-
 } // namespace aspia
 
 #endif // _ASPIA_BASE__BYTE_ORDER_H

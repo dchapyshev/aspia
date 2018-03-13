@@ -17,28 +17,28 @@ std::unique_ptr<proto::desktop::VideoPacket> CreateVideoPacket(
     return packet;
 }
 
-DesktopRect ConvertFromVideoRect(const proto::desktop::Rect& rect)
+QRect ConvertFromVideoRect(const proto::desktop::Rect& rect)
 {
-    return DesktopRect::MakeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
+    return QRect(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void ConvertToVideoRect(const DesktopRect& from, proto::desktop::Rect* to)
+void ConvertToVideoRect(const QRect& from, proto::desktop::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());
-    to->set_width(from.Width());
-    to->set_height(from.Height());
+    to->set_width(from.width());
+    to->set_height(from.height());
 }
 
-DesktopSize ConvertFromVideoSize(const proto::desktop::Size& size)
+QSize ConvertFromVideoSize(const proto::desktop::Size& size)
 {
-    return DesktopSize(size.width(), size.height());
+    return QSize(size.width(), size.height());
 }
 
-void ConvertToVideoSize(const DesktopSize& from, proto::desktop::Size* to)
+void ConvertToVideoSize(const QSize& from, proto::desktop::Size* to)
 {
-    to->set_width(from.Width());
-    to->set_height(from.Height());
+    to->set_width(from.width());
+    to->set_height(from.height());
 }
 
 PixelFormat ConvertFromVideoPixelFormat(const proto::desktop::PixelFormat& format)

@@ -420,42 +420,38 @@ list(APPEND SOURCE_CATEGORY
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc
     ${PROJECT_SOURCE_DIR}/client/client.h
-    ${PROJECT_SOURCE_DIR}/client/client_pool.cc
-    ${PROJECT_SOURCE_DIR}/client/client_pool.h
-    ${PROJECT_SOURCE_DIR}/client/client_session.cc
+    ${PROJECT_SOURCE_DIR}/client/client_main.cc
+    ${PROJECT_SOURCE_DIR}/client/client_main.h
     ${PROJECT_SOURCE_DIR}/client/client_session.h
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_manage.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_manage.h
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.cc
-    ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.h
-    ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.cc
-    ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
-    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.cc
-    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.h
-    ${PROJECT_SOURCE_DIR}/client/file_constants.h
-    ${PROJECT_SOURCE_DIR}/client/file_remover.cc
-    ${PROJECT_SOURCE_DIR}/client/file_remover.h
-    ${PROJECT_SOURCE_DIR}/client/file_reply_receiver.cc
-    ${PROJECT_SOURCE_DIR}/client/file_reply_receiver.h
-    ${PROJECT_SOURCE_DIR}/client/file_reply_receiver_proxy.cc
-    ${PROJECT_SOURCE_DIR}/client/file_reply_receiver_proxy.h
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender.cc
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender.h
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_local.cc
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_local.h
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_proxy.cc
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_proxy.h
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_remote.cc
-    ${PROJECT_SOURCE_DIR}/client/file_request_sender_remote.h
-    ${PROJECT_SOURCE_DIR}/client/file_task.cc
-    ${PROJECT_SOURCE_DIR}/client/file_task.h
-    ${PROJECT_SOURCE_DIR}/client/file_task_queue_builder.cc
-    ${PROJECT_SOURCE_DIR}/client/file_task_queue_builder.h
-    ${PROJECT_SOURCE_DIR}/client/file_transfer.h
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.cc
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.h
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.cc
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.h)
+    ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.h)
+
+list(APPEND SOURCE_CLIENT_UI
+    ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.h
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_widget.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_widget.h
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
+    ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui)
 
 list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/compressor.h
@@ -472,6 +468,7 @@ list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/pixel_translator.h
     ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.cc
     ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.h
+    ${PROJECT_SOURCE_DIR}/codec/video_decoder.cc
     ${PROJECT_SOURCE_DIR}/codec/video_decoder.h
     ${PROJECT_SOURCE_DIR}/codec/video_decoder_vpx.cc
     ${PROJECT_SOURCE_DIR}/codec/video_decoder_vpx.h
@@ -486,14 +483,8 @@ list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/video_helpers.h)
 
 list(APPEND SOURCE_CRYPTO
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/random.cc
     ${PROJECT_SOURCE_DIR}/crypto/random.h
-    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
-    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h
-    ${PROJECT_SOURCE_DIR}/crypto/sha.cc
-    ${PROJECT_SOURCE_DIR}/crypto/sha.h
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.h)
 
@@ -503,18 +494,14 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/cursor.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/cursor.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_basic.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_basic.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_dib.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_dib.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_qimage.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_qimage.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/differ.cc
@@ -533,8 +520,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/console_session_watcher.h
     ${PROJECT_SOURCE_DIR}/host/host.cc
     ${PROJECT_SOURCE_DIR}/host/host.h
-    ${PROJECT_SOURCE_DIR}/host/host_local_system_info.cc
-    ${PROJECT_SOURCE_DIR}/host/host_local_system_info.h
+    ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
+    ${PROJECT_SOURCE_DIR}/host/host_config_main.h
     ${PROJECT_SOURCE_DIR}/host/host_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_main.h
     ${PROJECT_SOURCE_DIR}/host/host_pool.cc
@@ -563,10 +550,20 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/scoped_sas_police.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
-    ${PROJECT_SOURCE_DIR}/host/users_storage.cc
-    ${PROJECT_SOURCE_DIR}/host/users_storage.h
-    ${PROJECT_SOURCE_DIR}/host/users_storage_registry.cc
-    ${PROJECT_SOURCE_DIR}/host/users_storage_registry.h)
+    ${PROJECT_SOURCE_DIR}/host/user.cc
+    ${PROJECT_SOURCE_DIR}/host/user.h
+    ${PROJECT_SOURCE_DIR}/host/user_list.cc
+    ${PROJECT_SOURCE_DIR}/host/user_list.h)
+
+list(APPEND SOURCE_HOST_UI
+    ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.cc
+    ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.h
+    ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.ui
+    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.cc
+    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.h
+    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.ui
+    ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.cc
+    ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 
 list(APPEND SOURCE_IPC
     ${PROJECT_SOURCE_DIR}/ipc/pipe_channel.cc
@@ -575,6 +572,8 @@ list(APPEND SOURCE_IPC
     ${PROJECT_SOURCE_DIR}/ipc/pipe_channel_proxy.h)
 
 list(APPEND SOURCE_NETWORK
+    ${PROJECT_SOURCE_DIR}/network/channel.cc
+    ${PROJECT_SOURCE_DIR}/network/channel.h
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.cc
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
     ${PROJECT_SOURCE_DIR}/network/network_adapter_enumerator.cc
@@ -585,12 +584,8 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/network_channel_proxy.h
     ${PROJECT_SOURCE_DIR}/network/network_channel_tcp.cc
     ${PROJECT_SOURCE_DIR}/network/network_channel_tcp.h
-    ${PROJECT_SOURCE_DIR}/network/network_client_tcp.cc
-    ${PROJECT_SOURCE_DIR}/network/network_client_tcp.h
     ${PROJECT_SOURCE_DIR}/network/network_server_tcp.cc
-    ${PROJECT_SOURCE_DIR}/network/network_server_tcp.h
-    ${PROJECT_SOURCE_DIR}/network/url.cc
-    ${PROJECT_SOURCE_DIR}/network/url.h)
+    ${PROJECT_SOURCE_DIR}/network/network_server_tcp.h)
 
 list(APPEND SOURCE_PROTO
     ${PROJECT_SOURCE_DIR}/proto/address_book.pb.cc
@@ -611,16 +606,11 @@ list(APPEND SOURCE_PROTO
     ${PROJECT_SOURCE_DIR}/proto/key_exchange.pb.cc
     ${PROJECT_SOURCE_DIR}/proto/key_exchange.pb.h
     ${PROJECT_SOURCE_DIR}/proto/key_exchange.proto
-    ${PROJECT_SOURCE_DIR}/proto/mru.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/mru.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/mru.proto
     ${PROJECT_SOURCE_DIR}/proto/system_info_session.pb.cc
     ${PROJECT_SOURCE_DIR}/proto/system_info_session.pb.h
     ${PROJECT_SOURCE_DIR}/proto/system_info_session.proto)
 
 list(APPEND SOURCE_PROTOCOL
-    ${PROJECT_SOURCE_DIR}/protocol/authorization.cc
-    ${PROJECT_SOURCE_DIR}/protocol/authorization.h
     ${PROJECT_SOURCE_DIR}/protocol/clipboard.cc
     ${PROJECT_SOURCE_DIR}/protocol/clipboard.h
     ${PROJECT_SOURCE_DIR}/protocol/file_depacketizer.cc
@@ -629,8 +619,6 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/file_packetizer.h
     ${PROJECT_SOURCE_DIR}/protocol/filesystem.cc
     ${PROJECT_SOURCE_DIR}/protocol/filesystem.h
-    ${PROJECT_SOURCE_DIR}/protocol/io_buffer.cc
-    ${PROJECT_SOURCE_DIR}/protocol/io_buffer.h
     ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/protocol/message_serialization.h)
@@ -662,81 +650,16 @@ list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
 
 list(APPEND SOURCE_UI
-    ${PROJECT_SOURCE_DIR}/ui/about_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/about_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/auth_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/auth_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/main_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/main_dialog.h
     ${PROJECT_SOURCE_DIR}/ui/misc.cc
     ${PROJECT_SOURCE_DIR}/ui/misc.h
-    ${PROJECT_SOURCE_DIR}/ui/mru.cc
-    ${PROJECT_SOURCE_DIR}/ui/mru.h
-    ${PROJECT_SOURCE_DIR}/ui/resource.h
-    ${PROJECT_SOURCE_DIR}/ui/status_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/status_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/user_prop_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/user_prop_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/users_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/users_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/win_main.cc
-    ${PROJECT_SOURCE_DIR}/ui/win_main.h)
-
-list(APPEND SOURCE_UI_BASE
-    ${PROJECT_SOURCE_DIR}/ui/base/splitter.h
-    ${PROJECT_SOURCE_DIR}/ui/base/timer.cc
-    ${PROJECT_SOURCE_DIR}/ui/base/timer.h
-    ${PROJECT_SOURCE_DIR}/ui/base/tray_icon.h)
-
-list(APPEND SOURCE_UI_DESKTOP
-    ${PROJECT_SOURCE_DIR}/ui/desktop/settings_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/desktop/settings_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/desktop/video_window.cc
-    ${PROJECT_SOURCE_DIR}/ui/desktop/video_window.h
-    ${PROJECT_SOURCE_DIR}/ui/desktop/viewer_toolbar.cc
-    ${PROJECT_SOURCE_DIR}/ui/desktop/viewer_toolbar.h
-    ${PROJECT_SOURCE_DIR}/ui/desktop/viewer_window.cc
-    ${PROJECT_SOURCE_DIR}/ui/desktop/viewer_window.h)
+    ${PROJECT_SOURCE_DIR}/ui/resource.h)
 
 list(APPEND SOURCE_UI_FILE_TRANSFER
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/drive_list_ctrl.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/drive_list_ctrl.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_action_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_action_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_list_ctrl.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_list_ctrl.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager_helpers.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager_helpers.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager_panel.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_manager_panel.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_remove_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_remove_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_status_code.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_status_code.h
     ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_status_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_status_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_toolbar.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_toolbar.h
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_transfer_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_transfer_dialog.h)
+    ${PROJECT_SOURCE_DIR}/ui/file_transfer/file_status_dialog.h)
 
-list(APPEND SOURCE_UI_SYSTEM_INFO
-    ${PROJECT_SOURCE_DIR}/ui/system_info/category_select_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/category_select_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/category_tree_ctrl.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/category_tree_ctrl.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/info_list_ctrl.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/info_list_ctrl.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/report_progress_dialog.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/report_progress_dialog.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_main.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_main.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_toolbar.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_toolbar.h
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_window.cc
-    ${PROJECT_SOURCE_DIR}/ui/system_info/system_info_window.h)
+list(APPEND SOURCE_UI_LANG
+    ${PROJECT_SOURCE_DIR}/ui/lang/en-US.rc)
 
 list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/build_config.cc

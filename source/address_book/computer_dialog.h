@@ -8,11 +8,9 @@
 #ifndef _ASPIA_ADDRESS_BOOK__COMPUTER_DIALOG_H
 #define _ASPIA_ADDRESS_BOOK__COMPUTER_DIALOG_H
 
-#include <QtWidgets/QDialog>
-
 #include "address_book/computer.h"
 #include "proto/address_book.pb.h"
-#include "qt_generated/ui_computer_dialog.h"
+#include "qt/ui_computer_dialog.h"
 
 namespace aspia {
 

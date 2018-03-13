@@ -8,8 +8,9 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_H
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
+#include <QByteArray>
+
 #include "base/macros.h"
-#include "protocol/io_buffer.h"
 
 #include <functional>
 
@@ -27,7 +28,7 @@ public:
 
     using StatusChangeHandler = std::function<void(Status status)>;
     using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler = std::function<void(IOBuffer& buffer)>;
+    using ReceiveCompleteHandler = std::function<void(QByteArray& buffer)>;
 
     virtual void StartChannel(StatusChangeHandler status_change_callback) = 0;
 
@@ -36,8 +37,8 @@ public:
 protected:
     friend class NetworkChannelProxy;
 
-    virtual void Send(IOBuffer&& buffer, SendCompleteHandler handler) = 0;
-    virtual void Send(IOBuffer&& buffer) = 0;
+    virtual void Send(QByteArray&& buffer, SendCompleteHandler handler) = 0;
+    virtual void Send(QByteArray&& buffer) = 0;
     virtual void Receive(ReceiveCompleteHandler handler) = 0;
     virtual void Disconnect() = 0;
     virtual bool IsDiconnecting() const = 0;

@@ -33,31 +33,11 @@ public:
     // 22:31 - unused
     static PixelFormat ARGB();
 
-    // True color (24 bits per pixel)
-    // 0:7   - blue
-    // 8:14  - green
-    // 15:21 - red
-    static PixelFormat RGB888();
-
     // High color (16 bits per pixel)
     // 0:4   - blue
     // 5:9   - green
     // 10:15 - red
     static PixelFormat RGB565();
-
-    // High color (15 bits per pixel)
-    // 0:4   - blue
-    // 5:9   - green
-    // 10:14 - red
-    // 15    - unused
-    static PixelFormat RGB555();
-
-    // High color (12 bits per pixel)
-    // 0:3   - blue
-    // 4:7   - green
-    // 8:11  - red
-    // 12:15 - unused
-    static PixelFormat RGB444();
 
     // 256 colors (8 bits per pixel)
     // 0:1 - blue

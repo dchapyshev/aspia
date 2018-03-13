@@ -8,6 +8,8 @@
 #ifndef _ASPIA_CODEC__VIDEO_DECODER_H
 #define _ASPIA_CODEC__VIDEO_DECODER_H
 
+#include <memory>
+
 #include "desktop_capture/desktop_frame.h"
 #include "proto/desktop_session.pb.h"
 
@@ -18,8 +20,9 @@ class VideoDecoder
 public:
     virtual ~VideoDecoder() = default;
 
-    virtual bool Decode(const proto::desktop::VideoPacket& packet,
-                        DesktopFrame* frame) = 0;
+    static std::unique_ptr<VideoDecoder> Create(proto::desktop::VideoEncoding encoding);
+
+    virtual bool Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) = 0;
 };
 
 } // namespace aspia

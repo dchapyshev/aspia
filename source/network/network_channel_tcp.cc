@@ -6,7 +6,9 @@
 //
 
 #include "network/network_channel_tcp.h"
-#include "base/byte_order.h"
+
+#include <QtEndian>
+
 #include "base/logging.h"
 
 namespace aspia {
@@ -56,20 +58,7 @@ void NetworkChannelTcp::DoConnect()
         LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << code.message();
     }
 
-    const Encryptor::Mode encryptor_mode = (mode_ == Mode::CLIENT) ?
-        Encryptor::Mode::CLIENT : Encryptor::Mode::SERVER;
-
-    encryptor_ = std::make_unique<Encryptor>(encryptor_mode);
-
-    if (mode_ == Mode::CLIENT)
-    {
-        DoSendHello();
-    }
-    else
-    {
-        DCHECK(mode_ == Mode::SERVER);
-        DoReceiveHello();
-    }
+    status_change_handler_(Status::CONNECTED);
 }
 
 void NetworkChannelTcp::DoDisconnect()
@@ -90,139 +79,6 @@ void NetworkChannelTcp::DoDisconnect()
         io_service_.stop();
 }
 
-void NetworkChannelTcp::DoSendHello()
-{
-    write_buffer_ = encryptor_->HelloMessage();
-    if (write_buffer_.IsEmpty())
-    {
-        DLOG(LS_ERROR) << "Empty hello message";
-        DoDisconnect();
-        return;
-    }
-
-    write_size_ = static_cast<MessageSizeType>(write_buffer_.Size());
-    if (write_size_ > kMaxMessageSize)
-    {
-        DLOG(LS_ERROR) << "Invalid message size: " << write_size_;
-        DoDisconnect();
-        return;
-    }
-
-    write_size_ = HostByteOrderToNetwork(write_size_);
-
-    asio::async_write(socket_,
-                      asio::buffer(&write_size_, sizeof(MessageSizeType)),
-                      std::bind(&NetworkChannelTcp::OnSendHelloSizeComplete,
-                                this,
-                                std::placeholders::_1,
-                                std::placeholders::_2));
-}
-
-void NetworkChannelTcp::OnSendHelloSizeComplete(const std::error_code& code,
-                                                size_t bytes_transferred)
-{
-    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
-    {
-        DLOG(LS_WARNING) << "Unable to send hello size message: " << code.message();
-        DoDisconnect();
-        return;
-    }
-
-    asio::async_write(socket_,
-                      asio::buffer(write_buffer_.Data(), write_buffer_.Size()),
-                      std::bind(&NetworkChannelTcp::OnSendHelloComplete,
-                                this,
-                                std::placeholders::_1,
-                                std::placeholders::_2));
-}
-
-void NetworkChannelTcp::OnSendHelloComplete(const std::error_code& code, size_t bytes_transferred)
-{
-    if (IsFailureCode(code) || bytes_transferred != write_buffer_.Size())
-    {
-        DLOG(LS_WARNING) << "Unable to send hello message: " << code.message();
-        DoDisconnect();
-        return;
-    }
-
-    if (mode_ == Mode::CLIENT)
-    {
-        DoReceiveHello();
-    }
-    else
-    {
-        DCHECK(mode_ == Mode::SERVER);
-        status_change_handler_(Status::CONNECTED);
-    }
-}
-
-void NetworkChannelTcp::DoReceiveHello()
-{
-    asio::async_read(socket_,
-                     asio::buffer(&read_size_, sizeof(MessageSizeType)),
-                     std::bind(&NetworkChannelTcp::OnReceiveHelloSizeComplete,
-                               this,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-void NetworkChannelTcp::OnReceiveHelloSizeComplete(const std::error_code& code,
-                                                   size_t bytes_transferred)
-{
-    if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
-    {
-        DLOG(LS_WARNING) << "Unable to receive hello size message: " << code.message();
-        DoDisconnect();
-        return;
-    }
-
-    read_size_ = NetworkByteOrderToHost(read_size_);
-    if (!read_size_ || read_size_ > kMaxMessageSize)
-    {
-        DLOG(LS_ERROR) << "Invalid message size: " << read_size_;
-        DoDisconnect();
-        return;
-    }
-
-    read_buffer_ = IOBuffer::Create(read_size_);
-
-    asio::async_read(socket_,
-                     asio::buffer(read_buffer_.Data(), read_buffer_.Size()),
-                     std::bind(&NetworkChannelTcp::OnReceiveHelloComplete,
-                               this,
-                               std::placeholders::_1,
-                               std::placeholders::_2));
-}
-
-
-void NetworkChannelTcp::OnReceiveHelloComplete(const std::error_code& code,
-                                               size_t bytes_transferred)
-{
-    if (IsFailureCode(code) || bytes_transferred != read_buffer_.Size())
-    {
-        DLOG(LS_WARNING) << "Unable to receive hello message: " << code.message();
-        DoDisconnect();
-        return;
-    }
-
-    if (!encryptor_->ReadHelloMessage(read_buffer_))
-    {
-        DLOG(LS_ERROR) << "Unable to read hello message";
-        DoDisconnect();
-        return;
-    }
-
-    if (mode_ == Mode::CLIENT)
-    {
-        status_change_handler_(Status::CONNECTED);
-    }
-    else
-    {
-        DCHECK(mode_ == Mode::SERVER);
-        DoSendHello();
-    }
-}
-
 void NetworkChannelTcp::DoReadMessage()
 {
     asio::async_read(socket_,
@@ -238,24 +94,24 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(LS_WARNING) << "Unable to read message size: " << code.message();
+        LOG(LS_WARNING) << "Unable to read message size: " << code.message();
         DoDisconnect();
         return;
     }
 
-    read_size_ = NetworkByteOrderToHost(read_size_);
+    read_size_ = qFromBigEndian(read_size_);
 
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
-        DLOG(LS_ERROR) << "Invalid message size: " << read_size_;
+        LOG(LS_ERROR) << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
 
-    read_buffer_ = IOBuffer::Create(read_size_);
+    read_buffer_.resize(read_size_);
 
     asio::async_read(socket_,
-                     asio::buffer(read_buffer_.Data(), read_buffer_.Size()),
+                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
                      std::bind(&NetworkChannelTcp::OnReadMessageComplete,
                                this,
                                std::placeholders::_1,
@@ -265,23 +121,14 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
                                               size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != read_buffer_.Size())
+    if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        DLOG(LS_WARNING) << "Unable to read message: " << code.message();
+        LOG(LS_WARNING) << "Unable to read message: " << code.message();
         DoDisconnect();
         return;
     }
 
-    IOBuffer decrypted_buffer = encryptor_->Decrypt(read_buffer_);
-
-    if (decrypted_buffer.IsEmpty())
-    {
-        DLOG(LS_ERROR) << "Empty decrypted buffer";
-        DoDisconnect();
-        return;
-    }
-
-    receive_complete_handler_(decrypted_buffer);
+    receive_complete_handler_(read_buffer_);
 }
 
 void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
@@ -322,33 +169,24 @@ void NetworkChannelTcp::ScheduleWrite()
 
 void NetworkChannelTcp::DoNextWriteTask()
 {
-    const IOBuffer& source_buffer = work_write_queue_.front().first;
-
-    if (source_buffer.IsEmpty())
+    write_buffer_ = std::move(work_write_queue_.front().first);
+    if (write_buffer_.isEmpty())
     {
-        DLOG(LS_ERROR) << "Empty source buffer";
+        LOG(LS_ERROR) << "Empty source buffer";
         DoDisconnect();
         return;
     }
 
-    write_buffer_ = encryptor_->Encrypt(source_buffer);
-    if (write_buffer_.IsEmpty())
-    {
-        DLOG(LS_ERROR) << "Empty encrypted buffer";
-        DoDisconnect();
-        return;
-    }
-
-    write_size_ = static_cast<MessageSizeType>(write_buffer_.Size());
+    write_size_ = static_cast<MessageSizeType>(write_buffer_.size());
 
     if (write_size_ > kMaxMessageSize)
     {
-        DLOG(LS_ERROR) << "Invalid message size: " << write_size_;
+        LOG(LS_ERROR) << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
 
-    write_size_ = HostByteOrderToNetwork(write_size_);
+    write_size_ = qToBigEndian(write_size_);
 
     asio::async_write(socket_,
                       asio::buffer(&write_size_, sizeof(MessageSizeType)),
@@ -362,13 +200,13 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        DLOG(LS_WARNING) << "Unable to write message size: " << code.message();
+        LOG(LS_WARNING) << "Unable to write message size: " << code.message();
         DoDisconnect();
         return;
     }
 
     asio::async_write(socket_,
-                      asio::buffer(write_buffer_.Data(), write_buffer_.Size()),
+                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
                       std::bind(&NetworkChannelTcp::OnWriteComplete,
                                 this,
                                 std::placeholders::_1,
@@ -377,9 +215,9 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t 
 
 void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t bytes_transferred)
 {
-    if (IsFailureCode(code) || bytes_transferred != write_buffer_.Size())
+    if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        DLOG(LS_WARNING) << "Unable to write message: " << code.message();
+        LOG(LS_WARNING) << "Unable to write message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -400,7 +238,7 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t byte
     DoNextWriteTask();
 }
 
-void NetworkChannelTcp::Send(IOBuffer&& buffer, SendCompleteHandler handler)
+void NetworkChannelTcp::Send(QByteArray&& buffer, SendCompleteHandler handler)
 {
     {
         std::scoped_lock<std::mutex> lock(incoming_write_queue_lock_);
@@ -416,7 +254,7 @@ void NetworkChannelTcp::Send(IOBuffer&& buffer, SendCompleteHandler handler)
     io_service_.post(std::bind(&NetworkChannelTcp::ScheduleWrite, this));
 }
 
-void NetworkChannelTcp::Send(IOBuffer&& buffer)
+void NetworkChannelTcp::Send(QByteArray&& buffer)
 {
     Send(std::move(buffer), nullptr);
 }

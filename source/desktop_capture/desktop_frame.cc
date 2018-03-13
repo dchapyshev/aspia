@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-DesktopFrame::DesktopFrame(const DesktopSize& size,
+DesktopFrame::DesktopFrame(const QSize& size,
                            const PixelFormat& format,
                            int stride,
                            uint8_t* data)
@@ -22,24 +22,24 @@ DesktopFrame::DesktopFrame(const DesktopSize& size,
     // Nothing
 }
 
-const DesktopSize& DesktopFrame::Size() const
+const QSize& DesktopFrame::size() const
 {
     return size_;
 }
 
-const PixelFormat& DesktopFrame::Format() const
+const PixelFormat& DesktopFrame::format() const
 {
     return format_;
 }
 
-int DesktopFrame::Stride() const
+int DesktopFrame::stride() const
 {
     return stride_;
 }
 
-bool DesktopFrame::Contains(int32_t x, int32_t y) const
+bool DesktopFrame::contains(int32_t x, int32_t y) const
 {
-    return (x > 0 && x <= size_.Width() && y > 0 && y <= size_.Height());
+    return (x > 0 && x <= size_.width() && y > 0 && y <= size_.height());
 }
 
 uint8_t* DesktopFrame::GetFrameData() const
@@ -47,22 +47,22 @@ uint8_t* DesktopFrame::GetFrameData() const
     return data_;
 }
 
-uint8_t* DesktopFrame::GetFrameDataAtPos(const DesktopPoint& pos) const
+uint8_t* DesktopFrame::GetFrameDataAtPos(const QPoint& pos) const
 {
-    return GetFrameData() + Stride() * pos.y() + format_.BytesPerPixel() * pos.x();
+    return GetFrameData() + stride() * pos.y() + format_.BytesPerPixel() * pos.x();
 }
 
 uint8_t* DesktopFrame::GetFrameDataAtPos(int32_t x, int32_t y) const
 {
-    return GetFrameDataAtPos(DesktopPoint(x, y));
+    return GetFrameDataAtPos(QPoint(x, y));
 }
 
-const DesktopRegion& DesktopFrame::UpdatedRegion() const
+const QRegion& DesktopFrame::UpdatedRegion() const
 {
     return updated_region_;
 }
 
-DesktopRegion* DesktopFrame::MutableUpdatedRegion()
+QRegion* DesktopFrame::MutableUpdatedRegion()
 {
     return &updated_region_;
 }

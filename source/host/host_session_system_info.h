@@ -23,7 +23,7 @@ public:
 
 private:
     void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelMessage(const IOBuffer& buffer);
+    void OnIpcChannelMessage(const QByteArray& buffer);
     void OnIpcChannelMessageSended();
 
     std::unique_ptr<PipeChannel> ipc_channel_;

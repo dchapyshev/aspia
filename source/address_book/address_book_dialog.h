@@ -8,10 +8,10 @@
 #ifndef _ASPIA_ADDRESS_BOOK__ADDRESS_BOOK_DIALOG_H
 #define _ASPIA_ADDRESS_BOOK__ADDRESS_BOOK_DIALOG_H
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 #include "address_book/address_book.h"
-#include "qt_generated/ui_address_book_dialog.h"
+#include "qt/ui_address_book_dialog.h"
 
 namespace aspia {
 

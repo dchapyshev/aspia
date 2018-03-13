@@ -55,7 +55,7 @@ void ScreenUpdater::UpdateScreen()
     const DesktopFrame* screen_frame = capturer_->CaptureImage();
     if (screen_frame)
     {
-        if (screen_frame->UpdatedRegion().IsEmpty())
+        if (screen_frame->UpdatedRegion().isEmpty())
             screen_frame = nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor;

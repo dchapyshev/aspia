@@ -1,0 +1,18 @@
+//
+// PROJECT:         Aspia
+// FILE:            host/host_config.rc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include <winuser.h>
+
+1 RT_MANIFEST "host_config.manifest"
+1 ICON "ui/resource/main.ico"
+
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0\0"
+#define VER_ORIGINALFILENAME_STR    "aspia_host_config.exe\0"
+#define VER_FILEDESCRIPTION_STR     "Aspia Host Configuration"
+
+#include "version.rc"

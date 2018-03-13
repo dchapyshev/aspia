@@ -9,7 +9,6 @@
 #define _ASPIA_IPC__PIPE_CHANNEL_H
 
 #include "base/threading/simple_thread.h"
-#include "protocol/io_buffer.h"
 
 #define ASIO_STANDALONE
 #define ASIO_HEADER_ONLY
@@ -35,6 +34,7 @@
 
 #include <asio.hpp>
 
+#include <QByteArray>
 #include <memory>
 #include <queue>
 
@@ -52,7 +52,7 @@ public:
 
     using DisconnectHandler = std::function<void()>;
     using SendCompleteHandler = std::function<void()>;
-    using ReceiveCompleteHandler = std::function<void(IOBuffer&)>;
+    using ReceiveCompleteHandler = std::function<void(QByteArray&)>;
 
     bool Connect(uint32_t& user_data, DisconnectHandler disconnect_handler = nullptr);
 
@@ -67,8 +67,8 @@ private:
 
     void Disconnect();
     bool IsDisconnecting() const;
-    void Send(IOBuffer&& buffer, SendCompleteHandler handler);
-    void Send(IOBuffer&& buffer);
+    void Send(QByteArray&& buffer, SendCompleteHandler handler);
+    void Send(QByteArray&& buffer);
     void Receive(ReceiveCompleteHandler handler);
 
     bool ReloadWriteQueue();
@@ -83,7 +83,7 @@ private:
     void Run() override;
 
     class WriteTaskQueue
-        : public std::queue<std::pair<IOBuffer, SendCompleteHandler>>
+        : public std::queue<std::pair<QByteArray, SendCompleteHandler>>
     {
     public:
         void Swap(WriteTaskQueue& queue)
@@ -103,12 +103,12 @@ private:
     WriteTaskQueue incoming_write_queue_;
     std::mutex incoming_write_queue_lock_;
 
-    IOBuffer write_buffer_;
+    QByteArray write_buffer_;
     uint32_t write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    IOBuffer read_buffer_;
+    QByteArray read_buffer_;
     uint32_t read_size_ = 0;
 
     std::shared_ptr<PipeChannelProxy> proxy_;

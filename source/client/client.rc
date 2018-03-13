@@ -1,0 +1,17 @@
+//
+// PROJECT:         Aspia
+// FILE:            client/client.rc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include <winuser.h>
+
+1 ICON "ui/resource/main.ico"
+
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0\0"
+#define VER_ORIGINALFILENAME_STR    "aspia_client.exe\0"
+#define VER_FILEDESCRIPTION_STR     "Aspia Client"
+
+#include "version.rc"

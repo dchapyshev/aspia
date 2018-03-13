@@ -10,8 +10,8 @@
 #include <QtWidgets/QMessageBox>
 
 #include "address_book/computer_group.h"
-#include "network/network_client_tcp.h"
-#include "protocol/authorization.h"
+#include "host/user.h"
+#include "client/ui/desktop_config_dialog.h"
 
 namespace aspia {
 
@@ -53,25 +53,17 @@ ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGrou
     ui.edit_password->setText(computer->Password());
     ui.edit_comment->setPlainText(computer->Comment());
 
-    connect(ui.combo_session_config,
-            SIGNAL(currentIndexChanged(int)),
-            this,
-            SLOT(OnSessionTypeChanged(int)));
+    connect(ui.combo_session_config, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(OnSessionTypeChanged(int)));
 
-    connect(ui.button_show_password,
-            SIGNAL(toggled(bool)),
-            this,
-            SLOT(OnShowPasswordButtonToggled(bool)));
+    connect(ui.button_show_password, SIGNAL(toggled(bool)),
+            this, SLOT(OnShowPasswordButtonToggled(bool)));
 
-    connect(ui.button_session_config,
-            SIGNAL(pressed()),
-            this,
-            SLOT(OnSessionConfigButtonPressed()));
+    connect(ui.button_session_config, SIGNAL(pressed()),
+            this, SLOT(OnSessionConfigButtonPressed()));
 
-    connect(ui.button_box,
-            SIGNAL(clicked(QAbstractButton*)),
-            this,
-            SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
+            this, SLOT(OnButtonBoxClicked(QAbstractButton*)));
 }
 
 void ComputerDialog::OnSessionTypeChanged(int item_index)
@@ -115,9 +107,24 @@ void ComputerDialog::OnSessionConfigButtonPressed()
     switch (session_type)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        {
+            proto::desktop::Config config = computer_->DesktopManageSessionConfig();
+
+            DesktopConfigDialog dialog(session_type, &config, this);
+            if (dialog.exec() == QDialog::Accepted)
+                computer_->SetDesktopManageSessionConfig(config);
+        }
+        break;
+
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            // TODO
-            break;
+        {
+            proto::desktop::Config config = computer_->DesktopViewSessionConfig();
+
+            DesktopConfigDialog dialog(session_type, &config, this);
+            if (dialog.exec() == QDialog::Accepted)
+                computer_->SetDesktopViewSessionConfig(config);
+        }
+        break;
 
         default:
             break;
@@ -140,15 +147,8 @@ void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        QString address = ui.edit_address->text();
-        if (!NetworkClientTcp::IsValidHostName(address.toStdWString()))
-        {
-            ShowError(tr("Invalid address specified."));
-            return;
-        }
-
         QString username = ui.edit_username->text();
-        if (!username.isEmpty() && !IsValidUserName(username.toStdWString()))
+        if (!username.isEmpty() && !User::isValidName(username))
         {
             ShowError(tr("The user name can not be empty and can contain only"
                          " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
@@ -156,7 +156,7 @@ void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
         }
 
         QString password = ui.edit_password->text();
-        if (!password.isEmpty() && !IsValidPassword(password.toStdWString()))
+        if (!password.isEmpty() && !User::isValidPassword(password))
         {
             ShowError(tr("Password can not be shorter than 8 characters."));
             return;
@@ -170,7 +170,7 @@ void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
         }
 
         computer_->SetName(name);
-        computer_->SetAddress(address);
+        computer_->SetAddress(ui.edit_address->text());
         computer_->SetPort(ui.spinbox_port->value());
         computer_->SetUserName(username);
         computer_->SetPassword(password);

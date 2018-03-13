@@ -19,7 +19,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
                   DesktopFrame* frame)
 {
-    DesktopRect frame_rect(DesktopRect::MakeSize(frame->Size()));
+    QRect frame_rect = QRect(QPoint(), frame->size());
 
     uint8_t* y_data = image->planes[0];
     uint8_t* u_data = image->planes[1];
@@ -35,9 +35,9 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                DesktopRect rect(ConvertFromVideoRect(packet.dirty_rect(i)));
+                QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
 
-                if (!frame_rect.ContainsRect(rect))
+                if (!frame_rect.contains(rect))
                 {
                     LOG(LS_ERROR) << "The rectangle is outside the screen area";
                     return false;
@@ -49,10 +49,10 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I420ToARGB(y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
                                    v_data + uv_offset, uv_stride,
-                                   frame->GetFrameDataAtPos(rect.LeftTop()),
-                                   frame->Stride(),
-                                   rect.Width(),
-                                   rect.Height());
+                                   frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->stride(),
+                                   rect.width(),
+                                   rect.height());
             }
         }
         break;
@@ -64,9 +64,9 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                DesktopRect rect(ConvertFromVideoRect(packet.dirty_rect(i)));
+                QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
 
-                if (!frame_rect.ContainsRect(rect))
+                if (!frame_rect.contains(rect))
                 {
                     LOG(LS_ERROR) << "The rectangle is outside the screen area";
                     return false;
@@ -79,10 +79,10 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I444ToARGB(y_data + y_offset, y_stride,
                                    u_data + u_offset, u_stride,
                                    v_data + v_offset, v_stride,
-                                   frame->GetFrameDataAtPos(rect.LeftTop()),
-                                   frame->Stride(),
-                                   rect.Width(),
-                                   rect.Height());
+                                   frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->stride(),
+                                   rect.width(),
+                                   rect.height());
             }
         }
         break;
@@ -173,7 +173,7 @@ bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopF
         return false;
     }
 
-    if (!DesktopSize(image->d_w, image->d_h).IsEqual(frame->Size()))
+    if (QSize(image->d_w, image->d_h) != frame->size())
     {
         LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
         return false;

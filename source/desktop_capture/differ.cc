@@ -61,13 +61,13 @@ uint8_t DiffPartialBlock(const uint8_t* prev_image,
 
 } // namespace
 
-Differ::Differ(const DesktopSize& size)
-    : size_(size),
-      bytes_per_row_(size.Width() * kBytesPerPixel),
-      diff_width_(((size.Width() + kBlockSize - 1) / kBlockSize) + 1),
-      diff_height_(((size.Height() + kBlockSize - 1) / kBlockSize) + 1),
-      full_blocks_x_(size.Width() / kBlockSize),
-      full_blocks_y_(size.Height() / kBlockSize)
+Differ::Differ(const QSize& size)
+    : screen_rect_(QPoint(0, 0), size),
+      bytes_per_row_(size.width() * kBytesPerPixel),
+      diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
+      diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
+      full_blocks_x_(size.width() / kBlockSize),
+      full_blocks_y_(size.height() / kBlockSize)
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
@@ -76,8 +76,8 @@ Differ::Differ(const DesktopSize& size)
 
     // Calc size of partial blocks which may be present on right and bottom
     // edge.
-    partial_column_width_ = size.Width() - (full_blocks_x_ * kBlockSize);
-    partial_row_height_ = size.Height() - (full_blocks_y_ * kBlockSize);
+    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
+    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
@@ -190,7 +190,7 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 // blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 //
-void Differ::MergeBlocks(DesktopRegion* dirty_region)
+void Differ::MergeBlocks(QRegion* dirty_region)
 {
     uint8_t* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -256,19 +256,11 @@ void Differ::MergeBlocks(DesktopRegion* dirty_region)
                     }
                 } while (found_new_row);
 
-                int32_t l = x * kBlockSize;
-                int32_t t = y * kBlockSize;
-                int32_t r = l + (width * kBlockSize);
-                int32_t b = t + (height * kBlockSize);
-
-                if (r > size_.Width())
-                    r = size_.Width();
-
-                if (b > size_.Height())
-                    b = size_.Height();
+                QRect dirty_rect(x * kBlockSize, y * kBlockSize,
+                           width * kBlockSize, height * kBlockSize);
 
                 // Add rect to region.
-                dirty_region->AddRect(DesktopRect::MakeLTRB(l, t, r, b));
+                *dirty_region += dirty_rect.intersected(screen_rect_);
             }
 
             // Increment to next block in this row.
@@ -282,9 +274,9 @@ void Differ::MergeBlocks(DesktopRegion* dirty_region)
 
 void Differ::CalcDirtyRegion(const uint8_t* prev_image,
                              const uint8_t* curr_image,
-                             DesktopRegion* dirty_region)
+                             QRegion* dirty_region)
 {
-    dirty_region->Clear();
+    *dirty_region = QRegion();
 
     // Identify all the blocks that contain changed pixels.
     MarkDirtyBlocks(prev_image, curr_image);

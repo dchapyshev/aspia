@@ -7,6 +7,7 @@
 
 #include "host/input_injector.h"
 
+#include <QRect>
 #include <sas.h>
 
 #include "base/scoped_thread_desktop.h"
@@ -94,22 +95,21 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
 {
     SwitchToInputDesktop();
 
-    DesktopRect screen_rect =
-        DesktopRect::MakeXYWH(GetSystemMetrics(SM_XVIRTUALSCREEN),
+    QRect screen_rect = QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
                               GetSystemMetrics(SM_YVIRTUALSCREEN),
                               GetSystemMetrics(SM_CXVIRTUALSCREEN),
                               GetSystemMetrics(SM_CYVIRTUALSCREEN));
-    if (!screen_rect.Contains(event.x(), event.y()))
+    if (!screen_rect.contains(event.x(), event.y()))
         return;
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    DesktopPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.Width() - 1),
-                     ((event.y() - screen_rect.y()) * 65535) / (screen_rect.Height() - 1));
+    QPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
+               ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
 
-    if (!pos.IsEqual(prev_mouse_pos_))
+    if (pos != prev_mouse_pos_)
     {
         flags |= MOUSEEVENTF_MOVE;
         prev_mouse_pos_ = pos;

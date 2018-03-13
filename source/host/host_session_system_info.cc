@@ -5,10 +5,13 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/process/process.h"
-#include "base/byte_order.h"
-#include "codec/compressor_zlib.h"
 #include "host/host_session_system_info.h"
+
+#include <QDebug>
+#include <QtEndian>
+
+#include "base/process/process.h"
+#include "codec/compressor_zlib.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "proto/auth_session.pb.h"
 #include "proto/system_info_session.pb.h"
@@ -40,7 +43,7 @@ void CompressMessageData(const std::string& input_data, std::string* output_data
 
     // The first 4 bytes store the size of the original (uncompressed) buffer.
     *reinterpret_cast<uint32_t*>(output_buffer) =
-        HostByteOrderToNetwork(static_cast<uint32_t>(input_data.size()));
+        qToBigEndian(static_cast<uint32_t>(input_data.size()));
     output_buffer += sizeof(uint32_t);
 
     size_t input_buffer_pos = 0;
@@ -103,7 +106,7 @@ void HostSessionSystemInfo::OnIpcChannelConnect(uint32_t user_data)
     // The server sends the session type in user_data.
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(user_data);
 
-    DCHECK(session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO);
+    Q_ASSERT(session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO);
 
     map_ = std::move(CreateCategoryMap());
 
@@ -111,7 +114,7 @@ void HostSessionSystemInfo::OnIpcChannelConnect(uint32_t user_data)
         &HostSessionSystemInfo::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
+void HostSessionSystemInfo::OnIpcChannelMessage(const QByteArray& buffer)
 {
     proto::system_info::ClientToHost request;
 
@@ -147,7 +150,7 @@ void HostSessionSystemInfo::OnIpcChannelMessage(const IOBuffer& buffer)
 
             if (message_size > kMaxMessageSize)
             {
-                LOG(LS_WARNING) << "Too much data: " << message_size;
+                qWarning() << "Too much data: " << message_size;
                 reply.clear_data();
             }
 

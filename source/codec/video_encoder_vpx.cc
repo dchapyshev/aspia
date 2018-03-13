@@ -26,14 +26,14 @@ constexpr int kVp9I444ProfileNumber = 1;
 // Magic encoder constants for adaptive quantization strategy.
 constexpr int kVp9AqModeNone = 0;
 
-void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
+void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
     config->g_timebase.den = 1000;
 
-    config->g_w = size.Width();
-    config->g_h = size.Height();
+    config->g_w = size.width();
+    config->g_h = size.height();
     config->g_pass = VPX_RC_ONE_PASS;
 
     // Start emitting packets immediately.
@@ -81,8 +81,8 @@ void VideoEncoderVPX::CreateImage()
 {
     memset(&image_, 0, sizeof(image_));
 
-    image_.d_w = image_.w = screen_size_.Width();
-    image_.d_h = image_.h = screen_size_.Height();
+    image_.d_w = image_.w = screen_size_.width();
+    image_.d_h = image_.h = screen_size_.height();
 
     if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
     {
@@ -135,8 +135,8 @@ void VideoEncoderVPX::CreateImage()
 
 void VideoEncoderVPX::CreateActiveMap()
 {
-    active_map_.cols = (screen_size_.Width() + kMacroBlockSize - 1) / kMacroBlockSize;
-    active_map_.rows = (screen_size_.Height() + kMacroBlockSize - 1) / kMacroBlockSize;
+    active_map_.cols = (screen_size_.width() + kMacroBlockSize - 1) / kMacroBlockSize;
+    active_map_.rows = (screen_size_.height() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_size_ = active_map_.cols * active_map_.rows;
     active_map_buffer_ = std::make_unique<uint8_t[]>(active_map_size_);
 
@@ -157,7 +157,7 @@ void VideoEncoderVPX::CreateVp8Codec()
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
 
     // Adjust default target bit-rate to account for actual desktop size.
-    config.rc_target_bitrate = screen_size_.Width() * screen_size_.Height() *
+    config.rc_target_bitrate = screen_size_.width() * screen_size_.height() *
         config.rc_target_bitrate / config.g_w / config.g_h;
 
     SetCommonCodecParameters(&config, screen_size_);
@@ -241,12 +241,12 @@ void VideoEncoderVPX::CreateVp9Codec()
     DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set aq mode";
 }
 
-void VideoEncoderVPX::SetActiveMap(const DesktopRect& rect)
+void VideoEncoderVPX::SetActiveMap(const QRect& rect)
 {
-    int left   = rect.Left() / kMacroBlockSize;
-    int top    = rect.Top() / kMacroBlockSize;
-    int right  = (rect.Right() - 1) / kMacroBlockSize;
-    int bottom = (rect.Bottom() - 1) / kMacroBlockSize;
+    int left   = rect.left() / kMacroBlockSize;
+    int top    = rect.top() / kMacroBlockSize;
+    int right  = (rect.right() - 1) / kMacroBlockSize;
+    int bottom = (rect.bottom() - 1) / kMacroBlockSize;
 
     uint8_t* map = active_map_.active_map + top * active_map_.cols;
 
@@ -276,21 +276,18 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
     {
         case VPX_IMG_FMT_YV12:
         {
-            for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
-                 !iter.IsAtEnd(); iter.Advance())
+            for (const auto& rect : frame->UpdatedRegion())
             {
-                const DesktopRect& rect = iter.rect();
-
                 int y_offset = y_stride * rect.y() + rect.x();
                 int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-                libyuv::ARGBToI420(frame->GetFrameDataAtPos(rect.LeftTop()),
-                                   frame->Stride(),
+                libyuv::ARGBToI420(frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->stride(),
                                    y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
                                    v_data + uv_offset, uv_stride,
-                                   rect.Width(),
-                                   rect.Height());
+                                   rect.width(),
+                                   rect.height());
 
                 ConvertToVideoRect(rect, packet->add_dirty_rect());
                 SetActiveMap(rect);
@@ -300,20 +297,17 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
 
         case VPX_IMG_FMT_I444:
         {
-            for (DesktopRegion::Iterator iter(frame->UpdatedRegion());
-                 !iter.IsAtEnd(); iter.Advance())
+            for (const auto& rect : frame->UpdatedRegion())
             {
-                const DesktopRect& rect = iter.rect();
-
                 int yuv_offset = uv_stride * rect.y() + rect.x();
 
-                libyuv::ARGBToI444(frame->GetFrameDataAtPos(rect.LeftTop()),
-                                   frame->Stride(),
+                libyuv::ARGBToI444(frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->stride(),
                                    y_data + yuv_offset, y_stride,
                                    u_data + yuv_offset, uv_stride,
                                    v_data + yuv_offset, uv_stride,
-                                   rect.Width(),
-                                   rect.Height());
+                                   rect.width(),
+                                   rect.height());
 
                 ConvertToVideoRect(rect, packet->add_dirty_rect());
                 SetActiveMap(rect);
@@ -336,9 +330,9 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::Encode(const Deskt
 
     std::unique_ptr<proto::desktop::VideoPacket> packet(CreateVideoPacket(encoding_));
 
-    if (!screen_size_.IsEqual(frame->Size()))
+    if (screen_size_ != frame->size())
     {
-        screen_size_ = frame->Size();
+        screen_size_ = frame->size();
 
         CreateImage();
         CreateActiveMap();

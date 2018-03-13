@@ -8,9 +8,9 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DIFFER_H
 #define _ASPIA_DESKTOP_CAPTURE__DIFFER_H
 
+#include <QRegion>
 #include <memory>
 
-#include "desktop_capture/desktop_region.h"
 #include "base/macros.h"
 
 namespace aspia {
@@ -19,18 +19,18 @@ namespace aspia {
 class Differ
 {
 public:
-    explicit Differ(const DesktopSize& size);
+    explicit Differ(const QSize& size);
     ~Differ() = default;
 
     void CalcDirtyRegion(const uint8_t* prev_image,
                          const uint8_t* curr_image,
-                         DesktopRegion* changed_region);
+                         QRegion* changed_region);
 
 private:
     void MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
-    void MergeBlocks(DesktopRegion* dirty_region);
+    void MergeBlocks(QRegion* dirty_region);
 
-    const DesktopSize size_;
+    const QRect screen_rect_;
 
     const int bytes_per_row_;
 

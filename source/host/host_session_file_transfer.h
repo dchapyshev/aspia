@@ -27,7 +27,7 @@ public:
 private:
     void OnIpcChannelConnect(uint32_t user_data);
     void OnIpcChannelDisconnect();
-    void OnIpcChannelMessage(const IOBuffer& buffer);
+    void OnIpcChannelMessage(const QByteArray& buffer);
 
     void SendReply(const proto::file_transfer::HostToClient& reply);
     void OnReplySended();

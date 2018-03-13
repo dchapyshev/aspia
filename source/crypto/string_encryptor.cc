@@ -18,7 +18,6 @@ extern "C" {
 #include <algorithm>
 
 #include "base/logging.h"
-#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -28,7 +27,7 @@ const size_t kChunkSize = 4096;
 
 } // namespace
 
-std::string EncryptString(const std::string& string, const std::string& key)
+std::string EncryptString(const std::string& string, const QByteArray& key)
 {
     DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
@@ -40,7 +39,7 @@ std::string EncryptString(const std::string& string, const std::string& key)
     crypto_secretstream_xchacha20poly1305_init_push(
         &state,
         reinterpret_cast<uint8_t*>(encrypted_string.data()),
-        reinterpret_cast<const uint8_t*>(key.c_str()));
+        reinterpret_cast<const uint8_t*>(key.data()));
 
     const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(string.c_str());
     size_t input_pos = 0;
@@ -72,8 +71,6 @@ std::string EncryptString(const std::string& string, const std::string& key)
         encrypted_string.resize(old_size + static_cast<size_t>(output_length));
         memcpy(&encrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
 
-        SecureMemZero(output_buffer, sizeof(output_buffer));
-
         input_pos += consumed;
 
     } while (!end_of_buffer);
@@ -81,7 +78,7 @@ std::string EncryptString(const std::string& string, const std::string& key)
     return encrypted_string;
 }
 
-bool DecryptString(const std::string& string, const std::string& key, std::string& decrypted_string)
+bool DecryptString(const std::string& string, const QByteArray& key, std::string& decrypted_string)
 {
     DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
@@ -95,7 +92,7 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
     if (crypto_secretstream_xchacha20poly1305_init_pull(
             &state,
             reinterpret_cast<const uint8_t*>(string.c_str()),
-            reinterpret_cast<const uint8_t*>(key.c_str())) != 0)
+            reinterpret_cast<const uint8_t*>(key.data())) != 0)
     {
         LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_init_pull failed";
         return false;
@@ -124,10 +121,6 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
                                                        nullptr, 0) != 0)
         {
             LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_pull failed";
-
-            SecureMemZero(output_buffer, sizeof(output_buffer));
-            SecureMemZero(&decrypted_string);
-
             return false;
         }
 
@@ -138,10 +131,6 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
             if (input_pos != input_size)
             {
                 LOG(LS_ERROR) << "Unexpected end of buffer";
-
-                SecureMemZero(output_buffer, sizeof(output_buffer));
-                SecureMemZero(&decrypted_string);
-
                 return false;
             }
 
@@ -152,8 +141,6 @@ bool DecryptString(const std::string& string, const std::string& key, std::strin
 
         decrypted_string.resize(old_size + static_cast<size_t>(output_length));
         memcpy(&decrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
-
-        SecureMemZero(output_buffer, sizeof(output_buffer));
 
     } while (!end_of_buffer);
 

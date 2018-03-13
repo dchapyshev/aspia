@@ -7,10 +7,13 @@
 
 #include "host/host.h"
 
-#include "base/strings/unicode.h"
-#include "host/users_storage.h"
+#include <QDebug>
+#include <QCryptographicHash>
+#include <QString>
+
+#include "crypto/random.h"
+#include "host/user_list.h"
 #include "proto/auth_session.pb.h"
-#include "protocol/authorization.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
@@ -18,29 +21,36 @@ namespace aspia {
 namespace {
 
 constexpr std::chrono::seconds kAuthTimeout{ 60 };
-constexpr uint32_t kAllowedMethods = proto::auth::METHOD_BASIC;
 
-proto::auth::Status DoBasicAuthorization(const std::string& username,
-                                         const std::string& key,
-                                         const std::string& nonce,
-                                         proto::auth::SessionType session_type)
+proto::auth::Status DoAuthorization(const QString& username,
+                                    const QByteArray& key,
+                                    const QByteArray& nonce,
+                                    proto::auth::SessionType session_type)
 {
-    UsersStorage::User user;
-    user.name = UNICODEfromUTF8(username);
+    UserList user_list = ReadUserList();
 
-    if (!UsersStorage::Open()->ReadUser(user))
-        return proto::auth::STATUS_ACCESS_DENIED;
+    for (const auto& user : user_list)
+    {
+        if (user.name().compare(username, Qt::CaseInsensitive) != 0)
+            continue;
 
-    if (CreateUserKey(user.password, nonce) != key)
-        return proto::auth::STATUS_ACCESS_DENIED;
+        QCryptographicHash key_hash(QCryptographicHash::Sha512);
+        key_hash.addData(nonce);
+        key_hash.addData(user.passwordHash());
 
-    if (!(user.flags & UsersStorage::USER_FLAG_ENABLED))
-        return proto::auth::STATUS_ACCESS_DENIED;
+        if (key_hash.result() != key)
+            return proto::auth::STATUS_ACCESS_DENIED;
 
-    if (!(user.sessions & session_type))
-        return proto::auth::STATUS_ACCESS_DENIED;
+        if (!(user.flags() & User::FLAG_ENABLED))
+            return proto::auth::STATUS_ACCESS_DENIED;
 
-    return proto::auth::STATUS_SUCCESS;
+        if (!(user.sessions() & session_type))
+            return proto::auth::STATUS_ACCESS_DENIED;
+
+        return proto::auth::STATUS_SUCCESS;
+    }
+
+    return proto::auth::STATUS_ACCESS_DENIED;
 }
 
 } // namespace
@@ -74,16 +84,16 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
         auth_timer_.Start(kAuthTimeout,
                           std::bind(&NetworkChannelProxy::Disconnect, channel_proxy_));
 
-        proto::auth::AllowMethods allow_methods;
+        nonce_ = CreateRandomBuffer(512);
 
-        allow_methods.set_methods(kAllowedMethods);
+        proto::auth::Request request;
+        request.set_nonce(nonce_.data(), nonce_.size());
 
-        channel_proxy_->Send(SerializeMessage(allow_methods),
-                             std::bind(&Host::OnAllowMethodsSended, this));
+        channel_proxy_->Send(SerializeMessage(request), std::bind(&Host::OnRequestSended, this));
     }
     else
     {
-        DCHECK(status == NetworkChannel::Status::DISCONNECTED);
+        Q_ASSERT(status == NetworkChannel::Status::DISCONNECTED);
 
         auth_timer_.Stop();
         session_.reset();
@@ -92,43 +102,14 @@ void Host::OnNetworkChannelStatusChange(NetworkChannel::Status status)
     }
 }
 
-void Host::OnAllowMethodsSended()
-{
-    channel_proxy_->Receive(std::bind(&Host::OnSelectMethodReceived, this, std::placeholders::_1));
-}
-
-void Host::OnSelectMethodReceived(const IOBuffer& buffer)
-{
-    proto::auth::SelectMethod select_method;
-
-    if (!ParseMessage(buffer, select_method))
-    {
-        channel_proxy_->Disconnect();
-        return;
-    }
-
-    if (!(select_method.method() & kAllowedMethods))
-    {
-        channel_proxy_->Disconnect();
-        return;
-    }
-
-    nonce_ = CreateNonce();
-
-    proto::auth::BasicRequest request;
-    request.set_nonce(nonce_);
-
-    channel_proxy_->Send(SerializeMessage(request), std::bind(&Host::OnRequestSended, this));
-}
-
 void Host::OnRequestSended()
 {
     channel_proxy_->Receive(std::bind(&Host::OnResponseReceived, this, std::placeholders::_1));
 }
 
-void Host::OnResponseReceived(const IOBuffer& buffer)
+void Host::OnResponseReceived(const QByteArray& buffer)
 {
-    proto::auth::BasicResponse response;
+    proto::auth::Response response;
 
     if (!ParseMessage(buffer, response))
     {
@@ -137,9 +118,12 @@ void Host::OnResponseReceived(const IOBuffer& buffer)
     }
 
     proto::auth::Status status =
-        DoBasicAuthorization(response.username(), response.key(), nonce_, response.session_type());
+        DoAuthorization(QString::fromUtf8(response.username().c_str(), response.username().size()),
+                        QByteArray(response.key().c_str(), response.key().size()),
+                        nonce_,
+                        response.session_type());
 
-    proto::auth::BasicResult result;
+    proto::auth::Result result;
     result.set_status(status);
 
     channel_proxy_->Send(SerializeMessage(result),
@@ -170,7 +154,7 @@ void Host::OnResultSended(proto::auth::SessionType session_type, proto::auth::St
 
         default:
         {
-            LOG(LS_ERROR) << "Unsupported session type: " << session_type;
+            qWarning() << "Unsupported session type: " << session_type;
             channel_proxy_->Disconnect();
         }
         break;

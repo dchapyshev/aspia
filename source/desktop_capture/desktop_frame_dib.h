@@ -20,14 +20,14 @@ class DesktopFrameDIB : public DesktopFrame
 public:
     ~DesktopFrameDIB() = default;
 
-    static std::unique_ptr<DesktopFrameDIB> Create(const DesktopSize& size,
+    static std::unique_ptr<DesktopFrameDIB> Create(const QSize& size,
                                                    const PixelFormat& format,
                                                    HDC hdc);
 
     HBITMAP Bitmap();
 
 private:
-    DesktopFrameDIB(const DesktopSize& size,
+    DesktopFrameDIB(const QSize& size,
                     const PixelFormat& format,
                     int stride,
                     uint8_t* data,

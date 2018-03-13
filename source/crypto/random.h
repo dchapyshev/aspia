@@ -8,11 +8,11 @@
 #ifndef _ASPIA_CRYPTO__RANDOM_H
 #define _ASPIA_CRYPTO__RANDOM_H
 
-#include <string>
+#include <QByteArray>
 
 namespace aspia {
 
-std::string CreateRandomBuffer(size_t size);
+QByteArray CreateRandomBuffer(size_t size);
 
 uint32_t CreateRandomNumber();
 

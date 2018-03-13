@@ -11,12 +11,6 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.auth;
 
-enum Method
-{
-    METHOD_UNKNOWN = 0;
-    METHOD_BASIC   = 1;
-}
-
 enum SessionType
 {
     SESSION_TYPE_UNKNOWN        = 0;
@@ -34,25 +28,14 @@ enum Status
 }
 
 // Host to client.
-message AllowMethods
+message Request
 {
-    uint32 methods = 1;
+    uint32 version = 1;
+    bytes nonce    = 2;
 }
 
 // Client to host.
-message SelectMethod
-{
-    Method method = 1;
-}
-
-// Host to client.
-message BasicRequest
-{
-    bytes nonce = 1;
-}
-
-// Client to host.
-message BasicResponse
+message Response
 {
     SessionType session_type = 1;
     string username = 2;
@@ -60,7 +43,7 @@ message BasicResponse
 }
 
 // Host to client.
-message BasicResult
+message Result
 {
     Status status = 1;
 }

@@ -51,7 +51,7 @@ bool PipeChannelProxy::IsDisconnecting() const
     return channel_->IsDisconnecting();
 }
 
-bool PipeChannelProxy::Send(IOBuffer&& buffer,
+bool PipeChannelProxy::Send(QByteArray&& buffer,
                             PipeChannel::SendCompleteHandler handler)
 {
     std::scoped_lock<std::mutex> lock(channel_lock_);
@@ -65,7 +65,7 @@ bool PipeChannelProxy::Send(IOBuffer&& buffer,
     return false;
 }
 
-bool PipeChannelProxy::Send(IOBuffer&& buffer)
+bool PipeChannelProxy::Send(QByteArray&& buffer)
 {
     std::scoped_lock<std::mutex> lock(channel_lock_);
 

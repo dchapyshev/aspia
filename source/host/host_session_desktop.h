@@ -29,7 +29,7 @@ public:
 
 private:
     void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelMessage(const IOBuffer& buffer);
+    void OnIpcChannelMessage(const QByteArray& buffer);
 
     void OnScreenUpdate(const DesktopFrame* screen_frame,
                         std::unique_ptr<MouseCursor> mouse_cursor);

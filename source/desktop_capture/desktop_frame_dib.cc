@@ -10,7 +10,7 @@
 
 namespace aspia {
 
-DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
+DesktopFrameDIB::DesktopFrameDIB(const QSize& size,
                                  const PixelFormat& format,
                                  int stride,
                                  uint8_t* data,
@@ -23,11 +23,11 @@ DesktopFrameDIB::DesktopFrameDIB(const DesktopSize& size,
 
 // static
 std::unique_ptr<DesktopFrameDIB>
-DesktopFrameDIB::Create(const DesktopSize& size,
+DesktopFrameDIB::Create(const QSize& size,
                         const PixelFormat& format,
                         HDC hdc)
 {
-    int bytes_per_row = size.Width() * format.BytesPerPixel();
+    int bytes_per_row = size.width() * format.BytesPerPixel();
 
     struct BitmapInfo
     {
@@ -47,10 +47,10 @@ DesktopFrameDIB::Create(const DesktopSize& size,
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);
     bmi.header.biBitCount  = format.BitsPerPixel();
-    bmi.header.biSizeImage = bytes_per_row * size.Height();
+    bmi.header.biSizeImage = bytes_per_row * size.height();
     bmi.header.biPlanes    = 1;
-    bmi.header.biWidth     = size.Width();
-    bmi.header.biHeight    = -size.Height();
+    bmi.header.biWidth     = size.width();
+    bmi.header.biHeight    = -size.height();
 
     if (format.BitsPerPixel() == 32 || format.BitsPerPixel() == 16)
     {

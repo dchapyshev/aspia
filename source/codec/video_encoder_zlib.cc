@@ -23,16 +23,18 @@ uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 
 } // namespace
 
-VideoEncoderZLIB::VideoEncoderZLIB(const PixelFormat& format, int compression_ratio)
-    : format_(format),
+VideoEncoderZLIB::VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
+                                   const PixelFormat& target_format,
+                                   int compression_ratio)
+    : target_format_(target_format),
       compressor_(compression_ratio),
-      translator_(format)
+      translator_(std::move(translator))
 {
     // Nothing
 }
 
 // static
-std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& format,
+std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& target_format,
                                                            int compression_ratio)
 {
     if (compression_ratio < Z_BEST_SPEED ||
@@ -42,20 +44,16 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& fo
         return nullptr;
     }
 
-    switch (format.BitsPerPixel())
+    std::unique_ptr<PixelTranslator> translator =
+        PixelTranslator::Create(PixelFormat::ARGB(), target_format);
+    if (!translator)
     {
-        case 8:
-        case 16:
-        case 24:
-        case 32:
-            break;
-
-        default:
-            LOG(LS_ERROR) << "Unsupprted pixel format";
-            return nullptr;
+        LOG(LS_ERROR) << "Unsupported pixel format";
+        return nullptr;
     }
 
-    return std::unique_ptr<VideoEncoderZLIB>(new VideoEncoderZLIB(format, compression_ratio));
+    return std::unique_ptr<VideoEncoderZLIB>(
+        new VideoEncoderZLIB(std::move(translator), target_format, compression_ratio));
 }
 
 void VideoEncoderZLIB::CompressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
@@ -100,25 +98,22 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const Desk
     std::unique_ptr<proto::desktop::VideoPacket> packet(
         CreateVideoPacket(proto::desktop::VIDEO_ENCODING_ZLIB));
 
-    if (!screen_size_.IsEqual(frame->Size()))
+    if (screen_size_ != frame->size())
     {
-        screen_size_ = frame->Size();
+        screen_size_ = frame->size();
 
         proto::desktop::VideoPacketFormat* format = packet->mutable_format();
 
         ConvertToVideoSize(screen_size_, format->mutable_screen_size());
-        ConvertToVideoPixelFormat(format_, format->mutable_pixel_format());
+        ConvertToVideoPixelFormat(target_format_, format->mutable_pixel_format());
     }
 
     size_t data_size = 0;
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
+    for (const auto& rect : frame->UpdatedRegion())
     {
-        const DesktopRect& rect = iter.rect();
-
+        data_size += rect.width() * rect.height() * target_format_.BytesPerPixel();
         ConvertToVideoRect(rect, packet->add_dirty_rect());
-
-        data_size += rect.Width() * rect.Height() * format_.BytesPerPixel();
     }
 
     if (translate_buffer_size_ < data_size)
@@ -129,19 +124,18 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const Desk
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (DesktopRegion::Iterator iter(frame->UpdatedRegion()); !iter.IsAtEnd(); iter.Advance())
+    for (const auto& rect : frame->UpdatedRegion())
     {
-        const DesktopRect& rect = iter.rect();
-        const int stride = rect.Width() * format_.BytesPerPixel();
+        const int stride = rect.width() * target_format_.BytesPerPixel();
 
-        translator_.Translate(frame->GetFrameDataAtPos(rect.LeftTop()),
-                              frame->Stride(),
-                              translate_pos,
-                              stride,
-                              rect.Width(),
-                              rect.Height());
+        translator_->Translate(frame->GetFrameDataAtPos(rect.topLeft()),
+                               frame->stride(),
+                               translate_pos,
+                               stride,
+                               rect.width(),
+                               rect.height());
 
-        translate_pos += rect.Height() * stride;
+        translate_pos += rect.height() * stride;
     }
 
     // Compress data with using ZLIB compressor.

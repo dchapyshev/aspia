@@ -47,18 +47,6 @@ PixelFormat PixelFormat::ARGB()
 }
 
 // static
-PixelFormat PixelFormat::RGB888()
-{
-    return PixelFormat(24,   // bits per pixel
-                       255,  // red max
-                       255,  // green max
-                       255,  // blue max
-                       16,   // red shift
-                       8,    // green shift
-                       0);   // blue shift
-}
-
-// static
 PixelFormat PixelFormat::RGB565()
 {
     return PixelFormat(16,  // bits per pixel
@@ -67,31 +55,6 @@ PixelFormat PixelFormat::RGB565()
                        31,  // blue max
                        11,  // red shift
                        5,   // green shift
-                       0);  // blue shift
-}
-
-// static
-// RGB555 (16 bits per pixel)
-PixelFormat PixelFormat::RGB555()
-{
-    return PixelFormat(16,  // bits per pixel
-                       31,  // red max
-                       31,  // green max
-                       31,  // blue max
-                       10,  // red shift
-                       5,   // green shift
-                       0);  // blue shift
-}
-
-//static
-PixelFormat PixelFormat::RGB444()
-{
-    return PixelFormat(16,  // bits per pixel
-                       15,  // red max
-                       15,  // green max
-                       15,  // blue max
-                       8,   // red shift
-                       4,   // green shift
                        0);  // blue shift
 }
 

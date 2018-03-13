@@ -7,10 +7,11 @@
 
 #include "address_book/address_book_window.h"
 
-#include <QtCore/QSettings>
-#include <QtGui/QDesktopServices>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QMessageBox>
+#include <QCryptographicHash>
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSettings>
 
 #include "address_book/address_book_dialog.h"
 #include "address_book/computer_group_dialog.h"
@@ -19,7 +20,6 @@
 #include "address_book/open_address_book_dialog.h"
 #include "base/logging.h"
 #include "crypto/string_encryptor.h"
-#include "crypto/sha.h"
 
 namespace aspia {
 
@@ -543,8 +543,11 @@ bool AddressBookWindow::OpenAddressBook(const QString& file_path)
 
             password_ = dialog.Password();
 
+            QCryptographicHash key_hash(QCryptographicHash::Sha256);
+            key_hash.addData(password_.toUtf8());
+
             std::string decrypted;
-            if (!DecryptString(address_book.data(), SHA512(password_.toStdWString(), 1000), decrypted))
+            if (!DecryptString(address_book.data(), key_hash.result(), decrypted))
             {
                 ShowOpenError(tr("Unable to decrypt the address book with the specified password."));
                 return false;
@@ -606,9 +609,13 @@ bool AddressBookWindow::SaveAddressBook(const QString& file_path)
             break;
 
         case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
-            address_book.set_data(
-                EncryptString(address_book_->Serialize(), SHA512(password_.toStdWString(), 1000)));
-            break;
+        {
+            QCryptographicHash key_hash(QCryptographicHash::Sha256);
+            key_hash.addData(password_.toUtf8());
+
+            address_book.set_data(EncryptString(address_book_->Serialize(), key_hash.result()));
+        }
+        break;
 
         default:
             DLOG(LS_FATAL) << "Unknown encryption type: " << address_book.encryption_type();

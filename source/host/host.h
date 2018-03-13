@@ -34,10 +34,8 @@ public:
 private:
     void OnNetworkChannelStatusChange(NetworkChannel::Status status);
 
-    void OnAllowMethodsSended();
-    void OnSelectMethodReceived(const IOBuffer& buffer);
     void OnRequestSended();
-    void OnResponseReceived(const IOBuffer& buffer);
+    void OnResponseReceived(const QByteArray& buffer);
     void OnResultSended(proto::auth::SessionType session_type, proto::auth::Status status);
 
     std::shared_ptr<NetworkChannel> channel_;
@@ -48,7 +46,7 @@ private:
     Delegate* delegate_;
 
     WaitableTimer auth_timer_;
-    std::string nonce_;
+    QByteArray nonce_;
 
     DISALLOW_COPY_AND_ASSIGN(Host);
 };

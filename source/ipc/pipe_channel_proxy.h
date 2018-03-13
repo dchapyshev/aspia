@@ -20,8 +20,8 @@ class PipeChannelProxy
 public:
     bool Disconnect();
     bool IsDisconnecting() const;
-    bool Send(IOBuffer&& buffer, PipeChannel::SendCompleteHandler handler);
-    bool Send(IOBuffer&& buffer);
+    bool Send(QByteArray&& buffer, PipeChannel::SendCompleteHandler handler);
+    bool Send(QByteArray&& buffer);
     bool Receive(PipeChannel::ReceiveCompleteHandler handler);
     void WaitForDisconnect();
 

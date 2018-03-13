@@ -13,7 +13,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
-find_package(Qt5 REQUIRED Core Gui Widgets)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets)
 
 include(aspia_core.cmake)
 
@@ -27,10 +27,12 @@ source_group(base\\strings FILES ${SOURCE_BASE_STRINGS})
 source_group(base\\threading FILES ${SOURCE_BASE_THREADING})
 source_group(category FILES ${SOURCE_CATEGORY})
 source_group(client FILES ${SOURCE_CLIENT})
+source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
 source_group(codec FILES ${SOURCE_CODEC})
 source_group(crypto FILES ${SOURCE_CRYPTO})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
 source_group(host FILES ${SOURCE_HOST})
+source_group(host\\ui FILES ${SOURCE_HOST_UI})
 source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(proto FILES ${SOURCE_PROTO})
@@ -69,10 +71,12 @@ add_library(aspia_core SHARED
             ${SOURCE_BASE_THREADING}
             ${SOURCE_CATEGORY}
             ${SOURCE_CLIENT}
+            ${SOURCE_CLIENT_UI}
             ${SOURCE_CODEC}
             ${SOURCE_CRYPTO}
             ${SOURCE_DESKTOP_CAPTURE}
             ${SOURCE_HOST}
+            ${SOURCE_HOST_UI}
             ${SOURCE_IPC}
             ${SOURCE_NETWORK}
             ${SOURCE_PROTO}
@@ -80,15 +84,15 @@ add_library(aspia_core SHARED
             ${SOURCE_REPORT}
             ${SOURCE_RESOURCES}
             ${SOURCE_UI}
-            ${SOURCE_UI_BASE}
-            ${SOURCE_UI_DESKTOP}
             ${SOURCE_UI_FILE_TRANSFER}
-            ${SOURCE_UI_SYSTEM_INFO}
+            ${SOURCE_UI_LANG}
             ${SOURCE})
 
 target_link_libraries(aspia_core
     Qt5::Core
     Qt5::Gui
+    Qt5::Network
+    Qt5::PrintSupport
     Qt5::Widgets
     Qt5::WinMain
     debug Qt5AccessibilitySupportd
@@ -144,6 +148,15 @@ target_link_libraries(aspia_core
 add_executable(aspia_address_book ${PROJECT_SOURCE_DIR}/address_book/entry_point.cc ${PROJECT_SOURCE_DIR}/address_book/address_book.rc)
 set_target_properties(aspia_address_book PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(aspia_address_book aspia_core)
+
+add_executable(aspia_client ${PROJECT_SOURCE_DIR}/client/entry_point.cc ${PROJECT_SOURCE_DIR}/client/client.rc)
+set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)
+target_link_libraries(aspia_client aspia_core)
+
+add_executable(aspia_host_config ${PROJECT_SOURCE_DIR}/host/host_config_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_config.rc)
+set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
+set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+target_link_libraries(aspia_host_config aspia_core)
 
 add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/host_service_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_service.rc)
 target_link_libraries(aspia_host_service aspia_core)

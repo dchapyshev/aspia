@@ -1,5 +1,18 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>application-resize-actual.png</file>
+    <file>application-resize-full.png</file>
+    <file>keyboard.png</file>
+    <file>ctrl-alt-del.png</file>
+    <file>check-all.png</file>
+    <file>check-none.png</file>
+    <file>user.png</file>
+    <file>user-disabled.png</file>
+    <file>user-minus.png</file>
+    <file>user-pencil.png</file>
+    <file>user-plus.png</file>
+    <file>plug-disconnect.png</file>
+    <file>main.png</file>
     <file>locale.png</file>
     <file>24x24/lock.png</file>
     <file>book-pencil.png</file>

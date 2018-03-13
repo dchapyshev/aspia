@@ -8,7 +8,10 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
 
-#include "desktop_capture/desktop_region.h"
+#include <QRegion>
+#include <QPoint>
+#include <QSize>
+
 #include "desktop_capture/pixel_format.h"
 #include "base/macros.h"
 
@@ -19,19 +22,19 @@ class DesktopFrame
 public:
     virtual ~DesktopFrame() = default;
 
-    uint8_t* GetFrameDataAtPos(const DesktopPoint& pos) const;
+    uint8_t* GetFrameDataAtPos(const QPoint& pos) const;
     uint8_t* GetFrameDataAtPos(int32_t x, int32_t y) const;
     uint8_t* GetFrameData() const;
-    const DesktopSize& Size() const;
-    const PixelFormat& Format() const;
-    int Stride() const;
-    bool Contains(int32_t x, int32_t y) const;
+    const QSize& size() const;
+    const PixelFormat& format() const;
+    int stride() const;
+    bool contains(int32_t x, int32_t y) const;
 
-    const DesktopRegion& UpdatedRegion() const;
-    DesktopRegion* MutableUpdatedRegion();
+    const QRegion& UpdatedRegion() const;
+    QRegion* MutableUpdatedRegion();
 
 protected:
-    DesktopFrame(const DesktopSize& size, const PixelFormat& format,
+    DesktopFrame(const QSize& size, const PixelFormat& format,
                  int stride, uint8_t* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
@@ -40,11 +43,11 @@ protected:
     uint8_t* const data_;
 
 private:
-    const DesktopSize size_;
+    const QSize size_;
     const PixelFormat format_;
     const int stride_;
 
-    DesktopRegion updated_region_;
+    QRegion updated_region_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
 };

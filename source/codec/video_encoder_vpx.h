@@ -47,12 +47,12 @@ private:
     void CreateVp8Codec();
     void CreateVp9Codec();
     void PrepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
-    void SetActiveMap(const DesktopRect& rect);
+    void SetActiveMap(const QRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;
 
     // The current frame size.
-    DesktopSize screen_size_;
+    QSize screen_size_;
 
     ScopedVpxCodec codec_ = nullptr;
     vpx_image_t image_;

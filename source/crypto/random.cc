@@ -17,9 +17,9 @@ extern "C" {
 
 namespace aspia {
 
-std::string CreateRandomBuffer(size_t size)
+QByteArray CreateRandomBuffer(size_t size)
 {
-    std::string buffer;
+    QByteArray buffer;
     buffer.resize(size);
 
     randombytes_buf(buffer.data(), buffer.size());

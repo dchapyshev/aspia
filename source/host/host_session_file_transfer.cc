@@ -6,6 +6,9 @@
 //
 
 #include "host/host_session_file_transfer.h"
+
+#include <QDebug>
+
 #include "base/files/file_helpers.h"
 #include "base/files/file_util.h"
 #include "base/process/process.h"
@@ -50,7 +53,7 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
 
     if (session_type != proto::auth::SESSION_TYPE_FILE_TRANSFER)
     {
-        LOG(LS_FATAL) << "Invalid session type passed: " << session_type;
+        qFatal("Invalid session type passed");
         return;
     }
 
@@ -65,7 +68,7 @@ void HostSessionFileTransfer::OnIpcChannelDisconnect()
     status_dialog_->OnSessionTerminated();
 }
 
-void HostSessionFileTransfer::OnIpcChannelMessage(const IOBuffer& buffer)
+void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
 {
     proto::file_transfer::ClientToHost message;
 
@@ -119,7 +122,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const IOBuffer& buffer)
     }
     else
     {
-        LOG(LS_ERROR) << "Unknown message from client";
+        qWarning("Unknown message from client");
         ipc_channel_proxy_->Disconnect();
     }
 }
@@ -287,7 +290,7 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
 {
     if (!file_depacketizer_)
     {
-        LOG(LS_ERROR) << "Unexpected file packet";
+        qWarning("Unexpected file packet");
         return false;
     }
 
@@ -348,7 +351,7 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
 {
     if (!file_packetizer_)
     {
-        LOG(LS_ERROR) << "Unexpected download data request";
+        qWarning("Unexpected download data request");
         return false;
     }
 

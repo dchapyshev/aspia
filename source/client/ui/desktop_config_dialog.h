@@ -1,0 +1,42 @@
+//
+// PROJECT:         Aspia
+// FILE:            client/ui/desktop_config_dialog.h
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#ifndef _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
+#define _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
+
+#include "base/macros.h"
+#include "proto/computer.pb.h"
+#include "qt/ui_desktop_config_dialog.h"
+
+namespace aspia {
+
+class DesktopConfigDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    DesktopConfigDialog(proto::auth::SessionType session_type,
+                        proto::desktop::Config* config,
+                        QWidget* parent = nullptr);
+    ~DesktopConfigDialog() = default;
+
+private slots:
+    void OnCodecChanged(int item_index);
+    void OnCompressionRatioChanged(int value);
+    void OnButtonBoxClicked(QAbstractButton* button);
+
+private:
+    Ui::DesktopConfigDialog ui;
+    proto::auth::SessionType session_type_;
+    proto::desktop::Config* config_;
+
+    DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
+};
+
+} // namespace aspia
+
+#endif // _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H

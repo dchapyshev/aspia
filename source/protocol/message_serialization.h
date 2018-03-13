@@ -8,34 +8,35 @@
 #ifndef _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
 #define _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
 
-#include "protocol/io_buffer.h"
-#include "base/logging.h"
+#include <QDebug>
+#include <QByteArray>
 
 #include <google/protobuf/message_lite.h>
 
 namespace aspia {
 
-static IOBuffer SerializeMessage(const google::protobuf::MessageLite& message)
+static QByteArray SerializeMessage(const google::protobuf::MessageLite& message)
 {
-    size_t size = message.ByteSizeLong();
-
+    uint32_t size = message.ByteSize();
     if (!size)
     {
-        LOG(LS_ERROR) << "Empty messages are not allowed";
-        return IOBuffer();
+        qWarning("Empty messages are not allowed");
+        return QByteArray();
     }
 
-    IOBuffer buffer = IOBuffer::Create(size);
-    message.SerializeWithCachedSizesToArray(buffer.Data());
+    QByteArray buffer;
+    buffer.resize(size);
+
+    message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(buffer.data()));
     return buffer;
 }
 
 template <class T>
-bool ParseMessage(const IOBuffer& buffer, T& message)
+bool ParseMessage(const QByteArray& buffer, T& message)
 {
-    if (!message.ParseFromArray(buffer.Data(), static_cast<int>(buffer.Size())))
+    if (!message.ParseFromArray(buffer, static_cast<int>(buffer.size())))
     {
-        LOG(LS_ERROR) << "Received message that is not a valid protocol buffer.";
+        qWarning("Received message that is not a valid protocol buffer");
         return false;
     }
 

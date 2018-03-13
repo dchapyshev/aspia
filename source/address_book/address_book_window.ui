@@ -98,6 +98,8 @@
     <addaction name="action_save_as"/>
     <addaction name="action_close"/>
     <addaction name="separator"/>
+    <addaction name="actionFast_Connect"/>
+    <addaction name="separator"/>
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menu_edit">
@@ -229,6 +231,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionFast_Connect"/>
+   <addaction name="separator"/>
    <addaction name="action_new"/>
    <addaction name="action_open"/>
    <addaction name="action_save"/>
@@ -554,6 +558,15 @@
    </property>
    <property name="text">
     <string>English</string>
+   </property>
+  </action>
+  <action name="actionFast_Connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/plug-disconnect.png</normaloff>:/icon/plug-disconnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fast Connect...</string>
    </property>
   </action>
  </widget>

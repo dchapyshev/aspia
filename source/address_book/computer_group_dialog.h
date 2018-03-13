@@ -11,7 +11,7 @@
 #include <QtWidgets/QDialog>
 
 #include "address_book/computer_group.h"
-#include "qt_generated/ui_computer_group_dialog.h"
+#include "qt/ui_computer_group_dialog.h"
 
 namespace aspia {
 

@@ -34,7 +34,7 @@ private:
     bool PrepareCaptureResources();
 
     ScopedThreadDesktop desktop_;
-    DesktopRect desktop_dc_rect_;
+    QRect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;
     std::unique_ptr<ScopedGetDC> desktop_dc_;

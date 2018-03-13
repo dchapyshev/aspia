@@ -9,7 +9,6 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_TCP_H
 
 #include "base/threading/simple_thread.h"
-#include "crypto/encryptor.h"
 #include "network/network_channel.h"
 
 #define ASIO_STANDALONE
@@ -57,8 +56,8 @@ public:
     void StartChannel(StatusChangeHandler handler) override;
 
 protected:
-    void Send(IOBuffer&& buffer, SendCompleteHandler handler) override;
-    void Send(IOBuffer&& buffer) override;
+    void Send(QByteArray&& buffer, SendCompleteHandler handler) override;
+    void Send(QByteArray&& buffer) override;
     void Receive(ReceiveCompleteHandler handler) override;
     void Disconnect() override;
     bool IsDiconnecting() const override;
@@ -72,14 +71,6 @@ private:
 
     void DoConnect();
     void DoDisconnect();
-
-    void DoSendHello();
-    void OnSendHelloSizeComplete(const std::error_code& code, size_t bytes_transferred);
-    void OnSendHelloComplete(const std::error_code& code, size_t bytes_transferred);
-
-    void DoReceiveHello();
-    void OnReceiveHelloSizeComplete(const std::error_code& code, size_t bytes_transferred);
-    void OnReceiveHelloComplete(const std::error_code& code, size_t bytes_transferred);
 
     void DoReadMessage();
     void OnReadMessageSizeComplete(const std::error_code& code, size_t bytes_transferred);
@@ -95,7 +86,7 @@ private:
     void Run() override;
 
     class WriteTaskQueue
-        : public std::queue<std::pair<IOBuffer, SendCompleteHandler>>
+        : public std::queue<std::pair<QByteArray, SendCompleteHandler>>
     {
     public:
         void Swap(WriteTaskQueue& queue)
@@ -115,15 +106,13 @@ private:
     WriteTaskQueue incoming_write_queue_;
     std::mutex incoming_write_queue_lock_;
 
-    IOBuffer write_buffer_;
+    QByteArray write_buffer_;
     MessageSizeType write_size_ = 0;
 
     ReceiveCompleteHandler receive_complete_handler_;
 
-    IOBuffer read_buffer_;
+    QByteArray read_buffer_;
     MessageSizeType read_size_ = 0;
-
-    std::unique_ptr<Encryptor> encryptor_;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannelTcp);
 };

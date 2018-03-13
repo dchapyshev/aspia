@@ -68,17 +68,17 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
     }
     else
     {
-        DesktopSize size(cursor_shape.width(), cursor_shape.height());
+        QSize size(cursor_shape.width(), cursor_shape.height());
 
-        if (size.Width()  <= 0 || size.Width()  > (std::numeric_limits<int16_t>::max() / 2) ||
-            size.Height() <= 0 || size.Height() > (std::numeric_limits<int16_t>::max() / 2))
+        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
+            size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
         {
             LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
-                          << size.Width() << "x" << size.Height();
+                          << size.width() << "x" << size.height();
             return nullptr;
         }
 
-        size_t image_size = size.Width() * size.Height() * sizeof(uint32_t);
+        size_t image_size = size.width() * size.height() * sizeof(uint32_t);
         std::unique_ptr<uint8_t[]> image = std::make_unique<uint8_t[]>(image_size);
 
         if (!DecompressCursor(cursor_shape, image.get()))
@@ -87,8 +87,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
         std::unique_ptr<MouseCursor> mouse_cursor =
             MouseCursor::Create(std::move(image),
                                 size,
-                                DesktopPoint(cursor_shape.hotspot_x(),
-                                             cursor_shape.hotspot_y()));
+                                QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {

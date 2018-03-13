@@ -8,7 +8,9 @@
 #ifndef _ASPIA_CODEC__VIDEO_HELPERS_H
 #define _ASPIA_CODEC__VIDEO_HELPERS_H
 
-#include "desktop_capture/desktop_geometry.h"
+#include <QRect>
+#include <QSize>
+
 #include "desktop_capture/pixel_format.h"
 #include "proto/desktop_session.pb.h"
 
@@ -19,13 +21,13 @@ namespace aspia {
 std::unique_ptr<proto::desktop::VideoPacket> CreateVideoPacket(
     proto::desktop::VideoEncoding encoding);
 
-DesktopRect ConvertFromVideoRect(const proto::desktop::Rect& rect);
+QRect ConvertFromVideoRect(const proto::desktop::Rect& rect);
 
-void ConvertToVideoRect(const DesktopRect& from, proto::desktop::Rect* to);
+void ConvertToVideoRect(const QRect& from, proto::desktop::Rect* to);
 
-DesktopSize ConvertFromVideoSize(const proto::desktop::Size& size);
+QSize ConvertFromVideoSize(const proto::desktop::Size& size);
 
-void ConvertToVideoSize(const DesktopSize& from, proto::desktop::Size* to);
+void ConvertToVideoSize(const QSize& from, proto::desktop::Size* to);
 
 PixelFormat ConvertFromVideoPixelFormat(const proto::desktop::PixelFormat& format);
 
