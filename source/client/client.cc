@@ -165,18 +165,16 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
 
     // Messages received from the network are sent to the session.
     connect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-            session_, SLOT(readMessage(const QByteArray&)),
-            Qt::DirectConnection);
+            session_, SLOT(readMessage(const QByteArray&)));
 
     connect(session_, SIGNAL(sessionMessage(const QByteArray&)),
-            channel_, SLOT(writeMessage(const QByteArray&)),
-            Qt::DirectConnection);
+            channel_, SLOT(writeMessage(const QByteArray&)));
 
-    connect(channel_, SIGNAL(channelDisconnected()), session_, SLOT(close()));
+    connect(channel_, SIGNAL(channelDisconnected()), session_, SLOT(closeSession()));
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, SIGNAL(sessionClose()), channel_, SLOT(stopChannel()));
-    connect(session_, SIGNAL(sessionClose()), status_dialog_, SLOT(close()));
+    connect(session_, SIGNAL(sessionClosed()), channel_, SLOT(stopChannel()));
+    connect(session_, SIGNAL(sessionClosed()), status_dialog_, SLOT(close()));
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
     connect(session_, SIGNAL(sessionError(const QString&)),

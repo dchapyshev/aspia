@@ -21,13 +21,22 @@ public:
     virtual ~ClientSession() = default;
 
 public slots:
+    // Reads the incoming message for the session.
     virtual void readMessage(const QByteArray& buffer) = 0;
-    virtual void close() = 0;
+
+    // Closes the session. When a slot is called, signal |sessionClosed| is not generated.
+    virtual void closeSession() = 0;
 
 signals:
+    // Indicates an outgoing message.
     void sessionMessage(const QByteArray& buffer);
+
+    // Indicates an error in the session.
     void sessionError(const QString& message);
-    void sessionClose();
+
+    // Indicates the end of the session by the user (for example, when the session window
+    // is closed).
+    void sessionClosed();
 };
 
 } // namespace aspia

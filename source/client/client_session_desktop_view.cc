@@ -24,7 +24,7 @@ ClientSessionDesktopView::ClientSessionDesktopView(proto::Computer* computer, QO
             this, SLOT(onSendConfig(const proto::desktop::Config&)));
 
     // When the window is closed, we close the session.
-    connect(desktop_window_, SIGNAL(windowClose()), SIGNAL(sessionClose()));
+    connect(desktop_window_, SIGNAL(windowClose()), this, SIGNAL(sessionClosed()));
 
     desktop_window_->show();
     desktop_window_->activateWindow();
@@ -60,8 +60,11 @@ void ClientSessionDesktopView::readMessage(const QByteArray& buffer)
     }
 }
 
-void ClientSessionDesktopView::close()
+void ClientSessionDesktopView::closeSession()
 {
+    // If the end of the session is not initiated by the user, then we do not send the session
+    // end signal.
+    disconnect(desktop_window_, SIGNAL(windowClose()), this, SIGNAL(sessionClosed()));
     desktop_window_->close();
 }
 

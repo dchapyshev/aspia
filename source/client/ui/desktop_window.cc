@@ -96,7 +96,7 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
 {
-    QSize prev_size = (desktop_->desktopFrame() ? desktop_->desktopFrame()->size() : QSize());
+    QSize prev_size = desktop_->size();
 
     desktop_->resizeDesktopFrame(screen_size);
 
@@ -214,16 +214,12 @@ void DesktopWindow::changeSettings()
 
 void DesktopWindow::autosizeWindow()
 {
-    DesktopFrame* frame = desktop_->desktopFrame();
-    if (!frame)
-        return;
-
     QRect desktop_rect = QApplication::desktop()->screenGeometry();
     QRect full_rect = geometry();
     QRect client_rect = rect();
 
-    QSize window_size(frame->size().width() + full_rect.width() - client_rect.width(),
-                      frame->size().height() + full_rect.height() - client_rect.height());
+    QSize window_size(desktop_->size().width() + full_rect.width() - client_rect.width(),
+                      desktop_->size().height() + full_rect.height() - client_rect.height());
 
     if (window_size.width() < desktop_rect.width() && window_size.height() < desktop_rect.height())
     {

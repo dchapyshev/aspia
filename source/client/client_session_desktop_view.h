@@ -30,7 +30,7 @@ public:
 public slots:
     // ClientSession implementation.
     void readMessage(const QByteArray& buffer) override;
-    void close() override;
+    void closeSession() override;
 
     virtual void onSendConfig(const proto::desktop::Config& config);
 
