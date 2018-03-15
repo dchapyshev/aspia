@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>arrow-in-out.png</file>
     <file>application-resize-actual.png</file>
     <file>application-resize-full.png</file>
     <file>keyboard.png</file>

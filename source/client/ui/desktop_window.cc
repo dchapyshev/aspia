@@ -82,9 +82,10 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
 
     connect(panel_, SIGNAL(keySequence(int)), desktop_, SLOT(executeKeySequense(int)));
+    connect(panel_, SIGNAL(switchToFullscreen()), SLOT(showFullScreen()));
+    connect(panel_, SIGNAL(switchToNormal()), SLOT(showNormal()));
     connect(panel_, SIGNAL(settingsButton()), SLOT(changeSettings()));
     connect(panel_, SIGNAL(autosizeButton()), SLOT(autosizeWindow()));
-    connect(panel_, SIGNAL(fullscreenButton()), SLOT(switchToFullscreen()));
     connect(panel_, SIGNAL(closeButton()), SLOT(close()));
 
     connect(desktop_, SIGNAL(sendPointerEvent(const QPoint&, quint32)),
@@ -235,14 +236,6 @@ void DesktopWindow::autosizeWindow()
 
     if (!isMaximized())
         showMaximized();
-}
-
-void DesktopWindow::switchToFullscreen()
-{
-    if (isFullScreen())
-        showNormal();
-    else
-        showFullScreen();
 }
 
 void DesktopWindow::resizeEvent(QResizeEvent* event)

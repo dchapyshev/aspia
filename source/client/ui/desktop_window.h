@@ -48,7 +48,6 @@ private slots:
     void clipboardDataChanged();
     void changeSettings();
     void autosizeWindow();
-    void switchToFullscreen();
 
 private:
     void resizeEvent(QResizeEvent* event) override;

@@ -23,12 +23,14 @@ public:
 
 signals:
     void keySequence(int key_secuence);
+    void switchToFullscreen();
+    void switchToNormal();
     void settingsButton();
     void autosizeButton();
-    void fullscreenButton();
     void closeButton();
 
 private slots:
+    void onFullscreenButton(bool checked);
     void onCtrlAltDelButton();
     void onAltTabAction();
     void onAltShiftTabAction();

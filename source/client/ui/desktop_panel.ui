@@ -77,7 +77,7 @@
      </property>
      <property name="icon">
       <iconset resource="../../resources/resources.qrc">
-       <normaloff>:/icon/application-resize-actual.png</normaloff>:/icon/application-resize-actual.png</iconset>
+       <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -103,7 +103,7 @@
        <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="flat">
       <bool>true</bool>
