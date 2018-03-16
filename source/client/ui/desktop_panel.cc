@@ -26,7 +26,7 @@ DesktopPanel::DesktopPanel(QWidget* parent)
     keys_menu_->addAction(ui.action_custom);
 
     connect(ui.button_settings, SIGNAL(pressed()), SIGNAL(settingsButton()));
-    connect(ui.button_autosize, SIGNAL(pressed()), SIGNAL(autosizeButton()));
+    connect(ui.button_autosize, SIGNAL(pressed()), SLOT(onAutosizeButton()));
     connect(ui.button_full_screen, SIGNAL(toggled(bool)), SLOT(onFullscreenButton(bool)));
     connect(ui.button_ctrl_alt_del, SIGNAL(pressed()), SLOT(onCtrlAltDelButton()));
     connect(ui.button_exit, SIGNAL(pressed()), SIGNAL(closeButton()));
@@ -52,6 +52,14 @@ void DesktopPanel::onFullscreenButton(bool checked)
         ui.button_full_screen->setIcon(QIcon(":/icon/application-resize-full.png"));
         emit switchToNormal();
     }
+}
+
+void DesktopPanel::onAutosizeButton()
+{
+    if (ui.button_full_screen->isChecked())
+        ui.button_full_screen->setChecked(false);
+
+    emit switchToAutosize();
 }
 
 void DesktopPanel::onCtrlAltDelButton()

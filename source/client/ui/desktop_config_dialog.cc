@@ -159,20 +159,21 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
             ConvertToVideoPixelFormat(pixel_format, config_->mutable_pixel_format());
 
             config_->set_compress_ratio(ui.slider_compression_ratio->value());
-            config_->set_update_interval(ui.spin_update_interval->value());
+        }
 
-            if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-            {
-                uint32_t flags = 0;
+        config_->set_update_interval(ui.spin_update_interval->value());
 
-                if (ui.checkbox_cursor_shape->isChecked())
-                    flags |= proto::desktop::Config::ENABLE_CURSOR_SHAPE;
+        if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            uint32_t flags = 0;
 
-                if (ui.checkbox_clipboard->isChecked())
-                    flags |= proto::desktop::Config::ENABLE_CLIPBOARD;
+            if (ui.checkbox_cursor_shape->isChecked())
+                flags |= proto::desktop::Config::ENABLE_CURSOR_SHAPE;
 
-                config_->set_flags(flags);
-            }
+            if (ui.checkbox_clipboard->isChecked())
+                flags |= proto::desktop::Config::ENABLE_CLIPBOARD;
+
+            config_->set_flags(flags);
         }
 
         accept();

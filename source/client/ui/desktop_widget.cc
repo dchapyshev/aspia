@@ -129,7 +129,6 @@ void DesktopWidget::paintEvent(QPaintEvent* event)
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
 {
     processMouseEvent(event->type(), event->buttons(), event->pos());
-    QWidget::mouseMoveEvent(event);
 }
 
 void DesktopWidget::mousePressEvent(QMouseEvent* event)

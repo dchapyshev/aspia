@@ -7,8 +7,6 @@
 
 #include "client/client_session_desktop_view.h"
 
-#include <QCoreApplication>
-
 #include "client/ui/desktop_window.h"
 #include "protocol/message_serialization.h"
 
