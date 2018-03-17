@@ -8,12 +8,13 @@
 #ifndef _ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 #define _ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 
-#include <QHBoxLayout>
-#include <QScrollArea>
 #include <QWidget>
 
 #include "base/macros.h"
 #include "proto/computer.pb.h"
+
+class QHBoxLayout;
+class QScrollArea;
 
 namespace aspia {
 
@@ -44,12 +45,12 @@ signals:
 
 private slots:
     void onPointerEvent(const QPoint& pos, quint32 mask);
-    void onScrollTimeout();
     void clipboardDataChanged();
     void changeSettings();
     void autosizeWindow();
 
 private:
+    void timerEvent(QTimerEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 
@@ -59,7 +60,7 @@ private:
     QScrollArea* scroll_area_;
     DesktopPanel* panel_;
     DesktopWidget* desktop_;
-    QTimer* scroll_timer_;
+    int scroll_timer_id_ = -1;
     QPoint scroll_delta_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWindow);

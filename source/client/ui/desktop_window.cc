@@ -12,12 +12,13 @@
 #include <QBrush>
 #include <QClipboard>
 #include <QDesktopWidget>
+#include <QHBoxLayout>
 #include <QMimeData>
 #include <QPalette>
 #include <QResizeEvent>
+#include <QScrollArea>
 #include <QScrollBar>
 #include <QShortcut>
-#include <QTimer>
 
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
@@ -74,10 +75,6 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     layout_->addWidget(scroll_area_);
 
     panel_ = new DesktopPanel(this);
-
-    scroll_timer_ = new QTimer(this);
-
-    connect(scroll_timer_, SIGNAL(timeout()), SLOT(onScrollTimeout()));
 
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
 
@@ -158,38 +155,11 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
     }
 
     if (!scroll_delta_.isNull())
-        scroll_timer_->start(20);
+        scroll_timer_id_ = startTimer(20);
     else
-        scroll_timer_->stop();
+        killTimer(scroll_timer_id_);
 
     emit sendPointerEvent(pos, mask);
-}
-
-void DesktopWindow::onScrollTimeout()
-{
-    if (scroll_delta_.x() != 0)
-    {
-        QScrollBar* scrollbar = scroll_area_->horizontalScrollBar();
-
-        int pos = scrollbar->sliderPosition() + scroll_delta_.x();
-
-        pos = std::max(pos, scrollbar->minimum());
-        pos = std::min(pos, scrollbar->maximum());
-
-        scrollbar->setSliderPosition(pos);
-    }
-
-    if (scroll_delta_.y() != 0)
-    {
-        QScrollBar* scrollbar = scroll_area_->verticalScrollBar();
-
-        int pos = scrollbar->sliderPosition() + scroll_delta_.y();
-
-        pos = std::max(pos, scrollbar->minimum());
-        pos = std::min(pos, scrollbar->maximum());
-
-        scrollbar->setSliderPosition(pos);
-    }
 }
 
 void DesktopWindow::clipboardDataChanged()
@@ -236,6 +206,38 @@ void DesktopWindow::autosizeWindow()
 
     if (!isMaximized())
         showMaximized();
+}
+
+void DesktopWindow::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == scroll_timer_id_)
+    {
+        if (scroll_delta_.x() != 0)
+        {
+            QScrollBar* scrollbar = scroll_area_->horizontalScrollBar();
+
+            int pos = scrollbar->sliderPosition() + scroll_delta_.x();
+
+            pos = std::max(pos, scrollbar->minimum());
+            pos = std::min(pos, scrollbar->maximum());
+
+            scrollbar->setSliderPosition(pos);
+        }
+
+        if (scroll_delta_.y() != 0)
+        {
+            QScrollBar* scrollbar = scroll_area_->verticalScrollBar();
+
+            int pos = scrollbar->sliderPosition() + scroll_delta_.y();
+
+            pos = std::max(pos, scrollbar->minimum());
+            pos = std::min(pos, scrollbar->maximum());
+
+            scrollbar->setSliderPosition(pos);
+        }
+    }
+
+    QWidget::timerEvent(event);
 }
 
 void DesktopWindow::resizeEvent(QResizeEvent* event)
