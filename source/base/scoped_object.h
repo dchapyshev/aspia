@@ -8,6 +8,9 @@
 #ifndef _ASPIA_BASE__SCOPED_HANDLE_H
 #define _ASPIA_BASE__SCOPED_HANDLE_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include "base/macros.h"
 
 namespace aspia {

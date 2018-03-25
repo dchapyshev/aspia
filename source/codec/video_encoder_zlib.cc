@@ -6,8 +6,10 @@
 //
 
 #include "codec/video_encoder_zlib.h"
-#include "codec/video_helpers.h"
-#include "base/logging.h"
+
+#include <QDebug>
+
+#include "codec/video_util.h"
 
 namespace aspia {
 
@@ -34,21 +36,21 @@ VideoEncoderZLIB::VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
 }
 
 // static
-std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& target_format,
+std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::create(const PixelFormat& target_format,
                                                            int compression_ratio)
 {
     if (compression_ratio < Z_BEST_SPEED ||
         compression_ratio > Z_BEST_COMPRESSION)
     {
-        LOG(LS_ERROR) << "Wrong compression ratio: " << compression_ratio;
+        qWarning() << "Wrong compression ratio: " << compression_ratio;
         return nullptr;
     }
 
     std::unique_ptr<PixelTranslator> translator =
-        PixelTranslator::Create(PixelFormat::ARGB(), target_format);
+        PixelTranslator::create(PixelFormat::ARGB(), target_format);
     if (!translator)
     {
-        LOG(LS_ERROR) << "Unsupported pixel format";
+        qWarning("Unsupported pixel format");
         return nullptr;
     }
 
@@ -56,9 +58,9 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::Create(const PixelFormat& ta
         new VideoEncoderZLIB(std::move(translator), target_format, compression_ratio));
 }
 
-void VideoEncoderZLIB::CompressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
+void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)
 {
-    compressor_.Reset();
+    compressor_.reset();
 
     const size_t packet_size = source_data_size + (source_data_size / 100 + 16);
 
@@ -76,7 +78,7 @@ void VideoEncoderZLIB::CompressPacket(proto::desktop::VideoPacket* packet, size_
         // Number of bytes that were written to the destination buffer.
         size_t written = 0;
 
-        compress_again = compressor_.Process(
+        compress_again = compressor_.process(
             translate_buffer_.get() + pos, source_data_size - pos,
             compress_pos + filled, packet_size - filled,
             Compressor::CompressorFinish, &consumed, &written);
@@ -93,10 +95,11 @@ void VideoEncoderZLIB::CompressPacket(proto::desktop::VideoPacket* packet, size_
     }
 }
 
-std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const DesktopFrame* frame)
+std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::desktop::VideoPacket> packet(
-        CreateVideoPacket(proto::desktop::VIDEO_ENCODING_ZLIB));
+    std::unique_ptr<proto::desktop::VideoPacket> packet(new proto::desktop::VideoPacket());
+
+    packet->set_encoding(proto::desktop::VIDEO_ENCODING_ZLIB);
 
     if (screen_size_ != frame->size())
     {
@@ -104,16 +107,16 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const Desk
 
         proto::desktop::VideoPacketFormat* format = packet->mutable_format();
 
-        ConvertToVideoSize(screen_size_, format->mutable_screen_size());
-        ConvertToVideoPixelFormat(target_format_, format->mutable_pixel_format());
+        VideoUtil::toVideoSize(screen_size_, format->mutable_screen_size());
+        VideoUtil::toVideoPixelFormat(target_format_, format->mutable_pixel_format());
     }
 
     size_t data_size = 0;
 
-    for (const auto& rect : frame->UpdatedRegion())
+    for (const auto& rect : frame->updatedRegion())
     {
-        data_size += rect.width() * rect.height() * target_format_.BytesPerPixel();
-        ConvertToVideoRect(rect, packet->add_dirty_rect());
+        data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
+        VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
     }
 
     if (translate_buffer_size_ < data_size)
@@ -124,11 +127,11 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const Desk
 
     uint8_t* translate_pos = translate_buffer_.get();
 
-    for (const auto& rect : frame->UpdatedRegion())
+    for (const auto& rect : frame->updatedRegion())
     {
-        const int stride = rect.width() * target_format_.BytesPerPixel();
+        const int stride = rect.width() * target_format_.bytesPerPixel();
 
-        translator_->Translate(frame->GetFrameDataAtPos(rect.topLeft()),
+        translator_->translate(frame->frameDataAtPos(rect.topLeft()),
                                frame->stride(),
                                translate_pos,
                                stride,
@@ -139,7 +142,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::Encode(const Desk
     }
 
     // Compress data with using ZLIB compressor.
-    CompressPacket(packet.get(), data_size);
+    compressPacket(packet.get(), data_size);
 
     return packet;
 }

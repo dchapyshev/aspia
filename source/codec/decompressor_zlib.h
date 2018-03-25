@@ -21,10 +21,10 @@ public:
     DecompressorZLIB();
     ~DecompressorZLIB();
 
-    void Reset() override;
+    void reset() override;
 
     // Decompressor implementations.
-    bool Process(const uint8_t* input_data,
+    bool process(const uint8_t* input_data,
                  size_t input_size,
                  uint8_t* output_data,
                  size_t output_size,

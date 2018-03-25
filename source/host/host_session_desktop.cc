@@ -6,10 +6,13 @@
 //
 
 #include "host/host_session_desktop.h"
+
+#include <QDebug>
+
 #include "base/process/process.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
-#include "codec/video_helpers.h"
+#include "codec/video_util.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
 
@@ -17,12 +20,12 @@ namespace aspia {
 
 namespace {
 
-static const uint32_t kSupportedVideoEncodings =
+static const quint32 kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_ZLIB |
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-static const uint32_t kSupportedFeatures =
+static const quint32 kSupportedFeatures =
     proto::desktop::FEATURE_CURSOR_SHAPE |
     proto::desktop::FEATURE_CLIPBOARD;
 
@@ -63,7 +66,7 @@ void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
             break;
 
         default:
-            LOG(LS_FATAL) << "Invalid session type passed: " << session_type_;
+            qFatal("Invalid session type passed: %d", session_type_);
             return;
     }
 
@@ -100,7 +103,7 @@ void HostSessionDesktop::OnIpcChannelMessage(const QByteArray& buffer)
         else
         {
             // Unknown messages are ignored.
-            DLOG(LS_WARNING) << "Unhandled message from client";
+            qWarning("Unhandled message from client");
         }
 
         if (success)
@@ -118,23 +121,23 @@ void HostSessionDesktop::OnIpcChannelMessage(const QByteArray& buffer)
 void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
                                         std::unique_ptr<MouseCursor> mouse_cursor)
 {
-    DCHECK(screen_frame || mouse_cursor);
-    DCHECK(video_encoder_);
+    Q_ASSERT(screen_frame || mouse_cursor);
+    Q_ASSERT(video_encoder_);
 
     proto::desktop::HostToClient message;
 
     // If the screen image has changes.
     if (screen_frame)
     {
-        std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder_->Encode(screen_frame);
+        std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder_->encode(screen_frame);
         message.set_allocated_video_packet(packet.release());
     }
 
     // If the mouse cursor has changes.
     if (mouse_cursor)
     {
-        DCHECK_EQ(session_type_, proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
-        DCHECK(cursor_encoder_);
+        Q_ASSERT(session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+        Q_ASSERT(cursor_encoder_);
 
         std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
             cursor_encoder_->Encode(std::move(mouse_cursor));
@@ -172,7 +175,7 @@ bool HostSessionDesktop::ReadPointerEvent(const proto::desktop::PointerEvent& ev
     if (!input_injector_)
         input_injector_ = std::make_unique<InputInjector>();
 
-    input_injector_->InjectPointerEvent(event);
+    input_injector_->injectPointerEvent(event);
     return true;
 }
 
@@ -184,7 +187,7 @@ bool HostSessionDesktop::ReadKeyEvent(const proto::desktop::KeyEvent& event)
     if (!input_injector_)
         input_injector_ = std::make_unique<InputInjector>();
 
-    input_injector_->InjectKeyEvent(event);
+    input_injector_->injectKeyEvent(event);
     return true;
 }
 
@@ -258,20 +261,20 @@ bool HostSessionDesktop::ReadConfig(const proto::desktop::Config& config)
     switch (config.video_encoding())
     {
         case proto::desktop::VIDEO_ENCODING_VP8:
-            video_encoder_ = VideoEncoderVPX::CreateVP8();
+            video_encoder_ = VideoEncoderVPX::createVP8();
             break;
 
         case proto::desktop::VIDEO_ENCODING_VP9:
-            video_encoder_ = VideoEncoderVPX::CreateVP9();
+            video_encoder_ = VideoEncoderVPX::createVP9();
             break;
 
         case proto::desktop::VIDEO_ENCODING_ZLIB:
-            video_encoder_ = VideoEncoderZLIB::Create(
-                ConvertFromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
+            video_encoder_ = VideoEncoderZLIB::create(
+                VideoUtil::fromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
             break;
 
         default:
-            LOG(LS_ERROR) << "Unsupported video encoding: " << config.video_encoding();
+            qWarning() << "Unsupported video encoding: " << config.video_encoding();
             video_encoder_.reset();
             break;
     }

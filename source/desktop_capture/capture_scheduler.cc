@@ -9,12 +9,12 @@
 
 namespace aspia {
 
-void CaptureScheduler::BeginCapture()
+void CaptureScheduler::beginCapture()
 {
     begin_time_ = std::chrono::high_resolution_clock::now();
 }
 
-std::chrono::milliseconds CaptureScheduler::NextCaptureDelay(
+std::chrono::milliseconds CaptureScheduler::nextCaptureDelay(
     const std::chrono::milliseconds& max_delay) const
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time =

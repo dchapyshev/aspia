@@ -24,6 +24,8 @@ public slots:
     // Reads the incoming message for the session.
     virtual void readMessage(const QByteArray& buffer) = 0;
 
+    virtual void startSession() = 0;
+
     // Closes the session. When a slot is called, signal |sessionClosed| is not generated.
     virtual void closeSession() = 0;
 

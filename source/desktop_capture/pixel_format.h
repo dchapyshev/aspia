@@ -59,21 +59,21 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    uint8_t BitsPerPixel() const;
-    uint8_t BytesPerPixel() const;
+    uint8_t bitsPerPixel() const;
+    uint8_t bytesPerPixel() const;
 
-    uint16_t RedMax() const;
-    uint16_t GreenMax() const;
-    uint16_t BlueMax() const;
+    uint16_t redMax() const;
+    uint16_t greenMax() const;
+    uint16_t blueMax() const;
 
-    uint8_t RedShift() const;
-    uint8_t GreenShift() const;
-    uint8_t BlueShift() const;
+    uint8_t redShift() const;
+    uint8_t greenShift() const;
+    uint8_t blueShift() const;
 
-    bool IsValid() const;
-    void Clear();
-    bool IsEqual(const PixelFormat& other) const;
-    void Set(const PixelFormat& other);
+    bool isValid() const;
+    void clear();
+    bool isEqual(const PixelFormat& other) const;
+    void set(const PixelFormat& other);
 
     PixelFormat& operator=(const PixelFormat& other);
     bool operator==(const PixelFormat& other) const;

@@ -6,16 +6,18 @@
 //
 
 #include "codec/video_decoder_vpx.h"
-#include "codec/video_helpers.h"
-#include "libyuv/convert_from.h"
-#include "libyuv/convert_argb.h"
-#include "base/logging.h"
+
+#include <libyuv/convert_from.h>
+#include <libyuv/convert_argb.h>
+#include <QDebug>
+
+#include "codec/video_util.h"
 
 namespace aspia {
 
 namespace {
 
-bool ConvertImage(const proto::desktop::VideoPacket& packet,
+bool convertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
                   DesktopFrame* frame)
 {
@@ -35,11 +37,11 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
+                QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
                 if (!frame_rect.contains(rect))
                 {
-                    LOG(LS_ERROR) << "The rectangle is outside the screen area";
+                    qWarning("The rectangle is outside the screen area");
                     return false;
                 }
 
@@ -49,7 +51,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I420ToARGB(y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
                                    v_data + uv_offset, uv_stride,
-                                   frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    rect.width(),
                                    rect.height());
@@ -64,11 +66,11 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
+                QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
                 if (!frame_rect.contains(rect))
                 {
-                    LOG(LS_ERROR) << "The rectangle is outside the screen area";
+                    qWarning("The rectangle is outside the screen area");
                     return false;
                 }
 
@@ -79,7 +81,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I444ToARGB(y_data + y_offset, y_stride,
                                    u_data + u_offset, u_stride,
                                    v_data + v_offset, v_stride,
-                                   frame->GetFrameDataAtPos(rect.topLeft()),
+                                   frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    rect.width(),
                                    rect.height());
@@ -89,7 +91,7 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 
         default:
         {
-            LOG(LS_ERROR) << "Unsupported image format: " << image->fmt;
+            qWarning() << "Unsupported image format: " << image->fmt;
             return false;
         }
     }
@@ -100,14 +102,14 @@ bool ConvertImage(const proto::desktop::VideoPacket& packet,
 } // namespace
 
 // static
-std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::CreateVP8()
+std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
 {
     return std::unique_ptr<VideoDecoderVPX>(
         new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 // static
-std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::CreateVP9()
+std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
 {
     return std::unique_ptr<VideoDecoderVPX>(
         new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
@@ -136,15 +138,15 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
             break;
 
         default:
-            LOG(LS_FATAL) << "Unsupported video encoding: " << encoding;
+            qFatal("Unsupported video encoding: %d", encoding);
             return;
     }
 
-    vpx_codec_err_t ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
-    CHECK_EQ(VPX_CODEC_OK, ret);
+    if (vpx_codec_dec_init(codec_.get(), algo, &config, 0) != VPX_CODEC_OK)
+        qFatal("vpx_codec_dec_init failed");
 }
 
-bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
+bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
@@ -158,8 +160,8 @@ bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopF
         const char* error = vpx_codec_error(codec_.get());
         const char* error_detail = vpx_codec_error_detail(codec_.get());
 
-        LOG(LS_ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
-                      << "Details: " << (error_detail ? error_detail : "(NULL)");
+        qWarning() << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
+                   << "Details: " << (error_detail ? error_detail : "(NULL)");
         return false;
     }
 
@@ -169,17 +171,17 @@ bool VideoDecoderVPX::Decode(const proto::desktop::VideoPacket& packet, DesktopF
     vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
     if (!image)
     {
-        LOG(LS_ERROR) << "No video frame decoded";
+        qWarning("No video frame decoded");
         return false;
     }
 
     if (QSize(image->d_w, image->d_h) != frame->size())
     {
-        LOG(LS_ERROR) << "Size of the encoded frame doesn't match size in the header";
+        qWarning("Size of the encoded frame doesn't match size in the header");
         return false;
     }
 
-    return ConvertImage(packet, image, frame);
+    return convertImage(packet, image, frame);
 }
 
 } // namespace aspia

@@ -8,6 +8,8 @@
 #include "base/object_watcher.h"
 #include "base/logging.h"
 
+#undef max
+
 namespace aspia {
 
 ObjectWatcher::~ObjectWatcher()

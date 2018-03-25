@@ -36,7 +36,7 @@ public:
     // Resets all the internal state so the compressor behaves as if it
     // was just created.
     //
-    virtual void Reset() = 0;
+    virtual void reset() = 0;
 
     //
     // Compress |input_data| with |input_size| bytes.
@@ -61,7 +61,7 @@ public:
     // there is more data to be written out. This is particularly
     // useful for end of the compression stream.
     //
-    virtual bool Process(const uint8_t* input_data,
+    virtual bool process(const uint8_t* input_data,
                          size_t input_size,
                          uint8_t* output_data,
                          size_t output_size,

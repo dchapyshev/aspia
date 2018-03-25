@@ -8,6 +8,9 @@
 #ifndef _ASPIA_PROTOCOL__CLIPBOARD_H
 #define _ASPIA_PROTOCOL__CLIPBOARD_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <memory>
 
 #include "base/message_window.h"

@@ -76,9 +76,11 @@ UserDialog::UserDialog(UserList* user_list, User* user, QWidget* parent)
                      tr("File Transfer"),
                      proto::auth::SESSION_TYPE_FILE_TRANSFER);
 
+#if 0
     add_session_type(QIcon(":/icon/system-monitor.png"),
                      tr("System Information"),
                      proto::auth::SESSION_TYPE_SYSTEM_INFO);
+#endif
 
     connect(ui.button_check_all, SIGNAL(pressed()), this, SLOT(onCheckAllButtonPressed()));
     connect(ui.button_check_none, SIGNAL(pressed()), this, SLOT(onCheckNoneButtonPressed()));

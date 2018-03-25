@@ -15,7 +15,7 @@
 
 namespace aspia {
 
-bool FirewallManager::Init(const std::wstring& app_name, const std::wstring& app_path)
+bool FirewallManager::Init(const wchar_t* app_name, const wchar_t* app_path)
 {
     firewall_rules_ = nullptr;
 
@@ -76,9 +76,9 @@ bool FirewallManager::IsFirewallEnabled() const
     return false;
 }
 
-bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
-                                 const std::wstring& description,
-                                 uint16_t port)
+bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
+                                 const wchar_t* description,
+                                 int port)
 {
     DeleteRuleByName(rule_name);
 
@@ -92,8 +92,8 @@ bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
         return false;
     }
 
-    rule->put_Name(ScopedBstr(rule_name.c_str()));
-    rule->put_Description(ScopedBstr(description.c_str()));
+    rule->put_Name(ScopedBstr(rule_name));
+    rule->put_Description(ScopedBstr(description));
     rule->put_ApplicationName(ScopedBstr(app_path_.c_str()));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
@@ -113,7 +113,7 @@ bool FirewallManager::AddTCPRule(const std::wstring& rule_name,
     return true;
 }
 
-void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
+void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
 {
     ScopedComPtr<IUnknown> rules_enum_unknown;
 
@@ -164,7 +164,7 @@ void FirewallManager::DeleteRuleByName(const std::wstring& rule_name)
             continue;
         }
 
-        if (bstr_rule_name && _wcsicmp(bstr_rule_name, rule_name.c_str()) == 0)
+        if (bstr_rule_name && _wcsicmp(bstr_rule_name, rule_name) == 0)
         {
             hr = firewall_rules_->Remove(bstr_rule_name);
             if (FAILED(hr))

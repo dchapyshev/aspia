@@ -21,7 +21,7 @@ public:
     explicit CompressorZLIB(int32_t compress_ratio);
     ~CompressorZLIB();
 
-    bool Process(const uint8_t* input_data,
+    bool process(const uint8_t* input_data,
                  size_t input_size,
                  uint8_t* output_data,
                  size_t output_size,
@@ -29,7 +29,7 @@ public:
                  size_t* consumed,
                  size_t* written) override;
 
-    void Reset() override;
+    void reset() override;
 
 private:
     z_stream stream_;

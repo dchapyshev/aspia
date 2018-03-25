@@ -20,32 +20,32 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        red_table_.resize(source_format_.RedMax() + 1);
-        green_table_.resize(source_format_.GreenMax() + 1);
-        blue_table_.resize(source_format_.BlueMax() + 1);
+        red_table_.resize(source_format_.redMax() + 1);
+        green_table_.resize(source_format_.greenMax() + 1);
+        blue_table_.resize(source_format_.blueMax() + 1);
 
-        for (uint32_t i = 0; i <= source_format_.RedMax(); ++i)
+        for (uint32_t i = 0; i <= source_format_.redMax(); ++i)
         {
-            red_table_[i] = ((i * target_format_.RedMax() + source_format_.RedMax() / 2) /
-                             source_format_.RedMax()) << target_format_.RedShift();
+            red_table_[i] = ((i * target_format_.redMax() + source_format_.redMax() / 2) /
+                             source_format_.redMax()) << target_format_.redShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.GreenMax(); ++i)
+        for (uint32_t i = 0; i <= source_format_.greenMax(); ++i)
         {
-            green_table_[i] = ((i * target_format_.GreenMax() + source_format_.GreenMax() / 2) /
-                               source_format_.GreenMax()) << target_format_.GreenShift();
+            green_table_[i] = ((i * target_format_.greenMax() + source_format_.greenMax() / 2) /
+                               source_format_.greenMax()) << target_format_.greenShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.BlueMax(); ++i)
+        for (uint32_t i = 0; i <= source_format_.blueMax(); ++i)
         {
-            blue_table_[i] = ((i * target_format_.BlueMax() + source_format_.BlueMax() / 2) /
-                              source_format_.BlueMax()) << target_format_.BlueShift();
+            blue_table_[i] = ((i * target_format_.blueMax() + source_format_.blueMax() / 2) /
+                              source_format_.blueMax()) << target_format_.blueShift();
         }
     }
 
     ~PixelTranslatorT() = default;
 
-    void Translate(const uint8_t* src, int src_stride,
+    void translate(const uint8_t* src, int src_stride,
                    uint8_t* dst, int dst_stride,
                    int width, int height) override
     {
@@ -63,29 +63,29 @@ public:
                 if constexpr (source_bpp == 4)
                 {
                     red = red_table_[
-                        *(uint32_t*) src >> source_format_.RedShift() & source_format_.RedMax()];
+                        *(uint32_t*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint32_t*) src >> source_format_.GreenShift() & source_format_.GreenMax()];
+                        *(uint32_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint32_t*) src >> source_format_.BlueShift() & source_format_.BlueMax()];
+                        *(uint32_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
                 else if constexpr (source_bpp == 2)
                 {
                     red = red_table_[
-                        *(uint16_t*) src >> source_format_.RedShift() & source_format_.RedMax()];
+                        *(uint16_t*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint16_t*) src >> source_format_.GreenShift() & source_format_.GreenMax()];
+                        *(uint16_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint16_t*) src >> source_format_.BlueShift() & source_format_.BlueMax()];
+                        *(uint16_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
                 else if constexpr (source_bpp == 1)
                 {
                     red = red_table_[
-                        *(uint8_t*) src >> source_format_.RedShift() & source_format_.RedMax()];
+                        *(uint8_t*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint8_t*) src >> source_format_.GreenShift() & source_format_.GreenMax()];
+                        *(uint8_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint8_t*) src >> source_format_.BlueShift() & source_format_.BlueMax()];
+                        *(uint8_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
 
                 if constexpr (target_bpp == 4)
@@ -118,14 +118,14 @@ private:
 } // namespace
 
 // static
-std::unique_ptr<PixelTranslator> PixelTranslator::Create(const PixelFormat& source_format,
+std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& source_format,
                                                          const PixelFormat& target_format)
 {
-    switch (target_format.BytesPerPixel())
+    switch (target_format.bytesPerPixel())
     {
         case 4:
         {
-            switch (source_format.BytesPerPixel())
+            switch (source_format.bytesPerPixel())
             {
                 case 4:
                     return std::make_unique<PixelTranslatorT<4, 4>>(source_format, target_format);
@@ -141,7 +141,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::Create(const PixelFormat& sour
 
         case 2:
         {
-            switch (source_format.BytesPerPixel())
+            switch (source_format.bytesPerPixel())
             {
                 case 4:
                     return std::make_unique<PixelTranslatorT<4, 2>>(source_format, target_format);
@@ -157,7 +157,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::Create(const PixelFormat& sour
 
         case 1:
         {
-            switch (source_format.BytesPerPixel())
+            switch (source_format.bytesPerPixel())
             {
                 case 4:
                     return std::make_unique<PixelTranslatorT<4, 1>>(source_format, target_format);

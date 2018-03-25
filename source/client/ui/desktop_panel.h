@@ -27,7 +27,6 @@ signals:
     void switchToNormal();
     void switchToAutosize();
     void settingsButton();
-    void closeButton();
 
 private slots:
     void onFullscreenButton(bool checked);

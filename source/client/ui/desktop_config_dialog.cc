@@ -7,7 +7,7 @@
 
 #include "client/ui/desktop_config_dialog.h"
 
-#include "codec/video_helpers.h"
+#include "codec/video_util.h"
 
 namespace aspia {
 
@@ -52,18 +52,18 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     ui.combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
     ui.combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
 
-    PixelFormat pixel_format = ConvertFromVideoPixelFormat(config->pixel_format());
+    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config->pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
-    if (pixel_format.IsEqual(PixelFormat::ARGB()))
+    if (pixel_format.isEqual(PixelFormat::ARGB()))
         color_depth = COLOR_DEPTH_ARGB;
-    else if (pixel_format.IsEqual(PixelFormat::RGB565()))
+    else if (pixel_format.isEqual(PixelFormat::RGB565()))
         color_depth = COLOR_DEPTH_RGB565;
-    else if (pixel_format.IsEqual(PixelFormat::RGB332()))
+    else if (pixel_format.isEqual(PixelFormat::RGB332()))
         color_depth = COLOR_DEPTH_RGB332;
-    else if (pixel_format.IsEqual(PixelFormat::RGB222()))
+    else if (pixel_format.isEqual(PixelFormat::RGB222()))
         color_depth = COLOR_DEPTH_RGB222;
-    else if (pixel_format.IsEqual(PixelFormat::RGB111()))
+    else if (pixel_format.isEqual(PixelFormat::RGB111()))
         color_depth = COLOR_DEPTH_RGB111;
 
     int current_color_depth = ui.combo_color_depth->findData(QVariant(color_depth));
@@ -156,7 +156,7 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
                     break;
             }
 
-            ConvertToVideoPixelFormat(pixel_format, config_->mutable_pixel_format());
+            VideoUtil::toVideoPixelFormat(pixel_format, config_->mutable_pixel_format());
 
             config_->set_compress_ratio(ui.slider_compression_ratio->value());
         }

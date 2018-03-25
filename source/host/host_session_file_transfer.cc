@@ -7,22 +7,21 @@
 
 #include "host/host_session_file_transfer.h"
 
+#include <QDateTime>
 #include <QDebug>
+#include <QStandardPaths>
+#include <QStorageInfo>
 
-#include "base/files/file_helpers.h"
-#include "base/files/file_util.h"
 #include "base/process/process.h"
+#include "client/file_platform_util.h"
 #include "ipc/pipe_channel_proxy.h"
 #include "protocol/message_serialization.h"
-#include "protocol/filesystem.h"
 #include "proto/auth_session.pb.h"
 
 namespace aspia {
 
 void HostSessionFileTransfer::Run(const std::wstring& channel_id)
 {
-    status_dialog_ = std::make_unique<FileStatusDialog>();
-
     ipc_channel_ = PipeChannel::CreateClient(channel_id);
     if (ipc_channel_)
     {
@@ -30,19 +29,14 @@ void HostSessionFileTransfer::Run(const std::wstring& channel_id)
 
         uint32_t user_data = Process::Current().Pid();
 
-        PipeChannel::DisconnectHandler disconnect_handler =
-            std::bind(&HostSessionFileTransfer::OnIpcChannelDisconnect, this);
-
-        if (ipc_channel_->Connect(user_data, std::move(disconnect_handler)))
+        if (ipc_channel_->Connect(user_data))
         {
             OnIpcChannelConnect(user_data);
-            status_dialog_->WaitForClose();
+            ipc_channel_proxy_->WaitForDisconnect();
         }
 
         ipc_channel_.reset();
     }
-
-    status_dialog_.reset();
 }
 
 void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
@@ -57,20 +51,13 @@ void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
         return;
     }
 
-    status_dialog_->OnSessionStarted();
-
     ipc_channel_proxy_->Receive(std::bind(
         &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionFileTransfer::OnIpcChannelDisconnect()
-{
-    status_dialog_->OnSessionTerminated();
-}
-
 void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
 {
-    proto::file_transfer::ClientToHost message;
+    proto::file_transfer::Request message;
 
     if (!ParseMessage(buffer, message))
     {
@@ -86,10 +73,6 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
     {
         ReadFileListRequest(message.file_list_request());
     }
-    else if (message.has_directory_size_request())
-    {
-        ReadDirectorySizeRequest(message.directory_size_request());
-    }
     else if (message.has_create_directory_request())
     {
         ReadCreateDirectoryRequest(message.create_directory_request());
@@ -102,20 +85,20 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
     {
         ReadRemoveRequest(message.remove_request());
     }
-    else if (message.has_file_upload_request())
+    else if (message.has_upload_request())
     {
-        ReadFileUploadRequest(message.file_upload_request());
+        ReadFileUploadRequest(message.upload_request());
     }
-    else if (message.has_file_packet())
+    else if (message.has_packet())
     {
-        if (!ReadFilePacket(message.file_packet()))
+        if (!ReadFilePacket(message.packet()))
             ipc_channel_proxy_->Disconnect();
     }
-    else if (message.has_file_download_request())
+    else if (message.has_download_request())
     {
-        ReadFileDownloadRequest(message.file_download_request());
+        ReadFileDownloadRequest(message.download_request());
     }
-    else if (message.has_file_packet_request())
+    else if (message.has_packet_request())
     {
         if (!ReadFilePacketRequest())
             ipc_channel_proxy_->Disconnect();
@@ -127,7 +110,7 @@ void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
     }
 }
 
-void HostSessionFileTransfer::SendReply(const proto::file_transfer::HostToClient& reply)
+void HostSessionFileTransfer::SendReply(const proto::file_transfer::Reply& reply)
 {
     ipc_channel_proxy_->Send(
         SerializeMessage(reply),
@@ -143,13 +126,40 @@ void HostSessionFileTransfer::OnReplySended()
 
 void HostSessionFileTransfer::ReadDriveListRequest()
 {
-    proto::file_transfer::HostToClient reply;
-    reply.set_status(FileSystemRequest::GetDriveList(reply.mutable_drive_list()));
+    proto::file_transfer::Reply reply;
 
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
+    for (const auto& volume : QStorageInfo::mountedVolumes())
     {
-        status_dialog_->OnDriveListRequest();
+        QString root_path = volume.rootPath();
+
+        proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
+
+        item->set_type(FilePlatformUtil::driveType(root_path));
+        item->set_path(root_path.toUtf8());
     }
+
+    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    if (!desktop_path.isEmpty())
+    {
+        proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
+
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
+        item->set_path(desktop_path.toUtf8());
+    }
+
+    QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (!home_path.isEmpty())
+    {
+        proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
+
+        item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
+        item->set_path(home_path.toUtf8());
+    }
+
+    if (!reply.drive_list().item_size())
+        reply.set_status(proto::file_transfer::STATUS_NO_DRIVES_FOUND);
+    else
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
 
     SendReply(reply);
 }
@@ -157,16 +167,34 @@ void HostSessionFileTransfer::ReadDriveListRequest()
 void HostSessionFileTransfer::ReadFileListRequest(
     const proto::file_transfer::FileListRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(request.path());
+    QString directory_path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
-    reply.set_status(FileSystemRequest::GetFileList(path, reply.mutable_file_list()));
-
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
+    QDir directory(directory_path);
+    if (!directory.exists())
     {
-        status_dialog_->OnFileListRequest(path);
+        reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
+    }
+    else
+    {
+        directory.setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot |
+                            QDir::System | QDir::Hidden);
+        directory.setSorting(QDir::Name | QDir::DirsFirst);
+
+        QFileInfoList info_list = directory.entryInfoList();
+
+        for (const auto& info : info_list)
+        {
+            proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
+
+            item->set_name(info.fileName().toUtf8());
+            item->set_size(info.size());
+            item->set_modification_time(info.lastModified().toTime_t());
+            item->set_is_directory(info.isDir());
+        }
+
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
 
     SendReply(reply);
@@ -175,51 +203,70 @@ void HostSessionFileTransfer::ReadFileListRequest(
 void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     const proto::file_transfer::CreateDirectoryRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(request.path());
+    QString directory_path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
-    reply.set_status(FileSystemRequest::CreateDirectory(path));
-
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
+    QFileInfo file_info(directory_path);
+    if (file_info.exists())
     {
-        status_dialog_->OnCreateDirectoryRequest(path);
+        reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
     }
-
-    SendReply(reply);
-}
-
-void HostSessionFileTransfer::ReadDirectorySizeRequest(
-    const proto::file_transfer::DirectorySizeRequest& request)
-{
-    proto::file_transfer::HostToClient reply;
-
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(request.path());
-
-    uint64_t directory_size = 0;
-
-    reply.set_status(FileSystemRequest::GetDirectorySize(path, directory_size));
-    reply.mutable_directory_size()->set_size(directory_size);
+    else
+    {
+        QDir directory;
+        if (!directory.mkdir(directory_path))
+            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+        else
+            reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+    }
 
     SendReply(reply);
 }
 
 void HostSessionFileTransfer::ReadRenameRequest(const proto::file_transfer::RenameRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path old_name =
-        std::experimental::filesystem::u8path(request.old_name());
-    std::experimental::filesystem::path new_name =
-        std::experimental::filesystem::u8path(request.new_name());
+    QString old_name = QString::fromUtf8(request.old_name().c_str(), request.old_name().size());
+    QString new_name = QString::fromUtf8(request.new_name().c_str(), request.new_name().size());
 
-    reply.set_status(FileSystemRequest::Rename(old_name, new_name));
-
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
+    if (old_name == new_name)
     {
-        status_dialog_->OnRenameRequest(old_name, new_name);
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+    }
+    else
+    {
+        QFileInfo old_file_info(old_name);
+        if (old_file_info.exists())
+        {
+            reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
+        }
+        else
+        {
+            QFileInfo new_file_info(new_name);
+            if (new_file_info.exists())
+            {
+                reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
+            }
+            else
+            {
+                if (old_file_info.isDir())
+                {
+                    if (!QDir().rename(old_name, new_name))
+                        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+                    else
+                        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+                }
+                else
+                {
+                    if (!QFile(old_name).rename(new_name))
+                        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+                    else
+                        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+                }
+            }
+        }
     }
 
     SendReply(reply);
@@ -227,40 +274,48 @@ void HostSessionFileTransfer::ReadRenameRequest(const proto::file_transfer::Rena
 
 void HostSessionFileTransfer::ReadRemoveRequest(const proto::file_transfer::RemoveRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path path =
-        std::experimental::filesystem::u8path(request.path());
+    QString path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
-    reply.set_status(FileSystemRequest::Remove(path));
-
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
+    QFileInfo file_info(path);
+    if (!file_info.exists())
     {
-        status_dialog_->OnRemoveRequest(path);
+        reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
+    }
+    else
+    {
+        if (file_info.isDir())
+        {
+            if (!QDir().rmdir(path))
+                reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+            else
+                reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+        }
+        else
+        {
+            if (!QFile::remove(path))
+                reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+            else
+                reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+        }
     }
 
     SendReply(reply);
 }
 
 void HostSessionFileTransfer::ReadFileUploadRequest(
-    const proto::file_transfer::FileUploadRequest& request)
+    const proto::file_transfer::UploadRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path file_path =
-        std::experimental::filesystem::u8path(request.file_path());
+    QString file_path = QString::fromUtf8(request.file_path().c_str(), request.file_path().size());
 
     do
     {
-        if (!IsValidPathName(file_path))
-        {
-            reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
-            break;
-        }
-
         if (!request.overwrite())
         {
-            if (PathExists(file_path))
+            if (QFile(file_path).exists())
             {
                 reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
                 break;
@@ -278,15 +333,10 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
     }
     while (false);
 
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
-    {
-        status_dialog_->OnFileUploadRequest(file_path);
-    }
-
     SendReply(reply);
 }
 
-bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePacket& file_packet)
+bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::Packet& file_packet)
 {
     if (!file_depacketizer_)
     {
@@ -294,7 +344,7 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
         return false;
     }
 
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
     if (!file_depacketizer_->ReadNextPacket(file_packet))
     {
@@ -305,7 +355,7 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
         reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
 
-    if (file_packet.flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
+    if (file_packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
     {
         file_depacketizer_.reset();
     }
@@ -315,33 +365,20 @@ bool HostSessionFileTransfer::ReadFilePacket(const proto::file_transfer::FilePac
 }
 
 void HostSessionFileTransfer::ReadFileDownloadRequest(
-    const proto::file_transfer::FileDownloadRequest& request)
+    const proto::file_transfer::DownloadRequest& request)
 {
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::experimental::filesystem::path file_path =
-        std::experimental::filesystem::u8path(request.file_path());
+    QString file_path = QString::fromUtf8(request.file_path().c_str(), request.file_path().size());
 
-    if (!IsValidPathName(file_path))
+    file_packetizer_ = FilePacketizer::Create(file_path);
+    if (!file_packetizer_)
     {
-        reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
+        reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
     }
     else
     {
-        file_packetizer_ = FilePacketizer::Create(file_path);
-        if (!file_packetizer_)
-        {
-            reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
-        }
-        else
-        {
-            reply.set_status(proto::file_transfer::STATUS_SUCCESS);
-        }
-    }
-
-    if (reply.status() == proto::file_transfer::STATUS_SUCCESS)
-    {
-        status_dialog_->OnFileDownloadRequest(file_path);
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     }
 
     SendReply(reply);
@@ -355,9 +392,9 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
         return false;
     }
 
-    proto::file_transfer::HostToClient reply;
+    proto::file_transfer::Reply reply;
 
-    std::unique_ptr<proto::file_transfer::FilePacket> packet =
+    std::unique_ptr<proto::file_transfer::Packet> packet =
         file_packetizer_->CreateNextPacket();
     if (!packet)
     {
@@ -365,13 +402,13 @@ bool HostSessionFileTransfer::ReadFilePacketRequest()
     }
     else
     {
-        if (packet->flags() & proto::file_transfer::FilePacket::FLAG_LAST_PACKET)
+        if (packet->flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
         {
             file_packetizer_.reset();
         }
 
         reply.set_status(proto::file_transfer::STATUS_SUCCESS);
-        reply.set_allocated_file_packet(packet.release());
+        reply.set_allocated_packet(packet.release());
     }
 
     SendReply(reply);

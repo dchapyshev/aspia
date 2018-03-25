@@ -27,7 +27,7 @@ DesktopFrameDIB::Create(const QSize& size,
                         const PixelFormat& format,
                         HDC hdc)
 {
-    int bytes_per_row = size.width() * format.BytesPerPixel();
+    int bytes_per_row = size.width() * format.bytesPerPixel();
 
     struct BitmapInfo
     {
@@ -46,19 +46,19 @@ DesktopFrameDIB::Create(const QSize& size,
 
     BitmapInfo bmi = { 0 };
     bmi.header.biSize      = sizeof(bmi.header);
-    bmi.header.biBitCount  = format.BitsPerPixel();
+    bmi.header.biBitCount  = format.bitsPerPixel();
     bmi.header.biSizeImage = bytes_per_row * size.height();
     bmi.header.biPlanes    = 1;
     bmi.header.biWidth     = size.width();
     bmi.header.biHeight    = -size.height();
 
-    if (format.BitsPerPixel() == 32 || format.BitsPerPixel() == 16)
+    if (format.bitsPerPixel() == 32 || format.bitsPerPixel() == 16)
     {
         bmi.header.biCompression = BI_BITFIELDS;
 
-        bmi.u.mask.red   = format.RedMax()   << format.RedShift();
-        bmi.u.mask.green = format.GreenMax() << format.GreenShift();
-        bmi.u.mask.blue  = format.BlueMax()  << format.BlueShift();
+        bmi.u.mask.red   = format.redMax()   << format.redShift();
+        bmi.u.mask.green = format.greenMax() << format.greenShift();
+        bmi.u.mask.blue  = format.blueMax()  << format.blueShift();
     }
     else
     {
@@ -66,13 +66,13 @@ DesktopFrameDIB::Create(const QSize& size,
 
         for (uint32_t i = 0; i < 256; ++i)
         {
-            const uint32_t red   = (i >> format.RedShift())   & format.RedMax();
-            const uint32_t green = (i >> format.GreenShift()) & format.GreenMax();
-            const uint32_t blue  = (i >> format.BlueShift())  & format.BlueMax();
+            const uint32_t red   = (i >> format.redShift())   & format.redMax();
+            const uint32_t green = (i >> format.greenShift()) & format.greenMax();
+            const uint32_t blue  = (i >> format.blueShift())  & format.blueMax();
 
-            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.RedMax());
-            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.GreenMax());
-            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.BlueMax());
+            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.redMax());
+            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.greenMax());
+            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.blueMax());
         }
     }
 

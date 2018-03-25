@@ -20,7 +20,7 @@ class MouseCursor
 public:
     ~MouseCursor() = default;
 
-    static std::unique_ptr<MouseCursor> Create(std::unique_ptr<uint8_t[]> data,
+    static std::unique_ptr<MouseCursor> create(std::unique_ptr<uint8_t[]> data,
                                                const QSize& size,
                                                const QPoint& hotspot);
 

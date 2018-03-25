@@ -8,12 +8,12 @@
 #include "client/client.h"
 
 #include <QCryptographicHash>
-#include <QMessageBox>
 
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
+#include "client/client_session_file_transfer.h"
 #include "proto/auth_session.pb.h"
 #include "protocol/message_serialization.h"
 
@@ -158,6 +158,10 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
             session_ = new ClientSessionDesktopView(&computer_, this);
             break;
 
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            session_ = new ClientSessionFileTransfer(&computer_, this);
+            break;
+
         default:
             status_dialog_->addStatus(tr("Unsupported session type."));
             return;
@@ -184,6 +188,8 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
 
     status_dialog_->addStatus(tr("Session started."));
     status_dialog_->hide();
+
+    session_->startSession();
 }
 
 } // namespace aspia

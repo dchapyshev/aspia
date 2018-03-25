@@ -8,10 +8,12 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_DIB_H
 #define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_DIB_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <memory>
+
 #include "desktop_capture/desktop_frame.h"
 #include "base/scoped_gdi_object.h"
-
-#include <memory>
 
 namespace aspia {
 

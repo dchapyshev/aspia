@@ -8,7 +8,7 @@
 #ifndef _ASPIA_ADDRESS_BOOK__COMPUTER_GROUP_DRAG_H
 #define _ASPIA_ADDRESS_BOOK__COMPUTER_GROUP_DRAG_H
 
-#include <QtGui/QDrag>
+#include <QDrag>
 
 #include "address_book/computer_group_mime_data.h"
 

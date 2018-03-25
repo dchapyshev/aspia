@@ -6,7 +6,8 @@
 //
 
 #include "codec/cursor_decoder.h"
-#include "base/logging.h"
+
+#include <QDebug>
 
 namespace aspia {
 
@@ -28,14 +29,14 @@ bool CursorDecoder::DecompressCursor(const proto::desktop::CursorShape& cursor_s
     {
         if (row_y > cursor_shape.height() - 1)
         {
-            LOG(LS_ERROR) << "Too much data is received for the given rectangle";
+            qWarning("Too much data is received for the given rectangle");
             return false;
         }
 
         size_t written = 0;
         size_t consumed = 0;
 
-        decompress_again = decompressor_.Process(src + used,
+        decompress_again = decompressor_.process(src + used,
                                                  src_size - used,
                                                  image + row_pos,
                                                  row_size - row_pos,
@@ -52,8 +53,7 @@ bool CursorDecoder::DecompressCursor(const proto::desktop::CursorShape& cursor_s
         }
     }
 
-    decompressor_.Reset();
-
+    decompressor_.reset();
     return true;
 }
 
@@ -73,8 +73,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
         {
-            LOG(LS_ERROR) << "Cursor dimensions are out of bounds for SetCursor: "
-                          << size.width() << "x" << size.height();
+            qWarning() << "Cursor dimensions are out of bounds for SetCursor: "
+                       << size.width() << "x" << size.height();
             return nullptr;
         }
 
@@ -85,7 +85,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
             return nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor =
-            MouseCursor::Create(std::move(image),
+            MouseCursor::create(std::move(image),
                                 size,
                                 QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
@@ -93,7 +93,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
         {
             size_t cache_size = cursor_shape.flags() & 0x1F;
 
-            if (!MouseCursorCache::IsValidCacheSize(cache_size))
+            if (!MouseCursorCache::isValidCacheSize(cache_size))
                 return nullptr;
 
             cache_ = std::make_unique<MouseCursorCache>(cache_size);
@@ -101,11 +101,11 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
 
         if (!cache_)
         {
-            LOG(LS_ERROR) << "Host did not send cache reset command";
+            qWarning("Host did not send cache reset command");
             return nullptr;
         }
 
-        cache_index = cache_->Add(std::move(mouse_cursor));
+        cache_index = cache_->add(std::move(mouse_cursor));
     }
 
     return cache_->Get(cache_index);

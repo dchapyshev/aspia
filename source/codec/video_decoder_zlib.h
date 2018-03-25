@@ -20,9 +20,9 @@ class VideoDecoderZLIB : public VideoDecoder
 public:
     ~VideoDecoderZLIB() = default;
 
-    static std::unique_ptr<VideoDecoderZLIB> Create();
+    static std::unique_ptr<VideoDecoderZLIB> create();
 
-    bool Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* target_frame) override;
+    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* target_frame) override;
 
 private:
     VideoDecoderZLIB() = default;

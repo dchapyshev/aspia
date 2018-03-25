@@ -8,6 +8,8 @@
 #include "base/waitable_timer.h"
 #include "base/logging.h"
 
+#undef max
+
 namespace aspia {
 
 WaitableTimer::~WaitableTimer()

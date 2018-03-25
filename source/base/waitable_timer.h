@@ -8,6 +8,9 @@
 #ifndef _ASPIA_BASE__WAITABLE_TIMER_H
 #define _ASPIA_BASE__WAITABLE_TIMER_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <chrono>
 #include <functional>
 

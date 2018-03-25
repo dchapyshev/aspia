@@ -6,11 +6,12 @@
 //
 
 #include "codec/video_encoder_vpx.h"
-#include "codec/video_helpers.h"
-#include <libyuv/convert_from_argb.h>
-#include "base/logging.h"
 
+#include <QDebug>
+#include <libyuv/convert_from_argb.h>
 #include <thread>
+
+#include "codec/video_util.h"
 
 namespace aspia {
 
@@ -26,7 +27,7 @@ constexpr int kVp9I444ProfileNumber = 1;
 // Magic encoder constants for adaptive quantization strategy.
 constexpr int kVp9AqModeNone = 0;
 
-void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
+void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -57,14 +58,14 @@ void SetCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 } // namespace
 
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP8()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
 {
     return std::unique_ptr<VideoEncoderVPX>(
         new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::CreateVP9()
+std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 {
     return std::unique_ptr<VideoEncoderVPX>(
         new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
@@ -77,7 +78,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
     memset(&image_, 0, sizeof(image_));
 }
 
-void VideoEncoderVPX::CreateImage()
+void VideoEncoderVPX::createImage()
 {
     memset(&image_, 0, sizeof(image_));
 
@@ -133,7 +134,7 @@ void VideoEncoderVPX::CreateImage()
     image_.stride[1] = image_.stride[2] = uv_stride;
 }
 
-void VideoEncoderVPX::CreateActiveMap()
+void VideoEncoderVPX::createActiveMap()
 {
     active_map_.cols = (screen_size_.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (screen_size_.height() + kMacroBlockSize - 1) / kMacroBlockSize;
@@ -144,7 +145,7 @@ void VideoEncoderVPX::CreateActiveMap()
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVPX::CreateVp8Codec()
+void VideoEncoderVPX::createVp8Codec()
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -154,13 +155,13 @@ void VideoEncoderVPX::CreateVp8Codec()
     vpx_codec_iface_t* algo = vpx_codec_vp8_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     // Adjust default target bit-rate to account for actual desktop size.
     config.rc_target_bitrate = screen_size_.width() * screen_size_.height() *
         config.rc_target_bitrate / config.g_w / config.g_h;
 
-    SetCommonCodecParameters(&config, screen_size_);
+    setCommonCodecParameters(&config, screen_size_);
 
     //
     // Value of 2 means using the real time profile. This is basically a
@@ -174,25 +175,25 @@ void VideoEncoderVPX::CreateVp8Codec()
     config.rc_max_quantizer = 30;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to initialize codec";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     // Value of 16 will have the smallest CPU load. This turns off subpixel
     // motion search.
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 16);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set CPUUSED";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     ret = vpx_codec_control(codec_.get(), VP8E_SET_SCREEN_CONTENT_MODE, 1);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set screen content mode";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     //
     // Use the lowest level of noise sensitivity so as to spend less time
     // on motion estimation and inter-prediction mode.
     //
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set noise sensitivity";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 }
 
-void VideoEncoderVPX::CreateVp9Codec()
+void VideoEncoderVPX::createVp9Codec()
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -202,9 +203,9 @@ void VideoEncoderVPX::CreateVp9Codec()
     vpx_codec_iface_t* algo = vpx_codec_vp9_cx();
 
     vpx_codec_err_t ret = vpx_codec_enc_config_default(algo, &config, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to fetch default configuration";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
-    SetCommonCodecParameters(&config, screen_size_);
+    setCommonCodecParameters(&config, screen_size_);
 
     // Configure VP9 for I444 source frames.
     config.g_profile = kVp9I444ProfileNumber;
@@ -215,33 +216,33 @@ void VideoEncoderVPX::CreateVp9Codec()
     config.rc_end_usage = VPX_VBR;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to initialize codec";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     //
     // Request the lowest-CPU usage that VP9 supports, which depends on whether
     // we are encoding lossy or lossless.
     //
     ret = vpx_codec_control(codec_.get(), VP8E_SET_CPUUSED, 5);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set CPUUSED";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     ret = vpx_codec_control(codec_.get(),
                             VP9E_SET_TUNE_CONTENT,
                             VP9E_CONTENT_SCREEN);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set screen content mode";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     //
     // Use the lowest level of noise sensitivity so as to spend less time
     // on motion estimation and inter-prediction mode.
     //
     ret = vpx_codec_control(codec_.get(), VP8E_SET_NOISE_SENSITIVITY, 0);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set noise sensitivity";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 
     // Set cyclic refresh (aka "top-off") only for lossy encoding.
     ret = vpx_codec_control(codec_.get(), VP9E_SET_AQ_MODE, kVp9AqModeNone);
-    DCHECK_EQ(VPX_CODEC_OK, ret) << "Failed to set aq mode";
+    Q_ASSERT(VPX_CODEC_OK == ret);
 }
 
-void VideoEncoderVPX::SetActiveMap(const QRect& rect)
+void VideoEncoderVPX::setActiveMap(const QRect& rect)
 {
     int left   = rect.left() / kMacroBlockSize;
     int top    = rect.top() / kMacroBlockSize;
@@ -261,7 +262,7 @@ void VideoEncoderVPX::SetActiveMap(const QRect& rect)
     }
 }
 
-void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
+void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
                                                proto::desktop::VideoPacket* packet)
 {
     memset(active_map_.active_map, 0, active_map_size_);
@@ -276,12 +277,12 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
     {
         case VPX_IMG_FMT_YV12:
         {
-            for (const auto& rect : frame->UpdatedRegion())
+            for (const auto& rect : frame->updatedRegion())
             {
                 int y_offset = y_stride * rect.y() + rect.x();
                 int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-                libyuv::ARGBToI420(frame->GetFrameDataAtPos(rect.topLeft()),
+                libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
@@ -289,19 +290,19 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
                                    rect.width(),
                                    rect.height());
 
-                ConvertToVideoRect(rect, packet->add_dirty_rect());
-                SetActiveMap(rect);
+                VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+                setActiveMap(rect);
             }
         }
         break;
 
         case VPX_IMG_FMT_I444:
         {
-            for (const auto& rect : frame->UpdatedRegion())
+            for (const auto& rect : frame->updatedRegion())
             {
                 int yuv_offset = uv_stride * rect.y() + rect.x();
 
-                libyuv::ARGBToI444(frame->GetFrameDataAtPos(rect.topLeft()),
+                libyuv::ARGBToI444(frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    y_data + yuv_offset, y_stride,
                                    u_data + yuv_offset, uv_stride,
@@ -309,63 +310,57 @@ void VideoEncoderVPX::PrepareImageAndActiveMap(const DesktopFrame* frame,
                                    rect.width(),
                                    rect.height());
 
-                ConvertToVideoRect(rect, packet->add_dirty_rect());
-                SetActiveMap(rect);
+                VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
+                setActiveMap(rect);
             }
         }
         break;
 
         default:
-        {
-            DLOG(LS_FATAL) << "Unsupported image format: " << image_.fmt;
-        }
-        break;
+            qFatal("Unsupported image format: %d", image_.fmt);
+            break;
     }
 }
 
-std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::Encode(const DesktopFrame* frame)
+std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::encode(const DesktopFrame* frame)
 {
-    DCHECK(encoding_ == proto::desktop::VIDEO_ENCODING_VP8 ||
-           encoding_ == proto::desktop::VIDEO_ENCODING_VP9);
+    Q_ASSERT(encoding_ == proto::desktop::VIDEO_ENCODING_VP8 ||
+             encoding_ == proto::desktop::VIDEO_ENCODING_VP9);
 
-    std::unique_ptr<proto::desktop::VideoPacket> packet(CreateVideoPacket(encoding_));
+    std::unique_ptr<proto::desktop::VideoPacket> packet(new proto::desktop::VideoPacket());
+
+    packet->set_encoding(encoding_);
 
     if (screen_size_ != frame->size())
     {
         screen_size_ = frame->size();
 
-        CreateImage();
-        CreateActiveMap();
+        createImage();
+        createActiveMap();
 
         if (encoding_ == proto::desktop::VIDEO_ENCODING_VP8)
         {
-            CreateVp8Codec();
+            createVp8Codec();
         }
         else if (encoding_ == proto::desktop::VIDEO_ENCODING_VP9)
         {
-            CreateVp9Codec();
+            createVp9Codec();
         }
 
-        ConvertToVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
+        VideoUtil::toVideoSize(screen_size_, packet->mutable_format()->mutable_screen_size());
     }
 
-    //
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
-    //
-    PrepareImageAndActiveMap(frame, packet.get());
+    prepareImageAndActiveMap(frame, packet.get());
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
-    DCHECK_EQ(ret, VPX_CODEC_OK) << "Unable to apply active map";
+    Q_ASSERT(ret == VPX_CODEC_OK);
 
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(), &image_, 0, 1, 0, VPX_DL_REALTIME);
-
-    DCHECK_EQ(ret, VPX_CODEC_OK)
-        << "Encoding error: " << vpx_codec_err_to_string(ret) << "\n"
-        << "Details: " << vpx_codec_error(codec_.get()) << "\n"
-        << vpx_codec_error_detail(codec_.get());
+    Q_ASSERT(ret == VPX_CODEC_OK);
 
     // Read the encoded data.
     vpx_codec_iter_t iter = nullptr;

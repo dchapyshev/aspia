@@ -8,6 +8,9 @@
 #ifndef _ASPIA_BASE__SECURITY_HELPERS_H
 #define _ASPIA_BASE__SECURITY_HELPERS_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <string>
 
 #include "base/typed_buffer.h"

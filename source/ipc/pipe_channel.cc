@@ -177,6 +177,7 @@ void PipeChannel::DoNextWriteTask()
 
     if (write_buffer_.isEmpty())
     {
+        LOG(LS_ERROR) << "Write buffer is empty";
         DoDisconnect();
         return;
     }
@@ -195,6 +196,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code, size_t bytes_
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
+        LOG(LS_ERROR) << "Unable to write message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -211,6 +213,7 @@ void PipeChannel::OnWriteComplete(const std::error_code& code, size_t bytes_tran
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
+        LOG(LS_ERROR) << "Unable to write message: " << code.message();
         DoDisconnect();
         return;
     }
@@ -310,6 +313,7 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code, size_t bytes_t
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
+        LOG(LS_ERROR) << "Unable to read message size: " << code.message();
         DoDisconnect();
         return;
     }
@@ -334,6 +338,7 @@ void PipeChannel::OnReadComplete(const std::error_code& code, size_t bytes_trans
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
+        LOG(LS_ERROR) << "Unable to read message: " << code.message();
         DoDisconnect();
         return;
     }

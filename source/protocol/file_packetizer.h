@@ -8,12 +8,13 @@
 #ifndef _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 #define _ASPIA_PROTOCOL__FILE_PACKETIZER_H
 
+#include <QFile>
+#include <QPointer>
+#include <QString>
+#include <memory>
+
 #include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
-
-#include <experimental/filesystem>
-#include <fstream>
-#include <memory>
 
 namespace aspia {
 
@@ -25,21 +26,20 @@ public:
     // Creates an instance of the class.
     // Parameter |file_path| contains the full path to the file.
     // If the specified file can not be opened for reading, then returns nullptr.
-    static std::unique_ptr<FilePacketizer> Create(
-        const std::experimental::filesystem::path& file_path);
+    static std::unique_ptr<FilePacketizer> Create(const QString& file_path);
 
     // Creates a packet for transferring.
-    std::unique_ptr<proto::file_transfer::FilePacket> CreateNextPacket();
+    std::unique_ptr<proto::file_transfer::Packet> CreateNextPacket();
 
-    uint64_t LeftSize() const { return left_size_; }
+    qint64 LeftSize() const { return left_size_; }
 
 private:
-    FilePacketizer(std::ifstream&& file_stream);
+    FilePacketizer(QPointer<QFile>& file);
 
-    std::ifstream file_stream_;
+    QPointer<QFile> file_;
 
-    std::streamoff file_size_ = 0;
-    std::streamoff left_size_ = 0;
+    qint64 file_size_ = 0;
+    qint64 left_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
 };

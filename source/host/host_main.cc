@@ -11,7 +11,6 @@
 #include "base/logging.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
-#include "host/host_session_system_info.h"
 #include "host/host_switches.h"
 
 namespace aspia {
@@ -37,10 +36,6 @@ void HostMain()
     else if (session_type == kSessionTypeFileTransfer)
     {
         HostSessionFileTransfer().Run(channel_id);
-    }
-    else if (session_type == kSessionTypeSystemInfo)
-    {
-        HostSessionSystemInfo().Run(channel_id);
     }
 
     ShutdownLogging();

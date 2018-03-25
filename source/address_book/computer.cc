@@ -8,7 +8,7 @@
 #include "address_book/computer.h"
 
 #include "address_book/computer_group.h"
-#include "codec/video_helpers.h"
+#include "codec/video_util.h"
 
 using namespace aspia;
 
@@ -41,14 +41,14 @@ std::unique_ptr<Computer> Computer::Create()
     desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_manage->set_update_interval(30);
     desktop_manage->set_compress_ratio(6);
-    ConvertToVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
+    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
 
     proto::desktop::Config* desktop_view = computer->mutable_desktop_view_session();
     desktop_view->set_flags(0);
     desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_view->set_update_interval(30);
     desktop_view->set_compress_ratio(6);
-    ConvertToVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
+    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
 
     return std::unique_ptr<Computer>(new Computer(computer.release(), nullptr));
 }

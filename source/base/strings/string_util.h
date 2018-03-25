@@ -18,12 +18,6 @@ std::string ReplaceCrLfByLf(const std::string& in);
 bool IsStringUTF8(const char* data, size_t length);
 bool IsStringUTF8(const std::string& string);
 
-bool IsStringASCII(const char* data, size_t length);
-bool IsStringASCII(const std::string& string);
-
-bool IsStringASCII(const wchar_t* data, size_t length);
-bool IsStringASCII(const std::wstring& string);
-
 // Searches  for CR or LF characters. Removes all contiguous whitespace
 // strings that contain them. This is useful when trying to deal with text
 // copied from terminals.
@@ -73,12 +67,6 @@ TrimPositions TrimWhitespaceASCII(const std::string& input,
 
 std::wstring ToUpper(std::wstring_view in);
 std::wstring ToLower(std::wstring_view in);
-
-std::string ToUpperASCII(std::string_view in);
-std::string ToLowerASCII(std::string_view in);
-
-const std::string& EmptyString();
-const std::wstring& EmptyStringW();
 
 } // namespace aspia
 

@@ -13,18 +13,18 @@
 namespace aspia {
 
 // static
-std::unique_ptr<VideoDecoder> VideoDecoder::Create(proto::desktop::VideoEncoding encoding)
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::desktop::VideoEncoding encoding)
 {
     switch (encoding)
     {
         case proto::desktop::VIDEO_ENCODING_ZLIB:
-            return VideoDecoderZLIB::Create();
+            return VideoDecoderZLIB::create();
 
         case proto::desktop::VIDEO_ENCODING_VP8:
-            return VideoDecoderVPX::CreateVP8();
+            return VideoDecoderVPX::createVP8();
 
         case proto::desktop::VIDEO_ENCODING_VP9:
-            return VideoDecoderVPX::CreateVP9();
+            return VideoDecoderVPX::createVP9();
 
         default:
             return nullptr;

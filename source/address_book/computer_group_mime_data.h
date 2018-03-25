@@ -8,7 +8,7 @@
 #ifndef _ASPIA_ADDRESS_BOOK__COMPUTER_GROUP_MIME_DATA_H
 #define _ASPIA_ADDRESS_BOOK__COMPUTER_GROUP_MIME_DATA_H
 
-#include <QtCore/QMimeData>
+#include <QMimeData>
 
 #include "address_book/computer_group.h"
 

@@ -41,7 +41,7 @@ CursorEncoder::CursorEncoder()
 void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
                                    const MouseCursor* mouse_cursor)
 {
-    compressor_.Reset();
+    compressor_.reset();
 
     int width = mouse_cursor->size().width();
     int height = mouse_cursor->size().height();
@@ -70,7 +70,7 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
         size_t consumed = 0;
         size_t written = 0;
 
-        compress_again = compressor_.Process(
+        compress_again = compressor_.process(
             source_pos + row_pos, row_size - row_pos,
             compressed_pos + filled, packet_size - filled,
             flush, &consumed, &written);
@@ -116,7 +116,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
     std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
         std::make_unique<proto::desktop::CursorShape>();
 
-    size_t index = cache_.Find(mouse_cursor.get());
+    size_t index = cache_.find(mouse_cursor.get());
 
     // The cursor is not found in the cache.
     if (index == MouseCursorCache::kInvalidIndex)
@@ -130,11 +130,11 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
 
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.
-        cursor_shape->set_flags(cache_.IsEmpty() ?
+        cursor_shape->set_flags(cache_.isEmpty() ?
             (proto::desktop::CursorShape::RESET_CACHE | (kCacheSize & 0x1F)) : 0);
 
         // Add the cursor to the cache.
-        cache_.Add(std::move(mouse_cursor));
+        cache_.add(std::move(mouse_cursor));
     }
     else
     {

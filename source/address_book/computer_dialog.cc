@@ -41,9 +41,11 @@ ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGrou
                                      tr("File Transfer"),
                                      QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
 
+#if 0
     ui.combo_session_config->addItem(QIcon(":/icon/system-monitor.png"),
                                      tr("System Information"),
                                      QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
+#endif
 
     ui.edit_parent_name->setText(parent_group->Name());
     ui.edit_name->setText(computer->Name());

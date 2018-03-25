@@ -22,16 +22,16 @@ class DesktopFrame
 public:
     virtual ~DesktopFrame() = default;
 
-    uint8_t* GetFrameDataAtPos(const QPoint& pos) const;
-    uint8_t* GetFrameDataAtPos(int32_t x, int32_t y) const;
-    uint8_t* GetFrameData() const;
+    uint8_t* frameDataAtPos(const QPoint& pos) const;
+    uint8_t* frameDataAtPos(int32_t x, int32_t y) const;
+    uint8_t* frameData() const;
     const QSize& size() const;
     const PixelFormat& format() const;
     int stride() const;
     bool contains(int32_t x, int32_t y) const;
 
-    const QRegion& UpdatedRegion() const;
-    QRegion* MutableUpdatedRegion();
+    const QRegion& updatedRegion() const;
+    QRegion* mutableUpdatedRegion();
 
 protected:
     DesktopFrame(const QSize& size, const PixelFormat& format,

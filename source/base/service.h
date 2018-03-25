@@ -8,6 +8,8 @@
 #ifndef _ASPIA_BASE__SERVICE_H
 #define _ASPIA_BASE__SERVICE_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <atomic>
 #include <string>
 

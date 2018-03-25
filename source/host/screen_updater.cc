@@ -35,7 +35,7 @@ void ScreenUpdater::PostUpdateRequest()
 
     if (!capturer_)
     {
-        capturer_ = CapturerGDI::Create();
+        capturer_ = CapturerGDI::create();
         if (capturer_)
             UpdateScreen();
 
@@ -43,25 +43,25 @@ void ScreenUpdater::PostUpdateRequest()
     }
 
     runner_->PostDelayedTask(std::bind(&ScreenUpdater::UpdateScreen, this),
-                             scheduler_.NextCaptureDelay(update_interval_));
+                             scheduler_.nextCaptureDelay(update_interval_));
 }
 
 void ScreenUpdater::UpdateScreen()
 {
     DCHECK(runner_->BelongsToCurrentThread());
 
-    scheduler_.BeginCapture();
+    scheduler_.beginCapture();
 
-    const DesktopFrame* screen_frame = capturer_->CaptureImage();
+    const DesktopFrame* screen_frame = capturer_->captureImage();
     if (screen_frame)
     {
-        if (screen_frame->UpdatedRegion().isEmpty())
+        if (screen_frame->updatedRegion().isEmpty())
             screen_frame = nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor;
 
         if (mode_ == Mode::SCREEN_WITH_CURSOR)
-            mouse_cursor = capturer_->CaptureCursor();
+            mouse_cursor = capturer_->captureCursor();
 
         if (screen_frame || mouse_cursor)
         {

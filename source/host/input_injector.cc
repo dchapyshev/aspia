@@ -8,24 +8,28 @@
 #include "host/input_injector.h"
 
 #include <QRect>
+#include <QSettings>
 #include <sas.h>
 
-#include "base/scoped_thread_desktop.h"
 #include "base/logging.h"
-#include "host/scoped_sas_police.h"
 #include "protocol/keycode_converter.h"
 
 namespace aspia {
 
 namespace {
 
-const uint32_t kUsbCodeDelete = 0x07004c;
-const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
-const uint32_t kUsbCodeRightCtrl = 0x0700e4;
-const uint32_t kUsbCodeLeftAlt = 0x0700e2;
-const uint32_t kUsbCodeRightAlt = 0x0700e6;
+const char kSoftwareSASGenerationPath[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 
-void SendKeyboardScancode(WORD scancode, DWORD flags)
+const char kSoftwareSASGeneration[] = "SoftwareSASGeneration";
+
+const quint32 kUsbCodeDelete = 0x07004c;
+const quint32 kUsbCodeLeftCtrl = 0x0700e0;
+const quint32 kUsbCodeRightCtrl = 0x0700e4;
+const quint32 kUsbCodeLeftAlt = 0x0700e2;
+const quint32 kUsbCodeRightAlt = 0x0700e6;
+
+void sendKeyboardScancode(WORD scancode, DWORD flags)
 {
     INPUT input;
     memset(&input, 0, sizeof(input));
@@ -47,7 +51,7 @@ void SendKeyboardScancode(WORD scancode, DWORD flags)
         PLOG(LS_WARNING) << "SendInput failed";
 }
 
-void SendKeyboardVirtualKey(WORD key_code, DWORD flags)
+void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 {
     INPUT input;
     memset(&input, 0, sizeof(input));
@@ -71,19 +75,19 @@ InputInjector::~InputInjector()
         int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(usb_keycode);
         if (scancode != KeycodeConverter::InvalidNativeKeycode())
         {
-            SendKeyboardScancode(static_cast<WORD>(scancode),
+            sendKeyboardScancode(static_cast<WORD>(scancode),
                                  KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
         }
     }
 }
 
-void InputInjector::SwitchToInputDesktop()
+void InputInjector::switchToInputDesktop()
 {
-    Desktop input_desktop(Desktop::GetInputDesktop());
+    Desktop input_desktop(Desktop::inputDesktop());
 
-    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
+    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
-        desktop_.SetThreadDesktop(std::move(input_desktop));
+        desktop_.setThreadDesktop(std::move(input_desktop));
     }
 
     // We send a notification to the system that it is used to prevent
@@ -91,9 +95,9 @@ void InputInjector::SwitchToInputDesktop()
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
 }
 
-void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event)
+void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
 {
-    SwitchToInputDesktop();
+    switchToInputDesktop();
 
     QRect screen_rect = QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
                               GetSystemMetrics(SM_YVIRTUALSCREEN),
@@ -115,7 +119,7 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
         prev_mouse_pos_ = pos;
     }
 
-    uint32_t mask = event.mask();
+    quint32 mask = event.mask();
 
     bool prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
     bool curr = (mask & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
@@ -168,37 +172,46 @@ void InputInjector::InjectPointerEvent(const proto::desktop::PointerEvent& event
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (event.flags() & proto::desktop::KeyEvent::PRESSED)
     {
         pressed_keys_.insert(event.usb_keycode());
 
-        if (event.usb_keycode() == kUsbCodeDelete && IsCtrlAndAltPressed())
+        if (event.usb_keycode() == kUsbCodeDelete && isCtrlAndAltPressed())
         {
-            ScopedSasPolice sas_police;
+            QSettings settings(kSoftwareSASGenerationPath, QSettings::Registry64Format);
+
+            static const int kNone = 0;
+            static const int kApplications = 2;
+
+            int old_state = settings.value(kSoftwareSASGeneration, kNone).toInt();
+            if (old_state < kApplications)
+                settings.setValue(kSoftwareSASGeneration, kApplications);
+
             SendSAS(FALSE);
+            settings.setValue(kSoftwareSASGeneration, old_state);
             return;
         }
     }
     else
     {
-        pressed_keys_.erase(event.usb_keycode());
+        pressed_keys_.remove(event.usb_keycode());
     }
 
     int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(event.usb_keycode());
     if (scancode == KeycodeConverter::InvalidNativeKeycode())
         return;
 
-    SwitchToInputDesktop();
+    switchToInputDesktop();
 
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
     bool curr_state = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
 
     if (prev_state != curr_state)
     {
-        SendKeyboardVirtualKey(VK_CAPITAL, 0);
-        SendKeyboardVirtualKey(VK_CAPITAL, KEYEVENTF_KEYUP);
+        sendKeyboardVirtualKey(VK_CAPITAL, 0);
+        sendKeyboardVirtualKey(VK_CAPITAL, KEYEVENTF_KEYUP);
     }
 
     prev_state = GetKeyState(VK_NUMLOCK) != 0;
@@ -206,8 +219,8 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
 
     if (prev_state != curr_state)
     {
-        SendKeyboardVirtualKey(VK_NUMLOCK, 0);
-        SendKeyboardVirtualKey(VK_NUMLOCK, KEYEVENTF_KEYUP);
+        sendKeyboardVirtualKey(VK_NUMLOCK, 0);
+        sendKeyboardVirtualKey(VK_NUMLOCK, KEYEVENTF_KEYUP);
     }
 
     DWORD flags = KEYEVENTF_SCANCODE;
@@ -215,18 +228,24 @@ void InputInjector::InjectKeyEvent(const proto::desktop::KeyEvent& event)
     if (!(event.flags() & proto::desktop::KeyEvent::PRESSED))
         flags |= KEYEVENTF_KEYUP;
 
-    SendKeyboardScancode(static_cast<WORD>(scancode), flags);
+    sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
-bool InputInjector::IsCtrlAndAltPressed()
+bool InputInjector::isCtrlAndAltPressed()
 {
-    size_t ctrl_keys = pressed_keys_.count(kUsbCodeLeftCtrl) +
-                       pressed_keys_.count(kUsbCodeRightCtrl);
+    bool ctrl_pressed = false;
+    bool alt_pressed = false;
 
-    size_t alt_keys = pressed_keys_.count(kUsbCodeLeftAlt) +
-                      pressed_keys_.count(kUsbCodeRightAlt);
+    for (const auto& key : pressed_keys_)
+    {
+        if (key == kUsbCodeLeftCtrl || key == kUsbCodeRightCtrl)
+            ctrl_pressed = true;
 
-    return ctrl_keys != 0 && alt_keys != 0;
+        if (key == kUsbCodeLeftAlt || key == kUsbCodeRightAlt)
+            alt_pressed = true;
+    }
+
+    return ctrl_pressed && alt_pressed;
 }
 
 } // namespace aspia

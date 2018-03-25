@@ -13,19 +13,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras)
 
 include(aspia_core.cmake)
 
 source_group(address_book FILES ${SOURCE_ADDRESS_BOOK})
 source_group(base FILES ${SOURCE_BASE})
-source_group(base\\devices FILES ${SOURCE_BASE_DEVICES})
-source_group(base\\files FILES ${SOURCE_BASE_FILES})
 source_group(base\\message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(base\\process FILES ${SOURCE_BASE_PROCESS})
 source_group(base\\strings FILES ${SOURCE_BASE_STRINGS})
 source_group(base\\threading FILES ${SOURCE_BASE_THREADING})
-source_group(category FILES ${SOURCE_CATEGORY})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
 source_group(codec FILES ${SOURCE_CODEC})
@@ -37,16 +34,10 @@ source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(proto FILES ${SOURCE_PROTO})
 source_group(protocol FILES ${SOURCE_PROTOCOL})
-source_group(report FILES ${SOURCE_REPORT})
 source_group(resources FILES ${SOURCE_RESOURCES})
-source_group(ui FILES ${SOURCE_UI})
-source_group(ui\\base FILES ${SOURCE_UI_BASE})
-source_group(ui\\desktop FILES ${SOURCE_UI_DESKTOP})
-source_group(ui\\file_transfer FILES ${SOURCE_UI_FILE_TRANSFER})
-source_group(ui\\system_info FILES ${SOURCE_UI_SYSTEM_INFO})
 source_group("" FILES ${SOURCE})
 
-add_definitions(/FI"global.h")
+add_definitions(/FI"build_config.h")
 
 add_definitions(-D_UNICODE
                 -D_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
@@ -63,13 +54,10 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INC
 add_library(aspia_core SHARED
             ${SOURCE_ADDRESS_BOOK}
             ${SOURCE_BASE}
-            ${SOURCE_BASE_DEVICES}
-            ${SOURCE_BASE_FILES}
             ${SOURCE_BASE_MESSAGE_LOOP}
             ${SOURCE_BASE_PROCESS}
             ${SOURCE_BASE_STRINGS}
             ${SOURCE_BASE_THREADING}
-            ${SOURCE_CATEGORY}
             ${SOURCE_CLIENT}
             ${SOURCE_CLIENT_UI}
             ${SOURCE_CODEC}
@@ -81,11 +69,7 @@ add_library(aspia_core SHARED
             ${SOURCE_NETWORK}
             ${SOURCE_PROTO}
             ${SOURCE_PROTOCOL}
-            ${SOURCE_REPORT}
             ${SOURCE_RESOURCES}
-            ${SOURCE_UI}
-            ${SOURCE_UI_FILE_TRANSFER}
-            ${SOURCE_UI_LANG}
             ${SOURCE})
 
 target_link_libraries(aspia_core
@@ -95,6 +79,7 @@ target_link_libraries(aspia_core
     Qt5::PrintSupport
     Qt5::Widgets
     Qt5::WinMain
+    Qt5::WinExtras
     debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
@@ -129,6 +114,7 @@ target_link_libraries(aspia_core
     dwmapi
     imm32
     iphlpapi
+    mpr
     msi
     netapi32
     psapi

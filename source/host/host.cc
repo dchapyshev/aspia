@@ -146,7 +146,7 @@ void Host::OnResultSended(proto::auth::SessionType session_type, proto::auth::St
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+        // case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
             session_ = std::make_unique<HostSession>(session_type, channel_proxy_);
         }

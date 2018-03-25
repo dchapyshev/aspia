@@ -23,7 +23,7 @@ MouseCursorCache::MouseCursorCache(size_t cache_size) :
     // Nothing
 }
 
-size_t MouseCursorCache::Find(const MouseCursor* mouse_cursor)
+size_t MouseCursorCache::find(const MouseCursor* mouse_cursor)
 {
     DCHECK(mouse_cursor);
 
@@ -42,7 +42,7 @@ size_t MouseCursorCache::Find(const MouseCursor* mouse_cursor)
     return kInvalidIndex;
 }
 
-size_t MouseCursorCache::Add(std::unique_ptr<MouseCursor> mouse_cursor)
+size_t MouseCursorCache::add(std::unique_ptr<MouseCursor> mouse_cursor)
 {
     DCHECK(mouse_cursor);
 
@@ -70,23 +70,23 @@ std::shared_ptr<MouseCursor> MouseCursorCache::Get(size_t index)
     return cache_.at(index);
 }
 
-bool MouseCursorCache::IsEmpty() const
+bool MouseCursorCache::isEmpty() const
 {
     return cache_.empty();
 }
 
-void MouseCursorCache::Clear()
+void MouseCursorCache::clear()
 {
     cache_.clear();
 }
 
-size_t MouseCursorCache::Size() const
+size_t MouseCursorCache::size() const
 {
     return cache_size_;
 }
 
 // static
-bool MouseCursorCache::IsValidCacheSize(size_t size)
+bool MouseCursorCache::isValidCacheSize(size_t size)
 {
     if (size < kMinCacheSize || size > kMaxCacheSize)
     {

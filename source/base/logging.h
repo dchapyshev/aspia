@@ -612,7 +612,7 @@ public:
     void operator&(std::ostream&) { }
 };
 
-using SystemErrorCode = DWORD;
+using SystemErrorCode = unsigned long;
 
 // Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to
 // pull in windows.h just for GetLastError() and DWORD.

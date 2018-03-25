@@ -9,9 +9,9 @@
 #define _ASPIA_HOST__INPUT_INJECTOR_H
 
 #include <QPoint>
-#include <set>
+#include <QSet>
 
-#include "base/scoped_thread_desktop.h"
+#include "desktop_capture/scoped_thread_desktop.h"
 #include "proto/desktop_session.pb.h"
 
 namespace aspia {
@@ -22,19 +22,19 @@ public:
     InputInjector() = default;
     ~InputInjector();
 
-    void InjectPointerEvent(const proto::desktop::PointerEvent& event);
-    void InjectKeyEvent(const proto::desktop::KeyEvent& event);
+    void injectPointerEvent(const proto::desktop::PointerEvent& event);
+    void injectKeyEvent(const proto::desktop::KeyEvent& event);
 
 private:
-    void SwitchToInputDesktop();
-    bool IsCtrlAndAltPressed();
+    void switchToInputDesktop();
+    bool isCtrlAndAltPressed();
 
     ScopedThreadDesktop desktop_;
 
-    std::set<uint32_t> pressed_keys_;
+    QSet<quint32> pressed_keys_;
 
     QPoint prev_mouse_pos_;
-    uint32_t prev_mouse_button_mask_ = 0;
+    quint32 prev_mouse_button_mask_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };

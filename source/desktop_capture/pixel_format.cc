@@ -12,7 +12,7 @@ namespace aspia {
 
 PixelFormat::PixelFormat(const PixelFormat& other)
 {
-    Set(other);
+    set(other);
 }
 
 PixelFormat::PixelFormat(uint8_t bits_per_pixel,
@@ -94,47 +94,47 @@ PixelFormat PixelFormat::RGB111()
                        0); // blue shift
 }
 
-uint8_t PixelFormat::BitsPerPixel() const
+uint8_t PixelFormat::bitsPerPixel() const
 {
     return bits_per_pixel_;
 }
 
-uint8_t PixelFormat::BytesPerPixel() const
+uint8_t PixelFormat::bytesPerPixel() const
 {
     return bytes_per_pixel_;
 }
 
-uint16_t PixelFormat::RedMax() const
+uint16_t PixelFormat::redMax() const
 {
     return red_max_;
 }
 
-uint16_t PixelFormat::GreenMax() const
+uint16_t PixelFormat::greenMax() const
 {
     return green_max_;
 }
 
-uint16_t PixelFormat::BlueMax() const
+uint16_t PixelFormat::blueMax() const
 {
     return blue_max_;
 }
 
-uint8_t PixelFormat::RedShift() const
+uint8_t PixelFormat::redShift() const
 {
     return red_shift_;
 }
 
-uint8_t PixelFormat::GreenShift() const
+uint8_t PixelFormat::greenShift() const
 {
     return green_shift_;
 }
 
-uint8_t PixelFormat::BlueShift() const
+uint8_t PixelFormat::blueShift() const
 {
     return blue_shift_;
 }
 
-bool PixelFormat::IsValid() const
+bool PixelFormat::isValid() const
 {
     if (bits_per_pixel_ == 0 &&
         red_max_        == 0 &&
@@ -150,7 +150,7 @@ bool PixelFormat::IsValid() const
     return true;
 }
 
-void PixelFormat::Clear()
+void PixelFormat::clear()
 {
     bits_per_pixel_ = 0;
     bytes_per_pixel_ = 0;
@@ -164,7 +164,7 @@ void PixelFormat::Clear()
     blue_shift_  = 0;
 }
 
-bool PixelFormat::IsEqual(const PixelFormat& other) const
+bool PixelFormat::isEqual(const PixelFormat& other) const
 {
     DCHECK(bytes_per_pixel_ == (bits_per_pixel_ / 8));
     DCHECK(other.bytes_per_pixel_ == (other.bits_per_pixel_ / 8));
@@ -183,7 +183,7 @@ bool PixelFormat::IsEqual(const PixelFormat& other) const
     return false;
 }
 
-void PixelFormat::Set(const PixelFormat& other)
+void PixelFormat::set(const PixelFormat& other)
 {
     bits_per_pixel_ = other.bits_per_pixel_;
     bytes_per_pixel_ = other.bytes_per_pixel_;
@@ -199,18 +199,18 @@ void PixelFormat::Set(const PixelFormat& other)
 
 PixelFormat& PixelFormat::operator=(const PixelFormat& other)
 {
-    Set(other);
+    set(other);
     return *this;
 }
 
 bool PixelFormat::operator==(const PixelFormat& other) const
 {
-    return IsEqual(other);
+    return isEqual(other);
 }
 
 bool PixelFormat::operator!=(const PixelFormat& other) const
 {
-    return !IsEqual(other);
+    return !isEqual(other);
 }
 
 } // namespace aspia

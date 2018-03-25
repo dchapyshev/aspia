@@ -27,7 +27,7 @@ DesktopFrameAligned::~DesktopFrameAligned()
 std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::Create(
     const QSize& size, const PixelFormat& format)
 {
-    int bytes_per_row = size.width() * format.BytesPerPixel();
+    int bytes_per_row = size.width() * format.bytesPerPixel();
 
     uint8_t* data = reinterpret_cast<uint8_t*>(_aligned_malloc(bytes_per_row * size.height(), 16));
     if (!data)

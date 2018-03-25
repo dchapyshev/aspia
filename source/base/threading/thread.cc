@@ -9,7 +9,6 @@
 
 #include "base/logging.h"
 #include "base/scoped_com_initializer.h"
-#include "base/settings_manager.h"
 
 namespace aspia {
 
@@ -94,9 +93,6 @@ void Thread::ThreadMain(MessageLoop::Type message_loop_type)
     CHECK(com_initializer.IsSucceeded());
 
     thread_id_ = GetCurrentThreadId();
-
-    if (message_loop_type == MessageLoop::TYPE_UI)
-        SetThreadUILanguage(SettingsManager().GetUILanguage());
 
     // Let the thread do extra initialization.
     // Let's do this before signaling we are started.

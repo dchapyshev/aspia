@@ -25,13 +25,13 @@ DecompressorZLIB::~DecompressorZLIB()
     DCHECK_EQ(ret, Z_OK);
 }
 
-void DecompressorZLIB::Reset()
+void DecompressorZLIB::reset()
 {
     int ret = inflateReset(&stream_);
     DCHECK_EQ(ret, Z_OK);
 }
 
-bool DecompressorZLIB::Process(const uint8_t* input_data,
+bool DecompressorZLIB::process(const uint8_t* input_data,
                                size_t input_size,
                                uint8_t* output_data,
                                size_t output_size,

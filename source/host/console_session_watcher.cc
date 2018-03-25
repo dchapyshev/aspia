@@ -9,7 +9,6 @@
 
 #include <wtsapi32.h>
 
-#include "base/files/base_paths.h"
 #include "base/logging.h"
 
 namespace aspia {

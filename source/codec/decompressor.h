@@ -29,7 +29,7 @@ public:
     // Resets all the internal state so the decompressor behaves as if it was
     // just created.
     //
-    virtual void Reset() = 0;
+    virtual void reset() = 0;
 
     //
     // Decompress |input_data| with |input_size| bytes.
@@ -45,7 +45,7 @@ public:
     // there is more bytes to be decompressed or more input data is
     // needed.
     //
-    virtual bool Process(const uint8_t* input_data,
+    virtual bool process(const uint8_t* input_data,
                          size_t input_size,
                          uint8_t* output_data,
                          size_t output_size,

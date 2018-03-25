@@ -15,16 +15,17 @@ enum Status
 {
     STATUS_UNKNOWN             = 0;
     STATUS_SUCCESS             = 1;
-    STATUS_INVALID_PATH_NAME   = 2;
-    STATUS_PATH_NOT_FOUND      = 3;
-    STATUS_PATH_ALREADY_EXISTS = 4;
-    STATUS_NO_DRIVES_FOUND     = 5;
-    STATUS_DISK_FULL           = 6;
-    STATUS_ACCESS_DENIED       = 7;
-    STATUS_FILE_OPEN_ERROR     = 8;
-    STATUS_FILE_CREATE_ERROR   = 9;
-    STATUS_FILE_WRITE_ERROR    = 10;
-    STATUS_FILE_READ_ERROR     = 11;
+    STATUS_INVALID_REQUEST     = 2;
+    STATUS_INVALID_PATH_NAME   = 3;
+    STATUS_PATH_NOT_FOUND      = 4;
+    STATUS_PATH_ALREADY_EXISTS = 5;
+    STATUS_NO_DRIVES_FOUND     = 6;
+    STATUS_DISK_FULL           = 7;
+    STATUS_ACCESS_DENIED       = 8;
+    STATUS_FILE_OPEN_ERROR     = 9;
+    STATUS_FILE_CREATE_ERROR   = 10;
+    STATUS_FILE_WRITE_ERROR    = 11;
+    STATUS_FILE_READ_ERROR     = 12;
 }
 
 message DriveList
@@ -43,11 +44,8 @@ message DriveList
             TYPE_DESKTOP_FOLDER = 7;
         }
 
-        Type type          = 1;
-        string name        = 2;
-        string path        = 3;
-        uint64 total_space = 4;
-        uint64 free_space  = 5;
+        Type type   = 1;
+        string path = 2;
     }
 
     repeated Item item = 1;
@@ -76,33 +74,23 @@ message FileListRequest
     string path = 1;
 }
 
-message DirectorySize
-{
-    uint64 size = 1;
-}
-
-message DirectorySizeRequest
-{
-    string path = 1;
-}
-
-message FileUploadRequest
+message UploadRequest
 {
     string file_path = 1;
     bool overwrite = 2;
 }
 
-message FileDownloadRequest
+message DownloadRequest
 {
    string file_path = 1;
 }
 
-message FilePacketRequest
+message PacketRequest
 {
     uint32 dummy = 1;
 }
 
-message FilePacket
+message Packet
 {
     enum Flags
     {
@@ -133,25 +121,23 @@ message RemoveRequest
     string path = 1;
 }
 
-message HostToClient
+message Reply
 {
     Status status                = 1;
     DriveList drive_list         = 2;
     FileList file_list           = 3;
-    DirectorySize directory_size = 4;
-    FilePacket file_packet       = 5;
+    Packet packet                = 4;
 }
 
-message ClientToHost
+message Request
 {
     DriveListRequest drive_list_request             = 1;
     FileListRequest file_list_request               = 2;
-    DirectorySizeRequest directory_size_request     = 3;
-    CreateDirectoryRequest create_directory_request = 4;
-    RenameRequest rename_request                    = 5;
-    RemoveRequest remove_request                    = 6;
-    FileDownloadRequest file_download_request       = 7;
-    FileUploadRequest file_upload_request           = 8;
-    FilePacketRequest file_packet_request           = 9;
-    FilePacket file_packet                          = 10;
+    CreateDirectoryRequest create_directory_request = 3;
+    RenameRequest rename_request                    = 4;
+    RemoveRequest remove_request                    = 5;
+    DownloadRequest download_request                = 6;
+    UploadRequest upload_request                    = 7;
+    PacketRequest packet_request                    = 8;
+    Packet packet                                   = 9;
 }

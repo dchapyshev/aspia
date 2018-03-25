@@ -23,16 +23,16 @@ class VideoEncoderZLIB : public VideoEncoder
 public:
     ~VideoEncoderZLIB() = default;
 
-    static std::unique_ptr<VideoEncoderZLIB> Create(const PixelFormat& target_format,
+    static std::unique_ptr<VideoEncoderZLIB> create(const PixelFormat& target_format,
                                                     int compression_ratio);
 
-    std::unique_ptr<proto::desktop::VideoPacket> Encode(const DesktopFrame* frame) override;
+    std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) override;
 
 private:
     VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
                      const PixelFormat& target_format,
                      int compression_ratio);
-    void CompressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
+    void compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
 
     // The current frame size.
     QSize screen_size_;

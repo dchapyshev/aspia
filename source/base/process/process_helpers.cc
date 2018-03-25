@@ -6,7 +6,6 @@
 //
 
 #include "base/process/process_helpers.h"
-#include "base/files/base_paths.h"
 #include "base/scoped_object.h"
 #include "base/scoped_local.h"
 #include "base/logging.h"

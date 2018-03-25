@@ -20,7 +20,7 @@ class DesktopFrameQImage : public DesktopFrame
 public:
     ~DesktopFrameQImage() = default;
 
-    static std::unique_ptr<DesktopFrameQImage> Create(const QSize& size);
+    static std::unique_ptr<DesktopFrameQImage> create(const QSize& size);
 
     const QImage& image() const;
 

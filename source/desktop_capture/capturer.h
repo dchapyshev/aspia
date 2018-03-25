@@ -18,8 +18,8 @@ class Capturer
 public:
     virtual ~Capturer() = default;
 
-    virtual const DesktopFrame* CaptureImage() = 0;
-    virtual std::unique_ptr<MouseCursor> CaptureCursor() = 0;
+    virtual const DesktopFrame* captureImage() = 0;
+    virtual std::unique_ptr<MouseCursor> captureCursor() = 0;
 };
 
 } // namespace aspia

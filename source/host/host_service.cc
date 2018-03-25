@@ -9,7 +9,6 @@
 #include "base/service_manager.h"
 #include "base/security_helpers.h"
 #include "base/scoped_com_initializer.h"
-#include "base/files/base_paths.h"
 
 #include <sddl.h>
 
@@ -83,11 +82,15 @@ uint32_t HostService::GetStatus()
 // static
 bool HostService::Install()
 {
-    auto program_path = BasePaths::GetCurrentExecutableFile();
-    if (!program_path.has_value())
-        return false;
+    wchar_t program_path[MAX_PATH] = { 0 };
 
-    CommandLine command_line(program_path.value());
+    if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
+    {
+        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        return false;
+    }
+
+    CommandLine command_line(program_path);
 
     std::unique_ptr<ServiceManager> manager =
         ServiceManager::Create(command_line,

@@ -20,10 +20,10 @@ class PixelTranslator
 public:
     virtual ~PixelTranslator() = default;
 
-    static std::unique_ptr<PixelTranslator> Create(const PixelFormat& source_format,
+    static std::unique_ptr<PixelTranslator> create(const PixelFormat& source_format,
                                                    const PixelFormat& target_format);
 
-    virtual void Translate(const uint8_t* src,
+    virtual void translate(const uint8_t* src,
                            int src_stride,
                            uint8_t* dst,
                            int dst_stride,

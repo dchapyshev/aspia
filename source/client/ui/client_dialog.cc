@@ -9,7 +9,7 @@
 
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client.h"
-#include "codec/video_helpers.h"
+#include "codec/video_util.h"
 #include "proto/computer.pb.h"
 
 namespace aspia {
@@ -38,9 +38,11 @@ ClientDialog::ClientDialog(QWidget* parent)
                                    tr("File Transfer"),
                                    QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
 
+#if 0
     ui.combo_session_type->addItem(QIcon(":/icon/system-monitor.png"),
                                    tr("System Information"),
                                    QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
+#endif
 
     int current_session_type = ui.combo_session_type->findData(QVariant(computer_.session_type()));
     if (current_session_type != -1)
@@ -128,14 +130,14 @@ void ClientDialog::SetDefaultConfig()
     desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_manage->set_update_interval(30);
     desktop_manage->set_compress_ratio(6);
-    ConvertToVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
+    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
 
     proto::desktop::Config* desktop_view = computer_.mutable_desktop_view_session();
     desktop_view->set_flags(0);
     desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_view->set_update_interval(30);
     desktop_view->set_compress_ratio(6);
-    ConvertToVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
+    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
 
     computer_.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 }

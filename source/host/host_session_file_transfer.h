@@ -12,7 +12,6 @@
 #include "proto/file_transfer_session.pb.h"
 #include "protocol/file_depacketizer.h"
 #include "protocol/file_packetizer.h"
-#include "ui/file_transfer/file_status_dialog.h"
 
 namespace aspia {
 
@@ -26,21 +25,19 @@ public:
 
 private:
     void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelDisconnect();
     void OnIpcChannelMessage(const QByteArray& buffer);
 
-    void SendReply(const proto::file_transfer::HostToClient& reply);
+    void SendReply(const proto::file_transfer::Reply& reply);
     void OnReplySended();
 
     void ReadDriveListRequest();
     void ReadFileListRequest(const proto::file_transfer::FileListRequest& request);
     void ReadCreateDirectoryRequest(const proto::file_transfer::CreateDirectoryRequest& request);
-    void ReadDirectorySizeRequest(const proto::file_transfer::DirectorySizeRequest& request);
     void ReadRenameRequest(const proto::file_transfer::RenameRequest& request);
     void ReadRemoveRequest(const proto::file_transfer::RemoveRequest& request);
-    void ReadFileUploadRequest(const proto::file_transfer::FileUploadRequest& request);
-    bool ReadFilePacket(const proto::file_transfer::FilePacket& file_packet);
-    void ReadFileDownloadRequest(const proto::file_transfer::FileDownloadRequest& request);
+    void ReadFileUploadRequest(const proto::file_transfer::UploadRequest& request);
+    bool ReadFilePacket(const proto::file_transfer::Packet& file_packet);
+    void ReadFileDownloadRequest(const proto::file_transfer::DownloadRequest& request);
     bool ReadFilePacketRequest();
 
     std::unique_ptr<PipeChannel> ipc_channel_;
@@ -48,8 +45,6 @@ private:
 
     std::unique_ptr<FileDepacketizer> file_depacketizer_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
-
-    std::unique_ptr<FileStatusDialog> status_dialog_;
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };

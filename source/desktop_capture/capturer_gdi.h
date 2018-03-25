@@ -11,8 +11,8 @@
 #include "desktop_capture/capturer.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
+#include "desktop_capture/scoped_thread_desktop.h"
 #include "base/scoped_native_library.h"
-#include "base/scoped_thread_desktop.h"
 #include "base/scoped_hdc.h"
 
 namespace aspia {
@@ -22,16 +22,16 @@ class CapturerGDI : public Capturer
 public:
     ~CapturerGDI() = default;
 
-    static std::unique_ptr<CapturerGDI> Create();
+    static std::unique_ptr<CapturerGDI> create();
 
-    const DesktopFrame* CaptureImage() override;
-    std::unique_ptr<MouseCursor> CaptureCursor() override;
+    const DesktopFrame* captureImage() override;
+    std::unique_ptr<MouseCursor> captureCursor() override;
 
 private:
     typedef HRESULT(WINAPI * DwmEnableCompositionFunc)(UINT);
 
     CapturerGDI();
-    bool PrepareCaptureResources();
+    bool prepareCaptureResources();
 
     ScopedThreadDesktop desktop_;
     QRect desktop_dc_rect_;

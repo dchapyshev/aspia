@@ -8,9 +8,11 @@
 #ifndef _ASPIA_BASE__OBJECT_WATCHER_H
 #define _ASPIA_BASE__OBJECT_WATCHER_H
 
-#include "base/macros.h"
-
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <chrono>
+
+#include "base/macros.h"
 
 namespace aspia {
 

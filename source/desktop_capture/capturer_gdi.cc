@@ -10,7 +10,6 @@
 #include <dwmapi.h>
 
 #include "base/logging.h"
-#include "base/scoped_select_object.h"
 
 namespace aspia {
 
@@ -32,7 +31,7 @@ constexpr uint32_t kPixelRgbWhite = RGB(0xFF, 0xFF, 0xFF);
 
 // Scans a 32bpp bitmap looking for any pixels with non-zero alpha component.
 // Returns true if non-zero alpha is found. |stride| is expressed in pixels.
-bool HasAlphaChannel(const uint32_t* data, int width, int height)
+bool hasAlphaChannel(const uint32_t* data, int width, int height)
 {
     const RGBQUAD* plane = reinterpret_cast<const RGBQUAD*>(data);
 
@@ -52,7 +51,7 @@ bool HasAlphaChannel(const uint32_t* data, int width, int height)
 
 // Expands the cursor shape to add a white outline for visibility against
 // dark backgrounds.
-void AddCursorOutline(int width, int height, uint32_t* data)
+void addCursorOutline(int width, int height, uint32_t* data)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -81,7 +80,7 @@ void AddCursorOutline(int width, int height, uint32_t* data)
 
 // Premultiplies RGB components of the pixel data in the given image by
 // the corresponding alpha components.
-void AlphaMul(uint32_t* data, int width, int height)
+void alphaMul(uint32_t* data, int width, int height)
 {
     static_assert(sizeof(uint32_t) == kBytesPerPixel,
                   "size of uint32 should be the number of bytes per pixel");
@@ -98,7 +97,7 @@ void AlphaMul(uint32_t* data, int width, int height)
 }
 
 // Converts an HCURSOR into a |MouseCursor| instance.
-std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
+std::unique_ptr<MouseCursor> createMouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
     ICONINFO icon_info = { 0 };
 
@@ -182,7 +181,7 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
         // GetDIBits() does not provide any indication whether the bitmap has
         // alpha channel, so we use HasAlphaChannel() below to find it out.
-        has_alpha = HasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
+        has_alpha = hasAlphaChannel(reinterpret_cast<const uint32_t*>(image.get()), width, height);
     }
     else
     {
@@ -247,20 +246,20 @@ std::unique_ptr<MouseCursor> CreateMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
         if (add_outline)
         {
-            AddCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.get()));
+            addCursorOutline(width, height, reinterpret_cast<uint32_t*>(image.get()));
         }
     }
 
     // Pre-multiply the resulting pixels since MouseCursor uses premultiplied
     // images.
-    AlphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
+    alphaMul(reinterpret_cast<uint32_t*>(image.get()), width, height);
 
-    return MouseCursor::Create(std::move(image),
+    return MouseCursor::create(std::move(image),
                                QSize(width, height),
                                QPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
-bool IsSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
+bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 {
     // If the cursors are not showing, we do not care the hCursor handle.
     return left.flags == right.flags && (left.flags != CURSOR_SHOWING ||
@@ -275,18 +274,18 @@ CapturerGDI::CapturerGDI()
 }
 
 // static
-std::unique_ptr<CapturerGDI> CapturerGDI::Create()
+std::unique_ptr<CapturerGDI> CapturerGDI::create()
 {
     return std::unique_ptr<CapturerGDI>(new CapturerGDI());
 }
 
-bool CapturerGDI::PrepareCaptureResources()
+bool CapturerGDI::prepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
     // current one.
-    Desktop input_desktop(Desktop::GetInputDesktop());
+    Desktop input_desktop(Desktop::inputDesktop());
 
-    if (input_desktop.IsValid() && !desktop_.IsSame(input_desktop))
+    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
     {
         // Release GDI resources otherwise SetThreadDesktop will fail.
         desktop_dc_.reset();
@@ -294,7 +293,7 @@ bool CapturerGDI::PrepareCaptureResources()
 
         // If SetThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
-        desktop_.SetThreadDesktop(std::move(input_desktop));
+        desktop_.setThreadDesktop(std::move(input_desktop));
     }
 
     QRect screen_rect = QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
@@ -346,9 +345,9 @@ bool CapturerGDI::PrepareCaptureResources()
     return true;
 }
 
-const DesktopFrame* CapturerGDI::CaptureImage()
+const DesktopFrame* CapturerGDI::captureImage()
 {
-    if (!PrepareCaptureResources())
+    if (!prepareCaptureResources())
         return nullptr;
 
     int prev_frame_id = curr_frame_id_ - 1;
@@ -358,9 +357,9 @@ const DesktopFrame* CapturerGDI::CaptureImage()
     DesktopFrameDIB* prev_frame = frame_[prev_frame_id].get();
     DesktopFrameDIB* curr_frame = frame_[curr_frame_id_].get();
 
+    HGDIOBJ old_bitmap = SelectObject(memory_dc_, curr_frame->Bitmap());
+    if (old_bitmap)
     {
-        ScopedSelectObject select_object(memory_dc_, curr_frame->Bitmap());
-
         BitBlt(memory_dc_,
                0, 0,
                curr_frame->size().width(),
@@ -369,18 +368,20 @@ const DesktopFrame* CapturerGDI::CaptureImage()
                desktop_dc_rect_.x(),
                desktop_dc_rect_.y(),
                CAPTUREBLT | SRCCOPY);
+
+        SelectObject(memory_dc_, old_bitmap);
     }
 
-    differ_->CalcDirtyRegion(prev_frame->GetFrameData(),
-                             curr_frame->GetFrameData(),
-                             curr_frame->MutableUpdatedRegion());
+    differ_->calcDirtyRegion(prev_frame->frameData(),
+                             curr_frame->frameData(),
+                             curr_frame->mutableUpdatedRegion());
 
     curr_frame_id_ = prev_frame_id;
 
     return curr_frame;
 }
 
-std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()
+std::unique_ptr<MouseCursor> CapturerGDI::captureCursor()
 {
     CURSORINFO cursor_info = { 0 };
 
@@ -388,7 +389,7 @@ std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()
     cursor_info.cbSize = sizeof(cursor_info);
     if (GetCursorInfo(&cursor_info))
     {
-        if (!IsSameCursorShape(cursor_info, prev_cursor_info_))
+        if (!isSameCursorShape(cursor_info, prev_cursor_info_))
         {
             if (cursor_info.flags == 0)
             {
@@ -400,7 +401,7 @@ std::unique_ptr<MouseCursor> CapturerGDI::CaptureCursor()
             }
 
             std::unique_ptr<MouseCursor> mouse_cursor =
-                CreateMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
+                createMouseCursorFromHCursor(*desktop_dc_, cursor_info.hCursor);
 
             if (mouse_cursor)
             {

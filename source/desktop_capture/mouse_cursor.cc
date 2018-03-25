@@ -11,7 +11,7 @@ namespace aspia {
 
 // static
 std::unique_ptr<MouseCursor>
-MouseCursor::Create(std::unique_ptr<uint8_t[]> data,
+MouseCursor::create(std::unique_ptr<uint8_t[]> data,
                     const QSize& size,
                     const QPoint& hotspot)
 {

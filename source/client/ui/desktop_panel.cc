@@ -29,7 +29,6 @@ DesktopPanel::DesktopPanel(QWidget* parent)
     connect(ui.button_autosize, SIGNAL(pressed()), SLOT(onAutosizeButton()));
     connect(ui.button_full_screen, SIGNAL(toggled(bool)), SLOT(onFullscreenButton(bool)));
     connect(ui.button_ctrl_alt_del, SIGNAL(pressed()), SLOT(onCtrlAltDelButton()));
-    connect(ui.button_exit, SIGNAL(pressed()), SIGNAL(closeButton()));
 
     connect(ui.action_alt_tab, SIGNAL(triggered()), SLOT(onAltTabAction()));
     connect(ui.action_alt_shift_tab, SIGNAL(triggered()), SLOT(onAltShiftTabAction()));

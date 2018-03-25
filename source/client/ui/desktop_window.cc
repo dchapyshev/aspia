@@ -83,7 +83,6 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     connect(panel_, SIGNAL(switchToNormal()), SLOT(showNormal()));
     connect(panel_, SIGNAL(switchToAutosize()), SLOT(autosizeWindow()));
     connect(panel_, SIGNAL(settingsButton()), SLOT(changeSettings()));
-    connect(panel_, SIGNAL(closeButton()), SLOT(close()));
 
     connect(desktop_, SIGNAL(sendPointerEvent(const QPoint&, quint32)),
             SLOT(onPointerEvent(const QPoint&, quint32)));

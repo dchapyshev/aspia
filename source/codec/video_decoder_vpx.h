@@ -32,10 +32,10 @@ class VideoDecoderVPX : public VideoDecoder
 public:
     ~VideoDecoderVPX() = default;
 
-    static std::unique_ptr<VideoDecoderVPX> CreateVP8();
-    static std::unique_ptr<VideoDecoderVPX> CreateVP9();
+    static std::unique_ptr<VideoDecoderVPX> createVP8();
+    static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) override;
+    bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) override;
 
 private:
     explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);

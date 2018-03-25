@@ -8,9 +8,11 @@
 #ifndef _ASPIA_BASE__SCOPED_DEVICE_INFO_H
 #define _ASPIA_BASE__SCOPED_DEVICE_INFO_H
 
-#include "base/macros.h"
-
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <setupapi.h>
+
+#include "base/macros.h"
 
 namespace aspia {
 

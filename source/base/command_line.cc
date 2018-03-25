@@ -5,11 +5,14 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/strings/string_util.h"
 #include "base/command_line.h"
-#include "base/logging.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <shellapi.h>
+
+#include "base/strings/string_util.h"
+#include "base/logging.h"
 
 namespace aspia {
 

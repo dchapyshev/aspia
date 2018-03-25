@@ -34,20 +34,20 @@ class VideoEncoderVPX : public VideoEncoder
 public:
     ~VideoEncoderVPX() = default;
 
-    static std::unique_ptr<VideoEncoderVPX> CreateVP8();
-    static std::unique_ptr<VideoEncoderVPX> CreateVP9();
+    static std::unique_ptr<VideoEncoderVPX> createVP8();
+    static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    std::unique_ptr<proto::desktop::VideoPacket> Encode(const DesktopFrame* frame) override;
+    std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) override;
 
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
 
-    void CreateImage();
-    void CreateActiveMap();
-    void CreateVp8Codec();
-    void CreateVp9Codec();
-    void PrepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
-    void SetActiveMap(const QRect& rect);
+    void createImage();
+    void createActiveMap();
+    void createVp8Codec();
+    void createVp9Codec();
+    void prepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
+    void setActiveMap(const QRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;
 

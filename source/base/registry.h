@@ -8,6 +8,9 @@
 #ifndef _ASPIA_BASE__REGISTRY_H
 #define _ASPIA_BASE__REGISTRY_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <vector>
 
 #include "base/macros.h"

@@ -9,8 +9,8 @@
 
 namespace aspia {
 
-PipeChannelProxy::PipeChannelProxy(PipeChannel* channel) :
-    channel_(channel)
+PipeChannelProxy::PipeChannelProxy(PipeChannel* channel)
+    : channel_(channel)
 {
     // Nothing
 }

@@ -15,8 +15,6 @@
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
 #include "base/scoped_object.h"
-#include "base/scoped_impersonator.h"
-#include "base/files/base_paths.h"
 #include "base/logging.h"
 #include "host/host_switches.h"
 
@@ -24,13 +22,32 @@ namespace aspia {
 
 namespace {
 
-constexpr wchar_t kProcessNameSystemInfo[] = L"aspia_system_info.exe";
 constexpr wchar_t kProcessNameHost[] = L"aspia_host.exe";
 
 // Name of the default session desktop.
 constexpr wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
-bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
+bool GetCurrentFolder(std::wstring* path)
+{
+    wchar_t buffer[MAX_PATH] = { 0 };
+
+    if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
+    {
+        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        return false;
+    }
+
+    std::wstring_view temp(buffer);
+
+    size_t pos = temp.find_last_of(L"\\/");
+    if (pos == std::wstring_view::npos)
+        return false;
+
+    path->assign(temp.substr(0, pos));
+    return true;
+}
+
+bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 {
     ScopedHandle process_token;
 
@@ -47,7 +64,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
                           nullptr,
                           SecurityImpersonation,
                           TokenPrimary,
-                          token_out.Recieve()))
+                          token_out->Recieve()))
     {
         PLOG(LS_ERROR) << "DuplicateTokenEx failed";
         return false;
@@ -57,13 +74,13 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle& token_out)
 }
 
 // Creates a copy of the current process with SE_TCB_NAME privilege enabled.
-bool CreatePrivilegedToken(ScopedHandle& token_out)
+bool CreatePrivilegedToken(ScopedHandle* token_out)
 {
     ScopedHandle privileged_token;
     const DWORD desired_access = TOKEN_ADJUST_PRIVILEGES | TOKEN_IMPERSONATE |
         TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    if (!CopyProcessToken(desired_access, privileged_token))
+    if (!CopyProcessToken(desired_access, &privileged_token))
         return false;
 
     // Get the LUID for the SE_TCB_NAME privilege.
@@ -85,42 +102,42 @@ bool CreatePrivilegedToken(ScopedHandle& token_out)
         return false;
     }
 
-    token_out.Reset(privileged_token.Release());
+    token_out->Reset(privileged_token.Release());
     return true;
 }
 
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
+bool CreateSessionToken(DWORD session_id, ScopedHandle* token_out)
 {
     ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
-    if (!CopyProcessToken(desired_access, session_token))
+    if (!CopyProcessToken(desired_access, &session_token))
         return false;
 
     ScopedHandle privileged_token;
 
-    if (!CreatePrivilegedToken(privileged_token))
+    if (!CreatePrivilegedToken(&privileged_token))
         return false;
 
+    if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        ScopedImpersonator impersonator;
+        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
+        return false;
+    }
 
-        if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
-            return false;
+    // Change the session ID of the token.
+    BOOL ret = SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id));
 
-        // Change the session ID of the token.
-        DWORD new_session_id = session_id;
-        if (!SetTokenInformation(session_token,
-                                 TokenSessionId,
-                                 &new_session_id,
-                                 sizeof(new_session_id)))
-        {
-            PLOG(LS_ERROR) << "SetTokenInformation failed";
-            return false;
-        }
+    BOOL reverted = RevertToSelf();
+    CHECK(reverted);
+
+    if (!ret)
+    {
+        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        return false;
     }
 
     DWORD ui_access = 1;
@@ -130,7 +147,7 @@ bool CreateSessionToken(uint32_t session_id, ScopedHandle& token_out)
         return false;
     }
 
-    token_out.Reset(session_token.Release());
+    token_out->Reset(session_token.Release());
     return true;
 }
 
@@ -184,31 +201,37 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
 {
     ScopedHandle privileged_token;
 
-    if (!CreatePrivilegedToken(privileged_token))
+    if (!CreatePrivilegedToken(&privileged_token))
         return false;
 
     ScopedHandle session_token;
 
+    if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        ScopedImpersonator impersonator;
-
-        if (!impersonator.ImpersonateLoggedOnUser(privileged_token))
-            return false;
-
-        if (!WTSQueryUserToken(session_id, session_token.Recieve()))
-        {
-            PLOG(LS_ERROR) << "WTSQueryUserToken failed";
-            return false;
-        }
+        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
+        return false;
     }
 
-    auto program_path = BasePaths::GetCurrentExecutableDirectory();
-    if (!program_path.has_value())
+    BOOL ret = WTSQueryUserToken(session_id, session_token.Recieve());
+
+    BOOL reverted = RevertToSelf();
+    CHECK(reverted);
+
+    if (!ret)
+    {
+        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+        return false;
+    }
+
+    std::wstring program_path;
+
+    if (!GetCurrentFolder(&program_path))
         return false;
 
-    program_path->append(kProcessNameHost);
+    program_path.append(L"\\");
+    program_path.append(kProcessNameHost);
 
-    CommandLine command_line(program_path.value());
+    CommandLine command_line(program_path);
 
     command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
@@ -220,20 +243,22 @@ bool LaunchSessionProcessAsSystem(const std::wstring& session_type,
                                   uint32_t session_id,
                                   const std::wstring& channel_id)
 {
-    auto program_path = BasePaths::GetCurrentExecutableDirectory();
-    if (!program_path.has_value())
+    std::wstring program_path;
+
+    if (!GetCurrentFolder(&program_path))
         return false;
 
-    program_path->append(kProcessNameHost);
+    program_path.append(L"\\");
+    program_path.append(kProcessNameHost);
 
-    CommandLine command_line(program_path.value());
+    CommandLine command_line(program_path);
 
     command_line.AppendSwitch(kSessionTypeSwitch, session_type);
     command_line.AppendSwitch(kChannelIdSwitch, channel_id);
 
     ScopedHandle session_token;
 
-    if (!CreateSessionToken(session_id, session_token))
+    if (!CreateSessionToken(session_id, &session_token))
         return false;
 
     return CreateProcessWithToken(session_token, command_line);
@@ -249,14 +274,8 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
         {
-            const wchar_t* session_type_switch = kSessionTypeDesktop;
-
-            if (session_type == proto::auth::SESSION_TYPE_SYSTEM_INFO)
-                session_type_switch = kSessionTypeSystemInfo;
-
-            return LaunchSessionProcessAsSystem(session_type_switch, session_id, channel_id);
+            return LaunchSessionProcessAsSystem(kSessionTypeDesktop, session_id, channel_id);
         }
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
@@ -266,21 +285,10 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
         default:
         {
-            DLOG(LS_ERROR) << "Unknown session type: " << session_type;
+            LOG(LS_ERROR) << "Unknown session type: " << session_type;
             return false;
         }
     }
-}
-
-bool LaunchSystemInfoProcess()
-{
-    auto program_path = BasePaths::GetCurrentExecutableDirectory();
-    if (!program_path.has_value())
-        return false;
-
-    program_path->append(kProcessNameSystemInfo);
-
-    return LaunchProcess(program_path.value());
 }
 
 } // namespace aspia

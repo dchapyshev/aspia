@@ -74,13 +74,12 @@ enum SessionType {
   SESSION_TYPE_DESKTOP_MANAGE = 1,
   SESSION_TYPE_DESKTOP_VIEW = 2,
   SESSION_TYPE_FILE_TRANSFER = 4,
-  SESSION_TYPE_SYSTEM_INFO = 8,
   SessionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   SessionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool SessionType_IsValid(int value);
 const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
-const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
+const SessionType SessionType_MAX = SESSION_TYPE_FILE_TRANSFER;
 const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
 
 enum Status {
@@ -177,9 +176,9 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes nonce = 1;
+  // bytes nonce = 2;
   void clear_nonce();
-  static const int kNonceFieldNumber = 1;
+  static const int kNonceFieldNumber = 2;
   const ::std::string& nonce() const;
   void set_nonce(const ::std::string& value);
   #if LANG_CXX11
@@ -191,11 +190,18 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::std::string* release_nonce();
   void set_allocated_nonce(::std::string* nonce);
 
+  // uint32 version = 1;
+  void clear_version();
+  static const int kVersionFieldNumber = 1;
+  ::google::protobuf::uint32 version() const;
+  void set_version(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:proto.auth.Request)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr nonce_;
+  ::google::protobuf::uint32 version_;
   mutable int _cached_size_;
   friend struct ::protobuf_auth_5fsession_2eproto::TableStruct;
   friend void ::protobuf_auth_5fsession_2eproto::InitDefaultsRequestImpl();
@@ -435,7 +441,21 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 #endif  // __GNUC__
 // Request
 
-// bytes nonce = 1;
+// uint32 version = 1;
+inline void Request::clear_version() {
+  version_ = 0u;
+}
+inline ::google::protobuf::uint32 Request::version() const {
+  // @@protoc_insertion_point(field_get:proto.auth.Request.version)
+  return version_;
+}
+inline void Request::set_version(::google::protobuf::uint32 value) {
+  
+  version_ = value;
+  // @@protoc_insertion_point(field_set:proto.auth.Request.version)
+}
+
+// bytes nonce = 2;
 inline void Request::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

@@ -42,27 +42,27 @@ bool DesktopFrame::contains(int32_t x, int32_t y) const
     return (x > 0 && x <= size_.width() && y > 0 && y <= size_.height());
 }
 
-uint8_t* DesktopFrame::GetFrameData() const
+uint8_t* DesktopFrame::frameData() const
 {
     return data_;
 }
 
-uint8_t* DesktopFrame::GetFrameDataAtPos(const QPoint& pos) const
+uint8_t* DesktopFrame::frameDataAtPos(const QPoint& pos) const
 {
-    return GetFrameData() + stride() * pos.y() + format_.BytesPerPixel() * pos.x();
+    return frameData() + stride() * pos.y() + format_.bytesPerPixel() * pos.x();
 }
 
-uint8_t* DesktopFrame::GetFrameDataAtPos(int32_t x, int32_t y) const
+uint8_t* DesktopFrame::frameDataAtPos(int32_t x, int32_t y) const
 {
-    return GetFrameDataAtPos(QPoint(x, y));
+    return frameDataAtPos(QPoint(x, y));
 }
 
-const QRegion& DesktopFrame::UpdatedRegion() const
+const QRegion& DesktopFrame::updatedRegion() const
 {
     return updated_region_;
 }
 
-QRegion* DesktopFrame::MutableUpdatedRegion()
+QRegion* DesktopFrame::mutableUpdatedRegion()
 {
     return &updated_region_;
 }

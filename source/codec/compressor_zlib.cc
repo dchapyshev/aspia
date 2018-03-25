@@ -30,13 +30,13 @@ CompressorZLIB::~CompressorZLIB()
     DCHECK_EQ(ret, Z_OK);
 }
 
-void CompressorZLIB::Reset()
+void CompressorZLIB::reset()
 {
     int ret = deflateReset(&stream_);
     DCHECK_EQ(ret, Z_OK);
 }
 
-bool CompressorZLIB::Process(const uint8_t* input_data,
+bool CompressorZLIB::process(const uint8_t* input_data,
                              size_t input_size,
                              uint8_t* output_data,
                              size_t output_size,

@@ -7,35 +7,36 @@
 
 #include "codec/video_decoder_zlib.h"
 
-#include "codec/video_helpers.h"
+#include <QDebug>
+
+#include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_aligned.h"
-#include "base/logging.h"
 
 namespace aspia {
 
 // static
-std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::Create()
+std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::create()
 {
     return std::unique_ptr<VideoDecoderZLIB>(new VideoDecoderZLIB());
 }
 
-bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet,
+bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
                               DesktopFrame* target_frame)
 {
     if (packet.has_format())
     {
         source_frame_ = DesktopFrameAligned::Create(
-            ConvertFromVideoSize(packet.format().screen_size()),
-            ConvertFromVideoPixelFormat(packet.format().pixel_format()));
+            VideoUtil::fromVideoSize(packet.format().screen_size()),
+            VideoUtil::fromVideoPixelFormat(packet.format().pixel_format()));
 
-        translator_ = PixelTranslator::Create(source_frame_->format(), target_frame->format());
+        translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }
 
-    DCHECK(source_frame_->size() == target_frame->size());
+    Q_ASSERT(source_frame_->size() == target_frame->size());
 
     if (!source_frame_ || !translator_)
     {
-        LOG(LS_ERROR) << "A packet with image information was not received";
+        qWarning("A packet with image information was not received");
         return false;
     }
 
@@ -47,16 +48,17 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        QRect rect = ConvertFromVideoRect(packet.dirty_rect(i));
+        QRect rect(packet.dirty_rect(i).x(), packet.dirty_rect(i).y(),
+                   packet.dirty_rect(i).width(), packet.dirty_rect(i).height());
 
         if (!frame_rect.contains(rect))
         {
-            LOG(LS_ERROR) << "The rectangle is outside the screen area";
+            qWarning("The rectangle is outside the screen area");
             return false;
         }
 
-        uint8_t* dst = source_frame_->GetFrameDataAtPos(rect.x(), rect.y());
-        const size_t row_size = rect.width() * source_frame_->format().BytesPerPixel();
+        uint8_t* dst = source_frame_->frameDataAtPos(rect.x(), rect.y());
+        const size_t row_size = rect.width() * source_frame_->format().bytesPerPixel();
 
         // Consume all the data in the message.
         bool decompress_again = true;
@@ -74,7 +76,7 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet,
             size_t written = 0;
             size_t consumed = 0;
 
-            decompress_again = decompressor_.Process(src + used,
+            decompress_again = decompressor_.process(src + used,
                                                      src_size - used,
                                                      dst + row_pos,
                                                      row_size - row_pos,
@@ -92,16 +94,15 @@ bool VideoDecoderZLIB::Decode(const proto::desktop::VideoPacket& packet,
             }
         }
 
-        translator_->Translate(source_frame_->GetFrameDataAtPos(rect.topLeft()),
+        translator_->translate(source_frame_->frameDataAtPos(rect.topLeft()),
                                source_frame_->stride(),
-                               target_frame->GetFrameDataAtPos(rect.topLeft()),
+                               target_frame->frameDataAtPos(rect.topLeft()),
                                target_frame->stride(),
                                rect.width(),
                                rect.height());
     }
 
-    decompressor_.Reset();
-
+    decompressor_.reset();
     return true;
 }
 

@@ -7,7 +7,7 @@
 
 #include <winuser.h>
 
-1 ICON "ui/resource/main.ico"
+1 ICON "resources/main.ico"
 
 #define VER_FILEVERSION             1,0,0,0
 #define VER_FILEVERSION_STR         L"1.0.0.0\0"

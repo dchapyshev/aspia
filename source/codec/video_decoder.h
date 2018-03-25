@@ -20,9 +20,9 @@ class VideoDecoder
 public:
     virtual ~VideoDecoder() = default;
 
-    static std::unique_ptr<VideoDecoder> Create(proto::desktop::VideoEncoding encoding);
+    static std::unique_ptr<VideoDecoder> create(proto::desktop::VideoEncoding encoding);
 
-    virtual bool Decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) = 0;
+    virtual bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* frame) = 0;
 };
 
 } // namespace aspia

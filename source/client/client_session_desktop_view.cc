@@ -23,9 +23,6 @@ ClientSessionDesktopView::ClientSessionDesktopView(proto::Computer* computer, QO
 
     // When the window is closed, we close the session.
     connect(desktop_window_, SIGNAL(windowClose()), this, SIGNAL(sessionClosed()));
-
-    desktop_window_->show();
-    desktop_window_->activateWindow();
 }
 
 ClientSessionDesktopView::~ClientSessionDesktopView()
@@ -58,6 +55,12 @@ void ClientSessionDesktopView::readMessage(const QByteArray& buffer)
     }
 }
 
+void ClientSessionDesktopView::startSession()
+{
+    desktop_window_->show();
+    desktop_window_->activateWindow();
+}
+
 void ClientSessionDesktopView::closeSession()
 {
     // If the end of the session is not initiated by the user, then we do not send the session
@@ -77,7 +80,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 {
     if (video_encoding_ != packet.encoding())
     {
-        video_decoder_ = VideoDecoder::Create(packet.encoding());
+        video_decoder_ = VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
     }
 
@@ -107,7 +110,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
         return;
     }
 
-    if (!video_decoder_->Decode(packet, frame))
+    if (!video_decoder_->decode(packet, frame))
     {
         emit sessionError(tr("Session error: The video packet could not be decoded."));
         return;

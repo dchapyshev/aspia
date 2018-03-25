@@ -22,13 +22,13 @@ public:
     explicit Differ(const QSize& size);
     ~Differ() = default;
 
-    void CalcDirtyRegion(const uint8_t* prev_image,
+    void calcDirtyRegion(const uint8_t* prev_image,
                          const uint8_t* curr_image,
                          QRegion* changed_region);
 
 private:
-    void MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
-    void MergeBlocks(QRegion* dirty_region);
+    void markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image);
+    void mergeBlocks(QRegion* dirty_region);
 
     const QRect screen_rect_;
 

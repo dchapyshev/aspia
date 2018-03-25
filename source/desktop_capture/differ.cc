@@ -40,17 +40,15 @@ uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_
 // height are multiples of kBlockSize, then this will never be called.
 //
 uint8_t DiffPartialBlock(const uint8_t* prev_image,
-                                const uint8_t* curr_image,
-                                int bytes_per_row,
-                                int bytes_per_block,
-                                int height)
+                         const uint8_t* curr_image,
+                         int bytes_per_row,
+                         int bytes_per_block,
+                         int height)
 {
     for (int y = 0; y < height; ++y)
     {
         if (memcmp(prev_image, curr_image, bytes_per_block) != 0)
-        {
             return 1U;
-        }
 
         prev_image += bytes_per_row;
         curr_image += bytes_per_row;
@@ -86,7 +84,7 @@ Differ::Differ(const QSize& size)
 //
 // Identify all of the blocks that contain changed pixels.
 //
-void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
+void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
 {
     const uint8_t* prev_block_row_start = prev_image;
     const uint8_t* curr_block_row_start = curr_image;
@@ -111,7 +109,7 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
             {
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
-                *is_different = DiffFullBlock_16x16_SSE2(prev_block,
+                *is_different = diffFullBlock_16x16_SSE2(prev_block,
                                                          curr_block,
                                                          bytes_per_row_);
             }
@@ -121,7 +119,7 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
-                *is_different = DiffFullBlock_32x32_SSE2(prev_block,
+                *is_different = diffFullBlock_32x32_SSE2(prev_block,
                                                          curr_block,
                                                          bytes_per_row_);
             }
@@ -190,7 +188,7 @@ void Differ::MarkDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 // blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 //
-void Differ::MergeBlocks(QRegion* dirty_region)
+void Differ::mergeBlocks(QRegion* dirty_region)
 {
     uint8_t* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -272,20 +270,20 @@ void Differ::MergeBlocks(QRegion* dirty_region)
     }
 }
 
-void Differ::CalcDirtyRegion(const uint8_t* prev_image,
+void Differ::calcDirtyRegion(const uint8_t* prev_image,
                              const uint8_t* curr_image,
                              QRegion* dirty_region)
 {
     *dirty_region = QRegion();
 
     // Identify all the blocks that contain changed pixels.
-    MarkDirtyBlocks(prev_image, curr_image);
+    markDirtyBlocks(prev_image, curr_image);
 
     //
     // Now that we've identified the blocks that have changed, merge adjacent
     // blocks to minimize the number of rects that we return.
     //
-    MergeBlocks(dirty_region);
+    mergeBlocks(dirty_region);
 }
 
 } // namespace aspia

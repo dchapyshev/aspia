@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-uint8_t DiffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+uint8_t diffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;
@@ -62,7 +62,7 @@ uint8_t DiffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, i
     return 0U;
 }
 
-uint8_t DiffFullBlock_16x16_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+uint8_t diffFullBlock_16x16_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;

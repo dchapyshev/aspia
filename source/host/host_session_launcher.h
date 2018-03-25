@@ -18,8 +18,6 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
                           uint32_t session_id,
                           const std::wstring& channel_id);
 
-bool LaunchSystemInfoProcess();
-
 } // namespace aspia
 
 #endif // _ASPIA_HOST__HOST_SESSION_LAUNCHER_H

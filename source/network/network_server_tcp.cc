@@ -6,7 +6,6 @@
 //
 
 #include "network/network_server_tcp.h"
-#include "base/files/base_paths.h"
 
 namespace aspia {
 
@@ -37,13 +36,17 @@ NetworkServerTcp::~NetworkServerTcp()
 
 void NetworkServerTcp::AddFirewallRule()
 {
-    auto exe_path = BasePaths::GetCurrentExecutableFile();
-    if (!exe_path.has_value())
+    wchar_t program_path[MAX_PATH] = { 0 };
+
+    if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
+    {
+        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
         return;
+    }
 
     firewall_manager_ = std::make_unique<FirewallManager>();
 
-    if (!firewall_manager_->Init(kAppName, exe_path.value()))
+    if (!firewall_manager_->Init(kAppName, program_path))
     {
         firewall_manager_.reset();
         return;

@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>folder-up.png</file>
+    <file>arrow-circle-double.png</file>
+    <file>arrow-turn.png</file>
+    <file>arrow-turn-left.png</file>
+    <file>home.png</file>
+    <file>cross-script.png</file>
     <file>arrow-in-out.png</file>
     <file>application-resize-actual.png</file>
     <file>application-resize-full.png</file>

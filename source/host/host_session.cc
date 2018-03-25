@@ -95,16 +95,7 @@ void HostSession::OnSessionDetached()
     process_connector_.Disconnect();
     process_watcher_.StopWatching();
 
-    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_VIEW ||
-        session_type_ == proto::auth::SESSION_TYPE_SYSTEM_INFO)
-    {
-        // We close the session process only for desktop manage and desktop view sessions.
-        // Processes for other types of sessions are left open so that the user can see the fact
-        // of connection to his computer.
-        process_.Terminate(0, false);
-    }
-
+    process_.Terminate(0, false);
     process_.Close();
 
     if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE ||

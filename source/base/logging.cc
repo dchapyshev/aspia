@@ -7,8 +7,10 @@
 
 #include "base/logging.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <io.h>
-#include <algorithm>
 #include <iomanip>
 #include <ostream>
 #include <utility>
@@ -179,7 +181,7 @@ bool BaseInitLoggingImpl(const LoggingSettings& settings)
 
 void SetMinLogLevel(LoggingSeverity level)
 {
-    g_min_log_level = std::min(LS_FATAL, level);
+    g_min_log_level = min(LS_FATAL, level);
 }
 
 LoggingSeverity GetMinLogLevel()

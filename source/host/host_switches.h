@@ -12,12 +12,10 @@ namespace aspia {
 
 extern const wchar_t kSessionTypeSwitch[];
 extern const wchar_t kChannelIdSwitch[];
-extern const wchar_t kServiceIdSwitch[];
 extern const wchar_t kSessionIdSwitch[];
 
 extern const wchar_t kSessionTypeDesktop[];
 extern const wchar_t kSessionTypeFileTransfer[];
-extern const wchar_t kSessionTypeSystemInfo[];
 
 } // namespace aspia
 
