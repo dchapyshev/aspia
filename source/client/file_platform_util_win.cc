@@ -12,10 +12,9 @@
 #endif
 
 #include <QtWin>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <shellapi.h>
+
+#include "base/scoped_user_object.h"
 
 namespace aspia {
 
@@ -28,10 +27,16 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
     memset(&icon_info, 0, sizeof(icon_info));
     icon_info.cbSize = sizeof(icon_info);
 
-    if (FAILED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
-        return QIcon();
+    if (SUCCEEDED(SHGetStockIconInfo(icon_id, SHGSI_ICON | SHGSI_SMALLICON, &icon_info)))
+    {
+        ScopedHICON icon(icon_info.hIcon);
+        if (icon.IsValid())
+            return QtWin::fromHICON(icon);
 
-    return QtWin::fromHICON(icon_info.hIcon);
+        return QtWin::fromHICON(icon);
+    }
+
+    return QIcon(":/icon/document.png");
 }
 
 } // namespace
@@ -48,7 +53,14 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
                    sizeof(file_info),
                    SHGFI_USEFILEATTRIBUTES | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_TYPENAME);
 
-    return QPair<QIcon, QString>(QtWin::fromHICON(file_info.hIcon),
+    ScopedHICON icon(file_info.hIcon);
+    if (icon.IsValid())
+    {
+        return QPair<QIcon, QString>(QtWin::fromHICON(icon),
+                                     QString::fromWCharArray(file_info.szTypeName));
+    }
+
+    return QPair<QIcon, QString>(QIcon(":/icon/document.png"),
                                  QString::fromWCharArray(file_info.szTypeName));
 }
 
@@ -94,7 +106,7 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
             return stockIcon(SIID_DESKTOP);
 
         default:
-            return QIcon();
+            return stockIcon(SIID_DRIVEFIXED);
     }
 }
 

@@ -192,7 +192,7 @@
    <item>
     <widget class="QTreeWidget" name="tree">
      <property name="editTriggers">
-      <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+      <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
      </property>
      <property name="dragEnabled">
       <bool>true</bool>
