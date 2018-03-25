@@ -17,7 +17,6 @@ find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras)
 
 include(aspia_core.cmake)
 
-source_group(address_book FILES ${SOURCE_ADDRESS_BOOK})
 source_group(base FILES ${SOURCE_BASE})
 source_group(base\\message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(base\\process FILES ${SOURCE_BASE_PROCESS})
@@ -26,6 +25,7 @@ source_group(base\\threading FILES ${SOURCE_BASE_THREADING})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
 source_group(codec FILES ${SOURCE_CODEC})
+source_group(console FILES ${SOURCE_CONSOLE})
 source_group(crypto FILES ${SOURCE_CRYPTO})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
 source_group(host FILES ${SOURCE_HOST})
@@ -52,7 +52,6 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTC
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 
 add_library(aspia_core SHARED
-            ${SOURCE_ADDRESS_BOOK}
             ${SOURCE_BASE}
             ${SOURCE_BASE_MESSAGE_LOOP}
             ${SOURCE_BASE_PROCESS}
@@ -61,6 +60,7 @@ add_library(aspia_core SHARED
             ${SOURCE_CLIENT}
             ${SOURCE_CLIENT_UI}
             ${SOURCE_CODEC}
+            ${SOURCE_CONSOLE}
             ${SOURCE_CRYPTO}
             ${SOURCE_DESKTOP_CAPTURE}
             ${SOURCE_HOST}
@@ -131,9 +131,9 @@ target_link_libraries(aspia_core
     ws2_32
     wtsapi32)
 
-add_executable(aspia_address_book ${PROJECT_SOURCE_DIR}/address_book/entry_point.cc ${PROJECT_SOURCE_DIR}/address_book/address_book.rc)
-set_target_properties(aspia_address_book PROPERTIES WIN32_EXECUTABLE TRUE)
-target_link_libraries(aspia_address_book aspia_core)
+add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJECT_SOURCE_DIR}/console/console.rc)
+set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
+target_link_libraries(aspia_console aspia_core)
 
 add_executable(aspia_client ${PROJECT_SOURCE_DIR}/client/entry_point.cc ${PROJECT_SOURCE_DIR}/client/client.rc)
 set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)

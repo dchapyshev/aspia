@@ -19,19 +19,23 @@ class FileItem : public QTreeWidgetItem
 {
 public:
     FileItem(const proto::file_transfer::FileList::Item& item);
-    ~FileItem() = default;
+    FileItem(const QString& directory_name);
+    ~FileItem();
 
-    bool isDirectory() const { return is_directory_; }
-    bool fileSize() const { return size_; }
-    time_t lastModified() const { return last_modified_; }
+    QString initialName() const;
+    QString currentName() const;
+    bool isDirectory() const;
+    qint64 fileSize() const;
+    time_t lastModified() const;
 
 protected:
     bool operator<(const QTreeWidgetItem& other) const override;
 
 private:
+    QString name_;
     bool is_directory_;
-    qint64 size_;
-    time_t last_modified_;
+    qint64 size_ = 0;
+    time_t last_modified_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileItem);
 };

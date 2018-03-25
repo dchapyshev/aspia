@@ -32,14 +32,7 @@ signals:
                        const FileReplyReceiver& receiver);
 
 public slots:
-    void localReply(const proto::file_transfer::Request& request,
-                    const proto::file_transfer::Reply& reply);
-    void remoteReply(const proto::file_transfer::Request& request,
-                     const proto::file_transfer::Reply& reply);
-
-private slots:
-    void localFileListRequest(const QString& directory_path);
-    void remoteFileListRequest(const QString& directory_path);
+    void refresh();
 
 private:
     void closeEvent(QCloseEvent* event) override;

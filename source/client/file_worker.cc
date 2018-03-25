@@ -130,7 +130,7 @@ proto::file_transfer::Reply doRenameRequest(const proto::file_transfer::RenameRe
     }
 
     QFileInfo old_file_info(old_name);
-    if (old_file_info.exists())
+    if (!old_file_info.exists())
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;

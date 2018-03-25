@@ -208,7 +208,7 @@ void HostSessionFileTransfer::ReadCreateDirectoryRequest(
     QString directory_path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
     QFileInfo file_info(directory_path);
-    if (file_info.exists())
+    if (!file_info.exists())
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
     }

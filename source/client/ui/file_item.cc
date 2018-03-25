@@ -16,15 +16,15 @@ namespace aspia {
 
 namespace {
 
-QString sizeToString(quint64 size)
+QString sizeToString(qint64 size)
 {
-    static const quint64 kTB = 1024ULL * 1024ULL * 1024ULL * 1024ULL;
-    static const quint64 kGB = 1024ULL * 1024ULL * 1024ULL;
-    static const quint64 kMB = 1024ULL * 1024ULL;
-    static const quint64 kKB = 1024ULL;
+    static const qint64 kTB = 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+    static const qint64 kGB = 1024ULL * 1024ULL * 1024ULL;
+    static const qint64 kMB = 1024ULL * 1024ULL;
+    static const qint64 kKB = 1024ULL;
 
     QString units;
-    quint64 divider;
+    qint64 divider;
 
     if (size >= kTB)
     {
@@ -64,9 +64,10 @@ FileItem::FileItem(const proto::file_transfer::FileList::Item& item)
       size_(item.size()),
       last_modified_(item.modification_time())
 {
-    QString name = QString::fromUtf8(item.name().c_str(), item.name().size());
+    name_ = QString::fromUtf8(item.name().c_str(), item.name().size());
 
-    setText(0, name);
+    setFlags(flags() | Qt::ItemIsEditable);
+    setText(0, name_);
 
     if (item.is_directory())
     {
@@ -75,15 +76,51 @@ FileItem::FileItem(const proto::file_transfer::FileList::Item& item)
     }
     else
     {
-        QPair<QIcon, QString> type_info = FilePlatformUtil::fileTypeInfo(name);
+        QPair<QIcon, QString> type_info = FilePlatformUtil::fileTypeInfo(name_);
 
         setIcon(0, type_info.first);
         setText(1, sizeToString(item.size()));
         setText(2, type_info.second);
+        
     }
 
     setText(3, QDateTime::fromTime_t(
         item.modification_time()).toString(Qt::DefaultLocaleShortDate));
+}
+
+FileItem::FileItem(const QString& directory_name)
+    : is_directory_(true)
+{
+    setFlags(flags() | Qt::ItemIsEditable);
+    setText(0, directory_name);
+    setIcon(0, FilePlatformUtil::directoryIcon());
+}
+
+FileItem::~FileItem() = default;
+
+QString FileItem::initialName() const
+{
+    return name_;
+}
+
+QString FileItem::currentName() const
+{
+    return text(0);
+}
+
+bool FileItem::isDirectory() const
+{
+    return is_directory_;
+}
+
+qint64 FileItem::fileSize() const
+{
+    return size_;
+}
+
+time_t FileItem::lastModified() const
+{
+    return last_modified_;
 }
 
 bool FileItem::operator<(const QTreeWidgetItem& other) const

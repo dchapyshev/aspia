@@ -19,37 +19,6 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
     ${ASPIA_THIRD_PARTY_DIR}/libsodium/lib)
 
-list(APPEND SOURCE_ADDRESS_BOOK
-    ${PROJECT_SOURCE_DIR}/address_book/address_book.cc
-    ${PROJECT_SOURCE_DIR}/address_book/address_book.h
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_dialog.cc
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_dialog.h
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_dialog.ui
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_main.cc
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_main.h
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_window.cc
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_window.h
-    ${PROJECT_SOURCE_DIR}/address_book/address_book_window.ui
-    ${PROJECT_SOURCE_DIR}/address_book/computer.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_dialog.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer_dialog.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_dialog.ui
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_dialog.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_dialog.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_dialog.ui
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_drag.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_mime_data.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_tree.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer_group_tree.h
-    ${PROJECT_SOURCE_DIR}/address_book/computer_tree.cc
-    ${PROJECT_SOURCE_DIR}/address_book/computer_tree.h
-    ${PROJECT_SOURCE_DIR}/address_book/open_address_book_dialog.cc
-    ${PROJECT_SOURCE_DIR}/address_book/open_address_book_dialog.h
-    ${PROJECT_SOURCE_DIR}/address_book/open_address_book_dialog.ui)
-
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
@@ -170,19 +139,18 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.ui
-    ${PROJECT_SOURCE_DIR}/client/ui/file_address_bar.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_address_bar.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_list_widget.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_list_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_panel.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_panel.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_panel.ui
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.ui
@@ -221,6 +189,37 @@ list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/video_encoder_zlib.h
     ${PROJECT_SOURCE_DIR}/codec/video_util.cc
     ${PROJECT_SOURCE_DIR}/codec/video_util.h)
+
+list(APPEND SOURCE_CONSOLE
+    ${PROJECT_SOURCE_DIR}/console/address_book.cc
+    ${PROJECT_SOURCE_DIR}/console/address_book.h
+    ${PROJECT_SOURCE_DIR}/console/address_book_dialog.cc
+    ${PROJECT_SOURCE_DIR}/console/address_book_dialog.h
+    ${PROJECT_SOURCE_DIR}/console/address_book_dialog.ui
+    ${PROJECT_SOURCE_DIR}/console/computer.cc
+    ${PROJECT_SOURCE_DIR}/console/computer.h
+    ${PROJECT_SOURCE_DIR}/console/computer_dialog.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_dialog.h
+    ${PROJECT_SOURCE_DIR}/console/computer_dialog.ui
+    ${PROJECT_SOURCE_DIR}/console/computer_group.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_group.h
+    ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.h
+    ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.ui
+    ${PROJECT_SOURCE_DIR}/console/computer_group_drag.h
+    ${PROJECT_SOURCE_DIR}/console/computer_group_mime_data.h
+    ${PROJECT_SOURCE_DIR}/console/computer_group_tree.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_group_tree.h
+    ${PROJECT_SOURCE_DIR}/console/computer_tree.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_tree.h
+    ${PROJECT_SOURCE_DIR}/console/console_main.cc
+    ${PROJECT_SOURCE_DIR}/console/console_main.h
+    ${PROJECT_SOURCE_DIR}/console/console_window.cc
+    ${PROJECT_SOURCE_DIR}/console/console_window.h
+    ${PROJECT_SOURCE_DIR}/console/console_window.ui
+    ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.cc
+    ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.h
+    ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
 
 list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/random.cc

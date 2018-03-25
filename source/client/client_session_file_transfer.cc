@@ -86,11 +86,7 @@ void ClientSessionFileTransfer::startSession()
 
     file_manager_->show();
     file_manager_->activateWindow();
-
-    remoteRequest(FileRequest::driveListRequest(), FileReplyReceiver(file_manager_, "remoteReply"));
-
-    worker_->executeRequest(FileRequest::driveListRequest(),
-                            FileReplyReceiver(file_manager_, "localReply"));
+    file_manager_->refresh();
 }
 
 void ClientSessionFileTransfer::closeSession()

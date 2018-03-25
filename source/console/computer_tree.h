@@ -1,0 +1,26 @@
+//
+// PROJECT:         Aspia
+// FILE:            console/computer_tree.h
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#ifndef _ASPIA_CONSOLE__COMPUTER_TREE_H
+#define _ASPIA_CONSOLE__COMPUTER_TREE_H
+
+#include <QTreeWidget>
+
+namespace aspia {
+
+class ComputerTree : public QTreeWidget
+{
+    Q_OBJECT
+
+public:
+    ComputerTree(QWidget *parent);
+    ~ComputerTree() = default;
+};
+
+} // namespace aspia
+
+#endif // _ASPIA_CONSOLE__COMPUTER_TREE_H

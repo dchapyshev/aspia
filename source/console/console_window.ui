@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConsoleWindow</class>
+ <widget class="QMainWindow" name="ConsoleWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>891</width>
+    <height>613</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Aspia Console</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
+  </property>
+  <widget class="QWidget" name="central_widget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="aspia::ComputerTree" name="tree_computer">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="dragDropMode">
+       <enum>QAbstractItemView::DragOnly</enum>
+      </property>
+      <property name="defaultDropAction">
+       <enum>Qt::MoveAction</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
+      <property name="indentation">
+       <number>0</number>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="columnCount">
+       <number>3</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Computer Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Port</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menu_bar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>891</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_file">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_new"/>
+    <addaction name="action_open"/>
+    <addaction name="action_save"/>
+    <addaction name="action_save_as"/>
+    <addaction name="action_close"/>
+    <addaction name="separator"/>
+    <addaction name="actionFast_Connect"/>
+    <addaction name="separator"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_address_book_properties"/>
+    <addaction name="separator"/>
+    <addaction name="action_add_computer_group"/>
+    <addaction name="action_modify_computer_group"/>
+    <addaction name="action_delete_computer_group"/>
+    <addaction name="separator"/>
+    <addaction name="action_add_computer"/>
+    <addaction name="action_modify_computer"/>
+    <addaction name="action_delete_computer"/>
+   </widget>
+   <widget class="QMenu" name="menu_session_type">
+    <property name="title">
+     <string>&amp;Session Type</string>
+    </property>
+    <addaction name="action_desktop_manage"/>
+    <addaction name="action_desktop_view"/>
+    <addaction name="action_file_transfer"/>
+    <addaction name="action_system_info"/>
+   </widget>
+   <widget class="QMenu" name="menu_help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_online_help"/>
+    <addaction name="separator"/>
+    <addaction name="action_about"/>
+   </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menu_language">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/resources.qrc">
+       <normaloff>:/icon/locale.png</normaloff>:/icon/locale.png</iconset>
+     </property>
+     <addaction name="action_english"/>
+    </widget>
+    <addaction name="menu_language"/>
+    <addaction name="action_toolbar"/>
+    <addaction name="action_statusbar"/>
+   </widget>
+   <addaction name="menu_file"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_session_type"/>
+   <addaction name="menu_help"/>
+  </widget>
+  <widget class="QDockWidget" name="dock_group">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Computer Groups</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="panel_content_group">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="aspia::ComputerGroupTree" name="tree_group">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="dragEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragDrop</enum>
+       </property>
+       <property name="defaultDropAction">
+        <enum>Qt::MoveAction</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectItems</enum>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="status_bar"/>
+  <widget class="QToolBar" name="tool_bar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_new"/>
+   <addaction name="action_open"/>
+   <addaction name="action_save"/>
+   <addaction name="separator"/>
+   <addaction name="actionFast_Connect"/>
+   <addaction name="separator"/>
+   <addaction name="action_address_book_properties"/>
+   <addaction name="action_add_computer_group"/>
+   <addaction name="action_modify_computer_group"/>
+   <addaction name="action_delete_computer_group"/>
+   <addaction name="action_add_computer"/>
+   <addaction name="action_modify_computer"/>
+   <addaction name="action_delete_computer"/>
+   <addaction name="separator"/>
+   <addaction name="action_desktop_manage"/>
+   <addaction name="action_desktop_view"/>
+   <addaction name="action_file_transfer"/>
+   <addaction name="action_system_info"/>
+   <addaction name="separator"/>
+   <addaction name="action_about"/>
+   <addaction name="action_exit"/>
+  </widget>
+  <action name="action_new">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/document.png</normaloff>:/icon/document.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_open">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/open.png</normaloff>:/icon/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_save">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/disk.png</normaloff>:/icon/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_save_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="action_close">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/exit.png</normaloff>:/icon/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="action_add_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Computer Group</string>
+   </property>
+  </action>
+  <action name="action_modify_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/folder-pencil.png</normaloff>:/icon/folder-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modify Computer Group</string>
+   </property>
+  </action>
+  <action name="action_delete_computer_group">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/folder-minus.png</normaloff>:/icon/folder-minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Computer Group</string>
+   </property>
+  </action>
+  <action name="action_add_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/computer-plus.png</normaloff>:/icon/computer-plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Computer</string>
+   </property>
+  </action>
+  <action name="action_modify_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/computer-pencil.png</normaloff>:/icon/computer-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modify Computer</string>
+   </property>
+  </action>
+  <action name="action_delete_computer">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/computer-minus.png</normaloff>:/icon/computer-minus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Computer</string>
+   </property>
+  </action>
+  <action name="action_desktop_manage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop &amp;Manage</string>
+   </property>
+  </action>
+  <action name="action_desktop_view">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop &amp;View</string>
+   </property>
+  </action>
+  <action name="action_file_transfer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;File Transfer</string>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;System Information</string>
+   </property>
+  </action>
+  <action name="action_online_help">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/lifebuoy.png</normaloff>:/icon/lifebuoy.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Online Help...</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/about.png</normaloff>:/icon/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="action_address_book_properties">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/book-pencil.png</normaloff>:/icon/book-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Address Book Properties</string>
+   </property>
+  </action>
+  <action name="action_desktop_manage_connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/monitor-keyboard.png</normaloff>:/icon/monitor-keyboard.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop Manage</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop Manage</string>
+   </property>
+  </action>
+  <action name="action_desktop_view_connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/monitor.png</normaloff>:/icon/monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Desktop View</string>
+   </property>
+   <property name="toolTip">
+    <string>Desktop View</string>
+   </property>
+  </action>
+  <action name="action_file_transfer_connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string>File Transfer</string>
+   </property>
+   <property name="toolTip">
+    <string>File Transfer</string>
+   </property>
+  </action>
+  <action name="action_system_info_connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>System Information</string>
+   </property>
+   <property name="toolTip">
+    <string>System Information</string>
+   </property>
+  </action>
+  <action name="action_toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tool Bar</string>
+   </property>
+  </action>
+  <action name="action_statusbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="action_english">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionFast_Connect">
+   <property name="icon">
+    <iconset resource="../resources/resources.qrc">
+     <normaloff>:/icon/plug-disconnect.png</normaloff>:/icon/plug-disconnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fast Connect...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>aspia::ComputerGroupTree</class>
+   <extends>QTreeWidget</extends>
+   <header>console/computer_group_tree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>aspia::ComputerTree</class>
+   <extends>QTreeWidget</extends>
+   <header>console/computer_tree.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
