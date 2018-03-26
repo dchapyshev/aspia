@@ -12,8 +12,10 @@
 #include <QStyledItemDelegate>
 
 #include "client/ui/file_item.h"
+#include "client/ui/file_remove_dialog.h"
 #include "client/file_platform_util.h"
 #include "client/file_request.h"
+#include "client/file_status.h"
 
 namespace aspia {
 
@@ -38,51 +40,6 @@ public:
 private:
     DISALLOW_COPY_AND_ASSIGN(NoEditDelegate);
 };
-
-QString statusToString(proto::file_transfer::Status status)
-{
-    switch (status)
-    {
-        case proto::file_transfer::STATUS_SUCCESS:
-            return QCoreApplication::tr("Successfully completed");
-
-        case proto::file_transfer::STATUS_INVALID_REQUEST:
-            return QCoreApplication::tr("Invalid request");
-
-        case proto::file_transfer::STATUS_INVALID_PATH_NAME:
-            return QCoreApplication::tr("Invalid directory or file name");
-
-        case proto::file_transfer::STATUS_PATH_NOT_FOUND:
-            return QCoreApplication::tr("Path not found");
-
-        case proto::file_transfer::STATUS_PATH_ALREADY_EXISTS:
-            return QCoreApplication::tr("Path already exists");
-
-        case proto::file_transfer::STATUS_NO_DRIVES_FOUND:
-            return QCoreApplication::tr("No drives found");
-
-        case proto::file_transfer::STATUS_DISK_FULL:
-            return QCoreApplication::tr("Disk full");
-
-        case proto::file_transfer::STATUS_ACCESS_DENIED:
-            return QCoreApplication::tr("Access denied");
-
-        case proto::file_transfer::STATUS_FILE_OPEN_ERROR:
-            return QCoreApplication::tr("Could not open file for reading");
-
-        case proto::file_transfer::STATUS_FILE_CREATE_ERROR:
-            return QCoreApplication::tr("Could not create or replace file");
-
-        case proto::file_transfer::STATUS_FILE_WRITE_ERROR:
-            return QCoreApplication::tr("Could not write to file");
-
-        case proto::file_transfer::STATUS_FILE_READ_ERROR:
-            return QCoreApplication::tr("Could not read file");
-
-        default:
-            return QCoreApplication::tr("Unknown status code");
-    }
-}
 
 QString normalizePath(const QString& path)
 {
@@ -168,7 +125,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Failed to get list of drives: %1")
-                                     .arg(statusToString(reply.status())),
+                                     .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
             return;
         }
@@ -182,7 +139,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Failed to get list of files: %1")
-                                     .arg(statusToString(reply.status())),
+                                     .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
             return;
         }
@@ -196,7 +153,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Failed to create directory: %1")
-                                     .arg(statusToString(reply.status())),
+                                     .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
 
@@ -209,7 +166,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Failed to rename item: %1")
-                                     .arg(statusToString(reply.status())),
+                                     .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
 
@@ -224,7 +181,24 @@ void FilePanel::refresh()
 
 void FilePanel::addressItemChanged(int index)
 {
-    current_path_ = addressItemPath(index);
+    current_path_ = normalizePath(addressItemPath(index));
+
+    // If the address is entered by the user, then the icon is missing.
+    if (ui.address_bar->itemIcon(index).isNull())
+    {
+        int equal_item = ui.address_bar->findData(current_path_);
+        if (equal_item == -1)
+        {
+            // We set the directory icon and update the path after normalization.
+            ui.address_bar->setItemIcon(index, FilePlatformUtil::directoryIcon());
+            ui.address_bar->setItemText(index, current_path_);
+        }
+        else
+        {
+            ui.address_bar->setCurrentIndex(equal_item);
+            ui.address_bar->removeItem(index);
+        }
+    }
 
     for (int i = 0; i < ui.address_bar->count(); ++i)
     {
@@ -317,12 +291,101 @@ void FilePanel::addFolder()
 
 void FilePanel::removeSelected()
 {
+    QList<FileRemoveTask> tasks;
 
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        FileItem* file_item = reinterpret_cast<FileItem*>(ui.tree->topLevelItem(i));
+
+        if (ui.tree->isItemSelected(file_item))
+        {
+            tasks.push_back(FileRemoveTask(currentPath() + file_item->currentName(),
+                                           file_item->isDirectory()));
+        }
+    }
+
+    if (tasks.isEmpty())
+        return;
+
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              tr("Are you sure you want to delete the selected items?"),
+                              QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+    {
+        return;
+    }
+
+    FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
+    remover_ = new FileRemover(this);
+
+    connect(remover_, SIGNAL(started()), progress_dialog, SLOT(open()));
+    connect(remover_, SIGNAL(finished()), progress_dialog, SLOT(close()));
+    connect(remover_, SIGNAL(finished()), SLOT(refresh()));
+    connect(remover_, SIGNAL(finished()), remover_, SLOT(deleteLater()));
+
+    connect(remover_, SIGNAL(progressChanged(const QString&, int)),
+            progress_dialog, SLOT(setProgress(const QString&, int)));
+    connect(remover_, SIGNAL(error(FileRemover::Actions, const QString&)),
+            SLOT(removeError(FileRemover::Actions, const QString&)));
+
+    connect(remover_,
+            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
+            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+
+    connect(progress_dialog, SIGNAL(cancel()), SLOT(removeCancel()));
+
+    remover_->start(tasks);
+}
+
+void FilePanel::removeError(FileRemover::Actions actions, const QString& message)
+{
+    QMessageBox dialog(this);
+
+    dialog.setWindowTitle(tr("Warning"));
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setText(message);
+
+    QAbstractButton* skip_button = nullptr;
+    QAbstractButton* skip_all_button = nullptr;
+    QAbstractButton* abort_button = nullptr;
+
+    if (actions & FileRemover::Skip)
+        skip_button = dialog.addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
+
+    if (actions & FileRemover::SkipAll)
+        skip_all_button = dialog.addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
+
+    if (actions & FileRemover::Abort)
+        abort_button = dialog.addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+
+    dialog.exec();
+
+    QAbstractButton* button = dialog.clickedButton();
+    if (button != nullptr)
+    {
+        if (button == skip_button)
+        {
+            remover_->applyAction(FileRemover::Skip);
+            return;
+        }
+        else if (button == skip_all_button)
+        {
+            remover_->applyAction(FileRemover::SkipAll);
+            return;
+        }
+    }
+
+    remover_->applyAction(FileRemover::Abort);
+}
+
+void FilePanel::removeCancel()
+{
+    remover_.clear();
 }
 
 void FilePanel::sendSelected()
 {
-
+    // TODO
 }
 
 QString FilePanel::addressItemPath(int index) const

@@ -187,7 +187,9 @@ proto::file_transfer::Reply doRemoveRequest(const proto::file_transfer::RemoveRe
     }
     else
     {
-        if (!QFile::remove(path))
+        QFile file(path);
+        file.setPermissions(QFile::ReadOther | QFile::WriteOther);
+        if (!file.remove(path))
         {
             reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
             return reply;

@@ -117,9 +117,17 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
     ${PROJECT_SOURCE_DIR}/client/file_platform_util_win.cc
     ${PROJECT_SOURCE_DIR}/client/file_platform_util.h
+    ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.cc
+    ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.h
+    ${PROJECT_SOURCE_DIR}/client/file_remove_task.cc
+    ${PROJECT_SOURCE_DIR}/client/file_remove_task.h
+    ${PROJECT_SOURCE_DIR}/client/file_remover.cc
+    ${PROJECT_SOURCE_DIR}/client/file_remover.h
     ${PROJECT_SOURCE_DIR}/client/file_reply_receiver.h
     ${PROJECT_SOURCE_DIR}/client/file_request.cc
     ${PROJECT_SOURCE_DIR}/client/file_request.h
+    ${PROJECT_SOURCE_DIR}/client/file_status.cc
+    ${PROJECT_SOURCE_DIR}/client/file_status.h
     ${PROJECT_SOURCE_DIR}/client/file_worker.cc
     ${PROJECT_SOURCE_DIR}/client/file_worker.h)
 
@@ -156,6 +164,9 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.ui
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
