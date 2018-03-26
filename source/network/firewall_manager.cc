@@ -6,12 +6,13 @@
 //
 
 #include "network/firewall_manager.h"
-#include "base/scoped_bstr.h"
-#include "base/scoped_variant.h"
-#include "base/logging.h"
 
 #include <objbase.h>
 #include <unknwn.h>
+
+#include "base/win/scoped_bstr.h"
+#include "base/win/scoped_variant.h"
+#include "base/logging.h"
 
 namespace aspia {
 

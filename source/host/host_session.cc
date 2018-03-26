@@ -7,7 +7,7 @@
 
 #include "host/host_session.h"
 
-#include "base/scoped_privilege.h"
+#include "base/win/scoped_privilege.h"
 #include "base/logging.h"
 #include "host/host_session_launcher.h"
 

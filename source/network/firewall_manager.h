@@ -8,10 +8,10 @@
 #ifndef _ASPIA_NETWORK__FIREWALL_MANAGER_H
 #define _ASPIA_NETWORK__FIREWALL_MANAGER_H
 
-#include "base/scoped_comptr.h"
-#include "base/macros.h"
-
 #include <netfw.h>
+
+#include "base/win/scoped_comptr.h"
+#include "base/macros.h"
 
 namespace aspia {
 

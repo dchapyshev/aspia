@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/service.h
+// FILE:            base/win/service.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SERVICE_H
-#define _ASPIA_BASE__SERVICE_H
+#ifndef _ASPIA_BASE__WIN__SERVICE_H
+#define _ASPIA_BASE__WIN__SERVICE_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -20,7 +20,7 @@ namespace aspia {
 class Service
 {
 public:
-    explicit Service(const std::wstring& service_name);
+    explicit Service(const wchar_t* service_name);
     virtual ~Service();
 
     // The method starts execution of the service and returns control when
@@ -62,4 +62,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__SERVICE_H
+#endif // _ASPIA_BASE__WIN__SERVICE_H

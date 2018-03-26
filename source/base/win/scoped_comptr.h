@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_comptr.h
+// FILE:            base/win/scoped_comptr.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_COMPTR_H
-#define _ASPIA_BASE__SCOPED_COMPTR_H
+#ifndef _ASPIA_BASE__WIN__SCOPED_COMPTR_H
+#define _ASPIA_BASE__WIN__SCOPED_COMPTR_H
 
 #include <unknwn.h>
 
@@ -225,4 +225,4 @@ private:
 
 }  // namespace aspia
 
-#endif // _ASPIA_BASE__SCOPED_COMPTR_H
+#endif // _ASPIA_BASE__WIN__SCOPED_COMPTR_H

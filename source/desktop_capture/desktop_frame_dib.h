@@ -12,8 +12,8 @@
 #include <windows.h>
 #include <memory>
 
+#include "base/win/scoped_gdi_object.h"
 #include "desktop_capture/desktop_frame.h"
-#include "base/scoped_gdi_object.h"
 
 namespace aspia {
 

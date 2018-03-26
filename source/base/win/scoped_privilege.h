@@ -1,17 +1,17 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_privilege.h
+// FILE:            base/win/scoped_privilege.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_PRIVILEGE_H
-#define _ASPIA_BASE__SCOPED_PRIVILEGE_H
+#ifndef _ASPIA_BASE__WIN__SCOPED_PRIVILEGE_H
+#define _ASPIA_BASE__WIN__SCOPED_PRIVILEGE_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "base/scoped_object.h"
+#include "base/win/scoped_object.h"
 
 namespace aspia {
 
@@ -33,4 +33,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__SCOPED_PRIVILEGE_H
+#endif // _ASPIA_BASE__WIN__SCOPED_PRIVILEGE_H

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_privilege.cc
+// FILE:            base/win/scoped_privilege.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/scoped_privilege.h"
+#include "base/win/scoped_privilege.h"
 #include "base/logging.h"
 
 namespace aspia {

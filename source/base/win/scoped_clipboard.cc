@@ -1,12 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_clipboard.cc
+// FILE:            base/win/scoped_clipboard.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/scoped_clipboard.h"
-
+#include "base/win/scoped_clipboard.h"
 #include "base/logging.h"
 
 namespace aspia {

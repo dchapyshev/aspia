@@ -6,12 +6,15 @@
 //
 
 #include "base/process/process_helpers.h"
-#include "base/scoped_object.h"
-#include "base/scoped_local.h"
-#include "base/logging.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <shellapi.h>
 #include <memory>
+
+#include "base/win/scoped_object.h"
+#include "base/win/scoped_local.h"
+#include "base/logging.h"
 
 namespace aspia {
 

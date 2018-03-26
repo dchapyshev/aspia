@@ -31,34 +31,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/message_window.h
     ${PROJECT_SOURCE_DIR}/base/object_watcher.cc
     ${PROJECT_SOURCE_DIR}/base/object_watcher.h
-    ${PROJECT_SOURCE_DIR}/base/registry.cc
-    ${PROJECT_SOURCE_DIR}/base/registry.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_bstr.cc
-    ${PROJECT_SOURCE_DIR}/base/scoped_bstr.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_clipboard.cc
-    ${PROJECT_SOURCE_DIR}/base/scoped_clipboard.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_com_initializer.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_comptr.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_device_info.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_gdi_object.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_hdc.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_hglobal.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_local.h
     ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_object.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_privilege.cc
-    ${PROJECT_SOURCE_DIR}/base/scoped_privilege.h
     ${PROJECT_SOURCE_DIR}/base/scoped_refptr.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_user_object.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_variant.cc
-    ${PROJECT_SOURCE_DIR}/base/scoped_variant.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_wts_memory.h
-    ${PROJECT_SOURCE_DIR}/base/security_helpers.cc
-    ${PROJECT_SOURCE_DIR}/base/security_helpers.h
-    ${PROJECT_SOURCE_DIR}/base/service.cc
-    ${PROJECT_SOURCE_DIR}/base/service.h
-    ${PROJECT_SOURCE_DIR}/base/service_manager.cc
-    ${PROJECT_SOURCE_DIR}/base/service_manager.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
     ${PROJECT_SOURCE_DIR}/base/waitable_timer.cc
     ${PROJECT_SOURCE_DIR}/base/waitable_timer.h)
@@ -100,6 +74,34 @@ list(APPEND SOURCE_BASE_THREADING
     ${PROJECT_SOURCE_DIR}/base/threading/simple_thread.h
     ${PROJECT_SOURCE_DIR}/base/threading/thread.cc
     ${PROJECT_SOURCE_DIR}/base/threading/thread.h)
+
+list(APPEND SOURCE_BASE_WIN
+    ${PROJECT_SOURCE_DIR}/base/win/registry.cc
+    ${PROJECT_SOURCE_DIR}/base/win/registry.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_bstr.cc
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_bstr.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_comptr.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_device_info.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_hglobal.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_local.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_object.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.cc
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_variant.cc
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_variant.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_wts_memory.h
+    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
+    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h
+    ${PROJECT_SOURCE_DIR}/base/win/service.cc
+    ${PROJECT_SOURCE_DIR}/base/win/service.h
+    ${PROJECT_SOURCE_DIR}/base/win/service_manager.cc
+    ${PROJECT_SOURCE_DIR}/base/win/service_manager.h)
 
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc

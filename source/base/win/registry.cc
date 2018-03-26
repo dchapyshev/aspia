@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/registry.cc
+// FILE:            base/win/registry.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/registry.h"
+#include "base/win/registry.h"
 #include "base/logging.h"
 
 namespace aspia {

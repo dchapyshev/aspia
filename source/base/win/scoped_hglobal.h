@@ -1,12 +1,15 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_hglobal.h
+// FILE:            base/win/scoped_hglobal.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_HGLOBAL_H
-#define _ASPIA_BASE__SCOPED_HGLOBAL_H
+#ifndef _ASPIA_BASE__WIN__SCOPED_HGLOBAL_H
+#define _ASPIA_BASE__WIN__SCOPED_HGLOBAL_H
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 #include "base/macros.h"
 
@@ -54,4 +57,4 @@ private:
 
 }  // namespace aspia
 
-#endif // _ASPIA_BASE__SCOPED_HGLOBAL_H
+#endif // _ASPIA_BASE__WIN__SCOPED_HGLOBAL_H

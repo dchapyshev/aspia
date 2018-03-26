@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/service_manager.cc
+// FILE:            base/win/service_manager.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/service_manager.h"
+#include "base/win/service_manager.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
+ServiceManager::ServiceManager(const wchar_t* service_short_name) :
     sc_manager_(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS))
 {
     if (!sc_manager_.IsValid())
@@ -19,9 +19,7 @@ ServiceManager::ServiceManager(const std::wstring_view& service_short_name) :
     }
     else
     {
-        service_ = OpenServiceW(sc_manager_,
-                                service_short_name.data(),
-                                SERVICE_ALL_ACCESS);
+        service_ = OpenServiceW(sc_manager_, service_short_name, SERVICE_ALL_ACCESS);
         if (!service_.IsValid())
         {
             PLOG(LS_ERROR) << "OpenServiceW failed";
@@ -47,9 +45,9 @@ ServiceManager::~ServiceManager()
 // static
 std::unique_ptr<ServiceManager>
 ServiceManager::Create(const CommandLine& command_line,
-                       const std::wstring_view& service_full_name,
-                       const std::wstring_view& service_short_name,
-                       const std::wstring_view& service_description)
+                       const wchar_t* service_full_name,
+                       const wchar_t* service_short_name,
+                       const wchar_t* service_description)
 {
     // Open the service manager.
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
@@ -61,8 +59,8 @@ ServiceManager::Create(const CommandLine& command_line,
 
     // Trying to create a service.
     ScopedScHandle service(CreateServiceW(sc_manager,
-                                          service_short_name.data(),
-                                          service_full_name.data(),
+                                          service_short_name,
+                                          service_full_name,
                                           SERVICE_ALL_ACCESS,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
@@ -79,10 +77,10 @@ ServiceManager::Create(const CommandLine& command_line,
         return nullptr;
     }
 
-    if (!service_description.empty())
+    if (service_description)
     {
         SERVICE_DESCRIPTIONW description;
-        description.lpDescription = const_cast<LPWSTR>(service_description.data());
+        description.lpDescription = const_cast<LPWSTR>(service_description);
 
         // Set the service description.
         if (!ChangeServiceConfig2W(service,
@@ -116,7 +114,7 @@ ServiceManager::Create(const CommandLine& command_line,
 }
 
 // static
-uint32_t ServiceManager::GetServiceStatus(const std::wstring& service_name)
+uint32_t ServiceManager::GetServiceStatus(const wchar_t* service_name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
 
@@ -126,9 +124,7 @@ uint32_t ServiceManager::GetServiceStatus(const std::wstring& service_name)
         return 0;
     }
 
-    ScopedScHandle service(OpenServiceW(sc_manager,
-                                        service_name.c_str(),
-                                        SERVICE_QUERY_STATUS));
+    ScopedScHandle service(OpenServiceW(sc_manager, service_name, SERVICE_QUERY_STATUS));
     if (!service.IsValid())
     {
         DWORD error = GetLastError();

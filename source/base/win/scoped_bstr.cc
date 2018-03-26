@@ -1,17 +1,17 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_bstr.cc
+// FILE:            base/win/scoped_bstr.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/scoped_bstr.h"
+#include "base/win/scoped_bstr.h"
 #include "base/logging.h"
 
 namespace aspia {
 
-ScopedBstr::ScopedBstr(const wchar_t* non_bstr) :
-    bstr_(SysAllocString(non_bstr))
+ScopedBstr::ScopedBstr(const wchar_t* non_bstr)
+    : bstr_(SysAllocString(non_bstr))
 {
     // Nothing
 }

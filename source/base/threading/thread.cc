@@ -7,8 +7,8 @@
 
 #include "base/threading/thread.h"
 
+#include "base/win/scoped_com_initializer.h"
 #include "base/logging.h"
-#include "base/scoped_com_initializer.h"
 
 namespace aspia {
 

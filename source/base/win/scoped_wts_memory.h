@@ -1,16 +1,16 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_wts_memory.h
+// FILE:            base/win/scoped_wts_memory.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_WTS_MEMORY_H
-#define _ASPIA_BASE__SCOPED_WTS_MEMORY_H
-
-#include "base/macros.h"
+#ifndef _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
+#define _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 
 #include <wtsapi32.h>
+
+#include "base/macros.h"
 
 template <typename T>
 class ScopedWtsMemory
@@ -90,4 +90,4 @@ private:
     DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
 
-#endif // _ASPIA_BASE__SCOPED_WTS_MEMORY_H
+#endif // _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H

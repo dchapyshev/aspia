@@ -1,19 +1,19 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/service_manager.h
+// FILE:            base/win/service_manager.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SERVICE_MANAGER_H
-#define _ASPIA_BASE__SERVICE_MANAGER_H
+#ifndef _ASPIA_BASE__WIN__SERVICE_MANAGER_H
+#define _ASPIA_BASE__WIN__SERVICE_MANAGER_H
 
 #include <memory>
 #include <string>
 
+#include "base/win/scoped_object.h"
 #include "base/command_line.h"
 #include "base/macros.h"
-#include "base/scoped_object.h"
 
 namespace aspia {
 
@@ -21,16 +21,16 @@ class ServiceManager
 {
 public:
     ServiceManager() = default;
-    explicit ServiceManager(const std::wstring_view& service_short_name);
+    explicit ServiceManager(const wchar_t* service_short_name);
     ~ServiceManager();
 
     // Creates a service in the system and returns a pointer to the instance
     // of the class to manage it.
     static std::unique_ptr<ServiceManager>
     Create(const CommandLine& command_line,
-           const std::wstring_view& service_name,
-           const std::wstring_view& service_short_name,
-           const std::wstring_view& service_description);
+           const wchar_t* service_name,
+           const wchar_t* service_short_name,
+           const wchar_t* service_description);
 
     enum ServiceStatus
     {
@@ -38,7 +38,7 @@ public:
         SERVICE_STATUS_STARTED = 2
     };
 
-    static uint32_t GetServiceStatus(const std::wstring& service_name);
+    static uint32_t GetServiceStatus(const wchar_t* service_name);
 
     // Starts the service.
     // If the service is successfully started, it returns true, if not,
@@ -67,4 +67,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__SERVICE_MANAGER_H
+#endif // _ASPIA_BASE__WIN__SERVICE_MANAGER_H

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_bstr.h
+// FILE:            base/win/scoped_bstr.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_BSTR_H
-#define _ASPIA_BASE__SCOPED_BSTR_H
+#ifndef _ASPIA_BASE__WIN__SCOPED_BSTR_H
+#define _ASPIA_BASE__WIN__SCOPED_BSTR_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -96,4 +96,4 @@ private:
 
 }  // namespace aspia
 
-#endif  // _ASPIA_BASE__SCOPED_BSTR_H
+#endif  // _ASPIA_BASE__WIN__SCOPED_BSTR_H

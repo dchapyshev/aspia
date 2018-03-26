@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/service.cc
+// FILE:            base/win/service.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/service.h"
+#include "base/win/service.h"
 #include "base/logging.h"
 
 namespace aspia {
@@ -17,7 +17,7 @@ static Service* _self = nullptr;
 } // namespace
 
 // public
-Service::Service(const std::wstring& service_name) :
+Service::Service(const wchar_t* service_name) :
     service_name_(service_name)
 {
     DCHECK(!_self) << "Another instance of the service has already been created";

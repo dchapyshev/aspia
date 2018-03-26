@@ -6,11 +6,12 @@
 //
 
 #include "host/host_service.h"
-#include "base/service_manager.h"
-#include "base/security_helpers.h"
-#include "base/scoped_com_initializer.h"
 
 #include <sddl.h>
+
+#include "base/win/service_manager.h"
+#include "base/win/security_helpers.h"
+#include "base/win/scoped_com_initializer.h"
 
 namespace aspia {
 
@@ -82,7 +83,7 @@ uint32_t HostService::GetStatus()
 // static
 bool HostService::Install()
 {
-    wchar_t program_path[MAX_PATH] = { 0 };
+    wchar_t program_path[MAX_PATH];
 
     if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
     {

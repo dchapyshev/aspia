@@ -12,9 +12,9 @@
 #include <string>
 
 #include "base/process/process_helpers.h"
+#include "base/win/scoped_object.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
-#include "base/scoped_object.h"
 #include "base/logging.h"
 #include "host/host_switches.h"
 

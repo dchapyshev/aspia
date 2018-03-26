@@ -22,6 +22,7 @@ source_group(base\\message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(base\\process FILES ${SOURCE_BASE_PROCESS})
 source_group(base\\strings FILES ${SOURCE_BASE_STRINGS})
 source_group(base\\threading FILES ${SOURCE_BASE_THREADING})
+source_group(base\\win FILES ${SOURCE_BASE_WIN})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
 source_group(codec FILES ${SOURCE_CODEC})
@@ -57,6 +58,7 @@ add_library(aspia_core SHARED
             ${SOURCE_BASE_PROCESS}
             ${SOURCE_BASE_STRINGS}
             ${SOURCE_BASE_THREADING}
+            ${SOURCE_BASE_WIN}
             ${SOURCE_CLIENT}
             ${SOURCE_CLIENT_UI}
             ${SOURCE_CODEC}

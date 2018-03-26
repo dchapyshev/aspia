@@ -14,7 +14,7 @@
 #include <QtWin>
 #include <shellapi.h>
 
-#include "base/scoped_user_object.h"
+#include "base/win/scoped_user_object.h"
 
 namespace aspia {
 

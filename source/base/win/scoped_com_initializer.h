@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            base/scoped_com_initializer.h
+// FILE:            base/win/scoped_com_initializer.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_BASE__SCOPED_COM_INITIALIZER_H
-#define _ASPIA_BASE__SCOPED_COM_INITIALIZER_H
+#ifndef _ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
+#define _ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
 
 #include <objbase.h>
 
@@ -85,4 +85,4 @@ private:
 
 }  // namespace aspia
 
-#endif  // _ASPIA_BASE__SCOPED_COM_INITIALIZER_H
+#endif  // _ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
