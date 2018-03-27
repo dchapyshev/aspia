@@ -16,6 +16,7 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+    setFixedSize(size());
 
     connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)), SLOT(close()));
 }
@@ -24,7 +25,13 @@ FileRemoveDialog::~FileRemoveDialog() = default;
 
 void FileRemoveDialog::setProgress(const QString& current_item, int percentage)
 {
-    ui.label_current_item->setText(current_item);
+    QFontMetrics metrics(ui.label_current_item->font());
+
+    QString elided_text = metrics.elidedText(tr("Deleting: %1").arg(current_item),
+                                             Qt::ElideMiddle,
+                                             ui.label_current_item->width());
+
+    ui.label_current_item->setText(elided_text);
     ui.progress->setValue(percentage);
 }
 

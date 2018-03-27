@@ -6,34 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>108</height>
+    <width>459</width>
+    <height>91</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Deleting...</string>
+   <string>Deleting Items</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Current item:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="label_current_item">
      <property name="text">
-      <string notr="true">item</string>
+      <string>Creating a list of files to delete...</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QProgressBar" name="progress">
-     <property name="value">
-      <number>0</number>
-     </property>
-    </widget>
+    <widget class="QProgressBar" name="progress"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="button_box">
