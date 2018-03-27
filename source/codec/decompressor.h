@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_H
 #define _ASPIA_CODEC__DECOMPRESSOR_H
 
-#include <cstdint>
+#include <QtGlobal>
 
 namespace aspia {
 
@@ -45,9 +45,9 @@ public:
     // there is more bytes to be decompressed or more input data is
     // needed.
     //
-    virtual bool process(const uint8_t* input_data,
+    virtual bool process(const quint8* input_data,
                          size_t input_size,
-                         uint8_t* output_data,
+                         quint8* output_data,
                          size_t output_size,
                          size_t* consumed,
                          size_t* written) = 0;

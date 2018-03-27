@@ -60,10 +60,10 @@ private:
     size_t active_map_size_ = 0;
 
     vpx_active_map_t active_map_;
-    std::unique_ptr<uint8_t[]> active_map_buffer_;
+    std::unique_ptr<quint8[]> active_map_buffer_;
 
     // Buffer for storing the yuv image.
-    std::unique_ptr<uint8_t[]> yuv_image_;
+    std::unique_ptr<quint8[]> yuv_image_;
 
     Q_DISABLE_COPY(VideoEncoderVPX)
 };

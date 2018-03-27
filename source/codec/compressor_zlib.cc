@@ -7,11 +7,11 @@
 
 #include "codec/compressor_zlib.h"
 
-#include "base/logging.h"
+#include <QDebug>
 
 namespace aspia {
 
-CompressorZLIB::CompressorZLIB(int32_t compress_ratio)
+CompressorZLIB::CompressorZLIB(int compress_ratio)
 {
     memset(&stream_, 0, sizeof(stream_));
 
@@ -21,35 +21,35 @@ CompressorZLIB::CompressorZLIB(int32_t compress_ratio)
                            MAX_WBITS,
                            MAX_MEM_LEVEL,
                            Z_DEFAULT_STRATEGY);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
 CompressorZLIB::~CompressorZLIB()
 {
     int ret = deflateEnd(&stream_);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
 void CompressorZLIB::reset()
 {
     int ret = deflateReset(&stream_);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
-bool CompressorZLIB::process(const uint8_t* input_data,
+bool CompressorZLIB::process(const quint8* input_data,
                              size_t input_size,
-                             uint8_t* output_data,
+                             quint8* output_data,
                              size_t output_size,
                              CompressorFlush flush,
                              size_t* consumed,
                              size_t* written)
 {
-    DCHECK(output_size != 0);
+    Q_ASSERT(output_size != 0);
 
     // Setup I/O parameters.
-    stream_.avail_in  = static_cast<uint32_t>(input_size);
+    stream_.avail_in  = static_cast<quint32>(input_size);
     stream_.next_in   = input_data;
-    stream_.avail_out = static_cast<uint32_t>(output_size);
+    stream_.avail_out = static_cast<quint32>(output_size);
     stream_.next_out  = output_data;
 
     int z_flush = 0;
@@ -69,15 +69,13 @@ bool CompressorZLIB::process(const uint8_t* input_data,
             break;
 
         default:
-            DLOG(LS_ERROR) << "Unsupported flush mode";
+            qWarning("Unsupported flush mode");
             break;
     }
 
     int ret = deflate(&stream_, z_flush);
     if (ret == Z_STREAM_ERROR)
-    {
-        DLOG(LS_ERROR) << "zlib compression failed";
-    }
+        qWarning("zlib compression failed");
 
     *consumed = input_size - stream_.avail_in;
     *written = output_size - stream_.avail_out;
@@ -99,7 +97,7 @@ bool CompressorZLIB::process(const uint8_t* input_data,
             return stream_.avail_out == 0;
 
         default:
-            DLOG(LS_ERROR) << "Unexpected zlib error: " << ret;
+            qWarning() << "Unexpected zlib error: " << ret;
             break;
     }
 

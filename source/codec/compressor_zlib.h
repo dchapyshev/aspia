@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 
-#include <QtGlobal>
 #include <zlib.h>
 
 #include "codec/compressor.h"
@@ -18,12 +17,12 @@ namespace aspia {
 class CompressorZLIB : public Compressor
 {
 public:
-    explicit CompressorZLIB(int32_t compress_ratio);
+    explicit CompressorZLIB(int compress_ratio);
     ~CompressorZLIB();
 
-    bool process(const uint8_t* input_data,
+    bool process(const quint8* input_data,
                  size_t input_size,
-                 uint8_t* output_data,
+                 quint8* output_data,
                  size_t output_size,
                  CompressorFlush flush,
                  size_t* consumed,

@@ -42,7 +42,7 @@ private:
     CompressorZLIB compressor_;
     std::unique_ptr<PixelTranslator> translator_;
 
-    std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
+    std::unique_ptr<quint8[], AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
     Q_DISABLE_COPY(VideoEncoderZLIB)

@@ -23,9 +23,9 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 {
     QRect frame_rect = QRect(QPoint(), frame->size());
 
-    uint8_t* y_data = image->planes[0];
-    uint8_t* u_data = image->planes[1];
-    uint8_t* v_data = image->planes[2];
+    quint8* y_data = image->planes[0];
+    quint8* u_data = image->planes[1];
+    quint8* v_data = image->planes[2];
 
     int y_stride = image->stride[0];
 
@@ -151,7 +151,7 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
     // Do the actual decoding.
     vpx_codec_err_t ret =
         vpx_codec_decode(codec_.get(),
-                         reinterpret_cast<const uint8_t*>(packet.data().data()),
+                         reinterpret_cast<const quint8*>(packet.data().data()),
                          static_cast<unsigned int>(packet.data().size()),
                          nullptr,
                          0);

@@ -7,7 +7,7 @@
 
 #include "codec/decompressor_zlib.h"
 
-#include "base/logging.h"
+#include <QDebug>
 
 namespace aspia {
 
@@ -16,29 +16,29 @@ DecompressorZLIB::DecompressorZLIB()
     memset(&stream_, 0, sizeof(stream_));
 
     int ret = inflateInit(&stream_);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
 DecompressorZLIB::~DecompressorZLIB()
 {
     int ret = inflateEnd(&stream_);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
 void DecompressorZLIB::reset()
 {
     int ret = inflateReset(&stream_);
-    DCHECK_EQ(ret, Z_OK);
+    Q_ASSERT(ret == Z_OK);
 }
 
-bool DecompressorZLIB::process(const uint8_t* input_data,
+bool DecompressorZLIB::process(const quint8* input_data,
                                size_t input_size,
-                               uint8_t* output_data,
+                               quint8* output_data,
                                size_t output_size,
                                size_t* consumed,
                                size_t* written)
 {
-    DCHECK(output_size != 0);
+    Q_ASSERT(output_size != 0);
 
     // Setup I/O parameters.
     stream_.avail_in  = static_cast<uint32_t>(input_size);
@@ -48,9 +48,7 @@ bool DecompressorZLIB::process(const uint8_t* input_data,
 
     int ret = inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
-    {
-        DLOG(LS_ERROR) << "zlib decompression failed: " << ret;
-    }
+        qWarning() << "zlib decompression failed: " << ret;
 
     *consumed = input_size - stream_.avail_in;
     *written = output_size - stream_.avail_out;

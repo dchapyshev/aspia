@@ -14,17 +14,17 @@ namespace aspia {
 namespace {
 
 // Cache size can be in the range from 2 to 31.
-constexpr uint8_t kCacheSize = 16;
+constexpr quint8 kCacheSize = 16;
 
 // The compression ratio can be in the range of 1 to 9.
-constexpr int32_t kCompressionRatio = 6;
+constexpr int kCompressionRatio = 6;
 
-uint8_t* GetOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+quint8* GetOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
 
-    return const_cast<uint8_t*>(
-        reinterpret_cast<const uint8_t*>(cursor_shape->mutable_data()->data()));
+    return const_cast<quint8*>(
+        reinterpret_cast<const quint8*>(cursor_shape->mutable_data()->data()));
 }
 
 } // namespace
@@ -46,13 +46,13 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
     int width = mouse_cursor->size().width();
     int height = mouse_cursor->size().height();
 
-    const size_t row_size = width * sizeof(uint32_t);
+    const size_t row_size = width * sizeof(quint32);
 
     size_t packet_size = row_size * height;
     packet_size += packet_size / 100 + 16;
 
-    uint8_t* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
-    const uint8_t* source_pos = mouse_cursor->data();
+    quint8* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
+    const quint8* source_pos = mouse_cursor->data();
 
     size_t filled = 0;
     size_t row_pos = 0; // Position in the current row in bytes.
@@ -103,13 +103,12 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
         return nullptr;
 
     const QSize& size = mouse_cursor->size();
-    const int32_t kMaxSize = std::numeric_limits<int16_t>::max() / 2;
+    const qint32 kMaxSize = std::numeric_limits<qint16>::max() / 2;
 
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)
     {
-        DLOG(LS_ERROR) << "Wrong size of cursor: "
-                       << size.width() << "x" << size.height();
+        DLOG(LS_ERROR) << "Wrong size of cursor: " << size.width() << "x" << size.height();
         return nullptr;
     }
 

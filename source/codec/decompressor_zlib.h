@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 
-#include <QtGlobal>
 #include <zlib.h>
 
 #include "codec/decompressor.h"
@@ -24,9 +23,9 @@ public:
     void reset() override;
 
     // Decompressor implementations.
-    bool process(const uint8_t* input_data,
+    bool process(const quint8* input_data,
                  size_t input_size,
-                 uint8_t* output_data,
+                 quint8* output_data,
                  size_t output_size,
                  size_t* consumed,
                  size_t* written) override;

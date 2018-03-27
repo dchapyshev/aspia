@@ -12,11 +12,11 @@
 namespace aspia {
 
 bool CursorDecoder::DecompressCursor(const proto::desktop::CursorShape& cursor_shape,
-                                     uint8_t* image)
+                                     quint8* image)
 {
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(cursor_shape.data().data());
+    const quint8* src = reinterpret_cast<const quint8*>(cursor_shape.data().data());
     const size_t src_size = cursor_shape.data().size();
-    const size_t row_size = cursor_shape.width() * sizeof(uint32_t);
+    const size_t row_size = cursor_shape.width() * sizeof(quint32);
 
     // Consume all the data in the message.
     bool decompress_again = true;
@@ -70,16 +70,16 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
     {
         QSize size(cursor_shape.width(), cursor_shape.height());
 
-        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
-            size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
+        if (size.width()  <= 0 || size.width()  > (std::numeric_limits<qint16>::max() / 2) ||
+            size.height() <= 0 || size.height() > (std::numeric_limits<qint16>::max() / 2))
         {
             qWarning() << "Cursor dimensions are out of bounds for SetCursor: "
                        << size.width() << "x" << size.height();
             return nullptr;
         }
 
-        size_t image_size = size.width() * size.height() * sizeof(uint32_t);
-        std::unique_ptr<uint8_t[]> image = std::make_unique<uint8_t[]>(image_size);
+        size_t image_size = size.width() * size.height() * sizeof(quint32);
+        std::unique_ptr<quint8[]> image = std::make_unique<quint8[]>(image_size);
 
         if (!DecompressCursor(cursor_shape, image.get()))
             return nullptr;

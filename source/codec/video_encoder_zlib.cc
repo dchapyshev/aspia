@@ -20,7 +20,7 @@ namespace {
 uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-    return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(packet->mutable_data()->data()));
+    return const_cast<quint8*>(reinterpret_cast<const quint8*>(packet->mutable_data()->data()));
 }
 
 } // namespace
@@ -64,7 +64,7 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
 
     const size_t packet_size = source_data_size + (source_data_size / 100 + 16);
 
-    uint8_t* compress_pos = GetOutputBuffer(packet, packet_size);
+    quint8* compress_pos = GetOutputBuffer(packet, packet_size);
 
     size_t filled = 0;  // Number of bytes in the destination buffer.
     size_t pos = 0;  // Position in the current row in bytes.
@@ -121,11 +121,11 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<uint8_t*>(AlignedAlloc(data_size, 16)));
+        translate_buffer_.reset(static_cast<quint8*>(AlignedAlloc(data_size, 16)));
         translate_buffer_size_ = data_size;
     }
 
-    uint8_t* translate_pos = translate_buffer_.get();
+    quint8* translate_pos = translate_buffer_.get();
 
     for (const auto& rect : frame->updatedRegion())
     {
