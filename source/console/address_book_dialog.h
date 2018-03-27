@@ -39,7 +39,7 @@ private:
     proto::AddressBook::EncryptionType* encryption_type_;
     QString* password_;
 
-    DISALLOW_COPY_AND_ASSIGN(AddressBookDialog);
+    Q_DISABLE_COPY(AddressBookDialog)
 };
 
 } // namespace aspia

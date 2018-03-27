@@ -8,6 +8,7 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 
+#include <QtGlobal>
 #include <memory>
 
 extern "C" {
@@ -25,7 +26,6 @@ extern "C" {
 
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -65,7 +65,7 @@ private:
     // Buffer for storing the yuv image.
     std::unique_ptr<uint8_t[]> yuv_image_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
+    Q_DISABLE_COPY(VideoEncoderVPX)
 };
 
 } // namespace aspia

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__SCOPED_THREAD_DESKTOP_H
 #define _ASPIA_DESKTOP_CAPTURE__SCOPED_THREAD_DESKTOP_H
 
-#include "base/macros.h"
 #include "desktop_capture/desktop.h"
 
 namespace aspia {
@@ -43,7 +42,7 @@ private:
     // The desktop handle assigned to the calling thread at creation.
     Desktop initial_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
+    Q_DISABLE_COPY(ScopedThreadDesktop)
 };
 
 } // namespace aspia

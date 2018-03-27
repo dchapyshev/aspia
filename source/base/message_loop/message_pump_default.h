@@ -8,10 +8,10 @@
 #ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 
+#include <QtGlobal>
 #include <condition_variable>
 #include <mutex>
 
-#include "base/macros.h"
 #include "base/message_loop/message_pump.h"
 
 namespace aspia {
@@ -42,7 +42,7 @@ private:
     // The time at which we should call DoDelayedWork.
     std::chrono::time_point<std::chrono::high_resolution_clock> delayed_work_time_;
 
-    DISALLOW_COPY_AND_ASSIGN(MessagePumpDefault);
+    Q_DISABLE_COPY(MessagePumpDefault)
 };
 
 } // namespace aspia

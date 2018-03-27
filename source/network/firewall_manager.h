@@ -11,7 +11,6 @@
 #include <netfw.h>
 
 #include "base/win/scoped_comptr.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -44,7 +43,7 @@ private:
     std::wstring app_name_;
     std::wstring app_path_;
 
-    DISALLOW_COPY_AND_ASSIGN(FirewallManager);
+    Q_DISABLE_COPY(FirewallManager)
 };
 
 } // namespace aspia

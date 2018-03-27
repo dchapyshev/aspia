@@ -8,10 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_PANEL_H
 #define _ASPIA_CLIENT__UI__FILE_PANEL_H
 
-#include <QPointer>
-
-#include "base/macros.h"
-#include "client/file_remover.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 #include "qt/ui_file_panel.h"
@@ -50,8 +46,6 @@ private slots:
     void toParentFolder();
     void addFolder();
     void removeSelected();
-    void removeError(FileRemover::Actions actions, const QString& message);
-    void removeCancel();
     void sendSelected();
 
 private:
@@ -62,9 +56,8 @@ private:
     Ui::FilePanel ui;
 
     QString current_path_;
-    QPointer<FileRemover> remover_;
 
-    DISALLOW_COPY_AND_ASSIGN(FilePanel);
+    Q_DISABLE_COPY(FilePanel)
 };
 
 } // namespace aspia

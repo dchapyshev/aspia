@@ -8,9 +8,9 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 #define _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 
-#include <wtsapi32.h>
+#include <QtGlobal>
 
-#include "base/macros.h"
+#include <wtsapi32.h>
 
 template <typename T>
 class ScopedWtsMemory
@@ -87,7 +87,7 @@ private:
 private:
     T memory_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
+    Q_DISABLE_COPY(ScopedWtsMemory)
 };
 
 #endif // _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H

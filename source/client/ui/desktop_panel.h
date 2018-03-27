@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__DESKTOP_PANEL_H
 #define _ASPIA_CLIENT__UI__DESKTOP_PANEL_H
 
-#include "base/macros.h"
 #include "qt/ui_desktop_panel.h"
 
 namespace aspia {
@@ -42,7 +41,7 @@ private:
     Ui::DesktopPanel ui;
     QMenu* keys_menu_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopPanel);
+    Q_DISABLE_COPY(DesktopPanel)
 };
 
 } // namespace aspia

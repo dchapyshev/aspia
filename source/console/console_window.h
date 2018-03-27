@@ -72,7 +72,7 @@ private:
 
     std::unique_ptr<AddressBook> address_book_;
 
-    DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
+    Q_DISABLE_COPY(ConsoleWindow)
 };
 
 } // namespace aspia

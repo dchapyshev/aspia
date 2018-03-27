@@ -61,7 +61,7 @@ private:
     std::shared_ptr<NetworkChannelProxy> channel_proxy_;
     HostProcessConnector process_connector_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSession);
+    Q_DISABLE_COPY(HostSession)
 };
 
 } // namespace aspia

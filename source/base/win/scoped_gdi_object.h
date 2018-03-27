@@ -8,10 +8,10 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H
 #define _ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -63,7 +63,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedGDIObject);
+    Q_DISABLE_COPY(ScopedGDIObject)
 };
 
 // The traits class that uses DeleteObject() to close a handle.
@@ -77,9 +77,6 @@ public:
         if (handle)
             DeleteObject(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DeleteObjectTraits);
 };
 
 // Typedefs for some common use cases.

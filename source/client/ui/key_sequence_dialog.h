@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H
 #define _ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H
 
-#include "base/macros.h"
 #include "qt/ui_key_sequence_dialog.h"
 
 namespace aspia {
@@ -26,11 +25,11 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    KeySequenceDialog(QWidget* parent);
+    explicit KeySequenceDialog(QWidget* parent);
 
     Ui::KeySequenceDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(KeySequenceDialog);
+    Q_DISABLE_COPY(KeySequenceDialog)
 };
 
 } // namespace aspia

@@ -11,8 +11,6 @@
 
 #include <QtCore>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 // This structure is used to define the keycode mapping table.
@@ -55,7 +53,7 @@ public:
     static int QtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(KeycodeConverter);
+    Q_DISABLE_COPY(KeycodeConverter)
 };
 
 } // namespace aspia

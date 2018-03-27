@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__CURSOR_ENCODER_H
 #define _ASPIA_CODEC__CURSOR_ENCODER_H
 
-#include "base/macros.h"
 #include "codec/compressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "proto/desktop_session.pb.h"
@@ -30,7 +29,7 @@ private:
     CompressorZLIB compressor_;
     MouseCursorCache cache_;
 
-    DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
+    Q_DISABLE_COPY(CursorEncoder)
 };
 
 } // namespace aspia

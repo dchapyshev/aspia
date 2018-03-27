@@ -34,7 +34,7 @@ private:
     Ui::ComputerDialog ui;
     Computer* computer_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerDialog);
+    Q_DISABLE_COPY(ComputerDialog)
 };
 
 } // namespace aspia

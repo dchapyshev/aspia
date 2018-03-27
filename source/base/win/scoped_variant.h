@@ -8,12 +8,12 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_VARIANT_H
 #define _ASPIA_BASE__WIN__SCOPED_VARIANT_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <oleauto.h>
 #include <cstdint>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -167,7 +167,7 @@ private:
     bool operator==(const ScopedVariant& var) const;
     bool operator!=(const ScopedVariant& var) const;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedVariant);
+    Q_DISABLE_COPY(ScopedVariant)
 };
 
 }  // namesoace aspia

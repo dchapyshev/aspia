@@ -46,7 +46,7 @@ private:
     std::unique_ptr<FileDepacketizer> file_depacketizer_;
     std::unique_ptr<FilePacketizer> file_packetizer_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
+    Q_DISABLE_COPY(HostSessionFileTransfer)
 };
 
 } // namespace aspia

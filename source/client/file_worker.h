@@ -10,7 +10,6 @@
 
 #include <QObject>
 
-#include "base/macros.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 
@@ -31,7 +30,7 @@ public slots:
 private:
     proto::file_transfer::Reply doRequest(const proto::file_transfer::Request& request);
 
-    DISALLOW_COPY_AND_ASSIGN(FileWorker);
+    Q_DISABLE_COPY(FileWorker)
 };
 
 } // namespace aspia

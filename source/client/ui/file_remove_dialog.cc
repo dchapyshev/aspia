@@ -7,6 +7,9 @@
 
 #include "client/ui/file_remove_dialog.h"
 
+#include <QPushButton>
+#include <QMessageBox>
+
 namespace aspia {
 
 FileRemoveDialog::FileRemoveDialog(QWidget* parent)
@@ -25,10 +28,47 @@ void FileRemoveDialog::setProgress(const QString& current_item, int percentage)
     ui.progress->setValue(percentage);
 }
 
-void FileRemoveDialog::closeEvent(QCloseEvent* event)
+void FileRemoveDialog::showError(FileRemover* remover,
+                                 FileRemover::Actions actions,
+                                 const QString& message)
 {
-    emit cancel();
-    QDialog::closeEvent(event);
+    QMessageBox dialog(this);
+
+    dialog.setWindowTitle(tr("Warning"));
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setText(message);
+
+    QAbstractButton* skip_button = nullptr;
+    QAbstractButton* skip_all_button = nullptr;
+    QAbstractButton* abort_button = nullptr;
+
+    if (actions & FileRemover::Skip)
+        skip_button = dialog.addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
+
+    if (actions & FileRemover::SkipAll)
+        skip_all_button = dialog.addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
+
+    if (actions & FileRemover::Abort)
+        abort_button = dialog.addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+
+    dialog.exec();
+
+    QAbstractButton* button = dialog.clickedButton();
+    if (button != nullptr)
+    {
+        if (button == skip_button)
+        {
+            remover->applyAction(FileRemover::Skip);
+            return;
+        }
+        else if (button == skip_all_button)
+        {
+            remover->applyAction(FileRemover::SkipAll);
+            return;
+        }
+    }
+
+    remover->applyAction(FileRemover::Abort);
 }
 
 } // namespace aspia

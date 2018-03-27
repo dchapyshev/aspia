@@ -8,12 +8,11 @@
 #ifndef _ASPIA_BASE__LOGGING_H
 #define _ASPIA_BASE__LOGGING_H
 
+#include <QtGlobal>
 #include <experimental/filesystem>
 #include <sstream>
 #include <type_traits>
 #include <utility>
-
-#include "base/macros.h"
 
 
 // Instructions
@@ -597,7 +596,7 @@ private:
 
     SaveLastError last_error_;
 
-    DISALLOW_COPY_AND_ASSIGN(LogMessage);
+    Q_DISABLE_COPY(LogMessage)
 };
 
 // This class is used to explicitly ignore values in the conditional
@@ -637,7 +636,7 @@ private:
     SystemErrorCode err_;
     LogMessage log_message_;
 
-    DISALLOW_COPY_AND_ASSIGN(Win32ErrorLogMessage);
+    Q_DISABLE_COPY(Win32ErrorLogMessage)
 };
 
 // Closes the log file explicitly if open.

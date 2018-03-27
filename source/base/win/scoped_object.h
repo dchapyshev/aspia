@@ -8,10 +8,10 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_HANDLE_H
 #define _ASPIA_BASE__WIN__SCOPED_HANDLE_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -88,7 +88,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedObject);
+    Q_DISABLE_COPY(ScopedObject)
 };
 
 class HandleObjectTraits
@@ -105,9 +105,6 @@ public:
     {
         return ((object != nullptr) && (object != INVALID_HANDLE_VALUE));
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(HandleObjectTraits);
 };
 
 class ScHandleObjectTraits
@@ -124,9 +121,6 @@ public:
     {
         return (object != nullptr);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(ScHandleObjectTraits);
 };
 
 class EventLogObjectTraits
@@ -143,9 +137,6 @@ public:
     {
         return (object != nullptr);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(EventLogObjectTraits);
 };
 
 using ScopedHandle = ScopedObject<HANDLE, HandleObjectTraits>;

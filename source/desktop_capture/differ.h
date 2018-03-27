@@ -11,8 +11,6 @@
 #include <QRegion>
 #include <memory>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 // Class to search for changed regions of the screen.
@@ -47,7 +45,7 @@ private:
 
     std::unique_ptr<uint8_t[]> diff_info_;
 
-    DISALLOW_COPY_AND_ASSIGN(Differ);
+    Q_DISABLE_COPY(Differ)
 };
 
 } // namespace aspia

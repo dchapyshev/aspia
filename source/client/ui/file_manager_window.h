@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "base/macros.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
@@ -39,7 +38,7 @@ private:
 
     Ui::FileManagerWindow ui;
 
-    DISALLOW_COPY_AND_ASSIGN(FileManagerWindow);
+    Q_DISABLE_COPY(FileManagerWindow)
 };
 
 } // namespace aspia

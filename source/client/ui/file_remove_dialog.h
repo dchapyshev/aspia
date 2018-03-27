@@ -10,7 +10,7 @@
 
 #include <QDialog>
 
-#include "base/macros.h"
+#include "client/file_remover.h"
 #include "qt/ui_file_remove_dialog.h"
 
 namespace aspia {
@@ -20,22 +20,17 @@ class FileRemoveDialog : public QDialog
     Q_OBJECT
 
 public:
-    FileRemoveDialog(QWidget* parent);
+    explicit FileRemoveDialog(QWidget* parent);
     ~FileRemoveDialog();
-
-signals:
-    void cancel();
 
 public slots:
     void setProgress(const QString& current_item, int percentage);
-
-protected:
-    void closeEvent(QCloseEvent* event) override;
+    void showError(FileRemover* remover, FileRemover::Actions actions, const QString& message);
 
 private:
     Ui::FileRemoveDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(FileRemoveDialog);
+    Q_DISABLE_COPY(FileRemoveDialog)
 };
 
 } // namespace aspia

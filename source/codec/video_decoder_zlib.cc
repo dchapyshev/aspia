@@ -48,8 +48,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        QRect rect(packet.dirty_rect(i).x(), packet.dirty_rect(i).y(),
-                   packet.dirty_rect(i).width(), packet.dirty_rect(i).height());
+        QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
         if (!frame_rect.contains(rect))
         {

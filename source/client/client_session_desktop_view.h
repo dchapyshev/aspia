@@ -10,7 +10,6 @@
 
 #include <QThread>
 
-#include "base/macros.h"
 #include "client/client_session.h"
 #include "codec/video_decoder.h"
 #include "proto/computer.pb.h"
@@ -48,7 +47,7 @@ private:
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<VideoDecoder> video_decoder_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopView);
+    Q_DISABLE_COPY(ClientSessionDesktopView)
 };
 
 } // namespace aspia

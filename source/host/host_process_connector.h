@@ -43,7 +43,7 @@ private:
     std::mutex ready_lock_;
     bool ready_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(HostProcessConnector);
+    Q_DISABLE_COPY(HostProcessConnector)
 };
 
 }

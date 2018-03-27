@@ -11,8 +11,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 // Like ScopedGDIObject but for User objects.
@@ -22,8 +20,8 @@ class ScopedUserObject
 public:
     ScopedUserObject() = default;
 
-    explicit ScopedUserObject(T object) :
-        object_(object)
+    explicit ScopedUserObject(T object)
+        : object_(object)
     {
         // Nothing
     }
@@ -85,7 +83,7 @@ public:
 private:
     T object_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedUserObject);
+    Q_DISABLE_COPY(ScopedUserObject)
 };
 
 // The traits class that uses DestroyWindow() to close a handle.
@@ -98,9 +96,6 @@ public:
         if (handle)
             DestroyWindow(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyWindowTraits);
 };
 
 // The traits class that uses DestroyMenu() to close a handle.
@@ -113,9 +108,6 @@ public:
         if (handle)
             DestroyMenu(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyMenuTraits);
 };
 
 // The traits class that uses DestroyCursor() to close a handle.
@@ -128,9 +120,6 @@ public:
         if (handle)
             DestroyCursor(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyCursorTraits);
 };
 
 // The traits class that uses DestroyIcon() to close a handle.
@@ -143,9 +132,6 @@ public:
         if (handle)
             DestroyIcon(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyIconTraits);
 };
 
 // The traits class that uses DestroyAcceleratorTable() to close a handle.
@@ -158,9 +144,6 @@ public:
         if (handle)
             DestroyAcceleratorTable(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyAccelTraits);
 };
 
 // The traits class that uses UnhookWindowsHookEx() to close a handle.
@@ -173,9 +156,6 @@ public:
         if (handle)
             UnhookWindowsHookEx(handle);
     }
-
-private:
-    DISALLOW_IMPLICIT_CONSTRUCTORS(DestroyHookTraits);
 };
 
 // Typedefs for some common use cases.

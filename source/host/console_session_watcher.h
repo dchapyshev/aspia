@@ -41,7 +41,7 @@ private:
     std::unique_ptr<MessageWindow> window_;
     Delegate* delegate_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ConsoleSessionWatcher);
+    Q_DISABLE_COPY(ConsoleSessionWatcher)
 };
 
 } // namespace aspia

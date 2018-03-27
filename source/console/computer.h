@@ -10,7 +10,6 @@
 
 #include <QTreeWidget>
 
-#include "base/macros.h"
 #include "proto/address_book.pb.h"
 
 class ComputerGroup;
@@ -49,7 +48,7 @@ private:
     proto::Computer* computer_;
     ComputerGroup* parent_group_;
 
-    DISALLOW_COPY_AND_ASSIGN(Computer);
+    Q_DISABLE_COPY(Computer)
 };
 
 #endif // _ASPIA_CONSOLE__COMPUTER_H

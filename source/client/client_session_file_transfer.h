@@ -11,7 +11,6 @@
 #include <QQueue>
 #include <QPair>
 
-#include "base/macros.h"
 #include "client/client_session.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
@@ -52,7 +51,7 @@ private:
 
     QQueue<QPair<proto::file_transfer::Request, FileReplyReceiver>> tasks_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
+    Q_DISABLE_COPY(ClientSessionFileTransfer)
 };
 
 } // namespace aspia

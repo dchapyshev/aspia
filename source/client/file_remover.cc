@@ -66,7 +66,7 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
 {
     if (!request.has_remove_request())
     {
-        emit error(Action::Abort, tr("An unexpected answer was received."));
+        emit error(this, Action::Abort, tr("An unexpected answer was received."));
         return;
     }
 
@@ -94,7 +94,7 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
                 break;
         }
 
-        emit error(actions, tr("Failed to delete \"%1\": %2.")
+        emit error(this, actions, tr("Failed to delete \"%1\": %2.")
                    .arg(QString::fromUtf8(request.remove_request().path().c_str(),
                                           request.remove_request().path().size()))
                    .arg(fileStatusToString(reply.status())));
@@ -106,11 +106,13 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
 
 void FileRemover::taskQueueError(const QString& message)
 {
-    emit error(Action::Abort, message);
+    emit error(this, Action::Abort, message);
 }
 
 void FileRemover::taskQueueReady()
 {
+    Q_ASSERT(builder_ != nullptr);
+
     tasks_ = builder_->taskQueue();
     tasks_count_ = tasks_.size();
 

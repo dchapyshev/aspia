@@ -8,12 +8,13 @@
 #ifndef _ASPIA_BASE__WIN__SERVICE_MANAGER_H
 #define _ASPIA_BASE__WIN__SERVICE_MANAGER_H
 
+#include <QtGlobal>
+
 #include <memory>
 #include <string>
 
 #include "base/win/scoped_object.h"
 #include "base/command_line.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -62,7 +63,7 @@ private:
     mutable ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    DISALLOW_COPY_AND_ASSIGN(ServiceManager);
+    Q_DISABLE_COPY(ServiceManager)
 };
 
 } // namespace aspia

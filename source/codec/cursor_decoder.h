@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__CURSOR_DECODER_H
 #define _ASPIA_CODEC__CURSOR_DECODER_H
 
-#include "base/macros.h"
 #include "codec/decompressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "proto/desktop_session.pb.h"
@@ -29,7 +28,7 @@ private:
     std::unique_ptr<MouseCursorCache> cache_;
     DecompressorZLIB decompressor_;
 
-    DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
+    Q_DISABLE_COPY(CursorDecoder)
 };
 
 } // namespace aspia

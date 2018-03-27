@@ -11,7 +11,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "base/macros.h"
+#include <QtGlobal>
 
 namespace aspia {
 
@@ -35,7 +35,7 @@ public:
 private:
     bool opened_ = false;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedClipboard);
+    Q_DISABLE_COPY(ScopedClipboard)
 };
 
 } // namespace aspia

@@ -46,7 +46,7 @@ private:
     proto::ComputerGroup* group_;
     ComputerGroup* parent_group_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroup);
+    Q_DISABLE_COPY(ComputerGroup)
 };
 
 #endif // _ASPIA_CONSOLE__COMPUTER_GROUP_H

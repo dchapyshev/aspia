@@ -58,7 +58,7 @@ private:
     std::unique_ptr<InputInjector> input_injector_;
     std::unique_ptr<ClipboardThread> clipboard_thread_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
+    Q_DISABLE_COPY(HostSessionDesktop)
 };
 
 } // namespace aspia

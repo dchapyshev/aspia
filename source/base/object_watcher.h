@@ -12,8 +12,6 @@
 #include <windows.h>
 #include <chrono>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 // A class that provides a means to asynchronously wait for a Windows object to

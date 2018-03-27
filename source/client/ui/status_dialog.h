@@ -10,7 +10,6 @@
 
 #include <QDialog>
 
-#include "base/macros.h"
 #include "qt/ui_status_dialog.h"
 
 namespace aspia {
@@ -20,7 +19,7 @@ class StatusDialog : public QDialog
     Q_OBJECT
 
 public:
-    StatusDialog(QWidget* parent = nullptr);
+    explicit StatusDialog(QWidget* parent = nullptr);
     ~StatusDialog() = default;
 
 public slots:
@@ -30,7 +29,7 @@ public slots:
 private:
     Ui::StatusDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
+    Q_DISABLE_COPY(StatusDialog)
 };
 
 } // namespace aspia

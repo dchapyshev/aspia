@@ -32,7 +32,7 @@ private:
     Ui::ComputerGroupDialog ui;
     ComputerGroup* group_;
 
-    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
+    Q_DISABLE_COPY(ComputerGroupDialog)
 };
 
 } // namespace aspia

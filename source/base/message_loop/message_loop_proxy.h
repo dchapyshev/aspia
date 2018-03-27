@@ -35,7 +35,7 @@ private:
     MessageLoop* loop_;
     mutable std::mutex loop_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageLoopProxy);
+    Q_DISABLE_COPY(MessageLoopProxy)
 };
 
 } // namespace aspia

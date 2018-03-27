@@ -6,7 +6,8 @@
 //
 
 #include "codec/pixel_translator.h"
-#include "base/macros.h"
+
+#include <QVector>
 
 namespace aspia {
 
@@ -24,19 +25,19 @@ public:
         green_table_.resize(source_format_.greenMax() + 1);
         blue_table_.resize(source_format_.blueMax() + 1);
 
-        for (uint32_t i = 0; i <= source_format_.redMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.redMax(); ++i)
         {
             red_table_[i] = ((i * target_format_.redMax() + source_format_.redMax() / 2) /
                              source_format_.redMax()) << target_format_.redShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.greenMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.greenMax(); ++i)
         {
             green_table_[i] = ((i * target_format_.greenMax() + source_format_.greenMax() / 2) /
                                source_format_.greenMax()) << target_format_.greenShift();
         }
 
-        for (uint32_t i = 0; i <= source_format_.blueMax(); ++i)
+        for (quint32 i = 0; i <= source_format_.blueMax(); ++i)
         {
             blue_table_[i] = ((i * target_format_.blueMax() + source_format_.blueMax() / 2) /
                               source_format_.blueMax()) << target_format_.blueShift();
@@ -45,8 +46,8 @@ public:
 
     ~PixelTranslatorT() = default;
 
-    void translate(const uint8_t* src, int src_stride,
-                   uint8_t* dst, int dst_stride,
+    void translate(const quint8* src, int src_stride,
+                   quint8* dst, int dst_stride,
                    int width, int height) override
     {
         src_stride -= width * source_bpp;
@@ -56,44 +57,49 @@ public:
         {
             for (int x = 0; x < width; ++x)
             {
-                uint32_t red;
-                uint32_t green;
-                uint32_t blue;
+                quint32 red;
+                quint32 green;
+                quint32 blue;
 
                 if constexpr (source_bpp == 4)
                 {
                     red = red_table_[
-                        *(uint32_t*) src >> source_format_.redShift() & source_format_.redMax()];
+                        *(quint32*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint32_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
+                        *(quint32*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint32_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
+                        *(quint32*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
                 else if constexpr (source_bpp == 2)
                 {
                     red = red_table_[
-                        *(uint16_t*) src >> source_format_.redShift() & source_format_.redMax()];
+                        *(quint16*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint16_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
+                        *(quint16*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint16_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
+                        *(quint16*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
                 else if constexpr (source_bpp == 1)
                 {
                     red = red_table_[
-                        *(uint8_t*) src >> source_format_.redShift() & source_format_.redMax()];
+                        *(quint8*) src >> source_format_.redShift() & source_format_.redMax()];
                     green = green_table_[
-                        *(uint8_t*) src >> source_format_.greenShift() & source_format_.greenMax()];
+                        *(quint8*) src >> source_format_.greenShift() & source_format_.greenMax()];
                     blue = blue_table_[
-                        *(uint8_t*) src >> source_format_.blueShift() & source_format_.blueMax()];
+                        *(quint8*) src >> source_format_.blueShift() & source_format_.blueMax()];
+                }
+                else
+                {
+                    red = green = blue = 0;
+                    qFatal("Unexpected pixel format");
                 }
 
                 if constexpr (target_bpp == 4)
-                    *(uint32_t*) dst = static_cast<uint32_t>(red | green | blue);
+                    *(quint32*) dst = static_cast<quint32>(red | green | blue);
                 else if constexpr (target_bpp == 2)
-                    *(uint16_t*) dst = static_cast<uint16_t>(red | green | blue);
+                    *(quint16*) dst = static_cast<quint16>(red | green | blue);
                 else if constexpr (target_bpp == 1)
-                    *(uint8_t*) dst = static_cast<uint8_t>(red | green | blue);
+                    *(quint8*) dst = static_cast<quint8>(red | green | blue);
 
                 src += source_bpp;
                 dst += target_bpp;
@@ -105,14 +111,14 @@ public:
     }
 
 private:
-    std::vector<uint32_t> red_table_;
-    std::vector<uint32_t> green_table_;
-    std::vector<uint32_t> blue_table_;
+    QVector<quint32> red_table_;
+    QVector<quint32> green_table_;
+    QVector<quint32> blue_table_;
 
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
+    Q_DISABLE_COPY(PixelTranslatorT)
 };
 
 } // namespace

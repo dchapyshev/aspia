@@ -34,7 +34,7 @@ private:
     std::unique_ptr<NetworkServerTcp> network_server_;
     std::list<std::unique_ptr<Host>> session_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostPool);
+    Q_DISABLE_COPY(HostPool)
 };
 
 } // namespace aspia

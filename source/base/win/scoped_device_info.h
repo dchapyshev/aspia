@@ -8,11 +8,11 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_DEVICE_INFO_H
 #define _ASPIA_BASE__WIN__SCOPED_DEVICE_INFO_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <setupapi.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -72,7 +72,7 @@ private:
 
     HDEVINFO device_info_ = INVALID_HANDLE_VALUE;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedDeviceInfo);
+    Q_DISABLE_COPY(ScopedDeviceInfo)
 };
 
 } // namespace aspia

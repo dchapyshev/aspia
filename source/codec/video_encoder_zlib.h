@@ -10,7 +10,6 @@
 
 #include <memory>
 
-#include "base/macros.h"
 #include "base/aligned_memory.h"
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
@@ -46,7 +45,7 @@ private:
     std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
+    Q_DISABLE_COPY(VideoEncoderZLIB)
 };
 
 } // namespace aspia

@@ -8,6 +8,8 @@
 #ifndef _ASPIA_CODEC__VIDEO_DECODER_VPX_H
 #define _ASPIA_CODEC__VIDEO_DECODER_VPX_H
 
+#include <QtGlobal>
+
 extern "C" {
 
 #pragma warning(push)
@@ -23,7 +25,6 @@ extern "C" {
 
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_decoder.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -42,7 +43,7 @@ private:
 
     ScopedVpxCodec codec_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
+    Q_DISABLE_COPY(VideoDecoderVPX)
 };
 
 } // namespace aspia

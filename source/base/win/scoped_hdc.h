@@ -8,11 +8,12 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_HDC_H
 #define _ASPIA_BASE__WIN__SCOPED_HDC_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include "base/logging.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -52,7 +53,7 @@ private:
     HWND hwnd_;
     HDC hdc_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedGetDC);
+    Q_DISABLE_COPY(ScopedGetDC);
 };
 
 //
@@ -95,7 +96,7 @@ private:
 
     HDC hdc_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
+    Q_DISABLE_COPY(ScopedCreateDC)
 };
 
 } // namespace aspia

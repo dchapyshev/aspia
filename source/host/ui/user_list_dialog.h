@@ -8,7 +8,6 @@
 #ifndef _ASPIA_HOST__UI__USER_LIST_DIALOG_H
 #define _ASPIA_HOST__UI__USER_LIST_DIALOG_H
 
-#include "base/macros.h"
 #include "host/user_list.h"
 #include "qt/ui_user_list_dialog.h"
 
@@ -36,7 +35,7 @@ private:
     Ui::UserListDialog ui;
     UserList user_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserListDialog);
+    Q_DISABLE_COPY(UserListDialog)
 };
 
 } // namespace aspia

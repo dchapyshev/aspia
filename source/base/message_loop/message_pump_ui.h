@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_UI_H
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_UI_H
 
-#include "base/macros.h"
 #include "base/message_window.h"
 #include "base/message_loop/message_pump.h"
 #include "base/message_loop/message_pump_dispatcher.h"
@@ -74,7 +73,7 @@ private:
     // State for the current invocation of Run.
     RunState* state_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(MessagePumpForUI);
+    Q_DISABLE_COPY(MessagePumpForUI)
 };
 
 } // namespace aspia

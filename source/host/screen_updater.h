@@ -47,7 +47,7 @@ private:
     const Mode mode_;
     const std::chrono::milliseconds update_interval_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
+    Q_DISABLE_COPY(ScreenUpdater)
 };
 
 } // namespace aspia

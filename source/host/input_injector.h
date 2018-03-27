@@ -36,7 +36,7 @@ private:
     QPoint prev_mouse_pos_;
     quint32 prev_mouse_button_mask_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(InputInjector);
+    Q_DISABLE_COPY(InputInjector)
 };
 
 } // namespace aspia

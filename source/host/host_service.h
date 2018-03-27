@@ -38,7 +38,7 @@ private:
 
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    DISALLOW_COPY_AND_ASSIGN(HostService);
+    Q_DISABLE_COPY(HostService)
 };
 
 } // namespace aspia

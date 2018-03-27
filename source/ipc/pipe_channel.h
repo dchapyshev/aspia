@@ -113,7 +113,7 @@ private:
 
     std::shared_ptr<PipeChannelProxy> proxy_;
 
-    DISALLOW_COPY_AND_ASSIGN(PipeChannel);
+    Q_DISABLE_COPY(PipeChannel)
 };
 
 } // namespace aspia

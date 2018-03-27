@@ -13,7 +13,6 @@
 #include <QSize>
 
 #include "desktop_capture/pixel_format.h"
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -49,7 +48,7 @@ private:
 
     QRegion updated_region_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
+    Q_DISABLE_COPY(DesktopFrame)
 };
 
 } // namespace aspia

@@ -8,13 +8,12 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
 #define _ASPIA_BASE__WIN__SCOPED_COM_INITIALIZER_H
 
+#include <QtGlobal>
 #include <objbase.h>
 
 #ifndef NDEBUG
 #include "base/logging.h"
 #endif
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -80,7 +79,7 @@ private:
     DWORD thread_id_;
 #endif
 
-  DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
+    Q_DISABLE_COPY(ScopedCOMInitializer)
 };
 
 }  // namespace aspia

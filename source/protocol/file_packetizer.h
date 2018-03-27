@@ -13,7 +13,6 @@
 #include <QString>
 #include <memory>
 
-#include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -41,7 +40,7 @@ private:
     qint64 file_size_ = 0;
     qint64 left_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
+    Q_DISABLE_COPY(FilePacketizer)
 };
 
 } // namespace aspia

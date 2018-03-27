@@ -29,7 +29,7 @@ private:
 
     QImage image_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameQImage);
+    Q_DISABLE_COPY(DesktopFrameQImage)
 };
 
 } // namespace aspia

@@ -10,7 +10,6 @@
 
 #include <QDialog>
 
-#include "base/macros.h"
 #include "qt/ui_file_progress_dialog.h"
 
 namespace aspia {
@@ -20,13 +19,13 @@ class FileProgressDialog : public QDialog
     Q_OBJECT
 
 public:
-    FileProgressDialog(QWidget* parent);
+    explicit FileProgressDialog(QWidget* parent);
     ~FileProgressDialog();
 
 private:
     Ui::FileProgressDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(FileProgressDialog);
+    Q_DISABLE_COPY(FileProgressDialog)
 };
 
 } // namespace aspia

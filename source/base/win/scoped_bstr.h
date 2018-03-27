@@ -8,11 +8,11 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_BSTR_H
 #define _ASPIA_BASE__WIN__SCOPED_BSTR_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <oleauto.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -91,7 +91,7 @@ private:
     bool operator==(const ScopedBstr& bstr2) const;
     bool operator!=(const ScopedBstr& bstr2) const;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedBstr);
+    Q_DISABLE_COPY(ScopedBstr)
 };
 
 }  // namespace aspia

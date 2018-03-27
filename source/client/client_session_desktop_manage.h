@@ -43,7 +43,7 @@ private:
     std::string last_clipboard_mime_type_;
     std::string last_clipboard_data_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientSessionDesktopManage);
+    Q_DISABLE_COPY(ClientSessionDesktopManage)
 };
 
 } // namespace aspia

@@ -8,10 +8,10 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_HGLOBAL_H
 #define _ASPIA_BASE__WIN__SCOPED_HGLOBAL_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -52,7 +52,7 @@ private:
 
     T* data_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedHGlobal);
+    Q_DISABLE_COPY(ScopedHGlobal)
 };
 
 }  // namespace aspia

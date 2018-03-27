@@ -48,7 +48,7 @@ private:
     WaitableTimer auth_timer_;
     QByteArray nonce_;
 
-    DISALLOW_COPY_AND_ASSIGN(Host);
+    Q_DISABLE_COPY(Host)
 };
 
 } // namespace aspia

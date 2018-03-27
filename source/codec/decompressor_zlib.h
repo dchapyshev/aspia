@@ -8,10 +8,10 @@
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 
-#include "base/macros.h"
-#include "codec/decompressor.h"
-
+#include <QtGlobal>
 #include <zlib.h>
+
+#include "codec/decompressor.h"
 
 namespace aspia {
 
@@ -34,7 +34,7 @@ public:
 private:
     z_stream stream_;
 
-    DISALLOW_COPY_AND_ASSIGN(DecompressorZLIB);
+    Q_DISABLE_COPY(DecompressorZLIB)
 };
 
 } // namespace aspia

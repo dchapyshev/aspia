@@ -32,7 +32,7 @@ private:
     Clipboard clipboard_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClipboardThread);
+    Q_DISABLE_COPY(ClipboardThread)
 };
 
 

@@ -20,9 +20,9 @@ public:
     void RestoreAppearance();
 
 private:
-    AddressBook(proto::ComputerGroup* root_group);
+    explicit AddressBook(proto::ComputerGroup* root_group);
 
-    DISALLOW_COPY_AND_ASSIGN(AddressBook);
+    Q_DISABLE_COPY(AddressBook)
 };
 
 #endif // _ASPIA_CONSOLE__ADDRESS_BOOK_H

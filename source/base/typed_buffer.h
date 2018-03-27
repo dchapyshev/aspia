@@ -8,9 +8,8 @@
 #ifndef _ASPIA_BASE__TYPED_BUFFER_H
 #define _ASPIA_BASE__TYPED_BUFFER_H
 
+#include <QtGlobal>
 #include <cstdint>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -103,7 +102,7 @@ private:
     // Length of the owned buffer in bytes.
     size_t length_;
 
-    DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
+    Q_DISABLE_COPY(TypedBuffer)
 };
 
 } // namespace aspia

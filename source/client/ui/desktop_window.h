@@ -10,7 +10,6 @@
 
 #include <QWidget>
 
-#include "base/macros.h"
 #include "proto/computer.pb.h"
 
 class QHBoxLayout;
@@ -63,7 +62,7 @@ private:
     int scroll_timer_id_ = -1;
     QPoint scroll_delta_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
+    Q_DISABLE_COPY(DesktopWindow)
 };
 
 } // namespace aspia

@@ -9,7 +9,6 @@
 #define _ASPIA_CODEC__PIXEL_TRANSLATOR_H
 
 #include <memory>
-#include <vector>
 
 #include "desktop_capture/pixel_format.h"
 

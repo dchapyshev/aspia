@@ -10,7 +10,6 @@
 
 #include <QTreeWidget>
 
-#include "base/macros.h"
 #include "host/user.h"
 
 namespace aspia {
@@ -28,7 +27,7 @@ private:
     User* user_;
     int index_;
 
-    DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
+    Q_DISABLE_COPY(UserTreeItem)
 };
 
 } // namespace aspia

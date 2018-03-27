@@ -8,10 +8,10 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_LOCAL_H
 #define _ASPIA_BASE__WIN__SCOPED_LOCAL_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -103,7 +103,7 @@ private:
 private:
     T local_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
+    Q_DISABLE_COPY(ScopedLocal)
 };
 
 } // namespace aspia

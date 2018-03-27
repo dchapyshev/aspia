@@ -10,7 +10,6 @@
 
 #include <QString>
 
-#include "base/macros.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -29,7 +28,7 @@ public:
     static proto::file_transfer::Request packet(const proto::file_transfer::Packet& packet);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FileRequest);
+    Q_DISABLE_COPY(FileRequest)
 };
 
 } // namespace aspia

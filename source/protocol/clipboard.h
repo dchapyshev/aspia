@@ -48,7 +48,7 @@ private:
     std::string last_mime_type_;
     std::string last_data_;
 
-    DISALLOW_COPY_AND_ASSIGN(Clipboard);
+    Q_DISABLE_COPY(Clipboard)
 };
 
 } // namespace aspia

@@ -10,7 +10,6 @@
 
 #include <QDialog>
 
-#include "base/macros.h"
 #include "proto/address_book.pb.h"
 #include "qt/ui_open_address_book_dialog.h"
 
@@ -33,7 +32,7 @@ private slots:
 private:
     Ui::OpenAddressBookDialog ui;
 
-    DISALLOW_COPY_AND_ASSIGN(OpenAddressBookDialog);
+    Q_DISABLE_COPY(OpenAddressBookDialog)
 };
 
 } // namespace aspia

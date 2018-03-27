@@ -45,7 +45,7 @@ private:
     std::unique_ptr<NetworkChannelTcp> channel_;
     std::mutex channel_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkServerTcp);
+    Q_DISABLE_COPY(NetworkServerTcp)
 };
 
 } // namespace aspia

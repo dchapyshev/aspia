@@ -28,7 +28,7 @@ private:
     ScopedHandle process_token_;
     TOKEN_PRIVILEGES privileges_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedProcessPrivilege);
+    Q_DISABLE_COPY(ScopedProcessPrivilege)
 };
 
 } // namespace aspia

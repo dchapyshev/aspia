@@ -8,12 +8,11 @@
 #ifndef _ASPIA_BASE__MESSAGE_WINDOW_H
 #define _ASPIA_BASE__MESSAGE_WINDOW_H
 
+#include <QtGlobal>
+#include <functional>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include "base/macros.h"
-
-#include <functional>
 
 namespace aspia {
 
@@ -44,7 +43,7 @@ private:
     MessageCallback message_callback_;
     HWND hwnd_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(MessageWindow);
+    Q_DISABLE_COPY(MessageWindow)
 };
 
 } // namespace aspia

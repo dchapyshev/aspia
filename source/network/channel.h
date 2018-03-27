@@ -11,8 +11,6 @@
 #include <QTcpSocket>
 #include <QQueue>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 class Channel : public QObject
@@ -57,7 +55,7 @@ private:
     MessageSizeType read_size_ = 0;
     qint64 read_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(Channel);
+    Q_DISABLE_COPY(Channel)
 };
 
 } // namespace aspia

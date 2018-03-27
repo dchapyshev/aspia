@@ -10,8 +10,6 @@
 
 #include <QDrag>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 class FileItem;
@@ -26,7 +24,7 @@ public:
     void setFileItem(FileItem* file_item);
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FileItemDrag);
+    Q_DISABLE_COPY(FileItemDrag)
 };
 
 } // namespace aspia

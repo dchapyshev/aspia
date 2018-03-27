@@ -11,7 +11,6 @@
 #include <QObject>
 #include <QQueue>
 
-#include "base/macros.h"
 #include "client/file_remove_task.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
@@ -59,7 +58,7 @@ private:
     QQueue<FileRemoveTask> pending_tasks_;
     QQueue<FileRemoveTask> tasks_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileRemoveQueueBuilder);
+    Q_DISABLE_COPY(FileRemoveQueueBuilder)
 };
 
 } // namespace aspia

@@ -47,7 +47,7 @@ private:
     NetworkChannel* channel_;
     mutable std::mutex channel_lock_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannelProxy);
+    Q_DISABLE_COPY(NetworkChannelProxy)
 };
 
 } // namespace aspia

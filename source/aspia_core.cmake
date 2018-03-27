@@ -26,7 +26,6 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/command_line.h
     ${PROJECT_SOURCE_DIR}/base/logging.cc
     ${PROJECT_SOURCE_DIR}/base/logging.h
-    ${PROJECT_SOURCE_DIR}/base/macros.h
     ${PROJECT_SOURCE_DIR}/base/message_window.cc
     ${PROJECT_SOURCE_DIR}/base/message_window.h
     ${PROJECT_SOURCE_DIR}/base/object_watcher.cc

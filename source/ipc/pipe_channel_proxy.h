@@ -38,7 +38,7 @@ private:
 
     std::condition_variable stop_event_;
 
-    DISALLOW_COPY_AND_ASSIGN(PipeChannelProxy);
+    Q_DISABLE_COPY(PipeChannelProxy);
 };
 
 } // namespace aspia

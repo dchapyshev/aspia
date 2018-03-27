@@ -10,7 +10,6 @@
 
 #include <QDialog>
 
-#include "base/macros.h"
 #include "proto/computer.pb.h"
 #include "qt/ui_client_dialog.h"
 
@@ -35,7 +34,7 @@ private:
     Ui::ClientDialog ui;
     proto::Computer computer_;
 
-    DISALLOW_COPY_AND_ASSIGN(ClientDialog);
+    Q_DISABLE_COPY(ClientDialog)
 };
 
 } // namespace aspia

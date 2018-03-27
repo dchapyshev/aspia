@@ -8,12 +8,12 @@
 #ifndef _ASPIA_BASE__WIN__SERVICE_H
 #define _ASPIA_BASE__WIN__SERVICE_H
 
+#include <QtGlobal>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <atomic>
 #include <string>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -57,7 +57,7 @@ private:
     SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
 
-    DISALLOW_COPY_AND_ASSIGN(Service);
+    Q_DISABLE_COPY(Service)
 };
 
 } // namespace aspia

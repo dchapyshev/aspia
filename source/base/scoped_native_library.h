@@ -8,7 +8,7 @@
 #ifndef _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 #define _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 
-#include "base/macros.h"
+#include <QtGlobal>
 
 namespace aspia {
 
@@ -36,7 +36,7 @@ public:
 private:
     HMODULE lib_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScopedNativeLibrary);
+    Q_DISABLE_COPY(ScopedNativeLibrary)
 };
 
 } // namespace aspia

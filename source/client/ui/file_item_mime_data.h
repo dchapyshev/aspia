@@ -10,8 +10,6 @@
 
 #include <QMimeData>
 
-#include "base/macros.h"
-
 namespace aspia {
 
 class FileItem;
@@ -30,7 +28,7 @@ public:
 private:
     FileItem* file_item_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileItemMimeData);
+    Q_DISABLE_COPY(FileItemMimeData)
 };
 
 } // namespace aspia

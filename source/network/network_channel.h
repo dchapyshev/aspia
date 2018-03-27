@@ -9,9 +9,6 @@
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
 #include <QByteArray>
-
-#include "base/macros.h"
-
 #include <functional>
 
 namespace aspia {
@@ -46,7 +43,7 @@ protected:
 private:
     std::shared_ptr<NetworkChannelProxy> proxy_;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
+    Q_DISABLE_COPY(NetworkChannel)
 };
 
 } // namespace aspia

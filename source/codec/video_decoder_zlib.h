@@ -31,7 +31,7 @@ private:
     std::unique_ptr<PixelTranslator> translator_;
     std::unique_ptr<DesktopFrame> source_frame_;
 
-    DISALLOW_COPY_AND_ASSIGN(VideoDecoderZLIB);
+    Q_DISABLE_COPY(VideoDecoderZLIB)
 };
 
 } // namespace aspia

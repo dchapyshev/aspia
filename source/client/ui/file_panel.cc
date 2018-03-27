@@ -24,7 +24,7 @@ namespace {
 class NoEditDelegate : public QStyledItemDelegate
 {
 public:
-    NoEditDelegate(QWidget* parent = nullptr)
+    explicit NoEditDelegate(QWidget* parent = nullptr)
         : QStyledItemDelegate(parent)
     {
         // Nothing
@@ -38,7 +38,7 @@ public:
     }
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(NoEditDelegate);
+    Q_DISABLE_COPY(NoEditDelegate)
 };
 
 QString normalizePath(const QString& path)
@@ -316,71 +316,28 @@ void FilePanel::removeSelected()
     }
 
     FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
-    remover_ = new FileRemover(this);
+    FileRemover* remover = new FileRemover(progress_dialog);
 
-    connect(remover_, SIGNAL(started()), progress_dialog, SLOT(open()));
-    connect(remover_, SIGNAL(finished()), progress_dialog, SLOT(close()));
-    connect(remover_, SIGNAL(finished()), SLOT(refresh()));
-    connect(remover_, SIGNAL(finished()), remover_, SLOT(deleteLater()));
+    connect(remover, SIGNAL(started()), progress_dialog, SLOT(open()));
+    connect(remover, SIGNAL(finished()), progress_dialog, SLOT(close()));
+    connect(remover, SIGNAL(finished()), SLOT(refresh()));
 
-    connect(remover_, SIGNAL(progressChanged(const QString&, int)),
+    connect(remover, SIGNAL(progressChanged(const QString&, int)),
             progress_dialog, SLOT(setProgress(const QString&, int)));
-    connect(remover_, SIGNAL(error(FileRemover::Actions, const QString&)),
-            SLOT(removeError(FileRemover::Actions, const QString&)));
 
-    connect(remover_,
+    connect(remover,
+            SIGNAL(error(FileRemover*, FileRemover::Actions, const QString&)),
+            progress_dialog,
+            SLOT(showError(FileRemover*, FileRemover::Actions, const QString&)));
+
+    connect(remover,
             SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
             SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)));
 
-    connect(progress_dialog, SIGNAL(cancel()), SLOT(removeCancel()));
+    // After closing the dialog, delete it. Remover is a child object and will also be deleted.
+    connect(progress_dialog, SIGNAL(finished(int)), progress_dialog, SLOT(deleteLater()));
 
-    remover_->start(tasks);
-}
-
-void FilePanel::removeError(FileRemover::Actions actions, const QString& message)
-{
-    QMessageBox dialog(this);
-
-    dialog.setWindowTitle(tr("Warning"));
-    dialog.setIcon(QMessageBox::Warning);
-    dialog.setText(message);
-
-    QAbstractButton* skip_button = nullptr;
-    QAbstractButton* skip_all_button = nullptr;
-    QAbstractButton* abort_button = nullptr;
-
-    if (actions & FileRemover::Skip)
-        skip_button = dialog.addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
-
-    if (actions & FileRemover::SkipAll)
-        skip_all_button = dialog.addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
-
-    if (actions & FileRemover::Abort)
-        abort_button = dialog.addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
-
-    dialog.exec();
-
-    QAbstractButton* button = dialog.clickedButton();
-    if (button != nullptr)
-    {
-        if (button == skip_button)
-        {
-            remover_->applyAction(FileRemover::Skip);
-            return;
-        }
-        else if (button == skip_all_button)
-        {
-            remover_->applyAction(FileRemover::SkipAll);
-            return;
-        }
-    }
-
-    remover_->applyAction(FileRemover::Abort);
-}
-
-void FilePanel::removeCancel()
-{
-    remover_.clear();
+    remover->start(tasks);
 }
 
 void FilePanel::sendSelected()

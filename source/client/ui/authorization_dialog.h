@@ -11,7 +11,6 @@
 #include <QCryptographicHash>
 #include <QDialog>
 
-#include "base/macros.h"
 #include "proto/computer.pb.h"
 #include "qt/ui_authorization_dialog.h"
 
@@ -33,7 +32,7 @@ private:
     Ui::AuthorizationDialog ui;
     proto::Computer* computer_;
 
-    DISALLOW_COPY_AND_ASSIGN(AuthorizationDialog);
+    Q_DISABLE_COPY(AuthorizationDialog)
 };
 
 } // namespace aspia

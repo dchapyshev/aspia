@@ -34,7 +34,7 @@ private:
     EventCallback callback_;
     HANDLE process_handle_ = kNullProcessHandle;
 
-    DISALLOW_COPY_AND_ASSIGN(ProcessWatcher);
+    Q_DISABLE_COPY(ProcessWatcher)
 };
 
 } // namespace aspia

@@ -37,7 +37,7 @@ private:
 
     ScopedHBITMAP bitmap_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopFrameDIB);
+    Q_DISABLE_COPY(DesktopFrameDIB)
 };
 
 } // namespace aspia

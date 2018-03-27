@@ -11,8 +11,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "base/macros.h"
-
+#include <QtGlobal>
 #include <cstdint>
 
 namespace aspia {
@@ -97,7 +96,7 @@ private:
 
     ProcessHandle process_handle_ = kNullProcessHandle;
 
-    DISALLOW_COPY_AND_ASSIGN(Process);
+    Q_DISABLE_COPY(Process)
 };
 
 } // namespace aspia

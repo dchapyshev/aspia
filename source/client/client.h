@@ -43,7 +43,7 @@ private:
 
     proto::Computer computer_;
 
-    DISALLOW_COPY_AND_ASSIGN(Client);
+    Q_DISABLE_COPY(Client)
 };
 
 } // namespace aspia

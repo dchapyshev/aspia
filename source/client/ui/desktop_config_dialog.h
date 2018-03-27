@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 #define _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 
-#include "base/macros.h"
 #include "proto/computer.pb.h"
 #include "qt/ui_desktop_config_dialog.h"
 
@@ -34,7 +33,7 @@ private:
     proto::auth::SessionType session_type_;
     proto::desktop::Config* config_;
 
-    DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
+    Q_DISABLE_COPY(DesktopConfigDialog)
 };
 
 } // namespace aspia

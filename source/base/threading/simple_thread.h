@@ -8,12 +8,11 @@
 #ifndef _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 #define _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 
+#include <QtGlobal>
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -63,7 +62,7 @@ private:
     std::mutex running_lock_;
     std::condition_variable running_event_;
 
-    DISALLOW_COPY_AND_ASSIGN(SimpleThread);
+    Q_DISABLE_COPY(SimpleThread)
 };
 
 } // namespace aspia

@@ -11,10 +11,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <QtGlobal>
 #include <chrono>
 #include <functional>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -46,7 +45,7 @@ private:
     TimeoutCallback signal_callback_;
     HANDLE timer_handle_ = nullptr;
 
-    DISALLOW_COPY_AND_ASSIGN(WaitableTimer);
+    Q_DISABLE_COPY(WaitableTimer)
 };
 
 } // namespace aspia

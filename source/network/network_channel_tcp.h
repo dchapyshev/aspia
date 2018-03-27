@@ -114,7 +114,7 @@ private:
     QByteArray read_buffer_;
     MessageSizeType read_size_ = 0;
 
-    DISALLOW_COPY_AND_ASSIGN(NetworkChannelTcp);
+    Q_DISABLE_COPY(NetworkChannelTcp)
 };
 
 } // namespace aspia

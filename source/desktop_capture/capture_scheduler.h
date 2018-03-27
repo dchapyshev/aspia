@@ -8,9 +8,8 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
 
+#include <QtGlobal>
 #include <chrono>
-
-#include "base/macros.h"
 
 namespace aspia {
 
@@ -26,7 +25,7 @@ public:
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> begin_time_;
 
-    DISALLOW_COPY_AND_ASSIGN(CaptureScheduler);
+    Q_DISABLE_COPY(CaptureScheduler)
 };
 
 } // namespace aspia
