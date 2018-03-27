@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 #define _ASPIA_BASE__THREADING__SIMPLE_THREAD_H
 
-#include <QtGlobal>
 #include <atomic>
 #include <condition_variable>
 #include <mutex>

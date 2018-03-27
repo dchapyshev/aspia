@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__WIN__SERVICE_H
 #define _ASPIA_BASE__WIN__SERVICE_H
 
-#include <QtGlobal>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <atomic>

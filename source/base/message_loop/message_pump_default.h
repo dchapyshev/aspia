@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 #define _ASPIA_BASE__MESSAGE_LOOP__MESSAGE_PUMP_DEFAULT_H
 
-#include <QtGlobal>
 #include <condition_variable>
 #include <mutex>
 

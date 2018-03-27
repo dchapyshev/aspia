@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 #define _ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H
 
-#include <QtGlobal>
-
 #include <wtsapi32.h>
 
 template <typename T>

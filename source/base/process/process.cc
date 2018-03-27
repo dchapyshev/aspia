@@ -106,7 +106,7 @@ ProcessHandle Process::Handle() const
     return process_handle_;
 }
 
-bool Process::Terminate(uint32_t exit_code, bool wait)
+bool Process::Terminate(quint32 exit_code, bool wait)
 {
     bool result = TerminateProcess(Handle(), exit_code) != FALSE;
 
@@ -130,7 +130,7 @@ bool Process::WaitForExit(int* exit_code) const
     return WaitForExitWithTimeout(INFINITE, exit_code);
 }
 
-bool Process::WaitForExitWithTimeout(uint32_t timeout_ms, int* exit_code) const
+bool Process::WaitForExitWithTimeout(quint32 timeout_ms, int* exit_code) const
 {
     if (WaitForSingleObject(Handle(), timeout_ms) != WAIT_OBJECT_0)
         return false;

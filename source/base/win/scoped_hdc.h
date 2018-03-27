@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_HDC_H
 #define _ASPIA_BASE__WIN__SCOPED_HDC_H
 
-#include <QtGlobal>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 

@@ -8,8 +8,6 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 #define _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 
-#include <QtGlobal>
-
 namespace aspia {
 
 class PixelFormat

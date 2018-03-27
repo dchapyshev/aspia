@@ -11,9 +11,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include <QtGlobal>
-#include <cstdint>
-
 namespace aspia {
 
 using ProcessHandle = HANDLE;
@@ -74,7 +71,7 @@ public:
     // will be the exit code of the process. If |wait| is true, this method
     // will wait for up to one minute for the process to actually terminate.
     // Returns true if the process terminates within the allowed time.
-    bool Terminate(uint32_t exit_code, bool wait);
+    bool Terminate(quint32 exit_code, bool wait);
 
     // Waits for the process to exit. Returns true on success.
     // NOTE: |exit_code| is optional, nullptr can be passed if the exit code is
@@ -84,7 +81,7 @@ public:
     // Same as WaitForExit() but only waits for up to |timeout|.
     // NOTE: |exit_code| is optional, nullptr can be passed if the exit code
     // is not required.
-    bool WaitForExitWithTimeout(uint32_t timeout_ms, int* exit_code) const;
+    bool WaitForExitWithTimeout(quint32 timeout_ms, int* exit_code) const;
 
     // Close the process handle. This will not terminate the process.
     void Close();

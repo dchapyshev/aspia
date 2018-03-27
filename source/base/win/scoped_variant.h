@@ -8,12 +8,9 @@
 #ifndef _ASPIA_BASE__WIN__SCOPED_VARIANT_H
 #define _ASPIA_BASE__WIN__SCOPED_VARIANT_H
 
-#include <QtGlobal>
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <oleauto.h>
-#include <cstdint>
 
 namespace aspia {
 
@@ -96,14 +93,14 @@ public:
     void Set(const wchar_t* str);
 
     // Setters for simple types.
-    void Set(int8_t i8);
-    void Set(uint8_t ui8);
-    void Set(int16_t i16);
-    void Set(uint16_t ui16);
-    void Set(int32_t i32);
-    void Set(uint32_t ui32);
-    void Set(int64_t i64);
-    void Set(uint64_t ui64);
+    void Set(qint8 i8);
+    void Set(quint8 ui8);
+    void Set(qint16 i16);
+    void Set(quint16 ui16);
+    void Set(qint32 i32);
+    void Set(quint32 ui32);
+    void Set(qint64 i64);
+    void Set(quint64 ui64);
     void Set(float r32);
     void Set(double r64);
     void Set(bool b);

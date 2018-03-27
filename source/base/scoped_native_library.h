@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 #define _ASPIA_BASE__SCOPED_NATIVE_LIBRARY_H
 
-#include <QtGlobal>
-
 namespace aspia {
 
 class ScopedNativeLibrary

@@ -139,7 +139,7 @@ void ScopedVariant::Set(const wchar_t* str)
     var_.bstrVal = ::SysAllocString(str);
 }
 
-void ScopedVariant::Set(int8_t i8)
+void ScopedVariant::Set(qint8 i8)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -147,7 +147,7 @@ void ScopedVariant::Set(int8_t i8)
     var_.cVal = i8;
 }
 
-void ScopedVariant::Set(uint8_t ui8)
+void ScopedVariant::Set(quint8 ui8)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -155,7 +155,7 @@ void ScopedVariant::Set(uint8_t ui8)
     var_.bVal = ui8;
 }
 
-void ScopedVariant::Set(int16_t i16)
+void ScopedVariant::Set(qint16 i16)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -163,7 +163,7 @@ void ScopedVariant::Set(int16_t i16)
     var_.iVal = i16;
 }
 
-void ScopedVariant::Set(uint16_t ui16)
+void ScopedVariant::Set(quint16 ui16)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -171,7 +171,7 @@ void ScopedVariant::Set(uint16_t ui16)
     var_.uiVal = ui16;
 }
 
-void ScopedVariant::Set(int32_t i32)
+void ScopedVariant::Set(qint32 i32)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -179,7 +179,7 @@ void ScopedVariant::Set(int32_t i32)
     var_.lVal = i32;
 }
 
-void ScopedVariant::Set(uint32_t ui32)
+void ScopedVariant::Set(quint32 ui32)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -187,7 +187,7 @@ void ScopedVariant::Set(uint32_t ui32)
     var_.ulVal = ui32;
 }
 
-void ScopedVariant::Set(int64_t i64)
+void ScopedVariant::Set(qint64 i64)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 
@@ -195,7 +195,7 @@ void ScopedVariant::Set(int64_t i64)
     var_.llVal = i64;
 }
 
-void ScopedVariant::Set(uint64_t ui64)
+void ScopedVariant::Set(quint64 ui64)
 {
     DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
 

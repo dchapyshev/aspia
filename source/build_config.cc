@@ -12,6 +12,6 @@ Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
 
 namespace aspia {
 
-const unsigned short kDefaultHostTcpPort = 8050;
+const int kDefaultHostTcpPort = 8050;
 
 } // namespace aspia

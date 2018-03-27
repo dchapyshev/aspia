@@ -11,7 +11,6 @@
 #include "base/message_loop/message_pump_ui.h"
 #include "base/message_loop/pending_task.h"
 
-#include <QtGlobal>
 #include <memory>
 #include <mutex>
 

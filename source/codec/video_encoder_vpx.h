@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 
-#include <QtGlobal>
 #include <memory>
 
 extern "C" {

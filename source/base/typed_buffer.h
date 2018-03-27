@@ -8,9 +8,6 @@
 #ifndef _ASPIA_BASE__TYPED_BUFFER_H
 #define _ASPIA_BASE__TYPED_BUFFER_H
 
-#include <QtGlobal>
-#include <cstdint>
-
 namespace aspia {
 
 //
@@ -29,7 +26,7 @@ public:
     explicit TypedBuffer(size_t length) : length_(length)
     {
         if (length_ != 0)
-            buffer_ = reinterpret_cast<T*>(new uint8_t[length_]);
+            buffer_ = reinterpret_cast<T*>(new quint8[length_]);
     }
 
     TypedBuffer(TypedBuffer&& rvalue) noexcept
@@ -42,7 +39,7 @@ public:
     {
         if (buffer_)
         {
-            delete[] reinterpret_cast<uint8_t*>(buffer_);
+            delete[] reinterpret_cast<quint8*>(buffer_);
             buffer_ = nullptr;
         }
     }
@@ -77,9 +74,9 @@ public:
 
     // Helper returning a pointer to the structure starting at a specified byte
     // offset.
-    T* GetAtOffset(uint32_t offset)
+    T* GetAtOffset(quint32 offset)
     {
-        return reinterpret_cast<T*>(reinterpret_cast<uint8_t*>(buffer_) + offset);
+        return reinterpret_cast<T*>(reinterpret_cast<quint8*>(buffer_) + offset);
     }
 
     // Allow TypedBuffer<T> to be used in boolean expressions.

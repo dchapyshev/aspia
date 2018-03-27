@@ -8,8 +8,6 @@
 #ifndef _ASPIA_BASE__WIN__SERVICE_MANAGER_H
 #define _ASPIA_BASE__WIN__SERVICE_MANAGER_H
 
-#include <QtGlobal>
-
 #include <memory>
 #include <string>
 

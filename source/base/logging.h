@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__LOGGING_H
 #define _ASPIA_BASE__LOGGING_H
 
-#include <QtGlobal>
 #include <experimental/filesystem>
 #include <sstream>
 #include <type_traits>
