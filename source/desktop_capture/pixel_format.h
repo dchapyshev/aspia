@@ -8,7 +8,7 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 #define _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
 
-#include <cstdint>
+#include <QtGlobal>
 
 namespace aspia {
 
@@ -17,13 +17,13 @@ class PixelFormat
 public:
     PixelFormat() = default;
     PixelFormat(const PixelFormat& other);
-    PixelFormat(uint8_t bits_per_pixel,
-                uint16_t red_max,
-                uint16_t green_max,
-                uint16_t blue_max,
-                uint8_t red_shift,
-                uint8_t green_shift,
-                uint8_t blue_shift);
+    PixelFormat(quint8 bits_per_pixel,
+                quint16 red_max,
+                quint16 green_max,
+                quint16 blue_max,
+                quint8 red_shift,
+                quint8 green_shift,
+                quint8 blue_shift);
     ~PixelFormat() = default;
 
     // True color (32 bits per pixel)
@@ -59,16 +59,16 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    uint8_t bitsPerPixel() const;
-    uint8_t bytesPerPixel() const;
+    quint8 bitsPerPixel() const;
+    quint8 bytesPerPixel() const;
 
-    uint16_t redMax() const;
-    uint16_t greenMax() const;
-    uint16_t blueMax() const;
+    quint16 redMax() const;
+    quint16 greenMax() const;
+    quint16 blueMax() const;
 
-    uint8_t redShift() const;
-    uint8_t greenShift() const;
-    uint8_t blueShift() const;
+    quint8 redShift() const;
+    quint8 greenShift() const;
+    quint8 blueShift() const;
 
     bool isValid() const;
     void clear();
@@ -80,16 +80,16 @@ public:
     bool operator!=(const PixelFormat& other) const;
 
 private:
-    uint16_t red_max_ = 0;
-    uint16_t green_max_ = 0;
-    uint16_t blue_max_ = 0;
+    quint16 red_max_ = 0;
+    quint16 green_max_ = 0;
+    quint16 blue_max_ = 0;
 
-    uint8_t red_shift_ = 0;
-    uint8_t green_shift_ = 0;
-    uint8_t blue_shift_ = 0;
+    quint8 red_shift_ = 0;
+    quint8 green_shift_ = 0;
+    quint8 blue_shift_ = 0;
 
-    uint8_t bits_per_pixel_ = 0;
-    uint8_t bytes_per_pixel_ = 0;
+    quint8 bits_per_pixel_ = 0;
+    quint8 bytes_per_pixel_ = 0;
 };
 
 } // namespace aspia

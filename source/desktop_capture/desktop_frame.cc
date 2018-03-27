@@ -13,7 +13,7 @@ namespace aspia {
 DesktopFrame::DesktopFrame(const QSize& size,
                            const PixelFormat& format,
                            int stride,
-                           uint8_t* data)
+                           quint8* data)
     : size_(size),
       format_(format),
       stride_(stride),
@@ -37,22 +37,22 @@ int DesktopFrame::stride() const
     return stride_;
 }
 
-bool DesktopFrame::contains(int32_t x, int32_t y) const
+bool DesktopFrame::contains(int x, int y) const
 {
     return (x > 0 && x <= size_.width() && y > 0 && y <= size_.height());
 }
 
-uint8_t* DesktopFrame::frameData() const
+quint8* DesktopFrame::frameData() const
 {
     return data_;
 }
 
-uint8_t* DesktopFrame::frameDataAtPos(const QPoint& pos) const
+quint8* DesktopFrame::frameDataAtPos(const QPoint& pos) const
 {
     return frameData() + stride() * pos.y() + format_.bytesPerPixel() * pos.x();
 }
 
-uint8_t* DesktopFrame::frameDataAtPos(int32_t x, int32_t y) const
+quint8* DesktopFrame::frameDataAtPos(int x, int y) const
 {
     return frameDataAtPos(QPoint(x, y));
 }

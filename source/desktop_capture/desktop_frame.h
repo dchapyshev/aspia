@@ -21,25 +21,24 @@ class DesktopFrame
 public:
     virtual ~DesktopFrame() = default;
 
-    uint8_t* frameDataAtPos(const QPoint& pos) const;
-    uint8_t* frameDataAtPos(int32_t x, int32_t y) const;
-    uint8_t* frameData() const;
+    quint8* frameDataAtPos(const QPoint& pos) const;
+    quint8* frameDataAtPos(int x, int y) const;
+    quint8* frameData() const;
     const QSize& size() const;
     const PixelFormat& format() const;
     int stride() const;
-    bool contains(int32_t x, int32_t y) const;
+    bool contains(int x, int y) const;
 
     const QRegion& updatedRegion() const;
     QRegion* mutableUpdatedRegion();
 
 protected:
-    DesktopFrame(const QSize& size, const PixelFormat& format,
-                 int stride, uint8_t* data);
+    DesktopFrame(const QSize& size, const PixelFormat& format, int stride, quint8* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
     // the frame is deleted.
-    uint8_t* const data_;
+    quint8* const data_;
 
 private:
     const QSize size_;

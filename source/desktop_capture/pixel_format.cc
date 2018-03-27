@@ -6,7 +6,6 @@
 //
 
 #include "desktop_capture/pixel_format.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -15,13 +14,13 @@ PixelFormat::PixelFormat(const PixelFormat& other)
     set(other);
 }
 
-PixelFormat::PixelFormat(uint8_t bits_per_pixel,
-                         uint16_t red_max,
-                         uint16_t green_max,
-                         uint16_t blue_max,
-                         uint8_t red_shift,
-                         uint8_t green_shift,
-                         uint8_t blue_shift)
+PixelFormat::PixelFormat(quint8 bits_per_pixel,
+                         quint16 red_max,
+                         quint16 green_max,
+                         quint16 blue_max,
+                         quint8 red_shift,
+                         quint8 green_shift,
+                         quint8 blue_shift)
     : bits_per_pixel_(bits_per_pixel),
       bytes_per_pixel_(bits_per_pixel / 8),
       red_max_(red_max),
@@ -94,42 +93,42 @@ PixelFormat PixelFormat::RGB111()
                        0); // blue shift
 }
 
-uint8_t PixelFormat::bitsPerPixel() const
+quint8 PixelFormat::bitsPerPixel() const
 {
     return bits_per_pixel_;
 }
 
-uint8_t PixelFormat::bytesPerPixel() const
+quint8 PixelFormat::bytesPerPixel() const
 {
     return bytes_per_pixel_;
 }
 
-uint16_t PixelFormat::redMax() const
+quint16 PixelFormat::redMax() const
 {
     return red_max_;
 }
 
-uint16_t PixelFormat::greenMax() const
+quint16 PixelFormat::greenMax() const
 {
     return green_max_;
 }
 
-uint16_t PixelFormat::blueMax() const
+quint16 PixelFormat::blueMax() const
 {
     return blue_max_;
 }
 
-uint8_t PixelFormat::redShift() const
+quint8 PixelFormat::redShift() const
 {
     return red_shift_;
 }
 
-uint8_t PixelFormat::greenShift() const
+quint8 PixelFormat::greenShift() const
 {
     return green_shift_;
 }
 
-uint8_t PixelFormat::blueShift() const
+quint8 PixelFormat::blueShift() const
 {
     return blue_shift_;
 }
@@ -166,8 +165,8 @@ void PixelFormat::clear()
 
 bool PixelFormat::isEqual(const PixelFormat& other) const
 {
-    DCHECK(bytes_per_pixel_ == (bits_per_pixel_ / 8));
-    DCHECK(other.bytes_per_pixel_ == (other.bits_per_pixel_ / 8));
+    Q_ASSERT(bytes_per_pixel_ == (bits_per_pixel_ / 8));
+    Q_ASSERT(other.bytes_per_pixel_ == (other.bits_per_pixel_ / 8));
 
     if (bits_per_pixel_ == other.bits_per_pixel_ &&
         red_max_        == other.red_max_        &&

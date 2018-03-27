@@ -26,7 +26,7 @@ private:
     DesktopFrameAligned(const QSize& size,
                       const PixelFormat& format,
                       int stride,
-                      uint8_t* data);
+                      quint8* data);
 
     Q_DISABLE_COPY(DesktopFrameAligned)
 };

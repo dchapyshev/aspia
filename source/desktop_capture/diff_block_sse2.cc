@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-uint8_t diffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_32x32_SSE2(const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;
@@ -45,8 +45,7 @@ uint8_t diffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, i
         sad = _mm_sad_epu8(_mm_loadu_si128(i1 + 7), _mm_loadu_si128(i2 + 7));
         acc = _mm_adds_epu16(acc, sad);
 
-        // This essential means sad = acc >> 64. We only care about the lower
-        // 16 bits.
+        // This essential means sad = acc >> 64. We only care about the lower 16 bits.
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 
@@ -62,7 +61,7 @@ uint8_t diffFullBlock_32x32_SSE2(const uint8_t* image1, const uint8_t* image2, i
     return 0U;
 }
 
-uint8_t diffFullBlock_16x16_SSE2(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 diffFullBlock_16x16_SSE2(const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     __m128i acc = _mm_setzero_si128();
     __m128i sad;
@@ -84,8 +83,7 @@ uint8_t diffFullBlock_16x16_SSE2(const uint8_t* image1, const uint8_t* image2, i
         sad = _mm_sad_epu8(_mm_loadu_si128(i1 + 3), _mm_loadu_si128(i2 + 3));
         acc = _mm_adds_epu16(acc, sad);
 
-        // This essential means sad = acc >> 64. We only care about the lower
-        //16 bits.
+        // This essential means sad = acc >> 64. We only care about the lower 16 bits.
         sad = _mm_shuffle_epi32(acc, 0xEE);
         sad = _mm_adds_epu16(sad, acc);
 

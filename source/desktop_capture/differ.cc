@@ -17,7 +17,7 @@ constexpr int kBytesPerPixel = 4;
 constexpr int kBlockSize = 16;
 constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
-uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_per_row)
+quint8 DiffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     for (int y = 0; y < kBlockSize; ++y)
     {
@@ -39,11 +39,11 @@ uint8_t DiffFullBlock_C(const uint8_t* image1, const uint8_t* image2, int bytes_
 // Note that if we force the capturer to always return images whose width and
 // height are multiples of kBlockSize, then this will never be called.
 //
-uint8_t DiffPartialBlock(const uint8_t* prev_image,
-                         const uint8_t* curr_image,
-                         int bytes_per_row,
-                         int bytes_per_block,
-                         int height)
+quint8 DiffPartialBlock(const quint8* prev_image,
+                        const quint8* curr_image,
+                        int bytes_per_row,
+                        int bytes_per_block,
+                        int height)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -69,11 +69,10 @@ Differ::Differ(const QSize& size)
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
-    diff_info_ = std::make_unique<uint8_t[]>(diff_info_size);
+    diff_info_ = std::make_unique<quint8[]>(diff_info_size);
     memset(diff_info_.get(), 0, diff_info_size);
 
-    // Calc size of partial blocks which may be present on right and bottom
-    // edge.
+    // Calc size of partial blocks which may be present on right and bottom edge.
     partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
     partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
@@ -84,22 +83,22 @@ Differ::Differ(const QSize& size)
 //
 // Identify all of the blocks that contain changed pixels.
 //
-void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_image)
+void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
 {
-    const uint8_t* prev_block_row_start = prev_image;
-    const uint8_t* curr_block_row_start = curr_image;
+    const quint8* prev_block_row_start = prev_image;
+    const quint8* curr_block_row_start = curr_image;
 
     // Offset from the start of one diff_info row to the next.
     const int diff_stride = diff_width_;
 
-    uint8_t* is_diff_row_start = diff_info_.get();
+    quint8* is_diff_row_start = diff_info_.get();
 
     for (int y = 0; y < full_blocks_y_; ++y)
     {
-        const uint8_t* prev_block = prev_block_row_start;
-        const uint8_t* curr_block = curr_block_row_start;
+        const quint8* prev_block = prev_block_row_start;
+        const quint8* curr_block = curr_block_row_start;
 
-        uint8_t* is_different = is_diff_row_start;
+        quint8* is_different = is_diff_row_start;
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
@@ -153,10 +152,10 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
     // the 'partial column' case.
     if (partial_row_height_ != 0)
     {
-        const uint8_t* prev_block = prev_block_row_start;
-        const uint8_t* curr_block = curr_block_row_start;
+        const quint8* prev_block = prev_block_row_start;
+        const quint8* curr_block = curr_block_row_start;
 
-        uint8_t* is_different = is_diff_row_start;
+        quint8* is_different = is_diff_row_start;
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
@@ -190,12 +189,12 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 //
 void Differ::mergeBlocks(QRegion* dirty_region)
 {
-    uint8_t* is_diff_row_start = diff_info_.get();
+    quint8* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
 
     for (int y = 0; y < diff_height_; ++y)
     {
-        uint8_t* is_different = is_diff_row_start;
+        quint8* is_different = is_diff_row_start;
 
         for (int x = 0; x < diff_width_; ++x)
         {
@@ -213,7 +212,7 @@ void Differ::mergeBlocks(QRegion* dirty_region)
                 // We can keep looking until we find an unchanged block because
                 // we have a boundary block which is never marked as having
                 // diffs.
-                uint8_t* right = is_different + 1;
+                quint8* right = is_different + 1;
 
                 while (*right != 0)
                 {
@@ -224,7 +223,7 @@ void Differ::mergeBlocks(QRegion* dirty_region)
                 // Group with blocks below.
                 // The entire width of blocks that we matched above much match
                 // for each row that we add.
-                uint8_t* bottom = is_different;
+                quint8* bottom = is_different;
                 bool found_new_row;
 
                 do
@@ -270,8 +269,8 @@ void Differ::mergeBlocks(QRegion* dirty_region)
     }
 }
 
-void Differ::calcDirtyRegion(const uint8_t* prev_image,
-                             const uint8_t* curr_image,
+void Differ::calcDirtyRegion(const quint8* prev_image,
+                             const quint8* curr_image,
                              QRegion* dirty_region)
 {
     *dirty_region = QRegion();

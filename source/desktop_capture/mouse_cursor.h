@@ -20,24 +20,24 @@ class MouseCursor
 public:
     ~MouseCursor() = default;
 
-    static std::unique_ptr<MouseCursor> create(std::unique_ptr<uint8_t[]> data,
+    static std::unique_ptr<MouseCursor> create(std::unique_ptr<quint8[]> data,
                                                const QSize& size,
                                                const QPoint& hotspot);
 
     const QSize& size() const;
     const QPoint& hotSpot() const;
-    uint8_t* data() const;
+    quint8* data() const;
 
     int stride() const;
 
     bool isEqual(const MouseCursor& other);
 
 private:
-    MouseCursor(std::unique_ptr<uint8_t[]> data,
+    MouseCursor(std::unique_ptr<quint8[]> data,
                 const QSize& size,
                 const QPoint& hotspot);
 
-    std::unique_ptr<uint8_t[]> const data_;
+    std::unique_ptr<quint8[]> const data_;
     const QSize size_;
     const QPoint hotspot_;
 };
