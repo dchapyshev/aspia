@@ -62,6 +62,8 @@ private:
     int scroll_timer_id_ = -1;
     QPoint scroll_delta_;
 
+    bool is_maximized_ = false;
+
     Q_DISABLE_COPY(DesktopWindow)
 };
 

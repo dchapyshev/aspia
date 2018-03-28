@@ -76,19 +76,34 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
 
     panel_ = new DesktopPanel(this);
 
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
+    connect(QApplication::clipboard(), &QClipboard::dataChanged,
+            this, &DesktopWindow::clipboardDataChanged);
 
-    connect(panel_, SIGNAL(keySequence(int)), desktop_, SLOT(executeKeySequense(int)));
-    connect(panel_, SIGNAL(switchToFullscreen()), SLOT(showFullScreen()));
-    connect(panel_, SIGNAL(switchToNormal()), SLOT(showNormal()));
-    connect(panel_, SIGNAL(switchToAutosize()), SLOT(autosizeWindow()));
-    connect(panel_, SIGNAL(settingsButton()), SLOT(changeSettings()));
+    connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
+    connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
+    connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
 
-    connect(desktop_, SIGNAL(sendPointerEvent(const QPoint&, quint32)),
-            SLOT(onPointerEvent(const QPoint&, quint32)));
+    connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
+    {
+        if (fullscreen)
+        {
+            is_maximized_ = isMaximized();
+            if (is_maximized_)
+                showNormal();
 
-    connect(desktop_, SIGNAL(sendKeyEvent(quint32, quint32)),
-            SIGNAL(sendKeyEvent(quint32, quint32)));
+            showFullScreen();
+        }
+        else
+        {
+            if (is_maximized_)
+                showMaximized();
+            else
+                showNormal();
+        }
+    });
+
+    connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
+    connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
 }
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
@@ -97,7 +112,7 @@ void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
 
     desktop_->resizeDesktopFrame(screen_size);
 
-    if (screen_size != prev_size)
+    if (screen_size != prev_size && !isMaximized() && !isFullScreen())
         autosizeWindow();
 }
 
@@ -140,23 +155,28 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
     if (client_area.width() < desktop_->width())
     {
         if (cursor.x() > client_area.width() - 50)
-            scroll_delta_.setX(20);
+            scroll_delta_.setX(10);
         else if (cursor.x() < 50)
-            scroll_delta_.setX(-20);
+            scroll_delta_.setX(-10);
     }
 
     if (client_area.height() < desktop_->height())
     {
         if (cursor.y() > client_area.height() - 50)
-            scroll_delta_.setY(20);
+            scroll_delta_.setY(10);
         else if (cursor.y() < 50)
-            scroll_delta_.setY(-20);
+            scroll_delta_.setY(-10);
     }
 
     if (!scroll_delta_.isNull())
-        scroll_timer_id_ = startTimer(20);
-    else
+    {
+        scroll_timer_id_ = startTimer(15);
+    }
+    else if (scroll_timer_id_ != -1)
+    {
         killTimer(scroll_timer_id_);
+        scroll_timer_id_ = -1;
+    }
 
     emit sendPointerEvent(pos, mask);
 }
@@ -193,18 +213,16 @@ void DesktopWindow::autosizeWindow()
 
     if (window_size.width() < desktop_rect.width() && window_size.height() < desktop_rect.height())
     {
-        if (!isMaximized())
-        {
-            move(desktop_rect.width() / 2 - window_size.width() / 2,
-                 desktop_rect.height() / 2 - window_size.height() / 2);
-            resize(window_size.width(), window_size.height());
-        }
+        showNormal();
 
-        return;
+        resize(window_size.width(), window_size.height());
+        move(desktop_rect.width() / 2 - window_size.width() / 2,
+             desktop_rect.height() / 2 - window_size.height() / 2);
     }
-
-    if (!isMaximized())
+    else
+    {
         showMaximized();
+    }
 }
 
 void DesktopWindow::timerEvent(QTimerEvent* event)

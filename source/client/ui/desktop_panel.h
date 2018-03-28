@@ -22,8 +22,7 @@ public:
 
 signals:
     void keySequence(int key_secuence);
-    void switchToFullscreen();
-    void switchToNormal();
+    void switchToFullscreen(bool fullscreen);
     void switchToAutosize();
     void settingsButton();
 
