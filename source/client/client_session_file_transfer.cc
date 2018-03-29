@@ -72,17 +72,14 @@ void ClientSessionFileTransfer::startSession()
     file_manager_ = new FileManagerWindow(computer_);
 
     // When the window is closed, we close the session.
-    connect(file_manager_, SIGNAL(windowClose()), this, SIGNAL(sessionClosed()));
+    connect(file_manager_, &FileManagerWindow::windowClose,
+            this, &ClientSessionFileTransfer::sessionClosed);
 
-    connect(file_manager_,
-            SIGNAL(localRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            worker_,
-            SLOT(executeRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(file_manager_, &FileManagerWindow::localRequest,
+            worker_, &FileWorker::executeRequest);
 
-    connect(file_manager_,
-            SIGNAL(remoteRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            this,
-            SLOT(remoteRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(file_manager_, &FileManagerWindow::remoteRequest,
+            this, &ClientSessionFileTransfer::remoteRequest);
 
     file_manager_->show();
     file_manager_->activateWindow();
@@ -93,7 +90,8 @@ void ClientSessionFileTransfer::closeSession()
 {
     // If the end of the session is not initiated by the user, then we do not send the session
     // end signal.
-    disconnect(file_manager_, SIGNAL(windowClose()), this, SIGNAL(sessionClosed()));
+    disconnect(file_manager_, &FileManagerWindow::windowClose,
+               this, &ClientSessionFileTransfer::sessionClosed);
     file_manager_->close();
 }
 

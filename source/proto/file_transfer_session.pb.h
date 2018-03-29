@@ -952,19 +952,19 @@ class UploadRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // string file_path = 1;
-  void clear_file_path();
-  static const int kFilePathFieldNumber = 1;
-  const ::std::string& file_path() const;
-  void set_file_path(const ::std::string& value);
+  // string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
   #if LANG_CXX11
-  void set_file_path(::std::string&& value);
+  void set_path(::std::string&& value);
   #endif
-  void set_file_path(const char* value);
-  void set_file_path(const char* value, size_t size);
-  ::std::string* mutable_file_path();
-  ::std::string* release_file_path();
-  void set_allocated_file_path(::std::string* file_path);
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
 
   // bool overwrite = 2;
   void clear_overwrite();
@@ -976,7 +976,7 @@ class UploadRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr file_path_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
   bool overwrite_;
   mutable int _cached_size_;
   friend struct ::protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
@@ -1064,25 +1064,25 @@ class DownloadRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // string file_path = 1;
-  void clear_file_path();
-  static const int kFilePathFieldNumber = 1;
-  const ::std::string& file_path() const;
-  void set_file_path(const ::std::string& value);
+  // string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
   #if LANG_CXX11
-  void set_file_path(::std::string&& value);
+  void set_path(::std::string&& value);
   #endif
-  void set_file_path(const char* value);
-  void set_file_path(const char* value, size_t size);
-  ::std::string* mutable_file_path();
-  ::std::string* release_file_path();
-  void set_allocated_file_path(::std::string* file_path);
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
 
   // @@protoc_insertion_point(class_scope:proto.file_transfer.DownloadRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr file_path_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
   mutable int _cached_size_;
   friend struct ::protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
   friend void ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDownloadRequestImpl();
@@ -2283,57 +2283,57 @@ inline void FileListRequest::set_allocated_path(::std::string* path) {
 
 // UploadRequest
 
-// string file_path = 1;
-inline void UploadRequest::clear_file_path() {
-  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string path = 1;
+inline void UploadRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& UploadRequest::file_path() const {
-  // @@protoc_insertion_point(field_get:proto.file_transfer.UploadRequest.file_path)
-  return file_path_.GetNoArena();
+inline const ::std::string& UploadRequest::path() const {
+  // @@protoc_insertion_point(field_get:proto.file_transfer.UploadRequest.path)
+  return path_.GetNoArena();
 }
-inline void UploadRequest::set_file_path(const ::std::string& value) {
+inline void UploadRequest::set_path(const ::std::string& value) {
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.file_transfer.UploadRequest.file_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.file_transfer.UploadRequest.path)
 }
 #if LANG_CXX11
-inline void UploadRequest::set_file_path(::std::string&& value) {
+inline void UploadRequest::set_path(::std::string&& value) {
   
-  file_path_.SetNoArena(
+  path_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:proto.file_transfer.UploadRequest.file_path)
+  // @@protoc_insertion_point(field_set_rvalue:proto.file_transfer.UploadRequest.path)
 }
 #endif
-inline void UploadRequest::set_file_path(const char* value) {
+inline void UploadRequest::set_path(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.file_transfer.UploadRequest.file_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.file_transfer.UploadRequest.path)
 }
-inline void UploadRequest::set_file_path(const char* value, size_t size) {
+inline void UploadRequest::set_path(const char* value, size_t size) {
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.file_transfer.UploadRequest.file_path)
+  // @@protoc_insertion_point(field_set_pointer:proto.file_transfer.UploadRequest.path)
 }
-inline ::std::string* UploadRequest::mutable_file_path() {
+inline ::std::string* UploadRequest::mutable_path() {
   
-  // @@protoc_insertion_point(field_mutable:proto.file_transfer.UploadRequest.file_path)
-  return file_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:proto.file_transfer.UploadRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* UploadRequest::release_file_path() {
-  // @@protoc_insertion_point(field_release:proto.file_transfer.UploadRequest.file_path)
+inline ::std::string* UploadRequest::release_path() {
+  // @@protoc_insertion_point(field_release:proto.file_transfer.UploadRequest.path)
   
-  return file_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void UploadRequest::set_allocated_file_path(::std::string* file_path) {
-  if (file_path != NULL) {
+inline void UploadRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
     
   } else {
     
   }
-  file_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), file_path);
-  // @@protoc_insertion_point(field_set_allocated:proto.file_transfer.UploadRequest.file_path)
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:proto.file_transfer.UploadRequest.path)
 }
 
 // bool overwrite = 2;
@@ -2354,57 +2354,57 @@ inline void UploadRequest::set_overwrite(bool value) {
 
 // DownloadRequest
 
-// string file_path = 1;
-inline void DownloadRequest::clear_file_path() {
-  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// string path = 1;
+inline void DownloadRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& DownloadRequest::file_path() const {
-  // @@protoc_insertion_point(field_get:proto.file_transfer.DownloadRequest.file_path)
-  return file_path_.GetNoArena();
+inline const ::std::string& DownloadRequest::path() const {
+  // @@protoc_insertion_point(field_get:proto.file_transfer.DownloadRequest.path)
+  return path_.GetNoArena();
 }
-inline void DownloadRequest::set_file_path(const ::std::string& value) {
+inline void DownloadRequest::set_path(const ::std::string& value) {
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:proto.file_transfer.DownloadRequest.file_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:proto.file_transfer.DownloadRequest.path)
 }
 #if LANG_CXX11
-inline void DownloadRequest::set_file_path(::std::string&& value) {
+inline void DownloadRequest::set_path(::std::string&& value) {
   
-  file_path_.SetNoArena(
+  path_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:proto.file_transfer.DownloadRequest.file_path)
+  // @@protoc_insertion_point(field_set_rvalue:proto.file_transfer.DownloadRequest.path)
 }
 #endif
-inline void DownloadRequest::set_file_path(const char* value) {
+inline void DownloadRequest::set_path(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:proto.file_transfer.DownloadRequest.file_path)
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:proto.file_transfer.DownloadRequest.path)
 }
-inline void DownloadRequest::set_file_path(const char* value, size_t size) {
+inline void DownloadRequest::set_path(const char* value, size_t size) {
   
-  file_path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:proto.file_transfer.DownloadRequest.file_path)
+  // @@protoc_insertion_point(field_set_pointer:proto.file_transfer.DownloadRequest.path)
 }
-inline ::std::string* DownloadRequest::mutable_file_path() {
+inline ::std::string* DownloadRequest::mutable_path() {
   
-  // @@protoc_insertion_point(field_mutable:proto.file_transfer.DownloadRequest.file_path)
-  return file_path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:proto.file_transfer.DownloadRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* DownloadRequest::release_file_path() {
-  // @@protoc_insertion_point(field_release:proto.file_transfer.DownloadRequest.file_path)
+inline ::std::string* DownloadRequest::release_path() {
+  // @@protoc_insertion_point(field_release:proto.file_transfer.DownloadRequest.path)
   
-  return file_path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void DownloadRequest::set_allocated_file_path(::std::string* file_path) {
-  if (file_path != NULL) {
+inline void DownloadRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
     
   } else {
     
   }
-  file_path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), file_path);
-  // @@protoc_insertion_point(field_set_allocated:proto.file_transfer.DownloadRequest.file_path)
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:proto.file_transfer.DownloadRequest.path)
 }
 
 // -------------------------------------------------------------------

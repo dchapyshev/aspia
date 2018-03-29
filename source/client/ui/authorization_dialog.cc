@@ -20,15 +20,11 @@ AuthorizationDialog::AuthorizationDialog(proto::Computer* computer, QWidget* par
     ui.edit_password->setText(QString::fromUtf8(computer_->password().c_str(),
                                                 computer_->password().size()));
 
-    connect(ui.button_show_password,
-            SIGNAL(toggled(bool)),
-            this,
-            SLOT(OnShowPasswordButtonToggled(bool)));
+    connect(ui.button_show_password, &QPushButton::toggled,
+            this, &AuthorizationDialog::OnShowPasswordButtonToggled);
 
-    connect(ui.button_box,
-            SIGNAL(clicked(QAbstractButton*)),
-            this,
-            SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &AuthorizationDialog::OnButtonBoxClicked);
 }
 
 void AuthorizationDialog::OnShowPasswordButtonToggled(bool checked)

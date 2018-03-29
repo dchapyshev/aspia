@@ -85,18 +85,20 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     }
     else
     {
+        Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+
         ui.checkbox_cursor_shape->setEnabled(false);
         ui.checkbox_clipboard->setEnabled(false);
     }
 
-    connect(ui.combo_codec, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(OnCodecChanged(int)));
+    connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &DesktopConfigDialog::OnCodecChanged);
 
-    connect(ui.slider_compression_ratio, SIGNAL(valueChanged(int)),
-            this, SLOT(OnCompressionRatioChanged(int)));
+    connect(ui.slider_compression_ratio, &QSlider::valueChanged,
+            this, &DesktopConfigDialog::OnCompressionRatioChanged);
 
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &DesktopConfigDialog::OnButtonBoxClicked);
 }
 
 void DesktopConfigDialog::OnCodecChanged(int item_index)
@@ -153,6 +155,7 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
                     break;
 
                 default:
+                    qFatal("Unexpected color depth");
                     break;
             }
 
@@ -165,7 +168,7 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
 
         if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            uint32_t flags = 0;
+            quint32 flags = 0;
 
             if (ui.checkbox_cursor_shape->isChecked())
                 flags |= proto::desktop::Config::ENABLE_CURSOR_SHAPE;

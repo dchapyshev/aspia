@@ -82,11 +82,9 @@ UserDialog::UserDialog(UserList* user_list, User* user, QWidget* parent)
                      proto::auth::SESSION_TYPE_SYSTEM_INFO);
 #endif
 
-    connect(ui.button_check_all, SIGNAL(pressed()), this, SLOT(onCheckAllButtonPressed()));
-    connect(ui.button_check_none, SIGNAL(pressed()), this, SLOT(onCheckNoneButtonPressed()));
-
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(onButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_check_all, &QPushButton::pressed, this, &UserDialog::onCheckAllButtonPressed);
+    connect(ui.button_check_none, &QPushButton::pressed, this, &UserDialog::onCheckNoneButtonPressed);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 }
 
 bool UserDialog::eventFilter(QObject* object, QEvent* event)

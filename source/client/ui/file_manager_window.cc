@@ -43,13 +43,11 @@ FileManagerWindow::FileManagerWindow(proto::Computer* computer, QWidget* parent)
 
     ui.splitter->setSizes(sizes);
 
-    connect(ui.local_panel,
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            SIGNAL(localRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(ui.local_panel, &FilePanel::request,
+            this, &FileManagerWindow::localRequest);
 
-    connect(ui.remote_panel,
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            SIGNAL(remoteRequest(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(ui.remote_panel, &FilePanel::request,
+            this, &FileManagerWindow::remoteRequest);
 }
 
 void FileManagerWindow::refresh()

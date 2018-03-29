@@ -55,7 +55,7 @@ proto::file_transfer::Request FileRequest::removeRequest(const QString& path)
 proto::file_transfer::Request FileRequest::downloadRequest(const QString& file_path)
 {
     proto::file_transfer::Request request;
-    request.mutable_download_request()->set_file_path(file_path.toUtf8());
+    request.mutable_download_request()->set_path(file_path.toUtf8());
     return request;
 }
 
@@ -63,7 +63,7 @@ proto::file_transfer::Request FileRequest::downloadRequest(const QString& file_p
 proto::file_transfer::Request FileRequest::uploadRequest(const QString& file_path, bool overwrite)
 {
     proto::file_transfer::Request request;
-    request.mutable_upload_request()->set_file_path(file_path.toUtf8());
+    request.mutable_upload_request()->set_path(file_path.toUtf8());
     request.mutable_upload_request()->set_overwrite(overwrite);
     return request;
 }

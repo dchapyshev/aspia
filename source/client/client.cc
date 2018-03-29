@@ -31,27 +31,28 @@ Client::Client(const proto::Computer& computer, QObject* parent)
     status_dialog_ = new StatusDialog();
 
     // When connected over a network.
-    connect(channel_, SIGNAL(channelConnected()), this, SLOT(onChannelConnected()));
+    connect(channel_, &Channel::channelConnected, this, &Client::onChannelConnected);
 
     // When a network error occurs.
-    connect(channel_, SIGNAL(channelError(const QString&)),
-            this, SLOT(onChannelError(const QString&)));
+    connect(channel_, &Channel::channelError, this, &Client::onChannelError);
 
     // The first message from the host is an authorization request.
-    connect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-            this, SLOT(onAuthorizationRequest(const QByteArray&)));
+    connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
 
     // If the network connection is disconnected.
-    connect(channel_, SIGNAL(channelDisconnected()), this, SLOT(onChannelDisconnected()));
+    connect(channel_, &Channel::channelDisconnected, this, &Client::onChannelDisconnected);
 
-    // When the status dialog is finished, we call the client's termination.
-    connect(status_dialog_, SIGNAL(finished(int)), this, SIGNAL(clientTerminated()));
+    connect(status_dialog_, &StatusDialog::finished, this, [this](int result)
+    {
+        // When the status dialog is finished, we call the client's termination.
+        clientTerminated();
 
-    // When the status dialog is finished, we stop the connection.
-    connect(status_dialog_, SIGNAL(finished(int)), channel_, SLOT(stopChannel()));
+        // When the status dialog is finished, we stop the connection.
+        channel_->stopChannel();
 
-    // Delete the dialog after the finish.
-    connect(status_dialog_, SIGNAL(finished(int)), status_dialog_, SLOT(deleteLater()));
+        // Delete the dialog after the finish.
+        status_dialog_->deleteLater();
+    });
 
     QString address = QString::fromUtf8(computer_.address().c_str(), computer_.address().size());
     int port = computer_.port();
@@ -90,7 +91,7 @@ void Client::onAuthorizationRequest(const QByteArray& buffer)
     }
 
     AuthorizationDialog dialog(&computer_, status_dialog_);
-    if (dialog.exec() == QDialog::Rejected)
+    if (dialog.exec() == AuthorizationDialog::Rejected)
     {
         status_dialog_->addStatus(tr("Authorization is canceled by the user."));
         return;
@@ -110,10 +111,8 @@ void Client::onAuthorizationRequest(const QByteArray& buffer)
     response.set_username(computer_.username());
     response.set_key(client_key.data(), client_key.size());
 
-    disconnect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-               this, SLOT(onAuthorizationRequest(const QByteArray&)));
-    connect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-            this, SLOT(onAuthorizationResult(const QByteArray&)));
+    disconnect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
+    connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationResult);
 
     channel_->writeMessage(SerializeMessage(response));
 }
@@ -145,8 +144,7 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
     if (result.status() != proto::auth::STATUS_SUCCESS)
         return;
 
-    disconnect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-               this, SLOT(onAuthorizationResult(const QByteArray&)));
+    disconnect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationResult);
 
     switch (computer_.session_type())
     {
@@ -168,23 +166,20 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
     }
 
     // Messages received from the network are sent to the session.
-    connect(channel_, SIGNAL(channelMessage(const QByteArray&)),
-            session_, SLOT(readMessage(const QByteArray&)));
-
-    connect(session_, SIGNAL(sessionMessage(const QByteArray&)),
-            channel_, SLOT(writeMessage(const QByteArray&)));
-
-    connect(channel_, SIGNAL(channelDisconnected()), session_, SLOT(closeSession()));
+    connect(channel_, &Channel::channelMessage, session_, &ClientSession::readMessage);
+    connect(session_, &ClientSession::sessionMessage, channel_, &Channel::writeMessage);
+    connect(channel_, &Channel::channelDisconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, SIGNAL(sessionClosed()), channel_, SLOT(stopChannel()));
-    connect(session_, SIGNAL(sessionClosed()), status_dialog_, SLOT(close()));
+    connect(session_, &ClientSession::sessionClosed, channel_, &Channel::stopChannel);
+    connect(session_, &ClientSession::sessionClosed, status_dialog_, &StatusDialog::close);
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
-    connect(session_, SIGNAL(sessionError(const QString&)),
-            status_dialog_, SLOT(addStatus(const QString&)));
-    connect(session_, SIGNAL(sessionError(const QString&)),
-            channel_, SLOT(stopChannel()));
+    connect(session_, &ClientSession::sessionError, this, [this](const QString& message)
+    {
+        status_dialog_->addStatus(message);
+        channel_->stopChannel();
+    });
 
     status_dialog_->addStatus(tr("Session started."));
     status_dialog_->hide();

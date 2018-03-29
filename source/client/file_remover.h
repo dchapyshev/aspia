@@ -24,7 +24,7 @@ class FileRemover : public QObject
     Q_OBJECT
 
 public:
-    FileRemover(QObject* parent = nullptr);
+    explicit FileRemover(QObject* parent = nullptr);
     ~FileRemover();
 
     enum Action

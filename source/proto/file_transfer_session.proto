@@ -76,13 +76,13 @@ message FileListRequest
 
 message UploadRequest
 {
-    string file_path = 1;
+    string path = 1;
     bool overwrite = 2;
 }
 
 message DownloadRequest
 {
-   string file_path = 1;
+   string path = 1;
 }
 
 message PacketRequest

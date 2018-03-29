@@ -26,17 +26,14 @@ constexpr char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
 ClientSessionDesktopManage::ClientSessionDesktopManage(proto::Computer* computer, QObject* parent)
     : ClientSessionDesktopView(computer, parent)
 {
-    connect(desktop_window_, SIGNAL(sendKeyEvent(quint32, quint32)),
-            this, SLOT(onSendKeyEvent(quint32, quint32)),
-            Qt::DirectConnection);
+    connect(desktop_window_, &DesktopWindow::sendKeyEvent,
+            this, &ClientSessionDesktopManage::onSendKeyEvent);
 
-    connect(desktop_window_, SIGNAL(sendPointerEvent(const QPoint&, quint32)),
-            this, SLOT(onSendPointerEvent(const QPoint&, quint32)),
-            Qt::DirectConnection);
+    connect(desktop_window_, &DesktopWindow::sendPointerEvent,
+            this, &ClientSessionDesktopManage::onSendPointerEvent);
 
-    connect(desktop_window_, SIGNAL(sendClipboardEvent(const QString&)),
-            this, SLOT(onSendClipboardEvent(const QString&)),
-            Qt::DirectConnection);
+    connect(desktop_window_, &DesktopWindow::sendClipboardEvent,
+            this, &ClientSessionDesktopManage::onSendClipboardEvent);
 }
 
 void ClientSessionDesktopManage::readMessage(const QByteArray& buffer)

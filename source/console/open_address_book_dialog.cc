@@ -7,8 +7,6 @@
 
 #include "console/open_address_book_dialog.h"
 
-#include "base/logging.h"
-
 namespace aspia {
 
 OpenAddressBookDialog::OpenAddressBookDialog(
@@ -17,15 +15,11 @@ OpenAddressBookDialog::OpenAddressBookDialog(
 {
     ui.setupUi(this);
 
-    connect(ui.button_show_password,
-            SIGNAL(toggled(bool)),
-            this,
-            SLOT(OnShowPasswordButtonToggled(bool)));
+    connect(ui.button_show_password, &QPushButton::toggled,
+            this, &OpenAddressBookDialog::OnShowPasswordButtonToggled);
 
-    connect(ui.button_box,
-            SIGNAL(clicked(QAbstractButton*)),
-            this,
-            SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &OpenAddressBookDialog::OnButtonBoxClicked);
 
     switch (encryption_type)
     {
@@ -38,7 +32,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(
             break;
 
         default:
-            DLOG(LS_FATAL) << "Unknown encryption type: " << encryption_type;
+            qFatal("Unknown encryption type: %d", encryption_type);
             break;
     }
 
@@ -68,13 +62,9 @@ void OpenAddressBookDialog::OnShowPasswordButtonToggled(bool checked)
 void OpenAddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
-    {
         accept();
-    }
     else
-    {
         reject();
-    }
 
     close();
 }

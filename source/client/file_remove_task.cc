@@ -16,13 +16,6 @@ FileRemoveTask::FileRemoveTask(const QString& path, bool is_directory)
     // Nothing
 }
 
-FileRemoveTask::FileRemoveTask(QString&& path, bool is_directory) noexcept
-    : path_(std::move(path)),
-      is_directory_(is_directory)
-{
-    // Nothing
-}
-
 FileRemoveTask::FileRemoveTask(const FileRemoveTask& other) = default;
 FileRemoveTask& FileRemoveTask::operator=(const FileRemoveTask& other) = default;
 

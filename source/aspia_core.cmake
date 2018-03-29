@@ -127,6 +127,16 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/file_request.h
     ${PROJECT_SOURCE_DIR}/client/file_status.cc
     ${PROJECT_SOURCE_DIR}/client/file_status.h
+    ${PROJECT_SOURCE_DIR}/client/file_transfer.cc
+    ${PROJECT_SOURCE_DIR}/client/file_transfer.h
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.cc
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.h
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_queue_builder.cc
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_queue_builder.h
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_task.cc
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.cc
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.h
     ${PROJECT_SOURCE_DIR}/client/file_worker.cc
     ${PROJECT_SOURCE_DIR}/client/file_worker.h)
 

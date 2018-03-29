@@ -20,24 +20,27 @@ UserListDialog::UserListDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.tree_users, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(onContextMenu(const QPoint&)));
+    connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
+            this, &UserListDialog::onContextMenu);
 
-    connect(ui.tree_users, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-            this, SLOT(onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(ui.tree_users, &QTreeWidget::currentItemChanged,
+            this, &UserListDialog::onCurrentItemChanged);
 
-    connect(ui.tree_users, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-            this, SLOT(onModifyUser()));
+    connect(ui.tree_users, &QTreeWidget::itemDoubleClicked,
+            [this](QTreeWidgetItem* /* item */, int /* column */)
+    {
+        onModifyUser();
+    });
 
-    connect(ui.action_add, SIGNAL(triggered()), this, SLOT(onAddUser()));
-    connect(ui.action_modify, SIGNAL(triggered()), this, SLOT(onModifyUser()));
-    connect(ui.action_delete, SIGNAL(triggered()), this, SLOT(onDeleteUser()));
-    connect(ui.button_add, SIGNAL(pressed()), this, SLOT(onAddUser()));
-    connect(ui.button_modify, SIGNAL(pressed()), this, SLOT(onModifyUser()));
-    connect(ui.button_delete, SIGNAL(pressed()), this, SLOT(onDeleteUser()));
+    connect(ui.action_add, &QAction::triggered, this, &UserListDialog::onAddUser);
+    connect(ui.action_modify, &QAction::triggered, this, &UserListDialog::onModifyUser);
+    connect(ui.action_delete, &QAction::triggered, this, &UserListDialog::onDeleteUser);
+    connect(ui.button_add, &QPushButton::pressed, this, &UserListDialog::onAddUser);
+    connect(ui.button_modify, &QPushButton::pressed, this, &UserListDialog::onModifyUser);
+    connect(ui.button_delete, &QPushButton::pressed, this, &UserListDialog::onDeleteUser);
 
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(onButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &UserListDialog::onButtonBoxClicked);
 
     user_list_ = ReadUserList();
     reloadUserList();

@@ -34,20 +34,14 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 {
     ui.setupUi(this);
 
-    connect(ui.button_box,
-            SIGNAL(clicked(QAbstractButton*)),
-            this,
-            SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &AddressBookDialog::OnButtonBoxClicked);
 
-    connect(ui.combo_encryption,
-            SIGNAL(currentIndexChanged(int)),
-            this,
-            SLOT(OnEncryptionTypedChanged(int)));
+    connect(ui.combo_encryption, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &AddressBookDialog::OnEncryptionTypedChanged);
 
-    connect(ui.button_show_password,
-            SIGNAL(toggled(bool)),
-            this,
-            SLOT(OnShowPasswordButtonToggled(bool)));
+    connect(ui.button_show_password, &QPushButton::toggled,
+            this, &AddressBookDialog::OnShowPasswordButtonToggled);
 
     ui.combo_encryption->addItem(tr("Without Encryption"),
                                  QVariant(proto::AddressBook::ENCRYPTION_TYPE_NONE));

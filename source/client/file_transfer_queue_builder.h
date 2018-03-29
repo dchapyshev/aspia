@@ -1,33 +1,34 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_remove_queue_builder.h
+// FILE:            client/file_transfer_queue_builder.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
-#define _ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#ifndef _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
+#define _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
 
 #include <QObject>
 #include <QQueue>
+#include <QPair>
 
-#include "client/file_remove_task.h"
+#include "client/file_transfer_task.h"
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
 
-// The class prepares the task queue to perform the deletion.
-class FileRemoveQueueBuilder : public QObject
+// The class prepares the task queue to perform the downloading/uploading.
+class FileTransferQueueBuilder : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileRemoveQueueBuilder(QObject* parent = nullptr);
-    ~FileRemoveQueueBuilder();
+    explicit FileTransferQueueBuilder(QObject* parent = nullptr);
+    ~FileTransferQueueBuilder();
 
     // Returns the queue of tasks.
-    QQueue<FileRemoveTask> taskQueue() const;
+    QQueue<FileTransferTask> taskQueue() const;
 
 signals:
     // Signals about the start of execution.
@@ -45,22 +46,28 @@ signals:
 
 public slots:
     // Starts building of the task queue.
-    void start(const QList<FileRemoveTask>& tasks);
+    void start(const QString& source_path,
+               const QString& target_path,
+               const QList<QPair<QString, bool>>& items);
 
     // Reads the reply to the request.
     void reply(const proto::file_transfer::Request& request,
                const proto::file_transfer::Reply& reply);
 
 private:
+    void addPendingTask(const QString& source_dir,
+                        const QString& target_dir,
+                        const QString& item_name,
+                        bool is_directory);
     void processNextPendingTask();
     void processError(const QString& message);
 
-    QQueue<FileRemoveTask> pending_tasks_;
-    QQueue<FileRemoveTask> tasks_;
+    QQueue<FileTransferTask> pending_tasks_;
+    QQueue<FileTransferTask> tasks_;
 
-    Q_DISABLE_COPY(FileRemoveQueueBuilder)
+    Q_DISABLE_COPY(FileTransferQueueBuilder)
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__FILE_REMOVE_QUEUE_BUILDER_H
+#endif // _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H

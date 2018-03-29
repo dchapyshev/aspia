@@ -35,7 +35,7 @@ public slots:
 
 private slots:
     void onConnected();
-    void onError();
+    void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
 

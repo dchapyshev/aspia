@@ -33,52 +33,65 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     restoreGeometry(settings.value("WindowGeometry").toByteArray());
     restoreState(settings.value("WindowState").toByteArray());
 
-    connect(ui.action_new, SIGNAL(triggered()),
-            this, SLOT(OnNewAction()));
-    connect(ui.action_open, SIGNAL(triggered()),
-            this, SLOT(OnOpenAction()));
-    connect(ui.action_save, SIGNAL(triggered()),
-            this, SLOT(OnSaveAction()));
-    connect(ui.action_save_as, SIGNAL(triggered()),
-            this, SLOT(OnSaveAsAction()));
-    connect(ui.action_close, SIGNAL(triggered()),
-            this, SLOT(OnCloseAction()));
-    connect(ui.action_address_book_properties, SIGNAL(triggered()),
-            this, SLOT(OnAddressBookPropertiesAction()));
-    connect(ui.action_add_computer, SIGNAL(triggered()),
-            this, SLOT(OnAddComputerAction()));
-    connect(ui.action_modify_computer, SIGNAL(triggered()),
-            this, SLOT(OnModifyComputerAction()));
-    connect(ui.action_delete_computer, SIGNAL(triggered()),
-            this, SLOT(OnDeleteComputerAction()));
-    connect(ui.action_add_computer_group, SIGNAL(triggered()),
-            this, SLOT(OnAddComputerGroupAction()));
-    connect(ui.action_modify_computer_group, SIGNAL(triggered()),
-            this, SLOT(OnModifyComputerGroupAction()));
-    connect(ui.action_delete_computer_group, SIGNAL(triggered()),
-            this, SLOT(OnDeleteComputerGroupAction()));
-    connect(ui.action_online_help, SIGNAL(triggered()), this, SLOT(OnOnlineHelpAction()));
-    connect(ui.action_exit, SIGNAL(triggered()), this, SLOT(OnExitAction()));
-    connect(ui.tree_group, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(OnGroupItemClicked(QTreeWidgetItem*, int)));
-    connect(ui.tree_group, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(OnGroupContextMenu(const QPoint&)));
-    connect(ui.tree_group, SIGNAL(itemCollapsed(QTreeWidgetItem*)),
-            this, SLOT(OnGroupItemCollapsed(QTreeWidgetItem*)));
-    connect(ui.tree_group, SIGNAL(itemExpanded(QTreeWidgetItem*)),
-            this, SLOT(OnGroupItemExpanded(QTreeWidgetItem*)));
-    connect(ui.tree_computer, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
-            this, SLOT(OnComputerItemClicked(QTreeWidgetItem*, int)));
-    connect(ui.tree_computer, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(OnComputerContextMenu(const QPoint&)));
-    connect(ui.action_desktop_manage, SIGNAL(toggled(bool)),
-            this, SLOT(OnDesktopManageSessionToggled(bool)));
-    connect(ui.action_desktop_view, SIGNAL(toggled(bool)),
-            this, SLOT(OnDesktopViewSessionToggled(bool)));
-    connect(ui.action_file_transfer, SIGNAL(toggled(bool)),
-            this, SLOT(OnFileTransferSessionToggled(bool)));
-    connect(ui.action_system_info, SIGNAL(toggled(bool)),
-            this, SLOT(OnSystemInfoSessionToggled(bool)));
+    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::OnNewAction);
+    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::OnOpenAction);
+    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::OnSaveAction);
+    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::OnSaveAsAction);
+    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::OnCloseAction);
+
+    connect(ui.action_address_book_properties, &QAction::triggered,
+            this, &ConsoleWindow::OnAddressBookPropertiesAction);
+
+    connect(ui.action_add_computer, &QAction::triggered,
+            this, &ConsoleWindow::OnAddComputerAction);
+
+    connect(ui.action_modify_computer, &QAction::triggered,
+            this, &ConsoleWindow::OnModifyComputerAction);
+
+    connect(ui.action_delete_computer, &QAction::triggered,
+            this, &ConsoleWindow::OnDeleteComputerAction);
+
+    connect(ui.action_add_computer_group, &QAction::triggered,
+            this, &ConsoleWindow::OnAddComputerGroupAction);
+
+    connect(ui.action_modify_computer_group, &QAction::triggered,
+            this, &ConsoleWindow::OnModifyComputerGroupAction);
+
+    connect(ui.action_delete_computer_group, &QAction::triggered,
+            this, &ConsoleWindow::OnDeleteComputerGroupAction);
+
+    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::OnOnlineHelpAction);
+    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::OnExitAction);
+
+    connect(ui.tree_group, &ComputerGroupTree::itemClicked,
+            this, &ConsoleWindow::OnGroupItemClicked);
+
+    connect(ui.tree_group, &ComputerGroupTree::customContextMenuRequested,
+            this, &ConsoleWindow::OnGroupContextMenu);
+
+    connect(ui.tree_group, &ComputerGroupTree::itemCollapsed,
+            this, &ConsoleWindow::OnGroupItemCollapsed);
+
+    connect(ui.tree_group, &ComputerGroupTree::itemExpanded,
+            this, &ConsoleWindow::OnGroupItemExpanded);
+
+    connect(ui.tree_computer, &ComputerTree::itemClicked,
+            this, &ConsoleWindow::OnComputerItemClicked);
+
+    connect(ui.tree_computer, &ComputerTree::customContextMenuRequested,
+            this, &ConsoleWindow::OnComputerContextMenu);
+
+    connect(ui.action_desktop_manage, &QAction::toggled,
+            this, &ConsoleWindow::OnDesktopManageSessionToggled);
+
+    connect(ui.action_desktop_view, &QAction::toggled,
+            this, &ConsoleWindow::OnDesktopViewSessionToggled);
+
+    connect(ui.action_file_transfer, &QAction::toggled,
+            this, &ConsoleWindow::OnFileTransferSessionToggled);
+
+    connect(ui.action_system_info, &QAction::toggled,
+            this, &ConsoleWindow::OnSystemInfoSessionToggled);
 
     if (!file_path_.isEmpty())
         OpenAddressBook(file_path_);

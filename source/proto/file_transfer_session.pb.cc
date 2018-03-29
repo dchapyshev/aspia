@@ -1852,7 +1852,7 @@ void FileListRequest::InternalSwap(FileListRequest* other) {
 void UploadRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int UploadRequest::kFilePathFieldNumber;
+const int UploadRequest::kPathFieldNumber;
 const int UploadRequest::kOverwriteFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1869,16 +1869,16 @@ UploadRequest::UploadRequest(const UploadRequest& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.file_path().size() > 0) {
-    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.path().size() > 0) {
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   overwrite_ = from.overwrite_;
   // @@protoc_insertion_point(copy_constructor:proto.file_transfer.UploadRequest)
 }
 
 void UploadRequest::SharedCtor() {
-  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   overwrite_ = false;
   _cached_size_ = 0;
 }
@@ -1889,7 +1889,7 @@ UploadRequest::~UploadRequest() {
 }
 
 void UploadRequest::SharedDtor() {
-  file_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void UploadRequest::SetCachedSize(int size) const {
@@ -1916,7 +1916,7 @@ void UploadRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   overwrite_ = false;
   _internal_metadata_.Clear();
 }
@@ -1937,16 +1937,16 @@ bool UploadRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string file_path = 1;
+      // string path = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_file_path()));
+                input, this->mutable_path()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->file_path().data(), static_cast<int>(this->file_path().length()),
+            this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.UploadRequest.file_path"));
+            "proto.file_transfer.UploadRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -1993,14 +1993,14 @@ void UploadRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string file_path = 1;
-  if (this->file_path().size() > 0) {
+  // string path = 1;
+  if (this->path().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->file_path().data(), static_cast<int>(this->file_path().length()),
+      this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.UploadRequest.file_path");
+      "proto.file_transfer.UploadRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->file_path(), output);
+      1, this->path(), output);
   }
 
   // bool overwrite = 2;
@@ -2019,11 +2019,11 @@ size_t UploadRequest::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string file_path = 1;
-  if (this->file_path().size() > 0) {
+  // string path = 1;
+  if (this->path().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->file_path());
+        this->path());
   }
 
   // bool overwrite = 2;
@@ -2050,9 +2050,9 @@ void UploadRequest::MergeFrom(const UploadRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.file_path().size() > 0) {
+  if (from.path().size() > 0) {
 
-    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   if (from.overwrite() != 0) {
     set_overwrite(from.overwrite());
@@ -2076,7 +2076,7 @@ void UploadRequest::Swap(UploadRequest* other) {
 }
 void UploadRequest::InternalSwap(UploadRequest* other) {
   using std::swap;
-  file_path_.Swap(&other->file_path_);
+  path_.Swap(&other->path_);
   swap(overwrite_, other->overwrite_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
@@ -2092,7 +2092,7 @@ void UploadRequest::InternalSwap(UploadRequest* other) {
 void DownloadRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int DownloadRequest::kFilePathFieldNumber;
+const int DownloadRequest::kPathFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DownloadRequest::DownloadRequest()
@@ -2108,15 +2108,15 @@ DownloadRequest::DownloadRequest(const DownloadRequest& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.file_path().size() > 0) {
-    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.path().size() > 0) {
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   // @@protoc_insertion_point(copy_constructor:proto.file_transfer.DownloadRequest)
 }
 
 void DownloadRequest::SharedCtor() {
-  file_path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
@@ -2126,7 +2126,7 @@ DownloadRequest::~DownloadRequest() {
 }
 
 void DownloadRequest::SharedDtor() {
-  file_path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DownloadRequest::SetCachedSize(int size) const {
@@ -2153,7 +2153,7 @@ void DownloadRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  file_path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -2173,16 +2173,16 @@ bool DownloadRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string file_path = 1;
+      // string path = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_file_path()));
+                input, this->mutable_path()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->file_path().data(), static_cast<int>(this->file_path().length()),
+            this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.DownloadRequest.file_path"));
+            "proto.file_transfer.DownloadRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -2215,14 +2215,14 @@ void DownloadRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string file_path = 1;
-  if (this->file_path().size() > 0) {
+  // string path = 1;
+  if (this->path().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->file_path().data(), static_cast<int>(this->file_path().length()),
+      this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.DownloadRequest.file_path");
+      "proto.file_transfer.DownloadRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->file_path(), output);
+      1, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -2236,11 +2236,11 @@ size_t DownloadRequest::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string file_path = 1;
-  if (this->file_path().size() > 0) {
+  // string path = 1;
+  if (this->path().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->file_path());
+        this->path());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2262,9 +2262,9 @@ void DownloadRequest::MergeFrom(const DownloadRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.file_path().size() > 0) {
+  if (from.path().size() > 0) {
 
-    file_path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_path_);
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
 }
 
@@ -2285,7 +2285,7 @@ void DownloadRequest::Swap(DownloadRequest* other) {
 }
 void DownloadRequest::InternalSwap(DownloadRequest* other) {
   using std::swap;
-  file_path_.Swap(&other->file_path_);
+  path_.Swap(&other->path_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

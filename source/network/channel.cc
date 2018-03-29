@@ -23,11 +23,12 @@ Channel::Channel(QObject* parent)
 {
     socket_ = new QTcpSocket(this);
 
-    connect(socket_, SIGNAL(connected()), this, SLOT(onConnected()));
-    connect(socket_, SIGNAL(disconnected()), this, SIGNAL(channelDisconnected()));
-    connect(socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError()));
-    connect(socket_, SIGNAL(bytesWritten(qint64)), this, SLOT(onBytesWritten(qint64)));
-    connect(socket_, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(socket_, &QTcpSocket::connected, this, &Channel::onConnected);
+    connect(socket_, &QTcpSocket::disconnected, this, &Channel::channelDisconnected);
+    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
+    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
+    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
+            this, &Channel::onError);
 
     read_buffer_.reserve(kReadBufferReservedSize);
 }
@@ -58,7 +59,7 @@ void Channel::onConnected()
     emit channelConnected();
 }
 
-void Channel::onError()
+void Channel::onError(QAbstractSocket::SocketError /* error */)
 {
     emit channelError(socket_->errorString());
 }

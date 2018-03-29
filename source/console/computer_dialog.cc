@@ -55,17 +55,17 @@ ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGrou
     ui.edit_password->setText(computer->Password());
     ui.edit_comment->setPlainText(computer->Comment());
 
-    connect(ui.combo_session_config, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(OnSessionTypeChanged(int)));
+    connect(ui.combo_session_config, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ComputerDialog::OnSessionTypeChanged);
 
-    connect(ui.button_show_password, SIGNAL(toggled(bool)),
-            this, SLOT(OnShowPasswordButtonToggled(bool)));
+    connect(ui.button_show_password, &QPushButton::toggled,
+            this, &ComputerDialog::OnShowPasswordButtonToggled);
 
-    connect(ui.button_session_config, SIGNAL(pressed()),
-            this, SLOT(OnSessionConfigButtonPressed()));
+    connect(ui.button_session_config, &QPushButton::pressed,
+            this, &ComputerDialog::OnSessionConfigButtonPressed);
 
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &ComputerDialog::OnButtonBoxClicked);
 }
 
 void ComputerDialog::OnSessionTypeChanged(int item_index)

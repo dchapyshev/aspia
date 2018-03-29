@@ -7,6 +7,8 @@
 
 #include "client/ui/key_sequence_dialog.h"
 
+#include <QAbstractButton>
+
 namespace aspia {
 
 KeySequenceDialog::KeySequenceDialog(QWidget* parent)
@@ -15,8 +17,8 @@ KeySequenceDialog::KeySequenceDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedSize(size());
 
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(onButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &KeySequenceDialog::onButtonBoxClicked);
 }
 
 // static

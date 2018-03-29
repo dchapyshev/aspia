@@ -18,7 +18,10 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedSize(size());
 
-    connect(ui.button_box, SIGNAL(clicked(QAbstractButton*)), SLOT(close()));
+    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    {
+        close();
+    });
 }
 
 FileRemoveDialog::~FileRemoveDialog() = default;

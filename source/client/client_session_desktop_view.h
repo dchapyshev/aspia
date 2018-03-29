@@ -8,6 +8,7 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H
 
+#include <QPointer>
 #include <QThread>
 
 #include "client/client_session.h"
@@ -39,7 +40,7 @@ protected:
     void writeMessage(const proto::desktop::ClientToHost& message);
 
     proto::Computer* computer_;
-    DesktopWindow* desktop_window_;
+    QPointer<DesktopWindow> desktop_window_;
 
 private:
     void readConfigRequest(const proto::desktop::ConfigRequest& config_request);

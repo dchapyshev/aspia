@@ -51,14 +51,14 @@ ClientDialog::ClientDialog(QWidget* parent)
         OnSessionTypeChanged(current_session_type);
     }
 
-    connect(ui.combo_session_type, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(OnSessionTypeChanged(int)));
+    connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ClientDialog::OnSessionTypeChanged);
 
-    connect(ui.button_session_config, SIGNAL(pressed()),
-            this, SLOT(OnSessionConfigButtonPressed()));
+    connect(ui.button_session_config, &QPushButton::pressed,
+            this, &ClientDialog::OnSessionConfigButtonPressed);
 
-    connect(ui.button_connect, SIGNAL(pressed()),
-            this, SLOT(OnConnectButtonPressed()));
+    connect(ui.button_connect, &QPushButton::pressed,
+            this, &ClientDialog::OnConnectButtonPressed);
 }
 
 void ClientDialog::OnSessionTypeChanged(int item_index)
@@ -114,8 +114,8 @@ void ClientDialog::OnConnectButtonPressed()
 
     Client* client = new Client(computer_);
 
-    connect(client, SIGNAL(clientTerminated()), this, SLOT(show()));
-    connect(client, SIGNAL(clientTerminated()), client, SLOT(deleteLater()));
+    connect(client, &Client::clientTerminated, this, &ClientDialog::show);
+    connect(client, &Client::clientTerminated, client, &Client::deleteLater);
 
     hide();
 }

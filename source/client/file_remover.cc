@@ -25,15 +25,20 @@ void FileRemover::start(const QList<FileRemoveTask>& tasks)
 {
     builder_ = new FileRemoveQueueBuilder();
 
-    connect(builder_, SIGNAL(started()), SIGNAL(started()));
-    connect(builder_, SIGNAL(error(const QString&)), SLOT(taskQueueError(const QString&)));
-    connect(builder_, SIGNAL(finished()), SLOT(taskQueueReady()));
-    connect(builder_, SIGNAL(finished()), builder_, SLOT(deleteLater()));
+    connect(builder_, &FileRemoveQueueBuilder::started,
+            this, &FileRemover::started);
 
-    connect(builder_,
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            this,
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(builder_, &FileRemoveQueueBuilder::error,
+            this, &FileRemover::taskQueueError);
+
+    connect(builder_, &FileRemoveQueueBuilder::finished,
+            this, &FileRemover::taskQueueReady);
+
+    connect(builder_, &FileRemoveQueueBuilder::finished,
+            builder_, &FileRemoveQueueBuilder::deleteLater);
+
+    connect(builder_, &FileRemoveQueueBuilder::request,
+            this, &FileRemover::request);
 
     builder_->start(tasks);
 }

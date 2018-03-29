@@ -7,6 +7,7 @@
 
 #include "console/computer_group_dialog.h"
 
+#include <QAbstractButton>
 #include <QMessageBox>
 
 namespace aspia {
@@ -27,10 +28,8 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 {
     ui.setupUi(this);
 
-    connect(ui.button_box,
-            SIGNAL(clicked(QAbstractButton*)),
-            this,
-            SLOT(OnButtonBoxClicked(QAbstractButton*)));
+    connect(ui.button_box, &QDialogButtonBox::clicked,
+            this, &ComputerGroupDialog::OnButtonBoxClicked);
 
     ui.edit_parent_name->setText(parent_group->Name());
     ui.edit_name->setText(group->Name());

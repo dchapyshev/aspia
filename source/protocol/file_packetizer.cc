@@ -7,8 +7,6 @@
 
 #include "protocol/file_packetizer.h"
 
-#include <QDebug>
-
 namespace aspia {
 
 namespace {
@@ -65,10 +63,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::CreateNextPacket()
     file_->seek(file_size_ - left_size_);
 
     if (file_->read(packet_buffer, packet_buffer_size) != packet_buffer_size)
-    {
-        qWarning() << "Unable to read file";
         return nullptr;
-    }
 
     if (left_size_ == file_size_)
     {

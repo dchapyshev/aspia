@@ -16,7 +16,6 @@ class FileRemoveTask
 {
 public:
     FileRemoveTask(const QString& path, bool is_directory);
-    FileRemoveTask(QString&& path, bool is_directory) noexcept;
 
     FileRemoveTask(const FileRemoveTask& other);
     FileRemoveTask& operator=(const FileRemoveTask& other);

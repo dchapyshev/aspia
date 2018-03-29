@@ -309,7 +309,7 @@ void HostSessionFileTransfer::ReadFileUploadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString file_path = QString::fromUtf8(request.file_path().c_str(), request.file_path().size());
+    QString file_path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
     do
     {
@@ -369,7 +369,7 @@ void HostSessionFileTransfer::ReadFileDownloadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString file_path = QString::fromUtf8(request.file_path().c_str(), request.file_path().size());
+    QString file_path = QString::fromUtf8(request.path().c_str(), request.path().size());
 
     file_packetizer_ = FilePacketizer::Create(file_path);
     if (!file_packetizer_)

@@ -64,21 +64,20 @@ FilePanel::FilePanel(QWidget* parent)
     ui.tree->setItemDelegateForColumn(2, new NoEditDelegate(this));
     ui.tree->setItemDelegateForColumn(3, new NoEditDelegate(this));
 
-    connect(ui.address_bar, SIGNAL(activated(int)), SLOT(addressItemChanged(int)));
+    connect(ui.address_bar, QOverload<int>::of(&QComboBox::activated),
+            this, &FilePanel::addressItemChanged);
 
-    connect(ui.tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-            SLOT(fileDoubleClicked(QTreeWidgetItem*, int)));
+    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+            this, &FilePanel::fileDoubleClicked);
 
-    connect(ui.tree, SIGNAL(itemSelectionChanged()), SLOT(fileSelectionChanged()));
+    connect(ui.tree, &QTreeWidget::itemSelectionChanged, this, &FilePanel::fileSelectionChanged);
+    connect(ui.tree, &QTreeWidget::itemChanged, this, &FilePanel::fileItemChanged);
 
-    connect(ui.tree, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
-            SLOT(fileItemChanged(QTreeWidgetItem*, int)));
-
-    connect(ui.button_up, SIGNAL(pressed()), SLOT(toParentFolder()));
-    connect(ui.button_refresh, SIGNAL(pressed()), SLOT(refresh()));
-    connect(ui.button_add, SIGNAL(pressed()), SLOT(addFolder()));
-    connect(ui.button_delete, SIGNAL(pressed()), SLOT(removeSelected()));
-    connect(ui.button_send, SIGNAL(pressed()), SLOT(sendSelected()));
+    connect(ui.button_up, &QPushButton::pressed, this, &FilePanel::toParentFolder);
+    connect(ui.button_refresh, &QPushButton::pressed, this, &FilePanel::refresh);
+    connect(ui.button_add, &QPushButton::pressed, this, &FilePanel::addFolder);
+    connect(ui.button_delete, &QPushButton::pressed, this, &FilePanel::removeSelected);
+    connect(ui.button_send, &QPushButton::pressed, this, &FilePanel::sendSelected);
 }
 
 FilePanel::~FilePanel() = default;
@@ -318,24 +317,21 @@ void FilePanel::removeSelected()
     FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
     FileRemover* remover = new FileRemover(progress_dialog);
 
-    connect(remover, SIGNAL(started()), progress_dialog, SLOT(open()));
-    connect(remover, SIGNAL(finished()), progress_dialog, SLOT(close()));
-    connect(remover, SIGNAL(finished()), SLOT(refresh()));
+    connect(remover, &FileRemover::started, progress_dialog, &FileRemoveDialog::open);
+    connect(remover, &FileRemover::finished, progress_dialog, &FileRemoveDialog::close);
+    connect(remover, &FileRemover::finished, this, &FilePanel::refresh);
 
-    connect(remover, SIGNAL(progressChanged(const QString&, int)),
-            progress_dialog, SLOT(setProgress(const QString&, int)));
+    connect(remover, &FileRemover::progressChanged,
+            progress_dialog, &FileRemoveDialog::setProgress);
 
-    connect(remover,
-            SIGNAL(error(FileRemover*, FileRemover::Actions, const QString&)),
-            progress_dialog,
-            SLOT(showError(FileRemover*, FileRemover::Actions, const QString&)));
-
-    connect(remover,
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)),
-            SIGNAL(request(const proto::file_transfer::Request&, const FileReplyReceiver&)));
+    connect(remover, &FileRemover::error, progress_dialog, &FileRemoveDialog::showError);
+    connect(remover, &FileRemover::request, this, &FilePanel::request);
 
     // After closing the dialog, delete it. Remover is a child object and will also be deleted.
-    connect(progress_dialog, SIGNAL(finished(int)), progress_dialog, SLOT(deleteLater()));
+    connect(progress_dialog, &FileRemoveDialog::finished, [progress_dialog](int /* result */)
+    {
+        progress_dialog->deleteLater();
+    });
 
     remover->start(tasks);
 }
