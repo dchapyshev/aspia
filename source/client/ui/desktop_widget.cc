@@ -119,11 +119,13 @@ void DesktopWidget::executeKeySequense(int key_sequence)
 
 void DesktopWidget::paintEvent(QPaintEvent* event)
 {
-    if (!frame_)
-        return;
+    if (frame_)
+    {
+        QPainter painter(this);
+        painter.drawImage(rect(), frame_->image());
+    }
 
-    QPainter painter(this);
-    painter.drawImage(rect(), frame_->image());
+    emit updated();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)

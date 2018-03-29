@@ -8,6 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 #define _ASPIA_CLIENT__UI__DESKTOP_WINDOW_H
 
+#include <QPointer>
 #include <QWidget>
 
 #include "proto/computer.pb.h"
@@ -42,6 +43,12 @@ signals:
     void sendPointerEvent(const QPoint& pos, quint32 mask);
     void sendClipboardEvent(const QString& text);
 
+protected:
+    // QWidget implementation.
+    void timerEvent(QTimerEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+
 private slots:
     void onPointerEvent(const QPoint& pos, quint32 mask);
     void clipboardDataChanged();
@@ -49,16 +56,13 @@ private slots:
     void autosizeWindow();
 
 private:
-    void timerEvent(QTimerEvent* event) override;
-    void resizeEvent(QResizeEvent* event) override;
-    void closeEvent(QCloseEvent* event) override;
-
     proto::Computer* computer_;
 
-    QHBoxLayout* layout_;
-    QScrollArea* scroll_area_;
-    DesktopPanel* panel_;
-    DesktopWidget* desktop_;
+    QPointer<QHBoxLayout> layout_;
+    QPointer<QScrollArea> scroll_area_;
+    QPointer<DesktopPanel> panel_;
+    QPointer<DesktopWidget> desktop_;
+
     int scroll_timer_id_ = 0;
     QPoint scroll_delta_;
 

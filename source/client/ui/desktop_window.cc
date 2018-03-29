@@ -89,9 +89,6 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
         if (fullscreen)
         {
             is_maximized_ = isMaximized();
-            if (is_maximized_)
-                showNormal();
-
             showFullScreen();
         }
         else
@@ -105,6 +102,7 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
 
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
+    connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
 }
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)

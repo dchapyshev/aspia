@@ -50,7 +50,6 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
                 this, &DesktopPanel::onCustomAction);
 
         ui.button_send_keys->setMenu(keys_menu_);
-        ui.button_send_keys->setIcon(QIcon(":/icon/keyboard.png"));
     }
     else
     {
