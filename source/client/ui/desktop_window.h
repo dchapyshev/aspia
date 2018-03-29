@@ -59,7 +59,7 @@ private:
     QScrollArea* scroll_area_;
     DesktopPanel* panel_;
     DesktopWidget* desktop_;
-    int scroll_timer_id_ = -1;
+    int scroll_timer_id_ = 0;
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;

@@ -151,7 +151,8 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
     if (!vscrollbar->isHidden())
         client_area.setWidth(client_area.width() - vscrollbar->width());
 
-    scroll_delta_ = QPoint();
+    scroll_delta_.setX(0);
+    scroll_delta_.setY(0);
 
     if (client_area.width() < desktop_->width())
     {
@@ -171,12 +172,13 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
 
     if (!scroll_delta_.isNull())
     {
-        scroll_timer_id_ = startTimer(15);
+        if (scroll_timer_id_ == 0)
+            scroll_timer_id_ = startTimer(15);
     }
-    else if (scroll_timer_id_ != -1)
+    else if (scroll_timer_id_ != 0)
     {
         killTimer(scroll_timer_id_);
-        scroll_timer_id_ = -1;
+        scroll_timer_id_ = 0;
     }
 
     emit sendPointerEvent(pos, mask);
