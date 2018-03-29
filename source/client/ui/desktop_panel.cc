@@ -13,31 +13,55 @@
 
 namespace aspia {
 
-DesktopPanel::DesktopPanel(QWidget* parent)
+DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* parent)
     : QFrame(parent)
 {
     ui.setupUi(this);
 
-    keys_menu_ = new QMenu(this);
-    keys_menu_->addAction(ui.action_alt_tab);
-    keys_menu_->addAction(ui.action_alt_shift_tab);
-    keys_menu_->addAction(ui.action_printscreen);
-    keys_menu_->addAction(ui.action_alt_printscreen);
-    keys_menu_->addAction(ui.action_custom);
+    connect(ui.button_settings, &QPushButton::pressed, this, &DesktopPanel::settingsButton);
+    connect(ui.button_autosize, &QPushButton::pressed, this, &DesktopPanel::onAutosizeButton);
+    connect(ui.button_full_screen, &QPushButton::clicked, this, &DesktopPanel::onFullscreenButton);
 
-    connect(ui.button_settings, SIGNAL(pressed()), SIGNAL(settingsButton()));
-    connect(ui.button_autosize, SIGNAL(pressed()), SLOT(onAutosizeButton()));
-    connect(ui.button_full_screen, SIGNAL(clicked(bool)), SLOT(onFullscreenButton(bool)));
-    connect(ui.button_ctrl_alt_del, SIGNAL(pressed()), SLOT(onCtrlAltDelButton()));
+    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        keys_menu_ = new QMenu(this);
+        keys_menu_->addAction(ui.action_alt_tab);
+        keys_menu_->addAction(ui.action_alt_shift_tab);
+        keys_menu_->addAction(ui.action_printscreen);
+        keys_menu_->addAction(ui.action_alt_printscreen);
+        keys_menu_->addAction(ui.action_custom);
 
-    connect(ui.action_alt_tab, SIGNAL(triggered()), SLOT(onAltTabAction()));
-    connect(ui.action_alt_shift_tab, SIGNAL(triggered()), SLOT(onAltShiftTabAction()));
-    connect(ui.action_printscreen, SIGNAL(triggered()), SLOT(onPrintScreenAction()));
-    connect(ui.action_alt_printscreen, SIGNAL(triggered()), SLOT(onAltPrintScreenAction()));
-    connect(ui.action_custom, SIGNAL(triggered()), SLOT(onCustomAction()));
+        connect(ui.button_ctrl_alt_del, &QPushButton::pressed,
+                this, &DesktopPanel::onCtrlAltDelButton);
 
-    ui.button_send_keys->setMenu(keys_menu_);
+        connect(ui.action_alt_tab, &QAction::triggered,
+                this, &DesktopPanel::onAltTabAction);
+
+        connect(ui.action_alt_shift_tab, &QAction::triggered,
+                this, &DesktopPanel::onAltShiftTabAction);
+
+        connect(ui.action_printscreen, &QAction::triggered,
+                this, &DesktopPanel::onPrintScreenAction);
+
+        connect(ui.action_alt_printscreen, &QAction::triggered,
+                this, &DesktopPanel::onAltPrintScreenAction);
+
+        connect(ui.action_custom, &QAction::triggered,
+                this, &DesktopPanel::onCustomAction);
+
+        ui.button_send_keys->setMenu(keys_menu_);
+        ui.button_send_keys->setIcon(QIcon(":/icon/keyboard.png"));
+    }
+    else
+    {
+        Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+
+        ui.button_send_keys->setHidden(true);
+        ui.button_ctrl_alt_del->setHidden(true);
+    }
 }
+
+DesktopPanel::~DesktopPanel() = default;
 
 void DesktopPanel::onFullscreenButton(bool checked)
 {

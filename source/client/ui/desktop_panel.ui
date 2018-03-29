@@ -10,6 +10,12 @@
     <height>26</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -111,29 +117,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="button_send_keys">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string>Send key sequence</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../../resources/resources.qrc">
-       <normaloff>:/icon/keyboard.png</normaloff>:/icon/keyboard.png</iconset>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="button_ctrl_alt_del">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -150,6 +133,32 @@
      <property name="icon">
       <iconset resource="../../resources/resources.qrc">
        <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="button_send_keys">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Send key sequence</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">text-align:left;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resources.qrc">
+       <normaloff>:/icon/keyboard.png</normaloff>:/icon/keyboard.png</iconset>
      </property>
      <property name="flat">
       <bool>true</bool>

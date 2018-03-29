@@ -74,7 +74,8 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(this);
+    panel_ = new DesktopPanel(computer_->session_type(), this);
+    panel_->adjustSize();
 
     connect(QApplication::clipboard(), &QClipboard::dataChanged,
             this, &DesktopWindow::clipboardDataChanged);
