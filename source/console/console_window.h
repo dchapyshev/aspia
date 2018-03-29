@@ -37,6 +37,7 @@ public slots:
     void OnModifyComputerGroupAction();
     void OnDeleteComputerGroupAction();
     void OnOnlineHelpAction();
+    void OnAboutAction();
     void OnExitAction();
     void OnGroupItemClicked(QTreeWidgetItem* item, int column);
     void OnGroupContextMenu(const QPoint& point);

@@ -13,7 +13,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include "base/logging.h"
+#include "console/about_dialog.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_dialog.h"
@@ -61,6 +61,7 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
             this, &ConsoleWindow::OnDeleteComputerGroupAction);
 
     connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::OnOnlineHelpAction);
+    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::OnAboutAction);
     connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::OnExitAction);
 
     connect(ui.tree_group, &ComputerGroupTree::itemClicked,
@@ -288,7 +289,12 @@ void ConsoleWindow::OnDeleteComputerGroupAction()
 
 void ConsoleWindow::OnOnlineHelpAction()
 {
-    QDesktopServices::openUrl(QUrl(tr("https://aspia.org/help")));
+    QDesktopServices::openUrl(QUrl(tr("https://aspia.net/help")));
+}
+
+void ConsoleWindow::OnAboutAction()
+{
+    AboutDialog(this).exec();
 }
 
 void ConsoleWindow::OnExitAction()
@@ -631,7 +637,7 @@ bool ConsoleWindow::SaveAddressBook(const QString& file_path)
         break;
 
         default:
-            DLOG(LS_FATAL) << "Unknown encryption type: " << address_book.encryption_type();
+            qFatal("Unknown encryption type: %d", address_book.encryption_type());
             break;
     }
 
