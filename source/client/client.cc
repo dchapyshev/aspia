@@ -42,7 +42,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
     // If the network connection is disconnected.
     connect(channel_, &Channel::channelDisconnected, this, &Client::onChannelDisconnected);
 
-    connect(status_dialog_, &StatusDialog::finished, this, [this](int result)
+    connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
         // When the status dialog is finished, we call the client's termination.
         clientTerminated();

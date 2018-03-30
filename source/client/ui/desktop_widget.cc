@@ -163,6 +163,18 @@ void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
     processKeyEvent(event);
 }
 
+void DesktopWidget::leaveEvent(QEvent *event)
+{
+    // When the mouse cursor leaves the widget area, release all the mouse buttons.
+    if (prev_mask_ != 0)
+    {
+        emit sendPointerEvent(prev_pos_, 0);
+        prev_mask_ = 0;
+    }
+
+    QWidget::leaveEvent(event);
+}
+
 void DesktopWidget::processMouseEvent(QEvent::Type event_type,
                                       const Qt::MouseButtons& buttons,
                                       const QPoint& pos,

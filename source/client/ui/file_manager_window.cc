@@ -43,11 +43,8 @@ FileManagerWindow::FileManagerWindow(proto::Computer* computer, QWidget* parent)
 
     ui.splitter->setSizes(sizes);
 
-    connect(ui.local_panel, &FilePanel::request,
-            this, &FileManagerWindow::localRequest);
-
-    connect(ui.remote_panel, &FilePanel::request,
-            this, &FileManagerWindow::remoteRequest);
+    connect(ui.local_panel, &FilePanel::request, this, &FileManagerWindow::localRequest);
+    connect(ui.remote_panel, &FilePanel::request, this, &FileManagerWindow::remoteRequest);
 }
 
 void FileManagerWindow::refresh()
