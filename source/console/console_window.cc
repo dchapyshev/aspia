@@ -30,8 +30,8 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     ui.setupUi(this);
 
     QSettings settings;
-    restoreGeometry(settings.value("WindowGeometry").toByteArray());
-    restoreState(settings.value("WindowState").toByteArray());
+    restoreGeometry(settings.value(QStringLiteral("WindowGeometry")).toByteArray());
+    restoreState(settings.value(QStringLiteral("WindowState")).toByteArray());
 
     connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::OnNewAction);
     connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::OnOpenAction);
@@ -459,8 +459,8 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     }
 
     QSettings settings;
-    settings.setValue("WindowGeometry", saveGeometry());
-    settings.setValue("WindowState", saveState());
+    settings.setValue(QStringLiteral("WindowGeometry"), saveGeometry());
+    settings.setValue(QStringLiteral("WindowState"), saveState());
 
     QMainWindow::closeEvent(event);
 }

@@ -26,20 +26,20 @@ ClientDialog::ClientDialog(QWidget* parent)
                                                computer_.address().size()));
     ui.spin_port->setValue(computer_.port());
 
-    ui.combo_session_type->addItem(QIcon(":/icon/monitor-keyboard.png"),
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
                                    tr("Desktop Manage"),
                                    QVariant(proto::auth::SESSION_TYPE_DESKTOP_MANAGE));
 
-    ui.combo_session_type->addItem(QIcon(":/icon/monitor.png"),
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor.png")),
                                    tr("Desktop View"),
                                    QVariant(proto::auth::SESSION_TYPE_DESKTOP_VIEW));
 
-    ui.combo_session_type->addItem(QIcon(":/icon/folder-stand.png"),
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                                    tr("File Transfer"),
                                    QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
 
 #if 0
-    ui.combo_session_type->addItem(QIcon(":/icon/system-monitor.png"),
+    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
                                    tr("System Information"),
                                    QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
 #endif

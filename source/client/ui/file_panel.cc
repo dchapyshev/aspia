@@ -282,7 +282,7 @@ void FilePanel::toParentFolder()
 
 void FilePanel::addFolder()
 {
-    FileItem* item = new FileItem("");
+    FileItem* item = new FileItem(QStringLiteral(""));
 
     ui.tree->addTopLevelItem(item);
     ui.tree->editItem(item);

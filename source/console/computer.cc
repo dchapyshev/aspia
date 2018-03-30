@@ -16,7 +16,7 @@ Computer::Computer(proto::Computer* computer, ComputerGroup* parent_group)
     : computer_(computer),
       parent_group_(parent_group)
 {
-    setIcon(0, QIcon(":/icon/computer.png"));
+    setIcon(0, QIcon(QStringLiteral(":/icon/computer.png")));
     setText(0, QString::fromUtf8(computer->name().c_str(), computer->name().size()));
     setText(1, QString::fromUtf8(computer->address().c_str(), computer->address().size()));
     setText(2, QString::number(computer->port()));

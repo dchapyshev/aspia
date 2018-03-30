@@ -9,6 +9,7 @@
 
 #include "base/logging.h"
 #include "client/ui/client_dialog.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -21,9 +22,9 @@ int ClientMain(int argc, char *argv[])
     InitLogging(settings);
 
     QApplication application(argc, argv);
-    application.setOrganizationName("Aspia");
-    application.setApplicationName("Client");
-    application.setApplicationVersion("1.0.0");
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Client"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
     ClientDialog dialog;
     dialog.show();

@@ -5,15 +5,14 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 ICON "resources/main.ico"
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_FILEVERSION_STR         L"1.0.0.0\0"
-#define VER_ORIGINALFILENAME_STR    "aspia_console.exe\0"
-#define VER_FILEDESCRIPTION_STR     "Aspia Console"
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_console.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Console"
 
 #include "version.rc"

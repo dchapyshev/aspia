@@ -8,7 +8,7 @@
 #include "console/address_book.h"
 
 AddressBook::AddressBook(proto::ComputerGroup* root_group)
-    : ComputerGroup(QIcon(":/icon/book.png"), root_group, nullptr)
+    : ComputerGroup(QIcon(QStringLiteral(":/icon/book.png")), root_group, nullptr)
 {
     setFlags(flags() ^ Qt::ItemIsDragEnabled);
 }

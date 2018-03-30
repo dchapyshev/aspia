@@ -20,7 +20,7 @@ public:
 
     static QString mimeType()
     {
-        return "application/computer_group";
+        return QStringLiteral("application/computer_group");
     }
 
     void setComputerGroup(ComputerGroup* computer_group)

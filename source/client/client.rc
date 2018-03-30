@@ -5,13 +5,14 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include <winuser.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 ICON "resources/main.ico"
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_FILEVERSION_STR         L"1.0.0.0\0"
-#define VER_ORIGINALFILENAME_STR    "aspia_client.exe\0"
-#define VER_FILEDESCRIPTION_STR     "Aspia Client"
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_client.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Client"
 
 #include "version.rc"

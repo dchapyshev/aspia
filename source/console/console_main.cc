@@ -11,6 +11,7 @@
 
 #include "base/logging.h"
 #include "console/console_window.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -23,14 +24,14 @@ int ConsoleMain(int argc, char *argv[])
     InitLogging(settings);
 
     QApplication application(argc, argv);
-    application.setOrganizationName("Aspia");
-    application.setApplicationName("Console");
-    application.setApplicationVersion("1.0.0");
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Console"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::tr("Aspia Console"));
     parser.addHelpOption();
-    parser.addPositionalArgument("file", QCoreApplication::tr("The file to open."));
+    parser.addPositionalArgument(QStringLiteral("file"), QCoreApplication::tr("The file to open."));
     parser.process(application);
 
     QStringList arguments = parser.positionalArguments();

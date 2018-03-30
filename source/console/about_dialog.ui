@@ -27,7 +27,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Aspia</string>
+      <string notr="true">Aspia</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -37,7 +37,7 @@
    <item>
     <widget class="QLabel" name="label_version">
      <property name="text">
-      <string>Version: 1.0.0</string>
+      <string notr="true">Version</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

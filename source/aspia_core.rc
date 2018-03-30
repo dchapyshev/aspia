@@ -5,11 +5,12 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include <winuser.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_FILEVERSION_STR         L"1.0.0.0\0"
-#define VER_ORIGINALFILENAME_STR    "aspia_core.dll\0"
-#define VER_FILEDESCRIPTION_STR     "Aspia Core"
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_core.dll"
+#define ASPIA_FILE_DESCRIPTION "Aspia Core"
 
 #include "version.rc"

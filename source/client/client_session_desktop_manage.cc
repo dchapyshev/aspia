@@ -115,7 +115,8 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const QString& text)
 
     proto::desktop::ClientToHost message;
     message.mutable_clipboard_event()->set_mime_type(kMimeTypeTextUtf8);
-    message.mutable_clipboard_event()->set_data(QString(text).replace("\r\n", "\n").toUtf8());
+    message.mutable_clipboard_event()->set_data(
+        QString(text).replace(QStringLiteral("\r\n"), QStringLiteral("\n")).toUtf8());
 
     if (message.clipboard_event().mime_type() == last_clipboard_mime_type_ &&
         message.clipboard_event().data() == last_clipboard_data_)
@@ -173,7 +174,7 @@ void ClientSessionDesktopManage::readClipboardEvent(
     QString text = QString::fromUtf8(clipboard_event.data().c_str(),
                                      clipboard_event.data().size());
 #if defined(Q_OS_WIN)
-    text.replace("\n", "\r\n");
+    text.replace(QStringLiteral("\n"), QStringLiteral("\r\n"));
 #endif
 
     desktop_window_->injectClipboard(text);

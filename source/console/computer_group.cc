@@ -17,7 +17,9 @@ ComputerGroup::ComputerGroup(const QIcon& icon,
     setText(0, QString::fromUtf8(group_->name().c_str(), group_->name().size()));
 
     for (int i = 0; i < group_->group_size(); ++i)
-        addChild(new ComputerGroup(QIcon(":/icon/folder.png"), group_->mutable_group(i), this));
+        addChild(new ComputerGroup(QIcon(QStringLiteral(":/icon/folder.png")),
+                                   group_->mutable_group(i),
+                                   this));
 }
 
 ComputerGroup::~ComputerGroup()
@@ -30,7 +32,9 @@ ComputerGroup::~ComputerGroup()
 std::unique_ptr<ComputerGroup> ComputerGroup::Create()
 {
     return std::unique_ptr<ComputerGroup>(
-        new ComputerGroup(QIcon(":/icon/folder.png"), new proto::ComputerGroup(), nullptr));
+        new ComputerGroup(QIcon(QStringLiteral(":/icon/folder.png")),
+                          new proto::ComputerGroup(),
+                          nullptr));
 }
 
 void ComputerGroup::AddChildComputerGroup(ComputerGroup* computer_group)

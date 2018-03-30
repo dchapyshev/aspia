@@ -5,14 +5,15 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include <winuser.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "host_config.manifest"
-1 ICON "ui/resource/main.ico"
+1 ICON "resources/main.ico"
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_FILEVERSION_STR         L"1.0.0.0\0"
-#define VER_ORIGINALFILENAME_STR    "aspia_host_config.exe\0"
-#define VER_FILEDESCRIPTION_STR     "Aspia Host Configuration"
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_config.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Host Configuration"
 
 #include "version.rc"

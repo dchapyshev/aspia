@@ -9,8 +9,6 @@
 
 #include <QMessageBox>
 
-#include "base/logging.h"
-
 namespace aspia {
 
 namespace {
@@ -61,7 +59,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     }
     else
     {
-        DCHECK_EQ(*encryption_type_, proto::AddressBook::ENCRYPTION_TYPE_NONE);
+        Q_ASSERT(*encryption_type_ == proto::AddressBook::ENCRYPTION_TYPE_NONE);
         ui.edit_password->setEnabled(false);
     }
 }
@@ -111,7 +109,7 @@ void AddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
             break;
 
             default:
-                DLOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
+                qFatal("Unexpected encryption type: %d", encryption_type);
                 break;
         }
 
@@ -149,7 +147,7 @@ void AddressBookDialog::OnEncryptionTypedChanged(int item_index)
             break;
 
         default:
-            DLOG(LS_FATAL) << "Unexpected encryption type: " << encryption_type;
+            qFatal("Unexpected encryption type: %d", encryption_type);
             break;
     }
 }
