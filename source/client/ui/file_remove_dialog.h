@@ -8,10 +8,8 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_REMOVE_DIALOG_H
 #define _ASPIA_CLIENT__UI__FILE_REMOVE_DIALOG_H
 
-#include <QDialog>
-
 #include "client/file_remover.h"
-#include "qt/ui_file_remove_dialog.h"
+#include "ui_file_remove_dialog.h"
 
 namespace aspia {
 

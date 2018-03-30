@@ -20,7 +20,7 @@ class FileTransfer : public QObject
     Q_OBJECT
 
 public:
-    FileTransfer(QObject* parent = nullptr);
+    explicit FileTransfer(QObject* parent = nullptr);
     virtual ~FileTransfer() = default;
 
     enum Action

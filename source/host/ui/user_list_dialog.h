@@ -9,7 +9,7 @@
 #define _ASPIA_HOST__UI__USER_LIST_DIALOG_H
 
 #include "host/user_list.h"
-#include "qt/ui_user_list_dialog.h"
+#include "ui_user_list_dialog.h"
 
 namespace aspia {
 
@@ -18,7 +18,7 @@ class UserListDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserListDialog(QWidget* parent = nullptr);
+    explicit UserListDialog(QWidget* parent = nullptr);
     ~UserListDialog() = default;
 
 private slots:

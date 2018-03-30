@@ -18,7 +18,7 @@ class FileItemMimeData;
 class FileItemDrag : public QDrag
 {
 public:
-    FileItemDrag(QObject* drag_source = nullptr);
+    explicit FileItemDrag(QObject* drag_source = nullptr);
     virtual ~FileItemDrag();
 
     void setFileItem(FileItem* file_item);

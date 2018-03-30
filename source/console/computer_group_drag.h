@@ -12,6 +12,8 @@
 
 #include "console/computer_group_mime_data.h"
 
+namespace aspia {
+
 class ComputerGroupDrag : public QDrag
 {
 public:
@@ -28,5 +30,7 @@ public:
         setMimeData(mime_data);
     }
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CONSOLE__COMPUTER_GROUP_DRAG_H

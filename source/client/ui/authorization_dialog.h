@@ -8,13 +8,13 @@
 #ifndef _ASPIA_CLIENT__UI__AUTHORIZATION_DIALOG_H
 #define _ASPIA_CLIENT__UI__AUTHORIZATION_DIALOG_H
 
-#include <QCryptographicHash>
-#include <QDialog>
-
-#include "proto/computer.pb.h"
-#include "qt/ui_authorization_dialog.h"
+#include "ui_authorization_dialog.h"
 
 namespace aspia {
+
+namespace proto {
+class Computer;
+} // namespace proto
 
 class AuthorizationDialog : public QDialog
 {
@@ -22,7 +22,7 @@ class AuthorizationDialog : public QDialog
 
 public:
     AuthorizationDialog(proto::Computer* computer, QWidget* parent);
-    ~AuthorizationDialog() = default;
+    ~AuthorizationDialog();
 
 private slots:
     void OnShowPasswordButtonToggled(bool checked);

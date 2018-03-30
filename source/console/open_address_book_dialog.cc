@@ -16,10 +16,10 @@ OpenAddressBookDialog::OpenAddressBookDialog(
     ui.setupUi(this);
 
     connect(ui.button_show_password, &QPushButton::toggled,
-            this, &OpenAddressBookDialog::OnShowPasswordButtonToggled);
+            this, &OpenAddressBookDialog::showPasswordButtonToggled);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &OpenAddressBookDialog::OnButtonBoxClicked);
+            this, &OpenAddressBookDialog::buttonBoxClicked);
 
     switch (encryption_type)
     {
@@ -39,12 +39,14 @@ OpenAddressBookDialog::OpenAddressBookDialog(
     ui.edit_password->setFocus();
 }
 
-QString OpenAddressBookDialog::Password() const
+OpenAddressBookDialog::~OpenAddressBookDialog() = default;
+
+QString OpenAddressBookDialog::password() const
 {
     return ui.edit_password->text();
 }
 
-void OpenAddressBookDialog::OnShowPasswordButtonToggled(bool checked)
+void OpenAddressBookDialog::showPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
@@ -59,7 +61,7 @@ void OpenAddressBookDialog::OnShowPasswordButtonToggled(bool checked)
     }
 }
 
-void OpenAddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
+void OpenAddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
         accept();

@@ -10,11 +10,11 @@
 #include "codec/video_util.h"
 #include "console/computer_group.h"
 
-using namespace aspia;
+namespace aspia {
 
 Computer::Computer(proto::Computer* computer, ComputerGroup* parent_group)
     : computer_(computer),
-      parent_group_(parent_group)
+    parent_group_(parent_group)
 {
     setIcon(0, QIcon(QStringLiteral(":/icon/computer.png")));
     setText(0, QString::fromUtf8(computer->name().c_str(), computer->name().size()));
@@ -140,3 +140,5 @@ ComputerGroup* Computer::ParentComputerGroup()
 {
     return parent_group_;
 }
+
+} // namespace aspia

@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 
 #include "proto/computer.pb.h"
-#include "qt/ui_desktop_config_dialog.h"
+#include "ui_desktop_config_dialog.h"
 
 namespace aspia {
 
@@ -21,7 +21,7 @@ public:
     DesktopConfigDialog(proto::auth::SessionType session_type,
                         proto::desktop::Config* config,
                         QWidget* parent = nullptr);
-    ~DesktopConfigDialog() = default;
+    ~DesktopConfigDialog();
 
 private slots:
     void OnCodecChanged(int item_index);

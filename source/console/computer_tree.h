@@ -17,8 +17,11 @@ class ComputerTree : public QTreeWidget
     Q_OBJECT
 
 public:
-    ComputerTree(QWidget *parent);
-    ~ComputerTree() = default;
+    explicit ComputerTree(QWidget* parent = nullptr);
+    ~ComputerTree();
+
+private:
+    Q_DISABLE_COPY(ComputerTree)
 };
 
 } // namespace aspia

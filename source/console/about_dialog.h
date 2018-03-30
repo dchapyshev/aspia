@@ -8,9 +8,7 @@
 #ifndef _ASPIA_CONSOLE__ABOUT_DIALOG_H
 #define _ASPIA_CONSOLE__ABOUT_DIALOG_H
 
-#include <QDialog>
-
-#include "qt/ui_about_dialog.h"
+#include "ui_about_dialog.h"
 
 namespace aspia {
 

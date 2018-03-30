@@ -10,7 +10,7 @@
 
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
-#include "qt/ui_file_panel.h"
+#include "ui_file_panel.h"
 
 namespace aspia {
 
@@ -19,7 +19,7 @@ class FilePanel : public QWidget
     Q_OBJECT
 
 public:
-    FilePanel(QWidget* parent = nullptr);
+    explicit FilePanel(QWidget* parent = nullptr);
     ~FilePanel();
 
     void setPanelName(const QString& name);
@@ -54,7 +54,6 @@ private:
     void updateFiles(const proto::file_transfer::FileList& list);
 
     Ui::FilePanel ui;
-
     QString current_path_;
 
     Q_DISABLE_COPY(FilePanel)

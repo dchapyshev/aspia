@@ -33,74 +33,76 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     restoreGeometry(settings.value(QStringLiteral("WindowGeometry")).toByteArray());
     restoreState(settings.value(QStringLiteral("WindowState")).toByteArray());
 
-    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::OnNewAction);
-    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::OnOpenAction);
-    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::OnSaveAction);
-    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::OnSaveAsAction);
-    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::OnCloseAction);
+    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::newAction);
+    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::openAction);
+    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::saveAction);
+    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::saveAsAction);
+    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::closeAction);
 
     connect(ui.action_address_book_properties, &QAction::triggered,
-            this, &ConsoleWindow::OnAddressBookPropertiesAction);
+            this, &ConsoleWindow::addressBookPropertiesAction);
 
     connect(ui.action_add_computer, &QAction::triggered,
-            this, &ConsoleWindow::OnAddComputerAction);
+            this, &ConsoleWindow::addComputerAction);
 
     connect(ui.action_modify_computer, &QAction::triggered,
-            this, &ConsoleWindow::OnModifyComputerAction);
+            this, &ConsoleWindow::modifyComputerAction);
 
     connect(ui.action_delete_computer, &QAction::triggered,
-            this, &ConsoleWindow::OnDeleteComputerAction);
+            this, &ConsoleWindow::deleteComputerAction);
 
     connect(ui.action_add_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::OnAddComputerGroupAction);
+            this, &ConsoleWindow::addComputerGroupAction);
 
     connect(ui.action_modify_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::OnModifyComputerGroupAction);
+            this, &ConsoleWindow::modifyComputerGroupAction);
 
     connect(ui.action_delete_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::OnDeleteComputerGroupAction);
+            this, &ConsoleWindow::deleteComputerGroupAction);
 
-    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::OnOnlineHelpAction);
-    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::OnAboutAction);
-    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::OnExitAction);
+    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onlineHelpAction);
+    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::aboutAction);
+    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::exitAction);
 
     connect(ui.tree_group, &ComputerGroupTree::itemClicked,
-            this, &ConsoleWindow::OnGroupItemClicked);
+            this, &ConsoleWindow::groupItemClicked);
 
     connect(ui.tree_group, &ComputerGroupTree::customContextMenuRequested,
-            this, &ConsoleWindow::OnGroupContextMenu);
+            this, &ConsoleWindow::groupContextMenu);
 
     connect(ui.tree_group, &ComputerGroupTree::itemCollapsed,
-            this, &ConsoleWindow::OnGroupItemCollapsed);
+            this, &ConsoleWindow::groupItemCollapsed);
 
     connect(ui.tree_group, &ComputerGroupTree::itemExpanded,
-            this, &ConsoleWindow::OnGroupItemExpanded);
+            this, &ConsoleWindow::groupItemExpanded);
 
     connect(ui.tree_computer, &ComputerTree::itemClicked,
-            this, &ConsoleWindow::OnComputerItemClicked);
+            this, &ConsoleWindow::computerItemClicked);
 
     connect(ui.tree_computer, &ComputerTree::customContextMenuRequested,
-            this, &ConsoleWindow::OnComputerContextMenu);
+            this, &ConsoleWindow::computerContextMenu);
 
     connect(ui.action_desktop_manage, &QAction::toggled,
-            this, &ConsoleWindow::OnDesktopManageSessionToggled);
+            this, &ConsoleWindow::desktopManageSessionToggled);
 
     connect(ui.action_desktop_view, &QAction::toggled,
-            this, &ConsoleWindow::OnDesktopViewSessionToggled);
+            this, &ConsoleWindow::desktopViewSessionToggled);
 
     connect(ui.action_file_transfer, &QAction::toggled,
-            this, &ConsoleWindow::OnFileTransferSessionToggled);
+            this, &ConsoleWindow::fileTransferSessionToggled);
 
     connect(ui.action_system_info, &QAction::toggled,
-            this, &ConsoleWindow::OnSystemInfoSessionToggled);
+            this, &ConsoleWindow::systemInfoSessionToggled);
 
     if (!file_path_.isEmpty())
-        OpenAddressBook(file_path_);
+        openAddressBook(file_path_);
 }
 
-void ConsoleWindow::OnNewAction()
+ConsoleWindow::~ConsoleWindow() = default;
+
+void ConsoleWindow::newAction()
 {
-    if (!CloseAddressBook())
+    if (!closeAddressBook())
         return;
 
     std::unique_ptr<AddressBook> address_book = AddressBook::Create();
@@ -118,33 +120,33 @@ void ConsoleWindow::OnNewAction()
     ui.tree_group->setEnabled(true);
     ui.tree_group->addTopLevelItem(address_book_.get());
 
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnOpenAction()
+void ConsoleWindow::openAction()
 {
-    OpenAddressBook(QString());
+    openAddressBook(QString());
 }
 
-void ConsoleWindow::OnSaveAction()
+void ConsoleWindow::saveAction()
 {
     if (!address_book_)
         return;
 
-    SaveAddressBook(file_path_);
+    saveAddressBook(file_path_);
 }
 
-void ConsoleWindow::OnSaveAsAction()
+void ConsoleWindow::saveAsAction()
 {
-    SaveAddressBook(QString());
+    saveAddressBook(QString());
 }
 
-void ConsoleWindow::OnCloseAction()
+void ConsoleWindow::closeAction()
 {
-    CloseAddressBook();
+    closeAddressBook();
 }
 
-void ConsoleWindow::OnAddressBookPropertiesAction()
+void ConsoleWindow::addressBookPropertiesAction()
 {
     if (!address_book_)
         return;
@@ -153,10 +155,10 @@ void ConsoleWindow::OnAddressBookPropertiesAction()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnAddComputerAction()
+void ConsoleWindow::addComputerAction()
 {
     if (!address_book_)
         return;
@@ -177,10 +179,10 @@ void ConsoleWindow::OnAddComputerAction()
     if (ui.tree_group->currentItem() == parent_item)
         ui.tree_computer->addTopLevelItem(computer_released);
 
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnModifyComputerAction()
+void ConsoleWindow::modifyComputerAction()
 {
     if (!address_book_)
         return;
@@ -193,10 +195,10 @@ void ConsoleWindow::OnModifyComputerAction()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnDeleteComputerAction()
+void ConsoleWindow::deleteComputerAction()
 {
     if (!address_book_)
         return;
@@ -216,11 +218,11 @@ void ConsoleWindow::OnDeleteComputerAction()
     {
         ComputerGroup* parent_group = current_item->ParentComputerGroup();
         if (parent_group->DeleteChildComputer(current_item))
-            SetChanged(true);
+            setChanged(true);
     }
 }
 
-void ConsoleWindow::OnAddComputerGroupAction()
+void ConsoleWindow::addComputerGroupAction()
 {
     if (!address_book_)
         return;
@@ -238,10 +240,10 @@ void ConsoleWindow::OnAddComputerGroupAction()
     ComputerGroup* computer_group_released = computer_group.release();
     parent_item->AddChildComputerGroup(computer_group_released);
     ui.tree_group->setCurrentItem(computer_group_released);
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnModifyComputerGroupAction()
+void ConsoleWindow::modifyComputerGroupAction()
 {
     if (!address_book_)
         return;
@@ -259,7 +261,7 @@ void ConsoleWindow::OnModifyComputerGroupAction()
         return;
 }
 
-void ConsoleWindow::OnDeleteComputerGroupAction()
+void ConsoleWindow::deleteComputerGroupAction()
 {
     if (!address_book_)
         return;
@@ -283,26 +285,26 @@ void ConsoleWindow::OnDeleteComputerGroupAction()
                     this).exec() == QMessageBox::Ok)
     {
         if (parent_item->DeleteChildComputerGroup(current_item))
-            SetChanged(true);
+            setChanged(true);
     }
 }
 
-void ConsoleWindow::OnOnlineHelpAction()
+void ConsoleWindow::onlineHelpAction()
 {
     QDesktopServices::openUrl(QUrl(tr("https://aspia.net/help")));
 }
 
-void ConsoleWindow::OnAboutAction()
+void ConsoleWindow::aboutAction()
 {
     AboutDialog(this).exec();
 }
 
-void ConsoleWindow::OnExitAction()
+void ConsoleWindow::exitAction()
 {
     close();
 }
 
-void ConsoleWindow::OnGroupItemClicked(QTreeWidgetItem* item, int /* column */)
+void ConsoleWindow::groupItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     ComputerGroup* current_item = reinterpret_cast<ComputerGroup*>(item);
     if (!current_item)
@@ -325,17 +327,17 @@ void ConsoleWindow::OnGroupItemClicked(QTreeWidgetItem* item, int /* column */)
         ui.action_delete_computer_group->setEnabled(true);
     }
 
-    UpdateComputerList(current_item);
+    updateComputerList(current_item);
 }
 
-void ConsoleWindow::OnGroupContextMenu(const QPoint& point)
+void ConsoleWindow::groupContextMenu(const QPoint& point)
 {
     ComputerGroup* current_item = reinterpret_cast<ComputerGroup*>(ui.tree_group->itemAt(point));
     if (!current_item)
         return;
 
     ui.tree_group->setCurrentItem(current_item);
-    OnGroupItemClicked(current_item, 0);
+    groupItemClicked(current_item, 0);
 
     QMenu menu;
 
@@ -356,27 +358,27 @@ void ConsoleWindow::OnGroupContextMenu(const QPoint& point)
     menu.exec(ui.tree_group->mapToGlobal(point));
 }
 
-void ConsoleWindow::OnGroupItemCollapsed(QTreeWidgetItem* item)
+void ConsoleWindow::groupItemCollapsed(QTreeWidgetItem* item)
 {
     ComputerGroup* current_item = reinterpret_cast<ComputerGroup*>(item);
     if (!current_item)
         return;
 
     current_item->SetExpanded(false);
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnGroupItemExpanded(QTreeWidgetItem* item)
+void ConsoleWindow::groupItemExpanded(QTreeWidgetItem* item)
 {
     ComputerGroup* current_item = reinterpret_cast<ComputerGroup*>(item);
     if (!current_item)
         return;
 
     current_item->SetExpanded(true);
-    SetChanged(true);
+    setChanged(true);
 }
 
-void ConsoleWindow::OnComputerItemClicked(QTreeWidgetItem* item, int /* column */)
+void ConsoleWindow::computerItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     Computer* current_item = reinterpret_cast<Computer*>(item);
     if (!current_item)
@@ -386,7 +388,7 @@ void ConsoleWindow::OnComputerItemClicked(QTreeWidgetItem* item, int /* column *
     ui.action_delete_computer->setEnabled(true);
 }
 
-void ConsoleWindow::OnComputerContextMenu(const QPoint& point)
+void ConsoleWindow::computerContextMenu(const QPoint& point)
 {
     QMenu menu;
 
@@ -394,7 +396,7 @@ void ConsoleWindow::OnComputerContextMenu(const QPoint& point)
     if (current_item)
     {
         ui.tree_computer->setCurrentItem(current_item);
-        OnComputerItemClicked(current_item, 0);
+        computerItemClicked(current_item, 0);
 
         menu.addAction(ui.action_desktop_manage_connect);
         menu.addAction(ui.action_desktop_view_connect);
@@ -410,7 +412,7 @@ void ConsoleWindow::OnComputerContextMenu(const QPoint& point)
     menu.exec(ui.tree_computer->mapToGlobal(point));
 }
 
-void ConsoleWindow::OnDesktopManageSessionToggled(bool checked)
+void ConsoleWindow::desktopManageSessionToggled(bool checked)
 {
     if (checked)
     {
@@ -420,7 +422,7 @@ void ConsoleWindow::OnDesktopManageSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::OnDesktopViewSessionToggled(bool checked)
+void ConsoleWindow::desktopViewSessionToggled(bool checked)
 {
     if (checked)
     {
@@ -430,7 +432,7 @@ void ConsoleWindow::OnDesktopViewSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::OnFileTransferSessionToggled(bool checked)
+void ConsoleWindow::fileTransferSessionToggled(bool checked)
 {
     if (checked)
     {
@@ -440,7 +442,7 @@ void ConsoleWindow::OnFileTransferSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::OnSystemInfoSessionToggled(bool checked)
+void ConsoleWindow::systemInfoSessionToggled(bool checked)
 {
     if (checked)
     {
@@ -454,7 +456,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
 {
     if (address_book_ && is_changed_)
     {
-        if (!CloseAddressBook())
+        if (!closeAddressBook())
             return;
     }
 
@@ -465,7 +467,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-void ConsoleWindow::ShowOpenError(const QString& message)
+void ConsoleWindow::showOpenError(const QString& message)
 {
     QMessageBox dialog(this);
 
@@ -478,7 +480,7 @@ void ConsoleWindow::ShowOpenError(const QString& message)
     dialog.exec();
 }
 
-void ConsoleWindow::ShowSaveError(const QString& message)
+void ConsoleWindow::showSaveError(const QString& message)
 {
     QMessageBox dialog(this);
 
@@ -491,7 +493,7 @@ void ConsoleWindow::ShowSaveError(const QString& message)
     dialog.exec();
 }
 
-void ConsoleWindow::UpdateComputerList(ComputerGroup* computer_group)
+void ConsoleWindow::updateComputerList(ComputerGroup* computer_group)
 {
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)
     {
@@ -502,15 +504,15 @@ void ConsoleWindow::UpdateComputerList(ComputerGroup* computer_group)
     ui.tree_computer->addTopLevelItems(computer_group->ComputerList());
 }
 
-void ConsoleWindow::SetChanged(bool changed)
+void ConsoleWindow::setChanged(bool changed)
 {
     ui.action_save->setEnabled(changed);
     is_changed_ = changed;
 }
 
-bool ConsoleWindow::OpenAddressBook(const QString& file_path)
+bool ConsoleWindow::openAddressBook(const QString& file_path)
 {
-    if (!CloseAddressBook())
+    if (!closeAddressBook())
         return false;
 
     file_path_ = file_path;
@@ -527,14 +529,14 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
     QFile file(file_path_);
     if (!file.open(QIODevice::ReadOnly))
     {
-        ShowOpenError(tr("Unable to open address book file."));
+        showOpenError(tr("Unable to open address book file."));
         return false;
     }
 
     QByteArray buffer = file.readAll();
     if (!buffer.size())
     {
-        ShowOpenError(tr("Unable to read address book file."));
+        showOpenError(tr("Unable to read address book file."));
         return false;
     }
 
@@ -542,7 +544,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
 
     if (!address_book.ParseFromArray(buffer.data(), buffer.size()))
     {
-        ShowOpenError(tr("The address book file is corrupted or has an unknown format."));
+        showOpenError(tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
@@ -560,7 +562,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
             if (dialog.exec() != QDialog::Accepted)
                 return false;
 
-            password_ = dialog.Password();
+            password_ = dialog.password();
 
             QCryptographicHash key_hash(QCryptographicHash::Sha256);
             key_hash.addData(password_.toUtf8());
@@ -568,7 +570,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
             std::string decrypted;
             if (!DecryptString(address_book.data(), key_hash.result(), decrypted))
             {
-                ShowOpenError(tr("Unable to decrypt the address book with the specified password."));
+                showOpenError(tr("Unable to decrypt the address book with the specified password."));
                 return false;
             }
 
@@ -578,7 +580,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
 
         default:
         {
-            ShowOpenError(tr("The address book file is encrypted with an unsupported encryption type."));
+            showOpenError(tr("The address book file is encrypted with an unsupported encryption type."));
             return false;
         }
         break;
@@ -586,7 +588,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
 
     if (!address_book_)
     {
-        ShowOpenError(tr("The address book file is corrupted or has an unknown format."));
+        showOpenError(tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
@@ -597,7 +599,7 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
     ui.tree_group->setCurrentItem(address_book_.get());
     ui.tree_group->setFocus();
 
-    OnGroupItemClicked(address_book_.get(), 0);
+    groupItemClicked(address_book_.get(), 0);
 
     // Restore the state of the address book after adding it to the control.
     address_book_->RestoreAppearance();
@@ -608,12 +610,12 @@ bool ConsoleWindow::OpenAddressBook(const QString& file_path)
     ui.action_save_as->setEnabled(true);
     ui.action_close->setEnabled(true);
 
-    UpdateComputerList(address_book_.get());
-    SetChanged(false);
+    updateComputerList(address_book_.get());
+    setChanged(false);
     return true;
 }
 
-bool ConsoleWindow::SaveAddressBook(const QString& file_path)
+bool ConsoleWindow::saveAddressBook(const QString& file_path)
 {
     if (!address_book_)
         return false;
@@ -655,22 +657,22 @@ bool ConsoleWindow::SaveAddressBook(const QString& file_path)
     QFile file(file_path_);
     if (!file.open(QIODevice::WriteOnly))
     {
-        ShowSaveError(tr("Unable to create or open address book file."));
+        showSaveError(tr("Unable to create or open address book file."));
         return false;
     }
 
     std::string buffer = address_book.SerializeAsString();
     if (file.write(buffer.c_str(), buffer.size()) != buffer.size())
     {
-        ShowSaveError(tr("Unable to write address book file."));
+        showSaveError(tr("Unable to write address book file."));
         return false;
     }
 
-    SetChanged(false);
+    setChanged(false);
     return true;
 }
 
-bool ConsoleWindow::CloseAddressBook()
+bool ConsoleWindow::closeAddressBook()
 {
     if (address_book_)
     {
@@ -685,7 +687,7 @@ bool ConsoleWindow::CloseAddressBook()
             {
                 case QMessageBox::Yes:
                 {
-                    if (!SaveAddressBook(file_path_))
+                    if (!saveAddressBook(file_path_))
                         return false;
                 }
                 break;
@@ -726,7 +728,7 @@ bool ConsoleWindow::CloseAddressBook()
     ui.action_save_as->setEnabled(false);
     ui.action_close->setEnabled(false);
 
-    SetChanged(false);
+    setChanged(false);
     return true;
 }
 

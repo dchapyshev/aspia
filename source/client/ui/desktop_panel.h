@@ -11,7 +11,7 @@
 #include <QPointer>
 
 #include "proto/auth_session.pb.h"
-#include "qt/ui_desktop_panel.h"
+#include "ui_desktop_panel.h"
 
 namespace aspia {
 

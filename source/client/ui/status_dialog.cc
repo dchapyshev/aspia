@@ -19,6 +19,8 @@ StatusDialog::StatusDialog(QWidget* parent)
     connect(ui.button_cancel, &QPushButton::pressed, this, &StatusDialog::close);
 }
 
+StatusDialog::~StatusDialog() = default;
+
 void StatusDialog::addStatus(const QString& status)
 {
     if (isHidden())

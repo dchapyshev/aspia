@@ -23,8 +23,8 @@ class DesktopWidget : public QWidget
     Q_OBJECT
 
 public:
-    DesktopWidget(QWidget* parent);
-    ~DesktopWidget() = default;
+    explicit DesktopWidget(QWidget* parent);
+    ~DesktopWidget();
 
     void resizeDesktopFrame(const QSize& screen_size);
     void drawDesktopFrame();

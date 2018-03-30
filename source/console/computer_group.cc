@@ -7,11 +7,13 @@
 
 #include "console/computer_group.h"
 
+namespace aspia {
+
 ComputerGroup::ComputerGroup(const QIcon& icon,
                              proto::ComputerGroup* group,
                              ComputerGroup* parent_group)
     : group_(group),
-      parent_group_(parent_group)
+    parent_group_(parent_group)
 {
     setIcon(0, icon);
     setText(0, QString::fromUtf8(group_->name().c_str(), group_->name().size()));
@@ -155,3 +157,5 @@ ComputerGroup* ComputerGroup::ParentComputerGroup()
 {
     return parent_group_;
 }
+
+} // namespace aspia

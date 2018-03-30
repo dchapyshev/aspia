@@ -11,7 +11,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "computer.proto";
 
-package proto;
+package aspia.proto;
 
 message ComputerGroup
 {

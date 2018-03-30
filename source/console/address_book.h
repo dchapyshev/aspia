@@ -10,6 +10,8 @@
 
 #include "console/computer_group.h"
 
+namespace aspia {
+
 class AddressBook : public ComputerGroup
 {
 public:
@@ -24,5 +26,7 @@ private:
 
     Q_DISABLE_COPY(AddressBook)
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CONSOLE__ADDRESS_BOOK_H

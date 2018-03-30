@@ -7,6 +7,8 @@
 
 #include "console/address_book.h"
 
+namespace aspia {
+
 AddressBook::AddressBook(proto::ComputerGroup* root_group)
     : ComputerGroup(QIcon(QStringLiteral(":/icon/book.png")), root_group, nullptr)
 {
@@ -56,3 +58,5 @@ void AddressBook::RestoreAppearance()
 
     restore_child(this);
 }
+
+} // namespace aspia

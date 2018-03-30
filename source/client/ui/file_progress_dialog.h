@@ -8,9 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_PROGRESS_DIALOG_H
 #define _ASPIA_CLIENT__UI__FILE_PROGRESS_DIALOG_H
 
-#include <QDialog>
-
-#include "qt/ui_file_progress_dialog.h"
+#include "ui_file_progress_dialog.h"
 
 namespace aspia {
 

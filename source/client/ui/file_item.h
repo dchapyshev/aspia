@@ -17,8 +17,8 @@ namespace aspia {
 class FileItem : public QTreeWidgetItem
 {
 public:
-    FileItem(const proto::file_transfer::FileList::Item& item);
-    FileItem(const QString& directory_name);
+    explicit FileItem(const proto::file_transfer::FileList::Item& item);
+    explicit FileItem(const QString& directory_name);
     ~FileItem();
 
     QString initialName() const;

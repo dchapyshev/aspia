@@ -32,14 +32,13 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 {
     ui.setupUi(this);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &AddressBookDialog::OnButtonBoxClicked);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &AddressBookDialog::buttonBoxClicked);
 
     connect(ui.combo_encryption, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &AddressBookDialog::OnEncryptionTypedChanged);
+            this, &AddressBookDialog::encryptionTypedChanged);
 
     connect(ui.button_show_password, &QPushButton::toggled,
-            this, &AddressBookDialog::OnShowPasswordButtonToggled);
+            this, &AddressBookDialog::showPasswordButtonToggled);
 
     ui.combo_encryption->addItem(tr("Without Encryption"),
                                  QVariant(proto::AddressBook::ENCRYPTION_TYPE_NONE));
@@ -64,26 +63,28 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     }
 }
 
-void AddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
+AddressBookDialog::~AddressBookDialog() = default;
+
+void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
         QString name = ui.edit_name->text();
         if (name.length() > kMaxNameLength)
         {
-            ShowError(tr("Too long name. The maximum length of the name is 64 characters."));
+            showError(tr("Too long name. The maximum length of the name is 64 characters."));
             return;
         }
         else if (name.length() < kMinNameLength)
         {
-            ShowError(tr("Name can not be empty."));
+            showError(tr("Name can not be empty."));
             return;
         }
 
         QString comment = ui.edit_comment->toPlainText();
         if (comment.length() > kMaxCommentLength)
         {
-            ShowError(tr("Too long comment. The maximum length of the comment is 2048 characters."));
+            showError(tr("Too long comment. The maximum length of the comment is 2048 characters."));
             return;
         }
 
@@ -102,7 +103,7 @@ void AddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
                 password = ui.edit_password->text();
                 if (password.length() < kMinPasswordLength)
                 {
-                    ShowError(tr("Password can not be shorter than 8 characters."));
+                    showError(tr("Password can not be shorter than 8 characters."));
                     return;
                 }
             }
@@ -128,7 +129,7 @@ void AddressBookDialog::OnButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void AddressBookDialog::OnEncryptionTypedChanged(int item_index)
+void AddressBookDialog::encryptionTypedChanged(int item_index)
 {
     proto::AddressBook::EncryptionType encryption_type =
         static_cast<proto::AddressBook::EncryptionType>(
@@ -152,7 +153,7 @@ void AddressBookDialog::OnEncryptionTypedChanged(int item_index)
     }
 }
 
-void AddressBookDialog::OnShowPasswordButtonToggled(bool checked)
+void AddressBookDialog::showPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
@@ -167,7 +168,7 @@ void AddressBookDialog::OnShowPasswordButtonToggled(bool checked)
     }
 }
 
-void AddressBookDialog::ShowError(const QString& message)
+void AddressBookDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }

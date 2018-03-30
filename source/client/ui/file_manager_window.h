@@ -11,7 +11,7 @@
 #include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
-#include "qt/ui_file_manager_window.h"
+#include "ui_file_manager_window.h"
 
 namespace aspia {
 
@@ -33,9 +33,11 @@ signals:
 public slots:
     void refresh();
 
-private:
+protected:
+    // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
 
+private:
     Ui::FileManagerWindow ui;
 
     Q_DISABLE_COPY(FileManagerWindow)

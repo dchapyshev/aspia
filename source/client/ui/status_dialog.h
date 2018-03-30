@@ -8,9 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__STATUS_DIALOG_H
 #define _ASPIA_CLIENT__UI__STATUS_DIALOG_H
 
-#include <QDialog>
-
-#include "qt/ui_status_dialog.h"
+#include "ui_status_dialog.h"
 
 namespace aspia {
 
@@ -20,7 +18,7 @@ class StatusDialog : public QDialog
 
 public:
     explicit StatusDialog(QWidget* parent = nullptr);
-    ~StatusDialog() = default;
+    ~StatusDialog();
 
 public slots:
     // Adds a message to the status dialog. If the dialog is hidden, it also shows it.

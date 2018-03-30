@@ -9,7 +9,7 @@
 #define _ASPIA_HOST__UI__USER_DIALOG_H
 
 #include "host/user_list.h"
-#include "qt/ui_user_dialog.h"
+#include "ui_user_dialog.h"
 
 namespace aspia {
 
@@ -22,6 +22,7 @@ public:
     ~UserDialog() = default;
 
 protected:
+    // QDialog implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:

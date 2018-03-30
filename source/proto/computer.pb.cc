@@ -16,6 +16,7 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+namespace aspia {
 namespace proto {
 class ComputerDefaultTypeInternal {
  public:
@@ -23,6 +24,7 @@ class ComputerDefaultTypeInternal {
       _instance;
 } _Computer_default_instance_;
 }  // namespace proto
+}  // namespace aspia
 namespace protobuf_computer_2eproto {
 void InitDefaultsComputerImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -34,11 +36,11 @@ void InitDefaultsComputerImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_desktop_5fsession_2eproto::InitDefaultsConfig();
   {
-    void* ptr = &::proto::_Computer_default_instance_;
-    new (ptr) ::proto::Computer();
+    void* ptr = &::aspia::proto::_Computer_default_instance_;
+    new (ptr) ::aspia::proto::Computer();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::Computer::InitAsDefaultInstance();
+  ::aspia::proto::Computer::InitAsDefaultInstance();
 }
 
 void InitDefaultsComputer() {
@@ -47,15 +49,16 @@ void InitDefaultsComputer() {
 }
 
 }  // namespace protobuf_computer_2eproto
+namespace aspia {
 namespace proto {
 
 // ===================================================================
 
 void Computer::InitAsDefaultInstance() {
-  ::proto::_Computer_default_instance_._instance.get_mutable()->desktop_manage_session_ = const_cast< ::proto::desktop::Config*>(
-      ::proto::desktop::Config::internal_default_instance());
-  ::proto::_Computer_default_instance_._instance.get_mutable()->desktop_view_session_ = const_cast< ::proto::desktop::Config*>(
-      ::proto::desktop::Config::internal_default_instance());
+  ::aspia::proto::_Computer_default_instance_._instance.get_mutable()->desktop_manage_session_ = const_cast< ::aspia::proto::desktop::Config*>(
+      ::aspia::proto::desktop::Config::internal_default_instance());
+  ::aspia::proto::_Computer_default_instance_._instance.get_mutable()->desktop_view_session_ = const_cast< ::aspia::proto::desktop::Config*>(
+      ::aspia::proto::desktop::Config::internal_default_instance());
 }
 void Computer::clear_desktop_manage_session() {
   if (GetArenaNoVirtual() == NULL && desktop_manage_session_ != NULL) {
@@ -87,7 +90,7 @@ Computer::Computer()
     ::protobuf_computer_2eproto::InitDefaultsComputer();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.Computer)
+  // @@protoc_insertion_point(constructor:aspia.proto.Computer)
 }
 Computer::Computer(const Computer& from)
   : ::google::protobuf::MessageLite(),
@@ -115,19 +118,19 @@ Computer::Computer(const Computer& from)
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
   if (from.has_desktop_manage_session()) {
-    desktop_manage_session_ = new ::proto::desktop::Config(*from.desktop_manage_session_);
+    desktop_manage_session_ = new ::aspia::proto::desktop::Config(*from.desktop_manage_session_);
   } else {
     desktop_manage_session_ = NULL;
   }
   if (from.has_desktop_view_session()) {
-    desktop_view_session_ = new ::proto::desktop::Config(*from.desktop_view_session_);
+    desktop_view_session_ = new ::aspia::proto::desktop::Config(*from.desktop_view_session_);
   } else {
     desktop_view_session_ = NULL;
   }
   ::memcpy(&port_, &from.port_,
     static_cast<size_t>(reinterpret_cast<char*>(&session_type_) -
     reinterpret_cast<char*>(&port_)) + sizeof(session_type_));
-  // @@protoc_insertion_point(copy_constructor:proto.Computer)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.Computer)
 }
 
 void Computer::SharedCtor() {
@@ -143,7 +146,7 @@ void Computer::SharedCtor() {
 }
 
 Computer::~Computer() {
-  // @@protoc_insertion_point(destructor:proto.Computer)
+  // @@protoc_insertion_point(destructor:aspia.proto.Computer)
   SharedDtor();
 }
 
@@ -176,7 +179,7 @@ Computer* Computer::New(::google::protobuf::Arena* arena) const {
 }
 
 void Computer::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.Computer)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.Computer)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -210,7 +213,7 @@ bool Computer::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.Computer)
+  // @@protoc_insertion_point(parse_start:aspia.proto.Computer)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -225,7 +228,7 @@ bool Computer::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.Computer.name"));
+            "aspia.proto.Computer.name"));
         } else {
           goto handle_unusual;
         }
@@ -241,7 +244,7 @@ bool Computer::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->comment().data(), static_cast<int>(this->comment().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.Computer.comment"));
+            "aspia.proto.Computer.comment"));
         } else {
           goto handle_unusual;
         }
@@ -257,7 +260,7 @@ bool Computer::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->address().data(), static_cast<int>(this->address().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.Computer.address"));
+            "aspia.proto.Computer.address"));
         } else {
           goto handle_unusual;
         }
@@ -287,7 +290,7 @@ bool Computer::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->username().data(), static_cast<int>(this->username().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.Computer.username"));
+            "aspia.proto.Computer.username"));
         } else {
           goto handle_unusual;
         }
@@ -303,14 +306,14 @@ bool Computer::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->password().data(), static_cast<int>(this->password().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.Computer.password"));
+            "aspia.proto.Computer.password"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .proto.auth.SessionType session_type = 7;
+      // .aspia.proto.auth.SessionType session_type = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
@@ -318,14 +321,14 @@ bool Computer::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_session_type(static_cast< ::proto::auth::SessionType >(value));
+          set_session_type(static_cast< ::aspia::proto::auth::SessionType >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .proto.desktop.Config desktop_manage_session = 8;
+      // .aspia.proto.desktop.Config desktop_manage_session = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
@@ -337,7 +340,7 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.desktop.Config desktop_view_session = 9;
+      // .aspia.proto.desktop.Config desktop_view_session = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
@@ -361,17 +364,17 @@ bool Computer::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.Computer)
+  // @@protoc_insertion_point(parse_success:aspia.proto.Computer)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.Computer)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.Computer)
   return false;
 #undef DO_
 }
 
 void Computer::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.Computer)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.Computer)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -380,7 +383,7 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.Computer.name");
+      "aspia.proto.Computer.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -390,7 +393,7 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.Computer.comment");
+      "aspia.proto.Computer.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->comment(), output);
   }
@@ -400,7 +403,7 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->address().data(), static_cast<int>(this->address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.Computer.address");
+      "aspia.proto.Computer.address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->address(), output);
   }
@@ -415,7 +418,7 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), static_cast<int>(this->username().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.Computer.username");
+      "aspia.proto.Computer.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->username(), output);
   }
@@ -425,24 +428,24 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->password().data(), static_cast<int>(this->password().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.Computer.password");
+      "aspia.proto.Computer.password");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->password(), output);
   }
 
-  // .proto.auth.SessionType session_type = 7;
+  // .aspia.proto.auth.SessionType session_type = 7;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       7, this->session_type(), output);
   }
 
-  // .proto.desktop.Config desktop_manage_session = 8;
+  // .aspia.proto.desktop.Config desktop_manage_session = 8;
   if (this->has_desktop_manage_session()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       8, *this->desktop_manage_session_, output);
   }
 
-  // .proto.desktop.Config desktop_view_session = 9;
+  // .aspia.proto.desktop.Config desktop_view_session = 9;
   if (this->has_desktop_view_session()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       9, *this->desktop_view_session_, output);
@@ -450,11 +453,11 @@ void Computer::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.Computer)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.Computer)
 }
 
 size_t Computer::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.Computer)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.Computer)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -494,14 +497,14 @@ size_t Computer::ByteSizeLong() const {
         this->password());
   }
 
-  // .proto.desktop.Config desktop_manage_session = 8;
+  // .aspia.proto.desktop.Config desktop_manage_session = 8;
   if (this->has_desktop_manage_session()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->desktop_manage_session_);
   }
 
-  // .proto.desktop.Config desktop_view_session = 9;
+  // .aspia.proto.desktop.Config desktop_view_session = 9;
   if (this->has_desktop_view_session()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -515,7 +518,7 @@ size_t Computer::ByteSizeLong() const {
         this->port());
   }
 
-  // .proto.auth.SessionType session_type = 7;
+  // .aspia.proto.auth.SessionType session_type = 7;
   if (this->session_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
@@ -534,7 +537,7 @@ void Computer::CheckTypeAndMergeFrom(
 }
 
 void Computer::MergeFrom(const Computer& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.Computer)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.Computer)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -561,10 +564,10 @@ void Computer::MergeFrom(const Computer& from) {
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
   if (from.has_desktop_manage_session()) {
-    mutable_desktop_manage_session()->::proto::desktop::Config::MergeFrom(from.desktop_manage_session());
+    mutable_desktop_manage_session()->::aspia::proto::desktop::Config::MergeFrom(from.desktop_manage_session());
   }
   if (from.has_desktop_view_session()) {
-    mutable_desktop_view_session()->::proto::desktop::Config::MergeFrom(from.desktop_view_session());
+    mutable_desktop_view_session()->::aspia::proto::desktop::Config::MergeFrom(from.desktop_view_session());
   }
   if (from.port() != 0) {
     set_port(from.port());
@@ -575,7 +578,7 @@ void Computer::MergeFrom(const Computer& from) {
 }
 
 void Computer::CopyFrom(const Computer& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.Computer)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.Computer)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -605,11 +608,12 @@ void Computer::InternalSwap(Computer* other) {
 }
 
 ::std::string Computer::GetTypeName() const {
-  return "proto.Computer";
+  return "aspia.proto.Computer";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace proto
+}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

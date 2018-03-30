@@ -8,10 +8,8 @@
 #ifndef _ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
 #define _ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
 
-#include <QDialog>
-
 #include "console/computer_group.h"
-#include "qt/ui_computer_group_dialog.h"
+#include "ui_computer_group_dialog.h"
 
 namespace aspia {
 
@@ -21,13 +19,13 @@ class ComputerGroupDialog : public QDialog
 
 public:
     ComputerGroupDialog(QWidget* parent, ComputerGroup* group, ComputerGroup* parent_group);
-    ~ComputerGroupDialog() = default;
+    ~ComputerGroupDialog();
 
 private slots:
-    void OnButtonBoxClicked(QAbstractButton* button);
+    void buttonBoxClicked(QAbstractButton* button);
 
 private:
-    void ShowError(const QString& message);
+    void showError(const QString& message);
 
     Ui::ComputerGroupDialog ui;
     ComputerGroup* group_;

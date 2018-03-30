@@ -9,9 +9,12 @@
 
 namespace aspia {
 
-ComputerTree::ComputerTree(QWidget *parent)
+ComputerTree::ComputerTree(QWidget* parent)
     : QTreeWidget(parent)
 {
+    // Nothing
 }
+
+ComputerTree::~ComputerTree() = default;
 
 } // namespace aspia

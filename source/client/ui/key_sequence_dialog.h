@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H
 #define _ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H
 
-#include "qt/ui_key_sequence_dialog.h"
+#include "ui_key_sequence_dialog.h"
 
 namespace aspia {
 
@@ -17,7 +17,7 @@ class KeySequenceDialog : public QDialog
     Q_OBJECT
 
 public:
-    ~KeySequenceDialog() = default;
+    ~KeySequenceDialog();
 
     static QKeySequence keySequence(QWidget* parent = nullptr);
 

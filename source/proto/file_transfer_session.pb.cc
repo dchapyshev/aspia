@@ -16,6 +16,7 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+namespace aspia {
 namespace proto {
 namespace file_transfer {
 class DriveList_ItemDefaultTypeInternal {
@@ -95,6 +96,7 @@ class RequestDefaultTypeInternal {
 } _Request_default_instance_;
 }  // namespace file_transfer
 }  // namespace proto
+}  // namespace aspia
 namespace protobuf_file_5ftransfer_5fsession_2eproto {
 void InitDefaultsDriveList_ItemImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -105,11 +107,11 @@ void InitDefaultsDriveList_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_DriveList_Item_default_instance_;
-    new (ptr) ::proto::file_transfer::DriveList_Item();
+    void* ptr = &::aspia::proto::file_transfer::_DriveList_Item_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::DriveList_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::DriveList_Item::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::DriveList_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsDriveList_Item() {
@@ -127,11 +129,11 @@ void InitDefaultsDriveListImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList_Item();
   {
-    void* ptr = &::proto::file_transfer::_DriveList_default_instance_;
-    new (ptr) ::proto::file_transfer::DriveList();
+    void* ptr = &::aspia::proto::file_transfer::_DriveList_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::DriveList();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::DriveList::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::DriveList::InitAsDefaultInstance();
 }
 
 void InitDefaultsDriveList() {
@@ -148,11 +150,11 @@ void InitDefaultsDriveListRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_DriveListRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::DriveListRequest();
+    void* ptr = &::aspia::proto::file_transfer::_DriveListRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::DriveListRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::DriveListRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::DriveListRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsDriveListRequest() {
@@ -169,11 +171,11 @@ void InitDefaultsFileList_ItemImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_FileList_Item_default_instance_;
-    new (ptr) ::proto::file_transfer::FileList_Item();
+    void* ptr = &::aspia::proto::file_transfer::_FileList_Item_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::FileList_Item();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::FileList_Item::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::FileList_Item::InitAsDefaultInstance();
 }
 
 void InitDefaultsFileList_Item() {
@@ -191,11 +193,11 @@ void InitDefaultsFileListImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList_Item();
   {
-    void* ptr = &::proto::file_transfer::_FileList_default_instance_;
-    new (ptr) ::proto::file_transfer::FileList();
+    void* ptr = &::aspia::proto::file_transfer::_FileList_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::FileList();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::FileList::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::FileList::InitAsDefaultInstance();
 }
 
 void InitDefaultsFileList() {
@@ -212,11 +214,11 @@ void InitDefaultsFileListRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_FileListRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::FileListRequest();
+    void* ptr = &::aspia::proto::file_transfer::_FileListRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::FileListRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::FileListRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::FileListRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsFileListRequest() {
@@ -233,11 +235,11 @@ void InitDefaultsUploadRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_UploadRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::UploadRequest();
+    void* ptr = &::aspia::proto::file_transfer::_UploadRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::UploadRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::UploadRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::UploadRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsUploadRequest() {
@@ -254,11 +256,11 @@ void InitDefaultsDownloadRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_DownloadRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::DownloadRequest();
+    void* ptr = &::aspia::proto::file_transfer::_DownloadRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::DownloadRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::DownloadRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::DownloadRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsDownloadRequest() {
@@ -275,11 +277,11 @@ void InitDefaultsPacketRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_PacketRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::PacketRequest();
+    void* ptr = &::aspia::proto::file_transfer::_PacketRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::PacketRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::PacketRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::PacketRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsPacketRequest() {
@@ -296,11 +298,11 @@ void InitDefaultsPacketImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_Packet_default_instance_;
-    new (ptr) ::proto::file_transfer::Packet();
+    void* ptr = &::aspia::proto::file_transfer::_Packet_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::Packet();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::Packet::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::Packet::InitAsDefaultInstance();
 }
 
 void InitDefaultsPacket() {
@@ -317,11 +319,11 @@ void InitDefaultsCreateDirectoryRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_CreateDirectoryRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::CreateDirectoryRequest();
+    void* ptr = &::aspia::proto::file_transfer::_CreateDirectoryRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::CreateDirectoryRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::CreateDirectoryRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::CreateDirectoryRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsCreateDirectoryRequest() {
@@ -338,11 +340,11 @@ void InitDefaultsRenameRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_RenameRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::RenameRequest();
+    void* ptr = &::aspia::proto::file_transfer::_RenameRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::RenameRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::RenameRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::RenameRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsRenameRequest() {
@@ -359,11 +361,11 @@ void InitDefaultsRemoveRequestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::proto::file_transfer::_RemoveRequest_default_instance_;
-    new (ptr) ::proto::file_transfer::RemoveRequest();
+    void* ptr = &::aspia::proto::file_transfer::_RemoveRequest_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::RemoveRequest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::RemoveRequest::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::RemoveRequest::InitAsDefaultInstance();
 }
 
 void InitDefaultsRemoveRequest() {
@@ -383,11 +385,11 @@ void InitDefaultsReplyImpl() {
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList();
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
   {
-    void* ptr = &::proto::file_transfer::_Reply_default_instance_;
-    new (ptr) ::proto::file_transfer::Reply();
+    void* ptr = &::aspia::proto::file_transfer::_Reply_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::Reply();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::Reply::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::Reply::InitAsDefaultInstance();
 }
 
 void InitDefaultsReply() {
@@ -413,11 +415,11 @@ void InitDefaultsRequestImpl() {
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacketRequest();
   protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
   {
-    void* ptr = &::proto::file_transfer::_Request_default_instance_;
-    new (ptr) ::proto::file_transfer::Request();
+    void* ptr = &::aspia::proto::file_transfer::_Request_default_instance_;
+    new (ptr) ::aspia::proto::file_transfer::Request();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::proto::file_transfer::Request::InitAsDefaultInstance();
+  ::aspia::proto::file_transfer::Request::InitAsDefaultInstance();
 }
 
 void InitDefaultsRequest() {
@@ -426,6 +428,7 @@ void InitDefaultsRequest() {
 }
 
 }  // namespace protobuf_file_5ftransfer_5fsession_2eproto
+namespace aspia {
 namespace proto {
 namespace file_transfer {
 bool DriveList_Item_Type_IsValid(int value) {
@@ -515,7 +518,7 @@ DriveList_Item::DriveList_Item()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveList.Item)
 }
 DriveList_Item::DriveList_Item(const DriveList_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -527,7 +530,7 @@ DriveList_Item::DriveList_Item(const DriveList_Item& from)
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   type_ = from.type_;
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveList.Item)
 }
 
 void DriveList_Item::SharedCtor() {
@@ -537,7 +540,7 @@ void DriveList_Item::SharedCtor() {
 }
 
 DriveList_Item::~DriveList_Item() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.DriveList.Item)
   SharedDtor();
 }
 
@@ -564,7 +567,7 @@ DriveList_Item* DriveList_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void DriveList_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.DriveList.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveList.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -584,13 +587,13 @@ bool DriveList_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveList.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .proto.file_transfer.DriveList.Item.Type type = 1;
+      // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -598,7 +601,7 @@ bool DriveList_Item::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::proto::file_transfer::DriveList_Item_Type >(value));
+          set_type(static_cast< ::aspia::proto::file_transfer::DriveList_Item_Type >(value));
         } else {
           goto handle_unusual;
         }
@@ -614,7 +617,7 @@ bool DriveList_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.DriveList.Item.path"));
+            "aspia.proto.file_transfer.DriveList.Item.path"));
         } else {
           goto handle_unusual;
         }
@@ -633,21 +636,21 @@ bool DriveList_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.DriveList.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.DriveList.Item)
   return false;
 #undef DO_
 }
 
 void DriveList_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.DriveList.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .proto.file_transfer.DriveList.Item.Type type = 1;
+  // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -658,18 +661,18 @@ void DriveList_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.DriveList.Item.path");
+      "aspia.proto.file_transfer.DriveList.Item.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.DriveList.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.DriveList.Item)
 }
 
 size_t DriveList_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.DriveList.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.DriveList.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -681,7 +684,7 @@ size_t DriveList_Item::ByteSizeLong() const {
         this->path());
   }
 
-  // .proto.file_transfer.DriveList.Item.Type type = 1;
+  // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -700,7 +703,7 @@ void DriveList_Item::CheckTypeAndMergeFrom(
 }
 
 void DriveList_Item::MergeFrom(const DriveList_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.DriveList.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.DriveList.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -716,7 +719,7 @@ void DriveList_Item::MergeFrom(const DriveList_Item& from) {
 }
 
 void DriveList_Item::CopyFrom(const DriveList_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.DriveList.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.DriveList.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -739,7 +742,7 @@ void DriveList_Item::InternalSwap(DriveList_Item* other) {
 }
 
 ::std::string DriveList_Item::GetTypeName() const {
-  return "proto.file_transfer.DriveList.Item";
+  return "aspia.proto.file_transfer.DriveList.Item";
 }
 
 
@@ -757,7 +760,7 @@ DriveList::DriveList()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveList)
 }
 DriveList::DriveList(const DriveList& from)
   : ::google::protobuf::MessageLite(),
@@ -765,7 +768,7 @@ DriveList::DriveList(const DriveList& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveList)
 }
 
 void DriveList::SharedCtor() {
@@ -773,7 +776,7 @@ void DriveList::SharedCtor() {
 }
 
 DriveList::~DriveList() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.DriveList)
   SharedDtor();
 }
 
@@ -799,7 +802,7 @@ DriveList* DriveList::New(::google::protobuf::Arena* arena) const {
 }
 
 void DriveList::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.DriveList)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -818,13 +821,13 @@ bool DriveList::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveList)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .proto.file_transfer.DriveList.Item item = 1;
+      // repeated .aspia.proto.file_transfer.DriveList.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -847,21 +850,21 @@ bool DriveList::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.DriveList)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.DriveList)
   return false;
 #undef DO_
 }
 
 void DriveList::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.DriveList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .proto.file_transfer.DriveList.Item item = 1;
+  // repeated .aspia.proto.file_transfer.DriveList.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -870,16 +873,16 @@ void DriveList::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.DriveList)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.DriveList)
 }
 
 size_t DriveList::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.DriveList)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.DriveList)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .proto.file_transfer.DriveList.Item item = 1;
+  // repeated .aspia.proto.file_transfer.DriveList.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -903,7 +906,7 @@ void DriveList::CheckTypeAndMergeFrom(
 }
 
 void DriveList::MergeFrom(const DriveList& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.DriveList)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.DriveList)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -913,7 +916,7 @@ void DriveList::MergeFrom(const DriveList& from) {
 }
 
 void DriveList::CopyFrom(const DriveList& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.DriveList)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.DriveList)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -935,7 +938,7 @@ void DriveList::InternalSwap(DriveList* other) {
 }
 
 ::std::string DriveList::GetTypeName() const {
-  return "proto.file_transfer.DriveList";
+  return "aspia.proto.file_transfer.DriveList";
 }
 
 
@@ -953,7 +956,7 @@ DriveListRequest::DriveListRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveListRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveListRequest)
 }
 DriveListRequest::DriveListRequest(const DriveListRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -961,7 +964,7 @@ DriveListRequest::DriveListRequest(const DriveListRequest& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dummy_ = from.dummy_;
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveListRequest)
 }
 
 void DriveListRequest::SharedCtor() {
@@ -970,7 +973,7 @@ void DriveListRequest::SharedCtor() {
 }
 
 DriveListRequest::~DriveListRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.DriveListRequest)
   SharedDtor();
 }
 
@@ -996,7 +999,7 @@ DriveListRequest* DriveListRequest::New(::google::protobuf::Arena* arena) const 
 }
 
 void DriveListRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.DriveListRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveListRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1015,7 +1018,7 @@ bool DriveListRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveListRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1047,17 +1050,17 @@ bool DriveListRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.DriveListRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.DriveListRequest)
   return false;
 #undef DO_
 }
 
 void DriveListRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.DriveListRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1068,11 +1071,11 @@ void DriveListRequest::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.DriveListRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.DriveListRequest)
 }
 
 size_t DriveListRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.DriveListRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.DriveListRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -1097,7 +1100,7 @@ void DriveListRequest::CheckTypeAndMergeFrom(
 }
 
 void DriveListRequest::MergeFrom(const DriveListRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.DriveListRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.DriveListRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1109,7 +1112,7 @@ void DriveListRequest::MergeFrom(const DriveListRequest& from) {
 }
 
 void DriveListRequest::CopyFrom(const DriveListRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.DriveListRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.DriveListRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1131,7 +1134,7 @@ void DriveListRequest::InternalSwap(DriveListRequest* other) {
 }
 
 ::std::string DriveListRequest::GetTypeName() const {
-  return "proto.file_transfer.DriveListRequest";
+  return "aspia.proto.file_transfer.DriveListRequest";
 }
 
 
@@ -1152,7 +1155,7 @@ FileList_Item::FileList_Item()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList_Item();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileList.Item)
 }
 FileList_Item::FileList_Item(const FileList_Item& from)
   : ::google::protobuf::MessageLite(),
@@ -1166,7 +1169,7 @@ FileList_Item::FileList_Item(const FileList_Item& from)
   ::memcpy(&size_, &from.size_,
     static_cast<size_t>(reinterpret_cast<char*>(&is_directory_) -
     reinterpret_cast<char*>(&size_)) + sizeof(is_directory_));
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.FileList.Item)
 }
 
 void FileList_Item::SharedCtor() {
@@ -1178,7 +1181,7 @@ void FileList_Item::SharedCtor() {
 }
 
 FileList_Item::~FileList_Item() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.FileList.Item)
   SharedDtor();
 }
 
@@ -1205,7 +1208,7 @@ FileList_Item* FileList_Item::New(::google::protobuf::Arena* arena) const {
 }
 
 void FileList_Item::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.FileList.Item)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileList.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1227,7 +1230,7 @@ bool FileList_Item::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileList.Item)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1242,7 +1245,7 @@ bool FileList_Item::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.FileList.Item.name"));
+            "aspia.proto.file_transfer.FileList.Item.name"));
         } else {
           goto handle_unusual;
         }
@@ -1303,17 +1306,17 @@ bool FileList_Item::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.FileList.Item)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.FileList.Item)
   return false;
 #undef DO_
 }
 
 void FileList_Item::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.FileList.Item)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1322,7 +1325,7 @@ void FileList_Item::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.FileList.Item.name");
+      "aspia.proto.file_transfer.FileList.Item.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->name(), output);
   }
@@ -1344,11 +1347,11 @@ void FileList_Item::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.FileList.Item)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.FileList.Item)
 }
 
 size_t FileList_Item::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.FileList.Item)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.FileList.Item)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -1392,7 +1395,7 @@ void FileList_Item::CheckTypeAndMergeFrom(
 }
 
 void FileList_Item::MergeFrom(const FileList_Item& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.FileList.Item)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.FileList.Item)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1414,7 +1417,7 @@ void FileList_Item::MergeFrom(const FileList_Item& from) {
 }
 
 void FileList_Item::CopyFrom(const FileList_Item& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.FileList.Item)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.FileList.Item)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1439,7 +1442,7 @@ void FileList_Item::InternalSwap(FileList_Item* other) {
 }
 
 ::std::string FileList_Item::GetTypeName() const {
-  return "proto.file_transfer.FileList.Item";
+  return "aspia.proto.file_transfer.FileList.Item";
 }
 
 
@@ -1457,7 +1460,7 @@ FileList::FileList()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileList)
 }
 FileList::FileList(const FileList& from)
   : ::google::protobuf::MessageLite(),
@@ -1465,7 +1468,7 @@ FileList::FileList(const FileList& from)
       item_(from.item_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.FileList)
 }
 
 void FileList::SharedCtor() {
@@ -1473,7 +1476,7 @@ void FileList::SharedCtor() {
 }
 
 FileList::~FileList() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.FileList)
   SharedDtor();
 }
 
@@ -1499,7 +1502,7 @@ FileList* FileList::New(::google::protobuf::Arena* arena) const {
 }
 
 void FileList::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.FileList)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1518,13 +1521,13 @@ bool FileList::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileList)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .proto.file_transfer.FileList.Item item = 1;
+      // repeated .aspia.proto.file_transfer.FileList.Item item = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -1547,21 +1550,21 @@ bool FileList::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.FileList)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.FileList)
   return false;
 #undef DO_
 }
 
 void FileList::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.FileList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .proto.file_transfer.FileList.Item item = 1;
+  // repeated .aspia.proto.file_transfer.FileList.Item item = 1;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -1570,16 +1573,16 @@ void FileList::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.FileList)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.FileList)
 }
 
 size_t FileList::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.FileList)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.FileList)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .proto.file_transfer.FileList.Item item = 1;
+  // repeated .aspia.proto.file_transfer.FileList.Item item = 1;
   {
     unsigned int count = static_cast<unsigned int>(this->item_size());
     total_size += 1UL * count;
@@ -1603,7 +1606,7 @@ void FileList::CheckTypeAndMergeFrom(
 }
 
 void FileList::MergeFrom(const FileList& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.FileList)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.FileList)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1613,7 +1616,7 @@ void FileList::MergeFrom(const FileList& from) {
 }
 
 void FileList::CopyFrom(const FileList& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.FileList)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.FileList)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1635,7 +1638,7 @@ void FileList::InternalSwap(FileList* other) {
 }
 
 ::std::string FileList::GetTypeName() const {
-  return "proto.file_transfer.FileList";
+  return "aspia.proto.file_transfer.FileList";
 }
 
 
@@ -1653,7 +1656,7 @@ FileListRequest::FileListRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileListRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileListRequest)
 }
 FileListRequest::FileListRequest(const FileListRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -1664,7 +1667,7 @@ FileListRequest::FileListRequest(const FileListRequest& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.FileListRequest)
 }
 
 void FileListRequest::SharedCtor() {
@@ -1673,7 +1676,7 @@ void FileListRequest::SharedCtor() {
 }
 
 FileListRequest::~FileListRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.FileListRequest)
   SharedDtor();
 }
 
@@ -1700,7 +1703,7 @@ FileListRequest* FileListRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void FileListRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.FileListRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileListRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1719,7 +1722,7 @@ bool FileListRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileListRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1734,7 +1737,7 @@ bool FileListRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.FileListRequest.path"));
+            "aspia.proto.file_transfer.FileListRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -1753,17 +1756,17 @@ bool FileListRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.FileListRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.FileListRequest)
   return false;
 #undef DO_
 }
 
 void FileListRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.FileListRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1772,18 +1775,18 @@ void FileListRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.FileListRequest.path");
+      "aspia.proto.file_transfer.FileListRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.FileListRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.FileListRequest)
 }
 
 size_t FileListRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.FileListRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.FileListRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -1808,7 +1811,7 @@ void FileListRequest::CheckTypeAndMergeFrom(
 }
 
 void FileListRequest::MergeFrom(const FileListRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.FileListRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.FileListRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1821,7 +1824,7 @@ void FileListRequest::MergeFrom(const FileListRequest& from) {
 }
 
 void FileListRequest::CopyFrom(const FileListRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.FileListRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.FileListRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1843,7 +1846,7 @@ void FileListRequest::InternalSwap(FileListRequest* other) {
 }
 
 ::std::string FileListRequest::GetTypeName() const {
-  return "proto.file_transfer.FileListRequest";
+  return "aspia.proto.file_transfer.FileListRequest";
 }
 
 
@@ -1862,7 +1865,7 @@ UploadRequest::UploadRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsUploadRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.UploadRequest)
 }
 UploadRequest::UploadRequest(const UploadRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -1874,7 +1877,7 @@ UploadRequest::UploadRequest(const UploadRequest& from)
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
   overwrite_ = from.overwrite_;
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.UploadRequest)
 }
 
 void UploadRequest::SharedCtor() {
@@ -1884,7 +1887,7 @@ void UploadRequest::SharedCtor() {
 }
 
 UploadRequest::~UploadRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.UploadRequest)
   SharedDtor();
 }
 
@@ -1911,7 +1914,7 @@ UploadRequest* UploadRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void UploadRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.UploadRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.UploadRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1931,7 +1934,7 @@ bool UploadRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.UploadRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1946,7 +1949,7 @@ bool UploadRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.UploadRequest.path"));
+            "aspia.proto.file_transfer.UploadRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -1979,17 +1982,17 @@ bool UploadRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.UploadRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.UploadRequest)
   return false;
 #undef DO_
 }
 
 void UploadRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.UploadRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1998,7 +2001,7 @@ void UploadRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.UploadRequest.path");
+      "aspia.proto.file_transfer.UploadRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
@@ -2010,11 +2013,11 @@ void UploadRequest::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.UploadRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.UploadRequest)
 }
 
 size_t UploadRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.UploadRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.UploadRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2044,7 +2047,7 @@ void UploadRequest::CheckTypeAndMergeFrom(
 }
 
 void UploadRequest::MergeFrom(const UploadRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.UploadRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.UploadRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2060,7 +2063,7 @@ void UploadRequest::MergeFrom(const UploadRequest& from) {
 }
 
 void UploadRequest::CopyFrom(const UploadRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.UploadRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.UploadRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2083,7 +2086,7 @@ void UploadRequest::InternalSwap(UploadRequest* other) {
 }
 
 ::std::string UploadRequest::GetTypeName() const {
-  return "proto.file_transfer.UploadRequest";
+  return "aspia.proto.file_transfer.UploadRequest";
 }
 
 
@@ -2101,7 +2104,7 @@ DownloadRequest::DownloadRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDownloadRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DownloadRequest)
 }
 DownloadRequest::DownloadRequest(const DownloadRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -2112,7 +2115,7 @@ DownloadRequest::DownloadRequest(const DownloadRequest& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DownloadRequest)
 }
 
 void DownloadRequest::SharedCtor() {
@@ -2121,7 +2124,7 @@ void DownloadRequest::SharedCtor() {
 }
 
 DownloadRequest::~DownloadRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.DownloadRequest)
   SharedDtor();
 }
 
@@ -2148,7 +2151,7 @@ DownloadRequest* DownloadRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void DownloadRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.DownloadRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DownloadRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2167,7 +2170,7 @@ bool DownloadRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DownloadRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2182,7 +2185,7 @@ bool DownloadRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.DownloadRequest.path"));
+            "aspia.proto.file_transfer.DownloadRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -2201,17 +2204,17 @@ bool DownloadRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.DownloadRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.DownloadRequest)
   return false;
 #undef DO_
 }
 
 void DownloadRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.DownloadRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2220,18 +2223,18 @@ void DownloadRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.DownloadRequest.path");
+      "aspia.proto.file_transfer.DownloadRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.DownloadRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.DownloadRequest)
 }
 
 size_t DownloadRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.DownloadRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.DownloadRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2256,7 +2259,7 @@ void DownloadRequest::CheckTypeAndMergeFrom(
 }
 
 void DownloadRequest::MergeFrom(const DownloadRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.DownloadRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.DownloadRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2269,7 +2272,7 @@ void DownloadRequest::MergeFrom(const DownloadRequest& from) {
 }
 
 void DownloadRequest::CopyFrom(const DownloadRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.DownloadRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.DownloadRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2291,7 +2294,7 @@ void DownloadRequest::InternalSwap(DownloadRequest* other) {
 }
 
 ::std::string DownloadRequest::GetTypeName() const {
-  return "proto.file_transfer.DownloadRequest";
+  return "aspia.proto.file_transfer.DownloadRequest";
 }
 
 
@@ -2309,7 +2312,7 @@ PacketRequest::PacketRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacketRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.PacketRequest)
 }
 PacketRequest::PacketRequest(const PacketRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -2317,7 +2320,7 @@ PacketRequest::PacketRequest(const PacketRequest& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dummy_ = from.dummy_;
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.PacketRequest)
 }
 
 void PacketRequest::SharedCtor() {
@@ -2326,7 +2329,7 @@ void PacketRequest::SharedCtor() {
 }
 
 PacketRequest::~PacketRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.PacketRequest)
   SharedDtor();
 }
 
@@ -2352,7 +2355,7 @@ PacketRequest* PacketRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void PacketRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.PacketRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.PacketRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2371,7 +2374,7 @@ bool PacketRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.PacketRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2403,17 +2406,17 @@ bool PacketRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.PacketRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.PacketRequest)
   return false;
 #undef DO_
 }
 
 void PacketRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.PacketRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2424,11 +2427,11 @@ void PacketRequest::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.PacketRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.PacketRequest)
 }
 
 size_t PacketRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.PacketRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.PacketRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2453,7 +2456,7 @@ void PacketRequest::CheckTypeAndMergeFrom(
 }
 
 void PacketRequest::MergeFrom(const PacketRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.PacketRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.PacketRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2465,7 +2468,7 @@ void PacketRequest::MergeFrom(const PacketRequest& from) {
 }
 
 void PacketRequest::CopyFrom(const PacketRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.PacketRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.PacketRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2487,7 +2490,7 @@ void PacketRequest::InternalSwap(PacketRequest* other) {
 }
 
 ::std::string PacketRequest::GetTypeName() const {
-  return "proto.file_transfer.PacketRequest";
+  return "aspia.proto.file_transfer.PacketRequest";
 }
 
 
@@ -2507,7 +2510,7 @@ Packet::Packet()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Packet)
 }
 Packet::Packet(const Packet& from)
   : ::google::protobuf::MessageLite(),
@@ -2521,7 +2524,7 @@ Packet::Packet(const Packet& from)
   ::memcpy(&file_size_, &from.file_size_,
     static_cast<size_t>(reinterpret_cast<char*>(&flags_) -
     reinterpret_cast<char*>(&file_size_)) + sizeof(flags_));
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.Packet)
 }
 
 void Packet::SharedCtor() {
@@ -2533,7 +2536,7 @@ void Packet::SharedCtor() {
 }
 
 Packet::~Packet() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.Packet)
   SharedDtor();
 }
 
@@ -2560,7 +2563,7 @@ Packet* Packet::New(::google::protobuf::Arena* arena) const {
 }
 
 void Packet::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.Packet)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Packet)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2582,7 +2585,7 @@ bool Packet::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Packet)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2640,17 +2643,17 @@ bool Packet::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.Packet)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.Packet)
   return false;
 #undef DO_
 }
 
 void Packet::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.Packet)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2672,11 +2675,11 @@ void Packet::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.Packet)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.Packet)
 }
 
 size_t Packet::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.Packet)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.Packet)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2715,7 +2718,7 @@ void Packet::CheckTypeAndMergeFrom(
 }
 
 void Packet::MergeFrom(const Packet& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.Packet)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.Packet)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2734,7 +2737,7 @@ void Packet::MergeFrom(const Packet& from) {
 }
 
 void Packet::CopyFrom(const Packet& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.Packet)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.Packet)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2758,7 +2761,7 @@ void Packet::InternalSwap(Packet* other) {
 }
 
 ::std::string Packet::GetTypeName() const {
-  return "proto.file_transfer.Packet";
+  return "aspia.proto.file_transfer.Packet";
 }
 
 
@@ -2776,7 +2779,7 @@ CreateDirectoryRequest::CreateDirectoryRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsCreateDirectoryRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.CreateDirectoryRequest)
 }
 CreateDirectoryRequest::CreateDirectoryRequest(const CreateDirectoryRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -2787,7 +2790,7 @@ CreateDirectoryRequest::CreateDirectoryRequest(const CreateDirectoryRequest& fro
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.CreateDirectoryRequest)
 }
 
 void CreateDirectoryRequest::SharedCtor() {
@@ -2796,7 +2799,7 @@ void CreateDirectoryRequest::SharedCtor() {
 }
 
 CreateDirectoryRequest::~CreateDirectoryRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.CreateDirectoryRequest)
   SharedDtor();
 }
 
@@ -2823,7 +2826,7 @@ CreateDirectoryRequest* CreateDirectoryRequest::New(::google::protobuf::Arena* a
 }
 
 void CreateDirectoryRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.CreateDirectoryRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2842,7 +2845,7 @@ bool CreateDirectoryRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2857,7 +2860,7 @@ bool CreateDirectoryRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.CreateDirectoryRequest.path"));
+            "aspia.proto.file_transfer.CreateDirectoryRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -2876,17 +2879,17 @@ bool CreateDirectoryRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.CreateDirectoryRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.CreateDirectoryRequest)
   return false;
 #undef DO_
 }
 
 void CreateDirectoryRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2895,18 +2898,18 @@ void CreateDirectoryRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.CreateDirectoryRequest.path");
+      "aspia.proto.file_transfer.CreateDirectoryRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.CreateDirectoryRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.CreateDirectoryRequest)
 }
 
 size_t CreateDirectoryRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.CreateDirectoryRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -2931,7 +2934,7 @@ void CreateDirectoryRequest::CheckTypeAndMergeFrom(
 }
 
 void CreateDirectoryRequest::MergeFrom(const CreateDirectoryRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.CreateDirectoryRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -2944,7 +2947,7 @@ void CreateDirectoryRequest::MergeFrom(const CreateDirectoryRequest& from) {
 }
 
 void CreateDirectoryRequest::CopyFrom(const CreateDirectoryRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.CreateDirectoryRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2966,7 +2969,7 @@ void CreateDirectoryRequest::InternalSwap(CreateDirectoryRequest* other) {
 }
 
 ::std::string CreateDirectoryRequest::GetTypeName() const {
-  return "proto.file_transfer.CreateDirectoryRequest";
+  return "aspia.proto.file_transfer.CreateDirectoryRequest";
 }
 
 
@@ -2985,7 +2988,7 @@ RenameRequest::RenameRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRenameRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.RenameRequest)
 }
 RenameRequest::RenameRequest(const RenameRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -3000,7 +3003,7 @@ RenameRequest::RenameRequest(const RenameRequest& from)
   if (from.new_name().size() > 0) {
     new_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.new_name_);
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.RenameRequest)
 }
 
 void RenameRequest::SharedCtor() {
@@ -3010,7 +3013,7 @@ void RenameRequest::SharedCtor() {
 }
 
 RenameRequest::~RenameRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.RenameRequest)
   SharedDtor();
 }
 
@@ -3038,7 +3041,7 @@ RenameRequest* RenameRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void RenameRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.RenameRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.RenameRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3058,7 +3061,7 @@ bool RenameRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.RenameRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3073,7 +3076,7 @@ bool RenameRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->old_name().data(), static_cast<int>(this->old_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.RenameRequest.old_name"));
+            "aspia.proto.file_transfer.RenameRequest.old_name"));
         } else {
           goto handle_unusual;
         }
@@ -3089,7 +3092,7 @@ bool RenameRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->new_name().data(), static_cast<int>(this->new_name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.RenameRequest.new_name"));
+            "aspia.proto.file_transfer.RenameRequest.new_name"));
         } else {
           goto handle_unusual;
         }
@@ -3108,17 +3111,17 @@ bool RenameRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.RenameRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.RenameRequest)
   return false;
 #undef DO_
 }
 
 void RenameRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.RenameRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3127,7 +3130,7 @@ void RenameRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->old_name().data(), static_cast<int>(this->old_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.RenameRequest.old_name");
+      "aspia.proto.file_transfer.RenameRequest.old_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->old_name(), output);
   }
@@ -3137,18 +3140,18 @@ void RenameRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->new_name().data(), static_cast<int>(this->new_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.RenameRequest.new_name");
+      "aspia.proto.file_transfer.RenameRequest.new_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->new_name(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.RenameRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.RenameRequest)
 }
 
 size_t RenameRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.RenameRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.RenameRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -3180,7 +3183,7 @@ void RenameRequest::CheckTypeAndMergeFrom(
 }
 
 void RenameRequest::MergeFrom(const RenameRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.RenameRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.RenameRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3197,7 +3200,7 @@ void RenameRequest::MergeFrom(const RenameRequest& from) {
 }
 
 void RenameRequest::CopyFrom(const RenameRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.RenameRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.RenameRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3220,7 +3223,7 @@ void RenameRequest::InternalSwap(RenameRequest* other) {
 }
 
 ::std::string RenameRequest::GetTypeName() const {
-  return "proto.file_transfer.RenameRequest";
+  return "aspia.proto.file_transfer.RenameRequest";
 }
 
 
@@ -3238,7 +3241,7 @@ RemoveRequest::RemoveRequest()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRemoveRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.RemoveRequest)
 }
 RemoveRequest::RemoveRequest(const RemoveRequest& from)
   : ::google::protobuf::MessageLite(),
@@ -3249,7 +3252,7 @@ RemoveRequest::RemoveRequest(const RemoveRequest& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.RemoveRequest)
 }
 
 void RemoveRequest::SharedCtor() {
@@ -3258,7 +3261,7 @@ void RemoveRequest::SharedCtor() {
 }
 
 RemoveRequest::~RemoveRequest() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.RemoveRequest)
   SharedDtor();
 }
 
@@ -3285,7 +3288,7 @@ RemoveRequest* RemoveRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void RemoveRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.RemoveRequest)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.RemoveRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3304,7 +3307,7 @@ bool RemoveRequest::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.RemoveRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -3319,7 +3322,7 @@ bool RemoveRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->path().data(), static_cast<int>(this->path().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "proto.file_transfer.RemoveRequest.path"));
+            "aspia.proto.file_transfer.RemoveRequest.path"));
         } else {
           goto handle_unusual;
         }
@@ -3338,17 +3341,17 @@ bool RemoveRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.RemoveRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.RemoveRequest)
   return false;
 #undef DO_
 }
 
 void RemoveRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.RemoveRequest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3357,18 +3360,18 @@ void RemoveRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->path().data(), static_cast<int>(this->path().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "proto.file_transfer.RemoveRequest.path");
+      "aspia.proto.file_transfer.RemoveRequest.path");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->path(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.RemoveRequest)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.RemoveRequest)
 }
 
 size_t RemoveRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.RemoveRequest)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.RemoveRequest)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -3393,7 +3396,7 @@ void RemoveRequest::CheckTypeAndMergeFrom(
 }
 
 void RemoveRequest::MergeFrom(const RemoveRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.RemoveRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.RemoveRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -3406,7 +3409,7 @@ void RemoveRequest::MergeFrom(const RemoveRequest& from) {
 }
 
 void RemoveRequest::CopyFrom(const RemoveRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.RemoveRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.RemoveRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3428,19 +3431,19 @@ void RemoveRequest::InternalSwap(RemoveRequest* other) {
 }
 
 ::std::string RemoveRequest::GetTypeName() const {
-  return "proto.file_transfer.RemoveRequest";
+  return "aspia.proto.file_transfer.RemoveRequest";
 }
 
 
 // ===================================================================
 
 void Reply::InitAsDefaultInstance() {
-  ::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->drive_list_ = const_cast< ::proto::file_transfer::DriveList*>(
-      ::proto::file_transfer::DriveList::internal_default_instance());
-  ::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->file_list_ = const_cast< ::proto::file_transfer::FileList*>(
-      ::proto::file_transfer::FileList::internal_default_instance());
-  ::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->packet_ = const_cast< ::proto::file_transfer::Packet*>(
-      ::proto::file_transfer::Packet::internal_default_instance());
+  ::aspia::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->drive_list_ = const_cast< ::aspia::proto::file_transfer::DriveList*>(
+      ::aspia::proto::file_transfer::DriveList::internal_default_instance());
+  ::aspia::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->file_list_ = const_cast< ::aspia::proto::file_transfer::FileList*>(
+      ::aspia::proto::file_transfer::FileList::internal_default_instance());
+  ::aspia::proto::file_transfer::_Reply_default_instance_._instance.get_mutable()->packet_ = const_cast< ::aspia::proto::file_transfer::Packet*>(
+      ::aspia::proto::file_transfer::Packet::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Reply::kStatusFieldNumber;
@@ -3455,7 +3458,7 @@ Reply::Reply()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsReply();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Reply)
 }
 Reply::Reply(const Reply& from)
   : ::google::protobuf::MessageLite(),
@@ -3463,22 +3466,22 @@ Reply::Reply(const Reply& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_drive_list()) {
-    drive_list_ = new ::proto::file_transfer::DriveList(*from.drive_list_);
+    drive_list_ = new ::aspia::proto::file_transfer::DriveList(*from.drive_list_);
   } else {
     drive_list_ = NULL;
   }
   if (from.has_file_list()) {
-    file_list_ = new ::proto::file_transfer::FileList(*from.file_list_);
+    file_list_ = new ::aspia::proto::file_transfer::FileList(*from.file_list_);
   } else {
     file_list_ = NULL;
   }
   if (from.has_packet()) {
-    packet_ = new ::proto::file_transfer::Packet(*from.packet_);
+    packet_ = new ::aspia::proto::file_transfer::Packet(*from.packet_);
   } else {
     packet_ = NULL;
   }
   status_ = from.status_;
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.Reply)
 }
 
 void Reply::SharedCtor() {
@@ -3489,7 +3492,7 @@ void Reply::SharedCtor() {
 }
 
 Reply::~Reply() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.Reply)
   SharedDtor();
 }
 
@@ -3518,7 +3521,7 @@ Reply* Reply::New(::google::protobuf::Arena* arena) const {
 }
 
 void Reply::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.Reply)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Reply)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3549,13 +3552,13 @@ bool Reply::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Reply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .proto.file_transfer.Status status = 1;
+      // .aspia.proto.file_transfer.Status status = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -3563,14 +3566,14 @@ bool Reply::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::proto::file_transfer::Status >(value));
+          set_status(static_cast< ::aspia::proto::file_transfer::Status >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .proto.file_transfer.DriveList drive_list = 2;
+      // .aspia.proto.file_transfer.DriveList drive_list = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
@@ -3582,7 +3585,7 @@ bool Reply::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.FileList file_list = 3;
+      // .aspia.proto.file_transfer.FileList file_list = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
@@ -3594,7 +3597,7 @@ bool Reply::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.Packet packet = 4;
+      // .aspia.proto.file_transfer.Packet packet = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
@@ -3618,39 +3621,39 @@ bool Reply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.Reply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.Reply)
   return false;
 #undef DO_
 }
 
 void Reply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.Reply)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .proto.file_transfer.Status status = 1;
+  // .aspia.proto.file_transfer.Status status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->status(), output);
   }
 
-  // .proto.file_transfer.DriveList drive_list = 2;
+  // .aspia.proto.file_transfer.DriveList drive_list = 2;
   if (this->has_drive_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       2, *this->drive_list_, output);
   }
 
-  // .proto.file_transfer.FileList file_list = 3;
+  // .aspia.proto.file_transfer.FileList file_list = 3;
   if (this->has_file_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       3, *this->file_list_, output);
   }
 
-  // .proto.file_transfer.Packet packet = 4;
+  // .aspia.proto.file_transfer.Packet packet = 4;
   if (this->has_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       4, *this->packet_, output);
@@ -3658,37 +3661,37 @@ void Reply::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.Reply)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.Reply)
 }
 
 size_t Reply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.Reply)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.Reply)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .proto.file_transfer.DriveList drive_list = 2;
+  // .aspia.proto.file_transfer.DriveList drive_list = 2;
   if (this->has_drive_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->drive_list_);
   }
 
-  // .proto.file_transfer.FileList file_list = 3;
+  // .aspia.proto.file_transfer.FileList file_list = 3;
   if (this->has_file_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->file_list_);
   }
 
-  // .proto.file_transfer.Packet packet = 4;
+  // .aspia.proto.file_transfer.Packet packet = 4;
   if (this->has_packet()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->packet_);
   }
 
-  // .proto.file_transfer.Status status = 1;
+  // .aspia.proto.file_transfer.Status status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -3707,20 +3710,20 @@ void Reply::CheckTypeAndMergeFrom(
 }
 
 void Reply::MergeFrom(const Reply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.Reply)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.Reply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from.has_drive_list()) {
-    mutable_drive_list()->::proto::file_transfer::DriveList::MergeFrom(from.drive_list());
+    mutable_drive_list()->::aspia::proto::file_transfer::DriveList::MergeFrom(from.drive_list());
   }
   if (from.has_file_list()) {
-    mutable_file_list()->::proto::file_transfer::FileList::MergeFrom(from.file_list());
+    mutable_file_list()->::aspia::proto::file_transfer::FileList::MergeFrom(from.file_list());
   }
   if (from.has_packet()) {
-    mutable_packet()->::proto::file_transfer::Packet::MergeFrom(from.packet());
+    mutable_packet()->::aspia::proto::file_transfer::Packet::MergeFrom(from.packet());
   }
   if (from.status() != 0) {
     set_status(from.status());
@@ -3728,7 +3731,7 @@ void Reply::MergeFrom(const Reply& from) {
 }
 
 void Reply::CopyFrom(const Reply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.Reply)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.Reply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3753,31 +3756,31 @@ void Reply::InternalSwap(Reply* other) {
 }
 
 ::std::string Reply::GetTypeName() const {
-  return "proto.file_transfer.Reply";
+  return "aspia.proto.file_transfer.Reply";
 }
 
 
 // ===================================================================
 
 void Request::InitAsDefaultInstance() {
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->drive_list_request_ = const_cast< ::proto::file_transfer::DriveListRequest*>(
-      ::proto::file_transfer::DriveListRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->file_list_request_ = const_cast< ::proto::file_transfer::FileListRequest*>(
-      ::proto::file_transfer::FileListRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->create_directory_request_ = const_cast< ::proto::file_transfer::CreateDirectoryRequest*>(
-      ::proto::file_transfer::CreateDirectoryRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->rename_request_ = const_cast< ::proto::file_transfer::RenameRequest*>(
-      ::proto::file_transfer::RenameRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->remove_request_ = const_cast< ::proto::file_transfer::RemoveRequest*>(
-      ::proto::file_transfer::RemoveRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->download_request_ = const_cast< ::proto::file_transfer::DownloadRequest*>(
-      ::proto::file_transfer::DownloadRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->upload_request_ = const_cast< ::proto::file_transfer::UploadRequest*>(
-      ::proto::file_transfer::UploadRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->packet_request_ = const_cast< ::proto::file_transfer::PacketRequest*>(
-      ::proto::file_transfer::PacketRequest::internal_default_instance());
-  ::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->packet_ = const_cast< ::proto::file_transfer::Packet*>(
-      ::proto::file_transfer::Packet::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->drive_list_request_ = const_cast< ::aspia::proto::file_transfer::DriveListRequest*>(
+      ::aspia::proto::file_transfer::DriveListRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->file_list_request_ = const_cast< ::aspia::proto::file_transfer::FileListRequest*>(
+      ::aspia::proto::file_transfer::FileListRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->create_directory_request_ = const_cast< ::aspia::proto::file_transfer::CreateDirectoryRequest*>(
+      ::aspia::proto::file_transfer::CreateDirectoryRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->rename_request_ = const_cast< ::aspia::proto::file_transfer::RenameRequest*>(
+      ::aspia::proto::file_transfer::RenameRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->remove_request_ = const_cast< ::aspia::proto::file_transfer::RemoveRequest*>(
+      ::aspia::proto::file_transfer::RemoveRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->download_request_ = const_cast< ::aspia::proto::file_transfer::DownloadRequest*>(
+      ::aspia::proto::file_transfer::DownloadRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->upload_request_ = const_cast< ::aspia::proto::file_transfer::UploadRequest*>(
+      ::aspia::proto::file_transfer::UploadRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->packet_request_ = const_cast< ::aspia::proto::file_transfer::PacketRequest*>(
+      ::aspia::proto::file_transfer::PacketRequest::internal_default_instance());
+  ::aspia::proto::file_transfer::_Request_default_instance_._instance.get_mutable()->packet_ = const_cast< ::aspia::proto::file_transfer::Packet*>(
+      ::aspia::proto::file_transfer::Packet::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Request::kDriveListRequestFieldNumber;
@@ -3797,7 +3800,7 @@ Request::Request()
     ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRequest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto.file_transfer.Request)
+  // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Request)
 }
 Request::Request(const Request& from)
   : ::google::protobuf::MessageLite(),
@@ -3805,51 +3808,51 @@ Request::Request(const Request& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_drive_list_request()) {
-    drive_list_request_ = new ::proto::file_transfer::DriveListRequest(*from.drive_list_request_);
+    drive_list_request_ = new ::aspia::proto::file_transfer::DriveListRequest(*from.drive_list_request_);
   } else {
     drive_list_request_ = NULL;
   }
   if (from.has_file_list_request()) {
-    file_list_request_ = new ::proto::file_transfer::FileListRequest(*from.file_list_request_);
+    file_list_request_ = new ::aspia::proto::file_transfer::FileListRequest(*from.file_list_request_);
   } else {
     file_list_request_ = NULL;
   }
   if (from.has_create_directory_request()) {
-    create_directory_request_ = new ::proto::file_transfer::CreateDirectoryRequest(*from.create_directory_request_);
+    create_directory_request_ = new ::aspia::proto::file_transfer::CreateDirectoryRequest(*from.create_directory_request_);
   } else {
     create_directory_request_ = NULL;
   }
   if (from.has_rename_request()) {
-    rename_request_ = new ::proto::file_transfer::RenameRequest(*from.rename_request_);
+    rename_request_ = new ::aspia::proto::file_transfer::RenameRequest(*from.rename_request_);
   } else {
     rename_request_ = NULL;
   }
   if (from.has_remove_request()) {
-    remove_request_ = new ::proto::file_transfer::RemoveRequest(*from.remove_request_);
+    remove_request_ = new ::aspia::proto::file_transfer::RemoveRequest(*from.remove_request_);
   } else {
     remove_request_ = NULL;
   }
   if (from.has_download_request()) {
-    download_request_ = new ::proto::file_transfer::DownloadRequest(*from.download_request_);
+    download_request_ = new ::aspia::proto::file_transfer::DownloadRequest(*from.download_request_);
   } else {
     download_request_ = NULL;
   }
   if (from.has_upload_request()) {
-    upload_request_ = new ::proto::file_transfer::UploadRequest(*from.upload_request_);
+    upload_request_ = new ::aspia::proto::file_transfer::UploadRequest(*from.upload_request_);
   } else {
     upload_request_ = NULL;
   }
   if (from.has_packet_request()) {
-    packet_request_ = new ::proto::file_transfer::PacketRequest(*from.packet_request_);
+    packet_request_ = new ::aspia::proto::file_transfer::PacketRequest(*from.packet_request_);
   } else {
     packet_request_ = NULL;
   }
   if (from.has_packet()) {
-    packet_ = new ::proto::file_transfer::Packet(*from.packet_);
+    packet_ = new ::aspia::proto::file_transfer::Packet(*from.packet_);
   } else {
     packet_ = NULL;
   }
-  // @@protoc_insertion_point(copy_constructor:proto.file_transfer.Request)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.Request)
 }
 
 void Request::SharedCtor() {
@@ -3860,7 +3863,7 @@ void Request::SharedCtor() {
 }
 
 Request::~Request() {
-  // @@protoc_insertion_point(destructor:proto.file_transfer.Request)
+  // @@protoc_insertion_point(destructor:aspia.proto.file_transfer.Request)
   SharedDtor();
 }
 
@@ -3895,7 +3898,7 @@ Request* Request::New(::google::protobuf::Arena* arena) const {
 }
 
 void Request::Clear() {
-// @@protoc_insertion_point(message_clear_start:proto.file_transfer.Request)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Request)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3949,13 +3952,13 @@ bool Request::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:proto.file_transfer.Request)
+  // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Request)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .proto.file_transfer.DriveListRequest drive_list_request = 1;
+      // .aspia.proto.file_transfer.DriveListRequest drive_list_request = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
@@ -3967,7 +3970,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.FileListRequest file_list_request = 2;
+      // .aspia.proto.file_transfer.FileListRequest file_list_request = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
@@ -3979,7 +3982,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
+      // .aspia.proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
@@ -3991,7 +3994,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.RenameRequest rename_request = 4;
+      // .aspia.proto.file_transfer.RenameRequest rename_request = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
@@ -4003,7 +4006,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.RemoveRequest remove_request = 5;
+      // .aspia.proto.file_transfer.RemoveRequest remove_request = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
@@ -4015,7 +4018,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.DownloadRequest download_request = 6;
+      // .aspia.proto.file_transfer.DownloadRequest download_request = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
@@ -4027,7 +4030,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.UploadRequest upload_request = 7;
+      // .aspia.proto.file_transfer.UploadRequest upload_request = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
@@ -4039,7 +4042,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.PacketRequest packet_request = 8;
+      // .aspia.proto.file_transfer.PacketRequest packet_request = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
@@ -4051,7 +4054,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .proto.file_transfer.Packet packet = 9;
+      // .aspia.proto.file_transfer.Packet packet = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
@@ -4075,69 +4078,69 @@ bool Request::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto.file_transfer.Request)
+  // @@protoc_insertion_point(parse_success:aspia.proto.file_transfer.Request)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto.file_transfer.Request)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.file_transfer.Request)
   return false;
 #undef DO_
 }
 
 void Request::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto.file_transfer.Request)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.file_transfer.Request)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .proto.file_transfer.DriveListRequest drive_list_request = 1;
+  // .aspia.proto.file_transfer.DriveListRequest drive_list_request = 1;
   if (this->has_drive_list_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       1, *this->drive_list_request_, output);
   }
 
-  // .proto.file_transfer.FileListRequest file_list_request = 2;
+  // .aspia.proto.file_transfer.FileListRequest file_list_request = 2;
   if (this->has_file_list_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       2, *this->file_list_request_, output);
   }
 
-  // .proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
+  // .aspia.proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
   if (this->has_create_directory_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       3, *this->create_directory_request_, output);
   }
 
-  // .proto.file_transfer.RenameRequest rename_request = 4;
+  // .aspia.proto.file_transfer.RenameRequest rename_request = 4;
   if (this->has_rename_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       4, *this->rename_request_, output);
   }
 
-  // .proto.file_transfer.RemoveRequest remove_request = 5;
+  // .aspia.proto.file_transfer.RemoveRequest remove_request = 5;
   if (this->has_remove_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       5, *this->remove_request_, output);
   }
 
-  // .proto.file_transfer.DownloadRequest download_request = 6;
+  // .aspia.proto.file_transfer.DownloadRequest download_request = 6;
   if (this->has_download_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       6, *this->download_request_, output);
   }
 
-  // .proto.file_transfer.UploadRequest upload_request = 7;
+  // .aspia.proto.file_transfer.UploadRequest upload_request = 7;
   if (this->has_upload_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       7, *this->upload_request_, output);
   }
 
-  // .proto.file_transfer.PacketRequest packet_request = 8;
+  // .aspia.proto.file_transfer.PacketRequest packet_request = 8;
   if (this->has_packet_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       8, *this->packet_request_, output);
   }
 
-  // .proto.file_transfer.Packet packet = 9;
+  // .aspia.proto.file_transfer.Packet packet = 9;
   if (this->has_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       9, *this->packet_, output);
@@ -4145,72 +4148,72 @@ void Request::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:proto.file_transfer.Request)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.Request)
 }
 
 size_t Request::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:proto.file_transfer.Request)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.file_transfer.Request)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .proto.file_transfer.DriveListRequest drive_list_request = 1;
+  // .aspia.proto.file_transfer.DriveListRequest drive_list_request = 1;
   if (this->has_drive_list_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->drive_list_request_);
   }
 
-  // .proto.file_transfer.FileListRequest file_list_request = 2;
+  // .aspia.proto.file_transfer.FileListRequest file_list_request = 2;
   if (this->has_file_list_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->file_list_request_);
   }
 
-  // .proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
+  // .aspia.proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
   if (this->has_create_directory_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->create_directory_request_);
   }
 
-  // .proto.file_transfer.RenameRequest rename_request = 4;
+  // .aspia.proto.file_transfer.RenameRequest rename_request = 4;
   if (this->has_rename_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->rename_request_);
   }
 
-  // .proto.file_transfer.RemoveRequest remove_request = 5;
+  // .aspia.proto.file_transfer.RemoveRequest remove_request = 5;
   if (this->has_remove_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->remove_request_);
   }
 
-  // .proto.file_transfer.DownloadRequest download_request = 6;
+  // .aspia.proto.file_transfer.DownloadRequest download_request = 6;
   if (this->has_download_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->download_request_);
   }
 
-  // .proto.file_transfer.UploadRequest upload_request = 7;
+  // .aspia.proto.file_transfer.UploadRequest upload_request = 7;
   if (this->has_upload_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->upload_request_);
   }
 
-  // .proto.file_transfer.PacketRequest packet_request = 8;
+  // .aspia.proto.file_transfer.PacketRequest packet_request = 8;
   if (this->has_packet_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *this->packet_request_);
   }
 
-  // .proto.file_transfer.Packet packet = 9;
+  // .aspia.proto.file_transfer.Packet packet = 9;
   if (this->has_packet()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -4230,43 +4233,43 @@ void Request::CheckTypeAndMergeFrom(
 }
 
 void Request::MergeFrom(const Request& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:proto.file_transfer.Request)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.file_transfer.Request)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from.has_drive_list_request()) {
-    mutable_drive_list_request()->::proto::file_transfer::DriveListRequest::MergeFrom(from.drive_list_request());
+    mutable_drive_list_request()->::aspia::proto::file_transfer::DriveListRequest::MergeFrom(from.drive_list_request());
   }
   if (from.has_file_list_request()) {
-    mutable_file_list_request()->::proto::file_transfer::FileListRequest::MergeFrom(from.file_list_request());
+    mutable_file_list_request()->::aspia::proto::file_transfer::FileListRequest::MergeFrom(from.file_list_request());
   }
   if (from.has_create_directory_request()) {
-    mutable_create_directory_request()->::proto::file_transfer::CreateDirectoryRequest::MergeFrom(from.create_directory_request());
+    mutable_create_directory_request()->::aspia::proto::file_transfer::CreateDirectoryRequest::MergeFrom(from.create_directory_request());
   }
   if (from.has_rename_request()) {
-    mutable_rename_request()->::proto::file_transfer::RenameRequest::MergeFrom(from.rename_request());
+    mutable_rename_request()->::aspia::proto::file_transfer::RenameRequest::MergeFrom(from.rename_request());
   }
   if (from.has_remove_request()) {
-    mutable_remove_request()->::proto::file_transfer::RemoveRequest::MergeFrom(from.remove_request());
+    mutable_remove_request()->::aspia::proto::file_transfer::RemoveRequest::MergeFrom(from.remove_request());
   }
   if (from.has_download_request()) {
-    mutable_download_request()->::proto::file_transfer::DownloadRequest::MergeFrom(from.download_request());
+    mutable_download_request()->::aspia::proto::file_transfer::DownloadRequest::MergeFrom(from.download_request());
   }
   if (from.has_upload_request()) {
-    mutable_upload_request()->::proto::file_transfer::UploadRequest::MergeFrom(from.upload_request());
+    mutable_upload_request()->::aspia::proto::file_transfer::UploadRequest::MergeFrom(from.upload_request());
   }
   if (from.has_packet_request()) {
-    mutable_packet_request()->::proto::file_transfer::PacketRequest::MergeFrom(from.packet_request());
+    mutable_packet_request()->::aspia::proto::file_transfer::PacketRequest::MergeFrom(from.packet_request());
   }
   if (from.has_packet()) {
-    mutable_packet()->::proto::file_transfer::Packet::MergeFrom(from.packet());
+    mutable_packet()->::aspia::proto::file_transfer::Packet::MergeFrom(from.packet());
   }
 }
 
 void Request::CopyFrom(const Request& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:proto.file_transfer.Request)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.file_transfer.Request)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -4296,12 +4299,13 @@ void Request::InternalSwap(Request* other) {
 }
 
 ::std::string Request::GetTypeName() const {
-  return "proto.file_transfer.Request";
+  return "aspia.proto.file_transfer.Request";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace file_transfer
 }  // namespace proto
+}  // namespace aspia
 
 // @@protoc_insertion_point(global_scope)

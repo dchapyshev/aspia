@@ -8,10 +8,8 @@
 #ifndef _ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H
 #define _ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H
 
-#include <QDialog>
-
 #include "proto/address_book.pb.h"
-#include "qt/ui_open_address_book_dialog.h"
+#include "ui_open_address_book_dialog.h"
 
 namespace aspia {
 
@@ -21,13 +19,13 @@ class OpenAddressBookDialog : public QDialog
 
 public:
     OpenAddressBookDialog(QWidget* parent, proto::AddressBook::EncryptionType encryption_type);
-    ~OpenAddressBookDialog() = default;
+    ~OpenAddressBookDialog();
 
-    QString Password() const;
+    QString password() const;
 
 private slots:
-    void OnShowPasswordButtonToggled(bool checked);
-    void OnButtonBoxClicked(QAbstractButton* button);
+    void showPasswordButtonToggled(bool checked);
+    void buttonBoxClicked(QAbstractButton* button);
 
 private:
     Ui::OpenAddressBookDialog ui;

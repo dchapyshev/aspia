@@ -8,10 +8,8 @@
 #ifndef _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
 #define _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
 
-#include <QDialog>
-
 #include "console/address_book.h"
-#include "qt/ui_address_book_dialog.h"
+#include "ui_address_book_dialog.h"
 
 namespace aspia {
 
@@ -24,15 +22,15 @@ public:
                       AddressBook* address_book,
                       proto::AddressBook::EncryptionType* encryption_type,
                       QString* password);
-    ~AddressBookDialog() = default;
+    ~AddressBookDialog();
 
 private slots:
-    void OnButtonBoxClicked(QAbstractButton* button);
-    void OnEncryptionTypedChanged(int item_index);
-    void OnShowPasswordButtonToggled(bool checked);
+    void buttonBoxClicked(QAbstractButton* button);
+    void encryptionTypedChanged(int item_index);
+    void showPasswordButtonToggled(bool checked);
 
 private:
-    void ShowError(const QString& message);
+    void showError(const QString& message);
 
     Ui::AddressBookDialog ui;
     AddressBook* address_book_;

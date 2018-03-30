@@ -12,6 +12,8 @@
 
 #include "proto/address_book.pb.h"
 
+namespace aspia {
+
 class ComputerGroup;
 
 class Computer : public QTreeWidgetItem
@@ -50,5 +52,7 @@ private:
 
     Q_DISABLE_COPY(Computer)
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CONSOLE__COMPUTER_H

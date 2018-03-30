@@ -8,10 +8,8 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
-#include <QMainWindow>
-
 #include "console/address_book.h"
-#include "qt/ui_console_window.h"
+#include "ui_console_window.h"
 
 namespace aspia {
 
@@ -21,46 +19,47 @@ class ConsoleWindow : public QMainWindow
 
 public:
     ConsoleWindow(const QString& file_path, QWidget* parent = nullptr);
-    ~ConsoleWindow() = default;
+    ~ConsoleWindow();
 
 public slots:
-    void OnNewAction();
-    void OnOpenAction();
-    void OnSaveAction();
-    void OnSaveAsAction();
-    void OnCloseAction();
-    void OnAddressBookPropertiesAction();
-    void OnAddComputerAction();
-    void OnModifyComputerAction();
-    void OnDeleteComputerAction();
-    void OnAddComputerGroupAction();
-    void OnModifyComputerGroupAction();
-    void OnDeleteComputerGroupAction();
-    void OnOnlineHelpAction();
-    void OnAboutAction();
-    void OnExitAction();
-    void OnGroupItemClicked(QTreeWidgetItem* item, int column);
-    void OnGroupContextMenu(const QPoint& point);
-    void OnGroupItemCollapsed(QTreeWidgetItem* item);
-    void OnGroupItemExpanded(QTreeWidgetItem* item);
-    void OnComputerItemClicked(QTreeWidgetItem* item, int column);
-    void OnComputerContextMenu(const QPoint& point);
-    void OnDesktopManageSessionToggled(bool checked);
-    void OnDesktopViewSessionToggled(bool checked);
-    void OnFileTransferSessionToggled(bool checked);
-    void OnSystemInfoSessionToggled(bool checked);
+    void newAction();
+    void openAction();
+    void saveAction();
+    void saveAsAction();
+    void closeAction();
+    void addressBookPropertiesAction();
+    void addComputerAction();
+    void modifyComputerAction();
+    void deleteComputerAction();
+    void addComputerGroupAction();
+    void modifyComputerGroupAction();
+    void deleteComputerGroupAction();
+    void onlineHelpAction();
+    void aboutAction();
+    void exitAction();
+    void groupItemClicked(QTreeWidgetItem* item, int column);
+    void groupContextMenu(const QPoint& point);
+    void groupItemCollapsed(QTreeWidgetItem* item);
+    void groupItemExpanded(QTreeWidgetItem* item);
+    void computerItemClicked(QTreeWidgetItem* item, int column);
+    void computerContextMenu(const QPoint& point);
+    void desktopManageSessionToggled(bool checked);
+    void desktopViewSessionToggled(bool checked);
+    void fileTransferSessionToggled(bool checked);
+    void systemInfoSessionToggled(bool checked);
 
-private:
+protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
-    void ShowOpenError(const QString& message);
-    void ShowSaveError(const QString& message);
-    void UpdateComputerList(ComputerGroup* computer_group);
-    void SetChanged(bool changed);
-    bool OpenAddressBook(const QString& file_path);
-    bool SaveAddressBook(const QString& file_path);
-    bool CloseAddressBook();
+private:
+    void showOpenError(const QString& message);
+    void showSaveError(const QString& message);
+    void updateComputerList(ComputerGroup* computer_group);
+    void setChanged(bool changed);
+    bool openAddressBook(const QString& file_path);
+    bool saveAddressBook(const QString& file_path);
+    bool closeAddressBook();
 
     Ui::ConsoleWindow ui;
 

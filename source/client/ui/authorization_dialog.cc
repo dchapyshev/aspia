@@ -7,6 +7,8 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include "proto/computer.pb.h"
+
 namespace aspia {
 
 AuthorizationDialog::AuthorizationDialog(proto::Computer* computer, QWidget* parent)
@@ -26,6 +28,8 @@ AuthorizationDialog::AuthorizationDialog(proto::Computer* computer, QWidget* par
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::OnButtonBoxClicked);
 }
+
+AuthorizationDialog::~AuthorizationDialog() = default;
 
 void AuthorizationDialog::OnShowPasswordButtonToggled(bool checked)
 {

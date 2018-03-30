@@ -12,7 +12,7 @@ option optimize_for = LITE_RUNTIME;
 import "auth_session.proto";
 import "desktop_session.proto";
 
-package proto;
+package aspia.proto;
 
 message Computer
 {

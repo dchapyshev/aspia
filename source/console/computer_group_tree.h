@@ -20,9 +20,10 @@ class ComputerGroupTree : public QTreeWidget
 
 public:
     ComputerGroupTree(QWidget* parent);
-    ~ComputerGroupTree() = default;
+    ~ComputerGroupTree();
 
 protected:
+    // QTreeWidget implementation.
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -34,6 +35,8 @@ private:
     void startDrag();
 
     QPoint start_pos_;
+
+    Q_DISABLE_COPY(ComputerGroupTree)
 };
 
 } // namespace aspia

@@ -15,7 +15,7 @@ FileItemMimeData::~FileItemMimeData() = default;
 // static
 QString FileItemMimeData::mimeType()
 {
-    return "application/file_item";
+    return QStringLiteral("application/file_item");
 }
 
 void FileItemMimeData::setFileItem(FileItem* file_item)

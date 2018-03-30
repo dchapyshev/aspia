@@ -12,6 +12,8 @@
 
 #include "console/computer_group.h"
 
+namespace aspia {
+
 class ComputerGroupMimeData : public QMimeData
 {
 public:
@@ -37,5 +39,7 @@ public:
 private:
     ComputerGroup* computer_group_ = nullptr;
 };
+
+} // namespace aspia
 
 #endif // _ASPIA_CONSOLE__COMPUTER_GROUP_MIME_DATA_H

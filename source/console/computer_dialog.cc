@@ -56,19 +56,21 @@ ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGrou
     ui.edit_comment->setPlainText(computer->Comment());
 
     connect(ui.combo_session_config, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ComputerDialog::OnSessionTypeChanged);
+            this, &ComputerDialog::sessionTypeChanged);
 
     connect(ui.button_show_password, &QPushButton::toggled,
-            this, &ComputerDialog::OnShowPasswordButtonToggled);
+            this, &ComputerDialog::showPasswordButtonToggled);
 
     connect(ui.button_session_config, &QPushButton::pressed,
-            this, &ComputerDialog::OnSessionConfigButtonPressed);
+            this, &ComputerDialog::sessionConfigButtonPressed);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &ComputerDialog::OnButtonBoxClicked);
+            this, &ComputerDialog::buttonBoxClicked);
 }
 
-void ComputerDialog::OnSessionTypeChanged(int item_index)
+ComputerDialog::~ComputerDialog() = default;
+
+void ComputerDialog::sessionTypeChanged(int item_index)
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
         ui.combo_session_config->itemData(item_index).toInt());
@@ -86,7 +88,7 @@ void ComputerDialog::OnSessionTypeChanged(int item_index)
     }
 }
 
-void ComputerDialog::OnShowPasswordButtonToggled(bool checked)
+void ComputerDialog::showPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
@@ -101,7 +103,7 @@ void ComputerDialog::OnShowPasswordButtonToggled(bool checked)
     }
 }
 
-void ComputerDialog::OnSessionConfigButtonPressed()
+void ComputerDialog::sessionConfigButtonPressed()
 {
     proto::auth::SessionType session_type =
         static_cast<proto::auth::SessionType>(ui.combo_session_config->currentData().toInt());
@@ -133,26 +135,26 @@ void ComputerDialog::OnSessionConfigButtonPressed()
     }
 }
 
-void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
+void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
         QString name = ui.edit_name->text();
         if (name.length() > kMaxNameLength)
         {
-            ShowError(tr("Too long name. The maximum length of the name is 64 characters."));
+            showError(tr("Too long name. The maximum length of the name is 64 characters."));
             return;
         }
         else if (name.length() < kMinNameLength)
         {
-            ShowError(tr("Name can not be empty."));
+            showError(tr("Name can not be empty."));
             return;
         }
 
         QString username = ui.edit_username->text();
         if (!username.isEmpty() && !User::isValidName(username))
         {
-            ShowError(tr("The user name can not be empty and can contain only"
+            showError(tr("The user name can not be empty and can contain only"
                          " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
             return;
         }
@@ -160,14 +162,14 @@ void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
         QString password = ui.edit_password->text();
         if (!password.isEmpty() && !User::isValidPassword(password))
         {
-            ShowError(tr("Password can not be shorter than 8 characters."));
+            showError(tr("Password can not be shorter than 8 characters."));
             return;
         }
 
         QString comment = ui.edit_comment->toPlainText();
         if (comment.length() > kMaxCommentLength)
         {
-            ShowError(tr("Too long comment. The maximum length of the comment is 2048 characters."));
+            showError(tr("Too long comment. The maximum length of the comment is 2048 characters."));
             return;
         }
 
@@ -188,7 +190,7 @@ void ComputerDialog::OnButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void ComputerDialog::ShowError(const QString& message)
+void ComputerDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }

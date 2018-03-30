@@ -10,7 +10,6 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client.h"
 #include "codec/video_util.h"
-#include "proto/computer.pb.h"
 
 namespace aspia {
 
@@ -20,7 +19,7 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui.setupUi(this);
 
     setFixedSize(size());
-    SetDefaultConfig();
+    setDefaultConfig();
 
     ui.edit_address->setText(QString::fromUtf8(computer_.address().c_str(),
                                                computer_.address().size()));
@@ -48,20 +47,22 @@ ClientDialog::ClientDialog(QWidget* parent)
     if (current_session_type != -1)
     {
         ui.combo_session_type->setCurrentIndex(current_session_type);
-        OnSessionTypeChanged(current_session_type);
+        sessionTypeChanged(current_session_type);
     }
 
     connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ClientDialog::OnSessionTypeChanged);
+            this, &ClientDialog::sessionTypeChanged);
 
     connect(ui.button_session_config, &QPushButton::pressed,
-            this, &ClientDialog::OnSessionConfigButtonPressed);
+            this, &ClientDialog::sessionConfigButtonPressed);
 
     connect(ui.button_connect, &QPushButton::pressed,
-            this, &ClientDialog::OnConnectButtonPressed);
+            this, &ClientDialog::connectButtonPressed);
 }
 
-void ClientDialog::OnSessionTypeChanged(int item_index)
+ClientDialog::~ClientDialog() = default;
+
+void ClientDialog::sessionTypeChanged(int item_index)
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
         ui.combo_session_type->itemData(item_index).toInt());
@@ -79,7 +80,7 @@ void ClientDialog::OnSessionTypeChanged(int item_index)
     }
 }
 
-void ClientDialog::OnSessionConfigButtonPressed()
+void ClientDialog::sessionConfigButtonPressed()
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
         ui.combo_session_type->currentData().toInt());
@@ -103,7 +104,7 @@ void ClientDialog::OnSessionConfigButtonPressed()
     }
 }
 
-void ClientDialog::OnConnectButtonPressed()
+void ClientDialog::connectButtonPressed()
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
         ui.combo_session_type->currentData().toInt());
@@ -120,7 +121,7 @@ void ClientDialog::OnConnectButtonPressed()
     hide();
 }
 
-void ClientDialog::SetDefaultConfig()
+void ClientDialog::setDefaultConfig()
 {
     computer_.set_port(kDefaultHostTcpPort);
 

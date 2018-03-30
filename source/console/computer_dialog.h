@@ -10,7 +10,7 @@
 
 #include "console/computer.h"
 #include "proto/address_book.pb.h"
-#include "qt/ui_computer_dialog.h"
+#include "ui_computer_dialog.h"
 
 namespace aspia {
 
@@ -20,16 +20,16 @@ class ComputerDialog : public QDialog
 
 public:
     ComputerDialog(QWidget* parent, Computer* computer, ComputerGroup* parent_group);
-    ~ComputerDialog() = default;
+    ~ComputerDialog();
 
 private slots:
-    void OnSessionTypeChanged(int item_index);
-    void OnShowPasswordButtonToggled(bool checked);
-    void OnSessionConfigButtonPressed();
-    void OnButtonBoxClicked(QAbstractButton* button);
+    void sessionTypeChanged(int item_index);
+    void showPasswordButtonToggled(bool checked);
+    void sessionConfigButtonPressed();
+    void buttonBoxClicked(QAbstractButton* button);
 
 private:
-    void ShowError(const QString& message);
+    void showError(const QString& message);
 
     Ui::ComputerDialog ui;
     Computer* computer_;

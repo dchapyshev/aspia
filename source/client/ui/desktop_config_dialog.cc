@@ -101,6 +101,8 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
             this, &DesktopConfigDialog::OnButtonBoxClicked);
 }
 
+DesktopConfigDialog::~DesktopConfigDialog() = default;
+
 void DesktopConfigDialog::OnCodecChanged(int item_index)
 {
     bool has_pixel_format =

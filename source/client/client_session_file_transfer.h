@@ -16,10 +16,10 @@
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
 
+namespace aspia {
+
 Q_DECLARE_METATYPE(proto::file_transfer::Request);
 Q_DECLARE_METATYPE(proto::file_transfer::Reply);
-
-namespace aspia {
 
 class FileManagerWindow;
 class FileWorker;

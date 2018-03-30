@@ -9,7 +9,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.file_transfer;
+package aspia.proto.file_transfer;
 
 enum Status
 {
