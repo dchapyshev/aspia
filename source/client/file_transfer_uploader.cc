@@ -105,11 +105,9 @@ void FileTransferUploader::processCreateDirectoryReply(
         return;
     }
 
-    QString path = QString::fromUtf8(request.path().c_str(), request.path().size());
-
     emit error(this, Action::Abort | Action::Skip | Action::SkipAll,
                tr("Failed to create directory \"%1\": %2")
-               .arg(path)
+               .arg(QString::fromStdString(request.path()))
                .arg(fileStatusToString(status)));
 }
 
@@ -135,7 +133,6 @@ void FileTransferUploader::processUploadReply(const proto::file_transfer::Upload
             }
         }
 
-        QString path = QString::fromUtf8(request.path().c_str(), request.path().size());
         Actions actions = Action::Abort | Action::Skip | Action::SkipAll;
 
         if (status == proto::file_transfer::STATUS_PATH_ALREADY_EXISTS)
@@ -143,7 +140,7 @@ void FileTransferUploader::processUploadReply(const proto::file_transfer::Upload
 
         emit error(this, actions,
                    tr("Failed to create file \"%1\": %2")
-                   .arg(path)
+                   .arg(QString::fromStdString(request.path()))
                    .arg(fileStatusToString(status)));
         return;
     }

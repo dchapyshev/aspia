@@ -17,10 +17,8 @@ AuthorizationDialog::AuthorizationDialog(proto::Computer* computer, QWidget* par
 {
     ui.setupUi(this);
 
-    ui.edit_username->setText(QString::fromUtf8(computer_->username().c_str(),
-                                                computer_->username().size()));
-    ui.edit_password->setText(QString::fromUtf8(computer_->password().c_str(),
-                                                computer_->password().size()));
+    ui.edit_username->setText(QString::fromStdString(computer_->username()));
+    ui.edit_password->setText(QString::fromStdString(computer_->password()));
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::OnShowPasswordButtonToggled);
@@ -50,8 +48,8 @@ void AuthorizationDialog::OnButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        computer_->set_username(ui.edit_username->text().toUtf8());
-        computer_->set_password(ui.edit_password->text().toUtf8());
+        computer_->set_username(ui.edit_username->text().toStdString());
+        computer_->set_password(ui.edit_password->text().toStdString());
         accept();
     }
     else

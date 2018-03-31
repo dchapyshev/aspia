@@ -118,7 +118,7 @@ void Host::OnResponseReceived(const QByteArray& buffer)
     }
 
     proto::auth::Status status =
-        DoAuthorization(QString::fromUtf8(response.username().c_str(), response.username().size()),
+        DoAuthorization(QString::fromStdString(response.username()),
                         QByteArray(response.key().c_str(), response.key().size()),
                         nonce_,
                         response.session_type());

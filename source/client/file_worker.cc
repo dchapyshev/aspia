@@ -29,7 +29,7 @@ proto::file_transfer::Reply doDriveListRequest()
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(FilePlatformUtil::driveType(root_path));
-        item->set_path(root_path.toUtf8());
+        item->set_path(root_path.toStdString());
     }
 
     QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
@@ -38,7 +38,7 @@ proto::file_transfer::Reply doDriveListRequest()
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
-        item->set_path(desktop_path.toUtf8());
+        item->set_path(desktop_path.toStdString());
     }
 
     QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -47,7 +47,7 @@ proto::file_transfer::Reply doDriveListRequest()
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
-        item->set_path(home_path.toUtf8());
+        item->set_path(home_path.toStdString());
     }
 
     if (reply.drive_list().item_size() == 0)
@@ -62,9 +62,7 @@ proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileLi
 {
     proto::file_transfer::Reply reply;
 
-    QString directory_path = QString::fromUtf8(request.path().c_str(), request.path().size());
-
-    QDir directory(directory_path);
+    QDir directory(QString::fromStdString(request.path()));
     if (!directory.exists())
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
@@ -73,7 +71,6 @@ proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileLi
 
     directory.setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot |
                         QDir::System | QDir::Hidden);
-    directory.setSorting(QDir::Name | QDir::DirsFirst);
 
     QFileInfoList info_list = directory.entryInfoList();
 
@@ -81,7 +78,7 @@ proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileLi
     {
         proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
 
-        item->set_name(info.fileName().toUtf8());
+        item->set_name(info.fileName().toStdString());
         item->set_size(info.size());
         item->set_modification_time(info.lastModified().toTime_t());
         item->set_is_directory(info.isDir());
@@ -96,7 +93,7 @@ proto::file_transfer::Reply doCreateDirectoryRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString directory_path = QString::fromUtf8(request.path().c_str(), request.path().size());
+    QString directory_path = QString::fromStdString(request.path());
 
     QFileInfo file_info(directory_path);
     if (file_info.exists())
@@ -120,8 +117,8 @@ proto::file_transfer::Reply doRenameRequest(const proto::file_transfer::RenameRe
 {
     proto::file_transfer::Reply reply;
 
-    QString old_name = QString::fromUtf8(request.old_name().c_str(), request.old_name().size());
-    QString new_name = QString::fromUtf8(request.new_name().c_str(), request.new_name().size());
+    QString old_name = QString::fromStdString(request.old_name());
+    QString new_name = QString::fromStdString(request.new_name());
 
     if (old_name == new_name)
     {
@@ -168,7 +165,7 @@ proto::file_transfer::Reply doRemoveRequest(const proto::file_transfer::RemoveRe
 {
     proto::file_transfer::Reply reply;
 
-    QString path = QString::fromUtf8(request.path().c_str(), request.path().size());
+    QString path = QString::fromStdString(request.path());
 
     QFileInfo file_info(path);
     if (!file_info.exists())

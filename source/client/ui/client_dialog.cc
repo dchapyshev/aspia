@@ -21,8 +21,7 @@ ClientDialog::ClientDialog(QWidget* parent)
     setFixedSize(size());
     setDefaultConfig();
 
-    ui.edit_address->setText(QString::fromUtf8(computer_.address().c_str(),
-                                               computer_.address().size()));
+    ui.edit_address->setText(QString::fromStdString(computer_.address()));
     ui.spin_port->setValue(computer_.port());
 
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
@@ -109,7 +108,7 @@ void ClientDialog::connectButtonPressed()
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
-    computer_.set_address(ui.edit_address->text().toUtf8());
+    computer_.set_address(ui.edit_address->text().toStdString());
     computer_.set_port(ui.spin_port->value());
     computer_.set_session_type(session_type);
 

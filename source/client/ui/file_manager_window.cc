@@ -22,15 +22,9 @@ FileManagerWindow::FileManagerWindow(proto::Computer* computer, QWidget* parent)
 
     QString computer_name;
     if (!computer->name().empty())
-    {
-        computer_name = QString::fromUtf8(computer->name().c_str(),
-                                          computer->name().size());
-    }
+        computer_name = QString::fromStdString(computer->name());
     else
-    {
-        computer_name = QString::fromUtf8(computer->address().c_str(),
-                                          computer->address().size());
-    }
+        computer_name = QString::fromStdString(computer->address());
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 

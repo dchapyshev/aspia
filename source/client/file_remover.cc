@@ -100,8 +100,7 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
         }
 
         emit error(this, actions, tr("Failed to delete \"%1\": %2.")
-                   .arg(QString::fromUtf8(request.remove_request().path().c_str(),
-                                          request.remove_request().path().size()))
+                   .arg(QString::fromStdString(request.remove_request().path()))
                    .arg(fileStatusToString(reply.status())));
         return;
     }

@@ -53,8 +53,7 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
         return;
     }
 
-    QString path = QString::fromUtf8(request.file_list_request().path().c_str(),
-                                     request.file_list_request().path().size());
+    QString path = QString::fromStdString(request.file_list_request().path());
     path.replace('\\', '/');
     if (!path.endsWith('/'))
         path += '/';
@@ -62,8 +61,10 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
         const proto::file_transfer::FileList::Item& item = reply.file_list().item(i);
-        QString name = QString::fromUtf8(item.name().c_str(), item.name().size());
-        pending_tasks_.push_back(FileRemoveTask(path + name, item.is_directory()));
+
+        pending_tasks_.push_back(
+            FileRemoveTask(path + QString::fromStdString(item.name()),
+                           item.is_directory()));
     }
 
     processNextPendingTask();

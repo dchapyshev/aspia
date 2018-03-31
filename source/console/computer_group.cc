@@ -13,10 +13,10 @@ ComputerGroup::ComputerGroup(const QIcon& icon,
                              proto::ComputerGroup* group,
                              ComputerGroup* parent_group)
     : group_(group),
-    parent_group_(parent_group)
+      parent_group_(parent_group)
 {
     setIcon(0, icon);
-    setText(0, QString::fromUtf8(group_->name().c_str(), group_->name().size()));
+    setText(0, QString::fromStdString(group_->name()));
 
     for (int i = 0; i < group_->group_size(); ++i)
         addChild(new ComputerGroup(QIcon(QStringLiteral(":/icon/folder.png")),
@@ -119,18 +119,18 @@ QString ComputerGroup::Name() const
 
 void ComputerGroup::SetName(const QString& name)
 {
-    group_->set_name(name.toUtf8());
+    group_->set_name(name.toStdString());
     setText(0, name);
 }
 
 QString ComputerGroup::Comment() const
 {
-    return QString::fromUtf8(group_->comment().c_str(), group_->comment().size());
+    return QString::fromStdString(group_->comment());
 }
 
 void ComputerGroup::SetComment(const QString& comment)
 {
-    group_->set_comment(comment.toUtf8());
+    group_->set_comment(comment.toStdString());
 }
 
 bool ComputerGroup::IsExpanded() const

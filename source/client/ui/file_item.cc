@@ -64,7 +64,7 @@ FileItem::FileItem(const proto::file_transfer::FileList::Item& item)
       size_(item.size()),
       last_modified_(item.modification_time())
 {
-    name_ = QString::fromUtf8(item.name().c_str(), item.name().size());
+    name_ = QString::fromStdString(item.name());
 
     setFlags(flags() | Qt::ItemIsEditable);
     setText(0, name_);

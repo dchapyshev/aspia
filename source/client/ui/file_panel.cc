@@ -358,7 +358,7 @@ void FilePanel::updateDrives(const proto::file_transfer::DriveList& list)
     {
         const proto::file_transfer::DriveList::Item& item = list.item(i);
 
-        QString path = normalizePath(QString::fromUtf8(item.path().c_str(), item.path().size()));
+        QString path = normalizePath(QString::fromStdString(item.path()));
         QIcon icon = FilePlatformUtil::driveIcon(item.type());
 
         switch (item.type())

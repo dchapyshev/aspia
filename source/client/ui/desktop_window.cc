@@ -44,15 +44,9 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
 
     QString computer_name;
     if (!computer_->name().empty())
-    {
-        computer_name = QString::fromUtf8(computer_->name().c_str(),
-                                          computer_->name().size());
-    }
+        computer_name = QString::fromStdString(computer_->name());
     else
-    {
-        computer_name = QString::fromUtf8(computer_->address().c_str(),
-                                          computer_->address().size());
-    }
+        computer_name = QString::fromStdString(computer_->address());
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
     setWindowIcon(QIcon(QStringLiteral(":/icon/main.png")));

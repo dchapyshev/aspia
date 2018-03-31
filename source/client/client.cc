@@ -54,7 +54,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
         status_dialog_->deleteLater();
     });
 
-    QString address = QString::fromUtf8(computer_.address().c_str(), computer_.address().size());
+    QString address = QString::fromStdString(computer_.address());
     int port = computer_.port();
 
     status_dialog_->show();

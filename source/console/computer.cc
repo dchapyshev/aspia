@@ -17,8 +17,8 @@ Computer::Computer(proto::Computer* computer, ComputerGroup* parent_group)
     parent_group_(parent_group)
 {
     setIcon(0, QIcon(QStringLiteral(":/icon/computer.png")));
-    setText(0, QString::fromUtf8(computer->name().c_str(), computer->name().size()));
-    setText(1, QString::fromUtf8(computer->address().c_str(), computer->address().size()));
+    setText(0, QString::fromStdString(computer->name()));
+    setText(1, QString::fromStdString(computer->address()));
     setText(2, QString::number(computer->port()));
 }
 
@@ -60,28 +60,28 @@ QString Computer::Name() const
 
 void Computer::SetName(const QString& name)
 {
-    computer_->set_name(name.toUtf8());
+    computer_->set_name(name.toStdString());
     setText(0, name);
 }
 
 QString Computer::Comment() const
 {
-    return QString::fromUtf8(computer_->comment().c_str(), computer_->comment().size());
+    return QString::fromStdString(computer_->comment());
 }
 
 void Computer::SetComment(const QString& comment)
 {
-    computer_->set_comment(comment.toUtf8());
+    computer_->set_comment(comment.toStdString());
 }
 
 QString Computer::Address() const
 {
-    return QString::fromUtf8(computer_->address().c_str(), computer_->address().size());
+    return QString::fromStdString(computer_->address());
 }
 
 void Computer::SetAddress(const QString& address)
 {
-    computer_->set_address(address.toUtf8());
+    computer_->set_address(address.toStdString());
     setText(1, address);
 }
 
@@ -98,22 +98,22 @@ void Computer::SetPort(int port)
 
 QString Computer::UserName() const
 {
-    return QString::fromUtf8(computer_->username().c_str(), computer_->username().size());
+    return QString::fromStdString(computer_->username());
 }
 
 void Computer::SetUserName(const QString& username)
 {
-    computer_->set_username(username.toUtf8());
+    computer_->set_username(username.toStdString());
 }
 
 QString Computer::Password() const
 {
-    return QString::fromUtf8(computer_->password().c_str(), computer_->password().size());
+    return QString::fromStdString(computer_->password());
 }
 
 void Computer::SetPassword(const QString& password)
 {
-    computer_->set_password(password.toUtf8());
+    computer_->set_password(password.toStdString());
 }
 
 proto::desktop::Config Computer::DesktopManageSessionConfig() const

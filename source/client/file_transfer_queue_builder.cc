@@ -82,7 +82,7 @@ void FileTransferQueueBuilder::reply(const proto::file_transfer::Request& reques
 
         addPendingTask(last_task.sourcePath(),
                        last_task.targetPath(),
-                       QString::fromUtf8(item.name().c_str(), item.name().size()),
+                       QString::fromStdString(item.name()),
                        item.is_directory());
     }
 
