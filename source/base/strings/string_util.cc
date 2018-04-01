@@ -200,16 +200,6 @@ std::string CollapseWhitespaceASCII(const std::string& text,
     return CollapseWhitespaceT(text, trim_sequences_with_line_breaks);
 }
 
-int CompareCaseInsensitiveASCII(const std::string& first, const std::string& second)
-{
-    return _stricmp(first.c_str(), second.c_str());
-}
-
-int CompareCaseInsensitive(const std::wstring& first, const std::wstring& second)
-{
-    return _wcsicmp(first.c_str(), second.c_str());
-}
-
 template <class Str>
 TrimPositions TrimStringT(const Str& input,
                           const typename Str::value_type* trim_chars,
