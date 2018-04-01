@@ -10,7 +10,7 @@
 
 #include <QTreeWidget>
 
-#include "proto/address_book.pb.h"
+#include "protocol/address_book.pb.h"
 
 namespace aspia {
 

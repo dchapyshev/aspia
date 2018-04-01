@@ -15,7 +15,7 @@
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 
 namespace aspia {
 

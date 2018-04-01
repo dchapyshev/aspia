@@ -16,7 +16,7 @@
 
 #include "client/file_transfer_task.h"
 #include "host/file_request.h"
-#include "proto/file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

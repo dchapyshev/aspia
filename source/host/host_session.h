@@ -15,7 +15,7 @@
 #include "host/console_session_watcher.h"
 #include "ipc/pipe_channel.h"
 #include "network/network_channel_proxy.h"
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 
 namespace aspia {
 

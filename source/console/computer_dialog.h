@@ -9,7 +9,7 @@
 #define _ASPIA_CONSOLE__COMPUTER_DIALOG_H
 
 #include "console/computer.h"
-#include "proto/address_book.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
 namespace aspia {

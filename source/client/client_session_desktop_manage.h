@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
 
 #include "client/client_session_desktop_view.h"
-#include "proto/computer.pb.h"
+#include "protocol/computer.pb.h"
 
 namespace aspia {
 

@@ -10,7 +10,7 @@
 
 #include "client/client_session.h"
 #include "network/channel.h"
-#include "proto/computer.pb.h"
+#include "protocol/computer.pb.h"
 
 namespace aspia {
 

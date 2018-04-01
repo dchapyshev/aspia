@@ -12,7 +12,7 @@
 #include <QPair>
 #include <QString>
 
-#include "proto/file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

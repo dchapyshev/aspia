@@ -14,7 +14,7 @@
 #include <memory>
 
 #include "base/message_window.h"
-#include "proto/desktop_session.pb.h"
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 

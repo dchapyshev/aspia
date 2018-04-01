@@ -12,7 +12,7 @@
 #include <QSet>
 
 #include "desktop_capture/scoped_thread_desktop.h"
-#include "proto/desktop_session.pb.h"
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 

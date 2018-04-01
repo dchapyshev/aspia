@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "desktop_capture/desktop_frame.h"
-#include "proto/desktop_session.pb.h"
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 

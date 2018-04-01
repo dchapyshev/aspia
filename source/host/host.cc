@@ -14,7 +14,7 @@
 #include "base/message_serialization.h"
 #include "crypto/random.h"
 #include "host/user_list.h"
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 
 namespace aspia {
 

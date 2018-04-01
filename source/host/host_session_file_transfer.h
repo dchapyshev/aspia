@@ -10,7 +10,7 @@
 
 #include "host/file_worker.h"
 #include "ipc/pipe_channel.h"
-#include "proto/file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            proto/desktop_session.proto
+// FILE:            protocol/desktop_session.proto
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //

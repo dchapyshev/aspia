@@ -12,7 +12,7 @@
 #include <QSize>
 
 #include "desktop_capture/pixel_format.h"
-#include "proto/desktop_session.pb.h"
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 

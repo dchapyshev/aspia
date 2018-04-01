@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            proto/address_book.proto
+// FILE:            protocol/address_book.proto
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //

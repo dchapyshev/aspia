@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H
 #define _ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H
 
-#include "proto/address_book.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_open_address_book_dialog.h"
 
 namespace aspia {

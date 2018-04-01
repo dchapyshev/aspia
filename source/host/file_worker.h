@@ -14,7 +14,7 @@
 #include "host/file_depacketizer.h"
 #include "host/file_packetizer.h"
 #include "host/file_request.h"
-#include "proto/file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

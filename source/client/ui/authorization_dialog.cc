@@ -7,7 +7,7 @@
 
 #include "client/ui/authorization_dialog.h"
 
-#include "proto/computer.pb.h"
+#include "protocol/computer.pb.h"
 
 namespace aspia {
 

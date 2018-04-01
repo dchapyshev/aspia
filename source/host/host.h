@@ -12,7 +12,7 @@
 #include "network/network_channel.h"
 #include "network/network_channel_proxy.h"
 #include "host/host_session.h"
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 
 namespace aspia {
 

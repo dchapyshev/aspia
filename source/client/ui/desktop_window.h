@@ -11,7 +11,7 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "proto/computer.pb.h"
+#include "protocol/computer.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;

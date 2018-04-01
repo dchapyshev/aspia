@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__CLIENT_DIALOG_H
 #define _ASPIA_CLIENT__UI__CLIENT_DIALOG_H
 
-#include "proto/computer.pb.h"
+#include "protocol/computer.pb.h"
 #include "ui_client_dialog.h"
 
 namespace aspia {

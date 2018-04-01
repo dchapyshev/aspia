@@ -10,7 +10,7 @@
 
 #include <QPointer>
 
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace aspia {

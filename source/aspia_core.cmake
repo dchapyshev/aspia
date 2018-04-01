@@ -353,22 +353,22 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/network_server_tcp.cc
     ${PROJECT_SOURCE_DIR}/network/network_server_tcp.h)
 
-list(APPEND SOURCE_PROTO
-    ${PROJECT_SOURCE_DIR}/proto/address_book.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/address_book.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/address_book.proto
-    ${PROJECT_SOURCE_DIR}/proto/auth_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/auth_session.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/auth_session.proto
-    ${PROJECT_SOURCE_DIR}/proto/computer.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/computer.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/computer.proto
-    ${PROJECT_SOURCE_DIR}/proto/desktop_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/desktop_session.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/desktop_session.proto
-    ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.pb.h
-    ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.proto)
+list(APPEND SOURCE_PROTOCOL
+    ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/address_book.proto
+    ${PROJECT_SOURCE_DIR}/protocol/auth_session.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/auth_session.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/auth_session.proto
+    ${PROJECT_SOURCE_DIR}/protocol/computer.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/computer.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/computer.proto
+    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/desktop_session.proto
+    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto)
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)

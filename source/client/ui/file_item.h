@@ -10,7 +10,7 @@
 
 #include <QTreeWidget>
 
-#include "proto/file_transfer_session.pb.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 

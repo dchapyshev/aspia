@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
-#include "proto/auth_session.pb.h"
+#include "protocol/auth_session.pb.h"
 
 namespace aspia {
 
