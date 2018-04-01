@@ -11,7 +11,6 @@
 #include <wtsapi32.h>
 #include <string>
 
-#include "base/process/process_helpers.h"
 #include "base/win/scoped_object.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"

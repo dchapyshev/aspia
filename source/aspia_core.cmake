@@ -56,8 +56,6 @@ list(APPEND SOURCE_BASE_MESSAGE_LOOP
 list(APPEND SOURCE_BASE_PROCESS
     ${PROJECT_SOURCE_DIR}/base/process/process.cc
     ${PROJECT_SOURCE_DIR}/base/process/process.h
-    ${PROJECT_SOURCE_DIR}/base/process/process_helpers.cc
-    ${PROJECT_SOURCE_DIR}/base/process/process_helpers.h
     ${PROJECT_SOURCE_DIR}/base/process/process_watcher.cc
     ${PROJECT_SOURCE_DIR}/base/process/process_watcher.h)
 
