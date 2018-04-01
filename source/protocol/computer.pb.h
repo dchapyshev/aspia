@@ -28,7 +28,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include "auth_session.pb.h"
+#include "authorization.pb.h"
 #include "desktop_session.pb.h"
 // @@protoc_insertion_point(includes)
 

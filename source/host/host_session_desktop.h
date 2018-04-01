@@ -14,7 +14,7 @@
 #include "host/screen_updater.h"
 #include "host/clipboard_thread.h"
 #include "ipc/pipe_channel.h"
-#include "protocol/auth_session.pb.h"
+#include "protocol/authorization.pb.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {

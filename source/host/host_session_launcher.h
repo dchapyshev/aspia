@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_LAUNCHER_H
 #define _ASPIA_HOST__HOST_SESSION_LAUNCHER_H
 
-#include "protocol/auth_session.pb.h"
+#include "protocol/authorization.pb.h"
 
 #include <cstdint>
 

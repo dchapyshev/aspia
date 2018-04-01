@@ -12,7 +12,7 @@
 #include "base/process/process.h"
 #include "base/message_serialization.h"
 #include "ipc/pipe_channel_proxy.h"
-#include "protocol/auth_session.pb.h"
+#include "protocol/authorization.pb.h"
 
 namespace aspia {
 

@@ -9,7 +9,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "auth_session.proto";
+import "authorization.proto";
 import "desktop_session.proto";
 
 package aspia.proto;

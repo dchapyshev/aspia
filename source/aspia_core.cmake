@@ -357,9 +357,9 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/address_book.proto
-    ${PROJECT_SOURCE_DIR}/protocol/auth_session.pb.cc
-    ${PROJECT_SOURCE_DIR}/protocol/auth_session.pb.h
-    ${PROJECT_SOURCE_DIR}/protocol/auth_session.proto
+    ${PROJECT_SOURCE_DIR}/protocol/authorization.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/authorization.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/authorization.proto
     ${PROJECT_SOURCE_DIR}/protocol/computer.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/computer.pb.h
     ${PROJECT_SOURCE_DIR}/protocol/computer.proto
