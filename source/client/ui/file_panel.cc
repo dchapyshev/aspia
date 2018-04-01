@@ -80,6 +80,11 @@ FilePanel::FilePanel(QWidget* parent)
     connect(ui.button_add, &QPushButton::pressed, this, &FilePanel::addFolder);
     connect(ui.button_delete, &QPushButton::pressed, this, &FilePanel::removeSelected);
     connect(ui.button_send, &QPushButton::pressed, this, &FilePanel::sendSelected);
+
+    connect(ui.tree, &FileTreeWidget::fileListDroped, [this](const QList<FileTransfer::Item>& items)
+    {
+        emit receiveItems(this, items);
+    });
 }
 
 FilePanel::~FilePanel() = default;

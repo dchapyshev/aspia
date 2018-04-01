@@ -10,6 +10,8 @@
 
 #include <QMimeData>
 
+#include "client/file_transfer.h"
+
 namespace aspia {
 
 class FileItem;
@@ -22,11 +24,11 @@ public:
 
     static QString mimeType();
 
-    void setFileItem(FileItem* file_item);
-    FileItem* fileItem() const;
+    void setFileList(const QList<FileTransfer::Item>& file_list);
+    QList<FileTransfer::Item> fileList() const;
 
 private:
-    FileItem* file_item_;
+    QList<FileTransfer::Item> file_list_;
 
     Q_DISABLE_COPY(FileItemMimeData)
 };

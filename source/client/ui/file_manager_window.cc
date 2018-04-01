@@ -43,6 +43,8 @@ FileManagerWindow::FileManagerWindow(proto::Computer* computer, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
     connect(ui.local_panel, &FilePanel::sendItems, this, &FileManagerWindow::sendItems);
     connect(ui.remote_panel, &FilePanel::sendItems, this, &FileManagerWindow::sendItems);
+    connect(ui.local_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
+    connect(ui.remote_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
     connect(ui.local_panel, &FilePanel::request, this, &FileManagerWindow::localRequest);
     connect(ui.remote_panel, &FilePanel::request, this, &FileManagerWindow::remoteRequest);
 }
@@ -95,30 +97,59 @@ void FileManagerWindow::removeItems(FilePanel* sender, QList<FileRemover::Item> 
 
 void FileManagerWindow::sendItems(FilePanel* sender, QList<FileTransfer::Item> items)
 {
-    FileTransferDialog* progress_dialog = new FileTransferDialog(this);
-    FileTransfer* transfer;
-
-    QString source_path;
-    QString target_path;
-
     if (sender == ui.local_panel)
     {
-        transfer = new FileTransfer(FileTransfer::Uploader, progress_dialog);
-
-        source_path = ui.local_panel->currentPath();
-        target_path = ui.remote_panel->currentPath();
-
-        connect(transfer, &FileTransfer::finished, ui.remote_panel, &FilePanel::refresh);
+        transferItems(FileTransfer::Uploader,
+                      ui.local_panel->currentPath(),
+                      ui.remote_panel->currentPath(),
+                      items);
     }
     else
     {
         Q_ASSERT(sender == ui.remote_panel);
 
-        transfer = new FileTransfer(FileTransfer::Downloader, progress_dialog);
+        transferItems(FileTransfer::Downloader,
+                      ui.remote_panel->currentPath(),
+                      ui.local_panel->currentPath(),
+                      items);
+    }
+}
 
-        source_path = ui.remote_panel->currentPath();
-        target_path = ui.local_panel->currentPath();
+void FileManagerWindow::receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items)
+{
+    if (sender == ui.local_panel)
+    {
+        transferItems(FileTransfer::Downloader,
+                      ui.remote_panel->currentPath(),
+                      ui.local_panel->currentPath(),
+                      items);
+    }
+    else
+    {
+        Q_ASSERT(sender == ui.remote_panel);
 
+        transferItems(FileTransfer::Uploader,
+                      ui.local_panel->currentPath(),
+                      ui.remote_panel->currentPath(),
+                      items);
+    }
+}
+
+void FileManagerWindow::transferItems(FileTransfer::Type type,
+                                      const QString& source_path,
+                                      const QString& target_path,
+                                      const QList<FileTransfer::Item>& items)
+{
+    FileTransferDialog* progress_dialog = new FileTransferDialog(this);
+    FileTransfer* transfer = new FileTransfer(type, progress_dialog);
+
+    if (type == FileTransfer::Uploader)
+    {
+        connect(transfer, &FileTransfer::finished, ui.remote_panel, &FilePanel::refresh);
+    }
+    else
+    {
+        Q_ASSERT(type == FileTransfer::Downloader);
         connect(transfer, &FileTransfer::finished, ui.local_panel, &FilePanel::refresh);
     }
 

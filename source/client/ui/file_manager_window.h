@@ -37,8 +37,14 @@ protected:
 private slots:
     void removeItems(FilePanel* sender, QList<FileRemover::Item> items);
     void sendItems(FilePanel* sender, QList<FileTransfer::Item> items);
+    void receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
 
 private:
+    void transferItems(FileTransfer::Type type,
+                       const QString& source_path,
+                       const QString& target_path,
+                       const QList<FileTransfer::Item>& items);
+
     Ui::FileManagerWindow ui;
 
     Q_DISABLE_COPY(FileManagerWindow)

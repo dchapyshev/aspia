@@ -10,6 +10,8 @@
 
 #include <QDrag>
 
+#include "client/file_transfer.h"
+
 namespace aspia {
 
 class FileItem;
@@ -21,7 +23,7 @@ public:
     explicit FileItemDrag(QObject* drag_source = nullptr);
     virtual ~FileItemDrag();
 
-    void setFileItem(FileItem* file_item);
+    void setFileList(const QList<FileTransfer::Item>& file_list);
 
 private:
     Q_DISABLE_COPY(FileItemDrag)

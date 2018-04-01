@@ -190,18 +190,27 @@
     </widget>
    </item>
    <item>
-    <widget class="QTreeWidget" name="tree">
+    <widget class="aspia::FileTreeWidget" name="tree">
      <property name="editTriggers">
       <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
      </property>
      <property name="dragEnabled">
       <bool>true</bool>
      </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::DragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::CopyAction</enum>
+     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
      <property name="indentation">
       <number>0</number>
+     </property>
+     <property name="itemsExpandable">
+      <bool>false</bool>
      </property>
      <property name="sortingEnabled">
       <bool>true</bool>
@@ -240,6 +249,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>aspia::FileTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>client/ui/file_tree_widget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../resources/resources.qrc"/>
  </resources>

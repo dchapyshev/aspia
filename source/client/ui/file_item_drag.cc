@@ -19,10 +19,10 @@ FileItemDrag::FileItemDrag(QObject* drag_source)
 
 FileItemDrag::~FileItemDrag() = default;
 
-void FileItemDrag::setFileItem(FileItem* file_item)
+void FileItemDrag::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     FileItemMimeData* mime_data = new FileItemMimeData();
-    mime_data->setFileItem(file_item);
+    mime_data->setFileList(file_list);
     setMimeData(mime_data);
 }
 

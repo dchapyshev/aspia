@@ -168,6 +168,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui

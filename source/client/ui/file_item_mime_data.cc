@@ -15,18 +15,18 @@ FileItemMimeData::~FileItemMimeData() = default;
 // static
 QString FileItemMimeData::mimeType()
 {
-    return QStringLiteral("application/file_item");
+    return QStringLiteral("application/file_list");
 }
 
-void FileItemMimeData::setFileItem(FileItem* file_item)
+void FileItemMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
 {
-    file_item_ = file_item;
+    file_list_ = file_list;
     setData(mimeType(), QByteArray());
 }
 
-FileItem* FileItemMimeData::fileItem() const
+QList<FileTransfer::Item> FileItemMimeData::fileList() const
 {
-    return file_item_;
+    return file_list_;
 }
 
 } // namespace aspia
