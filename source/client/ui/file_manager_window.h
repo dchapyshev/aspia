@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "client/file_reply_receiver.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
 #include "ui_file_manager_window.h"
@@ -23,19 +22,21 @@ public:
     FileManagerWindow(proto::Computer* computer, QWidget* parent = nullptr);
     ~FileManagerWindow() = default;
 
-signals:
-    void windowClose();
-    void localRequest(const proto::file_transfer::Request& request,
-                      const FileReplyReceiver& receiver);
-    void remoteRequest(const proto::file_transfer::Request& request,
-                       const FileReplyReceiver& receiver);
-
 public slots:
     void refresh();
+
+signals:
+    void windowClose();
+    void localRequest(FileRequest* request);
+    void remoteRequest(FileRequest* request);
 
 protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
+
+private slots:
+    void removeItems(FilePanel* sender, QList<FileRemover::Item> items);
+    void sendItems(FilePanel* sender, QList<FileTransfer::Item> items);
 
 private:
     Ui::FileManagerWindow ui;

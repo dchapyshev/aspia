@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_platform_util.h
+// FILE:            host/file_platform_util.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__FILE_PLATFORM_UTIL_H
-#define _ASPIA_CLIENT__FILE_PLATFORM_UTIL_H
+#ifndef _ASPIA_HOST__FILE_PLATFORM_UTIL_H
+#define _ASPIA_HOST__FILE_PLATFORM_UTIL_H
 
 #include <QIcon>
 #include <QPair>
@@ -35,4 +35,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__FILE_PLATFORM_UTIL_H
+#endif // _ASPIA_HOST__FILE_PLATFORM_UTIL_H

@@ -12,14 +12,16 @@
 #include <QStyledItemDelegate>
 
 #include "client/ui/file_item.h"
-#include "client/ui/file_remove_dialog.h"
-#include "client/file_platform_util.h"
+#include "client/file_remover.h"
 #include "client/file_request.h"
 #include "client/file_status.h"
+#include "host/file_platform_util.h"
 
 namespace aspia {
 
 namespace {
+
+const char* kReplySlot = "reply";
 
 class NoEditDelegate : public QStyledItemDelegate
 {
@@ -175,7 +177,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
 
 void FilePanel::refresh()
 {
-    emit request(FileRequest::driveListRequest(), FileReplyReceiver(this, "reply"));
+    emit request(FileRequest::driveListRequest(this, kReplySlot));
 }
 
 void FilePanel::addressItemChanged(int index)
@@ -209,7 +211,7 @@ void FilePanel::addressItemChanged(int index)
         }
     }
 
-    emit request(FileRequest::fileListRequest(current_path_), FileReplyReceiver(this, "reply"));
+    emit request(FileRequest::fileListRequest(this, current_path_, kReplySlot));
 }
 
 void FilePanel::fileDoubleClicked(QTreeWidgetItem* item, int column)
@@ -247,8 +249,8 @@ void FilePanel::fileItemChanged(QTreeWidgetItem* item, int column)
     if (initial_name.isEmpty())
     {
         // New item.
-        emit request(FileRequest::createDirectoryRequest(currentPath() + current_name),
-                     FileReplyReceiver(this, "reply"));
+        emit request(FileRequest::createDirectoryRequest(
+            this, currentPath() + current_name, kReplySlot));
     }
     else
     {
@@ -256,9 +258,11 @@ void FilePanel::fileItemChanged(QTreeWidgetItem* item, int column)
         if (current_name == initial_name)
             return;
 
-        emit request(FileRequest::renameRequest(currentPath() + initial_name,
-                                                currentPath() + current_name),
-                     FileReplyReceiver(this, "reply"));
+        emit request(FileRequest::renameRequest(
+            this,
+            currentPath() + initial_name,
+            currentPath() + current_name,
+            kReplySlot));
     }
 }
 
@@ -290,7 +294,7 @@ void FilePanel::addFolder()
 
 void FilePanel::removeSelected()
 {
-    QList<FileRemoveTask> tasks;
+    QList<FileRemover::Item> items;
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
@@ -298,12 +302,12 @@ void FilePanel::removeSelected()
 
         if (ui.tree->isItemSelected(file_item))
         {
-            tasks.push_back(FileRemoveTask(currentPath() + file_item->currentName(),
-                                           file_item->isDirectory()));
+            items.push_back(FileRemover::Item(file_item->currentName(),
+                                              file_item->isDirectory()));
         }
     }
 
-    if (tasks.isEmpty())
+    if (items.isEmpty())
         return;
 
     if (QMessageBox::question(this,
@@ -314,31 +318,29 @@ void FilePanel::removeSelected()
         return;
     }
 
-    FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
-    FileRemover* remover = new FileRemover(progress_dialog);
-
-    connect(remover, &FileRemover::started, progress_dialog, &FileRemoveDialog::open);
-    connect(remover, &FileRemover::finished, progress_dialog, &FileRemoveDialog::close);
-    connect(remover, &FileRemover::finished, this, &FilePanel::refresh);
-
-    connect(remover, &FileRemover::progressChanged,
-            progress_dialog, &FileRemoveDialog::setProgress);
-
-    connect(remover, &FileRemover::error, progress_dialog, &FileRemoveDialog::showError);
-    connect(remover, &FileRemover::request, this, &FilePanel::request);
-
-    // After closing the dialog, delete it. Remover is a child object and will also be deleted.
-    connect(progress_dialog, &FileRemoveDialog::finished, [progress_dialog](int /* result */)
-    {
-        progress_dialog->deleteLater();
-    });
-
-    remover->start(tasks);
+    emit removeItems(this, items);
 }
 
 void FilePanel::sendSelected()
 {
-    // TODO
+    QList<FileTransfer::Item> items;
+
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        FileItem* file_item = reinterpret_cast<FileItem*>(ui.tree->topLevelItem(i));
+
+        if (ui.tree->isItemSelected(file_item))
+        {
+            items.push_back(FileTransfer::Item(file_item->currentName(),
+                                               file_item->fileSize(),
+                                               file_item->isDirectory()));
+        }
+    }
+
+    if (items.isEmpty())
+        return;
+
+    emit sendItems(this, items);
 }
 
 QString FilePanel::addressItemPath(int index) const

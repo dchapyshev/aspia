@@ -14,6 +14,12 @@
 
 namespace aspia {
 
+namespace {
+
+const char* kReplySlot = "reply";
+
+} // namespace
+
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(QObject* parent)
     : QObject(parent)
 {
@@ -27,12 +33,12 @@ QQueue<FileRemoveTask> FileRemoveQueueBuilder::taskQueue() const
     return tasks_;
 }
 
-void FileRemoveQueueBuilder::start(const QList<FileRemoveTask>& tasks)
+void FileRemoveQueueBuilder::start(const QString& path, const QList<FileRemover::Item>& items)
 {
     emit started();
 
-    for (const auto& task : tasks)
-        pending_tasks_.push_back(task);
+    for (const auto& item : items)
+        pending_tasks_.push_back(FileRemoveTask(path + item.name, item.is_directory));
 
     processNextPendingTask();
 }
@@ -88,8 +94,7 @@ void FileRemoveQueueBuilder::processNextPendingTask()
         return;
     }
 
-    emit request(FileRequest::fileListRequest(current.path()),
-                 FileReplyReceiver(this, "reply"));
+    emit request(FileRequest::fileListRequest(this, current.path(), kReplySlot));
 }
 
 void FileRemoveQueueBuilder::processError(const QString& message)

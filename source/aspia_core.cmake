@@ -114,31 +114,22 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.h
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
-    ${PROJECT_SOURCE_DIR}/client/file_platform_util_win.cc
-    ${PROJECT_SOURCE_DIR}/client/file_platform_util.h
     ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.cc
     ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.h
     ${PROJECT_SOURCE_DIR}/client/file_remove_task.cc
     ${PROJECT_SOURCE_DIR}/client/file_remove_task.h
     ${PROJECT_SOURCE_DIR}/client/file_remover.cc
     ${PROJECT_SOURCE_DIR}/client/file_remover.h
-    ${PROJECT_SOURCE_DIR}/client/file_reply_receiver.h
     ${PROJECT_SOURCE_DIR}/client/file_request.cc
     ${PROJECT_SOURCE_DIR}/client/file_request.h
     ${PROJECT_SOURCE_DIR}/client/file_status.cc
     ${PROJECT_SOURCE_DIR}/client/file_status.h
     ${PROJECT_SOURCE_DIR}/client/file_transfer.cc
     ${PROJECT_SOURCE_DIR}/client/file_transfer.h
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.cc
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_downloader.h
     ${PROJECT_SOURCE_DIR}/client/file_transfer_queue_builder.cc
     ${PROJECT_SOURCE_DIR}/client/file_transfer_queue_builder.h
     ${PROJECT_SOURCE_DIR}/client/file_transfer_task.cc
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.cc
-    ${PROJECT_SOURCE_DIR}/client/file_transfer_uploader.h
-    ${PROJECT_SOURCE_DIR}/client/file_worker.cc
-    ${PROJECT_SOURCE_DIR}/client/file_worker.h)
+    ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h)
 
 list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
@@ -170,12 +161,12 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.ui
-    ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_progress_dialog.ui
     ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_remove_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.ui
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
@@ -286,6 +277,14 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/clipboard_thread.h
     ${PROJECT_SOURCE_DIR}/host/console_session_watcher.cc
     ${PROJECT_SOURCE_DIR}/host/console_session_watcher.h
+    ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
+    ${PROJECT_SOURCE_DIR}/host/file_depacketizer.h
+    ${PROJECT_SOURCE_DIR}/host/file_packetizer.cc
+    ${PROJECT_SOURCE_DIR}/host/file_packetizer.h
+    ${PROJECT_SOURCE_DIR}/host/file_platform_util_win.cc
+    ${PROJECT_SOURCE_DIR}/host/file_platform_util.h
+    ${PROJECT_SOURCE_DIR}/host/file_worker.cc
+    ${PROJECT_SOURCE_DIR}/host/file_worker.h
     ${PROJECT_SOURCE_DIR}/host/host.cc
     ${PROJECT_SOURCE_DIR}/host/host.h
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
@@ -369,10 +368,6 @@ list(APPEND SOURCE_PROTO
 list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/clipboard.cc
     ${PROJECT_SOURCE_DIR}/protocol/clipboard.h
-    ${PROJECT_SOURCE_DIR}/protocol/file_depacketizer.cc
-    ${PROJECT_SOURCE_DIR}/protocol/file_depacketizer.h
-    ${PROJECT_SOURCE_DIR}/protocol/file_packetizer.cc
-    ${PROJECT_SOURCE_DIR}/protocol/file_packetizer.h
     ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/protocol/message_serialization.h)

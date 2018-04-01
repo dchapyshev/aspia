@@ -12,7 +12,7 @@
 #include <QQueue>
 
 #include "client/file_remove_task.h"
-#include "client/file_reply_receiver.h"
+#include "client/file_request.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -36,16 +36,29 @@ public:
     };
     Q_DECLARE_FLAGS(Actions, Action)
 
+    struct Item
+    {
+        Item(const QString& name, bool is_directory)
+            : name(name),
+              is_directory(is_directory)
+        {
+            // Nothing
+        }
+
+        QString name;
+        bool is_directory;
+    };
+
+    void start(const QString& path, const QList<Item>& items);
+
 signals:
     void started();
     void finished();
     void progressChanged(const QString& name, int percentage);
     void error(FileRemover* remover, FileRemover::Actions actions, const QString& message);
-    void request(const proto::file_transfer::Request& request,
-                 const FileReplyReceiver& receiver);
+    void request(FileRequest* request);
 
 public slots:
-    void start(const QList<FileRemoveTask>& tasks);
     void applyAction(Action action);
     void reply(const proto::file_transfer::Request& request,
                const proto::file_transfer::Reply& reply);
@@ -61,7 +74,7 @@ private:
     FileRemoveQueueBuilder* builder_ = nullptr;
     QQueue<FileRemoveTask> tasks_;
 
-    Action failure_action_ = Action::Ask;
+    Action failure_action_ = Ask;
     int tasks_count_ = 0;
 
     Q_DISABLE_COPY(FileRemover)

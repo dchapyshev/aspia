@@ -175,7 +175,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Send</string>
+         <string>Copy</string>
         </property>
         <property name="icon">
          <iconset resource="../../resources/resources.qrc">

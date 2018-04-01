@@ -8,7 +8,8 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_PANEL_H
 #define _ASPIA_CLIENT__UI__FILE_PANEL_H
 
-#include "client/file_reply_receiver.h"
+#include "client/file_remover.h"
+#include "client/file_transfer.h"
 #include "proto/file_transfer_session.pb.h"
 #include "ui_file_panel.h"
 
@@ -28,9 +29,9 @@ public:
     void setCurrentPath(const QString& path);
 
 signals:
-    void request(const proto::file_transfer::Request& request,
-                 const FileReplyReceiver& receiver);
-    void sendItems(const QString& path, const QStringList& items);
+    void request(FileRequest* request);
+    void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
+    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
 
 public slots:
     void reply(const proto::file_transfer::Request& request,

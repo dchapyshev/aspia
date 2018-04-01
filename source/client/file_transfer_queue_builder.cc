@@ -16,6 +16,8 @@ namespace aspia {
 
 namespace {
 
+const char* kReplySlot = "reply";
+
 QString normalizePath(const QString& path)
 {
     QString normalized_path = path;
@@ -44,12 +46,12 @@ QQueue<FileTransferTask> FileTransferQueueBuilder::taskQueue() const
 
 void FileTransferQueueBuilder::start(const QString& source_path,
                                      const QString& target_path,
-                                     const QList<QPair<QString, bool>>& items)
+                                     const QList<FileTransfer::Item>& items)
 {
     emit started();
 
     for (const auto& item : items)
-        addPendingTask(source_path, target_path, item.first, item.second);
+        addPendingTask(source_path, target_path, item.name, item.is_directory, item.size);
 
     processNextPendingTask();
 }
@@ -83,7 +85,8 @@ void FileTransferQueueBuilder::reply(const proto::file_transfer::Request& reques
         addPendingTask(last_task.sourcePath(),
                        last_task.targetPath(),
                        QString::fromStdString(item.name()),
-                       item.is_directory());
+                       item.is_directory(),
+                       item.size());
     }
 
     processNextPendingTask();
@@ -107,8 +110,7 @@ void FileTransferQueueBuilder::processNextPendingTask()
         return;
     }
 
-    emit request(FileRequest::fileListRequest(current.sourcePath()),
-                 FileReplyReceiver(this, "reply"));
+    emit request(FileRequest::fileListRequest(this, current.sourcePath(), kReplySlot));
 }
 
 void FileTransferQueueBuilder::processError(const QString& message)
@@ -122,7 +124,8 @@ void FileTransferQueueBuilder::processError(const QString& message)
 void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
                                               const QString& target_dir,
                                               const QString& item_name,
-                                              bool is_directory)
+                                              bool is_directory,
+                                              qint64 size)
 {
     QString source_path = normalizePath(source_dir) + item_name;
     QString target_path = normalizePath(target_dir) + item_name;
@@ -133,7 +136,7 @@ void FileTransferQueueBuilder::addPendingTask(const QString& source_dir,
         target_path = normalizePath(target_path);
     }
 
-    pending_tasks_.push_back(FileTransferTask(source_path, target_path, is_directory));
+    pending_tasks_.push_back(FileTransferTask(source_path, target_path, is_directory, size));
 }
 
 } // namespace aspia

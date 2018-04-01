@@ -10,9 +10,10 @@
 
 #include <QQueue>
 #include <QPair>
+#include <QPointer>
 
 #include "client/client_session.h"
-#include "client/file_reply_receiver.h"
+#include "client/file_request.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
 
@@ -39,17 +40,16 @@ public slots:
     void closeSession() override;
 
 private slots:
-    void remoteRequest(const proto::file_transfer::Request& request,
-                       const FileReplyReceiver& receiver);
+    void remoteRequest(FileRequest* request);
 
 private:
     proto::Computer* computer_;
-    FileManagerWindow* file_manager_;
+    QPointer<FileManagerWindow> file_manager_;
 
-    FileWorker* worker_;
-    QThread* worker_thread_;
+    QPointer<FileWorker> worker_;
+    QPointer<QThread> worker_thread_;
 
-    QQueue<QPair<proto::file_transfer::Request, FileReplyReceiver>> tasks_;
+    QQueue<QPointer<FileRequest>> tasks_;
 
     Q_DISABLE_COPY(ClientSessionFileTransfer)
 };

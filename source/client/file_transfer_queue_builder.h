@@ -8,13 +8,7 @@
 #ifndef _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
 #define _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
 
-#include <QObject>
-#include <QQueue>
-#include <QPair>
-
-#include "client/file_transfer_task.h"
-#include "client/file_reply_receiver.h"
-#include "proto/file_transfer_session.pb.h"
+#include "client/file_transfer.h"
 
 namespace aspia {
 
@@ -41,14 +35,13 @@ signals:
     void error(const QString& message);
 
     // Signals an outbound request.
-    void request(const proto::file_transfer::Request& request,
-                 const FileReplyReceiver& receiver);
+    void request(FileRequest* request);
 
 public slots:
     // Starts building of the task queue.
     void start(const QString& source_path,
                const QString& target_path,
-               const QList<QPair<QString, bool>>& items);
+               const QList<FileTransfer::Item>& items);
 
     // Reads the reply to the request.
     void reply(const proto::file_transfer::Request& request,
@@ -58,7 +51,8 @@ private:
     void addPendingTask(const QString& source_dir,
                         const QString& target_dir,
                         const QString& item_name,
-                        bool is_directory);
+                        bool is_directory,
+                        qint64 size);
     void processNextPendingTask();
     void processError(const QString& message);
 

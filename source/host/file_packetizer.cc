@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/file_packetizer.cc
+// FILE:            host/file_packetizer.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "protocol/file_packetizer.h"
+#include "host/file_packetizer.h"
 
 namespace aspia {
 
@@ -31,7 +31,7 @@ FilePacketizer::FilePacketizer(QPointer<QFile>& file)
     left_size_ = file_size_;
 }
 
-std::unique_ptr<FilePacketizer> FilePacketizer::Create(const QString& file_path)
+std::unique_ptr<FilePacketizer> FilePacketizer::create(const QString& file_path)
 {
     QPointer<QFile> file = new QFile(file_path);
 
@@ -41,7 +41,7 @@ std::unique_ptr<FilePacketizer> FilePacketizer::Create(const QString& file_path)
     return std::unique_ptr<FilePacketizer>(new FilePacketizer(file));
 }
 
-std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::CreateNextPacket()
+std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
 {
     Q_ASSERT(!file_.isNull() && file_->isOpen());
 
@@ -60,10 +60,17 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::CreateNextPacket()
     char* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
 
     // Moving to a new position in file.
-    file_->seek(file_size_ - left_size_);
+    if (!file_->seek(file_size_ - left_size_))
+    {
+        qDebug("Unable to seek file");
+        return nullptr;
+    }
 
     if (file_->read(packet_buffer, packet_buffer_size) != packet_buffer_size)
+    {
+        qDebug("Unable to read file");
         return nullptr;
+    }
 
     if (left_size_ == file_size_)
     {

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/file_depacketizer.cc
+// FILE:            host/file_depacketizer.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "protocol/file_depacketizer.h"
+#include "host/file_depacketizer.h"
 
 #include <QDebug>
 
@@ -17,7 +17,7 @@ FileDepacketizer::FileDepacketizer(QPointer<QFile>& file)
 }
 
 // static
-std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
+std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
     const QString& file_path, bool overwrite)
 {
     QFile::OpenMode mode = QFile::WriteOnly;
@@ -33,7 +33,7 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::Create(
     return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(file));
 }
 
-bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::Packet& packet)
+bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
 {
     Q_ASSERT(!file_.isNull() && file_->isOpen());
 
@@ -48,13 +48,13 @@ bool FileDepacketizer::ReadNextPacket(const proto::file_transfer::Packet& packet
 
     if (!file_->seek(file_size_ - left_size_))
     {
-        qWarning() << "seek failed";
+        qDebug("seek failed");
         return false;
     }
 
     if (file_->write(packet.data().data(), packet_size) != packet_size)
     {
-        qWarning() << "Unable to write file";
+        qDebug("Unable to write file");
         return false;
     }
 

@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_platform_util_win.cc
+// FILE:            host/file_platform_util_win.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "client/file_platform_util.h"
+#include "host/file_platform_util.h"
 
 #if !defined(Q_OS_WIN)
 #error This file is only for MS Windows

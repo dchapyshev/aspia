@@ -8,10 +8,15 @@
 #include "client/file_remover.h"
 
 #include "client/file_remove_queue_builder.h"
-#include "client/file_request.h"
 #include "client/file_status.h"
 
 namespace aspia {
+
+namespace {
+
+const char* kReplySlot = "reply";
+
+} // namespace
 
 FileRemover::FileRemover(QObject* parent)
     : QObject(parent)
@@ -21,7 +26,7 @@ FileRemover::FileRemover(QObject* parent)
 
 FileRemover::~FileRemover() = default;
 
-void FileRemover::start(const QList<FileRemoveTask>& tasks)
+void FileRemover::start(const QString& path, const QList<Item>& items)
 {
     builder_ = new FileRemoveQueueBuilder();
 
@@ -40,23 +45,23 @@ void FileRemover::start(const QList<FileRemoveTask>& tasks)
     connect(builder_, &FileRemoveQueueBuilder::request,
             this, &FileRemover::request);
 
-    builder_->start(tasks);
+    builder_->start(path, items);
 }
 
 void FileRemover::applyAction(Action action)
 {
     switch (action)
     {
-        case Action::Skip:
+        case Skip:
             processNextTask();
             break;
 
-        case Action::SkipAll:
+        case SkipAll:
             failure_action_ = action;
             processNextTask();
             break;
 
-        case Action::Abort:
+        case Abort:
             emit finished();
             break;
 
@@ -71,7 +76,7 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
 {
     if (!request.has_remove_request())
     {
-        emit error(this, Action::Abort, tr("An unexpected answer was received."));
+        emit error(this, Abort, tr("An unexpected answer was received."));
         return;
     }
 
@@ -84,18 +89,18 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
             case proto::file_transfer::STATUS_PATH_NOT_FOUND:
             case proto::file_transfer::STATUS_ACCESS_DENIED:
             {
-                if (failure_action_ != Action::Ask)
+                if (failure_action_ != Ask)
                 {
                     applyAction(failure_action_);
                     return;
                 }
 
-                actions = Action::Abort | Action::Skip | Action::SkipAll;
+                actions = Abort | Skip | SkipAll;
             }
             break;
 
             default:
-                actions = Action::Abort;
+                actions = Abort;
                 break;
         }
 
@@ -110,7 +115,7 @@ void FileRemover::reply(const proto::file_transfer::Request& request,
 
 void FileRemover::taskQueueError(const QString& message)
 {
-    emit error(this, Action::Abort, message);
+    emit error(this, Abort, message);
 }
 
 void FileRemover::taskQueueReady()
@@ -136,8 +141,7 @@ void FileRemover::processTask()
     int percentage = (tasks_count_ - tasks_.size()) * 100 / tasks_count_;
 
     emit progressChanged(tasks_.front().path(), percentage);
-    emit request(FileRequest::removeRequest(tasks_.front().path()),
-                 FileReplyReceiver(this, "reply"));
+    emit request(FileRequest::removeRequest(this, tasks_.front().path(), kReplySlot));
 }
 
 void FileRemover::processNextTask()

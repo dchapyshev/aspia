@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/file_depacketizer.h
+// FILE:            host/file_depacketizer.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
-#define _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
+#ifndef _ASPIA_HOST__FILE_DEPACKETIZER_H
+#define _ASPIA_HOST__FILE_DEPACKETIZER_H
 
 #include <QFile>
 #include <QPointer>
@@ -22,12 +22,10 @@ class FileDepacketizer
 public:
     ~FileDepacketizer() = default;
 
-    static std::unique_ptr<FileDepacketizer> Create(const QString& file_path, bool overwrite);
+    static std::unique_ptr<FileDepacketizer> create(const QString& file_path, bool overwrite);
 
     // Reads the packet and writes its contents to a file.
-    bool ReadNextPacket(const proto::file_transfer::Packet& packet);
-
-    qint64 LeftSize() const { return left_size_; }
+    bool writeNextPacket(const proto::file_transfer::Packet& packet);
 
 private:
     FileDepacketizer(QPointer<QFile>& file_stream);
@@ -42,4 +40,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_PROTOCOL__FILE_DEPACKETIZER_H
+#endif // _ASPIA_HOST__FILE_DEPACKETIZER_H

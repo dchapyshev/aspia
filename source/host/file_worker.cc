@@ -1,24 +1,80 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_worker.cc
+// FILE:            host/file_worker.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "client/file_worker.h"
+#include "host/file_worker.h"
 
 #include <QDebug>
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QStorageInfo>
 
-#include "client/file_platform_util.h"
+#include "host/file_platform_util.h"
 
 namespace aspia {
 
-namespace {
+FileWorker::FileWorker(QObject* parent)
+    : QObject(parent)
+{
+    // Nothing
+}
 
-proto::file_transfer::Reply doDriveListRequest()
+proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Request& request)
+{
+    if (request.has_drive_list_request())
+    {
+        return doDriveListRequest();
+    }
+    else if (request.has_file_list_request())
+    {
+        return doFileListRequest(request.file_list_request());
+    }
+    else if (request.has_create_directory_request())
+    {
+        return doCreateDirectoryRequest(request.create_directory_request());
+    }
+    else if (request.has_rename_request())
+    {
+        return doRenameRequest(request.rename_request());
+    }
+    else if (request.has_remove_request())
+    {
+        return doRemoveRequest(request.remove_request());
+    }
+    else if (request.has_download_request())
+    {
+        return doDownloadRequest(request.download_request());
+    }
+    else if (request.has_upload_request())
+    {
+        return doUploadRequest(request.upload_request());
+    }
+    else if (request.has_packet_request())
+    {
+        return doPacketRequest();
+    }
+    else if (request.has_packet())
+    {
+        return doPacket(request.packet());
+    }
+    else
+    {
+        proto::file_transfer::Reply reply;
+        reply.set_status(proto::file_transfer::STATUS_INVALID_REQUEST);
+        return reply;
+    }
+}
+
+void FileWorker::executeRequest(FileRequest* request)
+{
+    request->sendReply(doRequest(request->request()));
+    delete request;
+}
+
+proto::file_transfer::Reply FileWorker::doDriveListRequest()
 {
     proto::file_transfer::Reply reply;
 
@@ -58,7 +114,8 @@ proto::file_transfer::Reply doDriveListRequest()
     return reply;
 }
 
-proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileListRequest& request)
+proto::file_transfer::Reply FileWorker::doFileListRequest(
+    const proto::file_transfer::FileListRequest& request)
 {
     proto::file_transfer::Reply reply;
 
@@ -71,6 +128,7 @@ proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileLi
 
     directory.setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot |
                         QDir::System | QDir::Hidden);
+    directory.setSorting(QDir::Name | QDir::DirsFirst);
 
     QFileInfoList info_list = directory.entryInfoList();
 
@@ -88,7 +146,7 @@ proto::file_transfer::Reply doFileListRequest(const proto::file_transfer::FileLi
     return reply;
 }
 
-proto::file_transfer::Reply doCreateDirectoryRequest(
+proto::file_transfer::Reply FileWorker::doCreateDirectoryRequest(
     const proto::file_transfer::CreateDirectoryRequest& request)
 {
     proto::file_transfer::Reply reply;
@@ -113,7 +171,8 @@ proto::file_transfer::Reply doCreateDirectoryRequest(
     return reply;
 }
 
-proto::file_transfer::Reply doRenameRequest(const proto::file_transfer::RenameRequest& request)
+proto::file_transfer::Reply FileWorker::doRenameRequest(
+    const proto::file_transfer::RenameRequest& request)
 {
     proto::file_transfer::Reply reply;
 
@@ -161,7 +220,8 @@ proto::file_transfer::Reply doRenameRequest(const proto::file_transfer::RenameRe
     return reply;
 }
 
-proto::file_transfer::Reply doRemoveRequest(const proto::file_transfer::RemoveRequest& request)
+proto::file_transfer::Reply FileWorker::doRemoveRequest(
+    const proto::file_transfer::RemoveRequest& request)
 {
     proto::file_transfer::Reply reply;
 
@@ -197,70 +257,105 @@ proto::file_transfer::Reply doRemoveRequest(const proto::file_transfer::RemoveRe
     return reply;
 }
 
-} // namespace
-
-FileWorker::FileWorker(QObject* parent)
-    : QObject(parent)
+proto::file_transfer::Reply FileWorker::doDownloadRequest(
+    const proto::file_transfer::DownloadRequest& request)
 {
-    // Nothing
+    proto::file_transfer::Reply reply;
+
+    packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
+    if (!packetizer_)
+        reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
+    else
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+
+    return reply;
 }
 
-void FileWorker::executeRequest(const proto::file_transfer::Request& request,
-                                const FileReplyReceiver& receiver)
+proto::file_transfer::Reply FileWorker::doUploadRequest(
+    const proto::file_transfer::UploadRequest& request)
 {
-    proto::file_transfer::Reply reply = doRequest(request);
+    proto::file_transfer::Reply reply;
 
-    QMetaObject::invokeMethod(receiver.object,
-                              receiver.slot,
-                              Qt::QueuedConnection,
-                              Q_ARG(const proto::file_transfer::Request&, request),
-                              Q_ARG(const proto::file_transfer::Reply&, reply));
+    QString file_path = QString::fromStdString(request.path());
+
+    do
+    {
+        if (!request.overwrite())
+        {
+            if (QFile(file_path).exists())
+            {
+                reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
+                break;
+            }
+        }
+
+        depacketizer_ = FileDepacketizer::create(file_path, request.overwrite());
+        if (!depacketizer_)
+        {
+            reply.set_status(proto::file_transfer::STATUS_FILE_CREATE_ERROR);
+            break;
+        }
+
+        reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+    }
+    while (false);
+
+    return reply;
 }
 
-proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Request& request)
+proto::file_transfer::Reply FileWorker::doPacketRequest()
 {
-    if (request.has_drive_list_request())
+    proto::file_transfer::Reply reply;
+
+    if (!packetizer_)
     {
-        return doDriveListRequest();
-    }
-    else if (request.has_file_list_request())
-    {
-        return doFileListRequest(request.file_list_request());
-    }
-    else if (request.has_create_directory_request())
-    {
-        return doCreateDirectoryRequest(request.create_directory_request());
-    }
-    else if (request.has_rename_request())
-    {
-        return doRenameRequest(request.rename_request());
-    }
-    else if (request.has_remove_request())
-    {
-        return doRemoveRequest(request.remove_request());
-    }
-    else if (request.has_download_request())
-    {
-        return proto::file_transfer::Reply();
-    }
-    else if (request.has_upload_request())
-    {
-        return proto::file_transfer::Reply();
-    }
-    else if (request.has_packet_request())
-    {
-        return proto::file_transfer::Reply();
-    }
-    else if (request.has_packet())
-    {
-        return proto::file_transfer::Reply();
+        // Set the unknown status of the request. The connection will be closed.
+        reply.set_status(proto::file_transfer::STATUS_UNKNOWN);
+        qWarning("Unexpected file packet request");
     }
     else
     {
-        proto::file_transfer::Reply reply;
-        reply.set_status(proto::file_transfer::STATUS_INVALID_REQUEST);
-        return reply;
+        std::unique_ptr<proto::file_transfer::Packet> packet =
+            packetizer_->readNextPacket();
+        if (!packet)
+        {
+            reply.set_status(proto::file_transfer::STATUS_FILE_READ_ERROR);
+        }
+        else
+        {
+            if (packet->flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+                packetizer_.reset();
+
+            reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+            reply.set_allocated_packet(packet.release());
+        }
     }
+
+    return reply;
+}
+
+proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Packet& packet)
+{
+    proto::file_transfer::Reply reply;
+
+    if (!depacketizer_)
+    {
+        // Set the unknown status of the request. The connection will be closed.
+        reply.set_status(proto::file_transfer::STATUS_UNKNOWN);
+        qWarning("Unexpected file packet");
+    }
+    else
+    {
+        if (!depacketizer_->writeNextPacket(packet))
+            reply.set_status(proto::file_transfer::STATUS_FILE_WRITE_ERROR);
+        else
+            reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+
+        if (packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+            depacketizer_.reset();
+    }
+
+    return reply;
 }
 
 } // namespace aspia

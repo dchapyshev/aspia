@@ -13,12 +13,10 @@
 
 #include "client/ui/file_manager_window.h"
 #include "client/file_request.h"
-#include "client/file_worker.h"
+#include "host/file_worker.h"
 #include "protocol/message_serialization.h"
 
 namespace aspia {
-
-Q_DECLARE_METATYPE(FileReplyReceiver);
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(proto::Computer* computer, QObject* parent)
     : ClientSession(parent),
@@ -26,7 +24,6 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(proto::Computer* computer, 
 {
     qRegisterMetaType<proto::file_transfer::Request>();
     qRegisterMetaType<proto::file_transfer::Reply>();
-    qRegisterMetaType<FileReplyReceiver>();
 }
 
 ClientSessionFileTransfer::~ClientSessionFileTransfer()
@@ -36,8 +33,6 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
         worker_thread_->quit();
         worker_thread_->wait();
     }
-
-    delete file_manager_;
 }
 
 void ClientSessionFileTransfer::readMessage(const QByteArray& buffer)
@@ -50,15 +45,7 @@ void ClientSessionFileTransfer::readMessage(const QByteArray& buffer)
         return;
     }
 
-    const proto::file_transfer::Request& request = tasks_.front().first;
-    const FileReplyReceiver& receiver = tasks_.front().second;
-
-    QMetaObject::invokeMethod(receiver.object,
-                              receiver.slot,
-                              Qt::DirectConnection,
-                              Q_ARG(const proto::file_transfer::Request&, request),
-                              Q_ARG(const proto::file_transfer::Reply&, reply));
-
+    tasks_.front()->sendReply(reply);
     tasks_.pop_front();
 }
 
@@ -95,11 +82,10 @@ void ClientSessionFileTransfer::closeSession()
     file_manager_->close();
 }
 
-void ClientSessionFileTransfer::remoteRequest(const proto::file_transfer::Request& request,
-                                              const FileReplyReceiver& receiver)
+void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
 {
-    tasks_.push_back(QPair<proto::file_transfer::Request, FileReplyReceiver>(request, receiver));
-    emit sessionMessage(SerializeMessage(request));
+    tasks_.push_back(QPointer<FileRequest>(request));
+    emit sessionMessage(SerializeMessage(request->request()));
 }
 
 } // namespace aspia

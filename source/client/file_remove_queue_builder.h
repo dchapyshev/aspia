@@ -11,9 +11,7 @@
 #include <QObject>
 #include <QQueue>
 
-#include "client/file_remove_task.h"
-#include "client/file_reply_receiver.h"
-#include "proto/file_transfer_session.pb.h"
+#include "client/file_remover.h"
 
 namespace aspia {
 
@@ -40,12 +38,11 @@ signals:
     void error(const QString& message);
 
     // Signals an outbound request.
-    void request(const proto::file_transfer::Request& request,
-                 const FileReplyReceiver& receiver);
+    void request(FileRequest* request);
 
 public slots:
     // Starts building of the task queue.
-    void start(const QList<FileRemoveTask>& tasks);
+    void start(const QString& path, const QList<FileRemover::Item>& items);
 
     // Reads the reply to the request.
     void reply(const proto::file_transfer::Request& request,

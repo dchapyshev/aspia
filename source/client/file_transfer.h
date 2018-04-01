@@ -9,19 +9,40 @@
 #define _ASPIA_CLIENT__FILE_TRANSFER_H
 
 #include <QObject>
+#include <QQueue>
+#include <QPair>
+#include <QPointer>
+#include <QMap>
 
-#include "client/file_reply_receiver.h"
+#include "client/file_request.h"
+#include "client/file_transfer_task.h"
 #include "proto/file_transfer_session.pb.h"
 
 namespace aspia {
+
+class FileTransferQueueBuilder;
 
 class FileTransfer : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileTransfer(QObject* parent = nullptr);
-    virtual ~FileTransfer() = default;
+    enum Type
+    {
+        Downloader = 0,
+        Uploader   = 1
+    };
+
+    enum Error
+    {
+        OtherError           = 0,
+        DirectoryCreateError = 1,
+        FileCreateError      = 2,
+        FileOpenError        = 3,
+        FileAlreadyExists    = 4,
+        FileWriteError       = 5,
+        FileReadError        = 6
+    };
 
     enum Action
     {
@@ -34,42 +55,71 @@ public:
     };
     Q_DECLARE_FLAGS(Actions, Action)
 
-    Action directoryCreateErrorAction() const;
-    void setDirectoryCreateErrorAction(Action action);
+    struct Item
+    {
+        Item(const QString& name, qint64 size, bool is_directory)
+            : name(name),
+              size(size),
+              is_directory(is_directory)
+        {
+            // Nothing
+        }
 
-    Action fileCreateErrorAction() const;
-    void setFileCreateErrorAction(Action action);
+        QString name;
+        qint64 size;
+        bool is_directory;
+    };
 
-    Action fileExistsAction() const;
-    void setFileExistsAction(Action action);
+    FileTransfer(Type type, QObject* parent);
+    ~FileTransfer() = default;
 
-    Action fileOpenErrorAction() const;
-    void setFileOpenErrorAction(Action action);
+    void start(const QString& source_path,
+               const QString& target_path,
+               const QList<Item>& items);
 
-    Action fileReadErrorAction() const;
-    void setFileReadErrorAction(Action action);
+    Actions availableActions(Error error_type) const;
+    Action defaultAction(Error error_type) const;
+    void setDefaultAction(Error error_type, Action action);
+    void applyAction(Error error_type, Action action);
+
+    FileTransferTask& currentTask();
 
 signals:
     void started();
     void finished();
-    void error(FileTransfer* transfer, FileTransfer::Actions actions, const QString& message);
-    void localRequest(const proto::file_transfer::Request& request,
-                      const FileReplyReceiver& receiver);
-    void remoteRequest(const proto::file_transfer::Request& request,
-                       const FileReplyReceiver& receiver);
+    void currentItemChanged(const QString& source_path, const QString& target_path);
+    void progressChanged(int total, int current);
+    void error(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
+    void localRequest(FileRequest* request);
+    void remoteRequest(FileRequest* request);
 
-public slots:
-    virtual void start(const QString& source_path,
-                       const QString& target_path,
-                       const QList<QPair<QString, bool>>& items) = 0;
-    virtual void applyAction(Action action) = 0;
+private slots:
+    void targetReply(const proto::file_transfer::Request& request,
+                     const proto::file_transfer::Reply& reply);
+    void sourceReply(const proto::file_transfer::Request& request,
+                    const proto::file_transfer::Reply& reply);
+    void taskQueueError(const QString& message);
+    void taskQueueReady();
 
 private:
-    Action action_directory_create_error_ = Action::Ask;
-    Action action_file_create_error_ = Action::Ask;
-    Action action_file_exists_ = Action::Ask;
-    Action action_file_open_error_ = Action::Ask;
-    Action action_file_read_error_ = Action::Ask;
+    void processTask(bool overwrite);
+    void processNextTask();
+    void processError(Error error_type, const QString& message);
+    void sourceRequest(FileRequest* request);
+    void targetRequest(FileRequest* request);
+
+    // The map contains available actions for the error and the current action.
+    QMap<Error, QPair<Actions, Action>> actions_;
+    QPointer<FileTransferQueueBuilder> builder_;
+    QQueue<FileTransferTask> tasks_;
+    const Type type_;
+
+    qint64 total_size_ = 0;
+    qint64 total_transfered_size_ = 0;
+    qint64 task_transfered_size_ = 0;
+
+    int total_percentage_ = 0;
+    int task_percentage_ = 0;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FileTransfer::Actions)

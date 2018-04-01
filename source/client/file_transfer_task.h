@@ -15,24 +15,34 @@ namespace aspia {
 class FileTransferTask
 {
 public:
-    FileTransferTask(const QString& source_path, const QString& target_path, bool is_directory);
+    FileTransferTask(const QString& source_path,
+                     const QString& target_path,
+                     bool is_directory,
+                     qint64 size);
 
-    FileTransferTask(const FileTransferTask& other);
-    FileTransferTask& operator=(const FileTransferTask& other);
+    FileTransferTask(const FileTransferTask& other) = default;
+    FileTransferTask& operator=(const FileTransferTask& other) = default;
 
     FileTransferTask(FileTransferTask&& other) noexcept;
+
     FileTransferTask& operator=(FileTransferTask&& other) noexcept;
 
-    ~FileTransferTask();
+    ~FileTransferTask() = default;
 
-    const QString& sourcePath() const;
-    const QString& targetPath() const;
-    bool isDirectory() const;
+    const QString& sourcePath() const { return source_path_; }
+    const QString& targetPath() const { return target_path_; }
+    bool isDirectory() const { return is_directory_; }
+    qint64 size() const { return size_; }
+
+    bool overwrite() const { return overwrite_; }
+    void setOverwrite(bool value) { overwrite_ = value; }
 
 private:
     QString source_path_;
     QString target_path_;
     bool is_directory_;
+    qint64 size_;
+    bool overwrite_ = false;
 };
 
 } // namespace aspia
