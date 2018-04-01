@@ -1,6 +1,6 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/keycode_converter.h
+// FILE:            base/keycode_converter.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 // NOTE:            This file is based on Chromium code.

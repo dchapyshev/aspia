@@ -11,9 +11,9 @@
 #include <QCursor>
 #include <QPixmap>
 
+#include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
 #include "codec/cursor_decoder.h"
-#include "protocol/message_serialization.h"
 
 namespace aspia {
 

@@ -9,8 +9,8 @@
 
 #include <QCoreApplication>
 
-#include "client/file_request.h"
 #include "client/file_status.h"
+#include "host/file_request.h"
 
 namespace aspia {
 

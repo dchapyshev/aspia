@@ -12,7 +12,7 @@
 #include <sas.h>
 
 #include "base/logging.h"
-#include "protocol/keycode_converter.h"
+#include "base/keycode_converter.h"
 
 namespace aspia {
 

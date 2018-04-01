@@ -1,16 +1,15 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_request.h
+// FILE:            host/file_request.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_CLIENT__FILE_REQUEST_H
-#define _ASPIA_CLIENT__FILE_REQUEST_H
+#ifndef _ASPIA_HOST__FILE_REQUEST_H
+#define _ASPIA_HOST__FILE_REQUEST_H
 
 #include <QObject>
 #include <QString>
-#include <memory>
 
 #include "proto/file_transfer_session.pb.h"
 
@@ -75,4 +74,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__FILE_REQUEST_H
+#endif // _ASPIA_HOST__FILE_REQUEST_H

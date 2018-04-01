@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            client/file_request.cc
+// FILE:            host/file_request.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "client/file_request.h"
+#include "host/file_request.h"
 
 namespace aspia {
 

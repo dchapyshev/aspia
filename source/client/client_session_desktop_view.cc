@@ -7,8 +7,8 @@
 
 #include "client/client_session_desktop_view.h"
 
+#include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
-#include "protocol/message_serialization.h"
 
 namespace aspia {
 

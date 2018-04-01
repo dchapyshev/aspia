@@ -10,11 +10,11 @@
 #include <QDebug>
 
 #include "base/process/process.h"
+#include "base/message_serialization.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_util.h"
 #include "ipc/pipe_channel_proxy.h"
-#include "protocol/message_serialization.h"
 
 namespace aspia {
 

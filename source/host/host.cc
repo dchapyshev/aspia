@@ -11,10 +11,10 @@
 #include <QCryptographicHash>
 #include <QString>
 
+#include "base/message_serialization.h"
 #include "crypto/random.h"
 #include "host/user_list.h"
 #include "proto/auth_session.pb.h"
-#include "protocol/message_serialization.h"
 
 namespace aspia {
 

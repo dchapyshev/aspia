@@ -9,7 +9,7 @@
 #define _ASPIA_HOST__CLIPBOARD_THREAD_H
 
 #include "base/threading/thread.h"
-#include "protocol/clipboard.h"
+#include "host/clipboard.h"
 
 namespace aspia {
 

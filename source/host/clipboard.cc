@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/clipboard.cc
+// FILE:            host/clipboard.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "protocol/clipboard.h"
+#include "host/clipboard.h"
 
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"

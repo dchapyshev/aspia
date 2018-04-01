@@ -10,8 +10,8 @@
 #include <QDebug>
 
 #include "base/process/process.h"
+#include "base/message_serialization.h"
 #include "ipc/pipe_channel_proxy.h"
-#include "protocol/message_serialization.h"
 #include "proto/auth_session.pb.h"
 
 namespace aspia {

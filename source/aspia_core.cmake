@@ -24,8 +24,11 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
     ${PROJECT_SOURCE_DIR}/base/command_line.cc
     ${PROJECT_SOURCE_DIR}/base/command_line.h
+    ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
+    ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/logging.cc
     ${PROJECT_SOURCE_DIR}/base/logging.h
+    ${PROJECT_SOURCE_DIR}/base/message_serialization.h
     ${PROJECT_SOURCE_DIR}/base/message_window.cc
     ${PROJECT_SOURCE_DIR}/base/message_window.h
     ${PROJECT_SOURCE_DIR}/base/object_watcher.cc
@@ -120,8 +123,6 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/file_remove_task.h
     ${PROJECT_SOURCE_DIR}/client/file_remover.cc
     ${PROJECT_SOURCE_DIR}/client/file_remover.h
-    ${PROJECT_SOURCE_DIR}/client/file_request.cc
-    ${PROJECT_SOURCE_DIR}/client/file_request.h
     ${PROJECT_SOURCE_DIR}/client/file_status.cc
     ${PROJECT_SOURCE_DIR}/client/file_status.h
     ${PROJECT_SOURCE_DIR}/client/file_transfer.cc
@@ -273,6 +274,8 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/scoped_thread_desktop.h)
 
 list(APPEND SOURCE_HOST
+    ${PROJECT_SOURCE_DIR}/host/clipboard.cc
+    ${PROJECT_SOURCE_DIR}/host/clipboard.h
     ${PROJECT_SOURCE_DIR}/host/clipboard_thread.cc
     ${PROJECT_SOURCE_DIR}/host/clipboard_thread.h
     ${PROJECT_SOURCE_DIR}/host/console_session_watcher.cc
@@ -283,6 +286,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_packetizer.h
     ${PROJECT_SOURCE_DIR}/host/file_platform_util_win.cc
     ${PROJECT_SOURCE_DIR}/host/file_platform_util.h
+    ${PROJECT_SOURCE_DIR}/host/file_request.cc
+    ${PROJECT_SOURCE_DIR}/host/file_request.h
     ${PROJECT_SOURCE_DIR}/host/file_worker.cc
     ${PROJECT_SOURCE_DIR}/host/file_worker.h
     ${PROJECT_SOURCE_DIR}/host/host.cc
@@ -364,13 +369,6 @@ list(APPEND SOURCE_PROTO
     ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.pb.cc
     ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.pb.h
     ${PROJECT_SOURCE_DIR}/proto/file_transfer_session.proto)
-
-list(APPEND SOURCE_PROTOCOL
-    ${PROJECT_SOURCE_DIR}/protocol/clipboard.cc
-    ${PROJECT_SOURCE_DIR}/protocol/clipboard.h
-    ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.cc
-    ${PROJECT_SOURCE_DIR}/protocol/keycode_converter.h
-    ${PROJECT_SOURCE_DIR}/protocol/message_serialization.h)
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)

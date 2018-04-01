@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/keycode_converter.cc
+// FILE:            base/keycode_converter.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 // NOTE:            This file is based on Chromium code.
 //
 
-#include "protocol/keycode_converter.h"
+#include "base/keycode_converter.h"
 
 namespace aspia {
 
@@ -24,7 +24,7 @@ namespace {
 #define USB_KEYMAP(usb, evdev, xkb, win, mac, qt) {usb, 0, qt}
 #endif
 #define USB_KEYMAP_DECLARATION const KeycodeMapEntry usb_keycode_map[] =
-#include "protocol/keycode_converter_data.inc"
+#include "base/keycode_converter_data.inc"
 #undef USB_KEYMAP
 #undef USB_KEYMAP_DECLARATION
 

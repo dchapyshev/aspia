@@ -13,7 +13,7 @@
 
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
-#include "client/file_request.h"
+#include "host/file_request.h"
 
 namespace aspia {
 

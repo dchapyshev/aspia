@@ -13,7 +13,7 @@
 #include <QPointer>
 
 #include "client/client_session.h"
-#include "client/file_request.h"
+#include "host/file_request.h"
 #include "proto/file_transfer_session.pb.h"
 #include "proto/computer.pb.h"
 

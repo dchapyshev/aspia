@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/message_serialization.h
+// FILE:            base/message_serialization.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
-#define _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
+#ifndef _ASPIA_BASE__MESSAGE_SERIALIZATION_H
+#define _ASPIA_BASE__MESSAGE_SERIALIZATION_H
 
 #include <QDebug>
 #include <QByteArray>
@@ -45,4 +45,4 @@ bool ParseMessage(const QByteArray& buffer, T& message)
 
 } // namespace aspia
 
-#endif // _ASPIA_PROTOCOL__MESSAGE_SERIALIZATION_H
+#endif // _ASPIA_BASE__MESSAGE_SERIALIZATION_H

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/clipboard.h
+// FILE:            host/clipboard.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_PROTOCOL__CLIPBOARD_H
-#define _ASPIA_PROTOCOL__CLIPBOARD_H
+#ifndef _ASPIA_HOST__CLIPBOARD_H
+#define _ASPIA_HOST__CLIPBOARD_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -53,4 +53,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_PROTOCOL__CLIPBOARD_H
+#endif // _ASPIA_HOST__CLIPBOARD_H

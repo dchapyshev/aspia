@@ -19,9 +19,9 @@
 #include <windows.h>
 #endif // defined(Q_OS_WIN)
 
-#include "proto/desktop_session.pb.h"
-#include "protocol/keycode_converter.h"
+#include "base/keycode_converter.h"
 #include "desktop_capture/desktop_frame_qimage.h"
+#include "proto/desktop_session.pb.h"
 
 namespace aspia {
 

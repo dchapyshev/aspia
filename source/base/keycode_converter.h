@@ -1,13 +1,13 @@
 //
 // PROJECT:         Aspia
-// FILE:            protocol/keycode_converter.h
+// FILE:            base/keycode_converter.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 // NOTE:            This file is based on Chromium code.
 //
 
-#ifndef _ASPIA_PROTOCOL__KEYCODE_CONVERTER_H
-#define _ASPIA_PROTOCOL__KEYCODE_CONVERTER_H
+#ifndef _ASPIA_BASE__KEYCODE_CONVERTER_H
+#define _ASPIA_BASE__KEYCODE_CONVERTER_H
 
 #include <QtCore>
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_PROTOCOL__KEYCODE_CONVERTER_H
+#endif // _ASPIA_BASE__KEYCODE_CONVERTER_H

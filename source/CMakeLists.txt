@@ -34,7 +34,6 @@ source_group(host\\ui FILES ${SOURCE_HOST_UI})
 source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(proto FILES ${SOURCE_PROTO})
-source_group(protocol FILES ${SOURCE_PROTOCOL})
 source_group(resources FILES ${SOURCE_RESOURCES})
 source_group("" FILES ${SOURCE})
 
@@ -70,7 +69,6 @@ add_library(aspia_core SHARED
             ${SOURCE_IPC}
             ${SOURCE_NETWORK}
             ${SOURCE_PROTO}
-            ${SOURCE_PROTOCOL}
             ${SOURCE_RESOURCES}
             ${SOURCE})
 

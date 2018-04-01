@@ -9,13 +9,13 @@
 
 #include <QCryptographicHash>
 
+#include "base/message_serialization.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
 #include "proto/auth_session.pb.h"
-#include "protocol/message_serialization.h"
 
 namespace aspia {
 
