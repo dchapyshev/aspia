@@ -34,7 +34,6 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/object_watcher.cc
     ${PROJECT_SOURCE_DIR}/base/object_watcher.h
     ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_refptr.h
     ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
@@ -85,7 +84,6 @@ list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_comptr.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_device_info.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h

@@ -85,7 +85,7 @@ bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
 {
     DeleteRuleByName(rule_name);
 
-    ScopedComPtr<INetFwRule> rule;
+    Microsoft::WRL::ComPtr<INetFwRule> rule;
 
     HRESULT hr = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL,
                                   IID_PPV_ARGS(rule.GetAddressOf()));
@@ -118,7 +118,7 @@ bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
 
 void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
 {
-    ScopedComPtr<IUnknown> rules_enum_unknown;
+    Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
 
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
@@ -127,7 +127,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
         return;
     }
 
-    ScopedComPtr<IEnumVARIANT> rules_enum;
+    Microsoft::WRL::ComPtr<IEnumVARIANT> rules_enum;
 
     hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
@@ -150,7 +150,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
 
         Q_ASSERT(VT_DISPATCH == rule_var.type());
 
-        ScopedComPtr<INetFwRule> rule;
+        Microsoft::WRL::ComPtr<INetFwRule> rule;
 
         hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
