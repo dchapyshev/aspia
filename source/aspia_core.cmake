@@ -77,8 +77,6 @@ list(APPEND SOURCE_BASE_THREADING
     ${PROJECT_SOURCE_DIR}/base/threading/thread.h)
 
 list(APPEND SOURCE_BASE_WIN
-    ${PROJECT_SOURCE_DIR}/base/win/registry.cc
-    ${PROJECT_SOURCE_DIR}/base/win/registry.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
