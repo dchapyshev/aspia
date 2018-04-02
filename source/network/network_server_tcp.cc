@@ -7,17 +7,17 @@
 
 #include "network/network_server_tcp.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 
 #include "base/system_error_code.h"
+#include "network/firewall_manager.h"
 
 namespace aspia {
 
-namespace {
+const char kFirewallRuleName[] = "Aspia Host Service";
 
-constexpr wchar_t kAppName[] = L"Aspia";
-constexpr wchar_t kRuleName[] = L"Aspia Host";
-constexpr wchar_t kRuleDesc[] = L"Allow incoming connections";
+namespace {
 
 bool IsFailureCode(const std::error_code& code)
 {
@@ -26,7 +26,7 @@ bool IsFailureCode(const std::error_code& code)
 
 } // namespace
 
-NetworkServerTcp::NetworkServerTcp(uint16_t port, ConnectCallback connect_callback)
+NetworkServerTcp::NetworkServerTcp(int port, ConnectCallback connect_callback)
     : connect_callback_(std::move(connect_callback)),
       port_(port)
 {
@@ -38,37 +38,19 @@ NetworkServerTcp::~NetworkServerTcp()
     thread_.Stop();
 }
 
-void NetworkServerTcp::AddFirewallRule()
-{
-    wchar_t program_path[MAX_PATH] = { 0 };
-
-    if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
-    {
-        qWarning() << "GetModuleFileNameW failed: " << lastSystemErrorString();
-        return;
-    }
-
-    firewall_manager_ = std::make_unique<FirewallManager>();
-
-    if (!firewall_manager_->Init(kAppName, program_path))
-    {
-        firewall_manager_.reset();
-        return;
-    }
-
-    if (!firewall_manager_->AddTCPRule(kRuleName, kRuleDesc, port_))
-    {
-        firewall_manager_.reset();
-    }
-}
-
-
 void NetworkServerTcp::OnBeforeThreadRunning()
 {
     runner_ = thread_.message_loop_proxy();
     Q_ASSERT(runner_);
 
-    AddFirewallRule();
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+    {
+        firewall.addTCPRule(kFirewallRuleName,
+                            QCoreApplication::tr("Allow incoming connections"),
+                            port_);
+    }
+
     DoAccept();
 }
 
@@ -84,8 +66,9 @@ void NetworkServerTcp::OnAfterThreadRunning()
         }
     }
 
-    if (firewall_manager_)
-        firewall_manager_->DeleteRuleByName(kRuleName);
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+        firewall.deleteRuleByName(kFirewallRuleName);
 }
 
 void NetworkServerTcp::OnAccept(const std::error_code& code)

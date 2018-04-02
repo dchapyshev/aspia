@@ -10,7 +10,6 @@
 
 #include "base/threading/thread.h"
 #include "network/network_channel_tcp.h"
-#include "network/firewall_manager.h"
 
 namespace aspia {
 
@@ -20,7 +19,7 @@ class NetworkServerTcp
 public:
     using ConnectCallback = std::function<void(std::shared_ptr<NetworkChannel> channel)>;
 
-    NetworkServerTcp(uint16_t port, ConnectCallback connect_callback);
+    NetworkServerTcp(int port, ConnectCallback connect_callback);
     ~NetworkServerTcp();
 
 private:
@@ -31,15 +30,12 @@ private:
     void OnAccept(const std::error_code& code);
     void DoAccept();
     void DoStop();
-    void AddFirewallRule();
 
     Thread thread_;
     std::shared_ptr<MessageLoopProxy> runner_;
 
     ConnectCallback connect_callback_;
-    uint16_t port_ = 0;
-
-    std::unique_ptr<FirewallManager> firewall_manager_;
+    int port_ = 0;
 
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
     std::unique_ptr<NetworkChannelTcp> channel_;
