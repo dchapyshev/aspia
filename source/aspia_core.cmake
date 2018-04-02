@@ -88,7 +88,6 @@ list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_wts_memory.h
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h
     ${PROJECT_SOURCE_DIR}/base/win/service.cc
