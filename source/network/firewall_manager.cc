@@ -9,11 +9,10 @@
 
 #include <QDebug>
 
+#include <comutil.h>
 #include <objbase.h>
 #include <unknwn.h>
 
-#include "base/win/scoped_bstr.h"
-#include "base/win/scoped_variant.h"
 #include "base/system_error_code.h"
 
 namespace aspia {
@@ -24,7 +23,7 @@ bool FirewallManager::Init(const wchar_t* app_name, const wchar_t* app_path)
 
     // Retrieve INetFwPolicy2
     HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
-                                  IID_PPV_ARGS(firewall_policy_.GetAddressOf()));
+                                  IID_PPV_ARGS(&firewall_policy_));
     if (FAILED(hr))
     {
         qWarning() << "CreateInstance failed: " << systemErrorCodeToString(hr);
@@ -32,7 +31,7 @@ bool FirewallManager::Init(const wchar_t* app_name, const wchar_t* app_path)
         return false;
     }
 
-    hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
+    hr = firewall_policy_->get_Rules(&firewall_rules_);
     if (FAILED(hr))
     {
         qWarning() << "get_Rules failed: " << systemErrorCodeToString(hr);
@@ -55,7 +54,7 @@ bool FirewallManager::IsFirewallEnabled() const
         return false;
 
     // The most-restrictive active profile takes precedence.
-    const NET_FW_PROFILE_TYPE2 kProfileTypes[] =
+    static const NET_FW_PROFILE_TYPE2 kProfileTypes[] =
     {
         NET_FW_PROFILE2_PUBLIC,
         NET_FW_PROFILE2_PRIVATE,
@@ -95,14 +94,14 @@ bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
         return false;
     }
 
-    rule->put_Name(ScopedBstr(rule_name));
-    rule->put_Description(ScopedBstr(description));
-    rule->put_ApplicationName(ScopedBstr(app_path_.c_str()));
+    rule->put_Name(_bstr_t(rule_name));
+    rule->put_Description(_bstr_t(description));
+    rule->put_ApplicationName(_bstr_t(app_path_.c_str()));
     rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);
-    rule->put_LocalPorts(ScopedBstr(std::to_wstring(port).c_str()));
-    rule->put_Grouping(ScopedBstr(app_name_.c_str()));
+    rule->put_LocalPorts(_bstr_t(std::to_wstring(port).c_str()));
+    rule->put_Grouping(_bstr_t(app_name_.c_str()));
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 
@@ -138,9 +137,9 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
 
     while (true)
     {
-        ScopedVariant rule_var;
+        _variant_t rule_var;
 
-        hr = rules_enum->Next(1, rule_var.Receive(), nullptr);
+        hr = rules_enum->Next(1, rule_var.GetAddress(), nullptr);
 
         if (FAILED(hr))
             qWarning() << "rules_enum->Next failed: " << systemErrorCodeToString(hr);
@@ -148,7 +147,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
         if (hr != S_OK)
             break;
 
-        Q_ASSERT(VT_DISPATCH == rule_var.type());
+        Q_ASSERT(VT_DISPATCH == rule_var.vt);
 
         Microsoft::WRL::ComPtr<INetFwRule> rule;
 
@@ -159,16 +158,19 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
             continue;
         }
 
-        ScopedBstr bstr_rule_name;
+        _bstr_t bstr_rule_name;
 
-        hr = rule->get_Name(bstr_rule_name.Receive());
+        hr = rule->get_Name(bstr_rule_name.GetAddress());
         if (FAILED(hr))
         {
             qWarning() << "get_Name failed: " << systemErrorCodeToString(hr);
             continue;
         }
 
-        if (bstr_rule_name && _wcsicmp(bstr_rule_name, rule_name) == 0)
+        if (!bstr_rule_name)
+            continue;
+
+        if (_wcsicmp(bstr_rule_name, rule_name) == 0)
         {
             hr = firewall_rules_->Remove(bstr_rule_name);
             if (FAILED(hr))

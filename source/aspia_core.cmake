@@ -79,8 +79,6 @@ list(APPEND SOURCE_BASE_THREADING
 list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc
     ${PROJECT_SOURCE_DIR}/base/win/registry.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_bstr.cc
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_bstr.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
@@ -93,8 +91,6 @@ list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_variant.cc
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_variant.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_wts_memory.h
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h
