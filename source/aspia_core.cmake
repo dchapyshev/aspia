@@ -80,7 +80,6 @@ list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_device_info.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hglobal.h
