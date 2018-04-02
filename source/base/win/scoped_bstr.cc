@@ -6,7 +6,6 @@
 //
 
 #include "base/win/scoped_bstr.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -48,7 +47,7 @@ void ScopedBstr::Swap(ScopedBstr& bstr2)
 
 BSTR* ScopedBstr::Receive()
 {
-    DCHECK(!bstr_) << "BSTR leak.";
+    Q_ASSERT(!bstr_);
     return &bstr_;
 }
 
@@ -66,7 +65,7 @@ BSTR ScopedBstr::AllocateBytes(size_t bytes)
 
 void ScopedBstr::SetByteLen(size_t bytes)
 {
-    DCHECK(bstr_ != nullptr) << "attempting to modify a NULL bstr";
+    Q_ASSERT(bstr_ != nullptr);
     uint32_t *data = reinterpret_cast<uint32_t*>(bstr_);
     data[-1] = static_cast<uint32_t>(bytes);
 }

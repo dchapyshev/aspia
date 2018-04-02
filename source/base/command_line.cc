@@ -12,7 +12,6 @@
 #include <shellapi.h>
 
 #include "base/strings/string_util.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -239,7 +238,7 @@ bool CommandLine::IsEmpty() const
 
 bool CommandLine::HasSwitch(const StringType& switch_string) const
 {
-    DCHECK(ToLower(switch_string) == switch_string);
+    Q_ASSERT(ToLower(switch_string) == switch_string);
     return switches_.find(switch_string) != switches_.end();
 }
 
@@ -256,7 +255,7 @@ std::experimental::filesystem::path CommandLine::GetSwitchValuePath(
 
 CommandLine::StringType CommandLine::GetSwitchValue(const StringType& switch_string) const
 {
-    DCHECK(ToLower(switch_string) == switch_string);
+    Q_ASSERT(ToLower(switch_string) == switch_string);
     auto result = switches_.find(switch_string);
     return result == switches_.end() ? StringType() : result->second;
 }
@@ -330,7 +329,7 @@ void CommandLine::ParseFromString(const StringType& command_line)
     int num_args = 0;
 
     wchar_t** args = ::CommandLineToArgvW(command_line_string.c_str(), &num_args);
-    DLOG_IF(LS_FATAL, !args) << "CommandLineToArgvW failed on command line: " << command_line;
+    Q_CHECK_PTR(args);
 
     InitFromArgv(num_args, args);
     LocalFree(args);

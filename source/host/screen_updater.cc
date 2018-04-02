@@ -16,7 +16,7 @@ ScreenUpdater::ScreenUpdater(Mode mode,
       mode_(mode),
       update_interval_(update_interval)
 {
-    DCHECK(screen_update_callback_ != nullptr);
+    Q_ASSERT(screen_update_callback_ != nullptr);
     thread_.Start(MessageLoop::TYPE_DEFAULT, this);
 }
 
@@ -48,7 +48,7 @@ void ScreenUpdater::PostUpdateRequest()
 
 void ScreenUpdater::UpdateScreen()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
 
     scheduler_.beginCapture();
 
@@ -78,7 +78,7 @@ void ScreenUpdater::OnBeforeThreadRunning()
     thread_.SetPriority(Thread::Priority::HIGHEST);
 
     runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
+    Q_ASSERT(runner_);
 }
 
 void ScreenUpdater::OnAfterThreadRunning()

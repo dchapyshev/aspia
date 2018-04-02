@@ -6,7 +6,6 @@
 //
 
 #include "base/strings/string_printf.h"
-#include "base/logging.h"
 
 #include <strsafe.h>
 
@@ -49,12 +48,14 @@ StringType StringPrintfVT(const typename StringType::value_type* format,
     va_copy(args_copy, args);
 
     int length = vscprintfT(format, args_copy);
-    CHECK(length >= 0) << errno;
+    if (length < 0)
+        qFatal("vscprintfT failed");
 
     StringType result;
     result.resize(length);
 
-    CHECK(SUCCEEDED(StringCchVPrintfT(&result[0], length + 1, format, args_copy)));
+    if (FAILED(StringCchVPrintfT(&result[0], length + 1, format, args_copy)))
+        qFatal("StringCchVPrintfT failed");
 
     va_end(args_copy);
 

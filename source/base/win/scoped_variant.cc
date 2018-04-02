@@ -6,7 +6,6 @@
 //
 
 #include "base/win/scoped_variant.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -39,7 +38,7 @@ ScopedVariant::ScopedVariant(int value, VARTYPE vt)
 
 ScopedVariant::ScopedVariant(double value, VARTYPE vt)
 {
-    DCHECK(vt == VT_R8 || vt == VT_DATE);
+    Q_ASSERT(vt == VT_R8 || vt == VT_DATE);
     var_.vt = vt;
     var_.dblVal = value;
 }
@@ -93,7 +92,7 @@ void ScopedVariant::Swap(ScopedVariant& var)
 
 VARIANT* ScopedVariant::Receive()
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "variant leak. type: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
     return &var_;
 }
 
@@ -101,7 +100,7 @@ VARIANT ScopedVariant::Copy() const
 {
     VARIANT ret = { VT_EMPTY };
     HRESULT hr = ::VariantCopy(&ret, &var_);
-    DCHECK(SUCCEEDED(hr));
+    Q_ASSERT(SUCCEEDED(hr));
     return ret;
 }
 
@@ -133,7 +132,7 @@ int ScopedVariant::Compare(const VARIANT& var, bool ignore_case) const
 
 void ScopedVariant::Set(const wchar_t* str)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_BSTR;
     var_.bstrVal = ::SysAllocString(str);
@@ -141,7 +140,7 @@ void ScopedVariant::Set(const wchar_t* str)
 
 void ScopedVariant::Set(qint8 i8)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_I1;
     var_.cVal = i8;
@@ -149,7 +148,7 @@ void ScopedVariant::Set(qint8 i8)
 
 void ScopedVariant::Set(quint8 ui8)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_UI1;
     var_.bVal = ui8;
@@ -157,7 +156,7 @@ void ScopedVariant::Set(quint8 ui8)
 
 void ScopedVariant::Set(qint16 i16)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_I2;
     var_.iVal = i16;
@@ -165,7 +164,7 @@ void ScopedVariant::Set(qint16 i16)
 
 void ScopedVariant::Set(quint16 ui16)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_UI2;
     var_.uiVal = ui16;
@@ -173,7 +172,7 @@ void ScopedVariant::Set(quint16 ui16)
 
 void ScopedVariant::Set(qint32 i32)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_I4;
     var_.lVal = i32;
@@ -181,7 +180,7 @@ void ScopedVariant::Set(qint32 i32)
 
 void ScopedVariant::Set(quint32 ui32)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_UI4;
     var_.ulVal = ui32;
@@ -189,7 +188,7 @@ void ScopedVariant::Set(quint32 ui32)
 
 void ScopedVariant::Set(qint64 i64)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_I8;
     var_.llVal = i64;
@@ -197,7 +196,7 @@ void ScopedVariant::Set(qint64 i64)
 
 void ScopedVariant::Set(quint64 ui64)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_UI8;
     var_.ullVal = ui64;
@@ -205,7 +204,7 @@ void ScopedVariant::Set(quint64 ui64)
 
 void ScopedVariant::Set(float r32)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_R4;
     var_.fltVal = r32;
@@ -213,7 +212,7 @@ void ScopedVariant::Set(float r32)
 
 void ScopedVariant::Set(double r64)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_R8;
     var_.dblVal = r64;
@@ -221,14 +220,14 @@ void ScopedVariant::Set(double r64)
 
 void ScopedVariant::SetDate(DATE date)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
     var_.vt = VT_DATE;
     var_.date = date;
 }
 
 void ScopedVariant::Set(IDispatch* disp)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_DISPATCH;
     var_.pdispVal = disp;
@@ -238,7 +237,7 @@ void ScopedVariant::Set(IDispatch* disp)
 
 void ScopedVariant::Set(bool b)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_BOOL;
     var_.boolVal = b ? VARIANT_TRUE : VARIANT_FALSE;
@@ -246,7 +245,7 @@ void ScopedVariant::Set(bool b)
 
 void ScopedVariant::Set(IUnknown* unk)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     var_.vt = VT_UNKNOWN;
     var_.punkVal = unk;
@@ -256,7 +255,7 @@ void ScopedVariant::Set(IUnknown* unk)
 
 void ScopedVariant::Set(SAFEARRAY* array)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     if (SUCCEEDED(::SafeArrayGetVartype(array, &var_.vt)))
     {
@@ -265,18 +264,18 @@ void ScopedVariant::Set(SAFEARRAY* array)
     }
     else
     {
-        DCHECK(!array) << "Unable to determine safearray vartype";
+        Q_ASSERT(!array);
         var_.vt = VT_EMPTY;
     }
 }
 
 void ScopedVariant::Set(const VARIANT& var)
 {
-    DCHECK(!IsLeakableVarType(var_.vt)) << "leaking variant: " << var_.vt;
+    Q_ASSERT(!IsLeakableVarType(var_.vt));
 
     if (FAILED(::VariantCopy(&var_, &var)))
     {
-        DLOG(LS_ERROR) << "VariantCopy failed";
+        qDebug("VariantCopy failed");
         var_.vt = VT_EMPTY;
     }
 }

@@ -230,8 +230,8 @@ void DesktopWindow::timerEvent(QTimerEvent* event)
 
             int pos = scrollbar->sliderPosition() + scroll_delta_.x();
 
-            pos = std::max(pos, scrollbar->minimum());
-            pos = std::min(pos, scrollbar->maximum());
+            pos = qMax(pos, scrollbar->minimum());
+            pos = qMin(pos, scrollbar->maximum());
 
             scrollbar->setSliderPosition(pos);
         }
@@ -242,8 +242,8 @@ void DesktopWindow::timerEvent(QTimerEvent* event)
 
             int pos = scrollbar->sliderPosition() + scroll_delta_.y();
 
-            pos = std::max(pos, scrollbar->minimum());
-            pos = std::min(pos, scrollbar->maximum());
+            pos = qMax(pos, scrollbar->minimum());
+            pos = qMin(pos, scrollbar->maximum());
 
             scrollbar->setSliderPosition(pos);
         }

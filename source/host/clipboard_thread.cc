@@ -6,7 +6,6 @@
 //
 
 #include "host/clipboard_thread.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -40,7 +39,7 @@ void ClipboardThread::OnBeforeThreadRunning()
     ui_thread_.SetPriority(Thread::Priority::LOWEST);
 
     runner_ = ui_thread_.message_loop_proxy();
-    DCHECK(runner_);
+    Q_ASSERT(runner_);
 
     clipboard_.Start(std::move(event_callback_));
 }

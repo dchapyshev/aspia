@@ -10,7 +10,6 @@
 
 #include <unknwn.h>
 
-#include "base/logging.h"
 #include "base/scoped_refptr.h"
 
 namespace aspia {
@@ -105,15 +104,15 @@ public:
     // Usage: Foo(p.GetAddressOf());
     Interface** GetAddressOf()
     {
-        DCHECK(!ptr_) << "Object leak. Pointer must be NULL";
+        Q_ASSERT(!ptr_);
         return &ptr_;
     }
 
     template <class Query>
     HRESULT CopyTo(Query** p)
     {
-        DCHECK(p);
-        DCHECK(ptr_);
+        Q_ASSERT(p);
+        Q_ASSERT(ptr_);
         // IUnknown already has a template version of QueryInterface
         // so the iid parameter is implicit here. The only thing this
         // function adds are the DCHECKs.
@@ -123,8 +122,8 @@ public:
     // QI for times when the IID is not associated with the type.
     HRESULT CopyTo(const IID& iid, void** obj)
     {
-        DCHECK(obj);
-        DCHECK(ptr_);
+        Q_ASSERT(obj);
+        Q_ASSERT(ptr_);
         return ptr_->QueryInterface(iid, obj);
     }
 
@@ -140,7 +139,7 @@ public:
     // and then making the call... but generally that shouldn't be necessary.
     BlockIUnknownMethods* operator->() const
     {
-        DCHECK(ptr_);
+        Q_ASSERT(ptr_);
         return reinterpret_cast<BlockIUnknownMethods*>(ptr_);
     }
 
@@ -169,7 +168,7 @@ public:
 
     Interface& operator*() const
     {
-        DCHECK(ptr_);
+        Q_ASSERT(ptr_);
         return *ptr_;
     }
 

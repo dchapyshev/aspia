@@ -7,11 +7,13 @@
 
 #include "host/host_service.h"
 
+#include <QDebug>
 #include <sddl.h>
 
 #include "base/win/service_manager.h"
 #include "base/win/security_helpers.h"
 #include "base/win/scoped_com_initializer.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -47,7 +49,8 @@ HostService::HostService()
 void HostService::Worker()
 {
     ScopedCOMInitializer com_initializer;
-    CHECK(com_initializer.IsSucceeded());
+    if (!com_initializer.IsSucceeded())
+        qFatal("COM not initialized");
 
     InitializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
@@ -87,7 +90,7 @@ bool HostService::Install()
 
     if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
     {
-        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        qWarning() << "GetModuleFileNameW failed: " << lastSystemErrorString();
         return false;
     }
 

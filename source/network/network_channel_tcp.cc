@@ -7,9 +7,8 @@
 
 #include "network/network_channel_tcp.h"
 
+#include <QDebug>
 #include <QtEndian>
-
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -38,8 +37,8 @@ NetworkChannelTcp::~NetworkChannelTcp()
 
 void NetworkChannelTcp::StartChannel(StatusChangeHandler handler)
 {
-    DCHECK(status_change_handler_ == nullptr);
-    DCHECK(handler != nullptr);
+    Q_ASSERT(status_change_handler_ == nullptr);
+    Q_ASSERT(handler != nullptr);
 
     status_change_handler_ = std::move(handler);
     io_service_.post(std::bind(&NetworkChannelTcp::DoConnect, this));
@@ -55,7 +54,8 @@ void NetworkChannelTcp::DoConnect()
 
     if (IsFailureCode(code))
     {
-        LOG(LS_ERROR) << "Failed to disable Nagle's algorithm: " << code.message();
+        qWarning() << "Failed to disable Nagle's algorithm: "
+                   << QString::fromStdString(code.message());
     }
 
     status_change_handler_(Status::CONNECTED);
@@ -94,7 +94,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        LOG(LS_WARNING) << "Unable to read message size: " << code.message();
+        qWarning() << "Unable to read message size: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -103,7 +103,7 @@ void NetworkChannelTcp::OnReadMessageSizeComplete(const std::error_code& code,
 
     if (!read_size_ || read_size_ > kMaxMessageSize)
     {
-        LOG(LS_ERROR) << "Invalid message size: " << read_size_;
+        qWarning() << "Invalid message size: " << read_size_;
         DoDisconnect();
         return;
     }
@@ -123,7 +123,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        LOG(LS_WARNING) << "Unable to read message: " << code.message();
+        qWarning() << "Unable to read message: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -133,7 +133,7 @@ void NetworkChannelTcp::OnReadMessageComplete(const std::error_code& code,
 
 void NetworkChannelTcp::Receive(ReceiveCompleteHandler handler)
 {
-    DCHECK(handler != nullptr);
+    Q_ASSERT(handler != nullptr);
     receive_complete_handler_ = std::move(handler);
     io_service_.post(std::bind(&NetworkChannelTcp::DoReadMessage, this));
 }
@@ -150,7 +150,7 @@ bool NetworkChannelTcp::ReloadWriteQueue()
             return false;
 
         incoming_write_queue_.Swap(work_write_queue_);
-        DCHECK(incoming_write_queue_.empty());
+        Q_ASSERT(incoming_write_queue_.empty());
     }
 
     return true;
@@ -172,7 +172,7 @@ void NetworkChannelTcp::DoNextWriteTask()
     write_buffer_ = std::move(work_write_queue_.front().first);
     if (write_buffer_.isEmpty())
     {
-        LOG(LS_ERROR) << "Empty source buffer";
+        qWarning("Empty source buffer");
         DoDisconnect();
         return;
     }
@@ -181,7 +181,7 @@ void NetworkChannelTcp::DoNextWriteTask()
 
     if (write_size_ > kMaxMessageSize)
     {
-        LOG(LS_ERROR) << "Invalid message size: " << write_size_;
+        qWarning() << "Invalid message size: " << write_size_;
         DoDisconnect();
         return;
     }
@@ -200,7 +200,7 @@ void NetworkChannelTcp::OnWriteSizeComplete(const std::error_code& code, size_t 
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(MessageSizeType))
     {
-        LOG(LS_WARNING) << "Unable to write message size: " << code.message();
+        qWarning() << "Unable to write message size: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -217,13 +217,13 @@ void NetworkChannelTcp::OnWriteComplete(const std::error_code& code, size_t byte
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        LOG(LS_WARNING) << "Unable to write message: " << code.message();
+        qWarning() << "Unable to write message: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
 
     // The queue must contain the current write task.
-    DCHECK(!work_write_queue_.empty());
+    Q_ASSERT(!work_write_queue_.empty());
 
     const SendCompleteHandler& complete_handler = work_write_queue_.front().second;
 

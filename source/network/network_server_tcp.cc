@@ -7,6 +7,10 @@
 
 #include "network/network_server_tcp.h"
 
+#include <QDebug>
+
+#include "base/system_error_code.h"
+
 namespace aspia {
 
 namespace {
@@ -40,7 +44,7 @@ void NetworkServerTcp::AddFirewallRule()
 
     if (!GetModuleFileNameW(nullptr, program_path, _countof(program_path)))
     {
-        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        qWarning() << "GetModuleFileNameW failed: " << lastSystemErrorString();
         return;
     }
 
@@ -62,7 +66,7 @@ void NetworkServerTcp::AddFirewallRule()
 void NetworkServerTcp::OnBeforeThreadRunning()
 {
     runner_ = thread_.message_loop_proxy();
-    DCHECK(runner_);
+    Q_ASSERT(runner_);
 
     AddFirewallRule();
     DoAccept();
@@ -94,7 +98,7 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
 
     if (IsFailureCode(code))
     {
-        DLOG(LS_ERROR) << "accept failure: " << code.message();
+        qDebug() << "accept failure: " << QString::fromStdString(code.message());
         return;
     }
 
@@ -115,7 +119,7 @@ void NetworkServerTcp::OnAccept(const std::error_code& code)
 
 void NetworkServerTcp::DoAccept()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
 
     std::scoped_lock<std::mutex> lock(channel_lock_);
 

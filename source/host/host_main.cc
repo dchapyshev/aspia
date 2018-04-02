@@ -8,21 +8,23 @@
 #include "host/host_main.h"
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/file_logger.h"
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
 #include "host/host_switches.h"
+#include "version.h"
 
 namespace aspia {
 
-void HostMain()
+int HostMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
+    QCoreApplication application(argc, argv);
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Host Service"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
-    settings.logging_dest = LOG_TO_ALL;
-    settings.lock_log = LOCK_LOG_FILE;
-
-    InitLogging(settings);
+    FileLogger logger;
+    logger.startLogging(application);
 
     std::wstring channel_id =
         CommandLine::ForCurrentProcess().GetSwitchValue(kChannelIdSwitch);
@@ -38,7 +40,7 @@ void HostMain()
         HostSessionFileTransfer().Run(channel_id);
     }
 
-    ShutdownLogging();
+    return 0;
 }
 
 } // namespace aspia

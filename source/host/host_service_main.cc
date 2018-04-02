@@ -8,8 +8,9 @@
 #include "host/host_service_main.h"
 
 #include "base/command_line.h"
-#include "base/logging.h"
+#include "base/file_logger.h"
 #include "host/host_service.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -20,14 +21,15 @@ const wchar_t kRemoveSwitch[] = L"remove";
 
 } // namespace
 
-void HostServiceMain()
+int HostServiceMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
+    QCoreApplication application(argc, argv);
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Host Service"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
-    settings.logging_dest = LOG_TO_ALL;
-    settings.lock_log = LOCK_LOG_FILE;
-
-    InitLogging(settings);
+    FileLogger logger;
+    logger.startLogging(application);
 
     const CommandLine& command_line = CommandLine::ForCurrentProcess();
 
@@ -45,7 +47,7 @@ void HostServiceMain()
         HostService().Run();
     }
 
-    ShutdownLogging();
+    return 0;
 }
 
 } // namespace aspia

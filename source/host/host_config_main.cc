@@ -7,32 +7,26 @@
 
 #include "host/host_config_main.h"
 
-#include "base/logging.h"
+#include "base/file_logger.h"
 #include "host/ui/user_list_dialog.h"
 
 namespace aspia {
 
 int HostConfigMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
-    settings.lock_log = LOCK_LOG_FILE;
-
-    InitLogging(settings);
-
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");
     application.setApplicationVersion("1.0.0");
 
+    FileLogger logger;
+    logger.startLogging(application);
+
     UserListDialog dialog;
     dialog.show();
     dialog.activateWindow();
 
-    int ret = application.exec();
-
-    ShutdownLogging();
-    return ret;
+    return application.exec();
 }
 
 } // namespace aspia

@@ -7,10 +7,11 @@
 
 #include "base/process/process.h"
 
+#include <QDebug>
 #include <stdlib.h>
 #include <string>
 
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -89,7 +90,7 @@ bool Process::SetPriority(Priority priority)
 {
     if (!SetPriorityClass(Handle(), static_cast<DWORD>(priority)))
     {
-        PLOG(LS_ERROR) << "SetPriorityClass failed";
+        qWarning() << "SetPriorityClass failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -114,12 +115,12 @@ bool Process::Terminate(quint32 exit_code, bool wait)
     {
         if (WaitForSingleObject(Handle(), 60 * 1000) != WAIT_OBJECT_0)
         {
-            LOG(LS_ERROR) << "Error waiting for process exit";
+            qWarning("Error waiting for process exit");
         }
     }
     else if (!result)
     {
-        LOG(LS_ERROR) << "Unable to terminate process";
+        qWarning("Unable to terminate process");
     }
 
     return result;

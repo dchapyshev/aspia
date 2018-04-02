@@ -7,12 +7,14 @@
 
 #include "network/firewall_manager.h"
 
+#include <QDebug>
+
 #include <objbase.h>
 #include <unknwn.h>
 
 #include "base/win/scoped_bstr.h"
 #include "base/win/scoped_variant.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -25,7 +27,7 @@ bool FirewallManager::Init(const wchar_t* app_name, const wchar_t* app_path)
                                   IID_PPV_ARGS(firewall_policy_.GetAddressOf()));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CreateInstance failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "CreateInstance failed: " << systemErrorCodeToString(hr);
         firewall_policy_ = nullptr;
         return false;
     }
@@ -33,7 +35,7 @@ bool FirewallManager::Init(const wchar_t* app_name, const wchar_t* app_path)
     hr = firewall_policy_->get_Rules(firewall_rules_.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "get_Rules failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "get_Rules failed: " << systemErrorCodeToString(hr);
         firewall_rules_ = nullptr;
         return false;
     }
@@ -89,7 +91,7 @@ bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
                                   IID_PPV_ARGS(rule.GetAddressOf()));
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "CoCreateInstance failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "CoCreateInstance failed: " << systemErrorCodeToString(hr);
         return false;
     }
 
@@ -107,7 +109,7 @@ bool FirewallManager::AddTCPRule(const wchar_t* rule_name,
     firewall_rules_->Add(rule.Get());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "Add failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "Add failed: " << systemErrorCodeToString(hr);
         return false;
     }
 
@@ -121,7 +123,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
     HRESULT hr = firewall_rules_->get__NewEnum(rules_enum_unknown.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "get__NewEnum failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "get__NewEnum failed: " << systemErrorCodeToString(hr);
         return;
     }
 
@@ -130,7 +132,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
     hr = rules_enum_unknown.CopyTo(rules_enum.GetAddressOf());
     if (FAILED(hr))
     {
-        LOG(LS_ERROR) << "QueryInterface failed: " << SystemErrorCodeToString(hr);
+        qWarning() << "QueryInterface failed: " << systemErrorCodeToString(hr);
         return;
     }
 
@@ -140,19 +142,20 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
 
         hr = rules_enum->Next(1, rule_var.Receive(), nullptr);
 
-        DLOG_IF(LS_ERROR, FAILED(hr)) << SystemErrorCodeToString(hr);
+        if (FAILED(hr))
+            qWarning() << "rules_enum->Next failed: " << systemErrorCodeToString(hr);
 
         if (hr != S_OK)
             break;
 
-        DCHECK_EQ(VT_DISPATCH, rule_var.type());
+        Q_ASSERT(VT_DISPATCH == rule_var.type());
 
         ScopedComPtr<INetFwRule> rule;
 
         hr = V_DISPATCH(&rule_var)->QueryInterface(IID_PPV_ARGS(rule.GetAddressOf()));
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "QueryInterface failed: " << SystemErrorCodeToString(hr);
+            qWarning() << "QueryInterface failed: " << systemErrorCodeToString(hr);
             continue;
         }
 
@@ -161,7 +164,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
         hr = rule->get_Name(bstr_rule_name.Receive());
         if (FAILED(hr))
         {
-            DLOG(LS_ERROR) << "get_Name failed: " << SystemErrorCodeToString(hr);
+            qWarning() << "get_Name failed: " << systemErrorCodeToString(hr);
             continue;
         }
 
@@ -170,7 +173,7 @@ void FirewallManager::DeleteRuleByName(const wchar_t* rule_name)
             hr = firewall_rules_->Remove(bstr_rule_name);
             if (FAILED(hr))
             {
-                DLOG(LS_ERROR) << "Remove failed: " << SystemErrorCodeToString(hr);
+                qWarning() << "Remove failed: " << systemErrorCodeToString(hr);
             }
         }
     }

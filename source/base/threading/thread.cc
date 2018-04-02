@@ -7,8 +7,10 @@
 
 #include "base/threading/thread.h"
 
+#include <QDebug>
+
 #include "base/win/scoped_com_initializer.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -19,7 +21,7 @@ Thread::~Thread()
 
 void Thread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
 {
-    DCHECK(!message_loop_);
+    Q_ASSERT(!message_loop_);
 
     delegate_ = delegate;
     state_ = State::STARTING;
@@ -32,7 +34,7 @@ void Thread::Start(MessageLoop::Type message_loop_type, Delegate* delegate)
 
     state_ = State::STARTED;
 
-    DCHECK(message_loop_);
+    Q_ASSERT(message_loop_);
 }
 
 void Thread::StopSoon()
@@ -58,7 +60,7 @@ void Thread::Stop()
     Join();
 
     // The thread should NULL message_loop_ on exit.
-    DCHECK(!message_loop_);
+    Q_ASSERT(!message_loop_);
 
     delegate_ = nullptr;
 }
@@ -90,7 +92,8 @@ void Thread::ThreadMain(MessageLoop::Type message_loop_type)
     message_loop_ = &message_loop;
 
     ScopedCOMInitializer com_initializer;
-    CHECK(com_initializer.IsSucceeded());
+    if (!com_initializer.IsSucceeded())
+        qFatal("COM not initialized");
 
     thread_id_ = GetCurrentThreadId();
 
@@ -132,7 +135,7 @@ bool Thread::SetPriority(Priority priority)
 {
     if (!SetThreadPriority(thread_.native_handle(), static_cast<int>(priority)))
     {
-        DPLOG(LS_ERROR) << "Unable to set thread priority";
+        qDebug() << "Unable to set thread priority: " << lastSystemErrorString();
         return false;
     }
 

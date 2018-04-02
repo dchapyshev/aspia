@@ -7,14 +7,7 @@
 
 #include "host/host_main.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-int WINAPI wWinMain(HINSTANCE /* hInstance */,
-                    HINSTANCE /* hPrevInstance */,
-                    LPWSTR /* lpCmdLine */,
-                    int /* nCmdShow */)
+int main(int argc, char *argv[])
 {
-    aspia::HostMain();
-    return 0;
+    return aspia::HostMain(argc, argv);
 }

@@ -7,11 +7,13 @@
 
 #include "host/clipboard.h"
 
+#include <QDebug>
+
 #include "base/strings/string_util.h"
 #include "base/strings/unicode.h"
 #include "base/win/scoped_clipboard.h"
 #include "base/win/scoped_hglobal.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -37,13 +39,13 @@ bool Clipboard::Start(ClipboardEventCallback clipboard_event_callback)
                                    std::placeholders::_1, std::placeholders::_2,
                                    std::placeholders::_3, std::placeholders::_4)))
     {
-        LOG(LS_ERROR) << "Couldn't create clipboard window.";
+        qWarning("Couldn't create clipboard window.");
         return false;
     }
 
     if (!AddClipboardFormatListener(window_->hwnd()))
     {
-        PLOG(LS_ERROR) << "AddClipboardFormatListener failed";
+        qWarning() << "AddClipboardFormatListener failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -78,14 +80,14 @@ void Clipboard::OnClipboardUpdate()
 
             if (!clipboard.Init(window_->hwnd()))
             {
-                PLOG(LS_WARNING) << "Couldn't open the clipboard";
+                qWarning() << "Couldn't open the clipboard: " << lastSystemErrorString();
                 return;
             }
 
             HGLOBAL text_global = clipboard.GetData(CF_UNICODETEXT);
             if (!text_global)
             {
-                PLOG(LS_WARNING) << "Couldn't get data from the clipboard";
+                qWarning() << "Couldn't get data from the clipboard: " << lastSystemErrorString();
                 return;
             }
 
@@ -93,13 +95,13 @@ void Clipboard::OnClipboardUpdate()
                 ScopedHGlobal<wchar_t> text_lock(text_global);
                 if (!text_lock.Get())
                 {
-                    PLOG(LS_WARNING) << "Couldn't lock clipboard data";
+                    qWarning() << "Couldn't lock clipboard data: " << lastSystemErrorString();
                     return;
                 }
 
                 if (!UNICODEtoUTF8(text_lock.Get(), data))
                 {
-                    LOG(LS_WARNING) << "Couldn't convert data to utf8";
+                    qWarning("Couldn't convert data to utf8");
                     return;
                 }
             }
@@ -146,13 +148,14 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
     // Currently we only handle UTF-8 text.
     if (clipboard_event.mime_type() != kMimeTypeTextUtf8)
     {
-        LOG(LS_WARNING) << "Unsupported mime type: " << clipboard_event.mime_type();
+        qWarning() << "Unsupported mime type: "
+                   << QString::fromStdString(clipboard_event.mime_type());
         return;
     }
 
     if (!IsStringUTF8(clipboard_event.data()))
     {
-        LOG(LS_WARNING) << "Clipboard data is not UTF-8 encoded";
+        qWarning("Clipboard data is not UTF-8 encoded");
         return;
     }
 
@@ -164,7 +167,7 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
 
     if (!UTF8toUNICODE(ReplaceLfByCrLf(last_data_), text))
     {
-        LOG(LS_WARNING) << "Couldn't convert data to unicode";
+        qWarning("Couldn't convert data to unicode");
         return;
     }
 
@@ -172,7 +175,7 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
 
     if (!clipboard.Init(window_->hwnd()))
     {
-        PLOG(LS_WARNING) << "Couldn't open the clipboard";
+        qWarning("Couldn't open the clipboard");
         return;
     }
 
@@ -181,14 +184,14 @@ void Clipboard::InjectClipboardEvent(const proto::desktop::ClipboardEvent& clipb
     HGLOBAL text_global = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
     if (!text_global)
     {
-        PLOG(LS_WARNING) << "GlobalAlloc failed";
+        qWarning() << "GlobalAlloc failed: " << lastSystemErrorString();
         return;
     }
 
     LPWSTR text_global_locked = reinterpret_cast<LPWSTR>(GlobalLock(text_global));
     if (!text_global_locked)
     {
-        PLOG(LS_WARNING) << "GlobalLock failed";
+        qWarning() << "GlobalLock failed: " << lastSystemErrorString();
         GlobalFree(text_global);
         return;
     }

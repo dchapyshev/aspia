@@ -6,7 +6,10 @@
 //
 
 #include "base/win/service.h"
-#include "base/logging.h"
+
+#include <QDebug>
+
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -20,7 +23,8 @@ static Service* _self = nullptr;
 Service::Service(const wchar_t* service_name) :
     service_name_(service_name)
 {
-    DCHECK(!_self) << "Another instance of the service has already been created";
+    // Another instance of the service has already been created
+    Q_ASSERT(!_self);
 
     memset(&status_, 0, sizeof(status_));
 
@@ -61,7 +65,7 @@ DWORD WINAPI Service::ServiceControlHandler(
 // static
 void Service::ServiceMain(DWORD /* argc */, LPWSTR* /* argv */)
 {
-    DCHECK(_self);
+    Q_ASSERT(_self);
 
     _self->terminating_ = false;
 
@@ -71,7 +75,7 @@ void Service::ServiceMain(DWORD /* argc */, LPWSTR* /* argv */)
                                       _self);
     if (!_self->status_handle_)
     {
-        PLOG(LS_ERROR) << "RegisterServiceCtrlHandlerExW failed";
+        qWarning() << "RegisterServiceCtrlHandlerExW failed: " << lastSystemErrorString();
         return;
     }
 
@@ -122,7 +126,7 @@ bool Service::Run()
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
-        PLOG(LS_ERROR) << "StartServiceCtrlDispatcherW failed";
+        qWarning() << "StartServiceCtrlDispatcherW failed: " << lastSystemErrorString();
         return false;
     }
 

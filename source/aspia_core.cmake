@@ -24,10 +24,10 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
     ${PROJECT_SOURCE_DIR}/base/command_line.cc
     ${PROJECT_SOURCE_DIR}/base/command_line.h
+    ${PROJECT_SOURCE_DIR}/base/file_logger.cc
+    ${PROJECT_SOURCE_DIR}/base/file_logger.h
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
-    ${PROJECT_SOURCE_DIR}/base/logging.cc
-    ${PROJECT_SOURCE_DIR}/base/logging.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
     ${PROJECT_SOURCE_DIR}/base/message_window.cc
     ${PROJECT_SOURCE_DIR}/base/message_window.h
@@ -35,6 +35,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/object_watcher.h
     ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
     ${PROJECT_SOURCE_DIR}/base/scoped_refptr.h
+    ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
+    ${PROJECT_SOURCE_DIR}/base/system_error_code.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
     ${PROJECT_SOURCE_DIR}/base/waitable_timer.cc
     ${PROJECT_SOURCE_DIR}/base/waitable_timer.h)

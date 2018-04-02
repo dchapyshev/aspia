@@ -7,8 +7,10 @@
 
 #include "host/host_session.h"
 
+#include <QDebug>
+
 #include "base/win/scoped_privilege.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 #include "host/host_session_launcher.h"
 
 namespace aspia {
@@ -36,12 +38,12 @@ HostSession::~HostSession()
 void HostSession::OnBeforeThreadRunning()
 {
     runner_ = ui_thread_.message_loop_proxy();
-    DCHECK(runner_);
+    Q_ASSERT(runner_);
 
     OnSessionAttached(WTSGetActiveConsoleSessionId());
 
     bool ret = session_watcher_.StartWatching(this);
-    DCHECK(ret);
+    Q_ASSERT(ret);
 }
 
 void HostSession::OnAfterThreadRunning()
@@ -54,9 +56,9 @@ void HostSession::OnAfterThreadRunning()
 
 void HostSession::OnSessionAttached(uint32_t session_id)
 {
-    DCHECK(runner_->BelongsToCurrentThread());
-    DCHECK(state_ == State::DETACHED);
-    DCHECK(!process_.IsValid());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
+    Q_ASSERT(state_ == State::DETACHED);
+    Q_ASSERT(!process_.IsValid());
 
     state_ = State::STARTING;
 
@@ -85,7 +87,7 @@ void HostSession::OnSessionAttached(uint32_t session_id)
 
 void HostSession::OnSessionDetached()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
 
     if (state_ == State::DETACHED)
         return;
@@ -134,7 +136,7 @@ void HostSession::OnProcessClose()
 
 void HostSession::OnIpcChannelConnect(uint32_t user_data)
 {
-    DCHECK(runner_->BelongsToCurrentThread());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
 
     // To open a host process and terminate it, additional privileges are
     // required. If the current process is running from the service, then the
@@ -147,7 +149,7 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
     bool ok = process_.IsValid();
     if (!ok)
     {
-        PLOG(LS_ERROR) << "Unable to open session process";
+        qWarning() << "Unable to open session process: " << lastSystemErrorString();
     }
 
     if (ok)
@@ -157,7 +159,7 @@ void HostSession::OnIpcChannelConnect(uint32_t user_data)
 
         if (!ok)
         {
-            LOG(LS_ERROR) << "Process watcher not started";
+            qWarning("Process watcher not started");
             process_.Close();
         }
     }
@@ -193,7 +195,7 @@ void HostSession::OnIpcChannelDisconnect()
 
         case State::STARTING:
         {
-            DCHECK(!process_.IsValid());
+            Q_ASSERT(!process_.IsValid());
 
             state_ = State::DETACHED;
 
@@ -220,7 +222,7 @@ void HostSession::OnSessionAttachTimeout()
             break;
 
         case State::ATTACHED:
-            LOG(LS_FATAL) << "In the attached state, the timer must me stopped";
+            qFatal("In the attached state, the timer must me stopped");
             break;
     }
 }

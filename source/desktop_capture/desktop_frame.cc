@@ -6,7 +6,6 @@
 //
 
 #include "desktop_capture/desktop_frame.h"
-#include "base/logging.h"
 
 namespace aspia {
 

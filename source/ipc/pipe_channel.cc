@@ -7,10 +7,12 @@
 
 #include "ipc/pipe_channel.h"
 
+#include <QDebug>
+
 #include "base/strings/string_printf.h"
 #include "base/win/security_helpers.h"
 #include "base/win/scoped_object.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 #include "crypto/random.h"
 #include "ipc/pipe_channel_proxy.h"
 
@@ -54,7 +56,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!GetUserSidString(user_sid))
     {
-        LOG(LS_ERROR) << "Failed to query the current user SID";
+        qWarning("Failed to query the current user SID");
         return nullptr;
     }
 
@@ -69,7 +71,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
     ScopedSd sd = ConvertSddlToSd(security_descriptor);
     if (!sd.get())
     {
-        LOG(LS_ERROR) << "Failed to create a security descriptor";
+        qWarning("Failed to create a security descriptor");
         return nullptr;
     }
 
@@ -94,7 +96,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
 
     if (!pipe.IsValid())
     {
-        PLOG(LS_ERROR) << "CreateNamedPipeW failed";
+        qWarning() << "CreateNamedPipeW failed: " << lastSystemErrorString();
         return nullptr;
     }
 
@@ -115,7 +117,7 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& chann
                                   nullptr));
     if (!pipe.IsValid())
     {
-        PLOG(LS_ERROR) << "CreateFileW failed";
+        qWarning() << "CreateFileW failed: " << lastSystemErrorString();
         return nullptr;
     }
 
@@ -154,7 +156,7 @@ bool PipeChannel::ReloadWriteQueue()
             return false;
 
         incoming_write_queue_.Swap(work_write_queue_);
-        DCHECK(incoming_write_queue_.empty());
+        Q_ASSERT(incoming_write_queue_.empty());
     }
 
     return true;
@@ -177,7 +179,7 @@ void PipeChannel::DoNextWriteTask()
 
     if (write_buffer_.isEmpty())
     {
-        LOG(LS_ERROR) << "Write buffer is empty";
+        qWarning("Write buffer is empty");
         DoDisconnect();
         return;
     }
@@ -196,7 +198,7 @@ void PipeChannel::OnWriteSizeComplete(const std::error_code& code, size_t bytes_
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
-        LOG(LS_ERROR) << "Unable to write message size: " << code.message();
+        qWarning() << "Unable to write message size: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -213,13 +215,13 @@ void PipeChannel::OnWriteComplete(const std::error_code& code, size_t bytes_tran
 {
     if (IsFailureCode(code) || bytes_transferred != write_buffer_.size())
     {
-        LOG(LS_ERROR) << "Unable to write message: " << code.message();
+        qWarning() << "Unable to write message: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
 
     // The queue must contain the current write task.
-    DCHECK(!work_write_queue_.empty());
+    Q_ASSERT(!work_write_queue_.empty());
 
     const SendCompleteHandler& complete_handler = work_write_queue_.front().second;
 
@@ -266,7 +268,7 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
     {
         if (!ConnectNamedPipe(stream_.native_handle(), nullptr))
         {
-            PLOG(LS_ERROR) << "ConnectNamedPipe failed";
+            qWarning() << "ConnectNamedPipe failed: " << lastSystemErrorString();
             return false;
         }
 
@@ -282,7 +284,7 @@ bool PipeChannel::Connect(uint32_t& user_data, DisconnectHandler disconnect_hand
     }
     else
     {
-        DCHECK(mode_ == Mode::CLIENT);
+        Q_ASSERT(mode_ == Mode::CLIENT);
 
         if (asio::write(stream_,
                         asio::buffer(&user_data, sizeof(user_data)),
@@ -313,7 +315,7 @@ void PipeChannel::OnReadSizeComplete(const std::error_code& code, size_t bytes_t
 {
     if (IsFailureCode(code) || bytes_transferred != sizeof(uint32_t))
     {
-        LOG(LS_ERROR) << "Unable to read message size: " << code.message();
+        qWarning() << "Unable to read message size: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -338,7 +340,7 @@ void PipeChannel::OnReadComplete(const std::error_code& code, size_t bytes_trans
 {
     if (IsFailureCode(code) || bytes_transferred != read_buffer_.size())
     {
-        LOG(LS_ERROR) << "Unable to read message: " << code.message();
+        qWarning() << "Unable to read message: " << QString::fromStdString(code.message());
         DoDisconnect();
         return;
     }
@@ -348,7 +350,7 @@ void PipeChannel::OnReadComplete(const std::error_code& code, size_t bytes_trans
 
 void PipeChannel::Receive(ReceiveCompleteHandler handler)
 {
-    DCHECK(handler != nullptr);
+    Q_ASSERT(handler != nullptr);
     receive_complete_handler_ = std::move(handler);
     io_service_.post(std::bind(&PipeChannel::ScheduleRead, this));
 }

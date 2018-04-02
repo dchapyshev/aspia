@@ -7,9 +7,8 @@
 
 #include "desktop_capture/capturer_gdi.h"
 
+#include <QDebug>
 #include <dwmapi.h>
-
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -103,7 +102,7 @@ std::unique_ptr<MouseCursor> createMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetIconInfo(cursor, &icon_info))
     {
-        PLOG(LS_ERROR) << "GetIconInfo failed";
+        qWarning("GetIconInfo failed");
         return nullptr;
     }
 
@@ -118,7 +117,7 @@ std::unique_ptr<MouseCursor> createMouseCursorFromHCursor(HDC dc, HCURSOR cursor
 
     if (!GetObjectW(scoped_mask, sizeof(bitmap_info), &bitmap_info))
     {
-        PLOG(LS_ERROR) << "GetObjectW failed";
+        qWarning("GetObjectW failed");
         return nullptr;
     }
 
@@ -149,7 +148,7 @@ std::unique_ptr<MouseCursor> createMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                    reinterpret_cast<BITMAPINFO*>(&bmi),
                    DIB_RGB_COLORS))
     {
-        PLOG(LS_ERROR) << "GetDIBits failed";
+        qWarning("GetDIBits failed");
         return nullptr;
     }
 
@@ -174,7 +173,7 @@ std::unique_ptr<MouseCursor> createMouseCursorFromHCursor(HDC dc, HCURSOR cursor
                        reinterpret_cast<BITMAPINFO*>(&bmi),
                        DIB_RGB_COLORS))
         {
-            PLOG(LS_ERROR) << "GetDIBits failed";
+            qWarning("GetDIBits failed");
             return nullptr;
         }
 
@@ -311,7 +310,7 @@ bool CapturerGDI::prepareCaptureResources()
 
     if (!desktop_dc_)
     {
-        DCHECK(!memory_dc_);
+        Q_ASSERT(!memory_dc_);
 
         // Vote to disable Aero composited desktop effects while capturing.
         // Windows will restore Aero automatically if the process exits.
@@ -323,7 +322,7 @@ bool CapturerGDI::prepareCaptureResources()
         memory_dc_.Reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {
-            LOG(LS_ERROR) << "CreateCompatibleDC failed";
+            qWarning("CreateCompatibleDC failed");
             return false;
         }
 

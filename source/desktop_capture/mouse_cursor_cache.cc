@@ -6,7 +6,8 @@
 //
 
 #include "desktop_capture/mouse_cursor_cache.h"
-#include "base/logging.h"
+
+#include <QDebug>
 
 namespace aspia {
 
@@ -25,7 +26,7 @@ MouseCursorCache::MouseCursorCache(size_t cache_size) :
 
 size_t MouseCursorCache::find(const MouseCursor* mouse_cursor)
 {
-    DCHECK(mouse_cursor);
+    Q_ASSERT(mouse_cursor);
 
     size_t size = cache_.size();
 
@@ -44,7 +45,7 @@ size_t MouseCursorCache::find(const MouseCursor* mouse_cursor)
 
 size_t MouseCursorCache::add(std::unique_ptr<MouseCursor> mouse_cursor)
 {
-    DCHECK(mouse_cursor);
+    Q_ASSERT(mouse_cursor);
 
     // Add the cursor to the end of the list.
     cache_.emplace_back(std::move(mouse_cursor));
@@ -63,7 +64,7 @@ std::shared_ptr<MouseCursor> MouseCursorCache::Get(size_t index)
 {
     if (index > kMaxCacheSize)
     {
-        DLOG(LS_ERROR) << "Invalid cache index: " << index;
+        qDebug() << "Invalid cache index: " << index;
         return nullptr;
     }
 

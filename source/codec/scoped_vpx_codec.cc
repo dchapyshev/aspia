@@ -7,8 +7,6 @@
 
 #include "codec/scoped_vpx_codec.h"
 
-#include "base/logging.h"
-
 extern "C"
 {
 #define VPX_CODEC_DISABLE_COMPAT 1
@@ -22,7 +20,7 @@ void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)
     if (codec)
     {
         vpx_codec_err_t ret = vpx_codec_destroy(codec);
-        DCHECK_EQ(ret, VPX_CODEC_OK) << "Failed to destroy codec";
+        Q_ASSERT(ret == VPX_CODEC_OK);
         delete codec;
     }
 }

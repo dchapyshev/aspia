@@ -6,7 +6,6 @@
 //
 
 #include "base/process/process_watcher.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -18,7 +17,7 @@ ProcessWatcher::~ProcessWatcher()
 bool ProcessWatcher::StartWatching(const Process& process,
                                    EventCallback callback)
 {
-    DCHECK(process_handle_ == kNullProcessHandle);
+    Q_ASSERT(process_handle_ == kNullProcessHandle);
 
     process_handle_ = process.Handle();
     callback_ = std::move(callback);
@@ -34,7 +33,7 @@ void ProcessWatcher::StopWatching()
 
 void ProcessWatcher::OnObjectSignaled(HANDLE object)
 {
-    DCHECK(process_handle_ == object);
+    Q_ASSERT(process_handle_ == object);
     process_handle_ = kNullProcessHandle;
     callback_();
 }

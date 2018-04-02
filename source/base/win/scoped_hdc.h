@@ -11,8 +11,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "base/logging.h"
-
 namespace aspia {
 
 //
@@ -27,15 +25,16 @@ public:
     {
         if (hwnd_)
         {
-            DCHECK(IsWindow(hwnd_));
-            DCHECK(hdc_);
+            Q_ASSERT(IsWindow(hwnd_));
+            Q_ASSERT(hdc_);
         }
         else
         {
             // If GetDC(NULL) returns NULL, something really bad has happened, like
             // GDI handle exhaustion.  In this case Chrome is going to behave badly no
             // matter what, so we may as well just force a crash now.
-            CHECK(hdc_);
+            if (!hdc_)
+                qFatal("!hdc_");
         }
     }
 

@@ -6,13 +6,13 @@
 //
 
 #include "base/message_loop/message_pump_default.h"
-#include "base/logging.h"
 
 namespace aspia {
 
 void MessagePumpDefault::Run(Delegate* delegate)
 {
-    DCHECK(keep_running_) << "Quit must have been called outside of Run!";
+    // Quit must have been called outside of Run!
+    Q_ASSERT(keep_running_);
 
     for (;;)
     {

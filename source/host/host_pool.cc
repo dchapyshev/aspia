@@ -12,7 +12,7 @@ namespace aspia {
 HostPool::HostPool(std::shared_ptr<MessageLoopProxy> runner)
     : runner_(runner)
 {
-    DCHECK(runner_);
+    Q_ASSERT(runner_);
 
     network_server_ = std::make_unique<NetworkServerTcp>(
         kDefaultHostTcpPort,
@@ -21,7 +21,7 @@ HostPool::HostPool(std::shared_ptr<MessageLoopProxy> runner)
 
 HostPool::~HostPool()
 {
-    DCHECK(runner_->BelongsToCurrentThread());
+    Q_ASSERT(runner_->BelongsToCurrentThread());
 
     terminating_ = true;
 

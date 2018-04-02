@@ -9,6 +9,7 @@
 #define _ASPIA_NETWORK__FIREWALL_MANAGER_H
 
 #include <netfw.h>
+#include <string>
 
 #include "base/win/scoped_comptr.h"
 

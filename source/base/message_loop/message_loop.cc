@@ -8,7 +8,6 @@
 #include "base/message_loop/message_loop.h"
 #include "base/message_loop/message_loop_proxy.h"
 #include "base/message_loop/message_pump_default.h"
-#include "base/logging.h"
 
 #include <memory>
 
@@ -25,7 +24,8 @@ MessageLoop* MessageLoop::Current()
 MessageLoop::MessageLoop(Type type) :
     type_(type)
 {
-    DCHECK(!Current()) << "should only have one message loop per thread";
+    // should only have one message loop per thread
+    Q_ASSERT(!Current());
 
     message_loop_for_current_thread = this;
 
@@ -45,7 +45,7 @@ MessageLoop::MessageLoop(Type type) :
 
 MessageLoop::~MessageLoop()
 {
-    DCHECK_EQ(this, Current());
+    Q_ASSERT(this == Current());
 
     ReloadWorkQueue();
     DeletePendingTasks();
@@ -58,7 +58,7 @@ MessageLoop::~MessageLoop()
 
 void MessageLoop::Run(Dispatcher *dispatcher)
 {
-    DCHECK_EQ(this, Current());
+    Q_ASSERT(this == Current());
 
     if (dispatcher && type() == TYPE_UI)
     {
@@ -71,7 +71,7 @@ void MessageLoop::Run(Dispatcher *dispatcher)
 
 void MessageLoop::Quit()
 {
-    DCHECK_EQ(this, Current());
+    Q_ASSERT(this == Current());
     pump_->Quit();
 }
 
@@ -82,7 +82,7 @@ PendingTask::Callback MessageLoop::QuitClosure()
 
 void MessageLoop::PostTask(PendingTask::Callback callback)
 {
-    DCHECK(callback != nullptr);
+    Q_ASSERT(callback != nullptr);
 
     PendingTask pending_task(std::move(callback),
                              CalculateDelayedRuntime(std::chrono::milliseconds::zero()));
@@ -92,7 +92,7 @@ void MessageLoop::PostTask(PendingTask::Callback callback)
 void MessageLoop::PostDelayedTask(PendingTask::Callback callback,
                                   const std::chrono::milliseconds& delay)
 {
-    DCHECK(callback != nullptr);
+    Q_ASSERT(callback != nullptr);
 
     PendingTask pending_task(std::move(callback), CalculateDelayedRuntime(delay));
     AddToIncomingQueue(pending_task);
@@ -105,7 +105,7 @@ MessagePumpForUI* MessageLoop::pump_ui() const
 
 void MessageLoop::RunTask(const PendingTask& pending_task)
 {
-    DCHECK(nestable_tasks_allowed_);
+    Q_ASSERT(nestable_tasks_allowed_);
 
     // Execute the task and assume the worst: It is probably not reentrant.
     nestable_tasks_allowed_ = false;
@@ -159,7 +159,7 @@ void MessageLoop::ReloadWorkQueue()
             return;
 
         incoming_queue_.Swap(work_queue_);
-        DCHECK(incoming_queue_.empty());
+        Q_ASSERT(incoming_queue_.empty());
     }
 }
 
@@ -276,7 +276,7 @@ MessageLoopForUI* MessageLoopForUI::Current()
 
     if (loop)
     {
-        DCHECK_EQ(MessageLoop::TYPE_UI, loop->type());
+        Q_ASSERT(MessageLoop::TYPE_UI == loop->type());
     }
 
     return static_cast<MessageLoopForUI*>(loop);

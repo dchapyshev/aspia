@@ -8,6 +8,8 @@
 #ifndef _ASPIA_BUILD_CONFIG_H
 #define _ASPIA_BUILD_CONFIG_H
 
+#define QT_MESSAGELOGCONTEXT
+
 #include <QtGlobal>
 
 #if defined(Q_OS_WIN)

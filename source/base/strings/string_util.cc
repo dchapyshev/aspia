@@ -14,7 +14,6 @@
 
 #include "base/strings/string_util_constants.h"
 #include "base/strings/unicode.h"
-#include "base/logging.h"
 
 namespace aspia {
 

@@ -11,7 +11,7 @@
 #include <QSettings>
 #include <sas.h>
 
-#include "base/logging.h"
+#include "base/system_error_code.h"
 #include "base/keycode_converter.h"
 
 namespace aspia {
@@ -48,7 +48,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        PLOG(LS_WARNING) << "SendInput failed";
+        qWarning() << "SendInput failed: " << lastSystemErrorString();
 }
 
 void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
@@ -63,7 +63,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        PLOG(LS_WARNING) << "SendInput failed";
+        qWarning() << "SendInput failed: " << lastSystemErrorString();
 }
 
 } // namespace
@@ -167,7 +167,7 @@ void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event
 
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
-        PLOG(LS_WARNING) << "SendInput failed";
+        qWarning() << "SendInput failed: " << lastSystemErrorString();
 
     prev_mouse_button_mask_ = mask;
 }

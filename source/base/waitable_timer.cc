@@ -6,7 +6,6 @@
 //
 
 #include "base/waitable_timer.h"
-#include "base/logging.h"
 
 #undef max
 
@@ -21,7 +20,7 @@ WaitableTimer::~WaitableTimer()
 void NTAPI WaitableTimer::TimerProc(LPVOID context, BOOLEAN /* timer_or_wait_fired */)
 {
     WaitableTimer* self = reinterpret_cast<WaitableTimer*>(context);
-    DCHECK(self);
+    Q_ASSERT(self);
 
     self->signal_callback_();
 }
@@ -29,7 +28,7 @@ void NTAPI WaitableTimer::TimerProc(LPVOID context, BOOLEAN /* timer_or_wait_fir
 void WaitableTimer::Start(const std::chrono::milliseconds& time_delta,
                           TimeoutCallback signal_callback)
 {
-    DCHECK(time_delta.count() < std::numeric_limits<DWORD>::max());
+    Q_ASSERT(time_delta.count() < std::numeric_limits<DWORD>::max());
 
     if (timer_handle_)
         return;
@@ -43,7 +42,8 @@ void WaitableTimer::Start(const std::chrono::milliseconds& time_delta,
                                      static_cast<DWORD>(time_delta.count()),
                                      0,
                                      WT_EXECUTEONLYONCE);
-    CHECK(ret);
+    if (!ret)
+        qFatal("CreateTimerQueueTimer failed");
 }
 
 void WaitableTimer::Stop()

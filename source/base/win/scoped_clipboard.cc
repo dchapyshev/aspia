@@ -6,7 +6,6 @@
 //
 
 #include "base/win/scoped_clipboard.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -19,12 +18,14 @@ ScopedClipboard::~ScopedClipboard()
         // crbug.com/441834.
         //
         BOOL result = ImpersonateAnonymousToken(GetCurrentThread());
-        CHECK(result);
+        if (!result)
+            qFatal("ImpersonateAnonymousToken failed");
 
         CloseClipboard();
 
         result = RevertToSelf();
-        CHECK(result);
+        if (!result)
+            qFatal("RevertToSelf failed");
     }
 }
 
@@ -35,7 +36,7 @@ bool ScopedClipboard::Init(HWND owner)
 
     if (opened_)
     {
-        DLOG(LS_ERROR) << "Attempt to open an already opened clipboard";
+        qDebug("Attempt to open an already opened clipboard");
         return true;
     }
 
@@ -61,7 +62,7 @@ BOOL ScopedClipboard::Empty()
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        qDebug("Clipboard is not open");
         return FALSE;
     }
 
@@ -72,7 +73,7 @@ void ScopedClipboard::SetData(UINT format, HANDLE mem)
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        qDebug("Clipboard is not open");
         return;
     }
 
@@ -84,7 +85,7 @@ HANDLE ScopedClipboard::GetData(UINT format) const
 {
     if (!opened_)
     {
-        DLOG(LS_WARNING) << "Clipboard is not open";
+        qDebug("Clipboard is not open");
         return nullptr;
     }
 

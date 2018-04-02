@@ -6,19 +6,22 @@
 //
 
 #include "base/win/scoped_privilege.h"
-#include "base/logging.h"
+
+#include <QDebug>
+
+#include "base/system_error_code.h"
 
 namespace aspia {
 
 ScopedProcessPrivilege::ScopedProcessPrivilege(const wchar_t* name)
 {
-    DCHECK(name);
+    Q_ASSERT(name);
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES,
                           process_token_.Recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        qWarning() << "OpenProcessToken failed: " << lastSystemErrorString();
         return;
     }
 
@@ -28,7 +31,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const wchar_t* name)
                                name,
                                &privileges_.Privileges[0].Luid))
     {
-        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
+        qWarning() << "LookupPrivilegeValueW failed: " << lastSystemErrorString();
         return;
     }
 
@@ -42,7 +45,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const wchar_t* name)
                                nullptr,
                                nullptr))
     {
-        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+        qWarning() << "AdjustTokenPrivileges failed: " << lastSystemErrorString();
         return;
     }
 
@@ -63,7 +66,7 @@ ScopedProcessPrivilege::~ScopedProcessPrivilege()
                                    nullptr,
                                    nullptr))
         {
-            PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+            qWarning() << "AdjustTokenPrivileges failed: " << lastSystemErrorString();
         }
     }
 }

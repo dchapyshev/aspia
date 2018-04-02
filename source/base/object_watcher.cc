@@ -6,7 +6,10 @@
 //
 
 #include "base/object_watcher.h"
-#include "base/logging.h"
+
+#include <QDebug>
+
+#include "base/system_error_code.h"
 
 #undef max
 
@@ -22,7 +25,7 @@ void NTAPI ObjectWatcher::DoneWaiting(PVOID context, BOOLEAN timed_out)
 {
     ObjectWatcher* self = reinterpret_cast<ObjectWatcher*>(context);
 
-    DCHECK(self);
+    Q_ASSERT(self);
 
     if (timed_out)
     {
@@ -42,7 +45,7 @@ bool ObjectWatcher::StartTimedWatching(HANDLE object,
                                        const std::chrono::milliseconds& timeout,
                                        Delegate* delegate)
 {
-    DCHECK(timeout.count() < std::numeric_limits<DWORD>::max());
+    Q_ASSERT(timeout.count() < std::numeric_limits<DWORD>::max());
 
     return StartWatchingInternal(
         object, static_cast<DWORD>(timeout.count()), delegate);
@@ -52,11 +55,11 @@ bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate
 {
     if (wait_object_)
     {
-        LOG(LS_ERROR) << "Already watching an object";
+        qWarning("Already watching an object");
         return false;
     }
 
-    DCHECK(delegate);
+    Q_ASSERT(delegate);
 
     object_ = object;
     delegate_ = delegate;
@@ -72,7 +75,7 @@ bool ObjectWatcher::StartWatchingInternal(HANDLE object, DWORD timeout, Delegate
                                      timeout,
                                      wait_flags))
     {
-        PLOG(LS_ERROR) << "RegisterWaitForSingleObject failed";
+        qWarning() << "RegisterWaitForSingleObject failed: " << lastSystemErrorString();
         object_ = nullptr;
         wait_object_ = nullptr;
         delegate_ = nullptr;
@@ -89,7 +92,7 @@ bool ObjectWatcher::StopWatching()
 
     if (!UnregisterWaitEx(wait_object_, INVALID_HANDLE_VALUE))
     {
-        PLOG(LS_ERROR) << "UnregisterWaitEx failed";
+        qWarning() << "UnregisterWaitEx failed: " << lastSystemErrorString();
         return false;
     }
 

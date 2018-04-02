@@ -6,9 +6,11 @@
 //
 
 #include "base/message_window.h"
-#include "base/logging.h"
 
+#include <QDebug>
 #include <atomic>
+
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -32,7 +34,7 @@ MessageWindow::~MessageWindow()
 
 bool MessageWindow::Create(MessageCallback message_callback)
 {
-    DCHECK(!hwnd_);
+    Q_ASSERT(!hwnd_);
 
     message_callback_ = std::move(message_callback);
 
@@ -43,7 +45,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                             reinterpret_cast<wchar_t*>(&WindowProc),
                             &instance))
     {
-        PLOG(LS_ERROR) << "GetModuleHandleExW failed";
+        qWarning() << "GetModuleHandleExW failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -59,7 +61,7 @@ bool MessageWindow::Create(MessageCallback message_callback)
                           this);
     if (!hwnd_)
     {
-        PLOG(LS_ERROR) << "CreateWindowW failed";
+        qWarning() << "CreateWindowW failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -93,7 +95,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
             SetLastError(ERROR_SUCCESS);
             LONG_PTR result =
                 SetWindowLongPtrW(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(self));
-            CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
+            Q_ASSERT(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;
 
@@ -103,7 +105,7 @@ LRESULT CALLBACK MessageWindow::WindowProc(HWND window, UINT msg, WPARAM wParam,
         {
             SetLastError(ERROR_SUCCESS);
             LONG_PTR result = SetWindowLongPtrW(window, GWLP_USERDATA, 0);
-            CHECK(result != 0 || GetLastError() == ERROR_SUCCESS);
+            Q_ASSERT(result != 0 || GetLastError() == ERROR_SUCCESS);
         }
         break;
 
@@ -139,7 +141,7 @@ bool MessageWindow::RegisterWindowClass(HINSTANCE instance)
 
     if (!RegisterClassExW(&window_class))
     {
-        PLOG(LS_ERROR) << "RegisterClassExW failed";
+        qWarning() << "RegisterClassExW failed: " << lastSystemErrorString();
         return false;
     }
 

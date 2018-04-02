@@ -9,7 +9,7 @@
 
 #include <QCommandLineParser>
 
-#include "base/logging.h"
+#include "base/file_logger.h"
 #include "console/console_window.h"
 #include "version.h"
 
@@ -17,16 +17,13 @@ namespace aspia {
 
 int ConsoleMain(int argc, char *argv[])
 {
-    LoggingSettings settings;
-    settings.logging_dest = LOG_TO_ALL;
-    settings.lock_log = LOCK_LOG_FILE;
-
-    InitLogging(settings);
-
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Console"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+
+    FileLogger logger;
+    logger.startLogging(application);
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::tr("Aspia Console"));
@@ -44,10 +41,7 @@ int ConsoleMain(int argc, char *argv[])
     window.show();
     window.activateWindow();
 
-    int ret = application.exec();
-
-    ShutdownLogging();
-    return ret;
+    return application.exec();
 }
 
 } // namespace aspia

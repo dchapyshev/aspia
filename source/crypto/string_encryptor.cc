@@ -17,8 +17,6 @@ extern "C" {
 
 #include <algorithm>
 
-#include "base/logging.h"
-
 namespace aspia {
 
 namespace {
@@ -29,7 +27,7 @@ const size_t kChunkSize = 4096;
 
 std::string EncryptString(const std::string& string, const QByteArray& key)
 {
-    DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
+    Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
     std::string encrypted_string;
     encrypted_string.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
@@ -80,7 +78,7 @@ std::string EncryptString(const std::string& string, const QByteArray& key)
 
 bool DecryptString(const std::string& string, const QByteArray& key, std::string& decrypted_string)
 {
-    DCHECK_EQ(key.size(), crypto_secretstream_xchacha20poly1305_KEYBYTES);
+    Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
     decrypted_string.clear();
 
@@ -94,7 +92,7 @@ bool DecryptString(const std::string& string, const QByteArray& key, std::string
             reinterpret_cast<const uint8_t*>(string.c_str()),
             reinterpret_cast<const uint8_t*>(key.data())) != 0)
     {
-        LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_init_pull failed";
+        qWarning("crypto_secretstream_xchacha20poly1305_init_pull failed");
         return false;
     }
 
@@ -120,7 +118,7 @@ bool DecryptString(const std::string& string, const QByteArray& key, std::string
                                                        input_buffer + input_pos, consumed,
                                                        nullptr, 0) != 0)
         {
-            LOG(LS_WARNING) << "crypto_secretstream_xchacha20poly1305_pull failed";
+            qWarning("crypto_secretstream_xchacha20poly1305_pull failed");
             return false;
         }
 
@@ -130,7 +128,7 @@ bool DecryptString(const std::string& string, const QByteArray& key, std::string
         {
             if (input_pos != input_size)
             {
-                LOG(LS_ERROR) << "Unexpected end of buffer";
+                qWarning("Unexpected end of buffer");
                 return false;
             }
 

@@ -7,6 +7,7 @@
 
 #include "base/win/security_helpers.h"
 
+#include <QDebug>
 #include <objidl.h>
 #include <sddl.h>
 #include <memory>
@@ -14,7 +15,7 @@
 #include "base/strings/string_util.h"
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_local.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -45,7 +46,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
+        qWarning() << "MakeAbsoluteSD failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -69,7 +70,7 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        PLOG(LS_ERROR) << "MakeAbsoluteSD failed";
+        qWarning() << "MakeAbsoluteSD failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -93,7 +94,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     ScopedSd relative_sd = ConvertSddlToSd(sddl);
     if (!relative_sd)
     {
-        LOG(LS_ERROR) << "Failed to create a security descriptor";
+        qWarning("Failed to create a security descriptor");
         return false;
     }
 
@@ -106,7 +107,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl,
                               group, owner, sacl))
     {
-        LOG(LS_ERROR) << "MakeScopedAbsoluteSd failed";
+        qWarning("MakeScopedAbsoluteSd failed");
         return false;
     }
 
@@ -128,7 +129,7 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
         nullptr);  // Reserved, must be nullptr
     if (FAILED(result))
     {
-        LOG(LS_ERROR) << "CoInitializeSecurity failed: " << result;
+        qWarning() << "CoInitializeSecurity failed: " << result;
         return false;
     }
 
@@ -174,7 +175,8 @@ ScopedSd ConvertSddlToSd(const std::wstring& sddl)
                                                               raw_sd.Recieve(),
                                                               &length))
     {
-        PLOG(LS_ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
+        qWarning() << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed: "
+                   << lastSystemErrorString();
         return ScopedSd();
     }
 

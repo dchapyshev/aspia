@@ -5,8 +5,8 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "base/logging.h"
 #include "desktop_capture/differ.h"
+
 #include "desktop_capture/diff_block_sse2.h"
 
 namespace aspia {
@@ -114,7 +114,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
             }
             else
             {
-                DCHECK(kBlockSize == 32);
+                Q_ASSERT(kBlockSize == 32);
 
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.

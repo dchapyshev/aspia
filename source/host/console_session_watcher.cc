@@ -7,9 +7,10 @@
 
 #include "host/console_session_watcher.h"
 
+#include <QDebug>
 #include <wtsapi32.h>
 
-#include "base/logging.h"
+#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -34,7 +35,7 @@ bool ConsoleSessionWatcher::StartWatching(Delegate* delegate)
 
     if (!WTSRegisterSessionNotification(window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
     {
-        PLOG(LS_ERROR) << "WTSRegisterSessionNotification failed";
+        qWarning() << "WTSRegisterSessionNotification failed: " << lastSystemErrorString();
         window_.reset();
         return false;
     }

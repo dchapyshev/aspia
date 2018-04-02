@@ -7,6 +7,8 @@
 
 #include "host/host_session_launcher.h"
 
+#include <QDebug>
+
 #include <userenv.h>
 #include <wtsapi32.h>
 #include <string>
@@ -14,7 +16,7 @@
 #include "base/win/scoped_object.h"
 #include "base/command_line.h"
 #include "base/scoped_native_library.h"
-#include "base/logging.h"
+#include "base/system_error_code.h"
 #include "host/host_switches.h"
 
 namespace aspia {
@@ -32,7 +34,7 @@ bool GetCurrentFolder(std::wstring* path)
 
     if (!GetModuleFileNameW(nullptr, buffer, _countof(buffer)))
     {
-        PLOG(LS_ERROR) << "GetModuleFileNameW failed";
+        qWarning() << "GetModuleFileNameW failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -54,7 +56,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TOKEN_DUPLICATE | desired_access,
                           process_token.Recieve()))
     {
-        PLOG(LS_ERROR) << "OpenProcessToken failed";
+        qWarning() << "OpenProcessToken failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -65,7 +67,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           TokenPrimary,
                           token_out->Recieve()))
     {
-        PLOG(LS_ERROR) << "DuplicateTokenEx failed";
+        qWarning() << "DuplicateTokenEx failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -89,7 +91,7 @@ bool CreatePrivilegedToken(ScopedHandle* token_out)
 
     if (!LookupPrivilegeValueW(nullptr, SE_TCB_NAME, &state.Privileges[0].Luid))
     {
-        PLOG(LS_ERROR) << "LookupPrivilegeValueW failed";
+        qWarning() << "LookupPrivilegeValueW failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -97,7 +99,7 @@ bool CreatePrivilegedToken(ScopedHandle* token_out)
     if (!AdjustTokenPrivileges(privileged_token, FALSE, &state, 0,
                                nullptr, nullptr))
     {
-        PLOG(LS_ERROR) << "AdjustTokenPrivileges failed";
+        qWarning() << "AdjustTokenPrivileges failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -123,7 +125,7 @@ bool CreateSessionToken(DWORD session_id, ScopedHandle* token_out)
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
+        qWarning() << "ImpersonateLoggedOnUser failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -131,18 +133,19 @@ bool CreateSessionToken(DWORD session_id, ScopedHandle* token_out)
     BOOL ret = SetTokenInformation(session_token, TokenSessionId, &session_id, sizeof(session_id));
 
     BOOL reverted = RevertToSelf();
-    CHECK(reverted);
+    if (!reverted)
+        qFatal("RevertToSelf failed");
 
     if (!ret)
     {
-        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        qWarning() << "SetTokenInformation failed: " << lastSystemErrorString();
         return false;
     }
 
     DWORD ui_access = 1;
     if (!SetTokenInformation(session_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
     {
-        PLOG(LS_ERROR) << "SetTokenInformation failed";
+        qWarning() << "SetTokenInformation failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -162,7 +165,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
 
     if (!CreateEnvironmentBlock(&environment, user_token, FALSE))
     {
-        PLOG(LS_ERROR) << "CreateEnvironmentBlock failed";
+        qWarning() << "CreateEnvironmentBlock failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -181,7 +184,7 @@ bool CreateProcessWithToken(HANDLE user_token, const CommandLine& command_line)
                               &startup_info,
                               &process_info))
     {
-        PLOG(LS_ERROR) << "CreateProcessAsUserW failed";
+        qWarning() << "CreateProcessAsUserW failed: " << lastSystemErrorString();
         DestroyEnvironmentBlock(environment);
         return false;
     }
@@ -207,18 +210,19 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
-        PLOG(LS_ERROR) << "ImpersonateLoggedOnUser failed";
+        qWarning() << "ImpersonateLoggedOnUser failed: " << lastSystemErrorString();
         return false;
     }
 
     BOOL ret = WTSQueryUserToken(session_id, session_token.Recieve());
 
     BOOL reverted = RevertToSelf();
-    CHECK(reverted);
+    if (!reverted)
+        qFatal("RevertToSelft failed");
 
     if (!ret)
     {
-        PLOG(LS_ERROR) << "WTSQueryUserToken failed";
+        qWarning() << "WTSQueryUserToken failed: " << lastSystemErrorString();
         return false;
     }
 
@@ -284,7 +288,7 @@ bool LaunchSessionProcess(proto::auth::SessionType session_type,
 
         default:
         {
-            LOG(LS_ERROR) << "Unknown session type: " << session_type;
+            qWarning() << "Unknown session type: " << session_type;
             return false;
         }
     }

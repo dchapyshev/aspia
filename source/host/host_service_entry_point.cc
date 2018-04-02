@@ -7,8 +7,7 @@
 
 #include "host/host_service_main.h"
 
-int wmain()
+int main(int argc, char *argv[])
 {
-    aspia::HostServiceMain();
-    return 0;
+    aspia::HostServiceMain(argc, argv);
 }

@@ -6,7 +6,6 @@
 //
 
 #include "base/message_loop/message_pump_ui.h"
-#include "base/logging.h"
 
 namespace aspia {
 
@@ -21,7 +20,7 @@ MessagePumpForUI::MessagePumpForUI()
                   this,
                   std::placeholders::_1, std::placeholders::_2,
                   std::placeholders::_3, std::placeholders::_4));
-    DCHECK(succeeded);
+    Q_ASSERT(succeeded);
 }
 
 void MessagePumpForUI::Run(Delegate* delegate)
@@ -31,7 +30,7 @@ void MessagePumpForUI::Run(Delegate* delegate)
 
 void MessagePumpForUI::Quit()
 {
-    DCHECK(state_);
+    Q_ASSERT(state_);
     state_->should_quit = true;
 }
 
@@ -83,7 +82,7 @@ void MessagePumpForUI::ScheduleDelayedWork(
     delayed_work_time_ = delayed_work_time;
 
     int delay_msec = GetCurrentDelay();
-    DCHECK(delay_msec > 0);
+    Q_ASSERT(delay_msec > 0);
     if (delay_msec < USER_TIMER_MINIMUM)
         delay_msec = USER_TIMER_MINIMUM;
 
@@ -224,7 +223,7 @@ void MessagePumpForUI::WaitForWork()
             wait_flags = 0;
         }
 
-        DCHECK_NE(WAIT_FAILED, result) << GetLastError();
+        Q_ASSERT(WAIT_FAILED != result);
     }
 }
 
@@ -335,11 +334,11 @@ bool MessagePumpForUI::ProcessPumpReplacementMessage()
     const bool have_message = (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE);
 
     // Expect no message or a message different than kMsgHaveWork.
-    DCHECK(!have_message || kMsgHaveWork != msg.message || msg.hwnd != message_window_.hwnd());
+    Q_ASSERT(!have_message || kMsgHaveWork != msg.message || msg.hwnd != message_window_.hwnd());
 
     // Since we discarded a kMsgHaveWork message, we must update the flag.
     int old_have_work = InterlockedExchange(&work_state_, READY);
-    DCHECK(old_have_work);
+    Q_ASSERT(old_have_work);
 
     // We don't need a special time slice if we didn't have_message to process.
     if (!have_message)
