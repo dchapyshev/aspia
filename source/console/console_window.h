@@ -46,7 +46,6 @@ public slots:
     void desktopManageSessionToggled(bool checked);
     void desktopViewSessionToggled(bool checked);
     void fileTransferSessionToggled(bool checked);
-    void systemInfoSessionToggled(bool checked);
 
 protected:
     // QMainWindow implementation.

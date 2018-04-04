@@ -91,9 +91,6 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     connect(ui.action_file_transfer, &QAction::toggled,
             this, &ConsoleWindow::fileTransferSessionToggled);
 
-    connect(ui.action_system_info, &QAction::toggled,
-            this, &ConsoleWindow::systemInfoSessionToggled);
-
     if (!file_path_.isEmpty())
         openAddressBook(file_path_);
 }
@@ -401,7 +398,6 @@ void ConsoleWindow::computerContextMenu(const QPoint& point)
         menu.addAction(ui.action_desktop_manage_connect);
         menu.addAction(ui.action_desktop_view_connect);
         menu.addAction(ui.action_file_transfer_connect);
-        menu.addAction(ui.action_system_info_connect);
         menu.addSeparator();
         menu.addAction(ui.action_modify_computer);
         menu.addAction(ui.action_delete_computer);
@@ -418,7 +414,6 @@ void ConsoleWindow::desktopManageSessionToggled(bool checked)
     {
         ui.action_desktop_view->setChecked(false);
         ui.action_file_transfer->setChecked(false);
-        ui.action_system_info->setChecked(false);
     }
 }
 
@@ -428,7 +423,6 @@ void ConsoleWindow::desktopViewSessionToggled(bool checked)
     {
         ui.action_desktop_manage->setChecked(false);
         ui.action_file_transfer->setChecked(false);
-        ui.action_system_info->setChecked(false);
     }
 }
 
@@ -438,17 +432,6 @@ void ConsoleWindow::fileTransferSessionToggled(bool checked)
     {
         ui.action_desktop_manage->setChecked(false);
         ui.action_desktop_view->setChecked(false);
-        ui.action_system_info->setChecked(false);
-    }
-}
-
-void ConsoleWindow::systemInfoSessionToggled(bool checked)
-{
-    if (checked)
-    {
-        ui.action_desktop_manage->setChecked(false);
-        ui.action_desktop_view->setChecked(false);
-        ui.action_file_transfer->setChecked(false);
     }
 }
 

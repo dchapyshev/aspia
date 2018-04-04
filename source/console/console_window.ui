@@ -123,7 +123,6 @@
     <addaction name="action_desktop_manage"/>
     <addaction name="action_desktop_view"/>
     <addaction name="action_file_transfer"/>
-    <addaction name="action_system_info"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -248,7 +247,6 @@
    <addaction name="action_desktop_manage"/>
    <addaction name="action_desktop_view"/>
    <addaction name="action_file_transfer"/>
-   <addaction name="action_system_info"/>
    <addaction name="separator"/>
    <addaction name="action_about"/>
    <addaction name="action_exit"/>
@@ -434,18 +432,6 @@
     <string>&amp;File Transfer</string>
    </property>
   </action>
-  <action name="action_system_info">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;System Information</string>
-   </property>
-  </action>
   <action name="action_online_help">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
@@ -513,18 +499,6 @@
    </property>
    <property name="toolTip">
     <string>File Transfer</string>
-   </property>
-  </action>
-  <action name="action_system_info_connect">
-   <property name="icon">
-    <iconset resource="../resources/resources.qrc">
-     <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
-   </property>
-   <property name="text">
-    <string>System Information</string>
-   </property>
-   <property name="toolTip">
-    <string>System Information</string>
    </property>
   </action>
   <action name="action_toolbar">

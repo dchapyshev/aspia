@@ -34,6 +34,9 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/object_watcher.cc
     ${PROJECT_SOURCE_DIR}/base/object_watcher.h
     ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
+    ${PROJECT_SOURCE_DIR}/base/service.h
+    ${PROJECT_SOURCE_DIR}/base/service_impl.h
+    ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
