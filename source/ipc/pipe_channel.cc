@@ -94,13 +94,13 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateServer(std::wstring& channel_id)
                                        5000,
                                        &security_attributes));
 
-    if (!pipe.IsValid())
+    if (!pipe.isValid())
     {
         qWarning() << "CreateNamedPipeW failed: " << lastSystemErrorString();
         return nullptr;
     }
 
-    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.Release(), Mode::SERVER));
+    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.release(), Mode::SERVER));
 }
 
 // static
@@ -115,13 +115,13 @@ std::unique_ptr<PipeChannel> PipeChannel::CreateClient(const std::wstring& chann
                                   OPEN_EXISTING,
                                   flags,
                                   nullptr));
-    if (!pipe.IsValid())
+    if (!pipe.isValid())
     {
         qWarning() << "CreateFileW failed: " << lastSystemErrorString();
         return nullptr;
     }
 
-    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.Release(), Mode::CLIENT));
+    return std::unique_ptr<PipeChannel>(new PipeChannel(pipe.release(), Mode::CLIENT));
 }
 
 PipeChannel::PipeChannel(HANDLE pipe, Mode mode)

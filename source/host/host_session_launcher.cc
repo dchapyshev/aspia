@@ -54,7 +54,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_DUPLICATE | desired_access,
-                          process_token.Recieve()))
+                          process_token.recieve()))
     {
         qWarning() << "OpenProcessToken failed: " << lastSystemErrorString();
         return false;
@@ -65,7 +65,7 @@ bool CopyProcessToken(DWORD desired_access, ScopedHandle* token_out)
                           nullptr,
                           SecurityImpersonation,
                           TokenPrimary,
-                          token_out->Recieve()))
+                          token_out->recieve()))
     {
         qWarning() << "DuplicateTokenEx failed: " << lastSystemErrorString();
         return false;
@@ -103,7 +103,7 @@ bool CreatePrivilegedToken(ScopedHandle* token_out)
         return false;
     }
 
-    token_out->Reset(privileged_token.Release());
+    token_out->reset(privileged_token.release());
     return true;
 }
 
@@ -149,7 +149,7 @@ bool CreateSessionToken(DWORD session_id, ScopedHandle* token_out)
         return false;
     }
 
-    token_out->Reset(session_token.Release());
+    token_out->reset(session_token.release());
     return true;
 }
 
@@ -214,11 +214,14 @@ bool LaunchSessionProcessAsUser(const std::wstring& session_type,
         return false;
     }
 
-    BOOL ret = WTSQueryUserToken(session_id, session_token.Recieve());
+    BOOL ret = WTSQueryUserToken(session_id, session_token.recieve());
 
     BOOL reverted = RevertToSelf();
     if (!reverted)
-        qFatal("RevertToSelft failed");
+    {
+        qFatal("RevertToSelf failed");
+        return false;
+    }
 
     if (!ret)
     {

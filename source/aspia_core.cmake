@@ -328,6 +328,12 @@ list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.cc
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 
+list(APPEND SOURCE_HOST_WIN
+    ${PROJECT_SOURCE_DIR}/host/win/host_process.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_process.h
+    ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.h)
+
 list(APPEND SOURCE_IPC
     ${PROJECT_SOURCE_DIR}/ipc/pipe_channel.cc
     ${PROJECT_SOURCE_DIR}/ipc/pipe_channel.h

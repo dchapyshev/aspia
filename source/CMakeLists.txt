@@ -31,6 +31,7 @@ source_group(crypto FILES ${SOURCE_CRYPTO})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
 source_group(host FILES ${SOURCE_HOST})
 source_group(host\\ui FILES ${SOURCE_HOST_UI})
+source_group(host\\win FILES ${SOURCE_HOST_WIN})
 source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(protocol FILES ${SOURCE_PROTOCOL})
@@ -66,6 +67,7 @@ add_library(aspia_core SHARED
             ${SOURCE_DESKTOP_CAPTURE}
             ${SOURCE_HOST}
             ${SOURCE_HOST_UI}
+            ${SOURCE_HOST_WIN}
             ${SOURCE_IPC}
             ${SOURCE_NETWORK}
             ${SOURCE_PROTOCOL}

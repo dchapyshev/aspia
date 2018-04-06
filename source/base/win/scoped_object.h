@@ -32,47 +32,47 @@ public:
 
     ~ScopedObject()
     {
-        Traits::Close(object_);
+        Traits::close(object_);
     }
 
-    T Get() const
+    T get() const
     {
         return object_;
     }
 
-    void Reset(T object = nullptr)
+    void reset(T object = nullptr)
     {
-        Traits::Close(object_);
+        Traits::close(object_);
         object_ = object;
     }
 
-    T* Recieve()
+    T* recieve()
     {
-        Traits::Close(object_);
+        Traits::close(object_);
         return &object_;
     }
 
-    T Release()
+    T release()
     {
         T object = object_;
         object_ = nullptr;
         return object;
     }
 
-    bool IsValid() const
+    bool isValid() const
     {
-        return Traits::IsValid(object_);
+        return Traits::isValid(object_);
     }
 
     ScopedObject& operator=(T handle)
     {
-        Reset(handle);
+        reset(handle);
         return *this;
     }
 
     ScopedObject& operator=(ScopedObject&& other) noexcept
     {
-        Traits::Close(object_);
+        Traits::close(object_);
         object_ = other.object_;
         other.object_ = nullptr;
         return *this;
@@ -93,13 +93,13 @@ class HandleObjectTraits
 {
 public:
     // Closes the handle.
-    static void Close(HANDLE object)
+    static void close(HANDLE object)
     {
-        if (IsValid(object))
+        if (isValid(object))
             CloseHandle(object);
     }
 
-    static bool IsValid(HANDLE object)
+    static bool isValid(HANDLE object)
     {
         return ((object != nullptr) && (object != INVALID_HANDLE_VALUE));
     }
@@ -109,13 +109,13 @@ class ScHandleObjectTraits
 {
 public:
     // Closes the handle.
-    static void Close(SC_HANDLE object)
+    static void close(SC_HANDLE object)
     {
-        if (IsValid(object))
+        if (isValid(object))
             CloseServiceHandle(object);
     }
 
-    static bool IsValid(SC_HANDLE object)
+    static bool isValid(SC_HANDLE object)
     {
         return (object != nullptr);
     }

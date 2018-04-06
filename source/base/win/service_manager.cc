@@ -16,17 +16,17 @@ namespace aspia {
 ServiceManager::ServiceManager(const wchar_t* service_short_name) :
     sc_manager_(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS))
 {
-    if (!sc_manager_.IsValid())
+    if (!sc_manager_.isValid())
     {
         qWarning() << "OpenSCManagerW failed: " << lastSystemErrorString();
     }
     else
     {
         service_ = OpenServiceW(sc_manager_, service_short_name, SERVICE_ALL_ACCESS);
-        if (!service_.IsValid())
+        if (!service_.isValid())
         {
             qWarning() << "OpenServiceW failed: " << lastSystemErrorString();
-            sc_manager_.Reset();
+            sc_manager_.reset();
         }
     }
 }
@@ -41,8 +41,8 @@ ServiceManager::ServiceManager(SC_HANDLE sc_manager, SC_HANDLE service) :
 
 ServiceManager::~ServiceManager()
 {
-    service_.Reset();
-    sc_manager_.Reset();
+    service_.reset();
+    sc_manager_.reset();
 }
 
 // static
@@ -74,7 +74,7 @@ ServiceManager::Create(const CommandLine& command_line,
                                           nullptr,
                                           nullptr,
                                           nullptr));
-    if (!service.IsValid())
+    if (!service.isValid())
     {
         qWarning() << "CreateServiceW failed: " << lastSystemErrorString();
         return nullptr;
@@ -113,7 +113,7 @@ ServiceManager::Create(const CommandLine& command_line,
     }
 
     return std::unique_ptr<ServiceManager>(
-        new ServiceManager(sc_manager.Release(), service.Release()));
+        new ServiceManager(sc_manager.release(), service.release()));
 }
 
 // static
@@ -121,14 +121,14 @@ uint32_t ServiceManager::GetServiceStatus(const wchar_t* service_name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
 
-    if (!sc_manager.IsValid())
+    if (!sc_manager.isValid())
     {
         qWarning() << "OpenSCManagerW failed: " << lastSystemErrorString();
         return 0;
     }
 
     ScopedScHandle service(OpenServiceW(sc_manager, service_name, SERVICE_QUERY_STATUS));
-    if (!service.IsValid())
+    if (!service.isValid())
     {
         DWORD error = GetLastError();
 
@@ -198,8 +198,8 @@ bool ServiceManager::Remove()
         return false;
     }
 
-    service_.Reset();
-    sc_manager_.Reset();
+    service_.reset();
+    sc_manager_.reset();
 
     return true;
 }

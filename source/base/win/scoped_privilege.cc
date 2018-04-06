@@ -19,7 +19,7 @@ ScopedProcessPrivilege::ScopedProcessPrivilege(const wchar_t* name)
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES,
-                          process_token_.Recieve()))
+                          process_token_.recieve()))
     {
         qWarning() << "OpenProcessToken failed: " << lastSystemErrorString();
         return;

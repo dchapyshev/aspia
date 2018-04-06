@@ -140,7 +140,7 @@ bool GetUserSidString(std::wstring& user_sid)
 {
     // Get the current token.
     ScopedHandle token;
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.Recieve()))
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
         return false;
 
     DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
