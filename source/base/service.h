@@ -29,13 +29,13 @@ public:
 protected:
     Application* application() const { return application_; }
 
-    // ServiceBase implementation.
+    // ServiceImpl implementation.
     void createApplication(int argc, char* argv[]) override
     {
         application_ = new Application(argc, argv);
     }
 
-    // ServiceBase implementation.
+    // ServiceImpl implementation.
     int executeApplication() override
     {
         return application_->exec();

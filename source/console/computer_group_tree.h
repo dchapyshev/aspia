@@ -29,10 +29,10 @@ protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    void startDrag(Qt::DropActions supported_actions) override;
 
 private:
     bool isAllowedDropTarget(ComputerGroup* target, ComputerGroup* item);
-    void startDrag();
 
     QPoint start_pos_;
 

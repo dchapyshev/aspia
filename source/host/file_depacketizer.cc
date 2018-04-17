@@ -41,7 +41,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     if (packet.flags() & proto::file_transfer::Packet::FLAG_FIRST_PACKET)
     {
         file_size_ = packet.file_size();
-        left_size_ = packet.file_size();
+        left_size_ = file_size_;
     }
 
     const size_t packet_size = packet.data().size();

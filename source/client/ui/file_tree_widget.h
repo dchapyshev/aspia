@@ -34,10 +34,9 @@ protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    void startDrag(Qt::DropActions supported_actions) override;
 
 private:
-    void startDrag();
-
     QPoint start_pos_;
 
     Q_DISABLE_COPY(FileTreeWidget)

@@ -21,7 +21,7 @@ class HostProcessImpl
 {
 public:
     HostProcessImpl(HostProcess* process);
-    ~HostProcessImpl() = default;
+    ~HostProcessImpl();
 
     void startProcess();
     void killProcess();

@@ -1,61 +1,61 @@
 //
 // PROJECT:         Aspia
-// FILE:            network/channel.h
+// FILE:            host/ipc_channel.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_NETWORK__CHANNEL_H
-#define _ASPIA_NETWORK__CHANNEL_H
+#ifndef _ASPIA_HOST__IPC_CHANNEL_H
+#define _ASPIA_HOST__IPC_CHANNEL_H
 
+#include <QByteArray>
 #include <QPair>
 #include <QPointer>
 #include <QQueue>
-#include <QTcpSocket>
+
+class QLocalSocket;
 
 namespace aspia {
 
-class Server;
+class IpcServer;
 
-class Channel : public QObject
+class IpcChannel : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Channel(QObject* parent);
-    ~Channel();
+    explicit IpcChannel(QObject* parent = nullptr);
+    ~IpcChannel();
 
-    void connectToHost(const QString& address, int port);
-
-signals:
-    void channelConnected();
-    void channelDisconnected();
-    void channelError(const QString& message);
-    void channelMessage(const QByteArray& buffer);
-    void messageWritten(int message_id);
+    void connectToServer(const QString& channel_name);
 
 public slots:
+    void disconnectFromServer();
     void readMessage();
     void writeMessage(int message_id, const QByteArray& buffer);
-    void stopChannel();
+
+signals:
+    void connected();
+    void disconnected();
+    void errorOccurred();
+    void messageWritten(int message_id);
+    void messageReceived(const QByteArray& buffer);
 
 private slots:
-    void onConnected();
-    void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
 
 private:
-    friend class Server;
+    friend class IpcServer;
 
-    Channel(QTcpSocket* socket, QObject* parent);
+    IpcChannel(QLocalSocket* socket, QObject* parent = nullptr);
+
     void initChannel();
-
     void scheduleWrite();
 
     using MessageSizeType = quint32;
 
-    QPointer<QTcpSocket> socket_;
+    QPointer<QLocalSocket> socket_;
 
     QQueue<QPair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;
@@ -67,9 +67,9 @@ private:
     MessageSizeType read_size_ = 0;
     qint64 read_ = 0;
 
-    Q_DISABLE_COPY(Channel)
+    Q_DISABLE_COPY(IpcChannel)
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_NETWORK__CHANNEL_H
+#endif // _ASPIA_HOST__IPC_CHANNEL_H

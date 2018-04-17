@@ -15,7 +15,7 @@
 
 namespace aspia {
 
-static QByteArray SerializeMessage(const google::protobuf::MessageLite& message)
+static QByteArray serializeMessage(const google::protobuf::MessageLite& message)
 {
     uint32_t size = message.ByteSize();
     if (!size)
@@ -32,7 +32,7 @@ static QByteArray SerializeMessage(const google::protobuf::MessageLite& message)
 }
 
 template <class T>
-bool ParseMessage(const QByteArray& buffer, T& message)
+bool parseMessage(const QByteArray& buffer, T& message)
 {
     if (!message.ParseFromArray(buffer, static_cast<int>(buffer.size())))
     {

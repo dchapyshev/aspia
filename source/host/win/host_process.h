@@ -36,7 +36,7 @@ public:
     Q_ENUM(Account)
 
     HostProcess(QObject* parent = nullptr);
-    virtual ~HostProcess() = default;
+    virtual ~HostProcess();
 
     void start(quint32 session_id,
                Account account,
@@ -68,10 +68,6 @@ signals:
 
 private:
     friend class HostProcessImpl;
-
-    void processStarted();
-    void processFinished();
-    void processError();
 
     QScopedPointer<HostProcessImpl> impl_;
 

@@ -48,7 +48,11 @@ QString systemErrorCodeToString(SystemErrorCode error_code)
                                   kErrorMessageBufferSize,
                                   nullptr);
     if (length)
-        return QString::fromUtf16(reinterpret_cast<const ushort*>(buffer)).trimmed();
+    {
+        return QString("%1 (%2)")
+            .arg(QString::fromUtf16(reinterpret_cast<const ushort*>(buffer)).trimmed())
+            .arg(error_code);
+    }
 
     return QString("Error (%1) while retrieving error (%2")
         .arg(lastSystemErrorCode())

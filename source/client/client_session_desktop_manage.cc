@@ -40,7 +40,7 @@ void ClientSessionDesktopManage::readMessage(const QByteArray& buffer)
 {
     proto::desktop::HostToClient message;
 
-    if (!ParseMessage(buffer, message))
+    if (!parseMessage(buffer, message))
     {
         emit sessionError(tr("Session error: Invalid message from host."));
         return;

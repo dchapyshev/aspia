@@ -90,9 +90,9 @@ void FileLogger::messageHandler(QtMsgType type,
 {
     QString filename(context.file);
 
-    int last_slash_pos = filename.lastIndexOf('\\');
+    int last_slash_pos = filename.lastIndexOf(QLatin1Char('\\'));
     if (last_slash_pos == -1)
-        last_slash_pos = filename.lastIndexOf('/');
+        last_slash_pos = filename.lastIndexOf(QLatin1Char('/'));
 
     if (last_slash_pos != -1)
         filename.remove(0, last_slash_pos + 1);
@@ -100,12 +100,10 @@ void FileLogger::messageHandler(QtMsgType type,
     QTextStream stream(file_.data());
 
     stream << QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss.zzz"))
-           << " "
-           << QThread::currentThreadId()
-           << " "
+           << QLatin1Char(' ')
            << typeName(type)
-           << " "
-           << filename << ":" << context.line << "] "
+           << QLatin1Char(' ')
+           << filename << QLatin1Char(':') << context.line << QLatin1String("] ")
            << msg
            << endl;
 

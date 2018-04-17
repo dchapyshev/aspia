@@ -12,7 +12,6 @@
 #include <sddl.h>
 #include <memory>
 
-#include "base/strings/string_util.h"
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_local.h"
 #include "base/system_error_code.h"

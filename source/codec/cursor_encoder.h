@@ -8,6 +8,8 @@
 #ifndef _ASPIA_CODEC__CURSOR_ENCODER_H
 #define _ASPIA_CODEC__CURSOR_ENCODER_H
 
+#include <memory>
+
 #include "codec/compressor_zlib.h"
 #include "desktop_capture/mouse_cursor_cache.h"
 #include "protocol/desktop_session.pb.h"
@@ -20,7 +22,7 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    std::unique_ptr<proto::desktop::CursorShape> Encode(std::unique_ptr<MouseCursor> mouse_cursor);
+    std::unique_ptr<proto::desktop::CursorShape> encode(std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
     void CompressCursor(proto::desktop::CursorShape* cursor_shape,

@@ -29,10 +29,13 @@ class ServiceHandler : public QThread
 {
 public:
     ServiceHandler();
+    ~ServiceHandler();
 
     void setStatus(DWORD status);
 
     static ServiceHandler* instance;
+
+    bool service_main_called = false;
 
     QSemaphore create_app_start_semaphore;
     QSemaphore create_app_end_semaphore;
@@ -60,15 +63,13 @@ class ServiceEventHandler : public QObject
 {
 public:
     ServiceEventHandler();
+    ~ServiceEventHandler();
 
     static ServiceEventHandler* instance;
 
-    enum ServiceEventType
-    {
-        Start         = QEvent::User + 1,
-        Stop          = QEvent::User + 2,
-        SessionChange = QEvent::User + 3
-    };
+    static const int kStartEvent = QEvent::User + 1;
+    static const int kStopEvent = QEvent::User + 2;
+    static const int kSessionChangeEvent = QEvent::User + 3;
 
     static void postStartEvent();
     static void postStopEvent();
@@ -78,7 +79,7 @@ public:
     {
     public:
         SessionChangeEvent(quint32 event, quint32 session_id)
-            : QEvent(QEvent::Type(SessionChange)),
+            : QEvent(QEvent::Type(kSessionChangeEvent)),
             event_(event),
             session_id_(session_id)
         {
@@ -117,6 +118,12 @@ ServiceHandler::ServiceHandler()
     memset(&status_, 0, sizeof(status_));
 }
 
+ServiceHandler::~ServiceHandler()
+{
+    Q_ASSERT(instance);
+    instance = nullptr;
+}
+
 void ServiceHandler::setStatus(DWORD status)
 {
     status_.dwServiceType             = SERVICE_WIN32;
@@ -146,24 +153,28 @@ void ServiceHandler::setStatus(DWORD status)
 
 void ServiceHandler::run()
 {
-    SERVICE_TABLE_ENTRYW service_table[1];
-    memset(&service_table, 0, sizeof(service_table));
+    SERVICE_TABLE_ENTRYW service_table[2];
 
     service_table[0].lpServiceName = const_cast<wchar_t*>(
         reinterpret_cast<const wchar_t*>(ServiceImpl::instance()->serviceName().utf16()));
     service_table[0].lpServiceProc = ServiceHandler::serviceMain;
+    service_table[1].lpServiceName = nullptr;
+    service_table[1].lpServiceProc = nullptr;
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
         qWarning() << "StartServiceCtrlDispatcherW failed: " << lastSystemErrorString();
-        return;
+        create_app_start_semaphore.release();
     }
 }
 
 // static
 void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 {
-    Q_ASSERT(instance);
+    if (!instance || !ServiceImpl::instance())
+        return;
+
+    instance->service_main_called = true;
 
     // Start creating the QCoreApplication instance.
     instance->create_app_start_semaphore.release();
@@ -207,7 +218,8 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
 
         case SERVICE_CONTROL_SESSIONCHANGE:
         {
-            Q_ASSERT(instance);
+            if (!instance)
+                return NO_ERROR;
 
             instance->event_lock.lock();
             instance->event_processed = false;
@@ -227,7 +239,8 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
         case SERVICE_CONTROL_SHUTDOWN:
         case SERVICE_CONTROL_STOP:
         {
-            Q_ASSERT(instance);
+            if (!instance)
+                return NO_ERROR;
 
             if (control_code == SERVICE_CONTROL_STOP)
                 instance->setStatus(SERVICE_STOP_PENDING);
@@ -263,38 +276,47 @@ ServiceEventHandler::ServiceEventHandler()
     instance = this;
 }
 
+ServiceEventHandler::~ServiceEventHandler()
+{
+    Q_ASSERT(instance);
+    instance = nullptr;
+}
+
 // static
 void ServiceEventHandler::postStartEvent()
 {
-    QCoreApplication::postEvent(instance, new QEvent(QEvent::Type(Start)));
+    if (instance)
+        QCoreApplication::postEvent(instance, new QEvent(QEvent::Type(kStartEvent)));
 }
 
 // static
 void ServiceEventHandler::postStopEvent()
 {
-    QCoreApplication::postEvent(instance, new QEvent(QEvent::Type(Stop)));
+    if (instance)
+        QCoreApplication::postEvent(instance, new QEvent(QEvent::Type(kStopEvent)));
 }
 
 // static
 void ServiceEventHandler::postSessionChangeEvent(quint32 event, quint32 session_id)
 {
-    QCoreApplication::postEvent(instance, new SessionChangeEvent(event, session_id));
+    if (instance)
+        QCoreApplication::postEvent(instance, new SessionChangeEvent(event, session_id));
 }
 
 void ServiceEventHandler::customEvent(QEvent* event)
 {
     switch (event->type())
     {
-        case ServiceEventHandler::Start:
+        case ServiceEventHandler::kStartEvent:
             ServiceImpl::instance()->start();
             break;
 
-        case ServiceEventHandler::Stop:
+        case ServiceEventHandler::kStopEvent:
             ServiceImpl::instance()->stop();
             QCoreApplication::instance()->quit();
             break;
 
-        case ServiceEventHandler::SessionChange:
+        case ServiceEventHandler::kSessionChangeEvent:
         {
             SessionChangeEvent* session_change_event =
                 reinterpret_cast<SessionChangeEvent*>(event);
@@ -308,13 +330,15 @@ void ServiceEventHandler::customEvent(QEvent* event)
             return;
     }
 
-    // Set the event flag is processed.
     ServiceHandler::instance->event_lock.lock();
+
+    // Set the event flag is processed.
     ServiceHandler::instance->event_processed = true;
-    ServiceHandler::instance->event_lock.unlock();
 
     // Notify waiting thread for the end of processing.
-    ServiceHandler::instance->event_condition.notify_one();
+    ServiceHandler::instance->event_condition.notify_all();
+
+    ServiceHandler::instance->event_lock.unlock();
 }
 
 //================================================================================================
@@ -326,7 +350,7 @@ ServiceImpl* ServiceImpl::instance_ = nullptr;
 ServiceImpl::ServiceImpl(const QString& name)
     : name_(name)
 {
-    // Nothing
+    instance_ = this;
 }
 
 int ServiceImpl::exec(int argc, char* argv[])
@@ -340,6 +364,13 @@ int ServiceImpl::exec(int argc, char* argv[])
     if (!handler->create_app_start_semaphore.tryAcquire(1, 20000))
     {
         qWarning("Function serviceMain was not called at the specified time interval");
+        handler->wait();
+        return 1;
+    }
+
+    if (!handler->service_main_called)
+    {
+        handler->wait();
         return 1;
     }
 

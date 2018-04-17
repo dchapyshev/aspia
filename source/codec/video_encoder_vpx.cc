@@ -327,7 +327,8 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::encode(const Deskt
     Q_ASSERT(encoding_ == proto::desktop::VIDEO_ENCODING_VP8 ||
              encoding_ == proto::desktop::VIDEO_ENCODING_VP9);
 
-    std::unique_ptr<proto::desktop::VideoPacket> packet(new proto::desktop::VideoPacket());
+    std::unique_ptr<proto::desktop::VideoPacket> packet =
+        std::make_unique<proto::desktop::VideoPacket>();
 
     packet->set_encoding(encoding_);
 

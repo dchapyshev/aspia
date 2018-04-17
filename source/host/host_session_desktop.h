@@ -8,55 +8,53 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_DESKTOP_H
 #define _ASPIA_HOST__HOST_SESSION_DESKTOP_H
 
-#include "codec/video_encoder.h"
-#include "codec/cursor_encoder.h"
-#include "host/input_injector.h"
-#include "host/screen_updater.h"
-#include "host/clipboard_thread.h"
-#include "ipc/pipe_channel.h"
+#include <QPointer>
+#include <QSharedPointer>
+#include <QScopedPointer>
+
+#include "host/host_session.h"
 #include "protocol/authorization.pb.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
-class HostSessionDesktop
+class Clipboard;
+class InputInjector;
+class ScreenUpdater;
+
+class HostSessionDesktop : public HostSession
 {
+    Q_OBJECT
+
 public:
-    HostSessionDesktop() = default;
+    HostSessionDesktop(proto::auth::SessionType session_type, const QString& channel_id);
     ~HostSessionDesktop() = default;
 
-    void Run(const std::wstring& channel_id);
+public slots:
+    // HostSession implementation.
+    void readMessage(const QByteArray& buffer) override;
+    void messageWritten(int message_id) override;
+
+protected:
+    // HostSession implementation.
+    void startSession() override;
+    void stopSession() override;
+    void customEvent(QEvent* event) override;
+
+private slots:
+    void clipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
-    void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelMessage(const QByteArray& buffer);
+    void readPointerEvent(const proto::desktop::PointerEvent& event);
+    void readKeyEvent(const proto::desktop::KeyEvent& event);
+    void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void readConfig(const proto::desktop::Config& config);
 
-    void OnScreenUpdate(const DesktopFrame* screen_frame,
-                        std::unique_ptr<MouseCursor> mouse_cursor);
-    void OnScreenUpdated();
+    const proto::auth::SessionType session_type_;
 
-    void WriteMessage(const proto::desktop::HostToClient& message);
-    void WriteMessage(const proto::desktop::HostToClient& message,
-                      PipeChannel::SendCompleteHandler handler);
-
-    bool ReadPointerEvent(const proto::desktop::PointerEvent& event);
-    bool ReadKeyEvent(const proto::desktop::KeyEvent& event);
-    bool ReadClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    bool ReadConfig(const proto::desktop::Config& config);
-
-    void SendClipboardEvent(proto::desktop::ClipboardEvent& event);
-    void SendConfigRequest();
-
-    std::unique_ptr<PipeChannel> ipc_channel_;
-    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
-
-    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
-
-    std::unique_ptr<VideoEncoder> video_encoder_;
-    std::unique_ptr<CursorEncoder> cursor_encoder_;
-    std::unique_ptr<ScreenUpdater> screen_updater_;
-    std::unique_ptr<InputInjector> input_injector_;
-    std::unique_ptr<ClipboardThread> clipboard_thread_;
+    QPointer<ScreenUpdater> screen_updater_;
+    QPointer<Clipboard> clipboard_;
+    QScopedPointer<InputInjector> input_injector_;
 
     Q_DISABLE_COPY(HostSessionDesktop)
 };

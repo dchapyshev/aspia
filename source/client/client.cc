@@ -19,6 +19,15 @@
 
 namespace aspia {
 
+namespace {
+
+enum MessageId
+{
+    ResponseMessageId
+};
+
+} // namespace
+
 Client::Client(const proto::Computer& computer, QObject* parent)
     : QObject(parent),
       computer_(computer)
@@ -38,6 +47,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
 
     // The first message from the host is an authorization request.
     connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
+    connect(channel_, &Channel::messageWritten, this, &Client::onMessageWritten);
 
     // If the network connection is disconnected.
     connect(channel_, &Channel::channelDisconnected, this, &Client::onChannelDisconnected);
@@ -67,6 +77,9 @@ Client::Client(const proto::Computer& computer, QObject* parent)
 void Client::onChannelConnected()
 {
     status_dialog_->addStatus(tr("Connection established."));
+
+    // Read authorization request.
+    channel_->readMessage();
 }
 
 void Client::onChannelDisconnected()
@@ -79,12 +92,28 @@ void Client::onChannelError(const QString& message)
     status_dialog_->addStatus(tr("Network error: %1.").arg(message));
 }
 
+void Client::onMessageWritten(int message_id)
+{
+    switch (message_id)
+    {
+        case ResponseMessageId:
+        {
+            // Read authorization result.
+            channel_->readMessage();
+        }
+        break;
+
+        default:
+            break;
+    }
+}
+
 void Client::onAuthorizationRequest(const QByteArray& buffer)
 {
     status_dialog_->addStatus(tr("Authorization request received."));
 
     proto::auth::Request request;
-    if (!ParseMessage(buffer, request))
+    if (!parseMessage(buffer, request))
     {
         status_dialog_->addStatus(tr("Protocol error: Invalid authorization request received."));
         return;
@@ -114,13 +143,13 @@ void Client::onAuthorizationRequest(const QByteArray& buffer)
     disconnect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
     connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationResult);
 
-    channel_->writeMessage(SerializeMessage(response));
+    channel_->writeMessage(ResponseMessageId, serializeMessage(response));
 }
 
 void Client::onAuthorizationResult(const QByteArray& buffer)
 {
     proto::auth::Result result;
-    if (!ParseMessage(buffer, result))
+    if (!parseMessage(buffer, result))
     {
         status_dialog_->addStatus(tr("Protocol error: Invalid authorization result received."));
         return;
@@ -166,8 +195,17 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
     }
 
     // Messages received from the network are sent to the session.
-    connect(channel_, &Channel::channelMessage, session_, &ClientSession::readMessage);
-    connect(session_, &ClientSession::sessionMessage, channel_, &Channel::writeMessage);
+    connect(channel_, &Channel::channelMessage, [this](const QByteArray& buffer)
+    {
+        session_->readMessage(buffer);
+        channel_->readMessage();
+    });
+
+    connect(session_, &ClientSession::sessionMessage, [this](const QByteArray& buffer)
+    {
+        channel_->writeMessage(-1, buffer);
+    });
+
     connect(channel_, &Channel::channelDisconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
@@ -185,6 +223,7 @@ void Client::onAuthorizationResult(const QByteArray& buffer)
     status_dialog_->hide();
 
     session_->startSession();
+    channel_->readMessage();
 }
 
 } // namespace aspia

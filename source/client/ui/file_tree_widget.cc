@@ -40,7 +40,7 @@ void FileTreeWidget::mouseMoveEvent(QMouseEvent* event)
 
         if (distance > QApplication::startDragDistance())
         {
-            startDrag();
+            startDrag(Qt::CopyAction);
             return;
         }
     }
@@ -75,7 +75,7 @@ void FileTreeWidget::dropEvent(QDropEvent* event)
     emit fileListDroped(mime_data->fileList());
 }
 
-void FileTreeWidget::startDrag()
+void FileTreeWidget::startDrag(Qt::DropActions supported_actions)
 {
     QList<FileTransfer::Item> file_list;
 

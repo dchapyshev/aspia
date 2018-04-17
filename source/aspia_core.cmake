@@ -5,10 +5,7 @@ include_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
-    ${ASPIA_THIRD_PARTY_DIR}/libsodium/include
-    ${ASPIA_THIRD_PARTY_DIR}/asio/include
-    ${ASPIA_THIRD_PARTY_DIR}/rapidjson/include
-    ${ASPIA_THIRD_PARTY_DIR}/rapidxml/include)
+    ${ASPIA_THIRD_PARTY_DIR}/libsodium/include)
 
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
@@ -22,81 +19,28 @@ link_directories(
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
-    ${PROJECT_SOURCE_DIR}/base/command_line.cc
-    ${PROJECT_SOURCE_DIR}/base/command_line.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
     ${PROJECT_SOURCE_DIR}/base/file_logger.h
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
-    ${PROJECT_SOURCE_DIR}/base/message_window.cc
-    ${PROJECT_SOURCE_DIR}/base/message_window.h
-    ${PROJECT_SOURCE_DIR}/base/object_watcher.cc
-    ${PROJECT_SOURCE_DIR}/base/object_watcher.h
     ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
     ${PROJECT_SOURCE_DIR}/base/service.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.h
-    ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
-    ${PROJECT_SOURCE_DIR}/base/waitable_timer.cc
-    ${PROJECT_SOURCE_DIR}/base/waitable_timer.h)
-
-list(APPEND SOURCE_BASE_MESSAGE_LOOP
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop.cc
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.cc
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.cc
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_dispatcher.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_ui.cc
-    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_ui.h
-    ${PROJECT_SOURCE_DIR}/base/message_loop/pending_task.cc
-    ${PROJECT_SOURCE_DIR}/base/message_loop/pending_task.h)
-
-list(APPEND SOURCE_BASE_PROCESS
-    ${PROJECT_SOURCE_DIR}/base/process/process.cc
-    ${PROJECT_SOURCE_DIR}/base/process/process.h
-    ${PROJECT_SOURCE_DIR}/base/process/process_watcher.cc
-    ${PROJECT_SOURCE_DIR}/base/process/process_watcher.h)
-
-list(APPEND SOURCE_BASE_STRINGS
-    ${PROJECT_SOURCE_DIR}/base/strings/string_printf.cc
-    ${PROJECT_SOURCE_DIR}/base/strings/string_printf.h
-    ${PROJECT_SOURCE_DIR}/base/strings/string_util.cc
-    ${PROJECT_SOURCE_DIR}/base/strings/string_util.h
-    ${PROJECT_SOURCE_DIR}/base/strings/string_util_constants.cc
-    ${PROJECT_SOURCE_DIR}/base/strings/string_util_constants.h
-    ${PROJECT_SOURCE_DIR}/base/strings/unicode.cc
-    ${PROJECT_SOURCE_DIR}/base/strings/unicode.h)
-
-list(APPEND SOURCE_BASE_THREADING
-    ${PROJECT_SOURCE_DIR}/base/threading/simple_thread.cc
-    ${PROJECT_SOURCE_DIR}/base/threading/simple_thread.h
-    ${PROJECT_SOURCE_DIR}/base/threading/thread.cc
-    ${PROJECT_SOURCE_DIR}/base/threading/thread.h)
+    ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.cc
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_clipboard.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_hglobal.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_local.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_object.h
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.cc
-    ${PROJECT_SOURCE_DIR}/base/win/scoped_privilege.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
-    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h
-    ${PROJECT_SOURCE_DIR}/base/win/service.cc
-    ${PROJECT_SOURCE_DIR}/base/win/service.h
-    ${PROJECT_SOURCE_DIR}/base/win/service_manager.cc
-    ${PROJECT_SOURCE_DIR}/base/win/service_manager.h)
+    ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h)
 
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc
@@ -234,8 +178,6 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
 
 list(APPEND SOURCE_CRYPTO
-    ${PROJECT_SOURCE_DIR}/crypto/random.cc
-    ${PROJECT_SOURCE_DIR}/crypto/random.h
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.h)
 
@@ -271,10 +213,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
 list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/clipboard.cc
     ${PROJECT_SOURCE_DIR}/host/clipboard.h
-    ${PROJECT_SOURCE_DIR}/host/clipboard_thread.cc
-    ${PROJECT_SOURCE_DIR}/host/clipboard_thread.h
-    ${PROJECT_SOURCE_DIR}/host/console_session_watcher.cc
-    ${PROJECT_SOURCE_DIR}/host/console_session_watcher.h
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.h
     ${PROJECT_SOURCE_DIR}/host/file_packetizer.cc
@@ -289,28 +227,20 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host.h
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
-    ${PROJECT_SOURCE_DIR}/host/host_main.cc
-    ${PROJECT_SOURCE_DIR}/host/host_main.h
-    ${PROJECT_SOURCE_DIR}/host/host_pool.cc
-    ${PROJECT_SOURCE_DIR}/host/host_pool.h
-    ${PROJECT_SOURCE_DIR}/host/host_process_connector.cc
-    ${PROJECT_SOURCE_DIR}/host/host_process_connector.h
-    ${PROJECT_SOURCE_DIR}/host/host_service.cc
-    ${PROJECT_SOURCE_DIR}/host/host_service.h
-    ${PROJECT_SOURCE_DIR}/host/host_service_main.cc
-    ${PROJECT_SOURCE_DIR}/host/host_service_main.h
     ${PROJECT_SOURCE_DIR}/host/host_session.cc
     ${PROJECT_SOURCE_DIR}/host/host_session.h
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.h
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.h
-    ${PROJECT_SOURCE_DIR}/host/host_session_launcher.cc
-    ${PROJECT_SOURCE_DIR}/host/host_session_launcher.h
-    ${PROJECT_SOURCE_DIR}/host/host_switches.cc
-    ${PROJECT_SOURCE_DIR}/host/host_switches.h
+    ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.cc
+    ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/host/input_injector.cc
     ${PROJECT_SOURCE_DIR}/host/input_injector.h
+    ${PROJECT_SOURCE_DIR}/host/ipc_channel.cc
+    ${PROJECT_SOURCE_DIR}/host/ipc_channel.h
+    ${PROJECT_SOURCE_DIR}/host/ipc_server.cc
+    ${PROJECT_SOURCE_DIR}/host/ipc_server.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
     ${PROJECT_SOURCE_DIR}/host/user.cc
@@ -329,30 +259,24 @@ list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 
 list(APPEND SOURCE_HOST_WIN
+    ${PROJECT_SOURCE_DIR}/host/win/host_main.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_main.h
     ${PROJECT_SOURCE_DIR}/host/win/host_process.cc
     ${PROJECT_SOURCE_DIR}/host/win/host_process.h
     ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.cc
-    ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.h)
-
-list(APPEND SOURCE_IPC
-    ${PROJECT_SOURCE_DIR}/ipc/pipe_channel.cc
-    ${PROJECT_SOURCE_DIR}/ipc/pipe_channel.h
-    ${PROJECT_SOURCE_DIR}/ipc/pipe_channel_proxy.cc
-    ${PROJECT_SOURCE_DIR}/ipc/pipe_channel_proxy.h)
+    ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.h
+    ${PROJECT_SOURCE_DIR}/host/win/host_service.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_service.h
+    ${PROJECT_SOURCE_DIR}/host/win/host_service_main.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_service_main.h)
 
 list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/channel.cc
     ${PROJECT_SOURCE_DIR}/network/channel.h
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.cc
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel_proxy.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel_proxy.h
-    ${PROJECT_SOURCE_DIR}/network/network_channel_tcp.cc
-    ${PROJECT_SOURCE_DIR}/network/network_channel_tcp.h
-    ${PROJECT_SOURCE_DIR}/network/network_server_tcp.cc
-    ${PROJECT_SOURCE_DIR}/network/network_server_tcp.h)
+    ${PROJECT_SOURCE_DIR}/network/server.cc
+    ${PROJECT_SOURCE_DIR}/network/server.h)
 
 list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc

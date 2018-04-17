@@ -41,8 +41,8 @@ private:
     QString source_path_;
     QString target_path_;
     bool is_directory_;
-    qint64 size_;
     bool overwrite_ = false;
+    qint64 size_;
 };
 
 } // namespace aspia

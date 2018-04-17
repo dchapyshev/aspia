@@ -8,10 +8,10 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_H
 
+#include <memory>
+
 #include "desktop_capture/desktop_frame.h"
 #include "protocol/desktop_session.pb.h"
-
-#include <memory>
 
 namespace aspia {
 

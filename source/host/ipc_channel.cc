@@ -1,13 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            network/channel.cc
+// FILE:            host/ipc_channel.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "network/channel.h"
+#include "host/ipc_channel.h"
 
-#include <QtEndian>
+#include <QDebug>
+#include <QLocalSocket>
 
 namespace aspia {
 
@@ -18,45 +19,56 @@ constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
 
 } // namespace
 
-Channel::Channel(QTcpSocket* socket, QObject* parent)
+IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
     : QObject(parent),
       socket_(socket)
 {
     Q_ASSERT(socket_);
+    socket_->setParent(this);
     initChannel();
 }
 
-Channel::Channel(QObject* parent)
+IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
-      socket_(new QTcpSocket(this))
+      socket_(new QLocalSocket(this))
 {
     initChannel();
-    connect(socket_, &QTcpSocket::connected, this, &Channel::onConnected);
+    connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
 }
 
-Channel::~Channel()
+IpcChannel::~IpcChannel()
 {
     socket_->abort();
     delete socket_;
 }
 
-void Channel::initChannel()
+void IpcChannel::initChannel()
 {
-    connect(socket_, &QTcpSocket::disconnected, this, &Channel::channelDisconnected);
-    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &Channel::onError);
+    connect(socket_, &QLocalSocket::disconnected, this, &IpcChannel::disconnected);
+    connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
+    connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
+
+    connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
+            [this](QLocalSocket::LocalSocketError /* socket_error */)
+    {
+        qWarning() << "IPC channel error: " << socket_->errorString();
+        emit errorOccurred();
+    });
 
     read_buffer_.reserve(kReadBufferReservedSize);
 }
 
-void Channel::connectToHost(const QString& address, int port)
+void IpcChannel::connectToServer(const QString& channel_name)
 {
-    socket_->connectToHost(address, port);
+    socket_->connectToServer(channel_name);
 }
 
-void Channel::readMessage()
+void IpcChannel::disconnectFromServer()
+{
+    socket_->disconnectFromServer();
+}
+
+void IpcChannel::readMessage()
 {
     Q_ASSERT(!read_required_);
 
@@ -64,7 +76,7 @@ void Channel::readMessage()
     onReadyRead();
 }
 
-void Channel::writeMessage(int message_id, const QByteArray& buffer)
+void IpcChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
     bool schedule_write = write_queue_.empty();
 
@@ -74,27 +86,11 @@ void Channel::writeMessage(int message_id, const QByteArray& buffer)
         scheduleWrite();
 }
 
-void Channel::stopChannel()
+void IpcChannel::onBytesWritten(qint64 bytes)
 {
-    socket_->disconnectFromHost();
-}
-
-void Channel::onConnected()
-{
-    socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
-    emit channelConnected();
-}
-
-void Channel::onError(QAbstractSocket::SocketError /* error */)
-{
-    emit channelError(socket_->errorString());
-}
-
-void Channel::onBytesWritten(qint64 bytes)
-{
-    written_ += bytes;
-
     const QByteArray& write_buffer = write_queue_.front().second;
+
+    written_ += bytes;
 
     if (written_ < sizeof(MessageSizeType))
     {
@@ -118,7 +114,7 @@ void Channel::onBytesWritten(qint64 bytes)
     }
 }
 
-void Channel::onReadyRead()
+void IpcChannel::onReadyRead()
 {
     if (!read_required_)
         return;
@@ -136,7 +132,6 @@ void Channel::onReadyRead()
         {
             read_size_received_ = true;
 
-            read_size_ = qFromBigEndian(read_size_);
             if (!read_size_ || read_size_ > kMaxMessageSize)
             {
                 qWarning() << "Wrong message size: " << read_size_;
@@ -159,7 +154,7 @@ void Channel::onReadyRead()
             read_size_received_ = false;
             current = read_ = 0;
 
-            emit channelMessage(read_buffer_);
+            emit messageReceived(read_buffer_);
             break;
         }
 
@@ -170,18 +165,18 @@ void Channel::onReadyRead()
     }
 }
 
-void Channel::scheduleWrite()
+void IpcChannel::scheduleWrite()
 {
     const QByteArray& write_buffer = write_queue_.front().second;
 
-    write_size_ = static_cast<MessageSizeType>(write_buffer.size());
+    write_size_ = write_buffer.size();
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
+        qWarning() << "Wrong message size: " << write_size_;
         abort();
         return;
     }
 
-    write_size_ = qToBigEndian(write_size_);
     socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(MessageSizeType));
 }
 

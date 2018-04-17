@@ -9,73 +9,46 @@
 
 #include <QDebug>
 
-#include "base/process/process.h"
 #include "base/message_serialization.h"
-#include "ipc/pipe_channel_proxy.h"
-#include "protocol/authorization.pb.h"
+#include "host/file_worker.h"
 
 namespace aspia {
 
-void HostSessionFileTransfer::Run(const std::wstring& channel_id)
+HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
+    : HostSession(channel_id)
 {
-    ipc_channel_ = PipeChannel::CreateClient(channel_id);
-    if (ipc_channel_)
-    {
-        ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
-
-        uint32_t user_data = Process::Current().Pid();
-
-        if (ipc_channel_->Connect(user_data))
-        {
-            OnIpcChannelConnect(user_data);
-            ipc_channel_proxy_->WaitForDisconnect();
-        }
-
-        ipc_channel_.reset();
-    }
+    // Nothing
 }
 
-void HostSessionFileTransfer::OnIpcChannelConnect(uint32_t user_data)
+void HostSessionFileTransfer::startSession()
 {
-    // The server sends the session type in user_data.
-    proto::auth::SessionType session_type =
-        static_cast<proto::auth::SessionType>(user_data);
+    worker_ = new FileWorker(this);
+}
 
-    if (session_type != proto::auth::SESSION_TYPE_FILE_TRANSFER)
-    {
-        qFatal("Invalid session type passed");
+void HostSessionFileTransfer::stopSession()
+{
+    delete worker_;
+}
+
+void HostSessionFileTransfer::readMessage(const QByteArray& buffer)
+{
+    if (worker_.isNull())
         return;
-    }
 
-    ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
-}
-
-void HostSessionFileTransfer::OnIpcChannelMessage(const QByteArray& buffer)
-{
     proto::file_transfer::Request request;
 
-    if (!ParseMessage(buffer, request))
+    if (!parseMessage(buffer, request))
     {
-        ipc_channel_proxy_->Disconnect();
+        emit errorOccurred();
         return;
     }
 
-    SendReply(worker_.doRequest(request));
+    emit writeMessage(-1, serializeMessage(worker_->doRequest(request)));
 }
 
-void HostSessionFileTransfer::SendReply(const proto::file_transfer::Reply& reply)
+void HostSessionFileTransfer::messageWritten(int /* message_id */)
 {
-    ipc_channel_proxy_->Send(
-        SerializeMessage(reply),
-        std::bind(&HostSessionFileTransfer::OnReplySended, this));
-}
-
-void HostSessionFileTransfer::OnReplySended()
-{
-    // Receive next request.
-    ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionFileTransfer::OnIpcChannelMessage, this, std::placeholders::_1));
+    // Nothing
 }
 
 } // namespace aspia

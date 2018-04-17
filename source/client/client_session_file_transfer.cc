@@ -39,7 +39,7 @@ void ClientSessionFileTransfer::readMessage(const QByteArray& buffer)
 {
     proto::file_transfer::Reply reply;
 
-    if (!ParseMessage(buffer, reply))
+    if (!parseMessage(buffer, reply))
     {
         emit sessionError(tr("Session error: Invalid message from host."));
         return;
@@ -85,7 +85,7 @@ void ClientSessionFileTransfer::closeSession()
 void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
 {
     tasks_.push_back(QPointer<FileRequest>(request));
-    emit sessionMessage(SerializeMessage(request->request()));
+    emit sessionMessage(serializeMessage(request->request()));
 }
 
 } // namespace aspia

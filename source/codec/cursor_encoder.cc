@@ -96,7 +96,7 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
     }
 }
 
-std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::Encode(
+std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
     std::unique_ptr<MouseCursor> mouse_cursor)
 {
     if (!mouse_cursor)

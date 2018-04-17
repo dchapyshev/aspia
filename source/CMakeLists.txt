@@ -18,10 +18,6 @@ find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras)
 include(aspia_core.cmake)
 
 source_group(base FILES ${SOURCE_BASE})
-source_group(base\\message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
-source_group(base\\process FILES ${SOURCE_BASE_PROCESS})
-source_group(base\\strings FILES ${SOURCE_BASE_STRINGS})
-source_group(base\\threading FILES ${SOURCE_BASE_THREADING})
 source_group(base\\win FILES ${SOURCE_BASE_WIN})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
@@ -32,7 +28,6 @@ source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
 source_group(host FILES ${SOURCE_HOST})
 source_group(host\\ui FILES ${SOURCE_HOST_UI})
 source_group(host\\win FILES ${SOURCE_HOST_WIN})
-source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(protocol FILES ${SOURCE_PROTOCOL})
 source_group(resources FILES ${SOURCE_RESOURCES})
@@ -54,10 +49,6 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INC
 
 add_library(aspia_core SHARED
             ${SOURCE_BASE}
-            ${SOURCE_BASE_MESSAGE_LOOP}
-            ${SOURCE_BASE_PROCESS}
-            ${SOURCE_BASE_STRINGS}
-            ${SOURCE_BASE_THREADING}
             ${SOURCE_BASE_WIN}
             ${SOURCE_CLIENT}
             ${SOURCE_CLIENT_UI}
@@ -68,7 +59,6 @@ add_library(aspia_core SHARED
             ${SOURCE_HOST}
             ${SOURCE_HOST_UI}
             ${SOURCE_HOST_WIN}
-            ${SOURCE_IPC}
             ${SOURCE_NETWORK}
             ${SOURCE_PROTOCOL}
             ${SOURCE_RESOURCES}
@@ -120,7 +110,6 @@ target_link_libraries(aspia_core
     msi
     netapi32
     psapi
-    rasapi32
     sas
     secur32
     setupapi
@@ -146,10 +135,10 @@ set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host_config aspia_core)
 
-add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/host_service_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_service.rc)
+add_executable(aspia_host_service ${PROJECT_SOURCE_DIR}/host/win/host_service_entry_point.cc ${PROJECT_SOURCE_DIR}/host/win/host_service.rc)
 target_link_libraries(aspia_host_service aspia_core)
 
-add_executable(aspia_host ${PROJECT_SOURCE_DIR}/host/host_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host.rc)
+add_executable(aspia_host ${PROJECT_SOURCE_DIR}/host/win/host_entry_point.cc ${PROJECT_SOURCE_DIR}/host/win/host.rc)
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_core)

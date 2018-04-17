@@ -11,7 +11,7 @@
 #include <objbase.h>
 
 #ifndef NDEBUG
-#include "base/logging.h"
+#include <QDebug>
 #endif
 
 namespace aspia {
@@ -45,7 +45,7 @@ public:
     {
 #ifndef NDEBUG
         // Using the windows API directly to avoid dependency on platform_thread.
-        DCHECK_EQ(GetCurrentThreadId(), thread_id_);
+        Q_ASSERT(GetCurrentThreadId() == thread_id_);
 #endif
 
         if (IsSucceeded())
@@ -63,9 +63,14 @@ private:
         hr_ = CoInitializeEx(nullptr, init);
 #ifndef NDEBUG
         if (hr_ == S_FALSE)
-            LOG(LS_ERROR) << "Multiple CoInitialize() calls for thread " << thread_id_;
+        {
+            qWarning() << "Multiple CoInitialize() calls for thread " << thread_id_;
+        }
         else
-            DCHECK_NE(RPC_E_CHANGED_MODE, hr_) << "Invalid COM thread model change";
+        {
+            if (hr_ != RPC_E_CHANGED_MODE)
+                qFatal("Invalid COM thread model change");
+        }
 #endif
     }
 

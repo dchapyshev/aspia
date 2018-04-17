@@ -1,0 +1,108 @@
+//
+// PROJECT:         Aspia
+// FILE:            network/server.cc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include "network/server.h"
+
+#include <QDebug>
+#include <QTcpServer>
+
+#include "host/host.h"
+#include "host/host_user_authorizer.h"
+#include "network/channel.h"
+
+namespace aspia {
+
+Server::Server(QObject* parent)
+    : QObject(parent)
+{
+    // Nothing
+}
+
+Server::~Server()
+{
+    stop();
+}
+
+bool Server::start(int port)
+{
+    if (!server_.isNull())
+    {
+        qWarning("An attempt was start an already running server.");
+        return false;
+    }
+
+    user_list_ = ReadUserList();
+    if (user_list_.isEmpty())
+    {
+        qWarning("Empty user list");
+        return false;
+    }
+
+    server_ = new QTcpServer(this);
+
+    connect(server_, &QTcpServer::newConnection, this, &Server::onNewConnection);
+    connect(server_, &QTcpServer::acceptError, [this](QAbstractSocket::SocketError /*error */)
+    {
+        qWarning() << "accept error: " << server_->errorString();
+        return;
+    });
+
+    if (!server_->listen(QHostAddress::Any, port))
+    {
+        qWarning() << "listen failed: " << server_->errorString();
+        return false;
+    }
+
+    return true;
+}
+
+void Server::stop()
+{
+    if (!server_.isNull())
+    {
+        server_->close();
+        delete server_;
+    }
+
+    user_list_.clear();
+}
+
+void Server::setSessionChanged(quint32 event, quint32 session_id)
+{
+    emit sessionChanged(event, session_id);
+}
+
+void Server::onNewConnection()
+{
+    while (server_->hasPendingConnections())
+    {
+        HostUserAuthorizer* authorizer = new HostUserAuthorizer(this);
+
+        authorizer->setChannel(new Channel(server_->nextPendingConnection(), nullptr));
+        authorizer->setUserList(user_list_);
+
+        // If successful authorization, create a session.
+        connect(authorizer, &HostUserAuthorizer::createSession, this, &Server::onCreateSession);
+
+        connect(authorizer, &HostUserAuthorizer::finished,
+                authorizer, &HostUserAuthorizer::deleteLater);
+
+        authorizer->start();
+    }
+}
+
+void Server::onCreateSession(proto::auth::SessionType session_type, Channel* channel)
+{
+    Host* host = new Host(session_type, channel, this);
+
+    connect(this, &Server::sessionChanged, host, &Host::sessionChanged);
+    connect(host, &Host::finished, host, &Host::deleteLater);
+
+    host->start();
+}
+
+} // namespace aspia

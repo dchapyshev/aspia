@@ -8,57 +8,40 @@
 #include "host/host_session_desktop.h"
 
 #include <QDebug>
+#include <QEvent>
 
-#include "base/process/process.h"
 #include "base/message_serialization.h"
-#include "codec/video_encoder_zlib.h"
-#include "codec/video_encoder_vpx.h"
-#include "codec/video_util.h"
-#include "ipc/pipe_channel_proxy.h"
+#include "host/clipboard.h"
+#include "host/input_injector.h"
+#include "host/screen_updater.h"
 
 namespace aspia {
 
 namespace {
 
-static const quint32 kSupportedVideoEncodings =
+const quint32 kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_ZLIB |
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-static const quint32 kSupportedFeatures =
+const quint32 kSupportedFeatures =
     proto::desktop::FEATURE_CURSOR_SHAPE |
     proto::desktop::FEATURE_CLIPBOARD;
 
+enum MessageId
+{
+    ScreenUpdateMessage,
+    ClipboardEventMessage,
+    ConfigRequestMessage
+};
+
 } // namespace
 
-void HostSessionDesktop::Run(const std::wstring& channel_id)
+HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
+                                       const QString& channel_id)
+    : HostSession(channel_id),
+      session_type_(session_type)
 {
-    ipc_channel_ = PipeChannel::CreateClient(channel_id);
-    if (!ipc_channel_)
-        return;
-
-    ipc_channel_proxy_ = ipc_channel_->pipe_channel_proxy();
-
-    uint32_t user_data = Process::Current().Pid();
-
-    if (ipc_channel_->Connect(user_data))
-    {
-        OnIpcChannelConnect(user_data);
-
-        // Waiting for the connection to close.
-        ipc_channel_proxy_->WaitForDisconnect();
-
-        // Stop the threads.
-        clipboard_thread_.reset();
-        screen_updater_.reset();
-    }
-}
-
-void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
-{
-    // The server sends the session type in user_data.
-    session_type_ = static_cast<proto::auth::SessionType>(user_data);
-
     switch (session_type_)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
@@ -66,237 +49,178 @@ void HostSessionDesktop::OnIpcChannelConnect(uint32_t user_data)
             break;
 
         default:
-            qFatal("Invalid session type passed: %d", session_type_);
-            return;
+            qFatal("Invalid session type: %d", session_type_);
+            break;
     }
-
-    SendConfigRequest();
-
-    ipc_channel_proxy_->Receive(std::bind(
-        &HostSessionDesktop::OnIpcChannelMessage, this, std::placeholders::_1));
 }
 
-void HostSessionDesktop::OnIpcChannelMessage(const QByteArray& buffer)
+void HostSessionDesktop::startSession()
+{
+    proto::desktop::HostToClient message;
+
+    message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
+
+    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        message.mutable_config_request()->set_features(kSupportedFeatures);
+    else
+        message.mutable_config_request()->set_features(0);
+
+    emit writeMessage(ConfigRequestMessage, serializeMessage(message));
+}
+
+void HostSessionDesktop::stopSession()
+{
+    delete screen_updater_;
+    delete clipboard_;
+    input_injector_.reset();
+}
+
+void HostSessionDesktop::customEvent(QEvent* event)
+{
+    switch (event->type())
+    {
+        case ScreenUpdater::UpdateEvent::kType:
+        {
+            ScreenUpdater::UpdateEvent* update_event =
+                reinterpret_cast<ScreenUpdater::UpdateEvent*>(event);
+
+            Q_ASSERT(update_event->video_packet || update_event->cursor_shape);
+
+            proto::desktop::HostToClient message;
+            message.set_allocated_video_packet(update_event->video_packet.release());
+            message.set_allocated_cursor_shape(update_event->cursor_shape.release());
+
+            emit writeMessage(ScreenUpdateMessage, serializeMessage(message));
+        }
+        break;
+
+        case ScreenUpdater::ErrorEvent::kType:
+            emit errorOccurred();
+            break;
+    }
+}
+
+void HostSessionDesktop::readMessage(const QByteArray& buffer)
 {
     proto::desktop::ClientToHost message;
 
-    if (ParseMessage(buffer, message))
+    if (!parseMessage(buffer, message))
     {
-        bool success = true;
-
-        if (message.has_pointer_event())
-        {
-            success = ReadPointerEvent(message.pointer_event());
-        }
-        else if (message.has_key_event())
-        {
-            success = ReadKeyEvent(message.key_event());
-        }
-        else if (message.has_clipboard_event())
-        {
-            success = ReadClipboardEvent(message.clipboard_event());
-        }
-        else if (message.has_config())
-        {
-            success = ReadConfig(message.config());
-        }
-        else
-        {
-            // Unknown messages are ignored.
-            qWarning("Unhandled message from client");
-        }
-
-        if (success)
-        {
-            ipc_channel_proxy_->Receive(std::bind(
-                &HostSessionDesktop::OnIpcChannelMessage, this, std::placeholders::_1));
-
-            return;
-        }
-    }
-
-    ipc_channel_proxy_->Disconnect();
-}
-
-void HostSessionDesktop::OnScreenUpdate(const DesktopFrame* screen_frame,
-                                        std::unique_ptr<MouseCursor> mouse_cursor)
-{
-    Q_ASSERT(screen_frame || mouse_cursor);
-    Q_ASSERT(video_encoder_);
-
-    proto::desktop::HostToClient message;
-
-    // If the screen image has changes.
-    if (screen_frame)
-    {
-        std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder_->encode(screen_frame);
-        message.set_allocated_video_packet(packet.release());
-    }
-
-    // If the mouse cursor has changes.
-    if (mouse_cursor)
-    {
-        Q_ASSERT(session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
-        Q_ASSERT(cursor_encoder_);
-
-        std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
-            cursor_encoder_->Encode(std::move(mouse_cursor));
-
-        message.set_allocated_cursor_shape(cursor_shape.release());
-    }
-
-    WriteMessage(message, std::bind(&HostSessionDesktop::OnScreenUpdated, this));
-}
-
-void HostSessionDesktop::OnScreenUpdated()
-{
-    if (!screen_updater_)
+        emit errorOccurred();
         return;
-
-    screen_updater_->PostUpdateRequest();
-}
-
-void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& message,
-                                      PipeChannel::SendCompleteHandler handler)
-{
-    ipc_channel_proxy_->Send(SerializeMessage(message), std::move(handler));
-}
-
-void HostSessionDesktop::WriteMessage(const proto::desktop::HostToClient& message)
-{
-    WriteMessage(message, nullptr);
-}
-
-bool HostSessionDesktop::ReadPointerEvent(const proto::desktop::PointerEvent& event)
-{
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
-    if (!input_injector_)
-        input_injector_ = std::make_unique<InputInjector>();
-
-    input_injector_->injectPointerEvent(event);
-    return true;
-}
-
-bool HostSessionDesktop::ReadKeyEvent(const proto::desktop::KeyEvent& event)
-{
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
-    if (!input_injector_)
-        input_injector_ = std::make_unique<InputInjector>();
-
-    input_injector_->injectKeyEvent(event);
-    return true;
-}
-
-bool HostSessionDesktop::ReadClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
-{
-    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
-    if (!clipboard_thread_)
-        return false;
-
-    clipboard_thread_->InjectClipboardEvent(clipboard_event);
-    return true;
-}
-
-void HostSessionDesktop::SendClipboardEvent(proto::desktop::ClipboardEvent& clipboard_event)
-{
-    proto::desktop::HostToClient message;
-    message.mutable_clipboard_event()->Swap(&clipboard_event);
-    WriteMessage(message);
-}
-
-void HostSessionDesktop::SendConfigRequest()
-{
-    proto::desktop::HostToClient message;
-
-    proto::desktop::ConfigRequest* request = message.mutable_config_request();
-    request->set_video_encodings(kSupportedVideoEncodings);
-
-    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        request->set_features(kSupportedFeatures);
-    else
-        request->set_features(0);
-
-    WriteMessage(message);
-}
-
-bool HostSessionDesktop::ReadConfig(const proto::desktop::Config& config)
-{
-    screen_updater_.reset();
-
-    bool enable_cursor_shape = false;
-
-    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        if (config.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE)
-            enable_cursor_shape = true;
-
-        if (enable_cursor_shape)
-        {
-            cursor_encoder_ = std::make_unique<CursorEncoder>();
-        }
-        else
-        {
-            cursor_encoder_.reset();
-        }
-
-        if (config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
-        {
-            clipboard_thread_ = std::make_unique<ClipboardThread>();
-
-            clipboard_thread_->Start(std::bind(
-                &HostSessionDesktop::SendClipboardEvent, this, std::placeholders::_1));
-        }
-        else
-        {
-            clipboard_thread_.reset();
-        }
     }
 
-    switch (config.video_encoding())
+    if (message.has_pointer_event())
+        readPointerEvent(message.pointer_event());
+    else if (message.has_key_event())
+        readKeyEvent(message.key_event());
+    else if (message.has_clipboard_event())
+        readClipboardEvent(message.clipboard_event());
+    else if (message.has_config())
+        readConfig(message.config());
+    else
     {
-        case proto::desktop::VIDEO_ENCODING_VP8:
-            video_encoder_ = VideoEncoderVPX::createVP8();
-            break;
+        qDebug("Unhandled message from client");
+    }
+}
 
-        case proto::desktop::VIDEO_ENCODING_VP9:
-            video_encoder_ = VideoEncoderVPX::createVP9();
-            break;
-
-        case proto::desktop::VIDEO_ENCODING_ZLIB:
-            video_encoder_ = VideoEncoderZLIB::create(
-                VideoUtil::fromVideoPixelFormat(config.pixel_format()), config.compress_ratio());
-            break;
+void HostSessionDesktop::messageWritten(int message_id)
+{
+    switch (message_id)
+    {
+        case ScreenUpdateMessage:
+        {
+            if (!screen_updater_.isNull())
+                screen_updater_->update();
+        }
+        break;
 
         default:
-            qWarning() << "Unsupported video encoding: " << config.video_encoding();
-            video_encoder_.reset();
             break;
     }
+}
 
-    if (!video_encoder_)
-        return false;
+void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& event)
+{
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
 
-    ScreenUpdater::ScreenUpdateCallback screen_update_callback =
-        std::bind(&HostSessionDesktop::OnScreenUpdate,
-                  this, std::placeholders::_1, std::placeholders::_2);
+    proto::desktop::HostToClient message;
+    message.mutable_clipboard_event()->CopyFrom(event);
 
-    ScreenUpdater::Mode update_mode = enable_cursor_shape ?
-        ScreenUpdater::Mode::SCREEN_WITH_CURSOR : ScreenUpdater::Mode::SCREEN;
+    emit writeMessage(ClipboardEventMessage, serializeMessage(message));
+}
 
-    screen_updater_ = std::make_unique<ScreenUpdater>(
-        update_mode,
-        std::chrono::milliseconds(config.update_interval()),
-        std::move(screen_update_callback));
+void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)
+{
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        qWarning("Attempt to inject pointer event to desktop view session");
+        emit errorOccurred();
+        return;
+    }
 
-    screen_updater_->PostUpdateRequest();
+    if (!input_injector_)
+        input_injector_.reset(new InputInjector(this));
 
-    return true;
+    input_injector_->injectPointerEvent(event);
+}
+
+void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
+{
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        qWarning("Attempt to inject key event to desktop view session");
+        emit errorOccurred();
+        return;
+    }
+
+    if (!input_injector_)
+        input_injector_.reset(new InputInjector(this));
+
+    input_injector_->injectKeyEvent(event);
+}
+
+void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
+{
+    if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        qWarning("Attempt to inject clipboard event to desktop view session");
+        emit errorOccurred();
+        return;
+    }
+
+    if (!clipboard_)
+    {
+        qWarning("Attempt to inject clipboard event to session with the clipboard disabled");
+        emit errorOccurred();
+        return;
+    }
+
+    clipboard_->injectClipboardEvent(clipboard_event);
+}
+
+void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
+{
+    delete screen_updater_;
+    delete clipboard_;
+
+    if (config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
+    {
+        if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            qWarning("Attempt to enable clipboard in desktop view session");
+            emit errorOccurred();
+            return;
+        }
+
+        clipboard_ = new Clipboard(this);
+
+        connect(clipboard_, &Clipboard::clipboardEvent,
+                this, &HostSessionDesktop::clipboardEvent);
+    }
+
+    screen_updater_ = new ScreenUpdater(config, this);
 }
 
 } // namespace aspia

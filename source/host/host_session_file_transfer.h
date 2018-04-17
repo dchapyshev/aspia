@@ -8,31 +8,33 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
 #define _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
 
-#include "host/file_worker.h"
-#include "ipc/pipe_channel.h"
-#include "protocol/file_transfer_session.pb.h"
+#include <QPointer>
+
+#include "host/host_session.h"
 
 namespace aspia {
 
-class HostSessionFileTransfer
+class FileWorker;
+
+class HostSessionFileTransfer : public HostSession
 {
+    Q_OBJECT
+
 public:
-    HostSessionFileTransfer() = default;
+    explicit HostSessionFileTransfer(const QString& channel_id);
     ~HostSessionFileTransfer() = default;
 
-    void Run(const std::wstring& channel_id);
+public slots:
+    // HostSession implementation.
+    void readMessage(const QByteArray& buffer) override;
+    void messageWritten(int message_id) override;
+
+protected:
+    void startSession() override;
+    void stopSession() override;
 
 private:
-    void OnIpcChannelConnect(uint32_t user_data);
-    void OnIpcChannelMessage(const QByteArray& buffer);
-
-    void SendReply(const proto::file_transfer::Reply& reply);
-    void OnReplySended();
-
-    std::unique_ptr<PipeChannel> ipc_channel_;
-    std::shared_ptr<PipeChannelProxy> ipc_channel_proxy_;
-
-    FileWorker worker_;
+    QPointer<FileWorker> worker_;
 
     Q_DISABLE_COPY(HostSessionFileTransfer)
 };

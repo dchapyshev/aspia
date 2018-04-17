@@ -39,7 +39,7 @@ void ComputerGroupTree::mouseMoveEvent(QMouseEvent* event)
 
         if (distance > QApplication::startDragDistance())
         {
-            startDrag();
+            startDrag(Qt::MoveAction);
             return;
         }
     }
@@ -119,7 +119,7 @@ bool ComputerGroupTree::isAllowedDropTarget(ComputerGroup* target, ComputerGroup
     return !is_child_item(item, target);
 }
 
-void ComputerGroupTree::startDrag()
+void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
 {
     ComputerGroup* computer_group = reinterpret_cast<ComputerGroup*>(itemAt(start_pos_));
     if (computer_group)

@@ -32,6 +32,7 @@ private slots:
     void onChannelDisconnected();
     void onChannelError(const QString& message);
 
+    void onMessageWritten(int message_id);
     void onAuthorizationRequest(const QByteArray& buffer);
     void onAuthorizationResult(const QByteArray& buffer);
 

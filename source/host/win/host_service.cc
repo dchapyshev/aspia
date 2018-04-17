@@ -1,0 +1,116 @@
+//
+// PROJECT:         Aspia
+// FILE:            host/host_service.cc
+// LICENSE:         GNU Lesser General Public License 2.1
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#include "host/win/host_service.h"
+
+#include <QCoreApplication>
+#include <QDebug>
+#include <QSettings>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <sddl.h>
+
+#include "base/win/security_helpers.h"
+#include "base/system_error_code.h"
+#include "network/firewall_manager.h"
+#include "network/server.h"
+#include "version.h"
+
+namespace aspia {
+
+namespace {
+
+// Security descriptor allowing local processes running under SYSTEM or
+// LocalService accounts to call COM methods exposed by the daemon.
+const wchar_t kComProcessSd[] =
+    SDDL_OWNER L":" SDDL_LOCAL_SYSTEM
+    SDDL_GROUP L":" SDDL_LOCAL_SYSTEM
+    SDDL_DACL L":"
+    SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SYSTEM)
+    SDDL_ACE(SDDL_ACCESS_ALLOWED, SDDL_COM_EXECUTE_LOCAL, SDDL_LOCAL_SERVICE);
+
+// Appended to |kComProcessSd| to specify that only callers running at medium
+// or higher integrity level are allowed to call COM methods exposed by the
+// daemon.
+const wchar_t kComProcessMandatoryLabel[] =
+    SDDL_SACL L":"
+    SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
+
+const char kFirewallRuleName[] = "Aspia Host Service";
+
+} // namespace
+
+HostService::HostService()
+    : Service<QCoreApplication>(QStringLiteral("aspia-host-service"))
+{
+    // Nothing
+}
+
+void HostService::start()
+{
+    QCoreApplication* app = application();
+
+    app->setOrganizationName(QStringLiteral("Aspia"));
+    app->setApplicationName(QStringLiteral("Host"));
+    app->setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+
+    file_logger_.reset(new FileLogger());
+    file_logger_->startLogging(*app);
+
+    com_initializer_.reset(new ScopedCOMInitializer());
+    if (!com_initializer_->IsSucceeded())
+    {
+        qFatal("COM not initialized");
+        app->quit();
+        return;
+    }
+
+    InitializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+
+    QSettings settings;
+    int port = settings.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();
+
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+    {
+        firewall.addTCPRule(kFirewallRuleName,
+                            QCoreApplication::tr("Allow incoming connections"),
+                            port);
+    }
+
+    server_ = new Server();
+
+    if (!server_->start(port))
+    {
+        delete server_;
+        app->quit();
+    }
+}
+
+void HostService::stop()
+{
+    delete server_;
+
+    // Limiting the scope of the class.
+    // After deinitializing the COM, the destructor will not be able to complete its work.
+    {
+        FirewallManager firewall(QCoreApplication::applicationFilePath());
+        if (firewall.isValid())
+            firewall.deleteRuleByName(kFirewallRuleName);
+    }
+
+    com_initializer_.reset();
+}
+
+void HostService::sessionChange(quint32 event, quint32 session_id)
+{
+    if (!server_.isNull())
+        server_->setSessionChanged(event, session_id);
+}
+
+} // namespace aspia

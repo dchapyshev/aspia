@@ -7,12 +7,18 @@
 
 #include "host/input_injector.h"
 
+#include <QPoint>
 #include <QRect>
+#include <QSet>
 #include <QSettings>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <sas.h>
 
 #include "base/system_error_code.h"
 #include "base/keycode_converter.h"
+#include "desktop_capture/scoped_thread_desktop.h"
 
 namespace aspia {
 
@@ -66,9 +72,28 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
         qWarning() << "SendInput failed: " << lastSystemErrorString();
 }
 
-} // namespace
+class InputInjectorImpl
+{
+public:
+    InputInjectorImpl() = default;
+    ~InputInjectorImpl();
 
-InputInjector::~InputInjector()
+    void injectPointerEvent(const proto::desktop::PointerEvent& event);
+    void injectKeyEvent(const proto::desktop::KeyEvent& event);
+
+private:
+    void switchToInputDesktop();
+    bool isCtrlAndAltPressed();
+
+    ScopedThreadDesktop desktop_;
+    QSet<quint32> pressed_keys_;
+    QPoint prev_mouse_pos_;
+    quint32 prev_mouse_button_mask_ = 0;
+
+    Q_DISABLE_COPY(InputInjectorImpl)
+};
+
+InputInjectorImpl::~InputInjectorImpl()
 {
     for (auto usb_keycode : pressed_keys_)
     {
@@ -81,21 +106,7 @@ InputInjector::~InputInjector()
     }
 }
 
-void InputInjector::switchToInputDesktop()
-{
-    Desktop input_desktop(Desktop::inputDesktop());
-
-    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
-    {
-        desktop_.setThreadDesktop(std::move(input_desktop));
-    }
-
-    // We send a notification to the system that it is used to prevent
-    // the screen saver, going into hibernation mode, etc.
-    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
-}
-
-void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
+void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& event)
 {
     switchToInputDesktop();
 
@@ -108,7 +119,7 @@ void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
     QPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
-               ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
+        ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
@@ -172,7 +183,7 @@ void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event
     prev_mouse_button_mask_ = mask;
 }
 
-void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     if (event.flags() & proto::desktop::KeyEvent::PRESSED)
     {
@@ -231,7 +242,21 @@ void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
-bool InputInjector::isCtrlAndAltPressed()
+void InputInjectorImpl::switchToInputDesktop()
+{
+    Desktop input_desktop(Desktop::inputDesktop());
+
+    if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
+    {
+        desktop_.setThreadDesktop(std::move(input_desktop));
+    }
+
+    // We send a notification to the system that it is used to prevent
+    // the screen saver, going into hibernation mode, etc.
+    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+}
+
+bool InputInjectorImpl::isCtrlAndAltPressed()
 {
     bool ctrl_pressed = false;
     bool alt_pressed = false;
@@ -246,6 +271,77 @@ bool InputInjector::isCtrlAndAltPressed()
     }
 
     return ctrl_pressed && alt_pressed;
+}
+
+} // namespace
+
+InputInjector::InputInjector(QObject* parent)
+    : QThread(parent)
+{
+    start(QThread::HighPriority);
+}
+
+InputInjector::~InputInjector()
+{
+    {
+        std::scoped_lock<std::mutex> lock(input_queue_lock_);
+        terminate_ = true;
+        input_event_.notify_one();
+    }
+
+    wait();
+}
+
+void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
+{
+    std::scoped_lock<std::mutex> lock(input_queue_lock_);
+    incoming_input_queue_.emplace(event);
+    input_event_.notify_one();
+}
+
+void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
+{
+    std::scoped_lock<std::mutex> lock(input_queue_lock_);
+    incoming_input_queue_.emplace(event);
+    input_event_.notify_one();
+}
+
+void InputInjector::run()
+{
+    InputInjectorImpl impl;
+
+    while (true)
+    {
+        std::queue<InputEvent> work_input_queue;
+
+        {
+            std::unique_lock<std::mutex> lock(input_queue_lock_);
+
+            while (incoming_input_queue_.empty() && !terminate_)
+                input_event_.wait(lock);
+
+            if (terminate_)
+                return;
+
+            work_input_queue.swap(incoming_input_queue_);
+        }
+
+        while (!work_input_queue.empty())
+        {
+            const InputEvent& input_event = work_input_queue.front();
+
+            if (std::holds_alternative<proto::desktop::KeyEvent>(input_event))
+            {
+                impl.injectKeyEvent(std::get<proto::desktop::KeyEvent>(input_event));
+            }
+            else if (std::holds_alternative<proto::desktop::PointerEvent>(input_event))
+            {
+                impl.injectPointerEvent(std::get<proto::desktop::PointerEvent>(input_event));
+            }
+
+            work_input_queue.pop();
+        }
+    }
 }
 
 } // namespace aspia

@@ -8,44 +8,71 @@
 #ifndef _ASPIA_HOST__SCREEN_UPDATER_H
 #define _ASPIA_HOST__SCREEN_UPDATER_H
 
-#include "base/threading/thread.h"
-#include "desktop_capture/capture_scheduler.h"
-#include "desktop_capture/capturer_gdi.h"
+#include <QEvent>
+#include <QThread>
+
+#include <condition_variable>
+#include <memory>
+#include <mutex>
+
+#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
-class ScreenUpdater : private Thread::Delegate
+class ScreenUpdater : public QThread
 {
+    Q_OBJECT
+
 public:
-    enum class Mode { SCREEN_WITH_CURSOR, SCREEN };
-
-    using ScreenUpdateCallback =
-        std::function<void(const DesktopFrame* screen_frame,
-                           std::unique_ptr<MouseCursor> mouse_cursor)>;
-
-    ScreenUpdater(Mode mode,
-                  const std::chrono::milliseconds& update_interval,
-                  ScreenUpdateCallback screen_update_callback);
+    ScreenUpdater(const proto::desktop::Config& config, QObject* parent);
     ~ScreenUpdater();
 
-    void PostUpdateRequest();
+    void update();
+
+    class UpdateEvent : public QEvent
+    {
+    public:
+        static const int kType = QEvent::User + 1;
+
+        UpdateEvent()
+            : QEvent(static_cast<QEvent::Type>(kType))
+        {
+            // Nothing
+        }
+
+        std::unique_ptr<aspia::proto::desktop::VideoPacket> video_packet;
+        std::unique_ptr<aspia::proto::desktop::CursorShape> cursor_shape;
+
+    private:
+        Q_DISABLE_COPY(UpdateEvent)
+    };
+
+    class ErrorEvent : public QEvent
+    {
+    public:
+        static const int kType = QEvent::User + 2;
+
+        ErrorEvent()
+            : QEvent(static_cast<QEvent::Type>(kType))
+        {
+            // Nothing
+        }
+
+    private:
+        Q_DISABLE_COPY(ErrorEvent)
+    };
+
+protected:
+    // QThread implementation.
+    void run() override;
 
 private:
-    // Thread::Delegate implementation.
-    void OnBeforeThreadRunning() final;
-    void OnAfterThreadRunning() final;
+    std::condition_variable update_condition_;
+    std::mutex update_lock_;
+    bool update_required_ = false;
+    bool terminate_ = false;
 
-    void UpdateScreen();
-
-    ScreenUpdateCallback screen_update_callback_;
-
-    Thread thread_;
-    std::shared_ptr<MessageLoopProxy> runner_;
-    std::unique_ptr<Capturer> capturer_;
-    CaptureScheduler scheduler_;
-
-    const Mode mode_;
-    const std::chrono::milliseconds update_interval_;
+    proto::desktop::Config config_;
 
     Q_DISABLE_COPY(ScreenUpdater)
 };

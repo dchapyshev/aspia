@@ -19,6 +19,11 @@ HostProcess::HostProcess(QObject* parent)
     impl_.reset(new HostProcessImpl(this));
 }
 
+HostProcess::~HostProcess()
+{
+    impl_.reset();
+}
+
 void HostProcess::start(quint32 session_id,
                         Account account,
                         const QString& program,
@@ -115,21 +120,6 @@ void HostProcess::start()
 void HostProcess::kill()
 {
     impl_->killProcess();
-}
-
-void HostProcess::processStarted()
-{
-    emit started();
-}
-
-void HostProcess::processFinished()
-{
-    emit finished();
-}
-
-void HostProcess::processError()
-{
-    emit errorOccurred();
 }
 
 } // namespace aspia

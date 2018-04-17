@@ -17,7 +17,7 @@ namespace {
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
+quint8* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
     return const_cast<quint8*>(reinterpret_cast<const quint8*>(packet->mutable_data()->data()));
@@ -97,7 +97,8 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
 
 std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const DesktopFrame* frame)
 {
-    std::unique_ptr<proto::desktop::VideoPacket> packet(new proto::desktop::VideoPacket());
+    std::unique_ptr<proto::desktop::VideoPacket> packet =
+        std::make_unique<proto::desktop::VideoPacket>();
 
     packet->set_encoding(proto::desktop::VIDEO_ENCODING_ZLIB);
 

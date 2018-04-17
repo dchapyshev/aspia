@@ -166,15 +166,16 @@ QString createCommandLine(const QString& program, const QStringList& arguments)
     {
         QString program_name = program;
 
-        if (!program_name.startsWith('\"') && !program_name.endsWith('\"') &&
-            program_name.contains(' '))
+        if (!program_name.startsWith(QLatin1Char('\"')) &&
+            !program_name.endsWith(QLatin1Char('\"')) &&
+            program_name.contains(QLatin1Char(' ')))
         {
-            program_name = '\"' + program_name + '\"';
+            program_name = QLatin1Char('\"') + program_name + QLatin1Char('\"');
         }
 
-        program_name.replace('/', '\\');
+        program_name.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
-        args = program_name + ' ';
+        args = program_name + QLatin1Char(' ');
     }
 
     for (int i = 0; i < arguments.size(); ++i)
@@ -182,21 +183,21 @@ QString createCommandLine(const QString& program, const QStringList& arguments)
         QString tmp = arguments.at(i);
 
         // Quotes are escaped and their preceding backslashes are doubled.
-        tmp.replace(QRegExp(QStringLiteral("(\\\\*)\"")), QStringLiteral("\\1\\1\\\""));
+        tmp.replace(QRegExp(QLatin1String("(\\\\*)\"")), QLatin1String("\\1\\1\\\""));
 
-        if (tmp.isEmpty() || tmp.contains(' ') || tmp.contains('\t'))
+        if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains(QLatin1Char('\t')))
         {
             // The argument must not end with a \ since this would be interpreted as escaping the
             // quote -- rather put the \ behind the quote: e.g. rather use "foo"\ than "foo\"
             int len = tmp.length();
-            while (len > 0 && tmp.at(len - 1) == '\\')
+            while (len > 0 && tmp.at(len - 1) == QLatin1Char('\\'))
                 --len;
 
-            tmp.insert(len, '"');
-            tmp.prepend('"');
+            tmp.insert(len, QLatin1Char('\"'));
+            tmp.prepend(QLatin1Char('\"'));
         }
 
-        args += ' ' + tmp;
+        args += QLatin1Char(' ') + tmp;
     }
 
     return args;
@@ -210,6 +211,11 @@ HostProcessImpl::HostProcessImpl(HostProcess* process)
     // Nothing
 }
 
+HostProcessImpl::~HostProcessImpl()
+{
+    delete finish_notifier_;
+}
+
 void HostProcessImpl::startProcess()
 {
     state_ = HostProcess::Starting;
@@ -221,7 +227,7 @@ void HostProcessImpl::startProcess()
         if (!createSessionToken(session_id_, &session_token))
         {
             state_ = HostProcess::NotRunning;
-            process_->processError();
+            emit process_->errorOccurred();
             return;
         }
     }
@@ -232,7 +238,7 @@ void HostProcessImpl::startProcess()
         if (!createLoggedOnUserToken(session_id_, &session_token))
         {
             state_ = HostProcess::NotRunning;
-            process_->processError();
+            emit process_->errorOccurred();
             return;
         }
     }
@@ -240,7 +246,7 @@ void HostProcessImpl::startProcess()
     if (!startProcessWithToken(session_token))
     {
         state_ = HostProcess::NotRunning;
-        process_->processError();
+        emit process_->errorOccurred();
         return;
     }
 
@@ -249,7 +255,7 @@ void HostProcessImpl::startProcess()
     QObject::connect(finish_notifier_, &QWinEventNotifier::activated, [this](HANDLE /* handle */)
     {
         state_ = HostProcess::NotRunning;
-        process_->processFinished();
+        emit process_->finished();
     });
 
     finish_notifier_->setEnabled(true);
@@ -271,7 +277,7 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
     startup_info.cb = sizeof(startup_info);
     startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
-    PVOID environment = nullptr;
+    void* environment = nullptr;
 
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
@@ -286,7 +292,7 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
 
     if (!CreateProcessAsUserW(token,
                               nullptr,
-                              const_cast<LPWSTR>(reinterpret_cast<const wchar_t*>(
+                              const_cast<wchar_t*>(reinterpret_cast<const wchar_t*>(
                                   command_line.utf16())),
                               nullptr,
                               nullptr,

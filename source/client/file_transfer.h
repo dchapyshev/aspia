@@ -66,8 +66,8 @@ public:
         }
 
         QString name;
-        qint64 size;
         bool is_directory;
+        qint64 size;
     };
 
     FileTransfer(Type type, QObject* parent);
