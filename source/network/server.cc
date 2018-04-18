@@ -12,7 +12,7 @@
 
 #include "host/host.h"
 #include "host/host_user_authorizer.h"
-#include "network/channel.h"
+#include "network/network_channel.h"
 
 namespace aspia {
 
@@ -82,7 +82,8 @@ void Server::onNewConnection()
     {
         HostUserAuthorizer* authorizer = new HostUserAuthorizer(this);
 
-        authorizer->setChannel(new Channel(server_->nextPendingConnection(), nullptr));
+        authorizer->setNetworkChannel(
+            new NetworkChannel(server_->nextPendingConnection(), nullptr));
         authorizer->setUserList(user_list_);
 
         // If successful authorization, create a session.
@@ -99,7 +100,7 @@ void Server::onAuthorizationFinished(HostUserAuthorizer* authorizer)
     if (authorizer->status() != proto::auth::STATUS_SUCCESS)
         return;
 
-    Host* host = new Host(authorizer->sessionType(), authorizer->takeChannel(), this);
+    Host* host = new Host(authorizer->sessionType(), authorizer->takeNetworkChannel(), this);
 
     connect(this, &Server::sessionChanged, host, &Host::sessionChanged);
     connect(host, &Host::finished, this, &Server::onHostFinished);

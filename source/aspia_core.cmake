@@ -273,10 +273,10 @@ list(APPEND SOURCE_HOST_WIN
     ${PROJECT_SOURCE_DIR}/host/win/host_service_main.h)
 
 list(APPEND SOURCE_NETWORK
-    ${PROJECT_SOURCE_DIR}/network/channel.cc
-    ${PROJECT_SOURCE_DIR}/network/channel.h
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.cc
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
+    ${PROJECT_SOURCE_DIR}/network/network_channel.cc
+    ${PROJECT_SOURCE_DIR}/network/network_channel.h
     ${PROJECT_SOURCE_DIR}/network/server.cc
     ${PROJECT_SOURCE_DIR}/network/server.h)
 

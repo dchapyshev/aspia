@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__CLIENT_H
 
 #include "client/client_session.h"
-#include "network/channel.h"
+#include "network/network_channel.h"
 #include "protocol/computer.pb.h"
 
 namespace aspia {
@@ -35,7 +35,7 @@ private slots:
     void authorizationFinished(proto::auth::Status status);
 
 private:
-    QPointer<Channel> channel_;
+    QPointer<NetworkChannel> network_channel_;
     QPointer<StatusDialog> status_dialog_;
     QPointer<ClientUserAuthorizer> authorizer_;
     QPointer<ClientSession> session_;

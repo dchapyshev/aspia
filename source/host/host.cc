@@ -16,17 +16,19 @@
 #include "host/win/host_process.h"
 #include "host/ipc_channel.h"
 #include "host/ipc_server.h"
-#include "network/channel.h"
+#include "network/network_channel.h"
 
 namespace aspia {
 
-Host::Host(proto::auth::SessionType session_type, Channel* channel, QObject* parent)
+Host::Host(proto::auth::SessionType session_type, NetworkChannel* network_channel, QObject* parent)
     : QObject(parent),
       session_type_(session_type),
-      network_channel_(channel)
+      network_channel_(network_channel)
 {
     Q_ASSERT(!network_channel_.isNull());
-    connect(network_channel_, &Channel::disconnected, network_channel_, &Channel::deleteLater);
+
+    connect(network_channel_, &NetworkChannel::disconnected,
+            network_channel_, &NetworkChannel::deleteLater);
 }
 
 Host::~Host()
@@ -38,9 +40,9 @@ void Host::start()
 {
     state_ = StartingState;
 
-    connect(network_channel_, &Channel::disconnected, this, &Host::stop);
-    connect(network_channel_, &Channel::messageWritten, this, &Host::networkMessageWritten);
-    connect(network_channel_, &Channel::messageReceived, this, &Host::networkMessageReceived);
+    connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
+    connect(network_channel_, &NetworkChannel::messageWritten, this, &Host::networkMessageWritten);
+    connect(network_channel_, &NetworkChannel::messageReceived, this, &Host::networkMessageReceived);
 
     attach_timer_id_ = startTimer(std::chrono::minutes(1));
     if (!attach_timer_id_)

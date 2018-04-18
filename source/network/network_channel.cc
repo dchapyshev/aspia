@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            network/channel.cc
+// FILE:            network/network_channel.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "network/channel.h"
+#include "network/network_channel.h"
 
 #include <QtEndian>
 
@@ -18,7 +18,7 @@ constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
 
 } // namespace
 
-Channel::Channel(QTcpSocket* socket, QObject* parent)
+NetworkChannel::NetworkChannel(QTcpSocket* socket, QObject* parent)
     : QObject(parent),
       socket_(socket)
 {
@@ -26,33 +26,33 @@ Channel::Channel(QTcpSocket* socket, QObject* parent)
 
     socket_->setParent(this);
 
-    connect(socket_, &QTcpSocket::connected, this, &Channel::onConnected);
-    connect(socket_, &QTcpSocket::disconnected, this, &Channel::disconnected);
-    connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
+    connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
+    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected);
+    connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
+    connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &Channel::onError);
+            this, &NetworkChannel::onError);
 
     read_buffer_.reserve(kReadBufferReservedSize);
 }
 
-Channel::~Channel()
+NetworkChannel::~NetworkChannel()
 {
     socket_->abort();
 }
 
 // static
-Channel* Channel::createClient(QObject* parent)
+NetworkChannel* NetworkChannel::createClient(QObject* parent)
 {
-    return new Channel(new QTcpSocket(), parent);
+    return new NetworkChannel(new QTcpSocket(), parent);
 }
 
-void Channel::connectToHost(const QString& address, int port)
+void NetworkChannel::connectToHost(const QString& address, int port)
 {
     socket_->connectToHost(address, port);
 }
 
-void Channel::readMessage()
+void NetworkChannel::readMessage()
 {
     Q_ASSERT(!read_required_);
 
@@ -60,7 +60,7 @@ void Channel::readMessage()
     onReadyRead();
 }
 
-void Channel::writeMessage(int message_id, const QByteArray& buffer)
+void NetworkChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
     bool schedule_write = write_queue_.empty();
 
@@ -70,23 +70,23 @@ void Channel::writeMessage(int message_id, const QByteArray& buffer)
         scheduleWrite();
 }
 
-void Channel::stop()
+void NetworkChannel::stop()
 {
     socket_->abort();
 }
 
-void Channel::onConnected()
+void NetworkChannel::onConnected()
 {
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
     emit connected();
 }
 
-void Channel::onError(QAbstractSocket::SocketError /* error */)
+void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
 {
     emit errorOccurred(socket_->errorString());
 }
 
-void Channel::onBytesWritten(qint64 bytes)
+void NetworkChannel::onBytesWritten(qint64 bytes)
 {
     written_ += bytes;
 
@@ -114,7 +114,7 @@ void Channel::onBytesWritten(qint64 bytes)
     }
 }
 
-void Channel::onReadyRead()
+void NetworkChannel::onReadyRead()
 {
     if (!read_required_)
         return;
@@ -166,7 +166,7 @@ void Channel::onReadyRead()
     }
 }
 
-void Channel::scheduleWrite()
+void NetworkChannel::scheduleWrite()
 {
     const QByteArray& write_buffer = write_queue_.front().second;
 

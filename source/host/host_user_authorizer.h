@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-class Channel;
+class NetworkChannel;
 
 class HostUserAuthorizer : public QObject
 {
@@ -36,9 +36,9 @@ public:
     ~HostUserAuthorizer();
 
     void setUserList(const UserList& user_list);
-    void setChannel(Channel* channel);
+    void setNetworkChannel(NetworkChannel* network_channel);
 
-    Channel* takeChannel();
+    NetworkChannel* takeNetworkChannel();
     proto::auth::Status status() const;
     proto::auth::SessionType sessionType() const;
 
@@ -63,7 +63,7 @@ private:
     State state_ = NotStarted;
 
     UserList user_list_;
-    QScopedPointer<Channel> channel_;
+    QScopedPointer<NetworkChannel> network_channel_;
 
     QByteArray nonce_;
     int timer_id_ = 0;

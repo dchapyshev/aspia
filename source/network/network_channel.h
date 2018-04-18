@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            network/channel.h
+// FILE:            network/network_channel.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_NETWORK__CHANNEL_H
-#define _ASPIA_NETWORK__CHANNEL_H
+#ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_H
+#define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
 #include <QPair>
 #include <QPointer>
@@ -17,14 +17,14 @@ namespace aspia {
 
 class Server;
 
-class Channel : public QObject
+class NetworkChannel : public QObject
 {
     Q_OBJECT
 
 public:
-    ~Channel();
+    ~NetworkChannel();
 
-    static Channel* createClient(QObject* parent = nullptr);
+    static NetworkChannel* createClient(QObject* parent = nullptr);
 
     void connectToHost(const QString& address, int port);
 
@@ -49,7 +49,7 @@ private slots:
 private:
     friend class Server;
 
-    Channel(QTcpSocket* socket, QObject* parent);
+    NetworkChannel(QTcpSocket* socket, QObject* parent);
 
     void scheduleWrite();
 
@@ -67,9 +67,9 @@ private:
     MessageSizeType read_size_ = 0;
     qint64 read_ = 0;
 
-    Q_DISABLE_COPY(Channel)
+    Q_DISABLE_COPY(NetworkChannel)
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_NETWORK__CHANNEL_H
+#endif // _ASPIA_NETWORK__NETWORK_CHANNEL_H

@@ -13,7 +13,7 @@
 #include <random>
 
 #include "base/message_serialization.h"
-#include "network/channel.h"
+#include "network/network_channel.h"
 
 namespace aspia {
 
@@ -63,14 +63,14 @@ void HostUserAuthorizer::setUserList(const UserList& user_list)
     user_list_ = user_list;
 }
 
-void HostUserAuthorizer::setChannel(Channel* channel)
+void HostUserAuthorizer::setNetworkChannel(NetworkChannel* network_channel)
 {
-    channel_.reset(channel);
+    network_channel_.reset(network_channel);
 }
 
-Channel* HostUserAuthorizer::takeChannel()
+NetworkChannel* HostUserAuthorizer::takeNetworkChannel()
 {
-    return channel_.take();
+    return network_channel_.take();
 }
 
 proto::auth::Status HostUserAuthorizer::status() const
@@ -91,7 +91,7 @@ void HostUserAuthorizer::start()
         return;
     }
 
-    if (user_list_.isEmpty() || channel_.isNull())
+    if (user_list_.isEmpty() || network_channel_.isNull())
     {
         qWarning("Empty user list or invalid network channel");
         stop();
@@ -102,11 +102,20 @@ void HostUserAuthorizer::start()
     // the connection will be closed.
     timer_id_ = startTimer(std::chrono::minutes(2));
 
-    connect(channel_.data(), &Channel::disconnected, this, &HostUserAuthorizer::stop);
-    connect(channel_.data(), &Channel::messageReceived, this, &HostUserAuthorizer::messageReceived);
-    connect(channel_.data(), &Channel::messageWritten, this, &HostUserAuthorizer::messageWritten);
-    connect(this, &HostUserAuthorizer::writeMessage, channel_.data(), &Channel::writeMessage);
-    connect(this, &HostUserAuthorizer::readMessage, channel_.data(), &Channel::readMessage);
+    connect(network_channel_.data(), &NetworkChannel::disconnected,
+            this, &HostUserAuthorizer::stop);
+
+    connect(network_channel_.data(), &NetworkChannel::messageReceived,
+            this, &HostUserAuthorizer::messageReceived);
+
+    connect(network_channel_.data(), &NetworkChannel::messageWritten,
+            this, &HostUserAuthorizer::messageWritten);
+
+    connect(this, &HostUserAuthorizer::writeMessage,
+            network_channel_.data(), &NetworkChannel::writeMessage);
+
+    connect(this, &HostUserAuthorizer::readMessage,
+            network_channel_.data(), &NetworkChannel::readMessage);
 
     nonce_ = generateNonce();
     if (nonce_.isEmpty())
@@ -136,7 +145,7 @@ void HostUserAuthorizer::stop()
         timer_id_ = 0;
     }
 
-    channel_.reset();
+    network_channel_.reset();
 
     state_ = Finished;
     session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;

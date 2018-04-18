@@ -16,10 +16,10 @@
 
 namespace aspia {
 
-class Channel;
 class HostProcess;
 class IpcChannel;
 class IpcServer;
+class NetworkChannel;
 
 class Host : public QObject
 {
@@ -35,7 +35,9 @@ public:
     };
     Q_ENUM(State);
 
-    Host(proto::auth::SessionType session_type, Channel* channel, QObject* parent = nullptr);
+    Host(proto::auth::SessionType session_type,
+         NetworkChannel* network_channel,
+         QObject* parent = nullptr);
     ~Host();
 
 public slots:
@@ -67,7 +69,7 @@ private:
     int attach_timer_id_ = 0;
     State state_ = StoppedState;
 
-    QPointer<Channel> network_channel_;
+    QPointer<NetworkChannel> network_channel_;
     QPointer<IpcChannel> ipc_channel_;
     QPointer<HostProcess> session_process_;
 

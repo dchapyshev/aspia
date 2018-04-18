@@ -21,15 +21,15 @@ Client::Client(const proto::Computer& computer, QObject* parent)
       computer_(computer)
 {
     // Create a network channel.
-    channel_ = Channel::createClient(this);
+    network_channel_ = NetworkChannel::createClient(this);
 
     // Create a status dialog. It displays all information about the progress of the connection
     // and errors.
     status_dialog_ = new StatusDialog();
 
-    connect(channel_, &Channel::connected, this, &Client::onChannelConnected);
-    connect(channel_, &Channel::errorOccurred, this, &Client::onChannelError);
-    connect(channel_, &Channel::disconnected, this, &Client::onChannelDisconnected);
+    connect(network_channel_, &NetworkChannel::connected, this, &Client::onChannelConnected);
+    connect(network_channel_, &NetworkChannel::errorOccurred, this, &Client::onChannelError);
+    connect(network_channel_, &NetworkChannel::disconnected, this, &Client::onChannelDisconnected);
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
@@ -37,7 +37,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
         clientTerminated();
 
         // When the status dialog is finished, we stop the connection.
-        channel_->stop();
+        network_channel_->stop();
 
         // Delete the dialog after the finish.
         status_dialog_->deleteLater();
@@ -50,7 +50,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
     status_dialog_->activateWindow();
 
     status_dialog_->addStatus(tr("Attempt to connect to %1:%2.").arg(address).arg(port));
-    channel_->connectToHost(address, port);
+    network_channel_->connectToHost(address, port);
 }
 
 void Client::onChannelConnected()
@@ -64,11 +64,20 @@ void Client::onChannelConnected()
     authorizer_->setPassword(QString::fromStdString(computer_.password()));
 
     // Connect authorizer to network.
-    connect(authorizer_, &ClientUserAuthorizer::writeMessage, channel_, &Channel::writeMessage);
-    connect(authorizer_, &ClientUserAuthorizer::readMessage, channel_, &Channel::readMessage);
-    connect(channel_, &Channel::messageReceived, authorizer_, &ClientUserAuthorizer::messageReceived);
-    connect(channel_, &Channel::messageWritten, authorizer_, &ClientUserAuthorizer::messageWritten);
-    connect(channel_, &Channel::disconnected, authorizer_, &ClientUserAuthorizer::cancel);
+    connect(authorizer_, &ClientUserAuthorizer::writeMessage,
+            network_channel_, &NetworkChannel::writeMessage);
+
+    connect(authorizer_, &ClientUserAuthorizer::readMessage,
+            network_channel_, &NetworkChannel::readMessage);
+
+    connect(network_channel_, &NetworkChannel::messageReceived,
+            authorizer_, &ClientUserAuthorizer::messageReceived);
+
+    connect(network_channel_, &NetworkChannel::messageWritten,
+            authorizer_, &ClientUserAuthorizer::messageWritten);
+
+    connect(network_channel_, &NetworkChannel::disconnected,
+            authorizer_, &ClientUserAuthorizer::cancel);
 
     connect(authorizer_, &ClientUserAuthorizer::errorOccurred,
             status_dialog_, &StatusDialog::addStatus);
@@ -134,21 +143,21 @@ void Client::authorizationFinished(proto::auth::Status status)
     }
 
     // Messages received from the network are sent to the session.
-    connect(session_, &ClientSession::readMessage, channel_, &Channel::readMessage);
-    connect(channel_, &Channel::messageReceived, session_, &ClientSession::messageReceived);
-    connect(session_, &ClientSession::writeMessage, channel_, &Channel::writeMessage);
-    connect(channel_, &Channel::messageWritten, session_, &ClientSession::messageWritten);
-    connect(channel_, &Channel::disconnected, session_, &ClientSession::closeSession);
+    connect(session_, &ClientSession::readMessage, network_channel_, &NetworkChannel::readMessage);
+    connect(network_channel_, &NetworkChannel::messageReceived, session_, &ClientSession::messageReceived);
+    connect(session_, &ClientSession::writeMessage, network_channel_, &NetworkChannel::writeMessage);
+    connect(network_channel_, &NetworkChannel::messageWritten, session_, &ClientSession::messageWritten);
+    connect(network_channel_, &NetworkChannel::disconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, &ClientSession::closedByUser, channel_, &Channel::stop);
+    connect(session_, &ClientSession::closedByUser, network_channel_, &NetworkChannel::stop);
     connect(session_, &ClientSession::closedByUser, status_dialog_, &StatusDialog::close);
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
     connect(session_, &ClientSession::errorOccurred, this, [this](const QString& message)
     {
         status_dialog_->addStatus(message);
-        channel_->stop();
+        network_channel_->stop();
     });
 
     status_dialog_->addStatus(tr("Session started."));
