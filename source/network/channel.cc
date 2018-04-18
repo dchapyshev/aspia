@@ -23,25 +23,10 @@ Channel::Channel(QTcpSocket* socket, QObject* parent)
       socket_(socket)
 {
     Q_ASSERT(socket_);
-    initChannel();
-}
 
-Channel::Channel(QObject* parent)
-    : QObject(parent),
-      socket_(new QTcpSocket(this))
-{
-    initChannel();
+    socket_->setParent(this);
+
     connect(socket_, &QTcpSocket::connected, this, &Channel::onConnected);
-}
-
-Channel::~Channel()
-{
-    socket_->abort();
-    delete socket_;
-}
-
-void Channel::initChannel()
-{
     connect(socket_, &QTcpSocket::disconnected, this, &Channel::disconnected);
     connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
@@ -49,6 +34,17 @@ void Channel::initChannel()
             this, &Channel::onError);
 
     read_buffer_.reserve(kReadBufferReservedSize);
+}
+
+Channel::~Channel()
+{
+    socket_->abort();
+}
+
+// static
+Channel* Channel::createClient(QObject* parent)
+{
+    return new Channel(new QTcpSocket(), parent);
 }
 
 void Channel::connectToHost(const QString& address, int port)
@@ -140,7 +136,7 @@ void Channel::onReadyRead()
             if (!read_size_ || read_size_ > kMaxMessageSize)
             {
                 qWarning() << "Wrong message size: " << read_size_;
-                abort();
+                socket_->abort();
                 return;
             }
 
@@ -177,7 +173,7 @@ void Channel::scheduleWrite()
     write_size_ = static_cast<MessageSizeType>(write_buffer.size());
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
-        abort();
+        socket_->abort();
         return;
     }
 

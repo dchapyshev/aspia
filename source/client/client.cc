@@ -21,7 +21,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
       computer_(computer)
 {
     // Create a network channel.
-    channel_ = new Channel(this);
+    channel_ = Channel::createClient(this);
 
     // Create a status dialog. It displays all information about the progress of the connection
     // and errors.

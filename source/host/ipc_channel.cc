@@ -24,26 +24,10 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
       socket_(socket)
 {
     Q_ASSERT(socket_);
+
     socket_->setParent(this);
-    initChannel();
-}
 
-IpcChannel::IpcChannel(QObject* parent)
-    : QObject(parent),
-      socket_(new QLocalSocket(this))
-{
-    initChannel();
     connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
-}
-
-IpcChannel::~IpcChannel()
-{
-    socket_->abort();
-    delete socket_;
-}
-
-void IpcChannel::initChannel()
-{
     connect(socket_, &QLocalSocket::disconnected, this, &IpcChannel::disconnected);
     connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
@@ -56,6 +40,17 @@ void IpcChannel::initChannel()
     });
 
     read_buffer_.reserve(kReadBufferReservedSize);
+}
+
+IpcChannel::~IpcChannel()
+{
+    socket_->abort();
+}
+
+// static
+IpcChannel* IpcChannel::createClient(QObject* parent)
+{
+    return new IpcChannel(new QLocalSocket(), parent);
 }
 
 void IpcChannel::connectToServer(const QString& channel_name)
@@ -135,7 +130,7 @@ void IpcChannel::onReadyRead()
             if (!read_size_ || read_size_ > kMaxMessageSize)
             {
                 qWarning() << "Wrong message size: " << read_size_;
-                abort();
+                socket_->abort();
                 return;
             }
 
@@ -173,7 +168,7 @@ void IpcChannel::scheduleWrite()
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
         qWarning() << "Wrong message size: " << write_size_;
-        abort();
+        socket_->abort();
         return;
     }
 

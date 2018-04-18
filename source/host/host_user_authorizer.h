@@ -23,20 +23,33 @@ class HostUserAuthorizer : public QObject
     Q_OBJECT
 
 public:
+    enum State
+    {
+        NotStarted,
+        RequestWrite,
+        WaitForResponse,
+        ResultWrite,
+        Finished
+    };
+
     HostUserAuthorizer(QObject* parent = nullptr);
     ~HostUserAuthorizer();
 
     void setUserList(const UserList& user_list);
     void setChannel(Channel* channel);
 
+    Channel* takeChannel();
+    proto::auth::Status status() const;
+    proto::auth::SessionType sessionType() const;
+
 public slots:
     void start();
-    void abort();
+    void stop();
 
 signals:
-    void started();
-    void finished();
-    void createSession(proto::auth::SessionType session_type, Channel* channel);
+    void finished(HostUserAuthorizer* authorizer);
+    void writeMessage(int message_id, const QByteArray& buffer);
+    void readMessage();
 
 protected:
     // QObject implementation.
@@ -44,9 +57,11 @@ protected:
 
 private slots:
     void messageWritten(int message_id);
-    void readMessage(const QByteArray& buffer);
+    void messageReceived(const QByteArray& buffer);
 
 private:
+    State state_ = NotStarted;
+
     UserList user_list_;
     QScopedPointer<Channel> channel_;
 

@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-UserList ReadUserList()
+UserList readUserList()
 {
     UserList user_list;
 
@@ -39,7 +39,7 @@ UserList ReadUserList()
     return user_list;
 }
 
-bool WriteUserList(const UserList& user_list)
+bool writeUserList(const UserList& user_list)
 {
     QSettings settings(QSettings::SystemScope, "Aspia", "Host");
 

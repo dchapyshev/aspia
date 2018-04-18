@@ -25,7 +25,8 @@ Host::Host(proto::auth::SessionType session_type, Channel* channel, QObject* par
       session_type_(session_type),
       network_channel_(channel)
 {
-    Q_ASSERT(network_channel_);
+    Q_ASSERT(!network_channel_.isNull());
+    connect(network_channel_, &Channel::disconnected, network_channel_, &Channel::deleteLater);
 }
 
 Host::~Host()
@@ -35,14 +36,11 @@ Host::~Host()
 
 void Host::start()
 {
-    emit started();
-
     state_ = StartingState;
 
     connect(network_channel_, &Channel::disconnected, this, &Host::stop);
-    connect(network_channel_, &Channel::messageReceived, this, &Host::networkMessage);
-
-    network_channel_->readMessage();
+    connect(network_channel_, &Channel::messageWritten, this, &Host::networkMessageWritten);
+    connect(network_channel_, &Channel::messageReceived, this, &Host::networkMessageReceived);
 
     attach_timer_id_ = startTimer(std::chrono::minutes(1));
     if (!attach_timer_id_)
@@ -71,9 +69,7 @@ void Host::stop()
         attach_timer_id_ = 0;
     }
 
-    delete network_channel_;
-
-    emit finished();
+    emit finished(this);
 }
 
 void Host::sessionChanged(quint32 event, quint32 session_id)
@@ -99,30 +95,31 @@ void Host::sessionChanged(quint32 event, quint32 session_id)
 void Host::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == attach_timer_id_)
-    {
         stop();
-    }
 }
 
-void Host::networkMessage(const QByteArray& buffer)
+void Host::networkMessageWritten(int message_id)
 {
-    if (state_ == AttachedState)
+    if (!ipc_channel_.isNull())
+        ipc_channel_->readMessage();
+}
+
+void Host::networkMessageReceived(const QByteArray& buffer)
+{
+    if (!ipc_channel_.isNull())
         ipc_channel_->writeMessage(-1, buffer);
-    else
-        read_queue_.push_back(buffer);
-
-    network_channel_->readMessage();
 }
 
-void Host::ipcMessage(const QByteArray& buffer)
+void Host::ipcMessageWritten(int message_id)
 {
-    if (network_channel_)
-    {
-        network_channel_->writeMessage(-1, buffer);
+    if (!network_channel_.isNull())
+        network_channel_->readMessage();
+}
 
-        if (ipc_channel_)
-            ipc_channel_->readMessage();
-    }
+void Host::ipcMessageReceived(const QByteArray& buffer)
+{
+    if (!network_channel_.isNull())
+        network_channel_->writeMessage(-1, buffer);
 }
 
 void Host::ipcServerStarted(const QString& channel_id)
@@ -182,17 +179,13 @@ void Host::ipcNewConnection(IpcChannel* channel)
     ipc_channel_ = channel;
 
     connect(ipc_channel_, &IpcChannel::disconnected, this, &Host::dettachSession);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::ipcMessage);
+    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::ipcMessageReceived);
+    connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::ipcMessageWritten);
 
     state_ = AttachedState;
 
-    while (!read_queue_.isEmpty())
-    {
-        ipc_channel_->writeMessage(-1, read_queue_.front());
-        read_queue_.pop_front();
-    }
-
     ipc_channel_->readMessage();
+    network_channel_->readMessage();
 }
 
 void Host::attachSession(quint32 session_id)

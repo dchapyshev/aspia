@@ -24,8 +24,9 @@ class IpcChannel : public QObject
     Q_OBJECT
 
 public:
-    explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
+
+    static IpcChannel* createClient(QObject* parent = nullptr);
 
     void connectToServer(const QString& channel_name);
 
@@ -48,9 +49,8 @@ private slots:
 private:
     friend class IpcServer;
 
-    IpcChannel(QLocalSocket* socket, QObject* parent = nullptr);
+    IpcChannel(QLocalSocket* socket, QObject* parent);
 
-    void initChannel();
     void scheduleWrite();
 
     using MessageSizeType = quint32;

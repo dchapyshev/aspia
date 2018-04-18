@@ -19,6 +19,8 @@ class QTcpServer;
 namespace aspia {
 
 class Channel;
+class Host;
+class HostUserAuthorizer;
 
 class Server : public QObject
 {
@@ -37,7 +39,8 @@ signals:
 
 private slots:
     void onNewConnection();
-    void onCreateSession(proto::auth::SessionType session_type, Channel* channel);
+    void onAuthorizationFinished(HostUserAuthorizer* authorizer);
+    void onHostFinished(Host* host);
 
 private:
     UserList user_list_;

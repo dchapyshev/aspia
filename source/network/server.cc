@@ -35,7 +35,7 @@ bool Server::start(int port)
         return false;
     }
 
-    user_list_ = ReadUserList();
+    user_list_ = readUserList();
     if (user_list_.isEmpty())
     {
         qWarning("Empty user list");
@@ -86,23 +86,30 @@ void Server::onNewConnection()
         authorizer->setUserList(user_list_);
 
         // If successful authorization, create a session.
-        connect(authorizer, &HostUserAuthorizer::createSession, this, &Server::onCreateSession);
-
-        connect(authorizer, &HostUserAuthorizer::finished,
-                authorizer, &HostUserAuthorizer::deleteLater);
+        connect(authorizer, &HostUserAuthorizer::finished, this, &Server::onAuthorizationFinished);
 
         authorizer->start();
     }
 }
 
-void Server::onCreateSession(proto::auth::SessionType session_type, Channel* channel)
+void Server::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 {
-    Host* host = new Host(session_type, channel, this);
+    QScopedPointer<HostUserAuthorizer> authorizer_deleter(authorizer);
+
+    if (authorizer->status() != proto::auth::STATUS_SUCCESS)
+        return;
+
+    Host* host = new Host(authorizer->sessionType(), authorizer->takeChannel(), this);
 
     connect(this, &Server::sessionChanged, host, &Host::sessionChanged);
-    connect(host, &Host::finished, host, &Host::deleteLater);
+    connect(host, &Host::finished, this, &Server::onHostFinished);
 
     host->start();
+}
+
+void Server::onHostFinished(Host* host)
+{
+    delete host;
 }
 
 } // namespace aspia

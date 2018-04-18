@@ -53,7 +53,10 @@ HostUserAuthorizer::HostUserAuthorizer(QObject* parent)
     // Nothing
 }
 
-HostUserAuthorizer::~HostUserAuthorizer() = default;
+HostUserAuthorizer::~HostUserAuthorizer()
+{
+    stop();
+}
 
 void HostUserAuthorizer::setUserList(const UserList& user_list)
 {
@@ -65,13 +68,33 @@ void HostUserAuthorizer::setChannel(Channel* channel)
     channel_.reset(channel);
 }
 
+Channel* HostUserAuthorizer::takeChannel()
+{
+    return channel_.take();
+}
+
+proto::auth::Status HostUserAuthorizer::status() const
+{
+    return status_;
+}
+
+proto::auth::SessionType HostUserAuthorizer::sessionType() const
+{
+    return session_type_;
+}
+
 void HostUserAuthorizer::start()
 {
-    emit started();
+    if (state_ != NotStarted)
+    {
+        qWarning("Authorizer already started");
+        return;
+    }
 
     if (user_list_.isEmpty() || channel_.isNull())
     {
-        abort();
+        qWarning("Empty user list or invalid network channel");
+        stop();
         return;
     }
 
@@ -79,22 +102,34 @@ void HostUserAuthorizer::start()
     // the connection will be closed.
     timer_id_ = startTimer(std::chrono::minutes(2));
 
-    connect(channel_.data(), &Channel::disconnected, this, &HostUserAuthorizer::abort);
-    connect(channel_.data(), &Channel::messageReceived, this, &HostUserAuthorizer::readMessage);
+    connect(channel_.data(), &Channel::disconnected, this, &HostUserAuthorizer::stop);
+    connect(channel_.data(), &Channel::messageReceived, this, &HostUserAuthorizer::messageReceived);
     connect(channel_.data(), &Channel::messageWritten, this, &HostUserAuthorizer::messageWritten);
+    connect(this, &HostUserAuthorizer::writeMessage, channel_.data(), &Channel::writeMessage);
+    connect(this, &HostUserAuthorizer::readMessage, channel_.data(), &Channel::readMessage);
 
     nonce_ = generateNonce();
+    if (nonce_.isEmpty())
+    {
+        qWarning("Empty nonce");
+        stop();
+        return;
+    }
 
     proto::auth::Request request;
 
     request.set_version(0);
     request.set_nonce(nonce_.constData(), nonce_.size());
 
-    channel_->writeMessage(RequestMessageId, serializeMessage(request));
+    state_ = RequestWrite;
+    emit writeMessage(RequestMessageId, serializeMessage(request));
 }
 
-void HostUserAuthorizer::abort()
+void HostUserAuthorizer::stop()
 {
+    if (state_ == Finished)
+        return;
+
     if (timer_id_)
     {
         killTimer(timer_id_);
@@ -102,7 +137,12 @@ void HostUserAuthorizer::abort()
     }
 
     channel_.reset();
-    emit finished();
+
+    state_ = Finished;
+    session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    status_ = proto::auth::STATUS_CANCELED;
+
+    emit finished(this);
 }
 
 void HostUserAuthorizer::timerEvent(QTimerEvent* event)
@@ -110,47 +150,65 @@ void HostUserAuthorizer::timerEvent(QTimerEvent* event)
     if (event->timerId() != timer_id_)
         return;
 
-    abort();
+    stop();
 }
 
 void HostUserAuthorizer::messageWritten(int message_id)
 {
+    if (state_ == Finished)
+        return;
+
     switch (message_id)
     {
         case RequestMessageId:
         {
+            Q_ASSERT(state_ == RequestWrite);
+
             // Authorization request sent. We are reading the response.
-            channel_->readMessage();
+            state_ = WaitForResponse;
+            emit readMessage();
         }
         break;
 
         case ResultMessageId:
         {
-            if (status_ == proto::auth::STATUS_SUCCESS)
-                emit createSession(session_type_, channel_.take());
+            Q_ASSERT(state_ == ResultWrite);
 
-            emit finished();
+            state_ = Finished;
+            emit finished(this);
         }
         break;
 
         default:
         {
             qFatal("Unexpected message id: %d", message_id);
-            abort();
+            stop();
         }
         break;
     }
 }
 
-void HostUserAuthorizer::readMessage(const QByteArray& buffer)
+void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
 {
+    if (state_ == Finished)
+        return;
+
+    Q_ASSERT(state_ == WaitForResponse);
+    Q_ASSERT(timer_id_);
+
     killTimer(timer_id_);
     timer_id_ = 0;
 
     proto::auth::Response response;
     if (!parseMessage(buffer, response))
     {
-        abort();
+        stop();
+        return;
+    }
+
+    if (response.username().empty() || response.key().empty())
+    {
+        stop();
         return;
     }
 
@@ -193,7 +251,8 @@ void HostUserAuthorizer::readMessage(const QByteArray& buffer)
     session_type_ = response.session_type();
     status_ = result.status();
 
-    channel_->writeMessage(ResultMessageId, serializeMessage(result));
+    state_ = ResultWrite;
+    emit writeMessage(ResultMessageId, serializeMessage(result));
 }
 
 } // namespace aspia

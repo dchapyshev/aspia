@@ -44,15 +44,16 @@ public slots:
     void sessionChanged(quint32 event, quint32 session_id);
 
 signals:
-    void started();
-    void finished();
+    void finished(Host* host);
 
 protected:
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
-    void networkMessage(const QByteArray& buffer);
-    void ipcMessage(const QByteArray& buffer);
+    void networkMessageWritten(int message_id);
+    void networkMessageReceived(const QByteArray& buffer);
+    void ipcMessageWritten(int message_id);
+    void ipcMessageReceived(const QByteArray& buffer);
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(IpcChannel* channel);
     void attachSession(quint32 session_id);
@@ -69,8 +70,6 @@ private:
     QPointer<Channel> network_channel_;
     QPointer<IpcChannel> ipc_channel_;
     QPointer<HostProcess> session_process_;
-
-    QQueue<QByteArray> read_queue_;
 
     Q_DISABLE_COPY(Host)
 };

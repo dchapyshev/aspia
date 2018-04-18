@@ -16,8 +16,8 @@ namespace aspia {
 
 using UserList = QVector<User>;
 
-UserList ReadUserList();
-bool WriteUserList(const UserList& user_list);
+UserList readUserList();
+bool writeUserList(const UserList& user_list);
 
 } // namespace aspia
 

@@ -45,7 +45,7 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
 
 void HostSession::start()
 {
-    ipc_channel_ = new IpcChannel(this);
+    ipc_channel_ = IpcChannel::createClient(this);
 
     connect(ipc_channel_, &IpcChannel::connected, this, &HostSession::ipcChannelConnected);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &HostSession::stop);

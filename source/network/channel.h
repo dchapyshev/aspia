@@ -22,8 +22,9 @@ class Channel : public QObject
     Q_OBJECT
 
 public:
-    explicit Channel(QObject* parent);
     ~Channel();
+
+    static Channel* createClient(QObject* parent = nullptr);
 
     void connectToHost(const QString& address, int port);
 
@@ -49,7 +50,6 @@ private:
     friend class Server;
 
     Channel(QTcpSocket* socket, QObject* parent);
-    void initChannel();
 
     void scheduleWrite();
 

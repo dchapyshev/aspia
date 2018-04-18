@@ -42,7 +42,7 @@ UserListDialog::UserListDialog(QWidget* parent)
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &UserListDialog::onButtonBoxClicked);
 
-    user_list_ = ReadUserList();
+    user_list_ = readUserList();
     reloadUserList();
 }
 
@@ -117,7 +117,7 @@ void UserListDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
-        if (!WriteUserList(user_list_))
+        if (!writeUserList(user_list_))
         {
             QString message =
                 tr("The user list could not be written. Make sure that you have sufficient rights to write.");
