@@ -28,11 +28,12 @@ public:
     void start();
 
 public slots:
-    virtual void readMessage(const QByteArray& buffer) = 0;
+    virtual void messageReceived(const QByteArray& buffer) = 0;
     virtual void messageWritten(int message_id) = 0;
 
 signals:
     void writeMessage(int message_id, const QByteArray& buffer);
+    void readMessage();
     void errorOccurred();
 
 protected:

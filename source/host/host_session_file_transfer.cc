@@ -14,6 +14,12 @@
 
 namespace aspia {
 
+namespace {
+
+enum MessageId { ReplyMessageId };
+
+} // namespace
+
 HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
     : HostSession(channel_id)
 {
@@ -23,6 +29,7 @@ HostSessionFileTransfer::HostSessionFileTransfer(const QString& channel_id)
 void HostSessionFileTransfer::startSession()
 {
     worker_ = new FileWorker(this);
+    emit readMessage();
 }
 
 void HostSessionFileTransfer::stopSession()
@@ -30,7 +37,7 @@ void HostSessionFileTransfer::stopSession()
     delete worker_;
 }
 
-void HostSessionFileTransfer::readMessage(const QByteArray& buffer)
+void HostSessionFileTransfer::messageReceived(const QByteArray& buffer)
 {
     if (worker_.isNull())
         return;
@@ -43,12 +50,13 @@ void HostSessionFileTransfer::readMessage(const QByteArray& buffer)
         return;
     }
 
-    emit writeMessage(-1, serializeMessage(worker_->doRequest(request)));
+    emit writeMessage(ReplyMessageId, serializeMessage(worker_->doRequest(request)));
 }
 
-void HostSessionFileTransfer::messageWritten(int /* message_id */)
+void HostSessionFileTransfer::messageWritten(int message_id)
 {
-    // Nothing
+    Q_ASSERT(message_id == ReplyMessageId);
+    emit readMessage();
 }
 
 } // namespace aspia

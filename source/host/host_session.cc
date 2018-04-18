@@ -51,12 +51,9 @@ void HostSession::start()
     connect(ipc_channel_, &IpcChannel::disconnected, this, &HostSession::stop);
     connect(ipc_channel_, &IpcChannel::errorOccurred, this, &HostSession::stop);
     connect(ipc_channel_, &IpcChannel::messageWritten, this, &HostSession::messageWritten);
-    connect(ipc_channel_, &IpcChannel::messageReceived, [this](const QByteArray& buffer)
-    {
-        readMessage(buffer);
-        ipc_channel_->readMessage();
-    });
+    connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostSession::messageReceived);
 
+    connect(this, &HostSession::readMessage, ipc_channel_, &IpcChannel::readMessage);
     connect(this, &HostSession::writeMessage, ipc_channel_, &IpcChannel::writeMessage);
     connect(this, &HostSession::errorOccurred, this, &HostSession::stop);
 
@@ -66,8 +63,6 @@ void HostSession::start()
 void HostSession::ipcChannelConnected()
 {
     startSession();
-
-    ipc_channel_->readMessage();
 }
 
 void HostSession::stop()

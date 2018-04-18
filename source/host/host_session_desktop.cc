@@ -66,6 +66,7 @@ void HostSessionDesktop::startSession()
         message.mutable_config_request()->set_features(0);
 
     emit writeMessage(ConfigRequestMessage, serializeMessage(message));
+    emit readMessage();
 }
 
 void HostSessionDesktop::stopSession()
@@ -100,7 +101,7 @@ void HostSessionDesktop::customEvent(QEvent* event)
     }
 }
 
-void HostSessionDesktop::readMessage(const QByteArray& buffer)
+void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 {
     proto::desktop::ClientToHost message;
 
@@ -122,6 +123,8 @@ void HostSessionDesktop::readMessage(const QByteArray& buffer)
     {
         qDebug("Unhandled message from client");
     }
+
+    emit readMessage();
 }
 
 void HostSessionDesktop::messageWritten(int message_id)
