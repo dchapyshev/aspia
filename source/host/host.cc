@@ -39,8 +39,8 @@ void Host::start()
 
     state_ = StartingState;
 
-    connect(network_channel_, &Channel::channelDisconnected, this, &Host::stop);
-    connect(network_channel_, &Channel::channelMessage, this, &Host::networkMessage);
+    connect(network_channel_, &Channel::disconnected, this, &Host::stop);
+    connect(network_channel_, &Channel::messageReceived, this, &Host::networkMessage);
 
     network_channel_->readMessage();
 

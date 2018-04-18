@@ -29,7 +29,8 @@ public:
 
 public slots:
     // ClientSession implementation.
-    void readMessage(const QByteArray& buffer) override;
+    void messageReceived(const QByteArray& buffer) override;
+    void messageWritten(int message_id) override;
     void startSession() override;
     void closeSession() override;
 
@@ -37,7 +38,6 @@ public slots:
 
 protected:
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
-    void writeMessage(const proto::desktop::ClientToHost& message);
 
     proto::Computer* computer_;
     QPointer<DesktopWindow> desktop_window_;

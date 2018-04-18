@@ -18,6 +18,12 @@
 
 namespace aspia {
 
+namespace {
+
+enum MessageId { RequestMessageId };
+
+} // namespace
+
 ClientSessionFileTransfer::ClientSessionFileTransfer(proto::Computer* computer, QObject* parent)
     : ClientSession(parent),
       computer_(computer)
@@ -35,18 +41,24 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
     }
 }
 
-void ClientSessionFileTransfer::readMessage(const QByteArray& buffer)
+void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
 {
     proto::file_transfer::Reply reply;
 
     if (!parseMessage(buffer, reply))
     {
-        emit sessionError(tr("Session error: Invalid message from host."));
+        emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
     tasks_.front()->sendReply(reply);
     tasks_.pop_front();
+}
+
+void ClientSessionFileTransfer::messageWritten(int message_id)
+{
+    Q_ASSERT(message_id == RequestMessageId);
+    emit readMessage();
 }
 
 void ClientSessionFileTransfer::startSession()
@@ -60,7 +72,7 @@ void ClientSessionFileTransfer::startSession()
 
     // When the window is closed, we close the session.
     connect(file_manager_, &FileManagerWindow::windowClose,
-            this, &ClientSessionFileTransfer::sessionClosed);
+            this, &ClientSessionFileTransfer::closedByUser);
 
     connect(file_manager_, &FileManagerWindow::localRequest,
             worker_, &FileWorker::executeRequest);
@@ -78,14 +90,14 @@ void ClientSessionFileTransfer::closeSession()
     // If the end of the session is not initiated by the user, then we do not send the session
     // end signal.
     disconnect(file_manager_, &FileManagerWindow::windowClose,
-               this, &ClientSessionFileTransfer::sessionClosed);
+               this, &ClientSessionFileTransfer::closedByUser);
     file_manager_->close();
 }
 
 void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
 {
     tasks_.push_back(QPointer<FileRequest>(request));
-    emit sessionMessage(serializeMessage(request->request()));
+    emit writeMessage(RequestMessageId, serializeMessage(request->request()));
 }
 
 } // namespace aspia

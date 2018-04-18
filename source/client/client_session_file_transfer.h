@@ -35,7 +35,8 @@ public:
 
 public slots:
     // ClientSession implementation.
-    void readMessage(const QByteArray& buffer) override;
+    void messageReceived(const QByteArray& buffer) override;
+    void messageWritten(int message_id) override;
     void startSession() override;
     void closeSession() override;
 

@@ -21,6 +21,14 @@ namespace {
 
 constexpr char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
 
+enum MessageId
+{
+    ConfigMessageId,
+    KeyEventMessageId,
+    PointerEventMessageId,
+    ClipboardEventMessageId
+};
+
 } // namespace
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(proto::Computer* computer, QObject* parent)
@@ -36,13 +44,13 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(proto::Computer* computer
             this, &ClientSessionDesktopManage::onSendClipboardEvent);
 }
 
-void ClientSessionDesktopManage::readMessage(const QByteArray& buffer)
+void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 {
     proto::desktop::HostToClient message;
 
     if (!parseMessage(buffer, message))
     {
-        emit sessionError(tr("Session error: Invalid message from host."));
+        emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
@@ -67,6 +75,13 @@ void ClientSessionDesktopManage::readMessage(const QByteArray& buffer)
         // Unknown messages are ignored.
         qWarning("Unhandled message from host");
     }
+
+    emit readMessage();
+}
+
+void ClientSessionDesktopManage::messageWritten(int /* message_id */)
+{
+    // Nothing
 }
 
 void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& config)
@@ -82,7 +97,7 @@ void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& conf
 
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
-    writeMessage(message);
+    emit writeMessage(ConfigMessageId, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 flags)
@@ -93,7 +108,7 @@ void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 fla
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
-    writeMessage(message);
+    emit writeMessage(KeyEventMessageId, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 mask)
@@ -105,7 +120,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
     event->set_y(pos.y());
     event->set_mask(mask);
 
-    writeMessage(message);
+    emit writeMessage(PointerEventMessageId, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const QString& text)
@@ -124,7 +139,7 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const QString& text)
         return;
     }
 
-    writeMessage(message);
+    emit writeMessage(ClipboardEventMessageId, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::readConfigRequest(

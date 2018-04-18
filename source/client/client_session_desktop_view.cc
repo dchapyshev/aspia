@@ -12,6 +12,12 @@
 
 namespace aspia {
 
+namespace {
+
+enum MessageId { ConfigMessageId };
+
+} // namespace
+
 ClientSessionDesktopView::ClientSessionDesktopView(proto::Computer* computer, QObject* parent)
     : ClientSession(parent),
       computer_(computer)
@@ -23,18 +29,18 @@ ClientSessionDesktopView::ClientSessionDesktopView(proto::Computer* computer, QO
 
     // When the window is closed, we close the session.
     connect(desktop_window_, &DesktopWindow::windowClose,
-            this, &ClientSessionDesktopView::sessionClosed);
+            this, &ClientSessionDesktopView::closedByUser);
 }
 
 ClientSessionDesktopView::~ClientSessionDesktopView() = default;
 
-void ClientSessionDesktopView::readMessage(const QByteArray& buffer)
+void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
 {
     proto::desktop::HostToClient message;
 
     if (!parseMessage(buffer, message))
     {
-        emit sessionError(tr("Session error: Invalid message from host."));
+        emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
@@ -51,12 +57,21 @@ void ClientSessionDesktopView::readMessage(const QByteArray& buffer)
         // Unknown messages are ignored.
         qWarning("Unhandled message from host");
     }
+
+    emit readMessage();
+}
+
+void ClientSessionDesktopView::messageWritten(int /* message_id */)
+{
+    // Nothing
 }
 
 void ClientSessionDesktopView::startSession()
 {
     desktop_window_->show();
     desktop_window_->activateWindow();
+
+    emit readMessage();
 }
 
 void ClientSessionDesktopView::closeSession()
@@ -64,7 +79,7 @@ void ClientSessionDesktopView::closeSession()
     // If the end of the session is not initiated by the user, then we do not send the session
     // end signal.
     disconnect(desktop_window_, &DesktopWindow::windowClose,
-               this, &ClientSessionDesktopView::sessionClosed);
+               this, &ClientSessionDesktopView::closedByUser);
     desktop_window_->close();
 }
 
@@ -72,7 +87,7 @@ void ClientSessionDesktopView::onSendConfig(const proto::desktop::Config& config
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
-    writeMessage(message);
+    emit writeMessage(ConfigMessageId, serializeMessage(message));
 }
 
 void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket& packet)
@@ -85,7 +100,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 
     if (!video_decoder_)
     {
-        emit sessionError(tr("Session error: Video decoder not initialized."));
+        emit errorOccurred(tr("Session error: Video decoder not initialized."));
         return;
     }
 
@@ -95,7 +110,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 
         if (size.width() <= 0 || size.height() <= 0)
         {
-            emit sessionError(tr("Session error: Wrong video frame size."));
+            emit errorOccurred(tr("Session error: Wrong video frame size."));
             return;
         }
 
@@ -105,22 +120,17 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
     DesktopFrame* frame = desktop_window_->desktopFrame();
     if (!frame)
     {
-        emit sessionError(tr("Session error: The desktop frame is not initialized."));
+        emit errorOccurred(tr("Session error: The desktop frame is not initialized."));
         return;
     }
 
     if (!video_decoder_->decode(packet, frame))
     {
-        emit sessionError(tr("Session error: The video packet could not be decoded."));
+        emit errorOccurred(tr("Session error: The video packet could not be decoded."));
         return;
     }
 
     desktop_window_->drawDesktopFrame();
-}
-
-void ClientSessionDesktopView::writeMessage(const proto::desktop::ClientToHost& message)
-{
-    emit sessionMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopView::readConfigRequest(

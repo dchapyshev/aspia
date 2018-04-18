@@ -42,7 +42,7 @@ Channel::~Channel()
 
 void Channel::initChannel()
 {
-    connect(socket_, &QTcpSocket::disconnected, this, &Channel::channelDisconnected);
+    connect(socket_, &QTcpSocket::disconnected, this, &Channel::disconnected);
     connect(socket_, &QTcpSocket::bytesWritten, this, &Channel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &Channel::onReadyRead);
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
@@ -74,20 +74,20 @@ void Channel::writeMessage(int message_id, const QByteArray& buffer)
         scheduleWrite();
 }
 
-void Channel::stopChannel()
+void Channel::stop()
 {
-    socket_->disconnectFromHost();
+    socket_->abort();
 }
 
 void Channel::onConnected()
 {
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
-    emit channelConnected();
+    emit connected();
 }
 
 void Channel::onError(QAbstractSocket::SocketError /* error */)
 {
-    emit channelError(socket_->errorString());
+    emit errorOccurred(socket_->errorString());
 }
 
 void Channel::onBytesWritten(qint64 bytes)
@@ -159,7 +159,7 @@ void Channel::onReadyRead()
             read_size_received_ = false;
             current = read_ = 0;
 
-            emit channelMessage(read_buffer_);
+            emit messageReceived(read_buffer_);
             break;
         }
 

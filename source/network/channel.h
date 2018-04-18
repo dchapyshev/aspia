@@ -28,16 +28,16 @@ public:
     void connectToHost(const QString& address, int port);
 
 signals:
-    void channelConnected();
-    void channelDisconnected();
-    void channelError(const QString& message);
-    void channelMessage(const QByteArray& buffer);
+    void connected();
+    void disconnected();
+    void errorOccurred(const QString& message);
+    void messageReceived(const QByteArray& buffer);
     void messageWritten(int message_id);
 
 public slots:
     void readMessage();
     void writeMessage(int message_id, const QByteArray& buffer);
-    void stopChannel();
+    void stop();
 
 private slots:
     void onConnected();

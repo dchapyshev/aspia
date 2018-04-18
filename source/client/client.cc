@@ -27,9 +27,9 @@ Client::Client(const proto::Computer& computer, QObject* parent)
     // and errors.
     status_dialog_ = new StatusDialog();
 
-    connect(channel_, &Channel::channelConnected, this, &Client::onChannelConnected);
-    connect(channel_, &Channel::channelError, this, &Client::onChannelError);
-    connect(channel_, &Channel::channelDisconnected, this, &Client::onChannelDisconnected);
+    connect(channel_, &Channel::connected, this, &Client::onChannelConnected);
+    connect(channel_, &Channel::errorOccurred, this, &Client::onChannelError);
+    connect(channel_, &Channel::disconnected, this, &Client::onChannelDisconnected);
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
@@ -37,7 +37,7 @@ Client::Client(const proto::Computer& computer, QObject* parent)
         clientTerminated();
 
         // When the status dialog is finished, we stop the connection.
-        channel_->stopChannel();
+        channel_->stop();
 
         // Delete the dialog after the finish.
         status_dialog_->deleteLater();
@@ -66,9 +66,9 @@ void Client::onChannelConnected()
     // Connect authorizer to network.
     connect(authorizer_, &ClientUserAuthorizer::writeMessage, channel_, &Channel::writeMessage);
     connect(authorizer_, &ClientUserAuthorizer::readMessage, channel_, &Channel::readMessage);
-    connect(channel_, &Channel::channelMessage, authorizer_, &ClientUserAuthorizer::messageReceived);
+    connect(channel_, &Channel::messageReceived, authorizer_, &ClientUserAuthorizer::messageReceived);
     connect(channel_, &Channel::messageWritten, authorizer_, &ClientUserAuthorizer::messageWritten);
-    connect(channel_, &Channel::channelDisconnected, authorizer_, &ClientUserAuthorizer::cancel);
+    connect(channel_, &Channel::disconnected, authorizer_, &ClientUserAuthorizer::cancel);
 
     connect(authorizer_, &ClientUserAuthorizer::errorOccurred,
             status_dialog_, &StatusDialog::addStatus);
@@ -134,35 +134,27 @@ void Client::authorizationFinished(proto::auth::Status status)
     }
 
     // Messages received from the network are sent to the session.
-    connect(channel_, &Channel::channelMessage, [this](const QByteArray& buffer)
-    {
-        session_->readMessage(buffer);
-        channel_->readMessage();
-    });
-
-    connect(session_, &ClientSession::sessionMessage, [this](const QByteArray& buffer)
-    {
-        channel_->writeMessage(-1, buffer);
-    });
-
-    connect(channel_, &Channel::channelDisconnected, session_, &ClientSession::closeSession);
+    connect(session_, &ClientSession::readMessage, channel_, &Channel::readMessage);
+    connect(channel_, &Channel::messageReceived, session_, &ClientSession::messageReceived);
+    connect(session_, &ClientSession::writeMessage, channel_, &Channel::writeMessage);
+    connect(channel_, &Channel::messageWritten, session_, &ClientSession::messageWritten);
+    connect(channel_, &Channel::disconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, &ClientSession::sessionClosed, channel_, &Channel::stopChannel);
-    connect(session_, &ClientSession::sessionClosed, status_dialog_, &StatusDialog::close);
+    connect(session_, &ClientSession::closedByUser, channel_, &Channel::stop);
+    connect(session_, &ClientSession::closedByUser, status_dialog_, &StatusDialog::close);
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
-    connect(session_, &ClientSession::sessionError, this, [this](const QString& message)
+    connect(session_, &ClientSession::errorOccurred, this, [this](const QString& message)
     {
         status_dialog_->addStatus(message);
-        channel_->stopChannel();
+        channel_->stop();
     });
 
     status_dialog_->addStatus(tr("Session started."));
     status_dialog_->hide();
 
     session_->startSession();
-    channel_->readMessage();
 }
 
 } // namespace aspia
