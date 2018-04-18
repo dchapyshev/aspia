@@ -12,25 +12,26 @@
 
 namespace aspia {
 
-namespace proto {
-class Computer;
-} // namespace proto
-
 class AuthorizationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AuthorizationDialog(proto::Computer* computer, QWidget* parent);
+    explicit AuthorizationDialog(QWidget* parent = nullptr);
     ~AuthorizationDialog();
 
+    QString userName() const;
+    void setUserName(const QString& username);
+
+    QString password() const;
+    void setPassword(const QString& password);
+
 private slots:
-    void OnShowPasswordButtonToggled(bool checked);
-    void OnButtonBoxClicked(QAbstractButton* button);
+    void onShowPasswordButtonToggled(bool checked);
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     Ui::AuthorizationDialog ui;
-    proto::Computer* computer_;
 
     Q_DISABLE_COPY(AuthorizationDialog)
 };

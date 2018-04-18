@@ -14,6 +14,7 @@
 
 namespace aspia {
 
+class ClientUserAuthorizer;
 class StatusDialog;
 
 class Client : public QObject
@@ -31,16 +32,13 @@ private slots:
     void onChannelConnected();
     void onChannelDisconnected();
     void onChannelError(const QString& message);
-
-    void onMessageWritten(int message_id);
-    void onAuthorizationRequest(const QByteArray& buffer);
-    void onAuthorizationResult(const QByteArray& buffer);
+    void authorizationFinished(proto::auth::Status status);
 
 private:
-    Channel* channel_;
-    StatusDialog* status_dialog_;
-
-    ClientSession* session_;
+    QPointer<Channel> channel_;
+    QPointer<StatusDialog> status_dialog_;
+    QPointer<ClientUserAuthorizer> authorizer_;
+    QPointer<ClientSession> session_;
 
     proto::Computer computer_;
 

@@ -7,29 +7,43 @@
 
 #include "client/ui/authorization_dialog.h"
 
-#include "protocol/computer.pb.h"
-
 namespace aspia {
 
-AuthorizationDialog::AuthorizationDialog(proto::Computer* computer, QWidget* parent)
-    : QDialog(parent),
-      computer_(computer)
+AuthorizationDialog::AuthorizationDialog(QWidget* parent)
+    : QDialog(parent)
 {
     ui.setupUi(this);
 
-    ui.edit_username->setText(QString::fromStdString(computer_->username()));
-    ui.edit_password->setText(QString::fromStdString(computer_->password()));
-
     connect(ui.button_show_password, &QPushButton::toggled,
-            this, &AuthorizationDialog::OnShowPasswordButtonToggled);
+            this, &AuthorizationDialog::onShowPasswordButtonToggled);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &AuthorizationDialog::OnButtonBoxClicked);
+            this, &AuthorizationDialog::onButtonBoxClicked);
 }
 
 AuthorizationDialog::~AuthorizationDialog() = default;
 
-void AuthorizationDialog::OnShowPasswordButtonToggled(bool checked)
+QString AuthorizationDialog::userName() const
+{
+    return ui.edit_username->text();
+}
+
+void AuthorizationDialog::setUserName(const QString& username)
+{
+    ui.edit_username->setText(username);
+}
+
+QString AuthorizationDialog::password() const
+{
+    return ui.edit_password->text();
+}
+
+void AuthorizationDialog::setPassword(const QString& password)
+{
+    ui.edit_password->setText(password);
+}
+
+void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
@@ -44,18 +58,12 @@ void AuthorizationDialog::OnShowPasswordButtonToggled(bool checked)
     }
 }
 
-void AuthorizationDialog::OnButtonBoxClicked(QAbstractButton* button)
+void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
-    {
-        computer_->set_username(ui.edit_username->text().toStdString());
-        computer_->set_password(ui.edit_password->text().toStdString());
         accept();
-    }
     else
-    {
         reject();
-    }
 
     close();
 }

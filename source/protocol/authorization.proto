@@ -25,6 +25,7 @@ enum Status
     STATUS_UNKNOWN       = 0;
     STATUS_SUCCESS       = 1;
     STATUS_ACCESS_DENIED = 2;
+    STATUS_CANCELED      = 3;
 }
 
 // Host to client.

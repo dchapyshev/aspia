@@ -7,26 +7,14 @@
 
 #include "client/client.h"
 
-#include <QCryptographicHash>
-
-#include "base/message_serialization.h"
 #include "client/ui/authorization_dialog.h"
 #include "client/ui/status_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
-#include "protocol/authorization.pb.h"
+#include "client/client_user_authorizer.h"
 
 namespace aspia {
-
-namespace {
-
-enum MessageId
-{
-    ResponseMessageId
-};
-
-} // namespace
 
 Client::Client(const proto::Computer& computer, QObject* parent)
     : QObject(parent),
@@ -39,17 +27,8 @@ Client::Client(const proto::Computer& computer, QObject* parent)
     // and errors.
     status_dialog_ = new StatusDialog();
 
-    // When connected over a network.
     connect(channel_, &Channel::channelConnected, this, &Client::onChannelConnected);
-
-    // When a network error occurs.
     connect(channel_, &Channel::channelError, this, &Client::onChannelError);
-
-    // The first message from the host is an authorization request.
-    connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
-    connect(channel_, &Channel::messageWritten, this, &Client::onMessageWritten);
-
-    // If the network connection is disconnected.
     connect(channel_, &Channel::channelDisconnected, this, &Client::onChannelDisconnected);
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
@@ -78,8 +57,28 @@ void Client::onChannelConnected()
 {
     status_dialog_->addStatus(tr("Connection established."));
 
-    // Read authorization request.
-    channel_->readMessage();
+    authorizer_ = new ClientUserAuthorizer(status_dialog_);
+
+    authorizer_->setSessionType(computer_.session_type());
+    authorizer_->setUserName(QString::fromStdString(computer_.username()));
+    authorizer_->setPassword(QString::fromStdString(computer_.password()));
+
+    // Connect authorizer to network.
+    connect(authorizer_, &ClientUserAuthorizer::writeMessage, channel_, &Channel::writeMessage);
+    connect(authorizer_, &ClientUserAuthorizer::readMessage, channel_, &Channel::readMessage);
+    connect(channel_, &Channel::channelMessage, authorizer_, &ClientUserAuthorizer::messageReceived);
+    connect(channel_, &Channel::messageWritten, authorizer_, &ClientUserAuthorizer::messageWritten);
+    connect(channel_, &Channel::channelDisconnected, authorizer_, &ClientUserAuthorizer::cancel);
+
+    connect(authorizer_, &ClientUserAuthorizer::errorOccurred,
+            status_dialog_, &StatusDialog::addStatus);
+
+    // If successful, we start the session.
+    connect(authorizer_, &ClientUserAuthorizer::finished, this, &Client::authorizationFinished);
+
+    // Now run authorization.
+    status_dialog_->addStatus(tr("Authorization started."));
+    authorizer_->start();
 }
 
 void Client::onChannelDisconnected()
@@ -92,88 +91,28 @@ void Client::onChannelError(const QString& message)
     status_dialog_->addStatus(tr("Network error: %1.").arg(message));
 }
 
-void Client::onMessageWritten(int message_id)
+void Client::authorizationFinished(proto::auth::Status status)
 {
-    switch (message_id)
-    {
-        case ResponseMessageId:
-        {
-            // Read authorization result.
-            channel_->readMessage();
-        }
-        break;
+    delete authorizer_;
 
-        default:
-            break;
-    }
-}
-
-void Client::onAuthorizationRequest(const QByteArray& buffer)
-{
-    status_dialog_->addStatus(tr("Authorization request received."));
-
-    proto::auth::Request request;
-    if (!parseMessage(buffer, request))
-    {
-        status_dialog_->addStatus(tr("Protocol error: Invalid authorization request received."));
-        return;
-    }
-
-    AuthorizationDialog dialog(&computer_, status_dialog_);
-    if (dialog.exec() == AuthorizationDialog::Rejected)
-    {
-        status_dialog_->addStatus(tr("Authorization is canceled by the user."));
-        return;
-    }
-
-    QCryptographicHash password_hash(QCryptographicHash::Sha512);
-    password_hash.addData(computer_.password().c_str(), computer_.password().size());
-
-    QCryptographicHash key_hash(QCryptographicHash::Sha512);
-    key_hash.addData(request.nonce().c_str(), request.nonce().size());
-    key_hash.addData(password_hash.result());
-
-    QByteArray client_key = key_hash.result();
-
-    proto::auth::Response response;
-    response.set_session_type(computer_.session_type());
-    response.set_username(computer_.username());
-    response.set_key(client_key.data(), client_key.size());
-
-    disconnect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationRequest);
-    connect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationResult);
-
-    channel_->writeMessage(ResponseMessageId, serializeMessage(response));
-}
-
-void Client::onAuthorizationResult(const QByteArray& buffer)
-{
-    proto::auth::Result result;
-    if (!parseMessage(buffer, result))
-    {
-        status_dialog_->addStatus(tr("Protocol error: Invalid authorization result received."));
-        return;
-    }
-
-    switch (result.status())
+    switch (status)
     {
         case proto::auth::STATUS_SUCCESS:
-            status_dialog_->addStatus(tr("Authorization successfully passed."));
+            status_dialog_->addStatus(tr("Successful authorization."));
             break;
 
         case proto::auth::STATUS_ACCESS_DENIED:
             status_dialog_->addStatus(tr("Authorization error: Access denied."));
-            break;
+            return;
+
+        case proto::auth::STATUS_CANCELED:
+            status_dialog_->addStatus(tr("Authorization has been canceled."));
+            return;
 
         default:
             status_dialog_->addStatus(tr("Authorization error: Unknown status code."));
-            break;
+            return;
     }
-
-    if (result.status() != proto::auth::STATUS_SUCCESS)
-        return;
-
-    disconnect(channel_, &Channel::channelMessage, this, &Client::onAuthorizationResult);
 
     switch (computer_.session_type())
     {

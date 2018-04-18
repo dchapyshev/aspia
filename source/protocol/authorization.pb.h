@@ -89,12 +89,13 @@ enum Status {
   STATUS_UNKNOWN = 0,
   STATUS_SUCCESS = 1,
   STATUS_ACCESS_DENIED = 2,
+  STATUS_CANCELED = 3,
   Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Status_IsValid(int value);
 const Status Status_MIN = STATUS_UNKNOWN;
-const Status Status_MAX = STATUS_ACCESS_DENIED;
+const Status Status_MAX = STATUS_CANCELED;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================
