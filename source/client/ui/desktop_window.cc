@@ -10,16 +10,15 @@
 #include <QDebug>
 #include <QApplication>
 #include <QBrush>
-#include <QClipboard>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
-#include <QMimeData>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QShortcut>
 
+#include "base/clipboard.h"
 #include "client/ui/desktop_config_dialog.h"
 #include "client/ui/desktop_panel.h"
 #include "client/ui/desktop_widget.h"
@@ -71,9 +70,6 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     panel_ = new DesktopPanel(computer_->session_type(), this);
     panel_->adjustSize();
 
-    connect(QApplication::clipboard(), &QClipboard::dataChanged,
-            this, &DesktopWindow::clipboardDataChanged);
-
     connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
@@ -97,6 +93,13 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
     connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
+
+    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE &&
+        (computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+    {
+        clipboard_ = new Clipboard(this);
+        connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
+    }
 }
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
@@ -124,9 +127,10 @@ void DesktopWindow::injectCursor(const QCursor& cursor)
     desktop_->setCursor(cursor);
 }
 
-void DesktopWindow::injectClipboard(const QString& text)
+void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 {
-    QApplication::clipboard()->setText(text);
+    if (!clipboard_.isNull())
+        clipboard_->injectClipboardEvent(event);
 }
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
@@ -176,15 +180,6 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
     emit sendPointerEvent(pos, mask);
 }
 
-void DesktopWindow::clipboardDataChanged()
-{
-    const QMimeData* mime_data = QApplication::clipboard()->mimeData();
-    if (!mime_data->hasText())
-        return;
-
-    emit sendClipboardEvent(mime_data->text());
-}
-
 void DesktopWindow::changeSettings()
 {
     proto::desktop::Config* config = config = computer_->mutable_desktop_view_session();
@@ -194,7 +189,22 @@ void DesktopWindow::changeSettings()
 
     DesktopConfigDialog dialog(computer_->session_type(), config, this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)
+    {
+        if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        {
+            delete clipboard_;
+
+            if (config->flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
+            {
+                clipboard_ = new Clipboard(this);
+
+                connect(clipboard_, &Clipboard::clipboardEvent,
+                        this, &DesktopWindow::sendClipboardEvent);
+            }
+        }
+
         emit sendConfig(*config);
+    }
 }
 
 void DesktopWindow::autosizeWindow()

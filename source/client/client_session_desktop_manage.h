@@ -32,7 +32,7 @@ public slots:
 
     void onSendKeyEvent(quint32 usb_keycode, quint32 flags);
     void onSendPointerEvent(const QPoint& pos, quint32 mask);
-    void onSendClipboardEvent(const QString& text);
+    void onSendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
     void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
@@ -40,9 +40,6 @@ private:
     void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
 
     std::unique_ptr<CursorDecoder> cursor_decoder_;
-
-    std::string last_clipboard_mime_type_;
-    std::string last_clipboard_data_;
 
     Q_DISABLE_COPY(ClientSessionDesktopManage)
 };

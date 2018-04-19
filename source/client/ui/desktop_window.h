@@ -18,6 +18,7 @@ class QScrollArea;
 
 namespace aspia {
 
+class Clipboard;
 class DesktopFrame;
 class DesktopPanel;
 class DesktopWidget;
@@ -34,14 +35,14 @@ public:
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
-    void injectClipboard(const QString& text);
+    void injectClipboard(const proto::desktop::ClipboardEvent& event);
 
 signals:
     void windowClose();
     void sendConfig(const proto::desktop::Config& config);
     void sendKeyEvent(quint32 usb_keycode, quint32 flags);
     void sendPointerEvent(const QPoint& pos, quint32 mask);
-    void sendClipboardEvent(const QString& text);
+    void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 protected:
     // QWidget implementation.
@@ -51,7 +52,6 @@ protected:
 
 private slots:
     void onPointerEvent(const QPoint& pos, quint32 mask);
-    void clipboardDataChanged();
     void changeSettings();
     void autosizeWindow();
 
@@ -62,6 +62,7 @@ private:
     QPointer<QScrollArea> scroll_area_;
     QPointer<DesktopPanel> panel_;
     QPointer<DesktopWidget> desktop_;
+    QPointer<Clipboard> clipboard_;
 
     int scroll_timer_id_ = 0;
     QPoint scroll_delta_;

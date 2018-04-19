@@ -163,7 +163,7 @@ void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& ev
         return;
     }
 
-    if (!input_injector_)
+    if (input_injector_.isNull())
         input_injector_.reset(new InputInjector(this));
 
     input_injector_->injectPointerEvent(event);
@@ -178,7 +178,7 @@ void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
         return;
     }
 
-    if (!input_injector_)
+    if (input_injector_.isNull())
         input_injector_.reset(new InputInjector(this));
 
     input_injector_->injectKeyEvent(event);
@@ -193,7 +193,7 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
         return;
     }
 
-    if (!clipboard_)
+    if (clipboard_.isNull())
     {
         qWarning("Attempt to inject clipboard event to session with the clipboard disabled");
         emit errorOccurred();

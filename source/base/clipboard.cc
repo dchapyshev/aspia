@@ -23,25 +23,15 @@ const char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
 Clipboard::Clipboard(QObject* parent)
     : QObject(parent)
 {
-    connect(QGuiApplication::clipboard(), &QClipboard::dataChanged, [this]()
-    {
-        const QMimeData* mime_data = QGuiApplication::clipboard()->mimeData();
-        if (!mime_data->hasText())
-            return;
-
-        proto::desktop::ClipboardEvent event;
-        event.set_mime_type(kMimeTypeTextUtf8);
-        event.set_data(QString(mime_data->text()).replace(
-            QStringLiteral("\r\n"), QStringLiteral("\n")).toStdString());
-
-        if (event.mime_type() == last_mime_type_ && event.data() == last_data_)
-            return;
-
-        emit clipboardEvent(event);
-    });
+    connect(QGuiApplication::clipboard(), &QClipboard::dataChanged,
+            this, &Clipboard::dataChanged);
 }
 
-Clipboard::~Clipboard() = default;
+Clipboard::~Clipboard()
+{
+    disconnect(QGuiApplication::clipboard(), &QClipboard::dataChanged,
+               this, &Clipboard::dataChanged);
+}
 
 void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
@@ -58,6 +48,23 @@ void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event
 #endif
 
     QGuiApplication::clipboard()->setText(text);
+}
+
+void Clipboard::dataChanged()
+{
+    const QMimeData* mime_data = QGuiApplication::clipboard()->mimeData();
+    if (!mime_data->hasText())
+        return;
+
+    proto::desktop::ClipboardEvent event;
+    event.set_mime_type(kMimeTypeTextUtf8);
+    event.set_data(QString(mime_data->text()).replace(
+        QStringLiteral("\r\n"), QStringLiteral("\n")).toStdString());
+
+    if (event.mime_type() == last_mime_type_ && event.data() == last_data_)
+        return;
+
+    emit clipboardEvent(event);
 }
 
 } // namespace aspia

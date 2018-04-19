@@ -29,6 +29,9 @@ public slots:
 signals:
     void clipboardEvent(const proto::desktop::ClipboardEvent& event);
 
+private slots:
+    void dataChanged();
+
 private:
     std::string last_mime_type_;
     std::string last_data_;

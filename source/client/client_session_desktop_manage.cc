@@ -19,8 +19,6 @@ namespace aspia {
 
 namespace {
 
-constexpr char kMimeTypeTextUtf8[] = "text/plain; charset=UTF-8";
-
 enum MessageId
 {
     ConfigMessageId,
@@ -89,12 +87,6 @@ void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& conf
     if (!(config.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
-    if (!(config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
-    {
-        last_clipboard_mime_type_.clear();
-        last_clipboard_data_.clear();
-    }
-
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
     emit writeMessage(ConfigMessageId, serializeMessage(message));
@@ -123,21 +115,13 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
     emit writeMessage(PointerEventMessageId, serializeMessage(message));
 }
 
-void ClientSessionDesktopManage::onSendClipboardEvent(const QString& text)
+void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (!(computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
-    message.mutable_clipboard_event()->set_mime_type(kMimeTypeTextUtf8);
-    message.mutable_clipboard_event()->set_data(
-        QString(text).replace(QStringLiteral("\r\n"), QStringLiteral("\n")).toStdString());
-
-    if (message.clipboard_event().mime_type() == last_clipboard_mime_type_ &&
-        message.clipboard_event().data() == last_clipboard_data_)
-    {
-        return;
-    }
+    message.mutable_clipboard_event()->CopyFrom(event);
 
     emit writeMessage(ClipboardEventMessageId, serializeMessage(message));
 }
@@ -180,19 +164,7 @@ void ClientSessionDesktopManage::readClipboardEvent(
     if (!(computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
         return;
 
-    if (clipboard_event.mime_type() != kMimeTypeTextUtf8)
-        return;
-
-    last_clipboard_mime_type_ = clipboard_event.mime_type();
-    last_clipboard_data_ = clipboard_event.data();
-
-    QString text = QString::fromStdString(clipboard_event.data());
-
-#if defined(Q_OS_WIN)
-    text.replace(QStringLiteral("\n"), QStringLiteral("\r\n"));
-#endif
-
-    desktop_window_->injectClipboard(text);
+    desktop_window_->injectClipboard(clipboard_event);
 }
 
 } // namespace aspia
