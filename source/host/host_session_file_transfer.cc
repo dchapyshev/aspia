@@ -7,8 +7,6 @@
 
 #include "host/host_session_file_transfer.h"
 
-#include <QDebug>
-
 #include "base/message_serialization.h"
 #include "host/file_worker.h"
 

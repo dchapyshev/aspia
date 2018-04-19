@@ -62,6 +62,7 @@ void IpcServer::start()
 
     server_ = new QLocalServer(this);
 
+    server_->setSocketOptions(QLocalServer::OtherAccessOption);
     server_->setMaxPendingConnections(1);
 
     connect(server_, &QLocalServer::newConnection, [this]()
