@@ -10,8 +10,8 @@
 #include <QDebug>
 #include <QEvent>
 
+#include "base/clipboard.h"
 #include "base/message_serialization.h"
-#include "host/clipboard.h"
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 

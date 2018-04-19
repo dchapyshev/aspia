@@ -19,12 +19,13 @@ link_directories(
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
+    ${PROJECT_SOURCE_DIR}/base/clipboard.cc
+    ${PROJECT_SOURCE_DIR}/base/clipboard.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
     ${PROJECT_SOURCE_DIR}/base/file_logger.h
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
-    ${PROJECT_SOURCE_DIR}/base/scoped_native_library.h
     ${PROJECT_SOURCE_DIR}/base/service.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
@@ -213,8 +214,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/scoped_thread_desktop.h)
 
 list(APPEND SOURCE_HOST
-    ${PROJECT_SOURCE_DIR}/host/clipboard.cc
-    ${PROJECT_SOURCE_DIR}/host/clipboard.h
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.h
     ${PROJECT_SOURCE_DIR}/host/file_packetizer.cc

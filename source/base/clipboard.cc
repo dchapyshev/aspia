@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/clipboard.cc
+// FILE:            base/clipboard.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/clipboard.h"
+#include "base/clipboard.h"
 
 #include <QClipboard>
 #include <QDebug>

@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/clipboard.h
+// FILE:            base/clipboard.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__CLIPBOARD_H
-#define _ASPIA_HOST__CLIPBOARD_H
+#ifndef _ASPIA_BASE__CLIPBOARD_H
+#define _ASPIA_BASE__CLIPBOARD_H
 
 #include <QObject>
 
@@ -38,4 +38,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__CLIPBOARD_H
+#endif // _ASPIA_BASE__CLIPBOARD_H
