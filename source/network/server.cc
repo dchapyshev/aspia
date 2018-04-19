@@ -80,10 +80,14 @@ void Server::onNewConnection()
 {
     while (server_->hasPendingConnections())
     {
+        QTcpSocket* socket = server_->nextPendingConnection();
+
+        // Disable the Nagle algorithm for the socket.
+        socket->setSocketOption(QTcpSocket::LowDelayOption, 1);
+
         HostUserAuthorizer* authorizer = new HostUserAuthorizer(this);
 
-        authorizer->setNetworkChannel(
-            new NetworkChannel(server_->nextPendingConnection(), nullptr));
+        authorizer->setNetworkChannel(new NetworkChannel(socket, nullptr));
         authorizer->setUserList(user_list_);
 
         // If successful authorization, create a session.

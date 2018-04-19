@@ -15,6 +15,7 @@ namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
+constexpr int kWriteQueueReservedSize = 64;
 
 } // namespace
 
@@ -34,6 +35,7 @@ NetworkChannel::NetworkChannel(QTcpSocket* socket, QObject* parent)
             this, &NetworkChannel::onError);
 
     read_buffer_.reserve(kReadBufferReservedSize);
+    write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 NetworkChannel::~NetworkChannel()
@@ -77,6 +79,7 @@ void NetworkChannel::stop()
 
 void NetworkChannel::onConnected()
 {
+    // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
     emit connected();
 }

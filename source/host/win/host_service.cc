@@ -53,6 +53,8 @@ HostService::HostService()
 
 void HostService::start()
 {
+    SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
     QCoreApplication* app = application();
 
     app->setOrganizationName(QStringLiteral("Aspia"));

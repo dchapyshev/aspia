@@ -16,6 +16,7 @@ namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
+constexpr int kWriteQueueReservedSize = 64;
 
 } // namespace
 
@@ -40,6 +41,7 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
     });
 
     read_buffer_.reserve(kReadBufferReservedSize);
+    write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 IpcChannel::~IpcChannel()
