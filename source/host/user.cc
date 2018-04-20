@@ -18,7 +18,7 @@ constexpr int kMinPasswordLength = 8;
 constexpr int kMaxPasswordLength = 64;
 constexpr int kPasswordHashLength = 64;
 
-bool IsValidUserNameChar(const QChar& username_char)
+bool isValidUserNameChar(const QChar& username_char)
 {
     if (username_char.isLetter())
         return true;
@@ -36,12 +36,26 @@ bool IsValidUserNameChar(const QChar& username_char)
     return false;
 }
 
-bool IsValidPasswordHash(const QByteArray& password_hash)
+bool isValidPasswordHash(const QByteArray& password_hash)
 {
     if (password_hash.size() != kPasswordHashLength)
         return false;
 
     return true;
+}
+
+QByteArray createPasswordHash(const QString& password)
+{
+    static const int kIterCount = 100000;
+
+    QByteArray data = password.toUtf8();
+
+    for (int i = 0; i < kIterCount; ++i)
+    {
+        data = QCryptographicHash::hash(data, QCryptographicHash::Sha512);
+    }
+
+    return data;
 }
 
 } // namespace
@@ -56,7 +70,7 @@ bool User::isValidName(const QString& value)
 
     for (int i = 0; i < length; ++i)
     {
-        if (!IsValidUserNameChar(value[i]))
+        if (!isValidUserNameChar(value[i]))
             return false;
     }
 
@@ -88,13 +102,13 @@ bool User::setPassword(const QString& value)
     if (!isValidPassword(value))
         return false;
 
-    password_hash_ = QCryptographicHash::hash(value.toUtf8(), QCryptographicHash::Sha512);
+    password_hash_ = createPasswordHash(value);
     return true;
 }
 
 bool User::setPasswordHash(const QByteArray& value)
 {
-    if (!IsValidPasswordHash(value))
+    if (!isValidPasswordHash(value))
         return false;
 
     password_hash_ = value;

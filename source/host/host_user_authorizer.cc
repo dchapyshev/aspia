@@ -45,6 +45,25 @@ QByteArray generateNonce()
     return nonce;
 }
 
+QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce)
+{
+    static const int kIterCount = 15000;
+
+    QByteArray data = password_hash;
+
+    for (int i = 0; i < kIterCount; ++i)
+    {
+        QCryptographicHash hash(QCryptographicHash::Sha512);
+
+        hash.addData(data);
+        hash.addData(nonce);
+
+        data = hash.result();
+    }
+
+    return data;
+}
+
 } // namespace
 
 HostUserAuthorizer::HostUserAuthorizer(QObject* parent)
@@ -231,11 +250,7 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         if (user.name().compare(username, Qt::CaseInsensitive) != 0)
             continue;
 
-        QCryptographicHash key_hash(QCryptographicHash::Sha512);
-        key_hash.addData(nonce_);
-        key_hash.addData(user.passwordHash());
-
-        if (key_hash.result() != key)
+        if (createKey(user.passwordHash(), nonce_) != key)
         {
             result.set_status(proto::auth::STATUS_ACCESS_DENIED);
             break;

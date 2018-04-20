@@ -19,6 +19,39 @@ namespace {
 
 enum MessageId { ResponseMessageId };
 
+QByteArray createPasswordHash(const QString& password)
+{
+    static const int kIterCount = 100000;
+
+    QByteArray data = password.toUtf8();
+
+    for (int i = 0; i < kIterCount; ++i)
+    {
+        data = QCryptographicHash::hash(data, QCryptographicHash::Sha512);
+    }
+
+    return data;
+}
+
+QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce)
+{
+    static const int kIterCount = 15000;
+
+    QByteArray data = password_hash;
+
+    for (int i = 0; i < kIterCount; ++i)
+    {
+        QCryptographicHash hash(QCryptographicHash::Sha512);
+
+        hash.addData(data);
+        hash.addData(nonce);
+
+        data = hash.result();
+    }
+
+    return data;
+}
+
 } // namespace
 
 ClientUserAuthorizer::ClientUserAuthorizer(QWidget* parent)
@@ -138,14 +171,7 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
                 password_ = dialog.password();
             }
 
-            QCryptographicHash password_hash(QCryptographicHash::Sha512);
-            password_hash.addData(password_.toUtf8());
-
-            QCryptographicHash key_hash(QCryptographicHash::Sha512);
-            key_hash.addData(nonce_);
-            key_hash.addData(password_hash.result());
-
-            QByteArray key = key_hash.result();
+            QByteArray key = createKey(createPasswordHash(password_), nonce_);
 
             proto::auth::Response response;
             response.set_session_type(session_type_);
