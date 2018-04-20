@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/ipc_channel.cc
+// FILE:            ipc/ipc_channel.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/ipc_channel.h"
+#include "ipc/ipc_channel.h"
 
 #include <QDebug>
 #include <QLocalSocket>

@@ -9,7 +9,7 @@
 
 #include <QDebug>
 
-#include "host/host.h"
+#include "host/win/host.h"
 #include "host/host_user_authorizer.h"
 #include "network/network_channel.h"
 

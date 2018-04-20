@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/ipc_channel.h
+// FILE:            ipc/ipc_channel.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__IPC_CHANNEL_H
-#define _ASPIA_HOST__IPC_CHANNEL_H
+#ifndef _ASPIA_IPC__IPC_CHANNEL_H
+#define _ASPIA_IPC__IPC_CHANNEL_H
 
 #include <QByteArray>
 #include <QPair>
@@ -72,4 +72,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__IPC_CHANNEL_H
+#endif // _ASPIA_IPC__IPC_CHANNEL_H

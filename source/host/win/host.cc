@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/host.cc
+// FILE:            host/win/host.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/host.h"
+#include "host/win/host.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -14,8 +14,8 @@
 #include <QDebug>
 
 #include "host/win/host_process.h"
-#include "host/ipc_channel.h"
-#include "host/ipc_server.h"
+#include "ipc/ipc_channel.h"
+#include "ipc/ipc_server.h"
 #include "network/network_channel.h"
 
 namespace aspia {

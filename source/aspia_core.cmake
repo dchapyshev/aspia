@@ -226,8 +226,6 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_request.h
     ${PROJECT_SOURCE_DIR}/host/file_worker.cc
     ${PROJECT_SOURCE_DIR}/host/file_worker.h
-    ${PROJECT_SOURCE_DIR}/host/host.cc
-    ${PROJECT_SOURCE_DIR}/host/host.h
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
     ${PROJECT_SOURCE_DIR}/host/host_server.cc
@@ -242,10 +240,6 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/host/input_injector.cc
     ${PROJECT_SOURCE_DIR}/host/input_injector.h
-    ${PROJECT_SOURCE_DIR}/host/ipc_channel.cc
-    ${PROJECT_SOURCE_DIR}/host/ipc_channel.h
-    ${PROJECT_SOURCE_DIR}/host/ipc_server.cc
-    ${PROJECT_SOURCE_DIR}/host/ipc_server.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
     ${PROJECT_SOURCE_DIR}/host/user.cc
@@ -264,6 +258,8 @@ list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 
 list(APPEND SOURCE_HOST_WIN
+    ${PROJECT_SOURCE_DIR}/host/win/host.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host.h
     ${PROJECT_SOURCE_DIR}/host/win/host_main.cc
     ${PROJECT_SOURCE_DIR}/host/win/host_main.h
     ${PROJECT_SOURCE_DIR}/host/win/host_process.cc
@@ -274,6 +270,12 @@ list(APPEND SOURCE_HOST_WIN
     ${PROJECT_SOURCE_DIR}/host/win/host_service.h
     ${PROJECT_SOURCE_DIR}/host/win/host_service_main.cc
     ${PROJECT_SOURCE_DIR}/host/win/host_service_main.h)
+
+list(APPEND SOURCE_IPC
+    ${PROJECT_SOURCE_DIR}/ipc/ipc_channel.cc
+    ${PROJECT_SOURCE_DIR}/ipc/ipc_channel.h
+    ${PROJECT_SOURCE_DIR}/ipc/ipc_server.cc
+    ${PROJECT_SOURCE_DIR}/ipc/ipc_server.h)
 
 list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.cc

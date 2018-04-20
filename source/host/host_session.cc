@@ -11,7 +11,7 @@
 
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
-#include "host/ipc_channel.h"
+#include "ipc/ipc_channel.h"
 
 namespace aspia {
 

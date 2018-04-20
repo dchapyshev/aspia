@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/host.h
+// FILE:            host/win/host.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__HOST_H
-#define _ASPIA_HOST__HOST_H
+#ifndef _ASPIA_HOST__WIN__HOST_H
+#define _ASPIA_HOST__WIN__HOST_H
 
 #include <QObject>
 #include <QPointer>
@@ -78,4 +78,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_H
+#endif // _ASPIA_HOST__WIN__HOST_H

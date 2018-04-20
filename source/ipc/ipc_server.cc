@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/ipc_server.cc
+// FILE:            ipc/ipc_server.cc
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "host/ipc_server.h"
+#include "ipc/ipc_server.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -13,7 +13,7 @@
 
 #include <random>
 
-#include "host/ipc_channel.h"
+#include "ipc/ipc_channel.h"
 
 namespace aspia {
 

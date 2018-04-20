@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            host/ipc_server.h
+// FILE:            ipc/ipc_server.h
 // LICENSE:         GNU Lesser General Public License 2.1
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_HOST__IPC_SERVER_H
-#define _ASPIA_HOST__IPC_SERVER_H
+#ifndef _ASPIA_IPC__IPC_SERVER_H
+#define _ASPIA_IPC__IPC_SERVER_H
 
 #include <QObject>
 #include <QPointer>
@@ -45,4 +45,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__IPC_SERVER_H
+#endif // _ASPIA_IPC__IPC_SERVER_H
