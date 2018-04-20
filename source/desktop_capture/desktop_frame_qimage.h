@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            desktop_capture/desktop_frame_qimage.h
-// LICENSE:         GNU Lesser General Public License 2.1
+// LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

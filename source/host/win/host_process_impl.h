@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            host/win/host_process_impl.h
-// LICENSE:         GNU Lesser General Public License 2.1
+// LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

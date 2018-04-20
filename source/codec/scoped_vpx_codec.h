@@ -1,7 +1,7 @@
 //
 // PROJECT:         Aspia
 // FILE:            codec/scoped_vpx_codec.h
-// LICENSE:         GNU Lesser General Public License 2.1
+// LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 

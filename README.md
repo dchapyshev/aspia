@@ -1,34 +1,16 @@
 Aspia
-====================
+=====
 Remote desktop and system information tool.
-
-|Build Status|Coverity Scan Status|
-|:--:|:--:|
-|[![Build Status](https://ci.appveyor.com/api/projects/status/i7353lnxrgmi2omq/branch/master?svg=true)](https://ci.appveyor.com/project/dchapyshev/aspia/branch/master)|[![Coverity Scan Status](https://scan.coverity.com/projects/13117/badge.svg)](https://scan.coverity.com/projects/aspia-remote-desktop)|
 
 Currently supported
 -------------------
 - Remote desktop management
 - Remote desktop view
 - File transfer
-- Encryption (all transmitted information is encrypted using the algorithms XSalsa20 + Poly1305)
+- Encryption (TLS 1.2 or above)
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
 - Work in service mode
-
-It is planned to implement
---------------------------
-- Audio transfer
-- Authorization with Windows credentials
-- NAT traversal
-
-Building
---------
-For building the project requires:
-   - [Visual Studio 2017](http://visualstudio.com "Visual Studio 2017")
-   - [YASM compiller](http://yasm.tortall.net/Download.html "YASM compiller") (version for "general use")
-
-For more information, see BUILDING.md.
 
 System requirements
 -------------------
@@ -41,6 +23,6 @@ If you have any questions, you can email me: dmitry@aspia.ru
 
 Licensing
 ---------
-Project code is available under the GNU Lesser General Public License 2.1.
+Project code is available under the GNU General Public License 3.
 
 For more information, see LICENSE.md.
