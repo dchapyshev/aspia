@@ -234,14 +234,15 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    if (response.username().empty() || response.key().empty())
+    const std::string& key = response.key();
+
+    if (response.username().empty() || key.empty())
     {
         stop();
         return;
     }
 
     QString username = QString::fromStdString(response.username());
-    QByteArray key = QByteArray(response.key().c_str(), response.key().size());
 
     proto::auth::Result result;
 
@@ -250,7 +251,7 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         if (user.name().compare(username, Qt::CaseInsensitive) != 0)
             continue;
 
-        if (createKey(user.passwordHash(), nonce_) != key)
+        if (createKey(user.passwordHash(), nonce_) != QByteArray(key.c_str(), key.size()))
         {
             result.set_status(proto::auth::STATUS_ACCESS_DENIED);
             break;

@@ -34,14 +34,13 @@ bool SslServer::generateCertificateAndKey(QSslCertificate* certificate, QSslKey*
 
     bool result = false;
 
-    EVP_PKEY* pkey = nullptr;
     BIGNUM* big_number = nullptr;
     RSA* rsa = nullptr;
     X509* x509 = nullptr;
     BIO* bp_public = nullptr;
     BIO* bp_private = nullptr;
 
-    pkey = EVP_PKEY_new();
+    EVP_PKEY* pkey = EVP_PKEY_new();
     if (!pkey)
     {
         qWarning("EVP_PKEY_new failed");
