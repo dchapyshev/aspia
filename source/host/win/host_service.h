@@ -17,7 +17,7 @@
 
 namespace aspia {
 
-class Server;
+class HostServer;
 
 class HostService : public Service<QCoreApplication>
 {
@@ -33,7 +33,7 @@ protected:
 private:
     QScopedPointer<FileLogger> file_logger_;
     QScopedPointer<ScopedCOMInitializer> com_initializer_;
-    QPointer<Server> server_;
+    QPointer<HostServer> server_;
 
     Q_DISABLE_COPY(HostService)
 };

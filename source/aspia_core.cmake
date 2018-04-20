@@ -3,6 +3,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/libsodium/include)
@@ -10,6 +11,7 @@ include_directories(
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
+    ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
@@ -228,6 +230,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host.h
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
+    ${PROJECT_SOURCE_DIR}/host/host_server.cc
+    ${PROJECT_SOURCE_DIR}/host/host_server.h
     ${PROJECT_SOURCE_DIR}/host/host_session.cc
     ${PROJECT_SOURCE_DIR}/host/host_session.h
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.cc
@@ -276,8 +280,10 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/firewall_manager.h
     ${PROJECT_SOURCE_DIR}/network/network_channel.cc
     ${PROJECT_SOURCE_DIR}/network/network_channel.h
-    ${PROJECT_SOURCE_DIR}/network/server.cc
-    ${PROJECT_SOURCE_DIR}/network/server.h)
+    ${PROJECT_SOURCE_DIR}/network/network_server.cc
+    ${PROJECT_SOURCE_DIR}/network/network_server.h
+    ${PROJECT_SOURCE_DIR}/network/ssl_server.cc
+    ${PROJECT_SOURCE_DIR}/network/ssl_server.h)
 
 list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc

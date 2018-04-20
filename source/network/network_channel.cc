@@ -19,20 +19,25 @@ constexpr int kWriteQueueReservedSize = 64;
 
 } // namespace
 
-NetworkChannel::NetworkChannel(QTcpSocket* socket, QObject* parent)
+NetworkChannel::NetworkChannel(ChannelType channel_type, QSslSocket* socket, QObject* parent)
     : QObject(parent),
+      channel_type_(channel_type),
       socket_(socket)
 {
+    Q_ASSERT(channel_type_ == ClientChannel || channel_type_ == ServerChannel);
     Q_ASSERT(socket_);
 
     socket_->setParent(this);
 
-    connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
-    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected);
-    connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
-    connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
+    connect(socket_, &QSslSocket::encrypted, this, &NetworkChannel::onEncrypted);
+    connect(socket_, &QSslSocket::disconnected, this, &NetworkChannel::disconnected);
+    connect(socket_, &QSslSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
+    connect(socket_, &QSslSocket::readyRead, this, &NetworkChannel::onReadyRead);
+
+    connect(socket_, QOverload<QSslSocket::SocketError>::of(&QSslSocket::error),
             this, &NetworkChannel::onError);
+    connect(socket_, QOverload<const QList<QSslError>&>::of(&QSslSocket::sslErrors),
+            this, &NetworkChannel::onSslErrors);
 
     read_buffer_.reserve(kReadBufferReservedSize);
     write_queue_.reserve(kWriteQueueReservedSize);
@@ -46,12 +51,18 @@ NetworkChannel::~NetworkChannel()
 // static
 NetworkChannel* NetworkChannel::createClient(QObject* parent)
 {
-    return new NetworkChannel(new QTcpSocket(), parent);
+    return new NetworkChannel(ClientChannel, new QSslSocket(), parent);
 }
 
 void NetworkChannel::connectToHost(const QString& address, int port)
 {
-    socket_->connectToHost(address, port);
+    if (channel_type_ == ServerChannel)
+    {
+        qWarning("The channel is server. The method invocation is invalid.");
+        return;
+    }
+
+    socket_->connectToHostEncrypted(address, port);
 }
 
 void NetworkChannel::readMessage()
@@ -77,16 +88,28 @@ void NetworkChannel::stop()
     socket_->abort();
 }
 
-void NetworkChannel::onConnected()
+void NetworkChannel::onEncrypted()
 {
     // Disable the Nagle algorithm for the socket.
-    socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
+    socket_->setSocketOption(QSslSocket::LowDelayOption, 1);
     emit connected();
 }
 
 void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
 {
     emit errorOccurred(socket_->errorString());
+}
+
+void NetworkChannel::onSslErrors(const QList<QSslError> &errors)
+{
+    // TODO: Show SSL errors to user.
+
+    for (const auto& error : errors)
+    {
+        qWarning() << "SSL error: " << error.errorString();
+    }
+
+    socket_->ignoreSslErrors(errors);
 }
 
 void NetworkChannel::onBytesWritten(qint64 bytes)

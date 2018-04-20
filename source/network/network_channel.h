@@ -11,17 +11,24 @@
 #include <QPair>
 #include <QPointer>
 #include <QQueue>
-#include <QTcpSocket>
+#include <QSslSocket>
 
 namespace aspia {
 
-class Server;
+class NetworkServer;
 
 class NetworkChannel : public QObject
 {
     Q_OBJECT
 
 public:
+    enum ChannelType
+    {
+        ServerChannel,
+        ClientChannel
+    };
+    Q_ENUM(ChannelType);
+
     ~NetworkChannel();
 
     static NetworkChannel* createClient(QObject* parent = nullptr);
@@ -41,21 +48,23 @@ public slots:
     void stop();
 
 private slots:
-    void onConnected();
+    void onEncrypted();
     void onError(QAbstractSocket::SocketError error);
+    void onSslErrors(const QList<QSslError> &errors);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
 
 private:
-    friend class Server;
+    friend class NetworkServer;
 
-    NetworkChannel(QTcpSocket* socket, QObject* parent);
+    NetworkChannel(ChannelType channel_type, QSslSocket* socket, QObject* parent);
 
     void scheduleWrite();
 
     using MessageSizeType = quint32;
 
-    QPointer<QTcpSocket> socket_;
+    const ChannelType channel_type_;
+    QPointer<QSslSocket> socket_;
 
     QQueue<QPair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;

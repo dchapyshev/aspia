@@ -17,8 +17,8 @@
 
 #include "base/win/security_helpers.h"
 #include "base/system_error_code.h"
+#include "host/host_server.h"
 #include "network/firewall_manager.h"
-#include "network/server.h"
 #include "version.h"
 
 namespace aspia {
@@ -85,7 +85,7 @@ void HostService::start()
                             port);
     }
 
-    server_ = new Server();
+    server_ = new HostServer();
 
     if (!server_->start(port))
     {

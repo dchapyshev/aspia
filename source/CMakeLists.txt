@@ -108,12 +108,14 @@ target_link_libraries(aspia_core
     iphlpapi
     mpr
     msi
+    libeay32
     netapi32
     psapi
     sas
     secur32
     setupapi
     shlwapi
+    ssleay32
     taskschd
     userenv
     uxtheme
