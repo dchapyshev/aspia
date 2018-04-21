@@ -129,6 +129,16 @@ bool Status_IsValid(int value) {
   }
 }
 
+bool Hashing_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -136,6 +146,8 @@ void Request::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Request::kVersionFieldNumber;
+const int Request::kHashingFieldNumber;
+const int Request::kRoundsFieldNumber;
 const int Request::kNonceFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -156,13 +168,17 @@ Request::Request(const Request& from)
   if (from.nonce().size() > 0) {
     nonce_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.nonce_);
   }
-  version_ = from.version_;
+  ::memcpy(&version_, &from.version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&rounds_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(rounds_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.Request)
 }
 
 void Request::SharedCtor() {
   nonce_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  version_ = 0u;
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&rounds_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(rounds_));
   _cached_size_ = 0;
 }
 
@@ -200,7 +216,9 @@ void Request::Clear() {
   (void) cached_has_bits;
 
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  version_ = 0u;
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&rounds_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(rounds_));
   _internal_metadata_.Clear();
 }
 
@@ -234,10 +252,39 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes nonce = 2;
+      // .aspia.proto.auth.Hashing hashing = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_hashing(static_cast< ::aspia::proto::auth::Hashing >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 rounds = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &rounds_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes nonce = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_nonce()));
         } else {
@@ -277,10 +324,21 @@ void Request::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->version(), output);
   }
 
-  // bytes nonce = 2;
+  // .aspia.proto.auth.Hashing hashing = 2;
+  if (this->hashing() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->hashing(), output);
+  }
+
+  // uint32 rounds = 3;
+  if (this->rounds() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->rounds(), output);
+  }
+
+  // bytes nonce = 4;
   if (this->nonce().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      2, this->nonce(), output);
+      4, this->nonce(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -294,7 +352,7 @@ size_t Request::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // bytes nonce = 2;
+  // bytes nonce = 4;
   if (this->nonce().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -306,6 +364,19 @@ size_t Request::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->version());
+  }
+
+  // .aspia.proto.auth.Hashing hashing = 2;
+  if (this->hashing() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->hashing());
+  }
+
+  // uint32 rounds = 3;
+  if (this->rounds() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->rounds());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -334,6 +405,12 @@ void Request::MergeFrom(const Request& from) {
   if (from.version() != 0) {
     set_version(from.version());
   }
+  if (from.hashing() != 0) {
+    set_hashing(from.hashing());
+  }
+  if (from.rounds() != 0) {
+    set_rounds(from.rounds());
+  }
 }
 
 void Request::CopyFrom(const Request& from) {
@@ -355,6 +432,8 @@ void Request::InternalSwap(Request* other) {
   using std::swap;
   nonce_.Swap(&other->nonce_);
   swap(version_, other->version_);
+  swap(hashing_, other->hashing_);
+  swap(rounds_, other->rounds_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

@@ -98,6 +98,17 @@ const Status Status_MIN = STATUS_UNKNOWN;
 const Status Status_MAX = STATUS_CANCELED;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
+enum Hashing {
+  HASHING_UNKNOWN = 0,
+  HASHING_SHA512 = 1,
+  Hashing_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Hashing_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Hashing_IsValid(int value);
+const Hashing Hashing_MIN = HASHING_UNKNOWN;
+const Hashing Hashing_MAX = HASHING_SHA512;
+const int Hashing_ARRAYSIZE = Hashing_MAX + 1;
+
 // ===================================================================
 
 class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Request) */ {
@@ -180,9 +191,9 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes nonce = 2;
+  // bytes nonce = 4;
   void clear_nonce();
-  static const int kNonceFieldNumber = 2;
+  static const int kNonceFieldNumber = 4;
   const ::std::string& nonce() const;
   void set_nonce(const ::std::string& value);
   #if LANG_CXX11
@@ -200,12 +211,26 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::google::protobuf::uint32 version() const;
   void set_version(::google::protobuf::uint32 value);
 
+  // .aspia.proto.auth.Hashing hashing = 2;
+  void clear_hashing();
+  static const int kHashingFieldNumber = 2;
+  ::aspia::proto::auth::Hashing hashing() const;
+  void set_hashing(::aspia::proto::auth::Hashing value);
+
+  // uint32 rounds = 3;
+  void clear_rounds();
+  static const int kRoundsFieldNumber = 3;
+  ::google::protobuf::uint32 rounds() const;
+  void set_rounds(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.auth.Request)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr nonce_;
   ::google::protobuf::uint32 version_;
+  int hashing_;
+  ::google::protobuf::uint32 rounds_;
   mutable int _cached_size_;
   friend struct ::protobuf_authorization_2eproto::TableStruct;
   friend void ::protobuf_authorization_2eproto::InitDefaultsRequestImpl();
@@ -459,7 +484,35 @@ inline void Request::set_version(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.version)
 }
 
-// bytes nonce = 2;
+// .aspia.proto.auth.Hashing hashing = 2;
+inline void Request::clear_hashing() {
+  hashing_ = 0;
+}
+inline ::aspia::proto::auth::Hashing Request::hashing() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.hashing)
+  return static_cast< ::aspia::proto::auth::Hashing >(hashing_);
+}
+inline void Request::set_hashing(::aspia::proto::auth::Hashing value) {
+  
+  hashing_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.hashing)
+}
+
+// uint32 rounds = 3;
+inline void Request::clear_rounds() {
+  rounds_ = 0u;
+}
+inline ::google::protobuf::uint32 Request::rounds() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.rounds)
+  return rounds_;
+}
+inline void Request::set_rounds(::google::protobuf::uint32 value) {
+  
+  rounds_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.rounds)
+}
+
+// bytes nonce = 4;
 inline void Request::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -673,6 +726,7 @@ namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::auth::Hashing> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

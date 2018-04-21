@@ -28,11 +28,19 @@ enum Status
     STATUS_CANCELED      = 3;
 }
 
+enum Hashing
+{
+    HASHING_UNKNOWN = 0;
+    HASHING_SHA512  = 1;
+}
+
 // Host to client.
 message Request
 {
-    uint32 version = 1;
-    bytes nonce    = 2;
+    uint32 version   = 1;
+    Hashing hashing  = 2;
+    uint32 rounds    = 3;
+    bytes nonce      = 4;
 }
 
 // Client to host.

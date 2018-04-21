@@ -33,13 +33,11 @@ QByteArray createPasswordHash(const QString& password)
     return data;
 }
 
-QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce)
+QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce, quint32 rounds)
 {
-    static const int kIterCount = 15000;
-
     QByteArray data = password_hash;
 
-    for (int i = 0; i < kIterCount; ++i)
+    for (quint32 i = 0; i < rounds; ++i)
     {
         QCryptographicHash hash(QCryptographicHash::Sha512);
 
@@ -143,12 +141,31 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
                 return;
             }
 
+            if (request.version() != 0)
+            {
+                emit errorOccurred(tr("Authorization error: Unsupported version of protocol."));
+                cancel();
+                return;
+            }
+
+            if (request.hashing() != proto::auth::HASHING_SHA512)
+            {
+                emit errorOccurred(tr("Authorization error: Unsupported hashing algorithm."));
+                cancel();
+                return;
+            }
+
+            if (!request.rounds())
+            {
+                emit errorOccurred(tr("Authorization error: Invalid number of hashing rounds."));
+                cancel();
+                return;
+            }
+
             nonce_ = QByteArray(request.nonce().c_str(), request.nonce().size());
             if (nonce_.isEmpty())
             {
-                qWarning("Empty nonce not allowed");
-
-                emit errorOccurred(tr("Protocol error: Invalid authorization request received."));
+                emit errorOccurred(tr("Authorization error: Empty nonce is not allowed."));
                 cancel();
                 return;
             }
@@ -171,7 +188,7 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
                 password_ = dialog.password();
             }
 
-            QByteArray key = createKey(createPasswordHash(password_), nonce_);
+            QByteArray key = createKey(createPasswordHash(password_), nonce_, request.rounds());
 
             proto::auth::Response response;
             response.set_session_type(session_type_);

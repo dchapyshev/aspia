@@ -19,6 +19,8 @@ namespace aspia {
 
 namespace {
 
+const quint32 kKeyHashingRounds = 15000;
+
 enum MessageId
 {
     RequestMessageId,
@@ -45,13 +47,11 @@ QByteArray generateNonce()
     return nonce;
 }
 
-QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce)
+QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce, quint32 rounds)
 {
-    static const int kIterCount = 15000;
-
     QByteArray data = password_hash;
 
-    for (int i = 0; i < kIterCount; ++i)
+    for (quint32 i = 0; i < rounds; ++i)
     {
         QCryptographicHash hash(QCryptographicHash::Sha512);
 
@@ -147,6 +147,8 @@ void HostUserAuthorizer::start()
     proto::auth::Request request;
 
     request.set_version(0);
+    request.set_hashing(proto::auth::HASHING_SHA512);
+    request.set_rounds(kKeyHashingRounds);
     request.set_nonce(nonce_.constData(), nonce_.size());
 
     state_ = RequestWrite;
@@ -251,7 +253,8 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         if (user.name().compare(username, Qt::CaseInsensitive) != 0)
             continue;
 
-        if (createKey(user.passwordHash(), nonce_) != QByteArray(key.c_str(), key.size()))
+        if (createKey(user.passwordHash(), nonce_, kKeyHashingRounds) !=
+                QByteArray(key.c_str(), key.size()))
         {
             result.set_status(proto::auth::STATUS_ACCESS_DENIED);
             break;
