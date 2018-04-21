@@ -228,7 +228,7 @@ bool SslServer::setPrivateKey(const QString& file_path,
     if (!key_file.open(QFile::ReadOnly))
     {
         qWarning() << "Unable to open key file '" << file_path << "': "
-            << key_file.errorString();
+                   << key_file.errorString();
         return false;
     }
 

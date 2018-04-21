@@ -83,20 +83,17 @@ NetworkChannel* NetworkServer::nextPendingChannel()
 
 void NetworkServer::onNewSslConnection()
 {
-    while (ssl_server_->hasPendingConnections())
-    {
-        QSslSocket* socket = reinterpret_cast<QSslSocket*>(ssl_server_->nextPendingConnection());
-        if (!socket)
-            continue;
+    QSslSocket* socket = reinterpret_cast<QSslSocket*>(ssl_server_->nextPendingConnection());
+    if (!socket)
+        return;
 
-        // Disable the Nagle algorithm for the socket.
-        socket->setSocketOption(QSslSocket::LowDelayOption, 1);
+    // Disable the Nagle algorithm for the socket.
+    socket->setSocketOption(QSslSocket::LowDelayOption, 1);
 
-        pending_channels_.push_back(
-            new NetworkChannel(NetworkChannel::ServerChannel, socket, this));
+    pending_channels_.push_back(
+        new NetworkChannel(NetworkChannel::ServerChannel, socket, this));
 
-        emit newChannelConnected();
-    }
+    emit newChannelConnected();
 }
 
 } // namespace aspia
