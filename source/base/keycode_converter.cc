@@ -33,25 +33,25 @@ const size_t kKeycodeMapEntries = _countof(usb_keycode_map);
 } // namespace
 
 // static
-int KeycodeConverter::InvalidNativeKeycode()
+int KeycodeConverter::invalidNativeKeycode()
 {
     return usb_keycode_map[0].native_keycode;
 }
 
 // static
-quint32 KeycodeConverter::InvalidUsbKeycode()
+quint32 KeycodeConverter::invalidUsbKeycode()
 {
     return usb_keycode_map[0].usb_keycode;
 }
 
 // static
-int KeycodeConverter::InvalidQtKeycode()
+int KeycodeConverter::invalidQtKeycode()
 {
     return usb_keycode_map[0].qt_keycode;
 }
 
 // static
-int KeycodeConverter::UsbKeycodeToNativeKeycode(quint32 usb_keycode)
+int KeycodeConverter::usbKeycodeToNativeKeycode(quint32 usb_keycode)
 {
     // Deal with some special-cases that don't fit the 1:1 mapping.
     if (usb_keycode == 0x070032) // non-US hash.
@@ -67,11 +67,11 @@ int KeycodeConverter::UsbKeycodeToNativeKeycode(quint32 usb_keycode)
             return usb_keycode_map[i].native_keycode;
     }
 
-    return InvalidNativeKeycode();
+    return invalidNativeKeycode();
 }
 
 // static
-quint32 KeycodeConverter::NativeKeycodeToUsbKeycode(int native_keycode)
+quint32 KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
 {
     for (size_t i = 0; i < kKeycodeMapEntries; ++i)
     {
@@ -79,11 +79,11 @@ quint32 KeycodeConverter::NativeKeycodeToUsbKeycode(int native_keycode)
             return usb_keycode_map[i].usb_keycode;
     }
 
-    return InvalidUsbKeycode();
+    return invalidUsbKeycode();
 }
 
 // static
-int KeycodeConverter::QtKeycodeToUsbKeycode(int qt_keycode)
+int KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
 {
     for (size_t i = 0; i < kKeycodeMapEntries; ++i)
     {
@@ -91,7 +91,7 @@ int KeycodeConverter::QtKeycodeToUsbKeycode(int qt_keycode)
             return usb_keycode_map[i].usb_keycode;
     }
 
-    return InvalidUsbKeycode();
+    return invalidUsbKeycode();
 }
 
 } // namespace aspia

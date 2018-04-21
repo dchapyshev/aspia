@@ -97,8 +97,8 @@ InputInjectorImpl::~InputInjectorImpl()
 {
     for (auto usb_keycode : pressed_keys_)
     {
-        int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(usb_keycode);
-        if (scancode != KeycodeConverter::InvalidNativeKeycode())
+        int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(usb_keycode);
+        if (scancode != KeycodeConverter::invalidNativeKeycode())
         {
             sendKeyboardScancode(static_cast<WORD>(scancode),
                                  KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
@@ -210,8 +210,8 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
         pressed_keys_.remove(event.usb_keycode());
     }
 
-    int scancode = KeycodeConverter::UsbKeycodeToNativeKeycode(event.usb_keycode());
-    if (scancode == KeycodeConverter::InvalidNativeKeycode())
+    int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
+    if (scancode == KeycodeConverter::invalidNativeKeycode())
         return;
 
     switchToInputDesktop();

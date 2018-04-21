@@ -99,8 +99,8 @@ void DesktopWidget::executeKeySequense(int key_sequence)
     if (key_sequence & Qt::MetaModifier)
         keys.push_back(kUsbCodeLeftMeta);
 
-    int key = KeycodeConverter::QtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
-    if (key == KeycodeConverter::InvalidUsbKeycode())
+    int key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
+    if (key == KeycodeConverter::invalidUsbKeycode())
         return;
 
     keys.push_back(key);
@@ -250,13 +250,13 @@ void DesktopWidget::processKeyEvent(QKeyEvent* event)
     if (key == Qt::Key_CapsLock || key == Qt::Key_NumLock)
         return;
 
-    uint32_t flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
+    quint32 flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
 
     flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
-    quint32 usb_keycode = KeycodeConverter::NativeKeycodeToUsbKeycode(event->nativeScanCode());
-    if (usb_keycode == KeycodeConverter::InvalidUsbKeycode())
+    quint32 usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
         return;
 
     emit sendKeyEvent(usb_keycode, flags);

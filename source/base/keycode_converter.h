@@ -35,22 +35,22 @@ class KeycodeConverter
 {
 public:
     // Return the value that identifies an invalid native keycode.
-    static int InvalidNativeKeycode();
+    static int invalidNativeKeycode();
 
     // Return the value that identifies an invalid USB keycode.
-    static quint32 InvalidUsbKeycode();
+    static quint32 invalidUsbKeycode();
 
     // Return the value that identifies an invalid Qt keycode.
-    static int InvalidQtKeycode();
+    static int invalidQtKeycode();
 
     // Convert a USB keycode into an equivalent platform native keycode.
-    static int UsbKeycodeToNativeKeycode(quint32 usb_keycode);
+    static int usbKeycodeToNativeKeycode(quint32 usb_keycode);
 
     // Convert a platform native keycode into an equivalent USB keycode.
-    static quint32 NativeKeycodeToUsbKeycode(int native_keycode);
+    static quint32 nativeKeycodeToUsbKeycode(int native_keycode);
 
     // Convert a Qt keycode into an equivalent USB keycode.
-    static int QtKeycodeToUsbKeycode(int qt_keycode);
+    static int qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
     Q_DISABLE_COPY(KeycodeConverter)
