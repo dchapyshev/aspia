@@ -105,6 +105,16 @@ void InitDefaultsResult() {
 namespace aspia {
 namespace proto {
 namespace auth {
+bool Version_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool SessionType_IsValid(int value) {
   switch (value) {
     case 0:
@@ -238,14 +248,15 @@ bool Request::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 version = 1;
+      // .aspia.proto.auth.Version version = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
-
+          int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &version_)));
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_version(static_cast< ::aspia::proto::auth::Version >(value));
         } else {
           goto handle_unusual;
         }
@@ -319,9 +330,10 @@ void Request::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 version = 1;
+  // .aspia.proto.auth.Version version = 1;
   if (this->version() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->version(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->version(), output);
   }
 
   // .aspia.proto.auth.Hashing hashing = 2;
@@ -359,11 +371,10 @@ size_t Request::ByteSizeLong() const {
         this->nonce());
   }
 
-  // uint32 version = 1;
+  // .aspia.proto.auth.Version version = 1;
   if (this->version() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->version());
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->version());
   }
 
   // .aspia.proto.auth.Hashing hashing = 2;

@@ -146,7 +146,7 @@ void HostUserAuthorizer::start()
 
     proto::auth::Request request;
 
-    request.set_version(0);
+    request.set_version(proto::auth::VERSION_1_0_0);
     request.set_hashing(proto::auth::HASHING_SHA512);
     request.set_rounds(kKeyHashingRounds);
     request.set_nonce(nonce_.constData(), nonce_.size());
