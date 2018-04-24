@@ -9,7 +9,7 @@
 #define _ASPIA_HOST__HOST_USER_AUTHORIZER_H
 
 #include <QObject>
-#include <QScopedPointer>
+#include <QPointer>
 
 #include "host/user_list.h"
 #include "protocol/authorization.pb.h"
@@ -63,7 +63,7 @@ private:
     State state_ = NotStarted;
 
     UserList user_list_;
-    QScopedPointer<NetworkChannel> network_channel_;
+    QPointer<NetworkChannel> network_channel_;
 
     QByteArray nonce_;
     int timer_id_ = 0;

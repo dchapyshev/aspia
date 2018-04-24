@@ -84,12 +84,12 @@ void HostUserAuthorizer::setUserList(const UserList& user_list)
 
 void HostUserAuthorizer::setNetworkChannel(NetworkChannel* network_channel)
 {
-    network_channel_.reset(network_channel);
+    network_channel_ = network_channel;
 }
 
 NetworkChannel* HostUserAuthorizer::takeNetworkChannel()
 {
-    return network_channel_.take();
+    return network_channel_;
 }
 
 proto::auth::Status HostUserAuthorizer::status() const
@@ -166,7 +166,10 @@ void HostUserAuthorizer::stop()
         timer_id_ = 0;
     }
 
-    network_channel_.reset();
+    connect(network_channel_, &NetworkChannel::disconnected,
+            network_channel_, &NetworkChannel::deleteLater);
+
+    network_channel_->stop();
 
     state_ = Finished;
     session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
