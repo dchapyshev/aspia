@@ -46,7 +46,13 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
 
 IpcChannel::~IpcChannel()
 {
-    socket_->abort();
+    if (!socket_.isNull())
+    {
+        socket_->abort();
+
+        if (socket_->state() != QLocalSocket::UnconnectedState)
+            socket_->waitForDisconnected();
+    }
 }
 
 // static

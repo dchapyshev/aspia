@@ -50,23 +50,48 @@ bool NetworkServer::start(int port)
 
 void NetworkServer::stop()
 {
+    if (tcp_server_.isNull())
+    {
+        qWarning("Server already stopped");
+        return;
+    }
+
+    for (auto it = pending_channels_.begin(); it != pending_channels_.end(); ++it)
+    {
+        NetworkChannel* network_channel = *it;
+
+        if (network_channel)
+            network_channel->stop();
+    }
+
+    for (auto it = ready_channels_.begin(); it != ready_channels_.end(); ++it)
+    {
+        NetworkChannel* network_channel = *it;
+
+        if (network_channel)
+            network_channel->stop();
+    }
+
+    pending_channels_.clear();
+    ready_channels_.clear();
+
     tcp_server_->close();
     delete tcp_server_;
 }
 
-bool NetworkServer::hasPendingChannels() const
+bool NetworkServer::hasReadyChannels() const
 {
-    return !pending_channels_.isEmpty();
+    return !ready_channels_.isEmpty();
 }
 
-NetworkChannel* NetworkServer::nextPendingChannel()
+NetworkChannel* NetworkServer::nextReadyChannel()
 {
-    if (pending_channels_.isEmpty())
+    if (ready_channels_.isEmpty())
         return nullptr;
 
-    NetworkChannel* channel = pending_channels_.front();
-    pending_channels_.pop_front();
-    return channel;
+    NetworkChannel* network_channel = ready_channels_.front();
+    ready_channels_.pop_front();
+    return network_channel;
 }
 
 void NetworkServer::onNewConnection()
@@ -75,13 +100,44 @@ void NetworkServer::onNewConnection()
     if (!socket)
         return;
 
-    // Disable the Nagle algorithm for the socket.
-    socket->setSocketOption(QTcpSocket::LowDelayOption, 1);
+    NetworkChannel* network_channel =
+        new NetworkChannel(NetworkChannel::ServerChannel, socket, this);
 
-    pending_channels_.push_back(
-        new NetworkChannel(NetworkChannel::ServerChannel, socket, this));
+    connect(network_channel, &NetworkChannel::connected,
+            this, &NetworkServer::onChannelReady);
+    connect(network_channel, &NetworkChannel::disconnected,
+            network_channel, &NetworkChannel::deleteLater);
 
-    emit newChannelConnected();
+    pending_channels_.push_back(network_channel);
+
+    // Start connection (key exchange).
+    network_channel->onConnected();
+}
+
+void NetworkServer::onChannelReady()
+{
+    auto it = pending_channels_.begin();
+
+    while (it != pending_channels_.end())
+    {
+        NetworkChannel* network_channel = *it;
+
+        if (!network_channel)
+        {
+            it = pending_channels_.erase(it);
+        }
+        else if (network_channel->channelState() == NetworkChannel::Encrypted)
+        {
+            it = pending_channels_.erase(it);
+
+            ready_channels_.push_back(network_channel);
+            emit newChannelReady();
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 } // namespace aspia

@@ -9,7 +9,7 @@
 #define _ASPIA_NETWORK__NETWORK_SERVER_H
 
 #include <QPointer>
-#include <QQueue>
+#include <QList>
 #include <QTcpServer>
 
 namespace aspia {
@@ -27,18 +27,25 @@ public:
     bool start(int port);
     void stop();
 
-    bool hasPendingChannels() const;
-    NetworkChannel* nextPendingChannel();
+    bool hasReadyChannels() const;
+    NetworkChannel* nextReadyChannel();
 
 signals:
-    void newChannelConnected();
+    void newChannelReady();
 
 private slots:
     void onNewConnection();
+    void onChannelReady();
 
 private:
     QPointer<QTcpServer> tcp_server_;
-    QQueue<NetworkChannel*> pending_channels_;
+
+    // Contains a list of channels that are already connected, but the key exchange
+    // is not yet complete.
+    QList<QPointer<NetworkChannel>> pending_channels_;
+
+    // Contains a list of channels that are ready for use.
+    QList<QPointer<NetworkChannel>> ready_channels_;
 
     Q_DISABLE_COPY(NetworkServer)
 };

@@ -15,6 +15,7 @@
 
 namespace aspia {
 
+class Encryptor;
 class NetworkServer;
 
 class NetworkChannel : public QObject
@@ -29,11 +30,21 @@ public:
     };
     Q_ENUM(ChannelType);
 
+    enum ChannelState
+    {
+        NotConnected,
+        Connected,
+        Encrypted
+    };
+    Q_ENUM(ChannelState);
+
     ~NetworkChannel();
 
     static NetworkChannel* createClient(QObject* parent = nullptr);
 
     void connectToHost(const QString& address, int port);
+
+    ChannelState channelState() const { return channel_state_; }
 
 signals:
     void connected();
@@ -52,18 +63,24 @@ private slots:
     void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
+    void onMessageWritten(int message_id);
+    void onMessageReceived(const QByteArray& buffer);
 
 private:
     friend class NetworkServer;
 
     NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
 
+    void write(int message_id, const QByteArray& buffer);
     void scheduleWrite();
 
     using MessageSizeType = quint32;
 
     const ChannelType channel_type_;
+    ChannelState channel_state_ = NotConnected;
     QPointer<QTcpSocket> socket_;
+
+    QScopedPointer<Encryptor> encryptor_;
 
     QQueue<QPair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;

@@ -9,6 +9,8 @@
 
 #include <QtEndian>
 
+#include "crypto/encryptor.h"
+
 namespace aspia {
 
 namespace {
@@ -24,12 +26,13 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
       channel_type_(channel_type),
       socket_(socket)
 {
-    Q_ASSERT(channel_type_ == ClientChannel || channel_type_ == ServerChannel);
-    Q_ASSERT(socket_);
+    Q_ASSERT(!socket_.isNull());
 
     socket_->setParent(this);
 
-    connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
+    if (channel_type_ == ClientChannel)
+        connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
+
     connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected);
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
@@ -43,7 +46,7 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
 
 NetworkChannel::~NetworkChannel()
 {
-    socket_->abort();
+    stop();
 }
 
 // static
@@ -60,6 +63,9 @@ void NetworkChannel::connectToHost(const QString& address, int port)
         return;
     }
 
+    if (socket_.isNull())
+        return;
+
     socket_->connectToHost(address, port);
 }
 
@@ -73,24 +79,50 @@ void NetworkChannel::readMessage()
 
 void NetworkChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
-    bool schedule_write = write_queue_.empty();
+    if (encryptor_.isNull())
+    {
+        qWarning("Uninitialized encryptor");
+        return;
+    }
 
-    write_queue_.push_back(QPair<int, QByteArray>(message_id, buffer));
-
-    if (schedule_write)
-        scheduleWrite();
+    write(message_id, encryptor_->encrypt(buffer));
 }
 
 void NetworkChannel::stop()
 {
-    socket_->abort();
+    channel_state_ = NotConnected;
+
+    if (!socket_.isNull())
+    {
+        socket_->abort();
+
+        if (socket_->state() != QTcpSocket::UnconnectedState)
+            socket_->waitForDisconnected();
+    }
 }
 
 void NetworkChannel::onConnected()
 {
+    channel_state_ = Connected;
+
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
-    emit connected();
+
+    if (channel_type_ == ServerChannel)
+    {
+        encryptor_.reset(new Encryptor(Encryptor::ServerMode));
+
+        // Start reading hello message.
+        readMessage();
+    }
+    else
+    {
+        Q_ASSERT(channel_type_ == ClientChannel);
+        encryptor_.reset(new Encryptor(Encryptor::ClientMode));
+
+        // Write hello message to server.
+        write(-1, encryptor_->helloMessage());
+    }
 }
 
 void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
@@ -100,6 +132,12 @@ void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
 
 void NetworkChannel::onBytesWritten(qint64 bytes)
 {
+    if (socket_.isNull())
+    {
+        stop();
+        return;
+    }
+
     written_ += bytes;
 
     const QByteArray& write_buffer = write_queue_.front().second;
@@ -116,7 +154,7 @@ void NetworkChannel::onBytesWritten(qint64 bytes)
     }
     else
     {
-        emit messageWritten(write_queue_.front().first);
+        onMessageWritten(write_queue_.front().first);
 
         write_queue_.pop_front();
         written_ = 0;
@@ -128,6 +166,12 @@ void NetworkChannel::onBytesWritten(qint64 bytes)
 
 void NetworkChannel::onReadyRead()
 {
+    if (socket_.isNull())
+    {
+        stop();
+        return;
+    }
+
     if (!read_required_)
         return;
 
@@ -148,7 +192,7 @@ void NetworkChannel::onReadyRead()
             if (!read_size_ || read_size_ > kMaxMessageSize)
             {
                 qWarning() << "Wrong message size: " << read_size_;
-                socket_->abort();
+                stop();
                 return;
             }
 
@@ -167,7 +211,7 @@ void NetworkChannel::onReadyRead()
             read_size_received_ = false;
             current = read_ = 0;
 
-            emit messageReceived(read_buffer_);
+            onMessageReceived(read_buffer_);
             break;
         }
 
@@ -178,6 +222,89 @@ void NetworkChannel::onReadyRead()
     }
 }
 
+void NetworkChannel::onMessageWritten(int message_id)
+{
+    switch (channel_state_)
+    {
+        case Encrypted:
+            emit messageWritten(message_id);
+            break;
+
+        case Connected:
+        {
+            if (channel_type_ == ServerChannel)
+            {
+                channel_state_ = Encrypted;
+                emit connected();
+            }
+            else
+            {
+                Q_ASSERT(channel_type_ == ClientChannel);
+
+                // Read hello message from server.
+                readMessage();
+            }
+        }
+        break;
+    }
+}
+
+void NetworkChannel::onMessageReceived(const QByteArray& buffer)
+{
+    switch (channel_state_)
+    {
+        case Encrypted:
+        {
+            if (encryptor_.isNull())
+            {
+                qWarning("Uninitialized encryptor");
+                return;
+            }
+
+            emit messageReceived(encryptor_->decrypt(buffer));
+        }
+        break;
+
+        case Connected:
+        {
+            if (!encryptor_->readHelloMessage(buffer))
+            {
+                stop();
+                return;
+            }
+
+            if (channel_type_ == ServerChannel)
+            {
+                write(-1, encryptor_->helloMessage());
+            }
+            else
+            {
+                Q_ASSERT(channel_type_ == ClientChannel);
+
+                channel_state_ = Encrypted;
+                emit connected();
+            }
+        }
+        break;
+    }
+}
+
+void NetworkChannel::write(int message_id, const QByteArray& buffer)
+{
+    if (socket_.isNull())
+    {
+        stop();
+        return;
+    }
+
+    bool schedule_write = write_queue_.empty();
+
+    write_queue_.push_back(QPair<int, QByteArray>(message_id, buffer));
+
+    if (schedule_write)
+        scheduleWrite();
+}
+
 void NetworkChannel::scheduleWrite()
 {
     const QByteArray& write_buffer = write_queue_.front().second;
@@ -185,7 +312,7 @@ void NetworkChannel::scheduleWrite()
     write_size_ = static_cast<MessageSizeType>(write_buffer.size());
     if (!write_size_ || write_size_ > kMaxMessageSize)
     {
-        socket_->abort();
+        stop();
         return;
     }
 

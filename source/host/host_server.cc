@@ -43,7 +43,7 @@ bool HostServer::start(int port)
 
     network_server_ = new NetworkServer(this);
 
-    connect(network_server_, &NetworkServer::newChannelConnected,
+    connect(network_server_, &NetworkServer::newChannelReady,
             this, &HostServer::onNewConnection);
 
     if (!network_server_->start(port))
@@ -70,9 +70,9 @@ void HostServer::setSessionChanged(quint32 event, quint32 session_id)
 
 void HostServer::onNewConnection()
 {
-    while (network_server_->hasPendingChannels())
+    while (network_server_->hasReadyChannels())
     {
-        NetworkChannel* channel = network_server_->nextPendingChannel();
+        NetworkChannel* channel = network_server_->nextReadyChannel();
         if (!channel)
             continue;
 
