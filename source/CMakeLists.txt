@@ -102,23 +102,12 @@ target_link_libraries(aspia_core
     optimized qtpcre2
     optimized qwindows
     optimized zlib-ng
-    comctl32
     crypt32
-    dbghelp
     dwmapi
     imm32
     iphlpapi
     mpr
-    msi
-    libeay32
-    netapi32
-    psapi
     sas
-    secur32
-    setupapi
-    shlwapi
-    ssleay32
-    taskschd
     userenv
     uxtheme
     version

@@ -121,20 +121,20 @@ void HostUserAuthorizer::start()
     // the connection will be closed.
     timer_id_ = startTimer(std::chrono::minutes(2));
 
-    connect(network_channel_.data(), &NetworkChannel::disconnected,
+    connect(network_channel_, &NetworkChannel::disconnected,
             this, &HostUserAuthorizer::stop);
 
-    connect(network_channel_.data(), &NetworkChannel::messageReceived,
+    connect(network_channel_, &NetworkChannel::messageReceived,
             this, &HostUserAuthorizer::messageReceived);
 
-    connect(network_channel_.data(), &NetworkChannel::messageWritten,
+    connect(network_channel_, &NetworkChannel::messageWritten,
             this, &HostUserAuthorizer::messageWritten);
 
     connect(this, &HostUserAuthorizer::writeMessage,
-            network_channel_.data(), &NetworkChannel::writeMessage);
+            network_channel_, &NetworkChannel::writeMessage);
 
     connect(this, &HostUserAuthorizer::readMessage,
-            network_channel_.data(), &NetworkChannel::readMessage);
+            network_channel_, &NetworkChannel::readMessage);
 
     nonce_ = generateNonce();
     if (nonce_.isEmpty())

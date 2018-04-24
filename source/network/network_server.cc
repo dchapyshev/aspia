@@ -23,37 +23,25 @@ NetworkServer::~NetworkServer() = default;
 
 bool NetworkServer::start(int port)
 {
-    if (!QSslSocket::supportsSsl())
+    if (!tcp_server_.isNull())
     {
-        qWarning("SSL/TLS not supported");
+        qWarning("Server already started");
         return false;
     }
 
-    QSslCertificate local_certificate;
-    QSslKey private_key;
+    tcp_server_ = new QTcpServer(this);
 
-    if (!SslServer::generateCertificateAndKey(&local_certificate, &private_key))
-    {
-        qWarning("TLS certificate or key not generated");
-        return false;
-    }
-
-    ssl_server_ = new SslServer(this);
-
-    ssl_server_->setLocalCertificate(local_certificate);
-    ssl_server_->setPrivateKey(private_key);
-
-    connect(ssl_server_, &SslServer::newSslConnection, this, &NetworkServer::onNewSslConnection);
-    connect(ssl_server_, &SslServer::acceptError,
+    connect(tcp_server_, &QTcpServer::newConnection, this, &NetworkServer::onNewConnection);
+    connect(tcp_server_, &QTcpServer::acceptError,
             [this](QAbstractSocket::SocketError /*error */)
     {
-        qWarning() << "accept error: " << ssl_server_->errorString();
+        qWarning() << "accept error: " << tcp_server_->errorString();
         return;
     });
 
-    if (!ssl_server_->listen(QHostAddress::Any, port))
+    if (!tcp_server_->listen(QHostAddress::Any, port))
     {
-        qWarning() << "listen failed: " << ssl_server_->errorString();
+        qWarning() << "listen failed: " << tcp_server_->errorString();
         return false;
     }
 
@@ -62,8 +50,8 @@ bool NetworkServer::start(int port)
 
 void NetworkServer::stop()
 {
-    ssl_server_->close();
-    delete ssl_server_;
+    tcp_server_->close();
+    delete tcp_server_;
 }
 
 bool NetworkServer::hasPendingChannels() const
@@ -81,14 +69,14 @@ NetworkChannel* NetworkServer::nextPendingChannel()
     return channel;
 }
 
-void NetworkServer::onNewSslConnection()
+void NetworkServer::onNewConnection()
 {
-    QSslSocket* socket = reinterpret_cast<QSslSocket*>(ssl_server_->nextPendingConnection());
+    QTcpSocket* socket = tcp_server_->nextPendingConnection();
     if (!socket)
         return;
 
     // Disable the Nagle algorithm for the socket.
-    socket->setSocketOption(QSslSocket::LowDelayOption, 1);
+    socket->setSocketOption(QTcpSocket::LowDelayOption, 1);
 
     pending_channels_.push_back(
         new NetworkChannel(NetworkChannel::ServerChannel, socket, this));

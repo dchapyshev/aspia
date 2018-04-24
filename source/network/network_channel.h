@@ -11,7 +11,7 @@
 #include <QPair>
 #include <QPointer>
 #include <QQueue>
-#include <QSslSocket>
+#include <QTcpSocket>
 
 namespace aspia {
 
@@ -48,23 +48,22 @@ public slots:
     void stop();
 
 private slots:
-    void onEncrypted();
+    void onConnected();
     void onError(QAbstractSocket::SocketError error);
-    void onSslErrors(const QList<QSslError> &errors);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
 
 private:
     friend class NetworkServer;
 
-    NetworkChannel(ChannelType channel_type, QSslSocket* socket, QObject* parent);
+    NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
 
     void scheduleWrite();
 
     using MessageSizeType = quint32;
 
     const ChannelType channel_type_;
-    QPointer<QSslSocket> socket_;
+    QPointer<QTcpSocket> socket_;
 
     QQueue<QPair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;

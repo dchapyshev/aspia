@@ -10,8 +10,7 @@
 
 #include <QPointer>
 #include <QQueue>
-
-#include "network/ssl_server.h"
+#include <QTcpServer>
 
 namespace aspia {
 
@@ -35,10 +34,10 @@ signals:
     void newChannelConnected();
 
 private slots:
-    void onNewSslConnection();
+    void onNewConnection();
 
 private:
-    QPointer<SslServer> ssl_server_;
+    QPointer<QTcpServer> tcp_server_;
     QQueue<NetworkChannel*> pending_channels_;
 
     Q_DISABLE_COPY(NetworkServer)

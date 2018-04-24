@@ -3,7 +3,6 @@ include_directories(
     ${PROJECT_SOURCE_DIR}
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
-    ${ASPIA_THIRD_PARTY_DIR}/openssl/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/include
     ${ASPIA_THIRD_PARTY_DIR}/libsodium/include)
@@ -11,7 +10,6 @@ include_directories(
 link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/lib
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/lib
-    ${ASPIA_THIRD_PARTY_DIR}/openssl/lib
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/lib
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
@@ -157,6 +155,9 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.h
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.ui
+    ${PROJECT_SOURCE_DIR}/console/address_book_tab.cc
+    ${PROJECT_SOURCE_DIR}/console/address_book_tab.h
+    ${PROJECT_SOURCE_DIR}/console/address_book_tab.ui
     ${PROJECT_SOURCE_DIR}/console/computer.cc
     ${PROJECT_SOURCE_DIR}/console/computer.h
     ${PROJECT_SOURCE_DIR}/console/computer_dialog.cc
@@ -183,6 +184,8 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
 
 list(APPEND SOURCE_CRYPTO
+    ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
+    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.h)
 
@@ -283,9 +286,7 @@ list(APPEND SOURCE_NETWORK
     ${PROJECT_SOURCE_DIR}/network/network_channel.cc
     ${PROJECT_SOURCE_DIR}/network/network_channel.h
     ${PROJECT_SOURCE_DIR}/network/network_server.cc
-    ${PROJECT_SOURCE_DIR}/network/network_server.h
-    ${PROJECT_SOURCE_DIR}/network/ssl_server.cc
-    ${PROJECT_SOURCE_DIR}/network/ssl_server.h)
+    ${PROJECT_SOURCE_DIR}/network/network_server.h)
 
 list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/address_book.pb.cc
@@ -302,7 +303,10 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/desktop_session.proto
     ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.pb.h
-    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto)
+    ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto
+    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto)
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
