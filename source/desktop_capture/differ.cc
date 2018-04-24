@@ -14,7 +14,7 @@ namespace aspia {
 namespace {
 
 constexpr int kBytesPerPixel = 4;
-constexpr int kBlockSize = 16;
+constexpr int kBlockSize = 8;
 constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
 quint8 DiffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
@@ -104,7 +104,15 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
         {
             // For x86 and x86_64, we do not support processors that do not
             // have SSE2 instructions support.
-            if constexpr(kBlockSize == 16)
+            if constexpr (kBlockSize == 8)
+            {
+                // Mark this block as being modified so that it gets
+                // incorporated into a dirty rect.
+                *is_different = diffFullBlock_8x8_SSE2(prev_block,
+                                                       curr_block,
+                                                       bytes_per_row_);
+            }
+            else if constexpr(kBlockSize == 16)
             {
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
@@ -114,7 +122,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
             }
             else
             {
-                Q_ASSERT(kBlockSize == 32);
+                static_assert(kBlockSize != 32);
 
                 // Mark this block as being modified so that it gets
                 // incorporated into a dirty rect.
