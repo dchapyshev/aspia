@@ -87,7 +87,7 @@ void HostUserAuthorizer::setNetworkChannel(NetworkChannel* network_channel)
     network_channel_ = network_channel;
 }
 
-NetworkChannel* HostUserAuthorizer::takeNetworkChannel()
+NetworkChannel* HostUserAuthorizer::networkChannel()
 {
     return network_channel_;
 }
@@ -170,6 +170,7 @@ void HostUserAuthorizer::stop()
             network_channel_, &NetworkChannel::deleteLater);
 
     network_channel_->stop();
+    network_channel_ = nullptr;
 
     state_ = Finished;
     session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
@@ -206,6 +207,15 @@ void HostUserAuthorizer::messageWritten(int message_id)
         case ResultMessageId:
         {
             Q_ASSERT(state_ == ResultWrite);
+
+            if (status_ != proto::auth::STATUS_SUCCESS)
+            {
+                connect(network_channel_, &NetworkChannel::disconnected,
+                        network_channel_, &NetworkChannel::deleteLater);
+
+                network_channel_->stop();
+                network_channel_ = nullptr;
+            }
 
             state_ = Finished;
             emit finished(this);

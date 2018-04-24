@@ -95,7 +95,11 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
     if (authorizer->status() != proto::auth::STATUS_SUCCESS)
         return;
 
-    Host* host = new Host(authorizer->sessionType(), authorizer->takeNetworkChannel(), this);
+    NetworkChannel* network_channel = authorizer->networkChannel();
+    if (!network_channel)
+        return;
+
+    Host* host = new Host(authorizer->sessionType(), network_channel, this);
 
     connect(this, &HostServer::sessionChanged, host, &Host::sessionChanged);
     connect(host, &Host::finished, this, &HostServer::onHostFinished);

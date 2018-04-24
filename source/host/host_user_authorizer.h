@@ -38,7 +38,7 @@ public:
     void setUserList(const UserList& user_list);
     void setNetworkChannel(NetworkChannel* network_channel);
 
-    NetworkChannel* takeNetworkChannel();
+    NetworkChannel* networkChannel();
     proto::auth::Status status() const;
     proto::auth::SessionType sessionType() const;
 
