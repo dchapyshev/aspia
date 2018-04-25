@@ -9,9 +9,10 @@
 #define _ASPIA_IPC__IPC_CHANNEL_H
 
 #include <QByteArray>
-#include <QPair>
 #include <QPointer>
-#include <QQueue>
+
+#include <queue>
+#include <utility>
 
 class QLocalSocket;
 
@@ -57,7 +58,7 @@ private:
 
     QPointer<QLocalSocket> socket_;
 
-    QQueue<QPair<int, QByteArray>> write_queue_;
+    std::queue<std::pair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;
     qint64 written_ = 0;
 

@@ -16,8 +16,7 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
-constexpr int kWriteQueueReservedSize = 64;
+constexpr int kReadBufferReservedSize = 32 * 1024; // 32kB
 
 } // namespace
 
@@ -41,7 +40,6 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
             this, &NetworkChannel::onError);
 
     read_buffer_.reserve(kReadBufferReservedSize);
-    write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 NetworkChannel::~NetworkChannel()
@@ -79,7 +77,7 @@ void NetworkChannel::readMessage()
 
 void NetworkChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
-    if (encryptor_.isNull())
+    if (!encryptor_)
     {
         qWarning("Uninitialized encryptor");
         return;
@@ -142,21 +140,15 @@ void NetworkChannel::onBytesWritten(qint64 bytes)
 
     const QByteArray& write_buffer = write_queue_.front().second;
 
-    if (written_ < sizeof(MessageSizeType))
+    if (written_ < write_buffer.size())
     {
-        socket_->write(reinterpret_cast<const char*>(&write_size_) + written_,
-                       sizeof(MessageSizeType) - written_);
-    }
-    else if (written_ < sizeof(MessageSizeType) + write_buffer.size())
-    {
-        socket_->write(write_buffer.data() + (written_ - sizeof(MessageSizeType)),
-                       write_buffer.size() - (written_ - sizeof(MessageSizeType)));
+        socket_->write(write_buffer.constData() + written_, write_buffer.size() - written_);
     }
     else
     {
         onMessageWritten(write_queue_.front().first);
 
-        write_queue_.pop_front();
+        write_queue_.pop();
         written_ = 0;
 
         if (!write_queue_.empty())
@@ -255,7 +247,7 @@ void NetworkChannel::onMessageReceived(const QByteArray& buffer)
     {
         case Encrypted:
         {
-            if (encryptor_.isNull())
+            if (!encryptor_)
             {
                 qWarning("Uninitialized encryptor");
                 return;
@@ -291,7 +283,7 @@ void NetworkChannel::onMessageReceived(const QByteArray& buffer)
 
 void NetworkChannel::write(int message_id, const QByteArray& buffer)
 {
-    if (socket_.isNull())
+    if (socket_.isNull() || buffer.isEmpty() || buffer.size() > kMaxMessageSize)
     {
         stop();
         return;
@@ -299,7 +291,15 @@ void NetworkChannel::write(int message_id, const QByteArray& buffer)
 
     bool schedule_write = write_queue_.empty();
 
-    write_queue_.push_back(QPair<int, QByteArray>(message_id, buffer));
+    QByteArray write_buffer;
+    write_buffer.resize(sizeof(MessageSizeType) + buffer.size());
+
+    *reinterpret_cast<MessageSizeType*>(write_buffer.data()) =
+        qToBigEndian(static_cast<MessageSizeType>(buffer.size()));
+
+    memcpy(write_buffer.data() + sizeof(MessageSizeType), buffer.constData(), buffer.size());
+
+    write_queue_.emplace(message_id, std::move(write_buffer));
 
     if (schedule_write)
         scheduleWrite();
@@ -308,16 +308,7 @@ void NetworkChannel::write(int message_id, const QByteArray& buffer)
 void NetworkChannel::scheduleWrite()
 {
     const QByteArray& write_buffer = write_queue_.front().second;
-
-    write_size_ = static_cast<MessageSizeType>(write_buffer.size());
-    if (!write_size_ || write_size_ > kMaxMessageSize)
-    {
-        stop();
-        return;
-    }
-
-    write_size_ = qToBigEndian(write_size_);
-    socket_->write(reinterpret_cast<const char*>(&write_size_), sizeof(MessageSizeType));
+    socket_->write(write_buffer.constData(), write_buffer.size());
 }
 
 } // namespace aspia

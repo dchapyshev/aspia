@@ -15,8 +15,7 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 8 * 1024; // 8kB
-constexpr int kWriteQueueReservedSize = 64;
+constexpr int kReadBufferReservedSize = 32 * 1024; // 32kB
 
 } // namespace
 
@@ -41,7 +40,6 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
     });
 
     read_buffer_.reserve(kReadBufferReservedSize);
-    write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 IpcChannel::~IpcChannel()
@@ -83,7 +81,7 @@ void IpcChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
     bool schedule_write = write_queue_.empty();
 
-    write_queue_.push_back(QPair<int, QByteArray>(message_id, buffer));
+    write_queue_.emplace(message_id, buffer);
 
     if (schedule_write)
         scheduleWrite();
@@ -109,7 +107,7 @@ void IpcChannel::onBytesWritten(qint64 bytes)
     {
         emit messageWritten(write_queue_.front().first);
 
-        write_queue_.pop_front();
+        write_queue_.pop();
         written_ = 0;
 
         if (!write_queue_.empty())

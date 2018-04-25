@@ -17,7 +17,7 @@ namespace aspia {
 
 static QByteArray serializeMessage(const google::protobuf::MessageLite& message)
 {
-    uint32_t size = message.ByteSize();
+    size_t size = message.ByteSizeLong();
     if (!size)
     {
         qWarning("Empty messages are not allowed");

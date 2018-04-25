@@ -8,10 +8,11 @@
 #ifndef _ASPIA_NETWORK__NETWORK_CHANNEL_H
 #define _ASPIA_NETWORK__NETWORK_CHANNEL_H
 
-#include <QPair>
 #include <QPointer>
-#include <QQueue>
 #include <QTcpSocket>
+
+#include <queue>
+#include <utility>
 
 namespace aspia {
 
@@ -80,10 +81,9 @@ private:
     ChannelState channel_state_ = NotConnected;
     QPointer<QTcpSocket> socket_;
 
-    QScopedPointer<Encryptor> encryptor_;
+    std::unique_ptr<Encryptor> encryptor_;
 
-    QQueue<QPair<int, QByteArray>> write_queue_;
-    MessageSizeType write_size_ = 0;
+    std::queue<std::pair<int, QByteArray>> write_queue_;
     qint64 written_ = 0;
 
     bool read_required_ = false;
