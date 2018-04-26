@@ -15,7 +15,6 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 128 * 1024; // 128kB
 
 } // namespace
 
@@ -38,8 +37,6 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
         qWarning() << "IPC channel error: " << socket_->errorString();
         emit errorOccurred();
     });
-
-    read_buffer_.reserve(kReadBufferReservedSize);
 }
 
 IpcChannel::~IpcChannel()
@@ -127,36 +124,38 @@ void IpcChannel::onReadyRead()
 
     for (;;)
     {
-        if (read_ < sizeof(MessageSizeType))
+        if (!read_size_received_)
         {
             current = socket_->read(reinterpret_cast<char*>(&read_size_) + read_,
                                     sizeof(MessageSizeType) - read_);
-        }
-        else if (!read_size_received_ && read_ == sizeof(MessageSizeType))
-        {
-            read_size_received_ = true;
-
-            if (!read_size_ || read_size_ > kMaxMessageSize)
+            if (current + read_ == sizeof(MessageSizeType))
             {
-                qWarning() << "Wrong message size: " << read_size_;
-                socket_->abort();
-                return;
+                read_size_received_ = true;
+
+                if (!read_size_ || read_size_ > kMaxMessageSize)
+                {
+                    qWarning() << "Wrong message size: " << read_size_;
+                    socket_->abort();
+                    return;
+                }
+
+                if (read_buffer_.capacity() < static_cast<int>(read_size_))
+                    read_buffer_.reserve(read_size_);
+
+                read_buffer_.resize(read_size_);
+                read_ = 0;
+                continue;
             }
-
-            read_buffer_.resize(read_size_);
-
-            current = socket_->read(read_buffer_.data(), read_buffer_.size());
         }
-        else if (read_ < sizeof(MessageSizeType) + read_buffer_.size())
+        else if (read_ < read_size_)
         {
-            current = socket_->read(read_buffer_.data() + (read_ - sizeof(MessageSizeType)),
-                                    read_buffer_.size() - (read_ - sizeof(MessageSizeType)));
+            current = socket_->read(read_buffer_.data() + read_, read_size_ - read_);
         }
         else
         {
             read_required_ = false;
             read_size_received_ = false;
-            current = read_ = 0;
+            read_ = 0;
 
             emit messageReceived(read_buffer_);
             break;

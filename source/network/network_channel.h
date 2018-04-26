@@ -100,7 +100,7 @@ private:
     bool read_required_ = false;
     bool read_size_received_ = false;
     QByteArray read_buffer_;
-    quint32 read_size_ = 0;
+    int read_size_ = 0;
     qint64 read_ = 0;
 
     int pinger_timer_id_ = 0;

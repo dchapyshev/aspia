@@ -16,7 +16,6 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 128 * 1024; // 128kB
 constexpr qint64 kMaxWriteSize = 1400;
 
 QByteArray createWriteBuffer(const QByteArray& message_buffer)
@@ -74,8 +73,6 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
 
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
             this, &NetworkChannel::onError);
-
-    read_buffer_.reserve(kReadBufferReservedSize);
 }
 
 NetworkChannel::~NetworkChannel()
@@ -276,6 +273,9 @@ void NetworkChannel::onReadyRead()
                         stop();
                         return;
                     }
+
+                    if (read_buffer_.capacity() < read_size_)
+                        read_buffer_.reserve(read_size_);
 
                     read_buffer_.resize(read_size_);
                     read_size_ = 0;
