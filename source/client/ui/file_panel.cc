@@ -8,6 +8,7 @@
 #include "client/ui/file_panel.h"
 
 #include <QDebug>
+#include <QKeyEvent>
 #include <QMessageBox>
 #include <QStyledItemDelegate>
 
@@ -183,6 +184,33 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
 void FilePanel::refresh()
 {
     emit request(FileRequest::driveListRequest(this, kReplySlot));
+}
+
+void FilePanel::keyPressEvent(QKeyEvent* event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_Backspace:
+            toParentFolder();
+            break;
+
+        case Qt::Key_F5:
+            refresh();
+            break;
+
+        case Qt::Key_Delete:
+            removeSelected();
+            break;
+
+        case Qt::Key_F11:
+            sendSelected();
+            break;
+
+        default:
+            break;
+    }
+
+    QWidget::keyPressEvent(event);
 }
 
 void FilePanel::addressItemChanged(int index)

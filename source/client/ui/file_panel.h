@@ -39,6 +39,10 @@ public slots:
                const proto::file_transfer::Reply& reply);
     void refresh();
 
+protected:
+    // QWidget implementation.
+    void keyPressEvent(QKeyEvent* event) override;
+
 private slots:
     void addressItemChanged(int index);
     void fileDoubleClicked(QTreeWidgetItem* item, int column);
