@@ -28,12 +28,7 @@ const quint32 kSupportedFeatures =
     proto::desktop::FEATURE_CURSOR_SHAPE |
     proto::desktop::FEATURE_CLIPBOARD;
 
-enum MessageId
-{
-    ScreenUpdateMessage,
-    ClipboardEventMessage,
-    ConfigRequestMessage
-};
+enum MessageId { ScreenUpdateMessage };
 
 } // namespace
 
@@ -65,7 +60,7 @@ void HostSessionDesktop::startSession()
     else
         message.mutable_config_request()->set_features(0);
 
-    emit writeMessage(ConfigRequestMessage, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
     emit readMessage();
 }
 
@@ -151,7 +146,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
     proto::desktop::HostToClient message;
     message.mutable_clipboard_event()->CopyFrom(event);
 
-    emit writeMessage(ClipboardEventMessage, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
 }
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)

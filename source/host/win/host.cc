@@ -20,6 +20,16 @@
 
 namespace aspia {
 
+namespace {
+
+enum MessageId
+{
+    IpcMessageId,
+    NetworkMessageId
+};
+
+} // namespace
+
 Host::Host(proto::auth::SessionType session_type, NetworkChannel* network_channel, QObject* parent)
     : QObject(parent),
       session_type_(session_type),
@@ -102,6 +112,8 @@ void Host::timerEvent(QTimerEvent* event)
 
 void Host::networkMessageWritten(int message_id)
 {
+    Q_ASSERT(message_id == NetworkMessageId);
+
     if (!ipc_channel_.isNull())
         ipc_channel_->readMessage();
 }
@@ -109,11 +121,13 @@ void Host::networkMessageWritten(int message_id)
 void Host::networkMessageReceived(const QByteArray& buffer)
 {
     if (!ipc_channel_.isNull())
-        ipc_channel_->writeMessage(-1, buffer);
+        ipc_channel_->writeMessage(IpcMessageId, buffer);
 }
 
 void Host::ipcMessageWritten(int message_id)
 {
+    Q_ASSERT(message_id == IpcMessageId);
+
     if (!network_channel_.isNull())
         network_channel_->readMessage();
 }
@@ -121,7 +135,7 @@ void Host::ipcMessageWritten(int message_id)
 void Host::ipcMessageReceived(const QByteArray& buffer)
 {
     if (!network_channel_.isNull())
-        network_channel_->writeMessage(-1, buffer);
+        network_channel_->writeMessage(NetworkMessageId, buffer);
 }
 
 void Host::ipcServerStarted(const QString& channel_id)

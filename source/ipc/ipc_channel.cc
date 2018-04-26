@@ -105,7 +105,10 @@ void IpcChannel::onBytesWritten(qint64 bytes)
     }
     else
     {
-        emit messageWritten(write_queue_.front().first);
+        int message_id = write_queue_.front().first;
+
+        if (message_id != -1)
+            emit messageWritten(message_id);
 
         write_queue_.pop();
         written_ = 0;

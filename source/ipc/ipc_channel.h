@@ -33,7 +33,13 @@ public:
 
 public slots:
     void disconnectFromServer();
+
+    // Starts reading the message. When the message is received, the signal |messageReceived| is
+    // called. You do not need to re-call |readMessage| until this signal is called.
     void readMessage();
+
+    // Sends a message. If the |message_id| is not -1, then after the message is sent,
+    // the signal |messageWritten| is called.
     void writeMessage(int message_id, const QByteArray& buffer);
 
 signals:

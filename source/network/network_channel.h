@@ -55,12 +55,23 @@ signals:
     void messageWritten(int message_id);
 
 public slots:
+    // Starts reading the message. When the message is received, the signal |messageReceived| is
+    // called. You do not need to re-call |readMessage| until this signal is called.
     void readMessage();
+
+    // Sends a message. If the |message_id| is not -1, then after the message is sent,
+    // the signal |messageWritten| is called.
     void writeMessage(int message_id, const QByteArray& buffer);
+
+    // Stops the channel.
     void stop();
+
+protected:
+    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void onConnected();
+    void onDisconnected();
     void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
@@ -91,6 +102,8 @@ private:
     QByteArray read_buffer_;
     quint32 read_size_ = 0;
     qint64 read_ = 0;
+
+    int pinger_timer_id_ = 0;
 
     Q_DISABLE_COPY(NetworkChannel)
 };

@@ -17,18 +17,6 @@
 
 namespace aspia {
 
-namespace {
-
-enum MessageId
-{
-    ConfigMessageId,
-    KeyEventMessageId,
-    PointerEventMessageId,
-    ClipboardEventMessageId
-};
-
-} // namespace
-
 ClientSessionDesktopManage::ClientSessionDesktopManage(proto::Computer* computer, QObject* parent)
     : ClientSessionDesktopView(computer, parent)
 {
@@ -89,7 +77,7 @@ void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& conf
 
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
-    emit writeMessage(ConfigMessageId, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 flags)
@@ -100,7 +88,7 @@ void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 fla
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
-    emit writeMessage(KeyEventMessageId, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 mask)
@@ -112,7 +100,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
     event->set_y(pos.y());
     event->set_mask(mask);
 
-    emit writeMessage(PointerEventMessageId, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -123,7 +111,7 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
     proto::desktop::ClientToHost message;
     message.mutable_clipboard_event()->CopyFrom(event);
 
-    emit writeMessage(ClipboardEventMessageId, serializeMessage(message));
+    emit writeMessage(-1, serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::readConfigRequest(

@@ -7,7 +7,7 @@
 
 #include "network/network_channel.h"
 
-#include <QtEndian>
+#include <QTimerEvent>
 
 #include "crypto/encryptor.h"
 
@@ -68,7 +68,7 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
     if (channel_type_ == ClientChannel)
         connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
 
-    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected);
+    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::onDisconnected);
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
 
@@ -135,6 +135,20 @@ void NetworkChannel::stop()
     }
 }
 
+void NetworkChannel::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == pinger_timer_id_)
+    {
+        bool schedule_write = write_queue_.empty();
+
+        // Pinger sends 1 byte equal to zero.
+        write_queue_.emplace(-1, QByteArray(1, 0));
+
+        if (schedule_write)
+            scheduleWrite();
+    }
+}
+
 void NetworkChannel::onConnected()
 {
     channel_state_ = Connected;
@@ -157,6 +171,17 @@ void NetworkChannel::onConnected()
         // Write hello message to server.
         write(-1, encryptor_->helloMessage());
     }
+}
+
+void NetworkChannel::onDisconnected()
+{
+    if (pinger_timer_id_)
+    {
+        killTimer(pinger_timer_id_);
+        pinger_timer_id_ = 0;
+    }
+
+    emit disconnected();
 }
 
 void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
@@ -218,8 +243,15 @@ void NetworkChannel::onReadyRead()
                 switch (read_)
                 {
                     case 0:
+                    {
+                        // If the first byte is zero, then message ping is received.
+                        // This message is ignored.
+                        if (byte == 0)
+                            continue;
+
                         read_size_ += byte & 0x7F;
-                        break;
+                    }
+                    break;
 
                     case 1:
                         read_size_ += (byte & 0x7F) << 7;
@@ -278,14 +310,21 @@ void NetworkChannel::onMessageWritten(int message_id)
     switch (channel_state_)
     {
         case Encrypted:
-            emit messageWritten(message_id);
-            break;
+        {
+            if (message_id != -1)
+                emit messageWritten(message_id);
+        }
+        break;
 
         case Connected:
         {
             if (channel_type_ == ServerChannel)
             {
+                Q_ASSERT(!pinger_timer_id_);
+
                 channel_state_ = Encrypted;
+                pinger_timer_id_ = startTimer(std::chrono::seconds(30));
+
                 emit connected();
             }
             else
@@ -331,8 +370,11 @@ void NetworkChannel::onMessageReceived(const QByteArray& buffer)
             else
             {
                 Q_ASSERT(channel_type_ == ClientChannel);
+                Q_ASSERT(!pinger_timer_id_);
 
                 channel_state_ = Encrypted;
+                pinger_timer_id_ = startTimer(std::chrono::seconds(30));
+
                 emit connected();
             }
         }
