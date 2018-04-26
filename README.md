@@ -7,10 +7,9 @@ Currently supported
 - Remote desktop management
 - Remote desktop view
 - File transfer
-- Encryption (TLS 1.2 or above)
+- Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
-- Work in service mode
 
 System requirements
 -------------------
