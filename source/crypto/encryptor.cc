@@ -29,14 +29,13 @@ Encryptor::Encryptor(Mode mode)
         return;
     }
 
-    QByteArray public_key;
+    std::vector<quint8> public_key;
     public_key.resize(crypto_kx_PUBLICKEYBYTES);
 
-    QByteArray secret_key;
+    std::vector<quint8> secret_key;
     secret_key.resize(crypto_kx_SECRETKEYBYTES);
 
-    if (crypto_kx_keypair(reinterpret_cast<quint8*>(public_key.data()),
-                          reinterpret_cast<quint8*>(secret_key.data())) != 0)
+    if (crypto_kx_keypair(public_key.data(), secret_key.data()) != 0)
     {
         qWarning("crypto_kx_keypair failed");
         return;
@@ -48,25 +47,25 @@ Encryptor::Encryptor(Mode mode)
 
 Encryptor::~Encryptor()
 {
-    if (!encrypt_key_.isEmpty())
+    if (!encrypt_key_.empty())
     {
         sodium_memzero(encrypt_key_.data(), encrypt_key_.size());
         encrypt_key_.clear();
     }
 
-    if (!decrypt_key_.isEmpty())
+    if (!decrypt_key_.empty())
     {
         sodium_memzero(decrypt_key_.data(), decrypt_key_.size());
         decrypt_key_.clear();
     }
 
-    if (!encrypt_nonce_.isEmpty())
+    if (!encrypt_nonce_.empty())
     {
         sodium_memzero(encrypt_nonce_.data(), encrypt_nonce_.size());
         encrypt_nonce_.clear();
     }
 
-    if (!decrypt_nonce_.isEmpty())
+    if (!decrypt_nonce_.empty())
     {
         sodium_memzero(decrypt_nonce_.data(), decrypt_nonce_.size());
         decrypt_nonce_.clear();
@@ -75,7 +74,7 @@ Encryptor::~Encryptor()
 
 bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
 {
-    if (local_public_key_.isEmpty() || local_secret_key_.isEmpty())
+    if (local_public_key_.empty() || local_secret_key_.empty())
         return false;
 
     proto::HelloMessage message;
@@ -92,19 +91,19 @@ bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
     decrypt_nonce_.resize(crypto_secretbox_NONCEBYTES);
     memcpy(decrypt_nonce_.data(), message.nonce().data(), crypto_secretbox_NONCEBYTES);
 
-    QByteArray decrypt_key;
+    std::vector<quint8> decrypt_key;
     decrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
 
-    QByteArray encrypt_key;
+    std::vector<quint8> encrypt_key;
     encrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
 
     if (mode_ == ServerMode)
     {
         if (crypto_kx_server_session_keys(
-                reinterpret_cast<quint8*>(decrypt_key.data()),
-                reinterpret_cast<quint8*>(encrypt_key.data()),
-                reinterpret_cast<const quint8*>(local_public_key_.data()),
-                reinterpret_cast<const quint8*>(local_secret_key_.data()),
+                decrypt_key.data(),
+                encrypt_key.data(),
+                local_public_key_.data(),
+                local_secret_key_.data(),
                 reinterpret_cast<const quint8*>(message.public_key().data())) != 0)
         {
             qWarning("crypto_kx_server_session_keys failed");
@@ -116,10 +115,10 @@ bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
         Q_ASSERT(mode_ == ClientMode);
 
         if (crypto_kx_client_session_keys(
-               reinterpret_cast<quint8*>(decrypt_key.data()),
-               reinterpret_cast<quint8*>(encrypt_key.data()),
-               reinterpret_cast<const quint8*>(local_public_key_.data()),
-               reinterpret_cast<const quint8*>(local_secret_key_.data()),
+               decrypt_key.data(),
+               encrypt_key.data(),
+               local_public_key_.data(),
+               local_secret_key_.data(),
                reinterpret_cast<const uint8_t*>(message.public_key().data())) != 0)
         {
             qWarning("crypto_kx_client_session_keys failed");
@@ -147,7 +146,7 @@ bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
 
 QByteArray Encryptor::helloMessage()
 {
-    if (local_public_key_.isEmpty() || local_secret_key_.isEmpty())
+    if (local_public_key_.empty() || local_secret_key_.empty())
         return QByteArray();
 
     encrypt_nonce_.resize(crypto_secretbox_NONCEBYTES);
@@ -179,13 +178,12 @@ QByteArray Encryptor::helloMessage()
 
 QByteArray Encryptor::encrypt(const QByteArray& source_buffer)
 {
-    Q_ASSERT(local_public_key_.isEmpty());
-    Q_ASSERT(local_secret_key_.isEmpty());
+    Q_ASSERT(local_public_key_.empty());
+    Q_ASSERT(local_secret_key_.empty());
     Q_ASSERT(encrypt_nonce_.size() == crypto_secretbox_NONCEBYTES);
-    Q_ASSERT(!encrypt_key_.isEmpty());
+    Q_ASSERT(!encrypt_key_.empty());
 
-    sodium_increment(reinterpret_cast<quint8*>(encrypt_nonce_.data()),
-                     crypto_secretbox_NONCEBYTES);
+    sodium_increment(encrypt_nonce_.data(), crypto_secretbox_NONCEBYTES);
 
     QByteArray encrypted_buffer;
     encrypted_buffer.resize(source_buffer.size() + crypto_secretbox_MACBYTES);
@@ -194,8 +192,8 @@ QByteArray Encryptor::encrypt(const QByteArray& source_buffer)
     if (crypto_secretbox_easy(reinterpret_cast<quint8*>(encrypted_buffer.data()),
                               reinterpret_cast<const quint8*>(source_buffer.data()),
                               source_buffer.size(),
-                              reinterpret_cast<const quint8*>(encrypt_nonce_.data()),
-                              reinterpret_cast<const quint8*>(encrypt_key_.data())) != 0)
+                              encrypt_nonce_.data(),
+                              encrypt_key_.data()) != 0)
     {
         qWarning("crypto_secretbox_easy failed");
         return QByteArray();
@@ -206,13 +204,12 @@ QByteArray Encryptor::encrypt(const QByteArray& source_buffer)
 
 QByteArray Encryptor::decrypt(const QByteArray& source_buffer)
 {
-    Q_ASSERT(local_public_key_.isEmpty());
-    Q_ASSERT(local_secret_key_.isEmpty());
+    Q_ASSERT(local_public_key_.empty());
+    Q_ASSERT(local_secret_key_.empty());
     Q_ASSERT(decrypt_nonce_.size() == crypto_secretbox_NONCEBYTES);
-    Q_ASSERT(!decrypt_key_.isEmpty());
+    Q_ASSERT(!decrypt_key_.empty());
 
-    sodium_increment(reinterpret_cast<quint8*>(decrypt_nonce_.data()),
-                     crypto_secretbox_NONCEBYTES);
+    sodium_increment(decrypt_nonce_.data(), crypto_secretbox_NONCEBYTES);
 
     QByteArray decrypted_buffer;
     decrypted_buffer.resize(source_buffer.size() - crypto_secretbox_MACBYTES);
@@ -221,8 +218,8 @@ QByteArray Encryptor::decrypt(const QByteArray& source_buffer)
     if (crypto_secretbox_open_easy(reinterpret_cast<quint8*>(decrypted_buffer.data()),
                                    reinterpret_cast<const quint8*>(source_buffer.data()),
                                    source_buffer.size(),
-                                   reinterpret_cast<const quint8*>(decrypt_nonce_.data()),
-                                   reinterpret_cast<const quint8*>(decrypt_key_.data())) != 0)
+                                   decrypt_nonce_.data(),
+                                   decrypt_key_.data()) != 0)
     {
         qWarning("crypto_secretbox_open_easy failed");
         return QByteArray();

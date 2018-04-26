@@ -15,7 +15,7 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 32 * 1024; // 32kB
+constexpr int kReadBufferReservedSize = 128 * 1024; // 128kB
 
 } // namespace
 

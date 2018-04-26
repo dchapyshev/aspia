@@ -9,8 +9,9 @@
 
 #include <QPoint>
 #include <QRect>
-#include <QSet>
 #include <QSettings>
+
+#include <set>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -86,7 +87,7 @@ private:
     bool isCtrlAndAltPressed();
 
     ScopedThreadDesktop desktop_;
-    QSet<quint32> pressed_keys_;
+    std::set<quint32> pressed_keys_;
     QPoint prev_mouse_pos_;
     quint32 prev_mouse_button_mask_ = 0;
 
@@ -207,7 +208,7 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
     }
     else
     {
-        pressed_keys_.remove(event.usb_keycode());
+        pressed_keys_.erase(event.usb_keycode());
     }
 
     int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());

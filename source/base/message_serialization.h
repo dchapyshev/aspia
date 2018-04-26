@@ -34,7 +34,7 @@ static QByteArray serializeMessage(const google::protobuf::MessageLite& message)
 template <class T>
 bool parseMessage(const QByteArray& buffer, T& message)
 {
-    if (!message.ParseFromArray(buffer, static_cast<int>(buffer.size())))
+    if (!message.ParseFromArray(buffer.constData(), buffer.size()))
     {
         qWarning("Received message that is not a valid protocol buffer");
         return false;

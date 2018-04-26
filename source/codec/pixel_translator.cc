@@ -7,7 +7,7 @@
 
 #include "codec/pixel_translator.h"
 
-#include <QVector>
+#include <vector>
 
 namespace aspia {
 
@@ -111,9 +111,9 @@ public:
     }
 
 private:
-    QVector<quint32> red_table_;
-    QVector<quint32> green_table_;
-    QVector<quint32> blue_table_;
+    std::vector<quint32> red_table_;
+    std::vector<quint32> green_table_;
+    std::vector<quint32> blue_table_;
 
     PixelFormat source_format_;
     PixelFormat target_format_;

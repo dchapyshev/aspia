@@ -16,7 +16,43 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr int kReadBufferReservedSize = 32 * 1024; // 32kB
+constexpr int kReadBufferReservedSize = 128 * 1024; // 128kB
+constexpr qint64 kMaxWriteSize = 1400;
+
+QByteArray createWriteBuffer(const QByteArray& message_buffer)
+{
+    quint32 message_size = message_buffer.size();
+
+    quint8 buffer[4];
+    size_t length = 1;
+
+    buffer[0] = message_size & 0x7F;
+    if (message_size > 0x7F) // 127 bytes
+    {
+        buffer[0] |= 0x80;
+        buffer[length++] = message_size >> 7 & 0x7F;
+
+        if (message_size > 0x3FFF) // 16383 bytes
+        {
+            buffer[1] |= 0x80;
+            buffer[length++] = message_size >> 14 & 0xFF;
+
+            if (message_size > 0x1FFFF) // 2097151 bytes
+            {
+                buffer[2] |= 0x80;
+                buffer[length++] = message_size >> 21 & 0xFF;
+            }
+        }
+    }
+
+    QByteArray write_buffer;
+    write_buffer.resize(length + message_size);
+
+    memcpy(write_buffer.data(), buffer, length);
+    memcpy(write_buffer.data() + length, message_buffer.constData(), message_size);
+
+    return write_buffer;
+}
 
 } // namespace
 
@@ -142,7 +178,8 @@ void NetworkChannel::onBytesWritten(qint64 bytes)
 
     if (written_ < write_buffer.size())
     {
-        socket_->write(write_buffer.constData() + written_, write_buffer.size() - written_);
+        qint64 bytes_to_write = qMin(write_buffer.size() - written_, kMaxWriteSize);
+        socket_->write(write_buffer.constData() + written_, bytes_to_write);
     }
     else
     {
@@ -171,37 +208,59 @@ void NetworkChannel::onReadyRead()
 
     for (;;)
     {
-        if (read_ < sizeof(MessageSizeType))
+        if (!read_size_received_)
         {
-            current = socket_->read(reinterpret_cast<char*>(&read_size_) + read_,
-                                    sizeof(MessageSizeType) - read_);
-        }
-        else if (!read_size_received_ && read_ == sizeof(MessageSizeType))
-        {
-            read_size_received_ = true;
+            quint8 byte;
 
-            read_size_ = qFromBigEndian(read_size_);
-            if (!read_size_ || read_size_ > kMaxMessageSize)
+            current = socket_->read(reinterpret_cast<char*>(&byte), sizeof(byte));
+            if (current == sizeof(byte))
             {
-                qWarning() << "Wrong message size: " << read_size_;
-                stop();
-                return;
+                switch (read_)
+                {
+                    case 0:
+                        read_size_ += byte & 0x7F;
+                        break;
+
+                    case 1:
+                        read_size_ += (byte & 0x7F) << 7;
+                        break;
+
+                    case 2:
+                        read_size_ += (byte & 0x7F) << 14;
+                        break;
+
+                    case 3:
+                        read_size_ += byte << 21;
+                        break;
+                }
+
+                if (!(byte & 0x80) || read_ == 3)
+                {
+                    read_size_received_ = true;
+
+                    if (!read_size_ || read_size_ > kMaxMessageSize)
+                    {
+                        qWarning() << "Wrong message size: " << read_size_;
+                        stop();
+                        return;
+                    }
+
+                    read_buffer_.resize(read_size_);
+                    read_size_ = 0;
+                    read_ = 0;
+                    continue;
+                }
             }
-
-            read_buffer_.resize(read_size_);
-
-            current = socket_->read(read_buffer_.data(), read_buffer_.size());
         }
-        else if (read_ < sizeof(MessageSizeType) + read_buffer_.size())
+        else if (read_ < read_buffer_.size())
         {
-            current = socket_->read(read_buffer_.data() + (read_ - sizeof(MessageSizeType)),
-                                    read_buffer_.size() - (read_ - sizeof(MessageSizeType)));
+            current = socket_->read(read_buffer_.data() + read_, read_buffer_.size() - read_);
         }
         else
         {
             read_required_ = false;
             read_size_received_ = false;
-            current = read_ = 0;
+            read_ = 0;
 
             onMessageReceived(read_buffer_);
             break;
@@ -291,15 +350,7 @@ void NetworkChannel::write(int message_id, const QByteArray& buffer)
 
     bool schedule_write = write_queue_.empty();
 
-    QByteArray write_buffer;
-    write_buffer.resize(sizeof(MessageSizeType) + buffer.size());
-
-    *reinterpret_cast<MessageSizeType*>(write_buffer.data()) =
-        qToBigEndian(static_cast<MessageSizeType>(buffer.size()));
-
-    memcpy(write_buffer.data() + sizeof(MessageSizeType), buffer.constData(), buffer.size());
-
-    write_queue_.emplace(message_id, std::move(write_buffer));
+    write_queue_.emplace(message_id, createWriteBuffer(buffer));
 
     if (schedule_write)
         scheduleWrite();

@@ -89,7 +89,7 @@ private:
     bool read_required_ = false;
     bool read_size_received_ = false;
     QByteArray read_buffer_;
-    MessageSizeType read_size_ = 0;
+    quint32 read_size_ = 0;
     qint64 read_ = 0;
 
     Q_DISABLE_COPY(NetworkChannel)

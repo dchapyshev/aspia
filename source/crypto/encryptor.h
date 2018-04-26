@@ -10,6 +10,8 @@
 
 #include <QByteArray>
 
+#include <vector>
+
 namespace aspia {
 
 // Implements encryption of messages with using xsalsa20 + poly1305 algorithms.
@@ -34,14 +36,14 @@ public:
 private:
     const Mode mode_;
 
-    QByteArray local_public_key_;
-    QByteArray local_secret_key_;
+    std::vector<quint8> local_public_key_;
+    std::vector<quint8> local_secret_key_;
 
-    QByteArray encrypt_key_;
-    QByteArray decrypt_key_;
+    std::vector<quint8> encrypt_key_;
+    std::vector<quint8> decrypt_key_;
 
-    QByteArray encrypt_nonce_;
-    QByteArray decrypt_nonce_;
+    std::vector<quint8> encrypt_nonce_;
+    std::vector<quint8> decrypt_nonce_;
 
     Q_DISABLE_COPY(Encryptor)
 };
