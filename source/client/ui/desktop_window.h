@@ -50,6 +50,8 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 
+    bool eventFilter(QObject* object, QEvent* event) override;
+
 private slots:
     void onPointerEvent(const QPoint& pos, quint32 mask);
     void changeSettings();

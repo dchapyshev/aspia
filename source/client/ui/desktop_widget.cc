@@ -78,109 +78,10 @@ DesktopFrame* DesktopWidget::desktopFrame()
     return frame_.get();
 }
 
-void DesktopWidget::executeKeySequense(int key_sequence)
-{
-    const quint32 kUsbCodeLeftAlt = 0x0700e2;
-    const quint32 kUsbCodeLeftCtrl = 0x0700e0;
-    const quint32 kUsbCodeLeftShift = 0x0700e1;
-    const quint32 kUsbCodeLeftMeta = 0x0700e3;
-
-    QVector<int> keys;
-
-    if (key_sequence & Qt::AltModifier)
-        keys.push_back(kUsbCodeLeftAlt);
-
-    if (key_sequence & Qt::ControlModifier)
-        keys.push_back(kUsbCodeLeftCtrl);
-
-    if (key_sequence & Qt::ShiftModifier)
-        keys.push_back(kUsbCodeLeftShift);
-
-    if (key_sequence & Qt::MetaModifier)
-        keys.push_back(kUsbCodeLeftMeta);
-
-    int key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
-    if (key == KeycodeConverter::invalidUsbKeycode())
-        return;
-
-    keys.push_back(key);
-
-    quint32 flags = proto::desktop::KeyEvent::PRESSED;
-
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
-
-    for (auto it = keys.begin(); it != keys.end(); ++it)
-        emit sendKeyEvent(*it, flags);
-
-    flags ^= proto::desktop::KeyEvent::PRESSED;
-
-    for (auto it = keys.rbegin(); it != keys.rend(); ++it)
-        emit sendKeyEvent(*it, flags);
-}
-
-void DesktopWidget::paintEvent(QPaintEvent* event)
-{
-    if (frame_)
-    {
-        QPainter painter(this);
-        painter.drawImage(rect(), frame_->image());
-    }
-
-    emit updated();
-}
-
-void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
-{
-    processMouseEvent(event->type(), event->buttons(), event->pos());
-}
-
-void DesktopWidget::mousePressEvent(QMouseEvent* event)
-{
-    processMouseEvent(event->type(), event->buttons(), event->pos());
-}
-
-void DesktopWidget::mouseReleaseEvent(QMouseEvent* event)
-{
-    processMouseEvent(event->type(), event->buttons(), event->pos());
-}
-
-void DesktopWidget::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    processMouseEvent(event->type(), event->buttons(), event->pos());
-}
-
-void DesktopWidget::wheelEvent(QWheelEvent* event)
-{
-    processMouseEvent(event->type(), event->buttons(), event->pos(), event->angleDelta());
-}
-
-void DesktopWidget::keyPressEvent(QKeyEvent* event)
-{
-    processKeyEvent(event);
-}
-
-void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
-{
-    processKeyEvent(event);
-}
-
-void DesktopWidget::leaveEvent(QEvent *event)
-{
-    // When the mouse cursor leaves the widget area, release all the mouse buttons.
-    if (prev_mask_ != 0)
-    {
-        emit sendPointerEvent(prev_pos_, 0);
-        prev_mask_ = 0;
-    }
-
-    QWidget::leaveEvent(event);
-}
-
-void DesktopWidget::processMouseEvent(QEvent::Type event_type,
-                                      const Qt::MouseButtons& buttons,
-                                      const QPoint& pos,
-                                      const QPoint& delta)
+void DesktopWidget::doMouseEvent(QEvent::Type event_type,
+                                 const Qt::MouseButtons& buttons,
+                                 const QPoint& pos,
+                                 const QPoint& delta)
 {
     if (!frame_ || !frame_->contains(pos.x(), pos.y()))
         return;
@@ -244,7 +145,7 @@ void DesktopWidget::processMouseEvent(QEvent::Type event_type,
     }
 }
 
-void DesktopWidget::processKeyEvent(QKeyEvent* event)
+void DesktopWidget::doKeyEvent(QKeyEvent* event)
 {
     int key = event->key();
     if (key == Qt::Key_CapsLock || key == Qt::Key_NumLock)
@@ -260,6 +161,105 @@ void DesktopWidget::processKeyEvent(QKeyEvent* event)
         return;
 
     emit sendKeyEvent(usb_keycode, flags);
+}
+
+void DesktopWidget::executeKeySequense(int key_sequence)
+{
+    const quint32 kUsbCodeLeftAlt = 0x0700e2;
+    const quint32 kUsbCodeLeftCtrl = 0x0700e0;
+    const quint32 kUsbCodeLeftShift = 0x0700e1;
+    const quint32 kUsbCodeLeftMeta = 0x0700e3;
+
+    QVector<int> keys;
+
+    if (key_sequence & Qt::AltModifier)
+        keys.push_back(kUsbCodeLeftAlt);
+
+    if (key_sequence & Qt::ControlModifier)
+        keys.push_back(kUsbCodeLeftCtrl);
+
+    if (key_sequence & Qt::ShiftModifier)
+        keys.push_back(kUsbCodeLeftShift);
+
+    if (key_sequence & Qt::MetaModifier)
+        keys.push_back(kUsbCodeLeftMeta);
+
+    int key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
+    if (key == KeycodeConverter::invalidUsbKeycode())
+        return;
+
+    keys.push_back(key);
+
+    quint32 flags = proto::desktop::KeyEvent::PRESSED;
+
+    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+
+    for (auto it = keys.begin(); it != keys.end(); ++it)
+        emit sendKeyEvent(*it, flags);
+
+    flags ^= proto::desktop::KeyEvent::PRESSED;
+
+    for (auto it = keys.rbegin(); it != keys.rend(); ++it)
+        emit sendKeyEvent(*it, flags);
+}
+
+void DesktopWidget::paintEvent(QPaintEvent* event)
+{
+    if (frame_)
+    {
+        QPainter painter(this);
+        painter.drawImage(rect(), frame_->image());
+    }
+
+    emit updated();
+}
+
+void DesktopWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    doMouseEvent(event->type(), event->buttons(), event->pos());
+}
+
+void DesktopWidget::mousePressEvent(QMouseEvent* event)
+{
+    doMouseEvent(event->type(), event->buttons(), event->pos());
+}
+
+void DesktopWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    doMouseEvent(event->type(), event->buttons(), event->pos());
+}
+
+void DesktopWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    doMouseEvent(event->type(), event->buttons(), event->pos());
+}
+
+void DesktopWidget::wheelEvent(QWheelEvent* event)
+{
+    doMouseEvent(event->type(), event->buttons(), event->pos(), event->angleDelta());
+}
+
+void DesktopWidget::keyPressEvent(QKeyEvent* event)
+{
+    doKeyEvent(event);
+}
+
+void DesktopWidget::keyReleaseEvent(QKeyEvent* event)
+{
+    doKeyEvent(event);
+}
+
+void DesktopWidget::leaveEvent(QEvent *event)
+{
+    // When the mouse cursor leaves the widget area, release all the mouse buttons.
+    if (prev_mask_ != 0)
+    {
+        emit sendPointerEvent(prev_pos_, 0);
+        prev_mask_ = 0;
+    }
+
+    QWidget::leaveEvent(event);
 }
 
 } // namespace aspia

@@ -100,6 +100,8 @@ DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
         clipboard_ = new Clipboard(this);
         connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
     }
+
+    desktop_->installEventFilter(this);
 }
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
@@ -272,6 +274,26 @@ void DesktopWindow::closeEvent(QCloseEvent* event)
 {
     emit windowClose();
     QWidget::closeEvent(event);
+}
+
+bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == desktop_)
+    {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent* key_event = dynamic_cast<QKeyEvent*>(event);
+            if (key_event->key() == Qt::Key_Tab)
+            {
+                desktop_->doKeyEvent(key_event);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return QWidget::eventFilter(object, event);
 }
 
 } // namespace aspia

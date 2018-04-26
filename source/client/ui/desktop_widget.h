@@ -30,6 +30,12 @@ public:
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
 
+    void doMouseEvent(QEvent::Type event_type,
+                      const Qt::MouseButtons& buttons,
+                      const QPoint& pos,
+                      const QPoint& delta = QPoint());
+    void doKeyEvent(QKeyEvent* event);
+
 public slots:
     void executeKeySequense(int key_sequence);
 
@@ -51,12 +57,6 @@ protected:
     void leaveEvent(QEvent *event) override;
 
 private:
-    void processMouseEvent(QEvent::Type event_type,
-                           const Qt::MouseButtons& buttons,
-                           const QPoint& pos,
-                           const QPoint& delta = QPoint());
-    void processKeyEvent(QKeyEvent* event);
-
     std::unique_ptr<DesktopFrameQImage> frame_;
 
     QPoint prev_pos_;
