@@ -88,7 +88,9 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
 
     target_group->AddChildComputerGroup(source_group);
     target_group->setExpanded(true);
-    setCurrentItem(source_group);
+    setCurrentItem(target_group);
+
+    emit itemDropped();
 }
 
 bool ComputerGroupTree::isAllowedDropTarget(ComputerGroup* target, ComputerGroup* item)
@@ -131,7 +133,7 @@ void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
         QIcon icon = computer_group->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
-        drag->exec(Qt::MoveAction);
+        drag->exec(supported_actions);
     }
 }
 

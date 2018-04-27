@@ -8,10 +8,11 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
-#include "console/address_book.h"
 #include "ui_console_window.h"
 
 namespace aspia {
+
+class AddressBookTab;
 
 class ConsoleWindow : public QMainWindow
 {
@@ -37,39 +38,27 @@ public slots:
     void onlineHelpAction();
     void aboutAction();
     void exitAction();
-    void groupItemClicked(QTreeWidgetItem* item, int column);
-    void groupContextMenu(const QPoint& point);
-    void groupItemCollapsed(QTreeWidgetItem* item);
-    void groupItemExpanded(QTreeWidgetItem* item);
-    void computerItemClicked(QTreeWidgetItem* item, int column);
-    void computerContextMenu(const QPoint& point);
     void desktopManageSessionToggled(bool checked);
     void desktopViewSessionToggled(bool checked);
     void fileTransferSessionToggled(bool checked);
+
+    void currentTabChanged(int index);
+    void closeTab(int index);
+
+    void onAddressBookChanged(bool changed);
+    void onComputerGroupActivated(bool activated, bool is_root);
+    void onComputerActivated(bool activated);
+    void onComputerGroupContextMenu(const QPoint& point, bool is_root);
+    void onComputerContextMenu(const QPoint& point);
 
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void showOpenError(const QString& message);
-    void showSaveError(const QString& message);
-    void updateComputerList(ComputerGroup* computer_group);
-    void setChanged(bool changed);
-    bool openAddressBook(const QString& file_path);
-    bool saveAddressBook(const QString& file_path);
-    bool closeAddressBook();
+    void addAddressBookTab(AddressBookTab* tab);
 
     Ui::ConsoleWindow ui;
-
-    QString file_path_;
-    QString password_;
-    bool is_changed_ = false;
-
-    proto::AddressBook::EncryptionType encryption_type_ =
-        proto::AddressBook::ENCRYPTION_TYPE_NONE;
-
-    std::unique_ptr<AddressBook> address_book_;
 
     Q_DISABLE_COPY(ConsoleWindow)
 };

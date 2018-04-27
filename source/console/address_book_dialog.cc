@@ -22,11 +22,11 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 AddressBookDialog::AddressBookDialog(QWidget* parent,
-                                     AddressBook* address_book,
                                      proto::AddressBook::EncryptionType* encryption_type,
-                                     QString* password)
+                                     QString* password,
+                                     proto::ComputerGroup* root_group)
     : QDialog(parent),
-      address_book_(address_book),
+      root_group_(root_group),
       encryption_type_(encryption_type),
       password_(password)
 {
@@ -45,8 +45,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.combo_encryption->addItem(tr("XChaCha20 + Poly1305 (256-bit key)"),
                                  QVariant(proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305));
 
-    ui.edit_name->setText(address_book_->Name());
-    ui.edit_comment->setPlainText(address_book_->Comment());
+    ui.edit_name->setText(QString::fromStdString(root_group_->name()));
+    ui.edit_comment->setPlainText(QString::fromStdString(root_group_->comment()));
 
     int current = ui.combo_encryption->findData(QVariant(*encryption_type_));
     if (current != -1)
@@ -114,8 +114,9 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                 break;
         }
 
-        address_book_->SetName(name);
-        address_book_->SetComment(comment);
+        root_group_->set_name(name.toStdString());
+        root_group_->set_comment(comment.toStdString());
+
         *encryption_type_ = encryption_type;
         *password_ = password;
 

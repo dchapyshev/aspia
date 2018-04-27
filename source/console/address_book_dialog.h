@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
 #define _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
 
-#include "console/address_book.h"
+#include "protocol/address_book.pb.h"
 #include "ui_address_book_dialog.h"
 
 namespace aspia {
@@ -19,9 +19,9 @@ class AddressBookDialog : public QDialog
 
 public:
     AddressBookDialog(QWidget* parent,
-                      AddressBook* address_book,
                       proto::AddressBook::EncryptionType* encryption_type,
-                      QString* password);
+                      QString* password,
+                      proto::ComputerGroup* root_group);
     ~AddressBookDialog();
 
 private slots:
@@ -33,7 +33,7 @@ private:
     void showError(const QString& message);
 
     Ui::AddressBookDialog ui;
-    AddressBook* address_book_;
+    proto::ComputerGroup* root_group_;
     proto::AddressBook::EncryptionType* encryption_type_;
     QString* password_;
 

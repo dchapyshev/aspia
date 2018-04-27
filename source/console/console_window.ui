@@ -18,7 +18,10 @@
     <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
   </property>
   <widget class="QWidget" name="central_widget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -32,49 +35,19 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="aspia::ComputerTree" name="tree_computer">
-      <property name="enabled">
-       <bool>false</bool>
+     <widget class="QTabWidget" name="tab_widget">
+      <property name="currentIndex">
+       <number>-1</number>
       </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="dragEnabled">
+      <property name="documentMode">
        <bool>true</bool>
       </property>
-      <property name="dragDropMode">
-       <enum>QAbstractItemView::DragOnly</enum>
-      </property>
-      <property name="defaultDropAction">
-       <enum>Qt::MoveAction</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectItems</enum>
-      </property>
-      <property name="indentation">
-       <number>0</number>
-      </property>
-      <property name="sortingEnabled">
+      <property name="tabsClosable">
        <bool>true</bool>
       </property>
-      <property name="columnCount">
-       <number>3</number>
+      <property name="movable">
+       <bool>true</bool>
       </property>
-      <column>
-       <property name="text">
-        <string>Computer Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Port</string>
-       </property>
-      </column>
      </widget>
     </item>
    </layout>
@@ -155,63 +128,6 @@
    <addaction name="menu_view"/>
    <addaction name="menu_session_type"/>
    <addaction name="menu_help"/>
-  </widget>
-  <widget class="QDockWidget" name="dock_group">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="windowTitle">
-    <string>Computer Groups</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="panel_content_group">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="aspia::ComputerGroupTree" name="tree_group">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="contextMenuPolicy">
-        <enum>Qt::CustomContextMenu</enum>
-       </property>
-       <property name="dragEnabled">
-        <bool>false</bool>
-       </property>
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::DragDrop</enum>
-       </property>
-       <property name="defaultDropAction">
-        <enum>Qt::MoveAction</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectItems</enum>
-       </property>
-       <attribute name="headerVisible">
-        <bool>false</bool>
-       </attribute>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
   <widget class="QToolBar" name="tool_bar">
@@ -545,18 +461,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>aspia::ComputerGroupTree</class>
-   <extends>QTreeWidget</extends>
-   <header>console/computer_group_tree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>aspia::ComputerTree</class>
-   <extends>QTreeWidget</extends>
-   <header>console/computer_tree.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>

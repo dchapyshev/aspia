@@ -24,11 +24,7 @@ ComputerGroup::ComputerGroup(const QIcon& icon,
                                    this));
 }
 
-ComputerGroup::~ComputerGroup()
-{
-    if (!parent_group_)
-        delete group_;
-}
+ComputerGroup::~ComputerGroup() = default;
 
 // static
 std::unique_ptr<ComputerGroup> ComputerGroup::Create()

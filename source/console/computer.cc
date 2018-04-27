@@ -14,7 +14,7 @@ namespace aspia {
 
 Computer::Computer(proto::Computer* computer, ComputerGroup* parent_group)
     : computer_(computer),
-    parent_group_(parent_group)
+      parent_group_(parent_group)
 {
     setIcon(0, QIcon(QStringLiteral(":/icon/computer.png")));
     setText(0, QString::fromStdString(computer->name()));

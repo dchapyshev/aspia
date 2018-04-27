@@ -22,6 +22,9 @@ public:
     ComputerGroupTree(QWidget* parent);
     ~ComputerGroupTree();
 
+signals:
+    void itemDropped();
+
 protected:
     // QTreeWidget implementation.
     void mousePressEvent(QMouseEvent* event) override;

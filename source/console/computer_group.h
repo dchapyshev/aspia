@@ -18,6 +18,9 @@ namespace aspia {
 class ComputerGroup : public QTreeWidgetItem
 {
 public:
+    ComputerGroup(const QIcon& icon,
+                  proto::ComputerGroup* group,
+                  ComputerGroup* parent_group);
     virtual ~ComputerGroup();
 
     static std::unique_ptr<ComputerGroup> Create();
@@ -36,14 +39,8 @@ public:
     QList<QTreeWidgetItem*> ComputerList();
     ComputerGroup* ParentComputerGroup();
 
-protected:
-    ComputerGroup(const QIcon& icon,
-                  proto::ComputerGroup* group,
-                  ComputerGroup* parent_group);
-
 private:
     friend class ComputerGroupTree;
-    friend class AddressBook;
 
     proto::ComputerGroup* group_;
     ComputerGroup* parent_group_;

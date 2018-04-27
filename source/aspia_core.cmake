@@ -149,8 +149,6 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/about_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/about_dialog.h
     ${PROJECT_SOURCE_DIR}/console/about_dialog.ui
-    ${PROJECT_SOURCE_DIR}/console/address_book.cc
-    ${PROJECT_SOURCE_DIR}/console/address_book.h
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.h
     ${PROJECT_SOURCE_DIR}/console/address_book_dialog.ui
