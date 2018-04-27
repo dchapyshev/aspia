@@ -527,6 +527,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setValue(QStringLiteral("WindowState"), saveState());
 
     QApplication::quit();
+    QMainWindow::closeEvent(event);
 }
 
 void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
