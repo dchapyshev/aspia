@@ -21,6 +21,8 @@ public:
     explicit ClientDialog(QWidget* parent = nullptr);
     ~ClientDialog();
 
+    proto::Computer computer() const { return computer_; }
+
 private slots:
     void sessionTypeChanged(int item_index);
     void sessionConfigButtonPressed();

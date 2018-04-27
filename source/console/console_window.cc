@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "client/client.h"
+#include "client/ui/client_dialog.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 
@@ -57,6 +59,17 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onlineHelpAction);
     connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::aboutAction);
     connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::exitAction);
+
+    connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::fastConnectAction);
+
+    connect(ui.action_desktop_manage_connect, &QAction::triggered,
+            this, &ConsoleWindow::desktopManageSessionConnect);
+
+    connect(ui.action_desktop_view_connect, &QAction::triggered,
+            this, &ConsoleWindow::desktopViewSessionConnect);
+
+    connect(ui.action_file_transfer_connect, &QAction::triggered,
+            this, &ConsoleWindow::fileTransferSessionConnect);
 
     connect(ui.action_desktop_manage, &QAction::toggled,
             this, &ConsoleWindow::desktopManageSessionToggled);
@@ -242,6 +255,70 @@ void ConsoleWindow::exitAction()
     close();
 }
 
+void ConsoleWindow::fastConnectAction()
+{
+    ClientDialog dialog(this);
+
+    if (dialog.exec() != ClientDialog::Accepted)
+        return;
+
+    connectToComputer(dialog.computer());
+}
+
+void ConsoleWindow::desktopManageSessionConnect()
+{
+    int current_tab = ui.tab_widget->currentIndex();
+    if (current_tab != -1)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
+        if (tab)
+        {
+            proto::Computer* computer = tab->currentComputer();
+            if (computer)
+            {
+                computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+                connectToComputer(*computer);
+            }
+        }
+    }
+}
+
+void ConsoleWindow::desktopViewSessionConnect()
+{
+    int current_tab = ui.tab_widget->currentIndex();
+    if (current_tab != -1)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
+        if (tab)
+        {
+            proto::Computer* computer = tab->currentComputer();
+            if (computer)
+            {
+                computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+                connectToComputer(*computer);
+            }
+        }
+    }
+}
+
+void ConsoleWindow::fileTransferSessionConnect()
+{
+    int current_tab = ui.tab_widget->currentIndex();
+    if (current_tab != -1)
+    {
+        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
+        if (tab)
+        {
+            proto::Computer* computer = tab->currentComputer();
+            if (computer)
+            {
+                computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+                connectToComputer(*computer);
+            }
+        }
+    }
+}
+
 void ConsoleWindow::desktopManageSessionToggled(bool checked)
 {
     if (checked)
@@ -394,6 +471,29 @@ void ConsoleWindow::onComputerContextMenu(const QPoint& point)
     menu.exec(point);
 }
 
+void ConsoleWindow::onComputerDoubleClicked(proto::Computer* computer)
+{
+    if (ui.action_desktop_manage->isChecked())
+    {
+        computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    }
+    else if (ui.action_desktop_view->isChecked())
+    {
+        computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+    }
+    else if (ui.action_file_transfer->isChecked())
+    {
+        computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+    }
+    else
+    {
+        qFatal("Unknown session type");
+        return;
+    }
+
+    connectToComputer(*computer);
+}
+
 void ConsoleWindow::closeEvent(QCloseEvent* event)
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -426,7 +526,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setValue(QStringLiteral("WindowGeometry"), saveGeometry());
     settings.setValue(QStringLiteral("WindowState"), saveState());
 
-    QMainWindow::closeEvent(event);
+    QApplication::quit();
 }
 
 void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
@@ -444,6 +544,8 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
             this, &ConsoleWindow::onComputerGroupContextMenu);
     connect(new_tab, &AddressBookTab::computerContextMenu,
             this, &ConsoleWindow::onComputerContextMenu);
+    connect(new_tab, &AddressBookTab::computerDoubleClicked,
+            this, &ConsoleWindow::onComputerDoubleClicked);
 
     int index = ui.tab_widget->addTab(new_tab,
                                       QIcon(QStringLiteral(":/icon/address-book.png")),
@@ -454,6 +556,12 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.action_close->setEnabled(true);
 
     ui.tab_widget->setCurrentIndex(index);
+}
+
+void ConsoleWindow::connectToComputer(const proto::Computer& computer)
+{
+    Client* client = new Client(computer, this);
+    connect(client, &Client::clientTerminated, client, &Client::deleteLater);
 }
 
 } // namespace aspia

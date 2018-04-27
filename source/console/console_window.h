@@ -8,6 +8,7 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
+#include "protocol/computer.pb.h"
 #include "ui_console_window.h"
 
 namespace aspia {
@@ -38,6 +39,10 @@ public slots:
     void onlineHelpAction();
     void aboutAction();
     void exitAction();
+    void fastConnectAction();
+    void desktopManageSessionConnect();
+    void desktopViewSessionConnect();
+    void fileTransferSessionConnect();
     void desktopManageSessionToggled(bool checked);
     void desktopViewSessionToggled(bool checked);
     void fileTransferSessionToggled(bool checked);
@@ -50,6 +55,7 @@ public slots:
     void onComputerActivated(bool activated);
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
     void onComputerContextMenu(const QPoint& point);
+    void onComputerDoubleClicked(proto::Computer* computer);
 
 protected:
     // QMainWindow implementation.
@@ -57,6 +63,7 @@ protected:
 
 private:
     void addAddressBookTab(AddressBookTab* tab);
+    void connectToComputer(const proto::Computer& computer);
 
     Ui::ConsoleWindow ui;
 

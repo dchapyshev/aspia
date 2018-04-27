@@ -8,7 +8,6 @@
 #include "client/ui/client_dialog.h"
 
 #include "client/ui/desktop_config_dialog.h"
-#include "client/client.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -35,12 +34,6 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/folder-stand.png")),
                                    tr("File Transfer"),
                                    QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
-
-#if 0
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
-                                   tr("System Information"),
-                                   QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
-#endif
 
     int current_session_type = ui.combo_session_type->findData(QVariant(computer_.session_type()));
     if (current_session_type != -1)
@@ -112,12 +105,8 @@ void ClientDialog::connectButtonPressed()
     computer_.set_port(ui.spin_port->value());
     computer_.set_session_type(session_type);
 
-    Client* client = new Client(computer_);
-
-    connect(client, &Client::clientTerminated, this, &ClientDialog::show);
-    connect(client, &Client::clientTerminated, client, &Client::deleteLater);
-
-    hide();
+    accept();
+    close();
 }
 
 void ClientDialog::setDefaultConfig()

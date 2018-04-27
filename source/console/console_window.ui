@@ -71,7 +71,7 @@
     <addaction name="action_save_as"/>
     <addaction name="action_close"/>
     <addaction name="separator"/>
-    <addaction name="actionFast_Connect"/>
+    <addaction name="action_fast_connect"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
    </widget>
@@ -150,7 +150,7 @@
    <addaction name="action_open"/>
    <addaction name="action_save"/>
    <addaction name="separator"/>
-   <addaction name="actionFast_Connect"/>
+   <addaction name="action_fast_connect"/>
    <addaction name="separator"/>
    <addaction name="action_address_book_properties"/>
    <addaction name="action_add_computer_group"/>
@@ -450,7 +450,7 @@
     <string>English</string>
    </property>
   </action>
-  <action name="actionFast_Connect">
+  <action name="action_fast_connect">
    <property name="icon">
     <iconset resource="../resources/resources.qrc">
      <normaloff>:/icon/plug-disconnect.png</normaloff>:/icon/plug-disconnect.png</iconset>

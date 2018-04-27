@@ -119,10 +119,6 @@ add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJ
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(aspia_console aspia_core)
 
-add_executable(aspia_client ${PROJECT_SOURCE_DIR}/client/entry_point.cc ${PROJECT_SOURCE_DIR}/client/client.rc)
-set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)
-target_link_libraries(aspia_client aspia_core)
-
 add_executable(aspia_host_config ${PROJECT_SOURCE_DIR}/host/host_config_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_config.rc)
 set_target_properties(aspia_host_config PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host_config PROPERTIES LINK_FLAGS "/MANIFEST:NO")

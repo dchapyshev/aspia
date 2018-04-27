@@ -139,6 +139,9 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 
     connect(ui.tree_computer, &ComputerTree::customContextMenuRequested,
             this, &AddressBookTab::onComputerContextMenu);
+
+    connect(ui.tree_computer, &ComputerTree::itemDoubleClicked,
+            this, &AddressBookTab::onComputerItemDoubleClicked);
 }
 
 AddressBookTab::~AddressBookTab() = default;
@@ -252,6 +255,15 @@ QString AddressBookTab::addressBookName() const
 QString AddressBookTab::addressBookPath() const
 {
     return file_path_;
+}
+
+proto::Computer* AddressBookTab::currentComputer() const
+{
+    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    if (!current_item)
+        return nullptr;
+
+    return current_item->computer();
 }
 
 void AddressBookTab::save()
@@ -475,6 +487,15 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
     onComputerItemClicked(current_item, 0);
 
     emit computerContextMenu(ui.tree_computer->mapToGlobal(point));
+}
+
+void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int column)
+{
+    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(item);
+    if (!current_item)
+        return;
+
+    emit computerDoubleClicked(current_item->computer());
 }
 
 void AddressBookTab::showEvent(QShowEvent* event)
