@@ -23,10 +23,10 @@ public:
         // Nothing
     }
 
-    void setComputerGroup(ComputerGroup* computer_group)
+    void setComputerGroupItem(ComputerGroupItem* computer_group_item)
     {
         ComputerGroupMimeData* mime_data = new ComputerGroupMimeData();
-        mime_data->setComputerGroup(computer_group);
+        mime_data->setComputerGroupItem(computer_group_item);
         setMimeData(mime_data);
     }
 };

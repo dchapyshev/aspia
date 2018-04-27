@@ -68,7 +68,7 @@ private:
                    proto::ComputerGroup root_group,
                    QWidget* parent);
 
-    void updateComputerList(ComputerGroup* computer_group);
+    void updateComputerList(ComputerGroupItem* computer_group);
     bool saveToFile(const QString& file_path);
 
     Ui::AddressBookTab ui;

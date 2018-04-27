@@ -155,20 +155,22 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/address_book_tab.cc
     ${PROJECT_SOURCE_DIR}/console/address_book_tab.h
     ${PROJECT_SOURCE_DIR}/console/address_book_tab.ui
-    ${PROJECT_SOURCE_DIR}/console/computer.cc
-    ${PROJECT_SOURCE_DIR}/console/computer.h
     ${PROJECT_SOURCE_DIR}/console/computer_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/computer_dialog.h
     ${PROJECT_SOURCE_DIR}/console/computer_dialog.ui
-    ${PROJECT_SOURCE_DIR}/console/computer_group.cc
-    ${PROJECT_SOURCE_DIR}/console/computer_group.h
+    ${PROJECT_SOURCE_DIR}/console/computer_drag.h
     ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.cc
     ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.h
     ${PROJECT_SOURCE_DIR}/console/computer_group_dialog.ui
     ${PROJECT_SOURCE_DIR}/console/computer_group_drag.h
+    ${PROJECT_SOURCE_DIR}/console/computer_group_item.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_group_item.h
     ${PROJECT_SOURCE_DIR}/console/computer_group_mime_data.h
     ${PROJECT_SOURCE_DIR}/console/computer_group_tree.cc
     ${PROJECT_SOURCE_DIR}/console/computer_group_tree.h
+    ${PROJECT_SOURCE_DIR}/console/computer_item.cc
+    ${PROJECT_SOURCE_DIR}/console/computer_item.h
+    ${PROJECT_SOURCE_DIR}/console/computer_mime_data.h
     ${PROJECT_SOURCE_DIR}/console/computer_tree.cc
     ${PROJECT_SOURCE_DIR}/console/computer_tree.h
     ${PROJECT_SOURCE_DIR}/console/console_main.cc

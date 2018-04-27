@@ -10,7 +10,7 @@
 #include <QMessageBox>
 
 #include "client/ui/desktop_config_dialog.h"
-#include "console/computer_group.h"
+#include "console/computer_group_item.h"
 #include "host/user.h"
 
 namespace aspia {
@@ -23,7 +23,9 @@ constexpr int kMaxCommentLength = 2048;
 
 } // namespace
 
-ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGroup* parent_group)
+ComputerDialog::ComputerDialog(QWidget* parent,
+                               proto::Computer* computer,
+                               proto::ComputerGroup* parent_computer_group)
     : QDialog(parent),
       computer_(computer)
 {
@@ -41,19 +43,13 @@ ComputerDialog::ComputerDialog(QWidget* parent, Computer* computer, ComputerGrou
                                      tr("File Transfer"),
                                      QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
 
-#if 0
-    ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
-                                     tr("System Information"),
-                                     QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
-#endif
-
-    ui.edit_parent_name->setText(parent_group->Name());
-    ui.edit_name->setText(computer->Name());
-    ui.edit_address->setText(computer->Address());
-    ui.spinbox_port->setValue(computer->Port());
-    ui.edit_username->setText(computer->UserName());
-    ui.edit_password->setText(computer->Password());
-    ui.edit_comment->setPlainText(computer->Comment());
+    ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
+    ui.edit_name->setText(QString::fromStdString(computer_->name()));
+    ui.edit_address->setText(QString::fromStdString(computer_->address()));
+    ui.spinbox_port->setValue(computer_->port());
+    ui.edit_username->setText(QString::fromStdString(computer_->username()));
+    ui.edit_password->setText(QString::fromStdString(computer->password()));
+    ui.edit_comment->setPlainText(QString::fromStdString(computer->comment()));
 
     connect(ui.combo_session_config, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ComputerDialog::sessionTypeChanged);
@@ -112,21 +108,21 @@ void ComputerDialog::sessionConfigButtonPressed()
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            proto::desktop::Config config = computer_->DesktopManageSessionConfig();
+            proto::desktop::Config config = computer_->desktop_manage_session();
 
             DesktopConfigDialog dialog(session_type, &config, this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->SetDesktopManageSessionConfig(config);
+                computer_->mutable_desktop_manage_session()->CopyFrom(config);
         }
         break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            proto::desktop::Config config = computer_->DesktopViewSessionConfig();
+            proto::desktop::Config config = computer_->desktop_view_session();
 
             DesktopConfigDialog dialog(session_type, &config, this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->SetDesktopViewSessionConfig(config);
+                computer_->mutable_desktop_view_session()->CopyFrom(config);
         }
         break;
 
@@ -173,12 +169,12 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        computer_->SetName(name);
-        computer_->SetAddress(ui.edit_address->text());
-        computer_->SetPort(ui.spinbox_port->value());
-        computer_->SetUserName(username);
-        computer_->SetPassword(password);
-        computer_->SetComment(comment);
+        computer_->set_name(name.toStdString());
+        computer_->set_address(ui.edit_address->text().toStdString());
+        computer_->set_port(ui.spinbox_port->value());
+        computer_->set_username(username.toStdString());
+        computer_->set_password(password.toStdString());
+        computer_->set_comment(comment.toStdString());
 
         accept();
     }

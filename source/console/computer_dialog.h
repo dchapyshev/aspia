@@ -8,18 +8,21 @@
 #ifndef _ASPIA_CONSOLE__COMPUTER_DIALOG_H
 #define _ASPIA_CONSOLE__COMPUTER_DIALOG_H
 
-#include "console/computer.h"
 #include "protocol/address_book.pb.h"
 #include "ui_computer_dialog.h"
 
 namespace aspia {
+
+class ComputerGroupItem;
 
 class ComputerDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ComputerDialog(QWidget* parent, Computer* computer, ComputerGroup* parent_group);
+    ComputerDialog(QWidget* parent,
+                   proto::Computer* computer,
+                   proto::ComputerGroup* parent_computer_group);
     ~ComputerDialog();
 
 private slots:
@@ -32,7 +35,7 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerDialog ui;
-    Computer* computer_;
+    proto::Computer* computer_;
 
     Q_DISABLE_COPY(ComputerDialog)
 };

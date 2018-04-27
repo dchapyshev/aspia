@@ -21,19 +21,19 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
-                                         ComputerGroup* group,
-                                         ComputerGroup* parent_group)
+                                         proto::ComputerGroup* computer_group,
+                                         proto::ComputerGroup* parent_computer_group)
     : QDialog(parent),
-      group_(group)
+      computer_group_(computer_group)
 {
     ui.setupUi(this);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);
 
-    ui.edit_parent_name->setText(parent_group->Name());
-    ui.edit_name->setText(group->Name());
-    ui.edit_comment->setPlainText(group->Comment());
+    ui.edit_parent_name->setText(QString::fromStdString(parent_computer_group->name()));
+    ui.edit_name->setText(QString::fromStdString(computer_group_->name()));
+    ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
 }
 
 ComputerGroupDialog::~ComputerGroupDialog() = default;
@@ -61,8 +61,8 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        group_->SetName(name);
-        group_->SetComment(comment);
+        computer_group_->set_name(name.toStdString());
+        computer_group_->set_comment(comment.toStdString());
 
         accept();
     }

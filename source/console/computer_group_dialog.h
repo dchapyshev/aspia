@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
 #define _ASPIA_CONSOLE__COMPUTER_GROUP_DIALOG_H
 
-#include "console/computer_group.h"
+#include "console/computer_group_item.h"
 #include "ui_computer_group_dialog.h"
 
 namespace aspia {
@@ -18,7 +18,9 @@ class ComputerGroupDialog : public QDialog
     Q_OBJECT
 
 public:
-    ComputerGroupDialog(QWidget* parent, ComputerGroup* group, ComputerGroup* parent_group);
+    ComputerGroupDialog(QWidget* parent,
+                        proto::ComputerGroup* computer_group,
+                        proto::ComputerGroup* parent_computer_group);
     ~ComputerGroupDialog();
 
 private slots:
@@ -28,7 +30,7 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerGroupDialog ui;
-    ComputerGroup* group_;
+    proto::ComputerGroup* computer_group_;
 
     Q_DISABLE_COPY(ComputerGroupDialog)
 };

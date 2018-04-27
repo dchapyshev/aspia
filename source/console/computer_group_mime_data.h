@@ -10,7 +10,7 @@
 
 #include <QMimeData>
 
-#include "console/computer_group.h"
+#include "console/computer_group_item.h"
 
 namespace aspia {
 
@@ -25,19 +25,19 @@ public:
         return QStringLiteral("application/computer_group");
     }
 
-    void setComputerGroup(ComputerGroup* computer_group)
+    void setComputerGroupItem(ComputerGroupItem* computer_group_item)
     {
-        computer_group_ = computer_group;
+        computer_group_item_ = computer_group_item;
         setData(mimeType(), QByteArray());
     }
 
-    ComputerGroup* computerGroup() const
+    ComputerGroupItem* computerGroup() const
     {
-        return computer_group_;
+        return computer_group_item_;
     }
 
 private:
-    ComputerGroup* computer_group_ = nullptr;
+    ComputerGroupItem* computer_group_item_ = nullptr;
 };
 
 } // namespace aspia

@@ -35,7 +35,7 @@ protected:
     void startDrag(Qt::DropActions supported_actions) override;
 
 private:
-    bool isAllowedDropTarget(ComputerGroup* target, ComputerGroup* item);
+    bool isAllowedDropTarget(ComputerGroupItem* target, ComputerGroupItem* item);
 
     QPoint start_pos_;
 
