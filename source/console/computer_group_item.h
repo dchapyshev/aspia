@@ -18,12 +18,13 @@ namespace aspia {
 class ComputerGroupItem : public QTreeWidgetItem
 {
 public:
-    ComputerGroupItem(proto::ComputerGroup* computer_group, ComputerGroupItem* parent_item);
+    ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
+                      ComputerGroupItem* parent_item);
     virtual ~ComputerGroupItem();
 
-    ComputerGroupItem* addChildComputerGroup(proto::ComputerGroup* computer_group);
+    ComputerGroupItem* addChildComputerGroup(proto::address_book::ComputerGroup* computer_group);
     bool deleteChildComputerGroup(ComputerGroupItem* computer_group_item);
-    proto::ComputerGroup* takeChildComputerGroup(ComputerGroupItem* computer_group_item);
+    proto::address_book::ComputerGroup* takeChildComputerGroup(ComputerGroupItem* computer_group_item);
     void addChildComputer(proto::Computer* computer);
     bool deleteChildComputer(proto::Computer* computer);
     proto::Computer* takeChildComputer(proto::Computer* computer);
@@ -32,12 +33,12 @@ public:
     void SetExpanded(bool expanded);
     QList<QTreeWidgetItem*> ComputerList();
 
-    proto::ComputerGroup* computerGroup() { return computer_group_; }
+    proto::address_book::ComputerGroup* computerGroup() { return computer_group_; }
 
 private:
     friend class ComputerGroupTree;
 
-    proto::ComputerGroup* computer_group_;
+    proto::address_book::ComputerGroup* computer_group_;
 
     Q_DISABLE_COPY(ComputerGroupItem)
 };

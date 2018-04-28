@@ -66,9 +66,9 @@ private slots:
 
 private:
     AddressBookTab(const QString& file_path,
-                   proto::AddressBook::EncryptionType encryption_type,
+                   proto::address_book::EncryptionType encryption_type,
                    const QString& password,
-                   proto::ComputerGroup root_group,
+                   proto::address_book::ComputerGroup root_group,
                    QWidget* parent);
 
     void updateComputerList(ComputerGroupItem* computer_group);
@@ -80,10 +80,10 @@ private:
     QString password_;
     bool is_changed_ = false;
 
-    proto::AddressBook::EncryptionType encryption_type_ =
-        proto::AddressBook::ENCRYPTION_TYPE_NONE;
+    proto::address_book::EncryptionType encryption_type_ =
+        proto::address_book::ENCRYPTION_TYPE_NONE;
 
-    proto::ComputerGroup root_group_;
+    proto::address_book::ComputerGroup root_group_;
 
     Q_DISABLE_COPY(AddressBookTab)
 };

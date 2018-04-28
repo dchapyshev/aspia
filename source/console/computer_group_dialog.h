@@ -19,8 +19,8 @@ class ComputerGroupDialog : public QDialog
 
 public:
     ComputerGroupDialog(QWidget* parent,
-                        proto::ComputerGroup* computer_group,
-                        proto::ComputerGroup* parent_computer_group);
+                        proto::address_book::ComputerGroup* computer_group,
+                        proto::address_book::ComputerGroup* parent_computer_group);
     ~ComputerGroupDialog();
 
 private slots:
@@ -30,7 +30,7 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerGroupDialog ui;
-    proto::ComputerGroup* computer_group_;
+    proto::address_book::ComputerGroup* computer_group_;
 
     Q_DISABLE_COPY(ComputerGroupDialog)
 };

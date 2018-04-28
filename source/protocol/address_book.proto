@@ -11,27 +11,61 @@ option optimize_for = LITE_RUNTIME;
 
 import "computer.proto";
 
-package aspia.proto;
+package aspia.proto.address_book;
+
+enum Version
+{
+    VERSION_UNKNOWN = 0;
+    VERSION_1_0_0   = 1;
+}
+
+enum EncryptionType
+{
+    ENCRYPTION_TYPE_UNKNOWN            = 0;
+    ENCRYPTION_TYPE_NONE               = 1;
+    ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
+}
 
 message ComputerGroup
 {
     repeated Computer computer = 1;
-    repeated ComputerGroup group = 2;
+    repeated ComputerGroup computer_group = 2;
 
     string name = 3;
     string comment = 4;
     bool expanded = 5;
 }
 
-message AddressBook
+message Encrypted
 {
-    enum EncryptionType
-    {
-        ENCRYPTION_TYPE_UNKNOWN            = 0;
-        ENCRYPTION_TYPE_NONE               = 1;
-        ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
-    }
+    // Random data before.
+    bytes salt1 = 1;
 
-    EncryptionType encryption_type = 1;
+    // Contains serialized root |ComputerGroup|.
     bytes data = 2;
+
+    // Random data after.
+    bytes salt2 = 3;
+}
+
+message File
+{
+    // The version of the address book file.
+    Version version = 1;
+
+    // Encryption type.
+    EncryptionType encryption_type = 2;
+
+    // Number of hashing iterations for encryption/decryption key.
+    // When the encryption is disabled, the field is not used.
+    uint64 hashing_rounds = 3;
+
+    // If encryption is enabled, contains salt (random data), which are added at each iteration
+    // of the hashing to create the key.
+    // When the encryption is disabled, the field is not used.
+    bytes salt = 4;
+
+    // If the encryption is enabled, it contains serialized and encrypted |Encrypted|.
+    // If the encryption is disabled, it contains a serialized |ComputerGroup|.
+    bytes data = 5;
 }

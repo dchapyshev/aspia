@@ -21,8 +21,8 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
-                                         proto::ComputerGroup* computer_group,
-                                         proto::ComputerGroup* parent_computer_group)
+                                         proto::address_book::ComputerGroup* computer_group,
+                                         proto::address_book::ComputerGroup* parent_computer_group)
     : QDialog(parent),
       computer_group_(computer_group)
 {

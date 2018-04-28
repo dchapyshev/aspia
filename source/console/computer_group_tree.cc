@@ -120,7 +120,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
         ComputerGroupItem* parent_group_item =
             reinterpret_cast<ComputerGroupItem*>(source_group_item->parent());
 
-        proto::ComputerGroup* computer_group =
+        proto::address_book::ComputerGroup* computer_group =
             parent_group_item->takeChildComputerGroup(source_group_item);
         if (!computer_group)
             return;

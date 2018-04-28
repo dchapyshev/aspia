@@ -10,7 +10,7 @@
 namespace aspia {
 
 OpenAddressBookDialog::OpenAddressBookDialog(
-    QWidget* parent, proto::AddressBook::EncryptionType encryption_type)
+    QWidget* parent, proto::address_book::EncryptionType encryption_type)
     : QDialog(parent)
 {
     ui.setupUi(this);
@@ -23,11 +23,11 @@ OpenAddressBookDialog::OpenAddressBookDialog(
 
     switch (encryption_type)
     {
-        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+        case proto::address_book::ENCRYPTION_TYPE_NONE:
             ui.edit_encryption_type->setText(tr("Without Encryption"));
             break;
 
-        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
             ui.edit_encryption_type->setText(tr("XChaCha20 + Poly1305 (256-bit key)"));
             break;
 

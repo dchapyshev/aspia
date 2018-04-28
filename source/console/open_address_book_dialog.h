@@ -18,7 +18,7 @@ class OpenAddressBookDialog : public QDialog
     Q_OBJECT
 
 public:
-    OpenAddressBookDialog(QWidget* parent, proto::AddressBook::EncryptionType encryption_type);
+    OpenAddressBookDialog(QWidget* parent, proto::address_book::EncryptionType encryption_type);
     ~OpenAddressBookDialog();
 
     QString password() const;

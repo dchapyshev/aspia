@@ -18,16 +18,23 @@
 // @@protoc_insertion_point(includes)
 namespace aspia {
 namespace proto {
+namespace address_book {
 class ComputerGroupDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<ComputerGroup>
       _instance;
 } _ComputerGroup_default_instance_;
-class AddressBookDefaultTypeInternal {
+class EncryptedDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<AddressBook>
+  ::google::protobuf::internal::ExplicitlyConstructed<Encrypted>
       _instance;
-} _AddressBook_default_instance_;
+} _Encrypted_default_instance_;
+class FileDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<File>
+      _instance;
+} _File_default_instance_;
+}  // namespace address_book
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_address_5fbook_2eproto {
@@ -41,11 +48,11 @@ void InitDefaultsComputerGroupImpl() {
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_computer_2eproto::InitDefaultsComputer();
   {
-    void* ptr = &::aspia::proto::_ComputerGroup_default_instance_;
-    new (ptr) ::aspia::proto::ComputerGroup();
+    void* ptr = &::aspia::proto::address_book::_ComputerGroup_default_instance_;
+    new (ptr) ::aspia::proto::address_book::ComputerGroup();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::ComputerGroup::InitAsDefaultInstance();
+  ::aspia::proto::address_book::ComputerGroup::InitAsDefaultInstance();
 }
 
 void InitDefaultsComputerGroup() {
@@ -53,7 +60,7 @@ void InitDefaultsComputerGroup() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsComputerGroupImpl);
 }
 
-void InitDefaultsAddressBookImpl() {
+void InitDefaultsEncryptedImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
@@ -62,22 +69,54 @@ void InitDefaultsAddressBookImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::aspia::proto::_AddressBook_default_instance_;
-    new (ptr) ::aspia::proto::AddressBook();
+    void* ptr = &::aspia::proto::address_book::_Encrypted_default_instance_;
+    new (ptr) ::aspia::proto::address_book::Encrypted();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::aspia::proto::AddressBook::InitAsDefaultInstance();
+  ::aspia::proto::address_book::Encrypted::InitAsDefaultInstance();
 }
 
-void InitDefaultsAddressBook() {
+void InitDefaultsEncrypted() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsAddressBookImpl);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsEncryptedImpl);
+}
+
+void InitDefaultsFileImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::aspia::proto::address_book::_File_default_instance_;
+    new (ptr) ::aspia::proto::address_book::File();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::aspia::proto::address_book::File::InitAsDefaultInstance();
+}
+
+void InitDefaultsFile() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsFileImpl);
 }
 
 }  // namespace protobuf_address_5fbook_2eproto
 namespace aspia {
 namespace proto {
-bool AddressBook_EncryptionType_IsValid(int value) {
+namespace address_book {
+bool Version_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool EncryptionType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -88,14 +127,6 @@ bool AddressBook_EncryptionType_IsValid(int value) {
   }
 }
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_UNKNOWN;
-const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_NONE;
-const AddressBook_EncryptionType AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305;
-const AddressBook_EncryptionType AddressBook::EncryptionType_MIN;
-const AddressBook_EncryptionType AddressBook::EncryptionType_MAX;
-const int AddressBook::EncryptionType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
 
@@ -106,7 +137,7 @@ void ComputerGroup::clear_computer() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ComputerGroup::kComputerFieldNumber;
-const int ComputerGroup::kGroupFieldNumber;
+const int ComputerGroup::kComputerGroupFieldNumber;
 const int ComputerGroup::kNameFieldNumber;
 const int ComputerGroup::kCommentFieldNumber;
 const int ComputerGroup::kExpandedFieldNumber;
@@ -118,13 +149,13 @@ ComputerGroup::ComputerGroup()
     ::protobuf_address_5fbook_2eproto::InitDefaultsComputerGroup();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(constructor:aspia.proto.address_book.ComputerGroup)
 }
 ComputerGroup::ComputerGroup(const ComputerGroup& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       computer_(from.computer_),
-      group_(from.group_),
+      computer_group_(from.computer_group_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -136,7 +167,7 @@ ComputerGroup::ComputerGroup(const ComputerGroup& from)
     comment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.comment_);
   }
   expanded_ = from.expanded_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.address_book.ComputerGroup)
 }
 
 void ComputerGroup::SharedCtor() {
@@ -147,7 +178,7 @@ void ComputerGroup::SharedCtor() {
 }
 
 ComputerGroup::~ComputerGroup() {
-  // @@protoc_insertion_point(destructor:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(destructor:aspia.proto.address_book.ComputerGroup)
   SharedDtor();
 }
 
@@ -175,13 +206,13 @@ ComputerGroup* ComputerGroup::New(::google::protobuf::Arena* arena) const {
 }
 
 void ComputerGroup::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.ComputerGroup)
+// @@protoc_insertion_point(message_clear_start:aspia.proto.address_book.ComputerGroup)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   computer_.Clear();
-  group_.Clear();
+  computer_group_.Clear();
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   expanded_ = false;
@@ -198,7 +229,7 @@ bool ComputerGroup::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(parse_start:aspia.proto.address_book.ComputerGroup)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -215,11 +246,11 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.ComputerGroup group = 2;
+      // repeated .aspia.proto.address_book.ComputerGroup computer_group = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_group()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_computer_group()));
         } else {
           goto handle_unusual;
         }
@@ -235,7 +266,7 @@ bool ComputerGroup::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->name().data(), static_cast<int>(this->name().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.ComputerGroup.name"));
+            "aspia.proto.address_book.ComputerGroup.name"));
         } else {
           goto handle_unusual;
         }
@@ -251,7 +282,7 @@ bool ComputerGroup::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->comment().data(), static_cast<int>(this->comment().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.ComputerGroup.comment"));
+            "aspia.proto.address_book.ComputerGroup.comment"));
         } else {
           goto handle_unusual;
         }
@@ -284,17 +315,17 @@ bool ComputerGroup::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(parse_success:aspia.proto.address_book.ComputerGroup)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.address_book.ComputerGroup)
   return false;
 #undef DO_
 }
 
 void ComputerGroup::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.address_book.ComputerGroup)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -305,11 +336,11 @@ void ComputerGroup::SerializeWithCachedSizes(
       1, this->computer(static_cast<int>(i)), output);
   }
 
-  // repeated .aspia.proto.ComputerGroup group = 2;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 2;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->group_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->computer_group_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, this->group(static_cast<int>(i)), output);
+      2, this->computer_group(static_cast<int>(i)), output);
   }
 
   // string name = 3;
@@ -317,7 +348,7 @@ void ComputerGroup::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.ComputerGroup.name");
+      "aspia.proto.address_book.ComputerGroup.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->name(), output);
   }
@@ -327,7 +358,7 @@ void ComputerGroup::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.ComputerGroup.comment");
+      "aspia.proto.address_book.ComputerGroup.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->comment(), output);
   }
@@ -339,11 +370,11 @@ void ComputerGroup::SerializeWithCachedSizes(
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.address_book.ComputerGroup)
 }
 
 size_t ComputerGroup::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.ComputerGroup)
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.address_book.ComputerGroup)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
@@ -359,14 +390,14 @@ size_t ComputerGroup::ByteSizeLong() const {
     }
   }
 
-  // repeated .aspia.proto.ComputerGroup group = 2;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 2;
   {
-    unsigned int count = static_cast<unsigned int>(this->group_size());
+    unsigned int count = static_cast<unsigned int>(this->computer_group_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->group(static_cast<int>(i)));
+          this->computer_group(static_cast<int>(i)));
     }
   }
 
@@ -402,14 +433,14 @@ void ComputerGroup::CheckTypeAndMergeFrom(
 }
 
 void ComputerGroup::MergeFrom(const ComputerGroup& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.ComputerGroup)
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.address_book.ComputerGroup)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   computer_.MergeFrom(from.computer_);
-  group_.MergeFrom(from.group_);
+  computer_group_.MergeFrom(from.computer_group_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -424,7 +455,7 @@ void ComputerGroup::MergeFrom(const ComputerGroup& from) {
 }
 
 void ComputerGroup::CopyFrom(const ComputerGroup& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.ComputerGroup)
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.address_book.ComputerGroup)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -441,7 +472,7 @@ void ComputerGroup::Swap(ComputerGroup* other) {
 void ComputerGroup::InternalSwap(ComputerGroup* other) {
   using std::swap;
   computer_.InternalSwap(&other->computer_);
-  group_.InternalSwap(&other->group_);
+  computer_group_.InternalSwap(&other->computer_group_);
   name_.Swap(&other->name_);
   comment_.Swap(&other->comment_);
   swap(expanded_, other->expanded_);
@@ -450,85 +481,97 @@ void ComputerGroup::InternalSwap(ComputerGroup* other) {
 }
 
 ::std::string ComputerGroup::GetTypeName() const {
-  return "aspia.proto.ComputerGroup";
+  return "aspia.proto.address_book.ComputerGroup";
 }
 
 
 // ===================================================================
 
-void AddressBook::InitAsDefaultInstance() {
+void Encrypted::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int AddressBook::kEncryptionTypeFieldNumber;
-const int AddressBook::kDataFieldNumber;
+const int Encrypted::kSalt1FieldNumber;
+const int Encrypted::kDataFieldNumber;
+const int Encrypted::kSalt2FieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-AddressBook::AddressBook()
+Encrypted::Encrypted()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_address_5fbook_2eproto::InitDefaultsAddressBook();
+    ::protobuf_address_5fbook_2eproto::InitDefaultsEncrypted();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(constructor:aspia.proto.address_book.Encrypted)
 }
-AddressBook::AddressBook(const AddressBook& from)
+Encrypted::Encrypted(const Encrypted& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  salt1_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.salt1().size() > 0) {
+    salt1_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt1_);
+  }
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  encryption_type_ = from.encryption_type_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.AddressBook)
+  salt2_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.salt2().size() > 0) {
+    salt2_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt2_);
+  }
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.address_book.Encrypted)
 }
 
-void AddressBook::SharedCtor() {
+void Encrypted::SharedCtor() {
+  salt1_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  encryption_type_ = 0;
+  salt2_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _cached_size_ = 0;
 }
 
-AddressBook::~AddressBook() {
-  // @@protoc_insertion_point(destructor:aspia.proto.AddressBook)
+Encrypted::~Encrypted() {
+  // @@protoc_insertion_point(destructor:aspia.proto.address_book.Encrypted)
   SharedDtor();
 }
 
-void AddressBook::SharedDtor() {
+void Encrypted::SharedDtor() {
+  salt1_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  salt2_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
-void AddressBook::SetCachedSize(int size) const {
+void Encrypted::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const AddressBook& AddressBook::default_instance() {
-  ::protobuf_address_5fbook_2eproto::InitDefaultsAddressBook();
+const Encrypted& Encrypted::default_instance() {
+  ::protobuf_address_5fbook_2eproto::InitDefaultsEncrypted();
   return *internal_default_instance();
 }
 
-AddressBook* AddressBook::New(::google::protobuf::Arena* arena) const {
-  AddressBook* n = new AddressBook;
+Encrypted* Encrypted::New(::google::protobuf::Arena* arena) const {
+  Encrypted* n = new Encrypted;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void AddressBook::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.AddressBook)
+void Encrypted::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.address_book.Encrypted)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  salt1_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  encryption_type_ = 0;
+  salt2_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
-bool AddressBook::MergePartialFromCodedStream(
+bool Encrypted::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
@@ -538,21 +581,18 @@ bool AddressBook::MergePartialFromCodedStream(
       unknown_fields_setter.buffer());
   ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
       &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(parse_start:aspia.proto.address_book.Encrypted)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
+      // bytes salt1 = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_encryption_type(static_cast< ::aspia::proto::AddressBook_EncryptionType >(value));
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_salt1()));
         } else {
           goto handle_unusual;
         }
@@ -563,6 +603,330 @@ bool AddressBook::MergePartialFromCodedStream(
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes salt2 = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_salt2()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
+            input, tag, &unknown_fields_stream));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:aspia.proto.address_book.Encrypted)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:aspia.proto.address_book.Encrypted)
+  return false;
+#undef DO_
+}
+
+void Encrypted::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:aspia.proto.address_book.Encrypted)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes salt1 = 1;
+  if (this->salt1().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      1, this->salt1(), output);
+  }
+
+  // bytes data = 2;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->data(), output);
+  }
+
+  // bytes salt2 = 3;
+  if (this->salt2().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->salt2(), output);
+  }
+
+  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
+                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
+  // @@protoc_insertion_point(serialize_end:aspia.proto.address_book.Encrypted)
+}
+
+size_t Encrypted::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.address_book.Encrypted)
+  size_t total_size = 0;
+
+  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
+
+  // bytes salt1 = 1;
+  if (this->salt1().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->salt1());
+  }
+
+  // bytes data = 2;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->data());
+  }
+
+  // bytes salt2 = 3;
+  if (this->salt2().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->salt2());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Encrypted::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Encrypted*>(&from));
+}
+
+void Encrypted::MergeFrom(const Encrypted& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.address_book.Encrypted)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.salt1().size() > 0) {
+
+    salt1_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt1_);
+  }
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.salt2().size() > 0) {
+
+    salt2_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt2_);
+  }
+}
+
+void Encrypted::CopyFrom(const Encrypted& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.address_book.Encrypted)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Encrypted::IsInitialized() const {
+  return true;
+}
+
+void Encrypted::Swap(Encrypted* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Encrypted::InternalSwap(Encrypted* other) {
+  using std::swap;
+  salt1_.Swap(&other->salt1_);
+  data_.Swap(&other->data_);
+  salt2_.Swap(&other->salt2_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Encrypted::GetTypeName() const {
+  return "aspia.proto.address_book.Encrypted";
+}
+
+
+// ===================================================================
+
+void File::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int File::kVersionFieldNumber;
+const int File::kEncryptionTypeFieldNumber;
+const int File::kHashingRoundsFieldNumber;
+const int File::kSaltFieldNumber;
+const int File::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+File::File()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_address_5fbook_2eproto::InitDefaultsFile();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:aspia.proto.address_book.File)
+}
+File::File(const File& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  salt_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.salt().size() > 0) {
+    salt_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt_);
+  }
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  ::memcpy(&version_, &from.version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&hashing_rounds_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(hashing_rounds_));
+  // @@protoc_insertion_point(copy_constructor:aspia.proto.address_book.File)
+}
+
+void File::SharedCtor() {
+  salt_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&hashing_rounds_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(hashing_rounds_));
+  _cached_size_ = 0;
+}
+
+File::~File() {
+  // @@protoc_insertion_point(destructor:aspia.proto.address_book.File)
+  SharedDtor();
+}
+
+void File::SharedDtor() {
+  salt_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void File::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const File& File::default_instance() {
+  ::protobuf_address_5fbook_2eproto::InitDefaultsFile();
+  return *internal_default_instance();
+}
+
+File* File::New(::google::protobuf::Arena* arena) const {
+  File* n = new File;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void File::Clear() {
+// @@protoc_insertion_point(message_clear_start:aspia.proto.address_book.File)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  salt_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&hashing_rounds_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(hashing_rounds_));
+  _internal_metadata_.Clear();
+}
+
+bool File::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
+      &_internal_metadata_);
+  ::google::protobuf::io::StringOutputStream unknown_fields_output(
+      unknown_fields_setter.buffer());
+  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
+      &unknown_fields_output, false);
+  // @@protoc_insertion_point(parse_start:aspia.proto.address_book.File)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .aspia.proto.address_book.Version version = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_version(static_cast< ::aspia::proto::address_book::Version >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.address_book.EncryptionType encryption_type = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_encryption_type(static_cast< ::aspia::proto::address_book::EncryptionType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 hashing_rounds = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &hashing_rounds_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes salt = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_salt()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes data = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
         } else {
@@ -583,54 +947,91 @@ bool AddressBook::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(parse_success:aspia.proto.address_book.File)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(parse_failure:aspia.proto.address_book.File)
   return false;
 #undef DO_
 }
 
-void AddressBook::SerializeWithCachedSizes(
+void File::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(serialize_start:aspia.proto.address_book.File)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
-  if (this->encryption_type() != 0) {
+  // .aspia.proto.address_book.Version version = 1;
+  if (this->version() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->encryption_type(), output);
+      1, this->version(), output);
   }
 
-  // bytes data = 2;
+  // .aspia.proto.address_book.EncryptionType encryption_type = 2;
+  if (this->encryption_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->encryption_type(), output);
+  }
+
+  // uint64 hashing_rounds = 3;
+  if (this->hashing_rounds() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->hashing_rounds(), output);
+  }
+
+  // bytes salt = 4;
+  if (this->salt().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      4, this->salt(), output);
+  }
+
+  // bytes data = 5;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      2, this->data(), output);
+      5, this->data(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(serialize_end:aspia.proto.address_book.File)
 }
 
-size_t AddressBook::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.AddressBook)
+size_t File::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:aspia.proto.address_book.File)
   size_t total_size = 0;
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // bytes data = 2;
+  // bytes salt = 4;
+  if (this->salt().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->salt());
+  }
+
+  // bytes data = 5;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
   }
 
-  // .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
+  // .aspia.proto.address_book.Version version = 1;
+  if (this->version() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->version());
+  }
+
+  // .aspia.proto.address_book.EncryptionType encryption_type = 2;
   if (this->encryption_type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->encryption_type());
+  }
+
+  // uint64 hashing_rounds = 3;
+  if (this->hashing_rounds() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->hashing_rounds());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -640,56 +1041,70 @@ size_t AddressBook::ByteSizeLong() const {
   return total_size;
 }
 
-void AddressBook::CheckTypeAndMergeFrom(
+void File::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const AddressBook*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const File*>(&from));
 }
 
-void AddressBook::MergeFrom(const AddressBook& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.AddressBook)
+void File::MergeFrom(const File& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.address_book.File)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.salt().size() > 0) {
+
+    salt_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.salt_);
+  }
   if (from.data().size() > 0) {
 
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
+  if (from.version() != 0) {
+    set_version(from.version());
+  }
   if (from.encryption_type() != 0) {
     set_encryption_type(from.encryption_type());
   }
+  if (from.hashing_rounds() != 0) {
+    set_hashing_rounds(from.hashing_rounds());
+  }
 }
 
-void AddressBook::CopyFrom(const AddressBook& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.AddressBook)
+void File::CopyFrom(const File& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.address_book.File)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool AddressBook::IsInitialized() const {
+bool File::IsInitialized() const {
   return true;
 }
 
-void AddressBook::Swap(AddressBook* other) {
+void File::Swap(File* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void AddressBook::InternalSwap(AddressBook* other) {
+void File::InternalSwap(File* other) {
   using std::swap;
+  salt_.Swap(&other->salt_);
   data_.Swap(&other->data_);
+  swap(version_, other->version_);
   swap(encryption_type_, other->encryption_type_);
+  swap(hashing_rounds_, other->hashing_rounds_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string AddressBook::GetTypeName() const {
-  return "aspia.proto.AddressBook";
+::std::string File::GetTypeName() const {
+  return "aspia.proto.address_book.File";
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
+}  // namespace address_book
 }  // namespace proto
 }  // namespace aspia
 

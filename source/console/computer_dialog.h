@@ -22,7 +22,7 @@ class ComputerDialog : public QDialog
 public:
     ComputerDialog(QWidget* parent,
                    proto::Computer* computer,
-                   proto::ComputerGroup* parent_computer_group);
+                   proto::address_book::ComputerGroup* parent_computer_group);
     ~ComputerDialog();
 
 private slots:

@@ -19,9 +19,9 @@ class AddressBookDialog : public QDialog
 
 public:
     AddressBookDialog(QWidget* parent,
-                      proto::AddressBook::EncryptionType* encryption_type,
+                      proto::address_book::EncryptionType* encryption_type,
                       QString* password,
-                      proto::ComputerGroup* root_group);
+                      proto::address_book::ComputerGroup* root_group);
     ~AddressBookDialog();
 
 private slots:
@@ -33,8 +33,8 @@ private:
     void showError(const QString& message);
 
     Ui::AddressBookDialog ui;
-    proto::ComputerGroup* root_group_;
-    proto::AddressBook::EncryptionType* encryption_type_;
+    proto::address_book::ComputerGroup* root_group_;
+    proto::address_book::EncryptionType* encryption_type_;
     QString* password_;
 
     Q_DISABLE_COPY(AddressBookDialog)

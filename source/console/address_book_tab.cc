@@ -76,9 +76,9 @@ std::unique_ptr<proto::Computer> createDefaultComputer()
 } // namespace
 
 AddressBookTab::AddressBookTab(const QString& file_path,
-                               proto::AddressBook::EncryptionType encryption_type,
+                               proto::address_book::EncryptionType encryption_type,
                                const QString& password,
-                               proto::ComputerGroup root_group,
+                               proto::address_book::ComputerGroup root_group,
                                QWidget* parent)
     : QWidget(parent),
       file_path_(file_path),
@@ -148,9 +148,9 @@ AddressBookTab::~AddressBookTab() = default;
 // static
 AddressBookTab* AddressBookTab::createNewAddressBook(QWidget* parent)
 {
-    proto::ComputerGroup root_group;
-    proto::AddressBook::EncryptionType encryption_type =
-        proto::AddressBook::ENCRYPTION_TYPE_NONE;
+    proto::address_book::ComputerGroup root_group;
+    proto::address_book::EncryptionType encryption_type =
+        proto::address_book::ENCRYPTION_TYPE_NONE;
     QString password;
 
     AddressBookDialog dialog(parent, &encryption_type, &password, &root_group);
@@ -185,23 +185,23 @@ AddressBookTab* AddressBookTab::openAddressBook(const QString& file_path, QWidge
         return nullptr;
     }
 
-    proto::AddressBook address_book;
+    proto::address_book::File address_book_file;
 
-    if (!address_book.ParseFromArray(buffer.data(), buffer.size()))
+    if (!address_book_file.ParseFromArray(buffer.data(), buffer.size()))
     {
         showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
         return nullptr;
     }
 
-    proto::AddressBook::EncryptionType encryption_type = address_book.encryption_type();
-    proto::ComputerGroup root_group;
+    proto::address_book::EncryptionType encryption_type = address_book_file.encryption_type();
+    proto::address_book::ComputerGroup root_group;
     QString password;
 
-    switch (address_book.encryption_type())
+    switch (encryption_type)
     {
-        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+        case proto::address_book::ENCRYPTION_TYPE_NONE:
         {
-            if (!root_group.ParseFromString(address_book.data()))
+            if (!root_group.ParseFromString(address_book_file.data()))
             {
                 showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
                 return nullptr;
@@ -209,9 +209,9 @@ AddressBookTab* AddressBookTab::openAddressBook(const QString& file_path, QWidge
         }
         break;
 
-        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
         {
-            OpenAddressBookDialog dialog(parent, address_book.encryption_type());
+            OpenAddressBookDialog dialog(parent, encryption_type);
             if (dialog.exec() != QDialog::Accepted)
                 return nullptr;
 
@@ -220,7 +220,7 @@ AddressBookTab* AddressBookTab::openAddressBook(const QString& file_path, QWidge
             std::string key = DataEncryptor::createKey(password.toStdString());
 
             std::string decrypted_data;
-            if (!DataEncryptor::decrypt(address_book.data(), key, &decrypted_data))
+            if (!DataEncryptor::decrypt(address_book_file.data(), key, &decrypted_data))
             {
                 showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
                 return nullptr;
@@ -281,14 +281,14 @@ void AddressBookTab::addComputerGroup()
     if (!parent_item)
         return;
 
-    std::unique_ptr<proto::ComputerGroup> computer_group =
-        std::make_unique<proto::ComputerGroup>();
+    std::unique_ptr<proto::address_book::ComputerGroup> computer_group =
+        std::make_unique<proto::address_book::ComputerGroup>();
 
     ComputerGroupDialog dialog(this, computer_group.get(), parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    proto::ComputerGroup* computer_group_released = computer_group.release();
+    proto::address_book::ComputerGroup* computer_group_released = computer_group.release();
 
     ComputerGroupItem* item = parent_item->addChildComputerGroup(computer_group_released);
     ui.tree_group->setCurrentItem(item);
@@ -540,25 +540,25 @@ void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 
 bool AddressBookTab::saveToFile(const QString& file_path)
 {
-    proto::AddressBook address_book;
-    address_book.set_encryption_type(encryption_type_);
+    proto::address_book::File address_book_file;
+    address_book_file.set_encryption_type(encryption_type_);
 
-    switch (address_book.encryption_type())
+    switch (address_book_file.encryption_type())
     {
-        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
-            address_book.set_data(root_group_.SerializeAsString());
+        case proto::address_book::ENCRYPTION_TYPE_NONE:
+            address_book_file.set_data(root_group_.SerializeAsString());
             break;
 
-        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
         {
-            address_book.set_data(
+            address_book_file.set_data(
                 DataEncryptor::encrypt(root_group_.SerializeAsString(),
                                        DataEncryptor::createKey(password_.toStdString())));
         }
         break;
 
         default:
-            qFatal("Unknown encryption type: %d", address_book.encryption_type());
+            qFatal("Unknown encryption type: %d", address_book_file.encryption_type());
             break;
     }
 
@@ -580,7 +580,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         return false;
     }
 
-    std::string buffer = address_book.SerializeAsString();
+    std::string buffer = address_book_file.SerializeAsString();
     if (file.write(buffer.c_str(), buffer.size()) != buffer.size())
     {
         showSaveError(this, tr("Unable to write address book file."));

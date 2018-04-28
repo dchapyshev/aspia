@@ -22,9 +22,9 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 AddressBookDialog::AddressBookDialog(QWidget* parent,
-                                     proto::AddressBook::EncryptionType* encryption_type,
+                                     proto::address_book::EncryptionType* encryption_type,
                                      QString* password,
-                                     proto::ComputerGroup* root_group)
+                                     proto::address_book::ComputerGroup* root_group)
     : QDialog(parent),
       root_group_(root_group),
       encryption_type_(encryption_type),
@@ -41,9 +41,9 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
             this, &AddressBookDialog::showPasswordButtonToggled);
 
     ui.combo_encryption->addItem(tr("Without Encryption"),
-                                 QVariant(proto::AddressBook::ENCRYPTION_TYPE_NONE));
+                                 QVariant(proto::address_book::ENCRYPTION_TYPE_NONE));
     ui.combo_encryption->addItem(tr("XChaCha20 + Poly1305 (256-bit key)"),
-                                 QVariant(proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305));
+                                 QVariant(proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305));
 
     ui.edit_name->setText(QString::fromStdString(root_group_->name()));
     ui.edit_comment->setPlainText(QString::fromStdString(root_group_->comment()));
@@ -52,13 +52,13 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     if (current != -1)
         ui.combo_encryption->setCurrentIndex(current);
 
-    if (*encryption_type_ == proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305)
+    if (*encryption_type_ == proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305)
     {
         ui.edit_password->setText(*password);
     }
     else
     {
-        Q_ASSERT(*encryption_type_ == proto::AddressBook::ENCRYPTION_TYPE_NONE);
+        Q_ASSERT(*encryption_type_ == proto::address_book::ENCRYPTION_TYPE_NONE);
         ui.edit_password->setEnabled(false);
     }
 }
@@ -88,17 +88,17 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        proto::AddressBook::EncryptionType encryption_type =
-            static_cast<proto::AddressBook::EncryptionType>(
+        proto::address_book::EncryptionType encryption_type =
+            static_cast<proto::address_book::EncryptionType>(
                 ui.combo_encryption->currentData().toInt());
         QString password;
 
         switch (encryption_type)
         {
-            case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+            case proto::address_book::ENCRYPTION_TYPE_NONE:
                 break;
 
-            case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+            case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
             {
                 password = ui.edit_password->text();
                 if (password.length() < kMinPasswordLength)
@@ -132,18 +132,18 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
 
 void AddressBookDialog::encryptionTypedChanged(int item_index)
 {
-    proto::AddressBook::EncryptionType encryption_type =
-        static_cast<proto::AddressBook::EncryptionType>(
+    proto::address_book::EncryptionType encryption_type =
+        static_cast<proto::address_book::EncryptionType>(
             ui.combo_encryption->itemData(item_index).toInt());
 
     switch (encryption_type)
     {
-        case proto::AddressBook::ENCRYPTION_TYPE_NONE:
+        case proto::address_book::ENCRYPTION_TYPE_NONE:
             ui.edit_password->setEnabled(false);
             ui.button_show_password->setEnabled(false);
             break;
 
-        case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
+        case proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
             ui.edit_password->setEnabled(true);
             ui.button_show_password->setEnabled(true);
             break;

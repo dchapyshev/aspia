@@ -9,7 +9,7 @@
 
 namespace aspia {
 
-ComputerGroupItem::ComputerGroupItem(proto::ComputerGroup* computer_group,
+ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                                      ComputerGroupItem* parent_item)
     : QTreeWidgetItem(parent_item),
       computer_group_(computer_group)
@@ -17,17 +17,18 @@ ComputerGroupItem::ComputerGroupItem(proto::ComputerGroup* computer_group,
     setIcon(0, QIcon(QStringLiteral(":/icon/folder.png")));
     setText(0, QString::fromStdString(computer_group_->name()));
 
-    for (int i = 0; i < computer_group_->group_size(); ++i)
+    for (int i = 0; i < computer_group_->computer_group_size(); ++i)
     {
-        addChild(new ComputerGroupItem(computer_group_->mutable_group(i), this));
+        addChild(new ComputerGroupItem(computer_group_->mutable_computer_group(i), this));
     }
 }
 
 ComputerGroupItem::~ComputerGroupItem() = default;
 
-ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(proto::ComputerGroup* computer_group)
+ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
+    proto::address_book::ComputerGroup* computer_group)
 {
-    computer_group_->mutable_group()->AddAllocated(computer_group);
+    computer_group_->mutable_computer_group()->AddAllocated(computer_group);
 
     ComputerGroupItem* item = new ComputerGroupItem(computer_group, this);
     addChild(item);
@@ -36,11 +37,11 @@ ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(proto::ComputerGroup
 
 bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_group_item)
 {
-    for (int i = 0; i < computer_group_->group_size(); ++i)
+    for (int i = 0; i < computer_group_->computer_group_size(); ++i)
     {
-        if (computer_group_->mutable_group(i) == computer_group_item->computerGroup())
+        if (computer_group_->mutable_computer_group(i) == computer_group_item->computerGroup())
         {
-            computer_group_->mutable_group()->DeleteSubrange(i, 1);
+            computer_group_->mutable_computer_group()->DeleteSubrange(i, 1);
             removeChild(computer_group_item);
             return true;
         }
@@ -49,18 +50,18 @@ bool ComputerGroupItem::deleteChildComputerGroup(ComputerGroupItem* computer_gro
     return false;
 }
 
-proto::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
+proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     ComputerGroupItem* computer_group_item)
 {
-    proto::ComputerGroup* computer_group = nullptr;
+    proto::address_book::ComputerGroup* computer_group = nullptr;
 
-    for (int i = 0; i < computer_group_->group_size(); ++i)
+    for (int i = 0; i < computer_group_->computer_group_size(); ++i)
     {
-        if (computer_group_->mutable_group(i) == computer_group_item->computerGroup())
+        if (computer_group_->mutable_computer_group(i) == computer_group_item->computerGroup())
         {
-            computer_group = new proto::ComputerGroup();
-            *computer_group = std::move(*computer_group_->mutable_group(i));
-            computer_group_->mutable_group()->DeleteSubrange(i, 1);
+            computer_group = new proto::address_book::ComputerGroup();
+            *computer_group = std::move(*computer_group_->mutable_computer_group(i));
+            computer_group_->mutable_computer_group()->DeleteSubrange(i, 1);
             break;
         }
     }

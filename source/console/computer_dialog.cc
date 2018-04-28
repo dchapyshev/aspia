@@ -25,7 +25,7 @@ constexpr int kMaxCommentLength = 2048;
 
 ComputerDialog::ComputerDialog(QWidget* parent,
                                proto::Computer* computer,
-                               proto::ComputerGroup* parent_computer_group)
+                               proto::address_book::ComputerGroup* parent_computer_group)
     : QDialog(parent),
       computer_(computer)
 {

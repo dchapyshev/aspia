@@ -37,48 +37,68 @@ namespace protobuf_address_5fbook_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[2];
+  static const ::google::protobuf::internal::ParseTable schema[3];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
 void InitDefaultsComputerGroupImpl();
 void InitDefaultsComputerGroup();
-void InitDefaultsAddressBookImpl();
-void InitDefaultsAddressBook();
+void InitDefaultsEncryptedImpl();
+void InitDefaultsEncrypted();
+void InitDefaultsFileImpl();
+void InitDefaultsFile();
 inline void InitDefaults() {
   InitDefaultsComputerGroup();
-  InitDefaultsAddressBook();
+  InitDefaultsEncrypted();
+  InitDefaultsFile();
 }
 }  // namespace protobuf_address_5fbook_2eproto
 namespace aspia {
 namespace proto {
-class AddressBook;
-class AddressBookDefaultTypeInternal;
-extern AddressBookDefaultTypeInternal _AddressBook_default_instance_;
+namespace address_book {
 class ComputerGroup;
 class ComputerGroupDefaultTypeInternal;
 extern ComputerGroupDefaultTypeInternal _ComputerGroup_default_instance_;
+class Encrypted;
+class EncryptedDefaultTypeInternal;
+extern EncryptedDefaultTypeInternal _Encrypted_default_instance_;
+class File;
+class FileDefaultTypeInternal;
+extern FileDefaultTypeInternal _File_default_instance_;
+}  // namespace address_book
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
 namespace proto {
+namespace address_book {
 
-enum AddressBook_EncryptionType {
-  AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN = 0,
-  AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE = 1,
-  AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2,
-  AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  AddressBook_EncryptionType_AddressBook_EncryptionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum Version {
+  VERSION_UNKNOWN = 0,
+  VERSION_1_0_0 = 1,
+  Version_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Version_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool AddressBook_EncryptionType_IsValid(int value);
-const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MIN = AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN;
-const AddressBook_EncryptionType AddressBook_EncryptionType_EncryptionType_MAX = AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305;
-const int AddressBook_EncryptionType_EncryptionType_ARRAYSIZE = AddressBook_EncryptionType_EncryptionType_MAX + 1;
+bool Version_IsValid(int value);
+const Version Version_MIN = VERSION_UNKNOWN;
+const Version Version_MAX = VERSION_1_0_0;
+const int Version_ARRAYSIZE = Version_MAX + 1;
+
+enum EncryptionType {
+  ENCRYPTION_TYPE_UNKNOWN = 0,
+  ENCRYPTION_TYPE_NONE = 1,
+  ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2,
+  EncryptionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  EncryptionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool EncryptionType_IsValid(int value);
+const EncryptionType EncryptionType_MIN = ENCRYPTION_TYPE_UNKNOWN;
+const EncryptionType EncryptionType_MAX = ENCRYPTION_TYPE_XCHACHA20_POLY1305;
+const int EncryptionType_ARRAYSIZE = EncryptionType_MAX + 1;
 
 // ===================================================================
 
-class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.ComputerGroup) */ {
+class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.address_book.ComputerGroup) */ {
  public:
   ComputerGroup();
   virtual ~ComputerGroup();
@@ -170,17 +190,17 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
       computer() const;
 
-  // repeated .aspia.proto.ComputerGroup group = 2;
-  int group_size() const;
-  void clear_group();
-  static const int kGroupFieldNumber = 2;
-  const ::aspia::proto::ComputerGroup& group(int index) const;
-  ::aspia::proto::ComputerGroup* mutable_group(int index);
-  ::aspia::proto::ComputerGroup* add_group();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-      mutable_group();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-      group() const;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 2;
+  int computer_group_size() const;
+  void clear_computer_group();
+  static const int kComputerGroupFieldNumber = 2;
+  const ::aspia::proto::address_book::ComputerGroup& computer_group(int index) const;
+  ::aspia::proto::address_book::ComputerGroup* mutable_computer_group(int index);
+  ::aspia::proto::address_book::ComputerGroup* add_computer_group();
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup >*
+      mutable_computer_group();
+  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup >&
+      computer_group() const;
 
   // string name = 3;
   void clear_name();
@@ -216,12 +236,12 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   bool expanded() const;
   void set_expanded(bool value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.ComputerGroup)
+  // @@protoc_insertion_point(class_scope:aspia.proto.address_book.ComputerGroup)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer > computer_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup > group_;
+  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup > computer_group_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
   bool expanded_;
@@ -231,24 +251,24 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
 };
 // -------------------------------------------------------------------
 
-class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.AddressBook) */ {
+class Encrypted : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.address_book.Encrypted) */ {
  public:
-  AddressBook();
-  virtual ~AddressBook();
+  Encrypted();
+  virtual ~Encrypted();
 
-  AddressBook(const AddressBook& from);
+  Encrypted(const Encrypted& from);
 
-  inline AddressBook& operator=(const AddressBook& from) {
+  inline Encrypted& operator=(const Encrypted& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  AddressBook(AddressBook&& from) noexcept
-    : AddressBook() {
+  Encrypted(Encrypted&& from) noexcept
+    : Encrypted() {
     *this = ::std::move(from);
   }
 
-  inline AddressBook& operator=(AddressBook&& from) noexcept {
+  inline Encrypted& operator=(Encrypted&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -257,30 +277,30 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
     return *this;
   }
   #endif
-  static const AddressBook& default_instance();
+  static const Encrypted& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const AddressBook* internal_default_instance() {
-    return reinterpret_cast<const AddressBook*>(
-               &_AddressBook_default_instance_);
+  static inline const Encrypted* internal_default_instance() {
+    return reinterpret_cast<const Encrypted*>(
+               &_Encrypted_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     1;
 
-  void Swap(AddressBook* other);
-  friend void swap(AddressBook& a, AddressBook& b) {
+  void Swap(Encrypted* other);
+  friend void swap(Encrypted& a, Encrypted& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline AddressBook* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline Encrypted* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  AddressBook* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  Encrypted* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const AddressBook& from);
-  void MergeFrom(const AddressBook& from);
+  void CopyFrom(const Encrypted& from);
+  void MergeFrom(const Encrypted& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -295,7 +315,7 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(AddressBook* other);
+  void InternalSwap(Encrypted* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -309,24 +329,21 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
 
   // nested types ----------------------------------------------------
 
-  typedef AddressBook_EncryptionType EncryptionType;
-  static const EncryptionType ENCRYPTION_TYPE_UNKNOWN =
-    AddressBook_EncryptionType_ENCRYPTION_TYPE_UNKNOWN;
-  static const EncryptionType ENCRYPTION_TYPE_NONE =
-    AddressBook_EncryptionType_ENCRYPTION_TYPE_NONE;
-  static const EncryptionType ENCRYPTION_TYPE_XCHACHA20_POLY1305 =
-    AddressBook_EncryptionType_ENCRYPTION_TYPE_XCHACHA20_POLY1305;
-  static inline bool EncryptionType_IsValid(int value) {
-    return AddressBook_EncryptionType_IsValid(value);
-  }
-  static const EncryptionType EncryptionType_MIN =
-    AddressBook_EncryptionType_EncryptionType_MIN;
-  static const EncryptionType EncryptionType_MAX =
-    AddressBook_EncryptionType_EncryptionType_MAX;
-  static const int EncryptionType_ARRAYSIZE =
-    AddressBook_EncryptionType_EncryptionType_ARRAYSIZE;
-
   // accessors -------------------------------------------------------
+
+  // bytes salt1 = 1;
+  void clear_salt1();
+  static const int kSalt1FieldNumber = 1;
+  const ::std::string& salt1() const;
+  void set_salt1(const ::std::string& value);
+  #if LANG_CXX11
+  void set_salt1(::std::string&& value);
+  #endif
+  void set_salt1(const char* value);
+  void set_salt1(const void* value, size_t size);
+  ::std::string* mutable_salt1();
+  ::std::string* release_salt1();
+  void set_allocated_salt1(::std::string* salt1);
 
   // bytes data = 2;
   void clear_data();
@@ -342,21 +359,171 @@ class AddressBook : public ::google::protobuf::MessageLite /* @@protoc_insertion
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
-  // .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
-  void clear_encryption_type();
-  static const int kEncryptionTypeFieldNumber = 1;
-  ::aspia::proto::AddressBook_EncryptionType encryption_type() const;
-  void set_encryption_type(::aspia::proto::AddressBook_EncryptionType value);
+  // bytes salt2 = 3;
+  void clear_salt2();
+  static const int kSalt2FieldNumber = 3;
+  const ::std::string& salt2() const;
+  void set_salt2(const ::std::string& value);
+  #if LANG_CXX11
+  void set_salt2(::std::string&& value);
+  #endif
+  void set_salt2(const char* value);
+  void set_salt2(const void* value, size_t size);
+  ::std::string* mutable_salt2();
+  ::std::string* release_salt2();
+  void set_allocated_salt2(::std::string* salt2);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.AddressBook)
+  // @@protoc_insertion_point(class_scope:aspia.proto.address_book.Encrypted)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr salt1_;
   ::google::protobuf::internal::ArenaStringPtr data_;
-  int encryption_type_;
+  ::google::protobuf::internal::ArenaStringPtr salt2_;
   mutable int _cached_size_;
   friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
-  friend void ::protobuf_address_5fbook_2eproto::InitDefaultsAddressBookImpl();
+  friend void ::protobuf_address_5fbook_2eproto::InitDefaultsEncryptedImpl();
+};
+// -------------------------------------------------------------------
+
+class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.address_book.File) */ {
+ public:
+  File();
+  virtual ~File();
+
+  File(const File& from);
+
+  inline File& operator=(const File& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  File(File&& from) noexcept
+    : File() {
+    *this = ::std::move(from);
+  }
+
+  inline File& operator=(File&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const File& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const File* internal_default_instance() {
+    return reinterpret_cast<const File*>(
+               &_File_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(File* other);
+  friend void swap(File& a, File& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline File* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  File* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const File& from);
+  void MergeFrom(const File& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(File* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bytes salt = 4;
+  void clear_salt();
+  static const int kSaltFieldNumber = 4;
+  const ::std::string& salt() const;
+  void set_salt(const ::std::string& value);
+  #if LANG_CXX11
+  void set_salt(::std::string&& value);
+  #endif
+  void set_salt(const char* value);
+  void set_salt(const void* value, size_t size);
+  ::std::string* mutable_salt();
+  ::std::string* release_salt();
+  void set_allocated_salt(::std::string* salt);
+
+  // bytes data = 5;
+  void clear_data();
+  static const int kDataFieldNumber = 5;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  #if LANG_CXX11
+  void set_data(::std::string&& value);
+  #endif
+  void set_data(const char* value);
+  void set_data(const void* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
+
+  // .aspia.proto.address_book.Version version = 1;
+  void clear_version();
+  static const int kVersionFieldNumber = 1;
+  ::aspia::proto::address_book::Version version() const;
+  void set_version(::aspia::proto::address_book::Version value);
+
+  // .aspia.proto.address_book.EncryptionType encryption_type = 2;
+  void clear_encryption_type();
+  static const int kEncryptionTypeFieldNumber = 2;
+  ::aspia::proto::address_book::EncryptionType encryption_type() const;
+  void set_encryption_type(::aspia::proto::address_book::EncryptionType value);
+
+  // uint64 hashing_rounds = 3;
+  void clear_hashing_rounds();
+  static const int kHashingRoundsFieldNumber = 3;
+  ::google::protobuf::uint64 hashing_rounds() const;
+  void set_hashing_rounds(::google::protobuf::uint64 value);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.address_book.File)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr salt_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
+  int version_;
+  int encryption_type_;
+  ::google::protobuf::uint64 hashing_rounds_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
+  friend void ::protobuf_address_5fbook_2eproto::InitDefaultsFileImpl();
 };
 // ===================================================================
 
@@ -374,56 +541,56 @@ inline int ComputerGroup::computer_size() const {
   return computer_.size();
 }
 inline const ::aspia::proto::Computer& ComputerGroup::computer(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.computer)
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.computer)
   return computer_.Get(index);
 }
 inline ::aspia::proto::Computer* ComputerGroup::mutable_computer(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.computer)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.ComputerGroup.computer)
   return computer_.Mutable(index);
 }
 inline ::aspia::proto::Computer* ComputerGroup::add_computer() {
-  // @@protoc_insertion_point(field_add:aspia.proto.ComputerGroup.computer)
+  // @@protoc_insertion_point(field_add:aspia.proto.address_book.ComputerGroup.computer)
   return computer_.Add();
 }
 inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >*
 ComputerGroup::mutable_computer() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.ComputerGroup.computer)
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.address_book.ComputerGroup.computer)
   return &computer_;
 }
 inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::Computer >&
 ComputerGroup::computer() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.ComputerGroup.computer)
+  // @@protoc_insertion_point(field_list:aspia.proto.address_book.ComputerGroup.computer)
   return computer_;
 }
 
-// repeated .aspia.proto.ComputerGroup group = 2;
-inline int ComputerGroup::group_size() const {
-  return group_.size();
+// repeated .aspia.proto.address_book.ComputerGroup computer_group = 2;
+inline int ComputerGroup::computer_group_size() const {
+  return computer_group_.size();
 }
-inline void ComputerGroup::clear_group() {
-  group_.Clear();
+inline void ComputerGroup::clear_computer_group() {
+  computer_group_.Clear();
 }
-inline const ::aspia::proto::ComputerGroup& ComputerGroup::group(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.group)
-  return group_.Get(index);
+inline const ::aspia::proto::address_book::ComputerGroup& ComputerGroup::computer_group(int index) const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.computer_group)
+  return computer_group_.Get(index);
 }
-inline ::aspia::proto::ComputerGroup* ComputerGroup::mutable_group(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.group)
-  return group_.Mutable(index);
+inline ::aspia::proto::address_book::ComputerGroup* ComputerGroup::mutable_computer_group(int index) {
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.ComputerGroup.computer_group)
+  return computer_group_.Mutable(index);
 }
-inline ::aspia::proto::ComputerGroup* ComputerGroup::add_group() {
-  // @@protoc_insertion_point(field_add:aspia.proto.ComputerGroup.group)
-  return group_.Add();
+inline ::aspia::proto::address_book::ComputerGroup* ComputerGroup::add_computer_group() {
+  // @@protoc_insertion_point(field_add:aspia.proto.address_book.ComputerGroup.computer_group)
+  return computer_group_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >*
-ComputerGroup::mutable_group() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.ComputerGroup.group)
-  return &group_;
+inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup >*
+ComputerGroup::mutable_computer_group() {
+  // @@protoc_insertion_point(field_mutable_list:aspia.proto.address_book.ComputerGroup.computer_group)
+  return &computer_group_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::ComputerGroup >&
-ComputerGroup::group() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.ComputerGroup.group)
-  return group_;
+inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup >&
+ComputerGroup::computer_group() const {
+  // @@protoc_insertion_point(field_list:aspia.proto.address_book.ComputerGroup.computer_group)
+  return computer_group_;
 }
 
 // string name = 3;
@@ -431,41 +598,41 @@ inline void ComputerGroup::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ComputerGroup::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.name)
   return name_.GetNoArena();
 }
 inline void ComputerGroup::set_name(const ::std::string& value) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.ComputerGroup.name)
 }
 #if LANG_CXX11
 inline void ComputerGroup::set_name(::std::string&& value) {
   
   name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.ComputerGroup.name)
 }
 #endif
 inline void ComputerGroup::set_name(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.ComputerGroup.name)
 }
 inline void ComputerGroup::set_name(const char* value, size_t size) {
   
   name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.ComputerGroup.name)
 }
 inline ::std::string* ComputerGroup::mutable_name() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.ComputerGroup.name)
   return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ComputerGroup::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.ComputerGroup.name)
   
   return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -476,7 +643,7 @@ inline void ComputerGroup::set_allocated_name(::std::string* name) {
     
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ComputerGroup.name)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.ComputerGroup.name)
 }
 
 // string comment = 4;
@@ -484,41 +651,41 @@ inline void ComputerGroup::clear_comment() {
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ComputerGroup::comment() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.comment)
   return comment_.GetNoArena();
 }
 inline void ComputerGroup::set_comment(const ::std::string& value) {
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.ComputerGroup.comment)
 }
 #if LANG_CXX11
 inline void ComputerGroup::set_comment(::std::string&& value) {
   
   comment_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.ComputerGroup.comment)
 }
 #endif
 inline void ComputerGroup::set_comment(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.ComputerGroup.comment)
 }
 inline void ComputerGroup::set_comment(const char* value, size_t size) {
   
   comment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.ComputerGroup.comment)
 }
 inline ::std::string* ComputerGroup::mutable_comment() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.ComputerGroup.comment)
   return comment_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ComputerGroup::release_comment() {
-  // @@protoc_insertion_point(field_release:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.ComputerGroup.comment)
   
   return comment_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -529,7 +696,7 @@ inline void ComputerGroup::set_allocated_comment(::std::string* comment) {
     
   }
   comment_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), comment);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.ComputerGroup.comment)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.ComputerGroup.comment)
 }
 
 // bool expanded = 5;
@@ -537,84 +704,328 @@ inline void ComputerGroup::clear_expanded() {
   expanded_ = false;
 }
 inline bool ComputerGroup::expanded() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.ComputerGroup.expanded)
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.expanded)
   return expanded_;
 }
 inline void ComputerGroup::set_expanded(bool value) {
   
   expanded_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.ComputerGroup.expanded)
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.ComputerGroup.expanded)
 }
 
 // -------------------------------------------------------------------
 
-// AddressBook
+// Encrypted
 
-// .aspia.proto.AddressBook.EncryptionType encryption_type = 1;
-inline void AddressBook::clear_encryption_type() {
-  encryption_type_ = 0;
+// bytes salt1 = 1;
+inline void Encrypted::clear_salt1() {
+  salt1_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::aspia::proto::AddressBook_EncryptionType AddressBook::encryption_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.encryption_type)
-  return static_cast< ::aspia::proto::AddressBook_EncryptionType >(encryption_type_);
+inline const ::std::string& Encrypted::salt1() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.Encrypted.salt1)
+  return salt1_.GetNoArena();
 }
-inline void AddressBook::set_encryption_type(::aspia::proto::AddressBook_EncryptionType value) {
+inline void Encrypted::set_salt1(const ::std::string& value) {
   
-  encryption_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.AddressBook.encryption_type)
+  salt1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.Encrypted.salt1)
+}
+#if LANG_CXX11
+inline void Encrypted::set_salt1(::std::string&& value) {
+  
+  salt1_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.Encrypted.salt1)
+}
+#endif
+inline void Encrypted::set_salt1(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  salt1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.Encrypted.salt1)
+}
+inline void Encrypted::set_salt1(const void* value, size_t size) {
+  
+  salt1_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.Encrypted.salt1)
+}
+inline ::std::string* Encrypted::mutable_salt1() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.Encrypted.salt1)
+  return salt1_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Encrypted::release_salt1() {
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.Encrypted.salt1)
+  
+  return salt1_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Encrypted::set_allocated_salt1(::std::string* salt1) {
+  if (salt1 != NULL) {
+    
+  } else {
+    
+  }
+  salt1_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), salt1);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Encrypted.salt1)
 }
 
 // bytes data = 2;
-inline void AddressBook::clear_data() {
+inline void Encrypted::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& AddressBook::data() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.AddressBook.data)
+inline const ::std::string& Encrypted::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.Encrypted.data)
   return data_.GetNoArena();
 }
-inline void AddressBook::set_data(const ::std::string& value) {
+inline void Encrypted::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.Encrypted.data)
 }
 #if LANG_CXX11
-inline void AddressBook::set_data(::std::string&& value) {
+inline void Encrypted::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.Encrypted.data)
 }
 #endif
-inline void AddressBook::set_data(const char* value) {
+inline void Encrypted::set_data(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.Encrypted.data)
 }
-inline void AddressBook::set_data(const void* value, size_t size) {
+inline void Encrypted::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.Encrypted.data)
 }
-inline ::std::string* AddressBook::mutable_data() {
+inline ::std::string* Encrypted::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.Encrypted.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* AddressBook::release_data() {
-  // @@protoc_insertion_point(field_release:aspia.proto.AddressBook.data)
+inline ::std::string* Encrypted::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.Encrypted.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void AddressBook::set_allocated_data(::std::string* data) {
+inline void Encrypted::set_allocated_data(::std::string* data) {
   if (data != NULL) {
     
   } else {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.AddressBook.data)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Encrypted.data)
+}
+
+// bytes salt2 = 3;
+inline void Encrypted::clear_salt2() {
+  salt2_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Encrypted::salt2() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.Encrypted.salt2)
+  return salt2_.GetNoArena();
+}
+inline void Encrypted::set_salt2(const ::std::string& value) {
+  
+  salt2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.Encrypted.salt2)
+}
+#if LANG_CXX11
+inline void Encrypted::set_salt2(::std::string&& value) {
+  
+  salt2_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.Encrypted.salt2)
+}
+#endif
+inline void Encrypted::set_salt2(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  salt2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.Encrypted.salt2)
+}
+inline void Encrypted::set_salt2(const void* value, size_t size) {
+  
+  salt2_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.Encrypted.salt2)
+}
+inline ::std::string* Encrypted::mutable_salt2() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.Encrypted.salt2)
+  return salt2_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Encrypted::release_salt2() {
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.Encrypted.salt2)
+  
+  return salt2_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Encrypted::set_allocated_salt2(::std::string* salt2) {
+  if (salt2 != NULL) {
+    
+  } else {
+    
+  }
+  salt2_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), salt2);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Encrypted.salt2)
+}
+
+// -------------------------------------------------------------------
+
+// File
+
+// .aspia.proto.address_book.Version version = 1;
+inline void File::clear_version() {
+  version_ = 0;
+}
+inline ::aspia::proto::address_book::Version File::version() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.version)
+  return static_cast< ::aspia::proto::address_book::Version >(version_);
+}
+inline void File::set_version(::aspia::proto::address_book::Version value) {
+  
+  version_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.version)
+}
+
+// .aspia.proto.address_book.EncryptionType encryption_type = 2;
+inline void File::clear_encryption_type() {
+  encryption_type_ = 0;
+}
+inline ::aspia::proto::address_book::EncryptionType File::encryption_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.encryption_type)
+  return static_cast< ::aspia::proto::address_book::EncryptionType >(encryption_type_);
+}
+inline void File::set_encryption_type(::aspia::proto::address_book::EncryptionType value) {
+  
+  encryption_type_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.encryption_type)
+}
+
+// uint64 hashing_rounds = 3;
+inline void File::clear_hashing_rounds() {
+  hashing_rounds_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 File::hashing_rounds() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.hashing_rounds)
+  return hashing_rounds_;
+}
+inline void File::set_hashing_rounds(::google::protobuf::uint64 value) {
+  
+  hashing_rounds_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.hashing_rounds)
+}
+
+// bytes salt = 4;
+inline void File::clear_salt() {
+  salt_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& File::salt() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.salt)
+  return salt_.GetNoArena();
+}
+inline void File::set_salt(const ::std::string& value) {
+  
+  salt_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.salt)
+}
+#if LANG_CXX11
+inline void File::set_salt(::std::string&& value) {
+  
+  salt_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.File.salt)
+}
+#endif
+inline void File::set_salt(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  salt_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.File.salt)
+}
+inline void File::set_salt(const void* value, size_t size) {
+  
+  salt_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.File.salt)
+}
+inline ::std::string* File::mutable_salt() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.File.salt)
+  return salt_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* File::release_salt() {
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.File.salt)
+  
+  return salt_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void File::set_allocated_salt(::std::string* salt) {
+  if (salt != NULL) {
+    
+  } else {
+    
+  }
+  salt_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), salt);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.File.salt)
+}
+
+// bytes data = 5;
+inline void File::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& File::data() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.address_book.File.data)
+  return data_.GetNoArena();
+}
+inline void File::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.address_book.File.data)
+}
+#if LANG_CXX11
+inline void File::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.File.data)
+}
+#endif
+inline void File::set_data(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.File.data)
+}
+inline void File::set_data(const void* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.File.data)
+}
+inline ::std::string* File::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.File.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* File::release_data() {
+  // @@protoc_insertion_point(field_release:aspia.proto.address_book.File.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void File::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.File.data)
 }
 
 #ifdef __GNUC__
@@ -622,16 +1033,20 @@ inline void AddressBook::set_allocated_data(::std::string* data) {
 #endif  // __GNUC__
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
+}  // namespace address_book
 }  // namespace proto
 }  // namespace aspia
 
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::AddressBook_EncryptionType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::address_book::Version> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::address_book::EncryptionType> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google
