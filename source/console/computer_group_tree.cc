@@ -145,7 +145,7 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
         {
             setCurrentItem(source_group_item);
 
-            proto::Computer* computer =
+            proto::address_book::Computer* computer =
                 source_group_item->takeChildComputer(computer_item->computer());
 
             if (computer)

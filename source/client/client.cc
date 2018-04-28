@@ -16,7 +16,7 @@
 
 namespace aspia {
 
-Client::Client(const proto::Computer& computer, QObject* parent)
+Client::Client(const proto::address_book::Computer& computer, QObject* parent)
     : QObject(parent),
       computer_(computer)
 {

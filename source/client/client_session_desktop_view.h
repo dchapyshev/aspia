@@ -13,7 +13,7 @@
 
 #include "client/client_session.h"
 #include "codec/video_decoder.h"
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 
 namespace aspia {
 
@@ -24,7 +24,7 @@ class ClientSessionDesktopView : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionDesktopView(proto::Computer* computer, QObject* parent);
+    ClientSessionDesktopView(proto::address_book::Computer* computer, QObject* parent);
     virtual ~ClientSessionDesktopView();
 
 public slots:
@@ -39,7 +39,7 @@ public slots:
 protected:
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
 
-    proto::Computer* computer_;
+    proto::address_book::Computer* computer_;
     QPointer<DesktopWindow> desktop_window_;
 
 private:

@@ -19,19 +19,19 @@ class ComputerGroupItem;
 class ComputerItem : public QTreeWidgetItem
 {
 public:
-    ComputerItem(proto::Computer* computer, ComputerGroupItem* parent_group_item);
+    ComputerItem(proto::address_book::Computer* computer, ComputerGroupItem* parent_group_item);
     ~ComputerItem();
 
     void updateItem();
 
-    proto::Computer* computer() { return computer_; }
+    proto::address_book::Computer* computer() { return computer_; }
 
     ComputerGroupItem* parentComputerGroupItem();
 
 private:
     friend class ComputerGroupItem;
 
-    proto::Computer* computer_;
+    proto::address_book::Computer* computer_;
     ComputerGroupItem* parent_group_item_;
 
     Q_DISABLE_COPY(ComputerItem)

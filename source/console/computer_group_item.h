@@ -25,9 +25,9 @@ public:
     ComputerGroupItem* addChildComputerGroup(proto::address_book::ComputerGroup* computer_group);
     bool deleteChildComputerGroup(ComputerGroupItem* computer_group_item);
     proto::address_book::ComputerGroup* takeChildComputerGroup(ComputerGroupItem* computer_group_item);
-    void addChildComputer(proto::Computer* computer);
-    bool deleteChildComputer(proto::Computer* computer);
-    proto::Computer* takeChildComputer(proto::Computer* computer);
+    void addChildComputer(proto::address_book::Computer* computer);
+    bool deleteChildComputer(proto::address_book::Computer* computer);
+    proto::address_book::Computer* takeChildComputer(proto::address_book::Computer* computer);
 
     bool IsExpanded() const;
     void SetExpanded(bool expanded);

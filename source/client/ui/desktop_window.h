@@ -11,7 +11,7 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;
@@ -28,7 +28,7 @@ class DesktopWindow : public QWidget
     Q_OBJECT
 
 public:
-    DesktopWindow(proto::Computer* computer, QWidget* parent = nullptr);
+    DesktopWindow(proto::address_book::Computer* computer, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
     void resizeDesktopFrame(const QSize& screen_size);
@@ -58,7 +58,7 @@ private slots:
     void autosizeWindow();
 
 private:
-    proto::Computer* computer_;
+    proto::address_book::Computer* computer_;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__CLIENT_DIALOG_H
 #define _ASPIA_CLIENT__UI__CLIENT_DIALOG_H
 
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_client_dialog.h"
 
 namespace aspia {
@@ -21,7 +21,7 @@ public:
     explicit ClientDialog(QWidget* parent = nullptr);
     ~ClientDialog();
 
-    proto::Computer computer() const { return computer_; }
+    proto::address_book::Computer computer() const { return computer_; }
 
 private slots:
     void sessionTypeChanged(int item_index);
@@ -32,7 +32,7 @@ private:
     void setDefaultConfig();
 
     Ui::ClientDialog ui;
-    proto::Computer computer_;
+    proto::address_book::Computer computer_;
 
     Q_DISABLE_COPY(ClientDialog)
 };

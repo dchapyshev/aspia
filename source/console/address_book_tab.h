@@ -27,7 +27,7 @@ public:
 
     QString addressBookName() const;
     QString addressBookPath() const;
-    proto::Computer* currentComputer() const;
+    proto::address_book::Computer* currentComputer() const;
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
 
@@ -48,7 +48,7 @@ signals:
     void computerActivated(bool activated);
     void computerGroupContextMenu(const QPoint& point, bool is_root);
     void computerContextMenu(const QPoint& point);
-    void computerDoubleClicked(proto::Computer* computer);
+    void computerDoubleClicked(proto::address_book::Computer* computer);
 
 protected:
     // QWidget implementation.

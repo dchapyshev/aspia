@@ -18,7 +18,8 @@ enum MessageId { ConfigMessageId };
 
 } // namespace
 
-ClientSessionDesktopView::ClientSessionDesktopView(proto::Computer* computer, QObject* parent)
+ClientSessionDesktopView::ClientSessionDesktopView(
+    proto::address_book::Computer* computer, QObject* parent)
     : ClientSession(parent),
       computer_(computer)
 {

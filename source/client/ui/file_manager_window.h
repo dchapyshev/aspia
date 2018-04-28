@@ -9,7 +9,7 @@
 #define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
 #include "protocol/file_transfer_session.pb.h"
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_file_manager_window.h"
 
 namespace aspia {
@@ -19,7 +19,7 @@ class FileManagerWindow : public QWidget
     Q_OBJECT
 
 public:
-    FileManagerWindow(proto::Computer* computer, QWidget* parent = nullptr);
+    FileManagerWindow(proto::address_book::Computer* computer, QWidget* parent = nullptr);
     ~FileManagerWindow() = default;
 
 public slots:

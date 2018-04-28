@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
 namespace aspia {
@@ -55,7 +55,7 @@ public slots:
     void onComputerActivated(bool activated);
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
     void onComputerContextMenu(const QPoint& point);
-    void onComputerDoubleClicked(proto::Computer* computer);
+    void onComputerDoubleClicked(proto::address_book::Computer* computer);
 
 protected:
     // QMainWindow implementation.
@@ -63,7 +63,7 @@ protected:
 
 private:
     void addAddressBookTab(AddressBookTab* tab);
-    void connectToComputer(const proto::Computer& computer);
+    void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleWindow ui;
 

@@ -8,7 +8,8 @@
 #ifndef _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 #define _ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H
 
-#include "protocol/computer.pb.h"
+#include "protocol/authorization.pb.h"
+#include "protocol/desktop_session.pb.h"
 #include "ui_desktop_config_dialog.h"
 
 namespace aspia {

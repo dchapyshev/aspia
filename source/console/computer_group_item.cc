@@ -72,12 +72,12 @@ proto::address_book::ComputerGroup* ComputerGroupItem::takeChildComputerGroup(
     return computer_group;
 }
 
-void ComputerGroupItem::addChildComputer(proto::Computer* computer)
+void ComputerGroupItem::addChildComputer(proto::address_book::Computer* computer)
 {
     computer_group_->mutable_computer()->AddAllocated(computer);
 }
 
-bool ComputerGroupItem::deleteChildComputer(proto::Computer* computer)
+bool ComputerGroupItem::deleteChildComputer(proto::address_book::Computer* computer)
 {
     for (int i = 0; i < computer_group_->computer_size(); ++i)
     {
@@ -91,13 +91,14 @@ bool ComputerGroupItem::deleteChildComputer(proto::Computer* computer)
     return false;
 }
 
-proto::Computer* ComputerGroupItem::takeChildComputer(proto::Computer* computer)
+proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
+    proto::address_book::Computer* computer)
 {
     for (int i = 0; i < computer_group_->computer_size(); ++i)
     {
         if (computer_group_->mutable_computer(i) == computer)
         {
-            proto::Computer* computer = new proto::Computer();
+            proto::address_book::Computer* computer = new proto::address_book::Computer();
             *computer = std::move(*computer_group_->mutable_computer(i));
 
             computer_group_->mutable_computer()->DeleteSubrange(i, 1);

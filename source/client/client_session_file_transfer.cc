@@ -24,7 +24,8 @@ enum MessageId { RequestMessageId };
 
 } // namespace
 
-ClientSessionFileTransfer::ClientSessionFileTransfer(proto::Computer* computer, QObject* parent)
+ClientSessionFileTransfer::ClientSessionFileTransfer(
+    proto::address_book::Computer* computer, QObject* parent)
     : ClientSession(parent),
       computer_(computer)
 {

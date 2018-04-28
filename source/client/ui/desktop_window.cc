@@ -26,7 +26,7 @@
 
 namespace aspia {
 
-DesktopWindow::DesktopWindow(proto::Computer* computer, QWidget* parent)
+DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* parent)
     : QWidget(parent),
       computer_(computer)
 {

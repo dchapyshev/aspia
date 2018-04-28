@@ -17,7 +17,8 @@
 
 namespace aspia {
 
-ClientSessionDesktopManage::ClientSessionDesktopManage(proto::Computer* computer, QObject* parent)
+ClientSessionDesktopManage::ClientSessionDesktopManage(proto::address_book::Computer* computer,
+                                                       QObject* parent)
     : ClientSessionDesktopView(computer, parent)
 {
     connect(desktop_window_, &DesktopWindow::sendKeyEvent,

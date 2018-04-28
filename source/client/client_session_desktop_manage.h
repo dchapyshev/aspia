@@ -9,7 +9,6 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
 
 #include "client/client_session_desktop_view.h"
-#include "protocol/computer.pb.h"
 
 namespace aspia {
 
@@ -20,7 +19,7 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
     Q_OBJECT
 
 public:
-    ClientSessionDesktopManage(proto::Computer* computer, QObject* parent);
+    ClientSessionDesktopManage(proto::address_book::Computer* computer, QObject* parent);
 
 public slots:
     // ClientSession implementation.

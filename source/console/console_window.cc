@@ -273,7 +273,7 @@ void ConsoleWindow::desktopManageSessionConnect()
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
         if (tab)
         {
-            proto::Computer* computer = tab->currentComputer();
+            proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
@@ -291,7 +291,7 @@ void ConsoleWindow::desktopViewSessionConnect()
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
         if (tab)
         {
-            proto::Computer* computer = tab->currentComputer();
+            proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
@@ -309,7 +309,7 @@ void ConsoleWindow::fileTransferSessionConnect()
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
         if (tab)
         {
-            proto::Computer* computer = tab->currentComputer();
+            proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
@@ -471,7 +471,7 @@ void ConsoleWindow::onComputerContextMenu(const QPoint& point)
     menu.exec(point);
 }
 
-void ConsoleWindow::onComputerDoubleClicked(proto::Computer* computer)
+void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
 {
     if (ui.action_desktop_manage->isChecked())
     {
@@ -559,7 +559,7 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.tab_widget->setCurrentIndex(index);
 }
 
-void ConsoleWindow::connectToComputer(const proto::Computer& computer)
+void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
     Client* client = new Client(computer, this);
     connect(client, &Client::clientTerminated, client, &Client::deleteLater);

@@ -10,7 +10,7 @@
 
 #include "client/client_session.h"
 #include "network/network_channel.h"
-#include "protocol/computer.pb.h"
+#include "protocol/address_book.pb.h"
 
 namespace aspia {
 
@@ -22,7 +22,7 @@ class Client : public QObject
     Q_OBJECT
 
 public:
-    Client(const proto::Computer& computer, QObject* parent = nullptr);
+    Client(const proto::address_book::Computer& computer, QObject* parent = nullptr);
     ~Client() = default;
 
 signals:
@@ -40,7 +40,7 @@ private:
     QPointer<ClientUserAuthorizer> authorizer_;
     QPointer<ClientSession> session_;
 
-    proto::Computer computer_;
+    proto::address_book::Computer computer_;
 
     Q_DISABLE_COPY(Client)
 };

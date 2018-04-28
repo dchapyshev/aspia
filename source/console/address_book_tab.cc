@@ -49,9 +49,10 @@ void showSaveError(QWidget* parent, const QString& message)
     dialog.exec();
 }
 
-std::unique_ptr<proto::Computer> createDefaultComputer()
+std::unique_ptr<proto::address_book::Computer> createDefaultComputer()
 {
-    std::unique_ptr<proto::Computer> computer = std::make_unique<proto::Computer>();
+    std::unique_ptr<proto::address_book::Computer> computer =
+        std::make_unique<proto::address_book::Computer>();
 
     computer->set_port(kDefaultHostTcpPort);
 
@@ -255,7 +256,7 @@ QString AddressBookTab::addressBookPath() const
     return file_path_;
 }
 
-proto::Computer* AddressBookTab::currentComputer() const
+proto::address_book::Computer* AddressBookTab::currentComputer() const
 {
     ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
@@ -302,13 +303,13 @@ void AddressBookTab::addComputer()
     if (!parent_item)
         return;
 
-    std::unique_ptr<proto::Computer> computer = createDefaultComputer();
+    std::unique_ptr<proto::address_book::Computer> computer = createDefaultComputer();
 
     ComputerDialog dialog(this, computer.get(), parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    proto::Computer* computer_released = computer.release();
+    proto::address_book::Computer* computer_released = computer.release();
 
     parent_item->addChildComputer(computer_released);
     if (ui.tree_group->currentItem() == parent_item)

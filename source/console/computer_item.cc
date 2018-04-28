@@ -11,7 +11,8 @@
 
 namespace aspia {
 
-ComputerItem::ComputerItem(proto::Computer* computer, ComputerGroupItem* parent_group_item)
+ComputerItem::ComputerItem(proto::address_book::Computer* computer,
+                           ComputerGroupItem* parent_group_item)
     : computer_(computer),
       parent_group_item_(parent_group_item)
 {

@@ -17,7 +17,7 @@
 
 namespace aspia {
 
-FileManagerWindow::FileManagerWindow(proto::Computer* computer, QWidget* parent)
+FileManagerWindow::FileManagerWindow(proto::address_book::Computer* computer, QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
