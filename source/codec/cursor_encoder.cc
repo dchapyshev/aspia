@@ -22,9 +22,7 @@ constexpr int kCompressionRatio = 6;
 quint8* GetOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
-
-    return const_cast<quint8*>(
-        reinterpret_cast<const quint8*>(cursor_shape->mutable_data()->data()));
+    return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
 }
 
 } // namespace

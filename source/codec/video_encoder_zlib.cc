@@ -20,7 +20,7 @@ namespace {
 quint8* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-    return const_cast<quint8*>(reinterpret_cast<const quint8*>(packet->mutable_data()->data()));
+    return reinterpret_cast<quint8*>(packet->mutable_data()->data());
 }
 
 } // namespace
