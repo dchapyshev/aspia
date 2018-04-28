@@ -23,14 +23,14 @@ public:
 
     quint8* frameDataAtPos(const QPoint& pos) const;
     quint8* frameDataAtPos(int x, int y) const;
-    quint8* frameData() const;
-    const QSize& size() const;
-    const PixelFormat& format() const;
-    int stride() const;
+    quint8* frameData() const { return data_; }
+    const QSize& size() const { return size_; }
+    const PixelFormat& format() const { return format_; }
+    int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
-    const QRegion& updatedRegion() const;
-    QRegion* mutableUpdatedRegion();
+    const QRegion& updatedRegion() const { return updated_region_; }
+    QRegion* mutableUpdatedRegion() { return &updated_region_; }
 
 protected:
     DesktopFrame(const QSize& size, const PixelFormat& format, int stride, quint8* data);

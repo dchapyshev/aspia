@@ -25,7 +25,7 @@ public:
     std::unique_ptr<proto::desktop::CursorShape> encode(std::unique_ptr<MouseCursor> mouse_cursor);
 
 private:
-    void CompressCursor(proto::desktop::CursorShape* cursor_shape,
+    void compressCursor(proto::desktop::CursorShape* cursor_shape,
                         const MouseCursor* mouse_cursor);
 
     CompressorZLIB compressor_;

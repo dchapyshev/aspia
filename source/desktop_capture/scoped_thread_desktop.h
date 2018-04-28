@@ -33,7 +33,7 @@ public:
     // Assigns |desktop| to be the calling thread. Returns true if the thread has
     // been switched to |desktop| successfully. Takes ownership of |desktop|.
     //
-    bool setThreadDesktop(Desktop desktop);
+    bool setThreadDesktop(Desktop&& desktop);
 
 private:
     // The desktop handle assigned to the calling thread by Set

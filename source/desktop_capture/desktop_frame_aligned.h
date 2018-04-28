@@ -19,7 +19,7 @@ class DesktopFrameAligned : public DesktopFrame
 public:
     ~DesktopFrameAligned();
 
-    static std::unique_ptr<DesktopFrameAligned> Create(const QSize& size,
+    static std::unique_ptr<DesktopFrameAligned> create(const QSize& size,
                                                        const PixelFormat& format);
 
 private:

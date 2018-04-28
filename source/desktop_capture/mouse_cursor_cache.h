@@ -41,7 +41,7 @@ public:
     void clear();
 
     // The current size of the cache.
-    size_t size() const;
+    size_t size() const { return cache_size_; }
 
     static bool isValidCacheSize(size_t size);
 

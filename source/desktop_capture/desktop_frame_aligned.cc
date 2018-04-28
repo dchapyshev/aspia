@@ -24,7 +24,7 @@ DesktopFrameAligned::~DesktopFrameAligned()
 }
 
 // static
-std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::Create(
+std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
     const QSize& size, const PixelFormat& format)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();

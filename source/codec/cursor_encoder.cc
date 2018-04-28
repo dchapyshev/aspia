@@ -19,7 +19,7 @@ constexpr quint8 kCacheSize = 16;
 // The compression ratio can be in the range of 1 to 9.
 constexpr int kCompressionRatio = 6;
 
-quint8* GetOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+quint8* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
     return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
@@ -31,12 +31,11 @@ CursorEncoder::CursorEncoder()
     : compressor_(kCompressionRatio),
       cache_(kCacheSize)
 {
-    static_assert(kCacheSize >= 2 && kCacheSize <= 31, "Invalid cache size");
-    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9,
-                  "Invalid compression ratio");
+    static_assert(kCacheSize >= 2 && kCacheSize <= 31);
+    static_assert(kCompressionRatio >= 1 && kCompressionRatio <= 9);
 }
 
-void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
+void CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
                                    const MouseCursor* mouse_cursor)
 {
     compressor_.reset();
@@ -49,7 +48,7 @@ void CursorEncoder::CompressCursor(proto::desktop::CursorShape* cursor_shape,
     size_t packet_size = row_size * height;
     packet_size += packet_size / 100 + 16;
 
-    quint8* compressed_pos = GetOutputBuffer(cursor_shape, packet_size);
+    quint8* compressed_pos = getOutputBuffer(cursor_shape, packet_size);
     const quint8* source_pos = mouse_cursor->data();
 
     size_t filled = 0;
@@ -101,7 +100,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         return nullptr;
 
     const QSize& size = mouse_cursor->size();
-    const qint32 kMaxSize = std::numeric_limits<qint16>::max() / 2;
+    const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
 
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)
@@ -123,7 +122,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         cursor_shape->set_hotspot_x(mouse_cursor->hotSpot().x());
         cursor_shape->set_hotspot_y(mouse_cursor->hotSpot().y());
 
-        CompressCursor(cursor_shape.get(), mouse_cursor.get());
+        compressCursor(cursor_shape.get(), mouse_cursor.get());
 
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.

@@ -57,16 +57,16 @@ public:
     // 3:7 - unused
     static PixelFormat RGB111();
 
-    quint8 bitsPerPixel() const;
-    quint8 bytesPerPixel() const;
+    quint8 bitsPerPixel() const { return bits_per_pixel_; }
+    quint8 bytesPerPixel() const { return bytes_per_pixel_; }
 
-    quint16 redMax() const;
-    quint16 greenMax() const;
-    quint16 blueMax() const;
+    quint16 redMax() const { return red_max_; }
+    quint16 greenMax() const { return green_max_; }
+    quint16 blueMax() const { return blue_max_; }
 
-    quint8 redShift() const;
-    quint8 greenShift() const;
-    quint8 blueShift() const;
+    quint8 redShift() const { return red_shift_; }
+    quint8 greenShift() const { return green_shift_; }
+    quint8 blueShift() const { return blue_shift_; }
 
     bool isValid() const;
     void clear();

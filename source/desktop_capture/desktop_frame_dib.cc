@@ -22,7 +22,7 @@ DesktopFrameDIB::DesktopFrameDIB(const QSize& size,
 
 // static
 std::unique_ptr<DesktopFrameDIB>
-DesktopFrameDIB::Create(const QSize& size,
+DesktopFrameDIB::create(const QSize& size,
                         const PixelFormat& format,
                         HDC hdc)
 {
@@ -95,11 +95,6 @@ DesktopFrameDIB::Create(const QSize& size,
                             bytes_per_row,
                             reinterpret_cast<quint8*>(data),
                             bitmap));
-}
-
-HBITMAP DesktopFrameDIB::Bitmap()
-{
-    return bitmap_;
 }
 
 } // namespace aspia

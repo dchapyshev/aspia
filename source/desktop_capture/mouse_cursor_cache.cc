@@ -81,18 +81,11 @@ void MouseCursorCache::clear()
     cache_.clear();
 }
 
-size_t MouseCursorCache::size() const
-{
-    return cache_size_;
-}
-
 // static
 bool MouseCursorCache::isValidCacheSize(size_t size)
 {
     if (size < kMinCacheSize || size > kMaxCacheSize)
-    {
         return false;
-    }
 
     return true;
 }

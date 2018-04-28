@@ -11,8 +11,8 @@
 
 namespace aspia {
 
-ScopedThreadDesktop::ScopedThreadDesktop() :
-    initial_(Desktop::threadDesktop())
+ScopedThreadDesktop::ScopedThreadDesktop()
+    : initial_(Desktop::threadDesktop())
 {
     // Nothing
 }
@@ -39,7 +39,7 @@ void ScopedThreadDesktop::revert()
     }
 }
 
-bool ScopedThreadDesktop::setThreadDesktop(Desktop desktop)
+bool ScopedThreadDesktop::setThreadDesktop(Desktop&& desktop)
 {
     revert();
 

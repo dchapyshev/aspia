@@ -25,7 +25,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
 {
     if (packet.has_format())
     {
-        source_frame_ = DesktopFrameAligned::Create(
+        source_frame_ = DesktopFrameAligned::create(
             VideoUtil::fromVideoSize(packet.format().screen_size()),
             VideoUtil::fromVideoPixelFormat(packet.format().pixel_format()));
 

@@ -24,8 +24,8 @@ public:
                                                const QSize& size,
                                                const QPoint& hotspot);
 
-    const QSize& size() const;
-    const QPoint& hotSpot() const;
+    const QSize& size() const { return size_; }
+    const QPoint& hotSpot() const { return hotspot_; }
     quint8* data() const;
 
     int stride() const;

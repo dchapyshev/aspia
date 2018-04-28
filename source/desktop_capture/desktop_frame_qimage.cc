@@ -32,9 +32,4 @@ std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QSize& size
         new DesktopFrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
 }
 
-const QImage& DesktopFrameQImage::image() const
-{
-    return image_;
-}
-
 } // namespace aspia

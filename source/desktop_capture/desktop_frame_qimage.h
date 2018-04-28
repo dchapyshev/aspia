@@ -22,7 +22,7 @@ public:
 
     static std::unique_ptr<DesktopFrameQImage> create(const QSize& size);
 
-    const QImage& image() const;
+    const QImage& image() const { return image_; }
 
 private:
     DesktopFrameQImage(QImage&& img);

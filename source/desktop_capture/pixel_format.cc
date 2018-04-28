@@ -93,46 +93,6 @@ PixelFormat PixelFormat::RGB111()
                        0); // blue shift
 }
 
-quint8 PixelFormat::bitsPerPixel() const
-{
-    return bits_per_pixel_;
-}
-
-quint8 PixelFormat::bytesPerPixel() const
-{
-    return bytes_per_pixel_;
-}
-
-quint16 PixelFormat::redMax() const
-{
-    return red_max_;
-}
-
-quint16 PixelFormat::greenMax() const
-{
-    return green_max_;
-}
-
-quint16 PixelFormat::blueMax() const
-{
-    return blue_max_;
-}
-
-quint8 PixelFormat::redShift() const
-{
-    return red_shift_;
-}
-
-quint8 PixelFormat::greenShift() const
-{
-    return green_shift_;
-}
-
-quint8 PixelFormat::blueShift() const
-{
-    return blue_shift_;
-}
-
 bool PixelFormat::isValid() const
 {
     if (bits_per_pixel_ == 0 &&

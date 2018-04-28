@@ -15,8 +15,7 @@ MouseCursor::create(std::unique_ptr<quint8[]> data,
                     const QSize& size,
                     const QPoint& hotspot)
 {
-    return std::unique_ptr<MouseCursor>(
-        new MouseCursor(std::move(data), size, hotspot));
+    return std::unique_ptr<MouseCursor>(new MouseCursor(std::move(data), size, hotspot));
 }
 
 MouseCursor::MouseCursor(std::unique_ptr<quint8[]> data,
@@ -27,16 +26,6 @@ MouseCursor::MouseCursor(std::unique_ptr<quint8[]> data,
       hotspot_(hotspot)
 {
     // Nothing
-}
-
-const QSize& MouseCursor::size() const
-{
-    return size_;
-}
-
-const QPoint& MouseCursor::hotSpot() const
-{
-    return hotspot_;
 }
 
 uint8_t* MouseCursor::data() const

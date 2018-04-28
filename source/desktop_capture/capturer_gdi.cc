@@ -330,7 +330,7 @@ bool CapturerGDI::prepareCaptureResources()
 
         for (int i = 0; i < kNumFrames; ++i)
         {
-            frame_[i] = DesktopFrameDIB::Create(screen_rect.size(),
+            frame_[i] = DesktopFrameDIB::create(screen_rect.size(),
                                                 PixelFormat::ARGB(),
                                                 memory_dc_);
             if (!frame_[i])
@@ -355,7 +355,7 @@ const DesktopFrame* CapturerGDI::captureImage()
     DesktopFrameDIB* prev_frame = frame_[prev_frame_id].get();
     DesktopFrameDIB* curr_frame = frame_[curr_frame_id_].get();
 
-    HGDIOBJ old_bitmap = SelectObject(memory_dc_, curr_frame->Bitmap());
+    HGDIOBJ old_bitmap = SelectObject(memory_dc_, curr_frame->bitmap());
     if (old_bitmap)
     {
         BitBlt(memory_dc_,
