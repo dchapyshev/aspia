@@ -181,10 +181,10 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/open_address_book_dialog.ui)
 
 list(APPEND SOURCE_CRYPTO
+    ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
+    ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
-    ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/string_encryptor.h)
+    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc

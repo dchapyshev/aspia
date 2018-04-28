@@ -1,11 +1,13 @@
 //
 // PROJECT:         Aspia
-// FILE:            crypto/string_encryptor.cc
+// FILE:            crypto/data_encryptor.cc
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "crypto/string_encryptor.h"
+#include "crypto/data_encryptor.h"
+
+#include <QCryptographicHash>
 
 extern "C" {
 #define SODIUM_STATIC
@@ -15,8 +17,6 @@ extern "C" {
 #pragma warning(pop)
 } // extern "C"
 
-#include <algorithm>
-
 namespace aspia {
 
 namespace {
@@ -25,29 +25,43 @@ const size_t kChunkSize = 4096;
 
 } // namespace
 
-std::string EncryptString(const std::string& string, const QByteArray& key)
+// static
+std::string DataEncryptor::createKey(const std::string& password)
+{
+    QByteArray data(password.c_str(), password.size());
+
+    for (int i = 0; i < 100000; ++i)
+    {
+        data = QCryptographicHash::hash(data, QCryptographicHash::Sha256);
+    }
+
+    return data.toStdString();
+}
+
+// static
+std::string DataEncryptor::encrypt(const std::string& source_data, const std::string& key)
 {
     Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
-    std::string encrypted_string;
-    encrypted_string.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
+    std::string encrypted_data;
+    encrypted_data.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
 
     crypto_secretstream_xchacha20poly1305_state state;
 
     crypto_secretstream_xchacha20poly1305_init_push(
         &state,
-        reinterpret_cast<uint8_t*>(encrypted_string.data()),
-        reinterpret_cast<const uint8_t*>(key.data()));
+        reinterpret_cast<quint8*>(encrypted_data.data()),
+        reinterpret_cast<const quint8*>(key.c_str()));
 
-    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(string.c_str());
+    const quint8* input_buffer = reinterpret_cast<const quint8*>(source_data.c_str());
     size_t input_pos = 0;
 
     bool end_of_buffer = false;
 
     do
     {
-        size_t consumed = std::min(string.size() - input_pos, kChunkSize);
-        uint8_t tag = 0;
+        size_t consumed = std::min(source_data.size() - input_pos, kChunkSize);
+        quint8 tag = 0;
 
         if (consumed < kChunkSize)
         {
@@ -55,8 +69,8 @@ std::string EncryptString(const std::string& string, const QByteArray& key)
             end_of_buffer = true;
         }
 
-        uint8_t output_buffer[kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES];
-        uint64_t output_length;
+        quint8 output_buffer[kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES];
+        quint64 output_length;
 
         crypto_secretstream_xchacha20poly1305_push(&state,
                                                    output_buffer, &output_length,
@@ -64,41 +78,44 @@ std::string EncryptString(const std::string& string, const QByteArray& key)
                                                    nullptr, 0,
                                                    tag);
 
-        size_t old_size = encrypted_string.size();
+        size_t old_size = encrypted_data.size();
 
-        encrypted_string.resize(old_size + static_cast<size_t>(output_length));
-        memcpy(&encrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
+        encrypted_data.resize(old_size + static_cast<size_t>(output_length));
+        memcpy(&encrypted_data[old_size], output_buffer, static_cast<size_t>(output_length));
 
         input_pos += consumed;
 
     } while (!end_of_buffer);
 
-    return encrypted_string;
+    return encrypted_data;
 }
 
-bool DecryptString(const std::string& string, const QByteArray& key, std::string& decrypted_string)
+// static
+bool DataEncryptor::decrypt(
+    const std::string& source_data, const std::string& key, std::string* decrypted_data)
 {
     Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
+    Q_ASSERT(decrypted_data);
 
-    decrypted_string.clear();
+    decrypted_data->clear();
 
-    if (string.size() < crypto_secretstream_xchacha20poly1305_HEADERBYTES)
+    if (source_data.size() < crypto_secretstream_xchacha20poly1305_HEADERBYTES)
         return false;
 
     crypto_secretstream_xchacha20poly1305_state state;
 
     if (crypto_secretstream_xchacha20poly1305_init_pull(
             &state,
-            reinterpret_cast<const uint8_t*>(string.c_str()),
-            reinterpret_cast<const uint8_t*>(key.data())) != 0)
+            reinterpret_cast<const quint8*>(source_data.c_str()),
+            reinterpret_cast<const quint8*>(key.data())) != 0)
     {
         qWarning("crypto_secretstream_xchacha20poly1305_init_pull failed");
         return false;
     }
 
-    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(string.c_str()) +
+    const quint8* input_buffer = reinterpret_cast<const quint8*>(source_data.c_str()) +
                                   crypto_secretstream_xchacha20poly1305_HEADERBYTES;
-    size_t input_size = string.size() - crypto_secretstream_xchacha20poly1305_HEADERBYTES;
+    size_t input_size = source_data.size() - crypto_secretstream_xchacha20poly1305_HEADERBYTES;
     size_t input_pos = 0;
 
     bool end_of_buffer = false;
@@ -108,9 +125,9 @@ bool DecryptString(const std::string& string, const QByteArray& key, std::string
         size_t consumed = std::min(input_size - input_pos,
                                    kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES);
 
-        uint8_t output_buffer[kChunkSize];
-        uint64_t output_length;
-        uint8_t tag;
+        quint8 output_buffer[kChunkSize];
+        quint64 output_length;
+        quint8 tag;
 
         if (crypto_secretstream_xchacha20poly1305_pull(&state,
                                                        output_buffer, &output_length,
@@ -135,10 +152,10 @@ bool DecryptString(const std::string& string, const QByteArray& key, std::string
             end_of_buffer = true;
         }
 
-        size_t old_size = decrypted_string.size();
+        size_t old_size = decrypted_data->size();
 
-        decrypted_string.resize(old_size + static_cast<size_t>(output_length));
-        memcpy(&decrypted_string[old_size], output_buffer, static_cast<size_t>(output_length));
+        decrypted_data->resize(old_size + static_cast<size_t>(output_length));
+        memcpy(decrypted_data->data() + old_size, output_buffer, static_cast<size_t>(output_length));
 
     } while (!end_of_buffer);
 

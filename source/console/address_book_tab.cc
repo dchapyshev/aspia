@@ -7,7 +7,6 @@
 
 #include "console/address_book_tab.h"
 
-#include <QCryptographicHash>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -18,7 +17,7 @@
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
 #include "console/open_address_book_dialog.h"
-#include "crypto/string_encryptor.h"
+#include "crypto/data_encryptor.h"
 
 namespace aspia {
 
@@ -218,17 +217,16 @@ AddressBookTab* AddressBookTab::openAddressBook(const QString& file_path, QWidge
 
             password = dialog.password();
 
-            QCryptographicHash key_hash(QCryptographicHash::Sha256);
-            key_hash.addData(password.toUtf8());
+            std::string key = DataEncryptor::createKey(password.toStdString());
 
-            std::string decrypted;
-            if (!DecryptString(address_book.data(), key_hash.result(), decrypted))
+            std::string decrypted_data;
+            if (!DataEncryptor::decrypt(address_book.data(), key, &decrypted_data))
             {
                 showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
-                return false;
+                return nullptr;
             }
 
-            if (!root_group.ParseFromString(decrypted))
+            if (!root_group.ParseFromString(decrypted_data))
             {
                 showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
                 return nullptr;
@@ -553,10 +551,9 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
         case proto::AddressBook::ENCRYPTION_TYPE_XCHACHA20_POLY1305:
         {
-            QCryptographicHash key_hash(QCryptographicHash::Sha256);
-            key_hash.addData(password_.toUtf8());
-
-            address_book.set_data(EncryptString(root_group_.SerializeAsString(), key_hash.result()));
+            address_book.set_data(
+                DataEncryptor::encrypt(root_group_.SerializeAsString(),
+                                       DataEncryptor::createKey(password_.toStdString())));
         }
         break;
 
