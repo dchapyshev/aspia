@@ -11,8 +11,8 @@ max_jobs: 1
 image: Visual Studio 2017
 
 environment:
-ASPIA_DIR: &ASPIA_DIR c:\aspia
-CACHE_DIR: &CACHE_DIR c:\aspia_cache
+  ASPIA_DIR: &ASPIA_DIR c:\aspia
+  CACHE_DIR: &CACHE_DIR c:\aspia_cache
 
 LIB_URL: https://aspia.ru/files/aspia/third_party_small.7z
 VER_URL: https://aspia.ru/files/aspia/third_party.txt
