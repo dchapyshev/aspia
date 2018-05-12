@@ -37,7 +37,7 @@ install:
     copy "c:\version.txt" "%CACHE_DIR%\version.txt")
 
   # Unpack the cached libraries.
-  - 7z x "%CACHE_DIR%\third_party.7z" -o"c:\third_party" > nul
+  - 7z x "%CACHE_DIR%\third_party.7z" -o"c:"
   - set ASPIA_THIRD_PARTY_DIR=c:\third_party
 
 platform:
