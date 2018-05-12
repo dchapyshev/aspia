@@ -1,6 +1,6 @@
 Aspia
 =====
-Remote desktop and system information tool.
+Remote desktop and file transfer tool.
 
 Currently supported
 -------------------
