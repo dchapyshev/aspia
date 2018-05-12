@@ -28,11 +28,11 @@ install:
   - set /p NEW_VERSION=<"c:\version.txt"
   - if exist "%CACHE_DIR%\version.txt" (set /p OLD_VERSION=<"%CACHE_DIR%\version.txt")
   - if not exist "%CACHE_DIR%\version" (set UPDATE_CACHE=1)
-  - if not "%OLD_VERSION%" == "%NEW_VERSION% (set UPDATE_CACHE=1)
+  - if not "%OLD_VERSION%" == "%NEW_VERSION%" (set UPDATE_CACHE=1)
 
   # If need to update libraries.
   - if "%UPDATE_CACHE%" == "1" (echo "Cache is obsolete. Updating..." &&
-    rmdir /S /Q %CACHE_DIR% & mkdir "%CACHE_DIR%" &&
+    rmdir /S /Q "%CACHE_DIR%" & mkdir "%CACHE_DIR%" &&
     curl -o "%CACHE_DIR%\third_party.7z" "%LIB_URL%" &&
     copy "c:\version.txt" "%CACHE_DIR%\version.txt")
 
