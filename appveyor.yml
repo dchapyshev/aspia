@@ -61,3 +61,5 @@ build:
   project: "%ASPIA_DIR%/build/aspia.sln"
   verbosity: minimal
   parallel: true
+
+test: off
