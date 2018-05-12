@@ -15,19 +15,19 @@ DecompressorZLIB::DecompressorZLIB()
 {
     memset(&stream_, 0, sizeof(stream_));
 
-    int ret = inflateInit(&stream_);
+    int ret = zng_inflateInit(&stream_);
     Q_ASSERT(ret == Z_OK);
 }
 
 DecompressorZLIB::~DecompressorZLIB()
 {
-    int ret = inflateEnd(&stream_);
+    int ret = zng_inflateEnd(&stream_);
     Q_ASSERT(ret == Z_OK);
 }
 
 void DecompressorZLIB::reset()
 {
-    int ret = inflateReset(&stream_);
+    int ret = zng_inflateReset(&stream_);
     Q_ASSERT(ret == Z_OK);
 }
 
@@ -46,7 +46,7 @@ bool DecompressorZLIB::process(const quint8* input_data,
     stream_.avail_out = static_cast<uint32_t>(output_size);
     stream_.next_out  = output_data;
 
-    int ret = inflate(&stream_, Z_NO_FLUSH);
+    int ret = zng_inflate(&stream_, Z_NO_FLUSH);
     if (ret == Z_STREAM_ERROR)
         qWarning() << "zlib decompression failed: " << ret;
 

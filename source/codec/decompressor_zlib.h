@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__DECOMPRESSOR_ZLIB_H
 
-#include <zlib.h>
+#include <zlib-ng.h>
 
 #include "codec/decompressor.h"
 
@@ -31,7 +31,7 @@ public:
                  size_t* written) override;
 
 private:
-    z_stream stream_;
+    zng_stream stream_;
 
     Q_DISABLE_COPY(DecompressorZLIB)
 };

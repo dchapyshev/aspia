@@ -15,24 +15,24 @@ CompressorZLIB::CompressorZLIB(int compress_ratio)
 {
     memset(&stream_, 0, sizeof(stream_));
 
-    int ret = deflateInit2(&stream_,
-                           compress_ratio,
-                           Z_DEFLATED,
-                           MAX_WBITS,
-                           MAX_MEM_LEVEL,
-                           Z_DEFAULT_STRATEGY);
+    int ret = zng_deflateInit2(&stream_,
+                               compress_ratio,
+                               Z_DEFLATED,
+                               MAX_WBITS,
+                               MAX_MEM_LEVEL,
+                               Z_DEFAULT_STRATEGY);
     Q_ASSERT(ret == Z_OK);
 }
 
 CompressorZLIB::~CompressorZLIB()
 {
-    int ret = deflateEnd(&stream_);
+    int ret = zng_deflateEnd(&stream_);
     Q_ASSERT(ret == Z_OK);
 }
 
 void CompressorZLIB::reset()
 {
-    int ret = deflateReset(&stream_);
+    int ret = zng_deflateReset(&stream_);
     Q_ASSERT(ret == Z_OK);
 }
 
@@ -73,7 +73,7 @@ bool CompressorZLIB::process(const quint8* input_data,
             break;
     }
 
-    int ret = deflate(&stream_, z_flush);
+    int ret = zng_deflate(&stream_, z_flush);
     if (ret == Z_STREAM_ERROR)
         qWarning("zlib compression failed");
 

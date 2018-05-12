@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 #define _ASPIA_CODEC__COMPRESSOR_ZLIB_H
 
-#include <zlib.h>
+#include <zlib-ng.h>
 
 #include "codec/compressor.h"
 
@@ -31,7 +31,7 @@ public:
     void reset() override;
 
 private:
-    z_stream stream_;
+    zng_stream stream_;
 
     Q_DISABLE_COPY(CompressorZLIB)
 };

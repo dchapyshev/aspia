@@ -8,6 +8,7 @@
 #ifndef _ASPIA_BUILD_CONFIG_H
 #define _ASPIA_BUILD_CONFIG_H
 
+#define QT_DEPRECATED_WARNINGS
 #define QT_MESSAGELOGCONTEXT
 
 #include <QtGlobal>
