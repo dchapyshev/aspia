@@ -35,70 +35,54 @@ public:
         local_ = reinterpret_cast<T>(LocalAlloc(LHND, length));
     }
 
-    ~ScopedLocal()
-    {
-        Close();
-    }
+    ~ScopedLocal() { close(); }
 
-    T Get()
-    {
-        return local_;
-    }
+    T get() { return local_; }
 
-    void Reset(T local = nullptr)
+    void reset(T local = nullptr)
     {
-        Close();
+        close();
         local_ = local;
     }
 
-    T Release()
+    T release()
     {
         T local = local_;
         local_ = nullptr;
         return local;
     }
 
-    T* Recieve()
+    T* recieve()
     {
-        Close();
+        close();
         return &local_;
     }
 
-    bool IsValid() const
+    bool isValid() const
     {
         return (local_ != nullptr);
     }
 
-    ScopedLocal& operator=(T other)
-    {
-        Set(other);
-        return *this;
-    }
-
     ScopedLocal& operator=(ScopedLocal&& other) noexcept
     {
-        Close();
+        close();
         local_ = other.local_;
         other.local_ = nullptr;
         return *this;
     }
 
-    operator T()
-    {
-        return local_;
-    }
+    operator T() { return local_; }
 
 private:
-    void Close()
+    void close()
     {
-        if (IsValid())
+        if (isValid())
         {
             LocalFree(local_);
             local_ = nullptr;
         }
     }
 
-private:
     T local_ = nullptr;
 
     Q_DISABLE_COPY(ScopedLocal)

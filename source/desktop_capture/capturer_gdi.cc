@@ -287,7 +287,7 @@ bool CapturerGDI::prepareCaptureResources()
     {
         // Release GDI resources otherwise SetThreadDesktop will fail.
         desktop_dc_.reset();
-        memory_dc_.Reset();
+        memory_dc_.reset();
 
         // If SetThreadDesktop() fails, the thread is still assigned a desktop.
         // So we can continue capture screen bits, just from the wrong desktop.
@@ -303,7 +303,7 @@ bool CapturerGDI::prepareCaptureResources()
     if (screen_rect != desktop_dc_rect_)
     {
         desktop_dc_.reset();
-        memory_dc_.Reset();
+        memory_dc_.reset();
 
         desktop_dc_rect_ = QRect();
     }
@@ -319,7 +319,7 @@ bool CapturerGDI::prepareCaptureResources()
 
         // Create GDI device contexts to capture from the desktop into memory.
         desktop_dc_ = std::make_unique<ScopedGetDC>(nullptr);
-        memory_dc_.Reset(CreateCompatibleDC(*desktop_dc_));
+        memory_dc_.reset(CreateCompatibleDC(*desktop_dc_));
         if (!memory_dc_)
         {
             qWarning("CreateCompatibleDC failed");

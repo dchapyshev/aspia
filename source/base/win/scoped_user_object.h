@@ -32,53 +32,35 @@ public:
         other.object_ = nullptr;
     }
 
-    ~ScopedUserObject()
-    {
-        Traits::Close(object_);
-    }
+    ~ScopedUserObject() { Traits::close(object_); }
 
-    T Get()
-    {
-        return object_;
-    }
+    T get() { return object_; }
 
-    void Reset(T object = nullptr)
+    void reset(T object = nullptr)
     {
         if (object_ && object != object_)
-            Traits::Close(object_);
+            Traits::close(object_);
         object_ = object;
     }
 
-    ScopedUserObject& operator=(T object)
-    {
-        Reset(object);
-        return *this;
-    }
-
-    T Release()
+    T release()
     {
         T object = object_;
         object_ = nullptr;
         return object;
     }
 
-    bool IsValid() const
-    {
-        return object_ != nullptr;
-    }
+    bool isValid() const { return object_ != nullptr; }
 
     ScopedUserObject& operator=(ScopedUserObject&& other) noexcept
     {
-        Traits::Close(object_);
+        Traits::close(object_);
         object_ = other.object_;
         other.object_ = nullptr;
         return *this;
     }
 
-    operator T()
-    {
-        return object_;
-    }
+    operator T() { return object_; }
 
 private:
     T object_ = nullptr;
@@ -91,7 +73,7 @@ class DestroyWindowTraits
 {
 public:
     // Closes the handle.
-    static void Close(HWND handle)
+    static void close(HWND handle)
     {
         if (handle)
             DestroyWindow(handle);
@@ -103,7 +85,7 @@ class DestroyMenuTraits
 {
 public:
     // Closes the handle.
-    static void Close(HMENU handle)
+    static void close(HMENU handle)
     {
         if (handle)
             DestroyMenu(handle);
@@ -115,7 +97,7 @@ class DestroyCursorTraits
 {
 public:
     // Closes the handle.
-    static void Close(HCURSOR handle)
+    static void close(HCURSOR handle)
     {
         if (handle)
             DestroyCursor(handle);
@@ -127,7 +109,7 @@ class DestroyIconTraits
 {
 public:
     // Closes the handle.
-    static void Close(HICON handle)
+    static void close(HICON handle)
     {
         if (handle)
             DestroyIcon(handle);
@@ -139,7 +121,7 @@ class DestroyAccelTraits
 {
 public:
     // Closes the handle.
-    static void Close(HACCEL handle)
+    static void close(HACCEL handle)
     {
         if (handle)
             DestroyAcceleratorTable(handle);
@@ -151,7 +133,7 @@ class DestroyHookTraits
 {
 public:
     // Closes the handle.
-    static void Close(HHOOK handle)
+    static void close(HHOOK handle)
     {
         if (handle)
             UnhookWindowsHookEx(handle);

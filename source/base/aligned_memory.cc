@@ -9,7 +9,7 @@
 
 namespace aspia {
 
-void* AlignedAlloc(size_t size, size_t alignment)
+void* alignedAlloc(size_t size, size_t alignment)
 {
     Q_ASSERT(size > 0U);
     Q_ASSERT((alignment & (alignment - 1)) == 0U);

@@ -41,9 +41,9 @@
 
 namespace aspia {
 
-void* AlignedAlloc(size_t size, size_t alignment);
+void* alignedAlloc(size_t size, size_t alignment);
 
-inline void AlignedFree(void* ptr)
+inline void alignedFree(void* ptr)
 {
     _aligned_free(ptr);
 }
@@ -54,7 +54,7 @@ struct AlignedFreeDeleter
 {
     void operator()(void* ptr) const
     {
-        AlignedFree(ptr);
+        alignedFree(ptr);
     }
 };
 

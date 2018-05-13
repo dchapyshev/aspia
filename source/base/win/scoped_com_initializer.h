@@ -32,13 +32,13 @@ public:
     // Constructor for STA initialization.
     ScopedCOMInitializer()
     {
-        Initialize(COINIT_APARTMENTTHREADED);
+        initialize(COINIT_APARTMENTTHREADED);
     }
 
     // Constructor for MTA initialization.
     explicit ScopedCOMInitializer(SelectMTA /* mta */)
     {
-        Initialize(COINIT_MULTITHREADED);
+        initialize(COINIT_MULTITHREADED);
     }
 
     ~ScopedCOMInitializer()
@@ -48,14 +48,14 @@ public:
         Q_ASSERT(GetCurrentThreadId() == thread_id_);
 #endif
 
-        if (IsSucceeded())
+        if (isSucceeded())
             CoUninitialize();
     }
 
-    bool IsSucceeded() const { return SUCCEEDED(hr_); }
+    bool isSucceeded() const { return SUCCEEDED(hr_); }
 
 private:
-    void Initialize(COINIT init)
+    void initialize(COINIT init)
     {
 #ifndef NDEBUG
         thread_id_ = GetCurrentThreadId();

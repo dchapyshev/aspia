@@ -20,36 +20,30 @@ class ScopedGDIObject
 public:
     ScopedGDIObject() = default;
 
-    explicit ScopedGDIObject(T object) :
-        object_(object)
+    explicit ScopedGDIObject(T object)
+        : object_(object)
     {
         // Nothing
     }
 
-    ~ScopedGDIObject()
-    {
-        Traits::Close(object_);
-    }
+    ~ScopedGDIObject() { Traits::close(object_); }
 
-    T Get()
-    {
-        return object_;
-    }
+    T get() { return object_; }
 
-    void Reset(T object = nullptr)
+    void reset(T object = nullptr)
     {
         if (object_ && object != object_)
-            Traits::Close(object_);
+            Traits::close(object_);
         object_ = object;
     }
 
     ScopedGDIObject& operator=(T object)
     {
-        Reset(object);
+        reset(object);
         return *this;
     }
 
-    T Release()
+    T release()
     {
         T object = object_;
         object_ = nullptr;
@@ -70,7 +64,7 @@ class DeleteObjectTraits
 {
 public:
     // Closes the handle.
-    static void Close(T handle)
+    static void close(T handle)
     {
         if (handle)
             DeleteObject(handle);

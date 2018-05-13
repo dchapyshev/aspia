@@ -19,7 +19,8 @@ class ScopedObject
 public:
     ScopedObject() = default;
 
-    explicit ScopedObject(T object) : object_(object)
+    explicit ScopedObject(T object)
+        : object_(object)
     {
         // Nothing
     }

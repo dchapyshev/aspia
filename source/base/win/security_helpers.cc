@@ -8,22 +8,34 @@
 #include "base/win/security_helpers.h"
 
 #include <QDebug>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <objidl.h>
 #include <sddl.h>
+
 #include <memory>
+#include <string>
 
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_local.h"
 #include "base/system_error_code.h"
+#include "base/typed_buffer.h"
 
 namespace aspia {
 
-static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
-                                 ScopedSd& absolute_sd,
-                                 ScopedAcl& dacl,
-                                 ScopedSid& group,
-                                 ScopedSid& owner,
-                                 ScopedAcl& sacl)
+namespace {
+
+using ScopedAcl = TypedBuffer<ACL>;
+using ScopedSd = TypedBuffer<SECURITY_DESCRIPTOR>;
+using ScopedSid = TypedBuffer<SID>;
+
+bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
+                          ScopedSd* absolute_sd,
+                          ScopedAcl* dacl,
+                          ScopedSid* group,
+                          ScopedSid* owner,
+                          ScopedAcl* sacl)
 {
     // Get buffer sizes.
     DWORD absolute_sd_size = 0;
@@ -73,24 +85,76 @@ static bool MakeScopedAbsoluteSd(const ScopedSd& relative_sd,
         return false;
     }
 
-    absolute_sd.Swap(local_absolute_sd);
-    dacl.Swap(local_dacl);
-    group.Swap(local_group);
-    owner.Swap(local_owner);
-    sacl.Swap(local_sacl);
+    absolute_sd->swap(local_absolute_sd);
+    dacl->swap(local_dacl);
+    group->swap(local_group);
+    owner->swap(local_owner);
+    sacl->swap(local_sacl);
 
     return true;
 }
 
-bool InitializeComSecurity(const std::wstring& security_descriptor,
-                           const std::wstring& mandatory_label,
+bool getUserSidString(std::wstring* user_sid)
+{
+    // Get the current token.
+    ScopedHandle token;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
+        return false;
+
+    DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
+    std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
+
+    TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
+
+    if (!GetTokenInformation(token, TokenUser, user, size, &size))
+        return false;
+
+    if (!user->User.Sid)
+        return false;
+
+    // Convert the data to a string.
+    ScopedLocal<wchar_t*> sid_string;
+
+    if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
+        return false;
+
+    user_sid->assign(sid_string);
+
+    return true;
+}
+
+ScopedSd convertSddlToSd(const std::wstring& sddl)
+{
+    ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
+    ULONG length = 0;
+
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
+                                                              raw_sd.recieve(), &length))
+    {
+        qWarning() << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed: "
+                   << lastSystemErrorString();
+        return ScopedSd();
+    }
+
+    ScopedSd sd(length);
+    memcpy(sd.get(), raw_sd, length);
+
+    return sd;
+}
+
+} // namespace
+
+bool initializeComSecurity(const wchar_t* security_descriptor,
+                           const wchar_t* mandatory_label,
                            bool activate_as_activator)
 {
-    std::wstring sddl = security_descriptor + mandatory_label;
+    std::wstring sddl;
 
-    // Convert the SDDL description into a security descriptor in absolute
-    // format.
-    ScopedSd relative_sd = ConvertSddlToSd(sddl);
+    sddl.append(security_descriptor);
+    sddl.append(mandatory_label);
+
+    // Convert the SDDL description into a security descriptor in absolute format.
+    ScopedSd relative_sd = convertSddlToSd(sddl);
     if (!relative_sd)
     {
         qWarning("Failed to create a security descriptor");
@@ -103,8 +167,8 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     ScopedSid owner;
     ScopedAcl sacl;
 
-    if (!MakeScopedAbsoluteSd(relative_sd, absolute_sd, dacl,
-                              group, owner, sacl))
+    if (!makeScopedAbsoluteSd(relative_sd, &absolute_sd, &dacl,
+                              &group, &owner, &sacl))
     {
         qWarning("MakeScopedAbsoluteSd failed");
         return false;
@@ -133,56 +197,6 @@ bool InitializeComSecurity(const std::wstring& security_descriptor,
     }
 
     return true;
-}
-
-bool GetUserSidString(std::wstring& user_sid)
-{
-    // Get the current token.
-    ScopedHandle token;
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
-        return false;
-
-    DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
-    std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
-
-    TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
-
-    if (!GetTokenInformation(token, TokenUser, user, size, &size))
-        return false;
-
-    if (!user->User.Sid)
-        return false;
-
-    // Convert the data to a string.
-    ScopedLocal<wchar_t*> sid_string;
-
-    if (!ConvertSidToStringSidW(user->User.Sid, sid_string.Recieve()))
-        return false;
-
-    user_sid.assign(sid_string);
-
-    return true;
-}
-
-ScopedSd ConvertSddlToSd(const std::wstring& sddl)
-{
-    ScopedLocal<PSECURITY_DESCRIPTOR> raw_sd;
-    ULONG length = 0;
-
-    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(),
-                                                              SDDL_REVISION_1,
-                                                              raw_sd.Recieve(),
-                                                              &length))
-    {
-        qWarning() << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed: "
-                   << lastSystemErrorString();
-        return ScopedSd();
-    }
-
-    ScopedSd sd(length);
-    memcpy(sd.get(), raw_sd, length);
-
-    return sd;
 }
 
 } // namespace aspia

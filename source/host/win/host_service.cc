@@ -25,6 +25,14 @@ namespace aspia {
 
 namespace {
 
+// Concatenates ACE type, permissions and sid given as SDDL strings into an ACE
+// definition in SDDL form.
+#define SDDL_ACE(type, permissions, sid) L"(" type L";;" permissions L";;;" sid L")"
+
+// Text representation of COM_RIGHTS_EXECUTE and COM_RIGHTS_EXECUTE_LOCAL
+// permission bits that is used in the SDDL definition below.
+#define SDDL_COM_EXECUTE_LOCAL L"0x3"
+
 // Security descriptor allowing local processes running under SYSTEM or
 // LocalService accounts to call COM methods exposed by the daemon.
 const wchar_t kComProcessSd[] =
@@ -65,14 +73,14 @@ void HostService::start()
     file_logger_->startLogging(*app);
 
     com_initializer_.reset(new ScopedCOMInitializer());
-    if (!com_initializer_->IsSucceeded())
+    if (!com_initializer_->isSucceeded())
     {
         qFatal("COM not initialized");
         app->quit();
         return;
     }
 
-    InitializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
+    initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
     QSettings settings;
     int port = settings.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();

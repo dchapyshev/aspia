@@ -122,7 +122,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<quint8*>(AlignedAlloc(data_size, 16)));
+        translate_buffer_.reset(static_cast<quint8*>(alignedAlloc(data_size, 16)));
         translate_buffer_size_ = data_size;
     }
 

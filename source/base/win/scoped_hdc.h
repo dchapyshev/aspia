@@ -13,15 +13,13 @@
 
 namespace aspia {
 
-//
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from GetDC.
-//
 class ScopedGetDC
 {
 public:
-    explicit ScopedGetDC(HWND hwnd) :
-        hwnd_(hwnd),
-        hdc_(GetDC(hwnd))
+    explicit ScopedGetDC(HWND hwnd)
+        : hwnd_(hwnd),
+          hdc_(GetDC(hwnd))
     {
         if (hwnd_)
         {
@@ -34,7 +32,9 @@ public:
             // GDI handle exhaustion.  In this case Chrome is going to behave badly no
             // matter what, so we may as well just force a crash now.
             if (!hdc_)
+            {
                 qFatal("!hdc_");
+            }
         }
     }
 
@@ -53,42 +53,36 @@ private:
     Q_DISABLE_COPY(ScopedGetDC);
 };
 
-//
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from
 // CreateCompatibleDC, CreateDC and CreateIC.
-//
 class ScopedCreateDC
 {
 public:
     ScopedCreateDC() = default;
 
-    explicit ScopedCreateDC(HDC h) : hdc_(h)
+    explicit ScopedCreateDC(HDC h)
+        : hdc_(h)
     {
         // Nothing
     }
 
-    ~ScopedCreateDC()
-    {
-        Close();
-    }
+    ~ScopedCreateDC() { close(); }
 
-    HDC Get()
-    {
-        return hdc_;
-    }
+    HDC get() { return hdc_; }
 
-    void Reset(HDC h = nullptr)
+    void reset(HDC h = nullptr)
     {
-        Close();
+        close();
         hdc_ = h;
     }
 
     operator HDC() { return hdc_; }
 
 private:
-    void Close()
+    void close()
     {
-        if (hdc_) DeleteDC(hdc_);
+        if (hdc_)
+            DeleteDC(hdc_);
     }
 
     HDC hdc_ = nullptr;
