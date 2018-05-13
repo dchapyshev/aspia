@@ -20,7 +20,7 @@ namespace aspia {
 class HostProcessImpl
 {
 public:
-    HostProcessImpl(HostProcess* process);
+    explicit HostProcessImpl(HostProcess* process);
     ~HostProcessImpl();
 
     void startProcess();

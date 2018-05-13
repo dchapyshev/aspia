@@ -56,9 +56,7 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
 } // namespace
 
 NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
-    : QObject(parent),
-      channel_type_(channel_type),
-      socket_(socket)
+    : QObject(parent), channel_type_(channel_type), socket_(socket)
 {
     Q_ASSERT(!socket_.isNull());
 
@@ -71,14 +69,11 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
 
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
-            this, &NetworkChannel::onError);
+    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error), this,
+            &NetworkChannel::onError);
 }
 
-NetworkChannel::~NetworkChannel()
-{
-    stop();
-}
+NetworkChannel::~NetworkChannel() { stop(); }
 
 // static
 NetworkChannel* NetworkChannel::createClient(QObject* parent)
@@ -336,6 +331,9 @@ void NetworkChannel::onMessageWritten(int message_id)
             }
         }
         break;
+
+        default:
+            break;
     }
 }
 
@@ -379,6 +377,9 @@ void NetworkChannel::onMessageReceived(const QByteArray& buffer)
             }
         }
         break;
+
+        default:
+            break;
     }
 }
 

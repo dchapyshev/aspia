@@ -18,7 +18,7 @@ namespace aspia {
 class FirewallManager
 {
 public:
-    FirewallManager(const QString& application_path);
+    explicit FirewallManager(const QString& application_path);
     ~FirewallManager() = default;
 
     // Returns true if firewall manager is valid.

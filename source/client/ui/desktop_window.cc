@@ -283,7 +283,7 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
         {
             QKeyEvent* key_event = dynamic_cast<QKeyEvent*>(event);
-            if (key_event->key() == Qt::Key_Tab)
+            if (key_event && key_event->key() == Qt::Key_Tab)
             {
                 desktop_->doKeyEvent(key_event);
                 return true;
