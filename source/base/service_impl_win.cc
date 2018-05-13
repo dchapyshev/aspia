@@ -376,7 +376,13 @@ int ServiceImpl::exec(int argc, char* argv[])
 
     // Creates QCoreApplication.
     createApplication(argc, argv);
-    Q_ASSERT(QCoreApplication::instance());
+
+    QScopedPointer<QCoreApplication> application(QCoreApplication::instance());
+    if (application.isNull())
+    {
+        qWarning("Application instance is null");
+        return 1;
+    }
 
     QScopedPointer<ServiceEventHandler> event_handler(new ServiceEventHandler());
 
