@@ -74,10 +74,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
 
             ui.spinbox_salt_before->setValue(data_->salt1().size());
             ui.spinbox_salt_after->setValue(data_->salt2().size());
-        }
-        else
-        {
-            password_changed_ = true;
+
+            password_changed_ = false;
         }
     }
     else
@@ -148,6 +146,9 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
         {
             file_->mutable_hashing_salt()->clear();
             file_->set_hashing_rounds(0);
+
+            data_->mutable_salt1()->clear();
+            data_->mutable_salt2()->clear();
         }
         break;
 

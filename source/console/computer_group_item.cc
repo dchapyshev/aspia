@@ -15,7 +15,7 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
       computer_group_(computer_group)
 {
     setIcon(0, QIcon(QStringLiteral(":/icon/folder.png")));
-    setText(0, QString::fromStdString(computer_group_->name()));
+    updateItem();
 
     for (int i = 0; i < computer_group_->computer_group_size(); ++i)
     {
@@ -108,6 +108,11 @@ proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     }
 
     return nullptr;
+}
+
+void ComputerGroupItem::updateItem()
+{
+    setText(0, QString::fromStdString(computer_group_->name()));
 }
 
 bool ComputerGroupItem::IsExpanded() const

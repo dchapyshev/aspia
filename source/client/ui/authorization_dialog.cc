@@ -43,6 +43,16 @@ void AuthorizationDialog::setPassword(const QString& password)
     ui.edit_password->setText(password);
 }
 
+void AuthorizationDialog::showEvent(QShowEvent* event)
+{
+    if (ui.edit_username->text().isEmpty())
+        ui.edit_username->setFocus();
+    else
+        ui.edit_password->setFocus();
+
+    QDialog::showEvent(event);
+}
+
 void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)

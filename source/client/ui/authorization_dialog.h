@@ -26,6 +26,9 @@ public:
     QString password() const;
     void setPassword(const QString& password);
 
+protected:
+    void showEvent(QShowEvent* event) override;
+
 private slots:
     void onShowPasswordButtonToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);

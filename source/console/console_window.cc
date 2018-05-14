@@ -408,6 +408,21 @@ void ConsoleWindow::closeTab(int index)
 void ConsoleWindow::onAddressBookChanged(bool changed)
 {
     ui.action_save->setEnabled(changed);
+
+    if (changed)
+    {
+        int current_tab_index = ui.tab_widget->currentIndex();
+        if (current_tab_index == -1)
+            return;
+
+        AddressBookTab* tab =
+            dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab_index));
+        if (!tab)
+            return;
+
+        // Update tab title.
+        ui.tab_widget->setTabText(current_tab_index, tab->addressBookName());
+    }
 }
 
 void ConsoleWindow::onComputerGroupActivated(bool activated, bool is_root)

@@ -44,7 +44,7 @@ private:
     proto::address_book::Data* data_;
     QByteArray* key_;
 
-    bool password_changed_ = false;
+    bool password_changed_ = true;
     bool value_reverting_ = false;
 
     Q_DISABLE_COPY(AddressBookDialog)

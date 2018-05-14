@@ -29,6 +29,8 @@ public:
     bool deleteChildComputer(proto::address_book::Computer* computer);
     proto::address_book::Computer* takeChildComputer(proto::address_book::Computer* computer);
 
+    void updateItem();
+
     bool IsExpanded() const;
     void SetExpanded(bool expanded);
     QList<QTreeWidgetItem*> ComputerList();

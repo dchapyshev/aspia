@@ -334,10 +334,19 @@ void AddressBookTab::addComputer()
 
 void AddressBookTab::modifyAddressBook()
 {
+    ComputerGroupItem* root_item =
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->topLevelItem(0));
+    if (!root_item)
+    {
+        qDebug("Invalid root item");
+        return;
+    }
+
     AddressBookDialog dialog(this, &file_, &data_, &key_);
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    root_item->updateItem();
     setChanged(true);
 }
 
@@ -355,6 +364,9 @@ void AddressBookTab::modifyComputerGroup()
     ComputerGroupDialog dialog(this, current_item->computerGroup(), parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
+
+    current_item->updateItem();
+    setChanged(true);
 }
 
 void AddressBookTab::modifyComputer()
