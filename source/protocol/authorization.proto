@@ -11,12 +11,6 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto.auth;
 
-enum Version
-{
-    VERSION_UNKNOWN = 0;
-    VERSION_1_0_0   = 1;
-}
-
 enum SessionType
 {
     SESSION_TYPE_UNKNOWN        = 0;
@@ -42,10 +36,9 @@ enum Hashing
 // Host to client.
 message Request
 {
-    Version version  = 1;
-    Hashing hashing  = 2;
-    uint32 rounds    = 3;
-    bytes nonce      = 4;
+    Hashing hashing  = 1;
+    uint32 rounds    = 2;
+    bytes nonce      = 3;
 }
 
 // Client to host.

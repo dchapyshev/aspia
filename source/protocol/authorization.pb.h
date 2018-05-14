@@ -72,17 +72,6 @@ namespace aspia {
 namespace proto {
 namespace auth {
 
-enum Version {
-  VERSION_UNKNOWN = 0,
-  VERSION_1_0_0 = 1,
-  Version_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Version_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool Version_IsValid(int value);
-const Version Version_MIN = VERSION_UNKNOWN;
-const Version Version_MAX = VERSION_1_0_0;
-const int Version_ARRAYSIZE = Version_MAX + 1;
-
 enum SessionType {
   SESSION_TYPE_UNKNOWN = 0,
   SESSION_TYPE_DESKTOP_MANAGE = 1,
@@ -202,9 +191,9 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes nonce = 4;
+  // bytes nonce = 3;
   void clear_nonce();
-  static const int kNonceFieldNumber = 4;
+  static const int kNonceFieldNumber = 3;
   const ::std::string& nonce() const;
   void set_nonce(const ::std::string& value);
   #if LANG_CXX11
@@ -216,21 +205,15 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::std::string* release_nonce();
   void set_allocated_nonce(::std::string* nonce);
 
-  // .aspia.proto.auth.Version version = 1;
-  void clear_version();
-  static const int kVersionFieldNumber = 1;
-  ::aspia::proto::auth::Version version() const;
-  void set_version(::aspia::proto::auth::Version value);
-
-  // .aspia.proto.auth.Hashing hashing = 2;
+  // .aspia.proto.auth.Hashing hashing = 1;
   void clear_hashing();
-  static const int kHashingFieldNumber = 2;
+  static const int kHashingFieldNumber = 1;
   ::aspia::proto::auth::Hashing hashing() const;
   void set_hashing(::aspia::proto::auth::Hashing value);
 
-  // uint32 rounds = 3;
+  // uint32 rounds = 2;
   void clear_rounds();
-  static const int kRoundsFieldNumber = 3;
+  static const int kRoundsFieldNumber = 2;
   ::google::protobuf::uint32 rounds() const;
   void set_rounds(::google::protobuf::uint32 value);
 
@@ -239,7 +222,6 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr nonce_;
-  int version_;
   int hashing_;
   ::google::protobuf::uint32 rounds_;
   mutable int _cached_size_;
@@ -481,21 +463,7 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 #endif  // __GNUC__
 // Request
 
-// .aspia.proto.auth.Version version = 1;
-inline void Request::clear_version() {
-  version_ = 0;
-}
-inline ::aspia::proto::auth::Version Request::version() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.version)
-  return static_cast< ::aspia::proto::auth::Version >(version_);
-}
-inline void Request::set_version(::aspia::proto::auth::Version value) {
-  
-  version_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.version)
-}
-
-// .aspia.proto.auth.Hashing hashing = 2;
+// .aspia.proto.auth.Hashing hashing = 1;
 inline void Request::clear_hashing() {
   hashing_ = 0;
 }
@@ -509,7 +477,7 @@ inline void Request::set_hashing(::aspia::proto::auth::Hashing value) {
   // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.hashing)
 }
 
-// uint32 rounds = 3;
+// uint32 rounds = 2;
 inline void Request::clear_rounds() {
   rounds_ = 0u;
 }
@@ -523,7 +491,7 @@ inline void Request::set_rounds(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.rounds)
 }
 
-// bytes nonce = 4;
+// bytes nonce = 3;
 inline void Request::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -735,7 +703,6 @@ inline void Result::set_status(::aspia::proto::auth::Status value) {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::auth::Version> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::Hashing> : ::google::protobuf::internal::true_type {};

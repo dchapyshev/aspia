@@ -141,13 +141,6 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
                 return;
             }
 
-            if (request.version() != proto::auth::VERSION_1_0_0)
-            {
-                emit errorOccurred(tr("Authorization error: Unsupported version of protocol."));
-                cancel();
-                return;
-            }
-
             if (request.hashing() != proto::auth::HASHING_SHA512)
             {
                 emit errorOccurred(tr("Authorization error: Unsupported hashing algorithm."));
