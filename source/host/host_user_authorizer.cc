@@ -18,6 +18,7 @@ namespace aspia {
 
 namespace {
 
+// TODO: Configuring the number of iterations in the UI.
 const quint32 kKeyHashingRounds = 15000;
 
 enum MessageId
@@ -28,6 +29,7 @@ enum MessageId
 
 QByteArray generateNonce()
 {
+    // TODO: Configure the size in the UI.
     static const size_t kNonceSize = 512; // 512 bytes.
     return Random::generateBuffer(kNonceSize);
 }
@@ -124,7 +126,7 @@ void HostUserAuthorizer::start()
     nonce_ = generateNonce();
     if (nonce_.isEmpty())
     {
-        qWarning("Empty nonce");
+        qDebug("Empty nonce generated");
         stop();
         return;
     }
