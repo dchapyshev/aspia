@@ -63,7 +63,7 @@ protected:
 
 private:
     void addAddressBookTab(AddressBookTab* tab);
-    void connectToComputer(const proto::address_book::Computer& computer);
+    void connectToComputer(proto::address_book::Computer* computer);
 
     Ui::ConsoleWindow ui;
 

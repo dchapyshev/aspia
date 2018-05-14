@@ -7,6 +7,7 @@
 
 #include "console/computer_dialog.h"
 
+#include <QDateTime>
 #include <QMessageBox>
 
 #include "client/ui/desktop_config_dialog.h"
@@ -24,9 +25,11 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 ComputerDialog::ComputerDialog(QWidget* parent,
+                               Mode mode,
                                proto::address_book::Computer* computer,
                                proto::address_book::ComputerGroup* parent_computer_group)
     : QDialog(parent),
+      mode_(mode),
       computer_(computer)
 {
     ui.setupUi(this);
@@ -169,6 +172,12 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
+        qint64 current_time = QDateTime::currentSecsSinceEpoch();
+
+        if (mode_ == CreateComputer)
+            computer_->set_create_time(current_time);
+
+        computer_->set_modify_time(current_time);
         computer_->set_name(name.toStdString());
         computer_->set_address(ui.edit_address->text().toStdString());
         computer_->set_port(ui.spinbox_port->value());

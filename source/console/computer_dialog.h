@@ -20,7 +20,10 @@ class ComputerDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum Mode { CreateComputer, ModifyComputer };
+
     ComputerDialog(QWidget* parent,
+                   Mode mode,
                    proto::address_book::Computer* computer,
                    proto::address_book::ComputerGroup* parent_computer_group);
     ~ComputerDialog();
@@ -35,6 +38,8 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerDialog ui;
+
+    const Mode mode_;
     proto::address_book::Computer* computer_;
 
     Q_DISABLE_COPY(ComputerDialog)

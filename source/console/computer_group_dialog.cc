@@ -8,6 +8,7 @@
 #include "console/computer_group_dialog.h"
 
 #include <QAbstractButton>
+#include <QDateTime>
 #include <QMessageBox>
 
 namespace aspia {
@@ -21,9 +22,11 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
+                                         Mode mode,
                                          proto::address_book::ComputerGroup* computer_group,
                                          proto::address_book::ComputerGroup* parent_computer_group)
     : QDialog(parent),
+      mode_(mode),
       computer_group_(computer_group)
 {
     ui.setupUi(this);
@@ -61,6 +64,12 @@ void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
             return;
         }
 
+        qint64 current_time = QDateTime::currentSecsSinceEpoch();
+
+        if (mode_ == CreateComputerGroup)
+            computer_group_->set_create_time(current_time);
+
+        computer_group_->set_modify_time(current_time);
         computer_group_->set_name(name.toStdString());
         computer_group_->set_comment(comment.toStdString());
 

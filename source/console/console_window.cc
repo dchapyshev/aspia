@@ -8,6 +8,7 @@
 #include "console/console_window.h"
 
 #include <QCryptographicHash>
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -262,7 +263,7 @@ void ConsoleWindow::fastConnectAction()
     if (dialog.exec() != ClientDialog::Accepted)
         return;
 
-    connectToComputer(dialog.computer());
+    connectToComputer(&dialog.computer());
 }
 
 void ConsoleWindow::desktopManageSessionConnect()
@@ -277,7 +278,7 @@ void ConsoleWindow::desktopManageSessionConnect()
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
-                connectToComputer(*computer);
+                connectToComputer(computer);
             }
         }
     }
@@ -295,7 +296,7 @@ void ConsoleWindow::desktopViewSessionConnect()
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
-                connectToComputer(*computer);
+                connectToComputer(computer);
             }
         }
     }
@@ -313,7 +314,7 @@ void ConsoleWindow::fileTransferSessionConnect()
             if (computer)
             {
                 computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
-                connectToComputer(*computer);
+                connectToComputer(computer);
             }
         }
     }
@@ -506,7 +507,7 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
         return;
     }
 
-    connectToComputer(*computer);
+    connectToComputer(computer);
 }
 
 void ConsoleWindow::closeEvent(QCloseEvent* event)
@@ -574,9 +575,11 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.tab_widget->setCurrentIndex(index);
 }
 
-void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
+void ConsoleWindow::connectToComputer(proto::address_book::Computer* computer)
 {
-    Client* client = new Client(computer, this);
+    computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+
+    Client* client = new Client(*computer, this);
     connect(client, &Client::clientTerminated, client, &Client::deleteLater);
 }
 

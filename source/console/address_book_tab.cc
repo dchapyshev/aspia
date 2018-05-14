@@ -297,7 +297,10 @@ void AddressBookTab::addComputerGroup()
     std::unique_ptr<proto::address_book::ComputerGroup> computer_group =
         std::make_unique<proto::address_book::ComputerGroup>();
 
-    ComputerGroupDialog dialog(this, computer_group.get(), parent_item->computerGroup());
+    ComputerGroupDialog dialog(this,
+                               ComputerGroupDialog::CreateComputerGroup,
+                               computer_group.get(),
+                               parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -317,7 +320,10 @@ void AddressBookTab::addComputer()
 
     std::unique_ptr<proto::address_book::Computer> computer = createDefaultComputer();
 
-    ComputerDialog dialog(this, computer.get(), parent_item->computerGroup());
+    ComputerDialog dialog(this,
+                          ComputerDialog::CreateComputer,
+                          computer.get(),
+                          parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -361,7 +367,10 @@ void AddressBookTab::modifyComputerGroup()
     if (!parent_item)
         return;
 
-    ComputerGroupDialog dialog(this, current_item->computerGroup(), parent_item->computerGroup());
+    ComputerGroupDialog dialog(this,
+                               ComputerGroupDialog::ModifyComputerGroup,
+                               current_item->computerGroup(),
+                               parent_item->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -376,6 +385,7 @@ void AddressBookTab::modifyComputer()
         return;
 
     ComputerDialog dialog(this,
+                          ComputerDialog::ModifyComputer,
                           current_item->computer(),
                           current_item->parentComputerGroupItem()->computerGroup());
     if (dialog.exec() != QDialog::Accepted)
