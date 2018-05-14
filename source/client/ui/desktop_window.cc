@@ -95,7 +95,7 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
 
     if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE &&
-        (computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+        (computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
     {
         clipboard_ = new Clipboard(this);
         connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
@@ -184,10 +184,11 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
 
 void DesktopWindow::changeSettings()
 {
-    proto::desktop::Config* config = config = computer_->mutable_desktop_view_session();
+    proto::desktop::Config* config = config =
+        computer_->mutable_session_config()->mutable_desktop_view();
 
     if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        config = computer_->mutable_desktop_manage_session();
+        config = computer_->mutable_session_config()->mutable_desktop_manage();
 
     DesktopConfigDialog dialog(computer_->session_type(), config, this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)

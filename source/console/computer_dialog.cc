@@ -108,21 +108,21 @@ void ComputerDialog::sessionConfigButtonPressed()
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            proto::desktop::Config config = computer_->desktop_manage_session();
+            proto::desktop::Config config = computer_->session_config().desktop_manage();
 
             DesktopConfigDialog dialog(session_type, &config, this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->mutable_desktop_manage_session()->CopyFrom(config);
+                computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(config);
         }
         break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            proto::desktop::Config config = computer_->desktop_view_session();
+            proto::desktop::Config config = computer_->session_config().desktop_view();
 
             DesktopConfigDialog dialog(session_type, &config, this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->mutable_desktop_view_session()->CopyFrom(config);
+                computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(config);
         }
         break;
 

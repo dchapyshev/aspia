@@ -10,9 +10,8 @@
 #include <QCryptographicHash>
 #include <QTimerEvent>
 
-#include <random>
-
 #include "base/message_serialization.h"
+#include "crypto/random.h"
 #include "network/network_channel.h"
 
 namespace aspia {
@@ -30,21 +29,7 @@ enum MessageId
 QByteArray generateNonce()
 {
     static const size_t kNonceSize = 512; // 512 bytes.
-
-    QByteArray nonce;
-    nonce.resize(kNonceSize);
-
-    std::random_device device;
-    std::mt19937 enigne(device());
-    std::uniform_int_distribution<quint64> dist(0, std::numeric_limits<quint64>::max());
-
-    for (size_t i = 0; i < kNonceSize / sizeof(quint64); ++i)
-    {
-        quint64 random_number = dist(enigne);
-        memcpy(nonce.data() + (i * sizeof(quint64)), &random_number, sizeof(quint64));
-    }
-
-    return nonce;
+    return Random::generateBuffer(kNonceSize);
 }
 
 QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce, quint32 rounds)

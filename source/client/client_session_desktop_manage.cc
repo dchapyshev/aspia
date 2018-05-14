@@ -106,7 +106,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (!(computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
@@ -118,12 +118,12 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
 void ClientSessionDesktopManage::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    onSendConfig(computer_->desktop_manage_session());
+    onSendConfig(computer_->session_config().desktop_manage());
 }
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    if (!(computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
+    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -150,7 +150,7 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (!(computer_->desktop_manage_session().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
         return;
 
     desktop_window_->injectClipboard(clipboard_event);

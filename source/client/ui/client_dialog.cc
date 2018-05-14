@@ -81,13 +81,13 @@ void ClientDialog::sessionConfigButtonPressed()
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
             DesktopConfigDialog(session_type,
-                                computer_.mutable_desktop_manage_session(),
+                                computer_.mutable_session_config()->mutable_desktop_manage(),
                                 this).exec();
             break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
             DesktopConfigDialog(session_type,
-                                computer_.mutable_desktop_view_session(),
+                                computer_.mutable_session_config()->mutable_desktop_view(),
                                 this).exec();
             break;
 
@@ -113,7 +113,9 @@ void ClientDialog::setDefaultConfig()
 {
     computer_.set_port(kDefaultHostTcpPort);
 
-    proto::desktop::Config* desktop_manage = computer_.mutable_desktop_manage_session();
+    proto::desktop::Config* desktop_manage =
+        computer_.mutable_session_config()->mutable_desktop_manage();
+
     desktop_manage->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
                               proto::desktop::Config::ENABLE_CURSOR_SHAPE);
     desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
@@ -121,7 +123,9 @@ void ClientDialog::setDefaultConfig()
     desktop_manage->set_compress_ratio(6);
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
 
-    proto::desktop::Config* desktop_view = computer_.mutable_desktop_view_session();
+    proto::desktop::Config* desktop_view =
+        computer_.mutable_session_config()->mutable_desktop_view();
+
     desktop_view->set_flags(0);
     desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_view->set_update_interval(30);

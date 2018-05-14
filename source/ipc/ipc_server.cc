@@ -11,8 +11,7 @@
 #include <QDebug>
 #include <QLocalServer>
 
-#include <random>
-
+#include "crypto/random.h"
 #include "ipc/ipc_channel.h"
 
 namespace aspia {
@@ -24,14 +23,10 @@ QString generateUniqueChannelId()
     static std::atomic_uint32_t last_channel_id = 0;
     quint32 channel_id = last_channel_id++;
 
-    std::random_device device;
-    std::mt19937 enigne(device());
-    std::uniform_int_distribution<quint32> dist(0, std::numeric_limits<quint32>::max());
-
     return QString("%1.%2.%3")
         .arg(QCoreApplication::applicationPid())
         .arg(channel_id)
-        .arg(dist(enigne));
+        .arg(Random::generateNumber());
 }
 
 } // namespace

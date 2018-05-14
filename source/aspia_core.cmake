@@ -173,6 +173,8 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/computer_tree.h
     ${PROJECT_SOURCE_DIR}/console/console_main.cc
     ${PROJECT_SOURCE_DIR}/console/console_main.h
+    ${PROJECT_SOURCE_DIR}/console/console_tab.cc
+    ${PROJECT_SOURCE_DIR}/console/console_tab.h
     ${PROJECT_SOURCE_DIR}/console/console_window.cc
     ${PROJECT_SOURCE_DIR}/console/console_window.h
     ${PROJECT_SOURCE_DIR}/console/console_window.ui
@@ -184,7 +186,9 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
-    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h)
+    ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
+	${PROJECT_SOURCE_DIR}/crypto/random.cc
+    ${PROJECT_SOURCE_DIR}/crypto/random.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc

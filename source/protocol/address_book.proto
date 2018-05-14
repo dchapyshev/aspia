@@ -14,12 +14,6 @@ import "desktop_session.proto";
 
 package aspia.proto.address_book;
 
-enum Version
-{
-    VERSION_UNKNOWN = 0;
-    VERSION_1_0_0   = 1;
-}
-
 enum EncryptionType
 {
     ENCRYPTION_TYPE_UNKNOWN            = 0;
@@ -27,59 +21,109 @@ enum EncryptionType
     ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
 }
 
+message CustomField
+{
+    enum Type
+    {
+        TYPE_STRING   = 0;
+        TYPE_BOOLEAN  = 1;
+        TYPE_NUMBER   = 2;
+        TYPE_DATETIME = 3;
+    }
+
+    Type type    = 1;
+    string name  = 2;
+    string value = 3;
+}
+
+message SessionConfig
+{
+    desktop.Config desktop_manage = 1;
+    desktop.Config desktop_view   = 2;
+}
+
 message Computer
 {
-    string name                           = 1;
-    string comment                        = 2;
-    string address                        = 3;
-    uint32 port                           = 4;
-    string username                       = 5;
-    string password                       = 6;
-    auth.SessionType session_type         = 7;
-    desktop.Config desktop_manage_session = 8;
-    desktop.Config desktop_view_session   = 9;
+    int64 create_time                     = 1;
+    int64 modify_time                     = 2;
+    int64 connect_time                    = 3;
+
+    // Fields 4-6 are reserved.
+
+    string name                           = 7;
+    string comment                        = 8;
+    string address                        = 9;
+    uint32 port                           = 10;
+    string username                       = 11;
+    string password                       = 12;
+
+    // Fields 13-17 are reserved.
+
+    // List of custom fields.
+    repeated CustomField custom_field     = 18;
+
+    // Fields 19-23 are reserved.
+
+    // Session configurations.
+    auth.SessionType session_type         = 24;
+    SessionConfig session_config          = 25;
 }
 
 message ComputerGroup
 {
-    repeated Computer computer = 1;
-    repeated ComputerGroup computer_group = 2;
+    int64 create_time = 1;
+    int64 modify_time = 2;
 
-    string name = 3;
-    string comment = 4;
-    bool expanded = 5;
+    // Fields 3-5 are reserved.
+
+    // List of child computers.
+    repeated Computer computer = 6;
+
+    // List of child computer groups.
+    repeated ComputerGroup computer_group = 7;
+
+    string name = 8;
+    string comment = 9;
+    bool expanded = 10;
+
+    // Fields 11-15 are reserved.
+
+    // List of custom fields.
+    repeated CustomField custom_field = 16;
 }
 
-message Encrypted
+message Data
 {
-    // Random data before.
+    // Random data before. If the address book is not encrypted, then the field is not used.
     bytes salt1 = 1;
 
-    // Contains serialized root |ComputerGroup|.
-    bytes data = 2;
+    // Fields 2-6 are reserved.
 
-    // Random data after.
-    bytes salt2 = 3;
+    ComputerGroup root_group = 7;
+
+    // Fields 8-12 are reserved.
+
+    // Random data after. If the address book is not encrypted, then the field is not used.
+    bytes salt2 = 13;
 }
 
 message File
 {
-    // The version of the address book file.
-    Version version = 1;
-
     // Encryption type.
-    EncryptionType encryption_type = 2;
+    EncryptionType encryption_type = 1;
 
     // Number of hashing iterations for encryption/decryption key.
     // When the encryption is disabled, the field is not used.
-    uint64 hashing_rounds = 3;
+    int32 hashing_rounds = 2;
 
     // If encryption is enabled, contains salt (random data), which are added at each iteration
     // of the hashing to create the key.
     // When the encryption is disabled, the field is not used.
-    bytes salt = 4;
+    bytes hashing_salt = 3;
 
-    // If the encryption is enabled, it contains serialized and encrypted |Encrypted|.
-    // If the encryption is disabled, it contains a serialized |ComputerGroup|.
-    bytes data = 5;
+    // Fields 4-8 are reserved.
+
+    // If the encryption is enabled, it contains serialized and encrypted |Data|.
+    // If the encryption is disabled, it contains a serialized |Data|.
+    bytes data = 9;
 }

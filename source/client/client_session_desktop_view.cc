@@ -137,7 +137,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    onSendConfig(computer_->desktop_view_session());
+    onSendConfig(computer_->session_config().desktop_view());
 }
 
 } // namespace aspia

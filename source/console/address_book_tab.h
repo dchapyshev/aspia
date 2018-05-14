@@ -10,20 +10,21 @@
 
 #include <QWidget>
 
+#include "console/console_tab.h"
 #include "protocol/address_book.pb.h"
 #include "ui_address_book_tab.h"
 
 namespace aspia {
 
-class AddressBookTab : public QWidget
+class AddressBookTab : public ConsoleTab
 {
     Q_OBJECT
 
 public:
     ~AddressBookTab();
 
-    static AddressBookTab* createNewAddressBook(QWidget* parent = nullptr);
-    static AddressBookTab* openAddressBook(const QString& file_path, QWidget* parent = nullptr);
+    static AddressBookTab* createNewAddressBook(QWidget* parent);
+    static AddressBookTab* openAddressBook(const QString& file_path, QWidget* parent);
 
     QString addressBookName() const;
     QString addressBookPath() const;
@@ -51,7 +52,7 @@ signals:
     void computerDoubleClicked(proto::address_book::Computer* computer);
 
 protected:
-    // QWidget implementation.
+    // ConsoleTab implementation.
     void showEvent(QShowEvent* event) override;
 
 private slots:
@@ -66,9 +67,9 @@ private slots:
 
 private:
     AddressBookTab(const QString& file_path,
-                   proto::address_book::EncryptionType encryption_type,
-                   const QString& password,
-                   proto::address_book::ComputerGroup root_group,
+                   proto::address_book::File&& file,
+                   proto::address_book::Data&& data,
+                   QByteArray&& key,
                    QWidget* parent);
 
     void updateComputerList(ComputerGroupItem* computer_group);
@@ -77,13 +78,12 @@ private:
     Ui::AddressBookTab ui;
 
     QString file_path_;
-    QString password_;
+    QByteArray key_;
+
+    proto::address_book::File file_;
+    proto::address_book::Data data_;
+
     bool is_changed_ = false;
-
-    proto::address_book::EncryptionType encryption_type_ =
-        proto::address_book::ENCRYPTION_TYPE_NONE;
-
-    proto::address_book::ComputerGroup root_group_;
 
     Q_DISABLE_COPY(AddressBookTab)
 };

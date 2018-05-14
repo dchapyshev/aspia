@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CRYPTO__DATA_ENCRYPTOR_H
 #define _ASPIA_CRYPTO__DATA_ENCRYPTOR_H
 
-#include <string>
+#include <QByteArray>
 
 namespace aspia {
 
@@ -16,13 +16,20 @@ class DataEncryptor
 {
 public:
     // Creates a key from the password. |password| must be in UTF-8 encoding.
-    static std::string createKey(const std::string& password);
+    static QByteArray createKey(const QByteArray& password,
+                                const QByteArray& salt,
+                                int rounds);
 
-    static std::string encrypt(const std::string& source_data, const std::string& key);
+    static QByteArray encrypt(const QByteArray& source_data, const QByteArray& key);
 
-    static bool decrypt(const std::string& source_data,
-                        const std::string& key,
-                        std::string* decrypted_data);
+    static bool decrypt(const QByteArray& source_data,
+                        const QByteArray& key,
+                        QByteArray* decrypted_data);
+
+    static bool decrypt(const char* source_data,
+                        int source_size,
+                        const QByteArray& key,
+                        QByteArray* decrypted_data);
 
 private:
     Q_DISABLE_COPY(DataEncryptor)

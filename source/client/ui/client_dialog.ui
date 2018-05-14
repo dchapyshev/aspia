@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Aspia Client</string>
+   <string>Connection</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources/resources.qrc">

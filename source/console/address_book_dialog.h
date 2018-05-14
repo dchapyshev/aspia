@@ -19,23 +19,33 @@ class AddressBookDialog : public QDialog
 
 public:
     AddressBookDialog(QWidget* parent,
-                      proto::address_book::EncryptionType* encryption_type,
-                      QString* password,
-                      proto::address_book::ComputerGroup* root_group);
+                      proto::address_book::File* file,
+                      proto::address_book::Data* data,
+                      QByteArray* key);
     ~AddressBookDialog();
+
+protected:
+    // QDialog implementation.
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void encryptionTypedChanged(int item_index);
-    void showPasswordButtonToggled(bool checked);
+    void hashingRoundsChanged(int value);
+    void hashingSaltChanged(int value);
 
 private:
+    void setPasswordChanged();
     void showError(const QString& message);
 
     Ui::AddressBookDialog ui;
-    proto::address_book::ComputerGroup* root_group_;
-    proto::address_book::EncryptionType* encryption_type_;
-    QString* password_;
+
+    proto::address_book::File* file_;
+    proto::address_book::Data* data_;
+    QByteArray* key_;
+
+    bool password_changed_ = false;
+    bool value_reverting_ = false;
 
     Q_DISABLE_COPY(AddressBookDialog)
 };
