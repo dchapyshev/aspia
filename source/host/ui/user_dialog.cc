@@ -41,6 +41,8 @@ UserDialog::UserDialog(UserList* user_list, User* user, QWidget* parent)
 
         ui.edit_password->installEventFilter(this);
         ui.edit_password_repeat->installEventFilter(this);
+
+        password_changed_ = false;
     }
 
     ui.checkbox_disable_user->setChecked(!(user_->flags() & User::FLAG_ENABLED));
@@ -86,6 +88,8 @@ bool UserDialog::eventFilter(QObject* object, QEvent* event)
     if (event->type() == QEvent::MouseButtonDblClick &&
         (object == ui.edit_password || object == ui.edit_password_repeat))
     {
+        password_changed_ = true;
+
         ui.edit_password->setEnabled(true);
         ui.edit_password_repeat->setEnabled(true);
 
@@ -149,23 +153,31 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        if (ui.edit_password->text() != ui.edit_password_repeat->text())
+        if (password_changed_)
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The passwords you entered do not match."),
-                                 QMessageBox::Ok);
-            return;
-        }
+            QString password = ui.edit_password->text();
+            QString password_repeat = ui.edit_password_repeat->text();
 
-        QString password = ui.edit_password->text();
-        if (!User::isValidPassword(password))
-        {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("Password can not be shorter than 8 characters."),
-                                 QMessageBox::Ok);
-            return;
+            if (password != password_repeat)
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("The passwords you entered do not match."),
+                                     QMessageBox::Ok);
+                return;
+            }
+
+            
+            if (!User::isValidPassword(password))
+            {
+                QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("Password can not be shorter than 8 characters."),
+                                     QMessageBox::Ok);
+                return;
+            }
+
+            user_->setPassword(password);
         }
 
         quint32 flags = 0;
@@ -181,7 +193,6 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         user_->setName(name);
-        user_->setPassword(password);
         user_->setFlags(flags);
         user_->setSessions(sessions);
 

@@ -32,8 +32,11 @@ private slots:
 
 private:
     Ui::UserDialog ui;
+
     UserList* user_list_;
     User* user_;
+
+    bool password_changed_ = true;
 
     Q_DISABLE_COPY(UserDialog)
 };
