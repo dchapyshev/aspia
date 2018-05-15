@@ -102,6 +102,13 @@ bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
     if (event->type() == QEvent::MouseButtonDblClick &&
         (object == ui.edit_password || object == ui.edit_password_repeat))
     {
+        proto::address_book::EncryptionType encryption_type =
+            static_cast<proto::address_book::EncryptionType>(
+                ui.combo_encryption->currentData().toInt());
+
+        if (encryption_type == proto::address_book::ENCRYPTION_TYPE_NONE)
+            return false;
+
         setPasswordChanged();
     }
 
