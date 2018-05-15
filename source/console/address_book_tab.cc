@@ -413,8 +413,8 @@ void AddressBookTab::removeComputerGroup()
     if (QMessageBox(QMessageBox::Question,
                     tr("Confirmation"),
                     message,
-                    QMessageBox::Ok | QMessageBox::Cancel,
-                    this).exec() == QMessageBox::Ok)
+                    QMessageBox::Yes | QMessageBox::No,
+                    this).exec() == QMessageBox::Yes)
     {
         if (parent_item->deleteChildComputerGroup(current_item))
             setChanged(true);
@@ -433,8 +433,8 @@ void AddressBookTab::removeComputer()
     if (QMessageBox(QMessageBox::Question,
                     tr("Confirmation"),
                     message,
-                    QMessageBox::Ok | QMessageBox::Cancel,
-                    this).exec() == QMessageBox::Ok)
+                    QMessageBox::Yes | QMessageBox::No,
+                    this).exec() == QMessageBox::Yes)
     {
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
         if (parent_group->deleteChildComputer(current_item->computer()))
