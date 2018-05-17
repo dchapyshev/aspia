@@ -18,8 +18,8 @@ template <class Application>
 class Service : public ServiceImpl
 {
 public:
-    explicit Service(const QString& name)
-        : ServiceImpl(name)
+    explicit Service(const QString& name, const QString& display_name, const QString& description)
+        : ServiceImpl(name, display_name, description)
     {
         // Nothing
     }

@@ -14,7 +14,7 @@
 
 namespace aspia {
 
-UserDialog::UserDialog(UserList* user_list, User* user, QWidget* parent)
+UserDialog::UserDialog(QList<User>* user_list, User* user, QWidget* parent)
     : QDialog(parent),
       user_list_(user_list),
       user_(user)

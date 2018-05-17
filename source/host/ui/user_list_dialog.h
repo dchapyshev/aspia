@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__UI__USER_LIST_DIALOG_H
 #define _ASPIA_HOST__UI__USER_LIST_DIALOG_H
 
-#include "host/user_list.h"
+#include "host/user.h"
 #include "ui_user_list_dialog.h"
 
 namespace aspia {
@@ -33,7 +33,7 @@ private:
     void reloadUserList();
 
     Ui::UserListDialog ui;
-    UserList user_list_;
+    QList<User> user_list_;
 
     Q_DISABLE_COPY(UserListDialog)
 };

@@ -27,6 +27,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
     ${PROJECT_SOURCE_DIR}/base/service.h
+    ${PROJECT_SOURCE_DIR}/base/service_controller.cc
+    ${PROJECT_SOURCE_DIR}/base/service_controller.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
     ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
@@ -240,6 +242,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.h
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.h
+    ${PROJECT_SOURCE_DIR}/host/host_settings.cc
+    ${PROJECT_SOURCE_DIR}/host/host_settings.h
     ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.cc
     ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/host/input_injector.cc
@@ -247,9 +251,7 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
     ${PROJECT_SOURCE_DIR}/host/user.cc
-    ${PROJECT_SOURCE_DIR}/host/user.h
-    ${PROJECT_SOURCE_DIR}/host/user_list.cc
-    ${PROJECT_SOURCE_DIR}/host/user_list.h)
+    ${PROJECT_SOURCE_DIR}/host/user.h)
 
 list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.cc

@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__UI__USER_DIALOG_H
 #define _ASPIA_HOST__UI__USER_DIALOG_H
 
-#include "host/user_list.h"
+#include "host/user.h"
 #include "ui_user_dialog.h"
 
 namespace aspia {
@@ -18,7 +18,7 @@ class UserDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(UserList* user_list, User* user, QWidget* parent = nullptr);
+    UserDialog(QList<User>* user_list, User* user, QWidget* parent = nullptr);
     ~UserDialog() = default;
 
 protected:
@@ -33,7 +33,7 @@ private slots:
 private:
     Ui::UserDialog ui;
 
-    UserList* user_list_;
+    QList<User>* user_list_;
     User* user_;
 
     bool password_changed_ = true;

@@ -65,12 +65,6 @@ public:
         return Traits::isValid(object_);
     }
 
-    ScopedObject& operator=(T handle)
-    {
-        reset(handle);
-        return *this;
-    }
-
     ScopedObject& operator=(ScopedObject&& other) noexcept
     {
         Traits::close(object_);
@@ -126,13 +120,13 @@ class EventLogObjectTraits
 {
 public:
     // Closes the handle.
-    static void Close(HANDLE object)
+    static void close(HANDLE object)
     {
-        if (IsValid(object))
+        if (isValid(object))
             CloseEventLog(object);
     }
 
-    static bool IsValid(HANDLE object)
+    static bool isValid(HANDLE object)
     {
         return (object != nullptr);
     }

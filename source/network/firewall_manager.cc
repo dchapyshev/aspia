@@ -23,7 +23,7 @@ FirewallManager::FirewallManager(const QString& application_path)
     : application_path_(application_path)
 {
     // Firewall manager does not work with the wrong path separators.
-    application_path_.replace('/', '\\');
+    application_path_.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
     // Retrieve INetFwPolicy2
     HRESULT hr = CoCreateInstance(CLSID_NetFwPolicy2, nullptr, CLSCTX_ALL,
@@ -89,7 +89,7 @@ bool FirewallManager::hasAnyRule()
     return !rules.isEmpty();
 }
 
-bool FirewallManager::addTCPRule(const QString& rule_name,
+bool FirewallManager::addTcpRule(const QString& rule_name,
                                  const QString& description,
                                  int port)
 {

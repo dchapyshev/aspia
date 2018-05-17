@@ -64,7 +64,7 @@ HostUserAuthorizer::~HostUserAuthorizer()
     stop();
 }
 
-void HostUserAuthorizer::setUserList(const UserList& user_list)
+void HostUserAuthorizer::setUserList(const QList<User>& user_list)
 {
     user_list_ = user_list;
 }

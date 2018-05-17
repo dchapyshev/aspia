@@ -14,6 +14,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDebug>
 #include <QMutex>
@@ -21,6 +22,7 @@
 #include <QThread>
 #include <QWaitCondition>
 
+#include "base/service_controller.h"
 #include "base/system_error_code.h"
 
 namespace aspia {
@@ -35,7 +37,8 @@ public:
 
     static ServiceHandler* instance;
 
-    bool service_main_called = false;
+    bool service_handler_started = true;
+    bool running_in_console = false;
 
     QSemaphore create_app_start_semaphore;
     QSemaphore create_app_end_semaphore;
@@ -80,8 +83,8 @@ public:
     public:
         SessionChangeEvent(quint32 event, quint32 session_id)
             : QEvent(QEvent::Type(kSessionChangeEvent)),
-            event_(event),
-            session_id_(session_id)
+              event_(event),
+              session_id_(session_id)
         {
             // Nothing
         }
@@ -163,7 +166,19 @@ void ServiceHandler::run()
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
-        qWarning() << "StartServiceCtrlDispatcherW failed: " << lastSystemErrorString();
+        DWORD error_code = GetLastError();
+
+        if (error_code == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
+        {
+            running_in_console = true;
+        }
+        else
+        {
+            qWarning() << "StartServiceCtrlDispatcherW failed: "
+                       << systemErrorCodeToString(error_code);
+        }
+
+        service_handler_started = false;
         create_app_start_semaphore.release();
     }
 }
@@ -173,8 +188,6 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 {
     if (!instance || !ServiceImpl::instance())
         return;
-
-    instance->service_main_called = true;
 
     // Start creating the QCoreApplication instance.
     instance->create_app_start_semaphore.release();
@@ -347,8 +360,12 @@ void ServiceEventHandler::customEvent(QEvent* event)
 
 ServiceImpl* ServiceImpl::instance_ = nullptr;
 
-ServiceImpl::ServiceImpl(const QString& name)
-    : name_(name)
+ServiceImpl::ServiceImpl(const QString& name,
+                         const QString& display_name,
+                         const QString& description)
+    : name_(name),
+      display_name_(display_name),
+      description_(description)
 {
     instance_ = this;
 }
@@ -364,15 +381,11 @@ int ServiceImpl::exec(int argc, char* argv[])
     if (!handler->create_app_start_semaphore.tryAcquire(1, 20000))
     {
         qWarning("Function serviceMain was not called at the specified time interval");
-        handler->wait();
         return 1;
     }
 
-    if (!handler->service_main_called)
-    {
-        handler->wait();
+    if (!handler->service_handler_started && !handler->running_in_console)
         return 1;
-    }
 
     // Creates QCoreApplication.
     createApplication(argc, argv);
@@ -382,6 +395,44 @@ int ServiceImpl::exec(int argc, char* argv[])
     {
         qWarning("Application instance is null");
         return 1;
+    }
+
+    if (handler->running_in_console)
+    {
+        QCommandLineOption install_option(QStringLiteral("install"),
+                                          QCoreApplication::tr("Install service"));
+        QCommandLineOption remove_option(QStringLiteral("remove"),
+                                         QCoreApplication::tr("Remove service"));
+        QCommandLineParser parser;
+
+        parser.addHelpOption();
+        parser.addOption(install_option);
+        parser.addOption(remove_option);
+
+        parser.process(application->arguments());
+
+        if (parser.isSet(install_option))
+        {
+            ServiceController controller = ServiceController::install(
+                name_, display_name_, application->applicationFilePath());
+            if (controller.isValid())
+            {
+                controller.setDescription(description_);
+                controller.start();
+            }
+        }
+        else if (parser.isSet(remove_option))
+        {
+            ServiceController controller = ServiceController::open(name_);
+            if (controller.isValid())
+            {
+                if (controller.isRunning())
+                    controller.stop();
+                controller.remove();
+            }
+        }
+
+        return 0;
     }
 
     QScopedPointer<ServiceEventHandler> event_handler(new ServiceEventHandler());
@@ -397,7 +448,6 @@ int ServiceImpl::exec(int argc, char* argv[])
     handler->wait();
 
     event_handler.reset();
-
     return ret;
 }
 

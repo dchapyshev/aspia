@@ -11,7 +11,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include "host/user_list.h"
+#include "host/user.h"
 #include "network/network_server.h"
 #include "protocol/authorization.pb.h"
 
@@ -28,7 +28,7 @@ public:
     HostServer(QObject* parent = nullptr);
     ~HostServer();
 
-    bool start(int port);
+    bool start();
     void stop();
     void setSessionChanged(quint32 event, quint32 session_id);
 
@@ -41,7 +41,7 @@ private slots:
     void onHostFinished(Host* host);
 
 private:
-    UserList user_list_;
+    QList<User> user_list_;
     QPointer<NetworkServer> network_server_;
 
     Q_DISABLE_COPY(HostServer)

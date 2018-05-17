@@ -9,7 +9,6 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QSettings>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -18,7 +17,6 @@
 #include "base/win/security_helpers.h"
 #include "base/system_error_code.h"
 #include "host/host_server.h"
-#include "network/firewall_manager.h"
 #include "version.h"
 
 namespace aspia {
@@ -49,12 +47,13 @@ const wchar_t kComProcessMandatoryLabel[] =
     SDDL_SACL L":"
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
-const char kFirewallRuleName[] = "Aspia Host Service";
-
 } // namespace
 
 HostService::HostService()
-    : Service<QCoreApplication>(QStringLiteral("aspia-host-service"))
+    : Service<QCoreApplication>(
+        QStringLiteral("aspia-host-service"),
+        QCoreApplication::tr("Aspia Host Service"),
+        QCoreApplication::tr("Accepts incoming remote desktop connections to this computer."))
 {
     // Nothing
 }
@@ -82,20 +81,8 @@ void HostService::start()
 
     initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
-    QSettings settings;
-    int port = settings.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();
-
-    FirewallManager firewall(QCoreApplication::applicationFilePath());
-    if (firewall.isValid())
-    {
-        firewall.addTCPRule(kFirewallRuleName,
-                            QCoreApplication::tr("Allow incoming connections"),
-                            port);
-    }
-
     server_ = new HostServer();
-
-    if (!server_->start(port))
+    if (!server_->start())
     {
         delete server_;
         app->quit();
@@ -105,15 +92,6 @@ void HostService::start()
 void HostService::stop()
 {
     delete server_;
-
-    // Limiting the scope of the class.
-    // After deinitializing the COM, the destructor will not be able to complete its work.
-    {
-        FirewallManager firewall(QCoreApplication::applicationFilePath());
-        if (firewall.isValid())
-            firewall.deleteRuleByName(kFirewallRuleName);
-    }
-
     com_initializer_.reset();
 }
 

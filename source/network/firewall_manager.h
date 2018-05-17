@@ -32,7 +32,7 @@ public:
 
     // Adds a firewall rule allowing inbound connections to the application on
     // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
-    bool addTCPRule(const QString& rule_name,
+    bool addTcpRule(const QString& rule_name,
                     const QString& description,
                     int port);
 

@@ -7,13 +7,22 @@
 
 #include "host/host_server.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 
 #include "host/win/host.h"
+#include "host/host_settings.h"
 #include "host/host_user_authorizer.h"
+#include "network/firewall_manager.h"
 #include "network/network_channel.h"
 
 namespace aspia {
+
+namespace {
+
+const char kFirewallRuleName[] = "Aspia Host Service";
+
+} // namespace
 
 HostServer::HostServer(QObject* parent)
     : QObject(parent)
@@ -26,7 +35,7 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start(int port)
+bool HostServer::start()
 {
     if (!network_server_.isNull())
     {
@@ -34,11 +43,23 @@ bool HostServer::start(int port)
         return false;
     }
 
-    user_list_ = readUserList();
+    HostSettings settings;
+
+    user_list_ = settings.userList();
     if (user_list_.isEmpty())
     {
         qWarning("Empty user list");
         return false;
+    }
+
+    int port = settings.tcpPort();
+
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+    {
+        firewall.addTcpRule(kFirewallRuleName,
+                            QCoreApplication::tr("Allow incoming TCP connections"),
+                            port);
     }
 
     network_server_ = new NetworkServer(this);
@@ -61,6 +82,10 @@ void HostServer::stop()
     }
 
     user_list_.clear();
+
+    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    if (firewall.isValid())
+        firewall.deleteRuleByName(kFirewallRuleName);
 }
 
 void HostServer::setSessionChanged(quint32 event, quint32 session_id)

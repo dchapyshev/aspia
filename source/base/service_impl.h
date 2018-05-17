@@ -18,11 +18,15 @@ class ServiceEventHandler;
 class ServiceImpl
 {
 public:
-    ServiceImpl(const QString& name);
+    ServiceImpl(const QString& name, const QString& display_name, const QString& description);
     virtual ~ServiceImpl() = default;
 
     static ServiceImpl* instance() { return instance_; }
+
     QString serviceName() const { return name_; }
+    QString serviceDisplayName() const { return display_name_; }
+    QString serviceDescription() const { return description_; }
+
     int exec(int argc, char* argv[]);
 
 protected:
@@ -40,7 +44,12 @@ protected:
 
 private:
     static ServiceImpl* instance_;
+
     QString name_;
+    QString display_name_;
+    QString description_;
+
+    Q_DISABLE_COPY(ServiceImpl)
 };
 
 } // namespace aspia

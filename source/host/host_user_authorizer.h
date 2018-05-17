@@ -11,7 +11,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include "host/user_list.h"
+#include "host/user.h"
 #include "protocol/authorization.pb.h"
 
 namespace aspia {
@@ -35,7 +35,7 @@ public:
     HostUserAuthorizer(QObject* parent = nullptr);
     ~HostUserAuthorizer();
 
-    void setUserList(const UserList& user_list);
+    void setUserList(const QList<User>& user_list);
     void setNetworkChannel(NetworkChannel* network_channel);
 
     NetworkChannel* networkChannel();
@@ -62,7 +62,7 @@ private slots:
 private:
     State state_ = NotStarted;
 
-    UserList user_list_;
+    QList<User> user_list_;
     QPointer<NetworkChannel> network_channel_;
 
     QByteArray nonce_;
