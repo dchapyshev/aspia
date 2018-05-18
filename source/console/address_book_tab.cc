@@ -114,7 +114,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
     {
         for (int i = 0; i < item->childCount(); ++i)
         {
-            ComputerGroupItem* child_item = reinterpret_cast<ComputerGroupItem*>(item->child(i));
+            ComputerGroupItem* child_item = dynamic_cast<ComputerGroupItem*>(item->child(i));
 
             if (child_item->IsExpanded())
                 child_item->setExpanded(true);
@@ -271,7 +271,7 @@ QString AddressBookTab::addressBookPath() const
 
 proto::address_book::Computer* AddressBookTab::currentComputer() const
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return nullptr;
 
@@ -291,7 +291,7 @@ void AddressBookTab::saveAs()
 void AddressBookTab::addComputerGroup()
 {
     ComputerGroupItem* parent_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!parent_item)
         return;
 
@@ -315,7 +315,7 @@ void AddressBookTab::addComputerGroup()
 void AddressBookTab::addComputer()
 {
     ComputerGroupItem* parent_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!parent_item)
         return;
 
@@ -360,11 +360,11 @@ void AddressBookTab::modifyAddressBook()
 void AddressBookTab::modifyComputerGroup()
 {
     ComputerGroupItem* current_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
         return;
 
-    ComputerGroupItem* parent_item = reinterpret_cast<ComputerGroupItem*>(current_item->parent());
+    ComputerGroupItem* parent_item = dynamic_cast<ComputerGroupItem*>(current_item->parent());
     if (!parent_item)
         return;
 
@@ -381,7 +381,7 @@ void AddressBookTab::modifyComputerGroup()
 
 void AddressBookTab::modifyComputer()
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return;
 
@@ -399,11 +399,11 @@ void AddressBookTab::modifyComputer()
 void AddressBookTab::removeComputerGroup()
 {
     ComputerGroupItem* current_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
         return;
 
-    ComputerGroupItem* parent_item = reinterpret_cast<ComputerGroupItem*>(current_item->parent());
+    ComputerGroupItem* parent_item = dynamic_cast<ComputerGroupItem*>(current_item->parent());
     if (!parent_item)
         return;
 
@@ -424,7 +424,7 @@ void AddressBookTab::removeComputerGroup()
 
 void AddressBookTab::removeComputer()
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
     if (!current_item)
         return;
 
@@ -448,7 +448,7 @@ void AddressBookTab::removeComputer()
 
 void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 {
-    ComputerGroupItem* current_item = reinterpret_cast<ComputerGroupItem*>(item);
+    ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
         return;
 
@@ -460,7 +460,7 @@ void AddressBookTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 void AddressBookTab::onGroupContextMenu(const QPoint& point)
 {
     ComputerGroupItem* current_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->itemAt(point));
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->itemAt(point));
     if (!current_item)
         return;
 
@@ -473,7 +473,7 @@ void AddressBookTab::onGroupContextMenu(const QPoint& point)
 
 void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
 {
-    ComputerGroupItem* current_item = reinterpret_cast<ComputerGroupItem*>(item);
+    ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
         return;
 
@@ -483,7 +483,7 @@ void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
 
 void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
 {
-    ComputerGroupItem* current_item = reinterpret_cast<ComputerGroupItem*>(item);
+    ComputerGroupItem* current_item = dynamic_cast<ComputerGroupItem*>(item);
     if (!current_item)
         return;
 
@@ -494,7 +494,7 @@ void AddressBookTab::onGroupItemExpanded(QTreeWidgetItem* item)
 void AddressBookTab::onGroupItemDropped()
 {
     ComputerGroupItem* current_item =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_item)
         return;
 
@@ -504,7 +504,7 @@ void AddressBookTab::onGroupItemDropped()
 
 void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column */)
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(item);
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
     if (!current_item)
         return;
 
@@ -513,7 +513,7 @@ void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column 
 
 void AddressBookTab::onComputerContextMenu(const QPoint& point)
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(ui.tree_computer->itemAt(point));
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->itemAt(point));
     if (!current_item)
         return;
 
@@ -525,7 +525,7 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
 
 void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-    ComputerItem* current_item = reinterpret_cast<ComputerItem*>(item);
+    ComputerItem* current_item = dynamic_cast<ComputerItem*>(item);
     if (!current_item)
         return;
 
@@ -535,7 +535,7 @@ void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int colu
 void AddressBookTab::showEvent(QShowEvent* event)
 {
     ComputerGroupItem* current_group =
-        reinterpret_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
     if (!current_group)
     {
         emit computerGroupActivated(false, false);
@@ -546,8 +546,7 @@ void AddressBookTab::showEvent(QShowEvent* event)
         emit computerGroupActivated(true, is_root);
     }
 
-    ComputerItem* current_computer =
-        reinterpret_cast<ComputerItem*>(ui.tree_computer->currentItem());
+    ComputerItem* current_computer = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());
 
     if (!current_computer)
         emit computerActivated(false);
