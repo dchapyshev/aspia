@@ -69,7 +69,7 @@ QList<User> HostSettings::userList() const
     return user_list;
 }
 
-bool HostSettings::setUserList(const QList<User> user_list)
+bool HostSettings::setUserList(const QList<User>& user_list)
 {
     if (!settings_.isWritable())
         return false;

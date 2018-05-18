@@ -24,7 +24,7 @@ public:
     bool setTcpPort(int port);
 
     QList<User> userList() const;
-    bool setUserList(const QList<User> user_list);
+    bool setUserList(const QList<User>& user_list);
 
 private:
     mutable QSettings settings_;

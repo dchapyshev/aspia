@@ -12,12 +12,12 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QSettings>
 
 #include "client/client.h"
 #include "client/ui/client_dialog.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
+#include "console/console_settings.h"
 
 namespace aspia {
 
@@ -26,9 +26,9 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 {
     ui.setupUi(this);
 
-    QSettings settings;
-    restoreGeometry(settings.value(QStringLiteral("WindowGeometry")).toByteArray());
-    restoreState(settings.value(QStringLiteral("WindowState")).toByteArray());
+    ConsoleSettings settings;
+    restoreGeometry(settings.windowGeometry());
+    restoreState(settings.windowState());
 
     connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::newAction);
     connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::openAction);
@@ -97,20 +97,17 @@ void ConsoleWindow::newAction()
 
 void ConsoleWindow::openAction()
 {
-    QSettings settings;
-
-    QString directory_path =
-        settings.value(QStringLiteral("LastDirectory"), QDir::homePath()).toString();
+    ConsoleSettings settings;
 
     QString file_path =
         QFileDialog::getOpenFileName(this,
                                      tr("Open Address Book"),
-                                     directory_path,
+                                     settings.lastDirectory(),
                                      tr("Aspia Address Book (*.aab)"));
     if (file_path.isEmpty())
         return;
 
-    settings.setValue(QStringLiteral("LastDirectory"), QFileInfo(file_path).absolutePath());
+    settings.setLastDirectory(QFileInfo(file_path).absolutePath());
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
     {
@@ -538,9 +535,9 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
         }
     }
 
-    QSettings settings;
-    settings.setValue(QStringLiteral("WindowGeometry"), saveGeometry());
-    settings.setValue(QStringLiteral("WindowState"), saveState());
+    ConsoleSettings settings;
+    settings.setWindowGeometry(saveGeometry());
+    settings.setWindowState(saveState());
 
     QApplication::quit();
     QMainWindow::closeEvent(event);

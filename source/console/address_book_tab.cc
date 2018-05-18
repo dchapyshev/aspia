@@ -17,6 +17,7 @@
 #include "console/computer_dialog.h"
 #include "console/computer_group_dialog.h"
 #include "console/computer_item.h"
+#include "console/console_settings.h"
 #include "console/open_address_book_dialog.h"
 #include "crypto/data_encryptor.h"
 
@@ -595,18 +596,23 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             return false;
     }
 
-    file_path_ = file_path;
-    if (file_path_.isEmpty())
+    QString path = file_path;
+
+    if (path.isEmpty())
     {
-        file_path_ = QFileDialog::getSaveFileName(this,
-                                                  tr("Save Address Book"),
-                                                  QDir::homePath(),
-                                                  tr("Aspia Address Book (*.aab)"));
-        if (file_path_.isEmpty())
+        ConsoleSettings settings;
+
+        path = QFileDialog::getSaveFileName(this,
+                                            tr("Save Address Book"),
+                                            settings.lastDirectory(),
+                                            tr("Aspia Address Book (*.aab)"));
+        if (path.isEmpty())
             return false;
+
+        settings.setLastDirectory(QFileInfo(path).absolutePath());
     }
 
-    QFile file(file_path_);
+    QFile file(path);
     if (!file.open(QIODevice::WriteOnly))
     {
         showSaveError(this, tr("Unable to create or open address book file."));
@@ -620,6 +626,8 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         showSaveError(this, tr("Unable to write address book file."));
         return false;
     }
+
+    file_path_ = path;
 
     setChanged(false);
     return true;
