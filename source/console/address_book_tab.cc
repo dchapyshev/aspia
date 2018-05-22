@@ -411,11 +411,11 @@ void AddressBookTab::removeComputerGroup()
         tr("Are you sure you want to delete computer group \"%1\" and all child items?")
         .arg(QString::fromStdString(current_item->computerGroup()->name()));
 
-    if (QMessageBox(QMessageBox::Question,
-                    tr("Confirmation"),
-                    message,
-                    QMessageBox::Yes | QMessageBox::No,
-                    this).exec() == QMessageBox::Yes)
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              message,
+                              QMessageBox::Yes,
+                              QMessageBox::No) == QMessageBox::Yes)
     {
         if (parent_item->deleteChildComputerGroup(current_item))
             setChanged(true);
@@ -431,11 +431,11 @@ void AddressBookTab::removeComputer()
     QString message = tr("Are you sure you want to delete computer \"%1\"?")
         .arg(QString::fromStdString(current_item->computer()->name()));
 
-    if (QMessageBox(QMessageBox::Question,
-                    tr("Confirmation"),
-                    message,
-                    QMessageBox::Yes | QMessageBox::No,
-                    this).exec() == QMessageBox::Yes)
+    if (QMessageBox::question(this,
+                              tr("Confirmation"),
+                              message,
+                              QMessageBox::Yes,
+                              QMessageBox::No) == QMessageBox::Yes)
     {
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
         if (parent_group->deleteChildComputer(current_item->computer()))
