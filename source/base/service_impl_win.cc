@@ -17,10 +17,11 @@
 #include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDebug>
-#include <QMutex>
 #include <QSemaphore>
 #include <QThread>
-#include <QWaitCondition>
+
+#include <condition_variable>
+#include <mutex>
 
 #include "base/service_controller.h"
 #include "base/system_error_code.h"
@@ -43,8 +44,8 @@ public:
     QSemaphore create_app_start_semaphore;
     QSemaphore create_app_end_semaphore;
 
-    QWaitCondition event_condition;
-    QMutex event_lock;
+    std::condition_variable event_condition;
+    std::mutex event_lock;
     bool event_processed = false;
 
 protected:
@@ -207,16 +208,16 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     }
 
     instance->setStatus(SERVICE_START_PENDING);
-    instance->event_lock.lock();
+
+    std::unique_lock<std::mutex> lock(instance->event_lock);
     instance->event_processed = false;
 
     ServiceEventHandler::postStartEvent();
 
     // Wait for the event to be processed by the application.
     while (!instance->event_processed)
-        instance->event_condition.wait(&instance->event_lock);
+        instance->event_condition.wait(lock);
 
-    instance->event_lock.unlock();
     instance->setStatus(SERVICE_RUNNING);
 }
 
@@ -234,7 +235,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
             if (!instance)
                 return NO_ERROR;
 
-            instance->event_lock.lock();
+            std::unique_lock<std::mutex> lock(instance->event_lock);
             instance->event_processed = false;
 
             // Post event to application.
@@ -243,9 +244,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
 
             // Wait for the event to be processed by the application.
             while (!instance->event_processed)
-                instance->event_condition.wait(&instance->event_lock);
-
-            instance->event_lock.unlock();
+                instance->event_condition.wait(lock);
         }
         return NO_ERROR;
 
@@ -258,7 +257,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
             if (control_code == SERVICE_CONTROL_STOP)
                 instance->setStatus(SERVICE_STOP_PENDING);
 
-            instance->event_lock.lock();
+            std::unique_lock<std::mutex> lock(instance->event_lock);
             instance->event_processed = false;
 
             // Post event to application.
@@ -266,9 +265,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
 
             // Wait for the event to be processed by the application.
             while (!instance->event_processed)
-                instance->event_condition.wait(&instance->event_lock);
-
-            instance->event_lock.unlock();
+                instance->event_condition.wait(lock);
         }
         return NO_ERROR;
 
