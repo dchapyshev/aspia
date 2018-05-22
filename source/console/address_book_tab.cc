@@ -115,11 +115,13 @@ AddressBookTab::AddressBookTab(const QString& file_path,
         for (int i = 0; i < item->childCount(); ++i)
         {
             ComputerGroupItem* child_item = dynamic_cast<ComputerGroupItem*>(item->child(i));
+            if (child_item)
+            {
+                if (child_item->IsExpanded())
+                    child_item->setExpanded(true);
 
-            if (child_item->IsExpanded())
-                child_item->setExpanded(true);
-
-            restore_child(child_item);
+                restore_child(child_item);
+            }
         }
     };
 
