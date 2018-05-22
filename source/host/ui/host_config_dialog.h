@@ -33,7 +33,8 @@ private slots:
 
 private:
     void reloadUserList();
-    void realodServiceStatus();
+    void reloadServiceStatus();
+    bool restartService();
 
     enum class ServiceStatus
     {

@@ -61,7 +61,7 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
 
     user_list_ = settings.userList();
 
-    realodServiceStatus();
+    reloadServiceStatus();
     reloadUserList();
 
     ui.spinbox_port->setValue(settings.tcpPort());
@@ -122,7 +122,7 @@ void HostConfigDialog::onServiceInstallRemove()
             break;
     }
 
-    realodServiceStatus();
+    reloadServiceStatus();
 }
 
 void HostConfigDialog::onServiceStartStop()
@@ -163,7 +163,7 @@ void HostConfigDialog::onServiceStartStop()
             break;
     }
 
-    realodServiceStatus();
+    reloadServiceStatus();
 }
 
 void HostConfigDialog::onContextMenu(const QPoint& point)
@@ -244,13 +244,38 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!settings.isWritable())
         {
             QString message =
-                tr("The configuration can not be written. Make sure that you have sufficient rights to write.");
+                tr("The configuration can not be written. "
+                   "Make sure that you have sufficient rights to write.");
+
             QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
             return;
         }
 
         settings.setTcpPort(ui.spinbox_port->value());
         settings.setUserList(user_list_);
+
+        if (service_status_ == ServiceStatus::Started)
+        {
+            QString message =
+                tr("Service configuration changed. "
+                   "For the changes to take effect, you must restart the service. "
+                   "Restart the service now?");
+
+            if (QMessageBox::question(this,
+                                      tr("Confirmation"),
+                                      message,
+                                      QMessageBox::Yes,
+                                      QMessageBox::No) == QMessageBox::Yes)
+            {
+                if (!restartService())
+                {
+                    QMessageBox::warning(this,
+                                         tr("Warning"),
+                                         tr("Could not restart the service."),
+                                         QMessageBox::Ok);
+                }
+            }
+        }
     }
 
     if (standard_button == QDialogButtonBox::Apply)
@@ -284,7 +309,7 @@ void HostConfigDialog::reloadUserList()
     ui.action_delete->setEnabled(false);
 }
 
-void HostConfigDialog::realodServiceStatus()
+void HostConfigDialog::reloadServiceStatus()
 {
     HostService host_service;
 
@@ -328,6 +353,19 @@ void HostConfigDialog::realodServiceStatus()
         ui.label_service_status->setText(tr("Not Installed"));
         ui.pushbutton_service_start_stop->setVisible(false);
     }
+}
+
+bool HostConfigDialog::restartService()
+{
+    HostService host_service;
+
+    ServiceController controller = ServiceController::open(host_service.serviceName());
+    if (!controller.isValid())
+        return false;
+
+    controller.stop();
+
+    return controller.start();
 }
 
 } // namespace aspia
