@@ -17,7 +17,6 @@
 #include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDebug>
-#include <QSemaphore>
 #include <QThread>
 
 #include <condition_variable>
@@ -38,11 +37,19 @@ public:
 
     static ServiceHandler* instance;
 
-    bool service_handler_started = true;
-    bool running_in_console = false;
+    enum StartupState
+    {
+        NotStarted,
+        ErrorOccurred,
+        ServiceMainCalled,
+        ApplicationCreated,
+        RunningAsConsole,
+        RunningAsService
+    };
 
-    QSemaphore create_app_start_semaphore;
-    QSemaphore create_app_end_semaphore;
+    std::condition_variable startup_condition;
+    std::mutex startup_lock;
+    StartupState startup_state = NotStarted;
 
     std::condition_variable event_condition;
     std::mutex event_lock;
@@ -167,20 +174,21 @@ void ServiceHandler::run()
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
-        DWORD error_code = GetLastError();
+        std::scoped_lock<std::mutex> lock(instance->startup_lock);
 
+        DWORD error_code = GetLastError();
         if (error_code == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
         {
-            running_in_console = true;
+            instance->startup_state = RunningAsConsole;
         }
         else
         {
             qWarning() << "StartServiceCtrlDispatcherW failed: "
                        << systemErrorCodeToString(error_code);
+            instance->startup_state = ErrorOccurred;
         }
 
-        service_handler_started = false;
-        create_app_start_semaphore.release();
+        instance->startup_condition.notify_all();
     }
 }
 
@@ -191,10 +199,21 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
         return;
 
     // Start creating the QCoreApplication instance.
-    instance->create_app_start_semaphore.release();
+    {
+        std::scoped_lock<std::mutex> lock(instance->startup_lock);
+        instance->startup_state = ServiceMainCalled;
+        instance->startup_condition.notify_all();
+    }
 
     // Waiting for the completion of the creation.
-    instance->create_app_end_semaphore.acquire();
+    {
+        std::unique_lock<std::mutex> lock(instance->startup_lock);
+
+        while (instance->startup_state != ApplicationCreated)
+            instance->startup_condition.wait(lock);
+
+        instance->startup_state = RunningAsService;
+    }
 
     instance->status_handle_ = RegisterServiceCtrlHandlerExW(
         reinterpret_cast<const wchar_t*>(ServiceImpl::instance()->serviceName().utf16()),
@@ -328,11 +347,12 @@ void ServiceEventHandler::customEvent(QEvent* event)
 
         case ServiceEventHandler::kSessionChangeEvent:
         {
-            SessionChangeEvent* session_change_event =
-                reinterpret_cast<SessionChangeEvent*>(event);
+            SessionChangeEvent* session_change_event = dynamic_cast<SessionChangeEvent*>(event);
+            if (!session_change_event)
+                return;
 
-            ServiceImpl::instance()->sessionChange(
-                session_change_event->event(), session_change_event->sessionId());
+            ServiceImpl::instance()->sessionChange(session_change_event->event(),
+                                                   session_change_event->sessionId());
         }
         break;
 
@@ -340,15 +360,13 @@ void ServiceEventHandler::customEvent(QEvent* event)
             return;
     }
 
-    ServiceHandler::instance->event_lock.lock();
+    std::scoped_lock<std::mutex> lock(ServiceHandler::instance->event_lock);
 
     // Set the event flag is processed.
     ServiceHandler::instance->event_processed = true;
 
     // Notify waiting thread for the end of processing.
     ServiceHandler::instance->event_condition.notify_all();
-
-    ServiceHandler::instance->event_lock.unlock();
 }
 
 //================================================================================================
@@ -371,18 +389,23 @@ int ServiceImpl::exec(int argc, char* argv[])
 {
     QScopedPointer<ServiceHandler> handler(new ServiceHandler());
 
-    // Starts handler thread.
-    handler->start();
-
     // Waiting for the launch ServiceHandler::serviceMain.
-    if (!handler->create_app_start_semaphore.tryAcquire(1, 20000))
     {
-        qWarning("Function serviceMain was not called at the specified time interval");
-        return 1;
-    }
+        std::unique_lock<std::mutex> lock(handler->startup_lock);
+        handler->startup_state = ServiceHandler::NotStarted;
 
-    if (!handler->service_handler_started && !handler->running_in_console)
-        return 1;
+        // Starts handler thread.
+        handler->start();
+
+        while (handler->startup_state != ServiceHandler::ServiceMainCalled &&
+               handler->startup_state != ServiceHandler::ErrorOccurred)
+        {
+            handler->startup_condition.wait(lock);
+        }
+
+        if (handler->startup_state == ServiceHandler::ErrorOccurred)
+            return 1;
+    }
 
     // Creates QCoreApplication.
     createApplication(argc, argv);
@@ -394,7 +417,7 @@ int ServiceImpl::exec(int argc, char* argv[])
         return 1;
     }
 
-    if (handler->running_in_console)
+    if (handler->startup_state == ServiceHandler::RunningAsConsole)
     {
         QCommandLineOption install_option(QStringLiteral("install"),
                                           QCoreApplication::tr("Install service"));
@@ -435,16 +458,25 @@ int ServiceImpl::exec(int argc, char* argv[])
     QScopedPointer<ServiceEventHandler> event_handler(new ServiceEventHandler());
 
     // Now we can complete the registration of the service.
-    handler->create_app_end_semaphore.release();
+    {
+        std::scoped_lock<std::mutex> lock(handler->startup_lock);
+        handler->startup_state = ServiceHandler::ApplicationCreated;
+        handler->startup_condition.notify_all();
+    }
 
     // Calls QCoreApplication::exec().
     int ret = executeApplication();
 
     // Set the state of the service and wait for the thread to complete.
     handler->setStatus(SERVICE_STOPPED);
-    handler->wait();
+
+    if (handler->isRunning())
+        handler->wait();
 
     event_handler.reset();
+    handler.reset();
+    application.reset();
+
     return ret;
 }
 
