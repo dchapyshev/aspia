@@ -19,6 +19,11 @@ HostSettings::HostSettings()
 
 HostSettings::~HostSettings() = default;
 
+bool HostSettings::isWritable() const
+{
+    return settings_.isWritable();
+}
+
 int HostSettings::tcpPort() const
 {
     return settings_.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();

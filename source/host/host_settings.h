@@ -20,6 +20,8 @@ public:
     HostSettings();
     ~HostSettings();
 
+    bool isWritable() const;
+
     int tcpPort() const;
     bool setTcpPort(int port);
 

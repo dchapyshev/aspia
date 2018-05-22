@@ -256,12 +256,12 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/user.h)
 
 list(APPEND SOURCE_HOST_UI
+    ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.cc
+    ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.h
+    ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.ui
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.cc
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.h
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.ui
-    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.cc
-    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.h
-    ${PROJECT_SOURCE_DIR}/host/ui/user_list_dialog.ui
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.cc
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 

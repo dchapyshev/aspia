@@ -8,7 +8,8 @@
 #include "host/host_config_main.h"
 
 #include "base/file_logger.h"
-#include "host/ui/user_list_dialog.h"
+#include "host/ui/host_config_dialog.h"
+#include "version.h"
 
 namespace aspia {
 
@@ -17,12 +18,12 @@ int HostConfigMain(int argc, char *argv[])
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");
-    application.setApplicationVersion("1.0.0");
+    application.setApplicationVersion(ASPIA_VERSION_STRING);
 
     FileLogger logger;
     logger.startLogging(application);
 
-    UserListDialog dialog;
+    HostConfigDialog dialog;
     dialog.show();
     dialog.activateWindow();
 
