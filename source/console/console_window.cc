@@ -25,9 +25,10 @@ namespace {
 
 QHash<QString, QStringList> createLocaleList()
 {
+    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
     QHash<QString, QStringList> locale_list;
 
-    QStringList qm_file_list = QDir(":/locale/").entryList(QStringList() << "*.qm");
+    QStringList qm_file_list = QDir(translations_dir).entryList(QStringList() << "*.qm");
     QRegExp regexp("([a-zA-Z0-9-_]+)_([^.]*).qm");
 
     for (const auto& qm_file : qm_file_list)
@@ -618,11 +619,12 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
 
 void ConsoleWindow::installTranslators(const QString& locale)
 {
+    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
     QStringList qm_file_list = locale_list_[locale];
 
     for (const auto& qm_file : qm_file_list)
     {
-        QString qm_file_path = ":/locale/" + qm_file;
+        QString qm_file_path = translations_dir + qm_file;
 
         QTranslator* translator = new QTranslator();
 
