@@ -85,4 +85,16 @@ void ConsoleSettings::setStatusBarEnabled(bool enable)
     settings_.setValue(QStringLiteral("StatusBar"), enable);
 }
 
+proto::auth::SessionType ConsoleSettings::sessionType()
+{
+    return static_cast<proto::auth::SessionType>(
+        settings_.value(QStringLiteral("SessionType"),
+                        proto::auth::SESSION_TYPE_DESKTOP_MANAGE).toInt());
+}
+
+void ConsoleSettings::setSessionType(proto::auth::SessionType session_type)
+{
+    settings_.setValue(QStringLiteral("SessionType"), session_type);
+}
+
 } // namespace aspia

@@ -10,6 +10,8 @@
 
 #include <QSettings>
 
+#include "protocol/authorization.pb.h"
+
 namespace aspia {
 
 class ConsoleSettings
@@ -36,6 +38,9 @@ public:
 
     bool isStatusBarEnabled() const;
     void setStatusBarEnabled(bool enable);
+
+    proto::auth::SessionType sessionType();
+    void setSessionType(proto::auth::SessionType session_type);
 
 private:
     QSettings settings_;

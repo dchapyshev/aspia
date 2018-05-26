@@ -150,6 +150,24 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.menu_language, &QMenu::triggered, this, &ConsoleWindow::onLanguageChanged);
 
+    switch (settings.sessionType())
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+            ui.action_desktop_manage->setChecked(true);
+            break;
+
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+            ui.action_desktop_view->setChecked(true);
+            break;
+
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            ui.action_file_transfer->setChecked(true);
+            break;
+
+        default:
+            break;
+    }
+
     if (!file_path.isEmpty())
         addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
 }
@@ -616,6 +634,13 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
+
+    if (ui.action_desktop_manage->isChecked())
+        settings.setSessionType(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+    else if (ui.action_desktop_view->isChecked())
+        settings.setSessionType(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+    else if (ui.action_file_transfer->isChecked())
+        settings.setSessionType(proto::auth::SESSION_TYPE_FILE_TRANSFER);
 
     removeTranslators();
 
