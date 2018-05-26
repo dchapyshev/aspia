@@ -438,6 +438,12 @@ void ConsoleWindow::onCurrentTabChanged(int index)
         return;
 
     ui.action_save->setEnabled(tab->isChanged());
+
+    proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
+    if (computer_group)
+        ui.status_bar->setCurrentComputerGroup(*computer_group);
+    else
+        ui.status_bar->clear();
 }
 
 void ConsoleWindow::onCloseTab(int index)
@@ -476,6 +482,7 @@ void ConsoleWindow::onCloseTab(int index)
 
     if (!ui.tab_widget->count())
     {
+        ui.status_bar->clear();
         ui.action_save_as->setEnabled(false);
         ui.action_address_book_properties->setEnabled(false);
         ui.action_close->setEnabled(false);
@@ -519,6 +526,20 @@ void ConsoleWindow::onComputerGroupActivated(bool activated, bool is_root)
     {
         ui.action_modify_computer_group->setEnabled(activated);
         ui.action_delete_computer_group->setEnabled(activated);
+    }
+
+    AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->currentWidget());
+    if (tab)
+    {
+        proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
+        if (computer_group)
+            ui.status_bar->setCurrentComputerGroup(*computer_group);
+        else
+            ui.status_bar->clear();
+    }
+    else
+    {
+        ui.status_bar->clear();
     }
 }
 

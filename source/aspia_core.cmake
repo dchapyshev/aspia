@@ -177,6 +177,8 @@ list(APPEND SOURCE_CONSOLE
     ${PROJECT_SOURCE_DIR}/console/console_main.h
     ${PROJECT_SOURCE_DIR}/console/console_settings.cc
     ${PROJECT_SOURCE_DIR}/console/console_settings.h
+    ${PROJECT_SOURCE_DIR}/console/console_statusbar.cc
+    ${PROJECT_SOURCE_DIR}/console/console_statusbar.h
     ${PROJECT_SOURCE_DIR}/console/console_tab.cc
     ${PROJECT_SOURCE_DIR}/console/console_tab.h
     ${PROJECT_SOURCE_DIR}/console/console_window.cc

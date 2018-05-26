@@ -29,6 +29,7 @@ public:
     QString addressBookName() const;
     QString addressBookPath() const;
     proto::address_book::Computer* currentComputer() const;
+    proto::address_book::ComputerGroup* currentComputerGroup() const;
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
 

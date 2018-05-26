@@ -280,6 +280,16 @@ proto::address_book::Computer* AddressBookTab::currentComputer() const
     return current_item->computer();
 }
 
+proto::address_book::ComputerGroup* AddressBookTab::currentComputerGroup() const
+{
+    ComputerGroupItem* current_item =
+        dynamic_cast<ComputerGroupItem*>(ui.tree_group->currentItem());
+    if (!current_item)
+        return nullptr;
+
+    return current_item->computerGroup();
+}
+
 void AddressBookTab::save()
 {
     saveToFile(file_path_);
