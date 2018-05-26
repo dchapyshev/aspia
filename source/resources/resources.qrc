@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>heart.png</file>
     <file>folder-up.png</file>
     <file>arrow-circle-double.png</file>
     <file>home.png</file>

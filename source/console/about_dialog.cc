@@ -8,6 +8,7 @@
 #include "console/about_dialog.h"
 
 #include <QAbstractButton>
+#include <QDesktopServices>
 
 #include "version.h"
 
@@ -20,7 +21,12 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     ui.label_version->setText(tr("Version: %1").arg(QLatin1String(ASPIA_VERSION_STRING)));
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)
+    connect(ui.push_button_donate, &QPushButton::pressed, [this]()
+    {
+        QDesktopServices::openUrl(QUrl(tr("https://aspia.net/donate")));
+    });
+
+    connect(ui.push_button_close, &QPushButton::pressed, [this]()
     {
         close();
     });
