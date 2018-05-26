@@ -56,7 +56,7 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onOnlineHelp);
     connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::onAbout);
-    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::onExit);
+    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::close);
     connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::onFastConnect);
 
     connect(ui.action_desktop_manage_connect, &QAction::triggered,
@@ -242,11 +242,6 @@ void ConsoleWindow::onOnlineHelp()
 void ConsoleWindow::onAbout()
 {
     AboutDialog(this).exec();
-}
-
-void ConsoleWindow::onExit()
-{
-    close();
 }
 
 void ConsoleWindow::onFastConnect()

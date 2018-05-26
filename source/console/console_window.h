@@ -38,7 +38,6 @@ public slots:
     void onDeleteComputerGroup();
     void onOnlineHelp();
     void onAbout();
-    void onExit();
     void onFastConnect();
     void onDesktopManageConnect();
     void onDesktopViewConnect();
