@@ -24,31 +24,31 @@ public:
     ~ConsoleWindow();
 
 public slots:
-    void newAction();
-    void openAction();
-    void saveAction();
-    void saveAsAction();
-    void closeAction();
-    void addressBookPropertiesAction();
-    void addComputerAction();
-    void modifyComputerAction();
-    void deleteComputerAction();
-    void addComputerGroupAction();
-    void modifyComputerGroupAction();
-    void deleteComputerGroupAction();
-    void onlineHelpAction();
-    void aboutAction();
-    void exitAction();
-    void fastConnectAction();
-    void desktopManageSessionConnect();
-    void desktopViewSessionConnect();
-    void fileTransferSessionConnect();
-    void desktopManageSessionToggled(bool checked);
-    void desktopViewSessionToggled(bool checked);
-    void fileTransferSessionToggled(bool checked);
+    void onNewAddressBook();
+    void onOpenAddressBook();
+    void onSaveAddressBook();
+    void onSaveAsAddressBook();
+    void onCloseAddressBook();
+    void onAddressBookProperties();
+    void onAddComputer();
+    void onModifyComputer();
+    void onDeleteComputer();
+    void onAddComputerGroup();
+    void onModifyComputerGroup();
+    void onDeleteComputerGroup();
+    void onOnlineHelp();
+    void onAbout();
+    void onExit();
+    void onFastConnect();
+    void onDesktopManageConnect();
+    void onDesktopViewConnect();
+    void onFileTransferConnect();
+    void onDesktopManageToggled(bool checked);
+    void onDesktopViewToggled(bool checked);
+    void onFileTransferToggled(bool checked);
 
-    void currentTabChanged(int index);
-    void closeTab(int index);
+    void onCurrentTabChanged(int index);
+    void onCloseTab(int index);
 
     void onAddressBookChanged(bool changed);
     void onComputerGroupActivated(bool activated, bool is_root);

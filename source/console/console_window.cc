@@ -30,72 +30,68 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
-    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::newAction);
-    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::openAction);
-    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::saveAction);
-    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::saveAsAction);
-    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::closeAction);
+    connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNewAddressBook);
+    connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpenAddressBook);
+    connect(ui.action_save, &QAction::triggered, this, &ConsoleWindow::onSaveAddressBook);
+    connect(ui.action_save_as, &QAction::triggered, this, &ConsoleWindow::onSaveAsAddressBook);
+    connect(ui.action_close, &QAction::triggered, this, &ConsoleWindow::onCloseAddressBook);
 
     connect(ui.action_address_book_properties, &QAction::triggered,
-            this, &ConsoleWindow::addressBookPropertiesAction);
+            this, &ConsoleWindow::onAddressBookProperties);
 
-    connect(ui.action_add_computer, &QAction::triggered,
-            this, &ConsoleWindow::addComputerAction);
-
-    connect(ui.action_modify_computer, &QAction::triggered,
-            this, &ConsoleWindow::modifyComputerAction);
+    connect(ui.action_add_computer, &QAction::triggered, this, &ConsoleWindow::onAddComputer);
+    connect(ui.action_modify_computer, &QAction::triggered, this, &ConsoleWindow::onModifyComputer);
 
     connect(ui.action_delete_computer, &QAction::triggered,
-            this, &ConsoleWindow::deleteComputerAction);
+            this, &ConsoleWindow::onDeleteComputer);
 
     connect(ui.action_add_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::addComputerGroupAction);
+            this, &ConsoleWindow::onAddComputerGroup);
 
     connect(ui.action_modify_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::modifyComputerGroupAction);
+            this, &ConsoleWindow::onModifyComputerGroup);
 
     connect(ui.action_delete_computer_group, &QAction::triggered,
-            this, &ConsoleWindow::deleteComputerGroupAction);
+            this, &ConsoleWindow::onDeleteComputerGroup);
 
-    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onlineHelpAction);
-    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::aboutAction);
-    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::exitAction);
-
-    connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::fastConnectAction);
+    connect(ui.action_online_help, &QAction::triggered, this, &ConsoleWindow::onOnlineHelp);
+    connect(ui.action_about, &QAction::triggered, this, &ConsoleWindow::onAbout);
+    connect(ui.action_exit, &QAction::triggered, this, &ConsoleWindow::onExit);
+    connect(ui.action_fast_connect, &QAction::triggered, this, &ConsoleWindow::onFastConnect);
 
     connect(ui.action_desktop_manage_connect, &QAction::triggered,
-            this, &ConsoleWindow::desktopManageSessionConnect);
+            this, &ConsoleWindow::onDesktopManageConnect);
 
     connect(ui.action_desktop_view_connect, &QAction::triggered,
-            this, &ConsoleWindow::desktopViewSessionConnect);
+            this, &ConsoleWindow::onDesktopViewConnect);
 
     connect(ui.action_file_transfer_connect, &QAction::triggered,
-            this, &ConsoleWindow::fileTransferSessionConnect);
+            this, &ConsoleWindow::onFileTransferConnect);
 
     connect(ui.action_desktop_manage, &QAction::toggled,
-            this, &ConsoleWindow::desktopManageSessionToggled);
+            this, &ConsoleWindow::onDesktopManageToggled);
 
     connect(ui.action_desktop_view, &QAction::toggled,
-            this, &ConsoleWindow::desktopViewSessionToggled);
+            this, &ConsoleWindow::onDesktopViewToggled);
 
     connect(ui.action_file_transfer, &QAction::toggled,
-            this, &ConsoleWindow::fileTransferSessionToggled);
+            this, &ConsoleWindow::onFileTransferToggled);
 
-    connect(ui.tab_widget, &QTabWidget::currentChanged, this, &ConsoleWindow::currentTabChanged);
-    connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &ConsoleWindow::closeTab);
+    connect(ui.tab_widget, &QTabWidget::currentChanged, this, &ConsoleWindow::onCurrentTabChanged);
+    connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &ConsoleWindow::onCloseTab);
 
     if (!file_path.isEmpty())
-        addAddressBookTab(AddressBookTab::openAddressBook(file_path, ui.tab_widget));
+        addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
 }
 
 ConsoleWindow::~ConsoleWindow() = default;
 
-void ConsoleWindow::newAction()
+void ConsoleWindow::onNewAddressBook()
 {
-    addAddressBookTab(AddressBookTab::createNewAddressBook(ui.tab_widget));
+    addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));
 }
 
-void ConsoleWindow::openAction()
+void ConsoleWindow::onOpenAddressBook()
 {
     ConsoleSettings settings;
 
@@ -131,10 +127,10 @@ void ConsoleWindow::openAction()
         }
     }
 
-    addAddressBookTab(AddressBookTab::openAddressBook(file_path, ui.tab_widget));
+    addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
 }
 
-void ConsoleWindow::saveAction()
+void ConsoleWindow::onSaveAddressBook()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -145,7 +141,7 @@ void ConsoleWindow::saveAction()
     }
 }
 
-void ConsoleWindow::saveAsAction()
+void ConsoleWindow::onSaveAsAddressBook()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -156,12 +152,12 @@ void ConsoleWindow::saveAsAction()
     }
 }
 
-void ConsoleWindow::closeAction()
+void ConsoleWindow::onCloseAddressBook()
 {
-    closeTab(ui.tab_widget->currentIndex());
+    onCloseTab(ui.tab_widget->currentIndex());
 }
 
-void ConsoleWindow::addressBookPropertiesAction()
+void ConsoleWindow::onAddressBookProperties()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -172,7 +168,7 @@ void ConsoleWindow::addressBookPropertiesAction()
     }
 }
 
-void ConsoleWindow::addComputerAction()
+void ConsoleWindow::onAddComputer()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -183,7 +179,7 @@ void ConsoleWindow::addComputerAction()
     }
 }
 
-void ConsoleWindow::modifyComputerAction()
+void ConsoleWindow::onModifyComputer()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -194,7 +190,7 @@ void ConsoleWindow::modifyComputerAction()
     }
 }
 
-void ConsoleWindow::deleteComputerAction()
+void ConsoleWindow::onDeleteComputer()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -205,7 +201,7 @@ void ConsoleWindow::deleteComputerAction()
     }
 }
 
-void ConsoleWindow::addComputerGroupAction()
+void ConsoleWindow::onAddComputerGroup()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -216,7 +212,7 @@ void ConsoleWindow::addComputerGroupAction()
     }
 }
 
-void ConsoleWindow::modifyComputerGroupAction()
+void ConsoleWindow::onModifyComputerGroup()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -227,7 +223,7 @@ void ConsoleWindow::modifyComputerGroupAction()
     }
 }
 
-void ConsoleWindow::deleteComputerGroupAction()
+void ConsoleWindow::onDeleteComputerGroup()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -238,22 +234,22 @@ void ConsoleWindow::deleteComputerGroupAction()
     }
 }
 
-void ConsoleWindow::onlineHelpAction()
+void ConsoleWindow::onOnlineHelp()
 {
     QDesktopServices::openUrl(QUrl(tr("https://aspia.net/help")));
 }
 
-void ConsoleWindow::aboutAction()
+void ConsoleWindow::onAbout()
 {
     AboutDialog(this).exec();
 }
 
-void ConsoleWindow::exitAction()
+void ConsoleWindow::onExit()
 {
     close();
 }
 
-void ConsoleWindow::fastConnectAction()
+void ConsoleWindow::onFastConnect()
 {
     ClientDialog dialog(this);
 
@@ -263,7 +259,7 @@ void ConsoleWindow::fastConnectAction()
     connectToComputer(&dialog.computer());
 }
 
-void ConsoleWindow::desktopManageSessionConnect()
+void ConsoleWindow::onDesktopManageConnect()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -281,7 +277,7 @@ void ConsoleWindow::desktopManageSessionConnect()
     }
 }
 
-void ConsoleWindow::desktopViewSessionConnect()
+void ConsoleWindow::onDesktopViewConnect()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -299,7 +295,7 @@ void ConsoleWindow::desktopViewSessionConnect()
     }
 }
 
-void ConsoleWindow::fileTransferSessionConnect()
+void ConsoleWindow::onFileTransferConnect()
 {
     int current_tab = ui.tab_widget->currentIndex();
     if (current_tab != -1)
@@ -317,7 +313,7 @@ void ConsoleWindow::fileTransferSessionConnect()
     }
 }
 
-void ConsoleWindow::desktopManageSessionToggled(bool checked)
+void ConsoleWindow::onDesktopManageToggled(bool checked)
 {
     if (checked)
     {
@@ -326,7 +322,7 @@ void ConsoleWindow::desktopManageSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::desktopViewSessionToggled(bool checked)
+void ConsoleWindow::onDesktopViewToggled(bool checked)
 {
     if (checked)
     {
@@ -335,7 +331,7 @@ void ConsoleWindow::desktopViewSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::fileTransferSessionToggled(bool checked)
+void ConsoleWindow::onFileTransferToggled(bool checked)
 {
     if (checked)
     {
@@ -344,7 +340,7 @@ void ConsoleWindow::fileTransferSessionToggled(bool checked)
     }
 }
 
-void ConsoleWindow::currentTabChanged(int index)
+void ConsoleWindow::onCurrentTabChanged(int index)
 {
     if (index == -1)
     {
@@ -361,7 +357,7 @@ void ConsoleWindow::currentTabChanged(int index)
     ui.action_save->setEnabled(tab->isChanged());
 }
 
-void ConsoleWindow::closeTab(int index)
+void ConsoleWindow::onCloseTab(int index)
 {
     if (index == -1)
         return;

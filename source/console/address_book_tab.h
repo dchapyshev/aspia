@@ -23,8 +23,8 @@ class AddressBookTab : public ConsoleTab
 public:
     ~AddressBookTab();
 
-    static AddressBookTab* createNewAddressBook(QWidget* parent);
-    static AddressBookTab* openAddressBook(const QString& file_path, QWidget* parent);
+    static AddressBookTab* createNew(QWidget* parent);
+    static AddressBookTab* openFromFile(const QString& file_path, QWidget* parent);
 
     QString addressBookName() const;
     QString addressBookPath() const;

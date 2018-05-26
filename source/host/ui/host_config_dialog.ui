@@ -117,7 +117,7 @@
        <item>
         <widget class="QGroupBox" name="groupbox_incoming_connections">
          <property name="title">
-          <string>Incoming connections</string>
+          <string>Incoming Connections</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>

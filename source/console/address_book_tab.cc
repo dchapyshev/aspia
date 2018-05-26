@@ -155,7 +155,7 @@ AddressBookTab::AddressBookTab(const QString& file_path,
 AddressBookTab::~AddressBookTab() = default;
 
 // static
-AddressBookTab* AddressBookTab::createNewAddressBook(QWidget* parent)
+AddressBookTab* AddressBookTab::createNew(QWidget* parent)
 {
     proto::address_book::File file;
     proto::address_book::Data data;
@@ -174,7 +174,7 @@ AddressBookTab* AddressBookTab::createNewAddressBook(QWidget* parent)
 }
 
 // static
-AddressBookTab* AddressBookTab::openAddressBook(const QString& file_path, QWidget* parent)
+AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* parent)
 {
     if (file_path.isEmpty())
         return nullptr;
