@@ -49,4 +49,24 @@ void ConsoleSettings::setWindowState(const QByteArray& state)
     settings_.setValue(QStringLiteral("WindowState"), state);
 }
 
+bool ConsoleSettings::isToolBarEnabled() const
+{
+    return settings_.value(QStringLiteral("ToolBar"), true).toBool();
+}
+
+void ConsoleSettings::setToolBarEnabled(bool enable)
+{
+    settings_.setValue(QStringLiteral("ToolBar"), enable);
+}
+
+bool ConsoleSettings::isStatusBarEnabled() const
+{
+    return settings_.value(QStringLiteral("StatusBar"), true).toBool();
+}
+
+void ConsoleSettings::setStatusBarEnabled(bool enable)
+{
+    settings_.setValue(QStringLiteral("StatusBar"), enable);
+}
+
 } // namespace aspia

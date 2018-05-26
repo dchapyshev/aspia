@@ -7,7 +7,6 @@
 
 #include "console/console_window.h"
 
-#include <QCryptographicHash>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -29,6 +28,12 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     ConsoleSettings settings;
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
+
+    ui.action_toolbar->setChecked(settings.isToolBarEnabled());
+
+    bool show_status_bar = settings.isStatusBarEnabled();
+    ui.action_statusbar->setChecked(show_status_bar);
+    ui.status_bar->setVisible(show_status_bar);
 
     connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNewAddressBook);
     connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpenAddressBook);
@@ -76,6 +81,9 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.action_file_transfer, &QAction::toggled,
             this, &ConsoleWindow::onFileTransferToggled);
+
+    connect(ui.action_toolbar, &QAction::toggled, ui.tool_bar, &QToolBar::setVisible);
+    connect(ui.action_statusbar, &QAction::toggled, ui.status_bar, &QStatusBar::setVisible);
 
     connect(ui.tab_widget, &QTabWidget::currentChanged, this, &ConsoleWindow::onCurrentTabChanged);
     connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &ConsoleWindow::onCloseTab);
@@ -527,6 +535,8 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     }
 
     ConsoleSettings settings;
+    settings.setToolBarEnabled(ui.action_toolbar->isChecked());
+    settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
 

@@ -27,6 +27,12 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
+    bool isToolBarEnabled() const;
+    void setToolBarEnabled(bool enable);
+
+    bool isStatusBarEnabled() const;
+    void setStatusBarEnabled(bool enable);
+
 private:
     QSettings settings_;
 
