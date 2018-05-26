@@ -22,6 +22,9 @@ public:
 
     bool isWritable() const;
 
+    QString locale() const;
+    void setLocale(const QString& locale);
+
     int tcpPort() const;
     bool setTcpPort(int port);
 

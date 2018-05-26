@@ -24,6 +24,16 @@ bool HostSettings::isWritable() const
     return settings_.isWritable();
 }
 
+QString HostSettings::locale() const
+{
+    return settings_.value(QStringLiteral("Locale"), "en").toString();
+}
+
+void HostSettings::setLocale(const QString& locale)
+{
+    settings_.setValue(QStringLiteral("Locale"), locale);
+}
+
 int HostSettings::tcpPort() const
 {
     return settings_.value(QStringLiteral("TcpPort"), kDefaultHostTcpPort).toInt();

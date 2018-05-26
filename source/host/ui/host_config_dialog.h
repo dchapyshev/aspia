@@ -19,19 +19,22 @@ class HostConfigDialog : public QDialog
 
 public:
     explicit HostConfigDialog(QWidget* parent = nullptr);
-    ~HostConfigDialog() = default;
+    ~HostConfigDialog();
 
 private slots:
     void onServiceInstallRemove();
     void onServiceStartStop();
     void onContextMenu(const QPoint& point);
-    void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
+    void installTranslators(const QString& locale);
+    void removeTranslators();
+    void createLanguageList(const QString& current_locale);
     void reloadUserList();
     void reloadServiceStatus();
     bool restartService();
@@ -45,6 +48,9 @@ private:
     };
 
     Ui::HostConfigDialog ui;
+
+    QHash<QString, QStringList> locale_list_;
+    QList<QTranslator*> translator_list_;
 
     QList<User> user_list_;
     ServiceStatus service_status_;
