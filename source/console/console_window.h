@@ -55,16 +55,23 @@ public slots:
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
     void onComputerContextMenu(const QPoint& point);
     void onComputerDoubleClicked(proto::address_book::Computer* computer);
+    void onLanguageChanged(QAction* action);
 
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
 private:
+    void installTranslators(const QString& locale);
+    void removeTranslators();
+    void createLanguageMenu(const QString& current_locale);
     void addAddressBookTab(AddressBookTab* tab);
     void connectToComputer(proto::address_book::Computer* computer);
 
     Ui::ConsoleWindow ui;
+
+    QHash<QString, QStringList> locale_list_;
+    QList<QTranslator*> translator_list_;
 
     Q_DISABLE_COPY(ConsoleWindow)
 };

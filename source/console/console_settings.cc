@@ -19,6 +19,16 @@ ConsoleSettings::ConsoleSettings()
 
 ConsoleSettings::~ConsoleSettings() = default;
 
+QString ConsoleSettings::locale() const
+{
+    return settings_.value(QStringLiteral("Locale"), "en").toString();
+}
+
+void ConsoleSettings::setLocale(const QString& locale)
+{
+    settings_.setValue(QStringLiteral("Locale"), locale);
+}
+
 QString ConsoleSettings::lastDirectory() const
 {
     return settings_.value(QStringLiteral("LastDirectory"), QDir::homePath()).toString();

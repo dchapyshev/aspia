@@ -11,6 +11,7 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTranslator>
 
 #include "client/client.h"
 #include "client/ui/client_dialog.h"
@@ -20,12 +21,64 @@
 
 namespace aspia {
 
-ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
-    : QMainWindow(parent)
-{
-    ui.setupUi(this);
+namespace {
 
+QHash<QString, QStringList> createLocaleList()
+{
+    QHash<QString, QStringList> locale_list;
+
+    QStringList qm_file_list = QDir(":/locale/").entryList(QStringList() << "*.qm");
+    QRegExp regexp("([a-zA-Z0-9-_]+)_([^.]*).qm");
+
+    for (const auto& qm_file : qm_file_list)
+    {
+        if (regexp.exactMatch(qm_file))
+        {
+            QString locale_name = regexp.cap(2);
+
+            if (locale_list.contains(locale_name))
+                locale_list[locale_name].push_back(qm_file);
+            else
+                locale_list.insert(locale_name, QStringList() << qm_file);
+        }
+    }
+
+    return locale_list;
+}
+
+class LanguageAction : public QAction
+{
+public:
+    LanguageAction(const QString& locale, QObject* parent = nullptr)
+        : QAction(parent)
+    {
+        setText(QLocale::languageToString(QLocale(locale).language()));
+        locale_ = locale;
+    }
+
+    ~LanguageAction() = default;
+
+    QString locale() const { return locale_; }
+
+private:
+    QString locale_;
+    Q_DISABLE_COPY(LanguageAction)
+};
+
+} // namespace
+
+ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
+    : QMainWindow(parent),
+      locale_list_(createLocaleList())
+{
     ConsoleSettings settings;
+
+    QString current_locale = settings.locale();
+
+    installTranslators(current_locale);
+    ui.setupUi(this);
+    createLanguageMenu(current_locale);
+
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
@@ -87,6 +140,8 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     connect(ui.tab_widget, &QTabWidget::currentChanged, this, &ConsoleWindow::onCurrentTabChanged);
     connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &ConsoleWindow::onCloseTab);
+
+    connect(ui.menu_language, &QMenu::triggered, this, &ConsoleWindow::onLanguageChanged);
 
     if (!file_path.isEmpty())
         addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
@@ -506,6 +561,21 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     connectToComputer(computer);
 }
 
+void ConsoleWindow::onLanguageChanged(QAction* action)
+{
+    LanguageAction* language_action = dynamic_cast<LanguageAction*>(action);
+    if (language_action)
+    {
+        QString new_locale = language_action->locale();
+
+        removeTranslators();
+        installTranslators(new_locale);
+        ui.retranslateUi(this);
+
+        ConsoleSettings().setLocale(new_locale);
+    }
+}
+
 void ConsoleWindow::closeEvent(QCloseEvent* event)
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -540,8 +610,83 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
 
+    removeTranslators();
+
     QApplication::quit();
     QMainWindow::closeEvent(event);
+}
+
+void ConsoleWindow::installTranslators(const QString& locale)
+{
+    QStringList qm_file_list = locale_list_[locale];
+
+    for (const auto& qm_file : qm_file_list)
+    {
+        QString qm_file_path = ":/locale/" + qm_file;
+
+        QTranslator* translator = new QTranslator();
+
+        if (!translator->load(qm_file_path))
+        {
+            qWarning() << "Translation file not loaded: " << qm_file_path;
+            delete translator;
+        }
+        else
+        {
+            QApplication::installTranslator(translator);
+            translator_list_.push_back(translator);
+        }
+    }
+}
+
+void ConsoleWindow::removeTranslators()
+{
+    for (auto translator : translator_list_)
+    {
+        QApplication::removeTranslator(translator);
+        delete translator;
+    }
+
+    translator_list_.clear();
+}
+
+void ConsoleWindow::createLanguageMenu(const QString& current_locale)
+{
+    QHashIterator<QString, QStringList> iter(locale_list_);
+
+    QStringList locale_list;
+
+    while (iter.hasNext())
+    {
+        iter.next();
+        locale_list.push_back(iter.key());
+    }
+
+    if (!locale_list_.contains("en"))
+        locale_list.push_back("en");
+
+    std::sort(locale_list.begin(), locale_list.end(),
+              [](const QString& a, const QString& b)
+    {
+        return QString::compare(QLocale::languageToString(QLocale(a).language()),
+                                QLocale::languageToString(QLocale(b).language()),
+                                Qt::CaseInsensitive) < 0;
+    });
+
+    QActionGroup* language_group = new QActionGroup(this);
+
+    for (const auto& locale : locale_list)
+    {
+        LanguageAction* action_language = new LanguageAction(locale, this);
+
+        action_language->setActionGroup(language_group);
+        action_language->setCheckable(true);
+
+        if (current_locale == locale)
+            action_language->setChecked(true);
+
+        ui.menu_language->addAction(action_language);
+    }
 }
 
 void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)

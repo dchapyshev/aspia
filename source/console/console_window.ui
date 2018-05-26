@@ -117,7 +117,6 @@
       <iconset resource="../resources/resources.qrc">
        <normaloff>:/icon/locale.png</normaloff>:/icon/locale.png</iconset>
      </property>
-     <addaction name="action_english"/>
     </widget>
     <addaction name="menu_language"/>
     <addaction name="action_toolbar"/>

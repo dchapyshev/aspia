@@ -18,6 +18,9 @@ public:
     ConsoleSettings();
     ~ConsoleSettings();
 
+    QString locale() const;
+    void setLocale(const QString& locale);
+
     QString lastDirectory() const;
     void setLastDirectory(const QString& directory_path);
 
