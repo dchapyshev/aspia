@@ -24,9 +24,15 @@ bool HostSettings::isWritable() const
     return settings_.isWritable();
 }
 
+// static
+QString HostSettings::defaultLocale()
+{
+    return QStringLiteral("en");
+}
+
 QString HostSettings::locale() const
 {
-    return settings_.value(QStringLiteral("Locale"), "en").toString();
+    return settings_.value(QStringLiteral("Locale"), defaultLocale()).toString();
 }
 
 void HostSettings::setLocale(const QString& locale)

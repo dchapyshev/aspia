@@ -19,9 +19,15 @@ ConsoleSettings::ConsoleSettings()
 
 ConsoleSettings::~ConsoleSettings() = default;
 
+// static
+QString ConsoleSettings::defaultLocale()
+{
+    return QStringLiteral("en");
+}
+
 QString ConsoleSettings::locale() const
 {
-    return settings_.value(QStringLiteral("Locale"), "en").toString();
+    return settings_.value(QStringLiteral("Locale"), defaultLocale()).toString();
 }
 
 void ConsoleSettings::setLocale(const QString& locale)

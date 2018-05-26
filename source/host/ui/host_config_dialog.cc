@@ -59,6 +59,12 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
 
     QString current_locale = settings.locale();
 
+    if (locale_list_.constFind(current_locale) == locale_list_.constEnd())
+    {
+        current_locale = HostSettings::defaultLocale();
+        settings.setLocale(current_locale);
+    }
+
     installTranslators(current_locale);
     ui.setupUi(this);
     createLanguageList(current_locale);

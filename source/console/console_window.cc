@@ -76,6 +76,12 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
 
     QString current_locale = settings.locale();
 
+    if (locale_list_.constFind(current_locale) == locale_list_.constEnd())
+    {
+        current_locale = ConsoleSettings::defaultLocale();
+        settings.setLocale(current_locale);
+    }
+
     installTranslators(current_locale);
     ui.setupUi(this);
     createLanguageMenu(current_locale);

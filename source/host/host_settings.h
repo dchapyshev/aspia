@@ -22,6 +22,7 @@ public:
 
     bool isWritable() const;
 
+    static QString defaultLocale();
     QString locale() const;
     void setLocale(const QString& locale);
 
