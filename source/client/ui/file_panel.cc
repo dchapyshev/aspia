@@ -37,6 +37,19 @@ QString normalizePath(const QString& path)
     return normalized_path;
 }
 
+QString parentPath(const QString& path)
+{
+    int from = -1;
+    if (path.endsWith(QLatin1Char('/')))
+        from = -2;
+
+    int last_slash = path.lastIndexOf(QLatin1Char('/'), from);
+    if (last_slash == -1)
+        return QString();
+
+    return path.left(last_slash);
+}
+
 } // namespace
 
 FilePanel::FilePanel(QWidget* parent)
@@ -247,6 +260,17 @@ void FilePanel::onFileSelectionChanged()
     }
 
     ui.label_status->setText(tr("%1 object(s) selected").arg(selected_count));
+
+    if (selected_count > 0)
+    {
+        ui.button_delete->setEnabled(true);
+        ui.button_send->setEnabled(true);
+    }
+    else
+    {
+        ui.button_delete->setEnabled(false);
+        ui.button_send->setEnabled(false);
+    }
 }
 
 void FilePanel::onFileNameChanged(FileItem* file_item)
@@ -320,19 +344,16 @@ void FilePanel::onFileContextMenu(const QPoint& point)
 void FilePanel::toChildFolder(const QString& child_name)
 {
     setCurrentPath(current_path_ + child_name);
+    ui.button_up->setEnabled(true);
 }
 
 void FilePanel::toParentFolder()
 {
-    int from = -1;
-    if (current_path_.endsWith(QLatin1Char('/')))
-        from = -2;
+    QString parent_path = parentPath(current_path_);
+    if (!parent_path.isEmpty())
+        setCurrentPath(parent_path);
 
-    int last_slash = current_path_.lastIndexOf(QLatin1Char('/'), from);
-    if (last_slash == -1)
-        return;
-
-    setCurrentPath(current_path_.left(last_slash));
+    ui.button_up->setEnabled(!parentPath(parent_path).isEmpty());
 }
 
 void FilePanel::addFolder()

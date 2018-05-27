@@ -72,6 +72,9 @@
       </property>
       <item>
        <widget class="QPushButton" name="button_up">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -141,6 +144,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="button_delete">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -177,6 +183,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="button_send">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
