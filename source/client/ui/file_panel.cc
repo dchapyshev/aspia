@@ -7,10 +7,11 @@
 
 #include "client/ui/file_panel.h"
 
+#include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QMenu>
 #include <QMessageBox>
-#include <QStyledItemDelegate>
 
 #include "client/ui/file_item.h"
 #include "client/file_remover.h"
@@ -24,34 +25,14 @@ namespace {
 
 const char* kReplySlot = "reply";
 
-class NoEditDelegate : public QStyledItemDelegate
-{
-public:
-    explicit NoEditDelegate(QWidget* parent = nullptr)
-        : QStyledItemDelegate(parent)
-    {
-        // Nothing
-    }
-
-    QWidget* createEditor(QWidget* parent,
-                          const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const override
-    {
-        return nullptr;
-    }
-
-private:
-    Q_DISABLE_COPY(NoEditDelegate)
-};
-
 QString normalizePath(const QString& path)
 {
     QString normalized_path = path;
 
-    normalized_path.replace('\\', '/');
+    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
 
-    if (!normalized_path.endsWith('/'))
-        normalized_path += '/';
+    if (!normalized_path.endsWith(QLatin1Char('/')))
+        normalized_path += QLatin1Char('/');
 
     return normalized_path;
 }
@@ -63,18 +44,17 @@ FilePanel::FilePanel(QWidget* parent)
 {
     ui.setupUi(this);
 
-    ui.tree->setItemDelegateForColumn(1, new NoEditDelegate(this));
-    ui.tree->setItemDelegateForColumn(2, new NoEditDelegate(this));
-    ui.tree->setItemDelegateForColumn(3, new NoEditDelegate(this));
-
     connect(ui.address_bar, QOverload<int>::of(&QComboBox::activated),
-            this, &FilePanel::addressItemChanged);
+            this, &FilePanel::onAddressItemChanged);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
-            this, &FilePanel::fileDoubleClicked);
-
-    connect(ui.tree, &QTreeWidget::itemSelectionChanged, this, &FilePanel::fileSelectionChanged);
-    connect(ui.tree, &QTreeWidget::itemChanged, this, &FilePanel::fileItemChanged);
+    connect(ui.tree, &FileTreeWidget::itemDoubleClicked,
+            this, &FilePanel::onFileDoubleClicked);
+    connect(ui.tree, &FileTreeWidget::itemSelectionChanged,
+            this, &FilePanel::onFileSelectionChanged);
+    connect(ui.tree, &FileTreeWidget::fileNameChanged,
+            this, &FilePanel::onFileNameChanged);
+    connect(ui.tree, &FileTreeWidget::customContextMenuRequested,
+            this, &FilePanel::onFileContextMenu);
 
     connect(ui.button_up, &QPushButton::pressed, this, &FilePanel::toParentFolder);
     connect(ui.button_refresh, &QPushButton::pressed, this, &FilePanel::refresh);
@@ -109,7 +89,7 @@ void FilePanel::setCurrentPath(const QString& path)
         if (addressItemPath(i) == current_path_)
         {
             ui.address_bar->setCurrentIndex(i);
-            addressItemChanged(i);
+            onAddressItemChanged(i);
             return;
         }
     }
@@ -119,7 +99,7 @@ void FilePanel::setCurrentPath(const QString& path)
     ui.address_bar->addItem(FilePlatformUtil::directoryIcon(), current_path_);
     ui.address_bar->setCurrentIndex(current_item);
 
-    addressItemChanged(current_item);
+    onAddressItemChanged(current_item);
 }
 
 void FilePanel::reply(const proto::file_transfer::Request& request,
@@ -213,7 +193,7 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
-void FilePanel::addressItemChanged(int index)
+void FilePanel::onAddressItemChanged(int index)
 {
     current_path_ = normalizePath(addressItemPath(index));
 
@@ -247,16 +227,16 @@ void FilePanel::addressItemChanged(int index)
     emit request(FileRequest::fileListRequest(this, current_path_, kReplySlot));
 }
 
-void FilePanel::fileDoubleClicked(QTreeWidgetItem* item, int column)
+void FilePanel::onFileDoubleClicked(QTreeWidgetItem* item, int column)
 {
-    FileItem* file_item = reinterpret_cast<FileItem*>(item);
-    if (!file_item->isDirectory())
+    FileItem* file_item = dynamic_cast<FileItem*>(item);
+    if (!file_item || !file_item->isDirectory())
         return;
 
     toChildFolder(file_item->text(0));
 }
 
-void FilePanel::fileSelectionChanged()
+void FilePanel::onFileSelectionChanged()
 {
     int selected_count = 0;
 
@@ -269,25 +249,28 @@ void FilePanel::fileSelectionChanged()
     ui.label_status->setText(tr("%1 object(s) selected").arg(selected_count));
 }
 
-void FilePanel::fileItemChanged(QTreeWidgetItem* item, int column)
+void FilePanel::onFileNameChanged(FileItem* file_item)
 {
-    if (column != 0)
-        return;
-
-    FileItem* file_item = reinterpret_cast<FileItem*>(item);
-
     QString initial_name = file_item->initialName();
     QString current_name = file_item->currentName();
 
-    if (initial_name.isEmpty())
+    if (initial_name.isEmpty()) // New item.
     {
-        // New item.
+        if (current_name.isEmpty())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Folder name can not be empty."),
+                                 QMessageBox::Ok);
+            delete file_item;
+            return;
+        }
+
         emit request(FileRequest::createDirectoryRequest(
             this, currentPath() + current_name, kReplySlot));
     }
-    else
+    else // Rename item.
     {
-        // Rename item.
         if (current_name == initial_name)
             return;
 
@@ -299,6 +282,41 @@ void FilePanel::fileItemChanged(QTreeWidgetItem* item, int column)
     }
 }
 
+void FilePanel::onFileContextMenu(const QPoint& point)
+{
+    QMenu menu;
+
+    QScopedPointer<QAction> copy_action;
+    QScopedPointer<QAction> delete_action;
+
+    QList<QTreeWidgetItem*> items = ui.tree->selectedItems();
+    if (!items.isEmpty())
+    {
+        copy_action.reset(new QAction(QIcon(":/icon/arrow-045.png"), tr("&Send\tF11")));
+        delete_action.reset(new QAction(QIcon(":/icon/cross-script.png"), tr("&Delete\tDelete")));
+
+        menu.addAction(copy_action.data());
+        menu.addAction(delete_action.data());
+        menu.addSeparator();
+    }
+
+    QScopedPointer<QAction> add_folder_action(
+        new QAction(QIcon(":/icon/folder-plus.png"), tr("&Create Folder")));
+
+    menu.addAction(add_folder_action.data());
+
+    QAction* selected_action = menu.exec(ui.tree->mapToGlobal(point));
+    if (!selected_action)
+        return;
+
+    if (selected_action == delete_action.data())
+        removeSelected();
+    else if (selected_action == copy_action.data())
+        sendSelected();
+    else if (selected_action == add_folder_action.data())
+        addFolder();
+}
+
 void FilePanel::toChildFolder(const QString& child_name)
 {
     setCurrentPath(current_path_ + child_name);
@@ -307,10 +325,10 @@ void FilePanel::toChildFolder(const QString& child_name)
 void FilePanel::toParentFolder()
 {
     int from = -1;
-    if (current_path_.endsWith('/'))
+    if (current_path_.endsWith(QLatin1Char('/')))
         from = -2;
 
-    int last_slash = current_path_.lastIndexOf('/', from);
+    int last_slash = current_path_.lastIndexOf(QLatin1Char('/'), from);
     if (last_slash == -1)
         return;
 
@@ -319,7 +337,7 @@ void FilePanel::toParentFolder()
 
 void FilePanel::addFolder()
 {
-    FileItem* item = new FileItem(QStringLiteral(""));
+    FileItem* item = new FileItem(QString());
 
     ui.tree->addTopLevelItem(item);
     ui.tree->editItem(item);
@@ -331,9 +349,9 @@ void FilePanel::removeSelected()
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
-        FileItem* file_item = reinterpret_cast<FileItem*>(ui.tree->topLevelItem(i));
+        FileItem* file_item = dynamic_cast<FileItem*>(ui.tree->topLevelItem(i));
 
-        if (ui.tree->isItemSelected(file_item))
+        if (file_item && ui.tree->isItemSelected(file_item))
         {
             items.push_back(FileRemover::Item(file_item->currentName(),
                                               file_item->isDirectory()));
@@ -360,9 +378,9 @@ void FilePanel::sendSelected()
 
     for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
     {
-        FileItem* file_item = reinterpret_cast<FileItem*>(ui.tree->topLevelItem(i));
+        FileItem* file_item = dynamic_cast<FileItem*>(ui.tree->topLevelItem(i));
 
-        if (ui.tree->isItemSelected(file_item))
+        if (file_item && ui.tree->isItemSelected(file_item))
         {
             items.push_back(FileTransfer::Item(file_item->currentName(),
                                                file_item->fileSize(),

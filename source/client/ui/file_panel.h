@@ -44,10 +44,12 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
-    void addressItemChanged(int index);
-    void fileDoubleClicked(QTreeWidgetItem* item, int column);
-    void fileSelectionChanged();
-    void fileItemChanged(QTreeWidgetItem* item, int column);
+    void onAddressItemChanged(int index);
+    void onFileDoubleClicked(QTreeWidgetItem* item, int column);
+    void onFileSelectionChanged();
+    void onFileNameChanged(FileItem* file_item);
+    void onFileContextMenu(const QPoint& point);
+
     void toChildFolder(const QString& child_name);
     void toParentFolder();
     void addFolder();

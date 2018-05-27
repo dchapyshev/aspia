@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 
 #include "client/ui/file_item.h"
+#include "client/ui/file_item_delegate.h"
 #include "client/ui/file_item_drag.h"
 #include "client/ui/file_item_mime_data.h"
 
@@ -20,6 +21,16 @@ FileTreeWidget::FileTreeWidget(QWidget* parent)
     : QTreeWidget(parent)
 {
     setAcceptDrops(true);
+
+    FileColumnDelegate* column_delegate = new FileColumnDelegate(this);
+
+    connect(column_delegate, &FileColumnDelegate::editingFinished,
+            this, &FileTreeWidget::onEditingFinished);
+
+    setItemDelegateForColumn(0, column_delegate);
+    setItemDelegateForColumn(1, new FileReadOnlyColumnDelegate(this));
+    setItemDelegateForColumn(2, new FileReadOnlyColumnDelegate(this));
+    setItemDelegateForColumn(3, new FileReadOnlyColumnDelegate(this));
 }
 
 FileTreeWidget::~FileTreeWidget() = default;
@@ -67,7 +78,7 @@ void FileTreeWidget::dragMoveEvent(QDragMoveEvent* event)
 void FileTreeWidget::dropEvent(QDropEvent* event)
 {
     const FileItemMimeData* mime_data =
-        reinterpret_cast<const FileItemMimeData*>(event->mimeData());
+        dynamic_cast<const FileItemMimeData*>(event->mimeData());
 
     if (!mime_data)
         return;
@@ -81,9 +92,9 @@ void FileTreeWidget::startDrag(Qt::DropActions supported_actions)
 
     for (int i = 0; i < topLevelItemCount(); ++i)
     {
-        FileItem* file_item = reinterpret_cast<FileItem*>(topLevelItem(i));
+        FileItem* file_item = dynamic_cast<FileItem*>(topLevelItem(i));
 
-        if (isItemSelected(file_item))
+        if (file_item && isItemSelected(file_item))
         {
             file_list.push_back(FileTransfer::Item(file_item->currentName(),
                                                    file_item->fileSize(),
@@ -96,7 +107,16 @@ void FileTreeWidget::startDrag(Qt::DropActions supported_actions)
 
     FileItemDrag* drag = new FileItemDrag(this);
     drag->setFileList(file_list);
-    drag->exec(Qt::CopyAction);
+    drag->exec(supported_actions);
+}
+
+void FileTreeWidget::onEditingFinished(const QModelIndex& index) const
+{
+    FileItem* file_item = dynamic_cast<FileItem*>(itemFromIndex(index));
+    if (!file_item)
+        return;
+
+    emit fileNameChanged(file_item);
 }
 
 } // namespace aspia

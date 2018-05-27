@@ -26,6 +26,7 @@ public:
 
 signals:
     void fileListDroped(const QList<FileTransfer::Item>& file_list);
+    void fileNameChanged(FileItem* file_item) const;
 
 protected:
     // QTreeWidget implementation.
@@ -35,6 +36,9 @@ protected:
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     void startDrag(Qt::DropActions supported_actions) override;
+
+private slots:
+    void onEditingFinished(const QModelIndex& index) const;
 
 private:
     QPoint start_pos_;

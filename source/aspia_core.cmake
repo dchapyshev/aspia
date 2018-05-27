@@ -91,6 +91,7 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc

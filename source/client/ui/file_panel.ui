@@ -184,13 +184,13 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Copy selected object(s) (F11)</string>
+         <string>Send selected object(s) (F11)</string>
         </property>
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Copy</string>
+         <string>Send</string>
         </property>
         <property name="icon">
          <iconset resource="../../resources/resources.qrc">
@@ -206,6 +206,9 @@
    </item>
    <item>
     <widget class="aspia::FileTreeWidget" name="tree">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
      </property>
