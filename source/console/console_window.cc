@@ -51,10 +51,10 @@ class LanguageAction : public QAction
 {
 public:
     LanguageAction(const QString& locale, QObject* parent = nullptr)
-        : QAction(parent)
+        : QAction(parent),
+          locale_(locale)
     {
         setText(QLocale::languageToString(QLocale(locale).language()));
-        locale_ = locale;
     }
 
     ~LanguageAction() = default;
