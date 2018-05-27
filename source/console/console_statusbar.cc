@@ -39,11 +39,11 @@ void ConsoleStatusBar::setCurrentComputerGroup(
                            .arg(QString::fromStdString(computer_group.name())));
 
     item_list_[1]->setText(tr("<table><tr><td><img src=':/icon/folder.png'></td>"
-                              "<td>Child Groups: %1</td></tr></table>")
+                              "<td>%1 child group(s)</td></tr></table>")
                            .arg(computer_group.computer_group_size()));
 
     item_list_[2]->setText(tr("<table><tr><td><img src=':/icon/computer.png'></td>"
-                              "<td>Child Computers: %1</td></tr></table>")
+                              "<td>%1 child computer(s)</td></tr></table>")
                            .arg(computer_group.computer_size()));
 }
 

@@ -7,6 +7,9 @@
 
 #include "host/win/host_main.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QGuiApplication>
@@ -19,6 +22,9 @@ namespace aspia {
 
 int hostMain(int argc, char *argv[])
 {
+    // At the end of the user's session, the program ends later than the others.
+    SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
+
     QGuiApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
