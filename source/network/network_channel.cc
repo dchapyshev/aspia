@@ -7,6 +7,7 @@
 
 #include "network/network_channel.h"
 
+#include <QHostAddress>
 #include <QTimerEvent>
 
 #include "crypto/encryptor.h"
@@ -93,6 +94,14 @@ void NetworkChannel::connectToHost(const QString& address, int port)
         return;
 
     socket_->connectToHost(address, port);
+}
+
+QString NetworkChannel::peerAddress() const
+{
+    if (socket_.isNull())
+        return QString();
+
+    return socket_->peerAddress().toString();
 }
 
 void NetworkChannel::readMessage()

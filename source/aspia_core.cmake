@@ -318,7 +318,10 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/file_transfer_session.proto
     ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/key_exchange.pb.h
-    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto)
+    ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto
+    ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/notifier.proto)
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)

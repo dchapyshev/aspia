@@ -89,6 +89,11 @@ proto::auth::SessionType HostUserAuthorizer::sessionType() const
     return session_type_;
 }
 
+QString HostUserAuthorizer::userName() const
+{
+    return user_name_;
+}
+
 void HostUserAuthorizer::start()
 {
     if (state_ != NotStarted)
@@ -243,42 +248,43 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    QString username = QString::fromStdString(response.username());
-
-    proto::auth::Result result;
+    user_name_ = QString::fromStdString(response.username());
+    status_ = proto::auth::STATUS_ACCESS_DENIED;
 
     for (const auto& user : user_list_)
     {
-        if (user.name().compare(username, Qt::CaseInsensitive) != 0)
+        if (user.name().compare(user_name_, Qt::CaseInsensitive) != 0)
             continue;
 
         if (createKey(user.passwordHash(), nonce_, kKeyHashingRounds) !=
                 QByteArray(key.c_str(), key.size()))
         {
-            result.set_status(proto::auth::STATUS_ACCESS_DENIED);
+            status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
 
         if (!(user.flags() & User::FLAG_ENABLED))
         {
-            result.set_status(proto::auth::STATUS_ACCESS_DENIED);
+            status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
 
         if (!(user.sessions() & response.session_type()))
         {
-            result.set_status(proto::auth::STATUS_ACCESS_DENIED);
+            status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
 
-        result.set_status(proto::auth::STATUS_SUCCESS);
+        status_ = proto::auth::STATUS_SUCCESS;
         break;
     }
 
     session_type_ = response.session_type();
-    status_ = result.status();
-
     state_ = ResultWrite;
+
+    proto::auth::Result result;
+    result.set_status(status_);
+
     emit writeMessage(ResultMessageId, serializeMessage(result));
 }
 

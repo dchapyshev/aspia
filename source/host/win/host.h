@@ -35,13 +35,26 @@ public:
     };
     Q_ENUM(State);
 
-    Host(proto::auth::SessionType session_type,
-         NetworkChannel* network_channel,
-         QObject* parent = nullptr);
+    Host(QObject* parent = nullptr);
     ~Host();
 
+    NetworkChannel* networkChannel() const;
+    void setNetworkChannel(NetworkChannel* network_channel);
+
+    proto::auth::SessionType sessionType() const;
+    void setSessionType(proto::auth::SessionType session_type);
+
+    QString userName() const;
+    void setUserName(const QString& user_name);
+
+    QString uuid() const;
+    void setUuid(const QString& uuid);
+
+    QString remoteAddress() const;
+
+    bool start();
+
 public slots:
-    void start();
     void stop();
     void sessionChanged(quint32 event, quint32 session_id);
 
@@ -49,6 +62,7 @@ signals:
     void finished(Host* host);
 
 protected:
+    // QObject implementation.
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
@@ -64,7 +78,10 @@ private slots:
 private:
     static const quint32 kInvalidSessionId = 0xFFFFFFFF;
 
-    proto::auth::SessionType session_type_;
+    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
+    QString user_name_;
+    QString uuid_;
+
     quint32 session_id_ = kInvalidSessionId;
     int attach_timer_id_ = 0;
     State state_ = StoppedState;

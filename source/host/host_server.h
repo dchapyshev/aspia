@@ -11,7 +11,9 @@
 #include <QObject>
 #include <QPointer>
 
+#include "host/win/host_process.h"
 #include "host/user.h"
+#include "ipc/ipc_channel.h"
 #include "network/network_server.h"
 #include "protocol/authorization.pb.h"
 
@@ -39,10 +41,32 @@ private slots:
     void onNewConnection();
     void onAuthorizationFinished(HostUserAuthorizer* authorizer);
     void onHostFinished(Host* host);
+    void onIpcServerStarted(const QString& channel_id);
+    void onIpcNewConnection(IpcChannel* channel);
+    void onIpcDisconnected();
+    void onIpcMessageReceived(const QByteArray& buffer);
+    void onNotifierFinished();
 
 private:
-    QList<User> user_list_;
+    void startNotifier();
+    void stopNotifier();
+    void sessionToNotifier(const Host& host);
+    void sessionCloseToNotifier(const Host& host);
+
+    // Accepts incoming network connections.
     QPointer<NetworkServer> network_server_;
+
+    // Starts and monitors the status of the notifier process.
+    QPointer<HostProcess> notifier_process_;
+
+    // The channel is used to communicate with the notifier process.
+    QPointer<IpcChannel> ipc_channel_;
+
+    // Contains a list of users for authorization.
+    QList<User> user_list_;
+
+    // Contains a list of connected sessions.
+    QList<QPointer<Host>> session_list_;
 
     Q_DISABLE_COPY(HostServer)
 };

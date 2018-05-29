@@ -177,6 +177,9 @@ background: #CFCFCF;</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">border: 1px;
 border-color: #A7A7A7;
@@ -229,6 +232,9 @@ margin-top: 2px;</string>
         </item>
         <item>
          <widget class="QPushButton" name="button_disconnect_all">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
 border: 1px solid #AAAAAA;
@@ -241,6 +247,9 @@ background: #EBEBEB;
 }
 QPushButton:pressed {
 background: #D7D7D7;
+}
+QPushButton:disabled {
+color: gray;
 }</string>
           </property>
           <property name="text">

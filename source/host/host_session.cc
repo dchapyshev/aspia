@@ -24,6 +24,12 @@ HostSession::HostSession(const QString& channel_id)
 // static
 HostSession* HostSession::create(const QString& session_type, const QString& channel_id)
 {
+    if (channel_id.isEmpty())
+    {
+        qWarning("Invalid IPC channel id");
+        return nullptr;
+    }
+
     if (session_type == QLatin1String("desktop_manage"))
     {
         return new HostSessionDesktop(proto::auth::SESSION_TYPE_DESKTOP_MANAGE, channel_id);

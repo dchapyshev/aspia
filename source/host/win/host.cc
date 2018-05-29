@@ -30,15 +30,10 @@ enum MessageId
 
 } // namespace
 
-Host::Host(proto::auth::SessionType session_type, NetworkChannel* network_channel, QObject* parent)
-    : QObject(parent),
-      session_type_(session_type),
-      network_channel_(network_channel)
+Host::Host(QObject* parent)
+    : QObject(parent)
 {
-    Q_ASSERT(!network_channel_.isNull());
-
-    connect(network_channel_, &NetworkChannel::disconnected,
-            network_channel_, &NetworkChannel::deleteLater);
+    // Nothing
 }
 
 Host::~Host()
@@ -46,8 +41,127 @@ Host::~Host()
     stop();
 }
 
-void Host::start()
+NetworkChannel* Host::networkChannel() const
 {
+    return network_channel_;
+}
+
+void Host::setNetworkChannel(NetworkChannel* network_channel)
+{
+    if (state_ != StoppedState)
+    {
+        qWarning("An attempt to set a network channel in an already running host.");
+        return;
+    }
+
+    if (!network_channel)
+    {
+        qWarning("Network channel is null");
+        return;
+    }
+
+    network_channel_ = network_channel;
+
+    connect(network_channel_, &NetworkChannel::disconnected,
+            network_channel_, &NetworkChannel::deleteLater);
+}
+
+proto::auth::SessionType Host::sessionType() const
+{
+    return session_type_;
+}
+
+void Host::setSessionType(proto::auth::SessionType session_type)
+{
+    if (state_ != StoppedState)
+    {
+        qWarning("An attempt to set a session type in an already running host.");
+        return;
+    }
+
+    session_type_ = session_type;
+}
+
+QString Host::userName() const
+{
+    return user_name_;
+}
+
+void Host::setUserName(const QString& user_name)
+{
+    if (state_ != StoppedState)
+    {
+        qWarning("An attempt to set a user name in an already running host.");
+        return;
+    }
+
+    user_name_ = user_name;
+}
+
+QString Host::uuid() const
+{
+    return uuid_;
+}
+
+void Host::setUuid(const QString& uuid)
+{
+    if (state_ != StoppedState)
+    {
+        qWarning("An attempt to set a UUID in an already running host.");
+        return;
+    }
+
+    uuid_ = uuid;
+}
+
+QString Host::remoteAddress() const
+{
+    if (network_channel_.isNull())
+        return QString();
+
+    return network_channel_->peerAddress();
+}
+
+bool Host::start()
+{
+    if (network_channel_.isNull())
+    {
+        qWarning("Invalid network channel");
+        return false;
+    }
+
+    switch (session_type_)
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            break;
+
+        default:
+        {
+            qWarning("Invalid session type: %d", session_type_);
+            return false;
+        }
+    }
+
+    if (user_name_.isEmpty())
+    {
+        qWarning("Invalid user name");
+        return false;
+    }
+
+    if (uuid_.isEmpty())
+    {
+        qWarning("Invalid session UUID");
+        return false;
+    }
+
+    if (state_ != StoppedState)
+    {
+        qWarning("Attempt to start a host already running");
+        return false;
+    }
+
     state_ = StartingState;
 
     connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
@@ -58,12 +172,11 @@ void Host::start()
     if (!attach_timer_id_)
     {
         qWarning("Could not start the timer");
-        stop();
+        return false;
     }
-    else
-    {
-        attachSession(WTSGetActiveConsoleSessionId());
-    }
+
+    attachSession(WTSGetActiveConsoleSessionId());
+    return true;
 }
 
 void Host::stop()

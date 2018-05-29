@@ -9,6 +9,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QTranslator>
@@ -18,6 +19,43 @@
 namespace aspia {
 
 namespace {
+
+class SessionTreeItem : public QTreeWidgetItem
+{
+public:
+    SessionTreeItem(const proto::notifier::Session& session)
+        : session_(session)
+    {
+        switch (session_.session_type())
+        {
+            case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+                setIcon(0, QIcon(QStringLiteral(":/icon/monitor-keyboard.png")));
+                break;
+
+            case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+                setIcon(0, QIcon(QStringLiteral(":/icon/monitor.png")));
+                break;
+
+            case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+                setIcon(0, QIcon(QStringLiteral(":/icon/folder-stand.png")));
+                break;
+
+            default:
+                qFatal("Unexpected session type: %d", session_.session_type());
+                return;
+        }
+
+        setText(0, QString("%1 (%2)")
+                .arg(QString::fromStdString(session_.username()))
+                .arg(QString::fromStdString(session_.remote_address())));
+    }
+
+    const proto::notifier::Session& session() const { return session_; }
+
+private:
+    proto::notifier::Session session_;
+    Q_DISABLE_COPY(SessionTreeItem)
+};
 
 QHash<QString, QStringList> createLocaleList()
 {
@@ -48,7 +86,7 @@ QHash<QString, QStringList> createLocaleList()
 } // namespace
 
 HostNotifierWindow::HostNotifierWindow(QWidget* parent)
-    : QWidget(parent, Qt::SplashScreen)
+    : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
     HostSettings settings;
 
@@ -70,14 +108,15 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     connect(ui.button_show_hide, &QPushButton::pressed,
             this, &HostNotifierWindow::onShowHidePressed);
 
-    connect(ui.button_disconnect_all, &QPushButton::pressed, [this]()
-    {
-        close();
-        QApplication::quit();
-    });
+    connect(ui.button_disconnect_all, &QPushButton::pressed,
+            this, &HostNotifierWindow::onDisconnectAllPressed);
+
+    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+            this, &HostNotifierWindow::onContextMenu);
 
     setAttribute(Qt::WA_ShowWithoutActivating);
     setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_NativeWindow);
 }
 
 HostNotifierWindow::~HostNotifierWindow()
@@ -86,6 +125,31 @@ HostNotifierWindow::~HostNotifierWindow()
     {
         QApplication::removeTranslator(translator);
         delete translator;
+    }
+}
+
+void HostNotifierWindow::sessionOpen(const proto::notifier::Session& session)
+{
+    ui.tree->addTopLevelItem(new SessionTreeItem(session));
+    ui.button_disconnect_all->setEnabled(true);
+}
+
+void HostNotifierWindow::sessionClose(const proto::notifier::SessionClose& session_close)
+{
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        if (item && item->session().uuid() == session_close.uuid())
+        {
+            delete item;
+            break;
+        }
+    }
+
+    if (!ui.tree->topLevelItemCount())
+    {
+        close();
+        QApplication::quit();
     }
 }
 
@@ -157,6 +221,31 @@ void HostNotifierWindow::onShowHidePressed()
 
         ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-left-gray.png")));
     }
+}
+
+void HostNotifierWindow::onDisconnectAllPressed()
+{
+    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    {
+        SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        if (item)
+            emit killSession(item->session().uuid());
+    }
+}
+
+void HostNotifierWindow::onContextMenu(const QPoint& point)
+{
+    SessionTreeItem* item = dynamic_cast<SessionTreeItem*>(ui.tree->itemAt(point));
+    if (!item)
+        return;
+
+    QAction disconnect_action(tr("Disconnect"));
+
+    QMenu menu;
+    menu.addAction(&disconnect_action);
+
+    if (menu.exec(ui.tree->mapToGlobal(point)) == &disconnect_action)
+        emit killSession(item->session().uuid());
 }
 
 void HostNotifierWindow::installTranslators(const QStringList& file_list)

@@ -41,6 +41,7 @@ public:
     NetworkChannel* networkChannel();
     proto::auth::Status status() const;
     proto::auth::SessionType sessionType() const;
+    QString userName() const;
 
 public slots:
     void start();
@@ -65,6 +66,7 @@ private:
     QList<User> user_list_;
     QPointer<NetworkChannel> network_channel_;
 
+    QString user_name_;
     QByteArray nonce_;
     int timer_id_ = 0;
 

@@ -46,6 +46,7 @@ public:
     void connectToHost(const QString& address, int port);
 
     ChannelState channelState() const { return channel_state_; }
+    QString peerAddress() const;
 
 signals:
     void connected();
