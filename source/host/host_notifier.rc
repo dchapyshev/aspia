@@ -1,0 +1,18 @@
+//
+// PROJECT:         Aspia
+// FILE:            host/host_config.rc
+// LICENSE:         GNU General Public License 3
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+1 ICON "resources/main.ico"
+
+#define ASPIA_ORIGINAL_FILE_NAME "aspia_host_notifier.exe"
+#define ASPIA_FILE_DESCRIPTION "Aspia Host Notifier"
+
+#include "version.rc"

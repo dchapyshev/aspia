@@ -131,3 +131,7 @@ add_executable(aspia_host ${PROJECT_SOURCE_DIR}/host/win/host_entry_point.cc ${P
 set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
 set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 target_link_libraries(aspia_host aspia_core)
+
+add_executable(aspia_host_notifier ${PROJECT_SOURCE_DIR}/host/host_notifier_entry_point.cc ${PROJECT_SOURCE_DIR}/host/host_notifier.rc)
+set_target_properties(aspia_host_notifier PROPERTIES WIN32_EXECUTABLE TRUE)
+target_link_libraries(aspia_host_notifier aspia_core)

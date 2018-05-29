@@ -239,6 +239,10 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_worker.h
     ${PROJECT_SOURCE_DIR}/host/host_config_main.cc
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
+    ${PROJECT_SOURCE_DIR}/host/host_notifier.cc
+    ${PROJECT_SOURCE_DIR}/host/host_notifier.h
+    ${PROJECT_SOURCE_DIR}/host/host_notifier_main.cc
+    ${PROJECT_SOURCE_DIR}/host/host_notifier_main.h
     ${PROJECT_SOURCE_DIR}/host/host_server.cc
     ${PROJECT_SOURCE_DIR}/host/host_server.h
     ${PROJECT_SOURCE_DIR}/host/host_session.cc
@@ -262,6 +266,9 @@ list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.cc
     ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.h
     ${PROJECT_SOURCE_DIR}/host/ui/host_config_dialog.ui
+    ${PROJECT_SOURCE_DIR}/host/ui/host_notifier_window.cc
+    ${PROJECT_SOURCE_DIR}/host/ui/host_notifier_window.h
+    ${PROJECT_SOURCE_DIR}/host/ui/host_notifier_window.ui
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.cc
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.h
     ${PROJECT_SOURCE_DIR}/host/ui/user_dialog.ui
