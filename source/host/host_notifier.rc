@@ -10,8 +10,6 @@
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-1 ICON "resources/main.ico"
-
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_host_notifier.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Host Notifier"
 
