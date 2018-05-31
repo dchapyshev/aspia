@@ -107,6 +107,12 @@ void FilePanel::setCurrentPath(const QString& path)
         }
     }
 
+    for (int i = ui.tree->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        QTreeWidgetItem* item = ui.tree->takeTopLevelItem(i);
+        delete item;
+    }
+
     int current_item = ui.address_bar->count();
 
     ui.address_bar->addItem(FilePlatformUtil::directoryIcon(), current_path_);
