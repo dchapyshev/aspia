@@ -37,6 +37,9 @@ signals:
     void newConnection(IpcChannel* channel);
     void errorOccurred();
 
+private slots:
+    void onNewConnection();
+
 private:
     QPointer<QLocalServer> server_;
 

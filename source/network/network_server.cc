@@ -105,8 +105,6 @@ void NetworkServer::onNewConnection()
 
     connect(network_channel, &NetworkChannel::connected,
             this, &NetworkServer::onChannelReady);
-    connect(network_channel, &NetworkChannel::disconnected,
-            network_channel, &NetworkChannel::deleteLater);
 
     pending_channels_.push_back(network_channel);
 

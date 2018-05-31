@@ -37,10 +37,7 @@ IpcServer::IpcServer(QObject* parent)
     // Nothing
 }
 
-IpcServer::~IpcServer()
-{
-    stop();
-}
+IpcServer::~IpcServer() = default;
 
 bool IpcServer::isStarted() const
 {
@@ -60,15 +57,7 @@ void IpcServer::start()
     server_->setSocketOptions(QLocalServer::OtherAccessOption);
     server_->setMaxPendingConnections(1);
 
-    connect(server_, &QLocalServer::newConnection, [this]()
-    {
-        if (server_->hasPendingConnections())
-        {
-            QLocalSocket* socket = server_->nextPendingConnection();
-            emit newConnection(new IpcChannel(socket, nullptr));
-            stop();
-        }
-    });
+    connect(server_, &QLocalServer::newConnection, this, &IpcServer::onNewConnection);
 
     QString channel_id = generateUniqueChannelId();
 
@@ -89,9 +78,18 @@ void IpcServer::stop()
     {
         server_->close();
         delete server_;
+        emit finished();
     }
+}
 
-    emit finished();
+void IpcServer::onNewConnection()
+{
+    if (server_->hasPendingConnections())
+    {
+        QLocalSocket* socket = server_->nextPendingConnection();
+        emit newConnection(new IpcChannel(socket, nullptr));
+        emit finished();
+    }
 }
 
 } // namespace aspia

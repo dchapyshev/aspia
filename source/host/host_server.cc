@@ -79,6 +79,9 @@ bool HostServer::start()
 
 void HostServer::stop()
 {
+    for (auto session : session_list_)
+        session->stop();
+
     stopNotifier();
 
     if (!network_server_.isNull())
@@ -101,9 +104,6 @@ void HostServer::setSessionChanged(quint32 event, quint32 session_id)
 
 void HostServer::onNewConnection()
 {
-    if (network_server_.isNull())
-        return;
-
     while (network_server_->hasReadyChannels())
     {
         NetworkChannel* channel = network_server_->nextReadyChannel();
@@ -124,13 +124,6 @@ void HostServer::onNewConnection()
 
 void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 {
-    if (!authorizer)
-    {
-        qWarning("Invalid authorizer passed");
-        stop();
-        return;
-    }
-
     QScopedPointer<HostUserAuthorizer> authorizer_deleter(authorizer);
 
     if (authorizer->status() != proto::auth::STATUS_SUCCESS)
@@ -144,7 +137,7 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
     host->setUuid(QUuid::createUuid().toString());
 
     connect(this, &HostServer::sessionChanged, host.data(), &Host::sessionChanged);
-    connect(host.data(), &Host::finished, this, &HostServer::onHostFinished);
+    connect(host.data(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
 
     if (host->start())
     {
@@ -190,7 +183,10 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
     notifier_process_->setArguments(QStringList() << "--channel_id" << channel_id);
 
     connect(notifier_process_, &HostProcess::errorOccurred, this, &HostServer::stop);
-    connect(notifier_process_, &HostProcess::finished, this, &HostServer::onNotifierFinished);
+
+    connect(notifier_process_, &HostProcess::finished,
+            this, &HostServer::onNotifierFinished,
+            Qt::QueuedConnection);
 
     // Start the process. After the start, the process must connect to the IPC server and
     // slot |onIpcNewConnection| will be called.
@@ -200,7 +196,9 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
 void HostServer::onIpcNewConnection(IpcChannel* channel)
 {
     ipc_channel_ = channel;
+    ipc_channel_->setParent(this);
 
+    connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &HostServer::onIpcDisconnected);
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostServer::onIpcMessageReceived);
 
@@ -216,11 +214,11 @@ void HostServer::onIpcDisconnected()
     stopNotifier();
 
     // The notifier is not needed if there are no active sessions.
-    //if (session_list_.isEmpty())
-    //    return;
+    if (session_list_.isEmpty())
+        return;
 
     // Otherwise, restart the notifier.
-    //startNotifier();
+    startNotifier();
 }
 
 void HostServer::onIpcMessageReceived(const QByteArray& buffer)
@@ -283,13 +281,14 @@ void HostServer::startNotifier()
 
 void HostServer::stopNotifier()
 {
+    if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
+        ipc_channel_->stop();
+
     if (!notifier_process_.isNull())
     {
         notifier_process_->kill();
         delete notifier_process_;
     }
-
-    delete ipc_channel_;
 }
 
 void HostServer::sessionToNotifier(const Host& host)

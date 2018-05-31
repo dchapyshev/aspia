@@ -66,15 +66,19 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
     if (channel_type_ == ClientChannel)
         connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
 
-    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::onDisconnected);
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
 
-    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error), this,
-            &NetworkChannel::onError);
+    connect(socket_, &QTcpSocket::disconnected,
+            this, &NetworkChannel::onDisconnected,
+            Qt::QueuedConnection);
+
+    connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
+            this, &NetworkChannel::onError,
+            Qt::QueuedConnection);
 }
 
-NetworkChannel::~NetworkChannel() { stop(); }
+NetworkChannel::~NetworkChannel() = default;
 
 // static
 NetworkChannel* NetworkChannel::createClient(QObject* parent)
@@ -90,17 +94,11 @@ void NetworkChannel::connectToHost(const QString& address, int port)
         return;
     }
 
-    if (socket_.isNull())
-        return;
-
     socket_->connectToHost(address, port);
 }
 
 QString NetworkChannel::peerAddress() const
 {
-    if (socket_.isNull())
-        return QString();
-
     return socket_->peerAddress().toString();
 }
 
@@ -127,12 +125,10 @@ void NetworkChannel::stop()
 {
     channel_state_ = NotConnected;
 
-    if (!socket_.isNull())
+    if (socket_->state() != QTcpSocket::UnconnectedState)
     {
-        socket_->abort();
-
-        if (socket_->state() != QTcpSocket::UnconnectedState)
-            socket_->waitForDisconnected();
+        socket_->close();
+        socket_->waitForDisconnected();
     }
 }
 
@@ -192,12 +188,6 @@ void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
 
 void NetworkChannel::onBytesWritten(qint64 bytes)
 {
-    if (socket_.isNull())
-    {
-        stop();
-        return;
-    }
-
     written_ += bytes;
 
     const QByteArray& write_buffer = write_queue_.front().second;
@@ -221,12 +211,6 @@ void NetworkChannel::onBytesWritten(qint64 bytes)
 
 void NetworkChannel::onReadyRead()
 {
-    if (socket_.isNull())
-    {
-        stop();
-        return;
-    }
-
     if (!read_required_)
         return;
 
@@ -394,7 +378,7 @@ void NetworkChannel::onMessageReceived(const QByteArray& buffer)
 
 void NetworkChannel::write(int message_id, const QByteArray& buffer)
 {
-    if (socket_.isNull() || buffer.isEmpty() || buffer.size() > kMaxMessageSize)
+    if (buffer.isEmpty() || buffer.size() > kMaxMessageSize)
     {
         stop();
         return;

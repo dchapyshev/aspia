@@ -61,9 +61,7 @@ void Host::setNetworkChannel(NetworkChannel* network_channel)
     }
 
     network_channel_ = network_channel;
-
-    connect(network_channel_, &NetworkChannel::disconnected,
-            network_channel_, &NetworkChannel::deleteLater);
+    network_channel_->setParent(this);
 }
 
 proto::auth::SessionType Host::sessionType() const
@@ -116,9 +114,6 @@ void Host::setUuid(const QString& uuid)
 
 QString Host::remoteAddress() const
 {
-    if (network_channel_.isNull())
-        return QString();
-
     return network_channel_->peerAddress();
 }
 
@@ -184,6 +179,9 @@ void Host::stop()
     if (state_ == StoppedState)
         return;
 
+    if (network_channel_->channelState() != NetworkChannel::NotConnected)
+        network_channel_->stop();
+
     dettachSession();
 
     state_ = StoppedState;
@@ -240,15 +238,12 @@ void Host::networkMessageReceived(const QByteArray& buffer)
 void Host::ipcMessageWritten(int message_id)
 {
     Q_ASSERT(message_id == IpcMessageId);
-
-    if (!network_channel_.isNull())
-        network_channel_->readMessage();
+    network_channel_->readMessage();
 }
 
 void Host::ipcMessageReceived(const QByteArray& buffer)
 {
-    if (!network_channel_.isNull())
-        network_channel_->writeMessage(NetworkMessageId, buffer);
+    network_channel_->writeMessage(NetworkMessageId, buffer);
 }
 
 void Host::ipcServerStarted(const QString& channel_id)
@@ -306,7 +301,9 @@ void Host::ipcNewConnection(IpcChannel* channel)
     attach_timer_id_ = 0;
 
     ipc_channel_ = channel;
+    ipc_channel_->setParent(this);
 
+    connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &Host::dettachSession);
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::ipcMessageReceived);
     connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::ipcMessageWritten);
@@ -339,13 +336,14 @@ void Host::dettachSession()
 
     state_ = DetachedState;
 
+    if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
+        ipc_channel_->stop();
+
     if (!session_process_.isNull())
     {
         session_process_->kill();
         delete session_process_;
     }
-
-    delete ipc_channel_;
 
     if (session_type_ == proto::auth::SESSION_TYPE_FILE_TRANSFER)
     {

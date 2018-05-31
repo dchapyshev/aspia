@@ -9,12 +9,11 @@
 #define _ASPIA_IPC__IPC_CHANNEL_H
 
 #include <QByteArray>
+#include <QLocalSocket>
 #include <QPointer>
 
 #include <queue>
 #include <utility>
-
-class QLocalSocket;
 
 namespace aspia {
 
@@ -25,14 +24,21 @@ class IpcChannel : public QObject
     Q_OBJECT
 
 public:
+    enum State
+    {
+        NotConnected,
+        Connected
+    };
+
     ~IpcChannel();
 
     static IpcChannel* createClient(QObject* parent = nullptr);
 
     void connectToServer(const QString& channel_name);
+    State channelState() const { return state_; }
 
 public slots:
-    void disconnectFromServer();
+    void stop();
 
     // Starts reading the message. When the message is received, the signal |messageReceived| is
     // called. You do not need to re-call |readMessage| until this signal is called.
@@ -50,6 +56,7 @@ signals:
     void messageReceived(const QByteArray& buffer);
 
 private slots:
+    void onError(QLocalSocket::LocalSocketError socket_error);
     void onBytesWritten(qint64 bytes);
     void onReadyRead();
 
@@ -63,6 +70,7 @@ private:
     using MessageSizeType = quint32;
 
     QPointer<QLocalSocket> socket_;
+    State state_ = NotConnected;
 
     std::queue<std::pair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;

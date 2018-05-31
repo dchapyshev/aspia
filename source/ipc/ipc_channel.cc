@@ -8,7 +8,6 @@
 #include "ipc/ipc_channel.h"
 
 #include <QDebug>
-#include <QLocalSocket>
 
 namespace aspia {
 
@@ -26,29 +25,25 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
 
     socket_->setParent(this);
 
-    connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
-    connect(socket_, &QLocalSocket::disconnected, this, &IpcChannel::disconnected);
+    connect(socket_, &QLocalSocket::connected, [this]()
+    {
+        state_ = Connected;
+        emit connected();
+    });
+
     connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
 
+    connect(socket_, &QLocalSocket::disconnected,
+            this, &IpcChannel::disconnected,
+            Qt::QueuedConnection);
+
     connect(socket_, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
-            [this](QLocalSocket::LocalSocketError /* socket_error */)
-    {
-        qWarning() << "IPC channel error: " << socket_->errorString();
-        emit errorOccurred();
-    });
+            this, &IpcChannel::onError,
+            Qt::QueuedConnection);
 }
 
-IpcChannel::~IpcChannel()
-{
-    if (!socket_.isNull())
-    {
-        socket_->abort();
-
-        if (socket_->state() != QLocalSocket::UnconnectedState)
-            socket_->waitForDisconnected();
-    }
-}
+IpcChannel::~IpcChannel() = default;
 
 // static
 IpcChannel* IpcChannel::createClient(QObject* parent)
@@ -61,9 +56,15 @@ void IpcChannel::connectToServer(const QString& channel_name)
     socket_->connectToServer(channel_name);
 }
 
-void IpcChannel::disconnectFromServer()
+void IpcChannel::stop()
 {
-    socket_->disconnectFromServer();
+    state_ = NotConnected;
+
+    if (socket_->state() != QLocalSocket::UnconnectedState)
+    {
+        socket_->close();
+        socket_->waitForDisconnected();
+    }
 }
 
 void IpcChannel::readMessage()
@@ -82,6 +83,12 @@ void IpcChannel::writeMessage(int message_id, const QByteArray& buffer)
 
     if (schedule_write)
         scheduleWrite();
+}
+
+void IpcChannel::onError(QLocalSocket::LocalSocketError /* socket_error */)
+{
+    qWarning() << "IPC channel error: " << socket_->errorString();
+    emit errorOccurred();
 }
 
 void IpcChannel::onBytesWritten(qint64 bytes)
