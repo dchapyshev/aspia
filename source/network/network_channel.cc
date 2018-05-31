@@ -99,7 +99,14 @@ void NetworkChannel::connectToHost(const QString& address, int port)
 
 QString NetworkChannel::peerAddress() const
 {
-    return socket_->peerAddress().toString();
+    QHostAddress address = socket_->peerAddress();
+
+    bool ok = false;
+    QHostAddress ipv4_address(address.toIPv4Address(&ok));
+    if (ok)
+        return ipv4_address.toString();
+
+    return address.toString();
 }
 
 void NetworkChannel::readMessage()
