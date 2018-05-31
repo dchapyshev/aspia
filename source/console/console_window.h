@@ -17,6 +17,7 @@
 namespace aspia {
 
 class AddressBookTab;
+class Client;
 
 class ConsoleWindow : public QMainWindow
 {
@@ -64,6 +65,9 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
+private slots:
+    void onClientTerminated(Client* client);
+
 private:
     void installTranslators(const QString& locale);
     void removeTranslators();
@@ -75,6 +79,7 @@ private:
 
     QHash<QString, QStringList> locale_list_;
     QList<QTranslator*> translator_list_;
+    QList<Client*> client_list_;
 
     Q_DISABLE_COPY(ConsoleWindow)
 };

@@ -17,7 +17,11 @@ class ClientSession : public QObject
     Q_OBJECT
 
 public:
-    ClientSession(QObject* parent) : QObject(parent) {}
+    ClientSession(QObject* parent) : QObject(parent)
+    {
+        // Nothing
+    }
+
     virtual ~ClientSession() = default;
 
 public slots:

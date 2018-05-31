@@ -33,14 +33,14 @@ Client::Client(const proto::address_book::Computer& computer, QObject* parent)
 
     connect(status_dialog_, &StatusDialog::finished, [this](int /* result */)
     {
-        // When the status dialog is finished, we call the client's termination.
-        clientTerminated();
-
         // When the status dialog is finished, we stop the connection.
         network_channel_->stop();
 
         // Delete the dialog after the finish.
         status_dialog_->deleteLater();
+
+        // When the status dialog is finished, we call the client's termination.
+        emit clientTerminated(this);
     });
 
     QString address = QString::fromStdString(computer_.address());
@@ -52,6 +52,8 @@ Client::Client(const proto::address_book::Computer& computer, QObject* parent)
     status_dialog_->addStatus(tr("Attempt to connect to %1:%2.").arg(address).arg(port));
     network_channel_->connectToHost(address, port);
 }
+
+Client::~Client() = default;
 
 void Client::onChannelConnected()
 {
@@ -150,11 +152,14 @@ void Client::authorizationFinished(proto::auth::Status status)
     connect(network_channel_, &NetworkChannel::disconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, &ClientSession::closedByUser, network_channel_, &NetworkChannel::stop);
-    connect(session_, &ClientSession::closedByUser, status_dialog_, &StatusDialog::close);
+    connect(session_, &ClientSession::closedByUser, [this]()
+    {
+        status_dialog_->show();
+        status_dialog_->close();
+    });
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
-    connect(session_, &ClientSession::errorOccurred, this, [this](const QString& message)
+    connect(session_, &ClientSession::errorOccurred, [this](const QString& message)
     {
         status_dialog_->addStatus(message);
         network_channel_->stop();

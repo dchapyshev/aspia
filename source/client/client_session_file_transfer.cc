@@ -40,6 +40,13 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
         worker_thread_->quit();
         worker_thread_->wait();
     }
+
+    for (auto task : tasks_)
+        delete task;
+    tasks_.clear();
+
+    delete file_manager_;
+    delete worker_;
 }
 
 void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)

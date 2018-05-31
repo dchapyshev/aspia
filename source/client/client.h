@@ -23,10 +23,10 @@ class Client : public QObject
 
 public:
     Client(const proto::address_book::Computer& computer, QObject* parent = nullptr);
-    ~Client() = default;
+    ~Client();
 
 signals:
-    void clientTerminated();
+    void clientTerminated(Client* client);
 
 private slots:
     void onChannelConnected();

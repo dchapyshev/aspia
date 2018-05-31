@@ -777,7 +777,22 @@ void ConsoleWindow::connectToComputer(proto::address_book::Computer* computer)
     computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
 
     Client* client = new Client(*computer, this);
-    connect(client, &Client::clientTerminated, client, &Client::deleteLater);
+    connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
+    client_list_.push_back(client);
+}
+
+void ConsoleWindow::onClientTerminated(Client* client)
+{
+    for (auto it = client_list_.begin(); it != client_list_.end(); ++it)
+    {
+        if (client == *it)
+        {
+            client_list_.erase(it);
+            break;
+        }
+    }
+
+    delete client;
 }
 
 } // namespace aspia

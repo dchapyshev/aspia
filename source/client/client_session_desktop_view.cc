@@ -33,7 +33,10 @@ ClientSessionDesktopView::ClientSessionDesktopView(
             this, &ClientSessionDesktopView::closedByUser);
 }
 
-ClientSessionDesktopView::~ClientSessionDesktopView() = default;
+ClientSessionDesktopView::~ClientSessionDesktopView()
+{
+    delete desktop_window_;
+}
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
 {
