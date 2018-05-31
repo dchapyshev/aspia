@@ -43,9 +43,8 @@ private slots:
     void onHostFinished(Host* host);
     void onIpcServerStarted(const QString& channel_id);
     void onIpcNewConnection(IpcChannel* channel);
-    void onIpcDisconnected();
     void onIpcMessageReceived(const QByteArray& buffer);
-    void onNotifierFinished();
+    void restartNotifier();
 
 private:
     enum class NotifierState

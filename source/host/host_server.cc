@@ -178,9 +178,7 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
     notifier_process_->setArguments(QStringList() << "--channel_id" << channel_id);
 
     connect(notifier_process_, &HostProcess::errorOccurred, this, &HostServer::stop);
-
-    connect(notifier_process_, &HostProcess::finished,
-            this, &HostServer::onNotifierFinished);
+    connect(notifier_process_, &HostProcess::finished, this, &HostServer::restartNotifier);
 
     // Start the process. After the start, the process must connect to the IPC server and
     // slot |onIpcNewConnection| will be called.
@@ -197,7 +195,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     ipc_channel_->setParent(this);
 
     connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
-    connect(ipc_channel_, &IpcChannel::disconnected, this, &HostServer::onIpcDisconnected);
+    connect(ipc_channel_, &IpcChannel::disconnected, this, &HostServer::restartNotifier);
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostServer::onIpcMessageReceived);
 
     // Send information about all connected sessions to the notifier.
@@ -207,7 +205,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     ipc_channel_->readMessage();
 }
 
-void HostServer::onIpcDisconnected()
+void HostServer::restartNotifier()
 {
     if (notifier_state_ == NotifierState::Stopped)
         return;
@@ -253,21 +251,6 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
 
     // Read next message.
     ipc_channel_->readMessage();
-}
-
-void HostServer::onNotifierFinished()
-{
-    if (notifier_state_ == NotifierState::Stopped)
-        return;
-
-    stopNotifier();
-
-    // The notifier is not needed if there are no active sessions.
-    if (session_list_.isEmpty())
-        return;
-
-    // Otherwise, restart the notifier.
-    startNotifier();
 }
 
 void HostServer::startNotifier()
