@@ -55,6 +55,16 @@ int HostNotifierMain(int argc, char *argv[])
                 screen_size.height() - window_size.height());
 
 #if defined(Q_OS_WIN)
+    DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
+    DWORD current_thread_id = GetCurrentThreadId();
+
+    if (active_thread_id != current_thread_id)
+    {
+        AttachThreadInput(current_thread_id, active_thread_id, TRUE);
+        SetForegroundWindow(reinterpret_cast<HWND>(window.winId()));
+        AttachThreadInput(current_thread_id, active_thread_id, FALSE);
+    }
+
     // I not found a way better than using WinAPI function in MS Windows.
     // Flag Qt::WindowStaysOnTopHint works incorrectly.
     SetWindowPos(reinterpret_cast<HWND>(window.winId()),
