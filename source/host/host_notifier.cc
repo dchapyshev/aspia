@@ -58,14 +58,12 @@ bool HostNotifier::start()
 
 void HostNotifier::stop()
 {
-    delete ipc_channel_;
+    if (ipc_channel_->channelState() == IpcChannel::Connected)
+        ipc_channel_->stop();
 }
 
 void HostNotifier::killSession(const std::string& uuid)
 {
-    if (ipc_channel_.isNull())
-        return;
-
     proto::notifier::NotifierToService message;
     message.mutable_kill_session()->set_uuid(uuid);
     ipc_channel_->writeMessage(-1, serializeMessage(message));
@@ -73,9 +71,6 @@ void HostNotifier::killSession(const std::string& uuid)
 
 void HostNotifier::onIpcChannelConnected()
 {
-    if (ipc_channel_.isNull())
-        return;
-
     window_ = new HostNotifierWindow();
     connect(window_, &HostNotifierWindow::killSession, this, &HostNotifier::killSession);
     window_->show();
@@ -104,9 +99,6 @@ void HostNotifier::onIpcChannelConnected()
 
 void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
 {
-    if (ipc_channel_.isNull())
-        return;
-
     proto::notifier::ServiceToNotifier message;
     if (!parseMessage(buffer, message))
     {
