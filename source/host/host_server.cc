@@ -25,6 +25,7 @@ namespace aspia {
 namespace {
 
 const char kFirewallRuleName[] = "Aspia Host Service";
+const char kNotifierFileName[] = "aspia_host_notifier.exe";
 
 } // namespace
 
@@ -141,7 +142,7 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 
     if (host->start())
     {
-        if (session_list_.isEmpty())
+        if (notifier_state_ == NotifierState::Stopped)
             startNotifier();
         else
             sessionToNotifier(*host);
@@ -152,13 +153,6 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 
 void HostServer::onHostFinished(Host* host)
 {
-    if (!host)
-    {
-        qWarning("Invalid host passed");
-        stop();
-        return;
-    }
-
     for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
     {
         if (*it != host)
@@ -174,19 +168,19 @@ void HostServer::onHostFinished(Host* host)
 
 void HostServer::onIpcServerStarted(const QString& channel_id)
 {
+    Q_ASSERT(notifier_state_ == NotifierState::Starting);
+
     notifier_process_ = new HostProcess(this);
 
     notifier_process_->setAccount(HostProcess::User);
     notifier_process_->setSessionId(WTSGetActiveConsoleSessionId());
-    notifier_process_->setProgram(
-        QCoreApplication::applicationDirPath() + QLatin1String("/aspia_host_notifier.exe"));
+    notifier_process_->setProgram(QCoreApplication::applicationDirPath() + "/" + kNotifierFileName);
     notifier_process_->setArguments(QStringList() << "--channel_id" << channel_id);
 
     connect(notifier_process_, &HostProcess::errorOccurred, this, &HostServer::stop);
 
     connect(notifier_process_, &HostProcess::finished,
-            this, &HostServer::onNotifierFinished,
-            Qt::QueuedConnection);
+            this, &HostServer::onNotifierFinished);
 
     // Start the process. After the start, the process must connect to the IPC server and
     // slot |onIpcNewConnection| will be called.
@@ -195,6 +189,10 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
 
 void HostServer::onIpcNewConnection(IpcChannel* channel)
 {
+    Q_ASSERT(notifier_state_ == NotifierState::Starting);
+
+    notifier_state_ = NotifierState::Started;
+
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
@@ -211,6 +209,9 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
 
 void HostServer::onIpcDisconnected()
 {
+    if (notifier_state_ == NotifierState::Stopped)
+        return;
+
     stopNotifier();
 
     // The notifier is not needed if there are no active sessions.
@@ -250,11 +251,15 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
         qWarning("Unhandled message from notifier");
     }
 
+    // Read next message.
     ipc_channel_->readMessage();
 }
 
 void HostServer::onNotifierFinished()
 {
+    if (notifier_state_ == NotifierState::Stopped)
+        return;
+
     stopNotifier();
 
     // The notifier is not needed if there are no active sessions.
@@ -267,6 +272,11 @@ void HostServer::onNotifierFinished()
 
 void HostServer::startNotifier()
 {
+    if (notifier_state_ != NotifierState::Stopped)
+        return;
+
+    notifier_state_ = NotifierState::Starting;
+
     IpcServer* ipc_server = new IpcServer(this);
 
     connect(ipc_server, &IpcServer::started, this, &HostServer::onIpcServerStarted);
@@ -281,6 +291,11 @@ void HostServer::startNotifier()
 
 void HostServer::stopNotifier()
 {
+    if (notifier_state_ == NotifierState::Stopped)
+        return;
+
+    notifier_state_ = NotifierState::Stopped;
+
     if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
         ipc_channel_->stop();
 

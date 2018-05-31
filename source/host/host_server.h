@@ -48,6 +48,13 @@ private slots:
     void onNotifierFinished();
 
 private:
+    enum class NotifierState
+    {
+        Stopped,
+        Starting,
+        Started
+    };
+
     void startNotifier();
     void stopNotifier();
     void sessionToNotifier(const Host& host);
@@ -55,6 +62,8 @@ private:
 
     // Accepts incoming network connections.
     QPointer<NetworkServer> network_server_;
+
+    NotifierState notifier_state_ = NotifierState::Stopped;
 
     // Starts and monitors the status of the notifier process.
     QPointer<HostProcess> notifier_process_;
