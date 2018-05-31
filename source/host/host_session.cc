@@ -7,6 +7,7 @@
 
 #include "host/host_session.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 
 #include "host/host_session_desktop.h"
@@ -73,8 +74,8 @@ void HostSession::ipcChannelConnected()
 
 void HostSession::stop()
 {
-    delete ipc_channel_;
     stopSession();
+    QCoreApplication::quit();
 }
 
 } // namespace aspia
