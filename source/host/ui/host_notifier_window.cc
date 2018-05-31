@@ -128,6 +128,11 @@ HostNotifierWindow::~HostNotifierWindow()
     }
 }
 
+void HostNotifierWindow::setChannelId(const QString& channel_id)
+{
+    channel_id_ = channel_id;
+}
+
 void HostNotifierWindow::sessionOpen(const proto::notifier::Session& session)
 {
     ui.tree->addTopLevelItem(new SessionTreeItem(session));
@@ -147,10 +152,7 @@ void HostNotifierWindow::sessionClose(const proto::notifier::SessionClose& sessi
     }
 
     if (!ui.tree->topLevelItemCount())
-    {
-        close();
-        QApplication::quit();
-    }
+        quit();
 }
 
 bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
@@ -194,6 +196,30 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+void HostNotifierWindow::showEvent(QShowEvent* event)
+{
+    if (notifier_.isNull())
+    {
+        notifier_ = new HostNotifier(this);
+
+        connect(notifier_, &HostNotifier::finished, this, &HostNotifierWindow::quit);
+        connect(notifier_, &HostNotifier::sessionOpen, this, &HostNotifierWindow::sessionOpen);
+        connect(notifier_, &HostNotifier::sessionClose, this, &HostNotifierWindow::sessionClose);
+        connect(this, &HostNotifierWindow::killSession, notifier_, &HostNotifier::killSession);
+
+        if (!notifier_->start(channel_id_))
+            quit();
+    }
+
+    QWidget::showEvent(event);
+}
+
+void HostNotifierWindow::quit()
+{
+    close();
+    QApplication::quit();
 }
 
 void HostNotifierWindow::onShowHidePressed()

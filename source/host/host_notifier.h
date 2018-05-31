@@ -8,10 +8,8 @@
 #ifndef _ASPIA_HOST__HOST_NOTIFIER_H
 #define _ASPIA_HOST__HOST_NOTIFIER_H
 
-#include <QObject>
-
-#include "host/ui/host_notifier_window.h"
 #include "ipc/ipc_channel.h"
+#include "protocol/notifier.pb.h"
 
 namespace aspia {
 
@@ -23,24 +21,23 @@ public:
     explicit HostNotifier(QObject* parent = nullptr);
     ~HostNotifier();
 
-    QString channelId() const;
-    void setChannelId(const QString& channel_id);
+    bool start(const QString& channel_id);
 
-    bool start();
-
-signals:
-    void sessionClose(const std::string& uuid);
-
-private slots:
+public slots:
     void stop();
     void killSession(const std::string& uuid);
+
+signals:
+    void finished();
+    void sessionOpen(const proto::notifier::Session& session);
+    void sessionClose(const proto::notifier::SessionClose& session_close);
+
+private slots:
     void onIpcChannelConnected();
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:
     QPointer<IpcChannel> ipc_channel_;
-    QPointer<HostNotifierWindow> window_;
-    QString channel_id_;
 
     Q_DISABLE_COPY(HostNotifier)
 };

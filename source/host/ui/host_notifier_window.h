@@ -8,6 +8,7 @@
 #ifndef _ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
 #define _ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
 
+#include "host/host_notifier.h"
 #include "protocol/notifier.pb.h"
 #include "ui_host_notifier_window.h"
 
@@ -21,6 +22,8 @@ public:
     explicit HostNotifierWindow(QWidget* parent = nullptr);
     ~HostNotifierWindow();
 
+    void setChannelId(const QString& channel_id);
+
 public slots:
     void sessionOpen(const proto::notifier::Session& session);
     void sessionClose(const proto::notifier::SessionClose& session_close);
@@ -31,8 +34,10 @@ signals:
 protected:
     // QMainWindow implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
+    void showEvent(QShowEvent* event) override;
 
 private slots:
+    void quit();
     void onShowHidePressed();
     void onDisconnectAllPressed();
     void onContextMenu(const QPoint& point);
@@ -45,6 +50,9 @@ private:
     QList<QTranslator*> translator_list_;
     QPoint start_pos_;
     QRect window_rect_;
+
+    QPointer<HostNotifier> notifier_;
+    QString channel_id_;
 
     Q_DISABLE_COPY(HostNotifierWindow)
 };
