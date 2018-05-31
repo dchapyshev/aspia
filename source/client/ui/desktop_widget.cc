@@ -113,12 +113,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         if (delta.y() < 0)
         {
             mask |= proto::desktop::PointerEvent::WHEEL_DOWN;
-            wheel_steps = -delta.y() / 120;
+            wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
             mask |= proto::desktop::PointerEvent::WHEEL_UP;
-            wheel_steps = delta.y() / 120;
+            wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
         if (!wheel_steps)

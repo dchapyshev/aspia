@@ -102,6 +102,7 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     }
 
     desktop_->installEventFilter(this);
+    scroll_area_->viewport()->installEventFilter(this);
 }
 
 void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
@@ -292,6 +293,23 @@ bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
         }
 
         return false;
+    }
+    else if (object == scroll_area_->viewport())
+    {
+        if (event->type() == QEvent::Wheel)
+        {
+            QWheelEvent* wheel_event = dynamic_cast<QWheelEvent*>(event);
+            if (wheel_event)
+            {
+                QPoint pos = desktop_->mapFromGlobal(wheel_event->globalPos());
+
+                desktop_->doMouseEvent(wheel_event->type(),
+                                       wheel_event->buttons(),
+                                       pos,
+                                       wheel_event->angleDelta());
+                return true;
+            }
+        }
     }
 
     return QWidget::eventFilter(object, event);
