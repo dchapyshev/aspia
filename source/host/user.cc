@@ -9,6 +9,8 @@
 
 #include <QCryptographicHash>
 
+#include "crypto/secure_memory.h"
+
 namespace aspia {
 
 namespace {
@@ -59,6 +61,12 @@ QByteArray createPasswordHash(const QString& password)
 }
 
 } // namespace
+
+User::~User()
+{
+    secureMemZero(&name_);
+    secureMemZero(&password_hash_);
+}
 
 // static
 bool User::isValidName(const QString& value)

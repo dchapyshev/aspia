@@ -13,6 +13,7 @@
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
 #include "client/client_user_authorizer.h"
+#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -53,7 +54,14 @@ Client::Client(const proto::address_book::Computer& computer, QObject* parent)
     network_channel_->connectToHost(address, port);
 }
 
-Client::~Client() = default;
+Client::~Client()
+{
+    secureMemZero(computer_.mutable_name());
+    secureMemZero(computer_.mutable_address());
+    secureMemZero(computer_.mutable_username());
+    secureMemZero(computer_.mutable_password());
+    secureMemZero(computer_.mutable_comment());
+}
 
 void Client::onChannelConnected()
 {

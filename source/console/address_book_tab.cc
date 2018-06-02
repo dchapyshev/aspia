@@ -20,6 +20,7 @@
 #include "console/console_settings.h"
 #include "console/open_address_book_dialog.h"
 #include "crypto/data_encryptor.h"
+#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -78,6 +79,58 @@ std::unique_ptr<proto::address_book::Computer> createDefaultComputer()
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
 
     return computer;
+}
+
+void cleanupComputer(proto::address_book::Computer* computer)
+{
+    if (!computer)
+        return;
+
+    secureMemZero(computer->mutable_name());
+    secureMemZero(computer->mutable_address());
+    secureMemZero(computer->mutable_username());
+    secureMemZero(computer->mutable_password());
+    secureMemZero(computer->mutable_comment());
+}
+
+void cleanupComputerGroup(proto::address_book::ComputerGroup* computer_group)
+{
+    if (!computer_group)
+        return;
+
+    for (int i = 0; i < computer_group->computer_size(); ++i)
+        cleanupComputer(computer_group->mutable_computer(i));
+
+    for (int i = 0; i < computer_group->computer_group_size(); ++i)
+    {
+        proto::address_book::ComputerGroup* child_group =
+            computer_group->mutable_computer_group(i);
+
+        secureMemZero(child_group->mutable_name());
+        secureMemZero(child_group->mutable_comment());
+
+        cleanupComputerGroup(child_group);
+    }
+}
+
+void cleanupData(proto::address_book::Data* data)
+{
+    if (!data)
+        return;
+
+    cleanupComputerGroup(data->mutable_root_group());
+
+    secureMemZero(data->mutable_salt1());
+    secureMemZero(data->mutable_salt2());
+}
+
+void cleanupFile(proto::address_book::File* file)
+{
+    if (!file)
+        return;
+
+    secureMemZero(file->mutable_hashing_salt());
+    secureMemZero(file->mutable_data());
 }
 
 } // namespace
@@ -152,7 +205,14 @@ AddressBookTab::AddressBookTab(const QString& file_path,
             this, &AddressBookTab::onComputerItemDoubleClicked);
 }
 
-AddressBookTab::~AddressBookTab() = default;
+AddressBookTab::~AddressBookTab()
+{
+    cleanupData(&data_);
+    cleanupFile(&file_);
+
+    secureMemZero(&file_path_);
+    secureMemZero(&key_);
+}
 
 // static
 AddressBookTab* AddressBookTab::createNew(QWidget* parent)
@@ -169,7 +229,6 @@ AddressBookTab* AddressBookTab::createNew(QWidget* parent)
         QString(), std::move(file), std::move(data), std::move(key), parent);
 
     tab->setChanged(true);
-
     return tab;
 }
 
@@ -200,6 +259,8 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
         showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
         return nullptr;
     }
+
+    secureMemZero(&buffer);
 
     proto::address_book::Data address_book_data;
     QByteArray key;
@@ -243,6 +304,8 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
                 showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
                 return nullptr;
             }
+
+            secureMemZero(&decrypted_data);
         }
         break;
 
@@ -429,6 +492,8 @@ void AddressBookTab::removeComputerGroup()
                               QMessageBox::Yes,
                               QMessageBox::No) == QMessageBox::Yes)
     {
+        cleanupComputerGroup(current_item->computerGroup());
+
         if (parent_item->deleteChildComputerGroup(current_item))
             setChanged(true);
     }
@@ -450,6 +515,9 @@ void AddressBookTab::removeComputer()
                               QMessageBox::No) == QMessageBox::Yes)
     {
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
+
+        cleanupComputer(current_item->computer());
+
         if (parent_group->deleteChildComputer(current_item->computer()))
         {
             delete current_item;
@@ -599,6 +667,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         {
             QByteArray encrypted_data = DataEncryptor::encrypt(serialized_data, key_);
             file_.set_data(encrypted_data.constData(), encrypted_data.size());
+            secureMemZero(&encrypted_data);
         }
         break;
 
@@ -607,8 +676,9 @@ bool AddressBookTab::saveToFile(const QString& file_path)
             return false;
     }
 
-    QString path = file_path;
+    secureMemZero(&serialized_data);
 
+    QString path = file_path;
     if (path.isEmpty())
     {
         ConsoleSettings settings;
@@ -632,7 +702,11 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     QByteArray buffer = serializeMessage(file_);
 
-    if (file.write(buffer) != buffer.size())
+    qint64 bytes_written = file.write(buffer);
+
+    secureMemZero(&buffer);
+
+    if (bytes_written != buffer.size())
     {
         showSaveError(this, tr("Unable to write address book file."));
         return false;

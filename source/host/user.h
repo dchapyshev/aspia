@@ -16,6 +16,8 @@ namespace aspia {
 class User
 {
 public:
+    ~User();
+
     enum Flags { FLAG_ENABLED = 1 };
 
     static bool isValidName(const QString& value);

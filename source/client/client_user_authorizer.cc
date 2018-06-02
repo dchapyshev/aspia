@@ -10,8 +10,9 @@
 #include <QCryptographicHash>
 #include <QDebug>
 
-#include "client/ui/authorization_dialog.h"
 #include "base/message_serialization.h"
+#include "client/ui/authorization_dialog.h"
+#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -60,6 +61,9 @@ ClientUserAuthorizer::ClientUserAuthorizer(QWidget* parent)
 
 ClientUserAuthorizer::~ClientUserAuthorizer()
 {
+    secureMemZero(&username_);
+    secureMemZero(&password_);
+
     cancel();
 }
 
@@ -188,8 +192,18 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
             response.set_username(username_.toStdString());
             response.set_key(key.constData(), key.size());
 
+            secureMemZero(&key);
+
             state_ = ResponseWrite;
-            emit writeMessage(ResponseMessageId, serializeMessage(response));
+
+            QByteArray serialized_message = serializeMessage(response);
+
+            secureMemZero(response.mutable_username());
+            secureMemZero(response.mutable_key());
+
+            emit writeMessage(ResponseMessageId, serialized_message);
+
+            secureMemZero(&serialized_message);
         }
         break;
 

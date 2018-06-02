@@ -12,6 +12,7 @@
 
 #include "base/message_serialization.h"
 #include "crypto/random.h"
+#include "crypto/secure_memory.h"
 #include "network/network_channel.h"
 
 namespace aspia {
@@ -62,6 +63,9 @@ HostUserAuthorizer::HostUserAuthorizer(QObject* parent)
 HostUserAuthorizer::~HostUserAuthorizer()
 {
     stop();
+
+    secureMemZero(&user_name_);
+    secureMemZero(&nonce_);
 }
 
 void HostUserAuthorizer::setUserList(const QList<User>& user_list)
@@ -142,8 +146,14 @@ void HostUserAuthorizer::start()
     request.set_rounds(kKeyHashingRounds);
     request.set_nonce(nonce_.constData(), nonce_.size());
 
+    QByteArray serialized_message = serializeMessage(request);
+
+    secureMemZero(request.mutable_nonce());
+
     state_ = RequestWrite;
-    emit writeMessage(RequestMessageId, serializeMessage(request));
+    emit writeMessage(RequestMessageId, serialized_message);
+
+    secureMemZero(&serialized_message);
 }
 
 void HostUserAuthorizer::stop()
@@ -240,15 +250,15 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    const std::string& key = response.key();
+    QByteArray key(response.key().c_str(), response.key().size());
+    user_name_ = QString::fromStdString(response.username());
 
-    if (response.username().empty() || key.empty())
+    if (user_name_.isEmpty() || key.isEmpty())
     {
         stop();
         return;
     }
 
-    user_name_ = QString::fromStdString(response.username());
     status_ = proto::auth::STATUS_ACCESS_DENIED;
 
     for (const auto& user : user_list_)
@@ -256,8 +266,7 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         if (user.name().compare(user_name_, Qt::CaseInsensitive) != 0)
             continue;
 
-        if (createKey(user.passwordHash(), nonce_, kKeyHashingRounds) !=
-                QByteArray(key.c_str(), key.size()))
+        if (createKey(user.passwordHash(), nonce_, kKeyHashingRounds) != key)
         {
             status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
@@ -278,6 +287,10 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         status_ = proto::auth::STATUS_SUCCESS;
         break;
     }
+
+    secureMemZero(response.mutable_username());
+    secureMemZero(response.mutable_key());
+    secureMemZero(&key);
 
     session_type_ = response.session_type();
     state_ = ResultWrite;
