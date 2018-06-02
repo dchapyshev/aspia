@@ -50,6 +50,8 @@ ClientDialog::ClientDialog(QWidget* parent)
 
     connect(ui.button_connect, &QPushButton::pressed,
             this, &ClientDialog::connectButtonPressed);
+
+    ui.edit_address->setFocus();
 }
 
 ClientDialog::~ClientDialog() = default;

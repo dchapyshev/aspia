@@ -16,6 +16,8 @@
 
 namespace aspia {
 
+class ComputerItem;
+
 class AddressBookTab : public ConsoleTab
 {
     Q_OBJECT
@@ -49,7 +51,7 @@ signals:
     void computerGroupActivated(bool activated, bool is_root);
     void computerActivated(bool activated);
     void computerGroupContextMenu(const QPoint& point, bool is_root);
-    void computerContextMenu(const QPoint& point);
+    void computerContextMenu(ComputerItem* comouter_item, const QPoint& point);
     void computerDoubleClicked(proto::address_book::Computer* computer);
 
 protected:

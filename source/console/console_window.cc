@@ -570,16 +570,23 @@ void ConsoleWindow::onComputerGroupContextMenu(const QPoint& point, bool is_root
     menu.exec(point);
 }
 
-void ConsoleWindow::onComputerContextMenu(const QPoint& point)
+void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint& point)
 {
     QMenu menu;
 
-    menu.addAction(ui.action_desktop_manage_connect);
-    menu.addAction(ui.action_desktop_view_connect);
-    menu.addAction(ui.action_file_transfer_connect);
-    menu.addSeparator();
-    menu.addAction(ui.action_modify_computer);
-    menu.addAction(ui.action_delete_computer);
+    if (computer_item)
+    {
+        menu.addAction(ui.action_desktop_manage_connect);
+        menu.addAction(ui.action_desktop_view_connect);
+        menu.addAction(ui.action_file_transfer_connect);
+        menu.addSeparator();
+        menu.addAction(ui.action_modify_computer);
+        menu.addAction(ui.action_delete_computer);
+    }
+    else
+    {
+        menu.addAction(ui.action_add_computer);
+    }
 
     menu.exec(point);
 }

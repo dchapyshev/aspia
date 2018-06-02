@@ -17,6 +17,7 @@
 namespace aspia {
 
 class AddressBookTab;
+class ComputerItem;
 class Client;
 
 class ConsoleWindow : public QMainWindow
@@ -57,7 +58,7 @@ public slots:
     void onComputerGroupActivated(bool activated, bool is_root);
     void onComputerActivated(bool activated);
     void onComputerGroupContextMenu(const QPoint& point, bool is_root);
-    void onComputerContextMenu(const QPoint& point);
+    void onComputerContextMenu(ComputerItem* computer_item, const QPoint& point);
     void onComputerDoubleClicked(proto::address_book::Computer* computer);
     void onLanguageChanged(QAction* action);
 

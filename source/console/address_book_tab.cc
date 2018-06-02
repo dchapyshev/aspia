@@ -526,13 +526,13 @@ void AddressBookTab::onComputerItemClicked(QTreeWidgetItem* item, int /* column 
 void AddressBookTab::onComputerContextMenu(const QPoint& point)
 {
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->itemAt(point));
-    if (!current_item)
-        return;
+    if (current_item)
+    {
+        ui.tree_computer->setCurrentItem(current_item);
+        onComputerItemClicked(current_item, 0);
+    }
 
-    ui.tree_computer->setCurrentItem(current_item);
-    onComputerItemClicked(current_item, 0);
-
-    emit computerContextMenu(ui.tree_computer->mapToGlobal(point));
+    emit computerContextMenu(current_item, ui.tree_computer->mapToGlobal(point));
 }
 
 void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int column)
