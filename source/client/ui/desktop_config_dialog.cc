@@ -35,6 +35,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
 {
     ui.setupUi(this);
 
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setFixedSize(size());
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)

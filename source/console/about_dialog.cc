@@ -18,6 +18,7 @@ AboutDialog::AboutDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     ui.label_version->setText(tr("Version: %1").arg(QLatin1String(ASPIA_VERSION_STRING)));
 
@@ -26,10 +27,7 @@ AboutDialog::AboutDialog(QWidget* parent)
         QDesktopServices::openUrl(QUrl(tr("https://aspia.net/donate")));
     });
 
-    connect(ui.push_button_close, &QPushButton::pressed, [this]()
-    {
-        close();
-    });
+    connect(ui.push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
 }
 
 AboutDialog::~AboutDialog() = default;

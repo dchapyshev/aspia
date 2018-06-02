@@ -69,6 +69,8 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     ui.setupUi(this);
     createLanguageList(current_locale);
 
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+
     connect(ui.pushbutton_service_install_remove, &QPushButton::pressed,
             this, &HostConfigDialog::onServiceInstallRemove);
 

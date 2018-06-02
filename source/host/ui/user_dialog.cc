@@ -20,6 +20,7 @@ UserDialog::UserDialog(QList<User>* user_list, User* user, QWidget* parent)
       user_(user)
 {
     ui.setupUi(this);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     ui.edit_username->setText(user_->name());
 

@@ -30,6 +30,7 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
       computer_group_(computer_group)
 {
     ui.setupUi(this);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &ComputerGroupDialog::buttonBoxClicked);

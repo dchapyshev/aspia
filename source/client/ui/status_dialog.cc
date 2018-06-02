@@ -16,6 +16,8 @@ StatusDialog::StatusDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+
     connect(ui.button_cancel, &QPushButton::pressed, this, &StatusDialog::close);
 }
 
