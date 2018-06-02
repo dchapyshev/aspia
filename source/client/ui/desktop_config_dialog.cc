@@ -77,10 +77,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config->flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE)
+        if (config->features() & proto::desktop::FEATURE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config->flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
+        if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
     }
     else
@@ -170,15 +170,15 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
 
         if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         {
-            quint32 flags = 0;
+            quint32 features = 0;
 
             if (ui.checkbox_cursor_shape->isChecked())
-                flags |= proto::desktop::Config::ENABLE_CURSOR_SHAPE;
+                features |= proto::desktop::FEATURE_CURSOR_SHAPE;
 
             if (ui.checkbox_clipboard->isChecked())
-                flags |= proto::desktop::Config::ENABLE_CLIPBOARD;
+                features |= proto::desktop::FEATURE_CLIPBOARD;
 
-            config_->set_flags(flags);
+            config_->set_features(features);
         }
 
         accept();

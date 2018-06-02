@@ -118,8 +118,8 @@ void ClientDialog::setDefaultConfig()
     proto::desktop::Config* desktop_manage =
         computer_.mutable_session_config()->mutable_desktop_manage();
 
-    desktop_manage->set_flags(proto::desktop::Config::ENABLE_CLIPBOARD |
-                              proto::desktop::Config::ENABLE_CURSOR_SHAPE);
+    desktop_manage->set_features(proto::desktop::FEATURE_CLIPBOARD |
+                                 proto::desktop::FEATURE_CURSOR_SHAPE);
     desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_manage->set_update_interval(30);
     desktop_manage->set_compress_ratio(6);
@@ -128,7 +128,7 @@ void ClientDialog::setDefaultConfig()
     proto::desktop::Config* desktop_view =
         computer_.mutable_session_config()->mutable_desktop_view();
 
-    desktop_view->set_flags(0);
+    desktop_view->set_features(0);
     desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
     desktop_view->set_update_interval(30);
     desktop_view->set_compress_ratio(6);

@@ -172,18 +172,6 @@ const CursorShape_Flags CursorShape_Flags_Flags_MIN = CursorShape_Flags_UNKNOWN;
 const CursorShape_Flags CursorShape_Flags_Flags_MAX = CursorShape_Flags_CACHE;
 const int CursorShape_Flags_Flags_ARRAYSIZE = CursorShape_Flags_Flags_MAX + 1;
 
-enum Config_Flags {
-  Config_Flags_ENABLE_NONE = 0,
-  Config_Flags_ENABLE_CURSOR_SHAPE = 1,
-  Config_Flags_ENABLE_CLIPBOARD = 2,
-  Config_Flags_Config_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Config_Flags_Config_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool Config_Flags_IsValid(int value);
-const Config_Flags Config_Flags_Flags_MIN = Config_Flags_ENABLE_NONE;
-const Config_Flags Config_Flags_Flags_MAX = Config_Flags_ENABLE_CLIPBOARD;
-const int Config_Flags_Flags_ARRAYSIZE = Config_Flags_Flags_MAX + 1;
-
 enum VideoEncoding {
   VIDEO_ENCODING_UNKNOWN = 0,
   VIDEO_ENCODING_ZLIB = 1,
@@ -1533,23 +1521,6 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 
   // nested types ----------------------------------------------------
 
-  typedef Config_Flags Flags;
-  static const Flags ENABLE_NONE =
-    Config_Flags_ENABLE_NONE;
-  static const Flags ENABLE_CURSOR_SHAPE =
-    Config_Flags_ENABLE_CURSOR_SHAPE;
-  static const Flags ENABLE_CLIPBOARD =
-    Config_Flags_ENABLE_CLIPBOARD;
-  static inline bool Flags_IsValid(int value) {
-    return Config_Flags_IsValid(value);
-  }
-  static const Flags Flags_MIN =
-    Config_Flags_Flags_MIN;
-  static const Flags Flags_MAX =
-    Config_Flags_Flags_MAX;
-  static const int Flags_ARRAYSIZE =
-    Config_Flags_Flags_ARRAYSIZE;
-
   // accessors -------------------------------------------------------
 
   // .aspia.proto.desktop.PixelFormat pixel_format = 3;
@@ -1561,11 +1532,11 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::aspia::proto::desktop::PixelFormat* mutable_pixel_format();
   void set_allocated_pixel_format(::aspia::proto::desktop::PixelFormat* pixel_format);
 
-  // uint32 flags = 1;
-  void clear_flags();
-  static const int kFlagsFieldNumber = 1;
-  ::google::protobuf::uint32 flags() const;
-  void set_flags(::google::protobuf::uint32 value);
+  // uint32 features = 1;
+  void clear_features();
+  static const int kFeaturesFieldNumber = 1;
+  ::google::protobuf::uint32 features() const;
+  void set_features(::google::protobuf::uint32 value);
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
   void clear_video_encoding();
@@ -1590,7 +1561,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::aspia::proto::desktop::PixelFormat* pixel_format_;
-  ::google::protobuf::uint32 flags_;
+  ::google::protobuf::uint32 features_;
   int video_encoding_;
   ::google::protobuf::uint32 update_interval_;
   ::google::protobuf::uint32 compress_ratio_;
@@ -2665,18 +2636,18 @@ inline void ConfigRequest::set_features(::google::protobuf::uint32 value) {
 
 // Config
 
-// uint32 flags = 1;
-inline void Config::clear_flags() {
-  flags_ = 0u;
+// uint32 features = 1;
+inline void Config::clear_features() {
+  features_ = 0u;
 }
-inline ::google::protobuf::uint32 Config::flags() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.flags)
-  return flags_;
+inline ::google::protobuf::uint32 Config::features() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.features)
+  return features_;
 }
-inline void Config::set_flags(::google::protobuf::uint32 value) {
+inline void Config::set_features(::google::protobuf::uint32 value) {
   
-  flags_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.flags)
+  features_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.features)
 }
 
 // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3219,7 +3190,6 @@ namespace protobuf {
 template <> struct is_proto_enum< ::aspia::proto::desktop::KeyEvent_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::PointerEvent_ButtonMask> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::CursorShape_Flags> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::desktop::Config_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::VideoEncoding> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::Features> : ::google::protobuf::internal::true_type {};
 

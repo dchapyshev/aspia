@@ -203,7 +203,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     delete screen_updater_;
     delete clipboard_;
 
-    if (config.flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
+    if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
     {
         if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         {

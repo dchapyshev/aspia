@@ -149,20 +149,11 @@ message ConfigRequest
 
 message Config
 {
-    enum Flags
-    {
-        ENABLE_NONE             = 0;
-        ENABLE_CURSOR_SHAPE     = 1;
-        ENABLE_CLIPBOARD        = 2;
-    }
-
-    uint32 flags = 1;
-
+    uint32 features              = 1;
     VideoEncoding video_encoding = 2;
-    PixelFormat pixel_format = 3;
-
-    uint32 update_interval = 4;
-    uint32 compress_ratio = 5;
+    PixelFormat pixel_format     = 3;
+    uint32 update_interval       = 4;
+    uint32 compress_ratio        = 5;
 }
 
 message HostToClient

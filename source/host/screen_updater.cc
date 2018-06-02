@@ -80,7 +80,7 @@ void ScreenUpdater::run()
 
     std::unique_ptr<CursorEncoder> cursor_encoder;
 
-    if (config_.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE)
+    if (config_.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
         cursor_encoder = std::make_unique<CursorEncoder>();
 
     CaptureScheduler scheduler;

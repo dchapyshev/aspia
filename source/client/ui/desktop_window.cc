@@ -95,7 +95,7 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
 
     if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE &&
-        (computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+        (computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
     {
         clipboard_ = new Clipboard(this);
         connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
@@ -198,7 +198,7 @@ void DesktopWindow::changeSettings()
         {
             delete clipboard_;
 
-            if (config->flags() & proto::desktop::Config::ENABLE_CLIPBOARD)
+            if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
             {
                 clipboard_ = new Clipboard(this);
 

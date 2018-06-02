@@ -73,7 +73,7 @@ void ClientSessionDesktopManage::messageWritten(int /* message_id */)
 
 void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& config)
 {
-    if (!(config.flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
+    if (!(config.features() & proto::desktop::FEATURE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
     proto::desktop::ClientToHost message;
@@ -106,7 +106,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
@@ -123,7 +123,7 @@ void ClientSessionDesktopManage::readConfigRequest(
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CURSOR_SHAPE))
+    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -150,7 +150,7 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (!(computer_->session_config().desktop_manage().flags() & proto::desktop::Config::ENABLE_CLIPBOARD))
+    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
         return;
 
     desktop_window_->injectClipboard(clipboard_event);

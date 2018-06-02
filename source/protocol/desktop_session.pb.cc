@@ -443,25 +443,6 @@ const CursorShape_Flags CursorShape::Flags_MIN;
 const CursorShape_Flags CursorShape::Flags_MAX;
 const int CursorShape::Flags_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-bool Config_Flags_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const Config_Flags Config::ENABLE_NONE;
-const Config_Flags Config::ENABLE_CURSOR_SHAPE;
-const Config_Flags Config::ENABLE_CLIPBOARD;
-const Config_Flags Config::Flags_MIN;
-const Config_Flags Config::Flags_MAX;
-const int Config::Flags_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool VideoEncoding_IsValid(int value) {
   switch (value) {
     case 0:
@@ -3311,7 +3292,7 @@ void Config::InitAsDefaultInstance() {
       ::aspia::proto::desktop::PixelFormat::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Config::kFlagsFieldNumber;
+const int Config::kFeaturesFieldNumber;
 const int Config::kVideoEncodingFieldNumber;
 const int Config::kPixelFormatFieldNumber;
 const int Config::kUpdateIntervalFieldNumber;
@@ -3336,9 +3317,9 @@ Config::Config(const Config& from)
   } else {
     pixel_format_ = NULL;
   }
-  ::memcpy(&flags_, &from.flags_,
+  ::memcpy(&features_, &from.features_,
     static_cast<size_t>(reinterpret_cast<char*>(&compress_ratio_) -
-    reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
+    reinterpret_cast<char*>(&features_)) + sizeof(compress_ratio_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.Config)
 }
 
@@ -3386,9 +3367,9 @@ void Config::Clear() {
     delete pixel_format_;
   }
   pixel_format_ = NULL;
-  ::memset(&flags_, 0, static_cast<size_t>(
+  ::memset(&features_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&compress_ratio_) -
-      reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
+      reinterpret_cast<char*>(&features_)) + sizeof(compress_ratio_));
   _internal_metadata_.Clear();
 }
 
@@ -3408,14 +3389,14 @@ bool Config::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 flags = 1;
+      // uint32 features = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &flags_)));
+                 input, &features_)));
         } else {
           goto handle_unusual;
         }
@@ -3503,9 +3484,9 @@ void Config::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 flags = 1;
-  if (this->flags() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
+  // uint32 features = 1;
+  if (this->features() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->features(), output);
   }
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3548,11 +3529,11 @@ size_t Config::ByteSizeLong() const {
         *this->pixel_format_);
   }
 
-  // uint32 flags = 1;
-  if (this->flags() != 0) {
+  // uint32 features = 1;
+  if (this->features() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->flags());
+        this->features());
   }
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3597,8 +3578,8 @@ void Config::MergeFrom(const Config& from) {
   if (from.has_pixel_format()) {
     mutable_pixel_format()->::aspia::proto::desktop::PixelFormat::MergeFrom(from.pixel_format());
   }
-  if (from.flags() != 0) {
-    set_flags(from.flags());
+  if (from.features() != 0) {
+    set_features(from.features());
   }
   if (from.video_encoding() != 0) {
     set_video_encoding(from.video_encoding());
@@ -3629,7 +3610,7 @@ void Config::Swap(Config* other) {
 void Config::InternalSwap(Config* other) {
   using std::swap;
   swap(pixel_format_, other->pixel_format_);
-  swap(flags_, other->flags_);
+  swap(features_, other->features_);
   swap(video_encoding_, other->video_encoding_);
   swap(update_interval_, other->update_interval_);
   swap(compress_ratio_, other->compress_ratio_);
