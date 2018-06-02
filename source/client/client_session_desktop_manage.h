@@ -21,6 +21,9 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
 public:
     ClientSessionDesktopManage(proto::address_book::Computer* computer, QObject* parent);
 
+    static quint32 supportedVideoEncodings();
+    static quint32 supportedFeatures();
+
 public slots:
     // ClientSession implementation.
     void messageReceived(const QByteArray& buffer) override;

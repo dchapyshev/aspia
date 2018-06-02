@@ -185,17 +185,17 @@ const VideoEncoding VideoEncoding_MIN = VIDEO_ENCODING_UNKNOWN;
 const VideoEncoding VideoEncoding_MAX = VIDEO_ENCODING_VP9;
 const int VideoEncoding_ARRAYSIZE = VideoEncoding_MAX + 1;
 
-enum Features {
+enum Feature {
   FEATURE_NONE = 0,
   FEATURE_CURSOR_SHAPE = 1,
   FEATURE_CLIPBOARD = 2,
-  Features_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Features_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+  Feature_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Feature_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool Features_IsValid(int value);
-const Features Features_MIN = FEATURE_NONE;
-const Features Features_MAX = FEATURE_CLIPBOARD;
-const int Features_ARRAYSIZE = Features_MAX + 1;
+bool Feature_IsValid(int value);
+const Feature Feature_MIN = FEATURE_NONE;
+const Feature Feature_MAX = FEATURE_CLIPBOARD;
+const int Feature_ARRAYSIZE = Feature_MAX + 1;
 
 // ===================================================================
 
@@ -3191,7 +3191,7 @@ template <> struct is_proto_enum< ::aspia::proto::desktop::KeyEvent_Flags> : ::g
 template <> struct is_proto_enum< ::aspia::proto::desktop::PointerEvent_ButtonMask> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::CursorShape_Flags> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::VideoEncoding> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::desktop::Features> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::desktop::Feature> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

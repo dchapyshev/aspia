@@ -12,6 +12,7 @@
 #include <QBrush>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
+#include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QScrollArea>
@@ -94,13 +95,6 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
     connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
 
-    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE &&
-        (computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
-    {
-        clipboard_ = new Clipboard(this);
-        connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
-    }
-
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
 }
@@ -134,6 +128,59 @@ void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 {
     if (!clipboard_.isNull())
         clipboard_->injectClipboardEvent(event);
+}
+
+void DesktopWindow::setSupportedVideoEncodings(quint32 video_encodings)
+{
+    supported_video_encodings_ = video_encodings;
+}
+
+void DesktopWindow::setSupportedFeatures(quint32 features)
+{
+    supported_features_ = features;
+
+    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        delete clipboard_;
+
+        // If the clipboard is supported by the host.
+        if (supported_features_ & proto::desktop::FEATURE_CLIPBOARD)
+        {
+            const proto::desktop::Config& config = computer_->session_config().desktop_manage();
+
+            // If the clipboard is enabled in the config.
+            if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
+            {
+                clipboard_ = new Clipboard(this);
+
+                connect(clipboard_, &Clipboard::clipboardEvent,
+                        this, &DesktopWindow::sendClipboardEvent);
+            }
+        }
+    }
+    else
+    {
+        Q_ASSERT(computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+    }
+}
+
+bool DesktopWindow::requireConfigChange(proto::desktop::Config* config)
+{
+    if (!(supported_video_encodings_ & config->video_encoding()))
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("The current video encoding is not supported by the host. "
+                                "Please specify a different video encoding."),
+                             QMessageBox::Ok);
+    }
+
+    DesktopConfigDialog dialog(config, supported_video_encodings_, supported_features_, this);
+    if (dialog.exec() != DesktopConfigDialog::Accepted)
+        return false;
+
+    setSupportedFeatures(supported_features_);
+    return true;
 }
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
@@ -185,28 +232,16 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
 
 void DesktopWindow::changeSettings()
 {
-    proto::desktop::Config* config = config =
+    proto::desktop::Config* config =
         computer_->mutable_session_config()->mutable_desktop_view();
 
     if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         config = computer_->mutable_session_config()->mutable_desktop_manage();
 
-    DesktopConfigDialog dialog(computer_->session_type(), config, this);
+    DesktopConfigDialog dialog(config, supported_video_encodings_, supported_features_, this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)
     {
-        if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            delete clipboard_;
-
-            if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
-            {
-                clipboard_ = new Clipboard(this);
-
-                connect(clipboard_, &Clipboard::clipboardEvent,
-                        this, &DesktopWindow::sendClipboardEvent);
-            }
-        }
-
+        setSupportedFeatures(supported_features_);
         emit sendConfig(*config);
     }
 }

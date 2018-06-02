@@ -455,7 +455,7 @@ bool VideoEncoding_IsValid(int value) {
   }
 }
 
-bool Features_IsValid(int value) {
+bool Feature_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:

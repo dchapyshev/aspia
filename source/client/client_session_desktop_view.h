@@ -27,6 +27,9 @@ public:
     ClientSessionDesktopView(proto::address_book::Computer* computer, QObject* parent);
     virtual ~ClientSessionDesktopView();
 
+    static quint32 supportedVideoEncodings();
+    static quint32 supportedFeatures();
+
 public slots:
     // ClientSession implementation.
     void messageReceived(const QByteArray& buffer) override;

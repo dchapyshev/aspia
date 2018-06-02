@@ -37,6 +37,10 @@ public:
     void injectCursor(const QCursor& cursor);
     void injectClipboard(const proto::desktop::ClipboardEvent& event);
 
+    void setSupportedVideoEncodings(quint32 video_encodings);
+    void setSupportedFeatures(quint32 features);
+    bool requireConfigChange(proto::desktop::Config* config);
+
 signals:
     void windowClose();
     void sendConfig(const proto::desktop::Config& config);
@@ -59,6 +63,9 @@ private slots:
 
 private:
     proto::address_book::Computer* computer_;
+
+    quint32 supported_video_encodings_ = 0;
+    quint32 supported_features_ = 0;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

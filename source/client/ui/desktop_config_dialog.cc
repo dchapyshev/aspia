@@ -24,27 +24,34 @@ enum ColorDepth
 
 } // namespace
 
-DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
-                                         proto::desktop::Config* config,
+DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
+                                         quint32 supported_video_encodings,
+                                         quint32 supported_features,
                                          QWidget* parent)
     : QDialog(parent),
-      session_type_(session_type),
+      supported_video_encodings_(supported_video_encodings),
+      supported_features_(supported_features),
       config_(config)
 {
     ui.setupUi(this);
 
     setFixedSize(size());
 
-    ui.combo_codec->addItem(tr("VP9 (LossLess)"), QVariant(proto::desktop::VIDEO_ENCODING_VP9));
-    ui.combo_codec->addItem(tr("VP8"), QVariant(proto::desktop::VIDEO_ENCODING_VP8));
-    ui.combo_codec->addItem(tr("ZLIB"), QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
+    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)
+        ui.combo_codec->addItem(tr("VP9 (LossLess)"), QVariant(proto::desktop::VIDEO_ENCODING_VP9));
+
+    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP8)
+        ui.combo_codec->addItem(tr("VP8"), QVariant(proto::desktop::VIDEO_ENCODING_VP8));
+
+    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_ZLIB)
+        ui.combo_codec->addItem(tr("ZLIB"), QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
 
     int current_codec = ui.combo_codec->findData(QVariant(config->video_encoding()));
-    if (current_codec != -1)
-    {
-        ui.combo_codec->setCurrentIndex(current_codec);
-        OnCodecChanged(current_codec);
-    }
+    if (current_codec == -1)
+        current_codec = 0;
+
+    ui.combo_codec->setCurrentIndex(current_codec);
+    OnCodecChanged(current_codec);
 
     ui.combo_color_depth->addItem(tr("True color (32 bit)"), QVariant(COLOR_DEPTH_ARGB));
     ui.combo_color_depth->addItem(tr("High color (16 bit)"), QVariant(COLOR_DEPTH_RGB565));
@@ -75,21 +82,17 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
 
     ui.spin_update_interval->setValue(config->update_interval());
 
-    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        if (config->features() & proto::desktop::FEATURE_CURSOR_SHAPE)
-            ui.checkbox_cursor_shape->setChecked(true);
+    if (config->features() & proto::desktop::FEATURE_CURSOR_SHAPE)
+        ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
-            ui.checkbox_clipboard->setChecked(true);
-    }
-    else
-    {
-        Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
-
+    if (!(supported_features_ & proto::desktop::FEATURE_CURSOR_SHAPE))
         ui.checkbox_cursor_shape->setEnabled(false);
+
+    if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
+        ui.checkbox_clipboard->setChecked(true);
+
+    if (!(supported_features_ & proto::desktop::FEATURE_CLIPBOARD))
         ui.checkbox_clipboard->setEnabled(false);
-    }
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::OnCodecChanged);
@@ -168,18 +171,15 @@ void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
 
         config_->set_update_interval(ui.spin_update_interval->value());
 
-        if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        {
-            quint32 features = 0;
+        quint32 features = 0;
 
-            if (ui.checkbox_cursor_shape->isChecked())
-                features |= proto::desktop::FEATURE_CURSOR_SHAPE;
+        if (ui.checkbox_cursor_shape->isChecked())
+            features |= proto::desktop::FEATURE_CURSOR_SHAPE;
 
-            if (ui.checkbox_clipboard->isChecked())
-                features |= proto::desktop::FEATURE_CLIPBOARD;
+        if (ui.checkbox_clipboard->isChecked())
+            features |= proto::desktop::FEATURE_CLIPBOARD;
 
-            config_->set_features(features);
-        }
+        config_->set_features(features);
 
         accept();
     }

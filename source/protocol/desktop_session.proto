@@ -134,7 +134,7 @@ message VideoPacket
     bytes data = 4;
 }
 
-enum Features
+enum Feature
 {
     FEATURE_NONE         = 0;
     FEATURE_CURSOR_SHAPE = 1;

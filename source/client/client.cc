@@ -85,7 +85,7 @@ void Client::onChannelConnected()
             status_dialog_, &StatusDialog::addStatus);
 
     // If successful, we start the session.
-    connect(authorizer_, &ClientUserAuthorizer::finished, this, &Client::authorizationFinished);
+    connect(authorizer_, &ClientUserAuthorizer::finished, this, &Client::onAuthorizationFinished);
 
     // Now run authorization.
     status_dialog_->addStatus(tr("Authorization started."));
@@ -102,7 +102,7 @@ void Client::onChannelError(const QString& message)
     status_dialog_->addStatus(tr("Network error: %1.").arg(message));
 }
 
-void Client::authorizationFinished(proto::auth::Status status)
+void Client::onAuthorizationFinished(proto::auth::Status status)
 {
     delete authorizer_;
 
@@ -152,23 +152,29 @@ void Client::authorizationFinished(proto::auth::Status status)
     connect(network_channel_, &NetworkChannel::disconnected, session_, &ClientSession::closeSession);
 
     // When closing the session (closing the window), close the status dialog.
-    connect(session_, &ClientSession::closedByUser, [this]()
-    {
-        status_dialog_->show();
-        status_dialog_->close();
-    });
+    connect(session_, &ClientSession::closedByUser, this, &Client::onSessionClosedByUser);
 
     // If an error occurs in the session, add a message to the status dialog and stop the channel.
-    connect(session_, &ClientSession::errorOccurred, [this](const QString& message)
-    {
-        status_dialog_->addStatus(message);
-        network_channel_->stop();
-    });
+    connect(session_, &ClientSession::errorOccurred,
+            this, &Client::onSessionError,
+            Qt::QueuedConnection);
 
     status_dialog_->addStatus(tr("Session started."));
     status_dialog_->hide();
 
     session_->startSession();
+}
+
+void Client::onSessionClosedByUser()
+{
+    status_dialog_->show();
+    status_dialog_->close();
+}
+
+void Client::onSessionError(const QString& message)
+{
+    status_dialog_->addStatus(message);
+    network_channel_->stop();
 }
 
 } // namespace aspia

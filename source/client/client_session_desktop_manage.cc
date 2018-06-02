@@ -17,6 +17,19 @@
 
 namespace aspia {
 
+namespace {
+
+const quint32 kSupportedVideoEncodings =
+    proto::desktop::VIDEO_ENCODING_ZLIB |
+    proto::desktop::VIDEO_ENCODING_VP8 |
+    proto::desktop::VIDEO_ENCODING_VP9;
+
+const quint32 kSupportedFeatures =
+    proto::desktop::FEATURE_CURSOR_SHAPE |
+    proto::desktop::FEATURE_CLIPBOARD;
+
+} // namespace
+
 ClientSessionDesktopManage::ClientSessionDesktopManage(proto::address_book::Computer* computer,
                                                        QObject* parent)
     : ClientSessionDesktopView(computer, parent)
@@ -29,6 +42,18 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(proto::address_book::Comp
 
     connect(desktop_window_, &DesktopWindow::sendClipboardEvent,
             this, &ClientSessionDesktopManage::onSendClipboardEvent);
+}
+
+// static
+quint32 ClientSessionDesktopManage::supportedVideoEncodings()
+{
+    return kSupportedVideoEncodings;
+}
+
+// static
+quint32 ClientSessionDesktopManage::supportedFeatures()
+{
+    return kSupportedFeatures;
 }
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
@@ -118,7 +143,30 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
 void ClientSessionDesktopManage::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    onSendConfig(computer_->session_config().desktop_manage());
+    proto::desktop::Config* config = computer_->mutable_session_config()->mutable_desktop_manage();
+
+    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
+    desktop_window_->setSupportedFeatures(config_request.features());
+
+    // If current video encoding not supported.
+    if (!(config_request.video_encodings() & config->video_encoding()))
+    {
+        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
+        {
+            emit errorOccurred(tr("Session error: There are no supported video encodings."));
+            return;
+        }
+        else
+        {
+            if (!desktop_window_->requireConfigChange(config))
+            {
+                emit errorOccurred(tr("Session error: Canceled by the user."));
+                return;
+            }
+        }
+    }
+
+    onSendConfig(*config);
 }
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)

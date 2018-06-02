@@ -24,9 +24,11 @@ const quint32 kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const quint32 kSupportedFeatures =
+const quint32 kSupportedFeaturesDesktopManage =
     proto::desktop::FEATURE_CURSOR_SHAPE |
     proto::desktop::FEATURE_CLIPBOARD;
+
+const quint32 kSupportedFeaturesDesktopView = 0;
 
 enum MessageId { ScreenUpdateMessage };
 
@@ -56,9 +58,9 @@ void HostSessionDesktop::startSession()
     message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
 
     if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        message.mutable_config_request()->set_features(kSupportedFeatures);
+        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopManage);
     else
-        message.mutable_config_request()->set_features(0);
+        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopView);
 
     emit writeMessage(-1, serializeMessage(message));
     emit readMessage();

@@ -8,6 +8,8 @@
 #include "client/ui/client_dialog.h"
 
 #include "client/ui/desktop_config_dialog.h"
+#include "client/client_session_desktop_manage.h"
+#include "client/client_session_desktop_view.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -82,14 +84,16 @@ void ClientDialog::sessionConfigButtonPressed()
     switch (session_type)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            DesktopConfigDialog(session_type,
-                                computer_.mutable_session_config()->mutable_desktop_manage(),
+            DesktopConfigDialog(computer_.mutable_session_config()->mutable_desktop_manage(),
+                                ClientSessionDesktopManage::supportedVideoEncodings(),
+                                ClientSessionDesktopManage::supportedFeatures(),
                                 this).exec();
             break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            DesktopConfigDialog(session_type,
-                                computer_.mutable_session_config()->mutable_desktop_view(),
+            DesktopConfigDialog(computer_.mutable_session_config()->mutable_desktop_view(),
+                                ClientSessionDesktopView::supportedVideoEncodings(),
+                                ClientSessionDesktopView::supportedFeatures(),
                                 this).exec();
             break;
 

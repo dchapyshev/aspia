@@ -11,6 +11,8 @@
 #include <QMessageBox>
 
 #include "client/ui/desktop_config_dialog.h"
+#include "client/client_session_desktop_manage.h"
+#include "client/client_session_desktop_view.h"
 #include "console/computer_group_item.h"
 #include "host/user.h"
 
@@ -113,7 +115,10 @@ void ComputerDialog::sessionConfigButtonPressed()
         {
             proto::desktop::Config config = computer_->session_config().desktop_manage();
 
-            DesktopConfigDialog dialog(session_type, &config, this);
+            DesktopConfigDialog dialog(&config,
+                                       ClientSessionDesktopManage::supportedVideoEncodings(),
+                                       ClientSessionDesktopManage::supportedFeatures(),
+                                       this);
             if (dialog.exec() == QDialog::Accepted)
                 computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(config);
         }
@@ -123,7 +128,10 @@ void ComputerDialog::sessionConfigButtonPressed()
         {
             proto::desktop::Config config = computer_->session_config().desktop_view();
 
-            DesktopConfigDialog dialog(session_type, &config, this);
+            DesktopConfigDialog dialog(&config,
+                                       ClientSessionDesktopManage::supportedVideoEncodings(),
+                                       ClientSessionDesktopManage::supportedFeatures(),
+                                       this);
             if (dialog.exec() == QDialog::Accepted)
                 computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(config);
         }

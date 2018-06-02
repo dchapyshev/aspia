@@ -19,8 +19,9 @@ class DesktopConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::auth::SessionType session_type,
-                        proto::desktop::Config* config,
+    DesktopConfigDialog(proto::desktop::Config* config,
+                        quint32 supported_video_encodings,
+                        quint32 supported_features,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog();
 
@@ -31,8 +32,10 @@ private slots:
 
 private:
     Ui::DesktopConfigDialog ui;
-    proto::auth::SessionType session_type_;
+
     proto::desktop::Config* config_;
+    quint32 supported_video_encodings_;
+    quint32 supported_features_;
 
     Q_DISABLE_COPY(DesktopConfigDialog)
 };

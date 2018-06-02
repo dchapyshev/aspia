@@ -16,6 +16,13 @@ namespace {
 
 enum MessageId { ConfigMessageId };
 
+const quint32 kSupportedVideoEncodings =
+    proto::desktop::VIDEO_ENCODING_ZLIB |
+    proto::desktop::VIDEO_ENCODING_VP8 |
+    proto::desktop::VIDEO_ENCODING_VP9;
+
+const quint32 kSupportedFeatures = 0;
+
 } // namespace
 
 ClientSessionDesktopView::ClientSessionDesktopView(
@@ -36,6 +43,18 @@ ClientSessionDesktopView::ClientSessionDesktopView(
 ClientSessionDesktopView::~ClientSessionDesktopView()
 {
     delete desktop_window_;
+}
+
+// static
+quint32 ClientSessionDesktopView::supportedVideoEncodings()
+{
+    return kSupportedVideoEncodings;
+}
+
+// static
+quint32 ClientSessionDesktopView::supportedFeatures()
+{
+    return kSupportedFeatures;
 }
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
@@ -140,7 +159,30 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    onSendConfig(computer_->session_config().desktop_view());
+    proto::desktop::Config* config = computer_->mutable_session_config()->mutable_desktop_view();
+
+    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
+    desktop_window_->setSupportedFeatures(config_request.features());
+
+    // If current video encoding not supported.
+    if (!(config_request.video_encodings() & config->video_encoding()))
+    {
+        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
+        {
+            emit errorOccurred(tr("Session error: There are no supported video encodings."));
+            return;
+        }
+        else
+        {
+            if (!desktop_window_->requireConfigChange(config))
+            {
+                emit errorOccurred(tr("Session error: Canceled by the user."));
+                return;
+            }
+        }
+    }
+
+    onSendConfig(*config);
 }
 
 } // namespace aspia

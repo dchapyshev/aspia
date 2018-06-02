@@ -32,7 +32,9 @@ private slots:
     void onChannelConnected();
     void onChannelDisconnected();
     void onChannelError(const QString& message);
-    void authorizationFinished(proto::auth::Status status);
+    void onAuthorizationFinished(proto::auth::Status status);
+    void onSessionClosedByUser();
+    void onSessionError(const QString& message);
 
 private:
     QPointer<NetworkChannel> network_channel_;
