@@ -62,7 +62,7 @@ void IpcChannel::stop()
 
     if (socket_->state() != QLocalSocket::UnconnectedState)
     {
-        socket_->close();
+        socket_->abort();
 
         if (socket_->state() != QLocalSocket::UnconnectedState)
             socket_->waitForDisconnected();

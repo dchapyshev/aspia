@@ -134,7 +134,7 @@ void NetworkChannel::stop()
 
     if (socket_->state() != QTcpSocket::UnconnectedState)
     {
-        socket_->close();
+        socket_->abort();
 
         if (socket_->state() != QTcpSocket::UnconnectedState)
             socket_->waitForDisconnected();
