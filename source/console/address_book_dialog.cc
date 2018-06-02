@@ -93,6 +93,8 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
 
     connect(ui.spinbox_password_salt, QOverload<int>::of(&QSpinBox::valueChanged), this,
             &AddressBookDialog::hashingSaltChanged);
+
+    ui.edit_name->setFocus();
 }
 
 AddressBookDialog::~AddressBookDialog() = default;
