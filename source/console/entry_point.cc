@@ -9,5 +9,5 @@
 
 int main(int argc, char *argv[])
 {
-    return aspia::ConsoleMain(argc, argv);
+    return aspia::consoleMain(argc, argv);
 }

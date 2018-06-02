@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-int CORE_EXPORT HostConfigMain(int argc, char *argv[]);
+int CORE_EXPORT hostConfigMain(int argc, char *argv[]);
 
 } // namespace aspia
 

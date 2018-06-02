@@ -13,7 +13,7 @@
 
 namespace aspia {
 
-int HostConfigMain(int argc, char *argv[])
+int hostConfigMain(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");

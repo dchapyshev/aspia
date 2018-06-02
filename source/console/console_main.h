@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-int CORE_EXPORT ConsoleMain(int argc, char *argv[]);
+int CORE_EXPORT consoleMain(int argc, char *argv[]);
 
 } // namespace aspia
 

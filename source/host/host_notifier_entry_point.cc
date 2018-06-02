@@ -9,5 +9,5 @@
 
 int main(int argc, char *argv[])
 {
-    return aspia::HostNotifierMain(argc, argv);
+    return aspia::hostNotifierMain(argc, argv);
 }

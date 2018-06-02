@@ -15,7 +15,7 @@
 
 namespace aspia {
 
-int ConsoleMain(int argc, char *argv[])
+int consoleMain(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     application.setOrganizationName(QStringLiteral("Aspia"));

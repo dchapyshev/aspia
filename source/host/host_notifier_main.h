@@ -12,7 +12,7 @@
 
 namespace aspia {
 
-int CORE_EXPORT HostNotifierMain(int argc, char *argv[]);
+int CORE_EXPORT hostNotifierMain(int argc, char *argv[]);
 
 } // namespace aspia
 

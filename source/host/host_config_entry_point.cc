@@ -9,5 +9,5 @@
 
 int main(int argc, char *argv[])
 {
-    return aspia::HostConfigMain(argc, argv);
+    return aspia::hostConfigMain(argc, argv);
 }

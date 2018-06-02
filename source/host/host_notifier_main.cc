@@ -22,7 +22,7 @@
 
 namespace aspia {
 
-int HostNotifierMain(int argc, char *argv[])
+int hostNotifierMain(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
