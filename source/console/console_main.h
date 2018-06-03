@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_MAIN_H
 #define _ASPIA_CONSOLE__CONSOLE_MAIN_H
 
-#include "export.h"
+#include "core_export.h"
 
 namespace aspia {
 
