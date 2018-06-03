@@ -96,31 +96,9 @@ FileItem::FileItem(const QString& directory_name)
     setIcon(0, FilePlatformUtil::directoryIcon());
 }
 
-FileItem::~FileItem() = default;
-
-QString FileItem::initialName() const
-{
-    return name_;
-}
-
 QString FileItem::currentName() const
 {
     return text(0);
-}
-
-bool FileItem::isDirectory() const
-{
-    return is_directory_;
-}
-
-qint64 FileItem::fileSize() const
-{
-    return size_;
-}
-
-time_t FileItem::lastModified() const
-{
-    return last_modified_;
 }
 
 bool FileItem::operator<(const QTreeWidgetItem& other) const

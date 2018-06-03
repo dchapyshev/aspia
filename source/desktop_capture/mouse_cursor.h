@@ -26,7 +26,7 @@ public:
 
     const QSize& size() const { return size_; }
     const QPoint& hotSpot() const { return hotspot_; }
-    quint8* data() const;
+    quint8* data() const { return data_.get(); }
 
     int stride() const;
 

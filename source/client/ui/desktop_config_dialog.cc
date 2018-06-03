@@ -52,7 +52,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
         current_codec = 0;
 
     ui.combo_codec->setCurrentIndex(current_codec);
-    OnCodecChanged(current_codec);
+    onCodecChanged(current_codec);
 
     ui.combo_color_depth->addItem(tr("True color (32 bit)"), QVariant(COLOR_DEPTH_ARGB));
     ui.combo_color_depth->addItem(tr("High color (16 bit)"), QVariant(COLOR_DEPTH_RGB565));
@@ -79,7 +79,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
         ui.combo_color_depth->setCurrentIndex(current_color_depth);
 
     ui.slider_compression_ratio->setValue(config->compress_ratio());
-    OnCompressionRatioChanged(config->compress_ratio());
+    onCompressionRatioChanged(config->compress_ratio());
 
     ui.spin_update_interval->setValue(config->update_interval());
 
@@ -96,18 +96,18 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
         ui.checkbox_clipboard->setEnabled(false);
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &DesktopConfigDialog::OnCodecChanged);
+            this, &DesktopConfigDialog::onCodecChanged);
 
     connect(ui.slider_compression_ratio, &QSlider::valueChanged,
-            this, &DesktopConfigDialog::OnCompressionRatioChanged);
+            this, &DesktopConfigDialog::onCompressionRatioChanged);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &DesktopConfigDialog::OnButtonBoxClicked);
+            this, &DesktopConfigDialog::onButtonBoxClicked);
 }
 
 DesktopConfigDialog::~DesktopConfigDialog() = default;
 
-void DesktopConfigDialog::OnCodecChanged(int item_index)
+void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =
         (ui.combo_codec->itemData(item_index).toInt() == proto::desktop::VIDEO_ENCODING_ZLIB);
@@ -120,12 +120,12 @@ void DesktopConfigDialog::OnCodecChanged(int item_index)
     ui.label_best->setEnabled(has_pixel_format);
 }
 
-void DesktopConfigDialog::OnCompressionRatioChanged(int value)
+void DesktopConfigDialog::onCompressionRatioChanged(int value)
 {
     ui.label_compression_ratio->setText(QString(tr("Compression ratio: %1").arg(value)));
 }
 
-void DesktopConfigDialog::OnButtonBoxClicked(QAbstractButton* button)
+void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
     {

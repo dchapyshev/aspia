@@ -28,11 +28,6 @@ MouseCursor::MouseCursor(std::unique_ptr<quint8[]> data,
     // Nothing
 }
 
-uint8_t* MouseCursor::data() const
-{
-    return data_.get();
-}
-
 int MouseCursor::stride() const
 {
     return size_.width() * sizeof(quint32);

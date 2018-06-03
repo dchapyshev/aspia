@@ -38,16 +38,16 @@ public:
     Host(QObject* parent = nullptr);
     ~Host();
 
-    NetworkChannel* networkChannel() const;
+    NetworkChannel* networkChannel() const { return network_channel_; }
     void setNetworkChannel(NetworkChannel* network_channel);
 
-    proto::auth::SessionType sessionType() const;
+    proto::auth::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::auth::SessionType session_type);
 
-    QString userName() const;
+    QString userName() const { return user_name_; }
     void setUserName(const QString& user_name);
 
-    QString uuid() const;
+    QString uuid() const { return uuid_; }
     void setUuid(const QString& uuid);
 
     QString remoteAddress() const;

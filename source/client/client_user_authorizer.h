@@ -32,13 +32,13 @@ public:
     explicit ClientUserAuthorizer(QWidget* parent);
     ~ClientUserAuthorizer();
 
-    proto::auth::SessionType sessionType() const;
+    proto::auth::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::auth::SessionType session_type);
 
-    QString userName() const;
+    QString userName() const { return username_; }
     void setUserName(const QString& username);
 
-    QString password() const;
+    QString password() const { return password_; }
     void setPassword(const QString& password);
 
 public slots:

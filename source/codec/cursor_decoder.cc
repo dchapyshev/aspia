@@ -11,7 +11,7 @@
 
 namespace aspia {
 
-bool CursorDecoder::DecompressCursor(const proto::desktop::CursorShape& cursor_shape,
+bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape,
                                      quint8* image)
 {
     const quint8* src = reinterpret_cast<const quint8*>(cursor_shape.data().data());
@@ -57,7 +57,7 @@ bool CursorDecoder::DecompressCursor(const proto::desktop::CursorShape& cursor_s
     return true;
 }
 
-std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorShape& cursor_shape)
+std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorShape& cursor_shape)
 {
     size_t cache_index;
 
@@ -81,7 +81,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::Decode(const proto::desktop::CursorS
         size_t image_size = size.width() * size.height() * sizeof(quint32);
         std::unique_ptr<quint8[]> image = std::make_unique<quint8[]>(image_size);
 
-        if (!DecompressCursor(cursor_shape, image.get()))
+        if (!decompressCursor(cursor_shape, image.get()))
             return nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor =

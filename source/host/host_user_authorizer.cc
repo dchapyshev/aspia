@@ -78,26 +78,6 @@ void HostUserAuthorizer::setNetworkChannel(NetworkChannel* network_channel)
     network_channel_ = network_channel;
 }
 
-NetworkChannel* HostUserAuthorizer::networkChannel()
-{
-    return network_channel_;
-}
-
-proto::auth::Status HostUserAuthorizer::status() const
-{
-    return status_;
-}
-
-proto::auth::SessionType HostUserAuthorizer::sessionType() const
-{
-    return session_type_;
-}
-
-QString HostUserAuthorizer::userName() const
-{
-    return user_name_;
-}
-
 void HostUserAuthorizer::start()
 {
     if (state_ != NotStarted)

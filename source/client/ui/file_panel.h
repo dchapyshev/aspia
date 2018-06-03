@@ -25,7 +25,7 @@ public:
 
     void setPanelName(const QString& name);
 
-    QString currentPath() const;
+    QString currentPath() const { return current_path_; }
     void setCurrentPath(const QString& path);
 
 signals:

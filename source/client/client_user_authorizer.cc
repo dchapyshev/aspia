@@ -67,29 +67,14 @@ ClientUserAuthorizer::~ClientUserAuthorizer()
     cancel();
 }
 
-proto::auth::SessionType ClientUserAuthorizer::sessionType() const
-{
-    return session_type_;
-}
-
 void ClientUserAuthorizer::setSessionType(proto::auth::SessionType session_type)
 {
     session_type_ = session_type;
 }
 
-QString ClientUserAuthorizer::userName() const
-{
-    return username_;
-}
-
 void ClientUserAuthorizer::setUserName(const QString& username)
 {
     username_ = username;
-}
-
-QString ClientUserAuthorizer::password() const
-{
-    return password_;
 }
 
 void ClientUserAuthorizer::setPassword(const QString& password)

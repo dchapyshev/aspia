@@ -19,13 +19,13 @@ class FileItem : public QTreeWidgetItem
 public:
     explicit FileItem(const proto::file_transfer::FileList::Item& item);
     explicit FileItem(const QString& directory_name);
-    ~FileItem();
+    ~FileItem() = default;
 
-    QString initialName() const;
+    QString initialName() const { return name_; }
     QString currentName() const;
-    bool isDirectory() const;
-    qint64 fileSize() const;
-    time_t lastModified() const;
+    bool isDirectory() const { return is_directory_; }
+    qint64 fileSize() const { return size_; }
+    time_t lastModified() const { return last_modified_; }
 
 protected:
     bool operator<(const QTreeWidgetItem& other) const override;

@@ -35,14 +35,4 @@ FileRemoveTask& FileRemoveTask::operator=(FileRemoveTask&& other) noexcept
 
 FileRemoveTask::~FileRemoveTask() = default;
 
-const QString& FileRemoveTask::path() const
-{
-    return path_;
-}
-
-bool FileRemoveTask::isDirectory() const
-{
-    return is_directory_;
-}
-
 } // namespace aspia

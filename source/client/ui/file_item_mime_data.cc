@@ -9,9 +9,6 @@
 
 namespace aspia {
 
-FileItemMimeData::FileItemMimeData() = default;
-FileItemMimeData::~FileItemMimeData() = default;
-
 // static
 QString FileItemMimeData::mimeType()
 {
@@ -22,11 +19,6 @@ void FileItemMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     file_list_ = file_list;
     setData(mimeType(), QByteArray());
-}
-
-QList<FileTransfer::Item> FileItemMimeData::fileList() const
-{
-    return file_list_;
 }
 
 } // namespace aspia

@@ -26,9 +26,9 @@ public:
     ~DesktopConfigDialog();
 
 private slots:
-    void OnCodecChanged(int item_index);
-    void OnCompressionRatioChanged(int value);
-    void OnButtonBoxClicked(QAbstractButton* button);
+    void onCodecChanged(int item_index);
+    void onCompressionRatioChanged(int value);
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     Ui::DesktopConfigDialog ui;

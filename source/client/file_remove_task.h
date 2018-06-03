@@ -25,8 +25,8 @@ public:
 
     ~FileRemoveTask();
 
-    const QString& path() const;
-    bool isDirectory() const;
+    const QString& path() const { return path_; }
+    bool isDirectory() const { return is_directory_; }
 
 private:
     QString path_;

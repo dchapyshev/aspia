@@ -19,13 +19,13 @@ class FileItem;
 class FileItemMimeData : public QMimeData
 {
 public:
-    FileItemMimeData();
-    virtual ~FileItemMimeData();
+    FileItemMimeData() = default;
+    virtual ~FileItemMimeData() = default;
 
     static QString mimeType();
 
     void setFileList(const QList<FileTransfer::Item>& file_list);
-    QList<FileTransfer::Item> fileList() const;
+    QList<FileTransfer::Item> fileList() const { return file_list_; }
 
 private:
     QList<FileTransfer::Item> file_list_;

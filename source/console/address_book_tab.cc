@@ -329,11 +329,6 @@ QString AddressBookTab::addressBookName() const
     return QString::fromStdString(data_.root_group().name());
 }
 
-QString AddressBookTab::addressBookPath() const
-{
-    return file_path_;
-}
-
 proto::address_book::Computer* AddressBookTab::currentComputer() const
 {
     ComputerItem* current_item = dynamic_cast<ComputerItem*>(ui.tree_computer->currentItem());

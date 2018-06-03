@@ -38,10 +38,10 @@ public:
     void setUserList(const QList<User>& user_list);
     void setNetworkChannel(NetworkChannel* network_channel);
 
-    NetworkChannel* networkChannel();
-    proto::auth::Status status() const;
-    proto::auth::SessionType sessionType() const;
-    QString userName() const;
+    NetworkChannel* networkChannel() { return network_channel_; }
+    proto::auth::Status status() const { return status_; }
+    proto::auth::SessionType sessionType() const { return session_type_; }
+    QString userName() const { return user_name_; }
 
 public slots:
     void start();

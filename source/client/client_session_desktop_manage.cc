@@ -131,7 +131,8 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
+    quint32 features = computer_->session_config().desktop_manage().features();
+    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
@@ -171,15 +172,14 @@ void ClientSessionDesktopManage::readConfigRequest(
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CURSOR_SHAPE))
+    quint32 features = computer_->session_config().desktop_manage().features();
+    if (!(features & proto::desktop::FEATURE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
         cursor_decoder_ = std::make_unique<CursorDecoder>();
 
-    std::shared_ptr<MouseCursor> mouse_cursor =
-        cursor_decoder_->Decode(cursor_shape);
-
+    std::shared_ptr<MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
     if (!mouse_cursor)
         return;
 
@@ -198,7 +198,8 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (!(computer_->session_config().desktop_manage().features() & proto::desktop::FEATURE_CLIPBOARD))
+    quint32 features = computer_->session_config().desktop_manage().features();
+    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
         return;
 
     desktop_window_->injectClipboard(clipboard_event);

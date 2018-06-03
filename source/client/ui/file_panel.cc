@@ -88,11 +88,6 @@ void FilePanel::setPanelName(const QString& name)
     ui.label_name->setText(name);
 }
 
-QString FilePanel::currentPath() const
-{
-    return current_path_;
-}
-
 void FilePanel::setCurrentPath(const QString& path)
 {
     current_path_ = normalizePath(path);

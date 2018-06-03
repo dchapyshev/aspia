@@ -41,11 +41,6 @@ Host::~Host()
     stop();
 }
 
-NetworkChannel* Host::networkChannel() const
-{
-    return network_channel_;
-}
-
 void Host::setNetworkChannel(NetworkChannel* network_channel)
 {
     if (state_ != StoppedState)
@@ -64,11 +59,6 @@ void Host::setNetworkChannel(NetworkChannel* network_channel)
     network_channel_->setParent(this);
 }
 
-proto::auth::SessionType Host::sessionType() const
-{
-    return session_type_;
-}
-
 void Host::setSessionType(proto::auth::SessionType session_type)
 {
     if (state_ != StoppedState)
@@ -80,11 +70,6 @@ void Host::setSessionType(proto::auth::SessionType session_type)
     session_type_ = session_type;
 }
 
-QString Host::userName() const
-{
-    return user_name_;
-}
-
 void Host::setUserName(const QString& user_name)
 {
     if (state_ != StoppedState)
@@ -94,11 +79,6 @@ void Host::setUserName(const QString& user_name)
     }
 
     user_name_ = user_name;
-}
-
-QString Host::uuid() const
-{
-    return uuid_;
 }
 
 void Host::setUuid(const QString& uuid)
