@@ -1,12 +1,12 @@
 //
 // PROJECT:         Aspia
-// FILE:            desktop_capture/desktop.h
+// FILE:            desktop_capture/win/desktop.h
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_H
-#define _ASPIA_DESKTOP_CAPTURE__DESKTOP_H
+#ifndef _ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
+#define _ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -77,4 +77,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__DESKTOP_H
+#endif // _ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H

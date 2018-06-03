@@ -19,7 +19,7 @@
 
 #include "base/system_error_code.h"
 #include "base/keycode_converter.h"
-#include "desktop_capture/scoped_thread_desktop.h"
+#include "desktop_capture/win/scoped_thread_desktop.h"
 
 namespace aspia {
 

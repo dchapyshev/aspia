@@ -13,7 +13,7 @@
 #include "base/win/scoped_hdc.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
-#include "desktop_capture/scoped_thread_desktop.h"
+#include "desktop_capture/win/scoped_thread_desktop.h"
 
 namespace aspia {
 

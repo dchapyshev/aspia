@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            desktop_capture/scoped_thread_desktop.h
+// FILE:            desktop_capture/win/scoped_thread_desktop.h
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__SCOPED_THREAD_DESKTOP_H
-#define _ASPIA_DESKTOP_CAPTURE__SCOPED_THREAD_DESKTOP_H
+#ifndef _ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H
+#define _ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H
 
-#include "desktop_capture/desktop.h"
+#include "desktop_capture/win/desktop.h"
 
 namespace aspia {
 
@@ -47,4 +47,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__SCOPED_THREAD_DESKTOP_H
+#endif // _ASPIA_DESKTOP_CAPTURE__WIN__SCOPED_THREAD_DESKTOP_H

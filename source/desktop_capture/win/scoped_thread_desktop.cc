@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            desktop_capture/scoped_thread_desktop.cc
+// FILE:            desktop_capture/win/scoped_thread_desktop.cc
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "desktop_capture/scoped_thread_desktop.h"
+#include "desktop_capture/win/scoped_thread_desktop.h"
 
 #include <utility>
 

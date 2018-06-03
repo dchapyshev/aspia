@@ -25,6 +25,7 @@ source_group(codec FILES ${SOURCE_CODEC})
 source_group(console FILES ${SOURCE_CONSOLE})
 source_group(crypto FILES ${SOURCE_CRYPTO})
 source_group(desktop_capture FILES ${SOURCE_DESKTOP_CAPTURE})
+source_group(desktop_capture\\win FILES ${SOURCE_DESKTOP_CAPTURE_WIN})
 source_group(host FILES ${SOURCE_HOST})
 source_group(host\\ui FILES ${SOURCE_HOST_UI})
 source_group(host\\win FILES ${SOURCE_HOST_WIN})
@@ -57,6 +58,7 @@ add_library(aspia_core SHARED
             ${SOURCE_CONSOLE}
             ${SOURCE_CRYPTO}
             ${SOURCE_DESKTOP_CAPTURE}
+            ${SOURCE_DESKTOP_CAPTURE_WIN}
             ${SOURCE_HOST}
             ${SOURCE_HOST_UI}
             ${SOURCE_HOST_WIN}

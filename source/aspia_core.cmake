@@ -205,8 +205,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.cc
@@ -224,9 +222,13 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/mouse_cursor_cache.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/mouse_cursor_cache.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/scoped_thread_desktop.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/scoped_thread_desktop.h)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h)
+
+list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.h)
 
 list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
