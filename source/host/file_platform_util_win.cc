@@ -47,7 +47,7 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
     SHFILEINFO file_info;
     memset(&file_info, 0, sizeof(file_info));
 
-    SHGetFileInfoW(file_name.toStdWString().c_str(),
+    SHGetFileInfoW(reinterpret_cast<const wchar_t*>(file_name.utf16()),
                    FILE_ATTRIBUTE_NORMAL,
                    &file_info,
                    sizeof(file_info),
@@ -57,11 +57,13 @@ QPair<QIcon, QString> FilePlatformUtil::fileTypeInfo(const QString& file_name)
     if (icon.isValid())
     {
         return QPair<QIcon, QString>(QtWin::fromHICON(icon),
-                                     QString::fromWCharArray(file_info.szTypeName));
+                                     QString::fromUtf16(
+                                         reinterpret_cast<const ushort*>(file_info.szTypeName)));
     }
 
     return QPair<QIcon, QString>(QIcon(QStringLiteral(":/icon/document.png")),
-                                 QString::fromWCharArray(file_info.szTypeName));
+                                 QString::fromUtf16(
+                                     reinterpret_cast<const ushort*>(file_info.szTypeName)));
 }
 
 // static
@@ -113,7 +115,7 @@ QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type ty
 // static
 proto::file_transfer::DriveList::Item::Type FilePlatformUtil::driveType(const QString& drive_path)
 {
-    switch (GetDriveTypeW(drive_path.toStdWString().c_str()))
+    switch (GetDriveTypeW(reinterpret_cast<const wchar_t*>(drive_path.utf16())))
     {
         case DRIVE_FIXED:
             return proto::file_transfer::DriveList::Item::TYPE_FIXED;
