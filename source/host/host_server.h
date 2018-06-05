@@ -37,6 +37,10 @@ public:
 signals:
     void sessionChanged(quint32 event, quint32 session_id);
 
+protected:
+    // QObject implementation.
+    void timerEvent(QTimerEvent* event) override;
+
 private slots:
     void onNewConnection();
     void onAuthorizationFinished(HostUserAuthorizer* authorizer);
@@ -44,6 +48,7 @@ private slots:
     void onIpcServerStarted(const QString& channel_id);
     void onIpcNewConnection(IpcChannel* channel);
     void onIpcMessageReceived(const QByteArray& buffer);
+    void onNotifierProcessError(HostProcess::ErrorCode error_code);
     void restartNotifier();
 
 private:
@@ -62,6 +67,7 @@ private:
     // Accepts incoming network connections.
     QPointer<NetworkServer> network_server_;
 
+    // Contains the status of the notifier process.
     NotifierState notifier_state_ = NotifierState::Stopped;
 
     // Starts and monitors the status of the notifier process.
@@ -75,6 +81,8 @@ private:
 
     // Contains a list of connected sessions.
     QList<QPointer<Host>> session_list_;
+
+    int restart_timer_id_ = 0;
 
     Q_DISABLE_COPY(HostServer)
 };

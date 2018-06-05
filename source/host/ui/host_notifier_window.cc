@@ -114,9 +114,7 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
             this, &HostNotifierWindow::onContextMenu);
 
-    setAttribute(Qt::WA_ShowWithoutActivating);
     setAttribute(Qt::WA_TranslucentBackground);
-    setAttribute(Qt::WA_NativeWindow);
 }
 
 HostNotifierWindow::~HostNotifierWindow()
@@ -210,7 +208,10 @@ void HostNotifierWindow::showEvent(QShowEvent* event)
         connect(this, &HostNotifierWindow::killSession, notifier_, &HostNotifier::killSession);
 
         if (!notifier_->start(channel_id_))
+        {
             quit();
+            return;
+        }
     }
 
     QWidget::showEvent(event);

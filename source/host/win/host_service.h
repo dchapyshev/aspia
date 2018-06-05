@@ -8,7 +8,7 @@
 #ifndef _ASPIA_HOST__HOST_SERVICE_H
 #define _ASPIA_HOST__HOST_SERVICE_H
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 #include <QScopedPointer>
 
 #include "base/win/scoped_com_initializer.h"
@@ -19,7 +19,7 @@ namespace aspia {
 
 class HostServer;
 
-class HostService : public Service<QCoreApplication>
+class HostService : public Service<QGuiApplication>
 {
 public:
     HostService();

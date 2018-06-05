@@ -17,6 +17,7 @@
 namespace aspia {
 
 class HostProcess;
+class HostSessionFake;
 class IpcChannel;
 class IpcServer;
 class NetworkChannel;
@@ -68,8 +69,8 @@ protected:
 private slots:
     void networkMessageWritten(int message_id);
     void networkMessageReceived(const QByteArray& buffer);
-    void ipcMessageWritten(int message_id);
-    void ipcMessageReceived(const QByteArray& buffer);
+    void sessionMessageWritten(int message_id);
+    void sessionMessageReceived(const QByteArray& buffer);
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(IpcChannel* channel);
     void attachSession(quint32 session_id);
@@ -89,6 +90,7 @@ private:
     QPointer<NetworkChannel> network_channel_;
     QPointer<IpcChannel> ipc_channel_;
     QPointer<HostProcess> session_process_;
+    QPointer<HostSessionFake> fake_session_;
 
     Q_DISABLE_COPY(Host)
 };

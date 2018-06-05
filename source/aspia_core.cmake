@@ -253,6 +253,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_session.h
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_desktop.h
+    ${PROJECT_SOURCE_DIR}/host/host_session_fake.cc
+    ${PROJECT_SOURCE_DIR}/host/host_session_fake.h
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.h
     ${PROJECT_SOURCE_DIR}/host/host_settings.cc

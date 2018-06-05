@@ -209,7 +209,7 @@ void DesktopWidget::paintEvent(QPaintEvent* event)
     if (frame_)
     {
         QPainter painter(this);
-        painter.drawImage(rect(), frame_->image());
+        painter.drawImage(rect(), frame_->constImage());
     }
 
     emit updated();

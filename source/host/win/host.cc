@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "host/win/host_process.h"
+#include "host/host_session_fake.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_server.h"
 #include "network/network_channel.h"
@@ -211,17 +212,24 @@ void Host::networkMessageWritten(int message_id)
 
 void Host::networkMessageReceived(const QByteArray& buffer)
 {
-    if (!ipc_channel_.isNull())
+    if (!fake_session_.isNull())
+    {
+        fake_session_->onMessageReceived(buffer);
+        network_channel_->readMessage();
+    }
+    else if (!ipc_channel_.isNull())
+    {
         ipc_channel_->writeMessage(IpcMessageId, buffer);
+    }
 }
 
-void Host::ipcMessageWritten(int message_id)
+void Host::sessionMessageWritten(int message_id)
 {
     Q_ASSERT(message_id == IpcMessageId);
     network_channel_->readMessage();
 }
 
-void Host::ipcMessageReceived(const QByteArray& buffer)
+void Host::sessionMessageReceived(const QByteArray& buffer)
 {
     network_channel_->writeMessage(NetworkMessageId, buffer);
 }
@@ -280,13 +288,15 @@ void Host::ipcNewConnection(IpcChannel* channel)
     killTimer(attach_timer_id_);
     attach_timer_id_ = 0;
 
+    delete fake_session_;
+
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 
     connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &Host::dettachSession);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::ipcMessageReceived);
-    connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::ipcMessageWritten);
+    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::sessionMessageReceived);
+    connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::sessionMessageWritten);
 
     state_ = AttachedState;
 
@@ -325,18 +335,30 @@ void Host::dettachSession()
         delete session_process_;
     }
 
-    if (session_type_ == proto::auth::SESSION_TYPE_FILE_TRANSFER)
+    fake_session_ = HostSessionFake::create(session_type_, this);
+    if (fake_session_.isNull())
     {
-        // The file transfer session ends when the user quits.
+        // The session does not have support for fake sessions.
         stop();
-        return;
     }
-
-    attach_timer_id_ = startTimer(std::chrono::minutes(1));
-    if (!attach_timer_id_)
+    else
     {
-        qWarning("Could not start the timer");
-        stop();
+        connect(fake_session_, &HostSessionFake::writeMessage,
+                network_channel_, &NetworkChannel::writeMessage);
+
+        connect(fake_session_, &HostSessionFake::readMessage,
+                network_channel_, &NetworkChannel::readMessage);
+
+        connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
+
+        fake_session_->startSession();
+
+        attach_timer_id_ = startTimer(std::chrono::minutes(1));
+        if (!attach_timer_id_)
+        {
+            qWarning("Could not start the timer");
+            stop();
+        }
     }
 }
 

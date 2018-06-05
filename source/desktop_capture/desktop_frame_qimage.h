@@ -21,8 +21,11 @@ public:
     ~DesktopFrameQImage() = default;
 
     static std::unique_ptr<DesktopFrameQImage> create(const QSize& size);
+    static std::unique_ptr<DesktopFrameQImage> create(const QPixmap& pixmap);
+    static std::unique_ptr<DesktopFrameQImage> create(QImage&& image);
 
-    const QImage& image() const { return image_; }
+    const QImage& constImage() const { return image_; }
+    QImage* image() { return &image_; }
 
 private:
     DesktopFrameQImage(QImage&& img);

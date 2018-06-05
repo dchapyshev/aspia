@@ -35,6 +35,14 @@ public:
     };
     Q_ENUM(Account)
 
+    enum ErrorCode
+    {
+        NoError,
+        NoLoggedOnUser,
+        OtherError
+    };
+    Q_ENUM(ErrorCode)
+
     HostProcess(QObject* parent = nullptr);
     virtual ~HostProcess();
 
@@ -64,7 +72,7 @@ public slots:
 signals:
     void started();
     void finished();
-    void errorOccurred();
+    void errorOccurred(HostProcess::ErrorCode error_code);
 
 private:
     friend class HostProcessImpl;

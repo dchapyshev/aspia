@@ -7,7 +7,7 @@
 
 #include "host/win/host_service.h"
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 #include <QDebug>
 
 #define WIN32_LEAN_AND_MEAN
@@ -50,10 +50,10 @@ const wchar_t kComProcessMandatoryLabel[] =
 } // namespace
 
 HostService::HostService()
-    : Service<QCoreApplication>(
+    : Service<QGuiApplication>(
         QStringLiteral("aspia-host-service"),
-        QCoreApplication::tr("Aspia Host Service"),
-        QCoreApplication::tr("Accepts incoming remote desktop connections to this computer."))
+        QGuiApplication::tr("Aspia Host Service"),
+        QGuiApplication::tr("Accepts incoming remote desktop connections to this computer."))
 {
     // Nothing
 }
@@ -62,7 +62,7 @@ void HostService::start()
 {
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
-    QCoreApplication* app = application();
+    QGuiApplication* app = application();
 
     app->setOrganizationName(QStringLiteral("Aspia"));
     app->setApplicationName(QStringLiteral("Host"));

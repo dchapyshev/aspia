@@ -17,6 +17,7 @@
 #include <QScreen>
 
 #include "base/file_logger.h"
+#include "desktop_capture/win/scoped_thread_desktop.h"
 #include "host/ui/host_notifier_window.h"
 #include "version.h"
 
@@ -24,6 +25,24 @@ namespace aspia {
 
 int hostNotifierMain(int argc, char *argv[])
 {
+    int max_attempt_count = 600;
+
+    do
+    {
+        Desktop input_desktop(Desktop::inputDesktop());
+        if (input_desktop.isValid())
+        {
+            input_desktop.setThreadDesktop();
+            break;
+        }
+
+        Sleep(100);
+    }
+    while (--max_attempt_count > 0);
+
+    if (max_attempt_count == 0)
+        return 1;
+
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");

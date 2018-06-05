@@ -82,24 +82,24 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 
 // Creates a copy of the current process token for the given |session_id| so
 // it can be used to launch a process in that session.
-bool createSessionToken(DWORD session_id, ScopedHandle* token_out)
+HostProcess::ErrorCode createSessionToken(DWORD session_id, ScopedHandle* token_out)
 {
     ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
         TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &session_token))
-        return false;
+        return HostProcess::OtherError;
 
     ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
-        return false;
+        return HostProcess::OtherError;
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
         qWarning() << "ImpersonateLoggedOnUser failed: " << lastSystemErrorString();
-        return false;
+        return HostProcess::OtherError;
     }
 
     // Change the session ID of the token.
@@ -108,54 +108,65 @@ bool createSessionToken(DWORD session_id, ScopedHandle* token_out)
     if (!RevertToSelf())
     {
         qFatal("RevertToSelf failed");
-        return false;
+        return HostProcess::OtherError;
     }
 
     if (!ret)
     {
         qWarning() << "SetTokenInformation failed: " << lastSystemErrorString();
-        return false;
+        return HostProcess::OtherError;
     }
 
     DWORD ui_access = 1;
     if (!SetTokenInformation(session_token, TokenUIAccess, &ui_access, sizeof(ui_access)))
     {
         qWarning() << "SetTokenInformation failed: " << lastSystemErrorString();
-        return false;
+        return HostProcess::OtherError;
     }
 
     token_out->reset(session_token.release());
-    return true;
+    return HostProcess::NoError;
 }
 
-bool createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
+HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
 {
     ScopedHandle privileged_token;
 
     if (!createPrivilegedToken(&privileged_token))
-        return false;
+        return HostProcess::OtherError;
 
     if (!ImpersonateLoggedOnUser(privileged_token))
     {
         qWarning() << "ImpersonateLoggedOnUser failed: " << lastSystemErrorString();
-        return false;
+        return HostProcess::OtherError;
     }
 
-    BOOL ret = WTSQueryUserToken(session_id, token_out->recieve());
+    HostProcess::ErrorCode error_code = HostProcess::NoError;
+
+    if (!WTSQueryUserToken(session_id, token_out->recieve()))
+    {
+        DWORD system_error_code = GetLastError();
+
+        if (system_error_code != ERROR_NO_TOKEN)
+        {
+            error_code = HostProcess::OtherError;
+
+            qWarning() << "WTSQueryUserToken failed: "
+                       << systemErrorCodeToString(system_error_code);
+        }
+        else
+        {
+            error_code = HostProcess::NoLoggedOnUser;
+        }
+    }
 
     if (!RevertToSelf())
     {
-        qFatal("RevertToSelf failed");
-        return false;
+        qWarning() << "RevertToSelf failed: " << lastSystemErrorString();
+        return HostProcess::OtherError;
     }
 
-    if (!ret)
-    {
-        qWarning() << "WTSQueryUserToken failed: " << lastSystemErrorString();
-        return false;
-    }
-
-    return true;
+    return error_code;
 }
 
 QString createCommandLine(const QString& program, const QStringList& arguments)
@@ -224,10 +235,11 @@ void HostProcessImpl::startProcess()
 
     if (account_ == HostProcess::System)
     {
-        if (!createSessionToken(session_id_, &session_token))
+        HostProcess::ErrorCode error_code = createSessionToken(session_id_, &session_token);
+        if (error_code != HostProcess::NoError)
         {
             state_ = HostProcess::NotRunning;
-            emit process_->errorOccurred();
+            emit process_->errorOccurred(error_code);
             return;
         }
     }
@@ -235,10 +247,11 @@ void HostProcessImpl::startProcess()
     {
         Q_ASSERT(account_ == HostProcess::User);
 
-        if (!createLoggedOnUserToken(session_id_, &session_token))
+        HostProcess::ErrorCode error_code = createLoggedOnUserToken(session_id_, &session_token);
+        if (error_code != HostProcess::NoError)
         {
             state_ = HostProcess::NotRunning;
-            emit process_->errorOccurred();
+            emit process_->errorOccurred(error_code);
             return;
         }
     }
@@ -246,7 +259,7 @@ void HostProcessImpl::startProcess()
     if (!startProcessWithToken(session_token))
     {
         state_ = HostProcess::NotRunning;
-        emit process_->errorOccurred();
+        emit process_->errorOccurred(HostProcess::OtherError);
         return;
     }
 

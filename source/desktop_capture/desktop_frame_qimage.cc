@@ -7,6 +7,8 @@
 
 #include "desktop_capture/desktop_frame_qimage.h"
 
+#include <QPixmap>
+
 namespace aspia {
 
 namespace {
@@ -30,6 +32,18 @@ std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QSize& size
 {
     return std::unique_ptr<DesktopFrameQImage>(
         new DesktopFrameQImage(QImage(size.width(), size.height(), QImage::Format_RGB32)));
+}
+
+// static
+std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(const QPixmap& pixmap)
+{
+    return std::unique_ptr<DesktopFrameQImage>(new DesktopFrameQImage(pixmap.toImage()));
+}
+
+// static
+std::unique_ptr<DesktopFrameQImage> DesktopFrameQImage::create(QImage&& image)
+{
+    return std::unique_ptr<DesktopFrameQImage>(new DesktopFrameQImage(std::move(image)));
 }
 
 } // namespace aspia

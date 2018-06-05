@@ -101,6 +101,55 @@ void HostServer::stop()
 void HostServer::setSessionChanged(quint32 event, quint32 session_id)
 {
     emit sessionChanged(event, session_id);
+
+    switch (event)
+    {
+        case WTS_CONSOLE_CONNECT:
+        {
+            if (!session_list_.isEmpty())
+                startNotifier();
+        }
+        break;
+
+        case WTS_CONSOLE_DISCONNECT:
+        {
+            if (restart_timer_id_ != 0)
+            {
+                killTimer(restart_timer_id_);
+                restart_timer_id_ = 0;
+            }
+
+            stopNotifier();
+        }
+        break;
+
+        case WTS_SESSION_LOGON:
+        {
+            if (session_id == WTSGetActiveConsoleSessionId() && !session_list_.isEmpty())
+                startNotifier();
+        }
+        break;
+
+        default:
+            break;
+    }
+}
+
+void HostServer::timerEvent(QTimerEvent* event)
+{
+    if (restart_timer_id_ != 0 && event->timerId() == restart_timer_id_)
+    {
+        killTimer(restart_timer_id_);
+        restart_timer_id_ = 0;
+
+        if (session_list_.isEmpty())
+            return;
+
+        startNotifier();
+        return;
+    }
+
+    QObject::timerEvent(event);
 }
 
 void HostServer::onNewConnection()
@@ -177,8 +226,11 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
     notifier_process_->setProgram(QCoreApplication::applicationDirPath() + "/" + kNotifierFileName);
     notifier_process_->setArguments(QStringList() << "--channel_id" << channel_id);
 
-    connect(notifier_process_, &HostProcess::errorOccurred, this, &HostServer::stop);
-    connect(notifier_process_, &HostProcess::finished, this, &HostServer::restartNotifier);
+    connect(notifier_process_, &HostProcess::errorOccurred,
+            this, &HostServer::onNotifierProcessError);
+
+    connect(notifier_process_, &HostProcess::finished,
+            this, &HostServer::restartNotifier);
 
     // Start the process. After the start, the process must connect to the IPC server and
     // slot |onIpcNewConnection| will be called.
@@ -205,6 +257,20 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     ipc_channel_->readMessage();
 }
 
+void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
+{
+    if (error_code == HostProcess::NoLoggedOnUser)
+    {
+        // If there is no logged on user, then we can not start the notifier.
+        stopNotifier();
+    }
+    else
+    {
+        // Stop the server.
+        stop();
+    }
+}
+
 void HostServer::restartNotifier()
 {
     if (notifier_state_ == NotifierState::Stopped)
@@ -216,8 +282,12 @@ void HostServer::restartNotifier()
     if (session_list_.isEmpty())
         return;
 
-    // Otherwise, restart the notifier.
-    startNotifier();
+    restart_timer_id_ = startTimer(std::chrono::seconds(30));
+    if (restart_timer_id_ == 0)
+    {
+        qWarning("Unable to start timer");
+        stop();
+    }
 }
 
 void HostServer::onIpcMessageReceived(const QByteArray& buffer)
@@ -265,7 +335,7 @@ void HostServer::startNotifier()
     connect(ipc_server, &IpcServer::started, this, &HostServer::onIpcServerStarted);
     connect(ipc_server, &IpcServer::finished, ipc_server, &IpcServer::deleteLater);
     connect(ipc_server, &IpcServer::newConnection, this, &HostServer::onIpcNewConnection);
-    connect(ipc_server, &IpcServer::errorOccurred, this, &HostServer::stop);
+    connect(ipc_server, &IpcServer::errorOccurred, this, &HostServer::stop, Qt::QueuedConnection);
 
     // Start IPC server. After its successful start, slot |onIpcServerStarted| will be called,
     // which will start the process.

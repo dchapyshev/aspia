@@ -32,7 +32,7 @@ signals:
     void killSession(const std::string& uuid);
 
 protected:
-    // QMainWindow implementation.
+    // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
     void showEvent(QShowEvent* event) override;
 
