@@ -21,21 +21,6 @@ enum EncryptionType
     ENCRYPTION_TYPE_XCHACHA20_POLY1305 = 2;
 }
 
-message CustomField
-{
-    enum Type
-    {
-        TYPE_STRING   = 0;
-        TYPE_BOOLEAN  = 1;
-        TYPE_NUMBER   = 2;
-        TYPE_DATETIME = 3;
-    }
-
-    Type type    = 1;
-    string name  = 2;
-    string value = 3;
-}
-
 message SessionConfig
 {
     desktop.Config desktop_manage = 1;
@@ -48,25 +33,18 @@ message Computer
     int64 modify_time                     = 2;
     int64 connect_time                    = 3;
 
-    // Fields 4-6 are reserved.
+    string name                           = 4;
+    string comment                        = 5;
+    string address                        = 6;
+    uint32 port                           = 7;
+    string username                       = 8;
+    string password                       = 9;
 
-    string name                           = 7;
-    string comment                        = 8;
-    string address                        = 9;
-    uint32 port                           = 10;
-    string username                       = 11;
-    string password                       = 12;
-
-    // Fields 13-17 are reserved.
-
-    // List of custom fields.
-    repeated CustomField custom_field     = 18;
-
-    // Fields 19-23 are reserved.
+    // Fields 10-15 are reserved.
 
     // Session configurations.
-    auth.SessionType session_type         = 24;
-    SessionConfig session_config          = 25;
+    auth.SessionType session_type         = 16;
+    SessionConfig session_config          = 17;
 }
 
 message ComputerGroup
@@ -74,22 +52,15 @@ message ComputerGroup
     int64 create_time = 1;
     int64 modify_time = 2;
 
-    // Fields 3-5 are reserved.
-
     // List of child computers.
-    repeated Computer computer = 6;
+    repeated Computer computer = 3;
 
     // List of child computer groups.
-    repeated ComputerGroup computer_group = 7;
+    repeated ComputerGroup computer_group = 4;
 
-    string name = 8;
-    string comment = 9;
-    bool expanded = 10;
-
-    // Fields 11-15 are reserved.
-
-    // List of custom fields.
-    repeated CustomField custom_field = 16;
+    string name    = 5;
+    string comment = 6;
+    bool expanded  = 7;
 }
 
 message Data
@@ -97,14 +68,10 @@ message Data
     // Random data before. If the address book is not encrypted, then the field is not used.
     bytes salt1 = 1;
 
-    // Fields 2-6 are reserved.
-
-    ComputerGroup root_group = 7;
-
-    // Fields 8-12 are reserved.
+    ComputerGroup root_group = 2;
 
     // Random data after. If the address book is not encrypted, then the field is not used.
-    bytes salt2 = 13;
+    bytes salt2 = 3;
 }
 
 message File

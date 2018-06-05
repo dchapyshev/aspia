@@ -19,11 +19,6 @@
 namespace aspia {
 namespace proto {
 namespace address_book {
-class CustomFieldDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<CustomField>
-      _instance;
-} _CustomField_default_instance_;
 class SessionConfigDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<SessionConfig>
@@ -53,27 +48,6 @@ class FileDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_address_5fbook_2eproto {
-void InitDefaultsCustomFieldImpl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  {
-    void* ptr = &::aspia::proto::address_book::_CustomField_default_instance_;
-    new (ptr) ::aspia::proto::address_book::CustomField();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::aspia::proto::address_book::CustomField::InitAsDefaultInstance();
-}
-
-void InitDefaultsCustomField() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCustomFieldImpl);
-}
-
 void InitDefaultsSessionConfigImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -104,7 +78,6 @@ void InitDefaultsComputerImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_address_5fbook_2eproto::InitDefaultsCustomField();
   protobuf_address_5fbook_2eproto::InitDefaultsSessionConfig();
   {
     void* ptr = &::aspia::proto::address_book::_Computer_default_instance_;
@@ -128,7 +101,6 @@ void InitDefaultsComputerGroupImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   protobuf_address_5fbook_2eproto::InitDefaultsComputer();
-  protobuf_address_5fbook_2eproto::InitDefaultsCustomField();
   {
     void* ptr = &::aspia::proto::address_book::_ComputerGroup_default_instance_;
     new (ptr) ::aspia::proto::address_book::ComputerGroup();
@@ -189,27 +161,6 @@ void InitDefaultsFile() {
 namespace aspia {
 namespace proto {
 namespace address_book {
-bool CustomField_Type_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const CustomField_Type CustomField::TYPE_STRING;
-const CustomField_Type CustomField::TYPE_BOOLEAN;
-const CustomField_Type CustomField::TYPE_NUMBER;
-const CustomField_Type CustomField::TYPE_DATETIME;
-const CustomField_Type CustomField::Type_MIN;
-const CustomField_Type CustomField::Type_MAX;
-const int CustomField::Type_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool EncryptionType_IsValid(int value) {
   switch (value) {
     case 0:
@@ -219,295 +170,6 @@ bool EncryptionType_IsValid(int value) {
     default:
       return false;
   }
-}
-
-
-// ===================================================================
-
-void CustomField::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int CustomField::kTypeFieldNumber;
-const int CustomField::kNameFieldNumber;
-const int CustomField::kValueFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-CustomField::CustomField()
-  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_address_5fbook_2eproto::InitDefaultsCustomField();
-  }
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:aspia.proto.address_book.CustomField)
-}
-CustomField::CustomField(const CustomField& from)
-  : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.value().size() > 0) {
-    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
-  }
-  type_ = from.type_;
-  // @@protoc_insertion_point(copy_constructor:aspia.proto.address_book.CustomField)
-}
-
-void CustomField::SharedCtor() {
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  value_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
-  _cached_size_ = 0;
-}
-
-CustomField::~CustomField() {
-  // @@protoc_insertion_point(destructor:aspia.proto.address_book.CustomField)
-  SharedDtor();
-}
-
-void CustomField::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  value_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void CustomField::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const CustomField& CustomField::default_instance() {
-  ::protobuf_address_5fbook_2eproto::InitDefaultsCustomField();
-  return *internal_default_instance();
-}
-
-CustomField* CustomField::New(::google::protobuf::Arena* arena) const {
-  CustomField* n = new CustomField;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void CustomField::Clear() {
-// @@protoc_insertion_point(message_clear_start:aspia.proto.address_book.CustomField)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
-  _internal_metadata_.Clear();
-}
-
-bool CustomField::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  ::google::protobuf::internal::LiteUnknownFieldSetter unknown_fields_setter(
-      &_internal_metadata_);
-  ::google::protobuf::io::StringOutputStream unknown_fields_output(
-      unknown_fields_setter.buffer());
-  ::google::protobuf::io::CodedOutputStream unknown_fields_stream(
-      &unknown_fields_output, false);
-  // @@protoc_insertion_point(parse_start:aspia.proto.address_book.CustomField)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.address_book.CustomField.Type type = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_type(static_cast< ::aspia::proto::address_book::CustomField_Type >(value));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // string name = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.address_book.CustomField.name"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // string value = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_value()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->value().data(), static_cast<int>(this->value().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.address_book.CustomField.value"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(
-            input, tag, &unknown_fields_stream));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:aspia.proto.address_book.CustomField)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:aspia.proto.address_book.CustomField)
-  return false;
-#undef DO_
-}
-
-void CustomField::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:aspia.proto.address_book.CustomField)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // .aspia.proto.address_book.CustomField.Type type = 1;
-  if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->type(), output);
-  }
-
-  // string name = 2;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.address_book.CustomField.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->name(), output);
-  }
-
-  // string value = 3;
-  if (this->value().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->value().data(), static_cast<int>(this->value().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.address_book.CustomField.value");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->value(), output);
-  }
-
-  output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
-                   static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
-  // @@protoc_insertion_point(serialize_end:aspia.proto.address_book.CustomField)
-}
-
-size_t CustomField::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:aspia.proto.address_book.CustomField)
-  size_t total_size = 0;
-
-  total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
-
-  // string name = 2;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
-  }
-
-  // string value = 3;
-  if (this->value().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->value());
-  }
-
-  // .aspia.proto.address_book.CustomField.Type type = 1;
-  if (this->type() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void CustomField::CheckTypeAndMergeFrom(
-    const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CustomField*>(&from));
-}
-
-void CustomField::MergeFrom(const CustomField& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:aspia.proto.address_book.CustomField)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  if (from.value().size() > 0) {
-
-    value_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.value_);
-  }
-  if (from.type() != 0) {
-    set_type(from.type());
-  }
-}
-
-void CustomField::CopyFrom(const CustomField& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:aspia.proto.address_book.CustomField)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool CustomField::IsInitialized() const {
-  return true;
-}
-
-void CustomField::Swap(CustomField* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void CustomField::InternalSwap(CustomField* other) {
-  using std::swap;
-  name_.Swap(&other->name_);
-  value_.Swap(&other->value_);
-  swap(type_, other->type_);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
-}
-
-::std::string CustomField::GetTypeName() const {
-  return "aspia.proto.address_book.CustomField";
 }
 
 
@@ -788,7 +450,6 @@ const int Computer::kAddressFieldNumber;
 const int Computer::kPortFieldNumber;
 const int Computer::kUsernameFieldNumber;
 const int Computer::kPasswordFieldNumber;
-const int Computer::kCustomFieldFieldNumber;
 const int Computer::kSessionTypeFieldNumber;
 const int Computer::kSessionConfigFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -804,7 +465,6 @@ Computer::Computer()
 Computer::Computer(const Computer& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      custom_field_(from.custom_field_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -888,7 +548,6 @@ void Computer::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  custom_field_.Clear();
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -962,10 +621,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // string name = 7;
-      case 7: {
+      // string name = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -978,10 +637,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // string comment = 8;
-      case 8: {
+      // string comment = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_comment()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -994,10 +653,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // string address = 9;
-      case 9: {
+      // string address = 6;
+      case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_address()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1010,10 +669,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 port = 10;
-      case 10: {
+      // uint32 port = 7;
+      case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -1024,10 +683,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // string username = 11;
-      case 11: {
+      // string username = 8;
+      case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(90u /* 90 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_username()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1040,10 +699,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // string password = 12;
-      case 12: {
+      // string password = 9;
+      case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(98u /* 98 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_password()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1056,21 +715,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.address_book.CustomField custom_field = 18;
-      case 18: {
+      // .aspia.proto.auth.SessionType session_type = 16;
+      case 16: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(146u /* 146 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_custom_field()));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // .aspia.proto.auth.SessionType session_type = 24;
-      case 24: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(192u /* 192 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -1082,10 +730,10 @@ bool Computer::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.address_book.SessionConfig session_config = 25;
-      case 25: {
+      // .aspia.proto.address_book.SessionConfig session_config = 17;
+      case 17: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(202u /* 202 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(138u /* 138 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_session_config()));
         } else {
@@ -1135,78 +783,71 @@ void Computer::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt64(3, this->connect_time(), output);
   }
 
-  // string name = 7;
+  // string name = 4;
   if (this->name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.Computer.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      7, this->name(), output);
+      4, this->name(), output);
   }
 
-  // string comment = 8;
+  // string comment = 5;
   if (this->comment().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.Computer.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      8, this->comment(), output);
+      5, this->comment(), output);
   }
 
-  // string address = 9;
+  // string address = 6;
   if (this->address().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->address().data(), static_cast<int>(this->address().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.Computer.address");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      9, this->address(), output);
+      6, this->address(), output);
   }
 
-  // uint32 port = 10;
+  // uint32 port = 7;
   if (this->port() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(10, this->port(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->port(), output);
   }
 
-  // string username = 11;
+  // string username = 8;
   if (this->username().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), static_cast<int>(this->username().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.Computer.username");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      11, this->username(), output);
+      8, this->username(), output);
   }
 
-  // string password = 12;
+  // string password = 9;
   if (this->password().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->password().data(), static_cast<int>(this->password().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.Computer.password");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      12, this->password(), output);
+      9, this->password(), output);
   }
 
-  // repeated .aspia.proto.address_book.CustomField custom_field = 18;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->custom_field_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      18, this->custom_field(static_cast<int>(i)), output);
-  }
-
-  // .aspia.proto.auth.SessionType session_type = 24;
+  // .aspia.proto.auth.SessionType session_type = 16;
   if (this->session_type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      24, this->session_type(), output);
+      16, this->session_type(), output);
   }
 
-  // .aspia.proto.address_book.SessionConfig session_config = 25;
+  // .aspia.proto.address_book.SessionConfig session_config = 17;
   if (this->has_session_config()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      25, *this->session_config_, output);
+      17, *this->session_config_, output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1220,53 +861,42 @@ size_t Computer::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.address_book.CustomField custom_field = 18;
-  {
-    unsigned int count = static_cast<unsigned int>(this->custom_field_size());
-    total_size += 2UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->custom_field(static_cast<int>(i)));
-    }
-  }
-
-  // string name = 7;
+  // string name = 4;
   if (this->name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->name());
   }
 
-  // string comment = 8;
+  // string comment = 5;
   if (this->comment().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->comment());
   }
 
-  // string address = 9;
+  // string address = 6;
   if (this->address().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->address());
   }
 
-  // string username = 11;
+  // string username = 8;
   if (this->username().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->username());
   }
 
-  // string password = 12;
+  // string password = 9;
   if (this->password().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->password());
   }
 
-  // .aspia.proto.address_book.SessionConfig session_config = 25;
+  // .aspia.proto.address_book.SessionConfig session_config = 17;
   if (this->has_session_config()) {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -1294,14 +924,14 @@ size_t Computer::ByteSizeLong() const {
         this->connect_time());
   }
 
-  // uint32 port = 10;
+  // uint32 port = 7;
   if (this->port() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->port());
   }
 
-  // .aspia.proto.auth.SessionType session_type = 24;
+  // .aspia.proto.auth.SessionType session_type = 16;
   if (this->session_type() != 0) {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->session_type());
@@ -1326,7 +956,6 @@ void Computer::MergeFrom(const Computer& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  custom_field_.MergeFrom(from.custom_field_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -1384,7 +1013,6 @@ void Computer::Swap(Computer* other) {
 }
 void Computer::InternalSwap(Computer* other) {
   using std::swap;
-  custom_field_.InternalSwap(&other->custom_field_);
   name_.Swap(&other->name_);
   comment_.Swap(&other->comment_);
   address_.Swap(&other->address_);
@@ -1417,7 +1045,6 @@ const int ComputerGroup::kComputerGroupFieldNumber;
 const int ComputerGroup::kNameFieldNumber;
 const int ComputerGroup::kCommentFieldNumber;
 const int ComputerGroup::kExpandedFieldNumber;
-const int ComputerGroup::kCustomFieldFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ComputerGroup::ComputerGroup()
@@ -1433,7 +1060,6 @@ ComputerGroup::ComputerGroup(const ComputerGroup& from)
       _internal_metadata_(NULL),
       computer_(from.computer_),
       computer_group_(from.computer_group_),
-      custom_field_(from.custom_field_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -1495,7 +1121,6 @@ void ComputerGroup::Clear() {
 
   computer_.Clear();
   computer_group_.Clear();
-  custom_field_.Clear();
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&create_time_, 0, static_cast<size_t>(
@@ -1516,7 +1141,7 @@ bool ComputerGroup::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.address_book.ComputerGroup)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1548,10 +1173,10 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.address_book.Computer computer = 6;
-      case 6: {
+      // repeated .aspia.proto.address_book.Computer computer = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_computer()));
         } else {
           goto handle_unusual;
@@ -1559,10 +1184,10 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .aspia.proto.address_book.ComputerGroup computer_group = 7;
-      case 7: {
+      // repeated .aspia.proto.address_book.ComputerGroup computer_group = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_computer_group()));
         } else {
           goto handle_unusual;
@@ -1570,10 +1195,10 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // string name = 8;
-      case 8: {
+      // string name = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(66u /* 66 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1586,10 +1211,10 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // string comment = 9;
-      case 9: {
+      // string comment = 6;
+      case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_comment()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1602,25 +1227,14 @@ bool ComputerGroup::MergePartialFromCodedStream(
         break;
       }
 
-      // bool expanded = 10;
-      case 10: {
+      // bool expanded = 7;
+      case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &expanded_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated .aspia.proto.address_book.CustomField custom_field = 16;
-      case 16: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(130u /* 130 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_custom_field()));
         } else {
           goto handle_unusual;
         }
@@ -1663,50 +1277,43 @@ void ComputerGroup::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->modify_time(), output);
   }
 
-  // repeated .aspia.proto.address_book.Computer computer = 6;
+  // repeated .aspia.proto.address_book.Computer computer = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->computer_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, this->computer(static_cast<int>(i)), output);
+      3, this->computer(static_cast<int>(i)), output);
   }
 
-  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 7;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 4;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->computer_group_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      7, this->computer_group(static_cast<int>(i)), output);
+      4, this->computer_group(static_cast<int>(i)), output);
   }
 
-  // string name = 8;
+  // string name = 5;
   if (this->name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), static_cast<int>(this->name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.ComputerGroup.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      8, this->name(), output);
+      5, this->name(), output);
   }
 
-  // string comment = 9;
+  // string comment = 6;
   if (this->comment().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->comment().data(), static_cast<int>(this->comment().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "aspia.proto.address_book.ComputerGroup.comment");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      9, this->comment(), output);
+      6, this->comment(), output);
   }
 
-  // bool expanded = 10;
+  // bool expanded = 7;
   if (this->expanded() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->expanded(), output);
-  }
-
-  // repeated .aspia.proto.address_book.CustomField custom_field = 16;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->custom_field_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      16, this->custom_field(static_cast<int>(i)), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->expanded(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1720,7 +1327,7 @@ size_t ComputerGroup::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // repeated .aspia.proto.address_book.Computer computer = 6;
+  // repeated .aspia.proto.address_book.Computer computer = 3;
   {
     unsigned int count = static_cast<unsigned int>(this->computer_size());
     total_size += 1UL * count;
@@ -1731,7 +1338,7 @@ size_t ComputerGroup::ByteSizeLong() const {
     }
   }
 
-  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 7;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 4;
   {
     unsigned int count = static_cast<unsigned int>(this->computer_group_size());
     total_size += 1UL * count;
@@ -1742,25 +1349,14 @@ size_t ComputerGroup::ByteSizeLong() const {
     }
   }
 
-  // repeated .aspia.proto.address_book.CustomField custom_field = 16;
-  {
-    unsigned int count = static_cast<unsigned int>(this->custom_field_size());
-    total_size += 2UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->custom_field(static_cast<int>(i)));
-    }
-  }
-
-  // string name = 8;
+  // string name = 5;
   if (this->name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->name());
   }
 
-  // string comment = 9;
+  // string comment = 6;
   if (this->comment().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1781,7 +1377,7 @@ size_t ComputerGroup::ByteSizeLong() const {
         this->modify_time());
   }
 
-  // bool expanded = 10;
+  // bool expanded = 7;
   if (this->expanded() != 0) {
     total_size += 1 + 1;
   }
@@ -1807,7 +1403,6 @@ void ComputerGroup::MergeFrom(const ComputerGroup& from) {
 
   computer_.MergeFrom(from.computer_);
   computer_group_.MergeFrom(from.computer_group_);
-  custom_field_.MergeFrom(from.custom_field_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -1846,7 +1441,6 @@ void ComputerGroup::InternalSwap(ComputerGroup* other) {
   using std::swap;
   computer_.InternalSwap(&other->computer_);
   computer_group_.InternalSwap(&other->computer_group_);
-  custom_field_.InternalSwap(&other->custom_field_);
   name_.Swap(&other->name_);
   comment_.Swap(&other->comment_);
   swap(create_time_, other->create_time_);
@@ -1981,10 +1575,10 @@ bool Data::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.address_book.ComputerGroup root_group = 7;
-      case 7: {
+      // .aspia.proto.address_book.ComputerGroup root_group = 2;
+      case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(58u /* 58 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_root_group()));
         } else {
@@ -1993,10 +1587,10 @@ bool Data::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes salt2 = 13;
-      case 13: {
+      // bytes salt2 = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_salt2()));
         } else {
@@ -2037,16 +1631,16 @@ void Data::SerializeWithCachedSizes(
       1, this->salt1(), output);
   }
 
-  // .aspia.proto.address_book.ComputerGroup root_group = 7;
+  // .aspia.proto.address_book.ComputerGroup root_group = 2;
   if (this->has_root_group()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      7, *this->root_group_, output);
+      2, *this->root_group_, output);
   }
 
-  // bytes salt2 = 13;
+  // bytes salt2 = 3;
   if (this->salt2().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      13, this->salt2(), output);
+      3, this->salt2(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -2067,14 +1661,14 @@ size_t Data::ByteSizeLong() const {
         this->salt1());
   }
 
-  // bytes salt2 = 13;
+  // bytes salt2 = 3;
   if (this->salt2().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->salt2());
   }
 
-  // .aspia.proto.address_book.ComputerGroup root_group = 7;
+  // .aspia.proto.address_book.ComputerGroup root_group = 2;
   if (this->has_root_group()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(

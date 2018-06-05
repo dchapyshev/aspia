@@ -38,13 +38,11 @@ namespace protobuf_address_5fbook_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[6];
+  static const ::google::protobuf::internal::ParseTable schema[5];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsCustomFieldImpl();
-void InitDefaultsCustomField();
 void InitDefaultsSessionConfigImpl();
 void InitDefaultsSessionConfig();
 void InitDefaultsComputerImpl();
@@ -56,7 +54,6 @@ void InitDefaultsData();
 void InitDefaultsFileImpl();
 void InitDefaultsFile();
 inline void InitDefaults() {
-  InitDefaultsCustomField();
   InitDefaultsSessionConfig();
   InitDefaultsComputer();
   InitDefaultsComputerGroup();
@@ -73,9 +70,6 @@ extern ComputerDefaultTypeInternal _Computer_default_instance_;
 class ComputerGroup;
 class ComputerGroupDefaultTypeInternal;
 extern ComputerGroupDefaultTypeInternal _ComputerGroup_default_instance_;
-class CustomField;
-class CustomFieldDefaultTypeInternal;
-extern CustomFieldDefaultTypeInternal _CustomField_default_instance_;
 class Data;
 class DataDefaultTypeInternal;
 extern DataDefaultTypeInternal _Data_default_instance_;
@@ -92,19 +86,6 @@ namespace aspia {
 namespace proto {
 namespace address_book {
 
-enum CustomField_Type {
-  CustomField_Type_TYPE_STRING = 0,
-  CustomField_Type_TYPE_BOOLEAN = 1,
-  CustomField_Type_TYPE_NUMBER = 2,
-  CustomField_Type_TYPE_DATETIME = 3,
-  CustomField_Type_CustomField_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  CustomField_Type_CustomField_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool CustomField_Type_IsValid(int value);
-const CustomField_Type CustomField_Type_Type_MIN = CustomField_Type_TYPE_STRING;
-const CustomField_Type CustomField_Type_Type_MAX = CustomField_Type_TYPE_DATETIME;
-const int CustomField_Type_Type_ARRAYSIZE = CustomField_Type_Type_MAX + 1;
-
 enum EncryptionType {
   ENCRYPTION_TYPE_UNKNOWN = 0,
   ENCRYPTION_TYPE_NONE = 1,
@@ -118,152 +99,6 @@ const EncryptionType EncryptionType_MAX = ENCRYPTION_TYPE_XCHACHA20_POLY1305;
 const int EncryptionType_ARRAYSIZE = EncryptionType_MAX + 1;
 
 // ===================================================================
-
-class CustomField : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.address_book.CustomField) */ {
- public:
-  CustomField();
-  virtual ~CustomField();
-
-  CustomField(const CustomField& from);
-
-  inline CustomField& operator=(const CustomField& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  CustomField(CustomField&& from) noexcept
-    : CustomField() {
-    *this = ::std::move(from);
-  }
-
-  inline CustomField& operator=(CustomField&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const CustomField& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const CustomField* internal_default_instance() {
-    return reinterpret_cast<const CustomField*>(
-               &_CustomField_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    0;
-
-  void Swap(CustomField* other);
-  friend void swap(CustomField& a, CustomField& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline CustomField* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  CustomField* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    PROTOBUF_FINAL;
-  void CopyFrom(const CustomField& from);
-  void MergeFrom(const CustomField& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  void DiscardUnknownFields();
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(CustomField* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  typedef CustomField_Type Type;
-  static const Type TYPE_STRING =
-    CustomField_Type_TYPE_STRING;
-  static const Type TYPE_BOOLEAN =
-    CustomField_Type_TYPE_BOOLEAN;
-  static const Type TYPE_NUMBER =
-    CustomField_Type_TYPE_NUMBER;
-  static const Type TYPE_DATETIME =
-    CustomField_Type_TYPE_DATETIME;
-  static inline bool Type_IsValid(int value) {
-    return CustomField_Type_IsValid(value);
-  }
-  static const Type Type_MIN =
-    CustomField_Type_Type_MIN;
-  static const Type Type_MAX =
-    CustomField_Type_Type_MAX;
-  static const int Type_ARRAYSIZE =
-    CustomField_Type_Type_ARRAYSIZE;
-
-  // accessors -------------------------------------------------------
-
-  // string name = 2;
-  void clear_name();
-  static const int kNameFieldNumber = 2;
-  const ::std::string& name() const;
-  void set_name(const ::std::string& value);
-  #if LANG_CXX11
-  void set_name(::std::string&& value);
-  #endif
-  void set_name(const char* value);
-  void set_name(const char* value, size_t size);
-  ::std::string* mutable_name();
-  ::std::string* release_name();
-  void set_allocated_name(::std::string* name);
-
-  // string value = 3;
-  void clear_value();
-  static const int kValueFieldNumber = 3;
-  const ::std::string& value() const;
-  void set_value(const ::std::string& value);
-  #if LANG_CXX11
-  void set_value(::std::string&& value);
-  #endif
-  void set_value(const char* value);
-  void set_value(const char* value, size_t size);
-  ::std::string* mutable_value();
-  ::std::string* release_value();
-  void set_allocated_value(::std::string* value);
-
-  // .aspia.proto.address_book.CustomField.Type type = 1;
-  void clear_type();
-  static const int kTypeFieldNumber = 1;
-  ::aspia::proto::address_book::CustomField_Type type() const;
-  void set_type(::aspia::proto::address_book::CustomField_Type value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.address_book.CustomField)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr name_;
-  ::google::protobuf::internal::ArenaStringPtr value_;
-  int type_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_address_5fbook_2eproto::TableStruct;
-  friend void ::protobuf_address_5fbook_2eproto::InitDefaultsCustomFieldImpl();
-};
-// -------------------------------------------------------------------
 
 class SessionConfig : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.address_book.SessionConfig) */ {
  public:
@@ -299,7 +134,7 @@ class SessionConfig : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_SessionConfig_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    1;
+    0;
 
   void Swap(SessionConfig* other);
   friend void swap(SessionConfig& a, SessionConfig& b) {
@@ -409,7 +244,7 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Computer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    1;
 
   void Swap(Computer* other);
   friend void swap(Computer& a, Computer& b) {
@@ -455,21 +290,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.address_book.CustomField custom_field = 18;
-  int custom_field_size() const;
-  void clear_custom_field();
-  static const int kCustomFieldFieldNumber = 18;
-  const ::aspia::proto::address_book::CustomField& custom_field(int index) const;
-  ::aspia::proto::address_book::CustomField* mutable_custom_field(int index);
-  ::aspia::proto::address_book::CustomField* add_custom_field();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >*
-      mutable_custom_field();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >&
-      custom_field() const;
-
-  // string name = 7;
+  // string name = 4;
   void clear_name();
-  static const int kNameFieldNumber = 7;
+  static const int kNameFieldNumber = 4;
   const ::std::string& name() const;
   void set_name(const ::std::string& value);
   #if LANG_CXX11
@@ -481,9 +304,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // string comment = 8;
+  // string comment = 5;
   void clear_comment();
-  static const int kCommentFieldNumber = 8;
+  static const int kCommentFieldNumber = 5;
   const ::std::string& comment() const;
   void set_comment(const ::std::string& value);
   #if LANG_CXX11
@@ -495,9 +318,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_comment();
   void set_allocated_comment(::std::string* comment);
 
-  // string address = 9;
+  // string address = 6;
   void clear_address();
-  static const int kAddressFieldNumber = 9;
+  static const int kAddressFieldNumber = 6;
   const ::std::string& address() const;
   void set_address(const ::std::string& value);
   #if LANG_CXX11
@@ -509,9 +332,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_address();
   void set_allocated_address(::std::string* address);
 
-  // string username = 11;
+  // string username = 8;
   void clear_username();
-  static const int kUsernameFieldNumber = 11;
+  static const int kUsernameFieldNumber = 8;
   const ::std::string& username() const;
   void set_username(const ::std::string& value);
   #if LANG_CXX11
@@ -523,9 +346,9 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // string password = 12;
+  // string password = 9;
   void clear_password();
-  static const int kPasswordFieldNumber = 12;
+  static const int kPasswordFieldNumber = 9;
   const ::std::string& password() const;
   void set_password(const ::std::string& value);
   #if LANG_CXX11
@@ -537,10 +360,10 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_password();
   void set_allocated_password(::std::string* password);
 
-  // .aspia.proto.address_book.SessionConfig session_config = 25;
+  // .aspia.proto.address_book.SessionConfig session_config = 17;
   bool has_session_config() const;
   void clear_session_config();
-  static const int kSessionConfigFieldNumber = 25;
+  static const int kSessionConfigFieldNumber = 17;
   const ::aspia::proto::address_book::SessionConfig& session_config() const;
   ::aspia::proto::address_book::SessionConfig* release_session_config();
   ::aspia::proto::address_book::SessionConfig* mutable_session_config();
@@ -564,15 +387,15 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::google::protobuf::int64 connect_time() const;
   void set_connect_time(::google::protobuf::int64 value);
 
-  // uint32 port = 10;
+  // uint32 port = 7;
   void clear_port();
-  static const int kPortFieldNumber = 10;
+  static const int kPortFieldNumber = 7;
   ::google::protobuf::uint32 port() const;
   void set_port(::google::protobuf::uint32 value);
 
-  // .aspia.proto.auth.SessionType session_type = 24;
+  // .aspia.proto.auth.SessionType session_type = 16;
   void clear_session_type();
-  static const int kSessionTypeFieldNumber = 24;
+  static const int kSessionTypeFieldNumber = 16;
   ::aspia::proto::auth::SessionType session_type() const;
   void set_session_type(::aspia::proto::auth::SessionType value);
 
@@ -580,7 +403,6 @@ class Computer : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField > custom_field_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
   ::google::protobuf::internal::ArenaStringPtr address_;
@@ -632,7 +454,7 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_ComputerGroup_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    3;
+    2;
 
   void Swap(ComputerGroup* other);
   friend void swap(ComputerGroup& a, ComputerGroup& b) {
@@ -678,10 +500,10 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // repeated .aspia.proto.address_book.Computer computer = 6;
+  // repeated .aspia.proto.address_book.Computer computer = 3;
   int computer_size() const;
   void clear_computer();
-  static const int kComputerFieldNumber = 6;
+  static const int kComputerFieldNumber = 3;
   const ::aspia::proto::address_book::Computer& computer(int index) const;
   ::aspia::proto::address_book::Computer* mutable_computer(int index);
   ::aspia::proto::address_book::Computer* add_computer();
@@ -690,10 +512,10 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::Computer >&
       computer() const;
 
-  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 7;
+  // repeated .aspia.proto.address_book.ComputerGroup computer_group = 4;
   int computer_group_size() const;
   void clear_computer_group();
-  static const int kComputerGroupFieldNumber = 7;
+  static const int kComputerGroupFieldNumber = 4;
   const ::aspia::proto::address_book::ComputerGroup& computer_group(int index) const;
   ::aspia::proto::address_book::ComputerGroup* mutable_computer_group(int index);
   ::aspia::proto::address_book::ComputerGroup* add_computer_group();
@@ -702,21 +524,9 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup >&
       computer_group() const;
 
-  // repeated .aspia.proto.address_book.CustomField custom_field = 16;
-  int custom_field_size() const;
-  void clear_custom_field();
-  static const int kCustomFieldFieldNumber = 16;
-  const ::aspia::proto::address_book::CustomField& custom_field(int index) const;
-  ::aspia::proto::address_book::CustomField* mutable_custom_field(int index);
-  ::aspia::proto::address_book::CustomField* add_custom_field();
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >*
-      mutable_custom_field();
-  const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >&
-      custom_field() const;
-
-  // string name = 8;
+  // string name = 5;
   void clear_name();
-  static const int kNameFieldNumber = 8;
+  static const int kNameFieldNumber = 5;
   const ::std::string& name() const;
   void set_name(const ::std::string& value);
   #if LANG_CXX11
@@ -728,9 +538,9 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // string comment = 9;
+  // string comment = 6;
   void clear_comment();
-  static const int kCommentFieldNumber = 9;
+  static const int kCommentFieldNumber = 6;
   const ::std::string& comment() const;
   void set_comment(const ::std::string& value);
   #if LANG_CXX11
@@ -754,9 +564,9 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::int64 modify_time() const;
   void set_modify_time(::google::protobuf::int64 value);
 
-  // bool expanded = 10;
+  // bool expanded = 7;
   void clear_expanded();
-  static const int kExpandedFieldNumber = 10;
+  static const int kExpandedFieldNumber = 7;
   bool expanded() const;
   void set_expanded(bool value);
 
@@ -766,7 +576,6 @@ class ComputerGroup : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::Computer > computer_;
   ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::ComputerGroup > computer_group_;
-  ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField > custom_field_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::internal::ArenaStringPtr comment_;
   ::google::protobuf::int64 create_time_;
@@ -812,7 +621,7 @@ class Data : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
                &_Data_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    4;
+    3;
 
   void Swap(Data* other);
   friend void swap(Data& a, Data& b) {
@@ -872,9 +681,9 @@ class Data : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::std::string* release_salt1();
   void set_allocated_salt1(::std::string* salt1);
 
-  // bytes salt2 = 13;
+  // bytes salt2 = 3;
   void clear_salt2();
-  static const int kSalt2FieldNumber = 13;
+  static const int kSalt2FieldNumber = 3;
   const ::std::string& salt2() const;
   void set_salt2(const ::std::string& value);
   #if LANG_CXX11
@@ -886,10 +695,10 @@ class Data : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::std::string* release_salt2();
   void set_allocated_salt2(::std::string* salt2);
 
-  // .aspia.proto.address_book.ComputerGroup root_group = 7;
+  // .aspia.proto.address_book.ComputerGroup root_group = 2;
   bool has_root_group() const;
   void clear_root_group();
-  static const int kRootGroupFieldNumber = 7;
+  static const int kRootGroupFieldNumber = 2;
   const ::aspia::proto::address_book::ComputerGroup& root_group() const;
   ::aspia::proto::address_book::ComputerGroup* release_root_group();
   ::aspia::proto::address_book::ComputerGroup* mutable_root_group();
@@ -942,7 +751,7 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
                &_File_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    5;
+    4;
 
   void Swap(File* other);
   friend void swap(File& a, File& b) {
@@ -1049,130 +858,6 @@ class File : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// CustomField
-
-// .aspia.proto.address_book.CustomField.Type type = 1;
-inline void CustomField::clear_type() {
-  type_ = 0;
-}
-inline ::aspia::proto::address_book::CustomField_Type CustomField::type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.CustomField.type)
-  return static_cast< ::aspia::proto::address_book::CustomField_Type >(type_);
-}
-inline void CustomField::set_type(::aspia::proto::address_book::CustomField_Type value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.address_book.CustomField.type)
-}
-
-// string name = 2;
-inline void CustomField::clear_name() {
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& CustomField::name() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.CustomField.name)
-  return name_.GetNoArena();
-}
-inline void CustomField::set_name(const ::std::string& value) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.address_book.CustomField.name)
-}
-#if LANG_CXX11
-inline void CustomField::set_name(::std::string&& value) {
-  
-  name_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.CustomField.name)
-}
-#endif
-inline void CustomField::set_name(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.CustomField.name)
-}
-inline void CustomField::set_name(const char* value, size_t size) {
-  
-  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.CustomField.name)
-}
-inline ::std::string* CustomField::mutable_name() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.CustomField.name)
-  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CustomField::release_name() {
-  // @@protoc_insertion_point(field_release:aspia.proto.address_book.CustomField.name)
-  
-  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CustomField::set_allocated_name(::std::string* name) {
-  if (name != NULL) {
-    
-  } else {
-    
-  }
-  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.CustomField.name)
-}
-
-// string value = 3;
-inline void CustomField::clear_value() {
-  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& CustomField::value() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.CustomField.value)
-  return value_.GetNoArena();
-}
-inline void CustomField::set_value(const ::std::string& value) {
-  
-  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.address_book.CustomField.value)
-}
-#if LANG_CXX11
-inline void CustomField::set_value(::std::string&& value) {
-  
-  value_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.address_book.CustomField.value)
-}
-#endif
-inline void CustomField::set_value(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.address_book.CustomField.value)
-}
-inline void CustomField::set_value(const char* value, size_t size) {
-  
-  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.address_book.CustomField.value)
-}
-inline ::std::string* CustomField::mutable_value() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.CustomField.value)
-  return value_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* CustomField::release_value() {
-  // @@protoc_insertion_point(field_release:aspia.proto.address_book.CustomField.value)
-  
-  return value_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void CustomField::set_allocated_value(::std::string* value) {
-  if (value != NULL) {
-    
-  } else {
-    
-  }
-  value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.CustomField.value)
-}
-
-// -------------------------------------------------------------------
-
 // SessionConfig
 
 // .aspia.proto.desktop.Config desktop_manage = 1;
@@ -1309,7 +994,7 @@ inline void Computer::set_connect_time(::google::protobuf::int64 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.Computer.connect_time)
 }
 
-// string name = 7;
+// string name = 4;
 inline void Computer::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1362,7 +1047,7 @@ inline void Computer::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.name)
 }
 
-// string comment = 8;
+// string comment = 5;
 inline void Computer::clear_comment() {
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1415,7 +1100,7 @@ inline void Computer::set_allocated_comment(::std::string* comment) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.comment)
 }
 
-// string address = 9;
+// string address = 6;
 inline void Computer::clear_address() {
   address_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1468,7 +1153,7 @@ inline void Computer::set_allocated_address(::std::string* address) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.address)
 }
 
-// uint32 port = 10;
+// uint32 port = 7;
 inline void Computer::clear_port() {
   port_ = 0u;
 }
@@ -1482,7 +1167,7 @@ inline void Computer::set_port(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.Computer.port)
 }
 
-// string username = 11;
+// string username = 8;
 inline void Computer::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1535,7 +1220,7 @@ inline void Computer::set_allocated_username(::std::string* username) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.username)
 }
 
-// string password = 12;
+// string password = 9;
 inline void Computer::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1588,37 +1273,7 @@ inline void Computer::set_allocated_password(::std::string* password) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Computer.password)
 }
 
-// repeated .aspia.proto.address_book.CustomField custom_field = 18;
-inline int Computer::custom_field_size() const {
-  return custom_field_.size();
-}
-inline void Computer::clear_custom_field() {
-  custom_field_.Clear();
-}
-inline const ::aspia::proto::address_book::CustomField& Computer::custom_field(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.Computer.custom_field)
-  return custom_field_.Get(index);
-}
-inline ::aspia::proto::address_book::CustomField* Computer::mutable_custom_field(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.Computer.custom_field)
-  return custom_field_.Mutable(index);
-}
-inline ::aspia::proto::address_book::CustomField* Computer::add_custom_field() {
-  // @@protoc_insertion_point(field_add:aspia.proto.address_book.Computer.custom_field)
-  return custom_field_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >*
-Computer::mutable_custom_field() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.address_book.Computer.custom_field)
-  return &custom_field_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >&
-Computer::custom_field() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.address_book.Computer.custom_field)
-  return custom_field_;
-}
-
-// .aspia.proto.auth.SessionType session_type = 24;
+// .aspia.proto.auth.SessionType session_type = 16;
 inline void Computer::clear_session_type() {
   session_type_ = 0;
 }
@@ -1632,7 +1287,7 @@ inline void Computer::set_session_type(::aspia::proto::auth::SessionType value) 
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.Computer.session_type)
 }
 
-// .aspia.proto.address_book.SessionConfig session_config = 25;
+// .aspia.proto.address_book.SessionConfig session_config = 17;
 inline bool Computer::has_session_config() const {
   return this != internal_default_instance() && session_config_ != NULL;
 }
@@ -1714,7 +1369,7 @@ inline void ComputerGroup::set_modify_time(::google::protobuf::int64 value) {
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.ComputerGroup.modify_time)
 }
 
-// repeated .aspia.proto.address_book.Computer computer = 6;
+// repeated .aspia.proto.address_book.Computer computer = 3;
 inline int ComputerGroup::computer_size() const {
   return computer_.size();
 }
@@ -1744,7 +1399,7 @@ ComputerGroup::computer() const {
   return computer_;
 }
 
-// repeated .aspia.proto.address_book.ComputerGroup computer_group = 7;
+// repeated .aspia.proto.address_book.ComputerGroup computer_group = 4;
 inline int ComputerGroup::computer_group_size() const {
   return computer_group_.size();
 }
@@ -1774,7 +1429,7 @@ ComputerGroup::computer_group() const {
   return computer_group_;
 }
 
-// string name = 8;
+// string name = 5;
 inline void ComputerGroup::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1827,7 +1482,7 @@ inline void ComputerGroup::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.ComputerGroup.name)
 }
 
-// string comment = 9;
+// string comment = 6;
 inline void ComputerGroup::clear_comment() {
   comment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1880,7 +1535,7 @@ inline void ComputerGroup::set_allocated_comment(::std::string* comment) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.ComputerGroup.comment)
 }
 
-// bool expanded = 10;
+// bool expanded = 7;
 inline void ComputerGroup::clear_expanded() {
   expanded_ = false;
 }
@@ -1892,36 +1547,6 @@ inline void ComputerGroup::set_expanded(bool value) {
   
   expanded_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.address_book.ComputerGroup.expanded)
-}
-
-// repeated .aspia.proto.address_book.CustomField custom_field = 16;
-inline int ComputerGroup::custom_field_size() const {
-  return custom_field_.size();
-}
-inline void ComputerGroup::clear_custom_field() {
-  custom_field_.Clear();
-}
-inline const ::aspia::proto::address_book::CustomField& ComputerGroup::custom_field(int index) const {
-  // @@protoc_insertion_point(field_get:aspia.proto.address_book.ComputerGroup.custom_field)
-  return custom_field_.Get(index);
-}
-inline ::aspia::proto::address_book::CustomField* ComputerGroup::mutable_custom_field(int index) {
-  // @@protoc_insertion_point(field_mutable:aspia.proto.address_book.ComputerGroup.custom_field)
-  return custom_field_.Mutable(index);
-}
-inline ::aspia::proto::address_book::CustomField* ComputerGroup::add_custom_field() {
-  // @@protoc_insertion_point(field_add:aspia.proto.address_book.ComputerGroup.custom_field)
-  return custom_field_.Add();
-}
-inline ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >*
-ComputerGroup::mutable_custom_field() {
-  // @@protoc_insertion_point(field_mutable_list:aspia.proto.address_book.ComputerGroup.custom_field)
-  return &custom_field_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::aspia::proto::address_book::CustomField >&
-ComputerGroup::custom_field() const {
-  // @@protoc_insertion_point(field_list:aspia.proto.address_book.ComputerGroup.custom_field)
-  return custom_field_;
 }
 
 // -------------------------------------------------------------------
@@ -1981,7 +1606,7 @@ inline void Data::set_allocated_salt1(::std::string* salt1) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Data.salt1)
 }
 
-// .aspia.proto.address_book.ComputerGroup root_group = 7;
+// .aspia.proto.address_book.ComputerGroup root_group = 2;
 inline bool Data::has_root_group() const {
   return this != internal_default_instance() && root_group_ != NULL;
 }
@@ -2031,7 +1656,7 @@ inline void Data::set_allocated_root_group(::aspia::proto::address_book::Compute
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.address_book.Data.root_group)
 }
 
-// bytes salt2 = 13;
+// bytes salt2 = 3;
 inline void Data::clear_salt2() {
   salt2_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2233,8 +1858,6 @@ inline void File::set_allocated_data(::std::string* data) {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -2245,7 +1868,6 @@ inline void File::set_allocated_data(::std::string* data) {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::aspia::proto::address_book::CustomField_Type> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::address_book::EncryptionType> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
