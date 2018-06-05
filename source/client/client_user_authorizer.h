@@ -19,15 +19,7 @@ class ClientUserAuthorizer : public QObject
     Q_OBJECT
 
 public:
-    enum State
-    {
-        NotStarted,
-        WaitForRequest,
-        ResponseWrite,
-        WaitForResult,
-        Finished
-    };
-    Q_ENUM(State);
+    enum State { NotStarted, Started, Finished };
 
     explicit ClientUserAuthorizer(QWidget* parent);
     ~ClientUserAuthorizer();
@@ -54,11 +46,13 @@ signals:
     void readMessage();
 
 private:
+    void readServerChallenge(const proto::auth::ServerChallenge& server_challenge);
+    void readLogonResult(const proto::auth::LogonResult& logon_result);
+
     State state_ = NotStarted;
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     QString username_;
     QString password_;
-    QByteArray nonce_;
 
     Q_DISABLE_COPY(ClientUserAuthorizer)
 };

@@ -23,14 +23,7 @@ class HostUserAuthorizer : public QObject
     Q_OBJECT
 
 public:
-    enum State
-    {
-        NotStarted,
-        RequestWrite,
-        WaitForResponse,
-        ResultWrite,
-        Finished
-    };
+    enum State { NotStarted, Started, Finished };
 
     HostUserAuthorizer(QObject* parent = nullptr);
     ~HostUserAuthorizer();
@@ -61,6 +54,9 @@ private slots:
     void messageReceived(const QByteArray& buffer);
 
 private:
+    void readLogonRequest(const proto::auth::LogonRequest& logon_request);
+    void readClientChallenge(const proto::auth::ClientChallenge& client_challenge);
+
     State state_ = NotStarted;
 
     QList<User> user_list_;
@@ -70,6 +66,7 @@ private:
     QByteArray nonce_;
     int timer_id_ = 0;
 
+    proto::auth::Method method_ = proto::auth::METHOD_UNKNOWN;
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     proto::auth::Status status_ = proto::auth::STATUS_ACCESS_DENIED;
 

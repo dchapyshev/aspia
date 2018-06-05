@@ -19,27 +19,21 @@ namespace aspia {
 
 namespace {
 
-// TODO: Configuring the number of iterations in the UI.
-const quint32 kKeyHashingRounds = 15000;
+const quint32 kKeyHashingRounds = 100000;
+const quint32 kNonceSize = 16;
 
-enum MessageId
-{
-    RequestMessageId,
-    ResultMessageId
-};
+enum MessageId { ServerChallenge, LogonResult };
 
 QByteArray generateNonce()
 {
-    // TODO: Configure the size in the UI.
-    static const size_t kNonceSize = 512; // 512 bytes.
     return Random::generateBuffer(kNonceSize);
 }
 
-QByteArray createKey(const QByteArray& password_hash, const QByteArray& nonce, quint32 rounds)
+QByteArray createSessionKey(const QByteArray& password_hash, const QByteArray& nonce)
 {
     QByteArray data = password_hash;
 
-    for (quint32 i = 0; i < rounds; ++i)
+    for (quint32 i = 0; i < kKeyHashingRounds; ++i)
     {
         QCryptographicHash hash(QCryptographicHash::Sha512);
 
@@ -96,6 +90,12 @@ void HostUserAuthorizer::start()
     // If authorization is not completed within the specified time interval
     // the connection will be closed.
     timer_id_ = startTimer(std::chrono::minutes(2));
+    if (!timer_id_)
+    {
+        qWarning("Unable to start timer");
+        stop();
+        return;
+    }
 
     connect(network_channel_, &NetworkChannel::disconnected,
             this, &HostUserAuthorizer::stop);
@@ -112,28 +112,8 @@ void HostUserAuthorizer::start()
     connect(this, &HostUserAuthorizer::readMessage,
             network_channel_, &NetworkChannel::readMessage);
 
-    nonce_ = generateNonce();
-    if (nonce_.isEmpty())
-    {
-        qDebug("Empty nonce generated");
-        stop();
-        return;
-    }
-
-    proto::auth::Request request;
-
-    request.set_hashing(proto::auth::HASHING_SHA512);
-    request.set_rounds(kKeyHashingRounds);
-    request.set_nonce(nonce_.constData(), nonce_.size());
-
-    QByteArray serialized_message = serializeMessage(request);
-
-    secureMemZero(request.mutable_nonce());
-
-    state_ = RequestWrite;
-    emit writeMessage(RequestMessageId, serialized_message);
-
-    secureMemZero(&serialized_message);
+    state_ = Started;
+    emit readMessage();
 }
 
 void HostUserAuthorizer::stop()
@@ -175,19 +155,14 @@ void HostUserAuthorizer::messageWritten(int message_id)
 
     switch (message_id)
     {
-        case RequestMessageId:
-        {
-            Q_ASSERT(state_ == RequestWrite);
-
-            // Authorization request sent. We are reading the response.
-            state_ = WaitForResponse;
+        case ServerChallenge:
             emit readMessage();
-        }
-        break;
+            break;
 
-        case ResultMessageId:
+        case LogonResult:
         {
-            Q_ASSERT(state_ == ResultWrite);
+            killTimer(timer_id_);
+            timer_id_ = 0;
 
             if (status_ != proto::auth::STATUS_SUCCESS)
             {
@@ -217,24 +192,74 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
     if (state_ == Finished)
         return;
 
-    Q_ASSERT(state_ == WaitForResponse);
-    Q_ASSERT(timer_id_);
-
-    killTimer(timer_id_);
-    timer_id_ = 0;
-
-    proto::auth::Response response;
-    if (!parseMessage(buffer, response))
+    proto::auth::ClientToHost message;
+    if (parseMessage(buffer, message))
     {
+        if (message.has_logon_request())
+        {
+            readLogonRequest(message.logon_request());
+            return;
+        }
+        else if (message.has_client_challenge())
+        {
+            readClientChallenge(message.client_challenge());
+
+            secureMemZero(message.mutable_client_challenge()->mutable_username());
+            secureMemZero(message.mutable_client_challenge()->mutable_session_key());
+            return;
+        }
+    }
+
+    qWarning("Unknown message from client");
+    stop();
+}
+
+void HostUserAuthorizer::readLogonRequest(const proto::auth::LogonRequest& logon_request)
+{
+    // We do not support other authorization methods yet.
+    if (logon_request.method() != proto::auth::METHOD_BASIC)
+    {
+        status_ = proto::auth::STATUS_ACCESS_DENIED;
+
+        proto::auth::HostToClient message;
+        message.mutable_logon_result()->set_status(status_);
+
+        emit writeMessage(LogonResult, serializeMessage(message));
+        return;
+    }
+
+    method_ = logon_request.method();
+
+    nonce_ = generateNonce();
+    if (nonce_.isEmpty())
+    {
+        qDebug("Empty nonce generated");
         stop();
         return;
     }
 
-    QByteArray key(response.key().c_str(), response.key().size());
-    user_name_ = QString::fromStdString(response.username());
+    proto::auth::HostToClient message;
+    message.mutable_server_challenge()->set_nonce(nonce_.constData(), nonce_.size());
 
-    if (user_name_.isEmpty() || key.isEmpty())
+    emit writeMessage(ServerChallenge, serializeMessage(message));
+}
+
+void HostUserAuthorizer::readClientChallenge(const proto::auth::ClientChallenge& client_challenge)
+{
+    if (nonce_.isEmpty())
     {
+        qWarning("Unexpected client challenge. Nonce not generated yet");
+        stop();
+        return;
+    }
+
+    QByteArray session_key(client_challenge.session_key().c_str(),
+                           client_challenge.session_key().size());
+    user_name_ = QString::fromStdString(client_challenge.username());
+
+    if (user_name_.isEmpty() || session_key.isEmpty())
+    {
+        qWarning("Empty user name or session key");
         stop();
         return;
     }
@@ -246,20 +271,23 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         if (user.name().compare(user_name_, Qt::CaseInsensitive) != 0)
             continue;
 
-        if (createKey(user.passwordHash(), nonce_, kKeyHashingRounds) != key)
+        if (createSessionKey(user.passwordHash(), nonce_) != session_key)
         {
+            // Wrong password.
             status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
 
         if (!(user.flags() & User::FLAG_ENABLED))
         {
+            // User disabled.
             status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
 
-        if (!(user.sessions() & response.session_type()))
+        if (!(user.sessions() & client_challenge.session_type()))
         {
+            // Session type disabled for user.
             status_ = proto::auth::STATUS_ACCESS_DENIED;
             break;
         }
@@ -268,17 +296,14 @@ void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
         break;
     }
 
-    secureMemZero(response.mutable_username());
-    secureMemZero(response.mutable_key());
-    secureMemZero(&key);
+    secureMemZero(&session_key);
 
-    session_type_ = response.session_type();
-    state_ = ResultWrite;
+    session_type_ = client_challenge.session_type();
 
-    proto::auth::Result result;
-    result.set_status(status_);
+    proto::auth::HostToClient message;
+    message.mutable_logon_result()->set_status(status_);
 
-    emit writeMessage(ResultMessageId, serializeMessage(result));
+    emit writeMessage(LogonResult, serializeMessage(message));
 }
 
 } // namespace aspia

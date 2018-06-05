@@ -36,41 +36,70 @@ namespace protobuf_authorization_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[3];
+  static const ::google::protobuf::internal::ParseTable schema[6];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
-void InitDefaultsRequestImpl();
-void InitDefaultsRequest();
-void InitDefaultsResponseImpl();
-void InitDefaultsResponse();
-void InitDefaultsResultImpl();
-void InitDefaultsResult();
+void InitDefaultsLogonRequestImpl();
+void InitDefaultsLogonRequest();
+void InitDefaultsServerChallengeImpl();
+void InitDefaultsServerChallenge();
+void InitDefaultsClientChallengeImpl();
+void InitDefaultsClientChallenge();
+void InitDefaultsLogonResultImpl();
+void InitDefaultsLogonResult();
+void InitDefaultsClientToHostImpl();
+void InitDefaultsClientToHost();
+void InitDefaultsHostToClientImpl();
+void InitDefaultsHostToClient();
 inline void InitDefaults() {
-  InitDefaultsRequest();
-  InitDefaultsResponse();
-  InitDefaultsResult();
+  InitDefaultsLogonRequest();
+  InitDefaultsServerChallenge();
+  InitDefaultsClientChallenge();
+  InitDefaultsLogonResult();
+  InitDefaultsClientToHost();
+  InitDefaultsHostToClient();
 }
 }  // namespace protobuf_authorization_2eproto
 namespace aspia {
 namespace proto {
 namespace auth {
-class Request;
-class RequestDefaultTypeInternal;
-extern RequestDefaultTypeInternal _Request_default_instance_;
-class Response;
-class ResponseDefaultTypeInternal;
-extern ResponseDefaultTypeInternal _Response_default_instance_;
-class Result;
-class ResultDefaultTypeInternal;
-extern ResultDefaultTypeInternal _Result_default_instance_;
+class ClientChallenge;
+class ClientChallengeDefaultTypeInternal;
+extern ClientChallengeDefaultTypeInternal _ClientChallenge_default_instance_;
+class ClientToHost;
+class ClientToHostDefaultTypeInternal;
+extern ClientToHostDefaultTypeInternal _ClientToHost_default_instance_;
+class HostToClient;
+class HostToClientDefaultTypeInternal;
+extern HostToClientDefaultTypeInternal _HostToClient_default_instance_;
+class LogonRequest;
+class LogonRequestDefaultTypeInternal;
+extern LogonRequestDefaultTypeInternal _LogonRequest_default_instance_;
+class LogonResult;
+class LogonResultDefaultTypeInternal;
+extern LogonResultDefaultTypeInternal _LogonResult_default_instance_;
+class ServerChallenge;
+class ServerChallengeDefaultTypeInternal;
+extern ServerChallengeDefaultTypeInternal _ServerChallenge_default_instance_;
 }  // namespace auth
 }  // namespace proto
 }  // namespace aspia
 namespace aspia {
 namespace proto {
 namespace auth {
+
+enum Method {
+  METHOD_UNKNOWN = 0,
+  METHOD_BASIC = 1,
+  Method_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Method_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Method_IsValid(int value);
+const Method Method_MIN = METHOD_UNKNOWN;
+const Method Method_MAX = METHOD_BASIC;
+const int Method_ARRAYSIZE = Method_MAX + 1;
 
 enum SessionType {
   SESSION_TYPE_UNKNOWN = 0,
@@ -98,37 +127,26 @@ const Status Status_MIN = STATUS_UNKNOWN;
 const Status Status_MAX = STATUS_CANCELED;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
-enum Hashing {
-  HASHING_UNKNOWN = 0,
-  HASHING_SHA512 = 1,
-  Hashing_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Hashing_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool Hashing_IsValid(int value);
-const Hashing Hashing_MIN = HASHING_UNKNOWN;
-const Hashing Hashing_MAX = HASHING_SHA512;
-const int Hashing_ARRAYSIZE = Hashing_MAX + 1;
-
 // ===================================================================
 
-class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Request) */ {
+class LogonRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.LogonRequest) */ {
  public:
-  Request();
-  virtual ~Request();
+  LogonRequest();
+  virtual ~LogonRequest();
 
-  Request(const Request& from);
+  LogonRequest(const LogonRequest& from);
 
-  inline Request& operator=(const Request& from) {
+  inline LogonRequest& operator=(const LogonRequest& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Request(Request&& from) noexcept
-    : Request() {
+  LogonRequest(LogonRequest&& from) noexcept
+    : LogonRequest() {
     *this = ::std::move(from);
   }
 
-  inline Request& operator=(Request&& from) noexcept {
+  inline LogonRequest& operator=(LogonRequest&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -137,30 +155,30 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
     return *this;
   }
   #endif
-  static const Request& default_instance();
+  static const LogonRequest& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Request* internal_default_instance() {
-    return reinterpret_cast<const Request*>(
-               &_Request_default_instance_);
+  static inline const LogonRequest* internal_default_instance() {
+    return reinterpret_cast<const LogonRequest*>(
+               &_LogonRequest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     0;
 
-  void Swap(Request* other);
-  friend void swap(Request& a, Request& b) {
+  void Swap(LogonRequest* other);
+  friend void swap(LogonRequest& a, LogonRequest& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Request* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline LogonRequest* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Request* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  LogonRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Request& from);
-  void MergeFrom(const Request& from);
+  void CopyFrom(const LogonRequest& from);
+  void MergeFrom(const LogonRequest& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -175,7 +193,7 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Request* other);
+  void InternalSwap(LogonRequest* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -191,63 +209,41 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes nonce = 3;
-  void clear_nonce();
-  static const int kNonceFieldNumber = 3;
-  const ::std::string& nonce() const;
-  void set_nonce(const ::std::string& value);
-  #if LANG_CXX11
-  void set_nonce(::std::string&& value);
-  #endif
-  void set_nonce(const char* value);
-  void set_nonce(const void* value, size_t size);
-  ::std::string* mutable_nonce();
-  ::std::string* release_nonce();
-  void set_allocated_nonce(::std::string* nonce);
+  // .aspia.proto.auth.Method method = 1;
+  void clear_method();
+  static const int kMethodFieldNumber = 1;
+  ::aspia::proto::auth::Method method() const;
+  void set_method(::aspia::proto::auth::Method value);
 
-  // .aspia.proto.auth.Hashing hashing = 1;
-  void clear_hashing();
-  static const int kHashingFieldNumber = 1;
-  ::aspia::proto::auth::Hashing hashing() const;
-  void set_hashing(::aspia::proto::auth::Hashing value);
-
-  // uint32 rounds = 2;
-  void clear_rounds();
-  static const int kRoundsFieldNumber = 2;
-  ::google::protobuf::uint32 rounds() const;
-  void set_rounds(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Request)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.LogonRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr nonce_;
-  int hashing_;
-  ::google::protobuf::uint32 rounds_;
+  int method_;
   mutable int _cached_size_;
   friend struct ::protobuf_authorization_2eproto::TableStruct;
-  friend void ::protobuf_authorization_2eproto::InitDefaultsRequestImpl();
+  friend void ::protobuf_authorization_2eproto::InitDefaultsLogonRequestImpl();
 };
 // -------------------------------------------------------------------
 
-class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Response) */ {
+class ServerChallenge : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.ServerChallenge) */ {
  public:
-  Response();
-  virtual ~Response();
+  ServerChallenge();
+  virtual ~ServerChallenge();
 
-  Response(const Response& from);
+  ServerChallenge(const ServerChallenge& from);
 
-  inline Response& operator=(const Response& from) {
+  inline ServerChallenge& operator=(const ServerChallenge& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Response(Response&& from) noexcept
-    : Response() {
+  ServerChallenge(ServerChallenge&& from) noexcept
+    : ServerChallenge() {
     *this = ::std::move(from);
   }
 
-  inline Response& operator=(Response&& from) noexcept {
+  inline ServerChallenge& operator=(ServerChallenge&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -256,30 +252,30 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
     return *this;
   }
   #endif
-  static const Response& default_instance();
+  static const ServerChallenge& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Response* internal_default_instance() {
-    return reinterpret_cast<const Response*>(
-               &_Response_default_instance_);
+  static inline const ServerChallenge* internal_default_instance() {
+    return reinterpret_cast<const ServerChallenge*>(
+               &_ServerChallenge_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     1;
 
-  void Swap(Response* other);
-  friend void swap(Response& a, Response& b) {
+  void Swap(ServerChallenge* other);
+  friend void swap(ServerChallenge& a, ServerChallenge& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Response* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline ServerChallenge* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Response* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  ServerChallenge* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Response& from);
-  void MergeFrom(const Response& from);
+  void CopyFrom(const ServerChallenge& from);
+  void MergeFrom(const ServerChallenge& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -294,7 +290,112 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Response* other);
+  void InternalSwap(ServerChallenge* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bytes nonce = 1;
+  void clear_nonce();
+  static const int kNonceFieldNumber = 1;
+  const ::std::string& nonce() const;
+  void set_nonce(const ::std::string& value);
+  #if LANG_CXX11
+  void set_nonce(::std::string&& value);
+  #endif
+  void set_nonce(const char* value);
+  void set_nonce(const void* value, size_t size);
+  ::std::string* mutable_nonce();
+  ::std::string* release_nonce();
+  void set_allocated_nonce(::std::string* nonce);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.ServerChallenge)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr nonce_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_authorization_2eproto::TableStruct;
+  friend void ::protobuf_authorization_2eproto::InitDefaultsServerChallengeImpl();
+};
+// -------------------------------------------------------------------
+
+class ClientChallenge : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.ClientChallenge) */ {
+ public:
+  ClientChallenge();
+  virtual ~ClientChallenge();
+
+  ClientChallenge(const ClientChallenge& from);
+
+  inline ClientChallenge& operator=(const ClientChallenge& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ClientChallenge(ClientChallenge&& from) noexcept
+    : ClientChallenge() {
+    *this = ::std::move(from);
+  }
+
+  inline ClientChallenge& operator=(ClientChallenge&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ClientChallenge& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ClientChallenge* internal_default_instance() {
+    return reinterpret_cast<const ClientChallenge*>(
+               &_ClientChallenge_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(ClientChallenge* other);
+  friend void swap(ClientChallenge& a, ClientChallenge& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ClientChallenge* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ClientChallenge* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ClientChallenge& from);
+  void MergeFrom(const ClientChallenge& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ClientChallenge* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -324,19 +425,19 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // bytes key = 3;
-  void clear_key();
-  static const int kKeyFieldNumber = 3;
-  const ::std::string& key() const;
-  void set_key(const ::std::string& value);
+  // bytes session_key = 3;
+  void clear_session_key();
+  static const int kSessionKeyFieldNumber = 3;
+  const ::std::string& session_key() const;
+  void set_session_key(const ::std::string& value);
   #if LANG_CXX11
-  void set_key(::std::string&& value);
+  void set_session_key(::std::string&& value);
   #endif
-  void set_key(const char* value);
-  void set_key(const void* value, size_t size);
-  ::std::string* mutable_key();
-  ::std::string* release_key();
-  void set_allocated_key(::std::string* key);
+  void set_session_key(const char* value);
+  void set_session_key(const void* value, size_t size);
+  ::std::string* mutable_session_key();
+  ::std::string* release_session_key();
+  void set_allocated_session_key(::std::string* session_key);
 
   // .aspia.proto.auth.SessionType session_type = 1;
   void clear_session_type();
@@ -344,37 +445,37 @@ class Response : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::aspia::proto::auth::SessionType session_type() const;
   void set_session_type(::aspia::proto::auth::SessionType value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Response)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.ClientChallenge)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr username_;
-  ::google::protobuf::internal::ArenaStringPtr key_;
+  ::google::protobuf::internal::ArenaStringPtr session_key_;
   int session_type_;
   mutable int _cached_size_;
   friend struct ::protobuf_authorization_2eproto::TableStruct;
-  friend void ::protobuf_authorization_2eproto::InitDefaultsResponseImpl();
+  friend void ::protobuf_authorization_2eproto::InitDefaultsClientChallengeImpl();
 };
 // -------------------------------------------------------------------
 
-class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.Result) */ {
+class LogonResult : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.LogonResult) */ {
  public:
-  Result();
-  virtual ~Result();
+  LogonResult();
+  virtual ~LogonResult();
 
-  Result(const Result& from);
+  LogonResult(const LogonResult& from);
 
-  inline Result& operator=(const Result& from) {
+  inline LogonResult& operator=(const LogonResult& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  Result(Result&& from) noexcept
-    : Result() {
+  LogonResult(LogonResult&& from) noexcept
+    : LogonResult() {
     *this = ::std::move(from);
   }
 
-  inline Result& operator=(Result&& from) noexcept {
+  inline LogonResult& operator=(LogonResult&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -383,30 +484,30 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
     return *this;
   }
   #endif
-  static const Result& default_instance();
+  static const LogonResult& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Result* internal_default_instance() {
-    return reinterpret_cast<const Result*>(
-               &_Result_default_instance_);
+  static inline const LogonResult* internal_default_instance() {
+    return reinterpret_cast<const LogonResult*>(
+               &_LogonResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    2;
+    3;
 
-  void Swap(Result* other);
-  friend void swap(Result& a, Result& b) {
+  void Swap(LogonResult* other);
+  friend void swap(LogonResult& a, LogonResult& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Result* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline LogonResult* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  Result* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  LogonResult* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const Result& from);
-  void MergeFrom(const Result& from);
+  void CopyFrom(const LogonResult& from);
+  void MergeFrom(const LogonResult& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -421,7 +522,7 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(Result* other);
+  void InternalSwap(LogonResult* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -443,14 +544,234 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::aspia::proto::auth::Status status() const;
   void set_status(::aspia::proto::auth::Status value);
 
-  // @@protoc_insertion_point(class_scope:aspia.proto.auth.Result)
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.LogonResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   int status_;
   mutable int _cached_size_;
   friend struct ::protobuf_authorization_2eproto::TableStruct;
-  friend void ::protobuf_authorization_2eproto::InitDefaultsResultImpl();
+  friend void ::protobuf_authorization_2eproto::InitDefaultsLogonResultImpl();
+};
+// -------------------------------------------------------------------
+
+class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.ClientToHost) */ {
+ public:
+  ClientToHost();
+  virtual ~ClientToHost();
+
+  ClientToHost(const ClientToHost& from);
+
+  inline ClientToHost& operator=(const ClientToHost& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ClientToHost(ClientToHost&& from) noexcept
+    : ClientToHost() {
+    *this = ::std::move(from);
+  }
+
+  inline ClientToHost& operator=(ClientToHost&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ClientToHost& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ClientToHost* internal_default_instance() {
+    return reinterpret_cast<const ClientToHost*>(
+               &_ClientToHost_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    4;
+
+  void Swap(ClientToHost* other);
+  friend void swap(ClientToHost& a, ClientToHost& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ClientToHost* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ClientToHost* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ClientToHost& from);
+  void MergeFrom(const ClientToHost& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ClientToHost* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .aspia.proto.auth.LogonRequest logon_request = 1;
+  bool has_logon_request() const;
+  void clear_logon_request();
+  static const int kLogonRequestFieldNumber = 1;
+  const ::aspia::proto::auth::LogonRequest& logon_request() const;
+  ::aspia::proto::auth::LogonRequest* release_logon_request();
+  ::aspia::proto::auth::LogonRequest* mutable_logon_request();
+  void set_allocated_logon_request(::aspia::proto::auth::LogonRequest* logon_request);
+
+  // .aspia.proto.auth.ClientChallenge client_challenge = 2;
+  bool has_client_challenge() const;
+  void clear_client_challenge();
+  static const int kClientChallengeFieldNumber = 2;
+  const ::aspia::proto::auth::ClientChallenge& client_challenge() const;
+  ::aspia::proto::auth::ClientChallenge* release_client_challenge();
+  ::aspia::proto::auth::ClientChallenge* mutable_client_challenge();
+  void set_allocated_client_challenge(::aspia::proto::auth::ClientChallenge* client_challenge);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.ClientToHost)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::aspia::proto::auth::LogonRequest* logon_request_;
+  ::aspia::proto::auth::ClientChallenge* client_challenge_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_authorization_2eproto::TableStruct;
+  friend void ::protobuf_authorization_2eproto::InitDefaultsClientToHostImpl();
+};
+// -------------------------------------------------------------------
+
+class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.auth.HostToClient) */ {
+ public:
+  HostToClient();
+  virtual ~HostToClient();
+
+  HostToClient(const HostToClient& from);
+
+  inline HostToClient& operator=(const HostToClient& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  HostToClient(HostToClient&& from) noexcept
+    : HostToClient() {
+    *this = ::std::move(from);
+  }
+
+  inline HostToClient& operator=(HostToClient&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const HostToClient& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const HostToClient* internal_default_instance() {
+    return reinterpret_cast<const HostToClient*>(
+               &_HostToClient_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    5;
+
+  void Swap(HostToClient* other);
+  friend void swap(HostToClient& a, HostToClient& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline HostToClient* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  HostToClient* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const HostToClient& from);
+  void MergeFrom(const HostToClient& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(HostToClient* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .aspia.proto.auth.ServerChallenge server_challenge = 1;
+  bool has_server_challenge() const;
+  void clear_server_challenge();
+  static const int kServerChallengeFieldNumber = 1;
+  const ::aspia::proto::auth::ServerChallenge& server_challenge() const;
+  ::aspia::proto::auth::ServerChallenge* release_server_challenge();
+  ::aspia::proto::auth::ServerChallenge* mutable_server_challenge();
+  void set_allocated_server_challenge(::aspia::proto::auth::ServerChallenge* server_challenge);
+
+  // .aspia.proto.auth.LogonResult logon_result = 2;
+  bool has_logon_result() const;
+  void clear_logon_result();
+  static const int kLogonResultFieldNumber = 2;
+  const ::aspia::proto::auth::LogonResult& logon_result() const;
+  ::aspia::proto::auth::LogonResult* release_logon_result();
+  ::aspia::proto::auth::LogonResult* mutable_logon_result();
+  void set_allocated_logon_result(::aspia::proto::auth::LogonResult* logon_result);
+
+  // @@protoc_insertion_point(class_scope:aspia.proto.auth.HostToClient)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::aspia::proto::auth::ServerChallenge* server_challenge_;
+  ::aspia::proto::auth::LogonResult* logon_result_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_authorization_2eproto::TableStruct;
+  friend void ::protobuf_authorization_2eproto::InitDefaultsHostToClientImpl();
 };
 // ===================================================================
 
@@ -461,234 +782,438 @@ class Result : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Request
+// LogonRequest
 
-// .aspia.proto.auth.Hashing hashing = 1;
-inline void Request::clear_hashing() {
-  hashing_ = 0;
+// .aspia.proto.auth.Method method = 1;
+inline void LogonRequest::clear_method() {
+  method_ = 0;
 }
-inline ::aspia::proto::auth::Hashing Request::hashing() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.hashing)
-  return static_cast< ::aspia::proto::auth::Hashing >(hashing_);
+inline ::aspia::proto::auth::Method LogonRequest::method() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.LogonRequest.method)
+  return static_cast< ::aspia::proto::auth::Method >(method_);
 }
-inline void Request::set_hashing(::aspia::proto::auth::Hashing value) {
+inline void LogonRequest::set_method(::aspia::proto::auth::Method value) {
   
-  hashing_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.hashing)
+  method_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.LogonRequest.method)
 }
 
-// uint32 rounds = 2;
-inline void Request::clear_rounds() {
-  rounds_ = 0u;
-}
-inline ::google::protobuf::uint32 Request::rounds() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.rounds)
-  return rounds_;
-}
-inline void Request::set_rounds(::google::protobuf::uint32 value) {
-  
-  rounds_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.rounds)
-}
+// -------------------------------------------------------------------
 
-// bytes nonce = 3;
-inline void Request::clear_nonce() {
+// ServerChallenge
+
+// bytes nonce = 1;
+inline void ServerChallenge::clear_nonce() {
   nonce_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Request::nonce() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Request.nonce)
+inline const ::std::string& ServerChallenge::nonce() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ServerChallenge.nonce)
   return nonce_.GetNoArena();
 }
-inline void Request::set_nonce(const ::std::string& value) {
+inline void ServerChallenge::set_nonce(const ::std::string& value) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ServerChallenge.nonce)
 }
 #if LANG_CXX11
-inline void Request::set_nonce(::std::string&& value) {
+inline void ServerChallenge::set_nonce(::std::string&& value) {
   
   nonce_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.ServerChallenge.nonce)
 }
 #endif
-inline void Request::set_nonce(const char* value) {
+inline void ServerChallenge::set_nonce(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.ServerChallenge.nonce)
 }
-inline void Request::set_nonce(const void* value, size_t size) {
+inline void ServerChallenge::set_nonce(const void* value, size_t size) {
   
   nonce_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.ServerChallenge.nonce)
 }
-inline ::std::string* Request::mutable_nonce() {
+inline ::std::string* ServerChallenge::mutable_nonce() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.ServerChallenge.nonce)
   return nonce_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_nonce() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.Request.nonce)
+inline ::std::string* ServerChallenge::release_nonce() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.ServerChallenge.nonce)
   
   return nonce_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_nonce(::std::string* nonce) {
+inline void ServerChallenge::set_allocated_nonce(::std::string* nonce) {
   if (nonce != NULL) {
     
   } else {
     
   }
   nonce_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nonce);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.Request.nonce)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ServerChallenge.nonce)
 }
 
 // -------------------------------------------------------------------
 
-// Response
+// ClientChallenge
 
 // .aspia.proto.auth.SessionType session_type = 1;
-inline void Response::clear_session_type() {
+inline void ClientChallenge::clear_session_type() {
   session_type_ = 0;
 }
-inline ::aspia::proto::auth::SessionType Response::session_type() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Response.session_type)
+inline ::aspia::proto::auth::SessionType ClientChallenge::session_type() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientChallenge.session_type)
   return static_cast< ::aspia::proto::auth::SessionType >(session_type_);
 }
-inline void Response::set_session_type(::aspia::proto::auth::SessionType value) {
+inline void ClientChallenge::set_session_type(::aspia::proto::auth::SessionType value) {
   
   session_type_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Response.session_type)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientChallenge.session_type)
 }
 
 // string username = 2;
-inline void Response::clear_username() {
+inline void ClientChallenge::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Response::username() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Response.username)
+inline const ::std::string& ClientChallenge::username() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientChallenge.username)
   return username_.GetNoArena();
 }
-inline void Response::set_username(const ::std::string& value) {
+inline void ClientChallenge::set_username(const ::std::string& value) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientChallenge.username)
 }
 #if LANG_CXX11
-inline void Response::set_username(::std::string&& value) {
+inline void ClientChallenge::set_username(::std::string&& value) {
   
   username_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.ClientChallenge.username)
 }
 #endif
-inline void Response::set_username(const char* value) {
+inline void ClientChallenge::set_username(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.ClientChallenge.username)
 }
-inline void Response::set_username(const char* value, size_t size) {
+inline void ClientChallenge::set_username(const char* value, size_t size) {
   
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.ClientChallenge.username)
 }
-inline ::std::string* Response::mutable_username() {
+inline ::std::string* ClientChallenge::mutable_username() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.ClientChallenge.username)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Response::release_username() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.Response.username)
+inline ::std::string* ClientChallenge::release_username() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.ClientChallenge.username)
   
   return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Response::set_allocated_username(::std::string* username) {
+inline void ClientChallenge::set_allocated_username(::std::string* username) {
   if (username != NULL) {
     
   } else {
     
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.Response.username)
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientChallenge.username)
 }
 
-// bytes key = 3;
-inline void Response::clear_key() {
-  key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// bytes session_key = 3;
+inline void ClientChallenge::clear_session_key() {
+  session_key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Response::key() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Response.key)
-  return key_.GetNoArena();
+inline const ::std::string& ClientChallenge::session_key() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientChallenge.session_key)
+  return session_key_.GetNoArena();
 }
-inline void Response::set_key(const ::std::string& value) {
+inline void ClientChallenge::set_session_key(const ::std::string& value) {
   
-  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Response.key)
+  session_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.ClientChallenge.session_key)
 }
 #if LANG_CXX11
-inline void Response::set_key(::std::string&& value) {
+inline void ClientChallenge::set_session_key(::std::string&& value) {
   
-  key_.SetNoArena(
+  session_key_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.auth.ClientChallenge.session_key)
 }
 #endif
-inline void Response::set_key(const char* value) {
+inline void ClientChallenge::set_session_key(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.Response.key)
+  session_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.auth.ClientChallenge.session_key)
 }
-inline void Response::set_key(const void* value, size_t size) {
+inline void ClientChallenge::set_session_key(const void* value, size_t size) {
   
-  key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  session_key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.Response.key)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.auth.ClientChallenge.session_key)
 }
-inline ::std::string* Response::mutable_key() {
+inline ::std::string* ClientChallenge::mutable_session_key() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.Response.key)
-  return key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.ClientChallenge.session_key)
+  return session_key_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Response::release_key() {
-  // @@protoc_insertion_point(field_release:aspia.proto.auth.Response.key)
+inline ::std::string* ClientChallenge::release_session_key() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.ClientChallenge.session_key)
   
-  return key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return session_key_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Response::set_allocated_key(::std::string* key) {
-  if (key != NULL) {
+inline void ClientChallenge::set_allocated_session_key(::std::string* session_key) {
+  if (session_key != NULL) {
     
   } else {
     
   }
-  key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), key);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.Response.key)
+  session_key_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), session_key);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientChallenge.session_key)
 }
 
 // -------------------------------------------------------------------
 
-// Result
+// LogonResult
 
 // .aspia.proto.auth.Status status = 1;
-inline void Result::clear_status() {
+inline void LogonResult::clear_status() {
   status_ = 0;
 }
-inline ::aspia::proto::auth::Status Result::status() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.auth.Result.status)
+inline ::aspia::proto::auth::Status LogonResult::status() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.LogonResult.status)
   return static_cast< ::aspia::proto::auth::Status >(status_);
 }
-inline void Result::set_status(::aspia::proto::auth::Status value) {
+inline void LogonResult::set_status(::aspia::proto::auth::Status value) {
   
   status_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.auth.Result.status)
+  // @@protoc_insertion_point(field_set:aspia.proto.auth.LogonResult.status)
+}
+
+// -------------------------------------------------------------------
+
+// ClientToHost
+
+// .aspia.proto.auth.LogonRequest logon_request = 1;
+inline bool ClientToHost::has_logon_request() const {
+  return this != internal_default_instance() && logon_request_ != NULL;
+}
+inline void ClientToHost::clear_logon_request() {
+  if (GetArenaNoVirtual() == NULL && logon_request_ != NULL) {
+    delete logon_request_;
+  }
+  logon_request_ = NULL;
+}
+inline const ::aspia::proto::auth::LogonRequest& ClientToHost::logon_request() const {
+  const ::aspia::proto::auth::LogonRequest* p = logon_request_;
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.logon_request)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::auth::LogonRequest*>(
+      &::aspia::proto::auth::_LogonRequest_default_instance_);
+}
+inline ::aspia::proto::auth::LogonRequest* ClientToHost::release_logon_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.ClientToHost.logon_request)
+  
+  ::aspia::proto::auth::LogonRequest* temp = logon_request_;
+  logon_request_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::auth::LogonRequest* ClientToHost::mutable_logon_request() {
+  
+  if (logon_request_ == NULL) {
+    logon_request_ = new ::aspia::proto::auth::LogonRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.ClientToHost.logon_request)
+  return logon_request_;
+}
+inline void ClientToHost::set_allocated_logon_request(::aspia::proto::auth::LogonRequest* logon_request) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete logon_request_;
+  }
+  if (logon_request) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      logon_request = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, logon_request, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  logon_request_ = logon_request;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.logon_request)
+}
+
+// .aspia.proto.auth.ClientChallenge client_challenge = 2;
+inline bool ClientToHost::has_client_challenge() const {
+  return this != internal_default_instance() && client_challenge_ != NULL;
+}
+inline void ClientToHost::clear_client_challenge() {
+  if (GetArenaNoVirtual() == NULL && client_challenge_ != NULL) {
+    delete client_challenge_;
+  }
+  client_challenge_ = NULL;
+}
+inline const ::aspia::proto::auth::ClientChallenge& ClientToHost::client_challenge() const {
+  const ::aspia::proto::auth::ClientChallenge* p = client_challenge_;
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.ClientToHost.client_challenge)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::auth::ClientChallenge*>(
+      &::aspia::proto::auth::_ClientChallenge_default_instance_);
+}
+inline ::aspia::proto::auth::ClientChallenge* ClientToHost::release_client_challenge() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.ClientToHost.client_challenge)
+  
+  ::aspia::proto::auth::ClientChallenge* temp = client_challenge_;
+  client_challenge_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::auth::ClientChallenge* ClientToHost::mutable_client_challenge() {
+  
+  if (client_challenge_ == NULL) {
+    client_challenge_ = new ::aspia::proto::auth::ClientChallenge;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.ClientToHost.client_challenge)
+  return client_challenge_;
+}
+inline void ClientToHost::set_allocated_client_challenge(::aspia::proto::auth::ClientChallenge* client_challenge) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete client_challenge_;
+  }
+  if (client_challenge) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      client_challenge = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, client_challenge, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  client_challenge_ = client_challenge;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.ClientToHost.client_challenge)
+}
+
+// -------------------------------------------------------------------
+
+// HostToClient
+
+// .aspia.proto.auth.ServerChallenge server_challenge = 1;
+inline bool HostToClient::has_server_challenge() const {
+  return this != internal_default_instance() && server_challenge_ != NULL;
+}
+inline void HostToClient::clear_server_challenge() {
+  if (GetArenaNoVirtual() == NULL && server_challenge_ != NULL) {
+    delete server_challenge_;
+  }
+  server_challenge_ = NULL;
+}
+inline const ::aspia::proto::auth::ServerChallenge& HostToClient::server_challenge() const {
+  const ::aspia::proto::auth::ServerChallenge* p = server_challenge_;
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.server_challenge)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::auth::ServerChallenge*>(
+      &::aspia::proto::auth::_ServerChallenge_default_instance_);
+}
+inline ::aspia::proto::auth::ServerChallenge* HostToClient::release_server_challenge() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.HostToClient.server_challenge)
+  
+  ::aspia::proto::auth::ServerChallenge* temp = server_challenge_;
+  server_challenge_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::auth::ServerChallenge* HostToClient::mutable_server_challenge() {
+  
+  if (server_challenge_ == NULL) {
+    server_challenge_ = new ::aspia::proto::auth::ServerChallenge;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.HostToClient.server_challenge)
+  return server_challenge_;
+}
+inline void HostToClient::set_allocated_server_challenge(::aspia::proto::auth::ServerChallenge* server_challenge) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete server_challenge_;
+  }
+  if (server_challenge) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      server_challenge = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, server_challenge, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  server_challenge_ = server_challenge;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.HostToClient.server_challenge)
+}
+
+// .aspia.proto.auth.LogonResult logon_result = 2;
+inline bool HostToClient::has_logon_result() const {
+  return this != internal_default_instance() && logon_result_ != NULL;
+}
+inline void HostToClient::clear_logon_result() {
+  if (GetArenaNoVirtual() == NULL && logon_result_ != NULL) {
+    delete logon_result_;
+  }
+  logon_result_ = NULL;
+}
+inline const ::aspia::proto::auth::LogonResult& HostToClient::logon_result() const {
+  const ::aspia::proto::auth::LogonResult* p = logon_result_;
+  // @@protoc_insertion_point(field_get:aspia.proto.auth.HostToClient.logon_result)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::auth::LogonResult*>(
+      &::aspia::proto::auth::_LogonResult_default_instance_);
+}
+inline ::aspia::proto::auth::LogonResult* HostToClient::release_logon_result() {
+  // @@protoc_insertion_point(field_release:aspia.proto.auth.HostToClient.logon_result)
+  
+  ::aspia::proto::auth::LogonResult* temp = logon_result_;
+  logon_result_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::auth::LogonResult* HostToClient::mutable_logon_result() {
+  
+  if (logon_result_ == NULL) {
+    logon_result_ = new ::aspia::proto::auth::LogonResult;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.auth.HostToClient.logon_result)
+  return logon_result_;
+}
+inline void HostToClient::set_allocated_logon_result(::aspia::proto::auth::LogonResult* logon_result) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete logon_result_;
+  }
+  if (logon_result) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      logon_result = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, logon_result, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  logon_result_ = logon_result;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.auth.HostToClient.logon_result)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -703,9 +1228,9 @@ inline void Result::set_status(::aspia::proto::auth::Status value) {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::aspia::proto::auth::Method> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::SessionType> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::auth::Status> : ::google::protobuf::internal::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::auth::Hashing> : ::google::protobuf::internal::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

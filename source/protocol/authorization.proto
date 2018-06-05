@@ -11,6 +11,12 @@ option optimize_for = LITE_RUNTIME;
 
 package aspia.proto.auth;
 
+enum Method
+{
+    METHOD_UNKNOWN = 0;
+    METHOD_BASIC   = 1;
+}
+
 enum SessionType
 {
     SESSION_TYPE_UNKNOWN        = 0;
@@ -27,30 +33,36 @@ enum Status
     STATUS_CANCELED      = 3;
 }
 
-enum Hashing
+message LogonRequest
 {
-    HASHING_UNKNOWN = 0;
-    HASHING_SHA512  = 1;
+    Method method = 1;
 }
 
-// Host to client.
-message Request
+message ServerChallenge
 {
-    Hashing hashing  = 1;
-    uint32 rounds    = 2;
-    bytes nonce      = 3;
+    bytes nonce = 1;
 }
 
-// Client to host.
-message Response
+message ClientChallenge
 {
     SessionType session_type = 1;
-    string username = 2;
-    bytes key = 3;
+    string username          = 2;
+    bytes session_key        = 3;
 }
 
-// Host to client.
-message Result
+message LogonResult
 {
     Status status = 1;
+}
+
+message ClientToHost
+{
+    LogonRequest logon_request       = 1;
+    ClientChallenge client_challenge = 2;
+}
+
+message HostToClient
+{
+    ServerChallenge server_challenge = 1;
+    LogonResult logon_result         = 2;
 }
