@@ -21,6 +21,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
     ${PROJECT_SOURCE_DIR}/base/clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/clipboard.h
+    ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
+    ${PROJECT_SOURCE_DIR}/base/errno_logging.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
     ${PROJECT_SOURCE_DIR}/base/file_logger.h
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
@@ -31,8 +33,6 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_controller.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
-    ${PROJECT_SOURCE_DIR}/base/system_error_code.cc
-    ${PROJECT_SOURCE_DIR}/base/system_error_code.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN

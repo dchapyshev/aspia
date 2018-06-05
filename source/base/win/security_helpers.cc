@@ -19,7 +19,7 @@
 
 #include "base/win/scoped_object.h"
 #include "base/win/scoped_local.h"
-#include "base/system_error_code.h"
+#include "base/errno_logging.h"
 #include "base/typed_buffer.h"
 
 namespace aspia {
@@ -57,7 +57,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                        &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
-        qWarning() << "MakeAbsoluteSD failed: " << lastSystemErrorString();
+        qWarningErrno("MakeAbsoluteSD failed");
         return false;
     }
 
@@ -81,7 +81,7 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
                         local_group.get(),
                         &group_size))
     {
-        qWarning() << "MakeAbsoluteSD failed: " << lastSystemErrorString();
+        qWarningErrno("MakeAbsoluteSD failed");
         return false;
     }
 
@@ -131,8 +131,7 @@ ScopedSd convertSddlToSd(const std::wstring& sddl)
     if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl.c_str(), SDDL_REVISION_1,
                                                               raw_sd.recieve(), &length))
     {
-        qWarning() << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed: "
-                   << lastSystemErrorString();
+        qWarningErrno("ConvertStringSecurityDescriptorToSecurityDescriptorW failed");
         return ScopedSd();
     }
 

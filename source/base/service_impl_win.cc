@@ -22,8 +22,8 @@
 #include <condition_variable>
 #include <mutex>
 
+#include "base/errno_logging.h"
 #include "base/service_controller.h"
-#include "base/system_error_code.h"
 
 namespace aspia {
 
@@ -157,7 +157,7 @@ void ServiceHandler::setStatus(DWORD status)
 
     if (!SetServiceStatus(status_handle_, &status_))
     {
-        qWarning() << "SetServiceStatus failed: " << lastSystemErrorString();
+        qWarningErrno("SetServiceStatus failed");
         return;
     }
 }
@@ -184,7 +184,7 @@ void ServiceHandler::run()
         else
         {
             qWarning() << "StartServiceCtrlDispatcherW failed: "
-                       << systemErrorCodeToString(error_code);
+                       << errnoToString(error_code);
             instance->startup_state = ErrorOccurred;
         }
 
@@ -222,7 +222,7 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     if (!instance->status_handle_)
     {
-        qWarning() << "RegisterServiceCtrlHandlerExW failed: " << lastSystemErrorString();
+        qWarningErrno("RegisterServiceCtrlHandlerExW failed");
         return;
     }
 

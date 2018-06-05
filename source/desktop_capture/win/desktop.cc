@@ -9,7 +9,7 @@
 
 #include <QDebug>
 
-#include "base/system_error_code.h"
+#include "base/errno_logging.h"
 
 namespace aspia {
 
@@ -45,7 +45,7 @@ Desktop Desktop::desktop(const wchar_t* desktop_name)
     HDESK desktop = OpenDesktopW(desktop_name, 0, FALSE, desired_access);
     if (!desktop)
     {
-        qDebug() << "OpenDesktopW failed: " << lastSystemErrorString();
+        qDebugErrno("OpenDesktopW failed");
         return Desktop();
     }
 
@@ -60,7 +60,7 @@ Desktop Desktop::inputDesktop()
     HDESK desktop = OpenInputDesktop(0, FALSE, desired_access);
     if (!desktop)
     {
-        qDebug() << "OpenInputDesktop failed: " << lastSystemErrorString();
+        qDebugErrno("OpenInputDesktop failed");
         return Desktop();
     }
 
@@ -73,7 +73,7 @@ Desktop Desktop::threadDesktop()
     HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
     if (!desktop)
     {
-        qDebug() << "GetThreadDesktop failed: " << lastSystemErrorString();
+        qDebugErrno("GetThreadDesktop failed");
         return Desktop();
     }
 
@@ -87,7 +87,7 @@ bool Desktop::name(wchar_t* name, DWORD length) const
 
     if (!GetUserObjectInformationW(desktop_, UOI_NAME, name, length, nullptr))
     {
-        qDebug() << "Failed to query the desktop name: " << lastSystemErrorString();
+        qDebugErrno("Failed to query the desktop name");
         return false;
     }
 
@@ -113,7 +113,7 @@ bool Desktop::setThreadDesktop() const
 {
     if (!SetThreadDesktop(desktop_))
     {
-        qDebug() << "SetThreadDesktop failed: " << lastSystemErrorString();
+        qDebugErrno("SetThreadDesktop failed");
         return false;
     }
 
@@ -131,7 +131,7 @@ void Desktop::close()
     {
         if (!CloseDesktop(desktop_))
         {
-            qDebug() << "CloseDesktop failed: " << lastSystemErrorString();
+            qDebugErrno("CloseDesktop failed");
         }
     }
 

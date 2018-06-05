@@ -17,7 +17,7 @@
 #include <windows.h>
 #include <sas.h>
 
-#include "base/system_error_code.h"
+#include "base/errno_logging.h"
 #include "base/keycode_converter.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
 
@@ -55,7 +55,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarning() << "SendInput failed: " << lastSystemErrorString();
+        qWarningErrno("SendInput failed");
 }
 
 void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
@@ -70,7 +70,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarning() << "SendInput failed: " << lastSystemErrorString();
+        qWarningErrno("SendInput failed");
 }
 
 class InputInjectorImpl
@@ -179,7 +179,7 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 
     // Do the mouse event.
     if (!SendInput(1, &input, sizeof(input)))
-        qWarning() << "SendInput failed: " << lastSystemErrorString();
+        qWarningErrno("SendInput failed");
 
     prev_mouse_button_mask_ = mask;
 }

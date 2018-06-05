@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <memory>
 
-#include "base/system_error_code.h"
+#include "base/errno_logging.h"
 
 namespace aspia {
 
@@ -45,7 +45,7 @@ ServiceController ServiceController::open(const QString& name)
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
-        qWarning() << "OpenSCManagerW failed: " << lastSystemErrorString();
+        qWarningErrno("OpenSCManagerW failed");
         return ServiceController();
     }
 
@@ -54,7 +54,7 @@ ServiceController ServiceController::open(const QString& name)
                                         SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
-        qWarning() << "OpenServiceW failed: " << lastSystemErrorString();
+        qWarningErrno("OpenServiceW failed");
         return ServiceController();
     }
 
@@ -69,7 +69,7 @@ ServiceController ServiceController::install(const QString& name,
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
-        qWarning() << "OpenSCManagerW failed: " << lastSystemErrorString();
+        qWarningErrno("OpenSCManagerW failed");
         return ServiceController();
     }
 
@@ -91,7 +91,7 @@ ServiceController ServiceController::install(const QString& name,
                                           nullptr));
     if (!service.isValid())
     {
-        qWarning() << "CreateServiceW failed: " << lastSystemErrorString();
+        qWarningErrno("CreateServiceW failed");
         return ServiceController();
     }
 
@@ -108,7 +108,7 @@ ServiceController ServiceController::install(const QString& name,
 
     if (!ChangeServiceConfig2W(service, SERVICE_CONFIG_FAILURE_ACTIONS, &actions))
     {
-        qWarning() << "ChangeServiceConfig2W failed: " << lastSystemErrorString();
+        qWarningErrno("ChangeServiceConfig2W failed");
         return ServiceController();
     }
 
@@ -121,7 +121,7 @@ bool ServiceController::isInstalled(const QString& name)
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
     {
-        qWarning() << "OpenSCManagerW failed: " << lastSystemErrorString();
+        qWarningErrno("OpenSCManagerW failed");
         return false;
     }
 
@@ -132,7 +132,7 @@ bool ServiceController::isInstalled(const QString& name)
     {
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
         {
-            qWarning() << "OpenServiceW failed: " << lastSystemErrorString();
+            qWarningErrno("OpenServiceW failed");
         }
 
         return false;
@@ -150,7 +150,7 @@ bool ServiceController::setDescription(const QString& description)
     // Set the service description.
     if (!ChangeServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, &service_description))
     {
-        qWarning() << "ChangeServiceConfig2W failed: " << lastSystemErrorString();
+        qWarningErrno("ChangeServiceConfig2W failed");
         return false;
     }
 
@@ -176,7 +176,7 @@ QString ServiceController::description() const
     if (!QueryServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, buffer.get(), bytes_needed,
                              &bytes_needed))
     {
-        qWarning() << "QueryServiceConfig2W failed: " << lastSystemErrorString();
+        qWarningErrno("QueryServiceConfig2W failed");
         return QString();
     }
 
@@ -207,7 +207,7 @@ QString ServiceController::filePath() const
 
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {
-        qWarning() << "QueryServiceConfigW failed: " << lastSystemErrorString();
+        qWarningErrno("QueryServiceConfigW failed");
         return QString();
     }
 
@@ -228,7 +228,7 @@ bool ServiceController::isRunning() const
 
     if (!QueryServiceStatus(service_, &status))
     {
-        qWarning() << "QueryServiceStatus failed: " << lastSystemErrorString();
+        qWarningErrno("QueryServiceStatus failed");
         return false;
     }
 
@@ -239,7 +239,7 @@ bool ServiceController::start()
 {
     if (!StartServiceW(service_, 0, nullptr))
     {
-        qWarning() << "StartServiceW failed: " << lastSystemErrorString();
+        qWarningErrno("StartServiceW failed");
         return false;
     }
 
@@ -252,7 +252,7 @@ bool ServiceController::stop()
 
     if (!ControlService(service_, SERVICE_CONTROL_STOP, &status))
     {
-        qWarning() << "ControlService failed: " << lastSystemErrorString();
+        qWarningErrno("ControlService failed");
         return false;
     }
 
@@ -277,7 +277,7 @@ bool ServiceController::remove()
 {
     if (!DeleteService(service_))
     {
-        qWarning() << "DeleteService failed: " << lastSystemErrorString();
+        qWarningErrno("DeleteService failed");
         return false;
     }
 
