@@ -51,8 +51,8 @@ const wchar_t kComProcessMandatoryLabel[] =
 HostService::HostService()
     : Service<QGuiApplication>(
         QStringLiteral("aspia-host-service"),
-        QGuiApplication::tr("Aspia Host Service"),
-        QGuiApplication::tr("Accepts incoming remote desktop connections to this computer."))
+        QStringLiteral("Aspia Host Service"),
+        QStringLiteral("Accepts incoming remote desktop connections to this computer."))
 {
     // Nothing
 }

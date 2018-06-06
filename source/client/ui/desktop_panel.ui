@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -168,22 +168,22 @@
   </layout>
   <action name="action_alt_tab">
    <property name="text">
-    <string>Alt+Tab</string>
+    <string notr="true">Alt+Tab</string>
    </property>
   </action>
   <action name="action_alt_shift_tab">
    <property name="text">
-    <string>Alt+Shift+Tab</string>
+    <string notr="true">Alt+Shift+Tab</string>
    </property>
   </action>
   <action name="action_printscreen">
    <property name="text">
-    <string>PrintScreen</string>
+    <string notr="true">PrintScreen</string>
    </property>
   </action>
   <action name="action_alt_printscreen">
    <property name="text">
-    <string>Alt+PrintScreen</string>
+    <string notr="true">Alt+PrintScreen</string>
    </property>
   </action>
   <action name="action_custom">

@@ -39,13 +39,16 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
     setFixedSize(size());
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)
-        ui.combo_codec->addItem(tr("VP9 (LossLess)"), QVariant(proto::desktop::VIDEO_ENCODING_VP9));
+        ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
+                                QVariant(proto::desktop::VIDEO_ENCODING_VP9));
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP8)
-        ui.combo_codec->addItem(tr("VP8"), QVariant(proto::desktop::VIDEO_ENCODING_VP8));
+        ui.combo_codec->addItem(QStringLiteral("VP8"),
+                                QVariant(proto::desktop::VIDEO_ENCODING_VP8));
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_ZLIB)
-        ui.combo_codec->addItem(tr("ZLIB"), QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
+        ui.combo_codec->addItem(QStringLiteral("ZLIB"),
+                                QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
 
     int current_codec = ui.combo_codec->findData(QVariant(config->video_encoding()));
     if (current_codec == -1)

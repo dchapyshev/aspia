@@ -26,10 +26,9 @@ int consoleMain(int argc, char *argv[])
     logger.startLogging(application);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QCoreApplication::tr("Aspia Console"));
+    parser.setApplicationDescription(QStringLiteral("Aspia Console"));
     parser.addHelpOption();
-    parser.addPositionalArgument(QStringLiteral("file"),
-                                 QCoreApplication::tr("The file to open."));
+    parser.addPositionalArgument(QStringLiteral("file"), QStringLiteral("The file to open."));
     parser.process(application);
 
     QStringList arguments = parser.positionalArguments();

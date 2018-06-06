@@ -134,11 +134,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../console/address_book_tab.ui" line="95"/>
         <source>Computer Name</source>
         <translation type="unfinished"></translation>
@@ -274,14 +269,9 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.ui" line="14"/>
-        <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../console/console_window.ui" line="66"/>
         <source>&amp;File</source>
-        <translation type="unfinished">&amp;Файл</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="80"/>
@@ -306,11 +296,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../console/console_window.ui" line="114"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="134"/>
-        <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -462,12 +447,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="449"/>
-        <source>English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="458"/>
+        <location filename="../console/console_window.ui" line="447"/>
         <source>Fast Connect...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -523,11 +503,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="20"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../client/ui/desktop_panel.ui" line="56"/>
         <source>Session configuration</source>
         <translation type="unfinished"></translation>
@@ -550,26 +525,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="151"/>
         <source>Send key sequence</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="171"/>
-        <source>Alt+Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="176"/>
-        <source>Alt+Shift+Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="181"/>
-        <source>PrintScreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="186"/>
-        <source>Alt+PrintScreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -754,28 +709,13 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.ui" line="58"/>
-        <source>&lt;img src=&quot;:/icon/main.png&quot;/&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../host/ui/host_notifier_window.ui" line="165"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Connections&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_notifier_window.ui" line="201"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../host/ui/host_notifier_window.ui" line="256"/>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_notifier_window.ui" line="286"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aspia&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -816,41 +756,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>QApplication</name>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="34"/>
-        <location filename="../console/address_book_tab.cc" line="47"/>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="36"/>
-        <source>Could not open address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="49"/>
-        <source>Failed to save address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>QCoreApplication</name>
-    <message>
-        <location filename="../host/host_server.cc" line="66"/>
-        <source>Allow incoming TCP connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_main.cc" line="29"/>
-        <source>Aspia Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_main.cc" line="32"/>
-        <source>The file to open.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="31"/>
         <source>TB</source>
@@ -884,89 +790,79 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../client/file_status.cc" line="19"/>
         <source>Successfully completed</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="22"/>
         <source>Invalid request</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="25"/>
         <source>Invalid directory or file name</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="28"/>
         <source>Path not found</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="31"/>
         <source>Path already exists</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="34"/>
         <source>No drives found</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="37"/>
         <source>Disk full</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="40"/>
         <source>Access denied</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="43"/>
         <source>Could not open file for reading</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="46"/>
         <source>Could not create or replace file</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="49"/>
         <source>Could not write to file</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="52"/>
         <source>Could not read file</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="55"/>
         <source>Unknown status code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/service_impl_win.cc" line="423"/>
-        <source>Install service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/service_impl_win.cc" line="425"/>
-        <source>Remove service</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QGuiApplication</name>
-    <message>
-        <location filename="../host/win/host_service.cc" line="54"/>
-        <source>Aspia Host Service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/win/host_service.cc" line="55"/>
-        <source>Accepts incoming remote desktop connections to this computer.</source>
+        <comment>FileStatus</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1096,66 +992,82 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="244"/>
+        <location filename="../console/address_book_tab.cc" line="218"/>
         <source>Unable to open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="251"/>
+        <location filename="../console/address_book_tab.cc" line="225"/>
         <source>Unable to read address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="259"/>
-        <location filename="../console/address_book_tab.cc" line="274"/>
-        <location filename="../console/address_book_tab.cc" line="304"/>
+        <location filename="../console/address_book_tab.cc" line="233"/>
+        <location filename="../console/address_book_tab.cc" line="248"/>
+        <location filename="../console/address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="298"/>
+        <location filename="../console/address_book_tab.cc" line="272"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="314"/>
+        <location filename="../console/address_book_tab.cc" line="288"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="481"/>
+        <location filename="../console/address_book_tab.cc" line="455"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="485"/>
-        <location filename="../console/address_book_tab.cc" line="507"/>
+        <location filename="../console/address_book_tab.cc" line="459"/>
+        <location filename="../console/address_book_tab.cc" line="481"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="503"/>
+        <location filename="../console/address_book_tab.cc" line="477"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="682"/>
+        <location filename="../console/address_book_tab.cc" line="656"/>
         <source>Save Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="684"/>
+        <location filename="../console/address_book_tab.cc" line="658"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="694"/>
+        <location filename="../console/address_book_tab.cc" line="668"/>
         <source>Unable to create or open address book file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="706"/>
+        <location filename="../console/address_book_tab.cc" line="680"/>
         <source>Unable to write address book file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_tab.cc" line="696"/>
+        <location filename="../console/address_book_tab.cc" line="710"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_tab.cc" line="698"/>
+        <source>Could not open address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_tab.cc" line="712"/>
+        <source>Failed to save address book</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1404,39 +1316,39 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="188"/>
+        <location filename="../console/console_window.cc" line="190"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="190"/>
+        <location filename="../console/console_window.cc" line="192"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="208"/>
+        <location filename="../console/console_window.cc" line="210"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="209"/>
+        <location filename="../console/console_window.cc" line="211"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="327"/>
+        <location filename="../console/console_window.cc" line="329"/>
         <source>https://aspia.net/help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="461"/>
-        <location filename="../console/console_window.cc" line="640"/>
+        <location filename="../console/console_window.cc" line="463"/>
+        <location filename="../console/console_window.cc" line="642"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="462"/>
-        <location filename="../console/console_window.cc" line="641"/>
+        <location filename="../console/console_window.cc" line="464"/>
+        <location filename="../console/console_window.cc" line="643"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1444,47 +1356,32 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="42"/>
-        <source>VP9 (LossLess)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="45"/>
-        <source>VP8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="48"/>
-        <source>ZLIB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="57"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
         <source>True color (32 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
         <source>High color (16 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
         <source>256 colors (8 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="63"/>
         <source>64 colors (6 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="64"/>
         <source>8 colors (3 bit)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="125"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="128"/>
         <source>Compression ratio: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1860,6 +1757,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../host/ui/host_notifier_window.cc" line="269"/>
         <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>aspia::HostServer</name>
+    <message>
+        <location filename="../host/host_server.cc" line="66"/>
+        <source>Allow incoming TCP connections</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

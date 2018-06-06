@@ -63,7 +63,7 @@ bool HostServer::start()
     if (firewall.isValid())
     {
         firewall.addTcpRule(kFirewallRuleName,
-                            QCoreApplication::tr("Allow incoming TCP connections"),
+                            tr("Allow incoming TCP connections"),
                             port);
     }
 

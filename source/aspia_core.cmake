@@ -1,3 +1,9 @@
+#
+# PROJECT:         Aspia
+# FILE:            aspia_core.cmake
+# LICENSE:         GNU General Public License 3
+# PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+#
 
 include_directories(
     ${PROJECT_SOURCE_DIR}

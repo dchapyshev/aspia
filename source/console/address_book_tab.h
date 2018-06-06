@@ -78,6 +78,9 @@ private:
     void updateComputerList(ComputerGroupItem* computer_group);
     bool saveToFile(const QString& file_path);
 
+    static void showOpenError(QWidget* parent, const QString& message);
+    static void showSaveError(QWidget* parent, const QString& message);
+
     Ui::AddressBookTab ui;
 
     QString file_path_;

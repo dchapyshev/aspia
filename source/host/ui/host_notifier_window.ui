@@ -55,7 +55,7 @@ background: #CFCFCF;
 padding: 3px;</string>
        </property>
        <property name="text">
-        <string>&lt;img src=&quot;:/icon/main.png&quot;/&gt;</string>
+        <string notr="true">&lt;img src=&quot;:/icon/main.png&quot;/&gt;</string>
        </property>
       </widget>
      </item>
@@ -198,7 +198,7 @@ margin-top: 2px;</string>
         </attribute>
         <column>
          <property name="text">
-          <string>1</string>
+          <string notr="true"/>
          </property>
         </column>
        </widget>
@@ -283,7 +283,7 @@ padding: 3px;
 background: #CFCFCF;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aspia&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aspia&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="textFormat">
          <enum>Qt::RichText</enum>

@@ -26,32 +26,6 @@ namespace aspia {
 
 namespace {
 
-void showOpenError(QWidget* parent, const QString& message)
-{
-    QMessageBox dialog(parent);
-
-    dialog.setIcon(QMessageBox::Warning);
-    dialog.setWindowTitle(QApplication::tr("Warning"));
-    dialog.setInformativeText(message);
-    dialog.setText(QApplication::tr("Could not open address book"));
-    dialog.setStandardButtons(QMessageBox::Ok);
-
-    dialog.exec();
-}
-
-void showSaveError(QWidget* parent, const QString& message)
-{
-    QMessageBox dialog(parent);
-
-    dialog.setIcon(QMessageBox::Warning);
-    dialog.setWindowTitle(QApplication::tr("Warning"));
-    dialog.setInformativeText(message);
-    dialog.setText(QApplication::tr("Failed to save address book"));
-    dialog.setStandardButtons(QMessageBox::Ok);
-
-    dialog.exec();
-}
-
 std::unique_ptr<proto::address_book::Computer> createDefaultComputer()
 {
     std::unique_ptr<proto::address_book::Computer> computer =
@@ -711,6 +685,34 @@ bool AddressBookTab::saveToFile(const QString& file_path)
 
     setChanged(false);
     return true;
+}
+
+// static
+void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
+{
+    QMessageBox dialog(parent);
+
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setWindowTitle(tr("Warning"));
+    dialog.setInformativeText(message);
+    dialog.setText(tr("Could not open address book"));
+    dialog.setStandardButtons(QMessageBox::Ok);
+
+    dialog.exec();
+}
+
+// static
+void AddressBookTab::showSaveError(QWidget* parent, const QString& message)
+{
+    QMessageBox dialog(parent);
+
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setWindowTitle(tr("Warning"));
+    dialog.setInformativeText(message);
+    dialog.setText(tr("Failed to save address book"));
+    dialog.setStandardButtons(QMessageBox::Ok);
+
+    dialog.exec();
 }
 
 } // namespace aspia

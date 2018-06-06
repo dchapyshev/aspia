@@ -25,11 +25,13 @@ namespace {
 
 QHash<QString, QStringList> createLocaleList()
 {
-    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
+    QString translations_dir =
+        QApplication::applicationDirPath() + QStringLiteral("/translations/");
+
     QHash<QString, QStringList> locale_list;
 
     QStringList qm_file_list = QDir(translations_dir).entryList(QStringList() << "*.qm");
-    QRegExp regexp("([a-zA-Z0-9-_]+)_([^.]*).qm");
+    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
 
     for (const auto& qm_file : qm_file_list)
     {
