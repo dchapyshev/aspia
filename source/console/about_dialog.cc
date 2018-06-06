@@ -24,7 +24,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     connect(ui.push_button_donate, &QPushButton::pressed, [this]()
     {
-        QDesktopServices::openUrl(QUrl(tr("https://aspia.net/donate")));
+        QDesktopServices::openUrl(QUrl(tr("https://aspia.org/donate")));
     });
 
     connect(ui.push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
