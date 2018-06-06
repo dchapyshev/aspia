@@ -14,8 +14,23 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
 find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras)
+find_package(Qt5LinguistTools REQUIRED)
 
 include(aspia_core.cmake)
+
+set(TS_FILES translations/aspia_ru.ts)
+
+# Get the list of files containing messages.
+file(GLOB_RECURSE TR_SOURCES *.cc *.cpp *.h *.ui)
+
+# Extract messages to the TS files.
+qt5_create_translation(MESSAGES ${TR_SOURCES} ${TS_FILES})
+
+# Generate QM files from TS files.
+qt5_add_translation(QM_FILES ${TS_FILES})
+
+add_custom_target(aspia_messages DEPENDS ${MESSAGES})
+add_custom_target(aspia_translations DEPENDS ${QM_FILES})
 
 source_group(base FILES ${SOURCE_BASE})
 source_group(base\\win FILES ${SOURCE_BASE_WIN})
@@ -50,23 +65,23 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTC
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF")
 
 add_library(aspia_core SHARED
-            ${SOURCE_BASE}
-            ${SOURCE_BASE_WIN}
-            ${SOURCE_CLIENT}
-            ${SOURCE_CLIENT_UI}
-            ${SOURCE_CODEC}
-            ${SOURCE_CONSOLE}
-            ${SOURCE_CRYPTO}
-            ${SOURCE_DESKTOP_CAPTURE}
-            ${SOURCE_DESKTOP_CAPTURE_WIN}
-            ${SOURCE_HOST}
-            ${SOURCE_HOST_UI}
-            ${SOURCE_HOST_WIN}
-            ${SOURCE_IPC}
-            ${SOURCE_NETWORK}
-            ${SOURCE_PROTOCOL}
-            ${SOURCE_RESOURCES}
-            ${SOURCE})
+    ${SOURCE_BASE}
+    ${SOURCE_BASE_WIN}
+    ${SOURCE_CLIENT}
+    ${SOURCE_CLIENT_UI}
+    ${SOURCE_CODEC}
+    ${SOURCE_CONSOLE}
+    ${SOURCE_CRYPTO}
+    ${SOURCE_DESKTOP_CAPTURE}
+    ${SOURCE_DESKTOP_CAPTURE_WIN}
+    ${SOURCE_HOST}
+    ${SOURCE_HOST_UI}
+    ${SOURCE_HOST_WIN}
+    ${SOURCE_IPC}
+    ${SOURCE_NETWORK}
+    ${SOURCE_PROTOCOL}
+    ${SOURCE_RESOURCES}
+    ${SOURCE})
 
 target_link_libraries(aspia_core
     Qt5::Core
@@ -116,6 +131,14 @@ target_link_libraries(aspia_core
     winmm
     ws2_32
     wtsapi32)
+
+add_dependencies(aspia_core aspia_translations)
+
+foreach(QM_FILE ${QM_FILES})
+    get_filename_component(QM_FILE_NAME ${QM_FILE} NAME)
+    add_custom_command(TARGET aspia_core POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${QM_FILE}" "${PROJECT_BINARY_DIR}/$<CONFIG>/translations/${QM_FILE_NAME}")
+endforeach()
 
 add_executable(aspia_console ${PROJECT_SOURCE_DIR}/console/entry_point.cc ${PROJECT_SOURCE_DIR}/console/console.rc)
 set_target_properties(aspia_console PROPERTIES WIN32_EXECUTABLE TRUE)
