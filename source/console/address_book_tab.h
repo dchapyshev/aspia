@@ -35,6 +35,8 @@ public:
     void setChanged(bool changed);
     bool isChanged() const { return is_changed_; }
 
+    void retranslateUi();
+
 public slots:
     void save();
     void saveAs();

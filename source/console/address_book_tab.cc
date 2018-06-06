@@ -611,6 +611,15 @@ void AddressBookTab::setChanged(bool value)
     emit addressBookChanged(value);
 }
 
+void AddressBookTab::retranslateUi()
+{
+    ui.retranslateUi(this);
+
+    QTreeWidgetItem* current = ui.tree_group->currentItem();
+    if (current)
+        onGroupItemClicked(current, 0);
+}
+
 void AddressBookTab::updateComputerList(ComputerGroupItem* computer_group)
 {
     for (int i = ui.tree_computer->topLevelItemCount() - 1; i >= 0; --i)

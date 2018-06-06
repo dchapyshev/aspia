@@ -627,6 +627,13 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
         installTranslators(new_locale);
         ui.retranslateUi(this);
 
+        for (int i = 0; i < ui.tab_widget->count(); ++i)
+        {
+            AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
+            if (tab)
+                tab->retranslateUi();
+        }
+
         ConsoleSettings().setLocale(new_locale);
     }
 }

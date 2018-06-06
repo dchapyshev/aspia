@@ -1329,12 +1329,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../console/console_statusbar.cc" line="41"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/folder.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 child group(s)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/folder.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 дочерних групп&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/folder.png&apos;&gt;&lt;/td&gt;&lt;td&gt;Дочерних групп: %1&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
     <message>
         <location filename="../console/console_statusbar.cc" line="45"/>
         <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/computer.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 child computer(s)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/computer.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 дочерних компьютеров&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/computer.png&apos;&gt;&lt;/td&gt;&lt;td&gt;Дочерних компьютеров: %1&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
     </message>
 </context>
 <context>
