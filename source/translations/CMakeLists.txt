@@ -22,7 +22,7 @@ if(Qt5LinguistTools_FOUND)
     qt5_add_translation(QM_UPDATE ${TS_FILES})
     add_custom_target(aspia_qm_update ALL DEPENDS ${QM_UPDATE})
 
-    qt5_create_translation(TS_UPDATE ${TR_SOURCES} ${TS_FILES})
+    qt5_create_translation(TS_UPDATE ${TR_SOURCES} ${TS_FILES} OPTIONS "-no-obsolete")
     add_custom_target(aspia_ts_update DEPENDS ${TS_UPDATE})
 
     foreach(QM_FILE ${QM_UPDATE})
