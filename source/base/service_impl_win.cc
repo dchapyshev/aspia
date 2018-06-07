@@ -167,7 +167,7 @@ void ServiceHandler::run()
     SERVICE_TABLE_ENTRYW service_table[2];
 
     service_table[0].lpServiceName = const_cast<wchar_t*>(
-        reinterpret_cast<const wchar_t*>(ServiceImpl::instance()->serviceName().utf16()));
+        qUtf16Printable(ServiceImpl::instance()->serviceName()));
     service_table[0].lpServiceProc = ServiceHandler::serviceMain;
     service_table[1].lpServiceName = nullptr;
     service_table[1].lpServiceProc = nullptr;
@@ -216,7 +216,7 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
     }
 
     instance->status_handle_ = RegisterServiceCtrlHandlerExW(
-        reinterpret_cast<const wchar_t*>(ServiceImpl::instance()->serviceName().utf16()),
+        qUtf16Printable(ServiceImpl::instance()->serviceName()),
         serviceControlHandler,
         nullptr);
 

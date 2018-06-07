@@ -50,7 +50,7 @@ ServiceController ServiceController::open(const QString& name)
     }
 
     ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        qUtf16Printable(name),
                                         SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
@@ -77,13 +77,13 @@ ServiceController ServiceController::install(const QString& name,
     normalized_file_path.replace(QLatin1Char('/'), QLatin1Char('\\'));
 
     ScopedScHandle service(CreateServiceW(sc_manager,
-                                          reinterpret_cast<const wchar_t*>(name.utf16()),
-                                          reinterpret_cast<const wchar_t*>(display_name.utf16()),
+                                          qUtf16Printable(name),
+                                          qUtf16Printable(display_name),
                                           SERVICE_ALL_ACCESS,
                                           SERVICE_WIN32_OWN_PROCESS,
                                           SERVICE_AUTO_START,
                                           SERVICE_ERROR_NORMAL,
-                                          reinterpret_cast<const wchar_t*>(normalized_file_path.utf16()),
+                                          qUtf16Printable(normalized_file_path),
                                           nullptr,
                                           nullptr,
                                           nullptr,
@@ -126,7 +126,7 @@ bool ServiceController::isInstalled(const QString& name)
     }
 
     ScopedScHandle service(OpenServiceW(sc_manager,
-                                        reinterpret_cast<const wchar_t*>(name.utf16()),
+                                        qUtf16Printable(name),
                                         SERVICE_QUERY_STATUS));
     if (!service.isValid())
     {
@@ -144,8 +144,7 @@ bool ServiceController::isInstalled(const QString& name)
 bool ServiceController::setDescription(const QString& description)
 {
     SERVICE_DESCRIPTIONW service_description;
-    service_description.lpDescription =
-        const_cast<LPWSTR>(reinterpret_cast<const wchar_t*>(description.utf16()));
+    service_description.lpDescription = const_cast<LPWSTR>(qUtf16Printable(description));
 
     // Set the service description.
     if (!ChangeServiceConfig2W(service_, SERVICE_CONFIG_DESCRIPTION, &service_description))
