@@ -138,7 +138,7 @@ proto::file_transfer::Reply FileWorker::doFileListRequest(
 
         item->set_name(info.fileName().toStdString());
         item->set_size(info.size());
-        item->set_modification_time(info.lastModified().toTime_t());
+        item->set_modification_time(info.lastModified().toSecsSinceEpoch());
         item->set_is_directory(info.isDir());
     }
 

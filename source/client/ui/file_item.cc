@@ -84,7 +84,7 @@ FileItem::FileItem(const proto::file_transfer::FileList::Item& item)
         
     }
 
-    setText(3, QDateTime::fromTime_t(
+    setText(3, QDateTime::fromSecsSinceEpoch(
         item.modification_time()).toString(Qt::DefaultLocaleShortDate));
 }
 
