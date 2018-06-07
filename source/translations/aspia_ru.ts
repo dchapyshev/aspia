@@ -9,75 +9,12 @@
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="60"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Aspia is free software released under GNU General Public License 3.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can get a copy of license here:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.gnu.org/licenses/gpl.html&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can also get a translation of GNU GPL license here:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.gnu.org/licenses/translations.html&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/translations.html&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Links:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Home page: &lt;a href=&quot;https://aspia.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://aspia.org&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GitHub page: &lt;a href=&quot;https://github.com/dchapyshev/aspia&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/dchapyshev/aspia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Developers:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Dmitry Chapyshev (dmitry@aspia.ru)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Translators:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Dmitry Chapyshev (Russian)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;In the development we used the following projects:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Qt Framework © 2015 The Qt Company Ltd., GPL 3&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libvpx © 2010, The WebM Project authors, BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libyuv © 2011 The LibYuv Project Authors, BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libsodium © 2013-2017 Frank Denis, ISC License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• protobuf © 2014 Google Inc., BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• FatCow Icons © 2009-2014 FatCow Web Hosting, Creative Commons Attribution 3.0 License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Вы можете получить копию лицензии по адресу:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.gnu.org/licenses/gpl.html&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ознакомиться с переводом лицензии на ваш язык можно по адресу:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.gnu.org/licenses/translations.html&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/translations.html&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ссылки:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Домашняя страница: &lt;a href=&quot;https://aspia.org&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://aspia.org&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GitHub страница: &lt;a href=&quot;https://github.com/dchapyshev/aspia&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/dchapyshev/aspia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Разработчики:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Dmitry Chapyshev (dmitry@aspia.ru)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Переводчики:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Dmitry Chapyshev (Russian)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;При разрабоке были использованы наработки следующих проектов:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Qt Framework © 2015 The Qt Company Ltd., GPL 3&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libvpx © 2010, The WebM Project authors, BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libyuv © 2011 The LibYuv Project Authors, BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• libsodium © 2013-2017 Frank Denis, ISC License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• protobuf © 2014 Google Inc., BSD 3-Clause License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• zlib-ng © 1995-2013 Jean-loup Gailly and Mark Adler, Zlib License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• FatCow Icons © 2009-2014 FatCow Web Hosting, Creative Commons Attribution 3.0 License&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;• Fugue Icons © 2013 Yusuke Kamiyamane, Creative Commons Attribution 3.0 License&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../console/about_dialog.ui" line="98"/>
+        <location filename="../console/about_dialog.ui" line="76"/>
         <source>Donate!</source>
         <translation>Поддержать!</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="122"/>
+        <location filename="../console/about_dialog.ui" line="100"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -734,8 +671,8 @@ p, li { white-space: pre-wrap; }
     <name>HostNotifierWindow</name>
     <message>
         <location filename="../host/ui/host_notifier_window.ui" line="165"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Connections&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Подключения&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>Connections</source>
+        <translation>Подключения</translation>
     </message>
     <message>
         <location filename="../host/ui/host_notifier_window.ui" line="256"/>
@@ -939,14 +876,54 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="23"/>
+        <location filename="../console/about_dialog.cc" line="64"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="27"/>
-        <source>https://aspia.org/donate</source>
-        <translation>https://aspia.org/ru/donate</translation>
+        <location filename="../console/about_dialog.cc" line="68"/>
+        <source>Aspia is free software released under GNU General Public License 3.</source>
+        <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="69"/>
+        <source>You can get a copy of license here:</source>
+        <translation>Вы можете получить копию лицензии по адресу:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="74"/>
+        <source>You can also get a translation of GNU GPL license here:</source>
+        <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="79"/>
+        <source>Links:</source>
+        <translation>Ссылки:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="80"/>
+        <source>Home page:</source>
+        <translation>Домашняя страница:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="81"/>
+        <source>GitHub page:</source>
+        <translation>GitHub страница:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="84"/>
+        <source>Developers:</source>
+        <translation>Разработчики:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="86"/>
+        <source>Translators:</source>
+        <translation>Переводчики:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="88"/>
+        <source>Third-party components:</source>
+        <translation>Сторонние компоненты:</translation>
     </message>
 </context>
 <context>
@@ -1059,38 +1036,38 @@ p, li { white-space: pre-wrap; }
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="656"/>
+        <location filename="../console/address_book_tab.cc" line="665"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="658"/>
+        <location filename="../console/address_book_tab.cc" line="667"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="668"/>
+        <location filename="../console/address_book_tab.cc" line="677"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="680"/>
+        <location filename="../console/address_book_tab.cc" line="689"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="696"/>
-        <location filename="../console/address_book_tab.cc" line="710"/>
+        <location filename="../console/address_book_tab.cc" line="705"/>
+        <location filename="../console/address_book_tab.cc" line="719"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="698"/>
+        <location filename="../console/address_book_tab.cc" line="707"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="712"/>
+        <location filename="../console/address_book_tab.cc" line="721"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1328,13 +1305,13 @@ p, li { white-space: pre-wrap; }
     <name>aspia::ConsoleStatusBar</name>
     <message>
         <location filename="../console/console_statusbar.cc" line="41"/>
-        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/folder.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 child group(s)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/folder.png&apos;&gt;&lt;/td&gt;&lt;td&gt;Дочерних групп: %1&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+        <source>%1 child group(s)</source>
+        <translation>Дочерних групп: %1</translation>
     </message>
     <message>
-        <location filename="../console/console_statusbar.cc" line="45"/>
-        <source>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/computer.png&apos;&gt;&lt;/td&gt;&lt;td&gt;%1 child computer(s)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</source>
-        <translation>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&apos;:/icon/computer.png&apos;&gt;&lt;/td&gt;&lt;td&gt;Дочерних компьютеров: %1&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</translation>
+        <location filename="../console/console_statusbar.cc" line="47"/>
+        <source>%1 child computer(s)</source>
+        <translation>Дочерних компьютеров: %1</translation>
     </message>
 </context>
 <context>
@@ -1360,19 +1337,14 @@ p, li { white-space: pre-wrap; }
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="329"/>
-        <source>https://aspia.org/help</source>
-        <translation>https://aspia.org/ru/help</translation>
-    </message>
-    <message>
         <location filename="../console/console_window.cc" line="463"/>
-        <location filename="../console/console_window.cc" line="642"/>
+        <location filename="../console/console_window.cc" line="649"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="464"/>
-        <location filename="../console/console_window.cc" line="643"/>
+        <location filename="../console/console_window.cc" line="650"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1596,19 +1568,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="127"/>
-        <source>Failed to write file: &quot;%1&quot;: %2</source>
-        <translation>Не удалось записать файл &quot;%1&quot;: %2</translation>
+        <source>Failed to write file &quot;%1&quot;: %2</source>
+        <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../client/file_transfer.cc" line="174"/>
+        <source>Failed to open file &quot;%1&quot;: %2</source>
+        <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="162"/>
         <location filename="../client/file_transfer.cc" line="201"/>
         <source>An unexpected response to the request was received</source>
         <translation>Получен неожиданный ответ на запрос</translation>
-    </message>
-    <message>
-        <location filename="../client/file_transfer.cc" line="174"/>
-        <source>Failed to open file: &quot;%1&quot;: %2</source>
-        <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="191"/>

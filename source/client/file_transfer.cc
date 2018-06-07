@@ -124,7 +124,7 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
         if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
         {
             processError(FileWriteError,
-                         tr("Failed to write file: \"%1\": %2")
+                         tr("Failed to write file \"%1\": %2")
                          .arg(currentTask().targetPath())
                          .arg(fileStatusToString(reply.status())));
             return;
@@ -171,7 +171,7 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
         if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
         {
             processError(FileOpenError,
-                         tr("Failed to open file: \"%1\": %2")
+                         tr("Failed to open file \"%1\": %2")
                          .arg(currentTask().sourcePath()
                          .arg(fileStatusToString(reply.status()))));
             return;

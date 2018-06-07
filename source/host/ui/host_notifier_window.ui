@@ -162,10 +162,10 @@ border-right-style: solid;
 background: #CFCFCF;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Connections&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>Connections</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::RichText</enum>
+         <enum>Qt::PlainText</enum>
         </property>
        </widget>
       </item>
