@@ -37,15 +37,13 @@
 #ifndef _ASPIA_BASE__ALIGNED_MEMORY_H
 #define _ASPIA_BASE__ALIGNED_MEMORY_H
 
-#include <memory>
-
 namespace aspia {
 
 void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {
-    _aligned_free(ptr);
+    qFreeAligned(ptr);
 }
 
 // Deleter for use with unique_ptr. E.g., use as

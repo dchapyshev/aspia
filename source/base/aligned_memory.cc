@@ -15,7 +15,7 @@ void* alignedAlloc(size_t size, size_t alignment)
     Q_ASSERT((alignment & (alignment - 1)) == 0U);
     Q_ASSERT((alignment % sizeof(void*)) == 0U);
 
-    void* ptr =  _aligned_malloc(size, alignment);
+    void* ptr =  qMallocAligned(size, alignment);
     Q_CHECK_PTR(ptr);
 
     // Sanity check alignment just to be safe.

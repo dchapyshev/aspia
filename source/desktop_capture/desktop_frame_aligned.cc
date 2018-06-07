@@ -20,7 +20,7 @@ DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
 
 DesktopFrameAligned::~DesktopFrameAligned()
 {
-    _aligned_free(data_);
+    qFreeAligned(data_);
 }
 
 // static
@@ -29,7 +29,7 @@ std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 
-    quint8* data = reinterpret_cast<quint8*>(_aligned_malloc(bytes_per_row * size.height(), 16));
+    quint8* data = reinterpret_cast<quint8*>(qMallocAligned(bytes_per_row * size.height(), 16));
     if (!data)
         return nullptr;
 
