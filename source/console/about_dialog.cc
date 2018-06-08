@@ -23,7 +23,13 @@ const char kGitHubLink[] = "https://github.com/dchapyshev/aspia";
 const char kDonateLink[] = "https://aspia.org/donate";
 
 const char* kDevelopers[] = { "Dmitry Chapyshev (dmitry@aspia.ru)" };
-const char* kTranslators[] = { "Dmitry Chapyshev (Russian)" };
+
+const char* kTranslators[] =
+{
+    "Dmitry Chapyshev (Russian)",
+    "Mark Jansen (Dutch)"
+};
+
 const char* kThirdParty[] =
 {
     "Qt Framework &copy; 2015 The Qt Company Ltd., GPL 3",
