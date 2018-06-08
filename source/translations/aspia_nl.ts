@@ -1252,9 +1252,9 @@
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="153"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
+            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
     </message>
     <message>
@@ -1270,17 +1270,17 @@
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="174"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
+            <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
     <message>
@@ -1294,9 +1294,9 @@
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="52"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
+            <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
     </message>
     <message>
@@ -1307,9 +1307,9 @@
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="65"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
+            <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
     <message>
@@ -1323,17 +1323,17 @@
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="41"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n onderliggende groep</numerusform>
+            <numerusform>%n onderliggende groepen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="47"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n onderliggende computer</numerusform>
+            <numerusform>%n onderliggende computers</numerusform>
         </translation>
     </message>
 </context>
@@ -1856,9 +1856,9 @@
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="176"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
+            <numerusform>Wachtwoord mag niet korter dan %n karakters zijn.</numerusform>
         </translation>
     </message>
 </context>
