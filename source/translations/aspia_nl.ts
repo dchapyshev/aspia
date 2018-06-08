@@ -84,12 +84,12 @@
     <message>
         <location filename="../console/address_book_dialog.ui" line="198"/>
         <source>Size of salt before the data (bytes):</source>
-        <translation>Grootte van de salt voor de data(bytes):</translation>
+        <translation>Grootte van de salt voor de data (bytes):</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="205"/>
         <source>Size of salt after the data (bytes):</source>
-        <translation>Grootte van de salt na de data(bytes):</translation>
+        <translation>Grootte van de salt na de data (bytes):</translation>
     </message>
 </context>
 <context>
