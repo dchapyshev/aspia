@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string notr="true">Aspia Console</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
-    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
-  </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="spacing">

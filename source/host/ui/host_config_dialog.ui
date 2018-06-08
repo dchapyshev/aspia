@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Host Configuration</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/resources.qrc">
-    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
-  </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>

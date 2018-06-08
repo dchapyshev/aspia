@@ -16,10 +16,6 @@
   <property name="windowTitle">
    <string>Key Sequence</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/resources.qrc">
-    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
-  </property>
   <property name="modal">
    <bool>true</bool>
   </property>

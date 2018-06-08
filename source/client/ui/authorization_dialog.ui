@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Authorization</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/resources.qrc">
-    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

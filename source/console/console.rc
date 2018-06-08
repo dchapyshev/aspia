@@ -10,8 +10,8 @@
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
-1 ICON "resources/main.ico"
-2 ICON "resources/address-book.ico"
+IDI_ICON1 ICON "resources/main.ico"
+IDI_ICON2 ICON "resources/address-book.ico"
 
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_console.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Console"

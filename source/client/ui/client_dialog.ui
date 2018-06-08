@@ -19,10 +19,6 @@
   <property name="windowTitle">
    <string>Connection</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/resources.qrc">
-    <normaloff>:/icon/main.png</normaloff>:/icon/main.png</iconset>
-  </property>
   <widget class="QPushButton" name="button_connect">
    <property name="geometry">
     <rect>

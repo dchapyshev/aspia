@@ -49,7 +49,6 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
         computer_name = QString::fromStdString(computer_->address());
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
-    setWindowIcon(QIcon(QStringLiteral(":/icon/main.png")));
     setMinimumSize(800, 600);
 
     desktop_ = new DesktopWidget(this);
