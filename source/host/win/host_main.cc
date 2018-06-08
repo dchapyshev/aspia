@@ -34,11 +34,11 @@ int hostMain(int argc, char *argv[])
     logger.startLogging(application);
 
     QCommandLineOption channel_id_option(QStringLiteral("channel_id"),
-                                         QStringLiteral("IPC channel id"),
+                                         QString(),
                                          QStringLiteral("channel_id"));
 
     QCommandLineOption session_type_option(QStringLiteral("session_type"),
-                                           QStringLiteral("Session Type"),
+                                           QString(),
                                            QStringLiteral("session_type"));
 
     QCommandLineParser parser;

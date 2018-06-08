@@ -52,7 +52,7 @@ int hostNotifierMain(int argc, char *argv[])
     logger.startLogging(application);
 
     QCommandLineOption channel_id_option(QStringLiteral("channel_id"),
-                                         QStringLiteral("IPC channel id"),
+                                         QString(),
                                          QStringLiteral("channel_id"));
     QCommandLineParser parser;
     parser.addOption(channel_id_option);

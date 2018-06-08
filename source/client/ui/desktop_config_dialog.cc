@@ -125,7 +125,7 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
 
 void DesktopConfigDialog::onCompressionRatioChanged(int value)
 {
-    ui.label_compression_ratio->setText(QString(tr("Compression ratio: %1").arg(value)));
+    ui.label_compression_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 
 void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)

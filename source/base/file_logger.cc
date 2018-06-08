@@ -55,7 +55,7 @@ FileLogger::~FileLogger()
 
 bool FileLogger::startLogging(const QCoreApplication& application)
 {
-    QDir directory(QString("%1/aspia").arg(QDir::tempPath()));
+    QDir directory(QDir::tempPath() + QStringLiteral("/aspia"));
     if (!directory.exists())
     {
         if (!directory.mkpath(directory.path()))

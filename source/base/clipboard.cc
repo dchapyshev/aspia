@@ -44,7 +44,7 @@ void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event
     QString text = QString::fromStdString(event.data());
 
 #if defined(Q_OS_WIN)
-    text.replace(QStringLiteral("\n"), QStringLiteral("\r\n"));
+    text.replace(QLatin1String("\n"), QLatin1String("\r\n"));
 #endif
 
     QGuiApplication::clipboard()->setText(text);
@@ -59,7 +59,7 @@ void Clipboard::dataChanged()
     proto::desktop::ClipboardEvent event;
     event.set_mime_type(kMimeTypeTextUtf8);
     event.set_data(QString(mime_data->text()).replace(
-        QStringLiteral("\r\n"), QStringLiteral("\n")).toStdString());
+        QLatin1String("\r\n"), QLatin1String("\n")).toStdString());
 
     if (event.mime_type() == last_mime_type_ && event.data() == last_data_)
         return;
