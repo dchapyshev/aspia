@@ -248,20 +248,16 @@ void DesktopWindow::changeSettings()
 
 void DesktopWindow::autosizeWindow()
 {
-    QRect desktop_rect = QApplication::desktop()->screenGeometry();
-    QRect full_rect = geometry();
-    QRect client_rect = rect();
+    QRect screen_rect = QApplication::desktop()->availableGeometry(this);
+    QSize window_size = desktop_->size() + frameSize() - size();
 
-    QSize window_size(desktop_->size().width() + full_rect.width() - client_rect.width(),
-                      desktop_->size().height() + full_rect.height() - client_rect.height());
-
-    if (window_size.width() < desktop_rect.width() && window_size.height() < desktop_rect.height())
+    if (window_size.width() < screen_rect.width() && window_size.height() < screen_rect.height())
     {
         showNormal();
 
-        resize(window_size.width(), window_size.height());
-        move(desktop_rect.width() / 2 - window_size.width() / 2,
-             desktop_rect.height() / 2 - window_size.height() / 2);
+        resize(desktop_->size());
+        move(screen_rect.x() + (screen_rect.width() / 2 - window_size.width() / 2),
+             screen_rect.y() + (screen_rect.height() / 2 - window_size.height() / 2));
     }
     else
     {
