@@ -17,7 +17,7 @@ namespace aspia {
 namespace {
 
 constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr qint64 kMaxWriteSize = 1400;
+constexpr qint64 kMaxWriteSize = 1200;
 
 QByteArray createWriteBuffer(const QByteArray& message_buffer)
 {
