@@ -7,7 +7,6 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
@@ -16,6 +15,22 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+
+namespace protobuf_file_5ftransfer_5fsession_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_CreateDirectoryRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_DownloadRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_DriveListRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_DriveList_Item;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_FileListRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_FileList_Item;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Packet;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_PacketRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_RemoveRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_RenameRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_UploadRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_DriveList;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_file_5ftransfer_5fsession_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_FileList;
+}  // namespace protobuf_file_5ftransfer_5fsession_2eproto
 namespace aspia {
 namespace proto {
 namespace file_transfer {
@@ -98,14 +113,9 @@ class RequestDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_file_5ftransfer_5fsession_2eproto {
-void InitDefaultsDriveList_ItemImpl() {
+static void InitDefaultsDriveList_Item() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_DriveList_Item_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::DriveList_Item();
@@ -114,20 +124,12 @@ void InitDefaultsDriveList_ItemImpl() {
   ::aspia::proto::file_transfer::DriveList_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsDriveList_Item() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDriveList_ItemImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_DriveList_Item =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsDriveList_Item}, {}};
 
-void InitDefaultsDriveListImpl() {
+static void InitDefaultsDriveList() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList_Item();
   {
     void* ptr = &::aspia::proto::file_transfer::_DriveList_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::DriveList();
@@ -136,19 +138,13 @@ void InitDefaultsDriveListImpl() {
   ::aspia::proto::file_transfer::DriveList::InitAsDefaultInstance();
 }
 
-void InitDefaultsDriveList() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDriveListImpl);
-}
+::google::protobuf::internal::SCCInfo<1> scc_info_DriveList =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsDriveList}, {
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList_Item.base,}};
 
-void InitDefaultsDriveListRequestImpl() {
+static void InitDefaultsDriveListRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_DriveListRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::DriveListRequest();
@@ -157,19 +153,12 @@ void InitDefaultsDriveListRequestImpl() {
   ::aspia::proto::file_transfer::DriveListRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsDriveListRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDriveListRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_DriveListRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsDriveListRequest}, {}};
 
-void InitDefaultsFileList_ItemImpl() {
+static void InitDefaultsFileList_Item() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_FileList_Item_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::FileList_Item();
@@ -178,20 +167,12 @@ void InitDefaultsFileList_ItemImpl() {
   ::aspia::proto::file_transfer::FileList_Item::InitAsDefaultInstance();
 }
 
-void InitDefaultsFileList_Item() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsFileList_ItemImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_FileList_Item =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsFileList_Item}, {}};
 
-void InitDefaultsFileListImpl() {
+static void InitDefaultsFileList() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList_Item();
   {
     void* ptr = &::aspia::proto::file_transfer::_FileList_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::FileList();
@@ -200,19 +181,13 @@ void InitDefaultsFileListImpl() {
   ::aspia::proto::file_transfer::FileList::InitAsDefaultInstance();
 }
 
-void InitDefaultsFileList() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsFileListImpl);
-}
+::google::protobuf::internal::SCCInfo<1> scc_info_FileList =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsFileList}, {
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList_Item.base,}};
 
-void InitDefaultsFileListRequestImpl() {
+static void InitDefaultsFileListRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_FileListRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::FileListRequest();
@@ -221,19 +196,12 @@ void InitDefaultsFileListRequestImpl() {
   ::aspia::proto::file_transfer::FileListRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsFileListRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsFileListRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_FileListRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsFileListRequest}, {}};
 
-void InitDefaultsUploadRequestImpl() {
+static void InitDefaultsUploadRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_UploadRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::UploadRequest();
@@ -242,19 +210,12 @@ void InitDefaultsUploadRequestImpl() {
   ::aspia::proto::file_transfer::UploadRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsUploadRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsUploadRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_UploadRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsUploadRequest}, {}};
 
-void InitDefaultsDownloadRequestImpl() {
+static void InitDefaultsDownloadRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_DownloadRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::DownloadRequest();
@@ -263,19 +224,12 @@ void InitDefaultsDownloadRequestImpl() {
   ::aspia::proto::file_transfer::DownloadRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsDownloadRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsDownloadRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_DownloadRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsDownloadRequest}, {}};
 
-void InitDefaultsPacketRequestImpl() {
+static void InitDefaultsPacketRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_PacketRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::PacketRequest();
@@ -284,19 +238,12 @@ void InitDefaultsPacketRequestImpl() {
   ::aspia::proto::file_transfer::PacketRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsPacketRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsPacketRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_PacketRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsPacketRequest}, {}};
 
-void InitDefaultsPacketImpl() {
+static void InitDefaultsPacket() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_Packet_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::Packet();
@@ -305,19 +252,12 @@ void InitDefaultsPacketImpl() {
   ::aspia::proto::file_transfer::Packet::InitAsDefaultInstance();
 }
 
-void InitDefaultsPacket() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsPacketImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_Packet =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsPacket}, {}};
 
-void InitDefaultsCreateDirectoryRequestImpl() {
+static void InitDefaultsCreateDirectoryRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_CreateDirectoryRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::CreateDirectoryRequest();
@@ -326,19 +266,12 @@ void InitDefaultsCreateDirectoryRequestImpl() {
   ::aspia::proto::file_transfer::CreateDirectoryRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsCreateDirectoryRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsCreateDirectoryRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_CreateDirectoryRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsCreateDirectoryRequest}, {}};
 
-void InitDefaultsRenameRequestImpl() {
+static void InitDefaultsRenameRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_RenameRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::RenameRequest();
@@ -347,19 +280,12 @@ void InitDefaultsRenameRequestImpl() {
   ::aspia::proto::file_transfer::RenameRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsRenameRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsRenameRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_RenameRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRenameRequest}, {}};
 
-void InitDefaultsRemoveRequestImpl() {
+static void InitDefaultsRemoveRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::file_transfer::_RemoveRequest_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::RemoveRequest();
@@ -368,22 +294,12 @@ void InitDefaultsRemoveRequestImpl() {
   ::aspia::proto::file_transfer::RemoveRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsRemoveRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsRemoveRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_RemoveRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRemoveRequest}, {}};
 
-void InitDefaultsReplyImpl() {
+static void InitDefaultsReply() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
   {
     void* ptr = &::aspia::proto::file_transfer::_Reply_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::Reply();
@@ -392,28 +308,15 @@ void InitDefaultsReplyImpl() {
   ::aspia::proto::file_transfer::Reply::InitAsDefaultInstance();
 }
 
-void InitDefaultsReply() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsReplyImpl);
-}
+::google::protobuf::internal::SCCInfo<3> scc_info_Reply =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsReply}, {
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Packet.base,}};
 
-void InitDefaultsRequestImpl() {
+static void InitDefaultsRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveListRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileListRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsCreateDirectoryRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRenameRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRemoveRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDownloadRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsUploadRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacketRequest();
-  protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
   {
     void* ptr = &::aspia::proto::file_transfer::_Request_default_instance_;
     new (ptr) ::aspia::proto::file_transfer::Request();
@@ -422,9 +325,34 @@ void InitDefaultsRequestImpl() {
   ::aspia::proto::file_transfer::Request::InitAsDefaultInstance();
 }
 
-void InitDefaultsRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsRequestImpl);
+::google::protobuf::internal::SCCInfo<9> scc_info_Request =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 9, InitDefaultsRequest}, {
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveListRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileListRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_CreateDirectoryRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RenameRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RemoveRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DownloadRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_UploadRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_PacketRequest.base,
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Packet.base,}};
+
+void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_DriveList_Item.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_DriveList.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_DriveListRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_FileList_Item.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_FileList.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_FileListRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_UploadRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_DownloadRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PacketRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Packet.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_CreateDirectoryRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_RenameRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_RemoveRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Reply.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Request.base);
 }
 
 }  // namespace protobuf_file_5ftransfer_5fsession_2eproto
@@ -514,16 +442,14 @@ const int DriveList_Item::kPathFieldNumber;
 
 DriveList_Item::DriveList_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList_Item();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList_Item.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveList.Item)
 }
 DriveList_Item::DriveList_Item(const DriveList_Item& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -536,7 +462,6 @@ DriveList_Item::DriveList_Item(const DriveList_Item& from)
 void DriveList_Item::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   type_ = 0;
-  _cached_size_ = 0;
 }
 
 DriveList_Item::~DriveList_Item() {
@@ -549,22 +474,13 @@ void DriveList_Item::SharedDtor() {
 }
 
 void DriveList_Item::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const DriveList_Item& DriveList_Item::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList_Item();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList_Item.base);
   return *internal_default_instance();
 }
 
-DriveList_Item* DriveList_Item::New(::google::protobuf::Arena* arena) const {
-  DriveList_Item* n = new DriveList_Item;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void DriveList_Item::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveList.Item)
@@ -589,7 +505,7 @@ bool DriveList_Item::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveList.Item)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -691,9 +607,7 @@ size_t DriveList_Item::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -735,10 +649,10 @@ void DriveList_Item::Swap(DriveList_Item* other) {
 }
 void DriveList_Item::InternalSwap(DriveList_Item* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(type_, other->type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DriveList_Item::GetTypeName() const {
@@ -756,23 +670,20 @@ const int DriveList::kItemFieldNumber;
 
 DriveList::DriveList()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveList)
 }
 DriveList::DriveList(const DriveList& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      item_(from.item_),
-      _cached_size_(0) {
+      item_(from.item_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveList)
 }
 
 void DriveList::SharedCtor() {
-  _cached_size_ = 0;
 }
 
 DriveList::~DriveList() {
@@ -784,22 +695,13 @@ void DriveList::SharedDtor() {
 }
 
 void DriveList::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const DriveList& DriveList::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveList();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveList.base);
   return *internal_default_instance();
 }
 
-DriveList* DriveList::New(::google::protobuf::Arena* arena) const {
-  DriveList* n = new DriveList;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void DriveList::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveList)
@@ -823,7 +725,7 @@ bool DriveList::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveList)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -831,7 +733,8 @@ bool DriveList::MergePartialFromCodedStream(
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_item()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_item()));
         } else {
           goto handle_unusual;
         }
@@ -868,7 +771,9 @@ void DriveList::SerializeWithCachedSizes(
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->item(static_cast<int>(i)), output);
+      1,
+      this->item(static_cast<int>(i)),
+      output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -894,9 +799,7 @@ size_t DriveList::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -932,9 +835,8 @@ void DriveList::Swap(DriveList* other) {
 }
 void DriveList::InternalSwap(DriveList* other) {
   using std::swap;
-  item_.InternalSwap(&other->item_);
+  CastToBase(&item_)->InternalSwap(CastToBase(&other->item_));
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DriveList::GetTypeName() const {
@@ -952,16 +854,14 @@ const int DriveListRequest::kDummyFieldNumber;
 
 DriveListRequest::DriveListRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveListRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveListRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DriveListRequest)
 }
 DriveListRequest::DriveListRequest(const DriveListRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dummy_ = from.dummy_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveListRequest)
@@ -969,7 +869,6 @@ DriveListRequest::DriveListRequest(const DriveListRequest& from)
 
 void DriveListRequest::SharedCtor() {
   dummy_ = 0u;
-  _cached_size_ = 0;
 }
 
 DriveListRequest::~DriveListRequest() {
@@ -981,22 +880,13 @@ void DriveListRequest::SharedDtor() {
 }
 
 void DriveListRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const DriveListRequest& DriveListRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDriveListRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DriveListRequest.base);
   return *internal_default_instance();
 }
 
-DriveListRequest* DriveListRequest::New(::google::protobuf::Arena* arena) const {
-  DriveListRequest* n = new DriveListRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void DriveListRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DriveListRequest)
@@ -1020,7 +910,7 @@ bool DriveListRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DriveListRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1088,9 +978,7 @@ size_t DriveListRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1130,7 +1018,6 @@ void DriveListRequest::InternalSwap(DriveListRequest* other) {
   using std::swap;
   swap(dummy_, other->dummy_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DriveListRequest::GetTypeName() const {
@@ -1151,16 +1038,14 @@ const int FileList_Item::kIsDirectoryFieldNumber;
 
 FileList_Item::FileList_Item()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList_Item();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList_Item.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileList.Item)
 }
 FileList_Item::FileList_Item(const FileList_Item& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.name().size() > 0) {
@@ -1177,7 +1062,6 @@ void FileList_Item::SharedCtor() {
   ::memset(&size_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&is_directory_) -
       reinterpret_cast<char*>(&size_)) + sizeof(is_directory_));
-  _cached_size_ = 0;
 }
 
 FileList_Item::~FileList_Item() {
@@ -1190,22 +1074,13 @@ void FileList_Item::SharedDtor() {
 }
 
 void FileList_Item::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const FileList_Item& FileList_Item::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList_Item();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList_Item.base);
   return *internal_default_instance();
 }
 
-FileList_Item* FileList_Item::New(::google::protobuf::Arena* arena) const {
-  FileList_Item* n = new FileList_Item;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void FileList_Item::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileList.Item)
@@ -1232,7 +1107,7 @@ bool FileList_Item::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileList.Item)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1383,9 +1258,7 @@ size_t FileList_Item::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1433,12 +1306,12 @@ void FileList_Item::Swap(FileList_Item* other) {
 }
 void FileList_Item::InternalSwap(FileList_Item* other) {
   using std::swap;
-  name_.Swap(&other->name_);
+  name_.Swap(&other->name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(size_, other->size_);
   swap(modification_time_, other->modification_time_);
   swap(is_directory_, other->is_directory_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string FileList_Item::GetTypeName() const {
@@ -1456,23 +1329,20 @@ const int FileList::kItemFieldNumber;
 
 FileList::FileList()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileList)
 }
 FileList::FileList(const FileList& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
-      item_(from.item_),
-      _cached_size_(0) {
+      item_(from.item_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.FileList)
 }
 
 void FileList::SharedCtor() {
-  _cached_size_ = 0;
 }
 
 FileList::~FileList() {
@@ -1484,22 +1354,13 @@ void FileList::SharedDtor() {
 }
 
 void FileList::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const FileList& FileList::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileList();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileList.base);
   return *internal_default_instance();
 }
 
-FileList* FileList::New(::google::protobuf::Arena* arena) const {
-  FileList* n = new FileList;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void FileList::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileList)
@@ -1523,7 +1384,7 @@ bool FileList::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileList)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1531,7 +1392,8 @@ bool FileList::MergePartialFromCodedStream(
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_item()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_item()));
         } else {
           goto handle_unusual;
         }
@@ -1568,7 +1430,9 @@ void FileList::SerializeWithCachedSizes(
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->item_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->item(static_cast<int>(i)), output);
+      1,
+      this->item(static_cast<int>(i)),
+      output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1594,9 +1458,7 @@ size_t FileList::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1632,9 +1494,8 @@ void FileList::Swap(FileList* other) {
 }
 void FileList::InternalSwap(FileList* other) {
   using std::swap;
-  item_.InternalSwap(&other->item_);
+  CastToBase(&item_)->InternalSwap(CastToBase(&other->item_));
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string FileList::GetTypeName() const {
@@ -1652,16 +1513,14 @@ const int FileListRequest::kPathFieldNumber;
 
 FileListRequest::FileListRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileListRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileListRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.FileListRequest)
 }
 FileListRequest::FileListRequest(const FileListRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -1672,7 +1531,6 @@ FileListRequest::FileListRequest(const FileListRequest& from)
 
 void FileListRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 FileListRequest::~FileListRequest() {
@@ -1685,22 +1543,13 @@ void FileListRequest::SharedDtor() {
 }
 
 void FileListRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const FileListRequest& FileListRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsFileListRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_FileListRequest.base);
   return *internal_default_instance();
 }
 
-FileListRequest* FileListRequest::New(::google::protobuf::Arena* arena) const {
-  FileListRequest* n = new FileListRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void FileListRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.FileListRequest)
@@ -1724,7 +1573,7 @@ bool FileListRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.FileListRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1799,9 +1648,7 @@ size_t FileListRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1840,9 +1687,9 @@ void FileListRequest::Swap(FileListRequest* other) {
 }
 void FileListRequest::InternalSwap(FileListRequest* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string FileListRequest::GetTypeName() const {
@@ -1861,16 +1708,14 @@ const int UploadRequest::kOverwriteFieldNumber;
 
 UploadRequest::UploadRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsUploadRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_UploadRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.UploadRequest)
 }
 UploadRequest::UploadRequest(const UploadRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -1883,7 +1728,6 @@ UploadRequest::UploadRequest(const UploadRequest& from)
 void UploadRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   overwrite_ = false;
-  _cached_size_ = 0;
 }
 
 UploadRequest::~UploadRequest() {
@@ -1896,22 +1740,13 @@ void UploadRequest::SharedDtor() {
 }
 
 void UploadRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const UploadRequest& UploadRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsUploadRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_UploadRequest.base);
   return *internal_default_instance();
 }
 
-UploadRequest* UploadRequest::New(::google::protobuf::Arena* arena) const {
-  UploadRequest* n = new UploadRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void UploadRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.UploadRequest)
@@ -1936,7 +1771,7 @@ bool UploadRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.UploadRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -2035,9 +1870,7 @@ size_t UploadRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -2079,10 +1912,10 @@ void UploadRequest::Swap(UploadRequest* other) {
 }
 void UploadRequest::InternalSwap(UploadRequest* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(overwrite_, other->overwrite_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string UploadRequest::GetTypeName() const {
@@ -2100,16 +1933,14 @@ const int DownloadRequest::kPathFieldNumber;
 
 DownloadRequest::DownloadRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDownloadRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DownloadRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.DownloadRequest)
 }
 DownloadRequest::DownloadRequest(const DownloadRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -2120,7 +1951,6 @@ DownloadRequest::DownloadRequest(const DownloadRequest& from)
 
 void DownloadRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 DownloadRequest::~DownloadRequest() {
@@ -2133,22 +1963,13 @@ void DownloadRequest::SharedDtor() {
 }
 
 void DownloadRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const DownloadRequest& DownloadRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsDownloadRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_DownloadRequest.base);
   return *internal_default_instance();
 }
 
-DownloadRequest* DownloadRequest::New(::google::protobuf::Arena* arena) const {
-  DownloadRequest* n = new DownloadRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void DownloadRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.DownloadRequest)
@@ -2172,7 +1993,7 @@ bool DownloadRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.DownloadRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -2247,9 +2068,7 @@ size_t DownloadRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -2288,9 +2107,9 @@ void DownloadRequest::Swap(DownloadRequest* other) {
 }
 void DownloadRequest::InternalSwap(DownloadRequest* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string DownloadRequest::GetTypeName() const {
@@ -2308,16 +2127,14 @@ const int PacketRequest::kDummyFieldNumber;
 
 PacketRequest::PacketRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacketRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_PacketRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.PacketRequest)
 }
 PacketRequest::PacketRequest(const PacketRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dummy_ = from.dummy_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.PacketRequest)
@@ -2325,7 +2142,6 @@ PacketRequest::PacketRequest(const PacketRequest& from)
 
 void PacketRequest::SharedCtor() {
   dummy_ = 0u;
-  _cached_size_ = 0;
 }
 
 PacketRequest::~PacketRequest() {
@@ -2337,22 +2153,13 @@ void PacketRequest::SharedDtor() {
 }
 
 void PacketRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const PacketRequest& PacketRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacketRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_PacketRequest.base);
   return *internal_default_instance();
 }
 
-PacketRequest* PacketRequest::New(::google::protobuf::Arena* arena) const {
-  PacketRequest* n = new PacketRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void PacketRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.PacketRequest)
@@ -2376,7 +2183,7 @@ bool PacketRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.PacketRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -2444,9 +2251,7 @@ size_t PacketRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -2486,7 +2291,6 @@ void PacketRequest::InternalSwap(PacketRequest* other) {
   using std::swap;
   swap(dummy_, other->dummy_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string PacketRequest::GetTypeName() const {
@@ -2506,16 +2310,14 @@ const int Packet::kDataFieldNumber;
 
 Packet::Packet()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Packet.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Packet)
 }
 Packet::Packet(const Packet& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.data().size() > 0) {
@@ -2532,7 +2334,6 @@ void Packet::SharedCtor() {
   ::memset(&file_size_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&flags_) -
       reinterpret_cast<char*>(&file_size_)) + sizeof(flags_));
-  _cached_size_ = 0;
 }
 
 Packet::~Packet() {
@@ -2545,22 +2346,13 @@ void Packet::SharedDtor() {
 }
 
 void Packet::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const Packet& Packet::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsPacket();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Packet.base);
   return *internal_default_instance();
 }
 
-Packet* Packet::New(::google::protobuf::Arena* arena) const {
-  Packet* n = new Packet;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void Packet::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Packet)
@@ -2587,7 +2379,7 @@ bool Packet::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Packet)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -2706,9 +2498,7 @@ size_t Packet::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -2753,11 +2543,11 @@ void Packet::Swap(Packet* other) {
 }
 void Packet::InternalSwap(Packet* other) {
   using std::swap;
-  data_.Swap(&other->data_);
+  data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(file_size_, other->file_size_);
   swap(flags_, other->flags_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string Packet::GetTypeName() const {
@@ -2775,16 +2565,14 @@ const int CreateDirectoryRequest::kPathFieldNumber;
 
 CreateDirectoryRequest::CreateDirectoryRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsCreateDirectoryRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_CreateDirectoryRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.CreateDirectoryRequest)
 }
 CreateDirectoryRequest::CreateDirectoryRequest(const CreateDirectoryRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -2795,7 +2583,6 @@ CreateDirectoryRequest::CreateDirectoryRequest(const CreateDirectoryRequest& fro
 
 void CreateDirectoryRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 CreateDirectoryRequest::~CreateDirectoryRequest() {
@@ -2808,22 +2595,13 @@ void CreateDirectoryRequest::SharedDtor() {
 }
 
 void CreateDirectoryRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const CreateDirectoryRequest& CreateDirectoryRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsCreateDirectoryRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_CreateDirectoryRequest.base);
   return *internal_default_instance();
 }
 
-CreateDirectoryRequest* CreateDirectoryRequest::New(::google::protobuf::Arena* arena) const {
-  CreateDirectoryRequest* n = new CreateDirectoryRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void CreateDirectoryRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.CreateDirectoryRequest)
@@ -2847,7 +2625,7 @@ bool CreateDirectoryRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.CreateDirectoryRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -2922,9 +2700,7 @@ size_t CreateDirectoryRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -2963,9 +2739,9 @@ void CreateDirectoryRequest::Swap(CreateDirectoryRequest* other) {
 }
 void CreateDirectoryRequest::InternalSwap(CreateDirectoryRequest* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string CreateDirectoryRequest::GetTypeName() const {
@@ -2984,16 +2760,14 @@ const int RenameRequest::kNewNameFieldNumber;
 
 RenameRequest::RenameRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRenameRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RenameRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.RenameRequest)
 }
 RenameRequest::RenameRequest(const RenameRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   old_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.old_name().size() > 0) {
@@ -3009,7 +2783,6 @@ RenameRequest::RenameRequest(const RenameRequest& from)
 void RenameRequest::SharedCtor() {
   old_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   new_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 RenameRequest::~RenameRequest() {
@@ -3023,22 +2796,13 @@ void RenameRequest::SharedDtor() {
 }
 
 void RenameRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const RenameRequest& RenameRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRenameRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RenameRequest.base);
   return *internal_default_instance();
 }
 
-RenameRequest* RenameRequest::New(::google::protobuf::Arena* arena) const {
-  RenameRequest* n = new RenameRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void RenameRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.RenameRequest)
@@ -3063,7 +2827,7 @@ bool RenameRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.RenameRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -3171,9 +2935,7 @@ size_t RenameRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -3216,10 +2978,11 @@ void RenameRequest::Swap(RenameRequest* other) {
 }
 void RenameRequest::InternalSwap(RenameRequest* other) {
   using std::swap;
-  old_name_.Swap(&other->old_name_);
-  new_name_.Swap(&other->new_name_);
+  old_name_.Swap(&other->old_name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  new_name_.Swap(&other->new_name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string RenameRequest::GetTypeName() const {
@@ -3237,16 +3000,14 @@ const int RemoveRequest::kPathFieldNumber;
 
 RemoveRequest::RemoveRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRemoveRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RemoveRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.RemoveRequest)
 }
 RemoveRequest::RemoveRequest(const RemoveRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.path().size() > 0) {
@@ -3257,7 +3018,6 @@ RemoveRequest::RemoveRequest(const RemoveRequest& from)
 
 void RemoveRequest::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 RemoveRequest::~RemoveRequest() {
@@ -3270,22 +3030,13 @@ void RemoveRequest::SharedDtor() {
 }
 
 void RemoveRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const RemoveRequest& RemoveRequest::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRemoveRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_RemoveRequest.base);
   return *internal_default_instance();
 }
 
-RemoveRequest* RemoveRequest::New(::google::protobuf::Arena* arena) const {
-  RemoveRequest* n = new RemoveRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void RemoveRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.RemoveRequest)
@@ -3309,7 +3060,7 @@ bool RemoveRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.RemoveRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -3384,9 +3135,7 @@ size_t RemoveRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -3425,9 +3174,9 @@ void RemoveRequest::Swap(RemoveRequest* other) {
 }
 void RemoveRequest::InternalSwap(RemoveRequest* other) {
   using std::swap;
-  path_.Swap(&other->path_);
+  path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string RemoveRequest::GetTypeName() const {
@@ -3454,16 +3203,14 @@ const int Reply::kPacketFieldNumber;
 
 Reply::Reply()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsReply();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Reply.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Reply)
 }
 Reply::Reply(const Reply& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_drive_list()) {
     drive_list_ = new ::aspia::proto::file_transfer::DriveList(*from.drive_list_);
@@ -3488,7 +3235,6 @@ void Reply::SharedCtor() {
   ::memset(&drive_list_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&status_) -
       reinterpret_cast<char*>(&drive_list_)) + sizeof(status_));
-  _cached_size_ = 0;
 }
 
 Reply::~Reply() {
@@ -3503,22 +3249,13 @@ void Reply::SharedDtor() {
 }
 
 void Reply::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const Reply& Reply::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsReply();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Reply.base);
   return *internal_default_instance();
 }
 
-Reply* Reply::New(::google::protobuf::Arena* arena) const {
-  Reply* n = new Reply;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void Reply::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Reply)
@@ -3554,7 +3291,7 @@ bool Reply::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Reply)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -3644,19 +3381,19 @@ void Reply::SerializeWithCachedSizes(
   // .aspia.proto.file_transfer.DriveList drive_list = 2;
   if (this->has_drive_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->drive_list_, output);
+      2, this->_internal_drive_list(), output);
   }
 
   // .aspia.proto.file_transfer.FileList file_list = 3;
   if (this->has_file_list()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->file_list_, output);
+      3, this->_internal_file_list(), output);
   }
 
   // .aspia.proto.file_transfer.Packet packet = 4;
   if (this->has_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->packet_, output);
+      4, this->_internal_packet(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -3674,21 +3411,21 @@ size_t Reply::ByteSizeLong() const {
   if (this->has_drive_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->drive_list_);
+        *drive_list_);
   }
 
   // .aspia.proto.file_transfer.FileList file_list = 3;
   if (this->has_file_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->file_list_);
+        *file_list_);
   }
 
   // .aspia.proto.file_transfer.Packet packet = 4;
   if (this->has_packet()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->packet_);
+        *packet_);
   }
 
   // .aspia.proto.file_transfer.Status status = 1;
@@ -3698,9 +3435,7 @@ size_t Reply::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -3752,7 +3487,6 @@ void Reply::InternalSwap(Reply* other) {
   swap(packet_, other->packet_);
   swap(status_, other->status_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string Reply::GetTypeName() const {
@@ -3796,16 +3530,14 @@ const int Request::kPacketFieldNumber;
 
 Request::Request()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Request.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.file_transfer.Request)
 }
 Request::Request(const Request& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_drive_list_request()) {
     drive_list_request_ = new ::aspia::proto::file_transfer::DriveListRequest(*from.drive_list_request_);
@@ -3859,7 +3591,6 @@ void Request::SharedCtor() {
   ::memset(&drive_list_request_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&packet_) -
       reinterpret_cast<char*>(&drive_list_request_)) + sizeof(packet_));
-  _cached_size_ = 0;
 }
 
 Request::~Request() {
@@ -3880,22 +3611,13 @@ void Request::SharedDtor() {
 }
 
 void Request::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const Request& Request::default_instance() {
-  ::protobuf_file_5ftransfer_5fsession_2eproto::InitDefaultsRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_file_5ftransfer_5fsession_2eproto::scc_info_Request.base);
   return *internal_default_instance();
 }
 
-Request* Request::New(::google::protobuf::Arena* arena) const {
-  Request* n = new Request;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void Request::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.file_transfer.Request)
@@ -3954,7 +3676,7 @@ bool Request::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.file_transfer.Request)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -4095,55 +3817,55 @@ void Request::SerializeWithCachedSizes(
   // .aspia.proto.file_transfer.DriveListRequest drive_list_request = 1;
   if (this->has_drive_list_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->drive_list_request_, output);
+      1, this->_internal_drive_list_request(), output);
   }
 
   // .aspia.proto.file_transfer.FileListRequest file_list_request = 2;
   if (this->has_file_list_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->file_list_request_, output);
+      2, this->_internal_file_list_request(), output);
   }
 
   // .aspia.proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
   if (this->has_create_directory_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      3, *this->create_directory_request_, output);
+      3, this->_internal_create_directory_request(), output);
   }
 
   // .aspia.proto.file_transfer.RenameRequest rename_request = 4;
   if (this->has_rename_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      4, *this->rename_request_, output);
+      4, this->_internal_rename_request(), output);
   }
 
   // .aspia.proto.file_transfer.RemoveRequest remove_request = 5;
   if (this->has_remove_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      5, *this->remove_request_, output);
+      5, this->_internal_remove_request(), output);
   }
 
   // .aspia.proto.file_transfer.DownloadRequest download_request = 6;
   if (this->has_download_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      6, *this->download_request_, output);
+      6, this->_internal_download_request(), output);
   }
 
   // .aspia.proto.file_transfer.UploadRequest upload_request = 7;
   if (this->has_upload_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      7, *this->upload_request_, output);
+      7, this->_internal_upload_request(), output);
   }
 
   // .aspia.proto.file_transfer.PacketRequest packet_request = 8;
   if (this->has_packet_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      8, *this->packet_request_, output);
+      8, this->_internal_packet_request(), output);
   }
 
   // .aspia.proto.file_transfer.Packet packet = 9;
   if (this->has_packet()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      9, *this->packet_, output);
+      9, this->_internal_packet(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -4161,69 +3883,67 @@ size_t Request::ByteSizeLong() const {
   if (this->has_drive_list_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->drive_list_request_);
+        *drive_list_request_);
   }
 
   // .aspia.proto.file_transfer.FileListRequest file_list_request = 2;
   if (this->has_file_list_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->file_list_request_);
+        *file_list_request_);
   }
 
   // .aspia.proto.file_transfer.CreateDirectoryRequest create_directory_request = 3;
   if (this->has_create_directory_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->create_directory_request_);
+        *create_directory_request_);
   }
 
   // .aspia.proto.file_transfer.RenameRequest rename_request = 4;
   if (this->has_rename_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->rename_request_);
+        *rename_request_);
   }
 
   // .aspia.proto.file_transfer.RemoveRequest remove_request = 5;
   if (this->has_remove_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->remove_request_);
+        *remove_request_);
   }
 
   // .aspia.proto.file_transfer.DownloadRequest download_request = 6;
   if (this->has_download_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->download_request_);
+        *download_request_);
   }
 
   // .aspia.proto.file_transfer.UploadRequest upload_request = 7;
   if (this->has_upload_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->upload_request_);
+        *upload_request_);
   }
 
   // .aspia.proto.file_transfer.PacketRequest packet_request = 8;
   if (this->has_packet_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->packet_request_);
+        *packet_request_);
   }
 
   // .aspia.proto.file_transfer.Packet packet = 9;
   if (this->has_packet()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->packet_);
+        *packet_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -4295,7 +4015,6 @@ void Request::InternalSwap(Request* other) {
   swap(packet_request_, other->packet_request_);
   swap(packet_, other->packet_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string Request::GetTypeName() const {
@@ -4307,5 +4026,54 @@ void Request::InternalSwap(Request* other) {
 }  // namespace file_transfer
 }  // namespace proto
 }  // namespace aspia
+namespace google {
+namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::DriveList_Item* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::DriveList_Item >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::DriveList_Item >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::DriveList* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::DriveList >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::DriveList >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::DriveListRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::DriveListRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::DriveListRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::FileList_Item* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::FileList_Item >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::FileList_Item >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::FileList* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::FileList >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::FileList >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::FileListRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::FileListRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::FileListRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::UploadRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::UploadRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::UploadRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::DownloadRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::DownloadRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::DownloadRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::PacketRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::PacketRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::PacketRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::Packet* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::Packet >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::Packet >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::CreateDirectoryRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::CreateDirectoryRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::CreateDirectoryRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::RenameRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::RenameRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::RenameRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::RemoveRequest* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::RemoveRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::RemoveRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::Reply* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::Reply >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::Reply >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::file_transfer::Request* Arena::CreateMaybeMessage< ::aspia::proto::file_transfer::Request >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::file_transfer::Request >(arena);
+}
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)

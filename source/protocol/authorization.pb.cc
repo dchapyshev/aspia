@@ -7,7 +7,6 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
@@ -16,6 +15,13 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+
+namespace protobuf_authorization_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_authorization_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_ClientChallenge;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_authorization_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LogonRequest;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_authorization_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_LogonResult;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_authorization_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_ServerChallenge;
+}  // namespace protobuf_authorization_2eproto
 namespace aspia {
 namespace proto {
 namespace auth {
@@ -53,14 +59,9 @@ class HostToClientDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_authorization_2eproto {
-void InitDefaultsLogonRequestImpl() {
+static void InitDefaultsLogonRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::auth::_LogonRequest_default_instance_;
     new (ptr) ::aspia::proto::auth::LogonRequest();
@@ -69,19 +70,12 @@ void InitDefaultsLogonRequestImpl() {
   ::aspia::proto::auth::LogonRequest::InitAsDefaultInstance();
 }
 
-void InitDefaultsLogonRequest() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLogonRequestImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_LogonRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsLogonRequest}, {}};
 
-void InitDefaultsServerChallengeImpl() {
+static void InitDefaultsServerChallenge() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::auth::_ServerChallenge_default_instance_;
     new (ptr) ::aspia::proto::auth::ServerChallenge();
@@ -90,19 +84,12 @@ void InitDefaultsServerChallengeImpl() {
   ::aspia::proto::auth::ServerChallenge::InitAsDefaultInstance();
 }
 
-void InitDefaultsServerChallenge() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsServerChallengeImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_ServerChallenge =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsServerChallenge}, {}};
 
-void InitDefaultsClientChallengeImpl() {
+static void InitDefaultsClientChallenge() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::auth::_ClientChallenge_default_instance_;
     new (ptr) ::aspia::proto::auth::ClientChallenge();
@@ -111,19 +98,12 @@ void InitDefaultsClientChallengeImpl() {
   ::aspia::proto::auth::ClientChallenge::InitAsDefaultInstance();
 }
 
-void InitDefaultsClientChallenge() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsClientChallengeImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_ClientChallenge =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsClientChallenge}, {}};
 
-void InitDefaultsLogonResultImpl() {
+static void InitDefaultsLogonResult() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::auth::_LogonResult_default_instance_;
     new (ptr) ::aspia::proto::auth::LogonResult();
@@ -132,21 +112,12 @@ void InitDefaultsLogonResultImpl() {
   ::aspia::proto::auth::LogonResult::InitAsDefaultInstance();
 }
 
-void InitDefaultsLogonResult() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLogonResultImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_LogonResult =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsLogonResult}, {}};
 
-void InitDefaultsClientToHostImpl() {
+static void InitDefaultsClientToHost() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_authorization_2eproto::InitDefaultsLogonRequest();
-  protobuf_authorization_2eproto::InitDefaultsClientChallenge();
   {
     void* ptr = &::aspia::proto::auth::_ClientToHost_default_instance_;
     new (ptr) ::aspia::proto::auth::ClientToHost();
@@ -155,21 +126,14 @@ void InitDefaultsClientToHostImpl() {
   ::aspia::proto::auth::ClientToHost::InitAsDefaultInstance();
 }
 
-void InitDefaultsClientToHost() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsClientToHostImpl);
-}
+::google::protobuf::internal::SCCInfo<2> scc_info_ClientToHost =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsClientToHost}, {
+      &protobuf_authorization_2eproto::scc_info_LogonRequest.base,
+      &protobuf_authorization_2eproto::scc_info_ClientChallenge.base,}};
 
-void InitDefaultsHostToClientImpl() {
+static void InitDefaultsHostToClient() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_authorization_2eproto::InitDefaultsServerChallenge();
-  protobuf_authorization_2eproto::InitDefaultsLogonResult();
   {
     void* ptr = &::aspia::proto::auth::_HostToClient_default_instance_;
     new (ptr) ::aspia::proto::auth::HostToClient();
@@ -178,9 +142,18 @@ void InitDefaultsHostToClientImpl() {
   ::aspia::proto::auth::HostToClient::InitAsDefaultInstance();
 }
 
-void InitDefaultsHostToClient() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsHostToClientImpl);
+::google::protobuf::internal::SCCInfo<2> scc_info_HostToClient =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsHostToClient}, {
+      &protobuf_authorization_2eproto::scc_info_ServerChallenge.base,
+      &protobuf_authorization_2eproto::scc_info_LogonResult.base,}};
+
+void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_LogonRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ServerChallenge.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ClientChallenge.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_LogonResult.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ClientToHost.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_HostToClient.base);
 }
 
 }  // namespace protobuf_authorization_2eproto
@@ -232,16 +205,14 @@ const int LogonRequest::kMethodFieldNumber;
 
 LogonRequest::LogonRequest()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsLogonRequest();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_LogonRequest.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.LogonRequest)
 }
 LogonRequest::LogonRequest(const LogonRequest& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   method_ = from.method_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.LogonRequest)
@@ -249,7 +220,6 @@ LogonRequest::LogonRequest(const LogonRequest& from)
 
 void LogonRequest::SharedCtor() {
   method_ = 0;
-  _cached_size_ = 0;
 }
 
 LogonRequest::~LogonRequest() {
@@ -261,22 +231,13 @@ void LogonRequest::SharedDtor() {
 }
 
 void LogonRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const LogonRequest& LogonRequest::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsLogonRequest();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_LogonRequest.base);
   return *internal_default_instance();
 }
 
-LogonRequest* LogonRequest::New(::google::protobuf::Arena* arena) const {
-  LogonRequest* n = new LogonRequest;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void LogonRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.LogonRequest)
@@ -300,7 +261,7 @@ bool LogonRequest::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.LogonRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -369,9 +330,7 @@ size_t LogonRequest::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -411,7 +370,6 @@ void LogonRequest::InternalSwap(LogonRequest* other) {
   using std::swap;
   swap(method_, other->method_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string LogonRequest::GetTypeName() const {
@@ -429,16 +387,14 @@ const int ServerChallenge::kNonceFieldNumber;
 
 ServerChallenge::ServerChallenge()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsServerChallenge();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_ServerChallenge.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.ServerChallenge)
 }
 ServerChallenge::ServerChallenge(const ServerChallenge& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   nonce_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.nonce().size() > 0) {
@@ -449,7 +405,6 @@ ServerChallenge::ServerChallenge(const ServerChallenge& from)
 
 void ServerChallenge::SharedCtor() {
   nonce_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 ServerChallenge::~ServerChallenge() {
@@ -462,22 +417,13 @@ void ServerChallenge::SharedDtor() {
 }
 
 void ServerChallenge::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const ServerChallenge& ServerChallenge::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsServerChallenge();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_ServerChallenge.base);
   return *internal_default_instance();
 }
 
-ServerChallenge* ServerChallenge::New(::google::protobuf::Arena* arena) const {
-  ServerChallenge* n = new ServerChallenge;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void ServerChallenge::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.ServerChallenge)
@@ -501,7 +447,7 @@ bool ServerChallenge::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.ServerChallenge)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -568,9 +514,7 @@ size_t ServerChallenge::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -609,9 +553,9 @@ void ServerChallenge::Swap(ServerChallenge* other) {
 }
 void ServerChallenge::InternalSwap(ServerChallenge* other) {
   using std::swap;
-  nonce_.Swap(&other->nonce_);
+  nonce_.Swap(&other->nonce_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string ServerChallenge::GetTypeName() const {
@@ -631,16 +575,14 @@ const int ClientChallenge::kSessionKeyFieldNumber;
 
 ClientChallenge::ClientChallenge()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsClientChallenge();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_ClientChallenge.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.ClientChallenge)
 }
 ClientChallenge::ClientChallenge(const ClientChallenge& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.username().size() > 0) {
@@ -658,7 +600,6 @@ void ClientChallenge::SharedCtor() {
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   session_key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   session_type_ = 0;
-  _cached_size_ = 0;
 }
 
 ClientChallenge::~ClientChallenge() {
@@ -672,22 +613,13 @@ void ClientChallenge::SharedDtor() {
 }
 
 void ClientChallenge::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const ClientChallenge& ClientChallenge::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsClientChallenge();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_ClientChallenge.base);
   return *internal_default_instance();
 }
 
-ClientChallenge* ClientChallenge::New(::google::protobuf::Arena* arena) const {
-  ClientChallenge* n = new ClientChallenge;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void ClientChallenge::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.ClientChallenge)
@@ -713,7 +645,7 @@ bool ClientChallenge::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.ClientChallenge)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -840,9 +772,7 @@ size_t ClientChallenge::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -888,11 +818,12 @@ void ClientChallenge::Swap(ClientChallenge* other) {
 }
 void ClientChallenge::InternalSwap(ClientChallenge* other) {
   using std::swap;
-  username_.Swap(&other->username_);
-  session_key_.Swap(&other->session_key_);
+  username_.Swap(&other->username_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  session_key_.Swap(&other->session_key_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(session_type_, other->session_type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string ClientChallenge::GetTypeName() const {
@@ -910,16 +841,14 @@ const int LogonResult::kStatusFieldNumber;
 
 LogonResult::LogonResult()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsLogonResult();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_LogonResult.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.LogonResult)
 }
 LogonResult::LogonResult(const LogonResult& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   status_ = from.status_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.auth.LogonResult)
@@ -927,7 +856,6 @@ LogonResult::LogonResult(const LogonResult& from)
 
 void LogonResult::SharedCtor() {
   status_ = 0;
-  _cached_size_ = 0;
 }
 
 LogonResult::~LogonResult() {
@@ -939,22 +867,13 @@ void LogonResult::SharedDtor() {
 }
 
 void LogonResult::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const LogonResult& LogonResult::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsLogonResult();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_LogonResult.base);
   return *internal_default_instance();
 }
 
-LogonResult* LogonResult::New(::google::protobuf::Arena* arena) const {
-  LogonResult* n = new LogonResult;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void LogonResult::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.LogonResult)
@@ -978,7 +897,7 @@ bool LogonResult::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.LogonResult)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1047,9 +966,7 @@ size_t LogonResult::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1089,7 +1006,6 @@ void LogonResult::InternalSwap(LogonResult* other) {
   using std::swap;
   swap(status_, other->status_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string LogonResult::GetTypeName() const {
@@ -1112,16 +1028,14 @@ const int ClientToHost::kClientChallengeFieldNumber;
 
 ClientToHost::ClientToHost()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsClientToHost();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_ClientToHost.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.ClientToHost)
 }
 ClientToHost::ClientToHost(const ClientToHost& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_logon_request()) {
     logon_request_ = new ::aspia::proto::auth::LogonRequest(*from.logon_request_);
@@ -1140,7 +1054,6 @@ void ClientToHost::SharedCtor() {
   ::memset(&logon_request_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&client_challenge_) -
       reinterpret_cast<char*>(&logon_request_)) + sizeof(client_challenge_));
-  _cached_size_ = 0;
 }
 
 ClientToHost::~ClientToHost() {
@@ -1154,22 +1067,13 @@ void ClientToHost::SharedDtor() {
 }
 
 void ClientToHost::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const ClientToHost& ClientToHost::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsClientToHost();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_ClientToHost.base);
   return *internal_default_instance();
 }
 
-ClientToHost* ClientToHost::New(::google::protobuf::Arena* arena) const {
-  ClientToHost* n = new ClientToHost;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void ClientToHost::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.ClientToHost)
@@ -1200,7 +1104,7 @@ bool ClientToHost::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.ClientToHost)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1257,13 +1161,13 @@ void ClientToHost::SerializeWithCachedSizes(
   // .aspia.proto.auth.LogonRequest logon_request = 1;
   if (this->has_logon_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->logon_request_, output);
+      1, this->_internal_logon_request(), output);
   }
 
   // .aspia.proto.auth.ClientChallenge client_challenge = 2;
   if (this->has_client_challenge()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->client_challenge_, output);
+      2, this->_internal_client_challenge(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1281,20 +1185,18 @@ size_t ClientToHost::ByteSizeLong() const {
   if (this->has_logon_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->logon_request_);
+        *logon_request_);
   }
 
   // .aspia.proto.auth.ClientChallenge client_challenge = 2;
   if (this->has_client_challenge()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->client_challenge_);
+        *client_challenge_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1338,7 +1240,6 @@ void ClientToHost::InternalSwap(ClientToHost* other) {
   swap(logon_request_, other->logon_request_);
   swap(client_challenge_, other->client_challenge_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string ClientToHost::GetTypeName() const {
@@ -1361,16 +1262,14 @@ const int HostToClient::kLogonResultFieldNumber;
 
 HostToClient::HostToClient()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_authorization_2eproto::InitDefaultsHostToClient();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_authorization_2eproto::scc_info_HostToClient.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.auth.HostToClient)
 }
 HostToClient::HostToClient(const HostToClient& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_server_challenge()) {
     server_challenge_ = new ::aspia::proto::auth::ServerChallenge(*from.server_challenge_);
@@ -1389,7 +1288,6 @@ void HostToClient::SharedCtor() {
   ::memset(&server_challenge_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&logon_result_) -
       reinterpret_cast<char*>(&server_challenge_)) + sizeof(logon_result_));
-  _cached_size_ = 0;
 }
 
 HostToClient::~HostToClient() {
@@ -1403,22 +1301,13 @@ void HostToClient::SharedDtor() {
 }
 
 void HostToClient::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const HostToClient& HostToClient::default_instance() {
-  ::protobuf_authorization_2eproto::InitDefaultsHostToClient();
+  ::google::protobuf::internal::InitSCC(&protobuf_authorization_2eproto::scc_info_HostToClient.base);
   return *internal_default_instance();
 }
 
-HostToClient* HostToClient::New(::google::protobuf::Arena* arena) const {
-  HostToClient* n = new HostToClient;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void HostToClient::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.auth.HostToClient)
@@ -1449,7 +1338,7 @@ bool HostToClient::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.auth.HostToClient)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1506,13 +1395,13 @@ void HostToClient::SerializeWithCachedSizes(
   // .aspia.proto.auth.ServerChallenge server_challenge = 1;
   if (this->has_server_challenge()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->server_challenge_, output);
+      1, this->_internal_server_challenge(), output);
   }
 
   // .aspia.proto.auth.LogonResult logon_result = 2;
   if (this->has_logon_result()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->logon_result_, output);
+      2, this->_internal_logon_result(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1530,20 +1419,18 @@ size_t HostToClient::ByteSizeLong() const {
   if (this->has_server_challenge()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->server_challenge_);
+        *server_challenge_);
   }
 
   // .aspia.proto.auth.LogonResult logon_result = 2;
   if (this->has_logon_result()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->logon_result_);
+        *logon_result_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1587,7 +1474,6 @@ void HostToClient::InternalSwap(HostToClient* other) {
   swap(server_challenge_, other->server_challenge_);
   swap(logon_result_, other->logon_result_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string HostToClient::GetTypeName() const {
@@ -1599,5 +1485,27 @@ void HostToClient::InternalSwap(HostToClient* other) {
 }  // namespace auth
 }  // namespace proto
 }  // namespace aspia
+namespace google {
+namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::LogonRequest* Arena::CreateMaybeMessage< ::aspia::proto::auth::LogonRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::LogonRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::ServerChallenge* Arena::CreateMaybeMessage< ::aspia::proto::auth::ServerChallenge >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::ServerChallenge >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::ClientChallenge* Arena::CreateMaybeMessage< ::aspia::proto::auth::ClientChallenge >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::ClientChallenge >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::LogonResult* Arena::CreateMaybeMessage< ::aspia::proto::auth::LogonResult >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::LogonResult >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::ClientToHost* Arena::CreateMaybeMessage< ::aspia::proto::auth::ClientToHost >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::ClientToHost >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::auth::HostToClient* Arena::CreateMaybeMessage< ::aspia::proto::auth::HostToClient >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::auth::HostToClient >(arena);
+}
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)

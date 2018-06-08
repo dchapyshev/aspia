@@ -7,7 +7,6 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
@@ -16,6 +15,7 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+
 namespace aspia {
 namespace proto {
 class HelloMessageDefaultTypeInternal {
@@ -26,14 +26,9 @@ class HelloMessageDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_key_5fexchange_2eproto {
-void InitDefaultsHelloMessageImpl() {
+static void InitDefaultsHelloMessage() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::_HelloMessage_default_instance_;
     new (ptr) ::aspia::proto::HelloMessage();
@@ -42,9 +37,11 @@ void InitDefaultsHelloMessageImpl() {
   ::aspia::proto::HelloMessage::InitAsDefaultInstance();
 }
 
-void InitDefaultsHelloMessage() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsHelloMessageImpl);
+::google::protobuf::internal::SCCInfo<0> scc_info_HelloMessage =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsHelloMessage}, {}};
+
+void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_HelloMessage.base);
 }
 
 }  // namespace protobuf_key_5fexchange_2eproto
@@ -62,16 +59,14 @@ const int HelloMessage::kNonceFieldNumber;
 
 HelloMessage::HelloMessage()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_key_5fexchange_2eproto::InitDefaultsHelloMessage();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_key_5fexchange_2eproto::scc_info_HelloMessage.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.HelloMessage)
 }
 HelloMessage::HelloMessage(const HelloMessage& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   public_key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.public_key().size() > 0) {
@@ -87,7 +82,6 @@ HelloMessage::HelloMessage(const HelloMessage& from)
 void HelloMessage::SharedCtor() {
   public_key_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   nonce_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 HelloMessage::~HelloMessage() {
@@ -101,22 +95,13 @@ void HelloMessage::SharedDtor() {
 }
 
 void HelloMessage::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const HelloMessage& HelloMessage::default_instance() {
-  ::protobuf_key_5fexchange_2eproto::InitDefaultsHelloMessage();
+  ::google::protobuf::internal::InitSCC(&protobuf_key_5fexchange_2eproto::scc_info_HelloMessage.base);
   return *internal_default_instance();
 }
 
-HelloMessage* HelloMessage::New(::google::protobuf::Arena* arena) const {
-  HelloMessage* n = new HelloMessage;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void HelloMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.HelloMessage)
@@ -141,7 +126,7 @@ bool HelloMessage::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.HelloMessage)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -233,9 +218,7 @@ size_t HelloMessage::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -278,10 +261,11 @@ void HelloMessage::Swap(HelloMessage* other) {
 }
 void HelloMessage::InternalSwap(HelloMessage* other) {
   using std::swap;
-  public_key_.Swap(&other->public_key_);
-  nonce_.Swap(&other->nonce_);
+  public_key_.Swap(&other->public_key_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  nonce_.Swap(&other->nonce_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string HelloMessage::GetTypeName() const {
@@ -292,5 +276,12 @@ void HelloMessage::InternalSwap(HelloMessage* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace proto
 }  // namespace aspia
+namespace google {
+namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::HelloMessage* Arena::CreateMaybeMessage< ::aspia::proto::HelloMessage >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::HelloMessage >(arena);
+}
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)

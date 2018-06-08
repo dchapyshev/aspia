@@ -7,7 +7,6 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
@@ -16,6 +15,12 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+
+namespace protobuf_notifier_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_notifier_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_KillSession;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_notifier_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Session;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_notifier_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_SessionClose;
+}  // namespace protobuf_notifier_2eproto
 namespace aspia {
 namespace proto {
 namespace notifier {
@@ -48,14 +53,9 @@ class ServiceToNotifierDefaultTypeInternal {
 }  // namespace proto
 }  // namespace aspia
 namespace protobuf_notifier_2eproto {
-void InitDefaultsSessionImpl() {
+static void InitDefaultsSession() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::notifier::_Session_default_instance_;
     new (ptr) ::aspia::proto::notifier::Session();
@@ -64,19 +64,12 @@ void InitDefaultsSessionImpl() {
   ::aspia::proto::notifier::Session::InitAsDefaultInstance();
 }
 
-void InitDefaultsSession() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsSessionImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_Session =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsSession}, {}};
 
-void InitDefaultsSessionCloseImpl() {
+static void InitDefaultsSessionClose() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::notifier::_SessionClose_default_instance_;
     new (ptr) ::aspia::proto::notifier::SessionClose();
@@ -85,19 +78,12 @@ void InitDefaultsSessionCloseImpl() {
   ::aspia::proto::notifier::SessionClose::InitAsDefaultInstance();
 }
 
-void InitDefaultsSessionClose() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsSessionCloseImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_SessionClose =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsSessionClose}, {}};
 
-void InitDefaultsKillSessionImpl() {
+static void InitDefaultsKillSession() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
     void* ptr = &::aspia::proto::notifier::_KillSession_default_instance_;
     new (ptr) ::aspia::proto::notifier::KillSession();
@@ -106,20 +92,12 @@ void InitDefaultsKillSessionImpl() {
   ::aspia::proto::notifier::KillSession::InitAsDefaultInstance();
 }
 
-void InitDefaultsKillSession() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsKillSessionImpl);
-}
+::google::protobuf::internal::SCCInfo<0> scc_info_KillSession =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsKillSession}, {}};
 
-void InitDefaultsNotifierToServiceImpl() {
+static void InitDefaultsNotifierToService() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_notifier_2eproto::InitDefaultsKillSession();
   {
     void* ptr = &::aspia::proto::notifier::_NotifierToService_default_instance_;
     new (ptr) ::aspia::proto::notifier::NotifierToService();
@@ -128,21 +106,13 @@ void InitDefaultsNotifierToServiceImpl() {
   ::aspia::proto::notifier::NotifierToService::InitAsDefaultInstance();
 }
 
-void InitDefaultsNotifierToService() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsNotifierToServiceImpl);
-}
+::google::protobuf::internal::SCCInfo<1> scc_info_NotifierToService =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsNotifierToService}, {
+      &protobuf_notifier_2eproto::scc_info_KillSession.base,}};
 
-void InitDefaultsServiceToNotifierImpl() {
+static void InitDefaultsServiceToNotifier() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  protobuf_notifier_2eproto::InitDefaultsSession();
-  protobuf_notifier_2eproto::InitDefaultsSessionClose();
   {
     void* ptr = &::aspia::proto::notifier::_ServiceToNotifier_default_instance_;
     new (ptr) ::aspia::proto::notifier::ServiceToNotifier();
@@ -151,9 +121,17 @@ void InitDefaultsServiceToNotifierImpl() {
   ::aspia::proto::notifier::ServiceToNotifier::InitAsDefaultInstance();
 }
 
-void InitDefaultsServiceToNotifier() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsServiceToNotifierImpl);
+::google::protobuf::internal::SCCInfo<2> scc_info_ServiceToNotifier =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsServiceToNotifier}, {
+      &protobuf_notifier_2eproto::scc_info_Session.base,
+      &protobuf_notifier_2eproto::scc_info_SessionClose.base,}};
+
+void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_Session.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_SessionClose.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_KillSession.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_NotifierToService.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ServiceToNotifier.base);
 }
 
 }  // namespace protobuf_notifier_2eproto
@@ -174,16 +152,14 @@ const int Session::kSessionTypeFieldNumber;
 
 Session::Session()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_notifier_2eproto::InitDefaultsSession();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_notifier_2eproto::scc_info_Session.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.notifier.Session)
 }
 Session::Session(const Session& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.uuid().size() > 0) {
@@ -206,7 +182,6 @@ void Session::SharedCtor() {
   remote_address_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   session_type_ = 0;
-  _cached_size_ = 0;
 }
 
 Session::~Session() {
@@ -221,22 +196,13 @@ void Session::SharedDtor() {
 }
 
 void Session::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const Session& Session::default_instance() {
-  ::protobuf_notifier_2eproto::InitDefaultsSession();
+  ::google::protobuf::internal::InitSCC(&protobuf_notifier_2eproto::scc_info_Session.base);
   return *internal_default_instance();
 }
 
-Session* Session::New(::google::protobuf::Arena* arena) const {
-  Session* n = new Session;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void Session::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.notifier.Session)
@@ -263,7 +229,7 @@ bool Session::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.notifier.Session)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -431,9 +397,7 @@ size_t Session::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -483,12 +447,14 @@ void Session::Swap(Session* other) {
 }
 void Session::InternalSwap(Session* other) {
   using std::swap;
-  uuid_.Swap(&other->uuid_);
-  remote_address_.Swap(&other->remote_address_);
-  username_.Swap(&other->username_);
+  uuid_.Swap(&other->uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  remote_address_.Swap(&other->remote_address_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  username_.Swap(&other->username_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(session_type_, other->session_type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string Session::GetTypeName() const {
@@ -506,16 +472,14 @@ const int SessionClose::kUuidFieldNumber;
 
 SessionClose::SessionClose()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_notifier_2eproto::InitDefaultsSessionClose();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_notifier_2eproto::scc_info_SessionClose.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.notifier.SessionClose)
 }
 SessionClose::SessionClose(const SessionClose& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.uuid().size() > 0) {
@@ -526,7 +490,6 @@ SessionClose::SessionClose(const SessionClose& from)
 
 void SessionClose::SharedCtor() {
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 SessionClose::~SessionClose() {
@@ -539,22 +502,13 @@ void SessionClose::SharedDtor() {
 }
 
 void SessionClose::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const SessionClose& SessionClose::default_instance() {
-  ::protobuf_notifier_2eproto::InitDefaultsSessionClose();
+  ::google::protobuf::internal::InitSCC(&protobuf_notifier_2eproto::scc_info_SessionClose.base);
   return *internal_default_instance();
 }
 
-SessionClose* SessionClose::New(::google::protobuf::Arena* arena) const {
-  SessionClose* n = new SessionClose;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void SessionClose::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.notifier.SessionClose)
@@ -578,7 +532,7 @@ bool SessionClose::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.notifier.SessionClose)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -653,9 +607,7 @@ size_t SessionClose::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -694,9 +646,9 @@ void SessionClose::Swap(SessionClose* other) {
 }
 void SessionClose::InternalSwap(SessionClose* other) {
   using std::swap;
-  uuid_.Swap(&other->uuid_);
+  uuid_.Swap(&other->uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string SessionClose::GetTypeName() const {
@@ -714,16 +666,14 @@ const int KillSession::kUuidFieldNumber;
 
 KillSession::KillSession()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_notifier_2eproto::InitDefaultsKillSession();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_notifier_2eproto::scc_info_KillSession.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.notifier.KillSession)
 }
 KillSession::KillSession(const KillSession& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.uuid().size() > 0) {
@@ -734,7 +684,6 @@ KillSession::KillSession(const KillSession& from)
 
 void KillSession::SharedCtor() {
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _cached_size_ = 0;
 }
 
 KillSession::~KillSession() {
@@ -747,22 +696,13 @@ void KillSession::SharedDtor() {
 }
 
 void KillSession::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const KillSession& KillSession::default_instance() {
-  ::protobuf_notifier_2eproto::InitDefaultsKillSession();
+  ::google::protobuf::internal::InitSCC(&protobuf_notifier_2eproto::scc_info_KillSession.base);
   return *internal_default_instance();
 }
 
-KillSession* KillSession::New(::google::protobuf::Arena* arena) const {
-  KillSession* n = new KillSession;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void KillSession::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.notifier.KillSession)
@@ -786,7 +726,7 @@ bool KillSession::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.notifier.KillSession)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -861,9 +801,7 @@ size_t KillSession::ByteSizeLong() const {
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -902,9 +840,9 @@ void KillSession::Swap(KillSession* other) {
 }
 void KillSession::InternalSwap(KillSession* other) {
   using std::swap;
-  uuid_.Swap(&other->uuid_);
+  uuid_.Swap(&other->uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string KillSession::GetTypeName() const {
@@ -924,16 +862,14 @@ const int NotifierToService::kKillSessionFieldNumber;
 
 NotifierToService::NotifierToService()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_notifier_2eproto::InitDefaultsNotifierToService();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_notifier_2eproto::scc_info_NotifierToService.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.notifier.NotifierToService)
 }
 NotifierToService::NotifierToService(const NotifierToService& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_kill_session()) {
     kill_session_ = new ::aspia::proto::notifier::KillSession(*from.kill_session_);
@@ -945,7 +881,6 @@ NotifierToService::NotifierToService(const NotifierToService& from)
 
 void NotifierToService::SharedCtor() {
   kill_session_ = NULL;
-  _cached_size_ = 0;
 }
 
 NotifierToService::~NotifierToService() {
@@ -958,22 +893,13 @@ void NotifierToService::SharedDtor() {
 }
 
 void NotifierToService::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const NotifierToService& NotifierToService::default_instance() {
-  ::protobuf_notifier_2eproto::InitDefaultsNotifierToService();
+  ::google::protobuf::internal::InitSCC(&protobuf_notifier_2eproto::scc_info_NotifierToService.base);
   return *internal_default_instance();
 }
 
-NotifierToService* NotifierToService::New(::google::protobuf::Arena* arena) const {
-  NotifierToService* n = new NotifierToService;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void NotifierToService::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.notifier.NotifierToService)
@@ -1000,7 +926,7 @@ bool NotifierToService::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.notifier.NotifierToService)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1045,7 +971,7 @@ void NotifierToService::SerializeWithCachedSizes(
   // .aspia.proto.notifier.KillSession kill_session = 1;
   if (this->has_kill_session()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->kill_session_, output);
+      1, this->_internal_kill_session(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1063,13 +989,11 @@ size_t NotifierToService::ByteSizeLong() const {
   if (this->has_kill_session()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->kill_session_);
+        *kill_session_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1109,7 +1033,6 @@ void NotifierToService::InternalSwap(NotifierToService* other) {
   using std::swap;
   swap(kill_session_, other->kill_session_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string NotifierToService::GetTypeName() const {
@@ -1132,16 +1055,14 @@ const int ServiceToNotifier::kSessionCloseFieldNumber;
 
 ServiceToNotifier::ServiceToNotifier()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_notifier_2eproto::InitDefaultsServiceToNotifier();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_notifier_2eproto::scc_info_ServiceToNotifier.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:aspia.proto.notifier.ServiceToNotifier)
 }
 ServiceToNotifier::ServiceToNotifier(const ServiceToNotifier& from)
   : ::google::protobuf::MessageLite(),
-      _internal_metadata_(NULL),
-      _cached_size_(0) {
+      _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_session()) {
     session_ = new ::aspia::proto::notifier::Session(*from.session_);
@@ -1160,7 +1081,6 @@ void ServiceToNotifier::SharedCtor() {
   ::memset(&session_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&session_close_) -
       reinterpret_cast<char*>(&session_)) + sizeof(session_close_));
-  _cached_size_ = 0;
 }
 
 ServiceToNotifier::~ServiceToNotifier() {
@@ -1174,22 +1094,13 @@ void ServiceToNotifier::SharedDtor() {
 }
 
 void ServiceToNotifier::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const ServiceToNotifier& ServiceToNotifier::default_instance() {
-  ::protobuf_notifier_2eproto::InitDefaultsServiceToNotifier();
+  ::google::protobuf::internal::InitSCC(&protobuf_notifier_2eproto::scc_info_ServiceToNotifier.base);
   return *internal_default_instance();
 }
 
-ServiceToNotifier* ServiceToNotifier::New(::google::protobuf::Arena* arena) const {
-  ServiceToNotifier* n = new ServiceToNotifier;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void ServiceToNotifier::Clear() {
 // @@protoc_insertion_point(message_clear_start:aspia.proto.notifier.ServiceToNotifier)
@@ -1220,7 +1131,7 @@ bool ServiceToNotifier::MergePartialFromCodedStream(
       &unknown_fields_output, false);
   // @@protoc_insertion_point(parse_start:aspia.proto.notifier.ServiceToNotifier)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -1277,13 +1188,13 @@ void ServiceToNotifier::SerializeWithCachedSizes(
   // .aspia.proto.notifier.Session session = 1;
   if (this->has_session()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, *this->session_, output);
+      1, this->_internal_session(), output);
   }
 
   // .aspia.proto.notifier.SessionClose session_close = 2;
   if (this->has_session_close()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, *this->session_close_, output);
+      2, this->_internal_session_close(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1301,20 +1212,18 @@ size_t ServiceToNotifier::ByteSizeLong() const {
   if (this->has_session()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->session_);
+        *session_);
   }
 
   // .aspia.proto.notifier.SessionClose session_close = 2;
   if (this->has_session_close()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *this->session_close_);
+        *session_close_);
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -1358,7 +1267,6 @@ void ServiceToNotifier::InternalSwap(ServiceToNotifier* other) {
   swap(session_, other->session_);
   swap(session_close_, other->session_close_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::std::string ServiceToNotifier::GetTypeName() const {
@@ -1370,5 +1278,24 @@ void ServiceToNotifier::InternalSwap(ServiceToNotifier* other) {
 }  // namespace notifier
 }  // namespace proto
 }  // namespace aspia
+namespace google {
+namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::notifier::Session* Arena::CreateMaybeMessage< ::aspia::proto::notifier::Session >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::notifier::Session >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::notifier::SessionClose* Arena::CreateMaybeMessage< ::aspia::proto::notifier::SessionClose >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::notifier::SessionClose >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::notifier::KillSession* Arena::CreateMaybeMessage< ::aspia::proto::notifier::KillSession >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::notifier::KillSession >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::notifier::NotifierToService* Arena::CreateMaybeMessage< ::aspia::proto::notifier::NotifierToService >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::notifier::NotifierToService >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::aspia::proto::notifier::ServiceToNotifier* Arena::CreateMaybeMessage< ::aspia::proto::notifier::ServiceToNotifier >(Arena* arena) {
+  return Arena::CreateInternal< ::aspia::proto::notifier::ServiceToNotifier >(arena);
+}
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
