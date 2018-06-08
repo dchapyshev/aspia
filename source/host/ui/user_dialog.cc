@@ -173,7 +173,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 QMessageBox::warning(this,
                                      tr("Warning"),
-                                     tr("Password can not be shorter than 8 characters."),
+                                     tr("Password can not be shorter than %n characters.",
+                                        "", User::kMinPasswordLength),
                                      QMessageBox::Ok);
                 return;
             }

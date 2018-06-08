@@ -15,11 +15,6 @@ namespace aspia {
 
 namespace {
 
-constexpr int kMaxUserNameLength = 64;
-constexpr int kMinPasswordLength = 8;
-constexpr int kMaxPasswordLength = 64;
-constexpr int kPasswordHashLength = 64;
-
 bool isValidUserNameChar(const QChar& username_char)
 {
     if (username_char.isLetter())
@@ -40,7 +35,7 @@ bool isValidUserNameChar(const QChar& username_char)
 
 bool isValidPasswordHash(const QByteArray& password_hash)
 {
-    if (password_hash.size() != kPasswordHashLength)
+    if (password_hash.size() != User::kPasswordHashLength)
         return false;
 
     return true;

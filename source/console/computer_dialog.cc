@@ -150,7 +150,8 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         QString name = ui.edit_name->text();
         if (name.length() > kMaxNameLength)
         {
-            showError(tr("Too long name. The maximum length of the name is 64 characters."));
+            showError(tr("Too long name. The maximum length of the name is %n characters.",
+                         "", kMaxNameLength));
             return;
         }
         else if (name.length() < kMinNameLength)
@@ -170,14 +171,16 @@ void ComputerDialog::buttonBoxClicked(QAbstractButton* button)
         QString password = ui.edit_password->text();
         if (!password.isEmpty() && !User::isValidPassword(password))
         {
-            showError(tr("Password can not be shorter than 8 characters."));
+            showError(tr("Password can not be shorter than %n characters.",
+                         "", User::kMinPasswordLength));
             return;
         }
 
         QString comment = ui.edit_comment->toPlainText();
         if (comment.length() > kMaxCommentLength)
         {
-            showError(tr("Too long comment. The maximum length of the comment is 2048 characters."));
+            showError(tr("Too long comment. The maximum length of the comment is %n characters.",
+                         "", kMaxCommentLength));
             return;
         }
 

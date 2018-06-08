@@ -876,52 +876,52 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="64"/>
+        <location filename="../console/about_dialog.cc" line="70"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="68"/>
+        <location filename="../console/about_dialog.cc" line="74"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="69"/>
+        <location filename="../console/about_dialog.cc" line="75"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="74"/>
+        <location filename="../console/about_dialog.cc" line="80"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="79"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="80"/>
+        <location filename="../console/about_dialog.cc" line="86"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="81"/>
+        <location filename="../console/about_dialog.cc" line="87"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="90"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="92"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="88"/>
+        <location filename="../console/about_dialog.cc" line="94"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
@@ -1249,71 +1249,92 @@
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="153"/>
-        <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation>Te lange naam. De maximum lengte is 64 karakters.</translation>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="158"/>
+        <location filename="../console/computer_dialog.cc" line="159"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="165"/>
+        <location filename="../console/computer_dialog.cc" line="166"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
-    <message>
-        <location filename="../console/computer_dialog.cc" line="173"/>
-        <source>Password can not be shorter than 8 characters.</source>
-        <translation>Wachtwoord mag niet korter dan 8 karakters zijn.</translation>
+    <message numerus="yes">
+        <location filename="../console/computer_dialog.cc" line="174"/>
+        <source>Password can not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/computer_dialog.cc" line="183"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="180"/>
-        <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation>Te lang commentaar. De maximale lengte is 2048 karakters.</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog.cc" line="209"/>
+        <location filename="../console/computer_dialog.cc" line="213"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
 </context>
 <context>
     <name>aspia::ComputerGroupDialog</name>
-    <message>
+    <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="52"/>
-        <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation>Te lange naam. De maximum lengte is 64 karakters.</translation>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="57"/>
+        <location filename="../console/computer_group_dialog.cc" line="58"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="64"/>
-        <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation>Te lang commentaar. De maximale lengte is 2048 karakters.</translation>
+    <message numerus="yes">
+        <location filename="../console/computer_group_dialog.cc" line="65"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="89"/>
+        <location filename="../console/computer_group_dialog.cc" line="91"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
 </context>
 <context>
     <name>aspia::ConsoleStatusBar</name>
-    <message>
+    <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="41"/>
-        <source>%1 child group(s)</source>
-        <translation>%1 onderliggende groep(en)</translation>
+        <source>%n child group(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="47"/>
-        <source>%1 child computer(s)</source>
-        <translation>%1 onderliggende computer(s)</translation>
+        <source>%n child computer(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1832,10 +1853,13 @@
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="176"/>
-        <source>Password can not be shorter than 8 characters.</source>
-        <translation>Wachtwoord mag niet korter dan 8 karakters zijn.</translation>
+        <source>Password can not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 </TS>

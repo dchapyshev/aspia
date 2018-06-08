@@ -20,6 +20,11 @@ public:
 
     enum Flags { FLAG_ENABLED = 1 };
 
+    static const int kMaxUserNameLength = 64;
+    static const int kMinPasswordLength = 8;
+    static const int kMaxPasswordLength = 64;
+    static const int kPasswordHashLength = 64;
+
     static bool isValidName(const QString& value);
     static bool isValidPassword(const QString& value);
 

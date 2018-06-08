@@ -38,13 +38,13 @@ void ConsoleStatusBar::setCurrentComputerGroup(
                                    "<td>%1</td></tr></table>")
                            .arg(QString::fromStdString(computer_group.name())));
 
-    QString child_groups = tr("%1 child group(s)").arg(computer_group.computer_group_size());
+    QString child_groups = tr("%n child group(s)", "", computer_group.computer_group_size());
 
     item_list_[1]->setText(
         QString("<table><tr><td><img src=':/icon/folder.png'></td><td>%1</td></tr></table>")
         .arg(child_groups));
 
-    QString child_computers = tr("%1 child computer(s)").arg(computer_group.computer_size());
+    QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
 
     item_list_[2]->setText(
         QString("<table><tr><td><img src=':/icon/computer.png'></td><td>%1</td></tr></table>")
