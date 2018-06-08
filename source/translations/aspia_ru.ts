@@ -1276,7 +1276,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="183"/>
+        <location filename="../console/computer_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1285,7 +1285,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="213"/>
+        <location filename="../console/computer_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
