@@ -156,7 +156,7 @@ void ClientUserAuthorizer::readServerChallenge(
 
     if (username_.isEmpty() || password_.isEmpty())
     {
-        AuthorizationDialog dialog;
+        AuthorizationDialog dialog(dynamic_cast<QWidget*>(parent()));
 
         dialog.setUserName(username_);
         dialog.setPassword(password_);
