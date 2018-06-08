@@ -68,11 +68,6 @@ void DesktopWidget::resizeDesktopFrame(const QSize& screen_size)
     resize(screen_size);
 }
 
-void DesktopWidget::drawDesktopFrame()
-{
-    update();
-}
-
 DesktopFrame* DesktopWidget::desktopFrame()
 {
     return frame_.get();
@@ -204,15 +199,13 @@ void DesktopWidget::executeKeySequense(int key_sequence)
         emit sendKeyEvent(*it, flags);
 }
 
-void DesktopWidget::paintEvent(QPaintEvent* event)
+void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 {
     if (frame_)
     {
         QPainter painter(this);
         painter.drawImage(rect(), frame_->constImage());
     }
-
-    emit updated();
 }
 
 void DesktopWidget::mouseMoveEvent(QMouseEvent* event)

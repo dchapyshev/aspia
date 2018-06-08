@@ -92,7 +92,6 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
 
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
     connect(desktop_, &DesktopWidget::sendKeyEvent, this, &DesktopWindow::sendKeyEvent);
-    connect(desktop_, &DesktopWidget::updated, panel_, QOverload<>::of(&DesktopPanel::update));
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
@@ -110,7 +109,8 @@ void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
 
 void DesktopWindow::drawDesktopFrame()
 {
-    desktop_->drawDesktopFrame();
+    desktop_->update();
+    panel_->update();
 }
 
 DesktopFrame* DesktopWindow::desktopFrame()

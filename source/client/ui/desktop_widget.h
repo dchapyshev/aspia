@@ -27,7 +27,6 @@ public:
     ~DesktopWidget();
 
     void resizeDesktopFrame(const QSize& screen_size);
-    void drawDesktopFrame();
     DesktopFrame* desktopFrame();
 
     void doMouseEvent(QEvent::Type event_type,
@@ -42,7 +41,6 @@ public slots:
 signals:
     void sendKeyEvent(quint32 usb_keycode, quint32 flags);
     void sendPointerEvent(const QPoint& pos, quint32 mask);
-    void updated();
 
 protected:
     // QWidget implementation.
