@@ -113,6 +113,9 @@
          <iconset resource="../../resources/resources.qrc">
           <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
         </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
      </layout>
