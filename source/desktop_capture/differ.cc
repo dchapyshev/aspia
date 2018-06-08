@@ -17,7 +17,7 @@ constexpr int kBytesPerPixel = 4;
 constexpr int kBlockSize = 8;
 constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
 
-quint8 DiffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
+quint8 diffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
 {
     for (int y = 0; y < kBlockSize; ++y)
     {
@@ -39,7 +39,7 @@ quint8 DiffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per
 // Note that if we force the capturer to always return images whose width and
 // height are multiples of kBlockSize, then this will never be called.
 //
-quint8 DiffPartialBlock(const quint8* prev_image,
+quint8 diffPartialBlock(const quint8* prev_image,
                         const quint8* curr_image,
                         int bytes_per_row,
                         int bytes_per_block,
@@ -141,7 +141,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
         // This condition should rarely, if ever, occur.
         if (partial_column_width_ != 0)
         {
-            *is_different = DiffPartialBlock(prev_block,
+            *is_different = diffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
                                              kBytesPerBlock,
@@ -167,7 +167,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
-            *is_different = DiffPartialBlock(prev_block,
+            *is_different = diffPartialBlock(prev_block,
                                              curr_block,
                                              bytes_per_row_,
                                              kBytesPerBlock,
@@ -181,7 +181,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
         if (partial_column_width_ != 0)
         {
             *is_different =
-                DiffPartialBlock(prev_block,
+                diffPartialBlock(prev_block,
                                  curr_block,
                                  bytes_per_row_,
                                  partial_column_width_ * kBytesPerPixel,
