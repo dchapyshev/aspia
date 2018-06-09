@@ -24,7 +24,7 @@ public:
 private slots:
     void onServiceInstallRemove();
     void onServiceStartStop();
-    void onContextMenu(const QPoint& point);
+    void onUserContextMenu(const QPoint& point);
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onAddUser();
     void onModifyUser();
@@ -35,6 +35,9 @@ private:
     void installTranslators(const QString& locale);
     void removeTranslators();
     void createLanguageList(const QString& current_locale);
+    void retranslateUi(const QString& locale);
+    void setConfigChanged(bool changed);
+    bool isConfigChanged() const;
     void reloadUserList();
     void reloadServiceStatus();
     bool restartService();

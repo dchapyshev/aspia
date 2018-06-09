@@ -27,11 +27,14 @@ const char kHostServiceFileName[] = "aspia_host_service.exe";
 
 QHash<QString, QStringList> createLocaleList()
 {
-    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
-    QHash<QString, QStringList> locale_list;
+    QString translations_dir =
+        QApplication::applicationDirPath() + QStringLiteral("/translations/");
 
-    QStringList qm_file_list = QDir(translations_dir).entryList(QStringList() << "*.qm");
-    QRegExp regexp("([a-zA-Z0-9-_]+)_([^.]*).qm");
+    QStringList qm_file_list =
+        QDir(translations_dir).entryList(QStringList() << QStringLiteral("*.qm"));
+
+    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
+    QHash<QString, QStringList> locale_list;
 
     for (const auto& qm_file : qm_file_list)
     {
@@ -71,6 +74,17 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
 
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
+    connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this](int /* index */)
+    {
+        setConfigChanged(true);
+    });
+
+    connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged), [this](int /* value */)
+    {
+        setConfigChanged(true);
+    });
+
     connect(ui.pushbutton_service_install_remove, &QPushButton::pressed,
             this, &HostConfigDialog::onServiceInstallRemove);
 
@@ -78,7 +92,7 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
             this, &HostConfigDialog::onServiceStartStop);
 
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
-            this, &HostConfigDialog::onContextMenu);
+            this, &HostConfigDialog::onUserContextMenu);
 
     connect(ui.tree_users, &QTreeWidget::currentItemChanged,
             this, &HostConfigDialog::onCurrentUserChanged);
@@ -105,6 +119,8 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     reloadUserList();
 
     ui.spinbox_port->setValue(settings.tcpPort());
+
+    setConfigChanged(false);
 }
 
 HostConfigDialog::~HostConfigDialog()
@@ -121,7 +137,7 @@ void HostConfigDialog::onServiceInstallRemove()
             HostService host_service;
 
             QString file_path =
-                QCoreApplication::applicationDirPath() + "/" + kHostServiceFileName;
+                QCoreApplication::applicationDirPath() + QLatin1Char('/') + kHostServiceFileName;
 
             ServiceController controller =
                 ServiceController::install(host_service.serviceName(),
@@ -211,7 +227,7 @@ void HostConfigDialog::onServiceStartStop()
     reloadServiceStatus();
 }
 
-void HostConfigDialog::onContextMenu(const QPoint& point)
+void HostConfigDialog::onUserContextMenu(const QPoint& point)
 {
     QMenu menu;
 
@@ -229,7 +245,8 @@ void HostConfigDialog::onContextMenu(const QPoint& point)
     menu.exec(ui.tree_users->mapToGlobal(point));
 }
 
-void HostConfigDialog::onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+void HostConfigDialog::onCurrentUserChanged(
+    QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     ui.button_modify->setEnabled(true);
     ui.button_delete->setEnabled(true);
@@ -246,23 +263,27 @@ void HostConfigDialog::onAddUser()
     if (UserDialog(&user_list_, &user, this).exec() == QDialog::Accepted)
     {
         user_list_.push_back(user);
+        setConfigChanged(true);
         reloadUserList();
     }
 }
 
 void HostConfigDialog::onModifyUser()
 {
-    UserTreeItem* user_item = reinterpret_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
         return;
 
     if (UserDialog(&user_list_, user_item->user(), this).exec() == QDialog::Accepted)
+    {
+        setConfigChanged(true);
         reloadUserList();
+    }
 }
 
 void HostConfigDialog::onDeleteUser()
 {
-    UserTreeItem* user_item = reinterpret_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* user_item = dynamic_cast<UserTreeItem*>(ui.tree_users->currentItem());
     if (!user_item)
         return;
 
@@ -274,6 +295,7 @@ void HostConfigDialog::onDeleteUser()
                               QMessageBox::No) == QMessageBox::Yes)
     {
         user_list_.removeAt(user_item->userIndex());
+        setConfigChanged(true);
         reloadUserList();
     }
 }
@@ -282,7 +304,8 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
 
-    if (standard_button == QDialogButtonBox::Ok || standard_button == QDialogButtonBox::Apply)
+    if (isConfigChanged() && (standard_button == QDialogButtonBox::Ok ||
+                              standard_button == QDialogButtonBox::Apply))
     {
         HostSettings settings;
 
@@ -299,11 +322,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         QString new_locale = ui.combobox_language->currentData().toString();
 
         if (standard_button == QDialogButtonBox::Apply)
-        {
-            removeTranslators();
-            installTranslators(new_locale);
-            ui.retranslateUi(this);
-        }
+            retranslateUi(new_locale);
 
         settings.setLocale(new_locale);
         settings.setTcpPort(ui.spinbox_port->value());
@@ -331,6 +350,8 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 }
             }
         }
+
+        setConfigChanged(false);
     }
 
     if (standard_button == QDialogButtonBox::Apply)
@@ -351,7 +372,9 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
 void HostConfigDialog::installTranslators(const QString& locale)
 {
-    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
+    QString translations_dir =
+        QApplication::applicationDirPath() + QStringLiteral("/translations/");
+
     QStringList qm_file_list = locale_list_[locale];
 
     for (const auto& qm_file : qm_file_list)
@@ -396,8 +419,8 @@ void HostConfigDialog::createLanguageList(const QString& current_locale)
         locale_list.push_back(iter.key());
     }
 
-    if (!locale_list_.contains("en"))
-        locale_list.push_back("en");
+    if (!locale_list_.contains(QStringLiteral("en")))
+        locale_list.push_back(QStringLiteral("en"));
 
     std::sort(locale_list.begin(), locale_list.end(),
               [](const QString& a, const QString& b)
@@ -416,6 +439,38 @@ void HostConfigDialog::createLanguageList(const QString& current_locale)
         if (current_locale == locale)
             ui.combobox_language->setCurrentText(language);
     }
+}
+
+void HostConfigDialog::retranslateUi(const QString& locale)
+{
+    removeTranslators();
+    installTranslators(locale);
+    ui.retranslateUi(this);
+    reloadServiceStatus();
+}
+
+void HostConfigDialog::setConfigChanged(bool changed)
+{
+    QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
+    if (!apply_button)
+    {
+        qFatal("Button not found");
+        return;
+    }
+
+    apply_button->setEnabled(changed);
+}
+
+bool HostConfigDialog::isConfigChanged() const
+{
+    QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::Apply);
+    if (!apply_button)
+    {
+        qFatal("Button not found");
+        return false;
+    }
+
+    return apply_button->isEnabled();
 }
 
 void HostConfigDialog::reloadUserList()
