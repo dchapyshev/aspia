@@ -58,9 +58,56 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
         ui.button_send_keys->setHidden(true);
         ui.button_ctrl_alt_del->setHidden(true);
     }
+
+    adjustSize();
+    ui.frame->setFixedWidth(ui.frame_buttons->width());
+
+    ui.frame_buttons->hide();
+    adjustSize();
 }
 
 DesktopPanel::~DesktopPanel() = default;
+
+void DesktopPanel::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == hide_timer_id_)
+    {
+        killTimer(hide_timer_id_);
+        hide_timer_id_ = 0;
+
+        ui.frame_buttons->hide();
+        ui.frame->show();
+
+        adjustSize();
+        return;
+    }
+
+    QFrame::timerEvent(event);
+}
+
+void DesktopPanel::enterEvent(QEvent* event)
+{
+    if (hide_timer_id_)
+    {
+        killTimer(hide_timer_id_);
+        hide_timer_id_ = 0;
+    }
+
+    ui.frame_buttons->show();
+    ui.frame->hide();
+
+    adjustSize();
+
+    QFrame::enterEvent(event);
+}
+
+void DesktopPanel::leaveEvent(QEvent* event)
+{
+    if (!ui.button_pin->isChecked() && !hide_timer_id_)
+        hide_timer_id_ = startTimer(std::chrono::seconds(1));
+
+    QFrame::leaveEvent(event);
+}
 
 void DesktopPanel::onFullscreenButton(bool checked)
 {

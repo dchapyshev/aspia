@@ -54,7 +54,7 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     desktop_ = new DesktopWidget(this);
 
     scroll_area_ = new QScrollArea(this);
-    scroll_area_->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    scroll_area_->setAlignment(Qt::AlignCenter);
     scroll_area_->setFrameShape(QFrame::NoFrame);
     scroll_area_->setAutoFillBackground(true);
     scroll_area_->setWidget(desktop_);
@@ -68,7 +68,6 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     layout_->addWidget(scroll_area_);
 
     panel_ = new DesktopPanel(computer_->session_type(), this);
-    panel_->adjustSize();
 
     connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);

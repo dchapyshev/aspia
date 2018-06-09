@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>pin.png</file>
     <file>arrow-left-gray.png</file>
     <file>arrow-right-gray.png</file>
     <file>heart.png</file>

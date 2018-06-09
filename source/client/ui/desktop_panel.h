@@ -29,6 +29,12 @@ signals:
     void switchToAutosize();
     void settingsButton();
 
+protected:
+    // QFrame implementation.
+    void timerEvent(QTimerEvent* event) override;
+    void enterEvent(QEvent* event) override;
+    void leaveEvent(QEvent* event) override;
+
 private slots:
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
@@ -42,6 +48,7 @@ private slots:
 private:
     Ui::DesktopPanel ui;
     QPointer<QMenu> keys_menu_;
+    int hide_timer_id_ = 0;
 
     Q_DISABLE_COPY(DesktopPanel)
 };
