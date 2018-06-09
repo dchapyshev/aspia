@@ -118,12 +118,12 @@
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="28"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="24"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="35"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="31"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
@@ -136,22 +136,22 @@
         <translation>Verbinding</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="42"/>
+        <location filename="../client/ui/client_dialog.ui" line="38"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="58"/>
+        <location filename="../client/ui/client_dialog.ui" line="54"/>
         <source>Server Address:</source>
         <translation>Server Adres:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="72"/>
+        <location filename="../client/ui/client_dialog.ui" line="68"/>
         <source>Server Port:</source>
         <translation>Server Poort:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="92"/>
+        <location filename="../client/ui/client_dialog.ui" line="88"/>
         <source>Session Type:</source>
         <translation>Sessie Type:</translation>
     </message>
@@ -230,185 +230,185 @@
 <context>
     <name>ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.ui" line="66"/>
+        <location filename="../console/console_window.ui" line="62"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="80"/>
+        <location filename="../console/console_window.ui" line="76"/>
         <source>&amp;Edit</source>
         <translation>B&amp;ewerken</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="94"/>
+        <location filename="../console/console_window.ui" line="90"/>
         <source>&amp;Session Type</source>
         <translation>&amp;Sessie Type</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="102"/>
+        <location filename="../console/console_window.ui" line="98"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="110"/>
+        <location filename="../console/console_window.ui" line="106"/>
         <source>&amp;View</source>
         <translation>&amp;Beeld</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="114"/>
+        <location filename="../console/console_window.ui" line="110"/>
         <source>&amp;Language</source>
         <translation>&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="175"/>
+        <location filename="../console/console_window.ui" line="171"/>
         <source>&amp;New</source>
         <translation>&amp;Nieuw</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="178"/>
+        <location filename="../console/console_window.ui" line="174"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="187"/>
+        <location filename="../console/console_window.ui" line="183"/>
         <source>&amp;Open...</source>
         <translation>&amp;Openen...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="190"/>
+        <location filename="../console/console_window.ui" line="186"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="202"/>
+        <location filename="../console/console_window.ui" line="198"/>
         <source>&amp;Save</source>
         <translation>O&amp;pslaan</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="205"/>
+        <location filename="../console/console_window.ui" line="201"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="213"/>
+        <location filename="../console/console_window.ui" line="209"/>
         <source>Save &amp;As...</source>
         <translation>Opslaan &amp;Als...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="216"/>
+        <location filename="../console/console_window.ui" line="212"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="224"/>
+        <location filename="../console/console_window.ui" line="220"/>
         <source>&amp;Close</source>
         <translation>S&amp;luiten</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="227"/>
+        <location filename="../console/console_window.ui" line="223"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="236"/>
+        <location filename="../console/console_window.ui" line="232"/>
         <source>&amp;Exit</source>
         <translation>&amp;Beeindigen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="248"/>
+        <location filename="../console/console_window.ui" line="244"/>
         <source>Add Computer Group</source>
         <translation>Computer Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="260"/>
+        <location filename="../console/console_window.ui" line="256"/>
         <source>Modify Computer Group</source>
         <translation>Computer Groep Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="272"/>
+        <location filename="../console/console_window.ui" line="268"/>
         <source>Delete Computer Group</source>
         <translation>Computer Groep Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="284"/>
+        <location filename="../console/console_window.ui" line="280"/>
         <source>Add Computer</source>
         <translation>Computer Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="296"/>
+        <location filename="../console/console_window.ui" line="292"/>
         <source>Modify Computer</source>
         <translation>Computer Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="308"/>
+        <location filename="../console/console_window.ui" line="304"/>
         <source>Delete Computer</source>
         <translation>Computer Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="323"/>
+        <location filename="../console/console_window.ui" line="319"/>
         <source>Desktop &amp;Manage</source>
         <translation>Bureaublad &amp;Beheren</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="335"/>
+        <location filename="../console/console_window.ui" line="331"/>
         <source>Desktop &amp;View</source>
         <translation>Bureaublad &amp;Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="347"/>
+        <location filename="../console/console_window.ui" line="343"/>
         <source>&amp;File Transfer</source>
         <translation>&amp;Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="356"/>
+        <location filename="../console/console_window.ui" line="352"/>
         <source>&amp;Online Help...</source>
         <translation>Online &amp;Hulp...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="359"/>
+        <location filename="../console/console_window.ui" line="355"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="368"/>
+        <location filename="../console/console_window.ui" line="364"/>
         <source>&amp;About</source>
         <translation>&amp;Over</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="380"/>
+        <location filename="../console/console_window.ui" line="376"/>
         <source>Address Book Properties</source>
         <translation>Adresboek eigenschappen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="389"/>
-        <location filename="../console/console_window.ui" line="392"/>
+        <location filename="../console/console_window.ui" line="385"/>
+        <location filename="../console/console_window.ui" line="388"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="401"/>
-        <location filename="../console/console_window.ui" line="404"/>
+        <location filename="../console/console_window.ui" line="397"/>
+        <location filename="../console/console_window.ui" line="400"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="413"/>
-        <location filename="../console/console_window.ui" line="416"/>
+        <location filename="../console/console_window.ui" line="409"/>
+        <location filename="../console/console_window.ui" line="412"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="427"/>
+        <location filename="../console/console_window.ui" line="423"/>
         <source>Tool Bar</source>
         <translation>Werkbalk</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="438"/>
+        <location filename="../console/console_window.ui" line="434"/>
         <source>Status Bar</source>
         <translation>Status Balk</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="447"/>
+        <location filename="../console/console_window.ui" line="443"/>
         <source>Fast Connect...</source>
         <translation>Snel Verbinden...</translation>
     </message>
@@ -464,32 +464,37 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="56"/>
+        <location filename="../client/ui/desktop_panel.ui" line="80"/>
+        <source>Lock toolbar</source>
+        <translation>Werkbalk vergrendelen</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="106"/>
         <source>Session configuration</source>
         <translation>Sessie configuratie</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="79"/>
+        <location filename="../client/ui/desktop_panel.ui" line="129"/>
         <source>Automatic window size</source>
         <translation>Automatische scherm grootte</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="102"/>
+        <location filename="../client/ui/desktop_panel.ui" line="152"/>
         <source>Switch to full screen mode or back</source>
         <translation>Tussen volledig scherm schakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="128"/>
+        <location filename="../client/ui/desktop_panel.ui" line="178"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Stuur Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="151"/>
+        <location filename="../client/ui/desktop_panel.ui" line="201"/>
         <source>Send key sequence</source>
         <translation>Stuur toetsencombinatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="191"/>
+        <location filename="../client/ui/desktop_panel.ui" line="275"/>
         <source>Custom...</source>
         <translation>Aangepast...</translation>
     </message>
@@ -611,58 +616,58 @@
         <translation>Host Configuratie</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="31"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Basis</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="37"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="33"/>
         <source>User Interface</source>
         <translation>Gebruikers interface</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="43"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="39"/>
         <source>Language:</source>
         <translation>Taal:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="56"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="52"/>
         <source>Service</source>
         <translation>Service</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="64"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="60"/>
         <source>Service Status:</source>
         <translation>Sertice Status:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="114"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="110"/>
         <source>Incoming Connections</source>
         <translation>Binnenkomende Verbindingen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="120"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="116"/>
         <source>Port:</source>
         <translation>Poort:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="157"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="241"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="153"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="237"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="264"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="260"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="273"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="269"/>
         <source>Modify</source>
         <translation>Aanpassen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="282"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="278"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
@@ -688,7 +693,7 @@
         <translation>Toetsencombinatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/key_sequence_dialog.ui" line="30"/>
+        <location filename="../client/ui/key_sequence_dialog.ui" line="26"/>
         <source>Key sequence to send:</source>
         <translation>Te versturen toetsencombinatie:</translation>
     </message>
@@ -835,7 +840,7 @@
         <translation>Verbindings Status</translation>
     </message>
     <message>
-        <location filename="../client/ui/status_dialog.ui" line="42"/>
+        <location filename="../client/ui/status_dialog.ui" line="38"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -848,27 +853,27 @@
         <translation>Gebruiker Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="31"/>
+        <location filename="../host/ui/user_dialog.ui" line="27"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="38"/>
+        <location filename="../host/ui/user_dialog.ui" line="34"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="45"/>
+        <location filename="../host/ui/user_dialog.ui" line="41"/>
         <source>Password (repeat):</source>
         <translation>Wachtwoord (nogmaals):</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="77"/>
+        <location filename="../host/ui/user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
         <translation>Gebruikers account uitschakelen</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="84"/>
+        <location filename="../host/ui/user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation>Toegestane sessie types:</translation>
     </message>
@@ -1418,12 +1423,12 @@
         <translation>Aspia Bureaublad Weergave</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="172"/>
+        <location filename="../client/ui/desktop_window.cc" line="170"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="173"/>
+        <location filename="../client/ui/desktop_window.cc" line="171"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>De huidige video encoding wordt niet ondersteund door de host. Verander alstublieft de video encoding.</translation>
     </message>

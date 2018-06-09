@@ -118,12 +118,12 @@
         <translation>Авторизация</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="28"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="24"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="35"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="31"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
@@ -136,22 +136,22 @@
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="42"/>
+        <location filename="../client/ui/client_dialog.ui" line="38"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="58"/>
+        <location filename="../client/ui/client_dialog.ui" line="54"/>
         <source>Server Address:</source>
         <translation>Адрес сервера:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="72"/>
+        <location filename="../client/ui/client_dialog.ui" line="68"/>
         <source>Server Port:</source>
         <translation>Порт сервера:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="92"/>
+        <location filename="../client/ui/client_dialog.ui" line="88"/>
         <source>Session Type:</source>
         <translation>Тип сессии:</translation>
     </message>
@@ -230,185 +230,185 @@
 <context>
     <name>ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.ui" line="66"/>
+        <location filename="../console/console_window.ui" line="62"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="80"/>
+        <location filename="../console/console_window.ui" line="76"/>
         <source>&amp;Edit</source>
         <translation>&amp;Правка</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="94"/>
+        <location filename="../console/console_window.ui" line="90"/>
         <source>&amp;Session Type</source>
         <translation>&amp;Тип сессии</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="102"/>
+        <location filename="../console/console_window.ui" line="98"/>
         <source>&amp;Help</source>
         <translation>П&amp;омощь</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="110"/>
+        <location filename="../console/console_window.ui" line="106"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="114"/>
+        <location filename="../console/console_window.ui" line="110"/>
         <source>&amp;Language</source>
         <translation>&amp;Язык (Language)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="175"/>
+        <location filename="../console/console_window.ui" line="171"/>
         <source>&amp;New</source>
         <translation>&amp;Новый</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="178"/>
+        <location filename="../console/console_window.ui" line="174"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="187"/>
+        <location filename="../console/console_window.ui" line="183"/>
         <source>&amp;Open...</source>
         <translation>&amp;Открыть...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="190"/>
+        <location filename="../console/console_window.ui" line="186"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="202"/>
+        <location filename="../console/console_window.ui" line="198"/>
         <source>&amp;Save</source>
         <translation>&amp;Сохранить</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="205"/>
+        <location filename="../console/console_window.ui" line="201"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="213"/>
+        <location filename="../console/console_window.ui" line="209"/>
         <source>Save &amp;As...</source>
         <translation>Сохранить &amp;как...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="216"/>
+        <location filename="../console/console_window.ui" line="212"/>
         <source>Ctrl+Alt+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="224"/>
+        <location filename="../console/console_window.ui" line="220"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="227"/>
+        <location filename="../console/console_window.ui" line="223"/>
         <source>Ctrl+W</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="236"/>
+        <location filename="../console/console_window.ui" line="232"/>
         <source>&amp;Exit</source>
         <translation>&amp;Выход</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="248"/>
+        <location filename="../console/console_window.ui" line="244"/>
         <source>Add Computer Group</source>
         <translation>Добавить группу компьютеров</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="260"/>
+        <location filename="../console/console_window.ui" line="256"/>
         <source>Modify Computer Group</source>
         <translation>Изменить группу компьютеров</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="272"/>
+        <location filename="../console/console_window.ui" line="268"/>
         <source>Delete Computer Group</source>
         <translation>Удалить группу компьютеров</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="284"/>
+        <location filename="../console/console_window.ui" line="280"/>
         <source>Add Computer</source>
         <translation>Добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="296"/>
+        <location filename="../console/console_window.ui" line="292"/>
         <source>Modify Computer</source>
         <translation>Изменить компьютер</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="308"/>
+        <location filename="../console/console_window.ui" line="304"/>
         <source>Delete Computer</source>
         <translation>Удалить компьютер</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="323"/>
+        <location filename="../console/console_window.ui" line="319"/>
         <source>Desktop &amp;Manage</source>
         <translation>Управление &amp;рабочим столом</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="335"/>
+        <location filename="../console/console_window.ui" line="331"/>
         <source>Desktop &amp;View</source>
         <translation>&amp;Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="347"/>
+        <location filename="../console/console_window.ui" line="343"/>
         <source>&amp;File Transfer</source>
         <translation>Передача &amp;файлов</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="356"/>
+        <location filename="../console/console_window.ui" line="352"/>
         <source>&amp;Online Help...</source>
         <translation>Онлайн &amp;справка...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="359"/>
+        <location filename="../console/console_window.ui" line="355"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="368"/>
+        <location filename="../console/console_window.ui" line="364"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="380"/>
+        <location filename="../console/console_window.ui" line="376"/>
         <source>Address Book Properties</source>
         <translation>Свойства адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="389"/>
-        <location filename="../console/console_window.ui" line="392"/>
+        <location filename="../console/console_window.ui" line="385"/>
+        <location filename="../console/console_window.ui" line="388"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="401"/>
-        <location filename="../console/console_window.ui" line="404"/>
+        <location filename="../console/console_window.ui" line="397"/>
+        <location filename="../console/console_window.ui" line="400"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="413"/>
-        <location filename="../console/console_window.ui" line="416"/>
+        <location filename="../console/console_window.ui" line="409"/>
+        <location filename="../console/console_window.ui" line="412"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="427"/>
+        <location filename="../console/console_window.ui" line="423"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="438"/>
+        <location filename="../console/console_window.ui" line="434"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="447"/>
+        <location filename="../console/console_window.ui" line="443"/>
         <source>Fast Connect...</source>
         <translation>Быстрое подключение...</translation>
     </message>
@@ -464,32 +464,37 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="56"/>
+        <location filename="../client/ui/desktop_panel.ui" line="80"/>
+        <source>Lock toolbar</source>
+        <translation>Закрепить панель инструментов</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="106"/>
         <source>Session configuration</source>
         <translation>Параметры сессии</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="79"/>
+        <location filename="../client/ui/desktop_panel.ui" line="129"/>
         <source>Automatic window size</source>
         <translation>Автоматический размер окна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="102"/>
+        <location filename="../client/ui/desktop_panel.ui" line="152"/>
         <source>Switch to full screen mode or back</source>
         <translation>Переключиться на полный экран (или назад)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="128"/>
+        <location filename="../client/ui/desktop_panel.ui" line="178"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Отправить Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="151"/>
+        <location filename="../client/ui/desktop_panel.ui" line="201"/>
         <source>Send key sequence</source>
         <translation>Отправить комбинацию клавиш</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="191"/>
+        <location filename="../client/ui/desktop_panel.ui" line="275"/>
         <source>Custom...</source>
         <translation>Другая...</translation>
     </message>
@@ -611,58 +616,58 @@
         <translation>Конфигурация сервера</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="31"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="27"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="37"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="33"/>
         <source>User Interface</source>
         <translation>Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="43"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="39"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="56"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="52"/>
         <source>Service</source>
         <translation>Служба</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="64"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="60"/>
         <source>Service Status:</source>
         <translation>Состояние службы:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="114"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="110"/>
         <source>Incoming Connections</source>
         <translation>Входящие подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="120"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="116"/>
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="157"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="241"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="153"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="237"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="264"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="260"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="273"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="269"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="282"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="278"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -688,7 +693,7 @@
         <translation>Сочетание клавиш</translation>
     </message>
     <message>
-        <location filename="../client/ui/key_sequence_dialog.ui" line="30"/>
+        <location filename="../client/ui/key_sequence_dialog.ui" line="26"/>
         <source>Key sequence to send:</source>
         <translation>Сочетание клавиш для отправки:</translation>
     </message>
@@ -835,7 +840,7 @@
         <translation>Состояние подключения</translation>
     </message>
     <message>
-        <location filename="../client/ui/status_dialog.ui" line="42"/>
+        <location filename="../client/ui/status_dialog.ui" line="38"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -848,27 +853,27 @@
         <translation>Свойства пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="31"/>
+        <location filename="../host/ui/user_dialog.ui" line="27"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="38"/>
+        <location filename="../host/ui/user_dialog.ui" line="34"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="45"/>
+        <location filename="../host/ui/user_dialog.ui" line="41"/>
         <source>Password (repeat):</source>
         <translation>Пароль (повторить):</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="77"/>
+        <location filename="../host/ui/user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
         <translation>Отключить аккаунт пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.ui" line="84"/>
+        <location filename="../host/ui/user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
         <translation>Разрешенные типы сессий:</translation>
     </message>
@@ -1423,12 +1428,12 @@
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="172"/>
+        <location filename="../client/ui/desktop_window.cc" line="170"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="173"/>
+        <location filename="../client/ui/desktop_window.cc" line="171"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущая кодировка видео не поддерживается хостом. Пожалуйста, укажите другую кодировку.</translation>
     </message>
