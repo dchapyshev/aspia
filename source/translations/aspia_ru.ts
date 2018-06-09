@@ -881,52 +881,52 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="70"/>
+        <location filename="../console/about_dialog.cc" line="69"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="74"/>
+        <location filename="../console/about_dialog.cc" line="73"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="75"/>
+        <location filename="../console/about_dialog.cc" line="74"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="80"/>
+        <location filename="../console/about_dialog.cc" line="79"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="84"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="87"/>
+        <location filename="../console/about_dialog.cc" line="86"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="90"/>
+        <location filename="../console/about_dialog.cc" line="89"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="92"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="94"/>
+        <location filename="../console/about_dialog.cc" line="93"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
@@ -934,63 +934,63 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="40"/>
+        <location filename="../console/address_book_dialog.cc" line="39"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="42"/>
+        <location filename="../console/address_book_dialog.cc" line="41"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="56"/>
+        <location filename="../console/address_book_dialog.cc" line="55"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчек для изменения</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="133"/>
+        <location filename="../console/address_book_dialog.cc" line="132"/>
         <source>Too long name. The maximum length of the name is 64 characters.</source>
         <translation>Слишком длинное имя. Максимальная длинна имени 64 символа.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="138"/>
+        <location filename="../console/address_book_dialog.cc" line="137"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="145"/>
+        <location filename="../console/address_book_dialog.cc" line="144"/>
         <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
         <translation>Слишком длинный коментарий. Максимальная длинна коментария 2048 символов.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="174"/>
+        <location filename="../console/address_book_dialog.cc" line="173"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="180"/>
+        <location filename="../console/address_book_dialog.cc" line="179"/>
         <source>Password can not be shorter than 8 characters.</source>
         <translation>Пароль не может быть короче 8 символов.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="267"/>
-        <location filename="../console/address_book_dialog.cc" line="289"/>
+        <location filename="../console/address_book_dialog.cc" line="266"/>
+        <location filename="../console/address_book_dialog.cc" line="288"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="268"/>
+        <location filename="../console/address_book_dialog.cc" line="267"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>При изменении количества итераций хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="290"/>
+        <location filename="../console/address_book_dialog.cc" line="289"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>При изменении размера соли для хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="328"/>
+        <location filename="../console/address_book_dialog.cc" line="327"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1138,17 +1138,17 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="30"/>
+        <location filename="../client/ui/client_dialog.cc" line="29"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="34"/>
+        <location filename="../client/ui/client_dialog.cc" line="33"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="38"/>
+        <location filename="../client/ui/client_dialog.cc" line="37"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
@@ -1238,22 +1238,22 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="41"/>
+        <location filename="../console/computer_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="45"/>
+        <location filename="../console/computer_dialog.cc" line="44"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="49"/>
+        <location filename="../console/computer_dialog.cc" line="48"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="153"/>
+        <location filename="../console/computer_dialog.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1262,17 +1262,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="159"/>
+        <location filename="../console/computer_dialog.cc" line="158"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="166"/>
+        <location filename="../console/computer_dialog.cc" line="165"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="174"/>
+        <location filename="../console/computer_dialog.cc" line="173"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
@@ -1281,7 +1281,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="182"/>
+        <location filename="../console/computer_dialog.cc" line="181"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1290,7 +1290,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="212"/>
+        <location filename="../console/computer_dialog.cc" line="211"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1298,7 +1298,7 @@
 <context>
     <name>aspia::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="52"/>
+        <location filename="../console/computer_group_dialog.cc" line="51"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1307,12 +1307,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="58"/>
+        <location filename="../console/computer_group_dialog.cc" line="57"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="65"/>
+        <location filename="../console/computer_group_dialog.cc" line="64"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1321,7 +1321,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="91"/>
+        <location filename="../console/computer_group_dialog.cc" line="90"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1385,32 +1385,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="63"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="64"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="128"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="126"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1536,27 +1536,27 @@
 <context>
     <name>aspia::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="35"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="33"/>
         <source>Deleting: %1</source>
         <translation>Удаление: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="49"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="47"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="58"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="56"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="61"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="59"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="64"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="62"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1624,47 +1624,47 @@
 <context>
     <name>aspia::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="37"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="35"/>
         <source>Current Task: Copying items.</source>
         <translation>Текущая задача: копирование элементов.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="44"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="42"/>
         <source>From: %1</source>
         <translation>Из: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="49"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="47"/>
         <source>To: %1</source>
         <translation>В: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="69"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="67"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="82"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="80"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="85"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="83"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="86"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="89"/>
         <source>Replace All</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="94"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="92"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1685,98 +1685,98 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="153"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="176"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="216"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="318"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="347"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="151"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="174"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="199"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="214"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="316"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="345"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="154"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="152"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="177"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="175"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="202"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="217"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="215"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="291"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="339"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="289"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="337"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="292"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="290"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="315"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="313"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="334"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="332"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="346"/>
         <source>Could not restart the service.</source>
         <translation>Не удалось перезапустить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="497"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="495"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="508"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="506"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="509"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="507"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="515"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="513"/>
         <source>Stopped</source>
         <translation>Остановлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="516"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="514"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="523"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="521"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="531"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="529"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="532"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="530"/>
         <source>Not Installed</source>
         <translation>Не установлена</translation>
     </message>
@@ -1808,12 +1808,12 @@
 <context>
     <name>aspia::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="28"/>
+        <location filename="../console/open_address_book_dialog.cc" line="27"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="32"/>
+        <location filename="../console/open_address_book_dialog.cc" line="31"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
@@ -1821,50 +1821,50 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="29"/>
+        <location filename="../host/ui/user_dialog.cc" line="28"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчек для изменения</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="71"/>
+        <location filename="../host/ui/user_dialog.cc" line="70"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="75"/>
+        <location filename="../host/ui/user_dialog.cc" line="74"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="79"/>
+        <location filename="../host/ui/user_dialog.cc" line="78"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="135"/>
-        <location filename="../host/ui/user_dialog.cc" line="149"/>
-        <location filename="../host/ui/user_dialog.cc" line="165"/>
-        <location filename="../host/ui/user_dialog.cc" line="175"/>
+        <location filename="../host/ui/user_dialog.cc" line="134"/>
+        <location filename="../host/ui/user_dialog.cc" line="148"/>
+        <location filename="../host/ui/user_dialog.cc" line="164"/>
+        <location filename="../host/ui/user_dialog.cc" line="174"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="136"/>
+        <location filename="../host/ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="149"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="166"/>
+        <location filename="../host/ui/user_dialog.cc" line="165"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="176"/>
+        <location filename="../host/ui/user_dialog.cc" line="175"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>

@@ -881,52 +881,52 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="70"/>
+        <location filename="../console/about_dialog.cc" line="69"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="74"/>
+        <location filename="../console/about_dialog.cc" line="73"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="75"/>
+        <location filename="../console/about_dialog.cc" line="74"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="80"/>
+        <location filename="../console/about_dialog.cc" line="79"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="84"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="87"/>
+        <location filename="../console/about_dialog.cc" line="86"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="90"/>
+        <location filename="../console/about_dialog.cc" line="89"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="92"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="94"/>
+        <location filename="../console/about_dialog.cc" line="93"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
     </message>
@@ -934,65 +934,65 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="40"/>
+        <location filename="../console/address_book_dialog.cc" line="39"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="42"/>
+        <location filename="../console/address_book_dialog.cc" line="41"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="56"/>
+        <location filename="../console/address_book_dialog.cc" line="55"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="133"/>
+        <location filename="../console/address_book_dialog.cc" line="132"/>
         <source>Too long name. The maximum length of the name is 64 characters.</source>
         <translatorcomment>Might be nice to make the 64 an argument as well?</translatorcomment>
         <translation>Te lange naam. De maximum lengte is 64 karakters.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="138"/>
+        <location filename="../console/address_book_dialog.cc" line="137"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="145"/>
+        <location filename="../console/address_book_dialog.cc" line="144"/>
         <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
         <translatorcomment>Ditto, might be nice to make this 2048 a format arg as well.</translatorcomment>
         <translation>Te lang commentaar. De maximale lengte is 2048 karakters.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="174"/>
+        <location filename="../console/address_book_dialog.cc" line="173"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="180"/>
+        <location filename="../console/address_book_dialog.cc" line="179"/>
         <source>Password can not be shorter than 8 characters.</source>
         <translation>Wachtwoord mag niet korter dan 8 karakters zijn.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="267"/>
-        <location filename="../console/address_book_dialog.cc" line="289"/>
+        <location filename="../console/address_book_dialog.cc" line="266"/>
+        <location filename="../console/address_book_dialog.cc" line="288"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="268"/>
+        <location filename="../console/address_book_dialog.cc" line="267"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>Bij het veranderen van het aantal hash iteraties moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="290"/>
+        <location filename="../console/address_book_dialog.cc" line="289"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="328"/>
+        <location filename="../console/address_book_dialog.cc" line="327"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1140,17 +1140,17 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="30"/>
+        <location filename="../client/ui/client_dialog.cc" line="29"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="34"/>
+        <location filename="../client/ui/client_dialog.cc" line="33"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="38"/>
+        <location filename="../client/ui/client_dialog.cc" line="37"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
@@ -1240,22 +1240,22 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="41"/>
+        <location filename="../console/computer_dialog.cc" line="40"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="45"/>
+        <location filename="../console/computer_dialog.cc" line="44"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="49"/>
+        <location filename="../console/computer_dialog.cc" line="48"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="153"/>
+        <location filename="../console/computer_dialog.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1263,17 +1263,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="159"/>
+        <location filename="../console/computer_dialog.cc" line="158"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="166"/>
+        <location filename="../console/computer_dialog.cc" line="165"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="174"/>
+        <location filename="../console/computer_dialog.cc" line="173"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
@@ -1281,7 +1281,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="182"/>
+        <location filename="../console/computer_dialog.cc" line="181"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1289,7 +1289,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="212"/>
+        <location filename="../console/computer_dialog.cc" line="211"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1297,7 +1297,7 @@
 <context>
     <name>aspia::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="52"/>
+        <location filename="../console/computer_group_dialog.cc" line="51"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1305,12 +1305,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="58"/>
+        <location filename="../console/computer_group_dialog.cc" line="57"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="65"/>
+        <location filename="../console/computer_group_dialog.cc" line="64"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1318,7 +1318,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="91"/>
+        <location filename="../console/computer_group_dialog.cc" line="90"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1380,32 +1380,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
         <source>True color (32 bit)</source>
         <translation>Ware kleuren (32 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
         <source>High color (16 bit)</source>
         <translation>Hoge kleuren (16 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
         <source>256 colors (8 bit)</source>
         <translation>256 kleuren (8 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="63"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
         <source>64 colors (6 bit)</source>
         <translation>64 kleuren (6 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="64"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
         <source>8 colors (3 bit)</source>
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="128"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="126"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>
@@ -1531,27 +1531,27 @@
 <context>
     <name>aspia::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="35"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="33"/>
         <source>Deleting: %1</source>
         <translation>Verwijderen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="49"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="47"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="58"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="56"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="61"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="59"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="64"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="62"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
@@ -1619,47 +1619,47 @@
 <context>
     <name>aspia::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="37"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="35"/>
         <source>Current Task: Copying items.</source>
         <translation>Huidige taak: Items kopieren.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="44"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="42"/>
         <source>From: %1</source>
         <translation>Van: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="49"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="47"/>
         <source>To: %1</source>
         <translation>Naar: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="69"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="67"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="82"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="80"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="85"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="83"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="86"/>
         <source>Replace</source>
         <translation>Vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="89"/>
         <source>Replace All</source>
         <translation>Alles vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="94"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="92"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
@@ -1680,98 +1680,98 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="153"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="176"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="216"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="318"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="347"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="151"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="174"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="199"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="214"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="316"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="345"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="154"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="152"/>
         <source>The service could not be installed.</source>
         <translation>De service kon niet geinstalleerd worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="177"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="175"/>
         <source>The service could not be removed.</source>
         <translation>De service kon niet verwijderd worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="202"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
         <source>The service could not be stopped.</source>
         <translation>De service kon niet gestopt worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="217"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="215"/>
         <source>The service could not be started.</source>
         <translation>De service kon niet gestart worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="291"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="339"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="289"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="337"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="292"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="290"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="315"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="313"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="334"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="332"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="346"/>
         <source>Could not restart the service.</source>
         <translation>De service kon niet herstart worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="497"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="495"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="508"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="506"/>
         <source>Started</source>
         <translation>Gestart</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="509"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="507"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="515"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="513"/>
         <source>Stopped</source>
         <translation>Gestopt</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="516"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="514"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="523"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="521"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="531"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="529"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="532"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="530"/>
         <source>Not Installed</source>
         <translation>Niet geinstalleerd</translation>
     </message>
@@ -1803,12 +1803,12 @@
 <context>
     <name>aspia::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="28"/>
+        <location filename="../console/open_address_book_dialog.cc" line="27"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="32"/>
+        <location filename="../console/open_address_book_dialog.cc" line="31"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
@@ -1816,50 +1816,50 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="29"/>
+        <location filename="../host/ui/user_dialog.cc" line="28"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="71"/>
+        <location filename="../host/ui/user_dialog.cc" line="70"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="75"/>
+        <location filename="../host/ui/user_dialog.cc" line="74"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="79"/>
+        <location filename="../host/ui/user_dialog.cc" line="78"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="135"/>
-        <location filename="../host/ui/user_dialog.cc" line="149"/>
-        <location filename="../host/ui/user_dialog.cc" line="165"/>
-        <location filename="../host/ui/user_dialog.cc" line="175"/>
+        <location filename="../host/ui/user_dialog.cc" line="134"/>
+        <location filename="../host/ui/user_dialog.cc" line="148"/>
+        <location filename="../host/ui/user_dialog.cc" line="164"/>
+        <location filename="../host/ui/user_dialog.cc" line="174"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="136"/>
+        <location filename="../host/ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="150"/>
+        <location filename="../host/ui/user_dialog.cc" line="149"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="166"/>
+        <location filename="../host/ui/user_dialog.cc" line="165"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="176"/>
+        <location filename="../host/ui/user_dialog.cc" line="175"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
