@@ -138,7 +138,7 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
         }
     }
 
-    emit errorOccurred(tr("Protocol error: Unknown message message from host."));
+    emit errorOccurred(tr("Protocol error: Unknown message from host."));
     cancel();
 }
 
