@@ -72,8 +72,6 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     ui.setupUi(this);
     createLanguageList(current_locale);
 
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
-
     connect(ui.combobox_language, QOverload<int>::of(&QComboBox::currentIndexChanged),
             [this](int /* index */)
     {

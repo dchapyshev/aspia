@@ -35,7 +35,6 @@ ComputerDialog::ComputerDialog(QWidget* parent,
       computer_(computer)
 {
     ui.setupUi(this);
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     ui.combo_session_config->addItem(QIcon(QStringLiteral(":/icon/monitor-keyboard.png")),
                                      tr("Desktop Manage"),

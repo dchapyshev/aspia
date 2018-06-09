@@ -19,7 +19,6 @@ ClientDialog::ClientDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setFixedSize(size());
     setDefaultConfig();
 

@@ -16,8 +16,6 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setFixedSize(size());
 
     connect(ui.button_box, &QDialogButtonBox::clicked, [this](QAbstractButton* /* button */)

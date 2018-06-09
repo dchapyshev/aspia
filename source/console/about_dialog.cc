@@ -65,7 +65,6 @@ AboutDialog::AboutDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     ui.label_version->setText(tr("Version: %1").arg(QLatin1String(ASPIA_VERSION_STRING)));
 

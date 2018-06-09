@@ -18,9 +18,11 @@ namespace aspia {
 int consoleMain(int argc, char *argv[])
 {
     QApplication application(argc, argv);
+
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Console"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
+    application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     FileLogger logger;
     logger.startLogging(application);

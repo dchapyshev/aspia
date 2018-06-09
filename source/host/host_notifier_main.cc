@@ -47,6 +47,7 @@ int hostNotifierMain(int argc, char *argv[])
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");
     application.setApplicationVersion(ASPIA_VERSION_STRING);
+    application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     FileLogger logger;
     logger.startLogging(application);

@@ -30,7 +30,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
     : QDialog(parent), file_(file), data_(data), key_(key)
 {
     ui.setupUi(this);
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &AddressBookDialog::buttonBoxClicked);
 

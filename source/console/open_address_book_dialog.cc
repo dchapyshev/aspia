@@ -14,7 +14,6 @@ OpenAddressBookDialog::OpenAddressBookDialog(
     : QDialog(parent)
 {
     ui.setupUi(this);
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &OpenAddressBookDialog::showPasswordButtonToggled);
