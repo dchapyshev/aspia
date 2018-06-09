@@ -88,6 +88,7 @@ target_link_libraries(aspia_core
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
     debug Qt5ThemeSupportd
+    debug Qt5WindowsUIAutomationSupportd
     debug libprotobuf-lited
     debug libsodiumd
     debug libvpxd
@@ -97,11 +98,13 @@ target_link_libraries(aspia_core
     debug qtlibpngd
     debug qtpcre2d
     debug qwindowsd
+    debug qwindowsvistastyled
     debug zlib-ngd
     optimized Qt5AccessibilitySupport
     optimized Qt5EventDispatcherSupport
     optimized Qt5FontDatabaseSupport
     optimized Qt5ThemeSupport
+    optimized Qt5WindowsUIAutomationSupport
     optimized libprotobuf-lite
     optimized libsodium
     optimized libvpx
@@ -111,12 +114,14 @@ target_link_libraries(aspia_core
     optimized qtlibpng
     optimized qtpcre2
     optimized qwindows
+    optimized qwindowsvistastyle
     optimized zlib-ng
     crypt32
     dwmapi
     imm32
     iphlpapi
     mpr
+    netapi32
     sas
     userenv
     uxtheme

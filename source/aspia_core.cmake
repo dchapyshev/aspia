@@ -20,6 +20,7 @@ link_directories(
     ${ASPIA_THIRD_PARTY_DIR}/protobuf/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/lib
     ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/platforms
+    ${ASPIA_THIRD_PARTY_DIR}/qt/plugins/styles
     ${ASPIA_THIRD_PARTY_DIR}/libsodium/lib)
 
 list(APPEND SOURCE_BASE
