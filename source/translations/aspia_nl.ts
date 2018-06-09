@@ -1223,7 +1223,7 @@
     <name>aspia::ClientUserAuthorizer</name>
     <message>
         <location filename="../client/client_user_authorizer.cc" line="141"/>
-        <source>Protocol error: Unknown message message from host.</source>
+        <source>Protocol error: Unknown message from host.</source>
         <translation>Protocol fout: Onbekend bericht van de host.</translation>
     </message>
     <message>
@@ -1680,98 +1680,98 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="137"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="160"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="185"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="295"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="328"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="153"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="176"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="216"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="318"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="347"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="138"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="154"/>
         <source>The service could not be installed.</source>
         <translation>De service kon niet geinstalleerd worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="161"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="177"/>
         <source>The service could not be removed.</source>
         <translation>De service kon niet verwijderd worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="186"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="202"/>
         <source>The service could not be stopped.</source>
         <translation>De service kon niet gestopt worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="217"/>
         <source>The service could not be started.</source>
         <translation>De service kon niet gestart worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="270"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="320"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="291"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="339"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="271"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="292"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="292"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="315"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="315"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="334"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="329"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
         <source>Could not restart the service.</source>
         <translation>De service kon niet herstart worden.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="442"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="497"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="453"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="508"/>
         <source>Started</source>
         <translation>Gestart</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="454"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="509"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="460"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="515"/>
         <source>Stopped</source>
         <translation>Gestopt</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="461"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="516"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="468"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="523"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="476"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="531"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="477"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="532"/>
         <source>Not Installed</source>
         <translation>Niet geinstalleerd</translation>
     </message>
