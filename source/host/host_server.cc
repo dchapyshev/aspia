@@ -254,7 +254,8 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 
 void HostServer::onHostFinished(Host* host)
 {
-    qInfo() << "Session is finished for:" << host->userName();
+    qInfo() << sessionTypeToString(host->sessionType())
+            << "session is finished for" << host->userName();
 
     for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
     {
