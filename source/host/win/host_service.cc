@@ -67,9 +67,6 @@ void HostService::start()
     app->setApplicationName(QStringLiteral("Host"));
     app->setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
 
-    file_logger_.reset(new FileLogger());
-    file_logger_->startLogging(*app);
-
     com_initializer_.reset(new ScopedCOMInitializer());
     if (!com_initializer_->isSucceeded())
     {

@@ -49,13 +49,12 @@ FileLogger::FileLogger() = default;
 
 FileLogger::~FileLogger()
 {
-    if (!file_.isNull() && !file_->size())
-        file_->remove();
+    qInfo("Logging finished");
 }
 
-bool FileLogger::startLogging(const QCoreApplication& application)
+bool FileLogger::startLogging(const QString& prefix)
 {
-    QDir directory(QDir::tempPath() + QStringLiteral("/aspia"));
+    QDir directory(QDir::tempPath() + QLatin1String("/aspia"));
     if (!directory.exists())
     {
         if (!directory.mkpath(directory.path()))
@@ -65,11 +64,10 @@ bool FileLogger::startLogging(const QCoreApplication& application)
         }
     }
 
-    QString file_path = QString("%1/%2_%3_%4.log")
+    QString file_path = QString("%1/%2_%3.log")
         .arg(directory.path())
-        .arg(QFileInfo(application.applicationFilePath()).fileName())
-        .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh.mm.ss.zzz")))
-        .arg(application.applicationPid());
+        .arg(prefix)
+        .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh.mm.ss.zzz")));
 
     file_.reset(new QFile(file_path));
 
@@ -80,6 +78,8 @@ bool FileLogger::startLogging(const QCoreApplication& application)
     }
 
     qInstallMessageHandler(messageHandler);
+
+    qInfo() << "Logging started.";
     return true;
 }
 

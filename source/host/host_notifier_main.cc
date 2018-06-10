@@ -14,6 +14,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QFileInfo>
 #include <QScreen>
 
 #include "base/file_logger.h"
@@ -25,6 +26,9 @@ namespace aspia {
 
 int hostNotifierMain(int argc, char *argv[])
 {
+    FileLogger logger;
+    logger.startLogging(QFileInfo(argv[0]).fileName());
+
     int max_attempt_count = 600;
 
     do
@@ -41,16 +45,16 @@ int hostNotifierMain(int argc, char *argv[])
     while (--max_attempt_count > 0);
 
     if (max_attempt_count == 0)
+    {
+        qWarning("Exceeded the number of attempts");
         return 1;
+    }
 
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");
     application.setApplicationVersion(ASPIA_VERSION_STRING);
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
-
-    FileLogger logger;
-    logger.startLogging(application);
 
     QCommandLineOption channel_id_option(QStringLiteral("channel_id"),
                                          QString(),

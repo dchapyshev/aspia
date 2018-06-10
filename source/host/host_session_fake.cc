@@ -64,6 +64,7 @@ void HostSessionFake::onMessageReceived(const QByteArray& buffer)
 
     if (!parseMessage(buffer, message))
     {
+        qWarning("Unable to parse message");
         emit errorOccurred();
         return;
     }
@@ -71,10 +72,17 @@ void HostSessionFake::onMessageReceived(const QByteArray& buffer)
     if (message.has_config())
     {
         std::unique_ptr<VideoEncoder> video_encoder = createEncoder(message.config());
-        std::unique_ptr<DesktopFrame> frame = createFrame();
-
-        if (!video_encoder || !frame)
+        if (!video_encoder)
         {
+            qWarning("Unable to create video encoder");
+            emit errorOccurred();
+            return;
+        }
+
+        std::unique_ptr<DesktopFrame> frame = createFrame();
+        if (!frame)
+        {
+            qWarning("Unable to create video frame");
             emit errorOccurred();
             return;
         }
@@ -82,6 +90,7 @@ void HostSessionFake::onMessageReceived(const QByteArray& buffer)
         std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder->encode(frame.get());
         if (!packet)
         {
+            qWarning("Unable to encode video frame");
             emit errorOccurred();
             return;
         }

@@ -8,6 +8,7 @@
 #include "console/console_main.h"
 
 #include <QCommandLineParser>
+#include <QFileInfo>
 
 #include "base/file_logger.h"
 #include "console/console_window.h"
@@ -17,15 +18,15 @@ namespace aspia {
 
 int consoleMain(int argc, char *argv[])
 {
+    FileLogger logger;
+    logger.startLogging(QFileInfo(argv[0]).fileName());
+
     QApplication application(argc, argv);
 
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Console"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
-
-    FileLogger logger;
-    logger.startLogging(application);
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("Aspia Console"));

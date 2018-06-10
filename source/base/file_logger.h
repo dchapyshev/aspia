@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__FILE_LOGGER_H
 #define _ASPIA_BASE__FILE_LOGGER_H
 
-#include <QCoreApplication>
 #include <QFile>
 #include <QScopedPointer>
 
@@ -20,7 +19,7 @@ public:
     FileLogger();
     ~FileLogger();
 
-    bool startLogging(const QCoreApplication& application);
+    bool startLogging(const QString& prefix);
 
 private:
     static void messageHandler(QtMsgType type,

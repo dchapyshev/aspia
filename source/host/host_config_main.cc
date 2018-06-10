@@ -7,6 +7,8 @@
 
 #include "host/host_config_main.h"
 
+#include <QFileInfo>
+
 #include "base/file_logger.h"
 #include "host/ui/host_config_dialog.h"
 #include "version.h"
@@ -15,14 +17,14 @@ namespace aspia {
 
 int hostConfigMain(int argc, char *argv[])
 {
+    FileLogger logger;
+    logger.startLogging(QFileInfo(argv[0]).fileName());
+
     QApplication application(argc, argv);
     application.setOrganizationName("Aspia");
     application.setApplicationName("Host");
     application.setApplicationVersion(ASPIA_VERSION_STRING);
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
-
-    FileLogger logger;
-    logger.startLogging(application);
 
     HostConfigDialog dialog;
     dialog.show();

@@ -12,6 +12,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QFileInfo>
 #include <QGuiApplication>
 
 #include "base/file_logger.h"
@@ -22,6 +23,9 @@ namespace aspia {
 
 int hostMain(int argc, char *argv[])
 {
+    FileLogger logger;
+    logger.startLogging(QFileInfo(argv[0]).fileName());
+
     // At the end of the user's session, the program ends later than the others.
     SetProcessShutdownParameters(0, SHUTDOWN_NORETRY);
 
@@ -29,9 +33,6 @@ int hostMain(int argc, char *argv[])
     application.setOrganizationName(QStringLiteral("Aspia"));
     application.setApplicationName(QStringLiteral("Host"));
     application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
-
-    FileLogger logger;
-    logger.startLogging(application);
 
     QCommandLineOption channel_id_option(QStringLiteral("channel_id"),
                                          QString(),
