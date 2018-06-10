@@ -56,6 +56,12 @@ private slots:
 private:
     void readLogonRequest(const proto::auth::LogonRequest& logon_request);
     void readClientChallenge(const proto::auth::ClientChallenge& client_challenge);
+    void writeServerChallenge(const QByteArray& nonce);
+    void writeLogonResult(proto::auth::Status status);
+
+    proto::auth::Status doBasicAuthorization(const QString& user_name,
+                                             const QByteArray& session_key,
+                                             proto::auth::SessionType session_type);
 
     State state_ = NotStarted;
 

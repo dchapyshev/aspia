@@ -219,12 +219,9 @@ void HostUserAuthorizer::readLogonRequest(const proto::auth::LogonRequest& logon
     // We do not support other authorization methods yet.
     if (logon_request.method() != proto::auth::METHOD_BASIC)
     {
+        qWarning() << "Unsupported authorization method: " << logon_request.method();
         status_ = proto::auth::STATUS_ACCESS_DENIED;
-
-        proto::auth::HostToClient message;
-        message.mutable_logon_result()->set_status(status_);
-
-        emit writeMessage(LogonResult, serializeMessage(message));
+        writeLogonResult(status_);
         return;
     }
 
@@ -238,10 +235,7 @@ void HostUserAuthorizer::readLogonRequest(const proto::auth::LogonRequest& logon
         return;
     }
 
-    proto::auth::HostToClient message;
-    message.mutable_server_challenge()->set_nonce(nonce_.constData(), nonce_.size());
-
-    emit writeMessage(ServerChallenge, serializeMessage(message));
+    writeServerChallenge(nonce_);
 }
 
 void HostUserAuthorizer::readClientChallenge(const proto::auth::ClientChallenge& client_challenge)
@@ -253,57 +247,74 @@ void HostUserAuthorizer::readClientChallenge(const proto::auth::ClientChallenge&
         return;
     }
 
-    QByteArray session_key(client_challenge.session_key().c_str(),
-                           client_challenge.session_key().size());
+    QByteArray session_key = QByteArray::fromStdString(client_challenge.session_key());
     user_name_ = QString::fromStdString(client_challenge.username());
+    session_type_ = client_challenge.session_type();
 
-    if (user_name_.isEmpty() || session_key.isEmpty())
+    status_ = doBasicAuthorization(user_name_, session_key, session_type_);
+
+    secureMemZero(&session_key);
+    writeLogonResult(status_);
+}
+
+void HostUserAuthorizer::writeServerChallenge(const QByteArray& nonce)
+{
+    proto::auth::HostToClient message;
+    message.mutable_server_challenge()->set_nonce(nonce.constData(), nonce.size());
+    emit writeMessage(ServerChallenge, serializeMessage(message));
+}
+
+void HostUserAuthorizer::writeLogonResult(proto::auth::Status status)
+{
+    proto::auth::HostToClient message;
+    message.mutable_logon_result()->set_status(status);
+    emit writeMessage(LogonResult, serializeMessage(message));
+}
+
+proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
+    const QString& user_name, const QByteArray& session_key, proto::auth::SessionType session_type)
+{
+    if (!User::isValidName(user_name))
     {
-        qWarning("Empty user name or session key");
-        stop();
-        return;
+        qWarning() << "Invalid user name: " << user_name;
+        return proto::auth::STATUS_ACCESS_DENIED;
     }
 
-    status_ = proto::auth::STATUS_ACCESS_DENIED;
+    if (session_key.isEmpty())
+    {
+        qWarning("Empty session key");
+        return proto::auth::STATUS_ACCESS_DENIED;
+    }
 
     for (const auto& user : user_list_)
     {
-        if (user.name().compare(user_name_, Qt::CaseInsensitive) != 0)
-            continue;
-
-        if (createSessionKey(user.passwordHash(), nonce_) != session_key)
+        if (user.name().compare(user_name, Qt::CaseInsensitive) == 0)
         {
-            // Wrong password.
-            status_ = proto::auth::STATUS_ACCESS_DENIED;
-            break;
-        }
+            if (createSessionKey(user.passwordHash(), nonce_) != session_key)
+            {
+                qWarning() << "Wrong password for user " << user_name;
+                return proto::auth::STATUS_ACCESS_DENIED;
+            }
 
-        if (!(user.flags() & User::FLAG_ENABLED))
-        {
-            // User disabled.
-            status_ = proto::auth::STATUS_ACCESS_DENIED;
-            break;
-        }
+            if (!(user.flags() & User::FLAG_ENABLED))
+            {
+                qWarning() << "User " << user_name << " is disabled";
+                return proto::auth::STATUS_ACCESS_DENIED;
+            }
 
-        if (!(user.sessions() & client_challenge.session_type()))
-        {
-            // Session type disabled for user.
-            status_ = proto::auth::STATUS_ACCESS_DENIED;
-            break;
-        }
+            if (!(user.sessions() & session_type))
+            {
+                qWarning() << "Session type " << session_type
+                           << " is disabled for user " << user_name;
+                return proto::auth::STATUS_ACCESS_DENIED;
+            }
 
-        status_ = proto::auth::STATUS_SUCCESS;
-        break;
+            return proto::auth::STATUS_SUCCESS;
+        }
     }
 
-    secureMemZero(&session_key);
-
-    session_type_ = client_challenge.session_type();
-
-    proto::auth::HostToClient message;
-    message.mutable_logon_result()->set_status(status_);
-
-    emit writeMessage(LogonResult, serializeMessage(message));
+    qWarning() << "User not found: " << user_name;
+    return proto::auth::STATUS_ACCESS_DENIED;
 }
 
 } // namespace aspia
