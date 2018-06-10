@@ -33,7 +33,7 @@ bool NetworkServer::start(int port)
 
     connect(tcp_server_, &QTcpServer::newConnection, this, &NetworkServer::onNewConnection);
     connect(tcp_server_, &QTcpServer::acceptError,
-            [this](QAbstractSocket::SocketError /*error */)
+            [this](QAbstractSocket::SocketError /* error */)
     {
         qWarning() << "accept error: " << tcp_server_->errorString();
         return;

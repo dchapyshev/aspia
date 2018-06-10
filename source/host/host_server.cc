@@ -100,9 +100,12 @@ bool HostServer::start()
     FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
     {
-        firewall.addTcpRule(kFirewallRuleName,
-                            tr("Allow incoming TCP connections"),
-                            port);
+        if (firewall.addTcpRule(kFirewallRuleName,
+                                tr("Allow incoming TCP connections"),
+                                port))
+        {
+            qInfo("Rule is added to the firewall");
+        }
     }
 
     network_server_ = new NetworkServer(this);
