@@ -247,24 +247,24 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     QStringList arguments;
 
-    arguments << "--channel_id" << channel_id;
-    arguments << "--session_type";
+    arguments << QStringLiteral("--channel_id") << channel_id;
+    arguments << QStringLiteral("--session_type");
 
     switch (session_type_)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
             session_process_->setAccount(HostProcess::Account::System);
-            arguments << "desktop_manage";
+            arguments << QStringLiteral("desktop_manage");
             break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
             session_process_->setAccount(HostProcess::Account::System);
-            arguments << "desktop_view";
+            arguments << QStringLiteral("desktop_view");
             break;
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
             session_process_->setAccount(HostProcess::Account::User);
-            arguments << "file_transfer";
+            arguments << QStringLiteral("file_transfer");
             break;
 
         default:

@@ -27,6 +27,42 @@ namespace {
 const char kFirewallRuleName[] = "Aspia Host Service";
 const char kNotifierFileName[] = "aspia_host_notifier.exe";
 
+const char* sessionTypeToString(proto::auth::SessionType session_type)
+{
+    switch (session_type)
+    {
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+            return "Desktop Manage";
+
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+            return "Desktop View";
+
+        case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+            return "File Transfer";
+
+        default:
+            return "Unknown";
+    }
+}
+
+const char* statusToString(proto::auth::Status status)
+{
+    switch (status)
+    {
+        case proto::auth::STATUS_SUCCESS:
+            return "Success";
+
+        case proto::auth::STATUS_ACCESS_DENIED:
+            return "Access Denied";
+
+        case proto::auth::STATUS_CANCELED:
+            return "Canceled";
+
+        default:
+            return "Unknown";
+    }
+}
+
 } // namespace
 
 HostServer::HostServer(QObject* parent)
@@ -42,6 +78,8 @@ HostServer::~HostServer()
 
 bool HostServer::start()
 {
+    qInfo("Starting the server");
+
     if (!network_server_.isNull())
     {
         qWarning("An attempt was start an already running server.");
@@ -75,11 +113,14 @@ bool HostServer::start()
     if (!network_server_->start(port))
         return false;
 
+    qInfo() << "Server is started on port" << port;
     return true;
 }
 
 void HostServer::stop()
 {
+    qInfo("Stopping the server");
+
     for (auto session : session_list_)
         session->stop();
 
@@ -96,6 +137,8 @@ void HostServer::stop()
     FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())
         firewall.deleteRuleByName(kFirewallRuleName);
+
+    qInfo("Server is stopped");
 }
 
 void HostServer::setSessionChanged(quint32 event, quint32 session_id)
@@ -160,6 +203,8 @@ void HostServer::onNewConnection()
         if (!channel)
             continue;
 
+        qInfo() << "New connected client:" << channel->peerAddress();
+
         HostUserAuthorizer* authorizer = new HostUserAuthorizer(this);
 
         authorizer->setNetworkChannel(channel);
@@ -168,12 +213,16 @@ void HostServer::onNewConnection()
         connect(authorizer, &HostUserAuthorizer::finished,
                 this, &HostServer::onAuthorizationFinished);
 
+        qInfo("Start authorization");
         authorizer->start();
     }
 }
 
 void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 {
+    qInfo() << "Authorization for" << authorizer->userName()
+            << "completed with status:" << statusToString(authorizer->status());
+
     QScopedPointer<HostUserAuthorizer> authorizer_deleter(authorizer);
 
     if (authorizer->status() != proto::auth::STATUS_SUCCESS)
@@ -189,6 +238,9 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
     connect(this, &HostServer::sessionChanged, host.data(), &Host::sessionChanged);
     connect(host.data(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
 
+    qInfo() << "Starting" << sessionTypeToString(authorizer->sessionType())
+            << "session for" << authorizer->userName();
+
     if (host->start())
     {
         if (notifier_state_ == NotifierState::Stopped)
@@ -202,6 +254,8 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 
 void HostServer::onHostFinished(Host* host)
 {
+    qInfo() << "Session is finished for:" << host->userName();
+
     for (auto it = session_list_.begin(); it != session_list_.end(); ++it)
     {
         if (*it != host)
@@ -223,8 +277,10 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
 
     notifier_process_->setAccount(HostProcess::User);
     notifier_process_->setSessionId(WTSGetActiveConsoleSessionId());
-    notifier_process_->setProgram(QCoreApplication::applicationDirPath() + "/" + kNotifierFileName);
-    notifier_process_->setArguments(QStringList() << "--channel_id" << channel_id);
+    notifier_process_->setProgram(
+        QCoreApplication::applicationDirPath() + QLatin1Char('/') + kNotifierFileName);
+    notifier_process_->setArguments(
+        QStringList() << QStringLiteral("--channel_id") << channel_id);
 
     connect(notifier_process_, &HostProcess::errorOccurred,
             this, &HostServer::onNotifierProcessError);
@@ -241,6 +297,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
 {
     Q_ASSERT(notifier_state_ == NotifierState::Starting);
 
+    qInfo("Notifier is started");
     notifier_state_ = NotifierState::Started;
 
     ipc_channel_ = channel;
@@ -261,12 +318,12 @@ void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
 {
     if (error_code == HostProcess::NoLoggedOnUser)
     {
-        // If there is no logged on user, then we can not start the notifier.
+        qInfo("There is no logged on user. The notifier will not be started.");
         stopNotifier();
     }
     else
     {
-        // Stop the server.
+        qWarning("Unable to start notifier. The server will be stopped");
         stop();
     }
 }
@@ -303,6 +360,8 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
 
     if (message.has_kill_session())
     {
+        qInfo("Command to terminate the session from the notifier is received");
+
         QString uuid = QString::fromStdString(message.kill_session().uuid());
 
         for (const auto& session : session_list_)
@@ -328,6 +387,7 @@ void HostServer::startNotifier()
     if (notifier_state_ != NotifierState::Stopped)
         return;
 
+    qInfo("Starting the notifier");
     notifier_state_ = NotifierState::Starting;
 
     IpcServer* ipc_server = new IpcServer(this);
@@ -357,6 +417,8 @@ void HostServer::stopNotifier()
         notifier_process_->kill();
         delete notifier_process_;
     }
+
+    qInfo("Notifier is stopped");
 }
 
 void HostServer::sessionToNotifier(const Host& host)

@@ -59,6 +59,8 @@ HostService::HostService()
 
 void HostService::start()
 {
+    qInfo("Command to start the service has been received");
+
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
     QGuiApplication* app = application();
@@ -82,13 +84,20 @@ void HostService::start()
     {
         delete server_;
         app->quit();
+        return;
     }
+
+    qInfo("Service is started");
 }
 
 void HostService::stop()
 {
+    qInfo("Command to stop the service has been received");
+
     delete server_;
     com_initializer_.reset();
+
+    qInfo("Service is stopped");
 }
 
 void HostService::sessionChange(quint32 event, quint32 session_id)
