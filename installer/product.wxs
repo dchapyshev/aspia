@@ -13,6 +13,9 @@
     <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)"
                   Schedule="afterInstallExecute" />
 
+    <Icon Id="aspia.ico" SourceFile="resources/aspia.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)">
