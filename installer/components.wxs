@@ -3,10 +3,11 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include variables.wxi?>
   <Fragment>
-    <!-- Shortcuts -->
+    <!-- Program Menu Shortcuts -->
     <DirectoryRef Id="ApplicationProgramsFolder">
-      <Component Id="ConsoleShortcuts" Guid="{DFA97C7E-E565-44D2-8D1E-7AB1E52ADB01}">
-        <Shortcut Id="ConsoleShortcut" Name="Aspia Console" WorkingDirectory="INSTALLLOCATION"
+      <Component Id="ConsoleProgramMenuShortcuts" Guid="{DFA97C7E-E565-44D2-8D1E-7AB1E52ADB01}">
+        <Condition>STARTMENU_SHORTCUTS</Condition>
+        <Shortcut Id="ConsoleProgramMenuShortcut" Name="Aspia Console" WorkingDirectory="INSTALLLOCATION"
                   Target="[INSTALLLOCATION]$(var.ConsoleExecutable)" />
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
@@ -14,8 +15,28 @@
         <RemoveRegistryKey Id="RemoveConsoleSettings" Root="HKCU" Key="SOFTWARE\$(var.ProductName)"
                            Action="removeOnUninstall" />
       </Component>
-      <Component Id="HostShortcuts" Guid="{7DAD9257-8C4C-4C47-BC88-FDF5E6A71C95}">
-        <Shortcut Id="HostConfigShortcut" Name="!(loc.HostConfigShortcutName)"
+      <Component Id="HostProgramMenuShortcuts" Guid="{7DAD9257-8C4C-4C47-BC88-FDF5E6A71C95}">
+        <Condition>STARTMENU_SHORTCUTS</Condition>
+        <Shortcut Id="HostConfigProgramMenuShortcut" Name="!(loc.HostConfigShortcutName)"
+                  Target="[INSTALLLOCATION]$(var.HostConfigExecutable)"
+                  WorkingDirectory="INSTALLLOCATION"/>
+        <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
+                       Value="" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Desktop Shortcuts -->
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ConsoleDesktopShortcuts" Guid="{267EB96D-5B4D-4636-9782-B3DE22BC2AA1}">
+        <Condition>DESKTOP_SHORTCUTS</Condition>
+        <Shortcut Id="ConsoleDesktopShortcut" Name="Aspia Console" WorkingDirectory="INSTALLLOCATION"
+                  Target="[INSTALLLOCATION]$(var.ConsoleExecutable)" />
+        <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
+                       Value="" KeyPath="yes" />
+      </Component>
+      <Component Id="HostDesktopShortcuts" Guid="{B04D7FC4-5CF8-40DC-BC76-5E5F1E7AA3C6}">
+        <Condition>DESKTOP_SHORTCUTS</Condition>
+        <Shortcut Id="HostConfigDesktopShortcut" Name="!(loc.HostConfigShortcutName)"
                   Target="[INSTALLLOCATION]$(var.HostConfigExecutable)"
                   WorkingDirectory="INSTALLLOCATION"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"

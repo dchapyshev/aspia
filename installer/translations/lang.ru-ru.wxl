@@ -12,4 +12,6 @@
   <String Id="RussianLanguage_Title">Русский</String>
   <String Id="RussianLanguage_Description">Перевод приложения на Русский язык.</String>
   <String Id="AddressBookFile_Description" Overridable="yes">Адресная книга Aspia (.aab)</String>
+  <String Id="CreateDesktopShortcuts" Overridable="yes">Создать ярлыки на рабочем столе</String>
+  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Создать ярлыки в меню "Пуск"</String>
 </WixLocalization>
