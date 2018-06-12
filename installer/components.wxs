@@ -12,8 +12,6 @@
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
                        Value="" KeyPath="yes" />
-        <RemoveRegistryKey Id="RemoveConsoleSettings" Root="HKCU" Key="SOFTWARE\$(var.ProductName)"
-                           Action="removeOnUninstall" />
       </Component>
       <Component Id="HostProgramMenuShortcuts" Guid="{7DAD9257-8C4C-4C47-BC88-FDF5E6A71C95}">
         <Condition>STARTMENU_SHORTCUTS</Condition>
@@ -63,6 +61,14 @@
         </ProgId>
       </Component>
 
+      <!-- Console Settings -->
+      <Component Id="ConsoleSettings" DiskId="1" Guid="{D57EC906-C0FE-4717-AEAC-DF46B4B1E617}">
+        <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)\Console" Name="Locale" Type="string"
+                       Value="!(loc.Locale)" />
+        <RemoveRegistryKey Id="RemoveConsoleSettings" Root="HKCU" Key="SOFTWARE\$(var.ProductName)"
+                           Action="removeOnUninstall" />
+      </Component>
+
       <!-- Host Applications -->
       <Component Id ="HostApplications" DiskId="1" Guid="{504F0249-32C0-47F6-942C-FF04389F6C12}">
         <File Id="$(var.HostServiceExecutable)" Name="$(var.HostServiceExecutable)" KeyPath="yes" />
@@ -78,6 +84,8 @@
         </ServiceInstall>
         <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall"
                         Name="$(var.ServiceName)" Wait="yes" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Host" Name="Locale" Type="string"
+                       Value="!(loc.Locale)" />
         <RemoveRegistryKey Id="RemoveHostSettings" Root="HKLM" Key="SOFTWARE\$(var.ProductName)"
                            Action="removeOnUninstall" />
       </Component>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="ru-ru" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Locale" Overridable="yes">ru</String>
   <String Id="HostConfigShortcutName" Overridable="yes">Конфигурация сервера Aspia</String>
   <String Id="DowngradeErrorMessage">Более новая версия приложения уже установлена.</String>
   <String Id="CoreDescription">Основные файлы приложения.</String>
