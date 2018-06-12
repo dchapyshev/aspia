@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?include variables.wxi?>
+  <Product Id="{E8E6DCA6-143F-4865-A3EB-63B74B3B4378}" Name="$(var.ProductName)" Language="1033"
+           Version="$(var.Version)" Manufacturer="$(var.Manufacturer)"
+           UpgradeCode="ebe607b9-84d0-4b36-afd7-71ea581d16dd">
+    <Package InstallerVersion="200" Compressed="yes" Manufacturer="$(var.Manufacturer)"
+             InstallPrivileges="elevated" InstallScope="perMachine" />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)"
+                  Schedule="afterInstallExecute" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="$(var.ProductName)">
+          <Directory Id="TRANSLATIONS" Name="translations" />
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)" />
+      </Directory>
+    </Directory>
+
+    <Feature Id="FeatureProduct" Title="$(var.ProductName)" Absent="disallow" AllowAdvertise="no"
+             Display="expand" InstallDefault="local" Description="!(loc.CoreDescription)"
+             ConfigurableDirectory="INSTALLLOCATION" Level="1">
+      <ComponentRef Id="CoreApplications" />
+      <ComponentRef Id="ConsoleApplications" />
+      <ComponentRef Id="ConsoleShortcuts" />
+      <Feature Id="HostFeature" Title="!(loc.HostService_Title)"
+               Description="!(loc.HostService_Description)" Absent="allow" AllowAdvertise="no"
+               TypicalDefault="install" InstallDefault="local" Level="2">
+        <ComponentRef Id="HostApplications" />
+        <ComponentRef Id="HostShortcuts" />
+      </Feature>
+      <Feature Id="TranslationsFeature" Title="!(loc.Translations_Title)"
+               Description="!(loc.Translations_Description)" Absent="disallow" AllowAdvertise="no"
+               TypicalDefault="install" InstallDefault="local" Level="2" Display="expand">
+        <Feature Id="FeatureDutchTranslation" Title="!(loc.DutchLanguage_Title)"
+                 Description="!(loc.DutchLanguage_Description)" Absent="allow" AllowAdvertise="no"
+                 TypicalDefault="install" InstallDefault="local" Level="3">
+          <ComponentRef Id="TranslationDutch" />
+        </Feature>
+        <Feature Id="FeatureRussianTranslation" Title="!(loc.RussianLanguage_Title)"
+                 Description="!(loc.RussianLanguage_Description)" Absent="allow"
+                 AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="3">
+          <ComponentRef Id="TranslationRussian" />
+        </Feature>
+      </Feature>
+    </Feature>
+    <Property Id="INSTALLLEVEL" Value="3" />
+
+    <WixVariable Id="WixUIBannerBmp" Value="resources/banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="resources/dialog.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="resources/exclamation.ico" />
+    <WixVariable Id="WixUIInfoIco" Value="resources/info.ico" />
+    <WixVariable Id="WixUINewIco" Value="resources/new.ico" />
+    <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
+    <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
+
+    <UI Id="InstallerUI">
+      <UIRef Id="WixUI_FeatureTree" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+  </Product>
+</Wix>

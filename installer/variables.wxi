@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define ProductName="Aspia"?>
+  <?define Manufacturer="Dmitry Chapyshev"?>
+  <?define Version="1.0.0.0"?>
+  <?define InstallLocation="Aspia"?>
+  <?define SourceFiles="..\build\Release"?>
+  <?define CoreLibrary="aspia_core.dll"?>
+  <?define ConsoleExecutable="aspia_console.exe"?>
+  <?define HostServiceExecutable="aspia_host_service.exe"?>
+  <?define HostConfigExecutable="aspia_host_config.exe"?>
+  <?define HostNotifierExecutable="aspia_host_notifier.exe"?>
+  <?define HostExecutable="aspia_host.exe"?>
+  <?define ServiceName="aspia-host-service"?>
+  <?define ServiceDisplayName="Aspia Host Service"?>
+  <?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>
+</Include>

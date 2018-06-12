@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="ru-ru" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="HostConfigShortcutName" Overridable="yes">Конфигурация сервера Aspia</String>
+  <String Id="DowngradeErrorMessage">Более новая версия приложения уже установлена.</String>
+  <String Id="CoreDescription">Основные файлы приложения.</String>
+  <String Id="HostService_Title" Overridable="yes">Служба сервера</String>
+  <String Id="HostService_Description" Overridable="yes">Предоставляет удаленный доступ к этому компьютеру.</String>
+  <String Id="Translations_Title" Overridable="yes">Переводы</String>
+  <String Id="Translations_Description" Overridable="yes">Переводы языка интерфейса приложения.</String>
+  <String Id="DutchLanguage_Title">Голландский</String>
+  <String Id="DutchLanguage_Description">Перевод приложения на Голландский язык.</String>
+  <String Id="RussianLanguage_Title">Русский</String>
+  <String Id="RussianLanguage_Description">Перевод приложения на Русский язык.</String>
+  <String Id="AddressBookFile_Description" Overridable="yes">Адресная книга Aspia (.aab)</String>
+</WixLocalization>

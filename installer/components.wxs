@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?include variables.wxi?>
+  <Fragment>
+    <!-- Shortcuts -->
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ConsoleShortcuts" Guid="{DFA97C7E-E565-44D2-8D1E-7AB1E52ADB01}">
+        <Shortcut Id="ConsoleShortcut" Name="Aspia Console" WorkingDirectory="INSTALLLOCATION"
+                  Target="[INSTALLLOCATION]$(var.ConsoleExecutable)" />
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
+                       Value="" KeyPath="yes" />
+        <RemoveRegistryKey Id="RemoveConsoleSettings" Root="HKCU" Key="SOFTWARE\$(var.ProductName)"
+                           Action="removeOnUninstall" />
+      </Component>
+      <Component Id="HostShortcuts" Guid="{7DAD9257-8C4C-4C47-BC88-FDF5E6A71C95}">
+        <Shortcut Id="HostConfigShortcut" Name="!(loc.HostConfigShortcutName)"
+                  Target="[INSTALLLOCATION]$(var.HostConfigExecutable)"
+                  WorkingDirectory="INSTALLLOCATION"/>
+        <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string"
+                       Value="" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
+
+      <!-- Core Library -->
+      <Component Id ="CoreApplications" DiskId="1" Guid="{E940D6C5-BC4C-41EF-9D40-8417E15FC224}">
+        <File Id="$(var.CoreLibrary)" Name="$(var.CoreLibrary)" />
+      </Component>
+
+      <!-- Console Applications -->
+      <Component Id ="ConsoleApplications" DiskId="1" Guid="{CEFF3F25-494A-4CDD-B9F9-446EC94003F9}">
+        <File Id="$(var.ConsoleExecutable)" Name="$(var.ConsoleExecutable)" KeyPath="yes" />
+        <ProgId Id="ConsoleAddressBook" Description="!(loc.AddressBookFile_Description)"
+                Icon="$(var.ConsoleExecutable)" IconIndex="1">
+          <Extension Id="aab">
+            <Verb Id="AspiaAddressBookFile" Command="Open" TargetFile="$(var.ConsoleExecutable)"
+                  Argument='"%1"' />
+          </Extension>
+        </ProgId>
+      </Component>
+
+      <!-- Host Applications -->
+      <Component Id ="HostApplications" DiskId="1" Guid="{504F0249-32C0-47F6-942C-FF04389F6C12}">
+        <File Id="$(var.HostServiceExecutable)" Name="$(var.HostServiceExecutable)" KeyPath="yes" />
+        <File Id="$(var.HostExecutable)" Name="$(var.HostExecutable)" />
+        <File Id="$(var.HostConfigExecutable)" Name="$(var.HostConfigExecutable)" />
+        <File Id="$(var.HostNotifierExecutable)" Name="$(var.HostNotifierExecutable)" />
+        <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes"
+                        Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)"
+                        Description="$(var.ServiceDescription)"
+                        Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
+          <util:ServiceConfig FirstFailureActionType="restart" SecondFailureActionType="restart"
+                              ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
+        </ServiceInstall>
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall"
+                        Name="$(var.ServiceName)" Wait="no" />
+        <RemoveRegistryKey Id="RemoveHostSettings" Root="HKLM" Key="SOFTWARE\$(var.ProductName)"
+                           Action="removeOnUninstall" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Translations -->
+    <DirectoryRef Id="TRANSLATIONS" FileSource="$(var.SourceFiles)\translations">
+      <Component Id ="TranslationDutch" DiskId="1" Guid="{A8C3C5A2-E3B8-4001-BCA8-7D634761E8C5}">
+        <File Id="aspia_nl.qm" Name="aspia_nl.qm" />
+      </Component>
+      <Component Id ="TranslationRussian" DiskId="1" Guid="{2CB24855-3B78-47AC-BAC8-D558EEE7519E}">
+        <File Id="aspia_ru.qm" Name="aspia_ru.qm" />
+        <File Id="qtbase_ru.qm" Name="qtbase_ru.qm" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="HostConfigShortcutName" Overridable="yes">Aspia Host Configuration</String>
+  <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
+  <String Id="CoreDescription" Overridable="yes">The core application files.</String>
+  <String Id="HostService_Title" Overridable="yes">Host Service</String>
+  <String Id="HostService_Description" Overridable="yes">Provides remote access to this computer.</String>
+  <String Id="Translations_Title" Overridable="yes">Translations</String>
+  <String Id="Translations_Description" Overridable="yes">Translations of the application interface language.</String>
+  <String Id="DutchLanguage_Title" Overridable="yes">Dutch</String>
+  <String Id="DutchLanguage_Description" Overridable="yes">Translation of the application into Dutch language.</String>
+  <String Id="RussianLanguage_Title" Overridable="yes">Russian</String>
+  <String Id="RussianLanguage_Description" Overridable="yes">Translation of the application into Russian language.</String>
+  <String Id="AddressBookFile_Description" Overridable="yes">Aspia Address Book (.aab)</String>
+</WixLocalization>
