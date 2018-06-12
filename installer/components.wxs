@@ -56,7 +56,7 @@
                               ThirdFailureActionType="restart" RestartServiceDelayInSeconds="60"/>
         </ServiceInstall>
         <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall"
-                        Name="$(var.ServiceName)" Wait="no" />
+                        Name="$(var.ServiceName)" Wait="yes" />
         <RemoveRegistryKey Id="RemoveHostSettings" Root="HKLM" Key="SOFTWARE\$(var.ProductName)"
                            Action="removeOnUninstall" />
       </Component>
