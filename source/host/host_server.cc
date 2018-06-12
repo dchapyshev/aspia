@@ -92,7 +92,6 @@ bool HostServer::start()
     if (user_list_.isEmpty())
     {
         qWarning("Empty user list");
-        return false;
     }
 
     int port = settings.tcpPort();
