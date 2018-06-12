@@ -632,42 +632,32 @@
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="52"/>
-        <source>Service</source>
-        <translation>Service</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="60"/>
-        <source>Service Status:</source>
-        <translation>Sertice Status:</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="110"/>
         <source>Incoming Connections</source>
         <translation>Binnenkomende Verbindingen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="116"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="58"/>
         <source>Port:</source>
         <translation>Poort:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="153"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="237"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="95"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="179"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="260"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="202"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="269"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="211"/>
         <source>Modify</source>
         <translation>Aanpassen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="278"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="220"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
@@ -1680,100 +1670,36 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="151"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="174"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="199"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="214"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="316"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="345"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="210"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="239"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="152"/>
-        <source>The service could not be installed.</source>
-        <translation>De service kon niet geinstalleerd worden.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="175"/>
-        <source>The service could not be removed.</source>
-        <translation>De service kon niet verwijderd worden.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
-        <source>The service could not be stopped.</source>
-        <translation>De service kon niet gestopt worden.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="215"/>
-        <source>The service could not be started.</source>
-        <translation>De service kon niet gestart worden.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="289"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="337"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="183"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="231"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="290"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="184"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="313"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="207"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="332"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="226"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="346"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="240"/>
         <source>Could not restart the service.</source>
         <translation>De service kon niet herstart worden.</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="495"/>
-        <source>Remove</source>
-        <translation>Verwijderen</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="506"/>
-        <source>Started</source>
-        <translation>Gestart</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="507"/>
-        <source>Stop</source>
-        <translation>Stop</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="513"/>
-        <source>Stopped</source>
-        <translation>Gestopt</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="514"/>
-        <source>Start</source>
-        <translation>Start</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="521"/>
-        <source>Unknown</source>
-        <translation>Onbekend</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="529"/>
-        <source>Install</source>
-        <translation>Installeren</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="530"/>
-        <source>Not Installed</source>
-        <translation>Niet geinstalleerd</translation>
     </message>
 </context>
 <context>
@@ -1787,7 +1713,7 @@
 <context>
     <name>aspia::HostServer</name>
     <message>
-        <location filename="../host/host_server.cc" line="66"/>
+        <location filename="../host/host_server.cc" line="103"/>
         <source>Allow incoming TCP connections</source>
         <translation>Sta binnenkomende TCP verbindingen toe</translation>
     </message>
@@ -1795,7 +1721,7 @@
 <context>
     <name>aspia::HostSessionFake</name>
     <message>
-        <location filename="../host/host_session_fake.cc" line="158"/>
+        <location filename="../host/host_session_fake.cc" line="167"/>
         <source>The session is temporarily unavailable.</source>
         <translation>De sessie is tijdelijk niet beschikbaar.</translation>
     </message>

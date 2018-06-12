@@ -22,8 +22,6 @@ public:
     ~HostConfigDialog();
 
 private slots:
-    void onServiceInstallRemove();
-    void onServiceStartStop();
     void onUserContextMenu(const QPoint& point);
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onAddUser();
@@ -39,24 +37,14 @@ private:
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadUserList();
-    void reloadServiceStatus();
+    bool isServiceStarted();
     bool restartService();
-
-    enum class ServiceStatus
-    {
-        Unknown,
-        NotInstalled,
-        Stopped,
-        Started
-    };
 
     Ui::HostConfigDialog ui;
 
     QHash<QString, QStringList> locale_list_;
     QList<QTranslator*> translator_list_;
-
     QList<User> user_list_;
-    ServiceStatus service_status_;
 
     Q_DISABLE_COPY(HostConfigDialog)
 };
