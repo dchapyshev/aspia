@@ -55,15 +55,14 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     {
         Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
 
-        ui.button_send_keys->setHidden(true);
-        ui.button_ctrl_alt_del->setHidden(true);
+        ui.button_send_keys->hide();
+        ui.button_ctrl_alt_del->hide();
     }
 
+    ui.frame->hide();
     adjustSize();
-    ui.frame->setFixedWidth(ui.frame_buttons->width());
 
-    ui.frame_buttons->hide();
-    adjustSize();
+    hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
 DesktopPanel::~DesktopPanel() = default;
@@ -74,6 +73,8 @@ void DesktopPanel::timerEvent(QTimerEvent* event)
     {
         killTimer(hide_timer_id_);
         hide_timer_id_ = 0;
+
+        ui.frame->setFixedWidth(ui.frame_buttons->width());
 
         ui.frame_buttons->hide();
         ui.frame->show();
