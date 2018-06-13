@@ -397,11 +397,8 @@ int ServiceImpl::exec(int argc, char* argv[])
         // Starts handler thread.
         handler->start();
 
-        while (handler->startup_state != ServiceHandler::ServiceMainCalled &&
-               handler->startup_state != ServiceHandler::ErrorOccurred)
-        {
+        while (handler->startup_state == ServiceHandler::NotStarted)
             handler->startup_condition.wait(lock);
-        }
 
         if (handler->startup_state == ServiceHandler::ErrorOccurred)
             return 1;
@@ -437,8 +434,12 @@ int ServiceImpl::exec(int argc, char* argv[])
                 name_, display_name_, application->applicationFilePath());
             if (controller.isValid())
             {
+                printf("Service has been successfully installed. Starting...\n");
                 controller.setDescription(description_);
-                controller.start();
+                if (!controller.start())
+                    printf("Service could not be started.");
+                else
+                    printf("Done.\n");
             }
         }
         else if (parser.isSet(remove_option))
@@ -447,8 +448,24 @@ int ServiceImpl::exec(int argc, char* argv[])
             if (controller.isValid())
             {
                 if (controller.isRunning())
-                    controller.stop();
-                controller.remove();
+                {
+                    printf("Service is started. Stopping...\n");
+                    if (!controller.stop())
+                        printf("Error: Service could not be stopped.\n");
+                    else
+                        printf("Done.\n");
+                }
+
+                printf("Remove the service...\n");
+                if (!controller.remove())
+                    printf("Error: Service could not be removed.\n");
+                else
+                    printf("Done.\n");
+            }
+            else
+            {
+                printf("Could not access the service.\n"
+                       "The service is not installed or you do not have administrator rights.\n");
             }
         }
 
