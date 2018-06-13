@@ -62,10 +62,12 @@ QHash<QString, QStringList> createLocaleList()
     QString translations_dir =
         QApplication::applicationDirPath() + QStringLiteral("/translations/");
 
-    QHash<QString, QStringList> locale_list;
+    QStringList qm_file_list =
+        QDir(translations_dir).entryList(QStringList() << QStringLiteral("*.qm"));
 
-    QStringList qm_file_list = QDir(translations_dir).entryList(QStringList() << "*.qm");
     QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
+
+    QHash<QString, QStringList> locale_list;
 
     for (const auto& qm_file : qm_file_list)
     {
@@ -232,6 +234,7 @@ void HostNotifierWindow::onShowHidePressed()
         window_rect_ = frameGeometry();
 
         ui.content->hide();
+        ui.title->hide();
 
         move(screen_size.width() - ui.button_show_hide->width(), pos().y());
         setFixedSize(window_rect_.width() - content_size.width(),
@@ -242,6 +245,7 @@ void HostNotifierWindow::onShowHidePressed()
     else
     {
         ui.content->show();
+        ui.title->show();
 
         move(window_rect_.topLeft());
         setFixedSize(window_rect_.size());
