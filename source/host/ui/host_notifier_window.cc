@@ -7,6 +7,11 @@
 
 #include "host/ui/host_notifier_window.h"
 
+#if defined(Q_OS_WIN)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 #include <QDebug>
 #include <QDir>
 #include <QMenu>
@@ -14,6 +19,7 @@
 #include <QScreen>
 #include <QTranslator>
 
+#include "base/errno_logging.h"
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -117,6 +123,14 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
             this, &HostNotifierWindow::onContextMenu);
 
     setAttribute(Qt::WA_TranslucentBackground);
+
+#if defined(Q_OS_WIN)
+    taskbar_create_message_ = RegisterWindowMessageW(L"TaskbarCreated");
+    if (!taskbar_create_message_)
+    {
+        qWarningErrno("RegisterWindowMessageW failed");
+    }
+#endif
 }
 
 HostNotifierWindow::~HostNotifierWindow()
@@ -196,6 +210,23 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return QWidget::eventFilter(object, event);
+}
+
+bool HostNotifierWindow::nativeEvent(const QByteArray& event_type, void* message, long* result)
+{
+#if defined(Q_OS_WIN)
+    MSG* native_message = reinterpret_cast<MSG*>(message);
+    if (native_message->message == taskbar_create_message_)
+    {
+        QSize screen_size = QApplication::primaryScreen()->availableSize();
+        QSize window_size = frameSize();
+
+        move(screen_size.width() - window_size.width(),
+             screen_size.height() - window_size.height());
+    }
+#endif
+
+    return QWidget::nativeEvent(event_type, message, result);
 }
 
 void HostNotifierWindow::showEvent(QShowEvent* event)
