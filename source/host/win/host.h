@@ -31,6 +31,7 @@ public:
     {
         StoppedState,
         StartingState,
+        StoppingState,
         DetachedState,
         AttachedState
     };

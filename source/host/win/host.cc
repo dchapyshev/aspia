@@ -138,6 +138,7 @@ bool Host::start()
         return false;
     }
 
+    qInfo("Starting the host");
     state_ = StartingState;
 
     connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
@@ -157,15 +158,16 @@ bool Host::start()
 
 void Host::stop()
 {
-    if (state_ == StoppedState)
+    if (state_ == StoppedState || state_ == StoppingState)
         return;
+
+    qInfo("Stopping host");
+    state_ = StoppingState;
 
     if (network_channel_->channelState() != NetworkChannel::NotConnected)
         network_channel_->stop();
 
     dettachSession();
-
-    state_ = StoppedState;
 
     if (attach_timer_id_)
     {
@@ -173,11 +175,16 @@ void Host::stop()
         attach_timer_id_ = 0;
     }
 
+    state_ = StoppedState;
+
+    qInfo("Host is stopped");
     emit finished(this);
 }
 
 void Host::sessionChanged(quint32 event, quint32 session_id)
 {
+    qInfo() << "Session change event" << event << "for session" << session_id;
+
     if (state_ != AttachedState && state_ != DetachedState)
         return;
 
@@ -199,7 +206,10 @@ void Host::sessionChanged(quint32 event, quint32 session_id)
 void Host::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == attach_timer_id_)
+    {
+        qWarning("Timeout of session attachment");
         stop();
+    }
 }
 
 void Host::networkMessageWritten(int message_id)
@@ -298,6 +308,7 @@ void Host::ipcNewConnection(IpcChannel* channel)
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::sessionMessageReceived);
     connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::sessionMessageWritten);
 
+    qInfo() << "Host process is attached for session" << session_id_;
     state_ = AttachedState;
 
     ipc_channel_->readMessage();
@@ -306,6 +317,8 @@ void Host::ipcNewConnection(IpcChannel* channel)
 
 void Host::attachSession(quint32 session_id)
 {
+    qInfo() << "Starting host process attachment to session" << session_id;
+
     state_ = StartingState;
     session_id_ = session_id;
 
@@ -324,7 +337,8 @@ void Host::dettachSession()
     if (state_ == StoppedState || state_ == DetachedState)
         return;
 
-    state_ = DetachedState;
+    if (state_ != StoppingState)
+        state_ = DetachedState;
 
     if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
         ipc_channel_->stop();
@@ -335,10 +349,15 @@ void Host::dettachSession()
         delete session_process_;
     }
 
+    qInfo("Host process is detached");
+
+    if (state_ == StoppingState)
+        return;
+
     fake_session_ = HostSessionFake::create(session_type_, this);
     if (fake_session_.isNull())
     {
-        // The session does not have support for fake sessions.
+        qInfo() << "Session type" << session_type_ << "does not have support for fake sessions";
         stop();
     }
     else
@@ -351,6 +370,7 @@ void Host::dettachSession()
 
         connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
 
+        qInfo("Starting a fake session");
         fake_session_->startSession();
 
         attach_timer_id_ = startTimer(std::chrono::minutes(1));
