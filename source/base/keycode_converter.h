@@ -9,8 +9,6 @@
 #ifndef _ASPIA_BASE__KEYCODE_CONVERTER_H
 #define _ASPIA_BASE__KEYCODE_CONVERTER_H
 
-#include <QtCore>
-
 namespace aspia {
 
 // This structure is used to define the keycode mapping table.
@@ -50,7 +48,7 @@ public:
     static quint32 nativeKeycodeToUsbKeycode(int native_keycode);
 
     // Convert a Qt keycode into an equivalent USB keycode.
-    static int qtKeycodeToUsbKeycode(int qt_keycode);
+    static quint32 qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
     Q_DISABLE_COPY(KeycodeConverter)

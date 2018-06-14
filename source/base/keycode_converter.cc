@@ -8,6 +8,8 @@
 
 #include "base/keycode_converter.h"
 
+#include <QtCore>
+
 namespace aspia {
 
 namespace {
@@ -83,7 +85,7 @@ quint32 KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
 }
 
 // static
-int KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
+quint32 KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
 {
     for (size_t i = 0; i < kKeycodeMapEntries; ++i)
     {

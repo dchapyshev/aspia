@@ -8,9 +8,6 @@
 #include "client/ui/desktop_widget.h"
 
 #include <QDebug>
-#include <QKeyEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
 #include <QPainter>
 #include <QWheelEvent>
 
@@ -179,7 +176,7 @@ void DesktopWidget::executeKeySequense(int key_sequence)
     if (key_sequence & Qt::MetaModifier)
         keys.push_back(kUsbCodeLeftMeta);
 
-    int key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
+    quint32 key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
     if (key == KeycodeConverter::invalidUsbKeycode())
         return;
 
