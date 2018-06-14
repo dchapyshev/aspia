@@ -8,9 +8,6 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
-#include <QLabel>
-#include <QPointer>
-
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
