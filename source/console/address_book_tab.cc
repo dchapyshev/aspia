@@ -288,7 +288,6 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
             showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
             return nullptr;
         }
-        break;
     }
 
     return new AddressBookTab(file_path,

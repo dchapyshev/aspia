@@ -336,16 +336,16 @@ void ServiceEventHandler::customEvent(QEvent* event)
 {
     switch (event->type())
     {
-        case ServiceEventHandler::kStartEvent:
+        case kStartEvent:
             ServiceImpl::instance()->start();
             break;
 
-        case ServiceEventHandler::kStopEvent:
+        case kStopEvent:
             ServiceImpl::instance()->stop();
             QCoreApplication::instance()->quit();
             break;
 
-        case ServiceEventHandler::kSessionChangeEvent:
+        case kSessionChangeEvent:
         {
             SessionChangeEvent* session_change_event = dynamic_cast<SessionChangeEvent*>(event);
             if (!session_change_event)
