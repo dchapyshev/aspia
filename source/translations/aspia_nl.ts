@@ -1340,34 +1340,34 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="164"/>
+        <location filename="../console/console_window.cc" line="161"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="166"/>
+        <location filename="../console/console_window.cc" line="163"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="184"/>
+        <location filename="../console/console_window.cc" line="181"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="185"/>
+        <location filename="../console/console_window.cc" line="182"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="443"/>
-        <location filename="../console/console_window.cc" line="630"/>
+        <location filename="../console/console_window.cc" line="413"/>
+        <location filename="../console/console_window.cc" line="600"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="444"/>
-        <location filename="../console/console_window.cc" line="631"/>
+        <location filename="../console/console_window.cc" line="414"/>
+        <location filename="../console/console_window.cc" line="601"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>

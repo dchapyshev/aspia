@@ -1345,34 +1345,34 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="164"/>
+        <location filename="../console/console_window.cc" line="161"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="166"/>
+        <location filename="../console/console_window.cc" line="163"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="184"/>
+        <location filename="../console/console_window.cc" line="181"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="185"/>
+        <location filename="../console/console_window.cc" line="182"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="443"/>
-        <location filename="../console/console_window.cc" line="630"/>
+        <location filename="../console/console_window.cc" line="413"/>
+        <location filename="../console/console_window.cc" line="600"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="444"/>
-        <location filename="../console/console_window.cc" line="631"/>
+        <location filename="../console/console_window.cc" line="414"/>
+        <location filename="../console/console_window.cc" line="601"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>

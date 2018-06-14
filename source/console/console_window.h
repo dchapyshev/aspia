@@ -45,9 +45,6 @@ public slots:
     void onDesktopManageConnect();
     void onDesktopViewConnect();
     void onFileTransferConnect();
-    void onDesktopManageToggled(bool checked);
-    void onDesktopViewToggled(bool checked);
-    void onFileTransferToggled(bool checked);
 
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
