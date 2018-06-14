@@ -46,9 +46,14 @@ private slots:
     void onCustomAction();
 
 private:
+    void delayedHide();
+
     Ui::DesktopPanel ui;
     QPointer<QMenu> keys_menu_;
     int hide_timer_id_ = 0;
+
+    bool allow_hide_ = true;
+    bool leaved_ = true;
 
     Q_DISABLE_COPY(DesktopPanel)
 };

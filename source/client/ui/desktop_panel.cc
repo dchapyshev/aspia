@@ -31,6 +31,15 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
         keys_menu_->addAction(ui.action_alt_printscreen);
         keys_menu_->addAction(ui.action_custom);
 
+        connect(keys_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+        connect(keys_menu_, &QMenu::aboutToHide, [this]()
+        {
+            allow_hide_ = true;
+
+            if (leaved_)
+                delayedHide();
+        });
+
         connect(ui.button_ctrl_alt_del, &QPushButton::pressed,
                 this, &DesktopPanel::onCtrlAltDelButton);
 
@@ -88,24 +97,31 @@ void DesktopPanel::timerEvent(QTimerEvent* event)
 
 void DesktopPanel::enterEvent(QEvent* event)
 {
-    if (hide_timer_id_)
+    leaved_ = false;
+
+    if (allow_hide_)
     {
-        killTimer(hide_timer_id_);
-        hide_timer_id_ = 0;
+        if (hide_timer_id_)
+        {
+            killTimer(hide_timer_id_);
+            hide_timer_id_ = 0;
+        }
+
+        ui.frame_buttons->show();
+        ui.frame->hide();
+
+        adjustSize();
     }
-
-    ui.frame_buttons->show();
-    ui.frame->hide();
-
-    adjustSize();
 
     QFrame::enterEvent(event);
 }
 
 void DesktopPanel::leaveEvent(QEvent* event)
 {
-    if (!ui.button_pin->isChecked() && !hide_timer_id_)
-        hide_timer_id_ = startTimer(std::chrono::seconds(1));
+    leaved_ = true;
+
+    if (allow_hide_)
+        delayedHide();
 
     QFrame::leaveEvent(event);
 }
@@ -169,6 +185,12 @@ void DesktopPanel::onCustomAction()
 
     for (int i = 0; i < key_sequence.count(); ++i)
         emit keySequence(key_sequence[i]);
+}
+
+void DesktopPanel::delayedHide()
+{
+    if (!ui.button_pin->isChecked() && !hide_timer_id_)
+        hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
 } // namespace aspia
