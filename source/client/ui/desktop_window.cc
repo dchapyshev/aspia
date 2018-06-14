@@ -24,26 +24,26 @@
 
 namespace aspia {
 
-DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* parent)
+DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     : QWidget(parent),
-      computer_(computer)
+      connect_data_(connect_data)
 {
     QString session_name;
-    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
         session_name = tr("Aspia Desktop Manage");
     }
     else
     {
-        Q_ASSERT(computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        Q_ASSERT(connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
         session_name = tr("Aspia Desktop View");
     }
 
     QString computer_name;
-    if (!computer_->name().empty())
-        computer_name = QString::fromStdString(computer_->name());
+    if (!connect_data_->computerName().isEmpty())
+        computer_name = connect_data_->computerName();
     else
-        computer_name = QString::fromStdString(computer_->address());
+        computer_name = connect_data_->address();
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
     setMinimumSize(800, 600);
@@ -64,7 +64,7 @@ DesktopWindow::DesktopWindow(proto::address_book::Computer* computer, QWidget* p
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    panel_ = new DesktopPanel(computer_->session_type(), this);
+    panel_ = new DesktopPanel(connect_data_->sessionType(), this);
 
     connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
@@ -134,14 +134,14 @@ void DesktopWindow::setSupportedFeatures(quint32 features)
 {
     supported_features_ = features;
 
-    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    if (connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
         delete clipboard_;
 
         // If the clipboard is supported by the host.
         if (supported_features_ & proto::desktop::FEATURE_CLIPBOARD)
         {
-            const proto::desktop::Config& config = computer_->session_config().desktop_manage();
+            const proto::desktop::Config& config = connect_data_->desktopConfig();
 
             // If the clipboard is enabled in the config.
             if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
@@ -155,7 +155,7 @@ void DesktopWindow::setSupportedFeatures(quint32 features)
     }
     else
     {
-        Q_ASSERT(computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+        Q_ASSERT(connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
     }
 }
 
@@ -230,18 +230,15 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
 
 void DesktopWindow::changeSettings()
 {
-    proto::desktop::Config* config =
-        computer_->mutable_session_config()->mutable_desktop_view();
-
-    if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        config = computer_->mutable_session_config()->mutable_desktop_manage();
-
-    DesktopConfigDialog dialog(*config, supported_video_encodings_, supported_features_, this);
+    DesktopConfigDialog dialog(connect_data_->desktopConfig(),
+                               supported_video_encodings_,
+                               supported_features_,
+                               this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)
     {
-        config->CopyFrom(dialog.config());
+        connect_data_->setDesktopConfig(dialog.config());
         setSupportedFeatures(supported_features_);
-        emit sendConfig(*config);
+        emit sendConfig(dialog.config());
     }
 }
 

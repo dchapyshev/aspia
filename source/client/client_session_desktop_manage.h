@@ -19,7 +19,7 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
     Q_OBJECT
 
 public:
-    ClientSessionDesktopManage(proto::address_book::Computer* computer, QObject* parent);
+    ClientSessionDesktopManage(ConnectData* connect_data, QObject* parent);
 
     static quint32 supportedVideoEncodings();
     static quint32 supportedFeatures();

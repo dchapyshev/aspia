@@ -19,7 +19,6 @@
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
-#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -43,18 +42,6 @@ private:
     QString locale_;
     Q_DISABLE_COPY(LanguageAction)
 };
-
-void cleanupComputer(proto::address_book::Computer* computer)
-{
-    if (!computer)
-        return;
-
-    secureMemZero(computer->mutable_name());
-    secureMemZero(computer->mutable_address());
-    secureMemZero(computer->mutable_username());
-    secureMemZero(computer->mutable_password());
-    secureMemZero(computer->mutable_comment());
-}
 
 } // namespace
 
@@ -726,25 +713,41 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
 
 void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
-    proto::address_book::Computer duplicate_computer(computer);
+    ConnectData connect_data;
 
-    if (!duplicate_computer.session_config().has_desktop_manage())
+    connect_data.setAddress(QString::fromStdString(computer.address()));
+    connect_data.setPort(computer.port());
+    connect_data.setUserName(QString::fromStdString(computer.username()));
+    connect_data.setPassword(QString::fromStdString(computer.password()));
+    connect_data.setSessionType(computer.session_type());
+
+    switch (computer.session_type())
     {
-        ComputerFactory::setDefaultDesktopManageConfig(
-            duplicate_computer.mutable_session_config()->mutable_desktop_manage());
+        case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
+        {
+            if (computer.session_config().has_desktop_manage())
+                connect_data.setDesktopConfig(computer.session_config().desktop_manage());
+            else
+                connect_data.setDesktopConfig(ComputerFactory::defaultDesktopManageConfig());
+        }
+        break;
+
+        case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            if (computer.session_config().has_desktop_view())
+                connect_data.setDesktopConfig(computer.session_config().desktop_view());
+            else
+                connect_data.setDesktopConfig(ComputerFactory::defaultDesktopViewConfig());
+        }
+        break;
+
+        default:
+            break;
     }
 
-    if (!duplicate_computer.session_config().has_desktop_view())
-    {
-        ComputerFactory::setDefaultDesktopViewConfig(
-            duplicate_computer.mutable_session_config()->mutable_desktop_view());
-    }
-
-    Client* client = new Client(duplicate_computer, this);
+    Client* client = new Client(connect_data, this);
     connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
     client_list_.push_back(client);
-
-    cleanupComputer(&duplicate_computer);
 }
 
 void ConsoleWindow::onClientTerminated(Client* client)

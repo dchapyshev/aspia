@@ -8,7 +8,7 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "protocol/address_book.pb.h"
+#include "client/connect_data.h"
 #include "ui_file_manager_window.h"
 
 namespace aspia {
@@ -18,7 +18,7 @@ class FileManagerWindow : public QWidget
     Q_OBJECT
 
 public:
-    FileManagerWindow(proto::address_book::Computer* computer, QWidget* parent = nullptr);
+    FileManagerWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~FileManagerWindow() = default;
 
 public slots:

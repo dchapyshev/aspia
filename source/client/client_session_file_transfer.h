@@ -12,9 +12,9 @@
 #include <QPointer>
 
 #include "client/client_session.h"
+#include "client/connect_data.h"
 #include "host/file_request.h"
 #include "protocol/file_transfer_session.pb.h"
-#include "protocol/address_book.pb.h"
 
 namespace aspia {
 
@@ -29,7 +29,7 @@ class ClientSessionFileTransfer : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(proto::address_book::Computer* computer, QObject* parent);
+    ClientSessionFileTransfer(ConnectData* connect_data, QObject* parent);
     ~ClientSessionFileTransfer();
 
 public slots:
@@ -43,7 +43,7 @@ private slots:
     void remoteRequest(FileRequest* request);
 
 private:
-    proto::address_book::Computer* computer_;
+    ConnectData* connect_data_;
     QPointer<FileManagerWindow> file_manager_;
 
     QPointer<FileWorker> worker_;

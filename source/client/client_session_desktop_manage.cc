@@ -26,9 +26,9 @@ const quint32 kSupportedFeatures =
 
 } // namespace
 
-ClientSessionDesktopManage::ClientSessionDesktopManage(proto::address_book::Computer* computer,
+ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data,
                                                        QObject* parent)
-    : ClientSessionDesktopView(computer, parent)
+    : ClientSessionDesktopView(connect_data, parent)
 {
     connect(desktop_window_, &DesktopWindow::sendKeyEvent,
             this, &ClientSessionDesktopManage::onSendKeyEvent);
@@ -127,7 +127,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    quint32 features = computer_->session_config().desktop_manage().features();
+    quint32 features = connect_data_->desktopConfig().features();
     if (!(features & proto::desktop::FEATURE_CLIPBOARD))
         return;
 
@@ -140,13 +140,13 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
 void ClientSessionDesktopManage::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    proto::desktop::Config* config = computer_->mutable_session_config()->mutable_desktop_manage();
+    proto::desktop::Config config = connect_data_->desktopConfig();
 
     desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
     desktop_window_->setSupportedFeatures(config_request.features());
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config->video_encoding()))
+    if (!(config_request.video_encodings() & config.video_encoding()))
     {
         if (!(config_request.video_encodings() & kSupportedVideoEncodings))
         {
@@ -155,7 +155,7 @@ void ClientSessionDesktopManage::readConfigRequest(
         }
         else
         {
-            if (!desktop_window_->requireConfigChange(config))
+            if (!desktop_window_->requireConfigChange(&config))
             {
                 emit errorOccurred(tr("Session error: Canceled by the user."));
                 return;
@@ -163,12 +163,13 @@ void ClientSessionDesktopManage::readConfigRequest(
         }
     }
 
-    onSendConfig(*config);
+    connect_data_->setDesktopConfig(config);
+    onSendConfig(config);
 }
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    quint32 features = computer_->session_config().desktop_manage().features();
+    quint32 features = connect_data_->desktopConfig().features();
     if (!(features & proto::desktop::FEATURE_CURSOR_SHAPE))
         return;
 
@@ -194,7 +195,7 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    quint32 features = computer_->session_config().desktop_manage().features();
+    quint32 features = connect_data_->desktopConfig().features();
     if (!(features & proto::desktop::FEATURE_CLIPBOARD))
         return;
 

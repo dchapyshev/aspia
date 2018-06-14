@@ -12,6 +12,7 @@
 #include <QThread>
 
 #include "client/client_session.h"
+#include "client/connect_data.h"
 #include "codec/video_decoder.h"
 #include "protocol/address_book.pb.h"
 
@@ -24,7 +25,7 @@ class ClientSessionDesktopView : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionDesktopView(proto::address_book::Computer* computer, QObject* parent);
+    ClientSessionDesktopView(ConnectData* connect_data, QObject* parent);
     virtual ~ClientSessionDesktopView();
 
     static quint32 supportedVideoEncodings();
@@ -42,7 +43,7 @@ public slots:
 protected:
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
 
-    proto::address_book::Computer* computer_;
+    ConnectData* connect_data_;
     QPointer<DesktopWindow> desktop_window_;
 
 private:

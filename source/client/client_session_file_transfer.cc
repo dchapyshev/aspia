@@ -24,9 +24,9 @@ enum MessageId { RequestMessageId };
 } // namespace
 
 ClientSessionFileTransfer::ClientSessionFileTransfer(
-    proto::address_book::Computer* computer, QObject* parent)
+    ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
-      computer_(computer)
+      connect_data_(connect_data)
 {
     qRegisterMetaType<proto::file_transfer::Request>();
     qRegisterMetaType<proto::file_transfer::Reply>();
@@ -82,7 +82,7 @@ void ClientSessionFileTransfer::startSession()
     worker_->moveToThread(worker_thread_);
     worker_thread_->start();
 
-    file_manager_ = new FileManagerWindow(computer_);
+    file_manager_ = new FileManagerWindow(connect_data_);
 
     // When the window is closed, we close the session.
     connect(file_manager_, &FileManagerWindow::windowClose,

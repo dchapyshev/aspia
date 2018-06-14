@@ -14,16 +14,16 @@
 
 namespace aspia {
 
-FileManagerWindow::FileManagerWindow(proto::address_book::Computer* computer, QWidget* parent)
+FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
 
     QString computer_name;
-    if (!computer->name().empty())
-        computer_name = QString::fromStdString(computer->name());
+    if (!connect_data->computerName().isEmpty())
+        computer_name = connect_data->computerName();
     else
-        computer_name = QString::fromStdString(computer->address());
+        computer_name = connect_data->address();
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 

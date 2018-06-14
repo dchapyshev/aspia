@@ -9,8 +9,8 @@
 #define _ASPIA_CLIENT__CLIENT_H
 
 #include "client/client_session.h"
+#include "client/connect_data.h"
 #include "network/network_channel.h"
-#include "protocol/address_book.pb.h"
 
 namespace aspia {
 
@@ -22,8 +22,8 @@ class Client : public QObject
     Q_OBJECT
 
 public:
-    Client(const proto::address_book::Computer& computer, QObject* parent = nullptr);
-    ~Client();
+    Client(const ConnectData& connect_data, QObject* parent = nullptr);
+    ~Client() = default;
 
 signals:
     void clientTerminated(Client* client);
@@ -37,12 +37,12 @@ private slots:
     void onSessionError(const QString& message);
 
 private:
+    ConnectData connect_data_;
+
     QPointer<NetworkChannel> network_channel_;
     QPointer<StatusDialog> status_dialog_;
     QPointer<ClientUserAuthorizer> authorizer_;
     QPointer<ClientSession> session_;
-
-    proto::address_book::Computer computer_;
 
     Q_DISABLE_COPY(Client)
 };

@@ -13,13 +13,12 @@
 #include "client/client_session_desktop_view.h"
 #include "client/client_session_file_transfer.h"
 #include "client/client_user_authorizer.h"
-#include "crypto/secure_memory.h"
 
 namespace aspia {
 
-Client::Client(const proto::address_book::Computer& computer, QObject* parent)
+Client::Client(const ConnectData& connect_data, QObject* parent)
     : QObject(parent),
-      computer_(computer)
+      connect_data_(connect_data)
 {
     // Create a network channel.
     network_channel_ = NetworkChannel::createClient(this);
@@ -44,8 +43,8 @@ Client::Client(const proto::address_book::Computer& computer, QObject* parent)
         emit clientTerminated(this);
     });
 
-    QString address = QString::fromStdString(computer_.address());
-    int port = computer_.port();
+    QString address = connect_data_.address();
+    int port = connect_data_.port();
 
     status_dialog_->show();
     status_dialog_->activateWindow();
@@ -54,24 +53,15 @@ Client::Client(const proto::address_book::Computer& computer, QObject* parent)
     network_channel_->connectToHost(address, port);
 }
 
-Client::~Client()
-{
-    secureMemZero(computer_.mutable_name());
-    secureMemZero(computer_.mutable_address());
-    secureMemZero(computer_.mutable_username());
-    secureMemZero(computer_.mutable_password());
-    secureMemZero(computer_.mutable_comment());
-}
-
 void Client::onChannelConnected()
 {
     status_dialog_->addStatus(tr("Connection established."));
 
     authorizer_ = new ClientUserAuthorizer(status_dialog_);
 
-    authorizer_->setSessionType(computer_.session_type());
-    authorizer_->setUserName(QString::fromStdString(computer_.username()));
-    authorizer_->setPassword(QString::fromStdString(computer_.password()));
+    authorizer_->setSessionType(connect_data_.sessionType());
+    authorizer_->setUserName(connect_data_.userName());
+    authorizer_->setPassword(connect_data_.password());
 
     // Connect authorizer to network.
     connect(authorizer_, &ClientUserAuthorizer::writeMessage,
@@ -133,18 +123,18 @@ void Client::onAuthorizationFinished(proto::auth::Status status)
             return;
     }
 
-    switch (computer_.session_type())
+    switch (connect_data_.sessionType())
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            session_ = new ClientSessionDesktopManage(&computer_, this);
+            session_ = new ClientSessionDesktopManage(&connect_data_, this);
             break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            session_ = new ClientSessionDesktopView(&computer_, this);
+            session_ = new ClientSessionDesktopView(&connect_data_, this);
             break;
 
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
-            session_ = new ClientSessionFileTransfer(&computer_, this);
+            session_ = new ClientSessionFileTransfer(&connect_data_, this);
             break;
 
         default:

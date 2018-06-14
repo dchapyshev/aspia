@@ -11,7 +11,8 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "protocol/address_book.pb.h"
+#include "client/connect_data.h"
+#include "protocol/desktop_session.pb.h"
 
 class QHBoxLayout;
 class QScrollArea;
@@ -28,7 +29,7 @@ class DesktopWindow : public QWidget
     Q_OBJECT
 
 public:
-    DesktopWindow(proto::address_book::Computer* computer, QWidget* parent = nullptr);
+    DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
     void resizeDesktopFrame(const QSize& screen_size);
@@ -62,7 +63,7 @@ private slots:
     void autosizeWindow();
 
 private:
-    proto::address_book::Computer* computer_;
+    ConnectData* connect_data_;
 
     quint32 supported_video_encodings_ = 0;
     quint32 supported_features_ = 0;

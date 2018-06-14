@@ -68,6 +68,8 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/client/computer_factory.cc
     ${PROJECT_SOURCE_DIR}/client/computer_factory.h
+    ${PROJECT_SOURCE_DIR}/client/connect_data.cc
+    ${PROJECT_SOURCE_DIR}/client/connect_data.h
     ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.cc
     ${PROJECT_SOURCE_DIR}/client/file_remove_queue_builder.h
     ${PROJECT_SOURCE_DIR}/client/file_remove_task.cc

@@ -26,11 +26,11 @@ const quint32 kSupportedFeatures = 0;
 } // namespace
 
 ClientSessionDesktopView::ClientSessionDesktopView(
-    proto::address_book::Computer* computer, QObject* parent)
+    ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
-      computer_(computer)
+      connect_data_(connect_data)
 {
-    desktop_window_ = new DesktopWindow(computer_);
+    desktop_window_ = new DesktopWindow(connect_data_);
 
     connect(desktop_window_, &DesktopWindow::sendConfig,
             this, &ClientSessionDesktopView::onSendConfig);
@@ -159,13 +159,13 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::readConfigRequest(
     const proto::desktop::ConfigRequest& config_request)
 {
-    proto::desktop::Config* config = computer_->mutable_session_config()->mutable_desktop_view();
+    proto::desktop::Config config = connect_data_->desktopConfig();
 
     desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
     desktop_window_->setSupportedFeatures(config_request.features());
 
     // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config->video_encoding()))
+    if (!(config_request.video_encodings() & config.video_encoding()))
     {
         if (!(config_request.video_encodings() & kSupportedVideoEncodings))
         {
@@ -174,7 +174,7 @@ void ClientSessionDesktopView::readConfigRequest(
         }
         else
         {
-            if (!desktop_window_->requireConfigChange(config))
+            if (!desktop_window_->requireConfigChange(&config))
             {
                 emit errorOccurred(tr("Session error: Canceled by the user."));
                 return;
@@ -182,7 +182,8 @@ void ClientSessionDesktopView::readConfigRequest(
         }
     }
 
-    onSendConfig(*config);
+    connect_data_->setDesktopConfig(config);
+    onSendConfig(config);
 }
 
 } // namespace aspia
