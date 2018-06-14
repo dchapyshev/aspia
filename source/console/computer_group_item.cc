@@ -98,12 +98,12 @@ proto::address_book::Computer* ComputerGroupItem::takeChildComputer(
     {
         if (computer_group_->mutable_computer(i) == computer)
         {
-            proto::address_book::Computer* computer = new proto::address_book::Computer();
-            *computer = std::move(*computer_group_->mutable_computer(i));
+            proto::address_book::Computer* new_computer = new proto::address_book::Computer();
+            *new_computer = std::move(*computer_group_->mutable_computer(i));
 
             computer_group_->mutable_computer()->DeleteSubrange(i, 1);
 
-            return computer;
+            return new_computer;
         }
     }
 
