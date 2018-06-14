@@ -14,10 +14,8 @@
 #include <objidl.h>
 #include <sddl.h>
 
-#include <memory>
 #include <string>
 
-#include "base/win/scoped_object.h"
 #include "base/win/scoped_local.h"
 #include "base/errno_logging.h"
 #include "base/typed_buffer.h"
@@ -90,35 +88,6 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
     group->swap(local_group);
     owner->swap(local_owner);
     sacl->swap(local_sacl);
-
-    return true;
-}
-
-bool getUserSidString(std::wstring* user_sid)
-{
-    // Get the current token.
-    ScopedHandle token;
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
-        return false;
-
-    DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
-    std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
-
-    TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
-
-    if (!GetTokenInformation(token, TokenUser, user, size, &size))
-        return false;
-
-    if (!user->User.Sid)
-        return false;
-
-    // Convert the data to a string.
-    ScopedLocal<wchar_t*> sid_string;
-
-    if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
-        return false;
-
-    user_sid->assign(sid_string);
 
     return true;
 }
