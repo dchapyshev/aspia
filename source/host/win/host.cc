@@ -22,11 +22,7 @@ namespace aspia {
 
 namespace {
 
-enum MessageId
-{
-    IpcMessageId,
-    NetworkMessageId
-};
+enum MessageId { IpcMessageId, NetworkMessageId };
 
 } // namespace
 
@@ -141,8 +137,6 @@ bool Host::start()
     state_ = StartingState;
 
     connect(network_channel_, &NetworkChannel::disconnected, this, &Host::stop);
-    connect(network_channel_, &NetworkChannel::messageWritten, this, &Host::networkMessageWritten);
-    connect(network_channel_, &NetworkChannel::messageReceived, this, &Host::networkMessageReceived);
 
     attach_timer_id_ = startTimer(std::chrono::minutes(1));
     if (!attach_timer_id_)
@@ -213,36 +207,25 @@ void Host::timerEvent(QTimerEvent* event)
 
 void Host::networkMessageWritten(int message_id)
 {
-    if (!fake_session_.isNull())
-    {
-        fake_session_->onMessageWritten(message_id);
-    }
-    else if (!ipc_channel_.isNull())
-    {
+    Q_ASSERT(message_id == NetworkMessageId);
+
+    if (!ipc_channel_.isNull())
         ipc_channel_->readMessage();
-    }
 }
 
 void Host::networkMessageReceived(const QByteArray& buffer)
 {
-    if (!fake_session_.isNull())
-    {
-        fake_session_->onMessageReceived(buffer);
-        network_channel_->readMessage();
-    }
-    else if (!ipc_channel_.isNull())
-    {
+    if (!ipc_channel_.isNull())
         ipc_channel_->writeMessage(IpcMessageId, buffer);
-    }
 }
 
-void Host::sessionMessageWritten(int message_id)
+void Host::ipcMessageWritten(int message_id)
 {
     Q_ASSERT(message_id == IpcMessageId);
     network_channel_->readMessage();
 }
 
-void Host::sessionMessageReceived(const QByteArray& buffer)
+void Host::ipcMessageReceived(const QByteArray& buffer)
 {
     network_channel_->writeMessage(NetworkMessageId, buffer);
 }
@@ -321,8 +304,11 @@ void Host::ipcNewConnection(IpcChannel* channel)
 
     connect(ipc_channel_, &IpcChannel::disconnected, ipc_channel_, &IpcChannel::deleteLater);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &Host::dettachSession);
-    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::sessionMessageReceived);
-    connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::sessionMessageWritten);
+    connect(ipc_channel_, &IpcChannel::messageReceived, this, &Host::ipcMessageReceived);
+    connect(ipc_channel_, &IpcChannel::messageWritten, this, &Host::ipcMessageWritten);
+
+    connect(network_channel_, &NetworkChannel::messageWritten, this, &Host::networkMessageWritten);
+    connect(network_channel_, &NetworkChannel::messageReceived, this, &Host::networkMessageReceived);
 
     qInfo() << "Host process is attached for session" << session_id_;
     state_ = AttachedState;
@@ -355,6 +341,11 @@ void Host::dettachSession()
 
     if (state_ != StoppingState)
         state_ = DetachedState;
+
+    disconnect(network_channel_, &NetworkChannel::messageWritten,
+               this, &Host::networkMessageWritten);
+    disconnect(network_channel_, &NetworkChannel::messageReceived,
+               this, &Host::networkMessageReceived);
 
     if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
         ipc_channel_->stop();
@@ -401,6 +392,12 @@ bool Host::startFakeSession()
 
     connect(fake_session_, &HostSessionFake::readMessage,
             network_channel_, &NetworkChannel::readMessage);
+
+    connect(network_channel_, &NetworkChannel::messageReceived,
+            fake_session_, &HostSessionFake::onMessageReceived);
+
+    connect(network_channel_, &NetworkChannel::messageWritten,
+            fake_session_, &HostSessionFake::onMessageWritten);
 
     connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
 

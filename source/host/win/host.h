@@ -68,8 +68,8 @@ protected:
 private slots:
     void networkMessageWritten(int message_id);
     void networkMessageReceived(const QByteArray& buffer);
-    void sessionMessageWritten(int message_id);
-    void sessionMessageReceived(const QByteArray& buffer);
+    void ipcMessageWritten(int message_id);
+    void ipcMessageReceived(const QByteArray& buffer);
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(IpcChannel* channel);
     void attachSession(quint32 session_id);
