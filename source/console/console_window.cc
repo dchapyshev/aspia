@@ -341,7 +341,9 @@ void ConsoleWindow::onFastConnect()
     if (dialog.exec() != ClientDialog::Accepted)
         return;
 
-    connectToComputer(&dialog.computer());
+    Client* client = new Client(dialog.computer(), this);
+    connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
+    client_list_.push_back(client);
 }
 
 void ConsoleWindow::onDesktopManageConnect()

@@ -21,7 +21,7 @@ public:
     explicit ClientDialog(QWidget* parent = nullptr);
     ~ClientDialog();
 
-    proto::address_book::Computer computer() const { return computer_; }
+    const proto::address_book::Computer& computer() const { return computer_; }
 
 private slots:
     void sessionTypeChanged(int item_index);
