@@ -988,81 +988,81 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="218"/>
+        <location filename="../console/address_book_tab.cc" line="190"/>
         <source>Unable to open address book file.</source>
         <translation>Не удалось открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="225"/>
+        <location filename="../console/address_book_tab.cc" line="197"/>
         <source>Unable to read address book file.</source>
         <translation>Не удалось прочитать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="233"/>
-        <location filename="../console/address_book_tab.cc" line="248"/>
-        <location filename="../console/address_book_tab.cc" line="278"/>
+        <location filename="../console/address_book_tab.cc" line="205"/>
+        <location filename="../console/address_book_tab.cc" line="220"/>
+        <location filename="../console/address_book_tab.cc" line="250"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="272"/>
+        <location filename="../console/address_book_tab.cc" line="244"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="288"/>
+        <location filename="../console/address_book_tab.cc" line="260"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="454"/>
+        <location filename="../console/address_book_tab.cc" line="427"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочернии элементы?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="458"/>
-        <location filename="../console/address_book_tab.cc" line="480"/>
+        <location filename="../console/address_book_tab.cc" line="431"/>
+        <location filename="../console/address_book_tab.cc" line="453"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="476"/>
+        <location filename="../console/address_book_tab.cc" line="449"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="664"/>
+        <location filename="../console/address_book_tab.cc" line="637"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="666"/>
+        <location filename="../console/address_book_tab.cc" line="639"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="676"/>
+        <location filename="../console/address_book_tab.cc" line="649"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="688"/>
+        <location filename="../console/address_book_tab.cc" line="661"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="704"/>
-        <location filename="../console/address_book_tab.cc" line="718"/>
+        <location filename="../console/address_book_tab.cc" line="677"/>
+        <location filename="../console/address_book_tab.cc" line="691"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="706"/>
+        <location filename="../console/address_book_tab.cc" line="679"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="720"/>
+        <location filename="../console/address_book_tab.cc" line="693"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1070,57 +1070,57 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client/client.cc" line="53"/>
+        <location filename="../client/client.cc" line="52"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="68"/>
+        <location filename="../client/client.cc" line="58"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="99"/>
+        <location filename="../client/client.cc" line="89"/>
         <source>Authorization started.</source>
         <translation>Начата авторизация.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="105"/>
+        <location filename="../client/client.cc" line="95"/>
         <source>Disconnected.</source>
         <translation>Подключение разорвано.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="110"/>
+        <location filename="../client/client.cc" line="100"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="120"/>
+        <location filename="../client/client.cc" line="110"/>
         <source>Successful authorization.</source>
         <translation>Успешная авторизация.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="124"/>
+        <location filename="../client/client.cc" line="114"/>
         <source>Authorization error: Access denied.</source>
         <translation>Ошибка авторизации: доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="128"/>
+        <location filename="../client/client.cc" line="118"/>
         <source>Authorization has been canceled.</source>
         <translation>Авторизация отменена.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="132"/>
+        <location filename="../client/client.cc" line="122"/>
         <source>Authorization error: Unknown status code.</source>
         <translation>Ошибка авторизации: Неизвестный код состояния.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="151"/>
+        <location filename="../client/client.cc" line="141"/>
         <source>Unsupported session type.</source>
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="170"/>
+        <location filename="../client/client.cc" line="160"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -1128,17 +1128,17 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="29"/>
+        <location filename="../client/ui/client_dialog.cc" line="28"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="33"/>
+        <location filename="../client/ui/client_dialog.cc" line="32"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="37"/>
+        <location filename="../client/ui/client_dialog.cc" line="36"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
@@ -1248,7 +1248,7 @@
         <translation>Передача файлов</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="151"/>
+        <location filename="../console/computer_dialog.cc" line="153"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1257,17 +1257,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="157"/>
+        <location filename="../console/computer_dialog.cc" line="159"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="164"/>
+        <location filename="../console/computer_dialog.cc" line="166"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="172"/>
+        <location filename="../console/computer_dialog.cc" line="174"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
@@ -1276,7 +1276,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="180"/>
+        <location filename="../console/computer_dialog.cc" line="182"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1285,7 +1285,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="210"/>
+        <location filename="../console/computer_dialog.cc" line="212"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1345,34 +1345,34 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="163"/>
+        <location filename="../console/console_window.cc" line="164"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="165"/>
+        <location filename="../console/console_window.cc" line="166"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="183"/>
+        <location filename="../console/console_window.cc" line="184"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="184"/>
+        <location filename="../console/console_window.cc" line="185"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="438"/>
-        <location filename="../console/console_window.cc" line="623"/>
+        <location filename="../console/console_window.cc" line="443"/>
+        <location filename="../console/console_window.cc" line="630"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="439"/>
-        <location filename="../console/console_window.cc" line="624"/>
+        <location filename="../console/console_window.cc" line="444"/>
+        <location filename="../console/console_window.cc" line="631"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
