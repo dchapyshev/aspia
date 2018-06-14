@@ -1335,34 +1335,34 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="190"/>
+        <location filename="../console/console_window.cc" line="163"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="192"/>
+        <location filename="../console/console_window.cc" line="165"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="210"/>
+        <location filename="../console/console_window.cc" line="183"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="211"/>
+        <location filename="../console/console_window.cc" line="184"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="465"/>
-        <location filename="../console/console_window.cc" line="651"/>
+        <location filename="../console/console_window.cc" line="438"/>
+        <location filename="../console/console_window.cc" line="623"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="466"/>
-        <location filename="../console/console_window.cc" line="652"/>
+        <location filename="../console/console_window.cc" line="439"/>
+        <location filename="../console/console_window.cc" line="624"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1670,34 +1670,34 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="208"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="237"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="171"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="181"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="229"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="144"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="192"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="182"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="145"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="205"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="168"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kon niet worden weggeschreven. Zorg dat U genoeg rechten heeft om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="224"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="187"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Service configuratie veranderd. Om de wijzigingen toe te passen, moet de service herstart worden. Nu herstarten?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="238"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
         <source>Could not restart the service.</source>
         <translation>De service kon niet herstart worden.</translation>
     </message>
@@ -1705,7 +1705,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="304"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="264"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
@@ -1713,7 +1713,7 @@
 <context>
     <name>aspia::HostServer</name>
     <message>
-        <location filename="../host/host_server.cc" line="103"/>
+        <location filename="../host/host_server.cc" line="98"/>
         <source>Allow incoming TCP connections</source>
         <translation>Sta binnenkomende TCP verbindingen toe</translation>
     </message>

@@ -12,8 +12,6 @@
 #include <windows.h>
 #endif
 
-#include <QDebug>
-#include <QDir>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
@@ -63,34 +61,6 @@ private:
     Q_DISABLE_COPY(SessionTreeItem)
 };
 
-QHash<QString, QStringList> createLocaleList()
-{
-    QString translations_dir =
-        QApplication::applicationDirPath() + QStringLiteral("/translations/");
-
-    QStringList qm_file_list =
-        QDir(translations_dir).entryList(QStringList() << QStringLiteral("*.qm"));
-
-    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
-
-    QHash<QString, QStringList> locale_list;
-
-    for (const auto& qm_file : qm_file_list)
-    {
-        if (regexp.exactMatch(qm_file))
-        {
-            QString locale_name = regexp.cap(2);
-
-            if (locale_list.contains(locale_name))
-                locale_list[locale_name].push_back(qm_file);
-            else
-                locale_list.insert(locale_name, QStringList() << qm_file);
-        }
-    }
-
-    return locale_list;
-}
-
 } // namespace
 
 HostNotifierWindow::HostNotifierWindow(QWidget* parent)
@@ -100,14 +70,13 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
 
     QString current_locale = settings.locale();
 
-    QHash<QString, QStringList> locale_list = createLocaleList();
-    if (locale_list.constFind(current_locale) == locale_list.constEnd())
+    if (!locale_loader_.contains(current_locale))
     {
         current_locale = HostSettings::defaultLocale();
         settings.setLocale(current_locale);
     }
 
-    installTranslators(locale_list[current_locale]);
+    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
 
     ui.label_title->installEventFilter(this);
@@ -131,15 +100,6 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
         qWarningErrno("RegisterWindowMessageW failed");
     }
 #endif
-}
-
-HostNotifierWindow::~HostNotifierWindow()
-{
-    for (auto translator : translator_list_)
-    {
-        QApplication::removeTranslator(translator);
-        delete translator;
-    }
 }
 
 void HostNotifierWindow::setChannelId(const QString& channel_id)
@@ -308,30 +268,6 @@ void HostNotifierWindow::onContextMenu(const QPoint& point)
 
     if (menu.exec(ui.tree->mapToGlobal(point)) == &disconnect_action)
         emit killSession(item->session().uuid());
-}
-
-void HostNotifierWindow::installTranslators(const QStringList& file_list)
-{
-    QString translations_dir =
-        QApplication::applicationDirPath() + QStringLiteral("/translations/");
-
-    for (const auto& qm_file : file_list)
-    {
-        QString qm_file_path = translations_dir + qm_file;
-
-        QTranslator* translator = new QTranslator();
-
-        if (!translator->load(qm_file_path))
-        {
-            qWarning() << "Translation file not loaded: " << qm_file_path;
-            delete translator;
-        }
-        else
-        {
-            QApplication::installTranslator(translator);
-            translator_list_.push_back(translator);
-        }
-    }
 }
 
 } // namespace aspia

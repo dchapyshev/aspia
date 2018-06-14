@@ -21,52 +21,20 @@
 
 namespace aspia {
 
-namespace {
-
-QHash<QString, QStringList> createLocaleList()
-{
-    QString translations_dir =
-        QApplication::applicationDirPath() + QStringLiteral("/translations/");
-
-    QStringList qm_file_list =
-        QDir(translations_dir).entryList(QStringList() << QStringLiteral("*.qm"));
-
-    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
-    QHash<QString, QStringList> locale_list;
-
-    for (const auto& qm_file : qm_file_list)
-    {
-        if (regexp.exactMatch(qm_file))
-        {
-            QString locale_name = regexp.cap(2);
-
-            if (locale_list.contains(locale_name))
-                locale_list[locale_name].push_back(qm_file);
-            else
-                locale_list.insert(locale_name, QStringList() << qm_file);
-        }
-    }
-
-    return locale_list;
-}
-
-} // namespace
-
 HostConfigDialog::HostConfigDialog(QWidget* parent)
-    : QDialog(parent),
-      locale_list_(createLocaleList())
+    : QDialog(parent)
 {
     HostSettings settings;
 
     QString current_locale = settings.locale();
 
-    if (locale_list_.constFind(current_locale) == locale_list_.constEnd())
+    if (!locale_loader_.contains(current_locale))
     {
         current_locale = HostSettings::defaultLocale();
         settings.setLocale(current_locale);
     }
 
-    installTranslators(current_locale);
+    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
     createLanguageList(current_locale);
 
@@ -110,11 +78,6 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     ui.spinbox_port->setValue(settings.tcpPort());
 
     setConfigChanged(false);
-}
-
-HostConfigDialog::~HostConfigDialog()
-{
-    removeTranslators();
 }
 
 void HostConfigDialog::onUserContextMenu(const QPoint& point)
@@ -260,72 +223,13 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     close();
 }
 
-void HostConfigDialog::installTranslators(const QString& locale)
-{
-    QString translations_dir =
-        QApplication::applicationDirPath() + QStringLiteral("/translations/");
-
-    QStringList qm_file_list = locale_list_[locale];
-
-    for (const auto& qm_file : qm_file_list)
-    {
-        QString qm_file_path = translations_dir + qm_file;
-
-        QTranslator* translator = new QTranslator();
-
-        if (!translator->load(qm_file_path))
-        {
-            qWarning() << "Translation file not loaded: " << qm_file_path;
-            delete translator;
-        }
-        else
-        {
-            QApplication::installTranslator(translator);
-            translator_list_.push_back(translator);
-        }
-    }
-}
-
-void HostConfigDialog::removeTranslators()
-{
-    for (auto translator : translator_list_)
-    {
-        QApplication::removeTranslator(translator);
-        delete translator;
-    }
-
-    translator_list_.clear();
-}
-
 void HostConfigDialog::createLanguageList(const QString& current_locale)
 {
-    QHashIterator<QString, QStringList> iter(locale_list_);
-
-    QStringList locale_list;
-
-    while (iter.hasNext())
+    for (const auto& locale : locale_loader_.sortedLocaleList())
     {
-        iter.next();
-        locale_list.push_back(iter.key());
-    }
-
-    if (!locale_list_.contains(QStringLiteral("en")))
-        locale_list.push_back(QStringLiteral("en"));
-
-    std::sort(locale_list.begin(), locale_list.end(),
-              [](const QString& a, const QString& b)
-    {
-        return QString::compare(QLocale::languageToString(QLocale(a).language()),
-                                QLocale::languageToString(QLocale(b).language()),
-                                Qt::CaseInsensitive) < 0;
-    });
-
-    for (const auto& locale : locale_list)
-    {
-        QString language = QLocale::languageToString(QLocale(locale).language());
+        const QString language = QLocale::languageToString(QLocale(locale).language());
 
         ui.combobox_language->addItem(language, locale);
-
         if (current_locale == locale)
             ui.combobox_language->setCurrentText(language);
     }
@@ -333,8 +237,7 @@ void HostConfigDialog::createLanguageList(const QString& current_locale)
 
 void HostConfigDialog::retranslateUi(const QString& locale)
 {
-    removeTranslators();
-    installTranslators(locale);
+    locale_loader_.installTranslators(locale);
     ui.retranslateUi(this);
 }
 

@@ -23,32 +23,6 @@ namespace aspia {
 
 namespace {
 
-QHash<QString, QStringList> createLocaleList()
-{
-    QString translations_dir =
-        QApplication::applicationDirPath() + QStringLiteral("/translations/");
-
-    QHash<QString, QStringList> locale_list;
-
-    QStringList qm_file_list = QDir(translations_dir).entryList(QStringList() << "*.qm");
-    QRegExp regexp(QStringLiteral("([a-zA-Z0-9-_]+)_([^.]*).qm"));
-
-    for (const auto& qm_file : qm_file_list)
-    {
-        if (regexp.exactMatch(qm_file))
-        {
-            QString locale_name = regexp.cap(2);
-
-            if (locale_list.contains(locale_name))
-                locale_list[locale_name].push_back(qm_file);
-            else
-                locale_list.insert(locale_name, QStringList() << qm_file);
-        }
-    }
-
-    return locale_list;
-}
-
 class LanguageAction : public QAction
 {
 public:
@@ -71,20 +45,19 @@ private:
 } // namespace
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
-    : QMainWindow(parent),
-      locale_list_(createLocaleList())
+    : QMainWindow(parent)
 {
     ConsoleSettings settings;
 
     QString current_locale = settings.locale();
 
-    if (locale_list_.constFind(current_locale) == locale_list_.constEnd())
+    if (!locale_loader_.contains(current_locale))
     {
         current_locale = ConsoleSettings::defaultLocale();
         settings.setLocale(current_locale);
     }
 
-    installTranslators(current_locale);
+    locale_loader_.installTranslators(current_locale);
     ui.setupUi(this);
     createLanguageMenu(current_locale);
 
@@ -625,8 +598,7 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
     {
         QString new_locale = language_action->locale();
 
-        removeTranslators();
-        installTranslators(new_locale);
+        locale_loader_.installTranslators(new_locale);
         ui.retranslateUi(this);
 
         for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -681,73 +653,15 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     else if (ui.action_file_transfer->isChecked())
         settings.setSessionType(proto::auth::SESSION_TYPE_FILE_TRANSFER);
 
-    removeTranslators();
-
     QApplication::quit();
     QMainWindow::closeEvent(event);
 }
 
-void ConsoleWindow::installTranslators(const QString& locale)
-{
-    QString translations_dir = QApplication::applicationDirPath() + "/translations/";
-    QStringList qm_file_list = locale_list_[locale];
-
-    for (const auto& qm_file : qm_file_list)
-    {
-        QString qm_file_path = translations_dir + qm_file;
-
-        QTranslator* translator = new QTranslator();
-
-        if (!translator->load(qm_file_path))
-        {
-            qWarning() << "Translation file not loaded: " << qm_file_path;
-            delete translator;
-        }
-        else
-        {
-            QApplication::installTranslator(translator);
-            translator_list_.push_back(translator);
-        }
-    }
-}
-
-void ConsoleWindow::removeTranslators()
-{
-    for (auto translator : translator_list_)
-    {
-        QApplication::removeTranslator(translator);
-        delete translator;
-    }
-
-    translator_list_.clear();
-}
-
 void ConsoleWindow::createLanguageMenu(const QString& current_locale)
 {
-    QHashIterator<QString, QStringList> iter(locale_list_);
-
-    QStringList locale_list;
-
-    while (iter.hasNext())
-    {
-        iter.next();
-        locale_list.push_back(iter.key());
-    }
-
-    if (!locale_list_.contains("en"))
-        locale_list.push_back("en");
-
-    std::sort(locale_list.begin(), locale_list.end(),
-              [](const QString& a, const QString& b)
-    {
-        return QString::compare(QLocale::languageToString(QLocale(a).language()),
-                                QLocale::languageToString(QLocale(b).language()),
-                                Qt::CaseInsensitive) < 0;
-    });
-
     QActionGroup* language_group = new QActionGroup(this);
 
-    for (const auto& locale : locale_list)
+    for (const auto& locale : locale_loader_.sortedLocaleList())
     {
         LanguageAction* action_language = new LanguageAction(locale, this);
 

@@ -15,6 +15,7 @@
 
 #include "base/win/security_helpers.h"
 #include "host/host_server.h"
+#include "host/host_settings.h"
 #include "version.h"
 
 namespace aspia {
@@ -78,8 +79,13 @@ void HostService::start()
 
     initializeComSecurity(kComProcessSd, kComProcessMandatoryLabel, false);
 
+    HostSettings settings;
+
+    locale_loader_.reset(new LocaleLoader());
+    locale_loader_->installTranslators(settings.locale());
+
     server_ = new HostServer();
-    if (!server_->start())
+    if (!server_->start(settings.tcpPort(), settings.userList()))
     {
         delete server_;
         app->quit();

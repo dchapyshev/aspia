@@ -8,6 +8,7 @@
 #ifndef _ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
 #define _ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
 
+#include "base/locale_loader.h"
 #include "host/user.h"
 #include "ui_host_config_dialog.h"
 
@@ -19,7 +20,7 @@ class HostConfigDialog : public QDialog
 
 public:
     explicit HostConfigDialog(QWidget* parent = nullptr);
-    ~HostConfigDialog();
+    ~HostConfigDialog() = default;
 
 private slots:
     void onUserContextMenu(const QPoint& point);
@@ -30,8 +31,6 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void installTranslators(const QString& locale);
-    void removeTranslators();
     void createLanguageList(const QString& current_locale);
     void retranslateUi(const QString& locale);
     void setConfigChanged(bool changed);
@@ -42,8 +41,7 @@ private:
 
     Ui::HostConfigDialog ui;
 
-    QHash<QString, QStringList> locale_list_;
-    QList<QTranslator*> translator_list_;
+    LocaleLoader locale_loader_;
     QList<User> user_list_;
 
     Q_DISABLE_COPY(HostConfigDialog)

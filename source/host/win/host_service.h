@@ -12,6 +12,7 @@
 #include <QScopedPointer>
 
 #include "base/win/scoped_com_initializer.h"
+#include "base/locale_loader.h"
 #include "base/service.h"
 
 namespace aspia {
@@ -31,6 +32,7 @@ protected:
 
 private:
     QScopedPointer<ScopedCOMInitializer> com_initializer_;
+    QScopedPointer<LocaleLoader> locale_loader_;
     QPointer<HostServer> server_;
 
     Q_DISABLE_COPY(HostService)

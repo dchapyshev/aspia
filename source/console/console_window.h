@@ -8,6 +8,7 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 #define _ASPIA_CONSOLE__CONSOLE_WINDOW_H
 
+#include "base/locale_loader.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
@@ -67,16 +68,12 @@ private slots:
     void onClientTerminated(Client* client);
 
 private:
-    void installTranslators(const QString& locale);
-    void removeTranslators();
     void createLanguageMenu(const QString& current_locale);
     void addAddressBookTab(AddressBookTab* tab);
     void connectToComputer(proto::address_book::Computer* computer);
 
     Ui::ConsoleWindow ui;
-
-    QHash<QString, QStringList> locale_list_;
-    QList<QTranslator*> translator_list_;
+    LocaleLoader locale_loader_;
     QList<Client*> client_list_;
 
     Q_DISABLE_COPY(ConsoleWindow)

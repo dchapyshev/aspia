@@ -8,6 +8,7 @@
 #ifndef _ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
 #define _ASPIA_HOST__UI__HOST_NOTIFIER_WINDOW_H
 
+#include "base/locale_loader.h"
 #include "host/host_notifier.h"
 #include "protocol/notifier.pb.h"
 #include "ui_host_notifier_window.h"
@@ -20,7 +21,7 @@ class HostNotifierWindow : public QWidget
 
 public:
     explicit HostNotifierWindow(QWidget* parent = nullptr);
-    ~HostNotifierWindow();
+    ~HostNotifierWindow() = default;
 
     void setChannelId(const QString& channel_id);
 
@@ -44,11 +45,9 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    void installTranslators(const QStringList& file_list);
-
     Ui::HostNotifierWindow ui;
 
-    QList<QTranslator*> translator_list_;
+    LocaleLoader locale_loader_;
     QPoint start_pos_;
     QRect window_rect_;
 

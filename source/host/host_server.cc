@@ -13,7 +13,6 @@
 
 #include "base/message_serialization.h"
 #include "host/win/host.h"
-#include "host/host_settings.h"
 #include "host/host_user_authorizer.h"
 #include "ipc/ipc_server.h"
 #include "network/firewall_manager.h"
@@ -76,7 +75,7 @@ HostServer::~HostServer()
     stop();
 }
 
-bool HostServer::start()
+bool HostServer::start(int port, const QList<User>& user_list)
 {
     qInfo("Starting the server");
 
@@ -86,15 +85,11 @@ bool HostServer::start()
         return false;
     }
 
-    HostSettings settings;
-
-    user_list_ = settings.userList();
+    user_list_ = user_list;
     if (user_list_.isEmpty())
     {
         qWarning("Empty user list");
     }
-
-    int port = settings.tcpPort();
 
     FirewallManager firewall(QCoreApplication::applicationFilePath());
     if (firewall.isValid())

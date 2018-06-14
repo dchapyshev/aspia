@@ -26,7 +26,7 @@ public:
     HostServer(QObject* parent = nullptr);
     ~HostServer();
 
-    bool start();
+    bool start(int port, const QList<User>& user_list);
     void stop();
     void setSessionChanged(quint32 event, quint32 session_id);
 
