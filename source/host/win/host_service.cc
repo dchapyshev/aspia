@@ -8,7 +8,6 @@
 #include "host/win/host_service.h"
 
 #include <QGuiApplication>
-#include <QDebug>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

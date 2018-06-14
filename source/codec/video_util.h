@@ -9,7 +9,6 @@
 #define _ASPIA_CODEC__VIDEO_UTIL_H
 
 #include <QRect>
-#include <QSize>
 
 #include "desktop_capture/pixel_format.h"
 #include "protocol/desktop_session.pb.h"

@@ -12,7 +12,6 @@
 
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
-#include "client/client_session_desktop_view.h"
 #include "console/computer_group_item.h"
 #include "host/user.h"
 

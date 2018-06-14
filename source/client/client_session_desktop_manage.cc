@@ -7,10 +7,6 @@
 
 #include "client/client_session_desktop_manage.h"
 
-#include <QDebug>
-#include <QCursor>
-#include <QPixmap>
-
 #include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
 #include "codec/cursor_decoder.h"

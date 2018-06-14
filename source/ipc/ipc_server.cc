@@ -8,7 +8,6 @@
 #include "ipc/ipc_server.h"
 
 #include <QCoreApplication>
-#include <QDebug>
 #include <QLocalServer>
 
 #include "crypto/random.h"

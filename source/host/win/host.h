@@ -8,9 +8,7 @@
 #ifndef _ASPIA_HOST__WIN__HOST_H
 #define _ASPIA_HOST__WIN__HOST_H
 
-#include <QObject>
 #include <QPointer>
-#include <QQueue>
 
 #include "protocol/authorization.pb.h"
 

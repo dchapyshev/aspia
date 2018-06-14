@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__FILE_REMOVER_H
 #define _ASPIA_CLIENT__FILE_REMOVER_H
 
-#include <QObject>
 #include <QQueue>
 
 #include "client/file_remove_task.h"

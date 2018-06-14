@@ -8,7 +8,6 @@
 #ifndef _ASPIA_IPC__IPC_SERVER_H
 #define _ASPIA_IPC__IPC_SERVER_H
 
-#include <QObject>
 #include <QPointer>
 
 class QLocalServer;

@@ -8,7 +8,6 @@
 #include "client/client_user_authorizer.h"
 
 #include <QCryptographicHash>
-#include <QDebug>
 
 #include "base/message_serialization.h"
 #include "client/ui/authorization_dialog.h"

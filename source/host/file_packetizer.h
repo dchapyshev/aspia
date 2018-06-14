@@ -10,7 +10,6 @@
 
 #include <QFile>
 #include <QPointer>
-#include <QString>
 #include <memory>
 
 #include "protocol/file_transfer_session.pb.h"

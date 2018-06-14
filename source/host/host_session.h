@@ -9,7 +9,6 @@
 #define _ASPIA_HOST__HOST_SESSION_H
 
 #include <QByteArray>
-#include <QObject>
 #include <QPointer>
 
 namespace aspia {

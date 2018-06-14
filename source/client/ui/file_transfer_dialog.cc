@@ -7,7 +7,6 @@
 
 #include "client/ui/file_transfer_dialog.h"
 
-#include <QAbstractButton>
 #include <QPushButton>
 #include <QMessageBox>
 

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__FILE_TRANSFER_H
 #define _ASPIA_CLIENT__FILE_TRANSFER_H
 
-#include <QObject>
 #include <QQueue>
 #include <QPair>
 #include <QPointer>

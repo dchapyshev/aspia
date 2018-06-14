@@ -12,7 +12,6 @@
 #include <QUuid>
 
 #include <comutil.h>
-#include <objbase.h>
 #include <unknwn.h>
 
 #include "base/errno_logging.h"

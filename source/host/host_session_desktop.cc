@@ -7,9 +7,6 @@
 
 #include "host/host_session_desktop.h"
 
-#include <QDebug>
-#include <QEvent>
-
 #include "base/clipboard.h"
 #include "base/message_serialization.h"
 #include "host/input_injector.h"

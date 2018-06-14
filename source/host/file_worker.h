@@ -8,9 +8,6 @@
 #ifndef _ASPIA_HOST__FILE_WORKER_H
 #define _ASPIA_HOST__FILE_WORKER_H
 
-#include <QObject>
-#include <memory>
-
 #include "host/file_depacketizer.h"
 #include "host/file_packetizer.h"
 #include "host/file_request.h"

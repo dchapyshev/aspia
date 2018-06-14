@@ -8,8 +8,6 @@
 #ifndef _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
 #define _ASPIA_HOST__HOST_SESSION_FILE_TRANSFER_H
 
-#include <QPointer>
-
 #include "host/host_session.h"
 
 namespace aspia {

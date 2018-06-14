@@ -8,10 +8,7 @@
 #ifndef _ASPIA_CRYPTO__SECURE_MEMORY_H
 #define _ASPIA_CRYPTO__SECURE_MEMORY_H
 
-#include <QByteArray>
 #include <QString>
-
-#include <string>
 
 namespace aspia {
 

@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 #define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
 
-#include "protocol/file_transfer_session.pb.h"
 #include "protocol/address_book.pb.h"
 #include "ui_file_manager_window.h"
 

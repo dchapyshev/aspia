@@ -7,7 +7,6 @@
 
 #include "host/input_injector.h"
 
-#include <QPoint>
 #include <QRect>
 #include <QSettings>
 

@@ -11,7 +11,6 @@
 #include <windows.h>
 
 #include <QCoreApplication>
-#include <QDebug>
 
 #include "host/win/host_process.h"
 #include "host/host_session_fake.h"

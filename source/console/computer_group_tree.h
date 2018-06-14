@@ -8,8 +8,6 @@
 #ifndef _ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
 #define _ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
 
-#include <QTreeWidget>
-
 #include "console/computer_group_drag.h"
 
 namespace aspia {

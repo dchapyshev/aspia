@@ -8,7 +8,6 @@
 #ifndef _ASPIA_HOST__USER_H
 #define _ASPIA_HOST__USER_H
 
-#include <QByteArray>
 #include <QString>
 
 namespace aspia {

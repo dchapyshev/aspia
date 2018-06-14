@@ -8,7 +8,6 @@
 #ifndef _ASPIA_HOST__HOST_USER_AUTHORIZER_H
 #define _ASPIA_HOST__HOST_USER_AUTHORIZER_H
 
-#include <QObject>
 #include <QPointer>
 
 #include "host/user.h"

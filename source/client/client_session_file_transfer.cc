@@ -7,7 +7,6 @@
 
 #include "client/client_session_file_transfer.h"
 
-#include <QDebug>
 #include <QMetaType>
 #include <QThread>
 

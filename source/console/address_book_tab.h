@@ -8,8 +8,6 @@
 #ifndef _ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
 #define _ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
 
-#include <QWidget>
-
 #include "console/console_tab.h"
 #include "protocol/address_book.pb.h"
 #include "ui_address_book_tab.h"

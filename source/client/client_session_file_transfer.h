@@ -9,7 +9,6 @@
 #define _ASPIA_CLIENT__CLIENT_SESSION_FILE_TRANSFER_H
 
 #include <QQueue>
-#include <QPair>
 #include <QPointer>
 
 #include "client/client_session.h"

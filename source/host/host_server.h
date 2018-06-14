@@ -8,14 +8,10 @@
 #ifndef _ASPIA_HOST__HOST_SERVER_H
 #define _ASPIA_HOST__HOST_SERVER_H
 
-#include <QObject>
-#include <QPointer>
-
 #include "host/win/host_process.h"
 #include "host/user.h"
 #include "ipc/ipc_channel.h"
 #include "network/network_server.h"
-#include "protocol/authorization.pb.h"
 
 namespace aspia {
 

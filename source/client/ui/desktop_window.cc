@@ -8,16 +8,13 @@
 #include "client/ui/desktop_window.h"
 
 #include <QDebug>
-#include <QApplication>
 #include <QBrush>
 #include <QDesktopWidget>
-#include <QHBoxLayout>
 #include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QShortcut>
 
 #include "base/clipboard.h"
 #include "client/ui/desktop_config_dialog.h"

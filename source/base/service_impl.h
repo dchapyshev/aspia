@@ -8,7 +8,6 @@
 #ifndef _ASPIA_BASE__SERVICE_IMPL_H
 #define _ASPIA_BASE__SERVICE_IMPL_H
 
-#include <QScopedPointer>
 #include <QString>
 
 namespace aspia {
