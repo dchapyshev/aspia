@@ -20,7 +20,6 @@ namespace {
 constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMinPasswordLength = 8;
-constexpr int kMaxPasswordLength = 64;
 constexpr int kMaxCommentLength = 2048;
 
 } // namespace

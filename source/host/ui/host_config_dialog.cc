@@ -23,8 +23,6 @@ namespace aspia {
 
 namespace {
 
-const char kHostServiceFileName[] = "aspia_host_service.exe";
-
 QHash<QString, QStringList> createLocaleList()
 {
     QString translations_dir =
