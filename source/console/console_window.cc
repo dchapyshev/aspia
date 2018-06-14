@@ -13,11 +13,13 @@
 #include <QMessageBox>
 #include <QTranslator>
 
-#include "client/client.h"
 #include "client/ui/client_dialog.h"
+#include "client/client.h"
+#include "client/computer_factory.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
+#include "crypto/secure_memory.h"
 
 namespace aspia {
 
@@ -41,6 +43,18 @@ private:
     QString locale_;
     Q_DISABLE_COPY(LanguageAction)
 };
+
+void cleanupComputer(proto::address_book::Computer* computer)
+{
+    if (!computer)
+        return;
+
+    secureMemZero(computer->mutable_name());
+    secureMemZero(computer->mutable_address());
+    secureMemZero(computer->mutable_username());
+    secureMemZero(computer->mutable_password());
+    secureMemZero(computer->mutable_comment());
+}
 
 } // namespace
 
@@ -314,9 +328,7 @@ void ConsoleWindow::onFastConnect()
     if (dialog.exec() != ClientDialog::Accepted)
         return;
 
-    Client* client = new Client(dialog.computer(), this);
-    connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
-    client_list_.push_back(client);
+    connectToComputer(dialog.computer());
 }
 
 void ConsoleWindow::onDesktopManageConnect()
@@ -330,8 +342,10 @@ void ConsoleWindow::onDesktopManageConnect()
             proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
+                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
-                connectToComputer(computer);
+
+                connectToComputer(*computer);
             }
         }
     }
@@ -348,8 +362,10 @@ void ConsoleWindow::onDesktopViewConnect()
             proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
+                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
                 computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
-                connectToComputer(computer);
+
+                connectToComputer(*computer);
             }
         }
     }
@@ -366,8 +382,10 @@ void ConsoleWindow::onFileTransferConnect()
             proto::address_book::Computer* computer = tab->currentComputer();
             if (computer)
             {
+                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
                 computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
-                connectToComputer(computer);
+
+                connectToComputer(*computer);
             }
         }
     }
@@ -570,6 +588,8 @@ void ConsoleWindow::onComputerContextMenu(ComputerItem* computer_item, const QPo
 
 void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* computer)
 {
+    computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+
     if (ui.action_desktop_manage->isChecked())
     {
         computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
@@ -588,7 +608,7 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
         return;
     }
 
-    connectToComputer(computer);
+    connectToComputer(*computer);
 }
 
 void ConsoleWindow::onLanguageChanged(QAction* action)
@@ -704,13 +724,27 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.tab_widget->setCurrentIndex(index);
 }
 
-void ConsoleWindow::connectToComputer(proto::address_book::Computer* computer)
+void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)
 {
-    computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+    proto::address_book::Computer duplicate_computer(computer);
 
-    Client* client = new Client(*computer, this);
+    if (!duplicate_computer.session_config().has_desktop_manage())
+    {
+        ComputerFactory::setDefaultDesktopManageConfig(
+            duplicate_computer.mutable_session_config()->mutable_desktop_manage());
+    }
+
+    if (!duplicate_computer.session_config().has_desktop_view())
+    {
+        ComputerFactory::setDefaultDesktopViewConfig(
+            duplicate_computer.mutable_session_config()->mutable_desktop_view());
+    }
+
+    Client* client = new Client(duplicate_computer, this);
     connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
     client_list_.push_back(client);
+
+    cleanupComputer(&duplicate_computer);
 }
 
 void ConsoleWindow::onClientTerminated(Client* client)

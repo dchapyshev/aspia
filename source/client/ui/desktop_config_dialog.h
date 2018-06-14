@@ -18,11 +18,13 @@ class DesktopConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::desktop::Config* config,
+    DesktopConfigDialog(const proto::desktop::Config& config,
                         quint32 supported_video_encodings,
                         quint32 supported_features,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog();
+
+    const proto::desktop::Config& config() { return config_; }
 
 private slots:
     void onCodecChanged(int item_index);
@@ -32,7 +34,7 @@ private slots:
 private:
     Ui::DesktopConfigDialog ui;
 
-    proto::desktop::Config* config_;
+    proto::desktop::Config config_;
     quint32 supported_video_encodings_;
     quint32 supported_features_;
 

@@ -12,6 +12,7 @@
 #include <QMessageBox>
 
 #include "base/message_serialization.h"
+#include "client/computer_factory.h"
 #include "codec/video_util.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
@@ -25,35 +26,6 @@
 namespace aspia {
 
 namespace {
-
-std::unique_ptr<proto::address_book::Computer> createDefaultComputer()
-{
-    std::unique_ptr<proto::address_book::Computer> computer =
-        std::make_unique<proto::address_book::Computer>();
-
-    computer->set_port(kDefaultHostTcpPort);
-
-    proto::desktop::Config* desktop_manage =
-        computer->mutable_session_config()->mutable_desktop_manage();
-
-    desktop_manage->set_features(proto::desktop::FEATURE_CLIPBOARD |
-                                 proto::desktop::FEATURE_CURSOR_SHAPE);
-    desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    desktop_manage->set_update_interval(30);
-    desktop_manage->set_compress_ratio(6);
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
-
-    proto::desktop::Config* desktop_view =
-        computer->mutable_session_config()->mutable_desktop_view();
-
-    desktop_view->set_features(0);
-    desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    desktop_view->set_update_interval(30);
-    desktop_view->set_compress_ratio(6);
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
-
-    return computer;
-}
 
 void cleanupComputer(proto::address_book::Computer* computer)
 {
@@ -362,7 +334,8 @@ void AddressBookTab::addComputer()
     if (!parent_item)
         return;
 
-    std::unique_ptr<proto::address_book::Computer> computer = createDefaultComputer();
+    std::unique_ptr<proto::address_book::Computer> computer =
+        std::make_unique<proto::address_book::Computer>(ComputerFactory::defaultComputer());
 
     ComputerDialog dialog(this,
                           ComputerDialog::CreateComputer,

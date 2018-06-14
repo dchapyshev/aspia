@@ -29,8 +29,6 @@ private slots:
     void connectButtonPressed();
 
 private:
-    void setDefaultConfig();
-
     Ui::ClientDialog ui;
     proto::address_book::Computer computer_;
 

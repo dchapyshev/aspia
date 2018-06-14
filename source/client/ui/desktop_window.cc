@@ -170,12 +170,15 @@ bool DesktopWindow::requireConfigChange(proto::desktop::Config* config)
                              QMessageBox::Ok);
     }
 
-    DesktopConfigDialog dialog(config, supported_video_encodings_, supported_features_, this);
-    if (dialog.exec() != DesktopConfigDialog::Accepted)
-        return false;
+    DesktopConfigDialog dialog(*config, supported_video_encodings_, supported_features_, this);
+    if (dialog.exec() == DesktopConfigDialog::Accepted)
+    {
+        config->CopyFrom(dialog.config());
+        setSupportedFeatures(supported_features_);
+        return true;
+    }
 
-    setSupportedFeatures(supported_features_);
-    return true;
+    return false;
 }
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
@@ -233,9 +236,10 @@ void DesktopWindow::changeSettings()
     if (computer_->session_type() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         config = computer_->mutable_session_config()->mutable_desktop_manage();
 
-    DesktopConfigDialog dialog(config, supported_video_encodings_, supported_features_, this);
+    DesktopConfigDialog dialog(*config, supported_video_encodings_, supported_features_, this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)
     {
+        config->CopyFrom(dialog.config());
         setSupportedFeatures(supported_features_);
         emit sendConfig(*config);
     }

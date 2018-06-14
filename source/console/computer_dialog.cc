@@ -112,27 +112,29 @@ void ComputerDialog::sessionConfigButtonPressed()
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            proto::desktop::Config config = computer_->session_config().desktop_manage();
-
-            DesktopConfigDialog dialog(&config,
+            DesktopConfigDialog dialog(computer_->session_config().desktop_manage(),
                                        ClientSessionDesktopManage::supportedVideoEncodings(),
                                        ClientSessionDesktopManage::supportedFeatures(),
                                        this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(config);
+            {
+                computer_->mutable_session_config()->mutable_desktop_manage()->CopyFrom(
+                    dialog.config());
+            }
         }
         break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            proto::desktop::Config config = computer_->session_config().desktop_view();
-
-            DesktopConfigDialog dialog(&config,
+            DesktopConfigDialog dialog(computer_->session_config().desktop_view(),
                                        ClientSessionDesktopManage::supportedVideoEncodings(),
                                        ClientSessionDesktopManage::supportedFeatures(),
                                        this);
             if (dialog.exec() == QDialog::Accepted)
-                computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(config);
+            {
+                computer_->mutable_session_config()->mutable_desktop_view()->CopyFrom(
+                    dialog.config());
+            }
         }
         break;
 

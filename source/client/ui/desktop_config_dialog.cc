@@ -24,7 +24,7 @@ enum ColorDepth
 
 } // namespace
 
-DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
+DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
                                          quint32 supported_video_encodings,
                                          quint32 supported_features,
                                          QWidget* parent)
@@ -48,7 +48,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
         ui.combo_codec->addItem(QStringLiteral("ZLIB"),
                                 QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
 
-    int current_codec = ui.combo_codec->findData(QVariant(config->video_encoding()));
+    int current_codec = ui.combo_codec->findData(QVariant(config.video_encoding()));
     if (current_codec == -1)
         current_codec = 0;
 
@@ -61,7 +61,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
     ui.combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
     ui.combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
 
-    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config->pixel_format());
+    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
     if (pixel_format.isEqual(PixelFormat::ARGB()))
@@ -79,18 +79,18 @@ DesktopConfigDialog::DesktopConfigDialog(proto::desktop::Config* config,
     if (current_color_depth != -1)
         ui.combo_color_depth->setCurrentIndex(current_color_depth);
 
-    ui.slider_compression_ratio->setValue(config->compress_ratio());
-    onCompressionRatioChanged(config->compress_ratio());
+    ui.slider_compression_ratio->setValue(config.compress_ratio());
+    onCompressionRatioChanged(config.compress_ratio());
 
-    ui.spin_update_interval->setValue(config->update_interval());
+    ui.spin_update_interval->setValue(config.update_interval());
 
-    if (config->features() & proto::desktop::FEATURE_CURSOR_SHAPE)
+    if (config.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
         ui.checkbox_cursor_shape->setChecked(true);
 
     if (!(supported_features_ & proto::desktop::FEATURE_CURSOR_SHAPE))
         ui.checkbox_cursor_shape->setEnabled(false);
 
-    if (config->features() & proto::desktop::FEATURE_CLIPBOARD)
+    if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
         ui.checkbox_clipboard->setChecked(true);
 
     if (!(supported_features_ & proto::desktop::FEATURE_CLIPBOARD))
@@ -133,7 +133,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         proto::desktop::VideoEncoding video_encoding =
             static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->currentData().toInt());
 
-        config_->set_video_encoding(video_encoding);
+        config_.set_video_encoding(video_encoding);
 
         if (video_encoding == proto::desktop::VIDEO_ENCODING_ZLIB)
         {
@@ -166,12 +166,12 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                     break;
             }
 
-            VideoUtil::toVideoPixelFormat(pixel_format, config_->mutable_pixel_format());
+            VideoUtil::toVideoPixelFormat(pixel_format, config_.mutable_pixel_format());
 
-            config_->set_compress_ratio(ui.slider_compression_ratio->value());
+            config_.set_compress_ratio(ui.slider_compression_ratio->value());
         }
 
-        config_->set_update_interval(ui.spin_update_interval->value());
+        config_.set_update_interval(ui.spin_update_interval->value());
 
         quint32 features = 0;
 
@@ -181,7 +181,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui.checkbox_clipboard->isChecked())
             features |= proto::desktop::FEATURE_CLIPBOARD;
 
-        config_->set_features(features);
+        config_.set_features(features);
 
         accept();
     }

@@ -10,17 +10,16 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
-#include "codec/video_util.h"
+#include "client/computer_factory.h"
 
 namespace aspia {
 
 ClientDialog::ClientDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      computer_(ComputerFactory::defaultComputer())
 {
     ui.setupUi(this);
-
     setFixedSize(size());
-    setDefaultConfig();
 
     ui.edit_address->setText(QString::fromStdString(computer_.address()));
     ui.spin_port->setValue(computer_.port());
@@ -84,18 +83,33 @@ void ClientDialog::sessionConfigButtonPressed()
     switch (session_type)
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
-            DesktopConfigDialog(computer_.mutable_session_config()->mutable_desktop_manage(),
-                                ClientSessionDesktopManage::supportedVideoEncodings(),
-                                ClientSessionDesktopManage::supportedFeatures(),
-                                this).exec();
-            break;
+        {
+            DesktopConfigDialog dialog(computer_.session_config().desktop_manage(),
+                                       ClientSessionDesktopManage::supportedVideoEncodings(),
+                                       ClientSessionDesktopManage::supportedFeatures(),
+                                       this);
+
+            if (dialog.exec() == DesktopConfigDialog::Accepted)
+            {
+                computer_.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
+                    dialog.config());
+            }
+        }
+        break;
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
-            DesktopConfigDialog(computer_.mutable_session_config()->mutable_desktop_view(),
-                                ClientSessionDesktopView::supportedVideoEncodings(),
-                                ClientSessionDesktopView::supportedFeatures(),
-                                this).exec();
-            break;
+        {
+            DesktopConfigDialog dialog(computer_.session_config().desktop_view(),
+                                       ClientSessionDesktopView::supportedVideoEncodings(),
+                                       ClientSessionDesktopView::supportedFeatures(),
+                                       this);
+            if (dialog.exec() == DesktopConfigDialog::Accepted)
+            {
+                computer_.mutable_session_config()->mutable_desktop_view()->CopyFrom(
+                    dialog.config());
+            }
+        }
+        break;
 
         default:
             break;
@@ -113,32 +127,6 @@ void ClientDialog::connectButtonPressed()
 
     accept();
     close();
-}
-
-void ClientDialog::setDefaultConfig()
-{
-    computer_.set_port(kDefaultHostTcpPort);
-
-    proto::desktop::Config* desktop_manage =
-        computer_.mutable_session_config()->mutable_desktop_manage();
-
-    desktop_manage->set_features(proto::desktop::FEATURE_CLIPBOARD |
-                                 proto::desktop::FEATURE_CURSOR_SHAPE);
-    desktop_manage->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    desktop_manage->set_update_interval(30);
-    desktop_manage->set_compress_ratio(6);
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_manage->mutable_pixel_format());
-
-    proto::desktop::Config* desktop_view =
-        computer_.mutable_session_config()->mutable_desktop_view();
-
-    desktop_view->set_features(0);
-    desktop_view->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    desktop_view->set_update_interval(30);
-    desktop_view->set_compress_ratio(6);
-    VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), desktop_view->mutable_pixel_format());
-
-    computer_.set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 }
 
 } // namespace aspia

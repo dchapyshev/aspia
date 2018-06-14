@@ -70,7 +70,7 @@ private slots:
 private:
     void createLanguageMenu(const QString& current_locale);
     void addAddressBookTab(AddressBookTab* tab);
-    void connectToComputer(proto::address_book::Computer* computer);
+    void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleWindow ui;
     LocaleLoader locale_loader_;
