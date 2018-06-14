@@ -1211,7 +1211,7 @@
     <message>
         <location filename="../client/client_session_file_transfer.cc" line="64"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
     </message>
 </context>
 <context>
@@ -1728,7 +1728,7 @@
     <message>
         <location filename="../host/host_session_fake_desktop.cc" line="159"/>
         <source>The session is temporarily unavailable.</source>
-        <translation type="unfinished">De sessie is tijdelijk niet beschikbaar.</translation>
+        <translation>De sessie is tijdelijk niet beschikbaar.</translation>
     </message>
 </context>
 <context>

@@ -1209,7 +1209,7 @@
     <message>
         <location filename="../client/client_session_file_transfer.cc" line="64"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
     </message>
 </context>
 <context>
@@ -1733,7 +1733,7 @@
     <message>
         <location filename="../host/host_session_fake_desktop.cc" line="159"/>
         <source>The session is temporarily unavailable.</source>
-        <translation type="unfinished">Сессия временно недоступна.</translation>
+        <translation>Сессия временно недоступна.</translation>
     </message>
 </context>
 <context>
