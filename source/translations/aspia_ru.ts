@@ -1206,6 +1206,11 @@
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
+    <message>
+        <location filename="../client/client_session_file_transfer.cc" line="64"/>
+        <source>Session error: There are no logged in users. File transfer is not available.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>aspia::ClientUserAuthorizer</name>
@@ -1724,11 +1729,11 @@
     </message>
 </context>
 <context>
-    <name>aspia::HostSessionFake</name>
+    <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake.cc" line="167"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="159"/>
         <source>The session is temporarily unavailable.</source>
-        <translation>Сессия временно недоступна.</translation>
+        <translation type="unfinished">Сессия временно недоступна.</translation>
     </message>
 </context>
 <context>

@@ -213,10 +213,14 @@ void Host::timerEvent(QTimerEvent* event)
 
 void Host::networkMessageWritten(int message_id)
 {
-    Q_ASSERT(message_id == NetworkMessageId);
-
-    if (!ipc_channel_.isNull())
+    if (!fake_session_.isNull())
+    {
+        fake_session_->onMessageWritten(message_id);
+    }
+    else if (!ipc_channel_.isNull())
+    {
         ipc_channel_->readMessage();
+    }
 }
 
 void Host::networkMessageReceived(const QByteArray& buffer)
@@ -283,7 +287,20 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     session_process_->setArguments(arguments);
 
-    connect(session_process_, &HostProcess::errorOccurred, this, &Host::stop);
+    connect(session_process_, &HostProcess::errorOccurred, [this](HostProcess::ErrorCode error_code)
+    {
+        if (session_type_ == proto::auth::SESSION_TYPE_FILE_TRANSFER &&
+            error_code == HostProcess::NoLoggedOnUser)
+        {
+            if (!startFakeSession())
+                stop();
+        }
+        else
+        {
+            stop();
+        }
+    });
+
     connect(session_process_, &HostProcess::finished, this, &Host::dettachSession);
 
     session_process_->start();
@@ -353,25 +370,12 @@ void Host::dettachSession()
     if (state_ == StoppingState)
         return;
 
-    fake_session_ = HostSessionFake::create(session_type_, this);
-    if (fake_session_.isNull())
+    if (!startFakeSession())
     {
-        qInfo() << "Session type" << session_type_ << "does not have support for fake sessions";
         stop();
     }
     else
     {
-        connect(fake_session_, &HostSessionFake::writeMessage,
-                network_channel_, &NetworkChannel::writeMessage);
-
-        connect(fake_session_, &HostSessionFake::readMessage,
-                network_channel_, &NetworkChannel::readMessage);
-
-        connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
-
-        qInfo("Starting a fake session");
-        fake_session_->startSession();
-
         attach_timer_id_ = startTimer(std::chrono::minutes(1));
         if (!attach_timer_id_)
         {
@@ -379,6 +383,29 @@ void Host::dettachSession()
             stop();
         }
     }
+}
+
+bool Host::startFakeSession()
+{
+    qInfo("Starting a fake session");
+
+    fake_session_ = HostSessionFake::create(session_type_, this);
+    if (fake_session_.isNull())
+    {
+        qInfo() << "Session type" << session_type_ << "does not have support for fake sessions";
+        return false;
+    }
+
+    connect(fake_session_, &HostSessionFake::writeMessage,
+            network_channel_, &NetworkChannel::writeMessage);
+
+    connect(fake_session_, &HostSessionFake::readMessage,
+            network_channel_, &NetworkChannel::readMessage);
+
+    connect(fake_session_, &HostSessionFake::errorOccurred, this, &Host::stop);
+
+    fake_session_->startSession();
+    return true;
 }
 
 } // namespace aspia

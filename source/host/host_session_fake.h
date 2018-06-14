@@ -11,23 +11,19 @@
 #include <QObject>
 
 #include "protocol/authorization.pb.h"
-#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
-
-class DesktopFrame;
-class VideoEncoder;
 
 class HostSessionFake : public QObject
 {
     Q_OBJECT
 
 public:
-    ~HostSessionFake() = default;
+    virtual ~HostSessionFake() = default;
 
     static HostSessionFake* create(proto::auth::SessionType session_type, QObject* parent);
 
-    void startSession();
+    virtual void startSession() = 0;
 
 signals:
     void writeMessage(int message_id, const QByteArray& buffer);
@@ -35,17 +31,11 @@ signals:
     void errorOccurred();
 
 public slots:
-    void onMessageReceived(const QByteArray& buffer);
+    virtual void onMessageReceived(const QByteArray& buffer) = 0;
+    virtual void onMessageWritten(int message_id) = 0;
 
 protected:
     explicit HostSessionFake(QObject* parent);
-
-private:
-    std::unique_ptr<VideoEncoder> createEncoder(const proto::desktop::Config& config);
-    std::unique_ptr<DesktopFrame> createFrame();
-    void sendPacket(std::unique_ptr<proto::desktop::VideoPacket> packet);
-
-    Q_DISABLE_COPY(HostSessionFake)
 };
 
 } // namespace aspia

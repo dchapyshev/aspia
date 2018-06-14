@@ -58,6 +58,13 @@ void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
         return;
     }
 
+    if (reply.status() == proto::file_transfer::STATUS_NO_LOGGED_ON_USER)
+    {
+        emit errorOccurred(
+            tr("Session error: There are no logged in users. File transfer is not available."));
+        return;
+    }
+
     tasks_.front()->sendReply(reply);
     tasks_.pop_front();
 }

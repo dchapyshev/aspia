@@ -76,6 +76,8 @@ private slots:
     void dettachSession();
 
 private:
+    bool startFakeSession();
+
     static const quint32 kInvalidSessionId = 0xFFFFFFFF;
 
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
