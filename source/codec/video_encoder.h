@@ -10,10 +10,11 @@
 
 #include <memory>
 
-#include "desktop_capture/desktop_frame.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
+
+class DesktopFrame;
 
 class VideoEncoder
 {

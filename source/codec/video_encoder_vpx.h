@@ -8,17 +8,12 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_VPX_H
 
+#include <QRect>
+
 extern "C" {
-
-#pragma warning(push)
-#pragma warning(disable:4505)
-
 #define VPX_CODEC_DISABLE_COMPAT 1
-#include "vpx/vpx_encoder.h"
-#include "vpx/vp8cx.h"
-
-#pragma warning(pop)
-
+#include <vpx/vpx_encoder.h>
+#include <vpx/vp8cx.h>
 } // extern "C"
 
 #include "codec/scoped_vpx_codec.h"

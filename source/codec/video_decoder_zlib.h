@@ -9,11 +9,12 @@
 #define _ASPIA_CODEC__VIDEO_DECODER_ZLIB_H
 
 #include "codec/decompressor_zlib.h"
-#include "codec/pixel_translator.h"
 #include "codec/video_decoder.h"
-#include "desktop_capture/desktop_frame.h"
 
 namespace aspia {
+
+class DesktopFrame;
+class PixelTranslator;
 
 class VideoDecoderZLIB : public VideoDecoder
 {

@@ -10,14 +10,9 @@
 
 extern "C" {
 
-#pragma warning(push)
-#pragma warning(disable:4505)
-
 #define VPX_CODEC_DISABLE_COMPAT 1
-#include "vpx/vpx_decoder.h"
-#include "vpx/vp8dx.h"
-
-#pragma warning(pop)
+#include <vpx/vpx_decoder.h>
+#include <vpx/vp8dx.h>
 
 } // extern "C"
 

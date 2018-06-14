@@ -8,14 +8,16 @@
 #ifndef _ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H
 #define _ASPIA_CODEC__VIDEO_ENCODER_ZLIB_H
 
-#include <memory>
+#include <QSize>
 
 #include "base/aligned_memory.h"
 #include "codec/compressor_zlib.h"
 #include "codec/video_encoder.h"
-#include "codec/pixel_translator.h"
+#include "desktop_capture/pixel_format.h"
 
 namespace aspia {
+
+class PixelTranslator;
 
 class VideoEncoderZLIB : public VideoEncoder
 {

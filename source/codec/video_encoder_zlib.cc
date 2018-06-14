@@ -9,7 +9,9 @@
 
 #include <QDebug>
 
+#include "codec/pixel_translator.h"
 #include "codec/video_util.h"
+#include "desktop_capture/desktop_frame.h"
 
 namespace aspia {
 

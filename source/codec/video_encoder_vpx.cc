@@ -9,9 +9,11 @@
 
 #include <QDebug>
 #include <QThread>
+
 #include <libyuv/convert_from_argb.h>
 
 #include "codec/video_util.h"
+#include "desktop_capture/desktop_frame.h"
 
 namespace aspia {
 
