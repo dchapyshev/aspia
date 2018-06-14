@@ -13,7 +13,6 @@
 #endif // defined(Q_OS_WIN)
 
 #include <QCommandLineParser>
-#include <QDebug>
 #include <QFileInfo>
 #include <QScreen>
 
@@ -36,8 +35,8 @@ int hostNotifierMain(int argc, char *argv[])
         Desktop input_desktop(Desktop::inputDesktop());
         if (input_desktop.isValid())
         {
-            input_desktop.setThreadDesktop();
-            break;
+            if (input_desktop.setThreadDesktop())
+                break;
         }
 
         Sleep(100);
@@ -51,9 +50,9 @@ int hostNotifierMain(int argc, char *argv[])
     }
 
     QApplication application(argc, argv);
-    application.setOrganizationName("Aspia");
-    application.setApplicationName("Host");
-    application.setApplicationVersion(ASPIA_VERSION_STRING);
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Host"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     QCommandLineOption channel_id_option(QStringLiteral("channel_id"),

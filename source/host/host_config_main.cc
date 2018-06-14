@@ -21,9 +21,9 @@ int hostConfigMain(int argc, char *argv[])
     logger.startLogging(QFileInfo(argv[0]).fileName());
 
     QApplication application(argc, argv);
-    application.setOrganizationName("Aspia");
-    application.setApplicationName("Host");
-    application.setApplicationVersion(ASPIA_VERSION_STRING);
+    application.setOrganizationName(QStringLiteral("Aspia"));
+    application.setApplicationName(QStringLiteral("Host"));
+    application.setApplicationVersion(QStringLiteral(ASPIA_VERSION_STRING));
     application.setAttribute(Qt::AA_DisableWindowContextHelpButton, true);
 
     HostConfigDialog dialog;

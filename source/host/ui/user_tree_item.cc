@@ -14,9 +14,9 @@ UserTreeItem::UserTreeItem(int index, User* user)
       user_(user)
 {
     if (user_->flags() & User::FLAG_ENABLED)
-        setIcon(0, QIcon(":/icon/user.png"));
+        setIcon(0, QIcon(QStringLiteral(":/icon/user.png")));
     else
-        setIcon(0, QIcon(":/icon/user-disabled.png"));
+        setIcon(0, QIcon(QStringLiteral(":/icon/user-disabled.png")));
 
     setText(0, user_->name());
 }
