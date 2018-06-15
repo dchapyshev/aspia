@@ -685,6 +685,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
 {
     ConnectData connect_data;
 
+    connect_data.setComputerName(QString::fromStdString(computer.name()));
     connect_data.setAddress(QString::fromStdString(computer.address()));
     connect_data.setPort(computer.port());
     connect_data.setUserName(QString::fromStdString(computer.username()));
