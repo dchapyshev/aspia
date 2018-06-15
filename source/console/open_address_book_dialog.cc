@@ -14,6 +14,7 @@ OpenAddressBookDialog::OpenAddressBookDialog(
     : QDialog(parent)
 {
     ui.setupUi(this);
+    setFixedHeight(sizeHint().height());
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &OpenAddressBookDialog::showPasswordButtonToggled);

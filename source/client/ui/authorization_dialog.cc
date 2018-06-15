@@ -13,6 +13,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+    setFixedHeight(sizeHint().height());
 
     connect(ui.button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::onShowPasswordButtonToggled);

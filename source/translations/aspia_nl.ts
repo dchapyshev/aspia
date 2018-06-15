@@ -27,67 +27,67 @@
         <translation>Adresboek eigenschappen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="30"/>
+        <location filename="../console/address_book_dialog.ui" line="33"/>
         <source>General</source>
         <translation>Basis</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="40"/>
+        <location filename="../console/address_book_dialog.ui" line="43"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="47"/>
+        <location filename="../console/address_book_dialog.ui" line="50"/>
         <source>Encryption:</source>
         <translation>Encryptie:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="54"/>
+        <location filename="../console/address_book_dialog.ui" line="57"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="61"/>
+        <location filename="../console/address_book_dialog.ui" line="64"/>
         <source>Password (repeat):</source>
         <translation>Wachtwoord (nogmaals):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="108"/>
+        <location filename="../console/address_book_dialog.ui" line="111"/>
         <source>Comment:</source>
         <translation>Commentaar:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="121"/>
+        <location filename="../console/address_book_dialog.ui" line="124"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="127"/>
+        <location filename="../console/address_book_dialog.ui" line="130"/>
         <source>Password hashing</source>
         <translation>Wachtwoord hashing</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="137"/>
+        <location filename="../console/address_book_dialog.ui" line="140"/>
         <source>Size of salt for password hashing (bytes):</source>
         <translation>Wachtwoord salt grootte (bytes):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="144"/>
+        <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Number of hashing iterations:</source>
         <translation>Aantal hash iteraties:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="188"/>
+        <location filename="../console/address_book_dialog.ui" line="191"/>
         <source>Salt of data</source>
         <translation>Salt van de data</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="198"/>
+        <location filename="../console/address_book_dialog.ui" line="201"/>
         <source>Size of salt before the data (bytes):</source>
         <translation>Grootte van de salt voor de data (bytes):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="205"/>
+        <location filename="../console/address_book_dialog.ui" line="208"/>
         <source>Size of salt after the data (bytes):</source>
         <translation>Grootte van de salt na de data (bytes):</translation>
     </message>
@@ -118,12 +118,12 @@
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="24"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="27"/>
         <source>User Name:</source>
         <translation>Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.ui" line="31"/>
+        <location filename="../client/ui/authorization_dialog.ui" line="34"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
@@ -136,22 +136,22 @@
         <translation>Verbinding</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="38"/>
+        <location filename="../client/ui/client_dialog.ui" line="122"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="54"/>
+        <location filename="../client/ui/client_dialog.ui" line="31"/>
         <source>Server Address:</source>
         <translation>Server Adres:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="68"/>
+        <location filename="../client/ui/client_dialog.ui" line="45"/>
         <source>Server Port:</source>
         <translation>Server Poort:</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.ui" line="88"/>
+        <location filename="../client/ui/client_dialog.ui" line="65"/>
         <source>Session Type:</source>
         <translation>Sessie Type:</translation>
     </message>
@@ -565,7 +565,7 @@
         <translation>Objecten Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.ui" line="20"/>
+        <location filename="../client/ui/file_remove_dialog.ui" line="23"/>
         <source>Creating a list of files to delete...</source>
         <translation>Lijst genereren van objecten om te verwijderen...</translation>
     </message>
@@ -578,32 +578,32 @@
         <translation>Bestands overdracht</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="26"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="29"/>
         <source>Current Task: Creating a list of files to copy...</source>
         <translation>Huidige taak: Bestandslijst maken...</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="33"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="36"/>
         <source>From: ...</source>
         <translation>Van: ...</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="40"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="43"/>
         <source>To: ...</source>
         <translation>Naar: ...</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="50"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="53"/>
         <source>Progress</source>
         <translation>Voortgang</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="58"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="61"/>
         <source>Total:</source>
         <translation>Totaal:</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.ui" line="65"/>
+        <location filename="../client/ui/file_transfer_dialog.ui" line="68"/>
         <source>Item:</source>
         <translation>Item:</translation>
     </message>
@@ -683,7 +683,7 @@
         <translation>Toetsencombinatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/key_sequence_dialog.ui" line="26"/>
+        <location filename="../client/ui/key_sequence_dialog.ui" line="29"/>
         <source>Key sequence to send:</source>
         <translation>Te versturen toetsencombinatie:</translation>
     </message>
@@ -696,17 +696,17 @@
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="56"/>
+        <location filename="../console/open_address_book_dialog.ui" line="59"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation>Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="69"/>
+        <location filename="../console/open_address_book_dialog.ui" line="72"/>
         <source>Encryption Type:</source>
         <translation>Encryptie Type:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="76"/>
+        <location filename="../console/open_address_book_dialog.ui" line="79"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
     </message>
@@ -830,7 +830,7 @@
         <translation>Verbindings Status</translation>
     </message>
     <message>
-        <location filename="../client/ui/status_dialog.ui" line="38"/>
+        <location filename="../client/ui/status_dialog.ui" line="41"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -1375,32 +1375,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="57"/>
         <source>True color (32 bit)</source>
         <translation>Ware kleuren (32 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
         <source>High color (16 bit)</source>
         <translation>Hoge kleuren (16 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
         <source>256 colors (8 bit)</source>
         <translation>256 kleuren (8 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
         <source>64 colors (6 bit)</source>
         <translation>64 kleuren (6 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
         <source>8 colors (3 bit)</source>
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="126"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="128"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>
@@ -1734,12 +1734,12 @@
 <context>
     <name>aspia::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="27"/>
+        <location filename="../console/open_address_book_dialog.cc" line="28"/>
         <source>Without Encryption</source>
         <translation>Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="31"/>
+        <location filename="../console/open_address_book_dialog.cc" line="32"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-bit key)</translation>
     </message>

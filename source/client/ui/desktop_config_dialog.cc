@@ -34,7 +34,6 @@ DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
       config_(config)
 {
     ui.setupUi(this);
-    setFixedSize(size());
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)
         ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
@@ -104,6 +103,9 @@ DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
+
+    setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
+    setFixedSize(sizeHint());
 }
 
 DesktopConfigDialog::~DesktopConfigDialog() = default;

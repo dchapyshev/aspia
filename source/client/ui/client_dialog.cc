@@ -19,7 +19,7 @@ ClientDialog::ClientDialog(QWidget* parent)
       computer_(ComputerFactory::defaultComputer())
 {
     ui.setupUi(this);
-    setFixedSize(size());
+    setFixedHeight(sizeHint().height());
 
     ui.edit_address->setText(QString::fromStdString(computer_.address()));
     ui.spin_port->setValue(computer_.port());
