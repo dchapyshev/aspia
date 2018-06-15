@@ -46,7 +46,7 @@
 
       <!-- Core Library -->
       <Component Id ="CoreApplications" DiskId="1" Guid="{E940D6C5-BC4C-41EF-9D40-8417E15FC224}">
-        <File Id="$(var.CoreLibrary)" Name="$(var.CoreLibrary)" />
+        <File Id="$(var.CoreLibrary)" Name="$(var.CoreLibrary)" KeyPath="yes" />
       </Component>
 
       <!-- Console Applications -->
@@ -64,7 +64,7 @@
       <!-- Console Settings -->
       <Component Id="ConsoleSettings" DiskId="1" Guid="{D57EC906-C0FE-4717-AEAC-DF46B4B1E617}">
         <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)\Console" Name="Locale" Type="string"
-                       Value="!(loc.Locale)" />
+                       Value="!(loc.Locale)" KeyPath="yes" />
         <RemoveRegistryKey Id="RemoveConsoleSettings" Root="HKCU" Key="SOFTWARE\$(var.ProductName)"
                            Action="removeOnUninstall" />
       </Component>
@@ -94,10 +94,10 @@
     <!-- Translations -->
     <DirectoryRef Id="TRANSLATIONS" FileSource="$(var.SourceFiles)\translations">
       <Component Id ="TranslationDutch" DiskId="1" Guid="{A8C3C5A2-E3B8-4001-BCA8-7D634761E8C5}">
-        <File Id="aspia_nl.qm" Name="aspia_nl.qm" />
+        <File Id="aspia_nl.qm" Name="aspia_nl.qm" KeyPath="yes" />
       </Component>
       <Component Id ="TranslationRussian" DiskId="1" Guid="{2CB24855-3B78-47AC-BAC8-D558EEE7519E}">
-        <File Id="aspia_ru.qm" Name="aspia_ru.qm" />
+        <File Id="aspia_ru.qm" Name="aspia_ru.qm" KeyPath="yes" />
         <File Id="qtbase_ru.qm" Name="qtbase_ru.qm" />
       </Component>
     </DirectoryRef>

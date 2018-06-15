@@ -13,6 +13,8 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -40,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="translations\lang.en-us.wxl" />
+    <EmbeddedResource Include="translations\lang.nl-nl.wxl" />
     <EmbeddedResource Include="translations\lang.ru-ru.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
