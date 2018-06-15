@@ -7,7 +7,7 @@
   <String Id="HostService_Title" Overridable="yes">Host Service</String>
   <String Id="HostService_Description" Overridable="yes">Provides remote access to this computer.</String>
   <String Id="Translations_Title" Overridable="yes">Translations</String>
-  <String Id="Translations_Description" Overridable="yes">Translations of the application interface language.</String>
+  <String Id="Translations_Description" Overridable="yes">Translations of the application interface.</String>
   <String Id="DutchLanguage_Title" Overridable="yes">Dutch</String>
   <String Id="DutchLanguage_Description" Overridable="yes">Translation of the application into Dutch language.</String>
   <String Id="RussianLanguage_Title" Overridable="yes">Russian</String>
