@@ -17,7 +17,7 @@ namespace aspia {
 namespace {
 
 const char kGplLink[] = "https://www.gnu.org/licenses/gpl.html";
-const char kGplTranslationLink[] = "http://www.gnu.org/licenses/translations.html";
+const char kGplTranslationLink[] = "https://www.gnu.org/licenses/translations.html";
 const char kHomeLink[] = "https://aspia.org";
 const char kGitHubLink[] = "https://github.com/dchapyshev/aspia";
 const char kDonateLink[] = "https://aspia.org/donate";
