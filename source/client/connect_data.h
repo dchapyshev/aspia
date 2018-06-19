@@ -49,7 +49,7 @@ private:
     QString user_name_;
     QString password_;
 
-    proto::auth::SessionType session_type_;
+    proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     proto::desktop::Config desktop_config_;
 };
 
