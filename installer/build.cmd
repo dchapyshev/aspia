@@ -32,6 +32,8 @@ echo "Integration of transforms to aspia-en-us.msi"
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%2\aspia-en-us.msi" "%2\ru-ru.mst" 1049
 cscript "%ProgramFiles(x86)%\Windows Kits\%SDK_VERSION%\bin\x86\wisubstg.vbs" "%2\aspia-en-us.msi" "%2\nl-nl.mst" 1043
 
+if "%1" == "msi" ( goto :END )
+
 :EXE
 echo "Creating an executable file"
 "%DNIDIR%\bin\InstallerLinker.exe" /a:"%2" /o:"%2\aspia-setup.exe" /t:"%DNIDIR%\bin\dotNetInstaller.exe" /c:dotnetinstaller.xml /f:aspia-en-us.msi /v
