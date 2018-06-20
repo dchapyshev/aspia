@@ -54,7 +54,7 @@ void NetworkServer::stop()
         return;
     }
 
-    for (auto it = pending_channels_.begin(); it != pending_channels_.end(); ++it)
+    for (auto it = pending_channels_.constBegin(); it != pending_channels_.constEnd(); ++it)
     {
         NetworkChannel* network_channel = *it;
 
@@ -62,7 +62,7 @@ void NetworkServer::stop()
             network_channel->stop();
     }
 
-    for (auto it = ready_channels_.begin(); it != ready_channels_.end(); ++it)
+    for (auto it = ready_channels_.constBegin(); it != ready_channels_.constEnd(); ++it)
     {
         NetworkChannel* network_channel = *it;
 

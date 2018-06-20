@@ -58,7 +58,7 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
-void FileManagerWindow::removeItems(FilePanel* sender, QList<FileRemover::Item> items)
+void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
 {
     FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
     FileRemover* remover = new FileRemover(progress_dialog);
@@ -92,7 +92,7 @@ void FileManagerWindow::removeItems(FilePanel* sender, QList<FileRemover::Item> 
     remover->start(sender->currentPath(), items);
 }
 
-void FileManagerWindow::sendItems(FilePanel* sender, QList<FileTransfer::Item> items)
+void FileManagerWindow::sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items)
 {
     if (sender == ui.local_panel)
     {

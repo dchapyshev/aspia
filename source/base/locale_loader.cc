@@ -116,7 +116,7 @@ QString LocaleLoader::translationsDir()
 
 void LocaleLoader::removeTranslators()
 {
-    for (auto translator : translator_list_)
+    for (const auto& translator : translator_list_)
     {
         QCoreApplication::removeTranslator(translator);
         delete translator;

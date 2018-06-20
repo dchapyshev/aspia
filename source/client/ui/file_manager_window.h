@@ -34,8 +34,8 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 private slots:
-    void removeItems(FilePanel* sender, QList<FileRemover::Item> items);
-    void sendItems(FilePanel* sender, QList<FileTransfer::Item> items);
+    void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
+    void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
 
 private:
