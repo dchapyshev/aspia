@@ -21,7 +21,6 @@ x86 or x86_64 CPU with SSE2 support, Windows 7/2008 R2 or higher.
 
 Other information
 -----------------
-At the moment the project in development stage and is not intended for use.
 If you have any questions, you can email me: dmitry@aspia.ru
 
 Licensing
