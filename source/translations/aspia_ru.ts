@@ -665,12 +665,12 @@
 <context>
     <name>HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.ui" line="188"/>
+        <location filename="../host/ui/host_notifier_window.ui" line="180"/>
         <source>Connections</source>
         <translation>Подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_notifier_window.ui" line="325"/>
+        <location filename="../host/ui/host_notifier_window.ui" line="317"/>
         <source>Disconnect All</source>
         <translation>Отключить всех</translation>
     </message>
