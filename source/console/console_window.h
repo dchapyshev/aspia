@@ -67,6 +67,7 @@ private slots:
 private:
     void createLanguageMenu(const QString& current_locale);
     void addAddressBookTab(AddressBookTab* tab);
+    AddressBookTab* currentAddressBookTab();
     void connectToComputer(const proto::address_book::Computer& computer);
 
     Ui::ConsoleWindow ui;

@@ -1365,19 +1365,19 @@
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="300"/>
+        <location filename="../console/console_window.cc" line="264"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="413"/>
-        <location filename="../console/console_window.cc" line="600"/>
+        <location filename="../console/console_window.cc" line="365"/>
+        <location filename="../console/console_window.cc" line="552"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="414"/>
-        <location filename="../console/console_window.cc" line="601"/>
+        <location filename="../console/console_window.cc" line="366"/>
+        <location filename="../console/console_window.cc" line="553"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>

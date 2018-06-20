@@ -193,24 +193,16 @@ void ConsoleWindow::onOpenAddressBook()
 
 void ConsoleWindow::onSaveAddressBook()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->save();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->save();
 }
 
 void ConsoleWindow::onSaveAsAddressBook()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->saveAs();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->saveAs();
 }
 
 void ConsoleWindow::onCloseAddressBook()
@@ -220,79 +212,51 @@ void ConsoleWindow::onCloseAddressBook()
 
 void ConsoleWindow::onAddressBookProperties()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->modifyAddressBook();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->modifyAddressBook();
 }
 
 void ConsoleWindow::onAddComputer()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->addComputer();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->addComputer();
 }
 
 void ConsoleWindow::onModifyComputer()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->modifyComputer();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->modifyComputer();
 }
 
 void ConsoleWindow::onDeleteComputer()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->removeComputer();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->removeComputer();
 }
 
 void ConsoleWindow::onAddComputerGroup()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->addComputerGroup();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->addComputerGroup();
 }
 
 void ConsoleWindow::onModifyComputerGroup()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->modifyComputerGroup();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->modifyComputerGroup();
 }
 
 void ConsoleWindow::onDeleteComputerGroup()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
-    {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
-            tab->removeComputerGroup();
-    }
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
+        tab->removeComputerGroup();
 }
 
 void ConsoleWindow::onOnlineHelp()
@@ -317,60 +281,48 @@ void ConsoleWindow::onFastConnect()
 
 void ConsoleWindow::onDesktopManageConnect()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
     {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
+        proto::address_book::Computer* computer = tab->currentComputer();
+        if (computer)
         {
-            proto::address_book::Computer* computer = tab->currentComputer();
-            if (computer)
-            {
-                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-                computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
+            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+            computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_MANAGE);
 
-                connectToComputer(*computer);
-            }
+            connectToComputer(*computer);
         }
     }
 }
 
 void ConsoleWindow::onDesktopViewConnect()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
     {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
+        proto::address_book::Computer* computer = tab->currentComputer();
+        if (computer)
         {
-            proto::address_book::Computer* computer = tab->currentComputer();
-            if (computer)
-            {
-                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-                computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
+            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+            computer->set_session_type(proto::auth::SESSION_TYPE_DESKTOP_VIEW);
 
-                connectToComputer(*computer);
-            }
+            connectToComputer(*computer);
         }
     }
 }
 
 void ConsoleWindow::onFileTransferConnect()
 {
-    int current_tab = ui.tab_widget->currentIndex();
-    if (current_tab != -1)
+    AddressBookTab* tab = currentAddressBookTab();
+    if (tab)
     {
-        AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
-        if (tab)
+        proto::address_book::Computer* computer = tab->currentComputer();
+        if (computer)
         {
-            proto::address_book::Computer* computer = tab->currentComputer();
-            if (computer)
-            {
-                computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
-                computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+            computer->set_connect_time(QDateTime::currentSecsSinceEpoch());
+            computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
 
-                connectToComputer(*computer);
-            }
+            connectToComputer(*computer);
         }
     }
 }
@@ -480,7 +432,7 @@ void ConsoleWindow::onComputerGroupActivated(bool activated, bool is_root)
         ui.action_delete_computer_group->setEnabled(activated);
     }
 
-    AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->currentWidget());
+    AddressBookTab* tab = currentAddressBookTab();
     if (tab)
     {
         proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
@@ -679,6 +631,15 @@ void ConsoleWindow::addAddressBookTab(AddressBookTab* new_tab)
     ui.action_close->setEnabled(true);
 
     ui.tab_widget->setCurrentIndex(index);
+}
+
+AddressBookTab* ConsoleWindow::currentAddressBookTab()
+{
+    int current_tab = ui.tab_widget->currentIndex();
+    if (current_tab == -1)
+        return nullptr;
+
+    return dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(current_tab));
 }
 
 void ConsoleWindow::connectToComputer(const proto::address_book::Computer& computer)

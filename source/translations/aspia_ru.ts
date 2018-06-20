@@ -1370,19 +1370,19 @@
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="300"/>
+        <location filename="../console/console_window.cc" line="264"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="413"/>
-        <location filename="../console/console_window.cc" line="600"/>
+        <location filename="../console/console_window.cc" line="365"/>
+        <location filename="../console/console_window.cc" line="552"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="414"/>
-        <location filename="../console/console_window.cc" line="601"/>
+        <location filename="../console/console_window.cc" line="366"/>
+        <location filename="../console/console_window.cc" line="553"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
