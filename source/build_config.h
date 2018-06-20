@@ -10,6 +10,7 @@
 
 #define QT_DEPRECATED_WARNINGS
 #define QT_MESSAGELOGCONTEXT
+#define QT_USE_QSTRINGBUILDER
 
 #include <QtGlobal>
 
