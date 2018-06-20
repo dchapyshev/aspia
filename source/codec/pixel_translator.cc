@@ -7,8 +7,6 @@
 
 #include "codec/pixel_translator.h"
 
-#include <vector>
-
 namespace aspia {
 
 namespace {
@@ -21,9 +19,9 @@ public:
         : source_format_(source_format),
           target_format_(target_format)
     {
-        red_table_.resize(source_format_.redMax() + 1);
-        green_table_.resize(source_format_.greenMax() + 1);
-        blue_table_.resize(source_format_.blueMax() + 1);
+        red_table_ = std::make_unique<quint32[]>(source_format_.redMax() + 1);
+        green_table_ = std::make_unique<quint32[]>(source_format_.greenMax() + 1);
+        blue_table_ = std::make_unique<quint32[]>(source_format_.blueMax() + 1);
 
         for (quint32 i = 0; i <= source_format_.redMax(); ++i)
         {
@@ -88,11 +86,6 @@ public:
                     blue = blue_table_[
                         *(quint8*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
-                else
-                {
-                    red = green = blue = 0;
-                    qFatal("Unexpected pixel format");
-                }
 
                 if constexpr (target_bpp == 4)
                     *(quint32*) dst = static_cast<quint32>(red | green | blue);
@@ -111,9 +104,9 @@ public:
     }
 
 private:
-    std::vector<quint32> red_table_;
-    std::vector<quint32> green_table_;
-    std::vector<quint32> blue_table_;
+    std::unique_ptr<quint32[]> red_table_;
+    std::unique_ptr<quint32[]> green_table_;
+    std::unique_ptr<quint32[]> blue_table_;
 
     PixelFormat source_format_;
     PixelFormat target_format_;
