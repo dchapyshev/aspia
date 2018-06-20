@@ -185,12 +185,12 @@ void DesktopWidget::executeKeySequense(int key_sequence)
     flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
-    for (auto it = keys.begin(); it != keys.end(); ++it)
+    for (auto it = keys.cbegin(); it != keys.cend(); ++it)
         emit sendKeyEvent(*it, flags);
 
     flags ^= proto::desktop::KeyEvent::PRESSED;
 
-    for (auto it = keys.rbegin(); it != keys.rend(); ++it)
+    for (auto it = keys.crbegin(); it != keys.crend(); ++it)
         emit sendKeyEvent(*it, flags);
 }
 
