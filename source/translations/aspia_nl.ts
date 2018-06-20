@@ -1463,7 +1463,7 @@
         <location filename="../client/ui/file_panel.cc" line="139"/>
         <location filename="../client/ui/file_panel.cc" line="153"/>
         <location filename="../client/ui/file_panel.cc" line="166"/>
-        <location filename="../client/ui/file_panel.cc" line="285"/>
+        <location filename="../client/ui/file_panel.cc" line="280"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1488,47 +1488,47 @@
         <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="261"/>
+        <location filename="../client/ui/file_panel.cc" line="256"/>
         <source>%1 object(s) selected</source>
         <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="286"/>
+        <location filename="../client/ui/file_panel.cc" line="281"/>
         <source>Folder name can not be empty.</source>
         <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="318"/>
+        <location filename="../client/ui/file_panel.cc" line="313"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="319"/>
+        <location filename="../client/ui/file_panel.cc" line="315"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="327"/>
+        <location filename="../client/ui/file_panel.cc" line="323"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Map maken</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="385"/>
+        <location filename="../client/ui/file_panel.cc" line="381"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="386"/>
+        <location filename="../client/ui/file_panel.cc" line="382"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="440"/>
+        <location filename="../client/ui/file_panel.cc" line="436"/>
         <source>Home Folder</source>
         <translation>Thuismap</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="444"/>
+        <location filename="../client/ui/file_panel.cc" line="440"/>
         <source>Desktop</source>
         <translation>Bureablad</translation>
     </message>

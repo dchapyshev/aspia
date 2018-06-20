@@ -1468,7 +1468,7 @@
         <location filename="../client/ui/file_panel.cc" line="139"/>
         <location filename="../client/ui/file_panel.cc" line="153"/>
         <location filename="../client/ui/file_panel.cc" line="166"/>
-        <location filename="../client/ui/file_panel.cc" line="285"/>
+        <location filename="../client/ui/file_panel.cc" line="280"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1493,47 +1493,47 @@
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="261"/>
+        <location filename="../client/ui/file_panel.cc" line="256"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="286"/>
+        <location filename="../client/ui/file_panel.cc" line="281"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="318"/>
+        <location filename="../client/ui/file_panel.cc" line="313"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="319"/>
+        <location filename="../client/ui/file_panel.cc" line="315"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="327"/>
+        <location filename="../client/ui/file_panel.cc" line="323"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="385"/>
+        <location filename="../client/ui/file_panel.cc" line="381"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="386"/>
+        <location filename="../client/ui/file_panel.cc" line="382"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="440"/>
+        <location filename="../client/ui/file_panel.cc" line="436"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="444"/>
+        <location filename="../client/ui/file_panel.cc" line="440"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>

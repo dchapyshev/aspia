@@ -60,6 +60,7 @@ private:
     QString addressItemPath(int index) const;
     void updateDrives(const proto::file_transfer::DriveList& list);
     void updateFiles(const proto::file_transfer::FileList& list);
+    int selectedFilesCount();
 
     Ui::FilePanel ui;
     QString current_path_;

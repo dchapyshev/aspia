@@ -56,21 +56,21 @@ QList<User> HostSettings::userList() const
 {
     QList<User> user_list;
 
-    int size = settings_.beginReadArray("UserList");
+    int size = settings_.beginReadArray(QStringLiteral("UserList"));
     for (int i = 0; i < size; ++i)
     {
         settings_.setArrayIndex(i);
 
         User user;
 
-        QString user_name = settings_.value("UserName").toString();
+        QString user_name = settings_.value(QStringLiteral("UserName")).toString();
         if (!user.setName(user_name))
         {
             qDebug() << "Invalid user name: " << user_name << ". The list of users is corrupted";
             return QList<User>();
         }
 
-        QByteArray password_hash = settings_.value("PasswordHash").toByteArray();
+        QByteArray password_hash = settings_.value(QStringLiteral("PasswordHash")).toByteArray();
         if (!user.setPasswordHash(password_hash))
         {
             qDebug() << "Invalid password hash: " << password_hash
@@ -78,8 +78,8 @@ QList<User> HostSettings::userList() const
             return QList<User>();
         }
 
-        user.setFlags(settings_.value("Flags").toUInt());
-        user.setSessions(settings_.value("Sessions").toUInt());
+        user.setFlags(settings_.value(QStringLiteral("Flags")).toUInt());
+        user.setSessions(settings_.value(QStringLiteral("Sessions")).toUInt());
 
         user_list.push_back(user);
     }
@@ -93,16 +93,19 @@ bool HostSettings::setUserList(const QList<User>& user_list)
     if (!settings_.isWritable())
         return false;
 
-    settings_.remove("UserList");
+    settings_.remove(QStringLiteral("UserList"));
 
-    settings_.beginWriteArray("UserList");
+    settings_.beginWriteArray(QStringLiteral("UserList"));
     for (int i = 0; i < user_list.size(); ++i)
     {
         settings_.setArrayIndex(i);
-        settings_.setValue("UserName", user_list[i].name());
-        settings_.setValue("PasswordHash", user_list[i].passwordHash());
-        settings_.setValue("Flags", user_list[i].flags());
-        settings_.setValue("Sessions", user_list[i].sessions());
+
+        const User& user = user_list.at(i);
+
+        settings_.setValue(QStringLiteral("UserName"), user.name());
+        settings_.setValue(QStringLiteral("PasswordHash"), user.passwordHash());
+        settings_.setValue(QStringLiteral("Flags"), user.flags());
+        settings_.setValue(QStringLiteral("Sessions"), user.sessions());
     }
     settings_.endArray();
 

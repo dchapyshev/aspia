@@ -226,7 +226,8 @@ void FilePanel::onAddressItemChanged(int index)
         }
     }
 
-    for (int i = 0; i < ui.address_bar->count(); ++i)
+    int count = ui.address_bar->count();
+    for (int i = 0; i < count; ++i)
     {
         if (ui.address_bar->itemData(i).toString().isEmpty() &&
             ui.address_bar->itemText(i) != ui.address_bar->itemText(index))
@@ -250,13 +251,7 @@ void FilePanel::onFileDoubleClicked(QTreeWidgetItem* item, int column)
 
 void FilePanel::onFileSelectionChanged()
 {
-    int selected_count = 0;
-
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-    {
-        if (ui.tree->isItemSelected(ui.tree->topLevelItem(i)))
-            ++selected_count;
-    }
+    int selected_count = selectedFilesCount();
 
     ui.label_status->setText(tr("%1 object(s) selected").arg(selected_count));
 
@@ -312,19 +307,20 @@ void FilePanel::onFileContextMenu(const QPoint& point)
     QScopedPointer<QAction> copy_action;
     QScopedPointer<QAction> delete_action;
 
-    QList<QTreeWidgetItem*> items = ui.tree->selectedItems();
-    if (!items.isEmpty())
+    if (selectedFilesCount() > 0)
     {
-        copy_action.reset(new QAction(QIcon(":/icon/arrow-045.png"), tr("&Send\tF11")));
-        delete_action.reset(new QAction(QIcon(":/icon/cross-script.png"), tr("&Delete\tDelete")));
+        copy_action.reset(new QAction(
+            QIcon(QStringLiteral(":/icon/arrow-045.png")), tr("&Send\tF11")));
+        delete_action.reset(new QAction(
+            QIcon(QStringLiteral(":/icon/cross-script.png")), tr("&Delete\tDelete")));
 
         menu.addAction(copy_action.data());
         menu.addAction(delete_action.data());
         menu.addSeparator();
     }
 
-    QScopedPointer<QAction> add_folder_action(
-        new QAction(QIcon(":/icon/folder-plus.png"), tr("&Create Folder")));
+    QScopedPointer<QAction> add_folder_action(new QAction(
+        QIcon(QStringLiteral(":/icon/folder-plus.png")), tr("&Create Folder")));
 
     menu.addAction(add_folder_action.data());
 
@@ -458,16 +454,22 @@ void FilePanel::updateDrives(const proto::file_transfer::DriveList& list)
 
 void FilePanel::updateFiles(const proto::file_transfer::FileList& list)
 {
-    for (int i = ui.tree->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = 0; i < list.item_size(); ++i)
+        ui.tree->addTopLevelItem(new FileItem(list.item(i)));
+}
+
+int FilePanel::selectedFilesCount()
+{
+    int selected_count = 0;
+
+    int total_count = ui.tree->topLevelItemCount();
+    for (int i = 0; i < total_count; ++i)
     {
-        QTreeWidgetItem* item = ui.tree->takeTopLevelItem(i);
-        delete item;
+        if (ui.tree->isItemSelected(ui.tree->topLevelItem(i)))
+            ++selected_count;
     }
 
-    for (int i = 0; i < list.item_size(); ++i)
-    {
-        ui.tree->addTopLevelItem(new FileItem(list.item(i)));
-    }
+    return selected_count;
 }
 
 } // namespace aspia

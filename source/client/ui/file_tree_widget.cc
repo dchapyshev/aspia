@@ -88,7 +88,8 @@ void FileTreeWidget::startDrag(Qt::DropActions supported_actions)
 {
     QList<FileTransfer::Item> file_list;
 
-    for (int i = 0; i < topLevelItemCount(); ++i)
+    int count = topLevelItemCount();
+    for (int i = 0; i < count; ++i)
     {
         FileItem* file_item = dynamic_cast<FileItem*>(topLevelItem(i));
 
