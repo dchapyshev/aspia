@@ -454,6 +454,12 @@ void FilePanel::updateDrives(const proto::file_transfer::DriveList& list)
 
 void FilePanel::updateFiles(const proto::file_transfer::FileList& list)
 {
+    for (int i = ui.tree->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        QTreeWidgetItem* item = ui.tree->takeTopLevelItem(i);
+        delete item;
+    }
+
     for (int i = 0; i < list.item_size(); ++i)
         ui.tree->addTopLevelItem(new FileItem(list.item(i)));
 }
