@@ -871,54 +871,59 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="69"/>
+        <location filename="../console/about_dialog.cc" line="68"/>
         <source>Version: %1</source>
         <translation>Versie: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="73"/>
+        <location filename="../console/about_dialog.cc" line="72"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia is gratis software verspreid onder de GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="74"/>
+        <location filename="../console/about_dialog.cc" line="73"/>
         <source>You can get a copy of license here:</source>
         <translation>Download een kopie van de licentie:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="79"/>
+        <location filename="../console/about_dialog.cc" line="78"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Download hier een vertaling van de GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="83"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="84"/>
         <source>Home page:</source>
         <translation>Website:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>GitHub page:</source>
         <translation>GitHub pagina:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="89"/>
+        <location filename="../console/about_dialog.cc" line="88"/>
         <source>Developers:</source>
         <translation>Ontwikkelaars:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="91"/>
+        <location filename="../console/about_dialog.cc" line="90"/>
         <source>Translators:</source>
         <translation>Vertalingen:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="93"/>
+        <location filename="../console/about_dialog.cc" line="92"/>
         <source>Third-party components:</source>
         <translation>Third-party componenten:</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="109"/>
+        <source>https://aspia.org/en/donate.html</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1358,6 +1363,11 @@
         <location filename="../console/console_window.cc" line="182"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.cc" line="300"/>
+        <source>https://aspia.org/en/help.html</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="413"/>

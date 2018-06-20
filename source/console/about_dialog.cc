@@ -20,7 +20,6 @@ const char kGplLink[] = "https://www.gnu.org/licenses/gpl.html";
 const char kGplTranslationLink[] = "https://www.gnu.org/licenses/translations.html";
 const char kHomeLink[] = "https://aspia.org";
 const char kGitHubLink[] = "https://github.com/dchapyshev/aspia";
-const char kDonateLink[] = "https://aspia.org/donate";
 
 const char* kDevelopers[] = { "Dmitry Chapyshev (dmitry@aspia.ru)" };
 
@@ -107,7 +106,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     connect(ui.push_button_donate, &QPushButton::pressed, [this]()
     {
-        QDesktopServices::openUrl(QUrl(kDonateLink));
+        QDesktopServices::openUrl(QUrl(tr("https://aspia.org/en/donate.html")));
     });
 
     connect(ui.push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
