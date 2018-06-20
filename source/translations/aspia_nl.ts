@@ -944,50 +944,50 @@
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="131"/>
+        <location filename="../console/address_book_dialog.cc" line="129"/>
         <source>Too long name. The maximum length of the name is 64 characters.</source>
         <translatorcomment>Might be nice to make the 64 an argument as well?</translatorcomment>
         <translation>Te lange naam. De maximum lengte is 64 karakters.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="136"/>
+        <location filename="../console/address_book_dialog.cc" line="134"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="143"/>
+        <location filename="../console/address_book_dialog.cc" line="141"/>
         <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
         <translatorcomment>Ditto, might be nice to make this 2048 a format arg as well.</translatorcomment>
         <translation>Te lang commentaar. De maximale lengte is 2048 karakters.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="172"/>
+        <location filename="../console/address_book_dialog.cc" line="170"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="178"/>
+        <location filename="../console/address_book_dialog.cc" line="176"/>
         <source>Password can not be shorter than 8 characters.</source>
         <translation>Wachtwoord mag niet korter dan 8 karakters zijn.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="265"/>
-        <location filename="../console/address_book_dialog.cc" line="287"/>
+        <location filename="../console/address_book_dialog.cc" line="263"/>
+        <location filename="../console/address_book_dialog.cc" line="285"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="266"/>
+        <location filename="../console/address_book_dialog.cc" line="264"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>Bij het veranderen van het aantal hash iteraties moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="288"/>
+        <location filename="../console/address_book_dialog.cc" line="286"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Bij het veranderen van de hash salt moet het wachtwoord opnieuw ingevoerd worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="326"/>
+        <location filename="../console/address_book_dialog.cc" line="324"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1255,7 +1255,7 @@
         <translation>Bestands Overdracht</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="153"/>
+        <location filename="../console/computer_dialog.cc" line="151"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1263,17 +1263,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="159"/>
+        <location filename="../console/computer_dialog.cc" line="157"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="166"/>
+        <location filename="../console/computer_dialog.cc" line="164"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="174"/>
+        <location filename="../console/computer_dialog.cc" line="172"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
@@ -1281,7 +1281,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="182"/>
+        <location filename="../console/computer_dialog.cc" line="180"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1289,7 +1289,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="212"/>
+        <location filename="../console/computer_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1297,7 +1297,7 @@
 <context>
     <name>aspia::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="51"/>
+        <location filename="../console/computer_group_dialog.cc" line="49"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1305,12 +1305,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="57"/>
+        <location filename="../console/computer_group_dialog.cc" line="55"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="64"/>
+        <location filename="../console/computer_group_dialog.cc" line="62"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1318,7 +1318,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="90"/>
+        <location filename="../console/computer_group_dialog.cc" line="88"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1326,7 +1326,7 @@
 <context>
     <name>aspia::ConsoleStatusBar</name>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="41"/>
+        <location filename="../console/console_statusbar.cc" line="39"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n onderliggende groep</numerusform>
@@ -1334,7 +1334,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="47"/>
+        <location filename="../console/console_statusbar.cc" line="45"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n onderliggende computer</numerusform>
@@ -1345,39 +1345,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="161"/>
+        <location filename="../console/console_window.cc" line="159"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="163"/>
+        <location filename="../console/console_window.cc" line="161"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="181"/>
+        <location filename="../console/console_window.cc" line="179"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="182"/>
+        <location filename="../console/console_window.cc" line="180"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="264"/>
+        <location filename="../console/console_window.cc" line="262"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="365"/>
-        <location filename="../console/console_window.cc" line="552"/>
+        <location filename="../console/console_window.cc" line="363"/>
+        <location filename="../console/console_window.cc" line="550"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="366"/>
-        <location filename="../console/console_window.cc" line="553"/>
+        <location filename="../console/console_window.cc" line="364"/>
+        <location filename="../console/console_window.cc" line="551"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1410,7 +1410,7 @@
         <translation>8 kleuren (3 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="128"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="126"/>
         <source>Compression ratio: %1</source>
         <translation>Compressie ratio: %1</translation>
     </message>
@@ -1459,76 +1459,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="127"/>
-        <location filename="../client/ui/file_panel.cc" line="141"/>
-        <location filename="../client/ui/file_panel.cc" line="155"/>
-        <location filename="../client/ui/file_panel.cc" line="168"/>
-        <location filename="../client/ui/file_panel.cc" line="287"/>
+        <location filename="../client/ui/file_panel.cc" line="125"/>
+        <location filename="../client/ui/file_panel.cc" line="139"/>
+        <location filename="../client/ui/file_panel.cc" line="153"/>
+        <location filename="../client/ui/file_panel.cc" line="166"/>
+        <location filename="../client/ui/file_panel.cc" line="285"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="128"/>
+        <location filename="../client/ui/file_panel.cc" line="126"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="142"/>
+        <location filename="../client/ui/file_panel.cc" line="140"/>
         <source>Failed to get list of files: %1</source>
         <translation>Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="156"/>
+        <location filename="../client/ui/file_panel.cc" line="154"/>
         <source>Failed to create directory: %1</source>
         <translation>Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="169"/>
+        <location filename="../client/ui/file_panel.cc" line="167"/>
         <source>Failed to rename item: %1</source>
         <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="263"/>
+        <location filename="../client/ui/file_panel.cc" line="261"/>
         <source>%1 object(s) selected</source>
         <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="288"/>
+        <location filename="../client/ui/file_panel.cc" line="286"/>
         <source>Folder name can not be empty.</source>
         <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="320"/>
+        <location filename="../client/ui/file_panel.cc" line="318"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="321"/>
+        <location filename="../client/ui/file_panel.cc" line="319"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="329"/>
+        <location filename="../client/ui/file_panel.cc" line="327"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Map maken</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="387"/>
+        <location filename="../client/ui/file_panel.cc" line="385"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="388"/>
+        <location filename="../client/ui/file_panel.cc" line="386"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="442"/>
+        <location filename="../client/ui/file_panel.cc" line="440"/>
         <source>Home Folder</source>
         <translation>Thuismap</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="446"/>
+        <location filename="../client/ui/file_panel.cc" line="444"/>
         <source>Desktop</source>
         <translation>Bureablad</translation>
     </message>
@@ -1536,27 +1536,27 @@
 <context>
     <name>aspia::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="33"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="31"/>
         <source>Deleting: %1</source>
         <translation>Verwijderen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="47"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="45"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="56"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="54"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="59"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="57"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="62"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="60"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
@@ -1564,12 +1564,12 @@
 <context>
     <name>aspia::FileRemoveQueueBuilder</name>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="51"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="49"/>
         <source>An unexpected answer was received.</source>
         <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="57"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="55"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
@@ -1577,12 +1577,12 @@
 <context>
     <name>aspia::FileRemover</name>
     <message>
-        <location filename="../client/file_remover.cc" line="79"/>
+        <location filename="../client/file_remover.cc" line="77"/>
         <source>An unexpected answer was received.</source>
         <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
-        <location filename="../client/file_remover.cc" line="107"/>
+        <location filename="../client/file_remover.cc" line="105"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Kon &quot;%1&quot; niet verwijderen: %2.</translation>
     </message>
@@ -1624,47 +1624,47 @@
 <context>
     <name>aspia::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="34"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="32"/>
         <source>Current Task: Copying items.</source>
         <translation>Huidige taak: Items kopieren.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="41"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="39"/>
         <source>From: %1</source>
         <translation>Van: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="46"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="44"/>
         <source>To: %1</source>
         <translation>Naar: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="66"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="64"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="79"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="77"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="82"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="80"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="85"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="83"/>
         <source>Replace</source>
         <translation>Vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="86"/>
         <source>Replace All</source>
         <translation>Alles vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="89"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
@@ -1672,12 +1672,12 @@
 <context>
     <name>aspia::FileTransferQueueBuilder</name>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="66"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="64"/>
         <source>An unexpected answer was received.</source>
         <translation>Een onverwacht antwoord was ontvangen.</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="72"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="70"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Er is een fout opgetreden bij het ontvangen van de bestandslijst: %1</translation>
     </message>
