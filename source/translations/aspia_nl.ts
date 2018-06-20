@@ -995,81 +995,81 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="190"/>
+        <location filename="../console/address_book_tab.cc" line="191"/>
         <source>Unable to open address book file.</source>
         <translation>Kan adresboek bestand niet openen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="197"/>
+        <location filename="../console/address_book_tab.cc" line="198"/>
         <source>Unable to read address book file.</source>
         <translation>Kan adresboek bestand niet lezen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="205"/>
-        <location filename="../console/address_book_tab.cc" line="220"/>
-        <location filename="../console/address_book_tab.cc" line="250"/>
+        <location filename="../console/address_book_tab.cc" line="206"/>
+        <location filename="../console/address_book_tab.cc" line="221"/>
+        <location filename="../console/address_book_tab.cc" line="251"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Het adresboek is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="244"/>
+        <location filename="../console/address_book_tab.cc" line="245"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="260"/>
+        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Het adresboek is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="427"/>
+        <location filename="../console/address_book_tab.cc" line="428"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Weet U zeker dat U de groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="431"/>
-        <location filename="../console/address_book_tab.cc" line="453"/>
+        <location filename="../console/address_book_tab.cc" line="432"/>
+        <location filename="../console/address_book_tab.cc" line="454"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="449"/>
+        <location filename="../console/address_book_tab.cc" line="450"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="637"/>
+        <location filename="../console/address_book_tab.cc" line="638"/>
         <source>Save Address Book</source>
         <translation>Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="639"/>
+        <location filename="../console/address_book_tab.cc" line="640"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="649"/>
+        <location filename="../console/address_book_tab.cc" line="650"/>
         <source>Unable to create or open address book file.</source>
         <translation>Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="661"/>
+        <location filename="../console/address_book_tab.cc" line="662"/>
         <source>Unable to write address book file.</source>
         <translation>Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="677"/>
-        <location filename="../console/address_book_tab.cc" line="691"/>
+        <location filename="../console/address_book_tab.cc" line="678"/>
+        <location filename="../console/address_book_tab.cc" line="692"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="679"/>
+        <location filename="../console/address_book_tab.cc" line="680"/>
         <source>Could not open address book</source>
         <translation>Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="693"/>
+        <location filename="../console/address_book_tab.cc" line="694"/>
         <source>Failed to save address book</source>
         <translation>Kon adresboek niet opslaan</translation>
     </message>
@@ -1326,7 +1326,7 @@
 <context>
     <name>aspia::ConsoleStatusBar</name>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="39"/>
+        <location filename="../console/console_statusbar.cc" line="26"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n onderliggende groep</numerusform>
@@ -1334,7 +1334,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="45"/>
+        <location filename="../console/console_statusbar.cc" line="27"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n onderliggende computer</numerusform>

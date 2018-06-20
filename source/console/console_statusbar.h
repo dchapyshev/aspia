@@ -8,7 +8,6 @@
 #ifndef _ASPIA_CONSOLE__CONSOLE_STATUSBAR_H
 #define _ASPIA_CONSOLE__CONSOLE_STATUSBAR_H
 
-#include <QLabel>
 #include <QStatusBar>
 
 #include "protocol/address_book.pb.h"
@@ -27,8 +26,6 @@ public:
     void clear();
 
 private:
-    QVector<QLabel*> item_list_;
-
     Q_DISABLE_COPY(ConsoleStatusBar)
 };
 

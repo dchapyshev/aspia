@@ -993,81 +993,81 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="190"/>
+        <location filename="../console/address_book_tab.cc" line="191"/>
         <source>Unable to open address book file.</source>
         <translation>Не удалось открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="197"/>
+        <location filename="../console/address_book_tab.cc" line="198"/>
         <source>Unable to read address book file.</source>
         <translation>Не удалось прочитать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="205"/>
-        <location filename="../console/address_book_tab.cc" line="220"/>
-        <location filename="../console/address_book_tab.cc" line="250"/>
+        <location filename="../console/address_book_tab.cc" line="206"/>
+        <location filename="../console/address_book_tab.cc" line="221"/>
+        <location filename="../console/address_book_tab.cc" line="251"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="244"/>
+        <location filename="../console/address_book_tab.cc" line="245"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="260"/>
+        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="427"/>
+        <location filename="../console/address_book_tab.cc" line="428"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочернии элементы?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="431"/>
-        <location filename="../console/address_book_tab.cc" line="453"/>
+        <location filename="../console/address_book_tab.cc" line="432"/>
+        <location filename="../console/address_book_tab.cc" line="454"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="449"/>
+        <location filename="../console/address_book_tab.cc" line="450"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="637"/>
+        <location filename="../console/address_book_tab.cc" line="638"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="639"/>
+        <location filename="../console/address_book_tab.cc" line="640"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="649"/>
+        <location filename="../console/address_book_tab.cc" line="650"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="661"/>
+        <location filename="../console/address_book_tab.cc" line="662"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="677"/>
-        <location filename="../console/address_book_tab.cc" line="691"/>
+        <location filename="../console/address_book_tab.cc" line="678"/>
+        <location filename="../console/address_book_tab.cc" line="692"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="679"/>
+        <location filename="../console/address_book_tab.cc" line="680"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="693"/>
+        <location filename="../console/address_book_tab.cc" line="694"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1329,7 +1329,7 @@
 <context>
     <name>aspia::ConsoleStatusBar</name>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="39"/>
+        <location filename="../console/console_statusbar.cc" line="26"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочерняя группа</numerusform>
@@ -1338,7 +1338,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="45"/>
+        <location filename="../console/console_statusbar.cc" line="27"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n дочерний компьютер</numerusform>
