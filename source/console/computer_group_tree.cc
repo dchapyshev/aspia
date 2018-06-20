@@ -65,8 +65,8 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
 
     if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
     {
-        ComputerGroupItem* source_item = reinterpret_cast<ComputerGroupItem*>(itemAt(start_pos_));
-        ComputerGroupItem* target_item = reinterpret_cast<ComputerGroupItem*>(itemAt(event->pos()));
+        ComputerGroupItem* source_item = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));
+        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
 
         if (isAllowedDropTarget(target_item, source_item))
         {
@@ -76,17 +76,19 @@ void ComputerGroupTree::dragMoveEvent(QDragMoveEvent* event)
     }
     else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
     {
-        ComputerGroupItem* target_item = reinterpret_cast<ComputerGroupItem*>(itemAt(event->pos()));
+        ComputerGroupItem* target_item = dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
         if (target_item)
         {
             const ComputerMimeData* computer_mime_data =
-                reinterpret_cast<const ComputerMimeData*>(mime_data);
-
-            ComputerItem* computer_item = computer_mime_data->computerItem();
-            if (computer_item && computer_item->parentComputerGroupItem() != target_item)
+                dynamic_cast<const ComputerMimeData*>(mime_data);
+            if (computer_mime_data)
             {
-                setCurrentItem(target_item);
-                event->acceptProposedAction();
+                ComputerItem* computer_item = computer_mime_data->computerItem();
+                if (computer_item && computer_item->parentComputerGroupItem() != target_item)
+                {
+                    setCurrentItem(target_item);
+                    event->acceptProposedAction();
+                }
             }
         }
     }
@@ -107,49 +109,59 @@ void ComputerGroupTree::dropEvent(QDropEvent* event)
     if (mime_data->hasFormat(ComputerGroupMimeData::mimeType()))
     {
         const ComputerGroupMimeData* computer_group_mime_data =
-            reinterpret_cast<const ComputerGroupMimeData*>(event->mimeData());
+            dynamic_cast<const ComputerGroupMimeData*>(event->mimeData());
+        if (computer_group_mime_data)
+        {
+            ComputerGroupItem* target_group_item =
+                dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+            ComputerGroupItem* source_group_item =
+                computer_group_mime_data->computerGroup();
 
-        ComputerGroupItem* target_group_item = reinterpret_cast<ComputerGroupItem*>(itemAt(event->pos()));
-        ComputerGroupItem* source_group_item = computer_group_mime_data->computerGroup();
+            if (!isAllowedDropTarget(target_group_item, source_group_item))
+                return;
 
-        if (!isAllowedDropTarget(target_group_item, source_group_item))
-            return;
+            ComputerGroupItem* parent_group_item =
+                dynamic_cast<ComputerGroupItem*>(source_group_item->parent());
+            if (!parent_group_item)
+                return;
 
-        ComputerGroupItem* parent_group_item =
-            reinterpret_cast<ComputerGroupItem*>(source_group_item->parent());
+            proto::address_book::ComputerGroup* computer_group =
+                parent_group_item->takeChildComputerGroup(source_group_item);
+            if (!computer_group)
+                return;
 
-        proto::address_book::ComputerGroup* computer_group =
-            parent_group_item->takeChildComputerGroup(source_group_item);
-        if (!computer_group)
-            return;
+            target_group_item->addChildComputerGroup(computer_group);
+            target_group_item->setExpanded(true);
+            setCurrentItem(target_group_item);
 
-        target_group_item->addChildComputerGroup(computer_group);
-        target_group_item->setExpanded(true);
-        setCurrentItem(target_group_item);
-
-        emit itemDropped();
+            emit itemDropped();
+        }
     }
     else if (mime_data->hasFormat(ComputerMimeData::mimeType()))
     {
         const ComputerMimeData* computer_mime_data =
-            reinterpret_cast<const ComputerMimeData*>(event->mimeData());
-
-        ComputerItem* computer_item = computer_mime_data->computerItem();
-
-        ComputerGroupItem* target_group_item = reinterpret_cast<ComputerGroupItem*>(itemAt(event->pos()));
-        ComputerGroupItem* source_group_item = computer_item->parentComputerGroupItem();
-
-        if (target_group_item && source_group_item)
+            dynamic_cast<const ComputerMimeData*>(event->mimeData());
+        if (computer_mime_data)
         {
-            setCurrentItem(source_group_item);
+            ComputerItem* computer_item = computer_mime_data->computerItem();
 
-            proto::address_book::Computer* computer =
-                source_group_item->takeChildComputer(computer_item->computer());
+            ComputerGroupItem* target_group_item =
+                dynamic_cast<ComputerGroupItem*>(itemAt(event->pos()));
+            ComputerGroupItem* source_group_item =
+                computer_item->parentComputerGroupItem();
 
-            if (computer)
+            if (target_group_item && source_group_item)
             {
-                target_group_item->addChildComputer(computer);
-                emit itemDropped();
+                setCurrentItem(source_group_item);
+
+                proto::address_book::Computer* computer =
+                    source_group_item->takeChildComputer(computer_item->computer());
+
+                if (computer)
+                {
+                    target_group_item->addChildComputer(computer);
+                    emit itemDropped();
+                }
             }
         }
     }
@@ -166,15 +178,18 @@ bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerG
     std::function<bool(ComputerGroupItem*, ComputerGroupItem*)> is_child_item =
         [&](ComputerGroupItem* parent_item, ComputerGroupItem* child_item)
     {
-        for (int i = 0; i < parent_item->childCount(); ++i)
+        int count = parent_item->childCount();
+        for (int i = 0; i < count; ++i)
         {
-            ComputerGroupItem* current = reinterpret_cast<ComputerGroupItem*>(parent_item->child(i));
+            ComputerGroupItem* current = dynamic_cast<ComputerGroupItem*>(parent_item->child(i));
+            if (current)
+            {
+                if (current == child_item)
+                    return true;
 
-            if (current == child_item)
-                return true;
-
-            if (is_child_item(current, child_item))
-                return true;
+                if (is_child_item(current, child_item))
+                    return true;
+            }
         }
 
         return false;
@@ -185,7 +200,7 @@ bool ComputerGroupTree::isAllowedDropTarget(ComputerGroupItem* target, ComputerG
 
 void ComputerGroupTree::startDrag(Qt::DropActions supported_actions)
 {
-    ComputerGroupItem* computer_group = reinterpret_cast<ComputerGroupItem*>(itemAt(start_pos_));
+    ComputerGroupItem* computer_group = dynamic_cast<ComputerGroupItem*>(itemAt(start_pos_));
     if (computer_group)
     {
         ComputerGroupDrag* drag = new ComputerGroupDrag(this);
