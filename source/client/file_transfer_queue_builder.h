@@ -19,7 +19,7 @@ class FileTransferQueueBuilder : public QObject
 
 public:
     explicit FileTransferQueueBuilder(QObject* parent = nullptr);
-    ~FileTransferQueueBuilder();
+    ~FileTransferQueueBuilder() = default;
 
     // Returns the queue of tasks.
     QQueue<FileTransferTask> taskQueue() const;

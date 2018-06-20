@@ -96,8 +96,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
     ui.edit_name->setFocus();
 }
 
-AddressBookDialog::~AddressBookDialog() = default;
-
 bool AddressBookDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&

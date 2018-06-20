@@ -18,7 +18,7 @@ class ComputerGroupItem : public QTreeWidgetItem
 public:
     ComputerGroupItem(proto::address_book::ComputerGroup* computer_group,
                       ComputerGroupItem* parent_item);
-    virtual ~ComputerGroupItem();
+    virtual ~ComputerGroupItem() = default;
 
     ComputerGroupItem* addChildComputerGroup(proto::address_book::ComputerGroup* computer_group);
     bool deleteChildComputerGroup(ComputerGroupItem* computer_group_item);

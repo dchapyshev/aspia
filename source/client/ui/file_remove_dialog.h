@@ -19,7 +19,7 @@ class FileRemoveDialog : public QDialog
 
 public:
     explicit FileRemoveDialog(QWidget* parent);
-    ~FileRemoveDialog();
+    ~FileRemoveDialog() = default;
 
 public slots:
     void setProgress(const QString& current_item, int percentage);

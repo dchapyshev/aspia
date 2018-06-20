@@ -17,7 +17,7 @@ class KeySequenceDialog : public QDialog
     Q_OBJECT
 
 public:
-    ~KeySequenceDialog();
+    ~KeySequenceDialog() = default;
 
     static QKeySequence keySequence(QWidget* parent = nullptr);
 

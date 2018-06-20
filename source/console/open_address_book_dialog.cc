@@ -40,8 +40,6 @@ OpenAddressBookDialog::OpenAddressBookDialog(
     ui.edit_password->setFocus();
 }
 
-OpenAddressBookDialog::~OpenAddressBookDialog() = default;
-
 QString OpenAddressBookDialog::password() const
 {
     return ui.edit_password->text();

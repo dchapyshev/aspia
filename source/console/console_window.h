@@ -24,7 +24,7 @@ class ConsoleWindow : public QMainWindow
 
 public:
     ConsoleWindow(const QString& file_path, QWidget* parent = nullptr);
-    ~ConsoleWindow();
+    ~ConsoleWindow() = default;
 
 public slots:
     void onNewAddressBook();

@@ -17,8 +17,6 @@ HostNotifier::HostNotifier(QObject* parent)
     // Nothing
 }
 
-HostNotifier::~HostNotifier() = default;
-
 bool HostNotifier::start(const QString& channel_id)
 {
     if (channel_id.isEmpty())

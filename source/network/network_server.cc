@@ -19,8 +19,6 @@ NetworkServer::NetworkServer(QObject* parent)
     // Nothing
 }
 
-NetworkServer::~NetworkServer() = default;
-
 bool NetworkServer::start(int port)
 {
     if (!tcp_server_.isNull())

@@ -24,8 +24,6 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
     });
 }
 
-FileRemoveDialog::~FileRemoveDialog() = default;
-
 void FileRemoveDialog::setProgress(const QString& current_item, int percentage)
 {
     QFontMetrics metrics(ui.label_current_item->font());

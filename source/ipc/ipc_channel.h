@@ -30,7 +30,7 @@ public:
         Connected
     };
 
-    ~IpcChannel();
+    ~IpcChannel() = default;
 
     static IpcChannel* createClient(QObject* parent = nullptr);
 

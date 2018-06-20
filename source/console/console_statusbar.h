@@ -21,7 +21,7 @@ class ConsoleStatusBar : public QStatusBar
 
 public:
     explicit ConsoleStatusBar(QWidget* parent);
-    ~ConsoleStatusBar();
+    ~ConsoleStatusBar() = default;
 
     void setCurrentComputerGroup(const proto::address_book::ComputerGroup& computer_group);
     void clear();

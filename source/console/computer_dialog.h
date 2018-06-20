@@ -26,7 +26,7 @@ public:
                    Mode mode,
                    proto::address_book::Computer* computer,
                    proto::address_book::ComputerGroup* parent_computer_group);
-    ~ComputerDialog();
+    ~ComputerDialog() = default;
 
 private slots:
     void sessionTypeChanged(int item_index);

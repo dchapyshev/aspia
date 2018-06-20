@@ -24,8 +24,6 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     });
 }
 
-FileTransferDialog::~FileTransferDialog() = default;
-
 void FileTransferDialog::setCurrentItem(const QString& source_path, const QString& target_path)
 {
     if (task_queue_building_)

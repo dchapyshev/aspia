@@ -74,8 +74,6 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 
-DesktopPanel::~DesktopPanel() = default;
-
 void DesktopPanel::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == hide_timer_id_)

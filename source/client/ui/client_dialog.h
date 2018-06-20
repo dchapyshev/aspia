@@ -19,7 +19,7 @@ class ClientDialog : public QDialog
 
 public:
     explicit ClientDialog(QWidget* parent = nullptr);
-    ~ClientDialog();
+    ~ClientDialog() = default;
 
     const proto::address_book::Computer& computer() const { return computer_; }
 

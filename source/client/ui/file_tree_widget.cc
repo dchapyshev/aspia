@@ -33,8 +33,6 @@ FileTreeWidget::FileTreeWidget(QWidget* parent)
     setItemDelegateForColumn(3, new FileReadOnlyColumnDelegate(this));
 }
 
-FileTreeWidget::~FileTreeWidget() = default;
-
 void FileTreeWidget::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)

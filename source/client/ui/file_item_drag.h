@@ -21,7 +21,7 @@ class FileItemDrag : public QDrag
 {
 public:
     explicit FileItemDrag(QObject* drag_source = nullptr);
-    virtual ~FileItemDrag();
+    virtual ~FileItemDrag() = default;
 
     void setFileList(const QList<FileTransfer::Item>& file_list);
 

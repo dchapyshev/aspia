@@ -68,8 +68,6 @@ ComputerDialog::ComputerDialog(QWidget* parent,
             this, &ComputerDialog::buttonBoxClicked);
 }
 
-ComputerDialog::~ComputerDialog() = default;
-
 void ComputerDialog::sessionTypeChanged(int item_index)
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(

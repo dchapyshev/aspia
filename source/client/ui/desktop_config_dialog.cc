@@ -108,8 +108,6 @@ DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
     setFixedSize(sizeHint());
 }
 
-DesktopConfigDialog::~DesktopConfigDialog() = default;
-
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     bool has_pixel_format =

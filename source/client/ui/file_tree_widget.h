@@ -22,7 +22,7 @@ class FileTreeWidget : public QTreeWidget
 
 public:
     FileTreeWidget(QWidget* parent = nullptr);
-    ~FileTreeWidget();
+    ~FileTreeWidget() = default;
 
 signals:
     void fileListDroped(const QList<FileTransfer::Item>& file_list);

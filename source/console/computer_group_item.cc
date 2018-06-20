@@ -23,8 +23,6 @@ ComputerGroupItem::ComputerGroupItem(proto::address_book::ComputerGroup* compute
     }
 }
 
-ComputerGroupItem::~ComputerGroupItem() = default;
-
 ComputerGroupItem* ComputerGroupItem::addChildComputerGroup(
     proto::address_book::ComputerGroup* computer_group)
 {

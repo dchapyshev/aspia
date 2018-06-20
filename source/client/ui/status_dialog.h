@@ -18,7 +18,7 @@ class StatusDialog : public QDialog
 
 public:
     explicit StatusDialog(QWidget* parent = nullptr);
-    ~StatusDialog();
+    ~StatusDialog() = default;
 
 public slots:
     // Adds a message to the status dialog. If the dialog is hidden, it also shows it.

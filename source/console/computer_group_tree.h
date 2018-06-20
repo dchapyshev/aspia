@@ -18,7 +18,7 @@ class ComputerGroupTree : public QTreeWidget
 
 public:
     ComputerGroupTree(QWidget* parent);
-    ~ComputerGroupTree();
+    ~ComputerGroupTree() = default;
 
 signals:
     void itemDropped();

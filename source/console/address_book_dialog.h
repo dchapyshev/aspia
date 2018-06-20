@@ -22,7 +22,7 @@ public:
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
                       QByteArray* key);
-    ~AddressBookDialog();
+    ~AddressBookDialog() = default;
 
 protected:
     // QDialog implementation.

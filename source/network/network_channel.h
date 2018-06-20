@@ -39,7 +39,7 @@ public:
     };
     Q_ENUM(ChannelState);
 
-    ~NetworkChannel();
+    ~NetworkChannel() = default;
 
     static NetworkChannel* createClient(QObject* parent = nullptr);
 

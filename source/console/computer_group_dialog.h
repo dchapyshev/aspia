@@ -24,7 +24,7 @@ public:
                         Mode mode,
                         proto::address_book::ComputerGroup* computer_group,
                         proto::address_book::ComputerGroup* parent_computer_group);
-    ~ComputerGroupDialog();
+    ~ComputerGroupDialog() = default;
 
 private slots:
     void buttonBoxClicked(QAbstractButton* button);

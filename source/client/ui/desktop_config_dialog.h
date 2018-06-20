@@ -22,7 +22,7 @@ public:
                         quint32 supported_video_encodings,
                         quint32 supported_features,
                         QWidget* parent = nullptr);
-    ~DesktopConfigDialog();
+    ~DesktopConfigDialog() = default;
 
     const proto::desktop::Config& config() { return config_; }
 

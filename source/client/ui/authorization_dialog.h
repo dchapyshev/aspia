@@ -18,7 +18,7 @@ class AuthorizationDialog : public QDialog
 
 public:
     explicit AuthorizationDialog(QWidget* parent = nullptr);
-    ~AuthorizationDialog();
+    ~AuthorizationDialog() = default;
 
     QString userName() const;
     void setUserName(const QString& username);

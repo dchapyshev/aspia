@@ -22,8 +22,6 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
             this, &AuthorizationDialog::onButtonBoxClicked);
 }
 
-AuthorizationDialog::~AuthorizationDialog() = default;
-
 QString AuthorizationDialog::userName() const
 {
     return ui.edit_username->text();

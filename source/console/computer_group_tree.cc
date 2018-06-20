@@ -22,8 +22,6 @@ ComputerGroupTree::ComputerGroupTree(QWidget* parent)
     setAcceptDrops(true);
 }
 
-ComputerGroupTree::~ComputerGroupTree() = default;
-
 void ComputerGroupTree::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)

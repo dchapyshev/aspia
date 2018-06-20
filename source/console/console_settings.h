@@ -18,7 +18,7 @@ class ConsoleSettings
 {
 public:
     ConsoleSettings();
-    ~ConsoleSettings();
+    ~ConsoleSettings() = default;
 
     static QString defaultLocale();
     QString locale() const;

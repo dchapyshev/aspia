@@ -145,8 +145,6 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
         addAddressBookTab(AddressBookTab::openFromFile(file_path, ui.tab_widget));
 }
 
-ConsoleWindow::~ConsoleWindow() = default;
-
 void ConsoleWindow::onNewAddressBook()
 {
     addAddressBookTab(AddressBookTab::createNew(ui.tab_widget));

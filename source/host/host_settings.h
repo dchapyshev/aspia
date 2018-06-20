@@ -18,7 +18,7 @@ class HostSettings
 {
 public:
     HostSettings();
-    ~HostSettings();
+    ~HostSettings() = default;
 
     bool isWritable() const;
 

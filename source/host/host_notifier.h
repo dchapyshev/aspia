@@ -19,7 +19,7 @@ class HostNotifier : public QObject
 
 public:
     explicit HostNotifier(QObject* parent = nullptr);
-    ~HostNotifier();
+    ~HostNotifier() = default;
 
     bool start(const QString& channel_id);
 

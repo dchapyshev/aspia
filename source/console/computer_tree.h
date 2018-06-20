@@ -18,7 +18,7 @@ class ComputerTree : public QTreeWidget
 
 public:
     explicit ComputerTree(QWidget* parent = nullptr);
-    ~ComputerTree();
+    ~ComputerTree() = default;
 
 protected:
     // QTreeWidget implementation.

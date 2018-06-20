@@ -22,7 +22,7 @@ class IpcServer : public QObject
 
 public:
     explicit IpcServer(QObject* parent = nullptr);
-    ~IpcServer();
+    ~IpcServer() = default;
 
     bool isStarted() const;
 

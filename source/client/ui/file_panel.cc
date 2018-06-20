@@ -81,8 +81,6 @@ FilePanel::FilePanel(QWidget* parent)
     });
 }
 
-FilePanel::~FilePanel() = default;
-
 void FilePanel::setPanelName(const QString& name)
 {
     ui.label_name->setText(name);

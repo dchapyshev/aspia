@@ -39,8 +39,6 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     ui.edit_comment->setPlainText(QString::fromStdString(computer_group->comment()));
 }
 
-ComputerGroupDialog::~ComputerGroupDialog() = default;
-
 void ComputerGroupDialog::buttonBoxClicked(QAbstractButton* button)
 {
     if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)

@@ -21,7 +21,7 @@ class FilePanel : public QWidget
 
 public:
     explicit FilePanel(QWidget* parent = nullptr);
-    ~FilePanel();
+    ~FilePanel() = default;
 
     void setPanelName(const QString& name);
 

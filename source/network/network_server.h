@@ -22,7 +22,7 @@ class NetworkServer : public QObject
 
 public:
     explicit NetworkServer(QObject* parent = nullptr);
-    ~NetworkServer();
+    ~NetworkServer() = default;
 
     bool start(int port);
     void stop();

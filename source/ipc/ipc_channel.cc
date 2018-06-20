@@ -43,8 +43,6 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
             Qt::QueuedConnection);
 }
 
-IpcChannel::~IpcChannel() = default;
-
 // static
 IpcChannel* IpcChannel::createClient(QObject* parent)
 {

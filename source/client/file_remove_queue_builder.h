@@ -19,7 +19,7 @@ class FileRemoveQueueBuilder : public QObject
 
 public:
     explicit FileRemoveQueueBuilder(QObject* parent = nullptr);
-    ~FileRemoveQueueBuilder();
+    ~FileRemoveQueueBuilder() = default;
 
     // Returns the queue of tasks.
     QQueue<FileRemoveTask> taskQueue() const;

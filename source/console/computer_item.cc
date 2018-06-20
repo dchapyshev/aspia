@@ -20,8 +20,6 @@ ComputerItem::ComputerItem(proto::address_book::Computer* computer,
     updateItem();
 }
 
-ComputerItem::~ComputerItem() = default;
-
 void ComputerItem::updateItem()
 {
     setText(0, QString::fromStdString(computer_->name()));

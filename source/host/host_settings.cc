@@ -17,8 +17,6 @@ HostSettings::HostSettings()
     // Nothing
 }
 
-HostSettings::~HostSettings() = default;
-
 bool HostSettings::isWritable() const
 {
     return settings_.isWritable();

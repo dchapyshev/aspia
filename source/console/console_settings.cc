@@ -17,8 +17,6 @@ ConsoleSettings::ConsoleSettings()
     // Nothing
 }
 
-ConsoleSettings::~ConsoleSettings() = default;
-
 // static
 QString ConsoleSettings::defaultLocale()
 {

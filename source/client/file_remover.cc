@@ -24,8 +24,6 @@ FileRemover::FileRemover(QObject* parent)
     // Nothing
 }
 
-FileRemover::~FileRemover() = default;
-
 void FileRemover::start(const QString& path, const QList<Item>& items)
 {
     builder_ = new FileRemoveQueueBuilder();

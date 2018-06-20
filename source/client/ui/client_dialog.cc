@@ -55,8 +55,6 @@ ClientDialog::ClientDialog(QWidget* parent)
     ui.edit_address->setFocus();
 }
 
-ClientDialog::~ClientDialog() = default;
-
 void ClientDialog::sessionTypeChanged(int item_index)
 {
     proto::auth::SessionType session_type = static_cast<proto::auth::SessionType>(

@@ -21,8 +21,6 @@ ComputerTree::ComputerTree(QWidget* parent)
     // Nothing
 }
 
-ComputerTree::~ComputerTree() = default;
-
 void ComputerTree::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)

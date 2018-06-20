@@ -19,7 +19,7 @@ class FileTransferDialog : public QDialog
 
 public:
     explicit FileTransferDialog(QWidget* parent = nullptr);
-    ~FileTransferDialog();
+    ~FileTransferDialog() = default;
 
 public slots:
     void setCurrentItem(const QString& source_path, const QString& target_path);

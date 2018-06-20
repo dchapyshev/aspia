@@ -17,8 +17,6 @@ ConsoleStatusBar::ConsoleStatusBar(QWidget* parent)
     // Nothing
 }
 
-ConsoleStatusBar::~ConsoleStatusBar() = default;
-
 void ConsoleStatusBar::setCurrentComputerGroup(
     const proto::address_book::ComputerGroup& computer_group)
 {

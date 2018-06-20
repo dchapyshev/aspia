@@ -21,7 +21,7 @@ class DesktopPanel : public QFrame
 
 public:
     DesktopPanel(proto::auth::SessionType session_type, QWidget* parent);
-    ~DesktopPanel();
+    ~DesktopPanel() = default;
 
 signals:
     void keySequence(int key_secuence);

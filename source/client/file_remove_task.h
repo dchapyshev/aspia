@@ -23,7 +23,7 @@ public:
     FileRemoveTask(FileRemoveTask&& other) noexcept;
     FileRemoveTask& operator=(FileRemoveTask&& other) noexcept;
 
-    ~FileRemoveTask();
+    ~FileRemoveTask() = default;
 
     const QString& path() const { return path_; }
     bool isDirectory() const { return is_directory_; }

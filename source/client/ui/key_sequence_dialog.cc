@@ -21,8 +21,6 @@ KeySequenceDialog::KeySequenceDialog(QWidget* parent)
             this, &KeySequenceDialog::onButtonBoxClicked);
 }
 
-KeySequenceDialog::~KeySequenceDialog() = default;
-
 // static
 QKeySequence KeySequenceDialog::keySequence(QWidget* parent)
 {

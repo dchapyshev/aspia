@@ -37,8 +37,6 @@ FileTransferQueueBuilder::FileTransferQueueBuilder(QObject* parent)
     // Nothing
 }
 
-FileTransferQueueBuilder::~FileTransferQueueBuilder() = default;
-
 QQueue<FileTransferTask> FileTransferQueueBuilder::taskQueue() const
 {
     return tasks_;

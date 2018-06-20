@@ -112,6 +112,4 @@ AboutDialog::AboutDialog(QWidget* parent)
     connect(ui.push_button_close, &QPushButton::pressed, this, &AboutDialog::close);
 }
 
-AboutDialog::~AboutDialog() = default;
-
 } // namespace aspia

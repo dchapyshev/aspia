@@ -36,8 +36,6 @@ IpcServer::IpcServer(QObject* parent)
     // Nothing
 }
 
-IpcServer::~IpcServer() = default;
-
 bool IpcServer::isStarted() const
 {
     return !server_.isNull();

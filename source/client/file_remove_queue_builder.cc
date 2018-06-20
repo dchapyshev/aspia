@@ -26,8 +26,6 @@ FileRemoveQueueBuilder::FileRemoveQueueBuilder(QObject* parent)
     // Nothing
 }
 
-FileRemoveQueueBuilder::~FileRemoveQueueBuilder() = default;
-
 QQueue<FileRemoveTask> FileRemoveQueueBuilder::taskQueue() const
 {
     return tasks_;

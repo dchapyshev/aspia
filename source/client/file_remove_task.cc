@@ -33,6 +33,4 @@ FileRemoveTask& FileRemoveTask::operator=(FileRemoveTask&& other) noexcept
     return *this;
 }
 
-FileRemoveTask::~FileRemoveTask() = default;
-
 } // namespace aspia

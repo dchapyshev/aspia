@@ -17,8 +17,6 @@ FileItemDrag::FileItemDrag(QObject* drag_source)
     // Nothing
 }
 
-FileItemDrag::~FileItemDrag() = default;
-
 void FileItemDrag::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     FileItemMimeData* mime_data = new FileItemMimeData();
