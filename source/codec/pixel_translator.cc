@@ -11,7 +11,7 @@ namespace aspia {
 
 namespace {
 
-template<int source_bpp, int target_bpp>
+template<int kSourceBpp, int kTargetBpp>
 class PixelTranslatorT : public PixelTranslator
 {
 public:
@@ -48,8 +48,8 @@ public:
                    quint8* dst, int dst_stride,
                    int width, int height) override
     {
-        src_stride -= width * source_bpp;
-        dst_stride -= width * target_bpp;
+        src_stride -= width * kSourceBpp;
+        dst_stride -= width * kTargetBpp;
 
         for (int y = 0; y < height; ++y)
         {
@@ -59,7 +59,7 @@ public:
                 quint32 green;
                 quint32 blue;
 
-                if constexpr (source_bpp == 4)
+                if constexpr (kSourceBpp == 4)
                 {
                     red = red_table_[
                         *(quint32*) src >> source_format_.redShift() & source_format_.redMax()];
@@ -68,7 +68,7 @@ public:
                     blue = blue_table_[
                         *(quint32*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
-                else if constexpr (source_bpp == 2)
+                else if constexpr (kSourceBpp == 2)
                 {
                     red = red_table_[
                         *(quint16*) src >> source_format_.redShift() & source_format_.redMax()];
@@ -77,7 +77,7 @@ public:
                     blue = blue_table_[
                         *(quint16*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
-                else if constexpr (source_bpp == 1)
+                else if constexpr (kSourceBpp == 1)
                 {
                     red = red_table_[
                         *(quint8*) src >> source_format_.redShift() & source_format_.redMax()];
@@ -87,15 +87,15 @@ public:
                         *(quint8*) src >> source_format_.blueShift() & source_format_.blueMax()];
                 }
 
-                if constexpr (target_bpp == 4)
+                if constexpr (kTargetBpp == 4)
                     *(quint32*) dst = static_cast<quint32>(red | green | blue);
-                else if constexpr (target_bpp == 2)
+                else if constexpr (kTargetBpp == 2)
                     *(quint16*) dst = static_cast<quint16>(red | green | blue);
-                else if constexpr (target_bpp == 1)
+                else if constexpr (kTargetBpp == 1)
                     *(quint8*) dst = static_cast<quint8>(red | green | blue);
 
-                src += source_bpp;
-                dst += target_bpp;
+                src += kSourceBpp;
+                dst += kTargetBpp;
             }
 
             src += src_stride;
@@ -114,6 +114,78 @@ private:
     Q_DISABLE_COPY(PixelTranslatorT)
 };
 
+template<int kTargetBpp>
+class PixelTranslatorFrom16bppT : public PixelTranslator
+{
+public:
+    PixelTranslatorFrom16bppT(const PixelFormat& source_format, const PixelFormat& target_format)
+        : source_format_(source_format),
+          target_format_(target_format)
+    {
+        quint32 source_red_mask = source_format.redMax() << source_format.redShift();
+        quint32 source_green_mask = source_format.greenMax() << source_format.greenShift();
+        quint32 source_blue_mask = source_format.blueMax() << source_format.blueShift();
+
+        for (quint32 i = 0; i < kTableSize; ++i)
+        {
+            quint32 source_red = (i & source_red_mask) >> source_format.redShift();
+            quint32 source_green = (i & source_green_mask) >> source_format.greenShift();
+            quint32 source_blue = (i & source_blue_mask) >> source_format.blueShift();
+
+            quint32 target_red =
+                (source_red * target_format.redMax() / source_format.redMax()) << target_format.redShift();
+            quint32 target_green =
+                (source_green * target_format.greenMax() / source_format.greenMax()) << target_format.greenShift();
+            quint32 target_blue =
+                (source_blue * target_format.blueMax() / source_format.blueMax()) << target_format.blueShift();
+
+            table_[i] = target_red | target_green | target_blue;
+        }
+    }
+
+    ~PixelTranslatorFrom16bppT() = default;
+
+    void translate(const quint8* src, int src_stride,
+                   quint8* dst, int dst_stride,
+                   int width, int height) override
+    {
+        src_stride -= width * kSourceBpp;
+        dst_stride -= width * kTargetBpp;
+
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                quint32 target_pixel = table_[*(quint16*)src];
+
+                if constexpr (kTargetBpp == 4)
+                    *(quint32*)dst = static_cast<quint32>(target_pixel);
+                else if constexpr (kTargetBpp == 2)
+                    *(quint16*)dst = static_cast<quint16>(target_pixel);
+                else if constexpr (kTargetBpp == 1)
+                    *(quint8*)dst = static_cast<quint8>(target_pixel);
+
+                src += kSourceBpp;
+                dst += kTargetBpp;
+            }
+
+            src += src_stride;
+            dst += dst_stride;
+        }
+    }
+
+private:
+    static const size_t kTableSize = 65536;
+    static const int kSourceBpp = 2;
+
+    quint32 table_[kTableSize];
+
+    PixelFormat source_format_;
+    PixelFormat target_format_;
+
+    Q_DISABLE_COPY(PixelTranslatorFrom16bppT)
+};
+
 } // namespace
 
 // static
@@ -130,7 +202,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                     return std::make_unique<PixelTranslatorT<4, 4>>(source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorT<2, 4>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom16bppT<4>>(source_format, target_format);
 
                 case 1:
                     return std::make_unique<PixelTranslatorT<1, 4>>(source_format, target_format);
@@ -146,7 +218,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                     return std::make_unique<PixelTranslatorT<4, 2>>(source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorT<2, 2>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom16bppT<2>>(source_format, target_format);
 
                 case 1:
                     return std::make_unique<PixelTranslatorT<1, 2>>(source_format, target_format);
@@ -162,7 +234,7 @@ std::unique_ptr<PixelTranslator> PixelTranslator::create(const PixelFormat& sour
                     return std::make_unique<PixelTranslatorT<4, 1>>(source_format, target_format);
 
                 case 2:
-                    return std::make_unique<PixelTranslatorT<2, 1>>(source_format, target_format);
+                    return std::make_unique<PixelTranslatorFrom16bppT<1>>(source_format, target_format);
 
                 case 1:
                     return std::make_unique<PixelTranslatorT<1, 1>>(source_format, target_format);
