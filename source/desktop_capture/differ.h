@@ -45,6 +45,9 @@ private:
 
     std::unique_ptr<quint8[]> diff_info_;
 
+    typedef quint8(*DiffFullBlockFunc)(const quint8*, const quint8*, int);
+    DiffFullBlockFunc diff_full_block_func_;
+
     Q_DISABLE_COPY(Differ)
 };
 

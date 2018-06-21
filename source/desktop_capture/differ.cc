@@ -7,19 +7,24 @@
 
 #include "desktop_capture/differ.h"
 
+#include "desktop_capture/diff_block_avx2.h"
 #include "desktop_capture/diff_block_sse2.h"
+#include "desktop_capture/diff_block_sse3.h"
+
+#include <libyuv/cpu_id.h>
 
 namespace aspia {
 
 namespace {
 
-constexpr int kBytesPerPixel = 4;
-constexpr int kBlockSize = 8;
-constexpr int kBytesPerBlock = kBytesPerPixel * kBlockSize;
+const int kBytesPerPixel = 4;
+const int kBlockWidth = 32;
+const int kBlockHeight = 2;
+const int kBytesPerBlock = kBytesPerPixel * kBlockWidth;
 
 quint8 diffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
 {
-    for (int y = 0; y < kBlockSize; ++y)
+    for (int y = 0; y < kBlockHeight; ++y)
     {
         if (memcmp(image1, image2, kBytesPerBlock) != 0)
         {
@@ -60,12 +65,12 @@ quint8 diffPartialBlock(const quint8* prev_image,
 } // namespace
 
 Differ::Differ(const QSize& size)
-    : screen_rect_(QPoint(0, 0), size),
+    : screen_rect_(QPoint(), size),
       bytes_per_row_(size.width() * kBytesPerPixel),
-      diff_width_(((size.width() + kBlockSize - 1) / kBlockSize) + 1),
-      diff_height_(((size.height() + kBlockSize - 1) / kBlockSize) + 1),
-      full_blocks_x_(size.width() / kBlockSize),
-      full_blocks_y_(size.height() / kBlockSize)
+      diff_width_(((size.width() + kBlockWidth - 1) / kBlockWidth) + 1),
+      diff_height_(((size.height() + kBlockHeight - 1) / kBlockHeight) + 1),
+      full_blocks_x_(size.width() / kBlockWidth),
+      full_blocks_y_(size.height() / kBlockHeight)
 {
     const int diff_info_size = diff_width_ * diff_height_;
 
@@ -73,11 +78,20 @@ Differ::Differ(const QSize& size)
     memset(diff_info_.get(), 0, diff_info_size);
 
     // Calc size of partial blocks which may be present on right and bottom edge.
-    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
-    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
+    partial_column_width_ = size.width() - (full_blocks_x_ * kBlockWidth);
+    partial_row_height_ = size.height() - (full_blocks_y_ * kBlockHeight);
 
     // Offset from the start of one block-row to the next.
-    block_stride_y_ = bytes_per_row_ * kBlockSize;
+    block_stride_y_ = bytes_per_row_ * kBlockHeight;
+
+    if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
+        diff_full_block_func_ = diffFullBlock_32x2_AVX2;
+    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+        diff_full_block_func_ = diffFullBlock_32x2_SSE3;
+    else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+        diff_full_block_func_ = diffFullBlock_32x2_SSE2;
+    else
+        diff_full_block_func_ = diffFullBlock_C;
 }
 
 //
@@ -102,34 +116,9 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
 
         for (int x = 0; x < full_blocks_x_; ++x)
         {
-            // For x86 and x86_64, we do not support processors that do not
-            // have SSE2 instructions support.
-            if constexpr (kBlockSize == 8)
-            {
-                // Mark this block as being modified so that it gets
-                // incorporated into a dirty rect.
-                *is_different = diffFullBlock_8x8_SSE2(prev_block,
-                                                       curr_block,
-                                                       bytes_per_row_);
-            }
-            else if constexpr(kBlockSize == 16)
-            {
-                // Mark this block as being modified so that it gets
-                // incorporated into a dirty rect.
-                *is_different = diffFullBlock_16x16_SSE2(prev_block,
-                                                         curr_block,
-                                                         bytes_per_row_);
-            }
-            else
-            {
-                static_assert(kBlockSize != 32);
-
-                // Mark this block as being modified so that it gets
-                // incorporated into a dirty rect.
-                *is_different = diffFullBlock_32x32_SSE2(prev_block,
-                                                         curr_block,
-                                                         bytes_per_row_);
-            }
+            // Mark this block as being modified so that it gets
+            // incorporated into a dirty rect.
+            *is_different = diff_full_block_func_(prev_block, curr_block, bytes_per_row_);
 
             prev_block += kBytesPerBlock;
             curr_block += kBytesPerBlock;
@@ -145,7 +134,7 @@ void Differ::markDirtyBlocks(const quint8* prev_image, const quint8* curr_image)
                                              curr_block,
                                              bytes_per_row_,
                                              kBytesPerBlock,
-                                             kBlockSize);
+                                             kBlockHeight);
         }
 
         // Update pointers for next row.
@@ -261,8 +250,8 @@ void Differ::mergeBlocks(QRegion* dirty_region)
                     }
                 } while (found_new_row);
 
-                QRect dirty_rect(x * kBlockSize, y * kBlockSize,
-                           width * kBlockSize, height * kBlockSize);
+                QRect dirty_rect(x * kBlockWidth, y * kBlockHeight,
+                                 width * kBlockWidth, height * kBlockHeight);
 
                 // Add rect to region.
                 *dirty_region += dirty_rect.intersected(screen_rect_);
