@@ -5,7 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "desktop_capture/diff_block_sse2.h"
+#include "desktop_capture/diff_block_sse3.h"
 
 #if defined(Q_CC_MSVC)
 #include <intrin.h>
