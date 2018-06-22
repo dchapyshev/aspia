@@ -85,13 +85,25 @@ Differ::Differ(const QSize& size)
     block_stride_y_ = bytes_per_row_ * kBlockHeight;
 
     if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
+    {
+        qInfo("AVX2 differ loaded");
         diff_full_block_func_ = diffFullBlock_32x2_AVX2;
+    }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
+    {
+        qInfo("SSE3 differ loaded");
         diff_full_block_func_ = diffFullBlock_32x2_SSE3;
+    }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
+    {
+        qInfo("SSE2 differ loaded");
         diff_full_block_func_ = diffFullBlock_32x2_SSE2;
+    }
     else
+    {
+        qInfo("C differ loaded");
         diff_full_block_func_ = diffFullBlock_C;
+    }
 }
 
 //
