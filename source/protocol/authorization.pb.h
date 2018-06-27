@@ -98,12 +98,13 @@ enum SessionType {
   SESSION_TYPE_DESKTOP_MANAGE = 1,
   SESSION_TYPE_DESKTOP_VIEW = 2,
   SESSION_TYPE_FILE_TRANSFER = 4,
+  SESSION_TYPE_SYSTEM_INFO = 8,
   SessionType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   SessionType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool SessionType_IsValid(int value);
 const SessionType SessionType_MIN = SESSION_TYPE_UNKNOWN;
-const SessionType SessionType_MAX = SESSION_TYPE_FILE_TRANSFER;
+const SessionType SessionType_MAX = SESSION_TYPE_SYSTEM_INFO;
 const int SessionType_ARRAYSIZE = SessionType_MAX + 1;
 
 enum Status {
