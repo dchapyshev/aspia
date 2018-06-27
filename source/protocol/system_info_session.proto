@@ -1,0 +1,46 @@
+//
+// PROJECT:         Aspia
+// FILE:            protocol/system_info_session.proto
+// LICENSE:         GNU General Public License 3
+// PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package aspia.proto.system_info;
+
+message CategoryListRequest
+{
+    uint32 dummy = 1;
+}
+
+message CategoryList
+{
+    repeated string uuid = 1;
+}
+
+message CategoryRequest
+{
+    string uuid = 1;
+    bytes data = 2;
+}
+
+message Category
+{
+    string uuid = 1;
+    bytes data = 2;
+}
+
+message Request
+{
+    CategoryListRequest category_list_request = 1;
+    CategoryRequest category_request = 2;
+}
+
+message Reply
+{
+    CategoryList category_list = 1;
+    Category category = 2;
+}
