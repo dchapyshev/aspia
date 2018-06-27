@@ -10,7 +10,11 @@
 
 namespace aspia {
 
-quint8 diffFullBlock_32x2_SSE3(const quint8* image1, const quint8* image2, int bytes_per_row);
+quint8 diffFullBlock_32x32_SSE3(const quint8* image1, const quint8* image2, int bytes_per_row);
+
+quint8 diffFullBlock_16x16_SSE3(const quint8* image1, const quint8* image2, int bytes_per_row);
+
+quint8 diffFullBlock_8x8_SSE3(const quint8* image1, const quint8* image2, int bytes_per_row);
 
 } // namespace aspia
 

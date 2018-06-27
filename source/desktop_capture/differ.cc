@@ -18,8 +18,8 @@ namespace aspia {
 namespace {
 
 const int kBytesPerPixel = 4;
-const int kBlockWidth = 32;
-const int kBlockHeight = 2;
+const int kBlockWidth = 8;
+const int kBlockHeight = 8;
 const int kBytesPerBlock = kBytesPerPixel * kBlockWidth;
 
 quint8 diffFullBlock_C(const quint8* image1, const quint8* image2, int bytes_per_row)
@@ -87,17 +87,35 @@ Differ::Differ(const QSize& size)
     if (libyuv::TestCpuFlag(libyuv::kCpuHasAVX2))
     {
         qInfo("AVX2 differ loaded");
-        diff_full_block_func_ = diffFullBlock_32x2_AVX2;
+
+        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+            diff_full_block_func_ = diffFullBlock_8x8_AVX2;
+        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+            diff_full_block_func_ = diffFullBlock_16x16_AVX2;
+        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+            diff_full_block_func_ = diffFullBlock_32x32_AVX2;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSSE3))
     {
         qInfo("SSE3 differ loaded");
-        diff_full_block_func_ = diffFullBlock_32x2_SSE3;
+
+        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+            diff_full_block_func_ = diffFullBlock_8x8_SSE3;
+        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+            diff_full_block_func_ = diffFullBlock_16x16_SSE3;
+        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+            diff_full_block_func_ = diffFullBlock_32x32_SSE3;
     }
     else if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
         qInfo("SSE2 differ loaded");
-        diff_full_block_func_ = diffFullBlock_32x2_SSE2;
+
+        if constexpr (kBlockWidth == 8 && kBlockHeight == 8)
+            diff_full_block_func_ = diffFullBlock_8x8_SSE2;
+        else if constexpr (kBlockWidth == 16 && kBlockHeight == 16)
+            diff_full_block_func_ = diffFullBlock_16x16_SSE2;
+        else if constexpr (kBlockWidth == 32 && kBlockHeight == 32)
+            diff_full_block_func_ = diffFullBlock_32x32_SSE2;
     }
     else
     {
