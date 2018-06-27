@@ -67,6 +67,8 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.h
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
+    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.cc
+    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.h
     ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.cc
     ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/client/computer_factory.cc
@@ -281,6 +283,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_session_fake_file_transfer.h
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.h
+    ${PROJECT_SOURCE_DIR}/host/host_session_system_info.cc
+    ${PROJECT_SOURCE_DIR}/host/host_session_system_info.h
     ${PROJECT_SOURCE_DIR}/host/host_settings.cc
     ${PROJECT_SOURCE_DIR}/host/host_settings.h
     ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.cc

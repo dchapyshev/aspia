@@ -106,6 +106,7 @@ bool Host::start()
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
+        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
             break;
 
         default:
@@ -261,6 +262,11 @@ void Host::ipcServerStarted(const QString& channel_id)
         case proto::auth::SESSION_TYPE_FILE_TRANSFER:
             session_process_->setAccount(HostProcess::Account::User);
             arguments << QStringLiteral("file_transfer");
+            break;
+
+        case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+            session_process_->setAccount(HostProcess::Account::System);
+            arguments << QStringLiteral("system_info");
             break;
 
         default:
