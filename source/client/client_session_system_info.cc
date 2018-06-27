@@ -8,6 +8,7 @@
 #include "client/client_session_system_info.h"
 
 #include "base/message_serialization.h"
+#include "client/ui/system_info_window.h"
 
 namespace aspia {
 
@@ -21,12 +22,13 @@ ClientSessionSystemInfo::ClientSessionSystemInfo(ConnectData* connect_data, QObj
     : ClientSession(parent),
       connect_data_(connect_data)
 {
-    // Nothing
+    qRegisterMetaType<proto::system_info::Request>();
+    qRegisterMetaType<proto::system_info::Reply>();
 }
 
 ClientSessionSystemInfo::~ClientSessionSystemInfo()
 {
-    // TODO
+    delete window_;
 }
 
 void ClientSessionSystemInfo::messageReceived(const QByteArray& buffer)
@@ -50,12 +52,23 @@ void ClientSessionSystemInfo::messageWritten(int message_id)
 
 void ClientSessionSystemInfo::startSession()
 {
-    // TODO
+    window_ = new SystemInfoWindow(connect_data_);
+
+    // When the window is closed, we close the session.
+    connect(window_, &SystemInfoWindow::windowClose,
+            this, &ClientSessionSystemInfo::closedByUser);
+
+    window_->show();
+    window_->activateWindow();
 }
 
 void ClientSessionSystemInfo::closeSession()
 {
-    // TODO
+    // If the end of the session is not initiated by the user, then we do not send the session
+    // end signal.
+    disconnect(window_, &SystemInfoWindow::windowClose,
+               this, &ClientSessionSystemInfo::closedByUser);
+    window_->close();
 }
 
 } // namespace aspia

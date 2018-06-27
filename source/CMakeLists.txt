@@ -41,6 +41,8 @@ source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(protocol FILES ${SOURCE_PROTOCOL})
 source_group(resources FILES ${SOURCE_RESOURCES})
+source_group(system_info\\protocol FILES ${SOURCE_SYSTEM_INFO_PROTOCOL})
+source_group(system_info\\ui FILES ${SOURCE_SYSTEM_INFO_UI})
 source_group("" FILES ${SOURCE})
 
 add_definitions(/FI"build_config.h")
@@ -73,6 +75,8 @@ add_library(aspia_core SHARED
     ${SOURCE_NETWORK}
     ${SOURCE_PROTOCOL}
     ${SOURCE_RESOURCES}
+    ${SOURCE_SYSTEM_INFO_UI}
+    ${SOURCE_SYSTEM_INFO_PROTOCOL}
     ${SOURCE})
 
 target_link_libraries(aspia_core

@@ -133,7 +133,10 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.h
-    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui)
+    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.h
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.ui)
 
 list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/compressor.h
@@ -293,6 +296,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/input_injector.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
+    ${PROJECT_SOURCE_DIR}/host/system_info_request.cc
+    ${PROJECT_SOURCE_DIR}/host/system_info_request.h
     ${PROJECT_SOURCE_DIR}/host/user.cc
     ${PROJECT_SOURCE_DIR}/host/user.h)
 
@@ -362,6 +367,17 @@ list(APPEND SOURCE_PROTOCOL
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
+
+list(APPEND SOURCE_SYSTEM_INFO_PROTOCOL
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.cc
+	${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.h
+	${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.proto)
+
+list(APPEND SOURCE_SYSTEM_INFO_UI
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.cc
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.h
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.ui
+    ${PROJECT_SOURCE_DIR}/system_info/ui/parser.h)
 
 list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/build_config.cc
