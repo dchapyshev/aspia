@@ -45,6 +45,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN
+    ${PROJECT_SOURCE_DIR}/base/win/registry.cc
+    ${PROJECT_SOURCE_DIR}/base/win/registry.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
