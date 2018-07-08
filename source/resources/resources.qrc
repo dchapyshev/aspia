@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>printer.png</file>
+    <file>processor.png</file>
+    <file>tick.png</file>
     <file>pin.png</file>
     <file>arrow-left-gray.png</file>
     <file>arrow-right-gray.png</file>
