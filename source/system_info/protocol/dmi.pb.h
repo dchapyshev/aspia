@@ -557,297 +557,297 @@ class Bios_Characteristics : public ::google::protobuf::MessageLite /* @@protoc_
 
   // accessors -------------------------------------------------------
 
-  // bool has_isa = 1;
-  void clear_has_isa();
-  static const int kHasIsaFieldNumber = 1;
-  bool has_isa() const;
-  void set_has_isa(bool value);
+  // bool isa = 1;
+  void clear_isa();
+  static const int kIsaFieldNumber = 1;
+  bool isa() const;
+  void set_isa(bool value);
 
-  // bool has_mca = 2;
-  void clear_has_mca();
-  static const int kHasMcaFieldNumber = 2;
-  bool has_mca() const;
-  void set_has_mca(bool value);
+  // bool mca = 2;
+  void clear_mca();
+  static const int kMcaFieldNumber = 2;
+  bool mca() const;
+  void set_mca(bool value);
 
-  // bool has_eisa = 3;
-  void clear_has_eisa();
-  static const int kHasEisaFieldNumber = 3;
-  bool has_eisa() const;
-  void set_has_eisa(bool value);
+  // bool eisa = 3;
+  void clear_eisa();
+  static const int kEisaFieldNumber = 3;
+  bool eisa() const;
+  void set_eisa(bool value);
 
-  // bool has_pci = 4;
-  void clear_has_pci();
-  static const int kHasPciFieldNumber = 4;
-  bool has_pci() const;
-  void set_has_pci(bool value);
+  // bool pci = 4;
+  void clear_pci();
+  static const int kPciFieldNumber = 4;
+  bool pci() const;
+  void set_pci(bool value);
 
-  // bool has_pc_card = 5;
-  void clear_has_pc_card();
-  static const int kHasPcCardFieldNumber = 5;
-  bool has_pc_card() const;
-  void set_has_pc_card(bool value);
+  // bool pc_card = 5;
+  void clear_pc_card();
+  static const int kPcCardFieldNumber = 5;
+  bool pc_card() const;
+  void set_pc_card(bool value);
 
-  // bool has_pnp = 6;
-  void clear_has_pnp();
-  static const int kHasPnpFieldNumber = 6;
-  bool has_pnp() const;
-  void set_has_pnp(bool value);
+  // bool pnp = 6;
+  void clear_pnp();
+  static const int kPnpFieldNumber = 6;
+  bool pnp() const;
+  void set_pnp(bool value);
 
-  // bool has_apm = 7;
-  void clear_has_apm();
-  static const int kHasApmFieldNumber = 7;
-  bool has_apm() const;
-  void set_has_apm(bool value);
+  // bool apm = 7;
+  void clear_apm();
+  static const int kApmFieldNumber = 7;
+  bool apm() const;
+  void set_apm(bool value);
 
-  // bool has_bios_upgradeable = 8;
-  void clear_has_bios_upgradeable();
-  static const int kHasBiosUpgradeableFieldNumber = 8;
-  bool has_bios_upgradeable() const;
-  void set_has_bios_upgradeable(bool value);
+  // bool bios_upgradeable = 8;
+  void clear_bios_upgradeable();
+  static const int kBiosUpgradeableFieldNumber = 8;
+  bool bios_upgradeable() const;
+  void set_bios_upgradeable(bool value);
 
-  // bool has_bios_shadowing = 9;
-  void clear_has_bios_shadowing();
-  static const int kHasBiosShadowingFieldNumber = 9;
-  bool has_bios_shadowing() const;
-  void set_has_bios_shadowing(bool value);
+  // bool bios_shadowing = 9;
+  void clear_bios_shadowing();
+  static const int kBiosShadowingFieldNumber = 9;
+  bool bios_shadowing() const;
+  void set_bios_shadowing(bool value);
 
-  // bool has_vlb = 10;
-  void clear_has_vlb();
-  static const int kHasVlbFieldNumber = 10;
-  bool has_vlb() const;
-  void set_has_vlb(bool value);
+  // bool vlb = 10;
+  void clear_vlb();
+  static const int kVlbFieldNumber = 10;
+  bool vlb() const;
+  void set_vlb(bool value);
 
-  // bool has_escd = 11;
-  void clear_has_escd();
-  static const int kHasEscdFieldNumber = 11;
-  bool has_escd() const;
-  void set_has_escd(bool value);
+  // bool escd = 11;
+  void clear_escd();
+  static const int kEscdFieldNumber = 11;
+  bool escd() const;
+  void set_escd(bool value);
 
-  // bool has_boot_from_cd = 12;
-  void clear_has_boot_from_cd();
-  static const int kHasBootFromCdFieldNumber = 12;
-  bool has_boot_from_cd() const;
-  void set_has_boot_from_cd(bool value);
+  // bool boot_from_cd = 12;
+  void clear_boot_from_cd();
+  static const int kBootFromCdFieldNumber = 12;
+  bool boot_from_cd() const;
+  void set_boot_from_cd(bool value);
 
-  // bool has_selectable_boot = 13;
-  void clear_has_selectable_boot();
-  static const int kHasSelectableBootFieldNumber = 13;
-  bool has_selectable_boot() const;
-  void set_has_selectable_boot(bool value);
+  // bool selectable_boot = 13;
+  void clear_selectable_boot();
+  static const int kSelectableBootFieldNumber = 13;
+  bool selectable_boot() const;
+  void set_selectable_boot(bool value);
 
-  // bool has_socketed_boot_rom = 14;
-  void clear_has_socketed_boot_rom();
-  static const int kHasSocketedBootRomFieldNumber = 14;
-  bool has_socketed_boot_rom() const;
-  void set_has_socketed_boot_rom(bool value);
+  // bool socketed_boot_rom = 14;
+  void clear_socketed_boot_rom();
+  static const int kSocketedBootRomFieldNumber = 14;
+  bool socketed_boot_rom() const;
+  void set_socketed_boot_rom(bool value);
 
-  // bool has_boot_from_pc_card = 15;
-  void clear_has_boot_from_pc_card();
-  static const int kHasBootFromPcCardFieldNumber = 15;
-  bool has_boot_from_pc_card() const;
-  void set_has_boot_from_pc_card(bool value);
+  // bool boot_from_pc_card = 15;
+  void clear_boot_from_pc_card();
+  static const int kBootFromPcCardFieldNumber = 15;
+  bool boot_from_pc_card() const;
+  void set_boot_from_pc_card(bool value);
 
-  // bool has_edd = 16;
-  void clear_has_edd();
-  static const int kHasEddFieldNumber = 16;
-  bool has_edd() const;
-  void set_has_edd(bool value);
+  // bool edd = 16;
+  void clear_edd();
+  static const int kEddFieldNumber = 16;
+  bool edd() const;
+  void set_edd(bool value);
 
-  // bool has_japanese_floppy_for_nec9800 = 17;
-  void clear_has_japanese_floppy_for_nec9800();
-  static const int kHasJapaneseFloppyForNec9800FieldNumber = 17;
-  bool has_japanese_floppy_for_nec9800() const;
-  void set_has_japanese_floppy_for_nec9800(bool value);
+  // bool japanese_floppy_for_nec9800 = 17;
+  void clear_japanese_floppy_for_nec9800();
+  static const int kJapaneseFloppyForNec9800FieldNumber = 17;
+  bool japanese_floppy_for_nec9800() const;
+  void set_japanese_floppy_for_nec9800(bool value);
 
-  // bool has_japanece_floppy_for_toshiba = 18;
-  void clear_has_japanece_floppy_for_toshiba();
-  static const int kHasJapaneceFloppyForToshibaFieldNumber = 18;
-  bool has_japanece_floppy_for_toshiba() const;
-  void set_has_japanece_floppy_for_toshiba(bool value);
+  // bool japanese_floppy_for_toshiba = 18;
+  void clear_japanese_floppy_for_toshiba();
+  static const int kJapaneseFloppyForToshibaFieldNumber = 18;
+  bool japanese_floppy_for_toshiba() const;
+  void set_japanese_floppy_for_toshiba(bool value);
 
-  // bool has_525_360kb_floppy = 19;
-  void clear_has_525_360kb_floppy();
-  static const int kHas525360KbFloppyFieldNumber = 19;
-  bool has_525_360kb_floppy() const;
-  void set_has_525_360kb_floppy(bool value);
+  // bool floppy_525_360kb = 19;
+  void clear_floppy_525_360kb();
+  static const int kFloppy525360KbFieldNumber = 19;
+  bool floppy_525_360kb() const;
+  void set_floppy_525_360kb(bool value);
 
-  // bool has_525_12mb_floppy = 20;
-  void clear_has_525_12mb_floppy();
-  static const int kHas52512MbFloppyFieldNumber = 20;
-  bool has_525_12mb_floppy() const;
-  void set_has_525_12mb_floppy(bool value);
+  // bool floppy_525_12mb = 20;
+  void clear_floppy_525_12mb();
+  static const int kFloppy52512MbFieldNumber = 20;
+  bool floppy_525_12mb() const;
+  void set_floppy_525_12mb(bool value);
 
-  // bool has_35_720kb_floppy = 21;
-  void clear_has_35_720kb_floppy();
-  static const int kHas35720KbFloppyFieldNumber = 21;
-  bool has_35_720kb_floppy() const;
-  void set_has_35_720kb_floppy(bool value);
+  // bool floppy_35_720kb = 21;
+  void clear_floppy_35_720kb();
+  static const int kFloppy35720KbFieldNumber = 21;
+  bool floppy_35_720kb() const;
+  void set_floppy_35_720kb(bool value);
 
-  // bool has_35_288mb_floppy = 22;
-  void clear_has_35_288mb_floppy();
-  static const int kHas35288MbFloppyFieldNumber = 22;
-  bool has_35_288mb_floppy() const;
-  void set_has_35_288mb_floppy(bool value);
+  // bool floppy_35_288mb = 22;
+  void clear_floppy_35_288mb();
+  static const int kFloppy35288MbFieldNumber = 22;
+  bool floppy_35_288mb() const;
+  void set_floppy_35_288mb(bool value);
 
-  // bool has_print_screen = 23;
-  void clear_has_print_screen();
-  static const int kHasPrintScreenFieldNumber = 23;
-  bool has_print_screen() const;
-  void set_has_print_screen(bool value);
+  // bool print_screen = 23;
+  void clear_print_screen();
+  static const int kPrintScreenFieldNumber = 23;
+  bool print_screen() const;
+  void set_print_screen(bool value);
 
-  // bool has_8042_keyboard = 24;
-  void clear_has_8042_keyboard();
-  static const int kHas8042KeyboardFieldNumber = 24;
-  bool has_8042_keyboard() const;
-  void set_has_8042_keyboard(bool value);
+  // bool keyboard_8042 = 24;
+  void clear_keyboard_8042();
+  static const int kKeyboard8042FieldNumber = 24;
+  bool keyboard_8042() const;
+  void set_keyboard_8042(bool value);
 
-  // bool has_serial = 25;
-  void clear_has_serial();
-  static const int kHasSerialFieldNumber = 25;
-  bool has_serial() const;
-  void set_has_serial(bool value);
+  // bool serial = 25;
+  void clear_serial();
+  static const int kSerialFieldNumber = 25;
+  bool serial() const;
+  void set_serial(bool value);
 
-  // bool has_printer = 26;
-  void clear_has_printer();
-  static const int kHasPrinterFieldNumber = 26;
-  bool has_printer() const;
-  void set_has_printer(bool value);
+  // bool printer = 26;
+  void clear_printer();
+  static const int kPrinterFieldNumber = 26;
+  bool printer() const;
+  void set_printer(bool value);
 
-  // bool has_cga_video = 27;
-  void clear_has_cga_video();
-  static const int kHasCgaVideoFieldNumber = 27;
-  bool has_cga_video() const;
-  void set_has_cga_video(bool value);
+  // bool cga_video = 27;
+  void clear_cga_video();
+  static const int kCgaVideoFieldNumber = 27;
+  bool cga_video() const;
+  void set_cga_video(bool value);
 
-  // bool has_nec_pc98 = 28;
-  void clear_has_nec_pc98();
-  static const int kHasNecPc98FieldNumber = 28;
-  bool has_nec_pc98() const;
-  void set_has_nec_pc98(bool value);
+  // bool nec_pc98 = 28;
+  void clear_nec_pc98();
+  static const int kNecPc98FieldNumber = 28;
+  bool nec_pc98() const;
+  void set_nec_pc98(bool value);
 
-  // bool has_acpi = 29;
-  void clear_has_acpi();
-  static const int kHasAcpiFieldNumber = 29;
-  bool has_acpi() const;
-  void set_has_acpi(bool value);
+  // bool acpi = 29;
+  void clear_acpi();
+  static const int kAcpiFieldNumber = 29;
+  bool acpi() const;
+  void set_acpi(bool value);
 
-  // bool has_usb_legacy = 30;
-  void clear_has_usb_legacy();
-  static const int kHasUsbLegacyFieldNumber = 30;
-  bool has_usb_legacy() const;
-  void set_has_usb_legacy(bool value);
+  // bool usb_legacy = 30;
+  void clear_usb_legacy();
+  static const int kUsbLegacyFieldNumber = 30;
+  bool usb_legacy() const;
+  void set_usb_legacy(bool value);
 
-  // bool has_agp = 31;
-  void clear_has_agp();
-  static const int kHasAgpFieldNumber = 31;
-  bool has_agp() const;
-  void set_has_agp(bool value);
+  // bool agp = 31;
+  void clear_agp();
+  static const int kAgpFieldNumber = 31;
+  bool agp() const;
+  void set_agp(bool value);
 
-  // bool has_i2o_boot = 32;
-  void clear_has_i2o_boot();
-  static const int kHasI2OBootFieldNumber = 32;
-  bool has_i2o_boot() const;
-  void set_has_i2o_boot(bool value);
+  // bool i2o_boot = 32;
+  void clear_i2o_boot();
+  static const int kI2OBootFieldNumber = 32;
+  bool i2o_boot() const;
+  void set_i2o_boot(bool value);
 
-  // bool has_ls120_boot = 33;
-  void clear_has_ls120_boot();
-  static const int kHasLs120BootFieldNumber = 33;
-  bool has_ls120_boot() const;
-  void set_has_ls120_boot(bool value);
+  // bool ls120_boot = 33;
+  void clear_ls120_boot();
+  static const int kLs120BootFieldNumber = 33;
+  bool ls120_boot() const;
+  void set_ls120_boot(bool value);
 
-  // bool has_atapi_zip_drive_boot = 34;
-  void clear_has_atapi_zip_drive_boot();
-  static const int kHasAtapiZipDriveBootFieldNumber = 34;
-  bool has_atapi_zip_drive_boot() const;
-  void set_has_atapi_zip_drive_boot(bool value);
+  // bool atapi_zip_drive_boot = 34;
+  void clear_atapi_zip_drive_boot();
+  static const int kAtapiZipDriveBootFieldNumber = 34;
+  bool atapi_zip_drive_boot() const;
+  void set_atapi_zip_drive_boot(bool value);
 
-  // bool has_ieee1394_boot = 35;
-  void clear_has_ieee1394_boot();
-  static const int kHasIeee1394BootFieldNumber = 35;
-  bool has_ieee1394_boot() const;
-  void set_has_ieee1394_boot(bool value);
+  // bool ieee1394_boot = 35;
+  void clear_ieee1394_boot();
+  static const int kIeee1394BootFieldNumber = 35;
+  bool ieee1394_boot() const;
+  void set_ieee1394_boot(bool value);
 
-  // bool has_smart_battery = 36;
-  void clear_has_smart_battery();
-  static const int kHasSmartBatteryFieldNumber = 36;
-  bool has_smart_battery() const;
-  void set_has_smart_battery(bool value);
+  // bool smart_battery = 36;
+  void clear_smart_battery();
+  static const int kSmartBatteryFieldNumber = 36;
+  bool smart_battery() const;
+  void set_smart_battery(bool value);
 
-  // bool has_bios_boot_specification = 37;
-  void clear_has_bios_boot_specification();
-  static const int kHasBiosBootSpecificationFieldNumber = 37;
-  bool has_bios_boot_specification() const;
-  void set_has_bios_boot_specification(bool value);
+  // bool bios_boot_specification = 37;
+  void clear_bios_boot_specification();
+  static const int kBiosBootSpecificationFieldNumber = 37;
+  bool bios_boot_specification() const;
+  void set_bios_boot_specification(bool value);
 
-  // bool has_key_init_network_boot = 38;
-  void clear_has_key_init_network_boot();
-  static const int kHasKeyInitNetworkBootFieldNumber = 38;
-  bool has_key_init_network_boot() const;
-  void set_has_key_init_network_boot(bool value);
+  // bool key_init_network_boot = 38;
+  void clear_key_init_network_boot();
+  static const int kKeyInitNetworkBootFieldNumber = 38;
+  bool key_init_network_boot() const;
+  void set_key_init_network_boot(bool value);
 
-  // bool has_targeted_content_distrib = 39;
-  void clear_has_targeted_content_distrib();
-  static const int kHasTargetedContentDistribFieldNumber = 39;
-  bool has_targeted_content_distrib() const;
-  void set_has_targeted_content_distrib(bool value);
+  // bool targeted_content_distrib = 39;
+  void clear_targeted_content_distrib();
+  static const int kTargetedContentDistribFieldNumber = 39;
+  bool targeted_content_distrib() const;
+  void set_targeted_content_distrib(bool value);
 
-  // bool has_uefi = 40;
-  void clear_has_uefi();
-  static const int kHasUefiFieldNumber = 40;
-  bool has_uefi() const;
-  void set_has_uefi(bool value);
+  // bool uefi = 40;
+  void clear_uefi();
+  static const int kUefiFieldNumber = 40;
+  bool uefi() const;
+  void set_uefi(bool value);
 
-  // bool has_virtual_machine = 41;
-  void clear_has_virtual_machine();
-  static const int kHasVirtualMachineFieldNumber = 41;
-  bool has_virtual_machine() const;
-  void set_has_virtual_machine(bool value);
+  // bool virtual_machine = 41;
+  void clear_virtual_machine();
+  static const int kVirtualMachineFieldNumber = 41;
+  bool virtual_machine() const;
+  void set_virtual_machine(bool value);
 
   // @@protoc_insertion_point(class_scope:aspia.system_info.dmi.Bios.Characteristics)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  bool has_isa_;
-  bool has_mca_;
-  bool has_eisa_;
-  bool has_pci_;
-  bool has_pc_card_;
-  bool has_pnp_;
-  bool has_apm_;
-  bool has_bios_upgradeable_;
-  bool has_bios_shadowing_;
-  bool has_vlb_;
-  bool has_escd_;
-  bool has_boot_from_cd_;
-  bool has_selectable_boot_;
-  bool has_socketed_boot_rom_;
-  bool has_boot_from_pc_card_;
-  bool has_edd_;
-  bool has_japanese_floppy_for_nec9800_;
-  bool has_japanece_floppy_for_toshiba_;
-  bool has_525_360kb_floppy_;
-  bool has_525_12mb_floppy_;
-  bool has_35_720kb_floppy_;
-  bool has_35_288mb_floppy_;
-  bool has_print_screen_;
-  bool has_8042_keyboard_;
-  bool has_serial_;
-  bool has_printer_;
-  bool has_cga_video_;
-  bool has_nec_pc98_;
-  bool has_acpi_;
-  bool has_usb_legacy_;
-  bool has_agp_;
-  bool has_i2o_boot_;
-  bool has_ls120_boot_;
-  bool has_atapi_zip_drive_boot_;
-  bool has_ieee1394_boot_;
-  bool has_smart_battery_;
-  bool has_bios_boot_specification_;
-  bool has_key_init_network_boot_;
-  bool has_targeted_content_distrib_;
-  bool has_uefi_;
-  bool has_virtual_machine_;
+  bool isa_;
+  bool mca_;
+  bool eisa_;
+  bool pci_;
+  bool pc_card_;
+  bool pnp_;
+  bool apm_;
+  bool bios_upgradeable_;
+  bool bios_shadowing_;
+  bool vlb_;
+  bool escd_;
+  bool boot_from_cd_;
+  bool selectable_boot_;
+  bool socketed_boot_rom_;
+  bool boot_from_pc_card_;
+  bool edd_;
+  bool japanese_floppy_for_nec9800_;
+  bool japanese_floppy_for_toshiba_;
+  bool floppy_525_360kb_;
+  bool floppy_525_12mb_;
+  bool floppy_35_720kb_;
+  bool floppy_35_288mb_;
+  bool print_screen_;
+  bool keyboard_8042_;
+  bool serial_;
+  bool printer_;
+  bool cga_video_;
+  bool nec_pc98_;
+  bool acpi_;
+  bool usb_legacy_;
+  bool agp_;
+  bool i2o_boot_;
+  bool ls120_boot_;
+  bool atapi_zip_drive_boot_;
+  bool ieee1394_boot_;
+  bool smart_battery_;
+  bool bios_boot_specification_;
+  bool key_init_network_boot_;
+  bool targeted_content_distrib_;
+  bool uefi_;
+  bool virtual_machine_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_dmi_2eproto::TableStruct;
 };
@@ -1042,11 +1042,11 @@ class Bios : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::google::protobuf::uint64 size() const;
   void set_size(::google::protobuf::uint64 value);
 
-  // int32 runtime_size = 8;
+  // uint64 runtime_size = 8;
   void clear_runtime_size();
   static const int kRuntimeSizeFieldNumber = 8;
-  ::google::protobuf::int32 runtime_size() const;
-  void set_runtime_size(::google::protobuf::int32 value);
+  ::google::protobuf::uint64 runtime_size() const;
+  void set_runtime_size(::google::protobuf::uint64 value);
 
   // @@protoc_insertion_point(class_scope:aspia.system_info.dmi.Bios)
  private:
@@ -1060,7 +1060,7 @@ class Bios : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
   ::google::protobuf::internal::ArenaStringPtr address_;
   ::aspia::system_info::dmi::Bios_Characteristics* characteristics_;
   ::google::protobuf::uint64 size_;
-  ::google::protobuf::int32 runtime_size_;
+  ::google::protobuf::uint64 runtime_size_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_dmi_2eproto::TableStruct;
 };
@@ -3807,578 +3807,578 @@ class Dmi : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(c
 #endif  // __GNUC__
 // Bios_Characteristics
 
-// bool has_isa = 1;
-inline void Bios_Characteristics::clear_has_isa() {
-  has_isa_ = false;
+// bool isa = 1;
+inline void Bios_Characteristics::clear_isa() {
+  isa_ = false;
 }
-inline bool Bios_Characteristics::has_isa() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_isa)
-  return has_isa_;
+inline bool Bios_Characteristics::isa() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.isa)
+  return isa_;
 }
-inline void Bios_Characteristics::set_has_isa(bool value) {
+inline void Bios_Characteristics::set_isa(bool value) {
   
-  has_isa_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_isa)
+  isa_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.isa)
 }
 
-// bool has_mca = 2;
-inline void Bios_Characteristics::clear_has_mca() {
-  has_mca_ = false;
+// bool mca = 2;
+inline void Bios_Characteristics::clear_mca() {
+  mca_ = false;
 }
-inline bool Bios_Characteristics::has_mca() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_mca)
-  return has_mca_;
+inline bool Bios_Characteristics::mca() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.mca)
+  return mca_;
 }
-inline void Bios_Characteristics::set_has_mca(bool value) {
+inline void Bios_Characteristics::set_mca(bool value) {
   
-  has_mca_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_mca)
+  mca_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.mca)
 }
 
-// bool has_eisa = 3;
-inline void Bios_Characteristics::clear_has_eisa() {
-  has_eisa_ = false;
+// bool eisa = 3;
+inline void Bios_Characteristics::clear_eisa() {
+  eisa_ = false;
 }
-inline bool Bios_Characteristics::has_eisa() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_eisa)
-  return has_eisa_;
+inline bool Bios_Characteristics::eisa() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.eisa)
+  return eisa_;
 }
-inline void Bios_Characteristics::set_has_eisa(bool value) {
+inline void Bios_Characteristics::set_eisa(bool value) {
   
-  has_eisa_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_eisa)
+  eisa_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.eisa)
 }
 
-// bool has_pci = 4;
-inline void Bios_Characteristics::clear_has_pci() {
-  has_pci_ = false;
+// bool pci = 4;
+inline void Bios_Characteristics::clear_pci() {
+  pci_ = false;
 }
-inline bool Bios_Characteristics::has_pci() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_pci)
-  return has_pci_;
+inline bool Bios_Characteristics::pci() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.pci)
+  return pci_;
 }
-inline void Bios_Characteristics::set_has_pci(bool value) {
+inline void Bios_Characteristics::set_pci(bool value) {
   
-  has_pci_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_pci)
+  pci_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.pci)
 }
 
-// bool has_pc_card = 5;
-inline void Bios_Characteristics::clear_has_pc_card() {
-  has_pc_card_ = false;
+// bool pc_card = 5;
+inline void Bios_Characteristics::clear_pc_card() {
+  pc_card_ = false;
 }
-inline bool Bios_Characteristics::has_pc_card() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_pc_card)
-  return has_pc_card_;
+inline bool Bios_Characteristics::pc_card() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.pc_card)
+  return pc_card_;
 }
-inline void Bios_Characteristics::set_has_pc_card(bool value) {
+inline void Bios_Characteristics::set_pc_card(bool value) {
   
-  has_pc_card_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_pc_card)
+  pc_card_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.pc_card)
 }
 
-// bool has_pnp = 6;
-inline void Bios_Characteristics::clear_has_pnp() {
-  has_pnp_ = false;
+// bool pnp = 6;
+inline void Bios_Characteristics::clear_pnp() {
+  pnp_ = false;
 }
-inline bool Bios_Characteristics::has_pnp() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_pnp)
-  return has_pnp_;
+inline bool Bios_Characteristics::pnp() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.pnp)
+  return pnp_;
 }
-inline void Bios_Characteristics::set_has_pnp(bool value) {
+inline void Bios_Characteristics::set_pnp(bool value) {
   
-  has_pnp_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_pnp)
+  pnp_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.pnp)
 }
 
-// bool has_apm = 7;
-inline void Bios_Characteristics::clear_has_apm() {
-  has_apm_ = false;
+// bool apm = 7;
+inline void Bios_Characteristics::clear_apm() {
+  apm_ = false;
 }
-inline bool Bios_Characteristics::has_apm() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_apm)
-  return has_apm_;
+inline bool Bios_Characteristics::apm() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.apm)
+  return apm_;
 }
-inline void Bios_Characteristics::set_has_apm(bool value) {
+inline void Bios_Characteristics::set_apm(bool value) {
   
-  has_apm_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_apm)
+  apm_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.apm)
 }
 
-// bool has_bios_upgradeable = 8;
-inline void Bios_Characteristics::clear_has_bios_upgradeable() {
-  has_bios_upgradeable_ = false;
+// bool bios_upgradeable = 8;
+inline void Bios_Characteristics::clear_bios_upgradeable() {
+  bios_upgradeable_ = false;
 }
-inline bool Bios_Characteristics::has_bios_upgradeable() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_bios_upgradeable)
-  return has_bios_upgradeable_;
+inline bool Bios_Characteristics::bios_upgradeable() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.bios_upgradeable)
+  return bios_upgradeable_;
 }
-inline void Bios_Characteristics::set_has_bios_upgradeable(bool value) {
+inline void Bios_Characteristics::set_bios_upgradeable(bool value) {
   
-  has_bios_upgradeable_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_bios_upgradeable)
+  bios_upgradeable_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.bios_upgradeable)
 }
 
-// bool has_bios_shadowing = 9;
-inline void Bios_Characteristics::clear_has_bios_shadowing() {
-  has_bios_shadowing_ = false;
+// bool bios_shadowing = 9;
+inline void Bios_Characteristics::clear_bios_shadowing() {
+  bios_shadowing_ = false;
 }
-inline bool Bios_Characteristics::has_bios_shadowing() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_bios_shadowing)
-  return has_bios_shadowing_;
+inline bool Bios_Characteristics::bios_shadowing() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.bios_shadowing)
+  return bios_shadowing_;
 }
-inline void Bios_Characteristics::set_has_bios_shadowing(bool value) {
+inline void Bios_Characteristics::set_bios_shadowing(bool value) {
   
-  has_bios_shadowing_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_bios_shadowing)
+  bios_shadowing_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.bios_shadowing)
 }
 
-// bool has_vlb = 10;
-inline void Bios_Characteristics::clear_has_vlb() {
-  has_vlb_ = false;
+// bool vlb = 10;
+inline void Bios_Characteristics::clear_vlb() {
+  vlb_ = false;
 }
-inline bool Bios_Characteristics::has_vlb() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_vlb)
-  return has_vlb_;
+inline bool Bios_Characteristics::vlb() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.vlb)
+  return vlb_;
 }
-inline void Bios_Characteristics::set_has_vlb(bool value) {
+inline void Bios_Characteristics::set_vlb(bool value) {
   
-  has_vlb_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_vlb)
+  vlb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.vlb)
 }
 
-// bool has_escd = 11;
-inline void Bios_Characteristics::clear_has_escd() {
-  has_escd_ = false;
+// bool escd = 11;
+inline void Bios_Characteristics::clear_escd() {
+  escd_ = false;
 }
-inline bool Bios_Characteristics::has_escd() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_escd)
-  return has_escd_;
+inline bool Bios_Characteristics::escd() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.escd)
+  return escd_;
 }
-inline void Bios_Characteristics::set_has_escd(bool value) {
+inline void Bios_Characteristics::set_escd(bool value) {
   
-  has_escd_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_escd)
+  escd_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.escd)
 }
 
-// bool has_boot_from_cd = 12;
-inline void Bios_Characteristics::clear_has_boot_from_cd() {
-  has_boot_from_cd_ = false;
+// bool boot_from_cd = 12;
+inline void Bios_Characteristics::clear_boot_from_cd() {
+  boot_from_cd_ = false;
 }
-inline bool Bios_Characteristics::has_boot_from_cd() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_boot_from_cd)
-  return has_boot_from_cd_;
+inline bool Bios_Characteristics::boot_from_cd() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.boot_from_cd)
+  return boot_from_cd_;
 }
-inline void Bios_Characteristics::set_has_boot_from_cd(bool value) {
+inline void Bios_Characteristics::set_boot_from_cd(bool value) {
   
-  has_boot_from_cd_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_boot_from_cd)
+  boot_from_cd_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.boot_from_cd)
 }
 
-// bool has_selectable_boot = 13;
-inline void Bios_Characteristics::clear_has_selectable_boot() {
-  has_selectable_boot_ = false;
+// bool selectable_boot = 13;
+inline void Bios_Characteristics::clear_selectable_boot() {
+  selectable_boot_ = false;
 }
-inline bool Bios_Characteristics::has_selectable_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_selectable_boot)
-  return has_selectable_boot_;
+inline bool Bios_Characteristics::selectable_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.selectable_boot)
+  return selectable_boot_;
 }
-inline void Bios_Characteristics::set_has_selectable_boot(bool value) {
+inline void Bios_Characteristics::set_selectable_boot(bool value) {
   
-  has_selectable_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_selectable_boot)
+  selectable_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.selectable_boot)
 }
 
-// bool has_socketed_boot_rom = 14;
-inline void Bios_Characteristics::clear_has_socketed_boot_rom() {
-  has_socketed_boot_rom_ = false;
+// bool socketed_boot_rom = 14;
+inline void Bios_Characteristics::clear_socketed_boot_rom() {
+  socketed_boot_rom_ = false;
 }
-inline bool Bios_Characteristics::has_socketed_boot_rom() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_socketed_boot_rom)
-  return has_socketed_boot_rom_;
+inline bool Bios_Characteristics::socketed_boot_rom() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.socketed_boot_rom)
+  return socketed_boot_rom_;
 }
-inline void Bios_Characteristics::set_has_socketed_boot_rom(bool value) {
+inline void Bios_Characteristics::set_socketed_boot_rom(bool value) {
   
-  has_socketed_boot_rom_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_socketed_boot_rom)
+  socketed_boot_rom_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.socketed_boot_rom)
 }
 
-// bool has_boot_from_pc_card = 15;
-inline void Bios_Characteristics::clear_has_boot_from_pc_card() {
-  has_boot_from_pc_card_ = false;
+// bool boot_from_pc_card = 15;
+inline void Bios_Characteristics::clear_boot_from_pc_card() {
+  boot_from_pc_card_ = false;
 }
-inline bool Bios_Characteristics::has_boot_from_pc_card() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_boot_from_pc_card)
-  return has_boot_from_pc_card_;
+inline bool Bios_Characteristics::boot_from_pc_card() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.boot_from_pc_card)
+  return boot_from_pc_card_;
 }
-inline void Bios_Characteristics::set_has_boot_from_pc_card(bool value) {
+inline void Bios_Characteristics::set_boot_from_pc_card(bool value) {
   
-  has_boot_from_pc_card_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_boot_from_pc_card)
+  boot_from_pc_card_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.boot_from_pc_card)
 }
 
-// bool has_edd = 16;
-inline void Bios_Characteristics::clear_has_edd() {
-  has_edd_ = false;
+// bool edd = 16;
+inline void Bios_Characteristics::clear_edd() {
+  edd_ = false;
 }
-inline bool Bios_Characteristics::has_edd() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_edd)
-  return has_edd_;
+inline bool Bios_Characteristics::edd() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.edd)
+  return edd_;
 }
-inline void Bios_Characteristics::set_has_edd(bool value) {
+inline void Bios_Characteristics::set_edd(bool value) {
   
-  has_edd_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_edd)
+  edd_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.edd)
 }
 
-// bool has_japanese_floppy_for_nec9800 = 17;
-inline void Bios_Characteristics::clear_has_japanese_floppy_for_nec9800() {
-  has_japanese_floppy_for_nec9800_ = false;
+// bool japanese_floppy_for_nec9800 = 17;
+inline void Bios_Characteristics::clear_japanese_floppy_for_nec9800() {
+  japanese_floppy_for_nec9800_ = false;
 }
-inline bool Bios_Characteristics::has_japanese_floppy_for_nec9800() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_japanese_floppy_for_nec9800)
-  return has_japanese_floppy_for_nec9800_;
+inline bool Bios_Characteristics::japanese_floppy_for_nec9800() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.japanese_floppy_for_nec9800)
+  return japanese_floppy_for_nec9800_;
 }
-inline void Bios_Characteristics::set_has_japanese_floppy_for_nec9800(bool value) {
+inline void Bios_Characteristics::set_japanese_floppy_for_nec9800(bool value) {
   
-  has_japanese_floppy_for_nec9800_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_japanese_floppy_for_nec9800)
+  japanese_floppy_for_nec9800_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.japanese_floppy_for_nec9800)
 }
 
-// bool has_japanece_floppy_for_toshiba = 18;
-inline void Bios_Characteristics::clear_has_japanece_floppy_for_toshiba() {
-  has_japanece_floppy_for_toshiba_ = false;
+// bool japanese_floppy_for_toshiba = 18;
+inline void Bios_Characteristics::clear_japanese_floppy_for_toshiba() {
+  japanese_floppy_for_toshiba_ = false;
 }
-inline bool Bios_Characteristics::has_japanece_floppy_for_toshiba() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_japanece_floppy_for_toshiba)
-  return has_japanece_floppy_for_toshiba_;
+inline bool Bios_Characteristics::japanese_floppy_for_toshiba() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.japanese_floppy_for_toshiba)
+  return japanese_floppy_for_toshiba_;
 }
-inline void Bios_Characteristics::set_has_japanece_floppy_for_toshiba(bool value) {
+inline void Bios_Characteristics::set_japanese_floppy_for_toshiba(bool value) {
   
-  has_japanece_floppy_for_toshiba_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_japanece_floppy_for_toshiba)
+  japanese_floppy_for_toshiba_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.japanese_floppy_for_toshiba)
 }
 
-// bool has_525_360kb_floppy = 19;
-inline void Bios_Characteristics::clear_has_525_360kb_floppy() {
-  has_525_360kb_floppy_ = false;
+// bool floppy_525_360kb = 19;
+inline void Bios_Characteristics::clear_floppy_525_360kb() {
+  floppy_525_360kb_ = false;
 }
-inline bool Bios_Characteristics::has_525_360kb_floppy() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_525_360kb_floppy)
-  return has_525_360kb_floppy_;
+inline bool Bios_Characteristics::floppy_525_360kb() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.floppy_525_360kb)
+  return floppy_525_360kb_;
 }
-inline void Bios_Characteristics::set_has_525_360kb_floppy(bool value) {
+inline void Bios_Characteristics::set_floppy_525_360kb(bool value) {
   
-  has_525_360kb_floppy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_525_360kb_floppy)
+  floppy_525_360kb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.floppy_525_360kb)
 }
 
-// bool has_525_12mb_floppy = 20;
-inline void Bios_Characteristics::clear_has_525_12mb_floppy() {
-  has_525_12mb_floppy_ = false;
+// bool floppy_525_12mb = 20;
+inline void Bios_Characteristics::clear_floppy_525_12mb() {
+  floppy_525_12mb_ = false;
 }
-inline bool Bios_Characteristics::has_525_12mb_floppy() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_525_12mb_floppy)
-  return has_525_12mb_floppy_;
+inline bool Bios_Characteristics::floppy_525_12mb() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.floppy_525_12mb)
+  return floppy_525_12mb_;
 }
-inline void Bios_Characteristics::set_has_525_12mb_floppy(bool value) {
+inline void Bios_Characteristics::set_floppy_525_12mb(bool value) {
   
-  has_525_12mb_floppy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_525_12mb_floppy)
+  floppy_525_12mb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.floppy_525_12mb)
 }
 
-// bool has_35_720kb_floppy = 21;
-inline void Bios_Characteristics::clear_has_35_720kb_floppy() {
-  has_35_720kb_floppy_ = false;
+// bool floppy_35_720kb = 21;
+inline void Bios_Characteristics::clear_floppy_35_720kb() {
+  floppy_35_720kb_ = false;
 }
-inline bool Bios_Characteristics::has_35_720kb_floppy() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_35_720kb_floppy)
-  return has_35_720kb_floppy_;
+inline bool Bios_Characteristics::floppy_35_720kb() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.floppy_35_720kb)
+  return floppy_35_720kb_;
 }
-inline void Bios_Characteristics::set_has_35_720kb_floppy(bool value) {
+inline void Bios_Characteristics::set_floppy_35_720kb(bool value) {
   
-  has_35_720kb_floppy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_35_720kb_floppy)
+  floppy_35_720kb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.floppy_35_720kb)
 }
 
-// bool has_35_288mb_floppy = 22;
-inline void Bios_Characteristics::clear_has_35_288mb_floppy() {
-  has_35_288mb_floppy_ = false;
+// bool floppy_35_288mb = 22;
+inline void Bios_Characteristics::clear_floppy_35_288mb() {
+  floppy_35_288mb_ = false;
 }
-inline bool Bios_Characteristics::has_35_288mb_floppy() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_35_288mb_floppy)
-  return has_35_288mb_floppy_;
+inline bool Bios_Characteristics::floppy_35_288mb() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.floppy_35_288mb)
+  return floppy_35_288mb_;
 }
-inline void Bios_Characteristics::set_has_35_288mb_floppy(bool value) {
+inline void Bios_Characteristics::set_floppy_35_288mb(bool value) {
   
-  has_35_288mb_floppy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_35_288mb_floppy)
+  floppy_35_288mb_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.floppy_35_288mb)
 }
 
-// bool has_print_screen = 23;
-inline void Bios_Characteristics::clear_has_print_screen() {
-  has_print_screen_ = false;
+// bool print_screen = 23;
+inline void Bios_Characteristics::clear_print_screen() {
+  print_screen_ = false;
 }
-inline bool Bios_Characteristics::has_print_screen() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_print_screen)
-  return has_print_screen_;
+inline bool Bios_Characteristics::print_screen() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.print_screen)
+  return print_screen_;
 }
-inline void Bios_Characteristics::set_has_print_screen(bool value) {
+inline void Bios_Characteristics::set_print_screen(bool value) {
   
-  has_print_screen_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_print_screen)
+  print_screen_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.print_screen)
 }
 
-// bool has_8042_keyboard = 24;
-inline void Bios_Characteristics::clear_has_8042_keyboard() {
-  has_8042_keyboard_ = false;
+// bool keyboard_8042 = 24;
+inline void Bios_Characteristics::clear_keyboard_8042() {
+  keyboard_8042_ = false;
 }
-inline bool Bios_Characteristics::has_8042_keyboard() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_8042_keyboard)
-  return has_8042_keyboard_;
+inline bool Bios_Characteristics::keyboard_8042() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.keyboard_8042)
+  return keyboard_8042_;
 }
-inline void Bios_Characteristics::set_has_8042_keyboard(bool value) {
+inline void Bios_Characteristics::set_keyboard_8042(bool value) {
   
-  has_8042_keyboard_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_8042_keyboard)
+  keyboard_8042_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.keyboard_8042)
 }
 
-// bool has_serial = 25;
-inline void Bios_Characteristics::clear_has_serial() {
-  has_serial_ = false;
+// bool serial = 25;
+inline void Bios_Characteristics::clear_serial() {
+  serial_ = false;
 }
-inline bool Bios_Characteristics::has_serial() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_serial)
-  return has_serial_;
+inline bool Bios_Characteristics::serial() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.serial)
+  return serial_;
 }
-inline void Bios_Characteristics::set_has_serial(bool value) {
+inline void Bios_Characteristics::set_serial(bool value) {
   
-  has_serial_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_serial)
+  serial_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.serial)
 }
 
-// bool has_printer = 26;
-inline void Bios_Characteristics::clear_has_printer() {
-  has_printer_ = false;
+// bool printer = 26;
+inline void Bios_Characteristics::clear_printer() {
+  printer_ = false;
 }
-inline bool Bios_Characteristics::has_printer() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_printer)
-  return has_printer_;
+inline bool Bios_Characteristics::printer() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.printer)
+  return printer_;
 }
-inline void Bios_Characteristics::set_has_printer(bool value) {
+inline void Bios_Characteristics::set_printer(bool value) {
   
-  has_printer_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_printer)
+  printer_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.printer)
 }
 
-// bool has_cga_video = 27;
-inline void Bios_Characteristics::clear_has_cga_video() {
-  has_cga_video_ = false;
+// bool cga_video = 27;
+inline void Bios_Characteristics::clear_cga_video() {
+  cga_video_ = false;
 }
-inline bool Bios_Characteristics::has_cga_video() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_cga_video)
-  return has_cga_video_;
+inline bool Bios_Characteristics::cga_video() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.cga_video)
+  return cga_video_;
 }
-inline void Bios_Characteristics::set_has_cga_video(bool value) {
+inline void Bios_Characteristics::set_cga_video(bool value) {
   
-  has_cga_video_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_cga_video)
+  cga_video_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.cga_video)
 }
 
-// bool has_nec_pc98 = 28;
-inline void Bios_Characteristics::clear_has_nec_pc98() {
-  has_nec_pc98_ = false;
+// bool nec_pc98 = 28;
+inline void Bios_Characteristics::clear_nec_pc98() {
+  nec_pc98_ = false;
 }
-inline bool Bios_Characteristics::has_nec_pc98() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_nec_pc98)
-  return has_nec_pc98_;
+inline bool Bios_Characteristics::nec_pc98() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.nec_pc98)
+  return nec_pc98_;
 }
-inline void Bios_Characteristics::set_has_nec_pc98(bool value) {
+inline void Bios_Characteristics::set_nec_pc98(bool value) {
   
-  has_nec_pc98_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_nec_pc98)
+  nec_pc98_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.nec_pc98)
 }
 
-// bool has_acpi = 29;
-inline void Bios_Characteristics::clear_has_acpi() {
-  has_acpi_ = false;
+// bool acpi = 29;
+inline void Bios_Characteristics::clear_acpi() {
+  acpi_ = false;
 }
-inline bool Bios_Characteristics::has_acpi() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_acpi)
-  return has_acpi_;
+inline bool Bios_Characteristics::acpi() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.acpi)
+  return acpi_;
 }
-inline void Bios_Characteristics::set_has_acpi(bool value) {
+inline void Bios_Characteristics::set_acpi(bool value) {
   
-  has_acpi_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_acpi)
+  acpi_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.acpi)
 }
 
-// bool has_usb_legacy = 30;
-inline void Bios_Characteristics::clear_has_usb_legacy() {
-  has_usb_legacy_ = false;
+// bool usb_legacy = 30;
+inline void Bios_Characteristics::clear_usb_legacy() {
+  usb_legacy_ = false;
 }
-inline bool Bios_Characteristics::has_usb_legacy() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_usb_legacy)
-  return has_usb_legacy_;
+inline bool Bios_Characteristics::usb_legacy() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.usb_legacy)
+  return usb_legacy_;
 }
-inline void Bios_Characteristics::set_has_usb_legacy(bool value) {
+inline void Bios_Characteristics::set_usb_legacy(bool value) {
   
-  has_usb_legacy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_usb_legacy)
+  usb_legacy_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.usb_legacy)
 }
 
-// bool has_agp = 31;
-inline void Bios_Characteristics::clear_has_agp() {
-  has_agp_ = false;
+// bool agp = 31;
+inline void Bios_Characteristics::clear_agp() {
+  agp_ = false;
 }
-inline bool Bios_Characteristics::has_agp() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_agp)
-  return has_agp_;
+inline bool Bios_Characteristics::agp() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.agp)
+  return agp_;
 }
-inline void Bios_Characteristics::set_has_agp(bool value) {
+inline void Bios_Characteristics::set_agp(bool value) {
   
-  has_agp_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_agp)
+  agp_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.agp)
 }
 
-// bool has_i2o_boot = 32;
-inline void Bios_Characteristics::clear_has_i2o_boot() {
-  has_i2o_boot_ = false;
+// bool i2o_boot = 32;
+inline void Bios_Characteristics::clear_i2o_boot() {
+  i2o_boot_ = false;
 }
-inline bool Bios_Characteristics::has_i2o_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_i2o_boot)
-  return has_i2o_boot_;
+inline bool Bios_Characteristics::i2o_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.i2o_boot)
+  return i2o_boot_;
 }
-inline void Bios_Characteristics::set_has_i2o_boot(bool value) {
+inline void Bios_Characteristics::set_i2o_boot(bool value) {
   
-  has_i2o_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_i2o_boot)
+  i2o_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.i2o_boot)
 }
 
-// bool has_ls120_boot = 33;
-inline void Bios_Characteristics::clear_has_ls120_boot() {
-  has_ls120_boot_ = false;
+// bool ls120_boot = 33;
+inline void Bios_Characteristics::clear_ls120_boot() {
+  ls120_boot_ = false;
 }
-inline bool Bios_Characteristics::has_ls120_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_ls120_boot)
-  return has_ls120_boot_;
+inline bool Bios_Characteristics::ls120_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.ls120_boot)
+  return ls120_boot_;
 }
-inline void Bios_Characteristics::set_has_ls120_boot(bool value) {
+inline void Bios_Characteristics::set_ls120_boot(bool value) {
   
-  has_ls120_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_ls120_boot)
+  ls120_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.ls120_boot)
 }
 
-// bool has_atapi_zip_drive_boot = 34;
-inline void Bios_Characteristics::clear_has_atapi_zip_drive_boot() {
-  has_atapi_zip_drive_boot_ = false;
+// bool atapi_zip_drive_boot = 34;
+inline void Bios_Characteristics::clear_atapi_zip_drive_boot() {
+  atapi_zip_drive_boot_ = false;
 }
-inline bool Bios_Characteristics::has_atapi_zip_drive_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_atapi_zip_drive_boot)
-  return has_atapi_zip_drive_boot_;
+inline bool Bios_Characteristics::atapi_zip_drive_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.atapi_zip_drive_boot)
+  return atapi_zip_drive_boot_;
 }
-inline void Bios_Characteristics::set_has_atapi_zip_drive_boot(bool value) {
+inline void Bios_Characteristics::set_atapi_zip_drive_boot(bool value) {
   
-  has_atapi_zip_drive_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_atapi_zip_drive_boot)
+  atapi_zip_drive_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.atapi_zip_drive_boot)
 }
 
-// bool has_ieee1394_boot = 35;
-inline void Bios_Characteristics::clear_has_ieee1394_boot() {
-  has_ieee1394_boot_ = false;
+// bool ieee1394_boot = 35;
+inline void Bios_Characteristics::clear_ieee1394_boot() {
+  ieee1394_boot_ = false;
 }
-inline bool Bios_Characteristics::has_ieee1394_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_ieee1394_boot)
-  return has_ieee1394_boot_;
+inline bool Bios_Characteristics::ieee1394_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.ieee1394_boot)
+  return ieee1394_boot_;
 }
-inline void Bios_Characteristics::set_has_ieee1394_boot(bool value) {
+inline void Bios_Characteristics::set_ieee1394_boot(bool value) {
   
-  has_ieee1394_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_ieee1394_boot)
+  ieee1394_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.ieee1394_boot)
 }
 
-// bool has_smart_battery = 36;
-inline void Bios_Characteristics::clear_has_smart_battery() {
-  has_smart_battery_ = false;
+// bool smart_battery = 36;
+inline void Bios_Characteristics::clear_smart_battery() {
+  smart_battery_ = false;
 }
-inline bool Bios_Characteristics::has_smart_battery() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_smart_battery)
-  return has_smart_battery_;
+inline bool Bios_Characteristics::smart_battery() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.smart_battery)
+  return smart_battery_;
 }
-inline void Bios_Characteristics::set_has_smart_battery(bool value) {
+inline void Bios_Characteristics::set_smart_battery(bool value) {
   
-  has_smart_battery_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_smart_battery)
+  smart_battery_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.smart_battery)
 }
 
-// bool has_bios_boot_specification = 37;
-inline void Bios_Characteristics::clear_has_bios_boot_specification() {
-  has_bios_boot_specification_ = false;
+// bool bios_boot_specification = 37;
+inline void Bios_Characteristics::clear_bios_boot_specification() {
+  bios_boot_specification_ = false;
 }
-inline bool Bios_Characteristics::has_bios_boot_specification() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_bios_boot_specification)
-  return has_bios_boot_specification_;
+inline bool Bios_Characteristics::bios_boot_specification() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.bios_boot_specification)
+  return bios_boot_specification_;
 }
-inline void Bios_Characteristics::set_has_bios_boot_specification(bool value) {
+inline void Bios_Characteristics::set_bios_boot_specification(bool value) {
   
-  has_bios_boot_specification_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_bios_boot_specification)
+  bios_boot_specification_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.bios_boot_specification)
 }
 
-// bool has_key_init_network_boot = 38;
-inline void Bios_Characteristics::clear_has_key_init_network_boot() {
-  has_key_init_network_boot_ = false;
+// bool key_init_network_boot = 38;
+inline void Bios_Characteristics::clear_key_init_network_boot() {
+  key_init_network_boot_ = false;
 }
-inline bool Bios_Characteristics::has_key_init_network_boot() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_key_init_network_boot)
-  return has_key_init_network_boot_;
+inline bool Bios_Characteristics::key_init_network_boot() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.key_init_network_boot)
+  return key_init_network_boot_;
 }
-inline void Bios_Characteristics::set_has_key_init_network_boot(bool value) {
+inline void Bios_Characteristics::set_key_init_network_boot(bool value) {
   
-  has_key_init_network_boot_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_key_init_network_boot)
+  key_init_network_boot_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.key_init_network_boot)
 }
 
-// bool has_targeted_content_distrib = 39;
-inline void Bios_Characteristics::clear_has_targeted_content_distrib() {
-  has_targeted_content_distrib_ = false;
+// bool targeted_content_distrib = 39;
+inline void Bios_Characteristics::clear_targeted_content_distrib() {
+  targeted_content_distrib_ = false;
 }
-inline bool Bios_Characteristics::has_targeted_content_distrib() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_targeted_content_distrib)
-  return has_targeted_content_distrib_;
+inline bool Bios_Characteristics::targeted_content_distrib() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.targeted_content_distrib)
+  return targeted_content_distrib_;
 }
-inline void Bios_Characteristics::set_has_targeted_content_distrib(bool value) {
+inline void Bios_Characteristics::set_targeted_content_distrib(bool value) {
   
-  has_targeted_content_distrib_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_targeted_content_distrib)
+  targeted_content_distrib_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.targeted_content_distrib)
 }
 
-// bool has_uefi = 40;
-inline void Bios_Characteristics::clear_has_uefi() {
-  has_uefi_ = false;
+// bool uefi = 40;
+inline void Bios_Characteristics::clear_uefi() {
+  uefi_ = false;
 }
-inline bool Bios_Characteristics::has_uefi() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_uefi)
-  return has_uefi_;
+inline bool Bios_Characteristics::uefi() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.uefi)
+  return uefi_;
 }
-inline void Bios_Characteristics::set_has_uefi(bool value) {
+inline void Bios_Characteristics::set_uefi(bool value) {
   
-  has_uefi_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_uefi)
+  uefi_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.uefi)
 }
 
-// bool has_virtual_machine = 41;
-inline void Bios_Characteristics::clear_has_virtual_machine() {
-  has_virtual_machine_ = false;
+// bool virtual_machine = 41;
+inline void Bios_Characteristics::clear_virtual_machine() {
+  virtual_machine_ = false;
 }
-inline bool Bios_Characteristics::has_virtual_machine() const {
-  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.has_virtual_machine)
-  return has_virtual_machine_;
+inline bool Bios_Characteristics::virtual_machine() const {
+  // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.Characteristics.virtual_machine)
+  return virtual_machine_;
 }
-inline void Bios_Characteristics::set_has_virtual_machine(bool value) {
+inline void Bios_Characteristics::set_virtual_machine(bool value) {
   
-  has_virtual_machine_ = value;
-  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.has_virtual_machine)
+  virtual_machine_ = value;
+  // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.Characteristics.virtual_machine)
 }
 
 // -------------------------------------------------------------------
@@ -4717,15 +4717,15 @@ inline void Bios::set_allocated_address(::std::string* address) {
   // @@protoc_insertion_point(field_set_allocated:aspia.system_info.dmi.Bios.address)
 }
 
-// int32 runtime_size = 8;
+// uint64 runtime_size = 8;
 inline void Bios::clear_runtime_size() {
-  runtime_size_ = 0;
+  runtime_size_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::int32 Bios::runtime_size() const {
+inline ::google::protobuf::uint64 Bios::runtime_size() const {
   // @@protoc_insertion_point(field_get:aspia.system_info.dmi.Bios.runtime_size)
   return runtime_size_;
 }
-inline void Bios::set_runtime_size(::google::protobuf::int32 value) {
+inline void Bios::set_runtime_size(::google::protobuf::uint64 value) {
   
   runtime_size_ = value;
   // @@protoc_insertion_point(field_set:aspia.system_info.dmi.Bios.runtime_size)

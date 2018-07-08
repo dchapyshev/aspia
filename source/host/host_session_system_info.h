@@ -9,6 +9,8 @@
 #define _ASPIA_HOST__HOST_SESSION_SYSTEM_INFO_H
 
 #include "host/host_session.h"
+#include "protocol/system_info_session.pb.h"
+#include "system_info/category.h"
 
 namespace aspia {
 
@@ -30,6 +32,13 @@ protected:
     void stopSession() override;
 
 private:
+    void readCategoryListRequest(const std::string& request_uuid,
+                                 const proto::system_info::CategoryListRequest& request);
+    void readCategoryRequest(const std::string& request_uuid,
+                             const proto::system_info::CategoryRequest& request);
+
+    QList<Category> category_list_;
+
     Q_DISABLE_COPY(HostSessionSystemInfo)
 };
 

@@ -533,6 +533,10 @@ void ConsoleWindow::onComputerDoubleClicked(proto::address_book::Computer* compu
     {
         computer->set_session_type(proto::auth::SESSION_TYPE_FILE_TRANSFER);
     }
+    else if (ui.action_system_info->isChecked())
+    {
+        computer->set_session_type(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+    }
     else
     {
         qFatal("Unknown session type");

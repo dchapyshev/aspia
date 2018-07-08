@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>463</height>
+    <width>754</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,6 +29,33 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item>
+    <widget class="QToolBar" name="toolbar">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="floatable">
+      <bool>false</bool>
+     </property>
+     <addaction name="action_save_report"/>
+     <addaction name="action_refresh"/>
+    </widget>
+   </item>
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -55,7 +82,42 @@
     </widget>
    </item>
   </layout>
+  <action name="action_save_report">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/disk.png</normaloff>:/icon/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Report</string>
+   </property>
+  </action>
+  <action name="action_refresh">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/arrow-circle-double.png</normaloff>:/icon/arrow-circle-double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+  </action>
+  <action name="action_save_current">
+   <property name="text">
+    <string>Current</string>
+   </property>
+  </action>
+  <action name="action_save_selected">
+   <property name="text">
+    <string>Selected</string>
+   </property>
+  </action>
+  <action name="action_save_all">
+   <property name="text">
+    <string>All</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

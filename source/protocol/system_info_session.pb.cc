@@ -160,6 +160,16 @@ void InitDefaults() {
 namespace aspia {
 namespace proto {
 namespace system_info {
+bool Compressor_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -535,7 +545,7 @@ void CategoryRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int CategoryRequest::kUuidFieldNumber;
-const int CategoryRequest::kDataFieldNumber;
+const int CategoryRequest::kParamsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 CategoryRequest::CategoryRequest()
@@ -553,16 +563,16 @@ CategoryRequest::CategoryRequest(const CategoryRequest& from)
   if (from.uuid().size() > 0) {
     uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
   }
-  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.data().size() > 0) {
-    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  params_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.params().size() > 0) {
+    params_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.params_);
   }
   // @@protoc_insertion_point(copy_constructor:aspia.proto.system_info.CategoryRequest)
 }
 
 void CategoryRequest::SharedCtor() {
   uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  params_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 CategoryRequest::~CategoryRequest() {
@@ -572,7 +582,7 @@ CategoryRequest::~CategoryRequest() {
 
 void CategoryRequest::SharedDtor() {
   uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  params_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void CategoryRequest::SetCachedSize(int size) const {
@@ -591,7 +601,7 @@ void CategoryRequest::Clear() {
   (void) cached_has_bits;
 
   uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  params_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -627,12 +637,12 @@ bool CategoryRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes data = 2;
+      // bytes params = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_data()));
+                input, this->mutable_params()));
         } else {
           goto handle_unusual;
         }
@@ -675,10 +685,10 @@ void CategoryRequest::SerializeWithCachedSizes(
       1, this->uuid(), output);
   }
 
-  // bytes data = 2;
-  if (this->data().size() > 0) {
+  // bytes params = 2;
+  if (this->params().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      2, this->data(), output);
+      2, this->params(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -699,11 +709,11 @@ size_t CategoryRequest::ByteSizeLong() const {
         this->uuid());
   }
 
-  // bytes data = 2;
-  if (this->data().size() > 0) {
+  // bytes params = 2;
+  if (this->params().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->data());
+        this->params());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -727,9 +737,9 @@ void CategoryRequest::MergeFrom(const CategoryRequest& from) {
 
     uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
   }
-  if (from.data().size() > 0) {
+  if (from.params().size() > 0) {
 
-    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+    params_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.params_);
   }
 }
 
@@ -752,7 +762,7 @@ void CategoryRequest::InternalSwap(CategoryRequest* other) {
   using std::swap;
   uuid_.Swap(&other->uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
-  data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  params_.Swap(&other->params_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
@@ -767,7 +777,7 @@ void CategoryRequest::InternalSwap(CategoryRequest* other) {
 void Category::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Category::kUuidFieldNumber;
+const int Category::kCompressorFieldNumber;
 const int Category::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -782,20 +792,17 @@ Category::Category(const Category& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.uuid().size() > 0) {
-    uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
-  }
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
+  compressor_ = from.compressor_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.system_info.Category)
 }
 
 void Category::SharedCtor() {
-  uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  compressor_ = 0;
 }
 
 Category::~Category() {
@@ -804,7 +811,6 @@ Category::~Category() {
 }
 
 void Category::SharedDtor() {
-  uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -823,8 +829,8 @@ void Category::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  compressor_ = 0;
   _internal_metadata_.Clear();
 }
 
@@ -844,16 +850,15 @@ bool Category::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string uuid = 1;
+      // .aspia.proto.system_info.Compressor compressor = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_uuid()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->uuid().data(), static_cast<int>(this->uuid().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aspia.proto.system_info.Category.uuid"));
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_compressor(static_cast< ::aspia::proto::system_info::Compressor >(value));
         } else {
           goto handle_unusual;
         }
@@ -898,14 +903,10 @@ void Category::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string uuid = 1;
-  if (this->uuid().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->uuid().data(), static_cast<int>(this->uuid().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aspia.proto.system_info.Category.uuid");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->uuid(), output);
+  // .aspia.proto.system_info.Compressor compressor = 1;
+  if (this->compressor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->compressor(), output);
   }
 
   // bytes data = 2;
@@ -925,18 +926,17 @@ size_t Category::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // string uuid = 1;
-  if (this->uuid().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->uuid());
-  }
-
   // bytes data = 2;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
+  }
+
+  // .aspia.proto.system_info.Compressor compressor = 1;
+  if (this->compressor() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->compressor());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -956,13 +956,12 @@ void Category::MergeFrom(const Category& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.uuid().size() > 0) {
-
-    uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.uuid_);
-  }
   if (from.data().size() > 0) {
 
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.compressor() != 0) {
+    set_compressor(from.compressor());
   }
 }
 
@@ -983,10 +982,9 @@ void Category::Swap(Category* other) {
 }
 void Category::InternalSwap(Category* other) {
   using std::swap;
-  uuid_.Swap(&other->uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
   data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  swap(compressor_, other->compressor_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 
@@ -1004,6 +1002,7 @@ void Request::InitAsDefaultInstance() {
       ::aspia::proto::system_info::CategoryRequest::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Request::kRequestUuidFieldNumber;
 const int Request::kCategoryListRequestFieldNumber;
 const int Request::kCategoryRequestFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -1019,6 +1018,10 @@ Request::Request(const Request& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  request_uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.request_uuid().size() > 0) {
+    request_uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_uuid_);
+  }
   if (from.has_category_list_request()) {
     category_list_request_ = new ::aspia::proto::system_info::CategoryListRequest(*from.category_list_request_);
   } else {
@@ -1033,6 +1036,7 @@ Request::Request(const Request& from)
 }
 
 void Request::SharedCtor() {
+  request_uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&category_list_request_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&category_request_) -
       reinterpret_cast<char*>(&category_list_request_)) + sizeof(category_request_));
@@ -1044,6 +1048,7 @@ Request::~Request() {
 }
 
 void Request::SharedDtor() {
+  request_uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete category_list_request_;
   if (this != internal_default_instance()) delete category_request_;
 }
@@ -1063,6 +1068,7 @@ void Request::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  request_uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (GetArenaNoVirtual() == NULL && category_list_request_ != NULL) {
     delete category_list_request_;
   }
@@ -1090,10 +1096,26 @@ bool Request::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.system_info.CategoryListRequest category_list_request = 1;
+      // string request_uuid = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_request_uuid()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->request_uuid().data(), static_cast<int>(this->request_uuid().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.system_info.Request.request_uuid"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.system_info.CategoryListRequest category_list_request = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_category_list_request()));
         } else {
@@ -1102,10 +1124,10 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.system_info.CategoryRequest category_request = 2;
-      case 2: {
+      // .aspia.proto.system_info.CategoryRequest category_request = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_category_request()));
         } else {
@@ -1140,16 +1162,26 @@ void Request::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.system_info.CategoryListRequest category_list_request = 1;
-  if (this->has_category_list_request()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->_internal_category_list_request(), output);
+  // string request_uuid = 1;
+  if (this->request_uuid().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->request_uuid().data(), static_cast<int>(this->request_uuid().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.system_info.Request.request_uuid");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->request_uuid(), output);
   }
 
-  // .aspia.proto.system_info.CategoryRequest category_request = 2;
+  // .aspia.proto.system_info.CategoryListRequest category_list_request = 2;
+  if (this->has_category_list_request()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, this->_internal_category_list_request(), output);
+  }
+
+  // .aspia.proto.system_info.CategoryRequest category_request = 3;
   if (this->has_category_request()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, this->_internal_category_request(), output);
+      3, this->_internal_category_request(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1163,14 +1195,21 @@ size_t Request::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.system_info.CategoryListRequest category_list_request = 1;
+  // string request_uuid = 1;
+  if (this->request_uuid().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->request_uuid());
+  }
+
+  // .aspia.proto.system_info.CategoryListRequest category_list_request = 2;
   if (this->has_category_list_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *category_list_request_);
   }
 
-  // .aspia.proto.system_info.CategoryRequest category_request = 2;
+  // .aspia.proto.system_info.CategoryRequest category_request = 3;
   if (this->has_category_request()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -1194,6 +1233,10 @@ void Request::MergeFrom(const Request& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.request_uuid().size() > 0) {
+
+    request_uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_uuid_);
+  }
   if (from.has_category_list_request()) {
     mutable_category_list_request()->::aspia::proto::system_info::CategoryListRequest::MergeFrom(from.category_list_request());
   }
@@ -1219,6 +1262,8 @@ void Request::Swap(Request* other) {
 }
 void Request::InternalSwap(Request* other) {
   using std::swap;
+  request_uuid_.Swap(&other->request_uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(category_list_request_, other->category_list_request_);
   swap(category_request_, other->category_request_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -1238,6 +1283,7 @@ void Reply::InitAsDefaultInstance() {
       ::aspia::proto::system_info::Category::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Reply::kRequestUuidFieldNumber;
 const int Reply::kCategoryListFieldNumber;
 const int Reply::kCategoryFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -1253,6 +1299,10 @@ Reply::Reply(const Reply& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  request_uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.request_uuid().size() > 0) {
+    request_uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_uuid_);
+  }
   if (from.has_category_list()) {
     category_list_ = new ::aspia::proto::system_info::CategoryList(*from.category_list_);
   } else {
@@ -1267,6 +1317,7 @@ Reply::Reply(const Reply& from)
 }
 
 void Reply::SharedCtor() {
+  request_uuid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&category_list_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&category_) -
       reinterpret_cast<char*>(&category_list_)) + sizeof(category_));
@@ -1278,6 +1329,7 @@ Reply::~Reply() {
 }
 
 void Reply::SharedDtor() {
+  request_uuid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete category_list_;
   if (this != internal_default_instance()) delete category_;
 }
@@ -1297,6 +1349,7 @@ void Reply::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  request_uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (GetArenaNoVirtual() == NULL && category_list_ != NULL) {
     delete category_list_;
   }
@@ -1324,10 +1377,26 @@ bool Reply::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .aspia.proto.system_info.CategoryList category_list = 1;
+      // string request_uuid = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_request_uuid()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->request_uuid().data(), static_cast<int>(this->request_uuid().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.system_info.Reply.request_uuid"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .aspia.proto.system_info.CategoryList category_list = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_category_list()));
         } else {
@@ -1336,10 +1405,10 @@ bool Reply::MergePartialFromCodedStream(
         break;
       }
 
-      // .aspia.proto.system_info.Category category = 2;
-      case 2: {
+      // .aspia.proto.system_info.Category category = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_category()));
         } else {
@@ -1374,16 +1443,26 @@ void Reply::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .aspia.proto.system_info.CategoryList category_list = 1;
-  if (this->has_category_list()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1, this->_internal_category_list(), output);
+  // string request_uuid = 1;
+  if (this->request_uuid().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->request_uuid().data(), static_cast<int>(this->request_uuid().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.system_info.Reply.request_uuid");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->request_uuid(), output);
   }
 
-  // .aspia.proto.system_info.Category category = 2;
+  // .aspia.proto.system_info.CategoryList category_list = 2;
+  if (this->has_category_list()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      2, this->_internal_category_list(), output);
+  }
+
+  // .aspia.proto.system_info.Category category = 3;
   if (this->has_category()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      2, this->_internal_category(), output);
+      3, this->_internal_category(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1397,14 +1476,21 @@ size_t Reply::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // .aspia.proto.system_info.CategoryList category_list = 1;
+  // string request_uuid = 1;
+  if (this->request_uuid().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->request_uuid());
+  }
+
+  // .aspia.proto.system_info.CategoryList category_list = 2;
   if (this->has_category_list()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
         *category_list_);
   }
 
-  // .aspia.proto.system_info.Category category = 2;
+  // .aspia.proto.system_info.Category category = 3;
   if (this->has_category()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -1428,6 +1514,10 @@ void Reply::MergeFrom(const Reply& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.request_uuid().size() > 0) {
+
+    request_uuid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.request_uuid_);
+  }
   if (from.has_category_list()) {
     mutable_category_list()->::aspia::proto::system_info::CategoryList::MergeFrom(from.category_list());
   }
@@ -1453,6 +1543,8 @@ void Reply::Swap(Reply* other) {
 }
 void Reply::InternalSwap(Reply* other) {
   using std::swap;
+  request_uuid_.Swap(&other->request_uuid_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(category_list_, other->category_list_);
   swap(category_, other->category_);
   _internal_metadata_.Swap(&other->_internal_metadata_);

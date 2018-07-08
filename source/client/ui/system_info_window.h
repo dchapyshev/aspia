@@ -34,6 +34,9 @@ protected:
 private:
     Ui::SystemInfoWindow ui;
 
+    QMenu* menu_;
+    QLineEdit* search_edit_;
+
     Q_DISABLE_COPY(SystemInfoWindow)
 };
 

@@ -29,6 +29,7 @@
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_util.h>
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_system_5finfo_5fsession_2eproto 
 
@@ -80,6 +81,17 @@ template<> ::aspia::proto::system_info::Request* Arena::CreateMaybeMessage<::asp
 namespace aspia {
 namespace proto {
 namespace system_info {
+
+enum Compressor {
+  COMPRESSOR_NONE = 0,
+  COMPRESSOR_ZLIB = 1,
+  Compressor_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  Compressor_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool Compressor_IsValid(int value);
+const Compressor Compressor_MIN = COMPRESSOR_NONE;
+const Compressor Compressor_MAX = COMPRESSOR_ZLIB;
+const int Compressor_ARRAYSIZE = Compressor_MAX + 1;
 
 // ===================================================================
 
@@ -400,26 +412,26 @@ class CategoryRequest : public ::google::protobuf::MessageLite /* @@protoc_inser
   ::std::string* release_uuid();
   void set_allocated_uuid(::std::string* uuid);
 
-  // bytes data = 2;
-  void clear_data();
-  static const int kDataFieldNumber = 2;
-  const ::std::string& data() const;
-  void set_data(const ::std::string& value);
+  // bytes params = 2;
+  void clear_params();
+  static const int kParamsFieldNumber = 2;
+  const ::std::string& params() const;
+  void set_params(const ::std::string& value);
   #if LANG_CXX11
-  void set_data(::std::string&& value);
+  void set_params(::std::string&& value);
   #endif
-  void set_data(const char* value);
-  void set_data(const void* value, size_t size);
-  ::std::string* mutable_data();
-  ::std::string* release_data();
-  void set_allocated_data(::std::string* data);
+  void set_params(const char* value);
+  void set_params(const void* value, size_t size);
+  ::std::string* mutable_params();
+  ::std::string* release_params();
+  void set_allocated_params(::std::string* params);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.system_info.CategoryRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr uuid_;
-  ::google::protobuf::internal::ArenaStringPtr data_;
+  ::google::protobuf::internal::ArenaStringPtr params_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_2eproto::TableStruct;
 };
@@ -510,20 +522,6 @@ class Category : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // string uuid = 1;
-  void clear_uuid();
-  static const int kUuidFieldNumber = 1;
-  const ::std::string& uuid() const;
-  void set_uuid(const ::std::string& value);
-  #if LANG_CXX11
-  void set_uuid(::std::string&& value);
-  #endif
-  void set_uuid(const char* value);
-  void set_uuid(const char* value, size_t size);
-  ::std::string* mutable_uuid();
-  ::std::string* release_uuid();
-  void set_allocated_uuid(::std::string* uuid);
-
   // bytes data = 2;
   void clear_data();
   static const int kDataFieldNumber = 2;
@@ -538,12 +536,18 @@ class Category : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
+  // .aspia.proto.system_info.Compressor compressor = 1;
+  void clear_compressor();
+  static const int kCompressorFieldNumber = 1;
+  ::aspia::proto::system_info::Compressor compressor() const;
+  void set_compressor(::aspia::proto::system_info::Compressor value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.system_info.Category)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr uuid_;
   ::google::protobuf::internal::ArenaStringPtr data_;
+  int compressor_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_system_5finfo_5fsession_2eproto::TableStruct;
 };
@@ -634,10 +638,24 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.system_info.CategoryListRequest category_list_request = 1;
+  // string request_uuid = 1;
+  void clear_request_uuid();
+  static const int kRequestUuidFieldNumber = 1;
+  const ::std::string& request_uuid() const;
+  void set_request_uuid(const ::std::string& value);
+  #if LANG_CXX11
+  void set_request_uuid(::std::string&& value);
+  #endif
+  void set_request_uuid(const char* value);
+  void set_request_uuid(const char* value, size_t size);
+  ::std::string* mutable_request_uuid();
+  ::std::string* release_request_uuid();
+  void set_allocated_request_uuid(::std::string* request_uuid);
+
+  // .aspia.proto.system_info.CategoryListRequest category_list_request = 2;
   bool has_category_list_request() const;
   void clear_category_list_request();
-  static const int kCategoryListRequestFieldNumber = 1;
+  static const int kCategoryListRequestFieldNumber = 2;
   private:
   const ::aspia::proto::system_info::CategoryListRequest& _internal_category_list_request() const;
   public:
@@ -646,10 +664,10 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
   ::aspia::proto::system_info::CategoryListRequest* mutable_category_list_request();
   void set_allocated_category_list_request(::aspia::proto::system_info::CategoryListRequest* category_list_request);
 
-  // .aspia.proto.system_info.CategoryRequest category_request = 2;
+  // .aspia.proto.system_info.CategoryRequest category_request = 3;
   bool has_category_request() const;
   void clear_category_request();
-  static const int kCategoryRequestFieldNumber = 2;
+  static const int kCategoryRequestFieldNumber = 3;
   private:
   const ::aspia::proto::system_info::CategoryRequest& _internal_category_request() const;
   public:
@@ -662,6 +680,7 @@ class Request : public ::google::protobuf::MessageLite /* @@protoc_insertion_poi
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr request_uuid_;
   ::aspia::proto::system_info::CategoryListRequest* category_list_request_;
   ::aspia::proto::system_info::CategoryRequest* category_request_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -754,10 +773,24 @@ class Reply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.system_info.CategoryList category_list = 1;
+  // string request_uuid = 1;
+  void clear_request_uuid();
+  static const int kRequestUuidFieldNumber = 1;
+  const ::std::string& request_uuid() const;
+  void set_request_uuid(const ::std::string& value);
+  #if LANG_CXX11
+  void set_request_uuid(::std::string&& value);
+  #endif
+  void set_request_uuid(const char* value);
+  void set_request_uuid(const char* value, size_t size);
+  ::std::string* mutable_request_uuid();
+  ::std::string* release_request_uuid();
+  void set_allocated_request_uuid(::std::string* request_uuid);
+
+  // .aspia.proto.system_info.CategoryList category_list = 2;
   bool has_category_list() const;
   void clear_category_list();
-  static const int kCategoryListFieldNumber = 1;
+  static const int kCategoryListFieldNumber = 2;
   private:
   const ::aspia::proto::system_info::CategoryList& _internal_category_list() const;
   public:
@@ -766,10 +799,10 @@ class Reply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
   ::aspia::proto::system_info::CategoryList* mutable_category_list();
   void set_allocated_category_list(::aspia::proto::system_info::CategoryList* category_list);
 
-  // .aspia.proto.system_info.Category category = 2;
+  // .aspia.proto.system_info.Category category = 3;
   bool has_category() const;
   void clear_category();
-  static const int kCategoryFieldNumber = 2;
+  static const int kCategoryFieldNumber = 3;
   private:
   const ::aspia::proto::system_info::Category& _internal_category() const;
   public:
@@ -782,6 +815,7 @@ class Reply : public ::google::protobuf::MessageLite /* @@protoc_insertion_point
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr request_uuid_;
   ::aspia::proto::system_info::CategoryList* category_list_;
   ::aspia::proto::system_info::Category* category_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -942,114 +976,75 @@ inline void CategoryRequest::set_allocated_uuid(::std::string* uuid) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.CategoryRequest.uuid)
 }
 
-// bytes data = 2;
-inline void CategoryRequest::clear_data() {
-  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// bytes params = 2;
+inline void CategoryRequest::clear_params() {
+  params_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& CategoryRequest::data() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.CategoryRequest.data)
-  return data_.GetNoArena();
+inline const ::std::string& CategoryRequest::params() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.CategoryRequest.params)
+  return params_.GetNoArena();
 }
-inline void CategoryRequest::set_data(const ::std::string& value) {
+inline void CategoryRequest::set_params(const ::std::string& value) {
   
-  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.CategoryRequest.data)
+  params_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.CategoryRequest.params)
 }
 #if LANG_CXX11
-inline void CategoryRequest::set_data(::std::string&& value) {
+inline void CategoryRequest::set_params(::std::string&& value) {
   
-  data_.SetNoArena(
+  params_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.CategoryRequest.data)
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.CategoryRequest.params)
 }
 #endif
-inline void CategoryRequest::set_data(const char* value) {
+inline void CategoryRequest::set_params(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.CategoryRequest.data)
+  params_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.CategoryRequest.params)
 }
-inline void CategoryRequest::set_data(const void* value, size_t size) {
+inline void CategoryRequest::set_params(const void* value, size_t size) {
   
-  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  params_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.CategoryRequest.data)
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.CategoryRequest.params)
 }
-inline ::std::string* CategoryRequest::mutable_data() {
+inline ::std::string* CategoryRequest::mutable_params() {
   
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.CategoryRequest.data)
-  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.CategoryRequest.params)
+  return params_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* CategoryRequest::release_data() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.CategoryRequest.data)
+inline ::std::string* CategoryRequest::release_params() {
+  // @@protoc_insertion_point(field_release:aspia.proto.system_info.CategoryRequest.params)
   
-  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return params_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void CategoryRequest::set_allocated_data(::std::string* data) {
-  if (data != NULL) {
+inline void CategoryRequest::set_allocated_params(::std::string* params) {
+  if (params != NULL) {
     
   } else {
     
   }
-  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.CategoryRequest.data)
+  params_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), params);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.CategoryRequest.params)
 }
 
 // -------------------------------------------------------------------
 
 // Category
 
-// string uuid = 1;
-inline void Category::clear_uuid() {
-  uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// .aspia.proto.system_info.Compressor compressor = 1;
+inline void Category::clear_compressor() {
+  compressor_ = 0;
 }
-inline const ::std::string& Category::uuid() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.system_info.Category.uuid)
-  return uuid_.GetNoArena();
+inline ::aspia::proto::system_info::Compressor Category::compressor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.Category.compressor)
+  return static_cast< ::aspia::proto::system_info::Compressor >(compressor_);
 }
-inline void Category::set_uuid(const ::std::string& value) {
+inline void Category::set_compressor(::aspia::proto::system_info::Compressor value) {
   
-  uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aspia.proto.system_info.Category.uuid)
-}
-#if LANG_CXX11
-inline void Category::set_uuid(::std::string&& value) {
-  
-  uuid_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.Category.uuid)
-}
-#endif
-inline void Category::set_uuid(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.Category.uuid)
-}
-inline void Category::set_uuid(const char* value, size_t size) {
-  
-  uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.Category.uuid)
-}
-inline ::std::string* Category::mutable_uuid() {
-  
-  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.Category.uuid)
-  return uuid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Category::release_uuid() {
-  // @@protoc_insertion_point(field_release:aspia.proto.system_info.Category.uuid)
-  
-  return uuid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Category::set_allocated_uuid(::std::string* uuid) {
-  if (uuid != NULL) {
-    
-  } else {
-    
-  }
-  uuid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), uuid);
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.Category.uuid)
+  compressor_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.Category.compressor)
 }
 
 // bytes data = 2;
@@ -1109,7 +1104,60 @@ inline void Category::set_allocated_data(::std::string* data) {
 
 // Request
 
-// .aspia.proto.system_info.CategoryListRequest category_list_request = 1;
+// string request_uuid = 1;
+inline void Request::clear_request_uuid() {
+  request_uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Request::request_uuid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.Request.request_uuid)
+  return request_uuid_.GetNoArena();
+}
+inline void Request::set_request_uuid(const ::std::string& value) {
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.Request.request_uuid)
+}
+#if LANG_CXX11
+inline void Request::set_request_uuid(::std::string&& value) {
+  
+  request_uuid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.Request.request_uuid)
+}
+#endif
+inline void Request::set_request_uuid(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.Request.request_uuid)
+}
+inline void Request::set_request_uuid(const char* value, size_t size) {
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.Request.request_uuid)
+}
+inline ::std::string* Request::mutable_request_uuid() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.Request.request_uuid)
+  return request_uuid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Request::release_request_uuid() {
+  // @@protoc_insertion_point(field_release:aspia.proto.system_info.Request.request_uuid)
+  
+  return request_uuid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Request::set_allocated_request_uuid(::std::string* request_uuid) {
+  if (request_uuid != NULL) {
+    
+  } else {
+    
+  }
+  request_uuid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request_uuid);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.Request.request_uuid)
+}
+
+// .aspia.proto.system_info.CategoryListRequest category_list_request = 2;
 inline bool Request::has_category_list_request() const {
   return this != internal_default_instance() && category_list_request_ != NULL;
 }
@@ -1163,7 +1211,7 @@ inline void Request::set_allocated_category_list_request(::aspia::proto::system_
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.Request.category_list_request)
 }
 
-// .aspia.proto.system_info.CategoryRequest category_request = 2;
+// .aspia.proto.system_info.CategoryRequest category_request = 3;
 inline bool Request::has_category_request() const {
   return this != internal_default_instance() && category_request_ != NULL;
 }
@@ -1221,7 +1269,60 @@ inline void Request::set_allocated_category_request(::aspia::proto::system_info:
 
 // Reply
 
-// .aspia.proto.system_info.CategoryList category_list = 1;
+// string request_uuid = 1;
+inline void Reply::clear_request_uuid() {
+  request_uuid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Reply::request_uuid() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.system_info.Reply.request_uuid)
+  return request_uuid_.GetNoArena();
+}
+inline void Reply::set_request_uuid(const ::std::string& value) {
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.system_info.Reply.request_uuid)
+}
+#if LANG_CXX11
+inline void Reply::set_request_uuid(::std::string&& value) {
+  
+  request_uuid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.system_info.Reply.request_uuid)
+}
+#endif
+inline void Reply::set_request_uuid(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.system_info.Reply.request_uuid)
+}
+inline void Reply::set_request_uuid(const char* value, size_t size) {
+  
+  request_uuid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.system_info.Reply.request_uuid)
+}
+inline ::std::string* Reply::mutable_request_uuid() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.system_info.Reply.request_uuid)
+  return request_uuid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Reply::release_request_uuid() {
+  // @@protoc_insertion_point(field_release:aspia.proto.system_info.Reply.request_uuid)
+  
+  return request_uuid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Reply::set_allocated_request_uuid(::std::string* request_uuid) {
+  if (request_uuid != NULL) {
+    
+  } else {
+    
+  }
+  request_uuid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), request_uuid);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.Reply.request_uuid)
+}
+
+// .aspia.proto.system_info.CategoryList category_list = 2;
 inline bool Reply::has_category_list() const {
   return this != internal_default_instance() && category_list_ != NULL;
 }
@@ -1275,7 +1376,7 @@ inline void Reply::set_allocated_category_list(::aspia::proto::system_info::Cate
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.system_info.Reply.category_list)
 }
 
-// .aspia.proto.system_info.Category category = 2;
+// .aspia.proto.system_info.Category category = 3;
 inline bool Reply::has_category() const {
   return this != internal_default_instance() && category_ != NULL;
 }
@@ -1348,6 +1449,14 @@ inline void Reply::set_allocated_category(::aspia::proto::system_info::Category*
 }  // namespace system_info
 }  // namespace proto
 }  // namespace aspia
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::aspia::proto::system_info::Compressor> : ::std::true_type {};
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

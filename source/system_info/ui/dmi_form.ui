@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DmiParser</class>
- <widget class="QWidget" name="DmiParser">
+ <class>DmiForm</class>
+ <widget class="QWidget" name="DmiForm">
   <property name="geometry">
    <rect>
     <x>0</x>

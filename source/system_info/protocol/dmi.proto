@@ -15,47 +15,47 @@ message Bios
 {
     message Characteristics
     {
-        bool has_isa                         = 1;
-        bool has_mca                         = 2;
-        bool has_eisa                        = 3;
-        bool has_pci                         = 4;
-        bool has_pc_card                     = 5;
-        bool has_pnp                         = 6;
-        bool has_apm                         = 7;
-        bool has_bios_upgradeable            = 8;
-        bool has_bios_shadowing              = 9;
-        bool has_vlb                         = 10;
-        bool has_escd                        = 11;
-        bool has_boot_from_cd                = 12;
-        bool has_selectable_boot             = 13;
-        bool has_socketed_boot_rom           = 14;
-        bool has_boot_from_pc_card           = 15;
-        bool has_edd                         = 16;
-        bool has_japanese_floppy_for_nec9800 = 17;
-        bool has_japanece_floppy_for_toshiba = 18;
-        bool has_525_360kb_floppy            = 19;
-        bool has_525_12mb_floppy             = 20;
-        bool has_35_720kb_floppy             = 21;
-        bool has_35_288mb_floppy             = 22;
-        bool has_print_screen                = 23;
-        bool has_8042_keyboard               = 24;
-        bool has_serial                      = 25;
-        bool has_printer                     = 26;
-        bool has_cga_video                   = 27;
-        bool has_nec_pc98                    = 28;
-        bool has_acpi                        = 29;
-        bool has_usb_legacy                  = 30;
-        bool has_agp                         = 31;
-        bool has_i2o_boot                    = 32;
-        bool has_ls120_boot                  = 33;
-        bool has_atapi_zip_drive_boot        = 34;
-        bool has_ieee1394_boot               = 35;
-        bool has_smart_battery               = 36;
-        bool has_bios_boot_specification     = 37;
-        bool has_key_init_network_boot       = 38;
-        bool has_targeted_content_distrib    = 39;
-        bool has_uefi                        = 40;
-        bool has_virtual_machine             = 41;
+        bool isa                         = 1;
+        bool mca                         = 2;
+        bool eisa                        = 3;
+        bool pci                         = 4;
+        bool pc_card                     = 5;
+        bool pnp                         = 6;
+        bool apm                         = 7;
+        bool bios_upgradeable            = 8;
+        bool bios_shadowing              = 9;
+        bool vlb                         = 10;
+        bool escd                        = 11;
+        bool boot_from_cd                = 12;
+        bool selectable_boot             = 13;
+        bool socketed_boot_rom           = 14;
+        bool boot_from_pc_card           = 15;
+        bool edd                         = 16;
+        bool japanese_floppy_for_nec9800 = 17;
+        bool japanese_floppy_for_toshiba = 18;
+        bool floppy_525_360kb            = 19;
+        bool floppy_525_12mb             = 20;
+        bool floppy_35_720kb             = 21;
+        bool floppy_35_288mb             = 22;
+        bool print_screen                = 23;
+        bool keyboard_8042               = 24;
+        bool serial                      = 25;
+        bool printer                     = 26;
+        bool cga_video                   = 27;
+        bool nec_pc98                    = 28;
+        bool acpi                        = 29;
+        bool usb_legacy                  = 30;
+        bool agp                         = 31;
+        bool i2o_boot                    = 32;
+        bool ls120_boot                  = 33;
+        bool atapi_zip_drive_boot        = 34;
+        bool ieee1394_boot               = 35;
+        bool smart_battery               = 36;
+        bool bios_boot_specification     = 37;
+        bool key_init_network_boot       = 38;
+        bool targeted_content_distrib    = 39;
+        bool uefi                        = 40;
+        bool virtual_machine             = 41;
     }
 
     string manufacturer             = 1;
@@ -65,7 +65,7 @@ message Bios
     string bios_revision            = 5;
     string firmware_revision        = 6;
     string address                  = 7;
-    int32 runtime_size              = 8;
+    uint64 runtime_size             = 8;
     Characteristics characteristics = 9;
 }
 

@@ -937,47 +937,47 @@ const int SystemSlot::Length_ARRAYSIZE;
 void Bios_Characteristics::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Bios_Characteristics::kHasIsaFieldNumber;
-const int Bios_Characteristics::kHasMcaFieldNumber;
-const int Bios_Characteristics::kHasEisaFieldNumber;
-const int Bios_Characteristics::kHasPciFieldNumber;
-const int Bios_Characteristics::kHasPcCardFieldNumber;
-const int Bios_Characteristics::kHasPnpFieldNumber;
-const int Bios_Characteristics::kHasApmFieldNumber;
-const int Bios_Characteristics::kHasBiosUpgradeableFieldNumber;
-const int Bios_Characteristics::kHasBiosShadowingFieldNumber;
-const int Bios_Characteristics::kHasVlbFieldNumber;
-const int Bios_Characteristics::kHasEscdFieldNumber;
-const int Bios_Characteristics::kHasBootFromCdFieldNumber;
-const int Bios_Characteristics::kHasSelectableBootFieldNumber;
-const int Bios_Characteristics::kHasSocketedBootRomFieldNumber;
-const int Bios_Characteristics::kHasBootFromPcCardFieldNumber;
-const int Bios_Characteristics::kHasEddFieldNumber;
-const int Bios_Characteristics::kHasJapaneseFloppyForNec9800FieldNumber;
-const int Bios_Characteristics::kHasJapaneceFloppyForToshibaFieldNumber;
-const int Bios_Characteristics::kHas525360KbFloppyFieldNumber;
-const int Bios_Characteristics::kHas52512MbFloppyFieldNumber;
-const int Bios_Characteristics::kHas35720KbFloppyFieldNumber;
-const int Bios_Characteristics::kHas35288MbFloppyFieldNumber;
-const int Bios_Characteristics::kHasPrintScreenFieldNumber;
-const int Bios_Characteristics::kHas8042KeyboardFieldNumber;
-const int Bios_Characteristics::kHasSerialFieldNumber;
-const int Bios_Characteristics::kHasPrinterFieldNumber;
-const int Bios_Characteristics::kHasCgaVideoFieldNumber;
-const int Bios_Characteristics::kHasNecPc98FieldNumber;
-const int Bios_Characteristics::kHasAcpiFieldNumber;
-const int Bios_Characteristics::kHasUsbLegacyFieldNumber;
-const int Bios_Characteristics::kHasAgpFieldNumber;
-const int Bios_Characteristics::kHasI2OBootFieldNumber;
-const int Bios_Characteristics::kHasLs120BootFieldNumber;
-const int Bios_Characteristics::kHasAtapiZipDriveBootFieldNumber;
-const int Bios_Characteristics::kHasIeee1394BootFieldNumber;
-const int Bios_Characteristics::kHasSmartBatteryFieldNumber;
-const int Bios_Characteristics::kHasBiosBootSpecificationFieldNumber;
-const int Bios_Characteristics::kHasKeyInitNetworkBootFieldNumber;
-const int Bios_Characteristics::kHasTargetedContentDistribFieldNumber;
-const int Bios_Characteristics::kHasUefiFieldNumber;
-const int Bios_Characteristics::kHasVirtualMachineFieldNumber;
+const int Bios_Characteristics::kIsaFieldNumber;
+const int Bios_Characteristics::kMcaFieldNumber;
+const int Bios_Characteristics::kEisaFieldNumber;
+const int Bios_Characteristics::kPciFieldNumber;
+const int Bios_Characteristics::kPcCardFieldNumber;
+const int Bios_Characteristics::kPnpFieldNumber;
+const int Bios_Characteristics::kApmFieldNumber;
+const int Bios_Characteristics::kBiosUpgradeableFieldNumber;
+const int Bios_Characteristics::kBiosShadowingFieldNumber;
+const int Bios_Characteristics::kVlbFieldNumber;
+const int Bios_Characteristics::kEscdFieldNumber;
+const int Bios_Characteristics::kBootFromCdFieldNumber;
+const int Bios_Characteristics::kSelectableBootFieldNumber;
+const int Bios_Characteristics::kSocketedBootRomFieldNumber;
+const int Bios_Characteristics::kBootFromPcCardFieldNumber;
+const int Bios_Characteristics::kEddFieldNumber;
+const int Bios_Characteristics::kJapaneseFloppyForNec9800FieldNumber;
+const int Bios_Characteristics::kJapaneseFloppyForToshibaFieldNumber;
+const int Bios_Characteristics::kFloppy525360KbFieldNumber;
+const int Bios_Characteristics::kFloppy52512MbFieldNumber;
+const int Bios_Characteristics::kFloppy35720KbFieldNumber;
+const int Bios_Characteristics::kFloppy35288MbFieldNumber;
+const int Bios_Characteristics::kPrintScreenFieldNumber;
+const int Bios_Characteristics::kKeyboard8042FieldNumber;
+const int Bios_Characteristics::kSerialFieldNumber;
+const int Bios_Characteristics::kPrinterFieldNumber;
+const int Bios_Characteristics::kCgaVideoFieldNumber;
+const int Bios_Characteristics::kNecPc98FieldNumber;
+const int Bios_Characteristics::kAcpiFieldNumber;
+const int Bios_Characteristics::kUsbLegacyFieldNumber;
+const int Bios_Characteristics::kAgpFieldNumber;
+const int Bios_Characteristics::kI2OBootFieldNumber;
+const int Bios_Characteristics::kLs120BootFieldNumber;
+const int Bios_Characteristics::kAtapiZipDriveBootFieldNumber;
+const int Bios_Characteristics::kIeee1394BootFieldNumber;
+const int Bios_Characteristics::kSmartBatteryFieldNumber;
+const int Bios_Characteristics::kBiosBootSpecificationFieldNumber;
+const int Bios_Characteristics::kKeyInitNetworkBootFieldNumber;
+const int Bios_Characteristics::kTargetedContentDistribFieldNumber;
+const int Bios_Characteristics::kUefiFieldNumber;
+const int Bios_Characteristics::kVirtualMachineFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Bios_Characteristics::Bios_Characteristics()
@@ -991,16 +991,16 @@ Bios_Characteristics::Bios_Characteristics(const Bios_Characteristics& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&has_isa_, &from.has_isa_,
-    static_cast<size_t>(reinterpret_cast<char*>(&has_virtual_machine_) -
-    reinterpret_cast<char*>(&has_isa_)) + sizeof(has_virtual_machine_));
+  ::memcpy(&isa_, &from.isa_,
+    static_cast<size_t>(reinterpret_cast<char*>(&virtual_machine_) -
+    reinterpret_cast<char*>(&isa_)) + sizeof(virtual_machine_));
   // @@protoc_insertion_point(copy_constructor:aspia.system_info.dmi.Bios.Characteristics)
 }
 
 void Bios_Characteristics::SharedCtor() {
-  ::memset(&has_isa_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_virtual_machine_) -
-      reinterpret_cast<char*>(&has_isa_)) + sizeof(has_virtual_machine_));
+  ::memset(&isa_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&virtual_machine_) -
+      reinterpret_cast<char*>(&isa_)) + sizeof(virtual_machine_));
 }
 
 Bios_Characteristics::~Bios_Characteristics() {
@@ -1026,9 +1026,9 @@ void Bios_Characteristics::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&has_isa_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&has_virtual_machine_) -
-      reinterpret_cast<char*>(&has_isa_)) + sizeof(has_virtual_machine_));
+  ::memset(&isa_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&virtual_machine_) -
+      reinterpret_cast<char*>(&isa_)) + sizeof(virtual_machine_));
   _internal_metadata_.Clear();
 }
 
@@ -1048,574 +1048,574 @@ bool Bios_Characteristics::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bool has_isa = 1;
+      // bool isa = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_isa_)));
+                 input, &isa_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_mca = 2;
+      // bool mca = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_mca_)));
+                 input, &mca_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_eisa = 3;
+      // bool eisa = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_eisa_)));
+                 input, &eisa_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_pci = 4;
+      // bool pci = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_pci_)));
+                 input, &pci_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_pc_card = 5;
+      // bool pc_card = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_pc_card_)));
+                 input, &pc_card_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_pnp = 6;
+      // bool pnp = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_pnp_)));
+                 input, &pnp_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_apm = 7;
+      // bool apm = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(56u /* 56 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_apm_)));
+                 input, &apm_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_bios_upgradeable = 8;
+      // bool bios_upgradeable = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_bios_upgradeable_)));
+                 input, &bios_upgradeable_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_bios_shadowing = 9;
+      // bool bios_shadowing = 9;
       case 9: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(72u /* 72 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_bios_shadowing_)));
+                 input, &bios_shadowing_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_vlb = 10;
+      // bool vlb = 10;
       case 10: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(80u /* 80 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_vlb_)));
+                 input, &vlb_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_escd = 11;
+      // bool escd = 11;
       case 11: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_escd_)));
+                 input, &escd_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_boot_from_cd = 12;
+      // bool boot_from_cd = 12;
       case 12: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(96u /* 96 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_boot_from_cd_)));
+                 input, &boot_from_cd_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_selectable_boot = 13;
+      // bool selectable_boot = 13;
       case 13: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_selectable_boot_)));
+                 input, &selectable_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_socketed_boot_rom = 14;
+      // bool socketed_boot_rom = 14;
       case 14: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(112u /* 112 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_socketed_boot_rom_)));
+                 input, &socketed_boot_rom_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_boot_from_pc_card = 15;
+      // bool boot_from_pc_card = 15;
       case 15: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_boot_from_pc_card_)));
+                 input, &boot_from_pc_card_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_edd = 16;
+      // bool edd = 16;
       case 16: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_edd_)));
+                 input, &edd_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_japanese_floppy_for_nec9800 = 17;
+      // bool japanese_floppy_for_nec9800 = 17;
       case 17: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(136u /* 136 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_japanese_floppy_for_nec9800_)));
+                 input, &japanese_floppy_for_nec9800_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_japanece_floppy_for_toshiba = 18;
+      // bool japanese_floppy_for_toshiba = 18;
       case 18: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(144u /* 144 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_japanece_floppy_for_toshiba_)));
+                 input, &japanese_floppy_for_toshiba_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_525_360kb_floppy = 19;
+      // bool floppy_525_360kb = 19;
       case 19: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(152u /* 152 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_525_360kb_floppy_)));
+                 input, &floppy_525_360kb_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_525_12mb_floppy = 20;
+      // bool floppy_525_12mb = 20;
       case 20: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(160u /* 160 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_525_12mb_floppy_)));
+                 input, &floppy_525_12mb_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_35_720kb_floppy = 21;
+      // bool floppy_35_720kb = 21;
       case 21: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(168u /* 168 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_35_720kb_floppy_)));
+                 input, &floppy_35_720kb_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_35_288mb_floppy = 22;
+      // bool floppy_35_288mb = 22;
       case 22: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(176u /* 176 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_35_288mb_floppy_)));
+                 input, &floppy_35_288mb_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_print_screen = 23;
+      // bool print_screen = 23;
       case 23: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(184u /* 184 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_print_screen_)));
+                 input, &print_screen_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_8042_keyboard = 24;
+      // bool keyboard_8042 = 24;
       case 24: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(192u /* 192 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_8042_keyboard_)));
+                 input, &keyboard_8042_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_serial = 25;
+      // bool serial = 25;
       case 25: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(200u /* 200 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_serial_)));
+                 input, &serial_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_printer = 26;
+      // bool printer = 26;
       case 26: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(208u /* 208 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_printer_)));
+                 input, &printer_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_cga_video = 27;
+      // bool cga_video = 27;
       case 27: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(216u /* 216 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_cga_video_)));
+                 input, &cga_video_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_nec_pc98 = 28;
+      // bool nec_pc98 = 28;
       case 28: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(224u /* 224 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_nec_pc98_)));
+                 input, &nec_pc98_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_acpi = 29;
+      // bool acpi = 29;
       case 29: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(232u /* 232 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_acpi_)));
+                 input, &acpi_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_usb_legacy = 30;
+      // bool usb_legacy = 30;
       case 30: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(240u /* 240 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_usb_legacy_)));
+                 input, &usb_legacy_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_agp = 31;
+      // bool agp = 31;
       case 31: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(248u /* 248 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_agp_)));
+                 input, &agp_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_i2o_boot = 32;
+      // bool i2o_boot = 32;
       case 32: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(0u /* 256 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_i2o_boot_)));
+                 input, &i2o_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_ls120_boot = 33;
+      // bool ls120_boot = 33;
       case 33: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 264 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_ls120_boot_)));
+                 input, &ls120_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_atapi_zip_drive_boot = 34;
+      // bool atapi_zip_drive_boot = 34;
       case 34: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(16u /* 272 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_atapi_zip_drive_boot_)));
+                 input, &atapi_zip_drive_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_ieee1394_boot = 35;
+      // bool ieee1394_boot = 35;
       case 35: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(24u /* 280 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_ieee1394_boot_)));
+                 input, &ieee1394_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_smart_battery = 36;
+      // bool smart_battery = 36;
       case 36: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 288 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_smart_battery_)));
+                 input, &smart_battery_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_bios_boot_specification = 37;
+      // bool bios_boot_specification = 37;
       case 37: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(40u /* 296 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_bios_boot_specification_)));
+                 input, &bios_boot_specification_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_key_init_network_boot = 38;
+      // bool key_init_network_boot = 38;
       case 38: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(48u /* 304 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_key_init_network_boot_)));
+                 input, &key_init_network_boot_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_targeted_content_distrib = 39;
+      // bool targeted_content_distrib = 39;
       case 39: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(56u /* 312 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_targeted_content_distrib_)));
+                 input, &targeted_content_distrib_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_uefi = 40;
+      // bool uefi = 40;
       case 40: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(64u /* 320 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_uefi_)));
+                 input, &uefi_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // bool has_virtual_machine = 41;
+      // bool virtual_machine = 41;
       case 41: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(72u /* 328 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &has_virtual_machine_)));
+                 input, &virtual_machine_)));
         } else {
           goto handle_unusual;
         }
@@ -1648,209 +1648,209 @@ void Bios_Characteristics::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool has_isa = 1;
-  if (this->has_isa() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->has_isa(), output);
+  // bool isa = 1;
+  if (this->isa() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->isa(), output);
   }
 
-  // bool has_mca = 2;
-  if (this->has_mca() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->has_mca(), output);
+  // bool mca = 2;
+  if (this->mca() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->mca(), output);
   }
 
-  // bool has_eisa = 3;
-  if (this->has_eisa() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->has_eisa(), output);
+  // bool eisa = 3;
+  if (this->eisa() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->eisa(), output);
   }
 
-  // bool has_pci = 4;
-  if (this->has_pci() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->has_pci(), output);
+  // bool pci = 4;
+  if (this->pci() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->pci(), output);
   }
 
-  // bool has_pc_card = 5;
-  if (this->has_pc_card() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->has_pc_card(), output);
+  // bool pc_card = 5;
+  if (this->pc_card() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->pc_card(), output);
   }
 
-  // bool has_pnp = 6;
-  if (this->has_pnp() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->has_pnp(), output);
+  // bool pnp = 6;
+  if (this->pnp() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->pnp(), output);
   }
 
-  // bool has_apm = 7;
-  if (this->has_apm() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->has_apm(), output);
+  // bool apm = 7;
+  if (this->apm() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->apm(), output);
   }
 
-  // bool has_bios_upgradeable = 8;
-  if (this->has_bios_upgradeable() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->has_bios_upgradeable(), output);
+  // bool bios_upgradeable = 8;
+  if (this->bios_upgradeable() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->bios_upgradeable(), output);
   }
 
-  // bool has_bios_shadowing = 9;
-  if (this->has_bios_shadowing() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(9, this->has_bios_shadowing(), output);
+  // bool bios_shadowing = 9;
+  if (this->bios_shadowing() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(9, this->bios_shadowing(), output);
   }
 
-  // bool has_vlb = 10;
-  if (this->has_vlb() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->has_vlb(), output);
+  // bool vlb = 10;
+  if (this->vlb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->vlb(), output);
   }
 
-  // bool has_escd = 11;
-  if (this->has_escd() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(11, this->has_escd(), output);
+  // bool escd = 11;
+  if (this->escd() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(11, this->escd(), output);
   }
 
-  // bool has_boot_from_cd = 12;
-  if (this->has_boot_from_cd() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->has_boot_from_cd(), output);
+  // bool boot_from_cd = 12;
+  if (this->boot_from_cd() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->boot_from_cd(), output);
   }
 
-  // bool has_selectable_boot = 13;
-  if (this->has_selectable_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->has_selectable_boot(), output);
+  // bool selectable_boot = 13;
+  if (this->selectable_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(13, this->selectable_boot(), output);
   }
 
-  // bool has_socketed_boot_rom = 14;
-  if (this->has_socketed_boot_rom() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(14, this->has_socketed_boot_rom(), output);
+  // bool socketed_boot_rom = 14;
+  if (this->socketed_boot_rom() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(14, this->socketed_boot_rom(), output);
   }
 
-  // bool has_boot_from_pc_card = 15;
-  if (this->has_boot_from_pc_card() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->has_boot_from_pc_card(), output);
+  // bool boot_from_pc_card = 15;
+  if (this->boot_from_pc_card() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->boot_from_pc_card(), output);
   }
 
-  // bool has_edd = 16;
-  if (this->has_edd() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->has_edd(), output);
+  // bool edd = 16;
+  if (this->edd() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->edd(), output);
   }
 
-  // bool has_japanese_floppy_for_nec9800 = 17;
-  if (this->has_japanese_floppy_for_nec9800() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(17, this->has_japanese_floppy_for_nec9800(), output);
+  // bool japanese_floppy_for_nec9800 = 17;
+  if (this->japanese_floppy_for_nec9800() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(17, this->japanese_floppy_for_nec9800(), output);
   }
 
-  // bool has_japanece_floppy_for_toshiba = 18;
-  if (this->has_japanece_floppy_for_toshiba() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(18, this->has_japanece_floppy_for_toshiba(), output);
+  // bool japanese_floppy_for_toshiba = 18;
+  if (this->japanese_floppy_for_toshiba() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(18, this->japanese_floppy_for_toshiba(), output);
   }
 
-  // bool has_525_360kb_floppy = 19;
-  if (this->has_525_360kb_floppy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->has_525_360kb_floppy(), output);
+  // bool floppy_525_360kb = 19;
+  if (this->floppy_525_360kb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->floppy_525_360kb(), output);
   }
 
-  // bool has_525_12mb_floppy = 20;
-  if (this->has_525_12mb_floppy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(20, this->has_525_12mb_floppy(), output);
+  // bool floppy_525_12mb = 20;
+  if (this->floppy_525_12mb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(20, this->floppy_525_12mb(), output);
   }
 
-  // bool has_35_720kb_floppy = 21;
-  if (this->has_35_720kb_floppy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(21, this->has_35_720kb_floppy(), output);
+  // bool floppy_35_720kb = 21;
+  if (this->floppy_35_720kb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(21, this->floppy_35_720kb(), output);
   }
 
-  // bool has_35_288mb_floppy = 22;
-  if (this->has_35_288mb_floppy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(22, this->has_35_288mb_floppy(), output);
+  // bool floppy_35_288mb = 22;
+  if (this->floppy_35_288mb() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(22, this->floppy_35_288mb(), output);
   }
 
-  // bool has_print_screen = 23;
-  if (this->has_print_screen() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(23, this->has_print_screen(), output);
+  // bool print_screen = 23;
+  if (this->print_screen() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(23, this->print_screen(), output);
   }
 
-  // bool has_8042_keyboard = 24;
-  if (this->has_8042_keyboard() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(24, this->has_8042_keyboard(), output);
+  // bool keyboard_8042 = 24;
+  if (this->keyboard_8042() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(24, this->keyboard_8042(), output);
   }
 
-  // bool has_serial = 25;
-  if (this->has_serial() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->has_serial(), output);
+  // bool serial = 25;
+  if (this->serial() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(25, this->serial(), output);
   }
 
-  // bool has_printer = 26;
-  if (this->has_printer() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(26, this->has_printer(), output);
+  // bool printer = 26;
+  if (this->printer() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(26, this->printer(), output);
   }
 
-  // bool has_cga_video = 27;
-  if (this->has_cga_video() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(27, this->has_cga_video(), output);
+  // bool cga_video = 27;
+  if (this->cga_video() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(27, this->cga_video(), output);
   }
 
-  // bool has_nec_pc98 = 28;
-  if (this->has_nec_pc98() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(28, this->has_nec_pc98(), output);
+  // bool nec_pc98 = 28;
+  if (this->nec_pc98() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(28, this->nec_pc98(), output);
   }
 
-  // bool has_acpi = 29;
-  if (this->has_acpi() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(29, this->has_acpi(), output);
+  // bool acpi = 29;
+  if (this->acpi() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(29, this->acpi(), output);
   }
 
-  // bool has_usb_legacy = 30;
-  if (this->has_usb_legacy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(30, this->has_usb_legacy(), output);
+  // bool usb_legacy = 30;
+  if (this->usb_legacy() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(30, this->usb_legacy(), output);
   }
 
-  // bool has_agp = 31;
-  if (this->has_agp() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(31, this->has_agp(), output);
+  // bool agp = 31;
+  if (this->agp() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(31, this->agp(), output);
   }
 
-  // bool has_i2o_boot = 32;
-  if (this->has_i2o_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(32, this->has_i2o_boot(), output);
+  // bool i2o_boot = 32;
+  if (this->i2o_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(32, this->i2o_boot(), output);
   }
 
-  // bool has_ls120_boot = 33;
-  if (this->has_ls120_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(33, this->has_ls120_boot(), output);
+  // bool ls120_boot = 33;
+  if (this->ls120_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(33, this->ls120_boot(), output);
   }
 
-  // bool has_atapi_zip_drive_boot = 34;
-  if (this->has_atapi_zip_drive_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(34, this->has_atapi_zip_drive_boot(), output);
+  // bool atapi_zip_drive_boot = 34;
+  if (this->atapi_zip_drive_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(34, this->atapi_zip_drive_boot(), output);
   }
 
-  // bool has_ieee1394_boot = 35;
-  if (this->has_ieee1394_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(35, this->has_ieee1394_boot(), output);
+  // bool ieee1394_boot = 35;
+  if (this->ieee1394_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(35, this->ieee1394_boot(), output);
   }
 
-  // bool has_smart_battery = 36;
-  if (this->has_smart_battery() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(36, this->has_smart_battery(), output);
+  // bool smart_battery = 36;
+  if (this->smart_battery() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(36, this->smart_battery(), output);
   }
 
-  // bool has_bios_boot_specification = 37;
-  if (this->has_bios_boot_specification() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(37, this->has_bios_boot_specification(), output);
+  // bool bios_boot_specification = 37;
+  if (this->bios_boot_specification() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(37, this->bios_boot_specification(), output);
   }
 
-  // bool has_key_init_network_boot = 38;
-  if (this->has_key_init_network_boot() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(38, this->has_key_init_network_boot(), output);
+  // bool key_init_network_boot = 38;
+  if (this->key_init_network_boot() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(38, this->key_init_network_boot(), output);
   }
 
-  // bool has_targeted_content_distrib = 39;
-  if (this->has_targeted_content_distrib() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(39, this->has_targeted_content_distrib(), output);
+  // bool targeted_content_distrib = 39;
+  if (this->targeted_content_distrib() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(39, this->targeted_content_distrib(), output);
   }
 
-  // bool has_uefi = 40;
-  if (this->has_uefi() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(40, this->has_uefi(), output);
+  // bool uefi = 40;
+  if (this->uefi() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(40, this->uefi(), output);
   }
 
-  // bool has_virtual_machine = 41;
-  if (this->has_virtual_machine() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(41, this->has_virtual_machine(), output);
+  // bool virtual_machine = 41;
+  if (this->virtual_machine() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(41, this->virtual_machine(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -1864,208 +1864,208 @@ size_t Bios_Characteristics::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // bool has_isa = 1;
-  if (this->has_isa() != 0) {
+  // bool isa = 1;
+  if (this->isa() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_mca = 2;
-  if (this->has_mca() != 0) {
+  // bool mca = 2;
+  if (this->mca() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_eisa = 3;
-  if (this->has_eisa() != 0) {
+  // bool eisa = 3;
+  if (this->eisa() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_pci = 4;
-  if (this->has_pci() != 0) {
+  // bool pci = 4;
+  if (this->pci() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_pc_card = 5;
-  if (this->has_pc_card() != 0) {
+  // bool pc_card = 5;
+  if (this->pc_card() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_pnp = 6;
-  if (this->has_pnp() != 0) {
+  // bool pnp = 6;
+  if (this->pnp() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_apm = 7;
-  if (this->has_apm() != 0) {
+  // bool apm = 7;
+  if (this->apm() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_bios_upgradeable = 8;
-  if (this->has_bios_upgradeable() != 0) {
+  // bool bios_upgradeable = 8;
+  if (this->bios_upgradeable() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_bios_shadowing = 9;
-  if (this->has_bios_shadowing() != 0) {
+  // bool bios_shadowing = 9;
+  if (this->bios_shadowing() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_vlb = 10;
-  if (this->has_vlb() != 0) {
+  // bool vlb = 10;
+  if (this->vlb() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_escd = 11;
-  if (this->has_escd() != 0) {
+  // bool escd = 11;
+  if (this->escd() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_boot_from_cd = 12;
-  if (this->has_boot_from_cd() != 0) {
+  // bool boot_from_cd = 12;
+  if (this->boot_from_cd() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_selectable_boot = 13;
-  if (this->has_selectable_boot() != 0) {
+  // bool selectable_boot = 13;
+  if (this->selectable_boot() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_socketed_boot_rom = 14;
-  if (this->has_socketed_boot_rom() != 0) {
+  // bool socketed_boot_rom = 14;
+  if (this->socketed_boot_rom() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_boot_from_pc_card = 15;
-  if (this->has_boot_from_pc_card() != 0) {
+  // bool boot_from_pc_card = 15;
+  if (this->boot_from_pc_card() != 0) {
     total_size += 1 + 1;
   }
 
-  // bool has_edd = 16;
-  if (this->has_edd() != 0) {
+  // bool edd = 16;
+  if (this->edd() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_japanese_floppy_for_nec9800 = 17;
-  if (this->has_japanese_floppy_for_nec9800() != 0) {
+  // bool japanese_floppy_for_nec9800 = 17;
+  if (this->japanese_floppy_for_nec9800() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_japanece_floppy_for_toshiba = 18;
-  if (this->has_japanece_floppy_for_toshiba() != 0) {
+  // bool japanese_floppy_for_toshiba = 18;
+  if (this->japanese_floppy_for_toshiba() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_525_360kb_floppy = 19;
-  if (this->has_525_360kb_floppy() != 0) {
+  // bool floppy_525_360kb = 19;
+  if (this->floppy_525_360kb() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_525_12mb_floppy = 20;
-  if (this->has_525_12mb_floppy() != 0) {
+  // bool floppy_525_12mb = 20;
+  if (this->floppy_525_12mb() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_35_720kb_floppy = 21;
-  if (this->has_35_720kb_floppy() != 0) {
+  // bool floppy_35_720kb = 21;
+  if (this->floppy_35_720kb() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_35_288mb_floppy = 22;
-  if (this->has_35_288mb_floppy() != 0) {
+  // bool floppy_35_288mb = 22;
+  if (this->floppy_35_288mb() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_print_screen = 23;
-  if (this->has_print_screen() != 0) {
+  // bool print_screen = 23;
+  if (this->print_screen() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_8042_keyboard = 24;
-  if (this->has_8042_keyboard() != 0) {
+  // bool keyboard_8042 = 24;
+  if (this->keyboard_8042() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_serial = 25;
-  if (this->has_serial() != 0) {
+  // bool serial = 25;
+  if (this->serial() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_printer = 26;
-  if (this->has_printer() != 0) {
+  // bool printer = 26;
+  if (this->printer() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_cga_video = 27;
-  if (this->has_cga_video() != 0) {
+  // bool cga_video = 27;
+  if (this->cga_video() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_nec_pc98 = 28;
-  if (this->has_nec_pc98() != 0) {
+  // bool nec_pc98 = 28;
+  if (this->nec_pc98() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_acpi = 29;
-  if (this->has_acpi() != 0) {
+  // bool acpi = 29;
+  if (this->acpi() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_usb_legacy = 30;
-  if (this->has_usb_legacy() != 0) {
+  // bool usb_legacy = 30;
+  if (this->usb_legacy() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_agp = 31;
-  if (this->has_agp() != 0) {
+  // bool agp = 31;
+  if (this->agp() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_i2o_boot = 32;
-  if (this->has_i2o_boot() != 0) {
+  // bool i2o_boot = 32;
+  if (this->i2o_boot() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_ls120_boot = 33;
-  if (this->has_ls120_boot() != 0) {
+  // bool ls120_boot = 33;
+  if (this->ls120_boot() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_atapi_zip_drive_boot = 34;
-  if (this->has_atapi_zip_drive_boot() != 0) {
+  // bool atapi_zip_drive_boot = 34;
+  if (this->atapi_zip_drive_boot() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_ieee1394_boot = 35;
-  if (this->has_ieee1394_boot() != 0) {
+  // bool ieee1394_boot = 35;
+  if (this->ieee1394_boot() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_smart_battery = 36;
-  if (this->has_smart_battery() != 0) {
+  // bool smart_battery = 36;
+  if (this->smart_battery() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_bios_boot_specification = 37;
-  if (this->has_bios_boot_specification() != 0) {
+  // bool bios_boot_specification = 37;
+  if (this->bios_boot_specification() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_key_init_network_boot = 38;
-  if (this->has_key_init_network_boot() != 0) {
+  // bool key_init_network_boot = 38;
+  if (this->key_init_network_boot() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_targeted_content_distrib = 39;
-  if (this->has_targeted_content_distrib() != 0) {
+  // bool targeted_content_distrib = 39;
+  if (this->targeted_content_distrib() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_uefi = 40;
-  if (this->has_uefi() != 0) {
+  // bool uefi = 40;
+  if (this->uefi() != 0) {
     total_size += 2 + 1;
   }
 
-  // bool has_virtual_machine = 41;
-  if (this->has_virtual_machine() != 0) {
+  // bool virtual_machine = 41;
+  if (this->virtual_machine() != 0) {
     total_size += 2 + 1;
   }
 
@@ -2086,128 +2086,128 @@ void Bios_Characteristics::MergeFrom(const Bios_Characteristics& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_isa() != 0) {
-    set_has_isa(from.has_isa());
+  if (from.isa() != 0) {
+    set_isa(from.isa());
   }
-  if (from.has_mca() != 0) {
-    set_has_mca(from.has_mca());
+  if (from.mca() != 0) {
+    set_mca(from.mca());
   }
-  if (from.has_eisa() != 0) {
-    set_has_eisa(from.has_eisa());
+  if (from.eisa() != 0) {
+    set_eisa(from.eisa());
   }
-  if (from.has_pci() != 0) {
-    set_has_pci(from.has_pci());
+  if (from.pci() != 0) {
+    set_pci(from.pci());
   }
-  if (from.has_pc_card() != 0) {
-    set_has_pc_card(from.has_pc_card());
+  if (from.pc_card() != 0) {
+    set_pc_card(from.pc_card());
   }
-  if (from.has_pnp() != 0) {
-    set_has_pnp(from.has_pnp());
+  if (from.pnp() != 0) {
+    set_pnp(from.pnp());
   }
-  if (from.has_apm() != 0) {
-    set_has_apm(from.has_apm());
+  if (from.apm() != 0) {
+    set_apm(from.apm());
   }
-  if (from.has_bios_upgradeable() != 0) {
-    set_has_bios_upgradeable(from.has_bios_upgradeable());
+  if (from.bios_upgradeable() != 0) {
+    set_bios_upgradeable(from.bios_upgradeable());
   }
-  if (from.has_bios_shadowing() != 0) {
-    set_has_bios_shadowing(from.has_bios_shadowing());
+  if (from.bios_shadowing() != 0) {
+    set_bios_shadowing(from.bios_shadowing());
   }
-  if (from.has_vlb() != 0) {
-    set_has_vlb(from.has_vlb());
+  if (from.vlb() != 0) {
+    set_vlb(from.vlb());
   }
-  if (from.has_escd() != 0) {
-    set_has_escd(from.has_escd());
+  if (from.escd() != 0) {
+    set_escd(from.escd());
   }
-  if (from.has_boot_from_cd() != 0) {
-    set_has_boot_from_cd(from.has_boot_from_cd());
+  if (from.boot_from_cd() != 0) {
+    set_boot_from_cd(from.boot_from_cd());
   }
-  if (from.has_selectable_boot() != 0) {
-    set_has_selectable_boot(from.has_selectable_boot());
+  if (from.selectable_boot() != 0) {
+    set_selectable_boot(from.selectable_boot());
   }
-  if (from.has_socketed_boot_rom() != 0) {
-    set_has_socketed_boot_rom(from.has_socketed_boot_rom());
+  if (from.socketed_boot_rom() != 0) {
+    set_socketed_boot_rom(from.socketed_boot_rom());
   }
-  if (from.has_boot_from_pc_card() != 0) {
-    set_has_boot_from_pc_card(from.has_boot_from_pc_card());
+  if (from.boot_from_pc_card() != 0) {
+    set_boot_from_pc_card(from.boot_from_pc_card());
   }
-  if (from.has_edd() != 0) {
-    set_has_edd(from.has_edd());
+  if (from.edd() != 0) {
+    set_edd(from.edd());
   }
-  if (from.has_japanese_floppy_for_nec9800() != 0) {
-    set_has_japanese_floppy_for_nec9800(from.has_japanese_floppy_for_nec9800());
+  if (from.japanese_floppy_for_nec9800() != 0) {
+    set_japanese_floppy_for_nec9800(from.japanese_floppy_for_nec9800());
   }
-  if (from.has_japanece_floppy_for_toshiba() != 0) {
-    set_has_japanece_floppy_for_toshiba(from.has_japanece_floppy_for_toshiba());
+  if (from.japanese_floppy_for_toshiba() != 0) {
+    set_japanese_floppy_for_toshiba(from.japanese_floppy_for_toshiba());
   }
-  if (from.has_525_360kb_floppy() != 0) {
-    set_has_525_360kb_floppy(from.has_525_360kb_floppy());
+  if (from.floppy_525_360kb() != 0) {
+    set_floppy_525_360kb(from.floppy_525_360kb());
   }
-  if (from.has_525_12mb_floppy() != 0) {
-    set_has_525_12mb_floppy(from.has_525_12mb_floppy());
+  if (from.floppy_525_12mb() != 0) {
+    set_floppy_525_12mb(from.floppy_525_12mb());
   }
-  if (from.has_35_720kb_floppy() != 0) {
-    set_has_35_720kb_floppy(from.has_35_720kb_floppy());
+  if (from.floppy_35_720kb() != 0) {
+    set_floppy_35_720kb(from.floppy_35_720kb());
   }
-  if (from.has_35_288mb_floppy() != 0) {
-    set_has_35_288mb_floppy(from.has_35_288mb_floppy());
+  if (from.floppy_35_288mb() != 0) {
+    set_floppy_35_288mb(from.floppy_35_288mb());
   }
-  if (from.has_print_screen() != 0) {
-    set_has_print_screen(from.has_print_screen());
+  if (from.print_screen() != 0) {
+    set_print_screen(from.print_screen());
   }
-  if (from.has_8042_keyboard() != 0) {
-    set_has_8042_keyboard(from.has_8042_keyboard());
+  if (from.keyboard_8042() != 0) {
+    set_keyboard_8042(from.keyboard_8042());
   }
-  if (from.has_serial() != 0) {
-    set_has_serial(from.has_serial());
+  if (from.serial() != 0) {
+    set_serial(from.serial());
   }
-  if (from.has_printer() != 0) {
-    set_has_printer(from.has_printer());
+  if (from.printer() != 0) {
+    set_printer(from.printer());
   }
-  if (from.has_cga_video() != 0) {
-    set_has_cga_video(from.has_cga_video());
+  if (from.cga_video() != 0) {
+    set_cga_video(from.cga_video());
   }
-  if (from.has_nec_pc98() != 0) {
-    set_has_nec_pc98(from.has_nec_pc98());
+  if (from.nec_pc98() != 0) {
+    set_nec_pc98(from.nec_pc98());
   }
-  if (from.has_acpi() != 0) {
-    set_has_acpi(from.has_acpi());
+  if (from.acpi() != 0) {
+    set_acpi(from.acpi());
   }
-  if (from.has_usb_legacy() != 0) {
-    set_has_usb_legacy(from.has_usb_legacy());
+  if (from.usb_legacy() != 0) {
+    set_usb_legacy(from.usb_legacy());
   }
-  if (from.has_agp() != 0) {
-    set_has_agp(from.has_agp());
+  if (from.agp() != 0) {
+    set_agp(from.agp());
   }
-  if (from.has_i2o_boot() != 0) {
-    set_has_i2o_boot(from.has_i2o_boot());
+  if (from.i2o_boot() != 0) {
+    set_i2o_boot(from.i2o_boot());
   }
-  if (from.has_ls120_boot() != 0) {
-    set_has_ls120_boot(from.has_ls120_boot());
+  if (from.ls120_boot() != 0) {
+    set_ls120_boot(from.ls120_boot());
   }
-  if (from.has_atapi_zip_drive_boot() != 0) {
-    set_has_atapi_zip_drive_boot(from.has_atapi_zip_drive_boot());
+  if (from.atapi_zip_drive_boot() != 0) {
+    set_atapi_zip_drive_boot(from.atapi_zip_drive_boot());
   }
-  if (from.has_ieee1394_boot() != 0) {
-    set_has_ieee1394_boot(from.has_ieee1394_boot());
+  if (from.ieee1394_boot() != 0) {
+    set_ieee1394_boot(from.ieee1394_boot());
   }
-  if (from.has_smart_battery() != 0) {
-    set_has_smart_battery(from.has_smart_battery());
+  if (from.smart_battery() != 0) {
+    set_smart_battery(from.smart_battery());
   }
-  if (from.has_bios_boot_specification() != 0) {
-    set_has_bios_boot_specification(from.has_bios_boot_specification());
+  if (from.bios_boot_specification() != 0) {
+    set_bios_boot_specification(from.bios_boot_specification());
   }
-  if (from.has_key_init_network_boot() != 0) {
-    set_has_key_init_network_boot(from.has_key_init_network_boot());
+  if (from.key_init_network_boot() != 0) {
+    set_key_init_network_boot(from.key_init_network_boot());
   }
-  if (from.has_targeted_content_distrib() != 0) {
-    set_has_targeted_content_distrib(from.has_targeted_content_distrib());
+  if (from.targeted_content_distrib() != 0) {
+    set_targeted_content_distrib(from.targeted_content_distrib());
   }
-  if (from.has_uefi() != 0) {
-    set_has_uefi(from.has_uefi());
+  if (from.uefi() != 0) {
+    set_uefi(from.uefi());
   }
-  if (from.has_virtual_machine() != 0) {
-    set_has_virtual_machine(from.has_virtual_machine());
+  if (from.virtual_machine() != 0) {
+    set_virtual_machine(from.virtual_machine());
   }
 }
 
@@ -2228,47 +2228,47 @@ void Bios_Characteristics::Swap(Bios_Characteristics* other) {
 }
 void Bios_Characteristics::InternalSwap(Bios_Characteristics* other) {
   using std::swap;
-  swap(has_isa_, other->has_isa_);
-  swap(has_mca_, other->has_mca_);
-  swap(has_eisa_, other->has_eisa_);
-  swap(has_pci_, other->has_pci_);
-  swap(has_pc_card_, other->has_pc_card_);
-  swap(has_pnp_, other->has_pnp_);
-  swap(has_apm_, other->has_apm_);
-  swap(has_bios_upgradeable_, other->has_bios_upgradeable_);
-  swap(has_bios_shadowing_, other->has_bios_shadowing_);
-  swap(has_vlb_, other->has_vlb_);
-  swap(has_escd_, other->has_escd_);
-  swap(has_boot_from_cd_, other->has_boot_from_cd_);
-  swap(has_selectable_boot_, other->has_selectable_boot_);
-  swap(has_socketed_boot_rom_, other->has_socketed_boot_rom_);
-  swap(has_boot_from_pc_card_, other->has_boot_from_pc_card_);
-  swap(has_edd_, other->has_edd_);
-  swap(has_japanese_floppy_for_nec9800_, other->has_japanese_floppy_for_nec9800_);
-  swap(has_japanece_floppy_for_toshiba_, other->has_japanece_floppy_for_toshiba_);
-  swap(has_525_360kb_floppy_, other->has_525_360kb_floppy_);
-  swap(has_525_12mb_floppy_, other->has_525_12mb_floppy_);
-  swap(has_35_720kb_floppy_, other->has_35_720kb_floppy_);
-  swap(has_35_288mb_floppy_, other->has_35_288mb_floppy_);
-  swap(has_print_screen_, other->has_print_screen_);
-  swap(has_8042_keyboard_, other->has_8042_keyboard_);
-  swap(has_serial_, other->has_serial_);
-  swap(has_printer_, other->has_printer_);
-  swap(has_cga_video_, other->has_cga_video_);
-  swap(has_nec_pc98_, other->has_nec_pc98_);
-  swap(has_acpi_, other->has_acpi_);
-  swap(has_usb_legacy_, other->has_usb_legacy_);
-  swap(has_agp_, other->has_agp_);
-  swap(has_i2o_boot_, other->has_i2o_boot_);
-  swap(has_ls120_boot_, other->has_ls120_boot_);
-  swap(has_atapi_zip_drive_boot_, other->has_atapi_zip_drive_boot_);
-  swap(has_ieee1394_boot_, other->has_ieee1394_boot_);
-  swap(has_smart_battery_, other->has_smart_battery_);
-  swap(has_bios_boot_specification_, other->has_bios_boot_specification_);
-  swap(has_key_init_network_boot_, other->has_key_init_network_boot_);
-  swap(has_targeted_content_distrib_, other->has_targeted_content_distrib_);
-  swap(has_uefi_, other->has_uefi_);
-  swap(has_virtual_machine_, other->has_virtual_machine_);
+  swap(isa_, other->isa_);
+  swap(mca_, other->mca_);
+  swap(eisa_, other->eisa_);
+  swap(pci_, other->pci_);
+  swap(pc_card_, other->pc_card_);
+  swap(pnp_, other->pnp_);
+  swap(apm_, other->apm_);
+  swap(bios_upgradeable_, other->bios_upgradeable_);
+  swap(bios_shadowing_, other->bios_shadowing_);
+  swap(vlb_, other->vlb_);
+  swap(escd_, other->escd_);
+  swap(boot_from_cd_, other->boot_from_cd_);
+  swap(selectable_boot_, other->selectable_boot_);
+  swap(socketed_boot_rom_, other->socketed_boot_rom_);
+  swap(boot_from_pc_card_, other->boot_from_pc_card_);
+  swap(edd_, other->edd_);
+  swap(japanese_floppy_for_nec9800_, other->japanese_floppy_for_nec9800_);
+  swap(japanese_floppy_for_toshiba_, other->japanese_floppy_for_toshiba_);
+  swap(floppy_525_360kb_, other->floppy_525_360kb_);
+  swap(floppy_525_12mb_, other->floppy_525_12mb_);
+  swap(floppy_35_720kb_, other->floppy_35_720kb_);
+  swap(floppy_35_288mb_, other->floppy_35_288mb_);
+  swap(print_screen_, other->print_screen_);
+  swap(keyboard_8042_, other->keyboard_8042_);
+  swap(serial_, other->serial_);
+  swap(printer_, other->printer_);
+  swap(cga_video_, other->cga_video_);
+  swap(nec_pc98_, other->nec_pc98_);
+  swap(acpi_, other->acpi_);
+  swap(usb_legacy_, other->usb_legacy_);
+  swap(agp_, other->agp_);
+  swap(i2o_boot_, other->i2o_boot_);
+  swap(ls120_boot_, other->ls120_boot_);
+  swap(atapi_zip_drive_boot_, other->atapi_zip_drive_boot_);
+  swap(ieee1394_boot_, other->ieee1394_boot_);
+  swap(smart_battery_, other->smart_battery_);
+  swap(bios_boot_specification_, other->bios_boot_specification_);
+  swap(key_init_network_boot_, other->key_init_network_boot_);
+  swap(targeted_content_distrib_, other->targeted_content_distrib_);
+  swap(uefi_, other->uefi_);
+  swap(virtual_machine_, other->virtual_machine_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 
@@ -2525,13 +2525,13 @@ bool Bios::MergePartialFromCodedStream(
         break;
       }
 
-      // int32 runtime_size = 8;
+      // uint64 runtime_size = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(64u /* 64 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &runtime_size_)));
         } else {
           goto handle_unusual;
@@ -2642,9 +2642,9 @@ void Bios::SerializeWithCachedSizes(
       7, this->address(), output);
   }
 
-  // int32 runtime_size = 8;
+  // uint64 runtime_size = 8;
   if (this->runtime_size() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(8, this->runtime_size(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(8, this->runtime_size(), output);
   }
 
   // .aspia.system_info.dmi.Bios.Characteristics characteristics = 9;
@@ -2720,10 +2720,10 @@ size_t Bios::ByteSizeLong() const {
         this->size());
   }
 
-  // int32 runtime_size = 8;
+  // uint64 runtime_size = 8;
   if (this->runtime_size() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int32Size(
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
         this->runtime_size());
   }
 

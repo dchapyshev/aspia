@@ -8,8 +8,8 @@
 #ifndef _ASPIA_SYSTEM_INFO__UI__DMI_PARSER_H
 #define _ASPIA_SYSTEM_INFO__UI__DMI_PARSER_H
 
-#include "system_info/ui/parser.h"
-#include "ui_dmi_parser.h"
+#include "system_info/parser/parser.h"
+#include "system_info/protocol/dmi.pb.h"
 
 namespace aspia {
 
@@ -18,14 +18,24 @@ class DmiParser : public Parser
     Q_OBJECT
 
 public:
-    DmiParser(QWidget* parent);
+    static Parser* create(QObject* parent, const QString& uuid);
+
+    // Parser implementation.
+    QJsonObject toJson() override;
+    QDomElement toXml() override;
+    QDomElement toHtml() override;
+    QString toText() override;
 
 public slots:
     // Parser implementation.
+    void updateData() const override;
     void readReply(const QString& uuid, const QByteArray& data) override;
 
+protected:
+    DmiParser(QObject* parent, const QString& uuid);
+
 private:
-    Ui::DmiParser ui;
+    std::unique_ptr<system_info::dmi::Dmi> dmi_;
 
     Q_DISABLE_COPY(DmiParser)
 };

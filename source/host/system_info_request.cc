@@ -7,6 +7,8 @@
 
 #include "host/system_info_request.h"
 
+#include <QUuid>
+
 namespace aspia {
 
 SystemInfoRequest::SystemInfoRequest(QObject* sender,
@@ -16,7 +18,8 @@ SystemInfoRequest::SystemInfoRequest(QObject* sender,
       request_(std::move(request)),
       reply_slot_(reply_slot)
 {
-    connect(sender, &QObject::destroyed, this, &SystemInfoRequest::senderDestroyed);
+    QString request_uuid = QUuid::createUuid().toString();
+    request_.set_request_uuid(request_uuid.toStdString());
 }
 
 bool SystemInfoRequest::sendReply(const proto::system_info::Reply& reply)
@@ -29,10 +32,9 @@ bool SystemInfoRequest::sendReply(const proto::system_info::Reply& reply)
                                      Q_ARG(const proto::system_info::Reply&, reply));
 }
 
-void SystemInfoRequest::senderDestroyed()
+QString SystemInfoRequest::requestUuid() const
 {
-    sender_ = nullptr;
-    reply_slot_ = nullptr;
+    return QString::fromStdString(request_.request_uuid());
 }
 
 // static
@@ -51,7 +53,7 @@ SystemInfoRequest* SystemInfoRequest::category(QObject* sender,
 {
     proto::system_info::Request request;
     request.mutable_category_request()->set_uuid(uuid.toStdString());
-    request.mutable_category_request()->set_data(params.toStdString());
+    request.mutable_category_request()->set_params(params.toStdString());
     return new SystemInfoRequest(sender, std::move(request), reply_slot);
 }
 

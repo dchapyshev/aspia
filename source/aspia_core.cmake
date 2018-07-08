@@ -26,6 +26,7 @@ link_directories(
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
+    ${PROJECT_SOURCE_DIR}/base/bitset.h
     ${PROJECT_SOURCE_DIR}/base/clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/clipboard.h
     ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
@@ -215,9 +216,9 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
-	${PROJECT_SOURCE_DIR}/crypto/random.cc
+    ${PROJECT_SOURCE_DIR}/crypto/random.cc
     ${PROJECT_SOURCE_DIR}/crypto/random.h
-	${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
+    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
     ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
@@ -368,16 +369,33 @@ list(APPEND SOURCE_PROTOCOL
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
 
+list(APPEND SOURCE_SYSTEM_INFO
+    ${PROJECT_SOURCE_DIR}/system_info/category.cc
+    ${PROJECT_SOURCE_DIR}/system_info/category.h)
+
+list(APPEND SOURCE_SYSTEM_INFO_PARSER
+    ${PROJECT_SOURCE_DIR}/system_info/parser/dmi_parser.cc
+    ${PROJECT_SOURCE_DIR}/system_info/parser/dmi_parser.h
+    ${PROJECT_SOURCE_DIR}/system_info/parser/parser.h)
+
 list(APPEND SOURCE_SYSTEM_INFO_PROTOCOL
     ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.cc
-	${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.h
-	${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.proto)
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.h
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.proto)
+
+list(APPEND SOURCE_SYSTEM_INFO_SERIALIZER
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_impl.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_impl.h
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_serializer.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_serializer.h
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/serializer.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/serializer.h)
 
 list(APPEND SOURCE_SYSTEM_INFO_UI
-    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.cc
-    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.h
-    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_parser.ui
-    ${PROJECT_SOURCE_DIR}/system_info/ui/parser.h)
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.cc
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.h
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.ui
+    ${PROJECT_SOURCE_DIR}/system_info/ui/form.h)
 
 list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/build_config.cc
