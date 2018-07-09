@@ -8,10 +8,9 @@
 #ifndef _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
 #define _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
 
-#include <QPointer>
-
 #include "client/client_session.h"
 #include "client/connect_data.h"
+#include "host/system_info_request.h"
 #include "protocol/system_info_session.pb.h"
 
 namespace aspia {
@@ -27,7 +26,7 @@ class ClientSessionSystemInfo : public ClientSession
 
 public:
     ClientSessionSystemInfo(ConnectData* connect_data, QObject* parent);
-    ~ClientSessionSystemInfo();
+    ~ClientSessionSystemInfo() = default;
 
 public slots:
     // ClientSession implementation.
@@ -36,10 +35,16 @@ public slots:
     void startSession() override;
     void closeSession() override;
 
+private slots:
+    void onNewRequest(SystemInfoRequest* request);
+
 private:
+    void writeNextRequest();
+
     ConnectData* connect_data_;
 
-    QPointer<SystemInfoWindow> window_;
+    std::unique_ptr<SystemInfoWindow> window_;
+    std::list<std::unique_ptr<SystemInfoRequest>> requests_;
 
     Q_DISABLE_COPY(ClientSessionSystemInfo)
 };

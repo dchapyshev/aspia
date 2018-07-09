@@ -95,6 +95,10 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/category_group_tree_item.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/category_group_tree_item.h
+    ${PROJECT_SOURCE_DIR}/client/ui/category_tree_item.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/category_tree_item.h
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.ui

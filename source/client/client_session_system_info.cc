@@ -26,11 +26,6 @@ ClientSessionSystemInfo::ClientSessionSystemInfo(ConnectData* connect_data, QObj
     qRegisterMetaType<proto::system_info::Reply>();
 }
 
-ClientSessionSystemInfo::~ClientSessionSystemInfo()
-{
-    delete window_;
-}
-
 void ClientSessionSystemInfo::messageReceived(const QByteArray& buffer)
 {
     proto::system_info::Reply reply;
@@ -41,7 +36,19 @@ void ClientSessionSystemInfo::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    // TODO
+    for (auto it = requests_.begin(); it != requests_.end(); ++it)
+    {
+        SystemInfoRequest* request = it->get();
+
+        if (request->requestUuid() == reply.request_uuid())
+        {
+            emit request->replyReady(reply);
+            requests_.erase(it);
+            break;
+        }
+    }
+
+    writeNextRequest();
 }
 
 void ClientSessionSystemInfo::messageWritten(int message_id)
@@ -52,23 +59,45 @@ void ClientSessionSystemInfo::messageWritten(int message_id)
 
 void ClientSessionSystemInfo::startSession()
 {
-    window_ = new SystemInfoWindow(connect_data_);
+    window_.reset(new SystemInfoWindow(connect_data_));
+
+    connect(window_.get(), &SystemInfoWindow::newRequest,
+            this, &ClientSessionSystemInfo::onNewRequest);
 
     // When the window is closed, we close the session.
-    connect(window_, &SystemInfoWindow::windowClose,
+    connect(window_.get(), &SystemInfoWindow::windowClose,
             this, &ClientSessionSystemInfo::closedByUser);
 
     window_->show();
     window_->activateWindow();
+    window_->refresh();
 }
 
 void ClientSessionSystemInfo::closeSession()
 {
     // If the end of the session is not initiated by the user, then we do not send the session
     // end signal.
-    disconnect(window_, &SystemInfoWindow::windowClose,
+    disconnect(window_.get(), &SystemInfoWindow::windowClose,
                this, &ClientSessionSystemInfo::closedByUser);
     window_->close();
+}
+
+void ClientSessionSystemInfo::onNewRequest(SystemInfoRequest* request)
+{
+    bool schedule_write = requests_.empty();
+
+    requests_.emplace_back(request);
+
+    if (schedule_write)
+        writeNextRequest();
+}
+
+void ClientSessionSystemInfo::writeNextRequest()
+{
+    if (requests_.empty())
+        return;
+
+    emit writeMessage(RequestMessageId, serializeMessage(requests_.front()->request()));
 }
 
 } // namespace aspia

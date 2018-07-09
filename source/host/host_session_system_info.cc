@@ -60,6 +60,7 @@ void HostSessionSystemInfo::messageWritten(int message_id)
 void HostSessionSystemInfo::startSession()
 {
     category_list_ = Category::all();
+    emit readMessage();
 }
 
 void HostSessionSystemInfo::stopSession()

@@ -9,36 +9,30 @@
 #define _ASPIA_HOST__SYSTEM_INFO_REQUEST_H
 
 #include <QObject>
-#include <QPointer>
 #include <QString>
 
 #include "protocol/system_info_session.pb.h"
 
 namespace aspia {
 
-class SystemInfoRequest
+class SystemInfoRequest : public QObject
 {
+    Q_OBJECT
+
 public:
     const proto::system_info::Request& request() const { return request_; }
-    bool sendReply(const proto::system_info::Reply& reply);
+    const std::string& requestUuid() const { return request_.request_uuid(); }
 
-    QString requestUuid() const;
+    static SystemInfoRequest* categoryList();
+    static SystemInfoRequest* category(const QString& uuid, const QByteArray& params);
 
-    static SystemInfoRequest* categoryList(QObject* sender, const char* reply_slot);
-
-    static SystemInfoRequest* category(QObject* sender,
-                                       const QString& uuid,
-                                       const QByteArray& params,
-                                       const char* reply_slot);
+signals:
+    void replyReady(const proto::system_info::Reply& reply);
 
 private:
-    SystemInfoRequest(QObject* sender,
-                      proto::system_info::Request&& request,
-                      const char* reply_slot);
+    SystemInfoRequest(proto::system_info::Request&& request);
 
-    QPointer<QObject> sender_;
     proto::system_info::Request request_;
-    const char* reply_slot_;
 
     Q_DISABLE_COPY(SystemInfoRequest)
 };

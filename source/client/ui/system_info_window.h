@@ -9,6 +9,7 @@
 #define _ASPIA_CLIENT__UI__SYSTEM_INFO_WINDOW_H
 
 #include "client/connect_data.h"
+#include "protocol/system_info_session.pb.h"
 #include "ui_system_info_window.h"
 
 namespace aspia {
@@ -23,13 +24,19 @@ public:
     SystemInfoWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~SystemInfoWindow() = default;
 
+public slots:
+    void refresh();
+
 signals:
     void windowClose();
-    void request(SystemInfoRequest* request);
+    void newRequest(SystemInfoRequest* request);
 
 protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
+
+private slots:
+    void onCategoryListReceived(const proto::system_info::Reply& reply);
 
 private:
     Ui::SystemInfoWindow ui;

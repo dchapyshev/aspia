@@ -82,10 +82,10 @@ const CategoryList kOSList[] =
 // This list can only contain groups.
 const CategoryList kCategoryList[] =
 {
-    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Hardware"),         "hardware.png", kHardwareList),
-    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Software"),         "software.png", kSoftwareList),
-    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Network"),          "network.png",  kNetworkList),
-    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Operating System"), "os.png",       kOSList),
+    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Hardware"),         "hardware.png",         kHardwareList),
+    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Software"),         "software.png",         kSoftwareList),
+    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Network"),          "network.png",          kNetworkList),
+    DECLARE_GROUP(QT_TRANSLATE_NOOP("CategoryName", "Operating System"), "operating-system.png", kOSList),
     DECLARE_END()
 };
 

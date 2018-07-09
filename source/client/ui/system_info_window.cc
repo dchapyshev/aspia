@@ -10,6 +10,11 @@
 #include <QLineEdit>
 #include <QMenu>
 
+#include "client/ui/category_group_tree_item.h"
+#include "client/ui/category_tree_item.h"
+#include "host/system_info_request.h"
+#include "system_info/category.h"
+
 namespace aspia {
 
 SystemInfoWindow::SystemInfoWindow(ConnectData* connect_data, QWidget* parent)
@@ -36,10 +41,77 @@ SystemInfoWindow::SystemInfoWindow(ConnectData* connect_data, QWidget* parent)
     ui.toolbar->addWidget(search_edit_);
 }
 
+void SystemInfoWindow::refresh()
+{
+    if (!ui.category_tree->topLevelItemCount())
+    {
+        SystemInfoRequest* request = SystemInfoRequest::categoryList();
+
+        connect(request, &SystemInfoRequest::replyReady,
+                this, &SystemInfoWindow::onCategoryListReceived);
+
+        emit newRequest(request);
+    }
+}
+
 void SystemInfoWindow::closeEvent(QCloseEvent* event)
 {
     emit windowClose();
     QWidget::closeEvent(event);
+}
+
+void SystemInfoWindow::onCategoryListReceived(const proto::system_info::Reply& reply)
+{
+    const proto::system_info::CategoryList& category_list = reply.category_list();
+
+    QSet<QString> supported_categories;
+    supported_categories.reserve(category_list.uuid_size());
+
+    for (int i = 0; i < category_list.uuid_size(); ++i)
+        supported_categories.insert(QString::fromStdString(category_list.uuid(i)));
+
+    std::function<QList<QTreeWidgetItem*>(const CategoryGroup&)> create_children =
+        [&](const CategoryGroup& parent_group)
+    {
+        QList<QTreeWidgetItem*> items;
+
+        for (const auto& group : parent_group.childGroupList())
+        {
+            QList<QTreeWidgetItem*> children = create_children(group);
+            if (!children.isEmpty())
+            {
+                CategoryGroupTreeItem* group_tree_item = new CategoryGroupTreeItem(group);
+                group_tree_item->addChildren(children);
+                items.append(group_tree_item);
+            }
+        }
+
+        for (const auto& category : parent_group.childCategoryList())
+        {
+            if (supported_categories.contains(category.uuid()))
+                items.append(new CategoryTreeItem(category));
+        }
+
+        return items;
+    };
+
+    QList<QTreeWidgetItem*> items;
+
+    for (const auto& group : CategoryGroup::rootGroups())
+    {
+        QList<QTreeWidgetItem*> children = create_children(group);
+        if (!children.isEmpty())
+        {
+            CategoryGroupTreeItem* group_tree_item = new CategoryGroupTreeItem(group);
+            group_tree_item->addChildren(children);
+            items.append(group_tree_item);
+        }
+    }
+
+    if (!items.isEmpty())
+        ui.category_tree->addTopLevelItems(items);
+
+    ui.category_tree->expandAll();
 }
 
 } // namespace aspia
