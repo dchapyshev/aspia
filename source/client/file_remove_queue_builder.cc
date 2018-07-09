@@ -58,9 +58,9 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
     }
 
     QString path = QString::fromStdString(request.file_list_request().path());
-    path.replace('\\', '/');
-    if (!path.endsWith('/'))
-        path += '/';
+    path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    if (!path.endsWith(QLatin1Char('/')))
+        path += QLatin1Char('/');
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
