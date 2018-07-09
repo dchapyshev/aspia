@@ -309,12 +309,12 @@ void FileTransfer::sourceRequest(FileRequest* request)
 {
     if (type_ == Downloader)
     {
-        QMetaObject::invokeMethod(this, "remoteRequest", Q_ARG(FileRequest*, request));
+        emit remoteRequest(request);
     }
     else
     {
         Q_ASSERT(type_ == Uploader);
-        QMetaObject::invokeMethod(this, "localRequest", Q_ARG(FileRequest*, request));
+        emit localRequest(request);
     }
 }
 
@@ -322,12 +322,12 @@ void FileTransfer::targetRequest(FileRequest* request)
 {
     if (type_ == Downloader)
     {
-        QMetaObject::invokeMethod(this, "localRequest", Q_ARG(FileRequest*, request));
+        emit localRequest(request);
     }
     else
     {
         Q_ASSERT(type_ == Uploader);
-        QMetaObject::invokeMethod(this, "remoteRequest", Q_ARG(FileRequest*, request));
+        emit remoteRequest(request);
     }
 }
 
