@@ -12,13 +12,6 @@
 
 namespace aspia {
 
-namespace {
-
-const char* kSourceReplySlot = "sourceReply";
-const char* kTargetReplySlot = "targetReply";
-
-} // namespace
-
 FileTransfer::FileTransfer(Type type, QObject* parent)
     : QObject(parent),
       type_(type)
@@ -50,12 +43,12 @@ void FileTransfer::start(const QString& source_path,
 
     if (type_ == Downloader)
     {
-        connect(builder_, &FileTransferQueueBuilder::request, this, &FileTransfer::remoteRequest);
+        connect(builder_, &FileTransferQueueBuilder::newRequest, this, &FileTransfer::remoteRequest);
     }
     else
     {
         Q_ASSERT(type_ == Uploader);
-        connect(builder_, &FileTransferQueueBuilder::request, this, &FileTransfer::localRequest);
+        connect(builder_, &FileTransferQueueBuilder::newRequest, this, &FileTransfer::localRequest);
     }
 
     connect(builder_, &FileTransferQueueBuilder::finished,
@@ -117,7 +110,9 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        sourceRequest(FileRequest::packetRequest(this, kSourceReplySlot));
+        FileRequest* request = FileRequest::packetRequest();
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
+        sourceRequest(request);
     }
     else if (request.has_packet())
     {
@@ -155,7 +150,9 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        sourceRequest(FileRequest::packetRequest(this, kSourceReplySlot));
+        FileRequest* request = FileRequest::packetRequest();
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
+        sourceRequest(request);
     }
     else
     {
@@ -177,11 +174,10 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        targetRequest(FileRequest::uploadRequest(
-            this,
-            currentTask().targetPath(),
-            currentTask().overwrite(),
-            kTargetReplySlot));
+        FileRequest* request = FileRequest::uploadRequest(currentTask().targetPath(),
+                                                          currentTask().overwrite());
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
+        targetRequest(request);
     }
     else if (request.has_packet_request())
     {
@@ -194,7 +190,9 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        targetRequest(FileRequest::packet(this, reply.packet(), kTargetReplySlot));
+        FileRequest* request = FileRequest::packet(reply.packet());
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
+        targetRequest(request);
     }
     else
     {
@@ -265,9 +263,17 @@ void FileTransfer::processTask(bool overwrite)
     emit currentItemChanged(task.sourcePath(), task.targetPath());
 
     if (task.isDirectory())
-        targetRequest(FileRequest::createDirectoryRequest(this, task.targetPath(), kTargetReplySlot));
+    {
+        FileRequest* request = FileRequest::createDirectoryRequest(task.targetPath());
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::targetReply);
+        targetRequest(request);
+    }
     else
-        sourceRequest(FileRequest::downloadRequest(this, task.sourcePath(), kSourceReplySlot));
+    {
+        FileRequest* request = FileRequest::FileRequest::downloadRequest(task.sourcePath());
+        connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
+        sourceRequest(request);
+    }
 }
 
 void FileTransfer::processNextTask()
