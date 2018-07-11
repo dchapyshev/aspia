@@ -22,6 +22,7 @@ x86 or x86_64 CPU with SSE2 support, Windows 7/2008 R2 or higher.
 Other information
 -----------------
 If you have any questions, you can email me: dmitry@aspia.ru
+
 You can also ask your questions on the IRC channel: irc.freenode.net, #aspia
 
 Licensing
