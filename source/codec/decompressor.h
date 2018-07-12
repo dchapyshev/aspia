@@ -8,6 +8,8 @@
 #ifndef _ASPIA_CODEC__DECOMPRESSOR_H
 #define _ASPIA_CODEC__DECOMPRESSOR_H
 
+#include <qglobal.h>
+
 namespace aspia {
 
 //

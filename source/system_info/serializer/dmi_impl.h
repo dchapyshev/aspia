@@ -8,6 +8,8 @@
 #ifndef _ASPIA_BASE__HARDWARE__DMI_H
 #define _ASPIA_BASE__HARDWARE__DMI_H
 
+#include <qglobal.h>
+
 #include <memory>
 
 namespace aspia {

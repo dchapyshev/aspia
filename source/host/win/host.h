@@ -10,6 +10,7 @@
 
 #include <QPointer>
 
+#include "network/network_channel.h"
 #include "protocol/authorization.pb.h"
 
 namespace aspia {

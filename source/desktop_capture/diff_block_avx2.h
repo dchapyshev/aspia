@@ -8,6 +8,8 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H
 #define _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H
 
+#include <qglobal.h>
+
 namespace aspia {
 
 quint8 diffFullBlock_32x32_AVX2(const quint8* image1, const quint8* image2, int bytes_per_row);

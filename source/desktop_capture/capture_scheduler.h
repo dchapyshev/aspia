@@ -8,6 +8,8 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
 #define _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
 
+#include <qglobal.h>
+
 #include <chrono>
 
 namespace aspia {

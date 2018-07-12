@@ -7,3 +7,4 @@
 *.pdb
 *.res
 *.exe
+*.aps # compiled resources (.rc)

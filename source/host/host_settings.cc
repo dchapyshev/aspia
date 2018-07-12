@@ -5,6 +5,7 @@
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
+#include "build_config.h"
 #include "host/host_settings.h"
 
 #include <QDebug>

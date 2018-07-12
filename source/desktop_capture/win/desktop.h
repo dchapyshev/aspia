@@ -8,6 +8,8 @@
 #ifndef _ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
 #define _ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H
 
+#include <qglobal.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
