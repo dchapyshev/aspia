@@ -19,9 +19,13 @@ System requirements
 -------------------
 x86 or x86_64 CPU with SSE2 support, Windows 7/2008 R2 or higher.
 
-Other information
------------------
-If you have any questions, you can email me: dmitry@aspia.ru
+Contacts
+--------
+E-Mail: dmitry@aspia.ru
+
+IRC channel: irc.freenode.net, #aspia
+
+Russian Group in Telegram: @aspia_ru
 
 Licensing
 ---------

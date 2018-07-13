@@ -202,7 +202,7 @@ QString ServiceController::filePath() const
         return QString();
 
     std::unique_ptr<quint8[]> buffer = std::make_unique<quint8[]>(bytes_needed);
-    QUERY_SERVICE_CONFIG* service_config = reinterpret_cast<QUERY_SERVICE_CONFIG*>(buffer.get());
+    QUERY_SERVICE_CONFIGW* service_config = reinterpret_cast<QUERY_SERVICE_CONFIGW*>(buffer.get());
 
     if (!QueryServiceConfigW(service_, service_config, bytes_needed, &bytes_needed))
     {

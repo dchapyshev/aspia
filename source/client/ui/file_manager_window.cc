@@ -42,8 +42,8 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::sendItems, this, &FileManagerWindow::sendItems);
     connect(ui.local_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
     connect(ui.remote_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
-    connect(ui.local_panel, &FilePanel::request, this, &FileManagerWindow::localRequest);
-    connect(ui.remote_panel, &FilePanel::request, this, &FileManagerWindow::remoteRequest);
+    connect(ui.local_panel, &FilePanel::newRequest, this, &FileManagerWindow::localRequest);
+    connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
 }
 
 void FileManagerWindow::refresh()
@@ -65,12 +65,12 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
 
     if (sender == ui.local_panel)
     {
-        connect(remover, &FileRemover::request, this, &FileManagerWindow::localRequest);
+        connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::localRequest);
     }
     else
     {
         Q_ASSERT(sender == ui.remote_panel);
-        connect(remover, &FileRemover::request, this, &FileManagerWindow::remoteRequest);
+        connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::remoteRequest);
     }
 
     connect(remover, &FileRemover::started, progress_dialog, &FileRemoveDialog::open);
