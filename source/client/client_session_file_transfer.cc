@@ -40,9 +40,9 @@ ClientSessionFileTransfer::~ClientSessionFileTransfer()
         worker_thread_->wait();
     }
 
-    for (auto task : tasks_)
-        delete task;
-    tasks_.clear();
+    for (auto request : requests_)
+        delete request;
+    requests_.clear();
 
     delete file_manager_;
     delete worker_;
@@ -65,8 +65,11 @@ void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
         return;
     }
 
-    tasks_.front()->sendReply(reply);
-    tasks_.pop_front();
+    FileRequest* request = requests_.front();
+    requests_.pop_front();
+
+    request->sendReply(reply);
+    delete request;
 }
 
 void ClientSessionFileTransfer::messageWritten(int message_id)
@@ -110,7 +113,7 @@ void ClientSessionFileTransfer::closeSession()
 
 void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
 {
-    tasks_.push_back(QPointer<FileRequest>(request));
+    requests_.push_back(QPointer<FileRequest>(request));
     emit writeMessage(RequestMessageId, serializeMessage(request->request()));
 }
 
