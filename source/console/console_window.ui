@@ -128,7 +128,7 @@
   <widget class="aspia::ConsoleStatusBar" name="status_bar"/>
   <widget class="QToolBar" name="tool_bar">
    <property name="windowTitle">
-    <string notr="true">toolBar</string>
+    <string>Tool Bar</string>
    </property>
    <property name="iconSize">
     <size>

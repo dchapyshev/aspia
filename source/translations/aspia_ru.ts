@@ -421,7 +421,8 @@
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="425"/>
+        <location filename="../console/console_window.ui" line="130"/>
+        <location filename="../console/console_window.ui" line="423"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
     </message>

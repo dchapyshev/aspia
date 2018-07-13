@@ -110,16 +110,15 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 {
     switchToInputDesktop();
 
-    QRect screen_rect = QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                              GetSystemMetrics(SM_YVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                              GetSystemMetrics(SM_CYVIRTUALSCREEN));
-    if (!screen_rect.contains(event.x(), event.y()))
+    QSize screen_size(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    if (screen_size.isEmpty())
         return;
 
+    int x = qMax(0, qMin(screen_size.width(), event.x()));
+    int y = qMax(0, qMin(screen_size.height(), event.y()));
+
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    QPoint pos(((event.x() - screen_rect.x()) * 65535) / (screen_rect.width() - 1),
-        ((event.y() - screen_rect.y()) * 65535) / (screen_rect.height() - 1));
+    QPoint pos((x * 65535) / (screen_size.width() - 1), (y * 65535) / (screen_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
