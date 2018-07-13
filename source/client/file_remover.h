@@ -55,7 +55,7 @@ signals:
     void finished();
     void progressChanged(const QString& name, int percentage);
     void error(FileRemover* remover, FileRemover::Actions actions, const QString& message);
-    void newRequest(FileRequest* request);
+    void request(FileRequest* request);
 
 public slots:
     void applyAction(Action action);

@@ -9,7 +9,6 @@
 #define _ASPIA_HOST__FILE_REQUEST_H
 
 #include <QObject>
-#include <QPointer>
 #include <QString>
 
 #include "protocol/file_transfer_session.pb.h"
@@ -22,26 +21,53 @@ class FileRequest : public QObject
 
 public:
     const proto::file_transfer::Request& request() const { return request_; }
-    void sendReply(const proto::file_transfer::Reply& reply);
+    bool sendReply(const proto::file_transfer::Reply& reply);
 
-    static FileRequest* driveListRequest();
-    static FileRequest* fileListRequest(const QString& path);
-    static FileRequest* createDirectoryRequest(const QString& path);
-    static FileRequest* renameRequest(const QString& old_name, const QString& new_name);
-    static FileRequest* removeRequest(const QString& path);
-    static FileRequest* downloadRequest(const QString& file_path);
-    static FileRequest* uploadRequest(const QString& file_path, bool overwrite);
-    static FileRequest* packetRequest();
-    static FileRequest* packet(const proto::file_transfer::Packet& packet);
+    static FileRequest* driveListRequest(QObject* sender, const char* reply_slot);
 
-signals:
-    void replyReady(const proto::file_transfer::Request& request,
-                    const proto::file_transfer::Reply& reply);
+    static FileRequest* fileListRequest(QObject* sender,
+                                        const QString& path,
+                                        const char* reply_slot);
+
+    static FileRequest* createDirectoryRequest(QObject* sender,
+                                               const QString& path,
+                                               const char* reply_slot);
+
+    static FileRequest* renameRequest(QObject* sender,
+                                      const QString& old_name,
+                                      const QString& new_name,
+                                      const char* reply_slot);
+
+    static FileRequest* removeRequest(QObject* sender,
+                                      const QString& path,
+                                      const char* reply_slot);
+
+    static FileRequest* downloadRequest(QObject* sender,
+                                        const QString& file_path,
+                                        const char* reply_slot);
+
+    static FileRequest* uploadRequest(QObject* sender,
+                                      const QString& file_path,
+                                      bool overwrite,
+                                      const char* reply_slot);
+
+    static FileRequest* packetRequest(QObject* sender, const char* reply_slot);
+
+    static FileRequest* packet(QObject* sender,
+                               const proto::file_transfer::Packet& packet,
+                               const char* reply_slot);
+
+private slots:
+    void senderDestroyed();
 
 private:
-    FileRequest(proto::file_transfer::Request&& request);
+    FileRequest(QObject* sender,
+                proto::file_transfer::Request&& request,
+                const char* reply_slot);
 
+    QObject* sender_;
     proto::file_transfer::Request request_;
+    const char* reply_slot_;
 
     Q_DISABLE_COPY(FileRequest)
 };

@@ -11,7 +11,6 @@
 
 #include "host/host_session_desktop.h"
 #include "host/host_session_file_transfer.h"
-#include "host/host_session_system_info.h"
 #include "ipc/ipc_channel.h"
 
 namespace aspia {
@@ -42,10 +41,6 @@ HostSession* HostSession::create(const QString& session_type, const QString& cha
     else if (session_type == QLatin1String("file_transfer"))
     {
         return new HostSessionFileTransfer(channel_id);
-    }
-    else if (session_type == QLatin1String("system_info"))
-    {
-        return new HostSessionSystemInfo(channel_id);
     }
     else
     {

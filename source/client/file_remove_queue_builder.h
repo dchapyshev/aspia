@@ -35,7 +35,7 @@ signals:
     void error(const QString& message);
 
     // Signals an outbound request.
-    void newRequest(FileRequest* request);
+    void request(FileRequest* request);
 
 public slots:
     // Starts building of the task queue.
