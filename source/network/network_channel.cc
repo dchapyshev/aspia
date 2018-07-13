@@ -8,6 +8,7 @@
 #include "network/network_channel.h"
 
 #include <QHostAddress>
+#include <QNetworkProxy>
 #include <QTimerEvent>
 
 #include "crypto/encryptor.h"
@@ -92,6 +93,7 @@ void NetworkChannel::connectToHost(const QString& address, int port)
         return;
     }
 
+    socket_->setProxy(QNetworkProxy::NoProxy);
     socket_->connectToHost(address, port);
 }
 
