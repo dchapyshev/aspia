@@ -49,7 +49,7 @@ private:
     QPointer<FileWorker> worker_;
     QPointer<QThread> worker_thread_;
 
-    QQueue<QPointer<FileRequest>> requests_;
+    QQueue<QPointer<FileRequest>> tasks_;
 
     Q_DISABLE_COPY(ClientSessionFileTransfer)
 };

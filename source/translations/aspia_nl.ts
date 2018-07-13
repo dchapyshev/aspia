@@ -129,29 +129,6 @@
     </message>
 </context>
 <context>
-    <name>CategoryName</name>
-    <message>
-        <location filename="../system_info/category.cc" line="85"/>
-        <source>Hardware</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../system_info/category.cc" line="86"/>
-        <source>Software</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../system_info/category.cc" line="87"/>
-        <source>Network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../system_info/category.cc" line="88"/>
-        <source>Operating System</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ClientDialog</name>
     <message>
         <location filename="../client/ui/client_dialog.ui" line="20"/>
@@ -268,155 +245,155 @@
         <translation>&amp;Sessie Type</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="99"/>
+        <location filename="../console/console_window.ui" line="98"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="107"/>
+        <location filename="../console/console_window.ui" line="106"/>
         <source>&amp;View</source>
         <translation>&amp;Beeld</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="111"/>
+        <location filename="../console/console_window.ui" line="110"/>
         <source>&amp;Language</source>
         <translation>&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="173"/>
+        <location filename="../console/console_window.ui" line="171"/>
         <source>&amp;New</source>
         <translation>&amp;Nieuw</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="176"/>
+        <location filename="../console/console_window.ui" line="174"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="185"/>
+        <location filename="../console/console_window.ui" line="183"/>
         <source>&amp;Open...</source>
         <translation>&amp;Openen...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="188"/>
+        <location filename="../console/console_window.ui" line="186"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="200"/>
+        <location filename="../console/console_window.ui" line="198"/>
         <source>&amp;Save</source>
         <translation>O&amp;pslaan</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="203"/>
+        <location filename="../console/console_window.ui" line="201"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="211"/>
+        <location filename="../console/console_window.ui" line="209"/>
         <source>Save &amp;As...</source>
         <translation>Opslaan &amp;Als...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="214"/>
+        <location filename="../console/console_window.ui" line="212"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="222"/>
+        <location filename="../console/console_window.ui" line="220"/>
         <source>&amp;Close</source>
         <translation>S&amp;luiten</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="225"/>
+        <location filename="../console/console_window.ui" line="223"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="234"/>
+        <location filename="../console/console_window.ui" line="232"/>
         <source>&amp;Exit</source>
         <translation>&amp;Beeindigen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="246"/>
+        <location filename="../console/console_window.ui" line="244"/>
         <source>Add Computer Group</source>
         <translation>Computer Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="258"/>
+        <location filename="../console/console_window.ui" line="256"/>
         <source>Modify Computer Group</source>
         <translation>Computer Groep Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="270"/>
+        <location filename="../console/console_window.ui" line="268"/>
         <source>Delete Computer Group</source>
         <translation>Computer Groep Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="282"/>
+        <location filename="../console/console_window.ui" line="280"/>
         <source>Add Computer</source>
         <translation>Computer Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="294"/>
+        <location filename="../console/console_window.ui" line="292"/>
         <source>Modify Computer</source>
         <translation>Computer Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="306"/>
+        <location filename="../console/console_window.ui" line="304"/>
         <source>Delete Computer</source>
         <translation>Computer Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="321"/>
+        <location filename="../console/console_window.ui" line="319"/>
         <source>Desktop &amp;Manage</source>
         <translation>Bureaublad &amp;Beheren</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="333"/>
+        <location filename="../console/console_window.ui" line="331"/>
         <source>Desktop &amp;View</source>
         <translation>Bureaublad &amp;Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="345"/>
+        <location filename="../console/console_window.ui" line="343"/>
         <source>&amp;File Transfer</source>
         <translation>&amp;Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="354"/>
+        <location filename="../console/console_window.ui" line="352"/>
         <source>&amp;Online Help...</source>
         <translation>Online &amp;Hulp...</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="357"/>
+        <location filename="../console/console_window.ui" line="355"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="366"/>
+        <location filename="../console/console_window.ui" line="364"/>
         <source>&amp;About</source>
         <translation>&amp;Over</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="378"/>
+        <location filename="../console/console_window.ui" line="376"/>
         <source>Address Book Properties</source>
         <translation>Adresboek eigenschappen</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="387"/>
-        <location filename="../console/console_window.ui" line="390"/>
+        <location filename="../console/console_window.ui" line="385"/>
+        <location filename="../console/console_window.ui" line="388"/>
         <source>Desktop Manage</source>
         <translation>Bureaublad Beheren</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="399"/>
-        <location filename="../console/console_window.ui" line="402"/>
+        <location filename="../console/console_window.ui" line="397"/>
+        <location filename="../console/console_window.ui" line="400"/>
         <source>Desktop View</source>
         <translation>Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="411"/>
-        <location filename="../console/console_window.ui" line="414"/>
+        <location filename="../console/console_window.ui" line="409"/>
+        <location filename="../console/console_window.ui" line="412"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
@@ -427,24 +404,14 @@
         <translation>Werkbalk</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="436"/>
+        <location filename="../console/console_window.ui" line="434"/>
         <source>Status Bar</source>
         <translation>Status Balk</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="445"/>
+        <location filename="../console/console_window.ui" line="443"/>
         <source>Fast Connect...</source>
         <translation>Snel Verbinden...</translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="457"/>
-        <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="466"/>
-        <source>System Information</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -531,19 +498,6 @@
         <location filename="../client/ui/desktop_panel.ui" line="281"/>
         <source>Custom...</source>
         <translation>Aangepast...</translation>
-    </message>
-</context>
-<context>
-    <name>DmiForm</name>
-    <message>
-        <location filename="../system_info/ui/dmi_form.ui" line="50"/>
-        <source>Field</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../system_info/ui/dmi_form.ui" line="55"/>
-        <source>Value</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1124,57 +1078,57 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client/client.cc" line="53"/>
+        <location filename="../client/client.cc" line="52"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Probeer te verbinden met %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="59"/>
+        <location filename="../client/client.cc" line="58"/>
         <source>Connection established.</source>
         <translation>Verbinding opgezet.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="90"/>
+        <location filename="../client/client.cc" line="89"/>
         <source>Authorization started.</source>
         <translation>Authorizatie begonnen.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="96"/>
+        <location filename="../client/client.cc" line="95"/>
         <source>Disconnected.</source>
         <translation>Verbinding verbroken.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="101"/>
+        <location filename="../client/client.cc" line="100"/>
         <source>Network error: %1.</source>
         <translation>Netwerk fout: %1.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="111"/>
+        <location filename="../client/client.cc" line="110"/>
         <source>Successful authorization.</source>
         <translation>Successvolle authorisatie.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="115"/>
+        <location filename="../client/client.cc" line="114"/>
         <source>Authorization error: Access denied.</source>
         <translation>Authorisatie fout: Toegang geweigerd.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="119"/>
+        <location filename="../client/client.cc" line="118"/>
         <source>Authorization has been canceled.</source>
         <translation>Authorisatie is door de gebruiker afgebroken.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="123"/>
+        <location filename="../client/client.cc" line="122"/>
         <source>Authorization error: Unknown status code.</source>
         <translation>Authorisatie fout: Onbekende code.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="146"/>
+        <location filename="../client/client.cc" line="141"/>
         <source>Unsupported session type.</source>
         <translation>Niet ondersteund sessie type.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="165"/>
+        <location filename="../client/client.cc" line="160"/>
         <source>Session started.</source>
         <translation>Sessie begonnen.</translation>
     </message>
@@ -1195,11 +1149,6 @@
         <location filename="../client/ui/client_dialog.cc" line="36"/>
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/client_dialog.cc" line="40"/>
-        <source>System Information</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1272,14 +1221,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::ClientSessionSystemInfo</name>
-    <message>
-        <location filename="../client/client_session_system_info.cc" line="40"/>
-        <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
-    </message>
-</context>
-<context>
     <name>aspia::ClientUserAuthorizer</name>
     <message>
         <location filename="../client/client_user_authorizer.cc" line="140"/>
@@ -1314,13 +1255,8 @@
         <source>File Transfer</source>
         <translation>Bestands Overdracht</translation>
     </message>
-    <message>
-        <location filename="../console/computer_dialog.cc" line="51"/>
-        <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="155"/>
+        <location filename="../console/computer_dialog.cc" line="151"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
@@ -1328,17 +1264,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="161"/>
+        <location filename="../console/computer_dialog.cc" line="157"/>
         <source>Name can not be empty.</source>
         <translation>Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="168"/>
+        <location filename="../console/computer_dialog.cc" line="164"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="176"/>
+        <location filename="../console/computer_dialog.cc" line="172"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>
@@ -1346,7 +1282,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="184"/>
+        <location filename="../console/computer_dialog.cc" line="180"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
@@ -1354,7 +1290,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="214"/>
+        <location filename="../console/computer_dialog.cc" line="210"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -1410,39 +1346,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="167"/>
+        <location filename="../console/console_window.cc" line="159"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="169"/>
+        <location filename="../console/console_window.cc" line="161"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="187"/>
+        <location filename="../console/console_window.cc" line="179"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="188"/>
+        <location filename="../console/console_window.cc" line="180"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="270"/>
+        <location filename="../console/console_window.cc" line="262"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="387"/>
-        <location filename="../console/console_window.cc" line="574"/>
+        <location filename="../console/console_window.cc" line="363"/>
+        <location filename="../console/console_window.cc" line="550"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="388"/>
-        <location filename="../console/console_window.cc" line="575"/>
+        <location filename="../console/console_window.cc" line="364"/>
+        <location filename="../console/console_window.cc" line="551"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1785,7 +1721,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="268"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="264"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
@@ -1793,7 +1729,7 @@
 <context>
     <name>aspia::HostServer</name>
     <message>
-        <location filename="../host/host_server.cc" line="101"/>
+        <location filename="../host/host_server.cc" line="98"/>
         <source>Allow incoming TCP connections</source>
         <translation>Sta binnenkomende TCP verbindingen toe</translation>
     </message>
@@ -1820,14 +1756,6 @@
     </message>
 </context>
 <context>
-    <name>aspia::SystemInfoWindow</name>
-    <message>
-        <location filename="../client/ui/system_info_window.cc" line="23"/>
-        <source>%1 - Aspia System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>aspia::UserDialog</name>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="28"/>
@@ -1850,35 +1778,30 @@
         <translation>Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="82"/>
-        <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/user_dialog.cc" line="138"/>
-        <location filename="../host/ui/user_dialog.cc" line="152"/>
-        <location filename="../host/ui/user_dialog.cc" line="168"/>
-        <location filename="../host/ui/user_dialog.cc" line="178"/>
+        <location filename="../host/ui/user_dialog.cc" line="134"/>
+        <location filename="../host/ui/user_dialog.cc" line="148"/>
+        <location filename="../host/ui/user_dialog.cc" line="164"/>
+        <location filename="../host/ui/user_dialog.cc" line="174"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="139"/>
+        <location filename="../host/ui/user_dialog.cc" line="135"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="153"/>
+        <location filename="../host/ui/user_dialog.cc" line="149"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="169"/>
+        <location filename="../host/ui/user_dialog.cc" line="165"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="179"/>
+        <location filename="../host/ui/user_dialog.cc" line="175"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Wachtwoord mag niet korter dan %n karakter zijn.</numerusform>

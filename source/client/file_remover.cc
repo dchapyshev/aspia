@@ -12,6 +12,12 @@
 
 namespace aspia {
 
+namespace {
+
+const char* kReplySlot = "reply";
+
+} // namespace
+
 FileRemover::FileRemover(QObject* parent)
     : QObject(parent)
 {
@@ -34,8 +40,8 @@ void FileRemover::start(const QString& path, const QList<Item>& items)
     connect(builder_, &FileRemoveQueueBuilder::finished,
             builder_, &FileRemoveQueueBuilder::deleteLater);
 
-    connect(builder_, &FileRemoveQueueBuilder::newRequest,
-            this, &FileRemover::newRequest);
+    connect(builder_, &FileRemoveQueueBuilder::request,
+            this, &FileRemover::request);
 
     builder_->start(path, items);
 }
@@ -133,11 +139,7 @@ void FileRemover::processTask()
     int percentage = (tasks_count_ - tasks_.size()) * 100 / tasks_count_;
 
     emit progressChanged(tasks_.front().path(), percentage);
-
-    FileRequest* request = FileRequest::removeRequest(tasks_.front().path());
-    connect(request, &FileRequest::replyReady, this, &FileRemover::reply);
-
-    emit newRequest(request);
+    emit request(FileRequest::removeRequest(this, tasks_.front().path(), kReplySlot));
 }
 
 void FileRemover::processNextTask()

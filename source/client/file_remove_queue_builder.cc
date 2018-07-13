@@ -14,6 +14,12 @@
 
 namespace aspia {
 
+namespace {
+
+const char* kReplySlot = "reply";
+
+} // namespace
+
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(QObject* parent)
     : QObject(parent)
 {
@@ -52,9 +58,9 @@ void FileRemoveQueueBuilder::reply(const proto::file_transfer::Request& request,
     }
 
     QString path = QString::fromStdString(request.file_list_request().path());
-    path.replace(QLatin1Char('\\'), QLatin1Char('/'));
-    if (!path.endsWith(QLatin1Char('/')))
-        path += QLatin1Char('/');
+    path.replace('\\', '/');
+    if (!path.endsWith('/'))
+        path += '/';
 
     for (int i = 0; i < reply.file_list().item_size(); ++i)
     {
@@ -86,9 +92,7 @@ void FileRemoveQueueBuilder::processNextPendingTask()
         return;
     }
 
-    FileRequest* request = FileRequest::fileListRequest(current.path());
-    connect(request, &FileRequest::replyReady, this, &FileRemoveQueueBuilder::reply);
-    emit newRequest(request);
+    emit request(FileRequest::fileListRequest(this, current.path(), kReplySlot));
 }
 
 void FileRemoveQueueBuilder::processError(const QString& message)

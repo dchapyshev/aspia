@@ -36,10 +36,6 @@ ClientDialog::ClientDialog(QWidget* parent)
                                    tr("File Transfer"),
                                    QVariant(proto::auth::SESSION_TYPE_FILE_TRANSFER));
 
-    ui.combo_session_type->addItem(QIcon(QStringLiteral(":/icon/system-monitor.png")),
-                                   tr("System Information"),
-                                   QVariant(proto::auth::SESSION_TYPE_SYSTEM_INFO));
-
     int current_session_type = ui.combo_session_type->findData(QVariant(computer_.session_type()));
     if (current_session_type != -1)
     {

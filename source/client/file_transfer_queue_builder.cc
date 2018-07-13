@@ -16,6 +16,8 @@ namespace aspia {
 
 namespace {
 
+const char* kReplySlot = "reply";
+
 QString normalizePath(const QString& path)
 {
     QString normalized_path = path;
@@ -106,9 +108,7 @@ void FileTransferQueueBuilder::processNextPendingTask()
         return;
     }
 
-    FileRequest* request = FileRequest::fileListRequest(current.sourcePath());
-    connect(request, &FileRequest::replyReady, this, &FileTransferQueueBuilder::reply);
-    emit newRequest(request);
+    emit request(FileRequest::fileListRequest(this, current.sourcePath(), kReplySlot));
 }
 
 void FileTransferQueueBuilder::processError(const QString& message)

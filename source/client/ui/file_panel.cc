@@ -23,6 +23,8 @@ namespace aspia {
 
 namespace {
 
+const char* kReplySlot = "reply";
+
 QString normalizePath(const QString& path)
 {
     QString normalized_path = path;
@@ -173,9 +175,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
 
 void FilePanel::refresh()
 {
-    FileRequest* request = FileRequest::driveListRequest();
-    connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-    emit newRequest(request);
+    emit request(FileRequest::driveListRequest(this, kReplySlot));
 }
 
 void FilePanel::keyPressEvent(QKeyEvent* event)
@@ -237,9 +237,7 @@ void FilePanel::onAddressItemChanged(int index)
         }
     }
 
-    FileRequest* request = FileRequest::fileListRequest(current_path_);
-    connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-    emit newRequest(request);
+    emit request(FileRequest::fileListRequest(this, current_path_, kReplySlot));
 }
 
 void FilePanel::onFileDoubleClicked(QTreeWidgetItem* item, int column)
@@ -286,19 +284,19 @@ void FilePanel::onFileNameChanged(FileItem* file_item)
             return;
         }
 
-        FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + current_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        emit request(FileRequest::createDirectoryRequest(
+            this, currentPath() + current_name, kReplySlot));
     }
     else // Rename item.
     {
         if (current_name == initial_name)
             return;
 
-        FileRequest* request = FileRequest::renameRequest(currentPath() + initial_name,
-                                                          currentPath() + current_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        emit request(FileRequest::renameRequest(
+            this,
+            currentPath() + initial_name,
+            currentPath() + current_name,
+            kReplySlot));
     }
 }
 

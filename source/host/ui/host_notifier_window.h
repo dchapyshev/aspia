@@ -35,7 +35,6 @@ signals:
 protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
-    bool nativeEvent(const QByteArray& event_type, void* message, long* result) override;
     void showEvent(QShowEvent* event) override;
 
 private slots:
@@ -43,8 +42,12 @@ private slots:
     void onShowHidePressed();
     void onDisconnectAllPressed();
     void onContextMenu(const QPoint& point);
+    void updateWindowPosition();
 
 private:
+    void showNotifier();
+    void hideNotifier();
+
     Ui::HostNotifierWindow ui;
 
     LocaleLoader locale_loader_;
@@ -53,10 +56,6 @@ private:
 
     QPointer<HostNotifier> notifier_;
     QString channel_id_;
-
-#if defined(Q_OS_WIN)
-    quintptr taskbar_create_message_ = 0;
-#endif
 
     Q_DISABLE_COPY(HostNotifierWindow)
 };

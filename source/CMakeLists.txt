@@ -20,7 +20,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_PREFIX_PATH "${ASPIA_THIRD_PARTY_DIR}/qt")
-find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras Xml)
+find_package(Qt5 REQUIRED Core Gui Network PrintSupport Widgets WinExtras)
 find_package(Qt5LinguistTools)
 
 include(aspia_core.cmake)
@@ -41,11 +41,6 @@ source_group(ipc FILES ${SOURCE_IPC})
 source_group(network FILES ${SOURCE_NETWORK})
 source_group(protocol FILES ${SOURCE_PROTOCOL})
 source_group(resources FILES ${SOURCE_RESOURCES})
-source_group(system_info FILES ${SOURCE_SYSTEM_INFO})
-source_group(system_info\\parser FILES ${SOURCE_SYSTEM_INFO_PARSER})
-source_group(system_info\\protocol FILES ${SOURCE_SYSTEM_INFO_PROTOCOL})
-source_group(system_info\\serializer FILES ${SOURCE_SYSTEM_INFO_SERIALIZER})
-source_group(system_info\\ui FILES ${SOURCE_SYSTEM_INFO_UI})
 source_group("" FILES ${SOURCE})
 
 add_definitions(/FI"build_config.h")
@@ -78,11 +73,6 @@ add_library(aspia_core SHARED
     ${SOURCE_NETWORK}
     ${SOURCE_PROTOCOL}
     ${SOURCE_RESOURCES}
-    ${SOURCE_SYSTEM_INFO}
-    ${SOURCE_SYSTEM_INFO_PARSER}
-    ${SOURCE_SYSTEM_INFO_PROTOCOL}
-    ${SOURCE_SYSTEM_INFO_SERIALIZER}
-    ${SOURCE_SYSTEM_INFO_UI}
     ${SOURCE})
 
 target_link_libraries(aspia_core
@@ -93,7 +83,6 @@ target_link_libraries(aspia_core
     Qt5::Widgets
     Qt5::WinMain
     Qt5::WinExtras
-    Qt5::Xml
     debug Qt5AccessibilitySupportd
     debug Qt5EventDispatcherSupportd
     debug Qt5FontDatabaseSupportd
