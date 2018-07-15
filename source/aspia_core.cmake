@@ -255,6 +255,8 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.cc
