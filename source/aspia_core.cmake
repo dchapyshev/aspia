@@ -26,6 +26,7 @@ link_directories(
 list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.cc
     ${PROJECT_SOURCE_DIR}/base/aligned_memory.h
+    ${PROJECT_SOURCE_DIR}/base/bitset.h
     ${PROJECT_SOURCE_DIR}/base/clipboard.cc
     ${PROJECT_SOURCE_DIR}/base/clipboard.h
     ${PROJECT_SOURCE_DIR}/base/errno_logging.cc
@@ -45,12 +46,15 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN
+    ${PROJECT_SOURCE_DIR}/base/win/registry.cc
+    ${PROJECT_SOURCE_DIR}/base/win/registry.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_gdi_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_hdc.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_local.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_object.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_user_object.h
+    ${PROJECT_SOURCE_DIR}/base/win/scoped_wts_memory.h
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.cc
     ${PROJECT_SOURCE_DIR}/base/win/security_helpers.h)
 
@@ -64,6 +68,8 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_view.h
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_file_transfer.h
+    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.cc
+    ${PROJECT_SOURCE_DIR}/client/client_session_system_info.h
     ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.cc
     ${PROJECT_SOURCE_DIR}/client/client_user_authorizer.h
     ${PROJECT_SOURCE_DIR}/client/computer_factory.cc
@@ -89,6 +95,10 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/category_group_tree_item.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/category_group_tree_item.h
+    ${PROJECT_SOURCE_DIR}/client/ui/category_tree_item.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/category_tree_item.h
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/client_dialog.ui
@@ -128,7 +138,10 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.h
-    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui)
+    ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.h
+    ${PROJECT_SOURCE_DIR}/client/ui/system_info_window.ui)
 
 list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/compressor.h
@@ -207,9 +220,9 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/data_encryptor.h
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.cc
     ${PROJECT_SOURCE_DIR}/crypto/encryptor.h
-	${PROJECT_SOURCE_DIR}/crypto/random.cc
+    ${PROJECT_SOURCE_DIR}/crypto/random.cc
     ${PROJECT_SOURCE_DIR}/crypto/random.h
-	${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
+    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
     ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
@@ -278,6 +291,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_session_fake_file_transfer.h
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.cc
     ${PROJECT_SOURCE_DIR}/host/host_session_file_transfer.h
+    ${PROJECT_SOURCE_DIR}/host/host_session_system_info.cc
+    ${PROJECT_SOURCE_DIR}/host/host_session_system_info.h
     ${PROJECT_SOURCE_DIR}/host/host_settings.cc
     ${PROJECT_SOURCE_DIR}/host/host_settings.h
     ${PROJECT_SOURCE_DIR}/host/host_user_authorizer.cc
@@ -286,6 +301,8 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/input_injector.h
     ${PROJECT_SOURCE_DIR}/host/screen_updater.cc
     ${PROJECT_SOURCE_DIR}/host/screen_updater.h
+    ${PROJECT_SOURCE_DIR}/host/system_info_request.cc
+    ${PROJECT_SOURCE_DIR}/host/system_info_request.h
     ${PROJECT_SOURCE_DIR}/host/user.cc
     ${PROJECT_SOURCE_DIR}/host/user.h)
 
@@ -348,10 +365,41 @@ list(APPEND SOURCE_PROTOCOL
     ${PROJECT_SOURCE_DIR}/protocol/key_exchange.proto
     ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.cc
     ${PROJECT_SOURCE_DIR}/protocol/notifier.pb.h
-    ${PROJECT_SOURCE_DIR}/protocol/notifier.proto)
+    ${PROJECT_SOURCE_DIR}/protocol/notifier.proto
+    ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.cc
+    ${PROJECT_SOURCE_DIR}/protocol/system_info_session.pb.h
+    ${PROJECT_SOURCE_DIR}/protocol/system_info_session.proto)
 
 list(APPEND SOURCE_RESOURCES
     ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
+
+list(APPEND SOURCE_SYSTEM_INFO
+    ${PROJECT_SOURCE_DIR}/system_info/category.cc
+    ${PROJECT_SOURCE_DIR}/system_info/category.h)
+
+list(APPEND SOURCE_SYSTEM_INFO_PARSER
+    ${PROJECT_SOURCE_DIR}/system_info/parser/dmi_parser.cc
+    ${PROJECT_SOURCE_DIR}/system_info/parser/dmi_parser.h
+    ${PROJECT_SOURCE_DIR}/system_info/parser/parser.h)
+
+list(APPEND SOURCE_SYSTEM_INFO_PROTOCOL
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.cc
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.pb.h
+    ${PROJECT_SOURCE_DIR}/system_info/protocol/dmi.proto)
+
+list(APPEND SOURCE_SYSTEM_INFO_SERIALIZER
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_impl.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_impl.h
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_serializer.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/dmi_serializer.h
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/serializer.cc
+    ${PROJECT_SOURCE_DIR}/system_info/serializer/serializer.h)
+
+list(APPEND SOURCE_SYSTEM_INFO_UI
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.cc
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.h
+    ${PROJECT_SOURCE_DIR}/system_info/ui/dmi_form.ui
+    ${PROJECT_SOURCE_DIR}/system_info/ui/form.h)
 
 list(APPEND SOURCE
     ${PROJECT_SOURCE_DIR}/build_config.cc

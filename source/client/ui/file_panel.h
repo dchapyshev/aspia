@@ -29,7 +29,7 @@ public:
     void setCurrentPath(const QString& path);
 
 signals:
-    void request(FileRequest* request);
+    void newRequest(FileRequest* request);
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
     void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
     void receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items);

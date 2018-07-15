@@ -7,11 +7,17 @@
 
 #include "host/ui/host_notifier_window.h"
 
+#if defined(Q_OS_WIN)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QTranslator>
 
+#include "base/errno_logging.h"
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -36,6 +42,10 @@ public:
 
             case proto::auth::SESSION_TYPE_FILE_TRANSFER:
                 setIcon(0, QIcon(QStringLiteral(":/icon/folder-stand.png")));
+                break;
+
+            case proto::auth::SESSION_TYPE_SYSTEM_INFO:
+                setIcon(0, QIcon(QStringLiteral(":/icon/system-monitor.png")));
                 break;
 
             default:
@@ -87,8 +97,13 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
-            this, &HostNotifierWindow::updateWindowPosition);
+#if defined(Q_OS_WIN)
+    taskbar_create_message_ = RegisterWindowMessageW(L"TaskbarCreated");
+    if (!taskbar_create_message_)
+    {
+        qWarningErrno("RegisterWindowMessageW failed");
+    }
+#endif
 }
 
 void HostNotifierWindow::setChannelId(const QString& channel_id)
@@ -161,6 +176,23 @@ bool HostNotifierWindow::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
+bool HostNotifierWindow::nativeEvent(const QByteArray& event_type, void* message, long* result)
+{
+#if defined(Q_OS_WIN)
+    MSG* native_message = reinterpret_cast<MSG*>(message);
+    if (native_message->message == taskbar_create_message_)
+    {
+        QSize screen_size = QApplication::primaryScreen()->availableSize();
+        QSize window_size = frameSize();
+
+        move(screen_size.width() - window_size.width(),
+             screen_size.height() - window_size.height());
+    }
+#endif
+
+    return QWidget::nativeEvent(event_type, message, result);
+}
+
 void HostNotifierWindow::showEvent(QShowEvent* event)
 {
     if (notifier_.isNull())
@@ -191,9 +223,30 @@ void HostNotifierWindow::quit()
 void HostNotifierWindow::onShowHidePressed()
 {
     if (ui.content->isVisible())
-        hideNotifier();
+    {
+        QSize screen_size = QApplication::primaryScreen()->availableSize();
+        QSize content_size = ui.content->frameSize();
+        window_rect_ = frameGeometry();
+
+        ui.content->hide();
+        ui.title->hide();
+
+        move(screen_size.width() - ui.button_show_hide->width(), pos().y());
+        setFixedSize(window_rect_.width() - content_size.width(),
+                     window_rect_.height());
+
+        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-right-gray.png")));
+    }
     else
-        showNotifier();
+    {
+        ui.content->show();
+        ui.title->show();
+
+        move(window_rect_.topLeft());
+        setFixedSize(window_rect_.size());
+
+        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-left-gray.png")));
+    }
 }
 
 void HostNotifierWindow::onDisconnectAllPressed()
@@ -219,48 +272,6 @@ void HostNotifierWindow::onContextMenu(const QPoint& point)
 
     if (menu.exec(ui.tree->mapToGlobal(point)) == &disconnect_action)
         emit killSession(item->session().uuid());
-}
-
-void HostNotifierWindow::updateWindowPosition()
-{
-    showNotifier();
-
-    QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
-    QSize window_size = frameSize();
-
-    move(screen_rect.x() + screen_rect.width() - window_size.width(),
-         screen_rect.y() + screen_rect.height() - window_size.height());
-}
-
-void HostNotifierWindow::showNotifier()
-{
-    if (ui.content->isHidden() && ui.title->isHidden())
-    {
-        ui.content->show();
-        ui.title->show();
-
-        move(window_rect_.topLeft());
-        setFixedSize(window_rect_.size());
-
-        ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-left-gray.png")));
-    }
-}
-
-void HostNotifierWindow::hideNotifier()
-{
-    QRect screen_rect = QApplication::primaryScreen()->availableGeometry();
-    QSize content_size = ui.content->frameSize();
-    window_rect_ = frameGeometry();
-
-    ui.content->hide();
-    ui.title->hide();
-
-    move(screen_rect.x() + screen_rect.width() - ui.button_show_hide->width(), pos().y());
-
-    setFixedSize(window_rect_.width() - content_size.width(),
-                 window_rect_.height());
-
-    ui.button_show_hide->setIcon(QIcon(QStringLiteral(":/icon/arrow-right-gray.png")));
 }
 
 } // namespace aspia
