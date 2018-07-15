@@ -228,6 +228,10 @@ list(APPEND SOURCE_CRYPTO
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer_win.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer_win.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.cc

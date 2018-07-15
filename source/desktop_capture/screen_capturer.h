@@ -9,7 +9,6 @@
 #define ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_H_
 
 #include "desktop_capture/desktop_frame.h"
-#include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {
 
@@ -32,7 +31,6 @@ public:
     static const ScreenId kInvalidScreenId = -2;
 
     virtual const DesktopFrame* captureImage() = 0;
-    virtual std::unique_ptr<MouseCursor> captureCursor() = 0;
 };
 
 } // namespace aspia

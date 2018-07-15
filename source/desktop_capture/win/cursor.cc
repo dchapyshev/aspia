@@ -8,6 +8,7 @@
 #include "desktop_capture/win/cursor.h"
 
 #include "base/win/scoped_gdi_object.h"
+#include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {
 
@@ -97,7 +98,7 @@ void alphaMul(quint32* data, int width, int height)
 } // namespace
 
 // Converts an HCURSOR into a |MouseCursor| instance.
-std::unique_ptr<MouseCursor> mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
+MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
 {
     ICONINFO icon_info = { 0 };
 
@@ -253,9 +254,9 @@ std::unique_ptr<MouseCursor> mouseCursorFromHCursor(HDC dc, HCURSOR cursor)
     // images.
     alphaMul(reinterpret_cast<quint32*>(image.get()), width, height);
 
-    return MouseCursor::create(std::move(image),
-                               QSize(width, height),
-                               QPoint(icon_info.xHotspot, icon_info.yHotspot));
+    return new MouseCursor(std::move(image),
+                           QSize(width, height),
+                           QPoint(icon_info.xHotspot, icon_info.yHotspot));
 }
 
 } // namespace aspia

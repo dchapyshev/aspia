@@ -20,17 +20,14 @@ namespace aspia {
 class ScreenCapturerGDI : public ScreenCapturer
 {
 public:
+    ScreenCapturerGDI() = default;
     ~ScreenCapturerGDI() = default;
 
-    static ScreenCapturerGDI* create();
-
     const DesktopFrame* captureImage() override;
-    std::unique_ptr<MouseCursor> captureCursor() override;
 
 private:
     typedef HRESULT(WINAPI * DwmEnableCompositionFunc)(UINT);
 
-    ScreenCapturerGDI();
     bool prepareCaptureResources();
 
     ScopedThreadDesktop desktop_;
@@ -44,8 +41,6 @@ private:
     int curr_frame_id_ = 0;
 
     std::unique_ptr<DesktopFrameDIB> frame_[kNumFrames];
-
-    CURSORINFO prev_cursor_info_;
 
     Q_DISABLE_COPY(ScreenCapturerGDI)
 };

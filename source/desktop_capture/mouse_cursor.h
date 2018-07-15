@@ -18,11 +18,10 @@ namespace aspia {
 class MouseCursor
 {
 public:
+    MouseCursor(std::unique_ptr<quint8[]> data,
+                const QSize& size,
+                const QPoint& hotspot);
     ~MouseCursor() = default;
-
-    static std::unique_ptr<MouseCursor> create(std::unique_ptr<quint8[]> data,
-                                               const QSize& size,
-                                               const QPoint& hotspot);
 
     const QSize& size() const { return size_; }
     const QPoint& hotSpot() const { return hotspot_; }
@@ -33,10 +32,6 @@ public:
     bool isEqual(const MouseCursor& other);
 
 private:
-    MouseCursor(std::unique_ptr<quint8[]> data,
-                const QSize& size,
-                const QPoint& hotspot);
-
     std::unique_ptr<quint8[]> const data_;
     const QSize size_;
     const QPoint hotspot_;
