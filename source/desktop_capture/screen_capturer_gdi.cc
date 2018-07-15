@@ -11,6 +11,7 @@
 #include <dwmapi.h>
 
 #include "desktop_capture/win/cursor.h"
+#include "desktop_capture/win/screen_capture_utils.h"
 
 namespace aspia {
 
@@ -53,10 +54,7 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         desktop_.setThreadDesktop(std::move(input_desktop));
     }
 
-    QRect screen_rect(GetSystemMetrics(SM_XVIRTUALSCREEN),
-                      GetSystemMetrics(SM_YVIRTUALSCREEN),
-                      GetSystemMetrics(SM_CXVIRTUALSCREEN),
-                      GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    QRect screen_rect = fullScreenRect();
 
     // If the display bounds have changed then recreate GDI resources.
     if (screen_rect != desktop_dc_rect_)
