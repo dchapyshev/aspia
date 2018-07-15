@@ -1,14 +1,14 @@
 //
 // PROJECT:         Aspia
-// FILE:            desktop_capture/capturer_gdi.h
+// FILE:            desktop_capture/screen_capturer_gdi.h
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
-#define _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
+#ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H_
+#define ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H_
 
-#include "desktop_capture/capturer.h"
+#include "desktop_capture/screen_capturer.h"
 
 #include "base/win/scoped_hdc.h"
 #include "desktop_capture/desktop_frame_dib.h"
@@ -17,12 +17,12 @@
 
 namespace aspia {
 
-class CapturerGDI : public Capturer
+class ScreenCapturerGDI : public ScreenCapturer
 {
 public:
-    ~CapturerGDI() = default;
+    ~ScreenCapturerGDI() = default;
 
-    static std::unique_ptr<CapturerGDI> create();
+    static ScreenCapturerGDI* create();
 
     const DesktopFrame* captureImage() override;
     std::unique_ptr<MouseCursor> captureCursor() override;
@@ -30,7 +30,7 @@ public:
 private:
     typedef HRESULT(WINAPI * DwmEnableCompositionFunc)(UINT);
 
-    CapturerGDI();
+    ScreenCapturerGDI();
     bool prepareCaptureResources();
 
     ScopedThreadDesktop desktop_;
@@ -47,9 +47,9 @@ private:
 
     CURSORINFO prev_cursor_info_;
 
-    Q_DISABLE_COPY(CapturerGDI)
+    Q_DISABLE_COPY(ScreenCapturerGDI)
 };
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__CAPTURER_GDI_H
+#endif // ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H_

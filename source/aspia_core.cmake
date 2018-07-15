@@ -228,9 +228,6 @@ list(APPEND SOURCE_CRYPTO
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/capturer.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/capturer_gdi.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.cc
@@ -252,7 +249,10 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/mouse_cursor_cache.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/mouse_cursor_cache.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.cc
@@ -260,7 +260,9 @@ list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/desktop.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.h)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/screen_capture_utils.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/screen_capture_utils.h)
 
 list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc

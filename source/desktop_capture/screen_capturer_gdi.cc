@@ -1,11 +1,11 @@
 //
 // PROJECT:         Aspia
-// FILE:            desktop_capture/capturer_gdi.cc
+// FILE:            desktop_capture/screen_capturer_gdi.cc
 // LICENSE:         GNU General Public License 3
 // PROGRAMMERS:     Dmitry Chapyshev (dmitry@aspia.ru)
 //
 
-#include "desktop_capture/capturer_gdi.h"
+#include "desktop_capture/screen_capturer_gdi.h"
 
 #include <QDebug>
 #include <dwmapi.h>
@@ -25,18 +25,18 @@ bool isSameCursorShape(const CURSORINFO& left, const CURSORINFO& right)
 
 } // namespace
 
-CapturerGDI::CapturerGDI()
+ScreenCapturerGDI::ScreenCapturerGDI()
 {
     memset(&prev_cursor_info_, 0, sizeof(prev_cursor_info_));
 }
 
 // static
-std::unique_ptr<CapturerGDI> CapturerGDI::create()
+ScreenCapturerGDI* ScreenCapturerGDI::create()
 {
-    return std::unique_ptr<CapturerGDI>(new CapturerGDI());
+    return new ScreenCapturerGDI();
 }
 
-bool CapturerGDI::prepareCaptureResources()
+bool ScreenCapturerGDI::prepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
     // current one.
@@ -102,7 +102,7 @@ bool CapturerGDI::prepareCaptureResources()
     return true;
 }
 
-const DesktopFrame* CapturerGDI::captureImage()
+const DesktopFrame* ScreenCapturerGDI::captureImage()
 {
     if (!prepareCaptureResources())
         return nullptr;
@@ -138,7 +138,7 @@ const DesktopFrame* CapturerGDI::captureImage()
     return curr_frame;
 }
 
-std::unique_ptr<MouseCursor> CapturerGDI::captureCursor()
+std::unique_ptr<MouseCursor> ScreenCapturerGDI::captureCursor()
 {
     CURSORINFO cursor_info = { 0 };
 

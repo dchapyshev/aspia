@@ -14,8 +14,8 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_util.h"
-#include "desktop_capture/capturer_gdi.h"
 #include "desktop_capture/capture_scheduler.h"
+#include "desktop_capture/screen_capturer_gdi.h"
 
 namespace aspia {
 
@@ -42,7 +42,7 @@ void ScreenUpdater::update()
 
 void ScreenUpdater::run()
 {
-    std::unique_ptr<Capturer> capturer = CapturerGDI::create();
+    std::unique_ptr<ScreenCapturer> capturer(ScreenCapturerGDI::create());
     if (!capturer)
     {
         QCoreApplication::postEvent(parent(), new ErrorEvent());
