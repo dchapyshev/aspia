@@ -116,7 +116,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
 
     size_t data_size = 0;
 
-    for (const auto& rect : frame->updatedRegion())
+    for (const auto& rect : frame->constUpdatedRegion())
     {
         data_size += rect.width() * rect.height() * target_format_.bytesPerPixel();
         VideoUtil::toVideoRect(rect, packet->add_dirty_rect());
@@ -130,7 +130,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
 
     quint8* translate_pos = translate_buffer_.get();
 
-    for (const auto& rect : frame->updatedRegion())
+    for (const auto& rect : frame->constUpdatedRegion())
     {
         const int stride = rect.width() * target_format_.bytesPerPixel();
 

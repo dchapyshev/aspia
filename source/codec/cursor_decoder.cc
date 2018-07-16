@@ -84,10 +84,8 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         if (!decompressCursor(cursor_shape, image.get()))
             return nullptr;
 
-        std::unique_ptr<MouseCursor> mouse_cursor =
-            MouseCursor::create(std::move(image),
-                                size,
-                                QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
+        std::unique_ptr<MouseCursor> mouse_cursor = std::make_unique<MouseCursor>(
+            std::move(image), size, QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {

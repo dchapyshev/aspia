@@ -14,8 +14,9 @@
 #include "codec/video_encoder_vpx.h"
 #include "codec/video_encoder_zlib.h"
 #include "codec/video_util.h"
-#include "desktop_capture/capturer_gdi.h"
 #include "desktop_capture/capture_scheduler.h"
+#include "desktop_capture/cursor_capturer_win.h"
+#include "desktop_capture/screen_capturer_gdi.h"
 
 namespace aspia {
 
@@ -42,13 +43,7 @@ void ScreenUpdater::update()
 
 void ScreenUpdater::run()
 {
-    std::unique_ptr<Capturer> capturer = CapturerGDI::create();
-    if (!capturer)
-    {
-        QCoreApplication::postEvent(parent(), new ErrorEvent());
-        return;
-    }
-
+    std::unique_ptr<ScreenCapturer> screen_capturer = std::make_unique<ScreenCapturerGDI>();
     std::unique_ptr<VideoEncoder> video_encoder;
 
     switch (config_.video_encoding())
@@ -78,10 +73,14 @@ void ScreenUpdater::run()
         return;
     }
 
+    std::unique_ptr<CursorCapturer> cursor_capturer;
     std::unique_ptr<CursorEncoder> cursor_encoder;
 
     if (config_.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
+    {
+        cursor_capturer = std::make_unique<CursorCapturerWin>();
         cursor_encoder = std::make_unique<CursorEncoder>();
+    }
 
     CaptureScheduler scheduler;
 
@@ -89,18 +88,18 @@ void ScreenUpdater::run()
     {
         scheduler.beginCapture();
 
-        const DesktopFrame* screen_frame = capturer->captureImage();
+        const DesktopFrame* screen_frame = screen_capturer->captureFrame();
         if (screen_frame)
         {
             std::unique_ptr<proto::desktop::VideoPacket> video_packet;
             std::unique_ptr<proto::desktop::CursorShape> cursor_shape;
 
-            if (!screen_frame->updatedRegion().isEmpty())
+            if (!screen_frame->constUpdatedRegion().isEmpty())
                 video_packet = video_encoder->encode(screen_frame);
 
-            if (cursor_encoder)
+            if (cursor_capturer && cursor_encoder)
             {
-                std::unique_ptr<MouseCursor> mouse_cursor = capturer->captureCursor();
+                std::unique_ptr<MouseCursor> mouse_cursor(cursor_capturer->captureCursor());
                 if (mouse_cursor)
                     cursor_shape = cursor_encoder->encode(std::move(mouse_cursor));
             }

@@ -1726,7 +1726,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="264"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="215"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
