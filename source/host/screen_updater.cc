@@ -88,13 +88,13 @@ void ScreenUpdater::run()
     {
         scheduler.beginCapture();
 
-        const DesktopFrame* screen_frame = screen_capturer->captureImage();
+        const DesktopFrame* screen_frame = screen_capturer->captureFrame();
         if (screen_frame)
         {
             std::unique_ptr<proto::desktop::VideoPacket> video_packet;
             std::unique_ptr<proto::desktop::CursorShape> cursor_shape;
 
-            if (!screen_frame->updatedRegion().isEmpty())
+            if (!screen_frame->constUpdatedRegion().isEmpty())
                 video_packet = video_encoder->encode(screen_frame);
 
             if (cursor_capturer && cursor_encoder)

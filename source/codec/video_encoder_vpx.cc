@@ -279,7 +279,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     {
         case VPX_IMG_FMT_YV12:
         {
-            for (const auto& rect : frame->updatedRegion())
+            for (const auto& rect : frame->constUpdatedRegion())
             {
                 int y_offset = y_stride * rect.y() + rect.x();
                 int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
@@ -300,7 +300,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
 
         case VPX_IMG_FMT_I444:
         {
-            for (const auto& rect : frame->updatedRegion())
+            for (const auto& rect : frame->constUpdatedRegion())
             {
                 int yuv_offset = uv_stride * rect.y() + rect.x();
 

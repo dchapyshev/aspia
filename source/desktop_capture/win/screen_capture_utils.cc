@@ -8,19 +8,15 @@
 
 #include "desktop_capture/win/screen_capture_utils.h"
 
+#include <QDebug>
 #include <qt_windows.h>
 
 namespace aspia {
 
-bool screenList(ScreenCapturer::ScreenList* screens,
-                QVector<QString>* device_names /* = nullptr */)
+// static
+bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
 {
     Q_ASSERT(screens->size() == 0U);
-
-    if (device_names)
-    {
-        Q_ASSERT(device_names->size() == 0U);
-    }
 
     for (int device_index = 0;; ++device_index)
     {
@@ -35,18 +31,15 @@ bool screenList(ScreenCapturer::ScreenList* screens,
         if (!(device.StateFlags & DISPLAY_DEVICE_ACTIVE))
             continue;
 
-        screens->push_back({device_index, QString()});
-        if (device_names)
-        {
-            device_names->push_back(QString::fromUtf16(
-                reinterpret_cast<const ushort*>(device.DeviceName)));
-        }
+        screens->push_back({device_index, QString::fromUtf16(
+            reinterpret_cast<const ushort*>(device.DeviceName))});
     }
 
     return true;
 }
 
-bool isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
+// static
+bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
     {
@@ -64,7 +57,8 @@ bool isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
     return true;
 }
 
-QRect fullScreenRect()
+// static
+QRect ScreenCaptureUtils::fullScreenRect()
 {
     return QRect(GetSystemMetrics(SM_XVIRTUALSCREEN),
                  GetSystemMetrics(SM_YVIRTUALSCREEN),
@@ -72,7 +66,8 @@ QRect fullScreenRect()
                  GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
 
-QRect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key)
+// static
+QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen, const QString& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
         return fullScreenRect();
@@ -86,7 +81,7 @@ QRect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key)
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
-    if (device_key != device.DeviceKey)
+    if (wcscmp(device.DeviceKey, reinterpret_cast<const wchar_t*>(device_key.utf16())) != 0)
         return QRect();
 
     DEVMODE device_mode;

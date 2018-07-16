@@ -231,7 +231,6 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer_win.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/cursor_capturer_win.h
-    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_aligned.cc
@@ -254,6 +253,7 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/mouse_cursor_cache.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/pixel_format.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capture_frame_queue.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.h)

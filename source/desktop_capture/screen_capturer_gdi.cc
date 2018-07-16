@@ -14,6 +14,83 @@
 
 namespace aspia {
 
+bool ScreenCapturerGDI::screenList(ScreenList* screens)
+{
+    return ScreenCaptureUtils::screenList(screens);
+}
+
+bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
+{
+    if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
+        return false;
+
+    current_screen_id_ = screen_id;
+    return true;
+}
+
+const DesktopFrame* ScreenCapturerGDI::captureFrame()
+{
+    queue_.moveToNextFrame();
+
+    if (!prepareCaptureResources())
+        return nullptr;
+
+    QRect screen_rect = ScreenCaptureUtils::screenRect(current_screen_id_, current_device_key_);
+    if (screen_rect.isEmpty())
+    {
+        qWarning("Failed to get screen rect");
+        return nullptr;
+    }
+
+    if (!queue_.currentFrame() || queue_.currentFrame()->size() != screen_rect.size())
+    {
+        Q_ASSERT(desktop_dc_);
+        Q_ASSERT(memory_dc_);
+
+        std::unique_ptr<DesktopFrame> frame =
+            DesktopFrameDIB::create(screen_rect.size(), PixelFormat::ARGB(), memory_dc_);
+        if (!frame)
+        {
+            qWarning("Failed to create frame buffer");
+            return nullptr;
+        }
+
+        queue_.replaceCurrentFrame(std::move(frame));
+    }
+
+    DesktopFrameDIB* current = static_cast<DesktopFrameDIB*>(queue_.currentFrame());
+    DesktopFrameDIB* previous = static_cast<DesktopFrameDIB*>(queue_.previousFrame());
+
+    HGDIOBJ old_bitmap = SelectObject(memory_dc_, current->bitmap());
+    if (old_bitmap)
+    {
+        BitBlt(memory_dc_,
+               0, 0,
+               screen_rect.width(),
+               screen_rect.height(),
+               *desktop_dc_,
+               screen_rect.left(),
+               screen_rect.top(),
+               CAPTUREBLT | SRCCOPY);
+
+        SelectObject(memory_dc_, old_bitmap);
+    }
+
+    if (!previous || previous->size() != current->size())
+    {
+        differ_ = std::make_unique<Differ>(screen_rect.size());
+        *current->updatedRegion() = QRect(QPoint(0, 0), screen_rect.size());
+    }
+    else
+    {
+        differ_->calcDirtyRegion(previous->frameData(),
+                                 current->frameData(),
+                                 current->updatedRegion());
+    }
+
+    return current;
+}
+
 bool ScreenCapturerGDI::prepareCaptureResources()
 {
     // Switch to the desktop receiving user input if different from the
@@ -31,10 +108,10 @@ bool ScreenCapturerGDI::prepareCaptureResources()
         desktop_.setThreadDesktop(std::move(input_desktop));
     }
 
-    QRect screen_rect = fullScreenRect();
+    QRect desktop_rect = ScreenCaptureUtils::fullScreenRect();
 
     // If the display bounds have changed then recreate GDI resources.
-    if (screen_rect != desktop_dc_rect_)
+    if (desktop_rect != desktop_dc_rect_)
     {
         desktop_dc_.reset();
         memory_dc_.reset();
@@ -60,57 +137,13 @@ bool ScreenCapturerGDI::prepareCaptureResources()
             return false;
         }
 
-        desktop_dc_rect_ = screen_rect;
+        desktop_dc_rect_ = desktop_rect;
 
-        for (int i = 0; i < kNumFrames; ++i)
-        {
-            frame_[i] = DesktopFrameDIB::create(screen_rect.size(),
-                                                PixelFormat::ARGB(),
-                                                memory_dc_);
-            if (!frame_[i])
-                return false;
-        }
-
-        differ_ = std::make_unique<Differ>(screen_rect.size());
+        // Make sure the frame buffers will be reallocated.
+        queue_.reset();
     }
 
     return true;
-}
-
-const DesktopFrame* ScreenCapturerGDI::captureImage()
-{
-    if (!prepareCaptureResources())
-        return nullptr;
-
-    int prev_frame_id = curr_frame_id_ - 1;
-    if (prev_frame_id < 0)
-        prev_frame_id = kNumFrames - 1;
-
-    DesktopFrameDIB* prev_frame = frame_[prev_frame_id].get();
-    DesktopFrameDIB* curr_frame = frame_[curr_frame_id_].get();
-
-    HGDIOBJ old_bitmap = SelectObject(memory_dc_, curr_frame->bitmap());
-    if (old_bitmap)
-    {
-        BitBlt(memory_dc_,
-               0, 0,
-               curr_frame->size().width(),
-               curr_frame->size().height(),
-               *desktop_dc_,
-               desktop_dc_rect_.x(),
-               desktop_dc_rect_.y(),
-               CAPTUREBLT | SRCCOPY);
-
-        SelectObject(memory_dc_, old_bitmap);
-    }
-
-    differ_->calcDirtyRegion(prev_frame->frameData(),
-                             curr_frame->frameData(),
-                             curr_frame->mutableUpdatedRegion());
-
-    curr_frame_id_ = prev_frame_id;
-
-    return curr_frame;
 }
 
 } // namespace aspia

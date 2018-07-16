@@ -11,9 +11,10 @@
 #include "desktop_capture/screen_capturer.h"
 
 #include "base/win/scoped_hdc.h"
+#include "desktop_capture/win/scoped_thread_desktop.h"
 #include "desktop_capture/desktop_frame_dib.h"
 #include "desktop_capture/differ.h"
-#include "desktop_capture/win/scoped_thread_desktop.h"
+#include "desktop_capture/screen_capture_frame_queue.h"
 
 namespace aspia {
 
@@ -23,12 +24,16 @@ public:
     ScreenCapturerGDI() = default;
     ~ScreenCapturerGDI() = default;
 
-    const DesktopFrame* captureImage() override;
+    bool screenList(ScreenList* screens) override;
+    bool selectScreen(ScreenId screen_id) override;
+
+    const DesktopFrame* captureFrame() override;
 
 private:
-    typedef HRESULT(WINAPI * DwmEnableCompositionFunc)(UINT);
-
     bool prepareCaptureResources();
+
+    ScreenId current_screen_id_ = kFullDesktopScreenId;
+    QString current_device_key_;
 
     ScopedThreadDesktop desktop_;
     QRect desktop_dc_rect_;
@@ -37,10 +42,7 @@ private:
     std::unique_ptr<ScopedGetDC> desktop_dc_;
     ScopedCreateDC memory_dc_;
 
-    static const int kNumFrames = 2;
-    int curr_frame_id_ = 0;
-
-    std::unique_ptr<DesktopFrameDIB> frame_[kNumFrames];
+    ScreenCaptureFrameQueue queue_;
 
     Q_DISABLE_COPY(ScreenCapturerGDI)
 };

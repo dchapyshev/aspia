@@ -23,7 +23,7 @@ DesktopFrame::DesktopFrame(const QSize& size,
 
 bool DesktopFrame::contains(int x, int y) const
 {
-    return (x > 0 && x <= size_.width() && y > 0 && y <= size_.height());
+    return (x >= 0 && x <= size_.width() && y >= 0 && y <= size_.height());
 }
 
 quint8* DesktopFrame::frameDataAtPos(const QPoint& pos) const

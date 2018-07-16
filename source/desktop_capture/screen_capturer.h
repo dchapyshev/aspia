@@ -30,7 +30,9 @@ public:
     static const ScreenId kFullDesktopScreenId = -1;
     static const ScreenId kInvalidScreenId = -2;
 
-    virtual const DesktopFrame* captureImage() = 0;
+    virtual bool screenList(ScreenList* screens) = 0;
+    virtual bool selectScreen(ScreenId screen_id) = 0;
+    virtual const DesktopFrame* captureFrame() = 0;
 };
 
 } // namespace aspia

@@ -29,8 +29,8 @@ public:
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
-    const QRegion& updatedRegion() const { return updated_region_; }
-    QRegion* mutableUpdatedRegion() { return &updated_region_; }
+    const QRegion& constUpdatedRegion() const { return updated_region_; }
+    QRegion* updatedRegion() { return &updated_region_; }
 
 protected:
     DesktopFrame(const QSize& size, const PixelFormat& format, int stride, quint8* data);

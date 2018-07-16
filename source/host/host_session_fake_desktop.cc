@@ -158,7 +158,7 @@ std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
                      Qt::AlignCenter,
                      tr("The session is temporarily unavailable."));
 
-    *frame->mutableUpdatedRegion() += frame_rect;
+    *frame->updatedRegion() += frame_rect;
     return frame;
 }
 
