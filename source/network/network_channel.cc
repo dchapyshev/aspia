@@ -36,7 +36,7 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
         if (message_size > 0x3FFF) // 16383 bytes
         {
             buffer[1] |= 0x80;
-            buffer[length++] = message_size >> 14 & 0xFF;
+            buffer[length++] = message_size >> 14 & 0x7F;
 
             if (message_size > 0x1FFFF) // 2097151 bytes
             {
@@ -58,7 +58,9 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
 } // namespace
 
 NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
-    : QObject(parent), channel_type_(channel_type), socket_(socket)
+    : QObject(parent),
+      channel_type_(channel_type),
+      socket_(socket)
 {
     Q_ASSERT(!socket_.isNull());
 
