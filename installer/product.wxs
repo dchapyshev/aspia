@@ -46,6 +46,11 @@
       <Feature Id="TranslationsFeature" Title="!(loc.Translations_Title)"
                Description="!(loc.Translations_Description)" Absent="disallow" AllowAdvertise="no"
                TypicalDefault="install" InstallDefault="local" Level="2" Display="expand">
+        <Feature Id="FeatureGermanTranslation" Title="!(loc.GermanLanguage_Title)"
+                 Description="!(loc.GermanLanguage_Description)" Absent="allow" AllowAdvertise="no"
+                 TypicalDefault="install" InstallDefault="local" Level="3">
+          <ComponentRef Id="TranslationGerman" />
+        </Feature>
         <Feature Id="FeatureDutchTranslation" Title="!(loc.DutchLanguage_Title)"
                  Description="!(loc.DutchLanguage_Description)" Absent="allow" AllowAdvertise="no"
                  TypicalDefault="install" InstallDefault="local" Level="3">

@@ -8,6 +8,8 @@
   <String Id="HostService_Description" Overridable="yes">Предоставляет удаленный доступ к этому компьютеру.</String>
   <String Id="Translations_Title" Overridable="yes">Переводы</String>
   <String Id="Translations_Description" Overridable="yes">Переводы языка интерфейса приложения.</String>
+  <String Id="GermanLanguage_Title">Немецкий</String>
+  <String Id="GermanLanguage_Description">Перевод приложения на Немецкий язык.</String>
   <String Id="DutchLanguage_Title">Голландский</String>
   <String Id="DutchLanguage_Description">Перевод приложения на Голландский язык.</String>
   <String Id="RussianLanguage_Title">Русский</String>

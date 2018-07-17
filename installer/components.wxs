@@ -93,6 +93,10 @@
 
     <!-- Translations -->
     <DirectoryRef Id="TRANSLATIONS" FileSource="$(var.SourceFiles)\translations">
+      <Component Id ="TranslationGerman" DiskId="1" Guid="{A66B1894-E68C-4F1C-B135-E2739BC7D717}">
+        <File Id="aspia_de.qm" Name="aspia_de.qm" KeyPath="yes" />
+        <File Id="qtbase_de.qm" Name="qtbase_de.qm" />
+      </Component>
       <Component Id ="TranslationDutch" DiskId="1" Guid="{A8C3C5A2-E3B8-4001-BCA8-7D634761E8C5}">
         <File Id="aspia_nl.qm" Name="aspia_nl.qm" KeyPath="yes" />
       </Component>
