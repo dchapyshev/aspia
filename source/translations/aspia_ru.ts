@@ -421,8 +421,8 @@
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="130"/>
-        <location filename="../console/console_window.ui" line="423"/>
+        <location filename="../console/console_window.ui" line="131"/>
+        <location filename="../console/console_window.ui" line="425"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
     </message>
@@ -883,6 +883,34 @@
     </message>
 </context>
 <context>
+    <name>SystemInfoWindow</name>
+    <message>
+        <location filename="../client/ui/system_info_window.ui" line="91"/>
+        <source>Save Report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/system_info_window.ui" line="100"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/system_info_window.ui" line="105"/>
+        <source>Current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/system_info_window.ui" line="110"/>
+        <source>Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/system_info_window.ui" line="115"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserDialog</name>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="14"/>
@@ -1272,7 +1300,7 @@
 <context>
     <name>aspia::ClientSessionSystemInfo</name>
     <message>
-        <location filename="../client/client_session_system_info.cc" line="40"/>
+        <location filename="../client/client_session_system_info.cc" line="35"/>
         <source>Session error: Invalid message from host.</source>
         <translation type="unfinished">Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
@@ -1415,39 +1443,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="167"/>
+        <location filename="../console/console_window.cc" line="166"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="169"/>
+        <location filename="../console/console_window.cc" line="168"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="187"/>
+        <location filename="../console/console_window.cc" line="186"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="188"/>
+        <location filename="../console/console_window.cc" line="187"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="270"/>
+        <location filename="../console/console_window.cc" line="269"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="387"/>
-        <location filename="../console/console_window.cc" line="574"/>
+        <location filename="../console/console_window.cc" line="386"/>
+        <location filename="../console/console_window.cc" line="577"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="388"/>
-        <location filename="../console/console_window.cc" line="575"/>
+        <location filename="../console/console_window.cc" line="387"/>
+        <location filename="../console/console_window.cc" line="578"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1529,76 +1557,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="125"/>
-        <location filename="../client/ui/file_panel.cc" line="139"/>
-        <location filename="../client/ui/file_panel.cc" line="153"/>
-        <location filename="../client/ui/file_panel.cc" line="166"/>
-        <location filename="../client/ui/file_panel.cc" line="280"/>
+        <location filename="../client/ui/file_panel.cc" line="123"/>
+        <location filename="../client/ui/file_panel.cc" line="137"/>
+        <location filename="../client/ui/file_panel.cc" line="151"/>
+        <location filename="../client/ui/file_panel.cc" line="164"/>
+        <location filename="../client/ui/file_panel.cc" line="282"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="126"/>
+        <location filename="../client/ui/file_panel.cc" line="124"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="140"/>
+        <location filename="../client/ui/file_panel.cc" line="138"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="154"/>
+        <location filename="../client/ui/file_panel.cc" line="152"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="167"/>
+        <location filename="../client/ui/file_panel.cc" line="165"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="256"/>
+        <location filename="../client/ui/file_panel.cc" line="258"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="281"/>
+        <location filename="../client/ui/file_panel.cc" line="283"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="313"/>
+        <location filename="../client/ui/file_panel.cc" line="315"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="315"/>
+        <location filename="../client/ui/file_panel.cc" line="317"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="323"/>
+        <location filename="../client/ui/file_panel.cc" line="325"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="381"/>
+        <location filename="../client/ui/file_panel.cc" line="383"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="382"/>
+        <location filename="../client/ui/file_panel.cc" line="384"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="436"/>
+        <location filename="../client/ui/file_panel.cc" line="438"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="440"/>
+        <location filename="../client/ui/file_panel.cc" line="442"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
@@ -1634,12 +1662,12 @@
 <context>
     <name>aspia::FileRemoveQueueBuilder</name>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="49"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="43"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="55"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="49"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
@@ -1647,12 +1675,12 @@
 <context>
     <name>aspia::FileRemover</name>
     <message>
-        <location filename="../client/file_remover.cc" line="77"/>
+        <location filename="../client/file_remover.cc" line="71"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_remover.cc" line="105"/>
+        <location filename="../client/file_remover.cc" line="99"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
@@ -1660,33 +1688,33 @@
 <context>
     <name>aspia::FileTransfer</name>
     <message>
-        <location filename="../client/file_transfer.cc" line="100"/>
+        <location filename="../client/file_transfer.cc" line="93"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="114"/>
+        <location filename="../client/file_transfer.cc" line="107"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="127"/>
+        <location filename="../client/file_transfer.cc" line="122"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="174"/>
+        <location filename="../client/file_transfer.cc" line="171"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="162"/>
-        <location filename="../client/file_transfer.cc" line="201"/>
+        <location filename="../client/file_transfer.cc" line="159"/>
+        <location filename="../client/file_transfer.cc" line="199"/>
         <source>An unexpected response to the request was received</source>
         <translation>Получен неожиданный ответ на запрос</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="191"/>
+        <location filename="../client/file_transfer.cc" line="187"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
@@ -1742,12 +1770,12 @@
 <context>
     <name>aspia::FileTransferQueueBuilder</name>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="64"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="62"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="70"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="68"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
@@ -1790,7 +1818,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="268"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="219"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -1827,7 +1855,7 @@
 <context>
     <name>aspia::SystemInfoWindow</name>
     <message>
-        <location filename="../client/ui/system_info_window.cc" line="23"/>
+        <location filename="../client/ui/system_info_window.cc" line="31"/>
         <source>%1 - Aspia System Information</source>
         <translation type="unfinished"></translation>
     </message>

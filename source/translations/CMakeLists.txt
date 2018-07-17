@@ -10,7 +10,7 @@ if(Qt5LinguistTools_FOUND)
     set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM TRUE)
 
     # List of translation files.
-    set(TS_FILES aspia_ru.ts aspia_nl.ts)
+    set(TS_FILES aspia_de.ts aspia_ru.ts aspia_nl.ts)
 
     # Get the list of files containing messages.
     file(GLOB_RECURSE TR_SOURCES
