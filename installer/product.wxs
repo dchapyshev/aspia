@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <?include variables.wxi?>
-  <Product Id="{E8E6DCA6-143F-4865-A3EB-63B74B3B4378}" Name="$(var.ProductName)" Language="1033"
+  <Product Id="*" Name="$(var.ProductName)" Language="1033"
            Version="$(var.Version)" Manufacturer="$(var.Manufacturer)"
            UpgradeCode="{A2C5BB66-6951-4342-B3A6-51201CD85758}">
     <Package InstallerVersion="200" Compressed="yes" Manufacturer="$(var.Manufacturer)"
@@ -11,7 +11,7 @@
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
     <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)"
-                  Schedule="afterInstallExecute" />
+                  Schedule="afterInstallInitialize" />
 
     <Icon Id="aspia.ico" SourceFile="resources/aspia.ico"/>
     <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
