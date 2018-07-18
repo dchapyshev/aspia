@@ -80,10 +80,22 @@ message CursorShape
 
 message Rect
 {
+    int32 x      = 1;
+    int32 y      = 2;
+    int32 width  = 3;
+    int32 height = 4;
+}
+
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
+message Point
+{
     int32 x = 1;
     int32 y = 2;
-    int32 width = 3;
-    int32 height = 4;
 }
 
 message PixelFormat
@@ -108,16 +120,11 @@ enum VideoEncoding
     VIDEO_ENCODING_VP9     = 4; // LossLess
 }
 
-message Size
-{
-    int32 width = 1;
-    int32 height = 2;
-}
-
 message VideoPacketFormat
 {
     Size screen_size         = 1;
     PixelFormat pixel_format = 2;
+    Point top_left           = 3;
 }
 
 message VideoPacket
@@ -141,10 +148,22 @@ enum Feature
     FEATURE_CLIPBOARD    = 2;
 }
 
+message Screen
+{
+    int64 id     = 1;
+    string title = 2;
+}
+
 message ConfigRequest
 {
+    // Bit field with supported video encodings.
     uint32 video_encodings = 1;
-    uint32 features = 2;
+
+    // Bit field with supported features.
+    uint32 features        = 2;
+
+    // List of screens (monitors) on the remote computer.
+    repeated Screen screen = 3;
 }
 
 message Config
@@ -154,6 +173,7 @@ message Config
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;
     uint32 compress_ratio        = 5;
+    int64 screen_id              = 6;
 }
 
 message HostToClient
