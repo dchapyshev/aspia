@@ -76,6 +76,8 @@ const DesktopFrame* ScreenCapturerGDI::captureFrame()
         SelectObject(memory_dc_, old_bitmap);
     }
 
+    current->setTopLeft(screen_rect.topLeft());
+
     if (!previous || previous->size() != current->size())
     {
         differ_ = std::make_unique<Differ>(screen_rect.size());

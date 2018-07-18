@@ -33,6 +33,19 @@ void VideoUtil::toVideoSize(const QSize& from, proto::desktop::Size* to)
     to->set_height(from.height());
 }
 
+// static
+QPoint VideoUtil::fromVideoPoint(const proto::desktop::Point& point)
+{
+    return QPoint(point.x(), point.y());
+}
+
+// static
+void VideoUtil::toVideoPoint(const QPoint& from, proto::desktop::Point* to)
+{
+    to->set_x(from.x());
+    to->set_y(from.y());
+}
+
 PixelFormat VideoUtil::fromVideoPixelFormat(const proto::desktop::PixelFormat& format)
 {
     return PixelFormat(static_cast<uint8_t>(format.bits_per_pixel()),

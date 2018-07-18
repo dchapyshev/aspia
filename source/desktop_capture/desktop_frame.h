@@ -32,6 +32,9 @@ public:
     const QRegion& constUpdatedRegion() const { return updated_region_; }
     QRegion* updatedRegion() { return &updated_region_; }
 
+    const QPoint& topLeft() const { return top_left_; }
+    void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
+
 protected:
     DesktopFrame(const QSize& size, const PixelFormat& format, int stride, quint8* data);
 
@@ -46,6 +49,7 @@ private:
     const int stride_;
 
     QRegion updated_region_;
+    QPoint top_left_;
 
     Q_DISABLE_COPY(DesktopFrame)
 };

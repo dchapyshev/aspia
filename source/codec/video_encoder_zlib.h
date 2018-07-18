@@ -35,9 +35,6 @@ private:
                      int compression_ratio);
     void compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size);
 
-    // The current frame size.
-    QSize screen_size_;
-
     // Client's pixel format
     PixelFormat target_format_;
 

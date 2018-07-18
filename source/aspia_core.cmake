@@ -164,6 +164,7 @@ list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/video_decoder_vpx.h
     ${PROJECT_SOURCE_DIR}/codec/video_decoder_zlib.cc
     ${PROJECT_SOURCE_DIR}/codec/video_decoder_zlib.h
+    ${PROJECT_SOURCE_DIR}/codec/video_encoder.cc
     ${PROJECT_SOURCE_DIR}/codec/video_encoder.h
     ${PROJECT_SOURCE_DIR}/codec/video_encoder_vpx.cc
     ${PROJECT_SOURCE_DIR}/codec/video_encoder_vpx.h

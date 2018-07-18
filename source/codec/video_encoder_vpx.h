@@ -34,28 +34,24 @@ public:
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
 
-    void createImage();
-    void createActiveMap();
-    void createVp8Codec();
-    void createVp9Codec();
+    void createActiveMap(const QSize& size);
+    void createVp8Codec(const QSize& size);
+    void createVp9Codec(const QSize& size);
     void prepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
     void setActiveMap(const QRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;
 
-    // The current frame size.
-    QSize screen_size_;
-
     ScopedVpxCodec codec_ = nullptr;
-    vpx_image_t image_;
 
     size_t active_map_size_ = 0;
 
     vpx_active_map_t active_map_;
     std::unique_ptr<quint8[]> active_map_buffer_;
 
-    // Buffer for storing the yuv image.
-    std::unique_ptr<quint8[]> yuv_image_;
+    // VPX image and buffer to hold the actual YUV planes.
+    std::unique_ptr<vpx_image_t> image_;
+    std::unique_ptr<quint8[]> image_buffer_;
 
     Q_DISABLE_COPY(VideoEncoderVPX)
 };

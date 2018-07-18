@@ -100,18 +100,12 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
 std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const DesktopFrame* frame)
 {
     std::unique_ptr<proto::desktop::VideoPacket> packet =
-        std::make_unique<proto::desktop::VideoPacket>();
+        createVideoPacket(proto::desktop::VIDEO_ENCODING_ZLIB, frame);
 
-    packet->set_encoding(proto::desktop::VIDEO_ENCODING_ZLIB);
-
-    if (screen_size_ != frame->size())
+    if (packet->has_format())
     {
-        screen_size_ = frame->size();
-
-        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
-
-        VideoUtil::toVideoSize(screen_size_, format->mutable_screen_size());
-        VideoUtil::toVideoPixelFormat(target_format_, format->mutable_pixel_format());
+        VideoUtil::toVideoPixelFormat(
+            target_format_, packet->mutable_format()->mutable_pixel_format());
     }
 
     size_t data_size = 0;
