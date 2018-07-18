@@ -130,14 +130,24 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
     if (packet.has_format())
     {
         const proto::desktop::Size& size = packet.format().screen_size();
+        const proto::desktop::Point& top_left = packet.format().top_left();
 
-        if (size.width() <= 0 || size.height() <= 0)
+        if (size.width()  <= 0 || size.width()  >= 65535 ||
+            size.height() <= 0 || size.height() >= 65535)
         {
             emit errorOccurred(tr("Session error: Wrong video frame size."));
             return;
         }
 
-        desktop_window_->resizeDesktopFrame(QSize(size.width(), size.height()));
+        if (top_left.x() < 0 || top_left.x() >= 65535 ||
+            top_left.y() < 0 || top_left.y() >= 65535)
+        {
+            emit errorOccurred(tr("Session error: Wrong video frame position."));
+            return;
+        }
+
+        desktop_window_->resizeDesktopFrame(QPoint(top_left.x(), top_left.y()),
+                                            QSize(size.width(), size.height()));
     }
 
     DesktopFrame* frame = desktop_window_->desktopFrame();

@@ -32,7 +32,7 @@ public:
     DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
-    void resizeDesktopFrame(const QSize& screen_size);
+    void resizeDesktopFrame(const QPoint& top_left, const QSize& screen_size);
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
@@ -78,6 +78,8 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
+
+    QPoint screen_top_left_;
 
     Q_DISABLE_COPY(DesktopWindow)
 };

@@ -93,7 +93,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     scroll_area_->viewport()->installEventFilter(this);
 }
 
-void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
+void DesktopWindow::resizeDesktopFrame(const QPoint& top_left, const QSize& screen_size)
 {
     QSize prev_size = desktop_->size();
 
@@ -101,6 +101,8 @@ void DesktopWindow::resizeDesktopFrame(const QSize& screen_size)
 
     if (screen_size != prev_size && !isMaximized() && !isFullScreen())
         autosizeWindow();
+
+    screen_top_left_ = top_left;
 }
 
 void DesktopWindow::drawDesktopFrame()
@@ -225,7 +227,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, quint32 mask)
         scroll_timer_id_ = 0;
     }
 
-    emit sendPointerEvent(pos, mask);
+    emit sendPointerEvent(pos + screen_top_left_, mask);
 }
 
 void DesktopWindow::changeSettings()
