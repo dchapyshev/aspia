@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<configurations lcid_type="User" show_language_selector="True" language_selector_title="Select Language" language_selector_ok="OK" language_selector_cancel="Cancel" configuration_no_match_message="" ui_level="silent" fileversion="1.0.0.0" productversion="1.0.0.0" log_enabled="False" log_file="#TEMPPATH\dotNetInstallerLog.txt">
+<configurations lcid_type="User" show_language_selector="True" language_selector_title="Select Language" language_selector_ok="OK" language_selector_cancel="Cancel" configuration_no_match_message="" ui_level="silent" fileversion="1.0.1" productversion="1.0.1" log_enabled="False" log_file="#TEMPPATH\dotNetInstallerLog.txt">
   <schema version="2.4.99.0" generator="dotNetInstaller InstallerEditor" />
   <fileattributes>
     <fileattribute name="FileDescription" value="Aspia Installer" />

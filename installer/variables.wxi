@@ -2,7 +2,7 @@
 <Include>
   <?define ProductName="Aspia"?>
   <?define Manufacturer="Dmitry Chapyshev"?>
-  <?define Version="1.0.0.0"?>
+  <?define Version="1.0.1"?>
   <?define InstallLocation="Aspia"?>
   <?define SourceFiles="..\build\Release"?>
   <?define CoreLibrary="aspia_core.dll"?>

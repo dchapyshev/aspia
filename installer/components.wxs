@@ -86,8 +86,8 @@
                         Name="$(var.ServiceName)" Wait="yes" />
         <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Host" Name="Locale" Type="string"
                        Value="!(loc.Locale)" />
-        <RemoveRegistryKey Id="RemoveHostSettings" Root="HKLM" Key="SOFTWARE\$(var.ProductName)"
-                           Action="removeOnUninstall" />
+        <!-- RemoveRegistryKey Id="RemoveHostSettings" Root="HKLM" Key="SOFTWARE\$(var.ProductName)"
+                           Action="removeOnUninstall" /-->
       </Component>
     </DirectoryRef>
 
