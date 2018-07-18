@@ -23,9 +23,7 @@ Contacts
 --------
 E-Mail: dmitry@aspia.ru
 
-IRC channel: irc.freenode.net, #aspia
-
-Russian Group in Telegram: @aspia_ru
+Russian Group in Telegram: [@aspia_ru](https://t.me/aspia_ru)
 
 Licensing
 ---------
