@@ -131,22 +131,22 @@
 <context>
     <name>CategoryName</name>
     <message>
-        <location filename="../system_info/category.cc" line="85"/>
+        <location filename="../system_info/category.cc" line="96"/>
         <source>Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../system_info/category.cc" line="86"/>
+        <location filename="../system_info/category.cc" line="97"/>
         <source>Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../system_info/category.cc" line="87"/>
+        <location filename="../system_info/category.cc" line="98"/>
         <source>Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../system_info/category.cc" line="88"/>
+        <location filename="../system_info/category.cc" line="99"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
     </message>
@@ -761,109 +761,109 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../client/ui/file_item.cc" line="31"/>
+        <location filename="../client/ui/file_item.cc" line="42"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_item.cc" line="36"/>
+        <location filename="../client/ui/file_item.cc" line="47"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_item.cc" line="41"/>
+        <location filename="../client/ui/file_item.cc" line="52"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_item.cc" line="46"/>
+        <location filename="../client/ui/file_item.cc" line="57"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_item.cc" line="51"/>
+        <location filename="../client/ui/file_item.cc" line="62"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_item.cc" line="75"/>
+        <location filename="../client/ui/file_item.cc" line="86"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="19"/>
+        <location filename="../client/file_status.cc" line="30"/>
         <source>Successfully completed</source>
         <comment>FileStatus</comment>
         <translation>Успешно завершено</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="22"/>
+        <location filename="../client/file_status.cc" line="33"/>
         <source>Invalid request</source>
         <comment>FileStatus</comment>
         <translation>Неверный запрос</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="25"/>
+        <location filename="../client/file_status.cc" line="36"/>
         <source>Invalid directory or file name</source>
         <comment>FileStatus</comment>
         <translation>Неверное имя директории или файла</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="28"/>
+        <location filename="../client/file_status.cc" line="39"/>
         <source>Path not found</source>
         <comment>FileStatus</comment>
         <translation>Путь не найден</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="31"/>
+        <location filename="../client/file_status.cc" line="42"/>
         <source>Path already exists</source>
         <comment>FileStatus</comment>
         <translation>Путь уже существует</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="34"/>
+        <location filename="../client/file_status.cc" line="45"/>
         <source>No drives found</source>
         <comment>FileStatus</comment>
         <translation>Диски не найдены</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="37"/>
+        <location filename="../client/file_status.cc" line="48"/>
         <source>Disk full</source>
         <comment>FileStatus</comment>
         <translation>Недостаточно свободного места на диске</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="40"/>
+        <location filename="../client/file_status.cc" line="51"/>
         <source>Access denied</source>
         <comment>FileStatus</comment>
         <translation>Доступ запрощен</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="43"/>
+        <location filename="../client/file_status.cc" line="54"/>
         <source>Could not open file for reading</source>
         <comment>FileStatus</comment>
         <translation>Не удалось открыть файл для чтения</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="46"/>
+        <location filename="../client/file_status.cc" line="57"/>
         <source>Could not create or replace file</source>
         <comment>FileStatus</comment>
         <translation>Не удалось создать или заменить файл</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="49"/>
+        <location filename="../client/file_status.cc" line="60"/>
         <source>Could not write to file</source>
         <comment>FileStatus</comment>
         <translation>Не удалось выполнить запись в файл</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="52"/>
+        <location filename="../client/file_status.cc" line="63"/>
         <source>Could not read file</source>
         <comment>FileStatus</comment>
         <translation>Не удалось выполнить чтение файла</translation>
     </message>
     <message>
-        <location filename="../client/file_status.cc" line="55"/>
+        <location filename="../client/file_status.cc" line="66"/>
         <source>Unknown status code</source>
         <comment>FileStatus</comment>
         <translation>Неизвестный код состояния</translation>
@@ -946,57 +946,57 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="68"/>
+        <location filename="../console/about_dialog.cc" line="79"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="72"/>
+        <location filename="../console/about_dialog.cc" line="83"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="73"/>
+        <location filename="../console/about_dialog.cc" line="84"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="78"/>
+        <location filename="../console/about_dialog.cc" line="89"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="83"/>
+        <location filename="../console/about_dialog.cc" line="94"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="95"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="88"/>
+        <location filename="../console/about_dialog.cc" line="99"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="90"/>
+        <location filename="../console/about_dialog.cc" line="101"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="92"/>
+        <location filename="../console/about_dialog.cc" line="103"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="109"/>
+        <location filename="../console/about_dialog.cc" line="120"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/ru/donate.html</translation>
     </message>
@@ -1004,63 +1004,63 @@
 <context>
     <name>aspia::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="38"/>
+        <location filename="../console/address_book_dialog.cc" line="49"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="40"/>
+        <location filename="../console/address_book_dialog.cc" line="51"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="54"/>
+        <location filename="../console/address_book_dialog.cc" line="65"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчек для изменения</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="129"/>
+        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Too long name. The maximum length of the name is 64 characters.</source>
         <translation>Слишком длинное имя. Максимальная длинна имени 64 символа.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="134"/>
+        <location filename="../console/address_book_dialog.cc" line="145"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="141"/>
+        <location filename="../console/address_book_dialog.cc" line="152"/>
         <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
         <translation>Слишком длинный коментарий. Максимальная длинна коментария 2048 символов.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="170"/>
+        <location filename="../console/address_book_dialog.cc" line="181"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="176"/>
+        <location filename="../console/address_book_dialog.cc" line="187"/>
         <source>Password can not be shorter than 8 characters.</source>
         <translation>Пароль не может быть короче 8 символов.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="263"/>
-        <location filename="../console/address_book_dialog.cc" line="285"/>
+        <location filename="../console/address_book_dialog.cc" line="274"/>
+        <location filename="../console/address_book_dialog.cc" line="296"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="264"/>
+        <location filename="../console/address_book_dialog.cc" line="275"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>При изменении количества итераций хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="286"/>
+        <location filename="../console/address_book_dialog.cc" line="297"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>При изменении размера соли для хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="324"/>
+        <location filename="../console/address_book_dialog.cc" line="335"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1068,81 +1068,81 @@
 <context>
     <name>aspia::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="191"/>
+        <location filename="../console/address_book_tab.cc" line="202"/>
         <source>Unable to open address book file.</source>
         <translation>Не удалось открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="198"/>
+        <location filename="../console/address_book_tab.cc" line="209"/>
         <source>Unable to read address book file.</source>
         <translation>Не удалось прочитать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="206"/>
-        <location filename="../console/address_book_tab.cc" line="221"/>
-        <location filename="../console/address_book_tab.cc" line="251"/>
+        <location filename="../console/address_book_tab.cc" line="217"/>
+        <location filename="../console/address_book_tab.cc" line="232"/>
+        <location filename="../console/address_book_tab.cc" line="262"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Файл адресной книги поврежден или имеет неизвестный формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="245"/>
+        <location filename="../console/address_book_tab.cc" line="256"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Не удалось расшифровать адресную книгу с указанным паролем.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="261"/>
+        <location filename="../console/address_book_tab.cc" line="272"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Файл адресной книги зашифрован неподдерживаемым методом шифрования.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="428"/>
+        <location filename="../console/address_book_tab.cc" line="439"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
         <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочернии элементы?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="432"/>
-        <location filename="../console/address_book_tab.cc" line="454"/>
+        <location filename="../console/address_book_tab.cc" line="443"/>
+        <location filename="../console/address_book_tab.cc" line="465"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="450"/>
+        <location filename="../console/address_book_tab.cc" line="461"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="638"/>
+        <location filename="../console/address_book_tab.cc" line="649"/>
         <source>Save Address Book</source>
         <translation>Сохранение адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="640"/>
+        <location filename="../console/address_book_tab.cc" line="651"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="650"/>
+        <location filename="../console/address_book_tab.cc" line="661"/>
         <source>Unable to create or open address book file.</source>
         <translation>Не удалось создать или открыть файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="662"/>
+        <location filename="../console/address_book_tab.cc" line="673"/>
         <source>Unable to write address book file.</source>
         <translation>Не удалось записать файл адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="678"/>
-        <location filename="../console/address_book_tab.cc" line="692"/>
+        <location filename="../console/address_book_tab.cc" line="689"/>
+        <location filename="../console/address_book_tab.cc" line="703"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="680"/>
+        <location filename="../console/address_book_tab.cc" line="691"/>
         <source>Could not open address book</source>
         <translation>Не удалось открыть адресную книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="694"/>
+        <location filename="../console/address_book_tab.cc" line="705"/>
         <source>Failed to save address book</source>
         <translation>Не удалось сохранить адресную книгу</translation>
     </message>
@@ -1150,57 +1150,57 @@
 <context>
     <name>aspia::Client</name>
     <message>
-        <location filename="../client/client.cc" line="53"/>
+        <location filename="../client/client.cc" line="64"/>
         <source>Attempt to connect to %1:%2.</source>
         <translation>Попытка подключения к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="59"/>
+        <location filename="../client/client.cc" line="70"/>
         <source>Connection established.</source>
         <translation>Соединение установлено.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="90"/>
+        <location filename="../client/client.cc" line="101"/>
         <source>Authorization started.</source>
         <translation>Начата авторизация.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="96"/>
+        <location filename="../client/client.cc" line="107"/>
         <source>Disconnected.</source>
         <translation>Подключение разорвано.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="101"/>
+        <location filename="../client/client.cc" line="112"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="111"/>
+        <location filename="../client/client.cc" line="122"/>
         <source>Successful authorization.</source>
         <translation>Успешная авторизация.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="115"/>
+        <location filename="../client/client.cc" line="126"/>
         <source>Authorization error: Access denied.</source>
         <translation>Ошибка авторизации: доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="119"/>
+        <location filename="../client/client.cc" line="130"/>
         <source>Authorization has been canceled.</source>
         <translation>Авторизация отменена.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="123"/>
+        <location filename="../client/client.cc" line="134"/>
         <source>Authorization error: Unknown status code.</source>
         <translation>Ошибка авторизации: Неизвестный код состояния.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="146"/>
+        <location filename="../client/client.cc" line="157"/>
         <source>Unsupported session type.</source>
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="165"/>
+        <location filename="../client/client.cc" line="176"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -1208,22 +1208,22 @@
 <context>
     <name>aspia::ClientDialog</name>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="28"/>
+        <location filename="../client/ui/client_dialog.cc" line="39"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="32"/>
+        <location filename="../client/ui/client_dialog.cc" line="43"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="36"/>
+        <location filename="../client/ui/client_dialog.cc" line="47"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_dialog.cc" line="40"/>
+        <location filename="../client/ui/client_dialog.cc" line="51"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1231,17 +1231,17 @@
 <context>
     <name>aspia::ClientSessionDesktopManage</name>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="61"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="72"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="153"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Ошибка сессии: Нет поддерживаемых видео-кодировок.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="160"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="171"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
@@ -1249,37 +1249,42 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="66"/>
+        <location filename="../client/client_session_desktop_view.cc" line="77"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="126"/>
+        <location filename="../client/client_session_desktop_view.cc" line="137"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="136"/>
+        <location filename="../client/client_session_desktop_view.cc" line="149"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="146"/>
+        <location filename="../client/client_session_desktop_view.cc" line="156"/>
+        <source>Session error: Wrong video frame position.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client_session_desktop_view.cc" line="167"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="152"/>
+        <location filename="../client/client_session_desktop_view.cc" line="173"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="172"/>
+        <location filename="../client/client_session_desktop_view.cc" line="193"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Ошибка сессии: Нет поддерживаемых видео-декодеров.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="179"/>
+        <location filename="../client/client_session_desktop_view.cc" line="200"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
@@ -1287,12 +1292,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="57"/>
+        <location filename="../client/client_session_file_transfer.cc" line="68"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="64"/>
+        <location filename="../client/client_session_file_transfer.cc" line="75"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
     </message>
@@ -1300,7 +1305,7 @@
 <context>
     <name>aspia::ClientSessionSystemInfo</name>
     <message>
-        <location filename="../client/client_session_system_info.cc" line="35"/>
+        <location filename="../client/client_session_system_info.cc" line="46"/>
         <source>Session error: Invalid message from host.</source>
         <translation type="unfinished">Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
@@ -1308,17 +1313,17 @@
 <context>
     <name>aspia::ClientUserAuthorizer</name>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="140"/>
+        <location filename="../client/client_user_authorizer.cc" line="151"/>
         <source>Protocol error: Unknown message from host.</source>
         <translation>Ошибка протокола: Неизвестное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="151"/>
+        <location filename="../client/client_user_authorizer.cc" line="162"/>
         <source>Authorization error: Empty nonce is not allowed.</source>
         <translation>Ошибка авторизации: Пустое поле nonce не разрешено.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="165"/>
+        <location filename="../client/client_user_authorizer.cc" line="176"/>
         <source>Authorization is canceled by the user.</source>
         <translation>Авторизация отменена пользователем.</translation>
     </message>
@@ -1326,27 +1331,27 @@
 <context>
     <name>aspia::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="39"/>
+        <location filename="../console/computer_dialog.cc" line="50"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="43"/>
+        <location filename="../console/computer_dialog.cc" line="54"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="47"/>
+        <location filename="../console/computer_dialog.cc" line="58"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="51"/>
+        <location filename="../console/computer_dialog.cc" line="62"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="155"/>
+        <location filename="../console/computer_dialog.cc" line="166"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1355,17 +1360,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="161"/>
+        <location filename="../console/computer_dialog.cc" line="172"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="168"/>
+        <location filename="../console/computer_dialog.cc" line="179"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="176"/>
+        <location filename="../console/computer_dialog.cc" line="187"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
@@ -1374,7 +1379,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="184"/>
+        <location filename="../console/computer_dialog.cc" line="195"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1383,7 +1388,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="214"/>
+        <location filename="../console/computer_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1391,7 +1396,7 @@
 <context>
     <name>aspia::ComputerGroupDialog</name>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="49"/>
+        <location filename="../console/computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1400,12 +1405,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="55"/>
+        <location filename="../console/computer_group_dialog.cc" line="66"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="62"/>
+        <location filename="../console/computer_group_dialog.cc" line="73"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1414,7 +1419,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="88"/>
+        <location filename="../console/computer_group_dialog.cc" line="99"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1422,7 +1427,7 @@
 <context>
     <name>aspia::ConsoleStatusBar</name>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="26"/>
+        <location filename="../console/console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочерняя группа</numerusform>
@@ -1431,7 +1436,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/console_statusbar.cc" line="27"/>
+        <location filename="../console/console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n дочерний компьютер</numerusform>
@@ -1443,39 +1448,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="166"/>
+        <location filename="../console/console_window.cc" line="177"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="168"/>
+        <location filename="../console/console_window.cc" line="179"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="186"/>
+        <location filename="../console/console_window.cc" line="197"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="187"/>
+        <location filename="../console/console_window.cc" line="198"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="269"/>
+        <location filename="../console/console_window.cc" line="280"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="386"/>
-        <location filename="../console/console_window.cc" line="577"/>
+        <location filename="../console/console_window.cc" line="397"/>
+        <location filename="../console/console_window.cc" line="588"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="387"/>
-        <location filename="../console/console_window.cc" line="578"/>
+        <location filename="../console/console_window.cc" line="398"/>
+        <location filename="../console/console_window.cc" line="589"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1483,32 +1488,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="57"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="68"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="58"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="69"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="59"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="70"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="60"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="71"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="61"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="72"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="126"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="137"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1516,22 +1521,22 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="34"/>
+        <location filename="../client/ui/desktop_window.cc" line="45"/>
         <source>Aspia Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="39"/>
+        <location filename="../client/ui/desktop_window.cc" line="50"/>
         <source>Aspia Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="167"/>
+        <location filename="../client/ui/desktop_window.cc" line="180"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="168"/>
+        <location filename="../client/ui/desktop_window.cc" line="181"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущая кодировка видео не поддерживается хостом. Пожалуйста, укажите другую кодировку.</translation>
     </message>
@@ -1539,17 +1544,17 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="28"/>
+        <location filename="../client/ui/file_manager_window.cc" line="39"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="30"/>
+        <location filename="../client/ui/file_manager_window.cc" line="41"/>
         <source>Local Computer</source>
         <translation>Локальный компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="31"/>
+        <location filename="../client/ui/file_manager_window.cc" line="42"/>
         <source>Remote Computer</source>
         <translation>Удаленный компьютер</translation>
     </message>
@@ -1557,76 +1562,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="123"/>
-        <location filename="../client/ui/file_panel.cc" line="137"/>
-        <location filename="../client/ui/file_panel.cc" line="151"/>
-        <location filename="../client/ui/file_panel.cc" line="164"/>
-        <location filename="../client/ui/file_panel.cc" line="282"/>
+        <location filename="../client/ui/file_panel.cc" line="134"/>
+        <location filename="../client/ui/file_panel.cc" line="148"/>
+        <location filename="../client/ui/file_panel.cc" line="162"/>
+        <location filename="../client/ui/file_panel.cc" line="175"/>
+        <location filename="../client/ui/file_panel.cc" line="293"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="124"/>
+        <location filename="../client/ui/file_panel.cc" line="135"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="138"/>
+        <location filename="../client/ui/file_panel.cc" line="149"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="152"/>
+        <location filename="../client/ui/file_panel.cc" line="163"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="165"/>
+        <location filename="../client/ui/file_panel.cc" line="176"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="258"/>
+        <location filename="../client/ui/file_panel.cc" line="269"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="283"/>
+        <location filename="../client/ui/file_panel.cc" line="294"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="315"/>
+        <location filename="../client/ui/file_panel.cc" line="326"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="317"/>
+        <location filename="../client/ui/file_panel.cc" line="328"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="325"/>
+        <location filename="../client/ui/file_panel.cc" line="336"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="383"/>
+        <location filename="../client/ui/file_panel.cc" line="394"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="384"/>
+        <location filename="../client/ui/file_panel.cc" line="395"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="438"/>
+        <location filename="../client/ui/file_panel.cc" line="449"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="442"/>
+        <location filename="../client/ui/file_panel.cc" line="453"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
@@ -1634,27 +1639,27 @@
 <context>
     <name>aspia::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="31"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="42"/>
         <source>Deleting: %1</source>
         <translation>Удаление: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="45"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="56"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="54"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="65"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="57"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="68"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_remove_dialog.cc" line="60"/>
+        <location filename="../client/ui/file_remove_dialog.cc" line="71"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1662,12 +1667,12 @@
 <context>
     <name>aspia::FileRemoveQueueBuilder</name>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="43"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_remove_queue_builder.cc" line="49"/>
+        <location filename="../client/file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
@@ -1675,12 +1680,12 @@
 <context>
     <name>aspia::FileRemover</name>
     <message>
-        <location filename="../client/file_remover.cc" line="71"/>
+        <location filename="../client/file_remover.cc" line="82"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_remover.cc" line="99"/>
+        <location filename="../client/file_remover.cc" line="110"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>Не удалось удалить &quot;%1&quot;: %2.</translation>
     </message>
@@ -1688,33 +1693,33 @@
 <context>
     <name>aspia::FileTransfer</name>
     <message>
-        <location filename="../client/file_transfer.cc" line="93"/>
+        <location filename="../client/file_transfer.cc" line="104"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Не удалось создать директорию &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="107"/>
+        <location filename="../client/file_transfer.cc" line="118"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Не удалось создать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="122"/>
+        <location filename="../client/file_transfer.cc" line="133"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось выполнить запись файла &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="171"/>
+        <location filename="../client/file_transfer.cc" line="182"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="159"/>
-        <location filename="../client/file_transfer.cc" line="199"/>
+        <location filename="../client/file_transfer.cc" line="170"/>
+        <location filename="../client/file_transfer.cc" line="210"/>
         <source>An unexpected response to the request was received</source>
         <translation>Получен неожиданный ответ на запрос</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="187"/>
+        <location filename="../client/file_transfer.cc" line="198"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Не удалось прочитать файл &quot;%1&quot;: %2</translation>
     </message>
@@ -1722,47 +1727,47 @@
 <context>
     <name>aspia::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="32"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="43"/>
         <source>Current Task: Copying items.</source>
         <translation>Текущая задача: копирование элементов.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="39"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="50"/>
         <source>From: %1</source>
         <translation>Из: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="44"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="55"/>
         <source>To: %1</source>
         <translation>В: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="64"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="75"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="77"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
         <source>Skip</source>
         <translation>Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="80"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
         <source>Skip All</source>
         <translation>Пропустить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="83"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="94"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="86"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="97"/>
         <source>Replace All</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="89"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="100"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
@@ -1770,12 +1775,12 @@
 <context>
     <name>aspia::FileTransferQueueBuilder</name>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="62"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="73"/>
         <source>An unexpected answer was received.</source>
         <translation>Получен неожиданный ответ на запрос.</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer_queue_builder.cc" line="68"/>
+        <location filename="../client/file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>Произошла ошибка при получении списка файлов: %1</translation>
     </message>
@@ -1783,34 +1788,34 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="171"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="200"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="182"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="211"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="144"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="192"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="155"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="203"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="145"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="156"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="168"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="179"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="187"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="198"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="201"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="212"/>
         <source>Could not restart the service.</source>
         <translation>Не удалось перезапустить службу.</translation>
     </message>
@@ -1818,7 +1823,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="219"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="230"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -1826,7 +1831,7 @@
 <context>
     <name>aspia::HostServer</name>
     <message>
-        <location filename="../host/host_server.cc" line="101"/>
+        <location filename="../host/host_server.cc" line="112"/>
         <source>Allow incoming TCP connections</source>
         <translation>Разрешает входящие TCP подключения</translation>
     </message>
@@ -1834,7 +1839,7 @@
 <context>
     <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake_desktop.cc" line="159"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="170"/>
         <source>The session is temporarily unavailable.</source>
         <translation>Сессия временно недоступна.</translation>
     </message>
@@ -1842,12 +1847,12 @@
 <context>
     <name>aspia::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="28"/>
+        <location filename="../console/open_address_book_dialog.cc" line="39"/>
         <source>Without Encryption</source>
         <translation>Без шифрования</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="32"/>
+        <location filename="../console/open_address_book_dialog.cc" line="43"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
         <translation>XChaCha20 + Poly1305 (256-битный ключ)</translation>
     </message>
@@ -1855,7 +1860,7 @@
 <context>
     <name>aspia::SystemInfoWindow</name>
     <message>
-        <location filename="../client/ui/system_info_window.cc" line="31"/>
+        <location filename="../client/ui/system_info_window.cc" line="42"/>
         <source>%1 - Aspia System Information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1863,55 +1868,55 @@
 <context>
     <name>aspia::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="28"/>
+        <location filename="../host/ui/user_dialog.cc" line="39"/>
         <source>Double-click to change</source>
         <translation>Двойной щелчек для изменения</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="70"/>
+        <location filename="../host/ui/user_dialog.cc" line="81"/>
         <source>Desktop Manage</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="74"/>
+        <location filename="../host/ui/user_dialog.cc" line="85"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="78"/>
+        <location filename="../host/ui/user_dialog.cc" line="89"/>
         <source>File Transfer</source>
         <translation>Передача файлов</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="82"/>
+        <location filename="../host/ui/user_dialog.cc" line="93"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="138"/>
-        <location filename="../host/ui/user_dialog.cc" line="152"/>
-        <location filename="../host/ui/user_dialog.cc" line="168"/>
-        <location filename="../host/ui/user_dialog.cc" line="178"/>
+        <location filename="../host/ui/user_dialog.cc" line="149"/>
+        <location filename="../host/ui/user_dialog.cc" line="163"/>
+        <location filename="../host/ui/user_dialog.cc" line="179"/>
+        <location filename="../host/ui/user_dialog.cc" line="189"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="139"/>
+        <location filename="../host/ui/user_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="153"/>
+        <location filename="../host/ui/user_dialog.cc" line="164"/>
         <source>The username you entered already exists.</source>
         <translation>Введенное имя пользователя уже существует.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="169"/>
+        <location filename="../host/ui/user_dialog.cc" line="180"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="179"/>
+        <location filename="../host/ui/user_dialog.cc" line="190"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
