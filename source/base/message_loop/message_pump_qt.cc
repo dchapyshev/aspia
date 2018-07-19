@@ -82,7 +82,8 @@ void MessagePumpForQt::scheduleDelayedWork(const MessageLoopTimePoint& delayed_w
 
 int MessagePumpForQt::doRunLoop()
 {
-    event_loop_ = new EventLoop(this);
+    EventLoop event_loop(this);
+    event_loop_ = &event_loop;
 
     for (;;)
     {
@@ -116,9 +117,7 @@ int MessagePumpForQt::doRunLoop()
         event_loop_->exec(QEventLoop::WaitForMoreEvents);
     }
 
-    delete event_loop_;
     event_loop_ = nullptr;
-
     return 0;
 }
 

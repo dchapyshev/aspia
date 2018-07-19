@@ -56,7 +56,7 @@ public:
 
 protected:
     friend class MessageLoopProxy;
-    friend class Thread;
+    friend class MessageLoopThread;
 
     void postTask(PendingTask::Callback callback);
     void postDelayedTask(PendingTask::Callback callback, const std::chrono::milliseconds& delay);

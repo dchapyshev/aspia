@@ -7,6 +7,7 @@
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
+    ${ASPIA_THIRD_PARTY_DIR}/asio/include
     ${ASPIA_THIRD_PARTY_DIR}/libvpx/include
     ${ASPIA_THIRD_PARTY_DIR}/libyuv/include
     ${ASPIA_THIRD_PARTY_DIR}/zlib-ng/include
@@ -50,11 +51,15 @@ list(APPEND SOURCE_BASE_MESSAGE_LOOP
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.cc
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_thread.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_thread.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_types.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.cc
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_dispatcher.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_io.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_io.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_qt.cc
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_qt.h
     ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_win.cc
