@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__ABOUT_DIALOG_H
-#define _ASPIA_CONSOLE__ABOUT_DIALOG_H
+#ifndef ASPIA_CONSOLE__ABOUT_DIALOG_H_
+#define ASPIA_CONSOLE__ABOUT_DIALOG_H_
 
 #include "ui_about_dialog.h"
 
@@ -39,4 +39,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__ABOUT_DIALOG_H
+#endif // ASPIA_CONSOLE__ABOUT_DIALOG_H_

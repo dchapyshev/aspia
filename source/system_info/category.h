@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__CATEGORY_H
-#define _ASPIA_SYSTEM_INFO__CATEGORY_H
+#ifndef ASPIA_SYSTEM_INFO__CATEGORY_H_
+#define ASPIA_SYSTEM_INFO__CATEGORY_H_
 
 #include "system_info/parser/parser.h"
 #include "system_info/serializer/serializer.h"
@@ -71,4 +71,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__CATEGORY_H
+#endif // ASPIA_SYSTEM_INFO__CATEGORY_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__FILE_PLATFORM_UTIL_H
-#define _ASPIA_HOST__FILE_PLATFORM_UTIL_H
+#ifndef ASPIA_HOST__FILE_PLATFORM_UTIL_H_
+#define ASPIA_HOST__FILE_PLATFORM_UTIL_H_
 
 #include <QIcon>
 #include <QPair>
@@ -46,4 +46,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__FILE_PLATFORM_UTIL_H
+#endif // ASPIA_HOST__FILE_PLATFORM_UTIL_H_

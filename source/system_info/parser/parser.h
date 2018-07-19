@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__UI__PARSER_H
-#define _ASPIA_SYSTEM_INFO__UI__PARSER_H
+#ifndef ASPIA_SYSTEM_INFO__UI__PARSER_H_
+#define ASPIA_SYSTEM_INFO__UI__PARSER_H_
 
 #include <QIcon>
 #include <QObject>
@@ -62,4 +62,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__UI__PARSER_H
+#endif // ASPIA_SYSTEM_INFO__UI__PARSER_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H
-#define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H
+#ifndef ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H_
+#define ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H_
 
 #include <QPointer>
 #include <QThread>
@@ -68,4 +68,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H
+#endif // ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_VIEW_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__HOST_SERVICE_H
-#define _ASPIA_HOST__HOST_SERVICE_H
+#ifndef ASPIA_HOST__HOST_SERVICE_H_
+#define ASPIA_HOST__HOST_SERVICE_H_
 
 #include <QGuiApplication>
 #include <QScopedPointer>
@@ -51,4 +51,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_SERVICE_H
+#endif // ASPIA_HOST__HOST_SERVICE_H_

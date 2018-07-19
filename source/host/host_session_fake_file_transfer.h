@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
-#define _ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
+#ifndef ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H_
+#define ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H_
 
 #include "host/host_session_fake.h"
 
@@ -44,4 +44,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H
+#endif // ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H_

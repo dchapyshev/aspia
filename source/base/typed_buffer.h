@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__TYPED_BUFFER_H
-#define _ASPIA_BASE__TYPED_BUFFER_H
+#ifndef ASPIA_BASE__TYPED_BUFFER_H_
+#define ASPIA_BASE__TYPED_BUFFER_H_
 
 namespace aspia {
 
@@ -112,4 +112,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__TYPED_BUFFER_H
+#endif // ASPIA_BASE__TYPED_BUFFER_H_

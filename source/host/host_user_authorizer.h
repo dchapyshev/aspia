@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__HOST_USER_AUTHORIZER_H
-#define _ASPIA_HOST__HOST_USER_AUTHORIZER_H
+#ifndef ASPIA_HOST__HOST_USER_AUTHORIZER_H_
+#define ASPIA_HOST__HOST_USER_AUTHORIZER_H_
 
 #include <QPointer>
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_USER_AUTHORIZER_H
+#endif // ASPIA_HOST__HOST_USER_AUTHORIZER_H_

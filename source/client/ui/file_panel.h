@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__FILE_PANEL_H
-#define _ASPIA_CLIENT__UI__FILE_PANEL_H
+#ifndef ASPIA_CLIENT__UI__FILE_PANEL_H_
+#define ASPIA_CLIENT__UI__FILE_PANEL_H_
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
@@ -81,4 +81,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__FILE_PANEL_H
+#endif // ASPIA_CLIENT__UI__FILE_PANEL_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H
-#define _ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H
+#ifndef ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H_
+#define ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H_
 
 #include "host/host_session_fake.h"
 #include "protocol/desktop_session.pb.h"
@@ -52,4 +52,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H
+#endif // ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H_

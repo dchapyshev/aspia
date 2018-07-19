@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__COMPUTER_TREE_H
-#define _ASPIA_CONSOLE__COMPUTER_TREE_H
+#ifndef ASPIA_CONSOLE__COMPUTER_TREE_H_
+#define ASPIA_CONSOLE__COMPUTER_TREE_H_
 
 #include <QTreeWidget>
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__COMPUTER_TREE_H
+#endif // ASPIA_CONSOLE__COMPUTER_TREE_H_

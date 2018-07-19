@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__FILE_LOGGER_H
-#define _ASPIA_BASE__FILE_LOGGER_H
+#ifndef ASPIA_BASE__FILE_LOGGER_H_
+#define ASPIA_BASE__FILE_LOGGER_H_
 
 #include <QFile>
 #include <QScopedPointer>
@@ -44,4 +44,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__FILE_LOGGER_H
+#endif // ASPIA_BASE__FILE_LOGGER_H_

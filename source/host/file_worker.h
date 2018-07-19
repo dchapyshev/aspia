@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__FILE_WORKER_H
-#define _ASPIA_HOST__FILE_WORKER_H
+#ifndef ASPIA_HOST__FILE_WORKER_H_
+#define ASPIA_HOST__FILE_WORKER_H_
 
 #include "host/file_depacketizer.h"
 #include "host/file_packetizer.h"
@@ -64,4 +64,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__FILE_WORKER_H
+#endif // ASPIA_HOST__FILE_WORKER_H_

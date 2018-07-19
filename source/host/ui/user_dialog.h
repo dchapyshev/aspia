@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__UI__USER_DIALOG_H
-#define _ASPIA_HOST__UI__USER_DIALOG_H
+#ifndef ASPIA_HOST__UI__USER_DIALOG_H_
+#define ASPIA_HOST__UI__USER_DIALOG_H_
 
 #include "host/user.h"
 #include "ui_user_dialog.h"
@@ -54,4 +54,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__UI__USER_DIALOG_H
+#endif // ASPIA_HOST__UI__USER_DIALOG_H_

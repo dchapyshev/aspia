@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
-#define _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
+#ifndef ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
+#define ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
 
 #include <chrono>
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H
+#endif // ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_

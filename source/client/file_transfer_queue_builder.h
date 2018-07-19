@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
-#define _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
+#ifndef ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H_
+#define ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H_
 
 #include "client/file_transfer.h"
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H
+#endif // ASPIA_CLIENT__FILE_TRANSFER_QUEUE_BUILDER_H_

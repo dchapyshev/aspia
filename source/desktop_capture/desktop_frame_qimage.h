@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H
-#define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H
+#ifndef ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H_
+#define ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H_
 
 #include <QImage>
 #include <memory>
@@ -48,4 +48,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H
+#endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_QIMAGE_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H
-#define _ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H
+#ifndef ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
+#define ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
 
 #include <QMimeData>
 
@@ -46,4 +46,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H
+#endif // ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_

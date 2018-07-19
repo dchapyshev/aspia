@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__MESSAGE_SERIALIZATION_H
-#define _ASPIA_BASE__MESSAGE_SERIALIZATION_H
+#ifndef ASPIA_BASE__MESSAGE_SERIALIZATION_H_
+#define ASPIA_BASE__MESSAGE_SERIALIZATION_H_
 
 #include <QDebug>
 #include <QByteArray>
@@ -56,4 +56,4 @@ bool parseMessage(const QByteArray& buffer, T& message)
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__MESSAGE_SERIALIZATION_H
+#endif // ASPIA_BASE__MESSAGE_SERIALIZATION_H_

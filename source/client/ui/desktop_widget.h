@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__DESKTOP_WIDGET_H
-#define _ASPIA_CLIENT__UI__DESKTOP_WIDGET_H
+#ifndef ASPIA_CLIENT__UI__DESKTOP_WIDGET_H_
+#define ASPIA_CLIENT__UI__DESKTOP_WIDGET_H_
 
 #include <QEvent>
 #include <QWidget>
@@ -76,4 +76,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__DESKTOP_WIDGET_H
+#endif // ASPIA_CLIENT__UI__DESKTOP_WIDGET_H_

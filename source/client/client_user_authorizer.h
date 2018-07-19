@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H
-#define _ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H
+#ifndef ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H_
+#define ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H_
 
 #include <QObject>
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H
+#endif // ASPIA_CLIENT__CLIENT_USER_AUTHORIZER_H_

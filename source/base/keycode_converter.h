@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__KEYCODE_CONVERTER_H
-#define _ASPIA_BASE__KEYCODE_CONVERTER_H
+#ifndef ASPIA_BASE__KEYCODE_CONVERTER_H_
+#define ASPIA_BASE__KEYCODE_CONVERTER_H_
 
 namespace aspia {
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__KEYCODE_CONVERTER_H
+#endif // ASPIA_BASE__KEYCODE_CONVERTER_H_

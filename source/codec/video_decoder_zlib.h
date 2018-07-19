@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CODEC__VIDEO_DECODER_ZLIB_H
-#define _ASPIA_CODEC__VIDEO_DECODER_ZLIB_H
+#ifndef ASPIA_CODEC__VIDEO_DECODER_ZLIB_H_
+#define ASPIA_CODEC__VIDEO_DECODER_ZLIB_H_
 
 #include "codec/decompressor_zlib.h"
 #include "codec/video_decoder.h"
@@ -48,4 +48,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CODEC__VIDEO_DECODER_ZLIB_H
+#endif // ASPIA_CODEC__VIDEO_DECODER_ZLIB_H_

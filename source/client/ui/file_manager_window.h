@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
-#define _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
+#ifndef ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H_
+#define ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H_
 
 #include "client/connect_data.h"
 #include "ui_file_manager_window.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H
+#endif // ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H_

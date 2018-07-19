@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_NETWORK__FIREWALL_MANAGER_H
-#define _ASPIA_NETWORK__FIREWALL_MANAGER_H
+#ifndef ASPIA_NETWORK__FIREWALL_MANAGER_H_
+#define ASPIA_NETWORK__FIREWALL_MANAGER_H_
 
 #include <QString>
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_NETWORK__FIREWALL_MANAGER_H
+#endif // ASPIA_NETWORK__FIREWALL_MANAGER_H_

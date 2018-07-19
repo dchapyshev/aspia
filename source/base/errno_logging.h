@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__ERRNO_LOGGING_H
-#define _ASPIA_BASE__ERRNO_LOGGING_H
+#ifndef ASPIA_BASE__ERRNO_LOGGING_H_
+#define ASPIA_BASE__ERRNO_LOGGING_H_
 
 #include <QString>
 
@@ -50,4 +50,4 @@ void errnoToLog(QtMsgType type, const char* file, int line, const char* message,
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__ERRNO_LOGGING_H
+#endif // ASPIA_BASE__ERRNO_LOGGING_H_

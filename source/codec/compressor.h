@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CODEC__COMPRESSOR_H
-#define _ASPIA_CODEC__COMPRESSOR_H
+#ifndef ASPIA_CODEC__COMPRESSOR_H_
+#define ASPIA_CODEC__COMPRESSOR_H_
 
 namespace aspia {
 
@@ -81,4 +81,4 @@ public:
 
 } // namespace aspia
 
-#endif // _ASPIA_CODEC__COMPRESSOR_H
+#endif // ASPIA_CODEC__COMPRESSOR_H_

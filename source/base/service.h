@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__SERVICE_H
-#define _ASPIA_BASE__SERVICE_H
+#ifndef ASPIA_BASE__SERVICE_H_
+#define ASPIA_BASE__SERVICE_H_
 
 #include <QPointer>
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__SERVICE_H
+#endif // ASPIA_BASE__SERVICE_H_

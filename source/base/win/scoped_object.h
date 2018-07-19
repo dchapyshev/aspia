@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__WIN__SCOPED_HANDLE_H
-#define _ASPIA_BASE__WIN__SCOPED_HANDLE_H
+#ifndef ASPIA_BASE__WIN__SCOPED_HANDLE_H_
+#define ASPIA_BASE__WIN__SCOPED_HANDLE_H_
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -149,4 +149,4 @@ using ScopedEventLog = ScopedObject<HANDLE, EventLogObjectTraits>;
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__WIN__SCOPED_HANDLE_H
+#endif // ASPIA_BASE__WIN__SCOPED_HANDLE_H_

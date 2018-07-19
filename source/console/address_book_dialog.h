@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
-#define _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
+#ifndef ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
+#define ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
 
 #include "protocol/address_book.pb.h"
 #include "ui_address_book_dialog.h"
@@ -63,4 +63,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H
+#endif // ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_

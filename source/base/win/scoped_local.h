@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BASE__WIN__SCOPED_LOCAL_H
-#define _ASPIA_BASE__WIN__SCOPED_LOCAL_H
+#ifndef ASPIA_BASE__WIN__SCOPED_LOCAL_H_
+#define ASPIA_BASE__WIN__SCOPED_LOCAL_H_
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -101,4 +101,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_BASE__WIN__SCOPED_LOCAL_H
+#endif // ASPIA_BASE__WIN__SCOPED_LOCAL_H_

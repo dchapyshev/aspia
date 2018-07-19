@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H
-#define _ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H
+#ifndef ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H_
+#define ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H_
 
 #include <QTreeWidget>
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H
+#endif // ASPIA_CLIENT__UI__CATEGORY_GROUP_TREE_ITEM_H_

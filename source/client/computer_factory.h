@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__COMPUTER_FACTORY_H
-#define _ASPIA_CLIENT__COMPUTER_FACTORY_H
+#ifndef ASPIA_CLIENT__COMPUTER_FACTORY_H_
+#define ASPIA_CLIENT__COMPUTER_FACTORY_H_
 
 #include "protocol/address_book.pb.h"
 
@@ -40,4 +40,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__COMPUTER_FACTORY_H
+#endif // ASPIA_CLIENT__COMPUTER_FACTORY_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__HOST_NOTIFIER_MAIN_H
-#define _ASPIA_HOST__HOST_NOTIFIER_MAIN_H
+#ifndef ASPIA_HOST__HOST_NOTIFIER_MAIN_H_
+#define ASPIA_HOST__HOST_NOTIFIER_MAIN_H_
 
 #include "core_export.h"
 
@@ -27,4 +27,4 @@ int CORE_EXPORT hostNotifierMain(int argc, char *argv[]);
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__HOST_NOTIFIER_MAIN_H
+#endif // ASPIA_HOST__HOST_NOTIFIER_MAIN_H_

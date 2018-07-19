@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
-#define _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
+#ifndef ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H_
+#define ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H_
 
 #include <QRegion>
 #include <QPoint>
@@ -67,4 +67,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H
+#endif // ASPIA_DESKTOP_CAPTURE__DESKTOP_FRAME_H_

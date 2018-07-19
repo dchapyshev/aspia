@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__UI__DMI_FORM_H
-#define _ASPIA_SYSTEM_INFO__UI__DMI_FORM_H
+#ifndef ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_
+#define ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_
 
 #include "system_info/protocol/dmi.pb.h"
 #include "system_info/ui/form.h"
@@ -47,4 +47,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__UI__DMI_FORM_H
+#endif // ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_

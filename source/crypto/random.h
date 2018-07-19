@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CRYPTO__RANDOM_H
-#define _ASPIA_CRYPTO__RANDOM_H
+#ifndef ASPIA_CRYPTO__RANDOM_H_
+#define ASPIA_CRYPTO__RANDOM_H_
 
 #include <QByteArray>
 
@@ -35,4 +35,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CRYPTO__RANDOM_H
+#endif // ASPIA_CRYPTO__RANDOM_H_

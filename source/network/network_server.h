@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_NETWORK__NETWORK_SERVER_H
-#define _ASPIA_NETWORK__NETWORK_SERVER_H
+#ifndef ASPIA_NETWORK__NETWORK_SERVER_H_
+#define ASPIA_NETWORK__NETWORK_SERVER_H_
 
 #include <QPointer>
 #include <QList>
@@ -63,4 +63,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_NETWORK__NETWORK_SERVER_H
+#endif // ASPIA_NETWORK__NETWORK_SERVER_H_

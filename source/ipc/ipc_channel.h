@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_IPC__IPC_CHANNEL_H
-#define _ASPIA_IPC__IPC_CHANNEL_H
+#ifndef ASPIA_IPC__IPC_CHANNEL_H_
+#define ASPIA_IPC__IPC_CHANNEL_H_
 
 #include <QByteArray>
 #include <QLocalSocket>
@@ -98,4 +98,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_IPC__IPC_CHANNEL_H
+#endif // ASPIA_IPC__IPC_CHANNEL_H_

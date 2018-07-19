@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
-#define _ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
+#ifndef ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
+#define ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
 
 #include "console/console_tab.h"
 #include "protocol/address_book.pb.h"
@@ -107,4 +107,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H
+#endif // ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_

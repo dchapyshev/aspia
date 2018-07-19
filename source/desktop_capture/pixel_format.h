@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
-#define _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
+#ifndef ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H_
+#define ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H_
 
 namespace aspia {
 
@@ -103,4 +103,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H
+#endif // ASPIA_DESKTOP_CAPTURE__PIXEL_FORMAT_H_

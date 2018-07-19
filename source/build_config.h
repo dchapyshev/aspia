@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_BUILD_CONFIG_H
-#define _ASPIA_BUILD_CONFIG_H
+#ifndef ASPIA_BUILD_CONFIG_H_
+#define ASPIA_BUILD_CONFIG_H_
 
 #define QT_DEPRECATED_WARNINGS
 #define QT_MESSAGELOGCONTEXT
@@ -41,4 +41,4 @@ extern const int kDefaultHostTcpPort;
 
 } // namespace
 
-#endif // _ASPIA_BUILD_CONFIG_H
+#endif // ASPIA_BUILD_CONFIG_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
-#define _ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
+#ifndef ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
+#define ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
 
 #include "console/computer_group_drag.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H
+#endif // ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_

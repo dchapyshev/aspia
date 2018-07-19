@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA__CORE_EXPORT_H
-#define _ASPIA__CORE_EXPORT_H
+#ifndef ASPIA__CORE_EXPORT_H_
+#define ASPIA__CORE_EXPORT_H_
 
 #if defined(CORE_IMPLEMENTATION)
 #define CORE_EXPORT __declspec(dllexport)
@@ -25,4 +25,4 @@
 #define CORE_EXPORT __declspec(dllimport)
 #endif // defined(CORE_IMPLEMENTATION)
 
-#endif // _ASPIA__CORE_EXPORT_H
+#endif // ASPIA__CORE_EXPORT_H_

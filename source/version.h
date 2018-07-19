@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_VERSION_H
-#define _ASPIA_VERSION_H
+#ifndef ASPIA_VERSION_H_
+#define ASPIA_VERSION_H_
 
 // Version information.
 #define ASPIA_VERSION_STRING "1.1.0"
 #define ASPIA_VERSION        1,1,0,0
 
-#endif // _ASPIA_VERSION_H
+#endif // ASPIA_VERSION_H_

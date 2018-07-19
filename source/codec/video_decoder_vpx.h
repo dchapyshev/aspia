@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CODEC__VIDEO_DECODER_VPX_H
-#define _ASPIA_CODEC__VIDEO_DECODER_VPX_H
+#ifndef ASPIA_CODEC__VIDEO_DECODER_VPX_H_
+#define ASPIA_CODEC__VIDEO_DECODER_VPX_H_
 
 extern "C" {
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CODEC__VIDEO_DECODER_VPX_H
+#endif // ASPIA_CODEC__VIDEO_DECODER_VPX_H_

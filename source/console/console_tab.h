@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__CONSOLE_TAB_H
-#define _ASPIA_CONSOLE__CONSOLE_TAB_H
+#ifndef ASPIA_CONSOLE__CONSOLE_TAB_H_
+#define ASPIA_CONSOLE__CONSOLE_TAB_H_
 
 #include <QWidget>
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__CONSOLE_TAB_H
+#endif // ASPIA_CONSOLE__CONSOLE_TAB_H_

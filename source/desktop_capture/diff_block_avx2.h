@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H
-#define _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H
+#ifndef ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H_
+#define ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H_
 
 namespace aspia {
 
@@ -29,4 +29,4 @@ quint8 diffFullBlock_8x8_AVX2(const quint8* image1, const quint8* image2, int by
 
 } // namespace aspia
 
-#endif // _ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H
+#endif // ASPIA_DESKTOP_CAPTURE__DIFF_BLOCK_AVX2_H_

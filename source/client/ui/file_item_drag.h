@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H
-#define _ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H
+#ifndef ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_
+#define ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_
 
 #include <QDrag>
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H
+#endif // ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_

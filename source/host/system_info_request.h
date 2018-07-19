@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__SYSTEM_INFO_REQUEST_H
-#define _ASPIA_HOST__SYSTEM_INFO_REQUEST_H
+#ifndef ASPIA_HOST__SYSTEM_INFO_REQUEST_H_
+#define ASPIA_HOST__SYSTEM_INFO_REQUEST_H_
 
 #include <QObject>
 #include <QString>
@@ -50,4 +50,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__SYSTEM_INFO_REQUEST_H
+#endif // ASPIA_HOST__SYSTEM_INFO_REQUEST_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_IPC__IPC_SERVER_H
-#define _ASPIA_IPC__IPC_SERVER_H
+#ifndef ASPIA_IPC__IPC_SERVER_H_
+#define ASPIA_IPC__IPC_SERVER_H_
 
 #include <QPointer>
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_IPC__IPC_SERVER_H
+#endif // ASPIA_IPC__IPC_SERVER_H_

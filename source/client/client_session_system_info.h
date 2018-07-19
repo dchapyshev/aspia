@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
-#define _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
+#ifndef ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H_
+#define ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H_
 
 #include "client/client_session.h"
 #include "client/connect_data.h"
@@ -62,4 +62,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H
+#endif // ASPIA_CLIENT__CLIENT_SESSION_SYSTEM_INFO_H_

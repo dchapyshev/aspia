@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__FILE_DEPACKETIZER_H
-#define _ASPIA_HOST__FILE_DEPACKETIZER_H
+#ifndef ASPIA_HOST__FILE_DEPACKETIZER_H_
+#define ASPIA_HOST__FILE_DEPACKETIZER_H_
 
 #include <QFile>
 #include <QPointer>
@@ -50,4 +50,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__FILE_DEPACKETIZER_H
+#endif // ASPIA_HOST__FILE_DEPACKETIZER_H_

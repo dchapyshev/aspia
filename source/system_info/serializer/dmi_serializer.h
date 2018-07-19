@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H
-#define _ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H
+#ifndef ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H_
+#define ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H_
 
 #include "system_info/serializer/serializer.h"
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H
+#endif // ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H_

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H
-#define _ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H
+#ifndef ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H_
+#define ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H_
 
 #include <QPointer>
 #include <QString>
@@ -56,4 +56,4 @@ public:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H
+#endif // ASPIA_HOST__WIN__HOST_PROCESS_IMPL_H_

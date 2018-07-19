@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
-#define _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
+#ifndef ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H_
+#define ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H_
 
 #include "client/client_session_desktop_view.h"
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H
+#endif // ASPIA_CLIENT__CLIENT_SESSION_DESKTOP_MANAGE_H_

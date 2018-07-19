@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_CONSOLE__COMPUTER_DRAG_H
-#define _ASPIA_CONSOLE__COMPUTER_DRAG_H
+#ifndef ASPIA_CONSOLE__COMPUTER_DRAG_H_
+#define ASPIA_CONSOLE__COMPUTER_DRAG_H_
 
 #include <QDrag>
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace aspia
 
-#endif // _ASPIA_CONSOLE__COMPUTER_DRAG_H
+#endif // ASPIA_CONSOLE__COMPUTER_DRAG_H_

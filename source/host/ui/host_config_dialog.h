@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef _ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
-#define _ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
+#ifndef ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
+#define ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
 
 #include "base/locale_loader.h"
 #include "host/user.h"
@@ -60,4 +60,4 @@ private:
 
 } // namespace aspia
 
-#endif // _ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H
+#endif // ASPIA_HOST__UI__HOST_CONFIG_DIALOG_H_
