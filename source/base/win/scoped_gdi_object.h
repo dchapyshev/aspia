@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H_
 #define ASPIA_BASE__WIN__SCOPED_GDI_OBJECT_H_
 
+#include <qglobal.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 

@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__WIN__REGISTRY_H_
 #define ASPIA_BASE__WIN__REGISTRY_H_
 
+#include <qglobal.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 

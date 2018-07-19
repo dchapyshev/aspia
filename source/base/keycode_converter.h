@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__KEYCODE_CONVERTER_H_
 #define ASPIA_BASE__KEYCODE_CONVERTER_H_
 
+#include <qglobal.h>
+
 namespace aspia {
 
 // This structure is used to define the keycode mapping table.

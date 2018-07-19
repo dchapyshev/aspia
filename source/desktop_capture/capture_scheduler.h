@@ -19,6 +19,8 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
 #define ASPIA_DESKTOP_CAPTURE__CAPTURE_SCHEDULER_H_
 
+#include <qglobal.h>
+
 #include <chrono>
 
 namespace aspia {

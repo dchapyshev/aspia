@@ -21,6 +21,8 @@
 
 #include "protocol/address_book.pb.h"
 
+#include <qglobal.h>
+
 namespace aspia {
 
 class ComputerFactory

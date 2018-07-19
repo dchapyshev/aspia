@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "build_config.h"
 #include "host/host_settings.h"
 
 #include <QDebug>

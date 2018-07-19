@@ -1,9 +1,15 @@
 # VS build folders
 /.vs/
-/build/
+/bin*
+/build*
+
+/.*
 
 # VS generated files
 *.obj
 *.pdb
 *.res
 *.exe
+*.lnk
+# compiled resources (.rc)
+*.aps

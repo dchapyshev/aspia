@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__HARDWARE__DMI_H_
 #define ASPIA_BASE__HARDWARE__DMI_H_
 
+#include <qglobal.h>
+
 #include <memory>
 
 namespace aspia {

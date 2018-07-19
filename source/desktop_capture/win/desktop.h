@@ -19,6 +19,8 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
 #define ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
 
+#include <qglobal.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 

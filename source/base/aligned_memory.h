@@ -48,6 +48,8 @@
 #ifndef ASPIA_BASE__ALIGNED_MEMORY_H_
 #define ASPIA_BASE__ALIGNED_MEMORY_H_
 
+#include <qglobal.h>
+
 namespace aspia {
 
 void* alignedAlloc(size_t size, size_t alignment);

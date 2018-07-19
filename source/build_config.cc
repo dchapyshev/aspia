@@ -19,8 +19,10 @@
 #include "build_config.h"
 
 #include <QtCore/QtPlugin>
+#ifdef QT_STATIC
 Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN (QWindowsVistaStylePlugin);
+#endif
 
 namespace aspia {
 

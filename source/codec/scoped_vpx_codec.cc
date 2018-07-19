@@ -24,6 +24,8 @@ extern "C"
 #include "vpx/vpx_codec.h"
 }
 
+#include <qglobal.h>
+
 namespace aspia {
 
 void VpxCodecDeleter::operator()(vpx_codec_ctx_t* codec)

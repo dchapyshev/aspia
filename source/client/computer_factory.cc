@@ -20,6 +20,8 @@
 
 #include "codec/video_util.h"
 
+#include "build_config.h"
+
 namespace aspia {
 
 // static
