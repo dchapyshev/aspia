@@ -1,0 +1,67 @@
+//
+// Aspia Project
+// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef ASPIA_BASE__MESSAGE_LOOP__PENDING_TASK_H_
+#define ASPIA_BASE__MESSAGE_LOOP__PENDING_TASK_H_
+
+#include <functional>
+#include <queue>
+
+#include "base/message_loop/message_loop_types.h"
+
+namespace aspia {
+
+// Contains data about a pending task. Stored in TaskQueue and DelayedTaskQueue for use by classes
+// that queue and execute tasks.
+class PendingTask
+{
+public:
+    using Callback = std::function<void()>;
+
+    explicit PendingTask(Callback callback);
+    PendingTask(Callback callback, const MessageLoopTimePoint& delayed_run_time);
+    ~PendingTask() = default;
+
+    // Used to support sorting.
+    bool operator<(const PendingTask& other) const;
+
+    // Secondary sort key for run time.
+    int sequence_num = 0;
+
+    MessageLoopTimePoint delayed_run_time;
+
+    // The task to run.
+    Callback callback;
+};
+
+// Wrapper around std::queue specialized for PendingTask which adds a Swap helper method.
+class TaskQueue : public std::queue<PendingTask>
+{
+public:
+    void Swap(TaskQueue& queue)
+    {
+        c.swap(queue.c); // Calls std::deque::swap.
+    }
+};
+
+// PendingTasks are sorted by their |delayed_run_time| property.
+using DelayedTaskQueue = std::priority_queue<PendingTask>;
+
+} // namespace aspia
+
+#endif // ASPIA_BASE__MESSAGE_LOOP__PENDING_TASK_H_

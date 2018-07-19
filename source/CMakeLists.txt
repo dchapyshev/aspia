@@ -26,6 +26,7 @@ find_package(Qt5LinguistTools)
 include(aspia_core.cmake)
 
 source_group(base FILES ${SOURCE_BASE})
+source_group(base\\message_loop FILES ${SOURCE_BASE_MESSAGE_LOOP})
 source_group(base\\win FILES ${SOURCE_BASE_WIN})
 source_group(client FILES ${SOURCE_CLIENT})
 source_group(client\\ui FILES ${SOURCE_CLIENT_UI})
@@ -63,6 +64,7 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /INC
 
 add_library(aspia_core SHARED
     ${SOURCE_BASE}
+    ${SOURCE_BASE_MESSAGE_LOOP}
     ${SOURCE_BASE_WIN}
     ${SOURCE_CLIENT}
     ${SOURCE_CLIENT_UI}

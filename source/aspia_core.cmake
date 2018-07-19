@@ -45,7 +45,26 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
+list(APPEND SOURCE_BASE_MESSAGE_LOOP
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_proxy.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_loop_types.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_default.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_dispatcher.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_qt.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_qt.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_win.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/message_pump_win.h
+    ${PROJECT_SOURCE_DIR}/base/message_loop/pending_task.cc
+    ${PROJECT_SOURCE_DIR}/base/message_loop/pending_task.h)
+
 list(APPEND SOURCE_BASE_WIN
+    ${PROJECT_SOURCE_DIR}/base/win/message_window.cc
+    ${PROJECT_SOURCE_DIR}/base/win/message_window.h
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc
     ${PROJECT_SOURCE_DIR}/base/win/registry.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
