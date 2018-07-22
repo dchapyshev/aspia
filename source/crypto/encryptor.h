@@ -29,11 +29,7 @@ namespace aspia {
 class Encryptor
 {
 public:
-    enum Mode
-    {
-        ServerMode,
-        ClientMode
-    };
+    enum class Mode { SERVER, CLIENT };
 
     explicit Encryptor(Mode mode);
     ~Encryptor();
@@ -41,8 +37,11 @@ public:
     bool readHelloMessage(const QByteArray& message_buffer);
     QByteArray helloMessage();
 
-    QByteArray encrypt(const QByteArray& source_buffer);
-    QByteArray decrypt(const QByteArray& source_buffer);
+    int encryptedDataSize(int source_data_size);
+    bool encrypt(const char* source, int source_size, char* target);
+
+    int decryptedDataSize(int source_data_size);
+    bool decrypt(const char* source, int source_size, char* target);
 
 private:
     const Mode mode_;

@@ -20,10 +20,8 @@
 #define ASPIA_NETWORK__NETWORK_CHANNEL_H_
 
 #include <QPointer>
+#include <QQueue>
 #include <QTcpSocket>
-
-#include <queue>
-#include <utility>
 
 namespace aspia {
 
@@ -85,35 +83,33 @@ private slots:
     void onConnected();
     void onDisconnected();
     void onError(QAbstractSocket::SocketError error);
-    void onBytesWritten(qint64 bytes);
+    void onBytesWritten(int64_t bytes);
     void onReadyRead();
-    void onMessageWritten(int message_id);
-    void onMessageReceived(const QByteArray& buffer);
+    void onMessageWritten();
+    void onMessageReceived();
 
 private:
     friend class NetworkServer;
-
     NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
-
-    void write(int message_id, const QByteArray& buffer);
     void scheduleWrite();
-
-    using MessageSizeType = quint32;
 
     const ChannelType channel_type_;
     ChannelState channel_state_ = NotConnected;
     QPointer<QTcpSocket> socket_;
 
-    std::unique_ptr<Encryptor> encryptor_;
+    QScopedPointer<Encryptor> encryptor_;
+    QByteArray decrypt_buffer_;
 
-    std::queue<std::pair<int, QByteArray>> write_queue_;
-    qint64 written_ = 0;
+    QByteArray write_buffer_;
+    QByteArray read_buffer_;
+
+    QQueue<QPair<int, QByteArray>> write_queue_;
+    int64_t written_ = 0;
 
     bool read_required_ = false;
     bool read_size_received_ = false;
-    QByteArray read_buffer_;
     int read_size_ = 0;
-    qint64 read_ = 0;
+    int64_t read_ = 0;
 
     int pinger_timer_id_ = 0;
 
