@@ -88,9 +88,9 @@ void IpcChannel::readMessage()
 
 void IpcChannel::writeMessage(int message_id, const QByteArray& buffer)
 {
-    bool schedule_write = write_queue_.empty();
+    bool schedule_write = write_queue_.isEmpty();
 
-    write_queue_.emplace(message_id, buffer);
+    write_queue_.push_back(qMakePair(message_id, buffer));
 
     if (schedule_write)
         scheduleWrite();
@@ -125,7 +125,7 @@ void IpcChannel::onBytesWritten(qint64 bytes)
         if (message_id != -1)
             emit messageWritten(message_id);
 
-        write_queue_.pop();
+        write_queue_.pop_front();
         written_ = 0;
 
         if (!write_queue_.empty())

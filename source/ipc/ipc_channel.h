@@ -21,10 +21,8 @@
 
 #include <QByteArray>
 #include <QLocalSocket>
+#include <QQueue>
 #include <QPointer>
-
-#include <queue>
-#include <utility>
 
 namespace aspia {
 
@@ -73,7 +71,6 @@ private slots:
 
 private:
     friend class IpcServer;
-
     IpcChannel(QLocalSocket* socket, QObject* parent);
 
     void scheduleWrite();
@@ -83,7 +80,7 @@ private:
     QPointer<QLocalSocket> socket_;
     State state_ = NotConnected;
 
-    std::queue<std::pair<int, QByteArray>> write_queue_;
+    QQueue<QPair<int, QByteArray>> write_queue_;
     MessageSizeType write_size_ = 0;
     qint64 written_ = 0;
 
