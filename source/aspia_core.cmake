@@ -43,6 +43,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_controller.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
+    ${PROJECT_SOURCE_DIR}/base/simple_event_dispatcher.cc
+    ${PROJECT_SOURCE_DIR}/base/simple_event_dispatcher.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN
