@@ -20,24 +20,31 @@
 
 namespace aspia {
 
+CaptureScheduler::CaptureScheduler(const std::chrono::milliseconds& update_interval)
+    : update_interval_(update_interval)
+{
+    // Nothing
+}
+
 void CaptureScheduler::beginCapture()
 {
     begin_time_ = std::chrono::high_resolution_clock::now();
 }
 
-std::chrono::milliseconds CaptureScheduler::nextCaptureDelay(
-    const std::chrono::milliseconds& max_delay) const
+void CaptureScheduler::endCapture()
 {
-    std::chrono::time_point<std::chrono::high_resolution_clock> end_time =
-        std::chrono::high_resolution_clock::now();
+    end_time_ = std::chrono::high_resolution_clock::now();
+}
 
+std::chrono::milliseconds CaptureScheduler::nextCaptureDelay() const
+{
     std::chrono::milliseconds diff_time =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end_time - begin_time_);
+        std::chrono::duration_cast<std::chrono::milliseconds>(end_time_ - begin_time_);
 
-    if (diff_time > max_delay)
-        diff_time = max_delay;
+    if (diff_time > update_interval_)
+        diff_time = update_interval_;
 
-    return max_delay - diff_time;
+    return update_interval_ - diff_time;
 }
 
 } // namespace aspia

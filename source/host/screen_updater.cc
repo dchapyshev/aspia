@@ -47,7 +47,7 @@ ScreenUpdater::~ScreenUpdater()
 
 void ScreenUpdater::update()
 {
-    std::scoped_lock<std::mutex> lock(update_lock_);
+    std::scoped_lock lock(update_lock_);
     update_required_ = true;
     update_condition_.notify_one();
 }
@@ -93,11 +93,11 @@ void ScreenUpdater::run()
         cursor_encoder = std::make_unique<CursorEncoder>();
     }
 
-    CaptureScheduler scheduler;
+    CaptureScheduler capture_scheduler(std::chrono::milliseconds(config_.update_interval()));
 
     while (!terminate_)
     {
-        scheduler.beginCapture();
+        capture_scheduler.beginCapture();
 
         const DesktopFrame* screen_frame = screen_capturer->captureFrame();
         if (screen_frame)
@@ -122,7 +122,7 @@ void ScreenUpdater::run()
                 update_event->video_packet = std::move(video_packet);
                 update_event->cursor_shape = std::move(cursor_shape);
 
-                std::unique_lock<std::mutex> lock(update_lock_);
+                std::unique_lock lock(update_lock_);
                 update_required_ = false;
 
                 QCoreApplication::postEvent(parent(), update_event);
@@ -132,13 +132,14 @@ void ScreenUpdater::run()
             }
         }
 
-        std::unique_lock<std::mutex> lock(update_lock_);
+        capture_scheduler.endCapture();
+
+        std::unique_lock lock(update_lock_);
         update_required_ = false;
 
         while (!update_required_ && !terminate_)
         {
-            std::chrono::milliseconds delay =
-                scheduler.nextCaptureDelay(std::chrono::milliseconds(config_.update_interval()));
+            std::chrono::milliseconds delay = capture_scheduler.nextCaptureDelay();
 
             if (update_condition_.wait_for(lock, delay) == std::cv_status::timeout)
                 break;

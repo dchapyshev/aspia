@@ -26,14 +26,17 @@ namespace aspia {
 class CaptureScheduler
 {
 public:
-    CaptureScheduler() = default;
+    CaptureScheduler(const std::chrono::milliseconds& update_interval);
     ~CaptureScheduler() = default;
 
     void beginCapture();
-    std::chrono::milliseconds nextCaptureDelay(const std::chrono::milliseconds& max_delay) const;
+    void endCapture();
+    std::chrono::milliseconds nextCaptureDelay() const;
 
 private:
+    std::chrono::milliseconds update_interval_;
     std::chrono::time_point<std::chrono::high_resolution_clock> begin_time_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> end_time_;
 
     Q_DISABLE_COPY(CaptureScheduler)
 };
