@@ -6,16 +6,6 @@
   <String Id="CoreDescription" Overridable="yes">De basis applicatie.</String>
   <String Id="HostService_Title" Overridable="yes">Host Service</String>
   <String Id="HostService_Description" Overridable="yes">Geeft toegang op afstand naar deze computer.</String>
-  <String Id="Translations_Title" Overridable="yes">Vertalingen</String>
-  <String Id="Translations_Description" Overridable="yes">Vertalingen van de applicatie interface.</String>
-  <String Id="GermanLanguage_Title">German</String>
-  <String Id="GermanLanguage_Description">Translation of the application into German language.</String>
-  <String Id="DutchLanguage_Title" Overridable="yes">Nederlands</String>
-  <String Id="DutchLanguage_Description" Overridable="yes">Vertaling van de applicatie in het Nederlands.</String>
-  <String Id="RussianLanguage_Title" Overridable="yes">Russisch</String>
-  <String Id="RussianLanguage_Description" Overridable="yes">Vertaling van de applicatie in het Russisch.</String>
-  <String Id="UkrainianLanguage_Title" Overridable="yes">Ukrainian</String>
-  <String Id="UkrainianLanguage_Description" Overridable="yes">Translation of the application into Ukrainian language.</String>
   <String Id="AddressBookFile_Description" Overridable="yes">Aspia Adresboek (.aab)</String>
   <String Id="CreateDesktopShortcuts" Overridable="yes">Maak bureaublad snelkoppelingen</String>
   <String Id="CreateProgramMenuShortcuts" Overridable="yes">Maak snelkoppelingen in het Start menu</String>

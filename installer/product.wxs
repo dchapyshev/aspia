@@ -36,6 +36,10 @@
       <ComponentRef Id="ConsoleSettings" />
       <ComponentRef Id="ConsoleProgramMenuShortcuts" />
       <ComponentRef Id="ConsoleDesktopShortcuts" />
+      <ComponentRef Id="TranslationGerman" />
+      <ComponentRef Id="TranslationDutch" />
+      <ComponentRef Id="TranslationRussian" />
+      <ComponentRef Id="TranslationUkrainian" />
       <Feature Id="HostFeature" Title="!(loc.HostService_Title)"
                Description="!(loc.HostService_Description)" Absent="allow" AllowAdvertise="no"
                TypicalDefault="install" InstallDefault="local" Level="2">
@@ -43,32 +47,8 @@
         <ComponentRef Id="HostProgramMenuShortcuts" />
         <ComponentRef Id="HostDesktopShortcuts" />
       </Feature>
-      <Feature Id="TranslationsFeature" Title="!(loc.Translations_Title)"
-               Description="!(loc.Translations_Description)" Absent="disallow" AllowAdvertise="no"
-               TypicalDefault="install" InstallDefault="local" Level="2" Display="expand">
-        <Feature Id="FeatureGermanTranslation" Title="!(loc.GermanLanguage_Title)"
-                 Description="!(loc.GermanLanguage_Description)" Absent="allow" AllowAdvertise="no"
-                 TypicalDefault="install" InstallDefault="local" Level="3">
-          <ComponentRef Id="TranslationGerman" />
-        </Feature>
-        <Feature Id="FeatureDutchTranslation" Title="!(loc.DutchLanguage_Title)"
-                 Description="!(loc.DutchLanguage_Description)" Absent="allow" AllowAdvertise="no"
-                 TypicalDefault="install" InstallDefault="local" Level="3">
-          <ComponentRef Id="TranslationDutch" />
-        </Feature>
-        <Feature Id="FeatureRussianTranslation" Title="!(loc.RussianLanguage_Title)"
-                 Description="!(loc.RussianLanguage_Description)" Absent="allow"
-                 AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="3">
-          <ComponentRef Id="TranslationRussian" />
-        </Feature>
-        <Feature Id="FeatureUkrainianTranslation" Title="!(loc.UkrainianLanguage_Title)"
-             Description="!(loc.UkrainianLanguage_Description)" Absent="allow"
-             AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="3">
-          <ComponentRef Id="TranslationUkrainian" />
-        </Feature>
-      </Feature>
     </Feature>
-    <Property Id="INSTALLLEVEL" Value="3" />
+    <Property Id="INSTALLLEVEL" Value="2" />
 
     <WixVariable Id="WixUIBannerBmp" Value="resources/banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="resources/dialog.bmp" />

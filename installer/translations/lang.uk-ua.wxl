@@ -6,16 +6,6 @@
   <String Id="CoreDescription" Overridable="yes">The core application files.</String>
   <String Id="HostService_Title" Overridable="yes">Host Service</String>
   <String Id="HostService_Description" Overridable="yes">Provides remote access to this computer.</String>
-  <String Id="Translations_Title" Overridable="yes">Translations</String>
-  <String Id="Translations_Description" Overridable="yes">Translations of the application interface.</String>
-  <String Id="GermanLanguage_Title">German</String>
-  <String Id="GermanLanguage_Description">Translation of the application into German language.</String>
-  <String Id="DutchLanguage_Title" Overridable="yes">Dutch</String>
-  <String Id="DutchLanguage_Description" Overridable="yes">Translation of the application into Dutch language.</String>
-  <String Id="RussianLanguage_Title" Overridable="yes">Russian</String>
-  <String Id="RussianLanguage_Description" Overridable="yes">Translation of the application into Russian language.</String>
-  <String Id="UkrainianLanguage_Title" Overridable="yes">Ukrainian</String>
-  <String Id="UkrainianLanguage_Description" Overridable="yes">Translation of the application into Ukrainian language.</String>
   <String Id="AddressBookFile_Description" Overridable="yes">Aspia Address Book (.aab)</String>
   <String Id="CreateDesktopShortcuts" Overridable="yes">Create desktop shortcuts</String>
   <String Id="CreateProgramMenuShortcuts" Overridable="yes">Create shortcuts in the Start menu</String>
