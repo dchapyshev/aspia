@@ -35,7 +35,7 @@ namespace aspia {
 namespace {
 
 const char kFirewallRuleName[] = "Aspia Host Service";
-const char kNotifierFileName[] = "aspia_host_notifier.exe";
+const char kNotifierFileName[] = "aspia_host.exe";
 
 const char* sessionTypeToString(proto::auth::SessionType session_type)
 {

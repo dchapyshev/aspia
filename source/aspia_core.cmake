@@ -286,8 +286,6 @@ list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/host_config_main.h
     ${PROJECT_SOURCE_DIR}/host/host_notifier.cc
     ${PROJECT_SOURCE_DIR}/host/host_notifier.h
-    ${PROJECT_SOURCE_DIR}/host/host_notifier_main.cc
-    ${PROJECT_SOURCE_DIR}/host/host_notifier_main.h
     ${PROJECT_SOURCE_DIR}/host/host_server.cc
     ${PROJECT_SOURCE_DIR}/host/host_server.h
     ${PROJECT_SOURCE_DIR}/host/host_session.cc

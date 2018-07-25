@@ -74,7 +74,6 @@
         <File Id="$(var.HostServiceExecutable)" Name="$(var.HostServiceExecutable)" KeyPath="yes" />
         <File Id="$(var.HostExecutable)" Name="$(var.HostExecutable)" />
         <File Id="$(var.HostConfigExecutable)" Name="$(var.HostConfigExecutable)" />
-        <File Id="$(var.HostNotifierExecutable)" Name="$(var.HostNotifierExecutable)" />
         <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes"
                         Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)"
                         Description="$(var.ServiceDescription)"

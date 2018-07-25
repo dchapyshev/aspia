@@ -9,7 +9,6 @@
   <?define ConsoleExecutable="aspia_console.exe"?>
   <?define HostServiceExecutable="aspia_host_service.exe"?>
   <?define HostConfigExecutable="aspia_host_config.exe"?>
-  <?define HostNotifierExecutable="aspia_host_notifier.exe"?>
   <?define HostExecutable="aspia_host.exe"?>
   <?define ServiceName="aspia-host-service"?>
   <?define ServiceDisplayName="Aspia Host Service"?>
