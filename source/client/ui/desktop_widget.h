@@ -21,6 +21,8 @@
 
 #include <QEvent>
 #include <QWidget>
+#include <QSet>
+
 #include <memory>
 
 #include "desktop_capture/desktop_frame.h"
@@ -50,8 +52,8 @@ public slots:
     void executeKeySequense(int key_sequence);
 
 signals:
-    void sendKeyEvent(quint32 usb_keycode, quint32 flags);
-    void sendPointerEvent(const QPoint& pos, quint32 mask);
+    void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
+    void sendPointerEvent(const QPoint& pos, uint32_t mask);
 
 protected:
     // QWidget implementation.
@@ -64,12 +66,17 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     void leaveEvent(QEvent *event) override;
+    void focusOutEvent(QFocusEvent* event) override;
 
 private:
+    void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
+
     std::unique_ptr<DesktopFrameQImage> frame_;
 
     QPoint prev_pos_;
-    quint32 prev_mask_ = 0;
+    uint32_t prev_mask_ = 0;
+
+    QSet<uint32_t> pressed_keys_;
 
     Q_DISABLE_COPY(DesktopWidget)
 };
