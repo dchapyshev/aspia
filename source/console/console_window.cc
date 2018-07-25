@@ -18,6 +18,7 @@
 
 #include "console/console_window.h"
 
+#include <QCloseEvent>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -597,6 +598,7 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
                     break;
 
                 case QMessageBox::Cancel:
+                    event->ignore();
                     return;
 
                 default:
