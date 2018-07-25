@@ -93,16 +93,20 @@
 
     <!-- Translations -->
     <DirectoryRef Id="TRANSLATIONS" FileSource="$(var.SourceFiles)\translations">
-      <Component Id ="TranslationGerman" DiskId="1" Guid="{A66B1894-E68C-4F1C-B135-E2739BC7D717}">
+      <Component Id="TranslationGerman" DiskId="1" Guid="{A66B1894-E68C-4F1C-B135-E2739BC7D717}">
         <File Id="aspia_de.qm" Name="aspia_de.qm" KeyPath="yes" />
         <File Id="qtbase_de.qm" Name="qtbase_de.qm" />
       </Component>
-      <Component Id ="TranslationDutch" DiskId="1" Guid="{A8C3C5A2-E3B8-4001-BCA8-7D634761E8C5}">
+      <Component Id="TranslationDutch" DiskId="1" Guid="{A8C3C5A2-E3B8-4001-BCA8-7D634761E8C5}">
         <File Id="aspia_nl.qm" Name="aspia_nl.qm" KeyPath="yes" />
       </Component>
-      <Component Id ="TranslationRussian" DiskId="1" Guid="{2CB24855-3B78-47AC-BAC8-D558EEE7519E}">
+      <Component Id="TranslationRussian" DiskId="1" Guid="{2CB24855-3B78-47AC-BAC8-D558EEE7519E}">
         <File Id="aspia_ru.qm" Name="aspia_ru.qm" KeyPath="yes" />
         <File Id="qtbase_ru.qm" Name="qtbase_ru.qm" />
+      </Component>
+      <Component Id="TranslationUkrainian" DiskId="1" Guid="{9101972F-87F0-4571-9C57-4C73C3A5989E}">
+        <File Id="aspia_uk.qm" Name="aspia_uk.qm" KeyPath="yes" />
+        <File Id="qtbase_uk.qm" Name="qtbase_uk.qm" />
       </Component>
     </DirectoryRef>
   </Fragment>

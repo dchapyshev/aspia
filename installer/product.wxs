@@ -61,6 +61,11 @@
                  AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="3">
           <ComponentRef Id="TranslationRussian" />
         </Feature>
+        <Feature Id="FeatureUkrainianTranslation" Title="!(loc.UkrainianLanguage_Title)"
+             Description="!(loc.UkrainianLanguage_Description)" Absent="allow"
+             AllowAdvertise="no" TypicalDefault="install" InstallDefault="local" Level="3">
+          <ComponentRef Id="TranslationUkrainian" />
+        </Feature>
       </Feature>
     </Feature>
     <Property Id="INSTALLLEVEL" Value="3" />
