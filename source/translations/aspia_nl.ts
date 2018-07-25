@@ -877,7 +877,7 @@
         <translation>Verbindings Status</translation>
     </message>
     <message>
-        <location filename="../client/ui/status_dialog.ui" line="41"/>
+        <location filename="../client/ui/status_dialog.ui" line="45"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -1202,7 +1202,7 @@
         <translation>Niet ondersteund sessie type.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="176"/>
+        <location filename="../client/client.cc" line="175"/>
         <source>Session started.</source>
         <translation>Sessie begonnen.</translation>
     </message>
@@ -1238,12 +1238,12 @@
         <translation>Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="157"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Sessie fout: Er zijn geen ondersteunde video encodings.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="171"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Sessie fout: Afgebroken door de gebruiker.</translation>
     </message>
@@ -1251,42 +1251,42 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="77"/>
+        <location filename="../client/client_session_desktop_view.cc" line="75"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="137"/>
+        <location filename="../client/client_session_desktop_view.cc" line="127"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Sessie fout: Video decoder niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="149"/>
+        <location filename="../client/client_session_desktop_view.cc" line="139"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Sessie fout: Verkeerde video frame grootte.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="156"/>
+        <location filename="../client/client_session_desktop_view.cc" line="146"/>
         <source>Session error: Wrong video frame position.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="167"/>
+        <location filename="../client/client_session_desktop_view.cc" line="157"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Sessie fout: Het bureaublad frame is niet geinitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="173"/>
+        <location filename="../client/client_session_desktop_view.cc" line="163"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Sessie fout: Het video pakket kon niet gedecodeerd worden.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="193"/>
+        <location filename="../client/client_session_desktop_view.cc" line="183"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Sessie fout: Er zijn geen ondersteunde video encodings.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="200"/>
+        <location filename="../client/client_session_desktop_view.cc" line="190"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Sessie fout: Afgebroken door de gebruiker.</translation>
     </message>
@@ -1294,12 +1294,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="68"/>
+        <location filename="../client/client_session_file_transfer.cc" line="62"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="75"/>
+        <location filename="../client/client_session_file_transfer.cc" line="69"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Sessie fout: Er zijn geen ingelogde gebruikers. Bestandsoverdracht is niet beschikbaar.</translation>
     </message>
@@ -1307,7 +1307,7 @@
 <context>
     <name>aspia::ClientSessionSystemInfo</name>
     <message>
-        <location filename="../client/client_session_system_info.cc" line="46"/>
+        <location filename="../client/client_session_system_info.cc" line="40"/>
         <source>Session error: Invalid message from host.</source>
         <translation type="unfinished">Sessie fout: Ongeldig bericht van de host.</translation>
     </message>
@@ -1315,17 +1315,17 @@
 <context>
     <name>aspia::ClientUserAuthorizer</name>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="151"/>
+        <location filename="../client/client_user_authorizer.cc" line="155"/>
         <source>Protocol error: Unknown message from host.</source>
         <translation>Protocol fout: Onbekend bericht van de host.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="162"/>
+        <location filename="../client/client_user_authorizer.cc" line="174"/>
         <source>Authorization error: Empty nonce is not allowed.</source>
         <translation>Authorisatie fout: Lege nonce is niet toegestaan.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="176"/>
+        <location filename="../client/client_user_authorizer.cc" line="188"/>
         <source>Authorization is canceled by the user.</source>
         <translation>Authorisatie is door de gebruiker afgebroken.</translation>
     </message>
@@ -1443,39 +1443,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="177"/>
+        <location filename="../console/console_window.cc" line="178"/>
         <source>Open Address Book</source>
         <translation>Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="179"/>
+        <location filename="../console/console_window.cc" line="180"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="197"/>
+        <location filename="../console/console_window.cc" line="198"/>
         <source>Information</source>
         <translation>Informatie</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="198"/>
+        <location filename="../console/console_window.cc" line="199"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="280"/>
+        <location filename="../console/console_window.cc" line="281"/>
         <source>https://aspia.org/en/help.html</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="397"/>
-        <location filename="../console/console_window.cc" line="588"/>
+        <location filename="../console/console_window.cc" line="398"/>
+        <location filename="../console/console_window.cc" line="589"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="398"/>
-        <location filename="../console/console_window.cc" line="589"/>
+        <location filename="../console/console_window.cc" line="399"/>
+        <location filename="../console/console_window.cc" line="590"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
@@ -1834,9 +1834,45 @@
 <context>
     <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake_desktop.cc" line="170"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="163"/>
         <source>The session is temporarily unavailable.</source>
         <translation>De sessie is tijdelijk niet beschikbaar.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::NetworkChannel</name>
+    <message>
+        <location filename="../network/network_channel.cc" line="217"/>
+        <location filename="../network/network_channel.cc" line="422"/>
+        <location filename="../network/network_channel.cc" line="433"/>
+        <source>Error in encryption key exchange.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="311"/>
+        <source>The received message has an invalid size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="390"/>
+        <location filename="../network/network_channel.cc" line="460"/>
+        <source>Unknown internal error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="406"/>
+        <source>Error while decrypting the message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="480"/>
+        <source>The message to send exceeds the size limit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="526"/>
+        <source>Error while encrypting the message.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

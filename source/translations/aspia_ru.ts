@@ -133,22 +133,22 @@
     <message>
         <location filename="../system_info/category.cc" line="96"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Оборудование</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="97"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Программное обеспечение</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="98"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеть</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="99"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Операционная система</translation>
     </message>
 </context>
 <context>
@@ -439,12 +439,12 @@
     <message>
         <location filename="../console/console_window.ui" line="457"/>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Информация о системе</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="466"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о системе</translation>
     </message>
 </context>
 <context>
@@ -538,12 +538,12 @@
     <message>
         <location filename="../system_info/ui/dmi_form.ui" line="50"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле</translation>
     </message>
     <message>
         <location filename="../system_info/ui/dmi_form.ui" line="55"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Значение</translation>
     </message>
 </context>
 <context>
@@ -877,7 +877,7 @@
         <translation>Состояние подключения</translation>
     </message>
     <message>
-        <location filename="../client/ui/status_dialog.ui" line="41"/>
+        <location filename="../client/ui/status_dialog.ui" line="45"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -887,27 +887,27 @@
     <message>
         <location filename="../client/ui/system_info_window.ui" line="91"/>
         <source>Save Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить отчет</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="100"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="105"/>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущая категория</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="110"/>
         <source>Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранные категории</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="115"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Все категории</translation>
     </message>
 </context>
 <context>
@@ -1016,7 +1016,7 @@
     <message>
         <location filename="../console/address_book_dialog.cc" line="65"/>
         <source>Double-click to change</source>
-        <translation>Двойной щелчек для изменения</translation>
+        <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="140"/>
@@ -1097,7 +1097,7 @@
     <message>
         <location filename="../console/address_book_tab.cc" line="439"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочернии элементы?</translation>
+        <translation>Вы действительно хотите удалить группу компьютеров &quot;%1&quot; и все дочерние элементы?</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="443"/>
@@ -1200,7 +1200,7 @@
         <translation>Неподдерживаемый тип сессии.</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="176"/>
+        <location filename="../client/client.cc" line="175"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
@@ -1225,7 +1225,7 @@
     <message>
         <location filename="../client/ui/client_dialog.cc" line="51"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о системе</translation>
     </message>
 </context>
 <context>
@@ -1236,12 +1236,12 @@
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="157"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Ошибка сессии: Нет поддерживаемых видео-кодировок.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="171"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
@@ -1249,42 +1249,42 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="77"/>
+        <location filename="../client/client_session_desktop_view.cc" line="75"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="137"/>
+        <location filename="../client/client_session_desktop_view.cc" line="127"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="149"/>
+        <location filename="../client/client_session_desktop_view.cc" line="139"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="156"/>
+        <location filename="../client/client_session_desktop_view.cc" line="146"/>
         <source>Session error: Wrong video frame position.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="167"/>
+        <location filename="../client/client_session_desktop_view.cc" line="157"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="173"/>
+        <location filename="../client/client_session_desktop_view.cc" line="163"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="193"/>
+        <location filename="../client/client_session_desktop_view.cc" line="183"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation>Ошибка сессии: Нет поддерживаемых видео-декодеров.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="200"/>
+        <location filename="../client/client_session_desktop_view.cc" line="190"/>
         <source>Session error: Canceled by the user.</source>
         <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
@@ -1292,12 +1292,12 @@
 <context>
     <name>aspia::ClientSessionFileTransfer</name>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="68"/>
+        <location filename="../client/client_session_file_transfer.cc" line="62"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_file_transfer.cc" line="75"/>
+        <location filename="../client/client_session_file_transfer.cc" line="69"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
         <translation>Ошибка сессии: Нет вошедших в систему пользователей. Передача файлов недоступна.</translation>
     </message>
@@ -1305,25 +1305,25 @@
 <context>
     <name>aspia::ClientSessionSystemInfo</name>
     <message>
-        <location filename="../client/client_session_system_info.cc" line="46"/>
+        <location filename="../client/client_session_system_info.cc" line="40"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished">Ошибка сессии: Неверное сообщение от хоста.</translation>
+        <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientUserAuthorizer</name>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="151"/>
+        <location filename="../client/client_user_authorizer.cc" line="155"/>
         <source>Protocol error: Unknown message from host.</source>
         <translation>Ошибка протокола: Неизвестное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="162"/>
+        <location filename="../client/client_user_authorizer.cc" line="174"/>
         <source>Authorization error: Empty nonce is not allowed.</source>
         <translation>Ошибка авторизации: Пустое поле nonce не разрешено.</translation>
     </message>
     <message>
-        <location filename="../client/client_user_authorizer.cc" line="176"/>
+        <location filename="../client/client_user_authorizer.cc" line="188"/>
         <source>Authorization is canceled by the user.</source>
         <translation>Авторизация отменена пользователем.</translation>
     </message>
@@ -1348,7 +1348,7 @@
     <message>
         <location filename="../console/computer_dialog.cc" line="62"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о системе</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="166"/>
@@ -1448,39 +1448,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="177"/>
+        <location filename="../console/console_window.cc" line="178"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="179"/>
+        <location filename="../console/console_window.cc" line="180"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="197"/>
+        <location filename="../console/console_window.cc" line="198"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="198"/>
+        <location filename="../console/console_window.cc" line="199"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="280"/>
+        <location filename="../console/console_window.cc" line="281"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/ru/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="397"/>
-        <location filename="../console/console_window.cc" line="588"/>
+        <location filename="../console/console_window.cc" line="398"/>
+        <location filename="../console/console_window.cc" line="589"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="398"/>
-        <location filename="../console/console_window.cc" line="589"/>
+        <location filename="../console/console_window.cc" line="399"/>
+        <location filename="../console/console_window.cc" line="590"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
     </message>
@@ -1839,9 +1839,45 @@
 <context>
     <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake_desktop.cc" line="170"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="163"/>
         <source>The session is temporarily unavailable.</source>
         <translation>Сессия временно недоступна.</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::NetworkChannel</name>
+    <message>
+        <location filename="../network/network_channel.cc" line="217"/>
+        <location filename="../network/network_channel.cc" line="422"/>
+        <location filename="../network/network_channel.cc" line="433"/>
+        <source>Error in encryption key exchange.</source>
+        <translation>Ошибка при обмене ключами шифрования.</translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="311"/>
+        <source>The received message has an invalid size.</source>
+        <translation>Полученное сообщение имеет некорректные размер.</translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="390"/>
+        <location filename="../network/network_channel.cc" line="460"/>
+        <source>Unknown internal error.</source>
+        <translation>Неизвестная внутренняя ошибка.</translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="406"/>
+        <source>Error while decrypting the message.</source>
+        <translation>Ошибка при расшифровке сообщения.</translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="480"/>
+        <source>The message to send exceeds the size limit.</source>
+        <translation>Сообщение для отправки превышает допустимый размер.</translation>
+    </message>
+    <message>
+        <location filename="../network/network_channel.cc" line="526"/>
+        <source>Error while encrypting the message.</source>
+        <translation>Ошибка при расшифровке сообщения.</translation>
     </message>
 </context>
 <context>
@@ -1862,7 +1898,7 @@
     <message>
         <location filename="../client/ui/system_info_window.cc" line="42"/>
         <source>%1 - Aspia System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Информация о системе</translation>
     </message>
 </context>
 <context>
@@ -1870,7 +1906,7 @@
     <message>
         <location filename="../host/ui/user_dialog.cc" line="39"/>
         <source>Double-click to change</source>
-        <translation>Двойной щелчек для изменения</translation>
+        <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="81"/>
@@ -1890,7 +1926,7 @@
     <message>
         <location filename="../host/ui/user_dialog.cc" line="93"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о системе</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="149"/>
