@@ -251,7 +251,6 @@ void HostUserAuthorizer::writeLogonResult(proto::auth::Status status)
         network_channel_->send(serializeMessage(message));
     }
 
-    // Authorization passed or exceeded the number of attempts. Finish.
     if (status == proto::auth::STATUS_SUCCESS)
     {
         Q_ASSERT(timer_id_ != 0);
