@@ -167,12 +167,7 @@ void HostServer::setSessionChanged(quint32 event, quint32 session_id)
 
         case WTS_CONSOLE_DISCONNECT:
         {
-            if (restart_timer_id_ != 0)
-            {
-                killTimer(restart_timer_id_);
-                restart_timer_id_ = 0;
-            }
-
+            has_user_session_ = false;
             stopNotifier();
         }
         break;
@@ -180,30 +175,16 @@ void HostServer::setSessionChanged(quint32 event, quint32 session_id)
         case WTS_SESSION_LOGON:
         {
             if (session_id == WTSGetActiveConsoleSessionId() && !session_list_.isEmpty())
+            {
+                has_user_session_ = true;
                 startNotifier();
+            }
         }
         break;
 
         default:
             break;
     }
-}
-
-void HostServer::timerEvent(QTimerEvent* event)
-{
-    if (restart_timer_id_ != 0 && event->timerId() == restart_timer_id_)
-    {
-        killTimer(restart_timer_id_);
-        restart_timer_id_ = 0;
-
-        if (session_list_.isEmpty())
-            return;
-
-        startNotifier();
-        return;
-    }
-
-    QObject::timerEvent(event);
 }
 
 void HostServer::onNewConnection()
@@ -332,6 +313,7 @@ void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
     if (error_code == HostProcess::NoLoggedOnUser)
     {
         qInfo("There is no logged on user. The notifier will not be started.");
+        has_user_session_ = false;
         stopNotifier();
     }
     else
@@ -349,15 +331,10 @@ void HostServer::restartNotifier()
     stopNotifier();
 
     // The notifier is not needed if there are no active sessions.
-    if (session_list_.isEmpty())
+    if (session_list_.isEmpty() || !has_user_session_)
         return;
 
-    restart_timer_id_ = startTimer(std::chrono::seconds(30));
-    if (restart_timer_id_ == 0)
-    {
-        qWarning("Unable to start timer");
-        stop();
-    }
+    startNotifier();
 }
 
 void HostServer::onIpcMessageReceived(const QByteArray& buffer)

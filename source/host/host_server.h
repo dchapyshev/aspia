@@ -44,10 +44,6 @@ public:
 signals:
     void sessionChanged(quint32 event, quint32 session_id);
 
-protected:
-    // QObject implementation.
-    void timerEvent(QTimerEvent* event) override;
-
 private slots:
     void onNewConnection();
     void onAuthorizationFinished(HostUserAuthorizer* authorizer);
@@ -75,6 +71,8 @@ private:
     // Starts and monitors the status of the notifier process.
     QPointer<HostProcess> notifier_process_;
 
+    bool has_user_session_ = true;
+
     // The channel is used to communicate with the notifier process.
     QPointer<IpcChannel> ipc_channel_;
 
@@ -83,8 +81,6 @@ private:
 
     // Contains a list of connected sessions.
     QList<QPointer<Host>> session_list_;
-
-    int restart_timer_id_ = 0;
 
     Q_DISABLE_COPY(HostServer)
 };
