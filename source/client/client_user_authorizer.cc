@@ -202,7 +202,7 @@ void ClientUserAuthorizer::readServerChallenge(
     proto::auth::ClientChallenge* client_challenge = message.mutable_client_challenge();
     client_challenge->set_session_type(session_type_);
     client_challenge->set_username(username_.toStdString());
-    client_challenge->set_session_key(session_key.constData(), session_key.size());
+    client_challenge->set_session_key(session_key.toStdString());
 
     secureMemZero(&password_hash);
     secureMemZero(&session_key);
