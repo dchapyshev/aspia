@@ -30,10 +30,9 @@ namespace aspia {
 
 namespace {
 
-const quint32 kKeyHashingRounds = 100000;
-const quint32 kNonceSize = 16;
-
-enum MessageId { ServerChallenge, LogonResult };
+const int kMaxAttemptCount = 3;
+const int kKeyHashingRounds = 100000;
+const int kNonceSize = 16;
 
 QByteArray generateNonce()
 {
@@ -44,7 +43,7 @@ QByteArray createSessionKey(const QByteArray& password_hash, const QByteArray& n
 {
     QByteArray data = password_hash;
 
-    for (quint32 i = 0; i < kKeyHashingRounds; ++i)
+    for (int i = 0; i < kKeyHashingRounds; ++i)
     {
         QCryptographicHash hash(QCryptographicHash::Sha512);
 
@@ -81,11 +80,12 @@ void HostUserAuthorizer::setUserList(const QList<User>& user_list)
 void HostUserAuthorizer::setNetworkChannel(NetworkChannel* network_channel)
 {
     network_channel_ = network_channel;
+    network_channel_->setParent(this);
 }
 
 void HostUserAuthorizer::start()
 {
-    if (state_ != NotStarted)
+    if (state_ != State::NOT_STARTED)
     {
         qWarning("Authorizer already started");
         return;
@@ -114,23 +114,16 @@ void HostUserAuthorizer::start()
     connect(network_channel_, &NetworkChannel::messageReceived,
             this, &HostUserAuthorizer::messageReceived);
 
-    connect(network_channel_, &NetworkChannel::messageWritten,
-            this, &HostUserAuthorizer::messageWritten);
-
-    connect(this, &HostUserAuthorizer::writeMessage,
-            network_channel_, &NetworkChannel::writeMessage);
-
-    connect(this, &HostUserAuthorizer::readMessage,
-            network_channel_, &NetworkChannel::readMessage);
-
-    state_ = Started;
-    emit readMessage();
+    state_ = State::STARTED;
+    network_channel_->start();
 }
 
 void HostUserAuthorizer::stop()
 {
-    if (state_ == Finished)
+    if (state_ == State::FINISHED)
         return;
+
+    state_ = State::FINISHED;
 
     if (timer_id_)
     {
@@ -138,13 +131,12 @@ void HostUserAuthorizer::stop()
         timer_id_ = 0;
     }
 
-    connect(network_channel_, &NetworkChannel::disconnected,
-            network_channel_, &NetworkChannel::deleteLater);
+    if (network_channel_)
+    {
+        network_channel_->stop();
+        network_channel_ = nullptr;
+    }
 
-    network_channel_->stop();
-    network_channel_ = nullptr;
-
-    state_ = Finished;
     session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     status_ = proto::auth::STATUS_CANCELED;
 
@@ -159,48 +151,9 @@ void HostUserAuthorizer::timerEvent(QTimerEvent* event)
     stop();
 }
 
-void HostUserAuthorizer::messageWritten(int message_id)
-{
-    if (state_ == Finished)
-        return;
-
-    switch (message_id)
-    {
-        case ServerChallenge:
-            emit readMessage();
-            break;
-
-        case LogonResult:
-        {
-            killTimer(timer_id_);
-            timer_id_ = 0;
-
-            if (status_ != proto::auth::STATUS_SUCCESS)
-            {
-                connect(network_channel_, &NetworkChannel::disconnected,
-                        network_channel_, &NetworkChannel::deleteLater);
-
-                network_channel_->stop();
-                network_channel_ = nullptr;
-            }
-
-            state_ = Finished;
-            emit finished(this);
-        }
-        break;
-
-        default:
-        {
-            qFatal("Unexpected message id: %d", message_id);
-            stop();
-        }
-        break;
-    }
-}
-
 void HostUserAuthorizer::messageReceived(const QByteArray& buffer)
 {
-    if (state_ == Finished)
+    if (state_ == State::FINISHED)
         return;
 
     proto::auth::ClientToHost message;
@@ -270,16 +223,49 @@ void HostUserAuthorizer::readClientChallenge(const proto::auth::ClientChallenge&
 
 void HostUserAuthorizer::writeServerChallenge(const QByteArray& nonce)
 {
-    proto::auth::HostToClient message;
-    message.mutable_server_challenge()->set_nonce(nonce.constData(), nonce.size());
-    emit writeMessage(ServerChallenge, serializeMessage(message));
+    if (network_channel_)
+    {
+        proto::auth::HostToClient message;
+        message.mutable_server_challenge()->set_nonce(nonce.toStdString());
+        network_channel_->send(serializeMessage(message));
+    }
 }
 
 void HostUserAuthorizer::writeLogonResult(proto::auth::Status status)
 {
-    proto::auth::HostToClient message;
-    message.mutable_logon_result()->set_status(status);
-    emit writeMessage(LogonResult, serializeMessage(message));
+    ++attempt_count_;
+
+    // If the number of authorization attempts is exceeded, then we disconnect the connection.
+    // The authorization result is not sent.
+    if (status != proto::auth::STATUS_SUCCESS && attempt_count_ >= kMaxAttemptCount)
+    {
+        qWarning("The number of authorization attempts has been exceeded.");
+        stop();
+        return;
+    }
+
+    if (network_channel_)
+    {
+        proto::auth::HostToClient message;
+        message.mutable_logon_result()->set_status(status);
+        network_channel_->send(serializeMessage(message));
+    }
+
+    // Authorization passed or exceeded the number of attempts. Finish.
+    if (status == proto::auth::STATUS_SUCCESS)
+    {
+        Q_ASSERT(timer_id_ != 0);
+
+        state_ = State::FINISHED;
+
+        if (network_channel_)
+            network_channel_->pause();
+
+        killTimer(timer_id_);
+        timer_id_ = 0;
+
+        emit finished(this);
+    }
 }
 
 proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
@@ -303,13 +289,13 @@ proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
         {
             if (createSessionKey(user.passwordHash(), nonce_) != session_key)
             {
-                qWarning() << "Wrong password for user " << user_name;
+                qWarning() << "Wrong password for user" << user_name;
                 return proto::auth::STATUS_ACCESS_DENIED;
             }
 
             if (!(user.flags() & User::FLAG_ENABLED))
             {
-                qWarning() << "User " << user_name << " is disabled";
+                qWarning() << "User" << user_name << "is disabled";
                 return proto::auth::STATUS_ACCESS_DENIED;
             }
 

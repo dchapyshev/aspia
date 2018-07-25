@@ -44,7 +44,6 @@ signals:
     void sessionClose(const proto::notifier::SessionClose& session_close);
 
 private slots:
-    void onIpcChannelConnected();
     void onIpcMessageReceived(const QByteArray& buffer);
 
 private:

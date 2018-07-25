@@ -28,12 +28,6 @@
 
 namespace aspia {
 
-namespace {
-
-enum MessageId { RequestMessageId };
-
-} // namespace
-
 ClientSessionFileTransfer::ClientSessionFileTransfer(
     ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
@@ -83,12 +77,6 @@ void ClientSessionFileTransfer::messageReceived(const QByteArray& buffer)
     delete request;
 }
 
-void ClientSessionFileTransfer::messageWritten(int message_id)
-{
-    Q_ASSERT(message_id == RequestMessageId);
-    emit readMessage();
-}
-
 void ClientSessionFileTransfer::startSession()
 {
     worker_thread_ = new QThread(this);
@@ -111,6 +99,8 @@ void ClientSessionFileTransfer::startSession()
     file_manager_->show();
     file_manager_->activateWindow();
     file_manager_->refresh();
+
+    emit started();
 }
 
 void ClientSessionFileTransfer::closeSession()
@@ -125,7 +115,7 @@ void ClientSessionFileTransfer::closeSession()
 void ClientSessionFileTransfer::remoteRequest(FileRequest* request)
 {
     requests_.push_back(QPointer<FileRequest>(request));
-    emit writeMessage(RequestMessageId, serializeMessage(request->request()));
+    emit sendMessage(serializeMessage(request->request()));
 }
 
 } // namespace aspia

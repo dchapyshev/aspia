@@ -69,22 +69,16 @@ void HostSession::start()
 {
     ipc_channel_ = IpcChannel::createClient(this);
 
-    connect(ipc_channel_, &IpcChannel::connected, this, &HostSession::ipcChannelConnected);
+    connect(ipc_channel_, &IpcChannel::connected, ipc_channel_, &IpcChannel::start);
+    connect(ipc_channel_, &IpcChannel::connected, this, &HostSession::startSession);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &HostSession::stop);
     connect(ipc_channel_, &IpcChannel::errorOccurred, this, &HostSession::stop);
-    connect(ipc_channel_, &IpcChannel::messageWritten, this, &HostSession::messageWritten);
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostSession::messageReceived);
 
-    connect(this, &HostSession::readMessage, ipc_channel_, &IpcChannel::readMessage);
-    connect(this, &HostSession::writeMessage, ipc_channel_, &IpcChannel::writeMessage);
+    connect(this, &HostSession::sendMessage, ipc_channel_, &IpcChannel::send);
     connect(this, &HostSession::errorOccurred, this, &HostSession::stop);
 
     ipc_channel_->connectToServer(channel_id_);
-}
-
-void HostSession::ipcChannelConnected()
-{
-    startSession();
 }
 
 void HostSession::stop()

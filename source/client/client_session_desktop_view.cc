@@ -25,8 +25,6 @@ namespace aspia {
 
 namespace {
 
-enum MessageId { ConfigMessageId };
-
 const quint32 kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_ZLIB |
     proto::desktop::VIDEO_ENCODING_VP8 |
@@ -91,21 +89,13 @@ void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
         // Unknown messages are ignored.
         qWarning("Unhandled message from host");
     }
-
-    emit readMessage();
-}
-
-void ClientSessionDesktopView::messageWritten(int /* message_id */)
-{
-    // Nothing
 }
 
 void ClientSessionDesktopView::startSession()
 {
     desktop_window_->show();
     desktop_window_->activateWindow();
-
-    emit readMessage();
+    emit started();
 }
 
 void ClientSessionDesktopView::closeSession()
@@ -121,7 +111,7 @@ void ClientSessionDesktopView::onSendConfig(const proto::desktop::Config& config
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
-    emit writeMessage(ConfigMessageId, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket& packet)

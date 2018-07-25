@@ -30,8 +30,6 @@ class ClientUserAuthorizer : public QObject
     Q_OBJECT
 
 public:
-    enum State { NotStarted, Started, Finished };
-
     explicit ClientUserAuthorizer(QWidget* parent);
     ~ClientUserAuthorizer();
 
@@ -47,20 +45,22 @@ public:
 public slots:
     void start();
     void cancel();
-    void messageWritten(int message_id);
     void messageReceived(const QByteArray& buffer);
 
 signals:
+    void started();
     void finished(proto::auth::Status status);
     void errorOccurred(const QString& message);
-    void writeMessage(int message_id, const QByteArray& buffer);
-    void readMessage();
+    void sendMessage(const QByteArray& buffer);
 
 private:
+    void writeLogonRequest();
     void readServerChallenge(const proto::auth::ServerChallenge& server_challenge);
     void readLogonResult(const proto::auth::LogonResult& logon_result);
 
-    State state_ = NotStarted;
+    enum class State { NOT_STARTED, STARTED, FINISHED };
+
+    State state_ = State::NOT_STARTED;
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     QString username_;
     QString password_;

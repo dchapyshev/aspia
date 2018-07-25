@@ -33,48 +33,55 @@ class NetworkChannel : public QObject
     Q_OBJECT
 
 public:
-    enum ChannelType
-    {
-        ServerChannel,
-        ClientChannel
-    };
-    Q_ENUM(ChannelType);
-
-    enum ChannelState
-    {
-        NotConnected,
-        Connected,
-        Encrypted
-    };
-    Q_ENUM(ChannelState);
+    enum class Type { SERVER_CHANNEL, CLIENT_CHANNEL };
+    enum class State { NOT_CONNECTED, CONNECTED, ENCRYPTED };
 
     ~NetworkChannel() = default;
 
+    // Creates a client to connect to the host.
     static NetworkChannel* createClient(QObject* parent = nullptr);
 
+    // Connection to the host. If the channel is server, it does nothing.
     void connectToHost(const QString& address, int port);
 
-    ChannelState channelState() const { return channel_state_; }
+    // Returns the state of the data channel.
+    State state() const { return state_; }
+
+    // If the channel is started, it returns true, if not, then false.
+    bool isStarted() const { return !read_.paused; }
+
+    // Returns the address of the connected peer.
     QString peerAddress() const;
 
 signals:
+    // Emits when a secure connection is established.
     void connected();
+
+    // Emits when the connection is aborted.
     void disconnected();
+
+    // Emitted when an error occurred. Parameter |message| contains a text description of the error.
     void errorOccurred(const QString& message);
+
+    // Emitted when a new message is received.
     void messageReceived(const QByteArray& buffer);
-    void messageWritten(int message_id);
 
 public slots:
-    // Starts reading the message. When the message is received, the signal |messageReceived| is
-    // called. You do not need to re-call |readMessage| until this signal is called.
-    void readMessage();
+    // Starts reading messages from the channel. After receiving each new message, the signal
+    // |messageReceived| will be emmited.
+    // If the channel is already started, it does nothing.
+    void start();
 
-    // Sends a message. If the |message_id| is not -1, then after the message is sent,
-    // the signal |messageWritten| is called.
-    void writeMessage(int message_id, const QByteArray& buffer);
-
-    // Stops the channel.
+    // Stops the channel. After calling this slot, new messages will not arrive and the sending of
+    // messages will be stopped. All messages that are in the sending queue will be deleted.
     void stop();
+
+    // Pauses channel. Receiving incoming messages is suspended. To continue data transfer, you
+    // need to call slot |start|.
+    void pause();
+
+    // Sends a message.
+    void send(const QByteArray& buffer);
 
 protected:
     void timerEvent(QTimerEvent* event) override;
@@ -90,26 +97,52 @@ private slots:
 
 private:
     friend class NetworkServer;
-    NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent);
-    void scheduleWrite();
+    NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* parent);
+    void keyExchangeComplete();
+    void scheduleWrite(const QByteArray& source_buffer);
 
-    const ChannelType channel_type_;
-    ChannelState channel_state_ = NotConnected;
+    const Type type_;
+    State state_ = State::NOT_CONNECTED;
     QPointer<QTcpSocket> socket_;
 
+    // Encrypts and decrypts data.
     QScopedPointer<Encryptor> encryptor_;
+
+    // To this buffer decrypts the data received from the network.
     QByteArray decrypt_buffer_;
 
-    QByteArray write_buffer_;
-    QByteArray read_buffer_;
+    struct WriteContext
+    {
+        // The queue contains unencrypted source messages.
+        QQueue<QByteArray> queue;
 
-    QQueue<QPair<int, QByteArray>> write_queue_;
-    int64_t written_ = 0;
+        // The buffer contains an encrypted message that is being sent to the current moment.
+        QByteArray buffer;
 
-    bool read_required_ = false;
-    bool read_size_received_ = false;
-    int read_size_ = 0;
-    int64_t read_ = 0;
+        // Number of bytes transferred from the |buffer|.
+        int64_t bytes_transferred = 0;
+    };
+
+    struct ReadContext
+    {
+        bool paused = false;
+
+        // To this buffer reads data from the network.
+        QByteArray buffer;
+
+        // If the flag is set to true, then the buffer size is read from the network, if false,
+        // then no.
+        bool buffer_size_received = false;
+
+        // Size of |buffer|.
+        int buffer_size = 0;
+
+        // Number of bytes read into the |buffer|.
+        int64_t bytes_transferred = 0;
+    };
+
+    ReadContext read_;
+    WriteContext write_;
 
     int pinger_timer_id_ = 0;
 

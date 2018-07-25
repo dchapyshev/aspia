@@ -24,7 +24,7 @@ namespace aspia {
 
 namespace {
 
-constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
+constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 } // namespace
 
@@ -36,12 +36,7 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
 
     socket_->setParent(this);
 
-    connect(socket_, &QLocalSocket::connected, [this]()
-    {
-        state_ = Connected;
-        emit connected();
-    });
-
+    connect(socket_, &QLocalSocket::connected, this, &IpcChannel::connected);
     connect(socket_, &QLocalSocket::bytesWritten, this, &IpcChannel::onBytesWritten);
     connect(socket_, &QLocalSocket::readyRead, this, &IpcChannel::onReadyRead);
 
@@ -67,8 +62,6 @@ void IpcChannel::connectToServer(const QString& channel_name)
 
 void IpcChannel::stop()
 {
-    state_ = NotConnected;
-
     if (socket_->state() != QLocalSocket::UnconnectedState)
     {
         socket_->abort();
@@ -78,19 +71,16 @@ void IpcChannel::stop()
     }
 }
 
-void IpcChannel::readMessage()
+void IpcChannel::start()
 {
-    Q_ASSERT(!read_required_);
-
-    read_required_ = true;
     onReadyRead();
 }
 
-void IpcChannel::writeMessage(int message_id, const QByteArray& buffer)
+void IpcChannel::send(const QByteArray& buffer)
 {
     bool schedule_write = write_queue_.isEmpty();
 
-    write_queue_.push_back(qMakePair(message_id, buffer));
+    write_queue_.push_back(buffer);
 
     if (schedule_write)
         scheduleWrite();
@@ -102,9 +92,9 @@ void IpcChannel::onError(QLocalSocket::LocalSocketError /* socket_error */)
     emit errorOccurred();
 }
 
-void IpcChannel::onBytesWritten(qint64 bytes)
+void IpcChannel::onBytesWritten(int64_t bytes)
 {
-    const QByteArray& write_buffer = write_queue_.front().second;
+    const QByteArray& write_buffer = write_queue_.front();
 
     written_ += bytes;
 
@@ -120,11 +110,6 @@ void IpcChannel::onBytesWritten(qint64 bytes)
     }
     else
     {
-        int message_id = write_queue_.front().first;
-
-        if (message_id != -1)
-            emit messageWritten(message_id);
-
         write_queue_.pop_front();
         written_ = 0;
 
@@ -135,10 +120,7 @@ void IpcChannel::onBytesWritten(qint64 bytes)
 
 void IpcChannel::onReadyRead()
 {
-    if (!read_required_)
-        return;
-
-    qint64 current;
+    int64_t current;
 
     for (;;)
     {
@@ -171,12 +153,11 @@ void IpcChannel::onReadyRead()
         }
         else
         {
-            read_required_ = false;
             read_size_received_ = false;
             read_ = 0;
 
             emit messageReceived(read_buffer_);
-            break;
+            continue;
         }
 
         if (current == 0)
@@ -188,7 +169,7 @@ void IpcChannel::onReadyRead()
 
 void IpcChannel::scheduleWrite()
 {
-    const QByteArray& write_buffer = write_queue_.front().second;
+    const QByteArray& write_buffer = write_queue_.front();
 
     write_size_ = write_buffer.size();
     if (!write_size_ || write_size_ > kMaxMessageSize)

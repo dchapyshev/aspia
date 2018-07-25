@@ -110,7 +110,7 @@ void NetworkServer::onNewConnection()
         return;
 
     NetworkChannel* network_channel =
-        new NetworkChannel(NetworkChannel::ServerChannel, socket, this);
+        new NetworkChannel(NetworkChannel::Type::SERVER_CHANNEL, socket, this);
 
     connect(network_channel, &NetworkChannel::connected,
             this, &NetworkServer::onChannelReady);
@@ -133,7 +133,7 @@ void NetworkServer::onChannelReady()
         {
             it = pending_channels_.erase(it);
         }
-        else if (network_channel->channelState() == NetworkChannel::Encrypted)
+        else if (network_channel->state() == NetworkChannel::State::ENCRYPTED)
         {
             it = pending_channels_.erase(it);
 

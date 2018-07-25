@@ -36,16 +36,6 @@ class Host : public QObject
     Q_OBJECT
 
 public:
-    enum State
-    {
-        StoppedState,
-        StartingState,
-        StoppingState,
-        DetachedState,
-        AttachedState
-    };
-    Q_ENUM(State);
-
     Host(QObject* parent = nullptr);
     ~Host();
 
@@ -67,7 +57,7 @@ public:
 
 public slots:
     void stop();
-    void sessionChanged(quint32 event, quint32 session_id);
+    void sessionChanged(uint32_t event, uint32_t session_id);
 
 signals:
     void finished(Host* host);
@@ -77,10 +67,6 @@ protected:
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
-    void networkMessageWritten(int message_id);
-    void networkMessageReceived(const QByteArray& buffer);
-    void ipcMessageWritten(int message_id);
-    void ipcMessageReceived(const QByteArray& buffer);
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(IpcChannel* channel);
     void attachSession(quint32 session_id);
@@ -89,15 +75,16 @@ private slots:
 private:
     bool startFakeSession();
 
-    static const quint32 kInvalidSessionId = 0xFFFFFFFF;
+    enum class State { STOPPED, STARTING, STOPPING, DETACHED, ATTACHED };
+    static const uint32_t kInvalidSessionId = 0xFFFFFFFF;
 
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     QString user_name_;
     QString uuid_;
 
-    quint32 session_id_ = kInvalidSessionId;
+    uint32_t session_id_ = kInvalidSessionId;
     int attach_timer_id_ = 0;
-    State state_ = StoppedState;
+    State state_ = State::STOPPED;
 
     QPointer<NetworkChannel> network_channel_;
     QPointer<IpcChannel> ipc_channel_;

@@ -40,7 +40,6 @@ public:
 public slots:
     // HostSessionFake implementation.
     void onMessageReceived(const QByteArray& buffer) override;
-    void onMessageWritten(int message_id) override;
 
 private:
     std::unique_ptr<VideoEncoder> createEncoder(const proto::desktop::Config& config);

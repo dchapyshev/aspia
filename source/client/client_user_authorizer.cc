@@ -28,10 +28,8 @@ namespace aspia {
 
 namespace {
 
-const quint32 kKeyHashingRounds = 100000;
-const quint32 kPasswordHashingRounds = 100000;
-
-enum MessageId { LogonRequest, ClientChallenge };
+const int kKeyHashingRounds = 100000;
+const int kPasswordHashingRounds = 100000;
 
 QByteArray createPasswordHash(const QString& password)
 {
@@ -49,7 +47,7 @@ QByteArray createSessionKey(const QByteArray& password_hash, const QByteArray& n
 {
     QByteArray data = password_hash;
 
-    for (quint32 i = 0; i < kKeyHashingRounds; ++i)
+    for (int i = 0; i < kKeyHashingRounds; ++i)
     {
         QCryptographicHash hash(QCryptographicHash::Sha512);
 
@@ -80,56 +78,62 @@ ClientUserAuthorizer::~ClientUserAuthorizer()
 
 void ClientUserAuthorizer::setSessionType(proto::auth::SessionType session_type)
 {
+    if (state_ != State::NOT_STARTED)
+    {
+        qDebug("An attempt to set a session type in an already running authorizer");
+        return;
+    }
+
     session_type_ = session_type;
 }
 
 void ClientUserAuthorizer::setUserName(const QString& username)
 {
+    if (state_ != State::NOT_STARTED)
+    {
+        qDebug("An attempt to set a user name in an already running authorizer");
+        return;
+    }
+
     username_ = username;
 }
 
 void ClientUserAuthorizer::setPassword(const QString& password)
 {
+    if (state_ != State::NOT_STARTED)
+    {
+        qDebug("An attempt to set a password in an already running authorizer");
+        return;
+    }
+
     password_ = password;
 }
 
 void ClientUserAuthorizer::start()
 {
-    if (state_ != NotStarted)
+    if (state_ != State::NOT_STARTED)
     {
-        qWarning("Authorizer already started");
+        qDebug("Authorizer already started");
         return;
     }
 
-    proto::auth::ClientToHost message;
-
-    // We do not support other authorization methods yet.
-    message.mutable_logon_request()->set_method(proto::auth::METHOD_BASIC);
-
-    state_ = Started;
-    emit writeMessage(LogonRequest, serializeMessage(message));
+    state_ = State::STARTED;
+    writeLogonRequest();
+    emit started();
 }
 
 void ClientUserAuthorizer::cancel()
 {
-    if (state_ == Finished)
+    if (state_ == State::FINISHED)
         return;
 
-    state_ = Finished;
+    state_ = State::FINISHED;
     emit finished(proto::auth::STATUS_CANCELED);
-}
-
-void ClientUserAuthorizer::messageWritten(int message_id)
-{
-    if (state_ == Finished)
-        return;
-
-    emit readMessage();
 }
 
 void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
 {
-    if (state_ == Finished)
+    if (state_ == State::FINISHED)
         return;
 
     proto::auth::HostToClient message;
@@ -152,11 +156,19 @@ void ClientUserAuthorizer::messageReceived(const QByteArray& buffer)
     cancel();
 }
 
+void ClientUserAuthorizer::writeLogonRequest()
+{
+    proto::auth::ClientToHost message;
+
+    // We do not support other authorization methods yet.
+    message.mutable_logon_request()->set_method(proto::auth::METHOD_BASIC);
+    emit sendMessage(serializeMessage(message));
+}
+
 void ClientUserAuthorizer::readServerChallenge(
     const proto::auth::ServerChallenge& server_challenge)
 {
-    QByteArray nonce = QByteArray(server_challenge.nonce().c_str(),
-                                  server_challenge.nonce().size());
+    QByteArray nonce = QByteArray::fromStdString(server_challenge.nonce());
     if (nonce.isEmpty())
     {
         emit errorOccurred(tr("Authorization error: Empty nonce is not allowed."));
@@ -182,7 +194,8 @@ void ClientUserAuthorizer::readServerChallenge(
         password_ = dialog.password();
     }
 
-    QByteArray session_key = createSessionKey(createPasswordHash(password_), nonce);
+    QByteArray password_hash = createPasswordHash(password_);
+    QByteArray session_key = createSessionKey(password_hash, nonce);
 
     proto::auth::ClientToHost message;
 
@@ -191,6 +204,7 @@ void ClientUserAuthorizer::readServerChallenge(
     client_challenge->set_username(username_.toStdString());
     client_challenge->set_session_key(session_key.constData(), session_key.size());
 
+    secureMemZero(&password_hash);
     secureMemZero(&session_key);
 
     QByteArray serialized_message = serializeMessage(message);
@@ -198,15 +212,29 @@ void ClientUserAuthorizer::readServerChallenge(
     secureMemZero(client_challenge->mutable_username());
     secureMemZero(client_challenge->mutable_session_key());
 
-    emit writeMessage(ClientChallenge, serialized_message);
+    emit sendMessage(serialized_message);
 
     secureMemZero(&serialized_message);
+    secureMemZero(&nonce);
 }
 
 void ClientUserAuthorizer::readLogonResult(const proto::auth::LogonResult& logon_result)
 {
-    state_ = Finished;
-    emit finished(logon_result.status());
+    if (logon_result.status() != proto::auth::STATUS_SUCCESS)
+    {
+        // Previous data for authorization is not correct. We clear the password so that the
+        // authorization dialog is invoked.
+        secureMemZero(&password_);
+        password_.clear();
+
+        // If the authorization fails, we send the authorization request again.
+        writeLogonRequest();
+    }
+    else
+    {
+        state_ = State::FINISHED;
+        emit finished(logon_result.status());
+    }
 }
 
 } // namespace aspia

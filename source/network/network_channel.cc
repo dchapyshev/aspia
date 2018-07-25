@@ -28,12 +28,15 @@ namespace aspia {
 
 namespace {
 
-constexpr quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
-constexpr qint64 kMaxWriteSize = 1200;
+constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
+constexpr int64_t kMaxWriteSize = 1200; // 1200 bytes
+constexpr int kPingerInterval = 30; // 30 seconds
 
 QByteArray createWriteBuffer(const QByteArray& message_buffer)
 {
     uint32_t message_size = message_buffer.size();
+    if (!message_size || message_size > kMaxMessageSize)
+        return QByteArray();
 
     uint8_t length_data[4];
     int length_data_size = 1;
@@ -68,16 +71,16 @@ QByteArray createWriteBuffer(const QByteArray& message_buffer)
 
 } // namespace
 
-NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QObject* parent)
+NetworkChannel::NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* parent)
     : QObject(parent),
-      channel_type_(channel_type),
+      type_(channel_type),
       socket_(socket)
 {
     Q_ASSERT(!socket_.isNull());
 
     socket_->setParent(this);
 
-    if (channel_type_ == ClientChannel)
+    if (type_ == Type::CLIENT_CHANNEL)
         connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
 
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
@@ -95,12 +98,12 @@ NetworkChannel::NetworkChannel(ChannelType channel_type, QTcpSocket* socket, QOb
 // static
 NetworkChannel* NetworkChannel::createClient(QObject* parent)
 {
-    return new NetworkChannel(ClientChannel, new QTcpSocket(), parent);
+    return new NetworkChannel(Type::CLIENT_CHANNEL, new QTcpSocket(), parent);
 }
 
 void NetworkChannel::connectToHost(const QString& address, int port)
 {
-    if (channel_type_ == ServerChannel)
+    if (type_ == Type::SERVER_CHANNEL)
     {
         qWarning("The channel is server. The method invocation is invalid.");
         return;
@@ -122,31 +125,20 @@ QString NetworkChannel::peerAddress() const
     return address.toString();
 }
 
-void NetworkChannel::readMessage()
+void NetworkChannel::start()
 {
-    Q_ASSERT(!read_required_);
-
-    read_required_ = true;
-    onReadyRead();
-}
-
-void NetworkChannel::writeMessage(int message_id, const QByteArray& buffer)
-{
-    if (buffer.isEmpty())
-    {
-        stop();
+    if (isStarted())
         return;
-    }
 
-    write_queue_.push_back(qMakePair(message_id, buffer));
+    read_.paused = false;
 
-    if (write_buffer_.isEmpty())
-        scheduleWrite();
+    // Start receiving messages.
+    onReadyRead();
 }
 
 void NetworkChannel::stop()
 {
-    channel_state_ = NotConnected;
+    state_ = State::NOT_CONNECTED;
 
     if (socket_->state() != QTcpSocket::UnconnectedState)
     {
@@ -157,45 +149,78 @@ void NetworkChannel::stop()
     }
 }
 
+void NetworkChannel::pause()
+{
+    read_.paused = true;
+}
+
+void NetworkChannel::send(const QByteArray& buffer)
+{
+    if (buffer.isEmpty())
+    {
+        emit errorOccurred("An attempt was made to send an empty message.");
+        stop();
+        return;
+    }
+
+    // If the write buffer is empty, then no write operation is currently performed.
+    if (write_.buffer.isEmpty() && write_.queue.isEmpty())
+    {
+        // Start the write operation.
+        scheduleWrite(buffer);
+    }
+    else
+    {
+        // Add the buffer to the queue for sending.
+        write_.queue.push_back(buffer);
+    }
+}
+
 void NetworkChannel::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == pinger_timer_id_)
     {
         // If at the moment the message is sent, then skip ping.
-        if (!write_buffer_.isEmpty())
+        if (!write_.buffer.isEmpty())
             return;
 
         // Pinger sends 1 byte equal to zero.
-        write_buffer_.resize(1);
-        write_buffer_[0] = 0;
+        write_.buffer.resize(1);
+        write_.buffer[0] = 0;
 
-        socket_->write(write_buffer_);
+        socket_->write(write_.buffer);
     }
 }
 
 void NetworkChannel::onConnected()
 {
-    channel_state_ = Connected;
+    state_ = State::CONNECTED;
 
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
 
-    if (channel_type_ == ServerChannel)
+    if (type_ == Type::SERVER_CHANNEL)
     {
         encryptor_.reset(new Encryptor(Encryptor::Mode::SERVER));
 
         // Start reading hello message.
-        readMessage();
+        onReadyRead();
     }
     else
     {
-        Q_ASSERT(channel_type_ == ClientChannel);
+        Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
         encryptor_.reset(new Encryptor(Encryptor::Mode::CLIENT));
 
-        write_buffer_ = createWriteBuffer(encryptor_->helloMessage());
+        write_.buffer = createWriteBuffer(encryptor_->helloMessage());
+        if (write_.buffer.isEmpty())
+        {
+            emit errorOccurred(tr("Error in encryption key exchange."));
+            stop();
+            return;
+        }
 
         // Write hello message to server.
-        socket_->write(write_buffer_);
+        socket_->write(write_.buffer);
     }
 }
 
@@ -217,144 +242,134 @@ void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
 
 void NetworkChannel::onBytesWritten(int64_t bytes)
 {
-    written_ += bytes;
+    write_.bytes_transferred += bytes;
 
-    if (written_ < write_buffer_.size())
+    if (write_.bytes_transferred < write_.buffer.size())
     {
-        int64_t bytes_to_write = qMin(write_buffer_.size() - written_, kMaxWriteSize);
-        socket_->write(write_buffer_.constData() + written_, bytes_to_write);
+        int64_t bytes_to_write =
+            qMin(write_.buffer.size() - write_.bytes_transferred, kMaxWriteSize);
+
+        socket_->write(write_.buffer.constData() + write_.bytes_transferred, bytes_to_write);
     }
     else
     {
         onMessageWritten();
 
-        write_buffer_.clear();
-        written_ = 0;
+        write_.buffer.clear();
+        write_.bytes_transferred = 0;
     }
 }
 
 void NetworkChannel::onReadyRead()
 {
-    if (!read_required_)
+    if (read_.paused)
         return;
 
-    int64_t current;
+    int64_t current = 0;
 
     for (;;)
     {
-        if (!read_size_received_)
+        if (!read_.buffer_size_received)
         {
             uint8_t byte;
 
             current = socket_->read(reinterpret_cast<char*>(&byte), sizeof(byte));
             if (current == sizeof(byte))
             {
-                switch (read_)
+                switch (read_.bytes_transferred)
                 {
                     case 0:
                     {
                         // If the first byte is zero, then message ping is received.
                         // This message is ignored.
-                        if (byte == 0)
+                        if (!byte)
                             continue;
 
-                        read_size_ += byte & 0x7F;
+                        read_.buffer_size += byte & 0x7F;
                     }
                     break;
 
                     case 1:
-                        read_size_ += (byte & 0x7F) << 7;
+                        read_.buffer_size += (byte & 0x7F) << 7;
                         break;
 
                     case 2:
-                        read_size_ += (byte & 0x7F) << 14;
+                        read_.buffer_size += (byte & 0x7F) << 14;
                         break;
 
                     case 3:
-                        read_size_ += byte << 21;
+                        read_.buffer_size += byte << 21;
                         break;
                 }
 
-                if (!(byte & 0x80) || read_ == 3)
+                if (!(byte & 0x80) || read_.bytes_transferred == 3)
                 {
-                    read_size_received_ = true;
+                    read_.buffer_size_received = true;
 
-                    if (!read_size_ || read_size_ > kMaxMessageSize)
+                    if (!read_.buffer_size || read_.buffer_size > kMaxMessageSize)
                     {
-                        qWarning() << "Wrong message size: " << read_size_;
+                        emit errorOccurred(tr("The received message has an invalid size."));
                         stop();
                         return;
                     }
 
-                    if (read_buffer_.capacity() < read_size_)
-                        read_buffer_.reserve(read_size_);
+                    if (read_.buffer.capacity() < read_.buffer_size)
+                        read_.buffer.reserve(read_.buffer_size);
 
-                    read_buffer_.resize(read_size_);
-                    read_size_ = 0;
-                    read_ = 0;
+                    read_.buffer.resize(read_.buffer_size);
+                    read_.buffer_size = 0;
+                    read_.bytes_transferred = 0;
                     continue;
                 }
             }
         }
-        else if (read_ < read_buffer_.size())
+        else if (read_.bytes_transferred < read_.buffer.size())
         {
-            current = socket_->read(read_buffer_.data() + read_, read_buffer_.size() - read_);
+            current = socket_->read(read_.buffer.data() + read_.bytes_transferred,
+                                    read_.buffer.size() - read_.bytes_transferred);
         }
         else
         {
-            read_required_ = false;
-            read_size_received_ = false;
-            read_ = 0;
+            read_.buffer_size_received = false;
+            read_.bytes_transferred = 0;
 
             onMessageReceived();
-            break;
+            return;
         }
 
-        if (current == 0)
-            break;
+        if (current <= 0)
+            return;
 
-        read_ += current;
+        read_.bytes_transferred += current;
     }
 }
 
 void NetworkChannel::onMessageWritten()
 {
-    switch (channel_state_)
+    switch (state_)
     {
-        case Encrypted:
+        case State::ENCRYPTED:
         {
-            // A message with a size of 1 byte can only be a ping.
-            if (write_buffer_.size() != 1)
+            if (!write_.queue.isEmpty())
             {
-                int message_id = write_queue_.front().first;
-                if (message_id != -1)
-                    emit messageWritten(message_id);
-
-                write_queue_.pop_front();
+                scheduleWrite(write_.queue.front());
+                write_.queue.pop_front();
             }
-
-            if (!write_queue_.isEmpty())
-                scheduleWrite();
         }
         break;
 
-        case Connected:
+        case State::CONNECTED:
         {
-            if (channel_type_ == ServerChannel)
+            if (type_ == Type::SERVER_CHANNEL)
             {
-                Q_ASSERT(!pinger_timer_id_);
-
-                channel_state_ = Encrypted;
-                pinger_timer_id_ = startTimer(std::chrono::seconds(30));
-
-                emit connected();
+                keyExchangeComplete();
             }
             else
             {
-                Q_ASSERT(channel_type_ == ClientChannel);
+                Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
 
                 // Read hello message from server.
-                readMessage();
+                onReadyRead();
             }
         }
         break;
@@ -366,57 +381,66 @@ void NetworkChannel::onMessageWritten()
 
 void NetworkChannel::onMessageReceived()
 {
-    switch (channel_state_)
+    switch (state_)
     {
-        case Encrypted:
+        case State::ENCRYPTED:
         {
             if (!encryptor_)
             {
+                emit errorOccurred(tr("Unknown internal error."));
                 stop();
                 return;
             }
 
-            int decrypted_data_size = encryptor_->decryptedDataSize(read_buffer_.size());
+            int decrypted_data_size = encryptor_->decryptedDataSize(read_.buffer.size());
 
             if (decrypt_buffer_.capacity() < decrypted_data_size)
                 decrypt_buffer_.reserve(decrypted_data_size);
 
             decrypt_buffer_.resize(decrypted_data_size);
 
-            if (!encryptor_->decrypt(read_buffer_.constData(),
-                                     read_buffer_.size(),
+            if (!encryptor_->decrypt(read_.buffer.constData(),
+                                     read_.buffer.size(),
                                      decrypt_buffer_.data()))
             {
+                emit errorOccurred(tr("Error while decrypting the message."));
                 stop();
                 return;
             }
 
             emit messageReceived(decrypt_buffer_);
+
+            // Read next message.
+            onReadyRead();
         }
         break;
 
-        case Connected:
+        case State::CONNECTED:
         {
-            if (!encryptor_->readHelloMessage(read_buffer_))
+            if (!encryptor_->readHelloMessage(read_.buffer))
             {
+                emit errorOccurred(tr("Error in encryption key exchange."));
                 stop();
                 return;
             }
 
-            if (channel_type_ == ServerChannel)
+            if (type_ == Type::SERVER_CHANNEL)
             {
                 // Write hello message to client.
-                socket_->write(createWriteBuffer(encryptor_->helloMessage()));
+                write_.buffer = createWriteBuffer(encryptor_->helloMessage());
+                if (write_.buffer.isEmpty())
+                {
+                    emit errorOccurred(tr("Error in encryption key exchange."));
+                    stop();
+                    return;
+                }
+
+                socket_->write(write_.buffer);
             }
             else
             {
-                Q_ASSERT(channel_type_ == ClientChannel);
-                Q_ASSERT(!pinger_timer_id_);
-
-                channel_state_ = Encrypted;
-                pinger_timer_id_ = startTimer(std::chrono::seconds(30));
-
-                emit connected();
+                Q_ASSERT(type_ == Type::CLIENT_CHANNEL);
+                keyExchangeComplete();
             }
         }
         break;
@@ -426,15 +450,34 @@ void NetworkChannel::onMessageReceived()
     }
 }
 
-void NetworkChannel::scheduleWrite()
+void NetworkChannel::keyExchangeComplete()
 {
-    // Get the following message to send from the queue.
-    const QByteArray& source_buffer = write_queue_.front().second;
+    Q_ASSERT(!pinger_timer_id_);
 
+    pinger_timer_id_ = startTimer(std::chrono::seconds(kPingerInterval));
+    if (!pinger_timer_id_)
+    {
+        emit errorOccurred(tr("Unknown internal error."));
+        stop();
+        return;
+    }
+
+    // After the successful completion of the key exchange, we pause the channel.
+    // To continue receiving messages, slot |start| must be called.
+    read_.paused = true;
+
+    // The data channel is now encrypted.
+    state_ = State::ENCRYPTED;
+    emit connected();
+}
+
+void NetworkChannel::scheduleWrite(const QByteArray& source_buffer)
+{
     // Calculate the size of the encrypted message.
     int encrypted_data_size = encryptor_->encryptedDataSize(source_buffer.size());
     if (encrypted_data_size > kMaxMessageSize)
     {
+        emit errorOccurred(tr("The message to send exceeds the size limit."));
         stop();
         return;
     }
@@ -466,26 +509,27 @@ void NetworkChannel::scheduleWrite()
     int total_size = length_data_size + encrypted_data_size;
 
     // If the reserved buffer size is less, then increase it.
-    if (write_buffer_.capacity() < total_size)
-        write_buffer_.reserve(total_size);
+    if (write_.buffer.capacity() < total_size)
+        write_.buffer.reserve(total_size);
 
     // Change the size of the buffer.
-    write_buffer_.resize(total_size);
+    write_.buffer.resize(total_size);
 
     // Copy the size of the message to the buffer.
-    memcpy(write_buffer_.data(), length_data, length_data_size);
+    memcpy(write_.buffer.data(), length_data, length_data_size);
 
     // Encrypt the message.
     if (!encryptor_->encrypt(source_buffer.constData(),
                              source_buffer.size(),
-                             write_buffer_.data() + length_data_size))
+                             write_.buffer.data() + length_data_size))
     {
+        emit errorOccurred(tr("Error while encrypting the message."));
         stop();
         return;
     }
 
     // Send the buffer to the recipient.
-    socket_->write(write_buffer_);
+    socket_->write(write_.buffer);
 }
 
 } // namespace aspia

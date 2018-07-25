@@ -59,12 +59,7 @@ private slots:
     void restartNotifier();
 
 private:
-    enum class NotifierState
-    {
-        Stopped,
-        Starting,
-        Started
-    };
+    enum class NotifierState { STOPPED, STARTING, STARTED };
 
     void startNotifier();
     void stopNotifier();
@@ -75,7 +70,7 @@ private:
     QPointer<NetworkServer> network_server_;
 
     // Contains the status of the notifier process.
-    NotifierState notifier_state_ = NotifierState::Stopped;
+    NotifierState notifier_state_ = NotifierState::STOPPED;
 
     // Starts and monitors the status of the notifier process.
     QPointer<HostProcess> notifier_process_;

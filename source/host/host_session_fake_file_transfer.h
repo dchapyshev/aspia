@@ -36,7 +36,6 @@ public:
 public slots:
     // HostSessionFake implementation.
     void onMessageReceived(const QByteArray& buffer) override;
-    void onMessageWritten(int message_id) override;
 
 private:
     Q_DISABLE_COPY(HostSessionFakeFileTransfer)

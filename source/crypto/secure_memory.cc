@@ -28,6 +28,8 @@ extern "C" {
 
 namespace aspia {
 
+#pragma optimize("", off)
+
 void secureMemZero(void* data, size_t data_size)
 {
     if (data && data_size)
@@ -57,5 +59,7 @@ void secureMemZero(QByteArray* bytes)
 
     secureMemZero(bytes->data(), bytes->size());
 }
+
+#pragma optimize("", on)
 
 } // namespace aspia

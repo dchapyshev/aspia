@@ -23,12 +23,6 @@
 
 namespace aspia {
 
-namespace {
-
-enum MessageId { RequestMessageId };
-
-} // namespace
-
 ClientSessionSystemInfo::ClientSessionSystemInfo(ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
       connect_data_(connect_data)
@@ -62,12 +56,6 @@ void ClientSessionSystemInfo::messageReceived(const QByteArray& buffer)
     writeNextRequest();
 }
 
-void ClientSessionSystemInfo::messageWritten(int message_id)
-{
-    Q_ASSERT(message_id == RequestMessageId);
-    emit readMessage();
-}
-
 void ClientSessionSystemInfo::startSession()
 {
     window_.reset(new SystemInfoWindow(connect_data_));
@@ -82,6 +70,8 @@ void ClientSessionSystemInfo::startSession()
     window_->show();
     window_->activateWindow();
     window_->refresh();
+
+    emit started();
 }
 
 void ClientSessionSystemInfo::closeSession()
@@ -108,7 +98,7 @@ void ClientSessionSystemInfo::writeNextRequest()
     if (requests_.empty())
         return;
 
-    emit writeMessage(RequestMessageId, serializeMessage(requests_.front()->request()));
+    emit sendMessage(serializeMessage(requests_.front()->request()));
 }
 
 } // namespace aspia

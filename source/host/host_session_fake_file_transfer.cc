@@ -23,12 +23,6 @@
 
 namespace aspia {
 
-namespace {
-
-enum MessageId { ReplyMessage = 1000 };
-
-} // namespace
-
 HostSessionFakeFileTransfer::HostSessionFakeFileTransfer(QObject* parent)
     : HostSessionFake(parent)
 {
@@ -37,20 +31,15 @@ HostSessionFakeFileTransfer::HostSessionFakeFileTransfer(QObject* parent)
 
 void HostSessionFakeFileTransfer::startSession()
 {
-    emit readMessage();
+    // Nothing
 }
 
 void HostSessionFakeFileTransfer::onMessageReceived(const QByteArray& /* buffer */)
 {
     proto::file_transfer::Reply reply;
     reply.set_status(proto::file_transfer::STATUS_NO_LOGGED_ON_USER);
-    emit writeMessage(ReplyMessage, serializeMessage(reply));
-}
-
-void HostSessionFakeFileTransfer::onMessageWritten(int message_id)
-{
-    if (message_id == ReplyMessage)
-        emit errorOccurred();
+    emit sendMessage(serializeMessage(reply));
+    emit errorOccurred();
 }
 
 } // namespace aspia

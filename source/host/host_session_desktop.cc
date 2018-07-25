@@ -38,8 +38,6 @@ const quint32 kSupportedFeaturesDesktopManage =
 
 const quint32 kSupportedFeaturesDesktopView = 0;
 
-enum MessageId { ScreenUpdateMessage };
-
 } // namespace
 
 HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
@@ -70,8 +68,7 @@ void HostSessionDesktop::startSession()
     else
         message.mutable_config_request()->set_features(kSupportedFeaturesDesktopView);
 
-    emit writeMessage(-1, serializeMessage(message));
-    emit readMessage();
+    emit sendMessage(serializeMessage(message));
 }
 
 void HostSessionDesktop::stopSession()
@@ -96,7 +93,7 @@ void HostSessionDesktop::customEvent(QEvent* event)
             message.set_allocated_video_packet(update_event->video_packet.release());
             message.set_allocated_cursor_shape(update_event->cursor_shape.release());
 
-            emit writeMessage(ScreenUpdateMessage, serializeMessage(message));
+            emit sendMessage(serializeMessage(message));
         }
         break;
 
@@ -128,24 +125,6 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
     {
         qDebug("Unhandled message from client");
     }
-
-    emit readMessage();
-}
-
-void HostSessionDesktop::messageWritten(int message_id)
-{
-    switch (message_id)
-    {
-        case ScreenUpdateMessage:
-        {
-            if (!screen_updater_.isNull())
-                screen_updater_->update();
-        }
-        break;
-
-        default:
-            break;
-    }
 }
 
 void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -156,7 +135,7 @@ void HostSessionDesktop::clipboardEvent(const proto::desktop::ClipboardEvent& ev
     proto::desktop::HostToClient message;
     message.mutable_clipboard_event()->CopyFrom(event);
 
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& event)

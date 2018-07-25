@@ -39,21 +39,17 @@ public:
 
 public slots:
     virtual void messageReceived(const QByteArray& buffer) = 0;
-    virtual void messageWritten(int message_id) = 0;
 
 signals:
-    void writeMessage(int message_id, const QByteArray& buffer);
-    void readMessage();
+    void sendMessage(const QByteArray& buffer);
     void errorOccurred();
 
 protected:
     explicit HostSession(const QString& channel_id);
 
+private slots:
     virtual void startSession() = 0;
     virtual void stopSession() = 0;
-
-private slots:
-    void ipcChannelConnected();
     void stop();
 
 private:

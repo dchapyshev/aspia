@@ -222,7 +222,8 @@ void HostServer::onNewConnection()
         authorizer->setUserList(user_list_);
 
         connect(authorizer, &HostUserAuthorizer::finished,
-                this, &HostServer::onAuthorizationFinished);
+                this, &HostServer::onAuthorizationFinished,
+                Qt::QueuedConnection);
 
         qInfo("Start authorization");
         authorizer->start();
@@ -254,7 +255,7 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
 
     if (host->start())
     {
-        if (notifier_state_ == NotifierState::Stopped)
+        if (notifier_state_ == NotifierState::STOPPED)
             startNotifier();
         else
             sessionToNotifier(*host);
@@ -283,7 +284,7 @@ void HostServer::onHostFinished(Host* host)
 
 void HostServer::onIpcServerStarted(const QString& channel_id)
 {
-    Q_ASSERT(notifier_state_ == NotifierState::Starting);
+    Q_ASSERT(notifier_state_ == NotifierState::STARTING);
 
     notifier_process_ = new HostProcess(this);
 
@@ -307,10 +308,10 @@ void HostServer::onIpcServerStarted(const QString& channel_id)
 
 void HostServer::onIpcNewConnection(IpcChannel* channel)
 {
-    Q_ASSERT(notifier_state_ == NotifierState::Starting);
+    Q_ASSERT(notifier_state_ == NotifierState::STARTING);
 
     qInfo("Notifier is started");
-    notifier_state_ = NotifierState::Started;
+    notifier_state_ = NotifierState::STARTED;
 
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
@@ -323,7 +324,7 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     for (const auto& session : session_list_)
         sessionToNotifier(*session);
 
-    ipc_channel_->readMessage();
+    ipc_channel_->start();
 }
 
 void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
@@ -342,7 +343,7 @@ void HostServer::onNotifierProcessError(HostProcess::ErrorCode error_code)
 
 void HostServer::restartNotifier()
 {
-    if (notifier_state_ == NotifierState::Stopped)
+    if (notifier_state_ == NotifierState::STOPPED)
         return;
 
     stopNotifier();
@@ -389,18 +390,15 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
     {
         qWarning("Unhandled message from notifier");
     }
-
-    // Read next message.
-    ipc_channel_->readMessage();
 }
 
 void HostServer::startNotifier()
 {
-    if (notifier_state_ != NotifierState::Stopped)
+    if (notifier_state_ != NotifierState::STOPPED)
         return;
 
     qInfo("Starting the notifier");
-    notifier_state_ = NotifierState::Starting;
+    notifier_state_ = NotifierState::STARTING;
 
     IpcServer* ipc_server = new IpcServer(this);
 
@@ -416,12 +414,12 @@ void HostServer::startNotifier()
 
 void HostServer::stopNotifier()
 {
-    if (notifier_state_ == NotifierState::Stopped)
+    if (notifier_state_ == NotifierState::STOPPED)
         return;
 
-    notifier_state_ = NotifierState::Stopped;
+    notifier_state_ = NotifierState::STOPPED;
 
-    if (!ipc_channel_.isNull() && ipc_channel_->channelState() == IpcChannel::Connected)
+    if (!ipc_channel_.isNull())
         ipc_channel_->stop();
 
     if (!notifier_process_.isNull())
@@ -446,7 +444,7 @@ void HostServer::sessionToNotifier(const Host& host)
     session->set_username(host.userName().toStdString());
     session->set_session_type(host.sessionType());
 
-    ipc_channel_->writeMessage(-1, serializeMessage(message));
+    ipc_channel_->send(serializeMessage(message));
 }
 
 void HostServer::sessionCloseToNotifier(const Host& host)
@@ -456,7 +454,7 @@ void HostServer::sessionCloseToNotifier(const Host& host)
 
     proto::notifier::ServiceToNotifier message;
     message.mutable_session_close()->set_uuid(host.uuid().toStdString());
-    ipc_channel_->writeMessage(-1, serializeMessage(message));
+    ipc_channel_->send(serializeMessage(message));
 }
 
 } // namespace aspia

@@ -76,26 +76,26 @@ void Client::onChannelConnected()
     authorizer_->setPassword(connect_data_.password());
 
     // Connect authorizer to network.
-    connect(authorizer_, &ClientUserAuthorizer::writeMessage,
-            network_channel_, &NetworkChannel::writeMessage);
-
-    connect(authorizer_, &ClientUserAuthorizer::readMessage,
-            network_channel_, &NetworkChannel::readMessage);
+    connect(authorizer_, &ClientUserAuthorizer::sendMessage,
+            network_channel_, &NetworkChannel::send);
 
     connect(network_channel_, &NetworkChannel::messageReceived,
             authorizer_, &ClientUserAuthorizer::messageReceived);
 
-    connect(network_channel_, &NetworkChannel::messageWritten,
-            authorizer_, &ClientUserAuthorizer::messageWritten);
-
     connect(network_channel_, &NetworkChannel::disconnected,
             authorizer_, &ClientUserAuthorizer::cancel);
+
+    connect(authorizer_, &ClientUserAuthorizer::started,
+            network_channel_, &NetworkChannel::start);
 
     connect(authorizer_, &ClientUserAuthorizer::errorOccurred,
             status_dialog_, &StatusDialog::addStatus);
 
-    // If successful, we start the session.
-    connect(authorizer_, &ClientUserAuthorizer::finished, this, &Client::onAuthorizationFinished);
+    connect(authorizer_, &ClientUserAuthorizer::finished,
+            network_channel_, &NetworkChannel::pause);
+
+    connect(authorizer_, &ClientUserAuthorizer::finished,
+            this, &Client::onAuthorizationFinished);
 
     // Now run authorization.
     status_dialog_->addStatus(tr("Authorization started."));
@@ -159,11 +159,10 @@ void Client::onAuthorizationFinished(proto::auth::Status status)
     }
 
     // Messages received from the network are sent to the session.
-    connect(session_, &ClientSession::readMessage, network_channel_, &NetworkChannel::readMessage);
     connect(network_channel_, &NetworkChannel::messageReceived, session_, &ClientSession::messageReceived);
-    connect(session_, &ClientSession::writeMessage, network_channel_, &NetworkChannel::writeMessage);
-    connect(network_channel_, &NetworkChannel::messageWritten, session_, &ClientSession::messageWritten);
+    connect(session_, &ClientSession::sendMessage, network_channel_, &NetworkChannel::send);
     connect(network_channel_, &NetworkChannel::disconnected, session_, &ClientSession::closeSession);
+    connect(session_, &ClientSession::started, network_channel_, &NetworkChannel::start);
 
     // When closing the session (closing the window), close the status dialog.
     connect(session_, &ClientSession::closedByUser, this, &Client::onSessionClosedByUser);

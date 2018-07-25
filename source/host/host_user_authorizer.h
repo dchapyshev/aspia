@@ -33,7 +33,7 @@ class HostUserAuthorizer : public QObject
     Q_OBJECT
 
 public:
-    enum State { NotStarted, Started, Finished };
+    enum class State { NOT_STARTED, STARTED, FINISHED };
 
     HostUserAuthorizer(QObject* parent = nullptr);
     ~HostUserAuthorizer();
@@ -52,15 +52,12 @@ public slots:
 
 signals:
     void finished(HostUserAuthorizer* authorizer);
-    void writeMessage(int message_id, const QByteArray& buffer);
-    void readMessage();
 
 protected:
     // QObject implementation.
     void timerEvent(QTimerEvent* event) override;
 
 private slots:
-    void messageWritten(int message_id);
     void messageReceived(const QByteArray& buffer);
 
 private:
@@ -73,7 +70,7 @@ private:
                                              const QByteArray& session_key,
                                              proto::auth::SessionType session_type);
 
-    State state_ = NotStarted;
+    State state_ = State::NOT_STARTED;
 
     QList<User> user_list_;
     QPointer<NetworkChannel> network_channel_;
@@ -81,6 +78,7 @@ private:
     QString user_name_;
     QByteArray nonce_;
     int timer_id_ = 0;
+    int attempt_count_ = 0;
 
     proto::auth::Method method_ = proto::auth::METHOD_UNKNOWN;
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;

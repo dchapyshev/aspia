@@ -41,15 +41,7 @@ ScreenUpdater::ScreenUpdater(const proto::desktop::Config& config, QObject* pare
 ScreenUpdater::~ScreenUpdater()
 {
     terminate_ = true;
-    update();
     wait();
-}
-
-void ScreenUpdater::update()
-{
-    std::scoped_lock lock(update_lock_);
-    update_required_ = true;
-    update_condition_.notify_one();
 }
 
 void ScreenUpdater::run()
@@ -122,28 +114,17 @@ void ScreenUpdater::run()
                 update_event->video_packet = std::move(video_packet);
                 update_event->cursor_shape = std::move(cursor_shape);
 
-                std::unique_lock lock(update_lock_);
-                update_required_ = false;
-
                 QCoreApplication::postEvent(parent(), update_event);
-
-                while (!update_required_ && !terminate_)
-                    update_condition_.wait(lock);
             }
         }
 
         capture_scheduler.endCapture();
 
-        std::unique_lock lock(update_lock_);
-        update_required_ = false;
+        if (terminate_)
+            break;
 
-        while (!update_required_ && !terminate_)
-        {
-            std::chrono::milliseconds delay = capture_scheduler.nextCaptureDelay();
-
-            if (update_condition_.wait_for(lock, delay) == std::cv_status::timeout)
-                break;
-        }
+        std::chrono::milliseconds delay = capture_scheduler.nextCaptureDelay();
+        QThread::msleep(delay.count());
     }
 }
 

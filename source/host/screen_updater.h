@@ -22,9 +22,7 @@
 #include <QEvent>
 #include <QThread>
 
-#include <condition_variable>
 #include <memory>
-#include <mutex>
 
 #include "protocol/desktop_session.pb.h"
 
@@ -37,8 +35,6 @@ class ScreenUpdater : public QThread
 public:
     ScreenUpdater(const proto::desktop::Config& config, QObject* parent);
     ~ScreenUpdater();
-
-    void update();
 
     class UpdateEvent : public QEvent
     {
@@ -78,11 +74,7 @@ protected:
     void run() override;
 
 private:
-    std::condition_variable update_condition_;
-    std::mutex update_lock_;
-    bool update_required_ = false;
     bool terminate_ = false;
-
     proto::desktop::Config config_;
 
     Q_DISABLE_COPY(ScreenUpdater)

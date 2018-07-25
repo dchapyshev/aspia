@@ -94,13 +94,6 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
         // Unknown messages are ignored.
         qWarning("Unhandled message from host");
     }
-
-    emit readMessage();
-}
-
-void ClientSessionDesktopManage::messageWritten(int /* message_id */)
-{
-    // Nothing
 }
 
 void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& config)
@@ -110,7 +103,7 @@ void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& conf
 
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 flags)
@@ -121,7 +114,7 @@ void ClientSessionDesktopManage::onSendKeyEvent(quint32 usb_keycode, quint32 fla
     event->set_usb_keycode(usb_keycode);
     event->set_flags(flags);
 
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 mask)
@@ -133,7 +126,7 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, quint32 m
     event->set_y(pos.y());
     event->set_mask(mask);
 
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
@@ -145,7 +138,7 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
     proto::desktop::ClientToHost message;
     message.mutable_clipboard_event()->CopyFrom(event);
 
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void ClientSessionDesktopManage::readConfigRequest(

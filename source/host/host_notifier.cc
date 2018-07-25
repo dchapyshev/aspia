@@ -38,7 +38,7 @@ bool HostNotifier::start(const QString& channel_id)
 
     ipc_channel_ = IpcChannel::createClient(this);
 
-    connect(ipc_channel_, &IpcChannel::connected, this, &HostNotifier::onIpcChannelConnected);
+    connect(ipc_channel_, &IpcChannel::connected, ipc_channel_, &IpcChannel::start);
     connect(ipc_channel_, &IpcChannel::disconnected, this, &HostNotifier::stop);
     connect(ipc_channel_, &IpcChannel::errorOccurred, this, &HostNotifier::stop);
     connect(ipc_channel_, &IpcChannel::messageReceived, this, &HostNotifier::onIpcMessageReceived);
@@ -49,9 +49,7 @@ bool HostNotifier::start(const QString& channel_id)
 
 void HostNotifier::stop()
 {
-    if (ipc_channel_->channelState() == IpcChannel::Connected)
-        ipc_channel_->stop();
-
+    ipc_channel_->stop();
     emit finished();
 }
 
@@ -59,12 +57,7 @@ void HostNotifier::killSession(const std::string& uuid)
 {
     proto::notifier::NotifierToService message;
     message.mutable_kill_session()->set_uuid(uuid);
-    ipc_channel_->writeMessage(-1, serializeMessage(message));
-}
-
-void HostNotifier::onIpcChannelConnected()
-{
-    ipc_channel_->readMessage();
+    ipc_channel_->send(serializeMessage(message));
 }
 
 void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
@@ -89,8 +82,6 @@ void HostNotifier::onIpcMessageReceived(const QByteArray& buffer)
     {
         qWarning("Unhandled message from service");
     }
-
-    ipc_channel_->readMessage();
 }
 
 } // namespace aspia

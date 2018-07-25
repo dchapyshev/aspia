@@ -35,6 +35,10 @@
 #define _WIN32_WINDOWS   _WIN32_WINNT
 #endif // defined(Q_OS_WIN)
 
+#if defined(NDEBUG)
+#define QT_NO_DEBUG_OUTPUT
+#endif
+
 namespace aspia {
 
 extern const int kDefaultHostTcpPort;

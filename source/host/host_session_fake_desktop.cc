@@ -52,7 +52,7 @@ void HostSessionFakeDesktop::startSession()
     message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
     message.mutable_config_request()->set_features(kSupportedFeatures);
 
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
@@ -98,13 +98,6 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
     {
         // Other messages are ignored.
     }
-
-    emit readMessage();
-}
-
-void HostSessionFakeDesktop::onMessageWritten(int /* message_id */)
-{
-    // Nothing
 }
 
 std::unique_ptr<VideoEncoder> HostSessionFakeDesktop::createEncoder(
@@ -177,7 +170,7 @@ void HostSessionFakeDesktop::sendPacket(std::unique_ptr<proto::desktop::VideoPac
 {
     proto::desktop::HostToClient message;
     message.set_allocated_video_packet(packet.release());
-    emit writeMessage(-1, serializeMessage(message));
+    emit sendMessage(serializeMessage(message));
 }
 
 } // namespace aspia

@@ -38,7 +38,6 @@ public:
 public slots:
     // ClientSession implementation.
     void messageReceived(const QByteArray& buffer) override;
-    void messageWritten(int message_id) override;
 
     // ClientSessionDesktopView implementation.
     void onSendConfig(const proto::desktop::Config& config) override;

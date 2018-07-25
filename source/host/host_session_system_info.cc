@@ -25,12 +25,6 @@
 
 namespace aspia {
 
-namespace {
-
-enum MessageId { ReplyMessageId };
-
-} // namespace
-
 HostSessionSystemInfo::HostSessionSystemInfo(const QString& channel_id)
     : HostSession(channel_id)
 {
@@ -62,16 +56,9 @@ void HostSessionSystemInfo::messageReceived(const QByteArray& buffer)
     }
 }
 
-void HostSessionSystemInfo::messageWritten(int message_id)
-{
-    Q_ASSERT(message_id == ReplyMessageId);
-    emit readMessage();
-}
-
 void HostSessionSystemInfo::startSession()
 {
     category_list_ = Category::all();
-    emit readMessage();
 }
 
 void HostSessionSystemInfo::stopSession()
@@ -89,7 +76,7 @@ void HostSessionSystemInfo::readCategoryListRequest(
     for (const auto& category : category_list_)
         reply.mutable_category_list()->add_uuid(category.uuid().toStdString());
 
-    emit writeMessage(ReplyMessageId, serializeMessage(reply));
+    emit sendMessage(serializeMessage(reply));
 }
 
 void HostSessionSystemInfo::readCategoryRequest(
@@ -118,7 +105,7 @@ void HostSessionSystemInfo::readCategoryRequest(
                 reply.set_request_uuid(request_uuid.toStdString());
                 reply.mutable_category()->set_data(data.toStdString());
 
-                emit writeMessage(ReplyMessageId, serializeMessage(reply));
+                emit sendMessage(serializeMessage(reply));
             });
 
             connect(thread, &QThread::started, serializer, &Serializer::start);

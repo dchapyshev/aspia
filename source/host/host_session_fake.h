@@ -37,13 +37,11 @@ public:
     virtual void startSession() = 0;
 
 signals:
-    void writeMessage(int message_id, const QByteArray& buffer);
-    void readMessage();
+    void sendMessage(const QByteArray& buffer);
     void errorOccurred();
 
 public slots:
     virtual void onMessageReceived(const QByteArray& buffer) = 0;
-    virtual void onMessageWritten(int message_id) = 0;
 
 protected:
     explicit HostSessionFake(QObject* parent);

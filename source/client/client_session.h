@@ -28,7 +28,8 @@ class ClientSession : public QObject
     Q_OBJECT
 
 public:
-    ClientSession(QObject* parent) : QObject(parent)
+    ClientSession(QObject* parent)
+        : QObject(parent)
     {
         // Nothing
     }
@@ -39,9 +40,6 @@ public slots:
     // Reads the incoming message for the session.
     virtual void messageReceived(const QByteArray& buffer) = 0;
 
-    // Message with ID |message_id| sent.
-    virtual void messageWritten(int message_id) = 0;
-
     // Starts session.
     virtual void startSession() = 0;
 
@@ -49,11 +47,11 @@ public slots:
     virtual void closeSession() = 0;
 
 signals:
-    // Indicates an outgoing message.
-    void writeMessage(int message_id, const QByteArray& buffer);
+    // Indicates that the session is started.
+    void started();
 
-    // Indicates that it is ready to receive the next incoming message.
-    void readMessage();
+    // Indicates an outgoing message.
+    void sendMessage(const QByteArray& buffer);
 
     // Indicates an error in the session.
     void errorOccurred(const QString& message);
