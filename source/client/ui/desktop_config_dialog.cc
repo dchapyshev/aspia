@@ -36,8 +36,8 @@ enum ColorDepth
 } // namespace
 
 DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
-                                         quint32 supported_video_encodings,
-                                         quint32 supported_features,
+                                         uint32_t supported_video_encodings,
+                                         uint32_t supported_features,
                                          QWidget* parent)
     : QDialog(parent),
       supported_video_encodings_(supported_video_encodings),
@@ -184,7 +184,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         config_.set_update_interval(ui.spin_update_interval->value());
 
-        quint32 features = 0;
+        uint32_t features = 0;
 
         if (ui.checkbox_cursor_shape->isChecked())
             features |= proto::desktop::FEATURE_CURSOR_SHAPE;

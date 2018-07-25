@@ -25,15 +25,15 @@ namespace aspia {
 namespace {
 
 // Cache size can be in the range from 2 to 31.
-constexpr quint8 kCacheSize = 16;
+constexpr uint8_t kCacheSize = 16;
 
 // The compression ratio can be in the range of 1 to 9.
 constexpr int kCompressionRatio = 6;
 
-quint8* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+uint8_t* getOutputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
-    return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
+    return reinterpret_cast<uint8_t*>(cursor_shape->mutable_data()->data());
 }
 
 } // namespace
@@ -54,13 +54,13 @@ void CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
     int width = mouse_cursor->size().width();
     int height = mouse_cursor->size().height();
 
-    const size_t row_size = width * sizeof(quint32);
+    const size_t row_size = width * sizeof(uint32_t);
 
     size_t packet_size = row_size * height;
     packet_size += packet_size / 100 + 16;
 
-    quint8* compressed_pos = getOutputBuffer(cursor_shape, packet_size);
-    const quint8* source_pos = mouse_cursor->data();
+    uint8_t* compressed_pos = getOutputBuffer(cursor_shape, packet_size);
+    const uint8_t* source_pos = mouse_cursor->data();
 
     size_t filled = 0;
     size_t row_pos = 0; // Position in the current row in bytes.
@@ -111,7 +111,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         return nullptr;
 
     const QSize& size = mouse_cursor->size();
-    const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
+    const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
     if (size.width() <= 0 || size.width() > kMaxSize ||
         size.height() <= 0 || size.height() > kMaxSize)

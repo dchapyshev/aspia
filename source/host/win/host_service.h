@@ -39,7 +39,7 @@ protected:
     // Service implementation.
     void start() override;
     void stop() override;
-    void sessionChange(quint32 event, quint32 session_id) override;
+    void sessionChange(uint32_t event, uint32_t session_id) override;
 
 private:
     QScopedPointer<ScopedCOMInitializer> com_initializer_;

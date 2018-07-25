@@ -196,11 +196,11 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             user_->setPassword(password);
         }
 
-        quint32 flags = 0;
+        uint32_t flags = 0;
         if (!ui.checkbox_disable_user->isChecked())
             flags |= User::FLAG_ENABLED;
 
-        quint32 sessions = 0;
+        uint32_t sessions = 0;
         for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
         {
             QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);

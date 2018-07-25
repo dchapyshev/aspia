@@ -32,9 +32,9 @@ class DesktopFrame
 public:
     virtual ~DesktopFrame() = default;
 
-    quint8* frameDataAtPos(const QPoint& pos) const;
-    quint8* frameDataAtPos(int x, int y) const;
-    quint8* frameData() const { return data_; }
+    uint8_t* frameDataAtPos(const QPoint& pos) const;
+    uint8_t* frameDataAtPos(int x, int y) const;
+    uint8_t* frameData() const { return data_; }
     const QSize& size() const { return size_; }
     const PixelFormat& format() const { return format_; }
     int stride() const { return stride_; }
@@ -47,12 +47,12 @@ public:
     void setTopLeft(const QPoint& top_left) { top_left_ = top_left; }
 
 protected:
-    DesktopFrame(const QSize& size, const PixelFormat& format, int stride, quint8* data);
+    DesktopFrame(const QSize& size, const PixelFormat& format, int stride, uint8_t* data);
 
     // Ownership of the buffers is defined by the classes that inherit from
     // this class. They must guarantee that the buffer is not deleted before
     // the frame is deleted.
-    quint8* const data_;
+    uint8_t* const data_;
 
 private:
     const QSize size_;

@@ -52,7 +52,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
         return false;
     }
 
-    const quint8* src = reinterpret_cast<const quint8*>(packet.data().data());
+    const uint8_t* src = reinterpret_cast<const uint8_t*>(packet.data().data());
     const size_t src_size = packet.data().size();
     size_t used = 0;
 
@@ -68,7 +68,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
             return false;
         }
 
-        quint8* dst = source_frame_->frameDataAtPos(rect.x(), rect.y());
+        uint8_t* dst = source_frame_->frameDataAtPos(rect.x(), rect.y());
         const size_t row_size = rect.width() * source_frame_->format().bytesPerPixel();
 
         // Consume all the data in the message.

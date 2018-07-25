@@ -23,7 +23,7 @@ namespace aspia {
 DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
                                          const PixelFormat& format,
                                          int stride,
-                                         quint8* data)
+                                         uint8_t* data)
     : DesktopFrame(size, format, stride, data)
 {
     // Nothing
@@ -40,7 +40,7 @@ std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 
-    quint8* data = reinterpret_cast<quint8*>(qMallocAligned(bytes_per_row * size.height(), 16));
+    uint8_t* data = reinterpret_cast<uint8_t*>(qMallocAligned(bytes_per_row * size.height(), 16));
     if (!data)
         return nullptr;
 

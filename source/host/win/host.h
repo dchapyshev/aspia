@@ -69,7 +69,7 @@ protected:
 private slots:
     void ipcServerStarted(const QString& channel_id);
     void ipcNewConnection(IpcChannel* channel);
-    void attachSession(quint32 session_id);
+    void attachSession(uint32_t session_id);
     void dettachSession();
 
 private:

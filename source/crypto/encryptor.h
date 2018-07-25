@@ -46,14 +46,14 @@ public:
 private:
     const Mode mode_;
 
-    std::vector<quint8> local_public_key_;
-    std::vector<quint8> local_secret_key_;
+    std::vector<uint8_t> local_public_key_;
+    std::vector<uint8_t> local_secret_key_;
 
-    std::vector<quint8> encrypt_key_;
-    std::vector<quint8> decrypt_key_;
+    std::vector<uint8_t> encrypt_key_;
+    std::vector<uint8_t> decrypt_key_;
 
-    std::vector<quint8> encrypt_nonce_;
-    std::vector<quint8> decrypt_nonce_;
+    std::vector<uint8_t> encrypt_nonce_;
+    std::vector<uint8_t> decrypt_nonce_;
 
     Q_DISABLE_COPY(Encryptor)
 };

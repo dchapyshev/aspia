@@ -42,7 +42,7 @@ public:
     HostProcess* process_;
     HostProcess::ProcessState state_ = HostProcess::NotRunning;
     HostProcess::Account account_ = HostProcess::User;
-    quint32 session_id_ = -1;
+    uint32_t session_id_ = -1;
     QString program_;
     QStringList arguments_;
 

@@ -28,7 +28,7 @@ typedef struct
     // USB keycode:
     //  Upper 16-bits: USB Usage Page.
     //  Lower 16-bits: USB Usage Id: Assigned ID within this usage page.
-    quint32 usb_keycode;
+    uint32_t usb_keycode;
 
     // Contains one of the following:
     //  On Linux: XKB scancode
@@ -46,19 +46,19 @@ public:
     static int invalidNativeKeycode();
 
     // Return the value that identifies an invalid USB keycode.
-    static quint32 invalidUsbKeycode();
+    static uint32_t invalidUsbKeycode();
 
     // Return the value that identifies an invalid Qt keycode.
     static int invalidQtKeycode();
 
     // Convert a USB keycode into an equivalent platform native keycode.
-    static int usbKeycodeToNativeKeycode(quint32 usb_keycode);
+    static int usbKeycodeToNativeKeycode(uint32_t usb_keycode);
 
     // Convert a platform native keycode into an equivalent USB keycode.
-    static quint32 nativeKeycodeToUsbKeycode(int native_keycode);
+    static uint32_t nativeKeycodeToUsbKeycode(int native_keycode);
 
     // Convert a Qt keycode into an equivalent USB keycode.
-    static quint32 qtKeycodeToUsbKeycode(int qt_keycode);
+    static uint32_t qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
     Q_DISABLE_COPY(KeycodeConverter)

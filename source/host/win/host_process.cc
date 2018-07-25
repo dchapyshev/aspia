@@ -35,7 +35,7 @@ HostProcess::~HostProcess()
     impl_.reset();
 }
 
-void HostProcess::start(quint32 session_id,
+void HostProcess::start(uint32_t session_id,
                         Account account,
                         const QString& program,
                         const QStringList& arguments)
@@ -54,12 +54,12 @@ void HostProcess::start(quint32 session_id,
     start();
 }
 
-quint32 HostProcess::sessionId() const
+uint32_t HostProcess::sessionId() const
 {
     return impl_->session_id_;
 }
 
-void HostProcess::setSessionId(quint32 session_id)
+void HostProcess::setSessionId(uint32_t session_id)
 {
     if (impl_->state_ != NotRunning)
     {

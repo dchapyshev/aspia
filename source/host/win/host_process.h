@@ -57,13 +57,13 @@ public:
     HostProcess(QObject* parent = nullptr);
     virtual ~HostProcess();
 
-    void start(quint32 session_id,
+    void start(uint32_t session_id,
                Account account,
                const QString& program,
                const QStringList& arguments);
 
-    quint32 sessionId() const;
-    void setSessionId(quint32 session_id);
+    uint32_t sessionId() const;
+    void setSessionId(uint32_t session_id);
 
     Account account() const;
     void setAccount(Account account);

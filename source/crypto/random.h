@@ -27,7 +27,7 @@ class Random
 {
 public:
     static QByteArray generateBuffer(int size);
-    static quint32 generateNumber();
+    static uint32_t generateNumber();
 
 private:
     Q_DISABLE_COPY(Random)

@@ -51,7 +51,7 @@ int KeycodeConverter::invalidNativeKeycode()
 }
 
 // static
-quint32 KeycodeConverter::invalidUsbKeycode()
+uint32_t KeycodeConverter::invalidUsbKeycode()
 {
     return usb_keycode_map[0].usb_keycode;
 }
@@ -63,7 +63,7 @@ int KeycodeConverter::invalidQtKeycode()
 }
 
 // static
-int KeycodeConverter::usbKeycodeToNativeKeycode(quint32 usb_keycode)
+int KeycodeConverter::usbKeycodeToNativeKeycode(uint32_t usb_keycode)
 {
     // Deal with some special-cases that don't fit the 1:1 mapping.
     if (usb_keycode == 0x070032) // non-US hash.
@@ -83,7 +83,7 @@ int KeycodeConverter::usbKeycodeToNativeKeycode(quint32 usb_keycode)
 }
 
 // static
-quint32 KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
+uint32_t KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
 {
     for (size_t i = 0; i < kKeycodeMapEntries; ++i)
     {
@@ -95,7 +95,7 @@ quint32 KeycodeConverter::nativeKeycodeToUsbKeycode(int native_keycode)
 }
 
 // static
-quint32 KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
+uint32_t KeycodeConverter::qtKeycodeToUsbKeycode(int qt_keycode)
 {
     for (size_t i = 0; i < kKeycodeMapEntries; ++i)
     {

@@ -68,10 +68,10 @@ QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArra
 
     crypto_secretstream_xchacha20poly1305_init_push(
         &state,
-        reinterpret_cast<quint8*>(encrypted_data.data()),
-        reinterpret_cast<const quint8*>(key.constData()));
+        reinterpret_cast<uint8_t*>(encrypted_data.data()),
+        reinterpret_cast<const uint8_t*>(key.constData()));
 
-    const quint8* input_buffer = reinterpret_cast<const quint8*>(source_data.constData());
+    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(source_data.constData());
     size_t input_pos = 0;
 
     bool end_of_buffer = false;
@@ -79,7 +79,7 @@ QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArra
     do
     {
         size_t consumed = std::min(source_data.size() - input_pos, kChunkSize);
-        quint8 tag = 0;
+        uint8_t tag = 0;
 
         if (consumed < kChunkSize)
         {
@@ -87,7 +87,7 @@ QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArra
             end_of_buffer = true;
         }
 
-        quint8 output_buffer[kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES];
+        uint8_t output_buffer[kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES];
         quint64 output_length;
 
         crypto_secretstream_xchacha20poly1305_push(&state,
@@ -138,14 +138,14 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const QByt
     crypto_secretstream_xchacha20poly1305_state state;
 
     if (crypto_secretstream_xchacha20poly1305_init_pull(
-            &state, reinterpret_cast<const quint8*>(source_data),
-            reinterpret_cast<const quint8*>(key.constData())) != 0)
+            &state, reinterpret_cast<const uint8_t*>(source_data),
+            reinterpret_cast<const uint8_t*>(key.constData())) != 0)
     {
         qWarning("crypto_secretstream_xchacha20poly1305_init_pull failed");
         return false;
     }
 
-    const quint8* input_buffer = reinterpret_cast<const quint8*>(source_data) +
+    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(source_data) +
                                  crypto_secretstream_xchacha20poly1305_HEADERBYTES;
     size_t input_size = source_size - crypto_secretstream_xchacha20poly1305_HEADERBYTES;
     size_t input_pos = 0;
@@ -157,9 +157,9 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const QByt
         size_t consumed = std::min(input_size - input_pos,
                                    kChunkSize + crypto_secretstream_xchacha20poly1305_ABYTES);
 
-        quint8 output_buffer[kChunkSize];
+        uint8_t output_buffer[kChunkSize];
         quint64 output_length;
-        quint8 tag;
+        uint8_t tag;
 
         if (crypto_secretstream_xchacha20poly1305_pull(&state, output_buffer, &output_length, &tag,
                                                        input_buffer + input_pos, consumed, nullptr,

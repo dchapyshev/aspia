@@ -23,7 +23,7 @@ namespace aspia {
 DesktopFrameDIB::DesktopFrameDIB(const QSize& size,
                                  const PixelFormat& format,
                                  int stride,
-                                 quint8* data,
+                                 uint8_t* data,
                                  HBITMAP bitmap)
     : DesktopFrame(size, format, stride, data),
       bitmap_(bitmap)
@@ -46,9 +46,9 @@ DesktopFrameDIB::create(const QSize& size,
         {
             struct
             {
-                quint32 red;
-                quint32 green;
-                quint32 blue;
+                uint32_t red;
+                uint32_t green;
+                uint32_t blue;
             } mask;
             RGBQUAD color[256];
         } u;
@@ -74,15 +74,15 @@ DesktopFrameDIB::create(const QSize& size,
     {
         bmi.header.biCompression = BI_RGB;
 
-        for (quint32 i = 0; i < 256; ++i)
+        for (uint32_t i = 0; i < 256; ++i)
         {
-            const quint32 red   = (i >> format.redShift())   & format.redMax();
-            const quint32 green = (i >> format.greenShift()) & format.greenMax();
-            const quint32 blue  = (i >> format.blueShift())  & format.blueMax();
+            const uint32_t red   = (i >> format.redShift())   & format.redMax();
+            const uint32_t green = (i >> format.greenShift()) & format.greenMax();
+            const uint32_t blue  = (i >> format.blueShift())  & format.blueMax();
 
-            bmi.u.color[i].rgbRed   = static_cast<quint8>(red   * 0xFF / format.redMax());
-            bmi.u.color[i].rgbGreen = static_cast<quint8>(green * 0xFF / format.greenMax());
-            bmi.u.color[i].rgbBlue  = static_cast<quint8>(blue  * 0xFF / format.blueMax());
+            bmi.u.color[i].rgbRed   = static_cast<uint8_t>(red   * 0xFF / format.redMax());
+            bmi.u.color[i].rgbGreen = static_cast<uint8_t>(green * 0xFF / format.greenMax());
+            bmi.u.color[i].rgbBlue  = static_cast<uint8_t>(blue  * 0xFF / format.blueMax());
         }
     }
 
@@ -104,7 +104,7 @@ DesktopFrameDIB::create(const QSize& size,
         new DesktopFrameDIB(size,
                             format,
                             bytes_per_row,
-                            reinterpret_cast<quint8*>(data),
+                            reinterpret_cast<uint8_t*>(data),
                             bitmap));
 }
 

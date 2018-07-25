@@ -301,7 +301,7 @@ void Host::ipcNewConnection(IpcChannel* channel)
     ipc_channel_->start();
 }
 
-void Host::attachSession(quint32 session_id)
+void Host::attachSession(uint32_t session_id)
 {
     qInfo() << "Starting host process attachment to session" << session_id;
 

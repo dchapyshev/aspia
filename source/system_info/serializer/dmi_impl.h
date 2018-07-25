@@ -34,26 +34,26 @@ public:
 
     struct SmBiosData
     {
-        quint8 used_20_calling_method;
-        quint8 smbios_major_version;
-        quint8 smbios_minor_version;
-        quint8 dmi_revision;
-        quint32 length;
-        quint8 smbios_table_data[kMaxDataSize];
+        uint8_t used_20_calling_method;
+        uint8_t smbios_major_version;
+        uint8_t smbios_minor_version;
+        uint8_t dmi_revision;
+        uint32_t length;
+        uint8_t smbios_table_data[kMaxDataSize];
     };
 
     bool isAtEnd() const { return !current_; }
     void advance();
     const DmiTable* table() const;
 
-    quint8 majorVersion() const { return data_.smbios_major_version; }
-    quint8 minorVersion() const { return data_.smbios_minor_version; }
+    uint8_t majorVersion() const { return data_.smbios_major_version; }
+    uint8_t minorVersion() const { return data_.smbios_minor_version; }
 
 private:
     SmBiosData data_;
 
-    const quint8* current_ = nullptr;
-    const quint8* next_ = nullptr;
+    const uint8_t* current_ = nullptr;
+    const uint8_t* next_ = nullptr;
 
     mutable std::unique_ptr<DmiTable> current_table_;
 
@@ -63,7 +63,7 @@ private:
 class DmiTable
 {
 public:
-    enum Type : quint8
+    enum Type : uint8_t
     {
         TYPE_BIOS             = 0x00,
         TYPE_SYSTEM           = 0x01,
@@ -80,22 +80,22 @@ public:
     };
 
     Type type() const { return static_cast<Type>(table_[0]); }
-    quint8 length() const { return table_[1]; }
+    uint8_t length() const { return table_[1]; }
 
 protected:
-    explicit DmiTable(const quint8* table);
+    explicit DmiTable(const uint8_t* table);
 
     template<typename T>
-    T number(quint8 offset) const
+    T number(uint8_t offset) const
     {
         Q_ASSERT(offset >= length());
         return *reinterpret_cast<const T*>(table_[offset]);
     }
 
-    QString string(quint8 offset) const;
+    QString string(uint8_t offset) const;
 
 private:
-    const quint8* table_;
+    const uint8_t* table_;
 };
 
 class DmiBiosTable : public DmiTable
@@ -159,7 +159,7 @@ public:
 
 private:
     friend class DmiTableEnumerator;
-    DmiBiosTable(const quint8* table);
+    DmiBiosTable(const uint8_t* table);
 };
 
 } // namespace aspia

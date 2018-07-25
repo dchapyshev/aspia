@@ -116,7 +116,7 @@ void HostService::stop()
     qInfo("Service is stopped");
 }
 
-void HostService::sessionChange(quint32 event, quint32 session_id)
+void HostService::sessionChange(uint32_t event, uint32_t session_id)
 {
     if (!server_.isNull())
         server_->setSessionChanged(event, session_id);

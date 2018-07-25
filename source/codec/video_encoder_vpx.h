@@ -58,11 +58,11 @@ private:
     size_t active_map_size_ = 0;
 
     vpx_active_map_t active_map_;
-    std::unique_ptr<quint8[]> active_map_buffer_;
+    std::unique_ptr<uint8_t[]> active_map_buffer_;
 
     // VPX image and buffer to hold the actual YUV planes.
     std::unique_ptr<vpx_image_t> image_;
-    std::unique_ptr<quint8[]> image_buffer_;
+    std::unique_ptr<uint8_t[]> image_buffer_;
 
     Q_DISABLE_COPY(VideoEncoderVPX)
 };

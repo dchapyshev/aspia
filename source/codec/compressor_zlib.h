@@ -31,9 +31,9 @@ public:
     explicit CompressorZLIB(int compress_ratio);
     ~CompressorZLIB();
 
-    bool process(const quint8* input_data,
+    bool process(const uint8_t* input_data,
                  size_t input_size,
-                 quint8* output_data,
+                 uint8_t* output_data,
                  size_t output_size,
                  CompressorFlush flush,
                  size_t* consumed,

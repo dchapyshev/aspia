@@ -152,7 +152,7 @@ void HostServer::stop()
     qInfo("Server is stopped");
 }
 
-void HostServer::setSessionChanged(quint32 event, quint32 session_id)
+void HostServer::setSessionChanged(uint32_t event, uint32_t session_id)
 {
     emit sessionChanged(event, session_id);
 

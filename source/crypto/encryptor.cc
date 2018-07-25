@@ -40,10 +40,10 @@ Encryptor::Encryptor(Mode mode)
         return;
     }
 
-    std::vector<quint8> public_key;
+    std::vector<uint8_t> public_key;
     public_key.resize(crypto_kx_PUBLICKEYBYTES);
 
-    std::vector<quint8> secret_key;
+    std::vector<uint8_t> secret_key;
     secret_key.resize(crypto_kx_SECRETKEYBYTES);
 
     if (crypto_kx_keypair(public_key.data(), secret_key.data()) != 0)
@@ -102,10 +102,10 @@ bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
     decrypt_nonce_.resize(crypto_secretbox_NONCEBYTES);
     memcpy(decrypt_nonce_.data(), message.nonce().data(), crypto_secretbox_NONCEBYTES);
 
-    std::vector<quint8> decrypt_key;
+    std::vector<uint8_t> decrypt_key;
     decrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
 
-    std::vector<quint8> encrypt_key;
+    std::vector<uint8_t> encrypt_key;
     encrypt_key.resize(crypto_kx_SESSIONKEYBYTES);
 
     if (mode_ == Mode::SERVER)
@@ -115,7 +115,7 @@ bool Encryptor::readHelloMessage(const QByteArray& message_buffer)
                 encrypt_key.data(),
                 local_public_key_.data(),
                 local_secret_key_.data(),
-                reinterpret_cast<const quint8*>(message.public_key().data())) != 0)
+                reinterpret_cast<const uint8_t*>(message.public_key().data())) != 0)
         {
             qWarning("crypto_kx_server_session_keys failed");
             return false;

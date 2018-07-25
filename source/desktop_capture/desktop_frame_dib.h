@@ -43,7 +43,7 @@ private:
     DesktopFrameDIB(const QSize& size,
                     const PixelFormat& format,
                     int stride,
-                    quint8* data,
+                    uint8_t* data,
                     HBITMAP bitmap);
 
     ScopedHBITMAP bitmap_;

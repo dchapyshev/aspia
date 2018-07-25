@@ -70,9 +70,9 @@ public:
     // there is more data to be written out. This is particularly
     // useful for end of the compression stream.
     //
-    virtual bool process(const quint8* input_data,
+    virtual bool process(const uint8_t* input_data,
                          size_t input_size,
-                         quint8* output_data,
+                         uint8_t* output_data,
                          size_t output_size,
                          CompressorFlush flush,
                          size_t* consumed,

@@ -30,10 +30,10 @@ namespace {
 
 // Retrieves a pointer to the output buffer in |update| used for storing the
 // encoded rectangle data. Will resize the buffer to |size|.
-quint8* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
+uint8_t* GetOutputBuffer(proto::desktop::VideoPacket* packet, size_t size)
 {
     packet->mutable_data()->resize(size);
-    return reinterpret_cast<quint8*>(packet->mutable_data()->data());
+    return reinterpret_cast<uint8_t*>(packet->mutable_data()->data());
 }
 
 } // namespace
@@ -77,7 +77,7 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
 
     const size_t packet_size = source_data_size + (source_data_size / 100 + 16);
 
-    quint8* compress_pos = GetOutputBuffer(packet, packet_size);
+    uint8_t* compress_pos = GetOutputBuffer(packet, packet_size);
 
     size_t filled = 0;  // Number of bytes in the destination buffer.
     size_t pos = 0;  // Position in the current row in bytes.
@@ -129,11 +129,11 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
 
     if (translate_buffer_size_ < data_size)
     {
-        translate_buffer_.reset(static_cast<quint8*>(alignedAlloc(data_size, 16)));
+        translate_buffer_.reset(static_cast<uint8_t*>(alignedAlloc(data_size, 16)));
         translate_buffer_size_ = data_size;
     }
 
-    quint8* translate_pos = translate_buffer_.get();
+    uint8_t* translate_pos = translate_buffer_.get();
 
     for (const auto& rect : frame->constUpdatedRegion())
     {

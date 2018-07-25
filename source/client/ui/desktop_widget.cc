@@ -157,7 +157,7 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
     flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
-    quint32 usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
+    uint32_t usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(event->nativeScanCode());
     if (usb_keycode == KeycodeConverter::invalidUsbKeycode())
         return;
 

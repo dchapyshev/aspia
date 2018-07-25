@@ -129,12 +129,12 @@ bool User::setPasswordHash(const QByteArray& value)
     return true;
 }
 
-void User::setFlags(quint32 value)
+void User::setFlags(uint32_t value)
 {
     flags_ = value;
 }
 
-void User::setSessions(quint32 value)
+void User::setSessions(uint32_t value)
 {
     sessions_ = value;
 }

@@ -31,7 +31,7 @@ namespace {
 QString generateUniqueChannelId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
-    quint32 channel_id = last_channel_id++;
+    uint32_t channel_id = last_channel_id++;
 
     return QString("%1.%2.%3")
         .arg(QCoreApplication::applicationPid())

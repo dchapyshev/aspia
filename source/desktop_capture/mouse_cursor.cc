@@ -20,7 +20,7 @@
 
 namespace aspia {
 
-MouseCursor::MouseCursor(std::unique_ptr<quint8[]> data,
+MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data,
                          const QSize& size,
                          const QPoint& hotspot)
     : data_(std::move(data)),
@@ -32,7 +32,7 @@ MouseCursor::MouseCursor(std::unique_ptr<quint8[]> data,
 
 int MouseCursor::stride() const
 {
-    return size_.width() * sizeof(quint32);
+    return size_.width() * sizeof(uint32_t);
 }
 
 bool MouseCursor::isEqual(const MouseCursor& other)

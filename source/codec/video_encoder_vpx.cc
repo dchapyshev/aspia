@@ -68,7 +68,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 void createImage(proto::desktop::VideoEncoding encoding,
                  const QSize& size,
                  std::unique_ptr<vpx_image_t>* out_image,
-                 std::unique_ptr<quint8[]>* out_image_buffer)
+                 std::unique_ptr<uint8_t[]>* out_image_buffer)
 {
     std::unique_ptr<vpx_image_t> image = std::make_unique<vpx_image_t>();
 
@@ -110,7 +110,7 @@ void createImage(proto::desktop::VideoEncoding encoding,
     // Allocate a YUV buffer large enough for the aligned data & padding.
     const int buffer_size = y_stride * y_rows + (2 * uv_stride) * uv_rows;
 
-    std::unique_ptr<quint8[]> image_buffer = std::make_unique<quint8[]>(buffer_size);
+    std::unique_ptr<uint8_t[]> image_buffer = std::make_unique<uint8_t[]>(buffer_size);
 
     // Reset image value to 128 so we just need to fill in the y plane.
     memset(image_buffer.get(), 128, buffer_size);
@@ -155,7 +155,7 @@ void VideoEncoderVPX::createActiveMap(const QSize& size)
     active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_size_ = active_map_.cols * active_map_.rows;
-    active_map_buffer_ = std::make_unique<quint8[]>(active_map_size_);
+    active_map_buffer_ = std::make_unique<uint8_t[]>(active_map_size_);
 
     memset(active_map_buffer_.get(), 0, active_map_size_);
     active_map_.active_map = active_map_buffer_.get();
@@ -255,7 +255,7 @@ void VideoEncoderVPX::setActiveMap(const QRect& rect)
     int right  = (rect.right() - 1) / kMacroBlockSize;
     int bottom = (rect.bottom() - 1) / kMacroBlockSize;
 
-    quint8* map = active_map_.active_map + top * active_map_.cols;
+    uint8_t* map = active_map_.active_map + top * active_map_.cols;
 
     for (int y = top; y <= bottom; ++y)
     {
@@ -275,9 +275,9 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
 
     int y_stride = image_->stride[0];
     int uv_stride = image_->stride[1];
-    quint8* y_data = image_->planes[0];
-    quint8* u_data = image_->planes[1];
-    quint8* v_data = image_->planes[2];
+    uint8_t* y_data = image_->planes[0];
+    uint8_t* u_data = image_->planes[1];
+    uint8_t* v_data = image_->planes[2];
 
     switch (image_->fmt)
     {

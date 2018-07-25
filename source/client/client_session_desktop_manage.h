@@ -32,8 +32,8 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
 public:
     ClientSessionDesktopManage(ConnectData* connect_data, QObject* parent);
 
-    static quint32 supportedVideoEncodings();
-    static quint32 supportedFeatures();
+    static uint32_t supportedVideoEncodings();
+    static uint32_t supportedFeatures();
 
 public slots:
     // ClientSession implementation.
@@ -42,8 +42,8 @@ public slots:
     // ClientSessionDesktopView implementation.
     void onSendConfig(const proto::desktop::Config& config) override;
 
-    void onSendKeyEvent(quint32 usb_keycode, quint32 flags);
-    void onSendPointerEvent(const QPoint& pos, quint32 mask);
+    void onSendKeyEvent(uint32_t usb_keycode, uint32_t flags);
+    void onSendPointerEvent(const QPoint& pos, uint32_t mask);
     void onSendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:

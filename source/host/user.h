@@ -45,17 +45,17 @@ public:
     bool setPasswordHash(const QByteArray& value);
     const QByteArray& passwordHash() const { return password_hash_; }
 
-    void setFlags(quint32 value);
-    quint32 flags() const { return flags_; }
+    void setFlags(uint32_t value);
+    uint32_t flags() const { return flags_; }
 
-    void setSessions(quint32 value);
-    quint32 sessions() const { return sessions_; }
+    void setSessions(uint32_t value);
+    uint32_t sessions() const { return sessions_; }
 
 private:
     QString name_;
     QByteArray password_hash_;
-    quint32 flags_ = 0;
-    quint32 sessions_ = 0;
+    uint32_t flags_ = 0;
+    uint32_t sessions_ = 0;
 };
 
 } // namespace aspia

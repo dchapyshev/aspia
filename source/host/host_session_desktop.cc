@@ -27,16 +27,16 @@ namespace aspia {
 
 namespace {
 
-const quint32 kSupportedVideoEncodings =
+const uint32_t kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_ZLIB |
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const quint32 kSupportedFeaturesDesktopManage =
+const uint32_t kSupportedFeaturesDesktopManage =
     proto::desktop::FEATURE_CURSOR_SHAPE |
     proto::desktop::FEATURE_CLIPBOARD;
 
-const quint32 kSupportedFeaturesDesktopView = 0;
+const uint32_t kSupportedFeaturesDesktopView = 0;
 
 } // namespace
 

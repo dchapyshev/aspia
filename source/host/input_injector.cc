@@ -40,11 +40,11 @@ const char kSoftwareSASGenerationPath[] =
 
 const char kSoftwareSASGeneration[] = "SoftwareSASGeneration";
 
-const quint32 kUsbCodeDelete = 0x07004c;
-const quint32 kUsbCodeLeftCtrl = 0x0700e0;
-const quint32 kUsbCodeRightCtrl = 0x0700e4;
-const quint32 kUsbCodeLeftAlt = 0x0700e2;
-const quint32 kUsbCodeRightAlt = 0x0700e6;
+const uint32_t kUsbCodeDelete = 0x07004c;
+const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
+const uint32_t kUsbCodeRightCtrl = 0x0700e4;
+const uint32_t kUsbCodeLeftAlt = 0x0700e2;
+const uint32_t kUsbCodeRightAlt = 0x0700e6;
 
 void sendKeyboardScancode(WORD scancode, DWORD flags)
 {
@@ -97,9 +97,9 @@ private:
     bool isCtrlAndAltPressed();
 
     ScopedThreadDesktop desktop_;
-    std::set<quint32> pressed_keys_;
+    std::set<uint32_t> pressed_keys_;
     QPoint prev_mouse_pos_;
-    quint32 prev_mouse_button_mask_ = 0;
+    uint32_t prev_mouse_button_mask_ = 0;
 
     Q_DISABLE_COPY(InputInjectorImpl)
 };
@@ -140,7 +140,7 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
         prev_mouse_pos_ = pos;
     }
 
-    quint32 mask = event.mask();
+    uint32_t mask = event.mask();
 
     bool prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
     bool curr = (mask & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
