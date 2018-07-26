@@ -836,7 +836,7 @@
         <location filename="../client/file_status.cc" line="51"/>
         <source>Access denied</source>
         <comment>FileStatus</comment>
-        <translation>Доступ запрощен</translation>
+        <translation>Доступ запрещен</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="54"/>
