@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="uk-ua" xmlns="http://schemas.microsoft.com/wix/2006/localization">
   <String Id="Locale" Overridable="yes">uk</String>
-  <String Id="HostConfigShortcutName" Overridable="yes">Aspia Host Configuration</String>
-  <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-  <String Id="CoreDescription" Overridable="yes">The core application files.</String>
-  <String Id="HostService_Title" Overridable="yes">Host Service</String>
-  <String Id="HostService_Description" Overridable="yes">Provides remote access to this computer.</String>
-  <String Id="AddressBookFile_Description" Overridable="yes">Aspia Address Book (.aab)</String>
-  <String Id="CreateDesktopShortcuts" Overridable="yes">Create desktop shortcuts</String>
-  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Create shortcuts in the Start menu</String>
+  <String Id="HostConfigShortcutName" Overridable="yes">Конфігурація сервера Aspia</String>
+  <String Id="DowngradeErrorMessage" Overridable="yes">Найновішу версію програми вже встановлено.</String>
+  <String Id="CoreDescription" Overridable="yes">Основні файли програми.</String>
+  <String Id="HostService_Title" Overridable="yes">Служба сервера</String>
+  <String Id="HostService_Description" Overridable="yes">Надає віддалений доступ до цього комп'ютера.</String>
+  <String Id="AddressBookFile_Description" Overridable="yes">Адресна книга Aspia (.aab)</String>
+  <String Id="CreateDesktopShortcuts" Overridable="yes">Створити ярлики на робочих столах</String>
+  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Створити ярлики в меню "Пуск"</String>
 </WixLocalization>

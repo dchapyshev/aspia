@@ -946,57 +946,57 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="79"/>
+        <location filename="../console/about_dialog.cc" line="80"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="83"/>
+        <location filename="../console/about_dialog.cc" line="84"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="89"/>
+        <location filename="../console/about_dialog.cc" line="90"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="94"/>
+        <location filename="../console/about_dialog.cc" line="95"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="95"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="96"/>
+        <location filename="../console/about_dialog.cc" line="97"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="99"/>
+        <location filename="../console/about_dialog.cc" line="100"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="101"/>
+        <location filename="../console/about_dialog.cc" line="102"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="103"/>
+        <location filename="../console/about_dialog.cc" line="104"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="120"/>
+        <location filename="../console/about_dialog.cc" line="121"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/ru/donate.html</translation>
     </message>
