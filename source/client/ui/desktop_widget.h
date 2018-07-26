@@ -25,6 +25,10 @@
 
 #include <memory>
 
+#if defined(Q_OS_WIN)
+#include "base/win/scoped_user_object.h"
+#endif
+
 #include "desktop_capture/desktop_frame.h"
 
 namespace aspia {
@@ -66,10 +70,17 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     void leaveEvent(QEvent *event) override;
+    void focusInEvent(QFocusEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
 
 private:
     void executeKeyEvent(uint32_t usb_keycode, uint32_t flags);
+
+#if defined(Q_OS_WIN)
+    static LRESULT CALLBACK keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam);
+
+    ScopedHHOOK keyboard_hook_;
+#endif // defined(Q_OS_WIN)
 
     std::unique_ptr<DesktopFrameQImage> frame_;
 

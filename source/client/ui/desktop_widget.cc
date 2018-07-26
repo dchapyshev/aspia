@@ -18,14 +18,10 @@
 
 #include "client/ui/desktop_widget.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
 #include <QWheelEvent>
-
-#if defined(Q_OS_WIN)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif // defined(Q_OS_WIN)
 
 #include "base/keycode_converter.h"
 #include "desktop_capture/desktop_frame_qimage.h"
@@ -185,7 +181,8 @@ void DesktopWidget::executeKeySequense(int key_sequence)
     if (key_sequence & Qt::MetaModifier)
         keys.push_back(kUsbCodeLeftMeta);
 
-    uint32_t key = KeycodeConverter::qtKeycodeToUsbKeycode(key_sequence & ~Qt::KeyboardModifierMask);
+    uint32_t key = KeycodeConverter::qtKeycodeToUsbKeycode(
+        key_sequence & ~Qt::KeyboardModifierMask);
     if (key == KeycodeConverter::invalidUsbKeycode())
         return;
 
@@ -261,8 +258,21 @@ void DesktopWidget::leaveEvent(QEvent* event)
     QWidget::leaveEvent(event);
 }
 
+void DesktopWidget::focusInEvent(QFocusEvent* event)
+{
+#if defined(Q_OS_WIN)
+    keyboard_hook_.reset(SetWindowsHookExW(WH_KEYBOARD_LL, keyboardHookProc, nullptr, 0));
+#endif // defined(Q_OS_WIN)
+
+    QWidget::focusInEvent(event);
+}
+
 void DesktopWidget::focusOutEvent(QFocusEvent* event)
 {
+#if defined(Q_OS_WIN)
+    keyboard_hook_.reset();
+#endif // defined(Q_OS_WIN)
+
     // Release all pressed keys of the keyboard.
     if (!pressed_keys_.isEmpty())
     {
@@ -287,5 +297,43 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
 
     emit sendKeyEvent(usb_keycode, flags);
 }
+
+#if defined(Q_OS_WIN)
+// static
+LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM lparam)
+{
+    if (code == HC_ACTION)
+    {
+        DesktopWidget* self = dynamic_cast<DesktopWidget*>(QApplication::focusWidget());
+        if (self)
+        {
+            KBDLLHOOKSTRUCT* hook = reinterpret_cast<KBDLLHOOKSTRUCT*>(lparam);
+
+            if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
+            {
+                uint32_t flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
+                                  proto::desktop::KeyEvent::PRESSED : 0);
+
+                flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
+                flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+
+                uint32_t scan_code = hook->scanCode;
+
+                if (hook->flags & LLKHF_EXTENDED)
+                    scan_code |= 0x100;
+
+                uint32_t usb_keycode = KeycodeConverter::nativeKeycodeToUsbKeycode(scan_code);
+                if (usb_keycode != KeycodeConverter::invalidUsbKeycode())
+                {
+                    self->executeKeyEvent(usb_keycode, flags);
+                    return TRUE;
+                }
+            }
+        }
+    }
+
+    return CallNextHookEx(nullptr, code, wparam, lparam);
+}
+#endif // defined(Q_OS_WIN)
 
 } // namespace aspia
