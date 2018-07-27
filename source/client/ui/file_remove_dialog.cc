@@ -51,43 +51,45 @@ void FileRemoveDialog::showError(FileRemover* remover,
                                  FileRemover::Actions actions,
                                  const QString& message)
 {
-    QMessageBox dialog(this);
+    QPointer<QMessageBox> dialog(new QMessageBox(this));
 
-    dialog.setWindowTitle(tr("Warning"));
-    dialog.setIcon(QMessageBox::Warning);
-    dialog.setText(message);
+    dialog->setWindowTitle(tr("Warning"));
+    dialog->setIcon(QMessageBox::Warning);
+    dialog->setText(message);
 
     QAbstractButton* skip_button = nullptr;
     QAbstractButton* skip_all_button = nullptr;
     QAbstractButton* abort_button = nullptr;
 
     if (actions & FileRemover::Skip)
-        skip_button = dialog.addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
+        skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileRemover::SkipAll)
-        skip_all_button = dialog.addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
+        skip_all_button = dialog->addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileRemover::Abort)
-        abort_button = dialog.addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+        abort_button = dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
-    dialog.exec();
-
-    QAbstractButton* button = dialog.clickedButton();
-    if (button != nullptr)
+    connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
     {
-        if (button == skip_button)
+        if (button != nullptr)
         {
-            remover->applyAction(FileRemover::Skip);
-            return;
+            if (button == skip_button)
+            {
+                remover->applyAction(FileRemover::Skip);
+                return;
+            }
+            else if (button == skip_all_button)
+            {
+                remover->applyAction(FileRemover::SkipAll);
+                return;
+            }
         }
-        else if (button == skip_all_button)
-        {
-            remover->applyAction(FileRemover::SkipAll);
-            return;
-        }
-    }
 
-    remover->applyAction(FileRemover::Abort);
+        remover->applyAction(FileRemover::Abort);
+    });
+
+    dialog->exec();
 }
 
 } // namespace aspia

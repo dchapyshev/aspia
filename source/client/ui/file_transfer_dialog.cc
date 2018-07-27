@@ -70,11 +70,11 @@ void FileTransferDialog::showError(FileTransfer* transfer,
                                    FileTransfer::Error error_type,
                                    const QString& message)
 {
-    QMessageBox dialog(this);
+    QPointer<QMessageBox> dialog(new QMessageBox(this));
 
-    dialog.setWindowTitle(tr("Warning"));
-    dialog.setIcon(QMessageBox::Warning);
-    dialog.setText(message);
+    dialog->setWindowTitle(tr("Warning"));
+    dialog->setIcon(QMessageBox::Warning);
+    dialog->setText(message);
 
     QAbstractButton* skip_button = nullptr;
     QAbstractButton* skip_all_button = nullptr;
@@ -85,48 +85,50 @@ void FileTransferDialog::showError(FileTransfer* transfer,
     FileTransfer::Actions actions = transfer->availableActions(error_type);
 
     if (actions & FileTransfer::Skip)
-        skip_button = dialog.addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
+        skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileTransfer::SkipAll)
-        skip_all_button = dialog.addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
+        skip_all_button = dialog->addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileTransfer::Replace)
-        replace_button = dialog.addButton(tr("Replace"), QMessageBox::ButtonRole::ActionRole);
+        replace_button = dialog->addButton(tr("Replace"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileTransfer::ReplaceAll)
-        replace_all_button = dialog.addButton(tr("Replace All"), QMessageBox::ButtonRole::ActionRole);
+        replace_all_button = dialog->addButton(tr("Replace All"), QMessageBox::ButtonRole::ActionRole);
 
     if (actions & FileTransfer::Abort)
-        abort_button = dialog.addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+        abort_button = dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
 
-    dialog.exec();
-
-    QAbstractButton* button = dialog.clickedButton();
-    if (button != nullptr)
+    connect(dialog, &QMessageBox::buttonClicked, [&](QAbstractButton* button)
     {
-        if (button == skip_button)
+        if (button != nullptr)
         {
-            transfer->applyAction(error_type, FileTransfer::Skip);
-            return;
+            if (button == skip_button)
+            {
+                transfer->applyAction(error_type, FileTransfer::Skip);
+                return;
+            }
+            else if (button == skip_all_button)
+            {
+                transfer->applyAction(error_type, FileTransfer::SkipAll);
+                return;
+            }
+            else if (button == replace_button)
+            {
+                transfer->applyAction(error_type, FileTransfer::Replace);
+                return;
+            }
+            else if (button == replace_all_button)
+            {
+                transfer->applyAction(error_type, FileTransfer::ReplaceAll);
+                return;
+            }
         }
-        else if (button == skip_all_button)
-        {
-            transfer->applyAction(error_type, FileTransfer::SkipAll);
-            return;
-        }
-        else if (button == replace_button)
-        {
-            transfer->applyAction(error_type, FileTransfer::Replace);
-            return;
-        }
-        else if (button == replace_all_button)
-        {
-            transfer->applyAction(error_type, FileTransfer::ReplaceAll);
-            return;
-        }
-    }
 
-    transfer->applyAction(error_type, FileTransfer::Abort);
+        transfer->applyAction(error_type, FileTransfer::Abort);
+    });
+
+    dialog->exec();
 }
 
 } // namespace aspia
