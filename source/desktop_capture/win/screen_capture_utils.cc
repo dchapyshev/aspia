@@ -53,7 +53,7 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString*
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
     {
-        *device_key = QString();
+        device_key->clear();
         return true;
     }
 
