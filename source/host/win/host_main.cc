@@ -72,13 +72,6 @@ int runHostNotifier(const QString& channel_id)
         AttachThreadInput(current_thread_id, active_thread_id, FALSE);
     }
 
-    // I not found a way better than using WinAPI function in MS Windows.
-    // Flag Qt::WindowStaysOnTopHint works incorrectly.
-    SetWindowPos(reinterpret_cast<HWND>(window.winId()),
-                 HWND_TOPMOST,
-                 0, 0, 0, 0,
-                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-
     return QApplication::exec();
 }
 

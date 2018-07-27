@@ -175,6 +175,13 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
         return HostProcess::OtherError;
     }
 
+    DWORD ui_access = 1;
+    if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
+    {
+        qWarningErrno("SetTokenInformation failed");
+        return HostProcess::OtherError;
+    }
+
     return error_code;
 }
 
