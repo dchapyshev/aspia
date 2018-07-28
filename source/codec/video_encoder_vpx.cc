@@ -130,17 +130,15 @@ void createImage(proto::desktop::VideoEncoding encoding,
 } // namespace
 
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
+VideoEncoderVPX* VideoEncoderVPX::createVP8()
 {
-    return std::unique_ptr<VideoEncoderVPX>(
-        new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
+    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8);
 }
 
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
+VideoEncoderVPX* VideoEncoderVPX::createVP9()
 {
-    return std::unique_ptr<VideoEncoderVPX>(
-        new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
+    return new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9);
 }
 
 VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)

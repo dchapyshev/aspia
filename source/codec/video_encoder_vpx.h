@@ -37,8 +37,8 @@ class VideoEncoderVPX : public VideoEncoder
 public:
     ~VideoEncoderVPX() = default;
 
-    static std::unique_ptr<VideoEncoderVPX> createVP8();
-    static std::unique_ptr<VideoEncoderVPX> createVP9();
+    static VideoEncoderVPX* createVP8();
+    static VideoEncoderVPX* createVP9();
 
     std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) override;
 

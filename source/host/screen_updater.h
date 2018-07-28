@@ -19,63 +19,37 @@
 #ifndef ASPIA_HOST__SCREEN_UPDATER_H_
 #define ASPIA_HOST__SCREEN_UPDATER_H_
 
-#include <QEvent>
-#include <QThread>
-
-#include <memory>
+#include <QObject>
 
 #include "protocol/desktop_session.pb.h"
 
+class QScreen;
+
 namespace aspia {
 
-class ScreenUpdater : public QThread
+class ScreenUpdaterImpl;
+
+class ScreenUpdater : public QObject
 {
     Q_OBJECT
 
 public:
-    ScreenUpdater(const proto::desktop::Config& config, QObject* parent);
-    ~ScreenUpdater();
+    explicit ScreenUpdater(QObject* parent = nullptr);
+    ~ScreenUpdater() = default;
 
-    class UpdateEvent : public QEvent
-    {
-    public:
-        static const int kType = QEvent::User + 1;
+public slots:
+    bool start(const proto::desktop::Config& config);
+    void selectScreen(int64_t screen_id);
 
-        UpdateEvent()
-            : QEvent(static_cast<QEvent::Type>(kType))
-        {
-            // Nothing
-        }
-
-        std::unique_ptr<aspia::proto::desktop::VideoPacket> video_packet;
-        std::unique_ptr<aspia::proto::desktop::CursorShape> cursor_shape;
-
-    private:
-        Q_DISABLE_COPY(UpdateEvent)
-    };
-
-    class ErrorEvent : public QEvent
-    {
-    public:
-        static const int kType = QEvent::User + 2;
-
-        ErrorEvent()
-            : QEvent(static_cast<QEvent::Type>(kType))
-        {
-            // Nothing
-        }
-
-    private:
-        Q_DISABLE_COPY(ErrorEvent)
-    };
+signals:
+    void sendMessage(const QByteArray& buffer);
 
 protected:
-    // QThread implementation.
-    void run() override;
+    // QObject implementation.
+    void customEvent(QEvent* event) override;
 
 private:
-    bool terminate_ = false;
-    proto::desktop::Config config_;
+    ScreenUpdaterImpl* impl_;
 
     Q_DISABLE_COPY(ScreenUpdater)
 };

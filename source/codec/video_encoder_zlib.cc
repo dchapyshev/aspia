@@ -49,11 +49,9 @@ VideoEncoderZLIB::VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,
 }
 
 // static
-std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::create(const PixelFormat& target_format,
-                                                           int compression_ratio)
+VideoEncoderZLIB* VideoEncoderZLIB::create(const PixelFormat& target_format, int compression_ratio)
 {
-    if (compression_ratio < Z_BEST_SPEED ||
-        compression_ratio > Z_BEST_COMPRESSION)
+    if (compression_ratio < Z_BEST_SPEED || compression_ratio > Z_BEST_COMPRESSION)
     {
         qWarning() << "Wrong compression ratio: " << compression_ratio;
         return nullptr;
@@ -67,8 +65,7 @@ std::unique_ptr<VideoEncoderZLIB> VideoEncoderZLIB::create(const PixelFormat& ta
         return nullptr;
     }
 
-    return std::unique_ptr<VideoEncoderZLIB>(
-        new VideoEncoderZLIB(std::move(translator), target_format, compression_ratio));
+    return new VideoEncoderZLIB(std::move(translator), target_format, compression_ratio);
 }
 
 void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_t source_data_size)

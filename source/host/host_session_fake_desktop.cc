@@ -68,7 +68,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
 
     if (message.has_config())
     {
-        std::unique_ptr<VideoEncoder> video_encoder = createEncoder(message.config());
+        std::unique_ptr<VideoEncoder> video_encoder(createEncoder(message.config()));
         if (!video_encoder)
         {
             qWarning("Unable to create video encoder");
@@ -100,8 +100,7 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
     }
 }
 
-std::unique_ptr<VideoEncoder> HostSessionFakeDesktop::createEncoder(
-    const proto::desktop::Config& config)
+VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config& config)
 {
     switch (config.video_encoding())
     {

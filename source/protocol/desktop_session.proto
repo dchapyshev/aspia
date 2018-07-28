@@ -165,6 +165,17 @@ message Screen
     string title = 2;
 }
 
+message ScreenList
+{
+    // List of screens (monitors) on the remote computer.
+    repeated Screen screen = 1;
+}
+
+message SelectScreen
+{
+    Screen screen = 1;
+}
+
 message ConfigRequest
 {
     // Bit field with supported video encodings.
@@ -172,9 +183,6 @@ message ConfigRequest
 
     // Bit field with supported features.
     uint32 features        = 2;
-
-    // List of screens (monitors) on the remote computer.
-    repeated Screen screen = 3;
 }
 
 message Config
@@ -184,7 +192,6 @@ message Config
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;
     uint32 compress_ratio        = 5;
-    int64 screen_id              = 6;
 }
 
 message HostToClient
@@ -193,6 +200,7 @@ message HostToClient
     CursorShape cursor_shape       = 2;
     ClipboardEvent clipboard_event = 3;
     ConfigRequest config_request   = 4;
+    ScreenList screen_list         = 5;
 }
 
 message ClientToHost
@@ -201,4 +209,5 @@ message ClientToHost
     KeyEvent key_event             = 2;
     ClipboardEvent clipboard_event = 3;
     Config config                  = 4;
+    SelectScreen select_screen     = 5;
 }

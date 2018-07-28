@@ -78,31 +78,6 @@ void HostSessionDesktop::stopSession()
     input_injector_.reset();
 }
 
-void HostSessionDesktop::customEvent(QEvent* event)
-{
-    switch (event->type())
-    {
-        case ScreenUpdater::UpdateEvent::kType:
-        {
-            ScreenUpdater::UpdateEvent* update_event =
-                reinterpret_cast<ScreenUpdater::UpdateEvent*>(event);
-
-            Q_ASSERT(update_event->video_packet || update_event->cursor_shape);
-
-            proto::desktop::HostToClient message;
-            message.set_allocated_video_packet(update_event->video_packet.release());
-            message.set_allocated_cursor_shape(update_event->cursor_shape.release());
-
-            emit sendMessage(serializeMessage(message));
-        }
-        break;
-
-        case ScreenUpdater::ErrorEvent::kType:
-            emit errorOccurred();
-            break;
-    }
-}
-
 void HostSessionDesktop::messageReceived(const QByteArray& buffer)
 {
     proto::desktop::ClientToHost message;
@@ -207,7 +182,15 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
                 this, &HostSessionDesktop::clipboardEvent);
     }
 
-    screen_updater_ = new ScreenUpdater(config, this);
+    screen_updater_ = new ScreenUpdater(this);
+
+    connect(screen_updater_, &ScreenUpdater::sendMessage, this, &HostSessionDesktop::sendMessage);
+
+    if (!screen_updater_->start(config))
+    {
+        emit errorOccurred();
+        return;
+    }
 }
 
 } // namespace aspia

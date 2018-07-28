@@ -45,7 +45,6 @@ protected:
     // HostSession implementation.
     void startSession() override;
     void stopSession() override;
-    void customEvent(QEvent* event) override;
 
 private slots:
     void clipboardEvent(const proto::desktop::ClipboardEvent& event);
