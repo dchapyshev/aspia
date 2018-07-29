@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>monitors.png</file>
     <file>hardware.png</file>
     <file>network.png</file>
     <file>operating-system.png</file>

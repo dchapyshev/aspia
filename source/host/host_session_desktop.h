@@ -54,6 +54,7 @@ private:
     void readKeyEvent(const proto::desktop::KeyEvent& event);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void readConfig(const proto::desktop::Config& config);
+    void readScreen(const proto::desktop::Screen& screen);
 
     const proto::auth::SessionType session_type_;
 

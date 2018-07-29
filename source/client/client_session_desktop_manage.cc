@@ -89,6 +89,10 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
     {
         readConfigRequest(message.config_request());
     }
+    else if (message.has_screen_list())
+    {
+        readScreenList(message.screen_list());
+    }
     else
     {
         // Unknown messages are ignored.

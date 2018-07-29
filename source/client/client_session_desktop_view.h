@@ -49,9 +49,11 @@ public slots:
     void closeSession() override;
 
     virtual void onSendConfig(const proto::desktop::Config& config);
+    virtual void onSendScreen(const proto::desktop::Screen& screen);
 
 protected:
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
+    void readScreenList(const proto::desktop::ScreenList& screen_list);
 
     ConnectData* connect_data_;
     QPointer<DesktopWindow> desktop_window_;

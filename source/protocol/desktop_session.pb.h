@@ -38,7 +38,7 @@ namespace protobuf_desktop_5fsession_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[17];
+  static const ::google::protobuf::internal::ParseTable schema[16];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -86,9 +86,6 @@ extern ScreenDefaultTypeInternal _Screen_default_instance_;
 class ScreenList;
 class ScreenListDefaultTypeInternal;
 extern ScreenListDefaultTypeInternal _ScreenList_default_instance_;
-class SelectScreen;
-class SelectScreenDefaultTypeInternal;
-extern SelectScreenDefaultTypeInternal _SelectScreen_default_instance_;
 class Size;
 class SizeDefaultTypeInternal;
 extern SizeDefaultTypeInternal _Size_default_instance_;
@@ -116,7 +113,6 @@ template<> ::aspia::proto::desktop::PointerEvent* Arena::CreateMaybeMessage<::as
 template<> ::aspia::proto::desktop::Rect* Arena::CreateMaybeMessage<::aspia::proto::desktop::Rect>(Arena*);
 template<> ::aspia::proto::desktop::Screen* Arena::CreateMaybeMessage<::aspia::proto::desktop::Screen>(Arena*);
 template<> ::aspia::proto::desktop::ScreenList* Arena::CreateMaybeMessage<::aspia::proto::desktop::ScreenList>(Arena*);
-template<> ::aspia::proto::desktop::SelectScreen* Arena::CreateMaybeMessage<::aspia::proto::desktop::SelectScreen>(Arena*);
 template<> ::aspia::proto::desktop::Size* Arena::CreateMaybeMessage<::aspia::proto::desktop::Size>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacket* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacket>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacketFormat* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacketFormat>(Arena*);
@@ -1722,113 +1718,6 @@ class ScreenList : public ::google::protobuf::MessageLite /* @@protoc_insertion_
 };
 // -------------------------------------------------------------------
 
-class SelectScreen : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.SelectScreen) */ {
- public:
-  SelectScreen();
-  virtual ~SelectScreen();
-
-  SelectScreen(const SelectScreen& from);
-
-  inline SelectScreen& operator=(const SelectScreen& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  SelectScreen(SelectScreen&& from) noexcept
-    : SelectScreen() {
-    *this = ::std::move(from);
-  }
-
-  inline SelectScreen& operator=(SelectScreen&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const SelectScreen& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const SelectScreen* internal_default_instance() {
-    return reinterpret_cast<const SelectScreen*>(
-               &_SelectScreen_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    12;
-
-  void Swap(SelectScreen* other);
-  friend void swap(SelectScreen& a, SelectScreen& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline SelectScreen* New() const final {
-    return CreateMaybeMessage<SelectScreen>(NULL);
-  }
-
-  SelectScreen* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<SelectScreen>(arena);
-  }
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    final;
-  void CopyFrom(const SelectScreen& from);
-  void MergeFrom(const SelectScreen& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  void DiscardUnknownFields();
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(SelectScreen* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // .aspia.proto.desktop.Screen screen = 1;
-  bool has_screen() const;
-  void clear_screen();
-  static const int kScreenFieldNumber = 1;
-  private:
-  const ::aspia::proto::desktop::Screen& _internal_screen() const;
-  public:
-  const ::aspia::proto::desktop::Screen& screen() const;
-  ::aspia::proto::desktop::Screen* release_screen();
-  ::aspia::proto::desktop::Screen* mutable_screen();
-  void set_allocated_screen(::aspia::proto::desktop::Screen* screen);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.desktop.SelectScreen)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::desktop::Screen* screen_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.ConfigRequest) */ {
  public:
   ConfigRequest();
@@ -1863,7 +1752,7 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_ConfigRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    12;
 
   void Swap(ConfigRequest* other);
   friend void swap(ConfigRequest& a, ConfigRequest& b) {
@@ -1971,7 +1860,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Config_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    13;
 
   void Swap(Config* other);
   friend void swap(Config& a, Config& b) {
@@ -2106,7 +1995,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_HostToClient_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    14;
 
   void Swap(HostToClient* other);
   friend void swap(HostToClient& a, HostToClient& b) {
@@ -2265,7 +2154,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_ClientToHost_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    15;
 
   void Swap(ClientToHost* other);
   friend void swap(ClientToHost& a, ClientToHost& b) {
@@ -2364,17 +2253,17 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::Config* mutable_config();
   void set_allocated_config(::aspia::proto::desktop::Config* config);
 
-  // .aspia.proto.desktop.SelectScreen select_screen = 5;
-  bool has_select_screen() const;
-  void clear_select_screen();
-  static const int kSelectScreenFieldNumber = 5;
+  // .aspia.proto.desktop.Screen screen = 5;
+  bool has_screen() const;
+  void clear_screen();
+  static const int kScreenFieldNumber = 5;
   private:
-  const ::aspia::proto::desktop::SelectScreen& _internal_select_screen() const;
+  const ::aspia::proto::desktop::Screen& _internal_screen() const;
   public:
-  const ::aspia::proto::desktop::SelectScreen& select_screen() const;
-  ::aspia::proto::desktop::SelectScreen* release_select_screen();
-  ::aspia::proto::desktop::SelectScreen* mutable_select_screen();
-  void set_allocated_select_screen(::aspia::proto::desktop::SelectScreen* select_screen);
+  const ::aspia::proto::desktop::Screen& screen() const;
+  ::aspia::proto::desktop::Screen* release_screen();
+  ::aspia::proto::desktop::Screen* mutable_screen();
+  void set_allocated_screen(::aspia::proto::desktop::Screen* screen);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ClientToHost)
  private:
@@ -2384,7 +2273,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::KeyEvent* key_event_;
   ::aspia::proto::desktop::ClipboardEvent* clipboard_event_;
   ::aspia::proto::desktop::Config* config_;
-  ::aspia::proto::desktop::SelectScreen* select_screen_;
+  ::aspia::proto::desktop::Screen* screen_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -3364,64 +3253,6 @@ ScreenList::screen() const {
 
 // -------------------------------------------------------------------
 
-// SelectScreen
-
-// .aspia.proto.desktop.Screen screen = 1;
-inline bool SelectScreen::has_screen() const {
-  return this != internal_default_instance() && screen_ != NULL;
-}
-inline void SelectScreen::clear_screen() {
-  if (GetArenaNoVirtual() == NULL && screen_ != NULL) {
-    delete screen_;
-  }
-  screen_ = NULL;
-}
-inline const ::aspia::proto::desktop::Screen& SelectScreen::_internal_screen() const {
-  return *screen_;
-}
-inline const ::aspia::proto::desktop::Screen& SelectScreen::screen() const {
-  const ::aspia::proto::desktop::Screen* p = screen_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.SelectScreen.screen)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Screen*>(
-      &::aspia::proto::desktop::_Screen_default_instance_);
-}
-inline ::aspia::proto::desktop::Screen* SelectScreen::release_screen() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.SelectScreen.screen)
-  
-  ::aspia::proto::desktop::Screen* temp = screen_;
-  screen_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::Screen* SelectScreen::mutable_screen() {
-  
-  if (screen_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Screen>(GetArenaNoVirtual());
-    screen_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.SelectScreen.screen)
-  return screen_;
-}
-inline void SelectScreen::set_allocated_screen(::aspia::proto::desktop::Screen* screen) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete screen_;
-  }
-  if (screen) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      screen = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, screen, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  screen_ = screen;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.SelectScreen.screen)
-}
-
-// -------------------------------------------------------------------
-
 // ConfigRequest
 
 // uint32 video_encodings = 1;
@@ -4060,65 +3891,63 @@ inline void ClientToHost::set_allocated_config(::aspia::proto::desktop::Config* 
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.config)
 }
 
-// .aspia.proto.desktop.SelectScreen select_screen = 5;
-inline bool ClientToHost::has_select_screen() const {
-  return this != internal_default_instance() && select_screen_ != NULL;
+// .aspia.proto.desktop.Screen screen = 5;
+inline bool ClientToHost::has_screen() const {
+  return this != internal_default_instance() && screen_ != NULL;
 }
-inline void ClientToHost::clear_select_screen() {
-  if (GetArenaNoVirtual() == NULL && select_screen_ != NULL) {
-    delete select_screen_;
+inline void ClientToHost::clear_screen() {
+  if (GetArenaNoVirtual() == NULL && screen_ != NULL) {
+    delete screen_;
   }
-  select_screen_ = NULL;
+  screen_ = NULL;
 }
-inline const ::aspia::proto::desktop::SelectScreen& ClientToHost::_internal_select_screen() const {
-  return *select_screen_;
+inline const ::aspia::proto::desktop::Screen& ClientToHost::_internal_screen() const {
+  return *screen_;
 }
-inline const ::aspia::proto::desktop::SelectScreen& ClientToHost::select_screen() const {
-  const ::aspia::proto::desktop::SelectScreen* p = select_screen_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.select_screen)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::SelectScreen*>(
-      &::aspia::proto::desktop::_SelectScreen_default_instance_);
+inline const ::aspia::proto::desktop::Screen& ClientToHost::screen() const {
+  const ::aspia::proto::desktop::Screen* p = screen_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.screen)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Screen*>(
+      &::aspia::proto::desktop::_Screen_default_instance_);
 }
-inline ::aspia::proto::desktop::SelectScreen* ClientToHost::release_select_screen() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.select_screen)
+inline ::aspia::proto::desktop::Screen* ClientToHost::release_screen() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.screen)
   
-  ::aspia::proto::desktop::SelectScreen* temp = select_screen_;
-  select_screen_ = NULL;
+  ::aspia::proto::desktop::Screen* temp = screen_;
+  screen_ = NULL;
   return temp;
 }
-inline ::aspia::proto::desktop::SelectScreen* ClientToHost::mutable_select_screen() {
+inline ::aspia::proto::desktop::Screen* ClientToHost::mutable_screen() {
   
-  if (select_screen_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::SelectScreen>(GetArenaNoVirtual());
-    select_screen_ = p;
+  if (screen_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Screen>(GetArenaNoVirtual());
+    screen_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.select_screen)
-  return select_screen_;
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.screen)
+  return screen_;
 }
-inline void ClientToHost::set_allocated_select_screen(::aspia::proto::desktop::SelectScreen* select_screen) {
+inline void ClientToHost::set_allocated_screen(::aspia::proto::desktop::Screen* screen) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete select_screen_;
+    delete screen_;
   }
-  if (select_screen) {
+  if (screen) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      select_screen = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, select_screen, submessage_arena);
+      screen = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, screen, submessage_arena);
     }
     
   } else {
     
   }
-  select_screen_ = select_screen;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.select_screen)
+  screen_ = screen;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.screen)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

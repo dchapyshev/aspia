@@ -35,6 +35,9 @@ bool ScreenCapturerGDI::selectScreen(ScreenId screen_id)
     if (!ScreenCaptureUtils::isScreenValid(screen_id, &current_device_key_))
         return false;
 
+    // At next screen capture, the resources are recreated.
+    desktop_dc_rect_ = QRect();
+
     current_screen_id_ = screen_id;
     return true;
 }

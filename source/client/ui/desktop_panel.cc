@@ -24,6 +24,39 @@
 
 namespace aspia {
 
+namespace {
+
+class ScreenAction : public QAction
+{
+public:
+    explicit ScreenAction(QObject* parent)
+        : QAction(parent)
+    {
+        setText(tr("Full Desktop"));
+
+        setCheckable(true);
+        setChecked(true);
+
+        screen_.set_id(-1);
+    }
+
+    ScreenAction(const proto::desktop::Screen& screen, QObject* parent)
+        : QAction(parent),
+          screen_(screen)
+    {
+        setText(QString::fromStdString(screen_.title()));
+        setCheckable(true);
+    }
+
+    const proto::desktop::Screen& screen() const { return screen_; }
+
+private:
+    proto::desktop::Screen screen_;
+    Q_DISABLE_COPY(ScreenAction)
+};
+
+} // namespace
+
 DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* parent)
     : QFrame(parent)
 {
@@ -32,6 +65,24 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     connect(ui.button_settings, &QPushButton::pressed, this, &DesktopPanel::settingsButton);
     connect(ui.button_autosize, &QPushButton::pressed, this, &DesktopPanel::onAutosizeButton);
     connect(ui.button_full_screen, &QPushButton::clicked, this, &DesktopPanel::onFullscreenButton);
+
+    screens_menu_ = new QMenu(this);
+    screens_group_ = new QActionGroup(this);
+
+    ScreenAction* full_screen_action = new ScreenAction(screens_group_);
+    screens_group_->addAction(full_screen_action);
+    screens_menu_->addAction(full_screen_action);
+
+    ui.button_monitors->setMenu(screens_menu_);
+
+    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(screens_menu_, &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
+
+        if (leaved_)
+            delayedHide();
+    });
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -83,6 +134,38 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     adjustSize();
 
     hide_timer_id_ = startTimer(std::chrono::seconds(1));
+}
+
+void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
+{
+    if (screens_group_)
+        delete screens_group_;
+
+    screens_group_ = new QActionGroup(this);
+
+    connect(screens_group_, &QActionGroup::triggered, [this](QAction* action)
+    {
+        ScreenAction* screen_action = dynamic_cast<ScreenAction*>(action);
+        if (!screen_action)
+            return;
+
+        emit screenSelected(screen_action->screen());
+    });
+
+    ScreenAction* full_desktop_action = new ScreenAction(screens_group_);
+
+    screens_group_->addAction(full_desktop_action);
+    screens_menu_->addAction(full_desktop_action);
+
+    for (int i = 0; i < screen_list.screen_size(); ++i)
+    {
+        ScreenAction* action = new ScreenAction(screen_list.screen(i), screens_group_);
+
+        screens_group_->addAction(action);
+        screens_menu_->addAction(action);
+    }
+
+    ui.button_monitors->setEnabled(true);
 }
 
 void DesktopPanel::timerEvent(QTimerEvent* event)

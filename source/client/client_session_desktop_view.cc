@@ -44,6 +44,9 @@ ClientSessionDesktopView::ClientSessionDesktopView(
     connect(desktop_window_, &DesktopWindow::sendConfig,
             this, &ClientSessionDesktopView::onSendConfig);
 
+    connect(desktop_window_, &DesktopWindow::sendScreen,
+            this, &ClientSessionDesktopView::onSendScreen);
+
     // When the window is closed, we close the session.
     connect(desktop_window_, &DesktopWindow::windowClose,
             this, &ClientSessionDesktopView::closedByUser);
@@ -84,6 +87,10 @@ void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
     {
         readConfigRequest(message.config_request());
     }
+    else if (message.has_screen_list())
+    {
+        readScreenList(message.screen_list());
+    }
     else
     {
         // Unknown messages are ignored.
@@ -111,6 +118,13 @@ void ClientSessionDesktopView::onSendConfig(const proto::desktop::Config& config
 {
     proto::desktop::ClientToHost message;
     message.mutable_config()->CopyFrom(config);
+    emit sendMessage(serializeMessage(message));
+}
+
+void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen)
+{
+    proto::desktop::ClientToHost message;
+    message.mutable_screen()->CopyFrom(screen);
     emit sendMessage(serializeMessage(message));
 }
 
@@ -165,6 +179,11 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
     }
 
     desktop_window_->drawDesktopFrame();
+}
+
+void ClientSessionDesktopView::readScreenList(const proto::desktop::ScreenList& screen_list)
+{
+    desktop_window_->setScreenList(screen_list);
 }
 
 void ClientSessionDesktopView::readConfigRequest(

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>170</width>
+    <width>198</width>
     <height>36</height>
    </rect>
   </property>
@@ -117,6 +117,35 @@
         <property name="icon">
          <iconset resource="../../resources/resources.qrc">
           <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_monitors">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Monitor selection</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">text-align:left;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources/resources.qrc">
+          <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
         </property>
         <property name="flat">
          <bool>true</bool>

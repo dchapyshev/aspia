@@ -22,6 +22,7 @@
 #include <QPointer>
 
 #include "protocol/authorization.pb.h"
+#include "protocol/desktop_session.pb.h"
 #include "ui_desktop_panel.h"
 
 namespace aspia {
@@ -34,11 +35,14 @@ public:
     DesktopPanel(proto::auth::SessionType session_type, QWidget* parent);
     ~DesktopPanel() = default;
 
+    void setScreenList(const proto::desktop::ScreenList& screen_list);
+
 signals:
     void keySequence(int key_secuence);
     void switchToFullscreen(bool fullscreen);
     void switchToAutosize();
     void settingsButton();
+    void screenSelected(const proto::desktop::Screen& screen);
 
 protected:
     // QFrame implementation.
@@ -60,7 +64,11 @@ private:
     void delayedHide();
 
     Ui::DesktopPanel ui;
-    QPointer<QMenu> keys_menu_;
+
+    QMenu* keys_menu_;
+    QMenu* screens_menu_;
+    QActionGroup* screens_group_;
+
     int hide_timer_id_ = 0;
 
     bool allow_hide_ = true;

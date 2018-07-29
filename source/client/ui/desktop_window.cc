@@ -80,6 +80,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::keySequence, desktop_, &DesktopWidget::executeKeySequense);
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
+    connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
     {
@@ -136,6 +137,11 @@ void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 {
     if (!clipboard_.isNull())
         clipboard_->injectClipboardEvent(event);
+}
+
+void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
+{
+    panel_->setScreenList(screen_list);
 }
 
 void DesktopWindow::setSupportedVideoEncodings(uint32_t video_encodings)

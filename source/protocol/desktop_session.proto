@@ -171,11 +171,6 @@ message ScreenList
     repeated Screen screen = 1;
 }
 
-message SelectScreen
-{
-    Screen screen = 1;
-}
-
 message ConfigRequest
 {
     // Bit field with supported video encodings.
@@ -209,5 +204,5 @@ message ClientToHost
     KeyEvent key_event             = 2;
     ClipboardEvent clipboard_event = 3;
     Config config                  = 4;
-    SelectScreen select_screen     = 5;
+    Screen screen                  = 5;
 }

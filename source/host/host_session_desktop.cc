@@ -96,6 +96,8 @@ void HostSessionDesktop::messageReceived(const QByteArray& buffer)
         readClipboardEvent(message.clipboard_event());
     else if (message.has_config())
         readConfig(message.config());
+    else if (message.has_screen())
+        readScreen(message.screen());
     else
     {
         qDebug("Unhandled message from client");
@@ -191,6 +193,12 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         emit errorOccurred();
         return;
     }
+}
+
+void HostSessionDesktop::readScreen(const proto::desktop::Screen& screen)
+{
+    if (screen_updater_)
+        screen_updater_->selectScreen(screen.id());
 }
 
 } // namespace aspia

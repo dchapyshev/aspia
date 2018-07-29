@@ -48,6 +48,7 @@ public:
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
     void injectClipboard(const proto::desktop::ClipboardEvent& event);
+    void setScreenList(const proto::desktop::ScreenList& screen_list);
 
     void setSupportedVideoEncodings(uint32_t video_encodings);
     void setSupportedFeatures(uint32_t features);
@@ -59,6 +60,7 @@ signals:
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
     void sendPointerEvent(const QPoint& pos, uint32_t mask);
     void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void sendScreen(const proto::desktop::Screen& screen);
 
 protected:
     // QWidget implementation.
