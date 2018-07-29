@@ -23,13 +23,10 @@
 
 namespace aspia {
 
-// static
-std::unique_ptr<proto::desktop::VideoPacket> VideoEncoder::createVideoPacket(
-    proto::desktop::VideoEncoding encoding, const DesktopFrame* frame)
+void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
+                                  const DesktopFrame* frame,
+                                  proto::desktop::VideoPacket* packet)
 {
-    std::unique_ptr<proto::desktop::VideoPacket> packet =
-        std::make_unique<proto::desktop::VideoPacket>();
-
     packet->set_encoding(encoding);
 
     if (screen_size_ != frame->size() || top_left_ != frame->topLeft())
@@ -42,8 +39,6 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoder::createVideoPacket(
         VideoUtil::toVideoSize(screen_size_, format->mutable_screen_size());
         VideoUtil::toVideoPoint(top_left_, format->mutable_top_left());
     }
-
-    return packet;
 }
 
 } // namespace aspia

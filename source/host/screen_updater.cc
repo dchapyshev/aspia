@@ -207,28 +207,23 @@ void ScreenUpdaterImpl::run()
         const DesktopFrame* screen_frame = screen_capturer_->captureFrame();
         if (screen_frame)
         {
-            std::unique_ptr<proto::desktop::VideoPacket> video_packet;
-            std::unique_ptr<proto::desktop::CursorShape> cursor_shape;
+            message_.Clear();
 
             if (!screen_frame->constUpdatedRegion().isEmpty())
-                video_packet = video_encoder_->encode(screen_frame);
+                video_encoder_->encode(screen_frame, message_.mutable_video_packet());
 
             if (cursor_capturer_ && cursor_encoder_)
             {
                 std::unique_ptr<MouseCursor> mouse_cursor(cursor_capturer_->captureCursor());
                 if (mouse_cursor)
-                    cursor_shape = cursor_encoder_->encode(std::move(mouse_cursor));
+                {
+                    cursor_encoder_->encode(std::move(mouse_cursor),
+                                            message_.mutable_cursor_shape());
+                }
             }
 
-            if (video_packet || cursor_shape)
-            {
-                message_.Clear();
-
-                message_.set_allocated_video_packet(video_packet.release());
-                message_.set_allocated_cursor_shape(cursor_shape.release());
-
+            if (message_.has_video_packet() || message_.has_cursor_shape())
                 QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
-            }
         }
 
         capture_scheduler_->endCapture();

@@ -84,15 +84,9 @@ void HostSessionFakeDesktop::onMessageReceived(const QByteArray& buffer)
             return;
         }
 
-        std::unique_ptr<proto::desktop::VideoPacket> packet = video_encoder->encode(frame.get());
-        if (!packet)
-        {
-            qWarning("Unable to encode video frame");
-            emit errorOccurred();
-            return;
-        }
-
-        sendPacket(std::move(packet));
+        proto::desktop::HostToClient message;
+        video_encoder->encode(frame.get(), message.mutable_video_packet());
+        emit sendMessage(serializeMessage(message));
     }
     else
     {
@@ -163,13 +157,6 @@ std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
 
     *frame->updatedRegion() += frame_rect;
     return frame;
-}
-
-void HostSessionFakeDesktop::sendPacket(std::unique_ptr<proto::desktop::VideoPacket> packet)
-{
-    proto::desktop::HostToClient message;
-    message.set_allocated_video_packet(packet.release());
-    emit sendMessage(serializeMessage(message));
 }
 
 } // namespace aspia

@@ -104,11 +104,11 @@ void CursorEncoder::compressCursor(proto::desktop::CursorShape* cursor_shape,
     }
 }
 
-std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
-    std::unique_ptr<MouseCursor> mouse_cursor)
+bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
+                           proto::desktop::CursorShape* cursor_shape)
 {
     if (!mouse_cursor)
-        return nullptr;
+        return false;
 
     const QSize& size = mouse_cursor->size();
     const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
@@ -117,11 +117,8 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         size.height() <= 0 || size.height() > kMaxSize)
     {
         qWarning() << "Wrong size of cursor: " << size.width() << "x" << size.height();
-        return nullptr;
+        return false;
     }
-
-    std::unique_ptr<proto::desktop::CursorShape> cursor_shape =
-        std::make_unique<proto::desktop::CursorShape>();
 
     size_t index = cache_.find(mouse_cursor.get());
 
@@ -133,7 +130,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         cursor_shape->set_hotspot_x(mouse_cursor->hotSpot().x());
         cursor_shape->set_hotspot_y(mouse_cursor->hotSpot().y());
 
-        compressCursor(cursor_shape.get(), mouse_cursor.get());
+        compressCursor(cursor_shape, mouse_cursor.get());
 
         // If the cache is empty, then set the cache reset flag on the client
         // side and pass the maximum cache size.
@@ -148,7 +145,7 @@ std::unique_ptr<proto::desktop::CursorShape> CursorEncoder::encode(
         cursor_shape->set_flags(proto::desktop::CursorShape::CACHE | (index & 0x1F));
     }
 
-    return cursor_shape;
+    return true;
 }
 
 } // namespace aspia

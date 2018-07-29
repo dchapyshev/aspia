@@ -35,11 +35,12 @@ class VideoEncoder
 public:
     virtual ~VideoEncoder() = default;
 
-    virtual std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) = 0;
+    virtual void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) = 0;
 
 protected:
-    std::unique_ptr<proto::desktop::VideoPacket> createVideoPacket(
-        proto::desktop::VideoEncoding encoding, const DesktopFrame* frame);
+    void fillPacketInfo(proto::desktop::VideoEncoding encoding,
+                        const DesktopFrame* frame,
+                        proto::desktop::VideoPacket* packet);
 
 private:
     QSize screen_size_;

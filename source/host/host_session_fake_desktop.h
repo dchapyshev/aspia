@@ -44,7 +44,6 @@ public slots:
 private:
     VideoEncoder* createEncoder(const proto::desktop::Config& config);
     std::unique_ptr<DesktopFrame> createFrame();
-    void sendPacket(std::unique_ptr<proto::desktop::VideoPacket> packet);
 
     Q_DISABLE_COPY(HostSessionFakeDesktop)
 };

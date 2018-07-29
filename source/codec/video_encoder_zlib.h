@@ -37,7 +37,7 @@ public:
 
     static VideoEncoderZLIB* create(const PixelFormat& target_format, int compression_ratio);
 
-    std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) override;
+    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderZLIB(std::unique_ptr<PixelTranslator> translator,

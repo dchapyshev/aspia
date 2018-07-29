@@ -326,10 +326,9 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     }
 }
 
-std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::encode(const DesktopFrame* frame)
+void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
-    std::unique_ptr<proto::desktop::VideoPacket> packet =
-        createVideoPacket(encoding_, frame);
+    fillPacketInfo(encoding_, frame, packet);
 
     if (packet->has_format())
     {
@@ -351,7 +350,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::encode(const Deskt
 
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
-    prepareImageAndActiveMap(frame, packet.get());
+    prepareImageAndActiveMap(frame, packet);
 
     // Apply active map to the encoder.
     vpx_codec_err_t ret = vpx_codec_control(codec_.get(), VP8E_SET_ACTIVEMAP, &active_map_);
@@ -374,8 +373,6 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderVPX::encode(const Deskt
             break;
         }
     }
-
-    return packet;
 }
 
 } // namespace aspia

@@ -40,7 +40,7 @@ public:
     static VideoEncoderVPX* createVP8();
     static VideoEncoderVPX* createVP9();
 
-    std::unique_ptr<proto::desktop::VideoPacket> encode(const DesktopFrame* frame) override;
+    void encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet) override;
 
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);

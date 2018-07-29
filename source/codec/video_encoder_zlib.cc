@@ -105,10 +105,9 @@ void VideoEncoderZLIB::compressPacket(proto::desktop::VideoPacket* packet, size_
     }
 }
 
-std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const DesktopFrame* frame)
+void VideoEncoderZLIB::encode(const DesktopFrame* frame, proto::desktop::VideoPacket* packet)
 {
-    std::unique_ptr<proto::desktop::VideoPacket> packet =
-        createVideoPacket(proto::desktop::VIDEO_ENCODING_ZLIB, frame);
+    fillPacketInfo(proto::desktop::VIDEO_ENCODING_ZLIB, frame, packet);
 
     if (packet->has_format())
     {
@@ -147,9 +146,7 @@ std::unique_ptr<proto::desktop::VideoPacket> VideoEncoderZLIB::encode(const Desk
     }
 
     // Compress data with using ZLIB compressor.
-    compressPacket(packet.get(), data_size);
-
-    return packet;
+    compressPacket(packet, data_size);
 }
 
 } // namespace aspia

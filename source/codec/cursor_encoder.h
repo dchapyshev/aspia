@@ -33,7 +33,8 @@ public:
     CursorEncoder();
     ~CursorEncoder() = default;
 
-    std::unique_ptr<proto::desktop::CursorShape> encode(std::unique_ptr<MouseCursor> mouse_cursor);
+    bool encode(std::unique_ptr<MouseCursor> mouse_cursor,
+                proto::desktop::CursorShape* cursor_shape);
 
 private:
     void compressCursor(proto::desktop::CursorShape* cursor_shape,
