@@ -49,6 +49,9 @@ public:
     // error happens, an empty rect is returned.
     static QRect screenRect(ScreenCapturer::ScreenId screen, const QString& device_key);
 
+    // The number of visible display monitors on a desktop.
+    static int screenCount();
+
 private:
     Q_DISABLE_COPY(ScreenCaptureUtils)
 };

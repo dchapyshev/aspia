@@ -35,6 +35,7 @@ public:
     ScreenCapturerGDI() = default;
     ~ScreenCapturerGDI() = default;
 
+    int screenCount() override;
     bool screenList(ScreenList* screens) override;
     bool selectScreen(ScreenId screen_id) override;
 

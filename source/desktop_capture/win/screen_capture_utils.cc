@@ -107,4 +107,10 @@ QRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen, const QStr
                  device_mode.dmPelsHeight);
 }
 
+// static
+int ScreenCaptureUtils::screenCount()
+{
+    return GetSystemMetrics(SM_CMONITORS);
+}
+
 } // namespace aspia

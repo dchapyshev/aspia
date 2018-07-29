@@ -24,7 +24,6 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QThread>
-#include <QScreen>
 
 #include "base/message_serialization.h"
 #include "codec/cursor_encoder.h"
@@ -64,22 +63,13 @@ public:
 
     bool startUpdater(const proto::desktop::Config& config);
     void selectScreen(ScreenCapturer::ScreenId screen_id);
-    void screenListChanged();
 
 protected:
     // QThread implementation.
     void run() override;
 
 private:
-    void sendScreenList();
-
-    enum class Event
-    {
-        NO_EVENT,
-        SCREEN_LIST_CHANGED,
-        SELECT_SCREEN,
-        TERMINATE
-    };
+    enum class Event { NO_EVENT, SELECT_SCREEN, TERMINATE };
 
     QScopedPointer<CaptureScheduler> capture_scheduler_;
 
@@ -91,6 +81,7 @@ private:
 
     // By default, we capture the full screen.
     ScreenCapturer::ScreenId screen_id_ = ScreenCapturer::kFullDesktopScreenId;
+    int screen_count_ = 0;
 
     Event event_ = Event::NO_EVENT;
     QWaitCondition event_condition_;
@@ -175,25 +166,42 @@ void ScreenUpdaterImpl::selectScreen(ScreenCapturer::ScreenId screen_id)
     event_condition_.wakeAll();
 }
 
-void ScreenUpdaterImpl::screenListChanged()
-{
-    // Set the event.
-    QMutexLocker locker(&event_lock_);
-    event_ = Event::SCREEN_LIST_CHANGED;
-
-    // Notify the thread about the event.
-    event_condition_.wakeAll();
-}
-
 void ScreenUpdaterImpl::run()
 {
     screen_capturer_.reset(new ScreenCapturerGDI());
 
-    // Send the list of screens to the client.
-    sendScreenList();
-
     while (true)
     {
+        int count = screen_capturer_->screenCount();
+        if (screen_count_ != count)
+        {
+            QMutexLocker locker(&event_lock_);
+
+            screen_count_ = count;
+
+            // The list of screens has changed. We do not know which screen is removed or added.
+            // We display the full desktop and send a new list of screens.
+            screen_id_ = ScreenCapturer::kFullDesktopScreenId;
+
+            ScreenCapturer::ScreenList screens;
+            if (screen_capturer_->screenList(&screens))
+            {
+                message_.Clear();
+
+                for (const auto& screen : screens)
+                {
+                    proto::desktop::Screen* item = message_.mutable_screen_list()->add_screen();
+
+                    item->set_id(screen.id);
+                    item->set_title(screen.title.toStdString());
+                }
+
+                QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
+            }
+
+            screen_capturer_->selectScreen(screen_id_);
+        }
+
         capture_scheduler_->beginCapture();
 
         const DesktopFrame* screen_frame = screen_capturer_->captureFrame();
@@ -219,7 +227,7 @@ void ScreenUpdaterImpl::run()
                 message_.set_allocated_video_packet(video_packet.release());
                 message_.set_allocated_cursor_shape(cursor_shape.release());
 
-                QCoreApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
+                QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
             }
         }
 
@@ -228,56 +236,25 @@ void ScreenUpdaterImpl::run()
         std::chrono::milliseconds delay = capture_scheduler_->nextCaptureDelay();
 
         event_lock_.lock();
+        event_condition_.wait(&event_lock_, delay.count());
 
-        if (event_condition_.wait(&event_lock_, delay.count()))
+        switch (event_)
         {
-            switch (event_)
-            {
-                case Event::TERMINATE:
-                    event_lock_.unlock();
-                    return;
-
-                case Event::SELECT_SCREEN:
-                    screen_capturer_->selectScreen(screen_id_);
-                    break;
-
-                case Event::SCREEN_LIST_CHANGED:
-                {
-                    // The list of screens has changed. We do not know which screen is removed.
-                    // We display the full desktop and send a new list of screens.
-                    screen_id_ = ScreenCapturer::kFullDesktopScreenId;
-                    screen_capturer_->selectScreen(ScreenCapturer::kFullDesktopScreenId);
-                    sendScreenList();
-                }
+            case Event::NO_EVENT:
                 break;
 
-                default:
-                    break;
-            }
+            case Event::TERMINATE:
+                event_lock_.unlock();
+                return;
+
+            case Event::SELECT_SCREEN:
+                screen_capturer_->selectScreen(screen_id_);
+                break;
         }
 
         event_ = Event::NO_EVENT;
         event_lock_.unlock();
     }
-}
-
-void ScreenUpdaterImpl::sendScreenList()
-{
-    ScreenCapturer::ScreenList screens;
-    if (!screen_capturer_->screenList(&screens))
-        return;
-
-    message_.Clear();
-
-    for (const auto& screen : screens)
-    {
-        proto::desktop::Screen* item = message_.mutable_screen_list()->add_screen();
-
-        item->set_id(screen.id);
-        item->set_title(screen.title.toStdString());
-    }
-
-    QCoreApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));
 }
 
 //================================================================================================
@@ -293,10 +270,6 @@ ScreenUpdater::ScreenUpdater(QObject* parent)
 bool ScreenUpdater::start(const proto::desktop::Config& config)
 {
     impl_ = new ScreenUpdaterImpl(this);
-
-    connect(qApp, &QApplication::screenAdded, impl_, &ScreenUpdaterImpl::screenListChanged);
-    connect(qApp, &QApplication::screenRemoved, impl_, &ScreenUpdaterImpl::screenListChanged);
-
     return impl_->startUpdater(config);
 }
 

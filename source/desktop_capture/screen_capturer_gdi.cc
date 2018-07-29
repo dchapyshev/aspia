@@ -25,6 +25,11 @@
 
 namespace aspia {
 
+int ScreenCapturerGDI::screenCount()
+{
+    return ScreenCaptureUtils::screenCount();
+}
+
 bool ScreenCapturerGDI::screenList(ScreenList* screens)
 {
     return ScreenCaptureUtils::screenList(screens);
