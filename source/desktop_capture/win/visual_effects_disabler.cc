@@ -34,6 +34,7 @@ struct VisualEffectsState
     uint8_t selection_fade = 0;
     uint8_t listbox_smooth_scrolling = 0;
     uint8_t ui_effects = 0;
+    uint8_t client_area_animation = 0;
 };
 
 struct WallpaperState
@@ -142,6 +143,17 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     else
     {
         qWarningErrno("SystemParametersInfoW(SPI_GETUIEFFECTS) failed");
+    }
+
+    BOOL client_area_animation;
+    if (SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION, 0, &client_area_animation, 0))
+    {
+        state->client_area_animation |= (client_area_animation ? STATE_ENABLED : 0);
+        state->client_area_animation |= STATE_SAVED;
+    }
+    else
+    {
+        qWarningErrno("SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed");
     }
 
     return state;
@@ -264,6 +276,21 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         else
         {
             qWarningErrno("SystemParametersInfoW(SPI_SETUIEFFECTS) failed");
+        }
+    }
+
+    if (state->client_area_animation & STATE_CHANGE_ALLOWED)
+    {
+        if (SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION,
+                                  0,
+                                  reinterpret_cast<void*>(enable),
+                                  SPIF_SENDCHANGE))
+        {
+            state->client_area_animation |= STATE_CHANGED;
+        }
+        else
+        {
+            qWarningErrno("SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed");
         }
     }
 }
