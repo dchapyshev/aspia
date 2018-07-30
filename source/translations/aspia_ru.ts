@@ -1893,6 +1893,11 @@
         <translation>Установить</translation>
     </message>
     <message>
+        <location filename="../host/ui/host_config_dialog.cc" line="401"/>
+        <source>Current state: %1</source>
+        <translation>Текущее состояние: %1</translation>
+    </message>
+    <message>
         <location filename="../host/ui/host_config_dialog.cc" line="424"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>

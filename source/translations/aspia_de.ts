@@ -1886,6 +1886,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../host/ui/host_config_dialog.cc" line="401"/>
+        <source>Current state: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../host/ui/host_config_dialog.cc" line="424"/>
         <source>The service could not be installed.</source>
         <translation type="unfinished"></translation>

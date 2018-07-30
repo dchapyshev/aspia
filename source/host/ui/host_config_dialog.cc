@@ -398,7 +398,7 @@ void HostConfigDialog::reloadServiceStatus()
         ui.button_service_start_stop->setEnabled(false);
     }
 
-    ui.label_service_status->setText(QString("Current state: %1").arg(state));
+    ui.label_service_status->setText(tr("Current state: %1").arg(state));
 }
 
 bool HostConfigDialog::isServiceStarted()
