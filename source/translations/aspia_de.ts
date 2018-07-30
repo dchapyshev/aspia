@@ -508,27 +508,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="135"/>
+        <location filename="../client/ui/desktop_panel.ui" line="138"/>
+        <source>Monitor selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="164"/>
         <source>Automatic window size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="158"/>
+        <location filename="../client/ui/desktop_panel.ui" line="187"/>
         <source>Switch to full screen mode or back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="184"/>
+        <location filename="../client/ui/desktop_panel.ui" line="213"/>
+        <source>Enabling/disabling automatic scrolling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="242"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="207"/>
+        <location filename="../client/ui/desktop_panel.ui" line="265"/>
         <source>Send key sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="281"/>
+        <location filename="../client/ui/desktop_panel.ui" line="339"/>
         <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1236,12 +1246,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="157"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="161"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="164"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="168"/>
         <source>Session error: Canceled by the user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1249,42 +1259,42 @@
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="75"/>
+        <location filename="../client/client_session_desktop_view.cc" line="78"/>
         <source>Session error: Invalid message from host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="127"/>
+        <location filename="../client/client_session_desktop_view.cc" line="141"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="139"/>
+        <location filename="../client/client_session_desktop_view.cc" line="153"/>
         <source>Session error: Wrong video frame size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="146"/>
+        <location filename="../client/client_session_desktop_view.cc" line="160"/>
         <source>Session error: Wrong video frame position.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="157"/>
+        <location filename="../client/client_session_desktop_view.cc" line="171"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="163"/>
+        <location filename="../client/client_session_desktop_view.cc" line="177"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="183"/>
+        <location filename="../client/client_session_desktop_view.cc" line="202"/>
         <source>Session error: There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="190"/>
+        <location filename="../client/client_session_desktop_view.cc" line="209"/>
         <source>Session error: Canceled by the user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1524,12 +1534,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="180"/>
+        <location filename="../client/ui/desktop_window.cc" line="191"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="181"/>
+        <location filename="../client/ui/desktop_window.cc" line="192"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1816,7 +1826,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="230"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="235"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1832,7 +1842,7 @@
 <context>
     <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake_desktop.cc" line="163"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="156"/>
         <source>The session is temporarily unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1883,6 +1893,14 @@
     <message>
         <location filename="../console/open_address_book_dialog.cc" line="43"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>aspia::SelectScreenAction</name>
+    <message>
+        <location filename="../client/ui/select_screen_action.h" line="37"/>
+        <source>Full Desktop</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

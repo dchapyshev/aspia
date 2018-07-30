@@ -139,6 +139,7 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/select_screen_action.h
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/status_dialog.ui
