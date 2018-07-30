@@ -289,19 +289,9 @@
         <translation>Панель інструментів</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="173"/>
-        <source>&amp;New</source>
-        <translation>&amp;Створити</translation>
-    </message>
-    <message>
         <location filename="../console/console_window.ui" line="176"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="185"/>
-        <source>&amp;Open...</source>
-        <translation>&amp;Відкрити...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="188"/>
@@ -319,9 +309,19 @@
         <translation>Ctrl+S</translation>
     </message>
     <message>
+        <location filename="../console/console_window.ui" line="173"/>
+        <source>&amp;New address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="185"/>
+        <source>&amp;Open address book...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../console/console_window.ui" line="211"/>
-        <source>Save &amp;As...</source>
-        <translation>Зберегти &amp;як...</translation>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="214"/>

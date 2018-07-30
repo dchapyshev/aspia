@@ -283,19 +283,9 @@
         <translation>&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="173"/>
-        <source>&amp;New</source>
-        <translation>&amp;Nieuw</translation>
-    </message>
-    <message>
         <location filename="../console/console_window.ui" line="176"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="185"/>
-        <source>&amp;Open...</source>
-        <translation>&amp;Openen...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="188"/>
@@ -311,11 +301,6 @@
         <location filename="../console/console_window.ui" line="203"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+P</translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="211"/>
-        <source>Save &amp;As...</source>
-        <translation>Opslaan &amp;Als...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="214"/>
@@ -425,6 +410,21 @@
         <location filename="../console/console_window.ui" line="425"/>
         <source>Tool Bar</source>
         <translation>Werkbalk</translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="173"/>
+        <source>&amp;New address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="185"/>
+        <source>&amp;Open address book...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="211"/>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="436"/>

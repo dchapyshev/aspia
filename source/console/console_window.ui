@@ -170,7 +170,7 @@
      <normaloff>:/icon/document.png</normaloff>:/icon/document.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;New</string>
+    <string>&amp;New address book</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -182,7 +182,7 @@
      <normaloff>:/icon/open.png</normaloff>:/icon/open.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Open address book...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -208,7 +208,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Save &amp;As...</string>
+    <string>Save &amp;as...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+S</string>

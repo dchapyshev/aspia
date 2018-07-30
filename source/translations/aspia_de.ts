@@ -289,18 +289,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="173"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../console/console_window.ui" line="176"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="185"/>
-        <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -319,8 +309,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../console/console_window.ui" line="173"/>
+        <source>&amp;New address book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="185"/>
+        <source>&amp;Open address book...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../console/console_window.ui" line="211"/>
-        <source>Save &amp;As...</source>
+        <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -283,19 +283,9 @@
         <translation>&amp;Язык (Language)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.ui" line="173"/>
-        <source>&amp;New</source>
-        <translation>&amp;Новый</translation>
-    </message>
-    <message>
         <location filename="../console/console_window.ui" line="176"/>
         <source>Ctrl+N</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="185"/>
-        <source>&amp;Open...</source>
-        <translation>&amp;Открыть...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="188"/>
@@ -311,11 +301,6 @@
         <location filename="../console/console_window.ui" line="203"/>
         <source>Ctrl+S</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../console/console_window.ui" line="211"/>
-        <source>Save &amp;As...</source>
-        <translation>Сохранить &amp;как...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="214"/>
@@ -425,6 +410,21 @@
         <location filename="../console/console_window.ui" line="425"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="173"/>
+        <source>&amp;New address book</source>
+        <translation>&amp;Новая адресная книга</translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="185"/>
+        <source>&amp;Open address book...</source>
+        <translation>&amp;Открыть адресную книгу...</translation>
+    </message>
+    <message>
+        <location filename="../console/console_window.ui" line="211"/>
+        <source>Save &amp;as...</source>
+        <translation>&amp;Сохранить как...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="436"/>
