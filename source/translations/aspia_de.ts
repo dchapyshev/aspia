@@ -719,22 +719,37 @@
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="165"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="249"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="258"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="272"/>
-        <source>Add</source>
+        <location filename="../host/ui/host_config_dialog.ui" line="179"/>
+        <source>Add new user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="199"/>
+        <source>Edit user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="219"/>
+        <source>Delete user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="281"/>
-        <source>Modify</source>
+        <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="290"/>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="299"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>

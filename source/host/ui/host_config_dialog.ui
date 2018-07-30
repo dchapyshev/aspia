@@ -175,6 +175,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Add new user</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -192,6 +195,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Edit user</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -208,6 +214,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Delete user</string>
            </property>
            <property name="text">
             <string/>

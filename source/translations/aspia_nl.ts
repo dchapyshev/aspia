@@ -719,22 +719,37 @@
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="165"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="249"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="258"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="272"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="179"/>
+        <source>Add new user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="199"/>
+        <source>Edit user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="219"/>
+        <source>Delete user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="281"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="281"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="290"/>
         <source>Modify</source>
         <translation>Aanpassen</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="290"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="299"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
