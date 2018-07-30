@@ -401,7 +401,7 @@ void HostServer::stopNotifier()
 
     if (!notifier_process_.isNull())
     {
-        notifier_process_->kill();
+        notifier_process_->terminate();
         delete notifier_process_;
     }
 

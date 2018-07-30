@@ -699,23 +699,38 @@
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="95"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="179"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="81"/>
+        <source>Desktop Sessions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="87"/>
+        <source>Disable desktop effects when a remote user connects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="94"/>
+        <source>Disable desktop wallpaper when when a remote user connects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_config_dialog.ui" line="118"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="202"/>
         <source>Users</source>
         <translation>Користувачі</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="202"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="225"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="211"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="234"/>
         <source>Modify</source>
         <translation>Змінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="220"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="243"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
@@ -1799,34 +1814,34 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="155"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="203"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="167"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="217"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="156"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="168"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="179"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="191"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="182"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="211"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="194"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="225"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="198"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="212"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="212"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="226"/>
         <source>Could not restart the service.</source>
         <translation>Неможливо перезапустити сервіс.</translation>
     </message>
@@ -1834,7 +1849,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="235"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="269"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
     </message>

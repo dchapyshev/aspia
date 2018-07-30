@@ -43,6 +43,9 @@ public:
     void disableWallpaper();
     void restoreWallpaper();
 
+    bool isEffectsDisabled() const { return effects_state_ != nullptr; }
+    bool isWallpaperDisabled() const { return wallpaper_state_ != nullptr; }
+
 private:
     std::unique_ptr<VisualEffectsState> effects_state_;
     std::unique_ptr<WallpaperState> wallpaper_state_;

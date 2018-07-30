@@ -60,6 +60,16 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
         setConfigChanged(true);
     });
 
+    connect(ui.checkbox_disable_effects, &QCheckBox::toggled, [this](bool /* checked */)
+    {
+        setConfigChanged(true);
+    });
+
+    connect(ui.checkbox_disable_wallpaper, &QCheckBox::toggled, [this](bool /* checked */)
+    {
+        setConfigChanged(true);
+    });
+
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
             this, &HostConfigDialog::onUserContextMenu);
 
@@ -87,6 +97,8 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     reloadUserList();
 
     ui.spinbox_port->setValue(settings.tcpPort());
+    ui.checkbox_disable_effects->setChecked(settings.disableVisualEffects());
+    ui.checkbox_disable_wallpaper->setChecked(settings.disableWallpaper());
 
     setConfigChanged(false);
 }
@@ -190,6 +202,8 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         settings.setLocale(new_locale);
         settings.setTcpPort(ui.spinbox_port->value());
+        settings.setDisableVisualEffects(ui.checkbox_disable_effects->isChecked());
+        settings.setDisableWallpaper(ui.checkbox_disable_wallpaper->isChecked());
         settings.setUserList(user_list_);
 
         if (isServiceStarted())

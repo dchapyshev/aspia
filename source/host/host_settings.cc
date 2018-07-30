@@ -123,4 +123,32 @@ bool HostSettings::setUserList(const QList<User>& user_list)
     return true;
 }
 
+bool HostSettings::disableVisualEffects()
+{
+    return settings_.value(QStringLiteral("DisableVisualEffects"), true).toBool();
+}
+
+bool HostSettings::setDisableVisualEffects(bool disable)
+{
+    if (!settings_.isWritable())
+        return false;
+
+    settings_.setValue(QStringLiteral("DisableVisualEffects"), disable);
+    return true;
+}
+
+bool HostSettings::disableWallpaper()
+{
+    return settings_.value(QStringLiteral("DisableWallpaper"), true).toBool();
+}
+
+bool HostSettings::setDisableWallpaper(bool disable)
+{
+    if (!settings_.isWritable())
+        return false;
+
+    settings_.setValue(QStringLiteral("DisableWallpaper"), disable);
+    return true;
+}
+
 } // namespace aspia

@@ -26,13 +26,15 @@
 
 namespace aspia {
 
+class VisualEffectsDisabler;
+
 class HostNotifierWindow : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit HostNotifierWindow(QWidget* parent = nullptr);
-    ~HostNotifierWindow() = default;
+    ~HostNotifierWindow();
 
     void setChannelId(const QString& channel_id);
 
@@ -68,6 +70,10 @@ private:
 
     QPointer<HostNotifier> notifier_;
     QString channel_id_;
+
+#if defined(Q_OS_WIN)
+    std::unique_ptr<VisualEffectsDisabler> effects_disabler_;
+#endif // defined(Q_OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
 };

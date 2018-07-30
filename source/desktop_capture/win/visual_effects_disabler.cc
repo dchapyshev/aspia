@@ -313,7 +313,14 @@ void VisualEffectsDisabler::disableWallpaper()
     {
         // If the string is empty, then the desktop wallpaper is not installed.
         if (!wallpaper_state_->path[0])
+        {
             wallpaper_state_.reset();
+        }
+        else
+        {
+            // We do not check the return value. For SPI_SETDESKWALLPAPER, always returns TRUE.
+            SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, L"", SPIF_SENDCHANGE);
+        }
     }
 }
 
