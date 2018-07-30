@@ -86,7 +86,7 @@ private:
     LocaleLoader locale_loader_;
     QList<Client*> client_list_;
 
-    Q_DISABLE_COPY(ConsoleWindow)
+    DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
 };
 
 } // namespace aspia

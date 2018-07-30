@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QScopedPointer>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class HostProcessImpl;
@@ -90,7 +92,7 @@ private:
 
     QScopedPointer<HostProcessImpl> impl_;
 
-    Q_DISABLE_COPY(HostProcess)
+    DISALLOW_COPY_AND_ASSIGN(HostProcess);
 };
 
 } // namespace aspia

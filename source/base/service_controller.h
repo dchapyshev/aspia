@@ -60,7 +60,7 @@ private:
     ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    Q_DISABLE_COPY(ServiceController)
+    DISALLOW_COPY_AND_ASSIGN(ServiceController);
 };
 
 } // namespace aspia

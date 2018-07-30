@@ -89,7 +89,7 @@ private:
 
     QSet<uint32_t> pressed_keys_;
 
-    Q_DISABLE_COPY(DesktopWidget)
+    DISALLOW_COPY_AND_ASSIGN(DesktopWidget);
 };
 
 } // namespace aspia

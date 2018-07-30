@@ -52,7 +52,7 @@ public:
 
 private:
     proto::desktop::Screen screen_;
-    Q_DISABLE_COPY(ScreenAction)
+    DISALLOW_COPY_AND_ASSIGN(ScreenAction);
 };
 
 } // namespace

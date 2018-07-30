@@ -21,6 +21,8 @@
 
 #include <QByteArray>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class DataEncryptor
@@ -43,7 +45,7 @@ public:
                         QByteArray* decrypted_data);
 
 private:
-    Q_DISABLE_COPY(DataEncryptor)
+    DISALLOW_COPY_AND_ASSIGN(DataEncryptor);
 };
 
 } // namespace aspia

@@ -27,6 +27,7 @@ extern "C" {
 
 } // extern "C"
 
+#include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_decoder.h"
 
@@ -47,7 +48,7 @@ private:
 
     ScopedVpxCodec codec_;
 
-    Q_DISABLE_COPY(VideoDecoderVPX)
+    DISALLOW_COPY_AND_ASSIGN(VideoDecoderVPX);
 };
 
 } // namespace aspia

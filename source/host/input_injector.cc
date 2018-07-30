@@ -23,8 +23,7 @@
 
 #include <set>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
 #include <sas.h>
 
 #include "base/errno_logging.h"
@@ -101,7 +100,7 @@ private:
     QPoint prev_mouse_pos_;
     uint32_t prev_mouse_button_mask_ = 0;
 
-    Q_DISABLE_COPY(InputInjectorImpl)
+    DISALLOW_COPY_AND_ASSIGN(InputInjectorImpl);
 };
 
 InputInjectorImpl::~InputInjectorImpl()

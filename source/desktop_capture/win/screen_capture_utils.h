@@ -23,6 +23,7 @@
 #include <QString>
 #include <QVector>
 
+#include "base/macros_magic.h"
 #include "desktop_capture/screen_capturer.h"
 
 namespace aspia {
@@ -53,7 +54,7 @@ public:
     static int screenCount();
 
 private:
-    Q_DISABLE_COPY(ScreenCaptureUtils)
+    DISALLOW_COPY_AND_ASSIGN(ScreenCaptureUtils);
 };
 
 } // namespace aspia

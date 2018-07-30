@@ -21,6 +21,7 @@
 
 #include <QTreeWidget>
 
+#include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -47,7 +48,7 @@ private:
     qint64 size_ = 0;
     time_t last_modified_ = 0;
 
-    Q_DISABLE_COPY(FileItem)
+    DISALLOW_COPY_AND_ASSIGN(FileItem);
 };
 
 } // namespace aspia

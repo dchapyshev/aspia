@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H_
 #define ASPIA_CLIENT__UI__FILE_MANAGER_WINDOW_H_
 
+#include "base/macros_magic.h"
 #include "client/connect_data.h"
 #include "ui_file_manager_window.h"
 
@@ -57,7 +58,7 @@ private:
 
     Ui::FileManagerWindow ui;
 
-    Q_DISABLE_COPY(FileManagerWindow)
+    DISALLOW_COPY_AND_ASSIGN(FileManagerWindow);
 };
 
 } // namespace aspia

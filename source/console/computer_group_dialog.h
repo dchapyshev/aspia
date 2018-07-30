@@ -48,7 +48,7 @@ private:
     const Mode mode_;
     proto::address_book::ComputerGroup* computer_group_;
 
-    Q_DISABLE_COPY(ComputerGroupDialog)
+    DISALLOW_COPY_AND_ASSIGN(ComputerGroupDialog);
 };
 
 } // namespace aspia

@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
 class QScreen;
@@ -51,7 +52,7 @@ protected:
 private:
     ScreenUpdaterImpl* impl_;
 
-    Q_DISABLE_COPY(ScreenUpdater)
+    DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };
 
 } // namespace aspia

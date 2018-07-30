@@ -22,6 +22,8 @@
 #include <QHash>
 #include <QStringList>
 
+#include "base/macros_magic.h"
+
 class QTranslator;
 
 namespace aspia {
@@ -46,7 +48,7 @@ private:
     QHash<QString, QStringList> locale_list_;
     QList<QTranslator*> translator_list_;
 
-    Q_DISABLE_COPY(LocaleLoader)
+    DISALLOW_COPY_AND_ASSIGN(LocaleLoader);
 };
 
 } // namespace aspia

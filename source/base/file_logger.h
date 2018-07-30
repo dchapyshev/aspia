@@ -22,6 +22,8 @@
 #include <QFile>
 #include <QScopedPointer>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class FileLogger
@@ -39,7 +41,7 @@ private:
 
     static QScopedPointer<QFile> file_;
 
-    Q_DISABLE_COPY(FileLogger);
+    DISALLOW_COPY_AND_ASSIGN(FileLogger);
 };
 
 } // namespace aspia

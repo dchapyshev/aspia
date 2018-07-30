@@ -19,10 +19,11 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_WIN_H_
 #define ASPIA_DESKTOP_CAPTURE__CURSOR_CAPTURER_WIN_H_
 
-#include "desktop_capture/cursor_capturer.h"
-
 #include <qt_windows.h>
 #include <memory>
+
+#include "base/macros_magic.h"
+#include "desktop_capture/cursor_capturer.h"
 
 namespace aspia {
 
@@ -40,7 +41,7 @@ private:
     std::unique_ptr<ScopedGetDC> desktop_dc_;
     CURSORINFO prev_cursor_info_;
 
-    Q_DISABLE_COPY(CursorCapturerWin)
+    DISALLOW_COPY_AND_ASSIGN(CursorCapturerWin);
 };
 
 } // namespace aspia

@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 #define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 #include "ui_desktop_config_dialog.h"
 
@@ -49,7 +50,7 @@ private:
     uint32_t supported_video_encodings_;
     uint32_t supported_features_;
 
-    Q_DISABLE_COPY(DesktopConfigDialog)
+    DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };
 
 } // namespace aspia

@@ -56,7 +56,7 @@ private:
     std::unique_ptr<SystemInfoWindow> window_;
     std::list<std::unique_ptr<SystemInfoRequest>> requests_;
 
-    Q_DISABLE_COPY(ClientSessionSystemInfo)
+    DISALLOW_COPY_AND_ASSIGN(ClientSessionSystemInfo);
 };
 
 } // namespace aspia

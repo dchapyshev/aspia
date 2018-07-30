@@ -46,7 +46,7 @@ private:
     QScopedPointer<LocaleLoader> locale_loader_;
     QPointer<HostServer> server_;
 
-    Q_DISABLE_COPY(HostService)
+    DISALLOW_COPY_AND_ASSIGN(HostService);
 };
 
 } // namespace aspia

@@ -21,6 +21,7 @@
 
 #include <QTreeWidget>
 
+#include "base/macros_magic.h"
 #include "host/user.h"
 
 namespace aspia {
@@ -38,7 +39,7 @@ private:
     User* user_;
     int index_;
 
-    Q_DISABLE_COPY(UserTreeItem)
+    DISALLOW_COPY_AND_ASSIGN(UserTreeItem);
 };
 
 } // namespace aspia

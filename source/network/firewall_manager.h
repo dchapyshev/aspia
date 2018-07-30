@@ -24,6 +24,8 @@
 #include <wrl/client.h>
 #include <netfw.h>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class FirewallManager
@@ -65,7 +67,7 @@ private:
 
     QString application_path_;
 
-    Q_DISABLE_COPY(FirewallManager)
+    DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };
 
 } // namespace aspia

@@ -55,7 +55,7 @@ private:
     LocaleLoader locale_loader_;
     QList<User> user_list_;
 
-    Q_DISABLE_COPY(HostConfigDialog)
+    DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
 };
 
 } // namespace aspia

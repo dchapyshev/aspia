@@ -21,6 +21,7 @@
 
 #include <QTreeWidget>
 
+#include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 
 namespace aspia {
@@ -45,7 +46,7 @@ private:
     proto::address_book::Computer* computer_;
     ComputerGroupItem* parent_group_item_;
 
-    Q_DISABLE_COPY(ComputerItem)
+    DISALLOW_COPY_AND_ASSIGN(ComputerItem);
 };
 
 } // namespace aspia

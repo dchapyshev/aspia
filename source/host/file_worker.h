@@ -59,7 +59,7 @@ private:
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
 
-    Q_DISABLE_COPY(FileWorker)
+    DISALLOW_COPY_AND_ASSIGN(FileWorker);
 };
 
 } // namespace aspia

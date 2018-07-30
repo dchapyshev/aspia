@@ -18,6 +18,8 @@
 
 #include "codec/pixel_translator.h"
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 namespace {
@@ -131,7 +133,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    Q_DISABLE_COPY(PixelTranslatorT)
+    DISALLOW_COPY_AND_ASSIGN(PixelTranslatorT);
 };
 
 template<int kSourceBpp, int kTargetBpp>
@@ -231,7 +233,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    Q_DISABLE_COPY(PixelTranslatorFrom8_16bppT)
+    DISALLOW_COPY_AND_ASSIGN(PixelTranslatorFrom8_16bppT);
 };
 
 } // namespace

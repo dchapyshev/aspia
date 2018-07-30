@@ -21,6 +21,7 @@
 
 #include <QPointer>
 
+#include "base/macros_magic.h"
 #include "host/user.h"
 #include "protocol/authorization.pb.h"
 
@@ -84,7 +85,7 @@ private:
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     proto::auth::Status status_ = proto::auth::STATUS_ACCESS_DENIED;
 
-    Q_DISABLE_COPY(HostUserAuthorizer)
+    DISALLOW_COPY_AND_ASSIGN(HostUserAuthorizer);
 };
 
 } // namespace aspia

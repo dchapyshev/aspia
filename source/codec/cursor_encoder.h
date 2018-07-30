@@ -43,7 +43,7 @@ private:
     CompressorZLIB compressor_;
     MouseCursorCache cache_;
 
-    Q_DISABLE_COPY(CursorEncoder)
+    DISALLOW_COPY_AND_ASSIGN(CursorEncoder);
 };
 
 } // namespace aspia

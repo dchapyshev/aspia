@@ -19,6 +19,7 @@
 #ifndef ASPIA_HOST__UI__USER_DIALOG_H_
 #define ASPIA_HOST__UI__USER_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "host/user.h"
 #include "ui_user_dialog.h"
 
@@ -49,7 +50,7 @@ private:
 
     bool password_changed_ = true;
 
-    Q_DISABLE_COPY(UserDialog)
+    DISALLOW_COPY_AND_ASSIGN(UserDialog);
 };
 
 } // namespace aspia

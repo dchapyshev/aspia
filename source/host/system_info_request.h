@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QString>
 
+#include "base/macros_magic.h"
 #include "protocol/system_info_session.pb.h"
 
 namespace aspia {
@@ -45,7 +46,7 @@ private:
 
     proto::system_info::Request request_;
 
-    Q_DISABLE_COPY(SystemInfoRequest)
+    DISALLOW_COPY_AND_ASSIGN(SystemInfoRequest);
 };
 
 } // namespace aspia

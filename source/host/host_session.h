@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QPointer>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class IpcChannel;
@@ -56,7 +58,7 @@ private:
     QString channel_id_;
     QPointer<IpcChannel> ipc_channel_;
 
-    Q_DISABLE_COPY(HostSession)
+    DISALLOW_COPY_AND_ASSIGN(HostSession);
 };
 
 } // namespace aspia

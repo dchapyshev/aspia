@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__COMPUTER_FACTORY_H_
 #define ASPIA_CLIENT__COMPUTER_FACTORY_H_
 
+#include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 
 namespace aspia {
@@ -35,7 +36,7 @@ public:
     static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
 
 private:
-    Q_DISABLE_COPY(ComputerFactory)
+    DISALLOW_COPY_AND_ASSIGN(ComputerFactory);
 };
 
 } // namespace aspia

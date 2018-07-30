@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__KEYCODE_CONVERTER_H_
 #define ASPIA_BASE__KEYCODE_CONVERTER_H_
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 // This structure is used to define the keycode mapping table.
@@ -61,7 +63,7 @@ public:
     static uint32_t qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
-    Q_DISABLE_COPY(KeycodeConverter)
+    DISALLOW_COPY_AND_ASSIGN(KeycodeConverter);
 };
 
 } // namespace aspia

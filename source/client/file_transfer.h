@@ -130,6 +130,8 @@ private:
 
     int total_percentage_ = 0;
     int task_percentage_ = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FileTransfer::Actions)

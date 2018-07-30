@@ -19,6 +19,8 @@
 #ifndef ASPIA_BASE__TYPED_BUFFER_H_
 #define ASPIA_BASE__TYPED_BUFFER_H_
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 //
@@ -107,7 +109,7 @@ private:
     // Length of the owned buffer in bytes.
     size_t length_;
 
-    Q_DISABLE_COPY(TypedBuffer)
+    DISALLOW_COPY_AND_ASSIGN(TypedBuffer);
 };
 
 } // namespace aspia

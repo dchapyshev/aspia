@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "base/macros_magic.h"
 #include "protocol/authorization.pb.h"
 
 namespace aspia {
@@ -65,7 +66,7 @@ private:
     QString username_;
     QString password_;
 
-    Q_DISABLE_COPY(ClientUserAuthorizer)
+    DISALLOW_COPY_AND_ASSIGN(ClientUserAuthorizer);
 };
 
 } // namespace aspia

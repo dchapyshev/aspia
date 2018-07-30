@@ -23,6 +23,7 @@
 #include <QPointer>
 #include <QString>
 
+#include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -54,7 +55,7 @@ private:
 
     proto::file_transfer::Request request_;
 
-    Q_DISABLE_COPY(FileRequest)
+    DISALLOW_COPY_AND_ASSIGN(FileRequest);
 };
 
 } // namespace aspia

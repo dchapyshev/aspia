@@ -19,8 +19,9 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_LOCAL_H_
 #define ASPIA_BASE__WIN__SCOPED_LOCAL_H_
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
@@ -96,7 +97,7 @@ private:
 
     T local_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedLocal)
+    DISALLOW_COPY_AND_ASSIGN(ScopedLocal);
 };
 
 } // namespace aspia

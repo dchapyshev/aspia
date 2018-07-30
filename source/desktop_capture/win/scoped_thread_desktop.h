@@ -53,7 +53,7 @@ private:
     // The desktop handle assigned to the calling thread at creation.
     Desktop initial_;
 
-    Q_DISABLE_COPY(ScopedThreadDesktop)
+    DISALLOW_COPY_AND_ASSIGN(ScopedThreadDesktop);
 };
 
 } // namespace aspia

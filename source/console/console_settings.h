@@ -21,6 +21,7 @@
 
 #include <QSettings>
 
+#include "base/macros_magic.h"
 #include "protocol/authorization.pb.h"
 
 namespace aspia {
@@ -56,7 +57,7 @@ public:
 private:
     QSettings settings_;
 
-    Q_DISABLE_COPY(ConsoleSettings)
+    DISALLOW_COPY_AND_ASSIGN(ConsoleSettings);
 };
 
 } // namespace aspia

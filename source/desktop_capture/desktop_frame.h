@@ -23,6 +23,7 @@
 #include <QPoint>
 #include <QSize>
 
+#include "base/macros_magic.h"
 #include "desktop_capture/pixel_format.h"
 
 namespace aspia {
@@ -62,7 +63,7 @@ private:
     QRegion updated_region_;
     QPoint top_left_;
 
-    Q_DISABLE_COPY(DesktopFrame)
+    DISALLOW_COPY_AND_ASSIGN(DesktopFrame);
 };
 
 } // namespace aspia

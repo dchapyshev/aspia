@@ -51,7 +51,7 @@ public:
 
     QPointer<QWinEventNotifier> finish_notifier_;
 
-    Q_DISABLE_COPY(HostProcessImpl)
+    DISALLOW_COPY_AND_ASSIGN(HostProcessImpl);
 };
 
 } // namespace aspia

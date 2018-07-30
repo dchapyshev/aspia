@@ -56,7 +56,7 @@ private:
 
     ScreenCaptureFrameQueue queue_;
 
-    Q_DISABLE_COPY(ScreenCapturerGDI)
+    DISALLOW_COPY_AND_ASSIGN(ScreenCapturerGDI);
 };
 
 } // namespace aspia

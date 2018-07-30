@@ -19,6 +19,7 @@
 #ifndef ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_
 #define ASPIA_SYSTEM_INFO__UI__DMI_FORM_H_
 
+#include "base/macros_magic.h"
 #include "system_info/protocol/dmi.pb.h"
 #include "system_info/ui/form.h"
 #include "ui_dmi_form.h"
@@ -42,7 +43,7 @@ private:
     Ui::DmiForm ui;
     std::unique_ptr<system_info::dmi::Dmi> dmi_;
 
-    Q_DISABLE_COPY(DmiForm)
+    DISALLOW_COPY_AND_ASSIGN(DmiForm);
 };
 
 } // namespace aspia

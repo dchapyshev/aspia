@@ -19,6 +19,7 @@
 #ifndef ASPIA_CONSOLE__ABOUT_DIALOG_H_
 #define ASPIA_CONSOLE__ABOUT_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "ui_about_dialog.h"
 
 namespace aspia {
@@ -34,7 +35,7 @@ public:
 private:
     Ui::AboutDialog ui;
 
-    Q_DISABLE_COPY(AboutDialog)
+    DISALLOW_COPY_AND_ASSIGN(AboutDialog);
 };
 
 } // namespace aspia

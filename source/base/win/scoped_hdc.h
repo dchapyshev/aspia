@@ -19,8 +19,9 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_HDC_H_
 #define ASPIA_BASE__WIN__SCOPED_HDC_H_
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
@@ -61,7 +62,7 @@ private:
     HWND hwnd_;
     HDC hdc_;
 
-    Q_DISABLE_COPY(ScopedGetDC);
+    DISALLOW_COPY_AND_ASSIGN(ScopedGetDC);
 };
 
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from
@@ -98,7 +99,7 @@ private:
 
     HDC hdc_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedCreateDC)
+    DISALLOW_COPY_AND_ASSIGN(ScopedCreateDC);
 };
 
 } // namespace aspia

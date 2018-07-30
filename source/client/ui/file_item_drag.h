@@ -37,7 +37,7 @@ public:
     void setFileList(const QList<FileTransfer::Item>& file_list);
 
 private:
-    Q_DISABLE_COPY(FileItemDrag)
+    DISALLOW_COPY_AND_ASSIGN(FileItemDrag);
 };
 
 } // namespace aspia

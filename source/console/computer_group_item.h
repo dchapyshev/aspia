@@ -51,7 +51,7 @@ private:
 
     proto::address_book::ComputerGroup* computer_group_;
 
-    Q_DISABLE_COPY(ComputerGroupItem)
+    DISALLOW_COPY_AND_ASSIGN(ComputerGroupItem);
 };
 
 } // namespace aspia

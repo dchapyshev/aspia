@@ -21,6 +21,8 @@
 
 #include <memory>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class DesktopFrame;
@@ -66,7 +68,7 @@ private:
     static const int kQueueLength = 2;
     std::unique_ptr<DesktopFrame> frames_[kQueueLength];
 
-    Q_DISABLE_COPY(ScreenCaptureFrameQueue)
+    DISALLOW_COPY_AND_ASSIGN(ScreenCaptureFrameQueue);
 };
 
 } // namespace aspia

@@ -21,6 +21,8 @@
 
 #include <wtsapi32.h>
 
+#include "base/macros_magic.h"
+
 template <typename T>
 class ScopedWtsMemory
 {
@@ -80,7 +82,7 @@ private:
 
     T memory_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedWtsMemory)
+    DISALLOW_COPY_AND_ASSIGN(ScopedWtsMemory);
 };
 
 #endif // ASPIA_BASE__WIN__SCOPED_WTS_MEMORY_H_

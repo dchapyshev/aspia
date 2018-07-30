@@ -19,6 +19,7 @@
 #ifndef ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
 #define ASPIA_CONSOLE__ADDRESS_BOOK_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 #include "ui_address_book_dialog.h"
 
@@ -58,7 +59,7 @@ private:
     bool password_changed_ = true;
     bool value_reverting_ = false;
 
-    Q_DISABLE_COPY(AddressBookDialog)
+    DISALLOW_COPY_AND_ASSIGN(AddressBookDialog);
 };
 
 } // namespace aspia

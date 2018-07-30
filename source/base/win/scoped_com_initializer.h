@@ -25,6 +25,8 @@
 #include <QDebug>
 #endif
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 // Initializes COM in the constructor (STA or MTA), and uninitializes COM in the
@@ -94,7 +96,7 @@ private:
     DWORD thread_id_;
 #endif
 
-    Q_DISABLE_COPY(ScopedCOMInitializer)
+    DISALLOW_COPY_AND_ASSIGN(ScopedCOMInitializer);
 };
 
 }  // namespace aspia

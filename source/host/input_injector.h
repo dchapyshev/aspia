@@ -26,6 +26,7 @@
 #include <mutex>
 #include <variant>
 
+#include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
@@ -53,7 +54,7 @@ private:
     std::queue<InputEvent> incoming_input_queue_;
     bool terminate_ = false;
 
-    Q_DISABLE_COPY(InputInjector)
+    DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };
 
 } // namespace aspia

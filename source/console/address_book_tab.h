@@ -19,6 +19,7 @@
 #ifndef ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
 #define ASPIA_CONSOLE__ADDRESS_BOOK_TAB_H_
 
+#include "base/macros_magic.h"
 #include "console/console_tab.h"
 #include "protocol/address_book.pb.h"
 #include "ui_address_book_tab.h"
@@ -102,7 +103,7 @@ private:
 
     bool is_changed_ = false;
 
-    Q_DISABLE_COPY(AddressBookTab)
+    DISALLOW_COPY_AND_ASSIGN(AddressBookTab);
 };
 
 } // namespace aspia

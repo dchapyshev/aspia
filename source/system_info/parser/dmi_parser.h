@@ -19,6 +19,7 @@
 #ifndef ASPIA_SYSTEM_INFO__UI__DMI_PARSER_H_
 #define ASPIA_SYSTEM_INFO__UI__DMI_PARSER_H_
 
+#include "base/macros_magic.h"
 #include "system_info/parser/parser.h"
 #include "system_info/protocol/dmi.pb.h"
 
@@ -48,7 +49,7 @@ protected:
 private:
     std::unique_ptr<system_info::dmi::Dmi> dmi_;
 
-    Q_DISABLE_COPY(DmiParser)
+    DISALLOW_COPY_AND_ASSIGN(DmiParser);
 };
 
 } // namespace aspia

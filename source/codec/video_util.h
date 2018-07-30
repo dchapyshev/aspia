@@ -21,6 +21,7 @@
 
 #include <QRect>
 
+#include "base/macros_magic.h"
 #include "desktop_capture/pixel_format.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -42,7 +43,7 @@ public:
     static void toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to);
 
 private:
-    Q_DISABLE_COPY(VideoUtil)
+    DISALLOW_COPY_AND_ASSIGN(VideoUtil);
 };
 
 } // namespace aspia

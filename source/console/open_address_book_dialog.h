@@ -19,6 +19,7 @@
 #ifndef ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H_
 #define ASPIA_CONSOLE__OPEN_ADDRESS_BOOK_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 #include "ui_open_address_book_dialog.h"
 
@@ -41,7 +42,7 @@ private slots:
 private:
     Ui::OpenAddressBookDialog ui;
 
-    Q_DISABLE_COPY(OpenAddressBookDialog)
+    DISALLOW_COPY_AND_ASSIGN(OpenAddressBookDialog);
 };
 
 } // namespace aspia

@@ -21,6 +21,8 @@
 
 #include <QByteArray>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class Random
@@ -30,7 +32,7 @@ public:
     static uint32_t generateNumber();
 
 private:
-    Q_DISABLE_COPY(Random)
+    DISALLOW_COPY_AND_ASSIGN(Random);
 };
 
 } // namespace aspia

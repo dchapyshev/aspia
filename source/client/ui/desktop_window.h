@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QWidget>
 
+#include "base/macros_magic.h"
 #include "client/connect_data.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -95,7 +96,7 @@ private:
 
     QPoint screen_top_left_;
 
-    Q_DISABLE_COPY(DesktopWindow)
+    DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
 };
 
 } // namespace aspia

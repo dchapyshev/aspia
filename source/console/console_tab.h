@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class ConsoleTab : public QWidget
@@ -38,7 +40,7 @@ public:
 private:
     const Type type_;
 
-    Q_DISABLE_COPY(ConsoleTab)
+    DISALLOW_COPY_AND_ASSIGN(ConsoleTab);
 };
 
 } // namespace aspia

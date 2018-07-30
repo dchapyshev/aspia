@@ -19,8 +19,9 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
 #define ASPIA_DESKTOP_CAPTURE__WIN__DESKTOP_H_
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
@@ -83,7 +84,7 @@ private:
     // True if |desktop_| must be closed on teardown.
     bool own_ = false;
 
-    Q_DISABLE_COPY(Desktop)
+    DISALLOW_COPY_AND_ASSIGN(Desktop);
 };
 
 } // namespace aspia

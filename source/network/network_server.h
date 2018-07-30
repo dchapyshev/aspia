@@ -23,6 +23,8 @@
 #include <QList>
 #include <QTcpServer>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class NetworkChannel;
@@ -58,7 +60,7 @@ private:
     // Contains a list of channels that are ready for use.
     QList<QPointer<NetworkChannel>> ready_channels_;
 
-    Q_DISABLE_COPY(NetworkServer)
+    DISALLOW_COPY_AND_ASSIGN(NetworkServer);
 };
 
 } // namespace aspia

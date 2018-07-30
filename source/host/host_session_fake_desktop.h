@@ -19,6 +19,7 @@
 #ifndef ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H_
 #define ASPIA_HOST__HOST_SESSION_FAKE_DESKTOP_H_
 
+#include "base/macros_magic.h"
 #include "host/host_session_fake.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -45,7 +46,7 @@ private:
     VideoEncoder* createEncoder(const proto::desktop::Config& config);
     std::unique_ptr<DesktopFrame> createFrame();
 
-    Q_DISABLE_COPY(HostSessionFakeDesktop)
+    DISALLOW_COPY_AND_ASSIGN(HostSessionFakeDesktop);
 };
 
 } // namespace aspia

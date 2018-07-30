@@ -23,6 +23,8 @@
 #include <QMutex>
 #include <QWaitCondition>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class SimpleEventDispatcher : public QAbstractEventDispatcher
@@ -81,7 +83,7 @@ private:
     bool awaken_;
     bool interrupt_;
 
-    Q_DISABLE_COPY(SimpleEventDispatcher)
+    DISALLOW_COPY_AND_ASSIGN(SimpleEventDispatcher);
 };
 
 } // namespace aspia

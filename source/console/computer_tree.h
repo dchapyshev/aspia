@@ -21,6 +21,8 @@
 
 #include <QTreeWidget>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class ComputerTree : public QTreeWidget
@@ -43,7 +45,7 @@ protected:
 private:
     QPoint start_pos_;
 
-    Q_DISABLE_COPY(ComputerTree)
+    DISALLOW_COPY_AND_ASSIGN(ComputerTree);
 };
 
 } // namespace aspia

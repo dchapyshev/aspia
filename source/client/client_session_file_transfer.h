@@ -61,7 +61,7 @@ private:
 
     QQueue<QPointer<FileRequest>> requests_;
 
-    Q_DISABLE_COPY(ClientSessionFileTransfer)
+    DISALLOW_COPY_AND_ASSIGN(ClientSessionFileTransfer);
 };
 
 } // namespace aspia

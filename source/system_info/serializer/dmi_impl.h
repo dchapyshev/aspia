@@ -21,6 +21,8 @@
 
 #include <memory>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class DmiTable;
@@ -57,7 +59,7 @@ private:
 
     mutable std::unique_ptr<DmiTable> current_table_;
 
-    Q_DISABLE_COPY(DmiTableEnumerator)
+    DISALLOW_COPY_AND_ASSIGN(DmiTableEnumerator);
 };
 
 class DmiTable

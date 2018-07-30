@@ -19,6 +19,7 @@
 #ifndef ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H_
 #define ASPIA_SYSTEM_INFO__SERIALIZER__DMI_SERIALIZER_H_
 
+#include "base/macros_magic.h"
 #include "system_info/serializer/serializer.h"
 
 namespace aspia {
@@ -37,7 +38,7 @@ protected:
     DmiSerializer(QObject* parent, const QString& uuid);
 
 private:
-    Q_DISABLE_COPY(DmiSerializer)
+    DISALLOW_COPY_AND_ASSIGN(DmiSerializer);
 };
 
 } // namespace aspia

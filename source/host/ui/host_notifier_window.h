@@ -69,7 +69,7 @@ private:
     QPointer<HostNotifier> notifier_;
     QString channel_id_;
 
-    Q_DISABLE_COPY(HostNotifierWindow)
+    DISALLOW_COPY_AND_ASSIGN(HostNotifierWindow);
 };
 
 } // namespace aspia

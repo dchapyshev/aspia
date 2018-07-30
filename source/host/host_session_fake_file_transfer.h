@@ -19,6 +19,7 @@
 #ifndef ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H_
 #define ASPIA_HOST__HOST_SESSION_FAKE_FILE_TRANSFER_H_
 
+#include "base/macros_magic.h"
 #include "host/host_session_fake.h"
 
 namespace aspia {
@@ -38,7 +39,7 @@ public slots:
     void onMessageReceived(const QByteArray& buffer) override;
 
 private:
-    Q_DISABLE_COPY(HostSessionFakeFileTransfer)
+    DISALLOW_COPY_AND_ASSIGN(HostSessionFakeFileTransfer);
 };
 
 } // namespace aspia

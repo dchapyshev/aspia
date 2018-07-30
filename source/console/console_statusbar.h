@@ -21,6 +21,7 @@
 
 #include <QStatusBar>
 
+#include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 
 namespace aspia {
@@ -37,7 +38,7 @@ public:
     void clear();
 
 private:
-    Q_DISABLE_COPY(ConsoleStatusBar)
+    DISALLOW_COPY_AND_ASSIGN(ConsoleStatusBar);
 };
 
 } // namespace aspia

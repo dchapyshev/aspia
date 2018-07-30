@@ -21,6 +21,8 @@
 
 #include <QPointer>
 
+#include "base/macros_magic.h"
+
 class QLocalServer;
 
 namespace aspia {
@@ -53,7 +55,7 @@ private slots:
 private:
     QPointer<QLocalServer> server_;
 
-    Q_DISABLE_COPY(IpcServer)
+    DISALLOW_COPY_AND_ASSIGN(IpcServer);
 };
 
 } // namespace aspia

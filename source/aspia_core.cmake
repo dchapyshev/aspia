@@ -37,6 +37,7 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/locale_loader.cc
     ${PROJECT_SOURCE_DIR}/base/locale_loader.h
+    ${PROJECT_SOURCE_DIR}/base/macros_magic.h
     ${PROJECT_SOURCE_DIR}/base/message_serialization.h
     ${PROJECT_SOURCE_DIR}/base/service.h
     ${PROJECT_SOURCE_DIR}/base/service_controller.cc

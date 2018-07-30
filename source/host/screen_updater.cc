@@ -52,7 +52,7 @@ public:
 
 private:
     QByteArray buffer_;
-    Q_DISABLE_COPY(MessageEvent)
+    DISALLOW_COPY_AND_ASSIGN(MessageEvent);
 };
 
 class ScreenUpdaterImpl : public QThread
@@ -89,7 +89,7 @@ private:
 
     proto::desktop::HostToClient message_;
 
-    Q_DISABLE_COPY(ScreenUpdaterImpl)
+    DISALLOW_COPY_AND_ASSIGN(ScreenUpdaterImpl);
 };
 
 //================================================================================================

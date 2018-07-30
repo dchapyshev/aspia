@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
@@ -47,7 +48,7 @@ private:
     std::string last_mime_type_;
     std::string last_data_;
 
-    Q_DISABLE_COPY(Clipboard)
+    DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
 
 } // namespace aspia

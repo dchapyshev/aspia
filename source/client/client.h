@@ -55,7 +55,7 @@ private:
     QPointer<ClientUserAuthorizer> authorizer_;
     QPointer<ClientSession> session_;
 
-    Q_DISABLE_COPY(Client)
+    DISALLOW_COPY_AND_ASSIGN(Client);
 };
 
 } // namespace aspia

@@ -23,6 +23,7 @@
 #include <QPointer>
 #include <memory>
 
+#include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -45,7 +46,7 @@ private:
     qint64 file_size_ = 0;
     qint64 left_size_ = 0;
 
-    Q_DISABLE_COPY(FileDepacketizer)
+    DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };
 
 } // namespace aspia

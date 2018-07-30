@@ -21,6 +21,7 @@
 
 #include <zlib-ng.h>
 
+#include "base/macros_magic.h"
 #include "codec/decompressor.h"
 
 namespace aspia {
@@ -44,7 +45,7 @@ public:
 private:
     zng_stream stream_;
 
-    Q_DISABLE_COPY(DecompressorZLIB)
+    DISALLOW_COPY_AND_ASSIGN(DecompressorZLIB);
 };
 
 } // namespace aspia

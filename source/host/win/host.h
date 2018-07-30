@@ -21,6 +21,7 @@
 
 #include <QPointer>
 
+#include "base/macros_magic.h"
 #include "protocol/authorization.pb.h"
 
 namespace aspia {
@@ -91,7 +92,7 @@ private:
     QPointer<HostProcess> session_process_;
     QPointer<HostSessionFake> fake_session_;
 
-    Q_DISABLE_COPY(Host)
+    DISALLOW_COPY_AND_ASSIGN(Host);
 };
 
 } // namespace aspia

@@ -19,6 +19,7 @@
 #ifndef ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
 #define ASPIA_CONSOLE__COMPUTER_GROUP_TREE_H_
 
+#include "base/macros_magic.h"
 #include "console/computer_group_drag.h"
 
 namespace aspia {
@@ -48,7 +49,7 @@ private:
 
     QPoint start_pos_;
 
-    Q_DISABLE_COPY(ComputerGroupTree)
+    DISALLOW_COPY_AND_ASSIGN(ComputerGroupTree);
 };
 
 } // namespace aspia

@@ -54,7 +54,7 @@ private:
     std::unique_ptr<uint8_t[], AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
-    Q_DISABLE_COPY(VideoEncoderZLIB)
+    DISALLOW_COPY_AND_ASSIGN(VideoEncoderZLIB);
 };
 
 } // namespace aspia

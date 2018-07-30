@@ -82,7 +82,7 @@ private:
     // Contains a list of connected sessions.
     QList<QPointer<Host>> session_list_;
 
-    Q_DISABLE_COPY(HostServer)
+    DISALLOW_COPY_AND_ASSIGN(HostServer);
 };
 
 } // namespace aspia

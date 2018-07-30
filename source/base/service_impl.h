@@ -21,6 +21,8 @@
 
 #include <QString>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class ServiceEventHandler;
@@ -59,7 +61,7 @@ private:
     QString display_name_;
     QString description_;
 
-    Q_DISABLE_COPY(ServiceImpl)
+    DISALLOW_COPY_AND_ASSIGN(ServiceImpl);
 };
 
 } // namespace aspia

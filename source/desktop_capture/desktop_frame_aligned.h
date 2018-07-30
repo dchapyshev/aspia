@@ -39,7 +39,7 @@ private:
                       int stride,
                       uint8_t* data);
 
-    Q_DISABLE_COPY(DesktopFrameAligned)
+    DISALLOW_COPY_AND_ASSIGN(DesktopFrameAligned);
 };
 
 } // namespace aspia

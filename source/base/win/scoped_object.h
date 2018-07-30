@@ -19,8 +19,9 @@
 #ifndef ASPIA_BASE__WIN__SCOPED_HANDLE_H_
 #define ASPIA_BASE__WIN__SCOPED_HANDLE_H_
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
@@ -92,7 +93,7 @@ public:
 private:
     T object_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedObject)
+    DISALLOW_COPY_AND_ASSIGN(ScopedObject);
 };
 
 class HandleObjectTraits

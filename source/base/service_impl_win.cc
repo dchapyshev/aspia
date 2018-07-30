@@ -22,8 +22,7 @@
 #error This file for MS Windows only
 #endif // defined(Q_OS_WIN)
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -78,7 +77,7 @@ private:
     SERVICE_STATUS_HANDLE status_handle_ = nullptr;
     SERVICE_STATUS status_;
 
-    Q_DISABLE_COPY(ServiceHandler)
+    DISALLOW_COPY_AND_ASSIGN(ServiceHandler);
 };
 
 class ServiceEventHandler : public QObject
@@ -115,7 +114,7 @@ public:
         uint32_t event_;
         uint32_t session_id_;
 
-        Q_DISABLE_COPY(SessionChangeEvent)
+        DISALLOW_COPY_AND_ASSIGN(SessionChangeEvent);
     };
 
 protected:
@@ -123,7 +122,7 @@ protected:
     void customEvent(QEvent* event) override;
 
 private:
-    Q_DISABLE_COPY(ServiceEventHandler)
+    DISALLOW_COPY_AND_ASSIGN(ServiceEventHandler);
 };
 
 //================================================================================================

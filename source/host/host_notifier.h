@@ -49,7 +49,7 @@ private slots:
 private:
     QPointer<IpcChannel> ipc_channel_;
 
-    Q_DISABLE_COPY(HostNotifier)
+    DISALLOW_COPY_AND_ASSIGN(HostNotifier);
 };
 
 } // namespace aspia

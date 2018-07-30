@@ -21,6 +21,7 @@
 
 #include <QSettings>
 
+#include "base/macros_magic.h"
 #include "host/user.h"
 
 namespace aspia {
@@ -46,7 +47,7 @@ public:
 private:
     mutable QSettings settings_;
 
-    Q_DISABLE_COPY(HostSettings)
+    DISALLOW_COPY_AND_ASSIGN(HostSettings);
 };
 
 } // namespace aspia

@@ -21,6 +21,7 @@
 
 #include <QTreeWidget>
 
+#include "base/macros_magic.h"
 #include "system_info/category.h"
 
 namespace aspia {
@@ -35,7 +36,7 @@ public:
 private:
     CategoryGroup category_group_;
 
-    Q_DISABLE_COPY(CategoryGroupTreeItem)
+    DISALLOW_COPY_AND_ASSIGN(CategoryGroupTreeItem);
 };
 
 } // namespace aspia

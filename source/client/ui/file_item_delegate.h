@@ -21,6 +21,8 @@
 
 #include <QStyledItemDelegate>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class FileReadOnlyColumnDelegate : public QStyledItemDelegate
@@ -40,7 +42,7 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(FileReadOnlyColumnDelegate)
+    DISALLOW_COPY_AND_ASSIGN(FileReadOnlyColumnDelegate);
 };
 
 class FileColumnDelegate : public QStyledItemDelegate
@@ -68,7 +70,7 @@ signals:
     void editingFinished(const QModelIndex& index) const;
 
 private:
-    Q_DISABLE_COPY(FileColumnDelegate)
+    DISALLOW_COPY_AND_ASSIGN(FileColumnDelegate);
 };
 
 } // namespace aspia

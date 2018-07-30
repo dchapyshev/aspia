@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__UI__STATUS_DIALOG_H_
 #define ASPIA_CLIENT__UI__STATUS_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "ui_status_dialog.h"
 
 namespace aspia {
@@ -38,7 +39,7 @@ public slots:
 private:
     Ui::StatusDialog ui;
 
-    Q_DISABLE_COPY(StatusDialog)
+    DISALLOW_COPY_AND_ASSIGN(StatusDialog);
 };
 
 } // namespace aspia

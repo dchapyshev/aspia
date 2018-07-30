@@ -23,6 +23,8 @@
 #include <QQueue>
 #include <QTcpSocket>
 
+#include "base/macros_magic.h"
+
 namespace aspia {
 
 class Encryptor;
@@ -146,7 +148,7 @@ private:
 
     int pinger_timer_id_ = 0;
 
-    Q_DISABLE_COPY(NetworkChannel)
+    DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };
 
 } // namespace aspia

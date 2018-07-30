@@ -39,7 +39,7 @@ private:
     std::unique_ptr<MouseCursorCache> cache_;
     DecompressorZLIB decompressor_;
 
-    Q_DISABLE_COPY(CursorDecoder)
+    DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
 };
 
 } // namespace aspia

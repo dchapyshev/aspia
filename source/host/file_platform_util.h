@@ -23,6 +23,7 @@
 #include <QPair>
 #include <QString>
 
+#include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
@@ -41,7 +42,7 @@ public:
     static proto::file_transfer::DriveList::Item::Type driveType(const QString& drive_path);
 
 private:
-    Q_DISABLE_COPY(FilePlatformUtil)
+    DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
 };
 
 } // namespace aspia

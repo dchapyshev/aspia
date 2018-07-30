@@ -76,7 +76,7 @@ private:
     Ui::FilePanel ui;
     QString current_path_;
 
-    Q_DISABLE_COPY(FilePanel)
+    DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };
 
 } // namespace aspia

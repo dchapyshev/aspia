@@ -19,6 +19,7 @@
 #ifndef ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H_
 #define ASPIA_CLIENT__UI__KEY_SEQUENCE_DIALOG_H_
 
+#include "base/macros_magic.h"
 #include "ui_key_sequence_dialog.h"
 
 namespace aspia {
@@ -40,7 +41,7 @@ private:
 
     Ui::KeySequenceDialog ui;
 
-    Q_DISABLE_COPY(KeySequenceDialog)
+    DISALLOW_COPY_AND_ASSIGN(KeySequenceDialog);
 };
 
 } // namespace aspia

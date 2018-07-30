@@ -27,6 +27,7 @@ extern "C" {
 #include <vpx/vp8cx.h>
 } // extern "C"
 
+#include "base/macros_magic.h"
 #include "codec/scoped_vpx_codec.h"
 #include "codec/video_encoder.h"
 
@@ -64,7 +65,7 @@ private:
     std::unique_ptr<vpx_image_t> image_;
     std::unique_ptr<uint8_t[]> image_buffer_;
 
-    Q_DISABLE_COPY(VideoEncoderVPX)
+    DISALLOW_COPY_AND_ASSIGN(VideoEncoderVPX);
 };
 
 } // namespace aspia

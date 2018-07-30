@@ -44,7 +44,7 @@ protected:
 private:
     QPointer<FileWorker> worker_;
 
-    Q_DISABLE_COPY(HostSessionFileTransfer)
+    DISALLOW_COPY_AND_ASSIGN(HostSessionFileTransfer);
 };
 
 } // namespace aspia
