@@ -324,6 +324,17 @@ void DesktopWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
+void DesktopWindow::leaveEvent(QEvent* event)
+{
+    if (scroll_timer_id_)
+    {
+        killTimer(scroll_timer_id_);
+        scroll_timer_id_ = 0;
+    }
+
+    QWidget::leaveEvent(event);
+}
+
 bool DesktopWindow::eventFilter(QObject* object, QEvent* event)
 {
     if (object == desktop_)
