@@ -47,6 +47,7 @@ protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) override;
     void showEvent(QShowEvent* event) override;
+    void hideEvent(QHideEvent* event) override;
 
 private slots:
     void quit();

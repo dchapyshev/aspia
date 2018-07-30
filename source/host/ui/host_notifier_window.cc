@@ -197,6 +197,11 @@ void HostNotifierWindow::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 }
 
+void HostNotifierWindow::hideEvent(QHideEvent* event)
+{
+    show();
+}
+
 void HostNotifierWindow::quit()
 {
     close();
