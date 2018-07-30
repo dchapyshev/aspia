@@ -27,7 +27,7 @@
 #include "base/service_controller.h"
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
-#include "host/win/host_service.h"
+#include "host/win/host_service_constants.h"
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -89,11 +89,17 @@ HostConfigDialog::HostConfigDialog(QWidget* parent)
     connect(ui.button_modify, &QPushButton::pressed, this, &HostConfigDialog::onModifyUser);
     connect(ui.button_delete, &QPushButton::pressed, this, &HostConfigDialog::onDeleteUser);
 
+    connect(ui.button_service_install_remove, &QPushButton::pressed,
+            this, &HostConfigDialog::onServiceInstallRemove);
+    connect(ui.button_service_start_stop, &QPushButton::pressed,
+            this, &HostConfigDialog::onServiceStartStop);
+
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &HostConfigDialog::onButtonBoxClicked);
 
     user_list_ = settings.userList();
 
+    reloadServiceStatus();
     reloadUserList();
 
     ui.spinbox_port->setValue(settings.tcpPort());
@@ -176,6 +182,50 @@ void HostConfigDialog::onDeleteUser()
     }
 }
 
+void HostConfigDialog::onServiceInstallRemove()
+{
+    switch (service_state_)
+    {
+        case ServiceState::NOT_INSTALLED:
+            installService();
+            break;
+
+        case ServiceState::NOT_STARTED:
+        case ServiceState::STARTED:
+        {
+            if (service_state_ == ServiceState::STARTED && !stopService())
+                break;
+
+            removeService();
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    reloadServiceStatus();
+}
+
+void HostConfigDialog::onServiceStartStop()
+{
+    switch (service_state_)
+    {
+        case ServiceState::NOT_STARTED:
+            startService();
+            break;
+
+        case ServiceState::STARTED:
+            stopService();
+            break;
+
+        default:
+            break;
+    }
+
+    reloadServiceStatus();
+}
+
 void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
@@ -219,13 +269,7 @@ void HostConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                                       QMessageBox::Yes,
                                       QMessageBox::No) == QMessageBox::Yes)
             {
-                if (!restartService())
-                {
-                    QMessageBox::warning(this,
-                                         tr("Warning"),
-                                         tr("Could not restart the service."),
-                                         QMessageBox::Ok);
-                }
+                restartService();
             }
         }
 
@@ -264,6 +308,7 @@ void HostConfigDialog::retranslateUi(const QString& locale)
 {
     locale_loader_.installTranslators(locale);
     ui.retranslateUi(this);
+    reloadServiceStatus();
 }
 
 void HostConfigDialog::setConfigChanged(bool changed)
@@ -305,28 +350,173 @@ void HostConfigDialog::reloadUserList()
     ui.action_delete->setEnabled(false);
 }
 
+void HostConfigDialog::reloadServiceStatus()
+{
+    ui.button_service_install_remove->setEnabled(true);
+    ui.button_service_start_stop->setEnabled(true);
+
+    QString state;
+
+    if (ServiceController::isInstalled(kHostServiceName))
+    {
+        ui.button_service_install_remove->setText(tr("Remove"));
+
+        ServiceController controller = ServiceController::open(kHostServiceName);
+        if (controller.isValid())
+        {
+            if (controller.isRunning())
+            {
+                service_state_ = ServiceState::STARTED;
+                state = tr("Started");
+                ui.button_service_start_stop->setText(tr("Stop"));
+            }
+            else
+            {
+                service_state_ = ServiceState::NOT_STARTED;
+                state = tr("Not started");
+                ui.button_service_start_stop->setText(tr("Start"));
+            }
+        }
+        else
+        {
+            service_state_ = ServiceState::ACCESS_DENIED;
+            state = tr("Installed");
+            ui.button_service_start_stop->setText(tr("Start"));
+
+            // The service is installed, but there is no access to management.
+            ui.button_service_install_remove->setEnabled(false);
+            ui.button_service_start_stop->setEnabled(false);
+        }
+    }
+    else
+    {
+        service_state_ = ServiceState::NOT_INSTALLED;
+        state = tr("Not installed");
+
+        ui.button_service_install_remove->setText(tr("Install"));
+        ui.button_service_start_stop->setText(tr("Start"));
+        ui.button_service_start_stop->setEnabled(false);
+    }
+
+    ui.label_service_status->setText(QString("Current state: %1").arg(state));
+}
+
 bool HostConfigDialog::isServiceStarted()
 {
-    HostService host_service;
-
-    ServiceController controller = ServiceController::open(host_service.serviceName());
+    ServiceController controller = ServiceController::open(kHostServiceName);
     if (controller.isValid())
         return controller.isRunning();
 
     return false;
 }
 
+bool HostConfigDialog::installService()
+{
+    QString service_file_path =
+        QApplication::applicationDirPath() + QLatin1Char('/') + QLatin1String(kHostServiceFileName);
+
+    ServiceController controller =
+        ServiceController::install(kHostServiceName, kHostServiceDisplayName, service_file_path);
+    if (!controller.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("The service could not be installed."),
+                             QMessageBox::Ok);
+        return false;
+    }
+    else
+    {
+        controller.setDescription(kHostServiceDescription);
+    }
+
+    return true;
+}
+
+bool HostConfigDialog::removeService()
+{
+    ServiceController controller = ServiceController::open(kHostServiceName);
+    if (!controller.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not access the service."),
+                             QMessageBox::Ok);
+        return false;
+    }
+    else
+    {
+        if (!controller.remove())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("The service could not be removed."),
+                                 QMessageBox::Ok);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool HostConfigDialog::startService()
+{
+    ServiceController controller = ServiceController::open(kHostServiceName);
+    if (!controller.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not access the service."),
+                             QMessageBox::Ok);
+        return false;
+    }
+    else
+    {
+        if (!controller.start())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("The service could not be started."),
+                                 QMessageBox::Ok);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool HostConfigDialog::stopService()
+{
+    ServiceController controller = ServiceController::open(kHostServiceName);
+    if (!controller.isValid())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Could not access the service."),
+                             QMessageBox::Ok);
+        return false;
+    }
+    else
+    {
+        if (!controller.stop())
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("The service could not be stopped."),
+                                 QMessageBox::Ok);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool HostConfigDialog::restartService()
 {
-    HostService host_service;
-
-    ServiceController controller = ServiceController::open(host_service.serviceName());
-    if (!controller.isValid())
+    if (!stopService())
         return false;
 
-    controller.stop();
-
-    return controller.start();
+    return startService();
 }
 
 } // namespace aspia

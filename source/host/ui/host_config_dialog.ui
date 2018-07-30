@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>383</width>
-    <height>289</height>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QGroupBox" name="groupbox_ui">
          <property name="title">
@@ -42,6 +42,53 @@
           </item>
           <item>
            <widget class="QComboBox" name="combobox_language"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Service</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_service_status">
+            <property name="text">
+             <string notr="true">Current state:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_service_start_stop">
+              <property name="text">
+               <string notr="true">Start</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_service_install_remove">
+              <property name="text">
+               <string notr="true">Install</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

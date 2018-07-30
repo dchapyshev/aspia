@@ -343,6 +343,8 @@ list(APPEND SOURCE_HOST_WIN
     ${PROJECT_SOURCE_DIR}/host/win/host_process_impl.h
     ${PROJECT_SOURCE_DIR}/host/win/host_service.cc
     ${PROJECT_SOURCE_DIR}/host/win/host_service.h
+    ${PROJECT_SOURCE_DIR}/host/win/host_service_constants.cc
+    ${PROJECT_SOURCE_DIR}/host/win/host_service_constants.h
     ${PROJECT_SOURCE_DIR}/host/win/host_service_main.cc
     ${PROJECT_SOURCE_DIR}/host/win/host_service_main.h)
 

@@ -22,18 +22,19 @@
 #include <QGuiApplication>
 #include <QScopedPointer>
 
-#include "base/win/scoped_com_initializer.h"
-#include "base/locale_loader.h"
 #include "base/service.h"
 
 namespace aspia {
 
 class HostServer;
+class LocaleLoader;
+class ScopedCOMInitializer;
 
 class HostService : public Service<QGuiApplication>
 {
 public:
     HostService();
+    ~HostService();
 
 protected:
     // Service implementation.
@@ -44,7 +45,7 @@ protected:
 private:
     QScopedPointer<ScopedCOMInitializer> com_initializer_;
     QScopedPointer<LocaleLoader> locale_loader_;
-    QPointer<HostServer> server_;
+    QScopedPointer<HostServer> server_;
 
     DISALLOW_COPY_AND_ASSIGN(HostService);
 };

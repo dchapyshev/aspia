@@ -20,11 +20,13 @@
 
 #include <QGuiApplication>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <qt_windows.h>
 #include <sddl.h>
 
+#include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
+#include "host/win/host_service_constants.h"
+#include "base/locale_loader.h"
 #include "host/host_server.h"
 #include "host/host_settings.h"
 #include "version.h"
@@ -60,13 +62,12 @@ const wchar_t kComProcessMandatoryLabel[] =
 } // namespace
 
 HostService::HostService()
-    : Service<QGuiApplication>(
-        QStringLiteral("aspia-host-service"),
-        QStringLiteral("Aspia Host Service"),
-        QStringLiteral("Accepts incoming remote desktop connections to this computer."))
+    : Service<QGuiApplication>(kHostServiceName, kHostServiceDisplayName, kHostServiceDescription)
 {
     // Nothing
 }
+
+HostService::~HostService() = default;
 
 void HostService::start()
 {
@@ -95,10 +96,10 @@ void HostService::start()
     locale_loader_.reset(new LocaleLoader());
     locale_loader_->installTranslators(settings.locale());
 
-    server_ = new HostServer();
+    server_.reset(new HostServer());
     if (!server_->start(settings.tcpPort(), settings.userList()))
     {
-        delete server_;
+        server_.reset();
         app->quit();
         return;
     }
@@ -110,7 +111,7 @@ void HostService::stop()
 {
     qInfo("Command to stop the service has been received");
 
-    delete server_;
+    server_.reset();
     com_initializer_.reset();
 
     qInfo("Service is stopped");
@@ -118,7 +119,7 @@ void HostService::stop()
 
 void HostService::sessionChange(uint32_t event, uint32_t session_id)
 {
-    if (!server_.isNull())
+    if (server_)
         server_->setSessionChanged(event, session_id);
 }
 

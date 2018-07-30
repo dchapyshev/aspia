@@ -39,6 +39,8 @@ private slots:
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
+    void onServiceInstallRemove();
+    void onServiceStartStop();
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
@@ -47,13 +49,22 @@ private:
     void setConfigChanged(bool changed);
     bool isConfigChanged() const;
     void reloadUserList();
+    void reloadServiceStatus();
     bool isServiceStarted();
+    bool installService();
+    bool removeService();
+    bool startService();
+    bool stopService();
     bool restartService();
 
     Ui::HostConfigDialog ui;
 
     LocaleLoader locale_loader_;
     QList<User> user_list_;
+
+    enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
+
+    ServiceState service_state_;
 
     DISALLOW_COPY_AND_ASSIGN(HostConfigDialog);
 };
