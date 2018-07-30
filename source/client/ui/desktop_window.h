@@ -93,6 +93,7 @@ private:
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
+    bool autoscroll_enabled_ = true;
 
     QPoint screen_top_left_;
 

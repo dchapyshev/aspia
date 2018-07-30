@@ -65,6 +65,7 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     connect(ui.button_settings, &QPushButton::pressed, this, &DesktopPanel::settingsButton);
     connect(ui.button_autosize, &QPushButton::pressed, this, &DesktopPanel::onAutosizeButton);
     connect(ui.button_full_screen, &QPushButton::clicked, this, &DesktopPanel::onFullscreenButton);
+    connect(ui.button_autoscroll, &QPushButton::clicked, this, &DesktopPanel::autoScrollChanged);
 
     screens_menu_ = new QMenu(this);
     screens_group_ = new QActionGroup(this);

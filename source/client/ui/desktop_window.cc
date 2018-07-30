@@ -82,7 +82,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
 
-    connect(panel_, &DesktopPanel::switchToFullscreen, this, [this](bool fullscreen)
+    connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
         if (fullscreen)
         {
@@ -96,6 +96,11 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
             else
                 showNormal();
         }
+    });
+
+    connect(panel_, &DesktopPanel::autoScrollChanged, [this](bool enabled)
+    {
+        autoscroll_enabled_ = enabled;
     });
 
     connect(desktop_, &DesktopWidget::sendPointerEvent, this, &DesktopWindow::onPointerEvent);
@@ -202,41 +207,49 @@ bool DesktopWindow::requireConfigChange(proto::desktop::Config* config)
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 {
-    QPoint cursor = desktop_->mapTo(scroll_area_, pos);
-    QRect client_area = scroll_area_->rect();
-
-    QScrollBar* hscrollbar = scroll_area_->horizontalScrollBar();
-    QScrollBar* vscrollbar = scroll_area_->verticalScrollBar();
-
-    if (!hscrollbar->isHidden())
-        client_area.setHeight(client_area.height() - hscrollbar->height());
-
-    if (!vscrollbar->isHidden())
-        client_area.setWidth(client_area.width() - vscrollbar->width());
-
-    scroll_delta_.setX(0);
-    scroll_delta_.setY(0);
-
-    if (client_area.width() < desktop_->width())
+    if (autoscroll_enabled_)
     {
-        if (cursor.x() > client_area.width() - 50)
-            scroll_delta_.setX(10);
-        else if (cursor.x() < 50)
-            scroll_delta_.setX(-10);
-    }
+        QPoint cursor = desktop_->mapTo(scroll_area_, pos);
+        QRect client_area = scroll_area_->rect();
 
-    if (client_area.height() < desktop_->height())
-    {
-        if (cursor.y() > client_area.height() - 50)
-            scroll_delta_.setY(10);
-        else if (cursor.y() < 50)
-            scroll_delta_.setY(-10);
-    }
+        QScrollBar* hscrollbar = scroll_area_->horizontalScrollBar();
+        QScrollBar* vscrollbar = scroll_area_->verticalScrollBar();
 
-    if (!scroll_delta_.isNull())
-    {
-        if (scroll_timer_id_ == 0)
-            scroll_timer_id_ = startTimer(15);
+        if (!hscrollbar->isHidden())
+            client_area.setHeight(client_area.height() - hscrollbar->height());
+
+        if (!vscrollbar->isHidden())
+            client_area.setWidth(client_area.width() - vscrollbar->width());
+
+        scroll_delta_.setX(0);
+        scroll_delta_.setY(0);
+
+        if (client_area.width() < desktop_->width())
+        {
+            if (cursor.x() > client_area.width() - 50)
+                scroll_delta_.setX(10);
+            else if (cursor.x() < 50)
+                scroll_delta_.setX(-10);
+        }
+
+        if (client_area.height() < desktop_->height())
+        {
+            if (cursor.y() > client_area.height() - 50)
+                scroll_delta_.setY(10);
+            else if (cursor.y() < 50)
+                scroll_delta_.setY(-10);
+        }
+
+        if (!scroll_delta_.isNull())
+        {
+            if (scroll_timer_id_ == 0)
+                scroll_timer_id_ = startTimer(15);
+        }
+        else if (scroll_timer_id_ != 0)
+        {
+            killTimer(scroll_timer_id_);
+            scroll_timer_id_ = 0;
+        }
     }
     else if (scroll_timer_id_ != 0)
     {

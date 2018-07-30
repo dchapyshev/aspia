@@ -44,6 +44,7 @@ signals:
     void switchToAutosize();
     void settingsButton();
     void screenSelected(const proto::desktop::Screen& screen);
+    void autoScrollChanged(bool enabled);
 
 protected:
     // QFrame implementation.
