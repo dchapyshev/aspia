@@ -230,6 +230,19 @@ QString createCommandLine(const QString& program, const QStringList& arguments)
     return args;
 }
 
+BOOL CALLBACK terminateEnumProc(HWND hwnd, LPARAM lparam)
+{
+    DWORD process_id = static_cast<DWORD>(lparam);
+
+    DWORD current_process_id = 0;
+    GetWindowThreadProcessId(hwnd, &current_process_id);
+
+    if (process_id == current_process_id)
+        PostMessageW(hwnd, WM_CLOSE, 0, 0);
+
+    return TRUE;
+}
+
 } // namespace
 
 HostProcessImpl::HostProcessImpl(HostProcess* process)
@@ -298,6 +311,15 @@ void HostProcessImpl::killProcess()
         TerminateProcess(process_handle_, 0);
 }
 
+void HostProcessImpl::terminateProcess()
+{
+    if (process_handle_.isValid())
+    {
+        EnumWindows(terminateEnumProc, process_id_);
+        PostThreadMessageW(thread_id_, WM_CLOSE, 0, 0);
+    }
+}
+
 bool HostProcessImpl::startProcessWithToken(HANDLE token)
 {
     STARTUPINFOW startup_info;
@@ -338,6 +360,8 @@ bool HostProcessImpl::startProcessWithToken(HANDLE token)
 
     thread_handle_.reset(process_info.hThread);
     process_handle_.reset(process_info.hProcess);
+    thread_id_ = process_info.dwThreadId;
+    process_id_ = process_info.dwProcessId;
 
     DestroyEnvironmentBlock(environment);
     return true;

@@ -36,6 +36,7 @@ public:
 
     void startProcess();
     void killProcess();
+    void terminateProcess();
 
     bool startProcessWithToken(HANDLE token);
 
@@ -48,6 +49,8 @@ public:
 
     ScopedHandle thread_handle_;
     ScopedHandle process_handle_;
+    uint32_t process_id_ = -1;
+    uint32_t thread_id_ = -1;
 
     QPointer<QWinEventNotifier> finish_notifier_;
 

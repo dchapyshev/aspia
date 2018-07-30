@@ -81,6 +81,7 @@ public:
 public slots:
     void start();
     void kill();
+    void terminate();
 
 signals:
     void started();

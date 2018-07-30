@@ -133,4 +133,9 @@ void HostProcess::kill()
     impl_->killProcess();
 }
 
+void HostProcess::terminate()
+{
+    impl_->terminateProcess();
+}
+
 } // namespace aspia
