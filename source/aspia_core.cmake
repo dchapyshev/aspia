@@ -271,7 +271,9 @@ list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/scoped_thread_desktop.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/screen_capture_utils.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/win/screen_capture_utils.h)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/screen_capture_utils.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/visual_effects_disabler.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/win/visual_effects_disabler.h)
 
 list(APPEND SOURCE_HOST
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
