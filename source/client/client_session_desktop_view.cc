@@ -20,6 +20,7 @@
 
 #include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
+#include "codec/video_util.h"
 
 namespace aspia {
 
@@ -144,25 +145,23 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 
     if (packet.has_format())
     {
-        const proto::desktop::Size& size = packet.format().screen_size();
-        const proto::desktop::Point& top_left = packet.format().top_left();
+        QRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
 
-        if (size.width()  <= 0 || size.width()  >= 65535 ||
-            size.height() <= 0 || size.height() >= 65535)
+        if (screen_rect.width()  <= 0 || screen_rect.width()  >= 65535 ||
+            screen_rect.height() <= 0 || screen_rect.height() >= 65535)
         {
             emit errorOccurred(tr("Session error: Wrong video frame size."));
             return;
         }
 
-        if (top_left.x() < 0 || top_left.x() >= 65535 ||
-            top_left.y() < 0 || top_left.y() >= 65535)
+        if (screen_rect.x() < 0 || screen_rect.x() >= 65535 ||
+            screen_rect.y() < 0 || screen_rect.y() >= 65535)
         {
             emit errorOccurred(tr("Session error: Wrong video frame position."));
             return;
         }
 
-        desktop_window_->resizeDesktopFrame(QPoint(top_left.x(), top_left.y()),
-                                            QSize(size.width(), size.height()));
+        desktop_window_->resizeDesktopFrame(screen_rect);
     }
 
     DesktopFrame* frame = desktop_window_->desktopFrame();

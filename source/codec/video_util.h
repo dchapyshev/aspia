@@ -33,12 +33,6 @@ public:
     static QRect fromVideoRect(const proto::desktop::Rect& rect);
     static void toVideoRect(const QRect& from, proto::desktop::Rect* to);
 
-    static QSize fromVideoSize(const proto::desktop::Size& size);
-    static void toVideoSize(const QSize& from, proto::desktop::Size* to);
-
-    static QPoint fromVideoPoint(const proto::desktop::Point& point);
-    static void toVideoPoint(const QPoint& from, proto::desktop::Point* to);
-
     static PixelFormat fromVideoPixelFormat(const proto::desktop::PixelFormat& format);
     static void toVideoPixelFormat(const PixelFormat& from, proto::desktop::PixelFormat* to);
 

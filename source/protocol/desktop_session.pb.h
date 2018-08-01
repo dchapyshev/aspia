@@ -38,7 +38,7 @@ namespace protobuf_desktop_5fsession_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[16];
+  static const ::google::protobuf::internal::ParseTable schema[14];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -71,9 +71,6 @@ extern KeyEventDefaultTypeInternal _KeyEvent_default_instance_;
 class PixelFormat;
 class PixelFormatDefaultTypeInternal;
 extern PixelFormatDefaultTypeInternal _PixelFormat_default_instance_;
-class Point;
-class PointDefaultTypeInternal;
-extern PointDefaultTypeInternal _Point_default_instance_;
 class PointerEvent;
 class PointerEventDefaultTypeInternal;
 extern PointerEventDefaultTypeInternal _PointerEvent_default_instance_;
@@ -86,9 +83,6 @@ extern ScreenDefaultTypeInternal _Screen_default_instance_;
 class ScreenList;
 class ScreenListDefaultTypeInternal;
 extern ScreenListDefaultTypeInternal _ScreenList_default_instance_;
-class Size;
-class SizeDefaultTypeInternal;
-extern SizeDefaultTypeInternal _Size_default_instance_;
 class VideoPacket;
 class VideoPacketDefaultTypeInternal;
 extern VideoPacketDefaultTypeInternal _VideoPacket_default_instance_;
@@ -108,12 +102,10 @@ template<> ::aspia::proto::desktop::CursorShape* Arena::CreateMaybeMessage<::asp
 template<> ::aspia::proto::desktop::HostToClient* Arena::CreateMaybeMessage<::aspia::proto::desktop::HostToClient>(Arena*);
 template<> ::aspia::proto::desktop::KeyEvent* Arena::CreateMaybeMessage<::aspia::proto::desktop::KeyEvent>(Arena*);
 template<> ::aspia::proto::desktop::PixelFormat* Arena::CreateMaybeMessage<::aspia::proto::desktop::PixelFormat>(Arena*);
-template<> ::aspia::proto::desktop::Point* Arena::CreateMaybeMessage<::aspia::proto::desktop::Point>(Arena*);
 template<> ::aspia::proto::desktop::PointerEvent* Arena::CreateMaybeMessage<::aspia::proto::desktop::PointerEvent>(Arena*);
 template<> ::aspia::proto::desktop::Rect* Arena::CreateMaybeMessage<::aspia::proto::desktop::Rect>(Arena*);
 template<> ::aspia::proto::desktop::Screen* Arena::CreateMaybeMessage<::aspia::proto::desktop::Screen>(Arena*);
 template<> ::aspia::proto::desktop::ScreenList* Arena::CreateMaybeMessage<::aspia::proto::desktop::ScreenList>(Arena*);
-template<> ::aspia::proto::desktop::Size* Arena::CreateMaybeMessage<::aspia::proto::desktop::Size>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacket* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacket>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacketFormat* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacketFormat>(Arena*);
 }  // namespace protobuf
@@ -861,222 +853,6 @@ class Rect : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
 };
 // -------------------------------------------------------------------
 
-class Size : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.Size) */ {
- public:
-  Size();
-  virtual ~Size();
-
-  Size(const Size& from);
-
-  inline Size& operator=(const Size& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Size(Size&& from) noexcept
-    : Size() {
-    *this = ::std::move(from);
-  }
-
-  inline Size& operator=(Size&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Size& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Size* internal_default_instance() {
-    return reinterpret_cast<const Size*>(
-               &_Size_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    5;
-
-  void Swap(Size* other);
-  friend void swap(Size& a, Size& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Size* New() const final {
-    return CreateMaybeMessage<Size>(NULL);
-  }
-
-  Size* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<Size>(arena);
-  }
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    final;
-  void CopyFrom(const Size& from);
-  void MergeFrom(const Size& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  void DiscardUnknownFields();
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Size* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // int32 width = 1;
-  void clear_width();
-  static const int kWidthFieldNumber = 1;
-  ::google::protobuf::int32 width() const;
-  void set_width(::google::protobuf::int32 value);
-
-  // int32 height = 2;
-  void clear_height();
-  static const int kHeightFieldNumber = 2;
-  ::google::protobuf::int32 height() const;
-  void set_height(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.desktop.Size)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::int32 width_;
-  ::google::protobuf::int32 height_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class Point : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.Point) */ {
- public:
-  Point();
-  virtual ~Point();
-
-  Point(const Point& from);
-
-  inline Point& operator=(const Point& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Point(Point&& from) noexcept
-    : Point() {
-    *this = ::std::move(from);
-  }
-
-  inline Point& operator=(Point&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Point& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Point* internal_default_instance() {
-    return reinterpret_cast<const Point*>(
-               &_Point_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    6;
-
-  void Swap(Point* other);
-  friend void swap(Point& a, Point& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Point* New() const final {
-    return CreateMaybeMessage<Point>(NULL);
-  }
-
-  Point* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<Point>(arena);
-  }
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    final;
-  void CopyFrom(const Point& from);
-  void MergeFrom(const Point& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  void DiscardUnknownFields();
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Point* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // int32 x = 1;
-  void clear_x();
-  static const int kXFieldNumber = 1;
-  ::google::protobuf::int32 x() const;
-  void set_x(::google::protobuf::int32 value);
-
-  // int32 y = 2;
-  void clear_y();
-  static const int kYFieldNumber = 2;
-  ::google::protobuf::int32 y() const;
-  void set_y(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.desktop.Point)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::int32 x_;
-  ::google::protobuf::int32 y_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class PixelFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.PixelFormat) */ {
  public:
   PixelFormat();
@@ -1111,7 +887,7 @@ class PixelFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_PixelFormat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(PixelFormat* other);
   friend void swap(PixelFormat& a, PixelFormat& b) {
@@ -1254,7 +1030,7 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_VideoPacketFormat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(VideoPacketFormat* other);
   friend void swap(VideoPacketFormat& a, VideoPacketFormat& b) {
@@ -1305,17 +1081,17 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.desktop.Size screen_size = 1;
-  bool has_screen_size() const;
-  void clear_screen_size();
-  static const int kScreenSizeFieldNumber = 1;
+  // .aspia.proto.desktop.Rect screen_rect = 1;
+  bool has_screen_rect() const;
+  void clear_screen_rect();
+  static const int kScreenRectFieldNumber = 1;
   private:
-  const ::aspia::proto::desktop::Size& _internal_screen_size() const;
+  const ::aspia::proto::desktop::Rect& _internal_screen_rect() const;
   public:
-  const ::aspia::proto::desktop::Size& screen_size() const;
-  ::aspia::proto::desktop::Size* release_screen_size();
-  ::aspia::proto::desktop::Size* mutable_screen_size();
-  void set_allocated_screen_size(::aspia::proto::desktop::Size* screen_size);
+  const ::aspia::proto::desktop::Rect& screen_rect() const;
+  ::aspia::proto::desktop::Rect* release_screen_rect();
+  ::aspia::proto::desktop::Rect* mutable_screen_rect();
+  void set_allocated_screen_rect(::aspia::proto::desktop::Rect* screen_rect);
 
   // .aspia.proto.desktop.PixelFormat pixel_format = 2;
   bool has_pixel_format() const;
@@ -1329,25 +1105,12 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::aspia::proto::desktop::PixelFormat* mutable_pixel_format();
   void set_allocated_pixel_format(::aspia::proto::desktop::PixelFormat* pixel_format);
 
-  // .aspia.proto.desktop.Point top_left = 3;
-  bool has_top_left() const;
-  void clear_top_left();
-  static const int kTopLeftFieldNumber = 3;
-  private:
-  const ::aspia::proto::desktop::Point& _internal_top_left() const;
-  public:
-  const ::aspia::proto::desktop::Point& top_left() const;
-  ::aspia::proto::desktop::Point* release_top_left();
-  ::aspia::proto::desktop::Point* mutable_top_left();
-  void set_allocated_top_left(::aspia::proto::desktop::Point* top_left);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.VideoPacketFormat)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::desktop::Size* screen_size_;
+  ::aspia::proto::desktop::Rect* screen_rect_;
   ::aspia::proto::desktop::PixelFormat* pixel_format_;
-  ::aspia::proto::desktop::Point* top_left_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -1387,7 +1150,7 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_VideoPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(VideoPacket* other);
   friend void swap(VideoPacket& a, VideoPacket& b) {
@@ -1529,7 +1292,7 @@ class Screen : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Screen_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Screen* other);
   friend void swap(Screen& a, Screen& b) {
@@ -1645,7 +1408,7 @@ class ScreenList : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_ScreenList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(ScreenList* other);
   friend void swap(ScreenList& a, ScreenList& b) {
@@ -1752,7 +1515,7 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_ConfigRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(ConfigRequest* other);
   friend void swap(ConfigRequest& a, ConfigRequest& b) {
@@ -1860,7 +1623,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Config_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(Config* other);
   friend void swap(Config& a, Config& b) {
@@ -1995,7 +1758,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_HostToClient_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(HostToClient* other);
   friend void swap(HostToClient& a, HostToClient& b) {
@@ -2154,7 +1917,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_ClientToHost_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(ClientToHost* other);
   friend void swap(ClientToHost& a, ClientToHost& b) {
@@ -2661,70 +2424,6 @@ inline void Rect::set_height(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
-// Size
-
-// int32 width = 1;
-inline void Size::clear_width() {
-  width_ = 0;
-}
-inline ::google::protobuf::int32 Size::width() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Size.width)
-  return width_;
-}
-inline void Size::set_width(::google::protobuf::int32 value) {
-  
-  width_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Size.width)
-}
-
-// int32 height = 2;
-inline void Size::clear_height() {
-  height_ = 0;
-}
-inline ::google::protobuf::int32 Size::height() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Size.height)
-  return height_;
-}
-inline void Size::set_height(::google::protobuf::int32 value) {
-  
-  height_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Size.height)
-}
-
-// -------------------------------------------------------------------
-
-// Point
-
-// int32 x = 1;
-inline void Point::clear_x() {
-  x_ = 0;
-}
-inline ::google::protobuf::int32 Point::x() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Point.x)
-  return x_;
-}
-inline void Point::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Point.x)
-}
-
-// int32 y = 2;
-inline void Point::clear_y() {
-  y_ = 0;
-}
-inline ::google::protobuf::int32 Point::y() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Point.y)
-  return y_;
-}
-inline void Point::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Point.y)
-}
-
-// -------------------------------------------------------------------
-
 // PixelFormat
 
 // uint32 bits_per_pixel = 1;
@@ -2829,58 +2528,58 @@ inline void PixelFormat::set_blue_shift(::google::protobuf::uint32 value) {
 
 // VideoPacketFormat
 
-// .aspia.proto.desktop.Size screen_size = 1;
-inline bool VideoPacketFormat::has_screen_size() const {
-  return this != internal_default_instance() && screen_size_ != NULL;
+// .aspia.proto.desktop.Rect screen_rect = 1;
+inline bool VideoPacketFormat::has_screen_rect() const {
+  return this != internal_default_instance() && screen_rect_ != NULL;
 }
-inline void VideoPacketFormat::clear_screen_size() {
-  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) {
-    delete screen_size_;
+inline void VideoPacketFormat::clear_screen_rect() {
+  if (GetArenaNoVirtual() == NULL && screen_rect_ != NULL) {
+    delete screen_rect_;
   }
-  screen_size_ = NULL;
+  screen_rect_ = NULL;
 }
-inline const ::aspia::proto::desktop::Size& VideoPacketFormat::_internal_screen_size() const {
-  return *screen_size_;
+inline const ::aspia::proto::desktop::Rect& VideoPacketFormat::_internal_screen_rect() const {
+  return *screen_rect_;
 }
-inline const ::aspia::proto::desktop::Size& VideoPacketFormat::screen_size() const {
-  const ::aspia::proto::desktop::Size* p = screen_size_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.screen_size)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Size*>(
-      &::aspia::proto::desktop::_Size_default_instance_);
+inline const ::aspia::proto::desktop::Rect& VideoPacketFormat::screen_rect() const {
+  const ::aspia::proto::desktop::Rect* p = screen_rect_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.screen_rect)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Rect*>(
+      &::aspia::proto::desktop::_Rect_default_instance_);
 }
-inline ::aspia::proto::desktop::Size* VideoPacketFormat::release_screen_size() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.screen_size)
+inline ::aspia::proto::desktop::Rect* VideoPacketFormat::release_screen_rect() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.screen_rect)
   
-  ::aspia::proto::desktop::Size* temp = screen_size_;
-  screen_size_ = NULL;
+  ::aspia::proto::desktop::Rect* temp = screen_rect_;
+  screen_rect_ = NULL;
   return temp;
 }
-inline ::aspia::proto::desktop::Size* VideoPacketFormat::mutable_screen_size() {
+inline ::aspia::proto::desktop::Rect* VideoPacketFormat::mutable_screen_rect() {
   
-  if (screen_size_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Size>(GetArenaNoVirtual());
-    screen_size_ = p;
+  if (screen_rect_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Rect>(GetArenaNoVirtual());
+    screen_rect_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.screen_size)
-  return screen_size_;
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.screen_rect)
+  return screen_rect_;
 }
-inline void VideoPacketFormat::set_allocated_screen_size(::aspia::proto::desktop::Size* screen_size) {
+inline void VideoPacketFormat::set_allocated_screen_rect(::aspia::proto::desktop::Rect* screen_rect) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete screen_size_;
+    delete screen_rect_;
   }
-  if (screen_size) {
+  if (screen_rect) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      screen_size = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, screen_size, submessage_arena);
+      screen_rect = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, screen_rect, submessage_arena);
     }
     
   } else {
     
   }
-  screen_size_ = screen_size;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.screen_size)
+  screen_rect_ = screen_rect;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.screen_rect)
 }
 
 // .aspia.proto.desktop.PixelFormat pixel_format = 2;
@@ -2935,60 +2634,6 @@ inline void VideoPacketFormat::set_allocated_pixel_format(::aspia::proto::deskto
   }
   pixel_format_ = pixel_format;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.pixel_format)
-}
-
-// .aspia.proto.desktop.Point top_left = 3;
-inline bool VideoPacketFormat::has_top_left() const {
-  return this != internal_default_instance() && top_left_ != NULL;
-}
-inline void VideoPacketFormat::clear_top_left() {
-  if (GetArenaNoVirtual() == NULL && top_left_ != NULL) {
-    delete top_left_;
-  }
-  top_left_ = NULL;
-}
-inline const ::aspia::proto::desktop::Point& VideoPacketFormat::_internal_top_left() const {
-  return *top_left_;
-}
-inline const ::aspia::proto::desktop::Point& VideoPacketFormat::top_left() const {
-  const ::aspia::proto::desktop::Point* p = top_left_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.top_left)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Point*>(
-      &::aspia::proto::desktop::_Point_default_instance_);
-}
-inline ::aspia::proto::desktop::Point* VideoPacketFormat::release_top_left() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.top_left)
-  
-  ::aspia::proto::desktop::Point* temp = top_left_;
-  top_left_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::Point* VideoPacketFormat::mutable_top_left() {
-  
-  if (top_left_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Point>(GetArenaNoVirtual());
-    top_left_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.top_left)
-  return top_left_;
-}
-inline void VideoPacketFormat::set_allocated_top_left(::aspia::proto::desktop::Point* top_left) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete top_left_;
-  }
-  if (top_left) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      top_left = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, top_left, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  top_left_ = top_left;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.top_left)
 }
 
 // -------------------------------------------------------------------
@@ -3948,10 +3593,6 @@ inline void ClientToHost::set_allocated_screen(::aspia::proto::desktop::Screen* 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

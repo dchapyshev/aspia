@@ -44,7 +44,7 @@ public:
     DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
-    void resizeDesktopFrame(const QPoint& top_left, const QSize& screen_size);
+    void resizeDesktopFrame(const QRect& screen_rect);
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
