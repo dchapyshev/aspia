@@ -24,8 +24,7 @@
 
 namespace aspia {
 
-ClientSessionDesktopView::ClientSessionDesktopView(
-    ConnectData* connect_data, QObject* parent)
+ClientSessionDesktopView::ClientSessionDesktopView(ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
       connect_data_(connect_data)
 {
