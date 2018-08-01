@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>383</width>
-    <height>372</height>
+    <height>293</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,29 +116,6 @@
             </property>
             <property name="value">
              <number>8050</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupbox_desktop">
-         <property name="title">
-          <string>Desktop Sessions</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QCheckBox" name="checkbox_disable_effects">
-            <property name="text">
-             <string>Disable desktop effects when a remote user connects</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkbox_disable_wallpaper">
-            <property name="text">
-             <string>Disable desktop wallpaper when when a remote user connects</string>
             </property>
            </widget>
           </item>

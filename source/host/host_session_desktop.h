@@ -28,6 +28,7 @@ namespace aspia {
 class Clipboard;
 class InputInjector;
 class ScreenUpdater;
+class VisualEffectsDisabler;
 
 class HostSessionDesktop : public HostSession
 {
@@ -61,6 +62,10 @@ private:
     QPointer<ScreenUpdater> screen_updater_;
     QPointer<Clipboard> clipboard_;
     QScopedPointer<InputInjector> input_injector_;
+
+#if defined(Q_OS_WIN)
+    std::unique_ptr<VisualEffectsDisabler> effects_disabler_;
+#endif // defined(Q_OS_WIN)
 
     DISALLOW_COPY_AND_ASSIGN(HostSessionDesktop);
 };

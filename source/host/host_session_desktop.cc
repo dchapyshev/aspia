@@ -23,6 +23,10 @@
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 
+#if defined(Q_OS_WIN)
+#include "desktop_capture/win/visual_effects_disabler.h"
+#endif // defined(Q_OS_WIN)
+
 namespace aspia {
 
 HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
@@ -54,6 +58,17 @@ void HostSessionDesktop::stopSession()
     delete screen_updater_;
     delete clipboard_;
     input_injector_.reset();
+
+#if defined(Q_OS_WIN)
+    if (effects_disabler_)
+    {
+        if (effects_disabler_->isEffectsDisabled())
+            effects_disabler_->restoreEffects();
+
+        if (effects_disabler_->isWallpaperDisabled())
+            effects_disabler_->restoreWallpaper();
+    }
+#endif // defined(Q_OS_WIN)
 }
 
 void HostSessionDesktop::messageReceived(const QByteArray& buffer)
@@ -157,20 +172,40 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         }
 
         clipboard_ = new Clipboard(this);
-
-        connect(clipboard_, &Clipboard::clipboardEvent,
-                this, &HostSessionDesktop::clipboardEvent);
+        connect(clipboard_, &Clipboard::clipboardEvent, this, &HostSessionDesktop::clipboardEvent);
     }
+
+#if defined(Q_OS_WIN)
+    bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
+    bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+
+    if (effects_disabler_)
+    {
+        if (effects_disabler_->isEffectsDisabled())
+            effects_disabler_->restoreEffects();
+
+        if (effects_disabler_->isWallpaperDisabled())
+            effects_disabler_->restoreWallpaper();
+    }
+
+    if (disable_wallpaper || disable_effects)
+    {
+        effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
+
+        if (disable_effects)
+            effects_disabler_->disableEffects();
+
+        if (disable_wallpaper)
+            effects_disabler_->disableWallpaper();
+    }
+#endif // defined(Q_OS_WIN)
 
     screen_updater_ = new ScreenUpdater(this);
 
     connect(screen_updater_, &ScreenUpdater::sendMessage, this, &HostSessionDesktop::sendMessage);
 
     if (!screen_updater_->start(config))
-    {
         emit errorOccurred();
-        return;
-    }
 }
 
 void HostSessionDesktop::readScreen(const proto::desktop::Screen& screen)

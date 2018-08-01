@@ -494,6 +494,16 @@
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="131"/>
+        <source>Disable desktop effects</source>
+        <translation>Отключить эффекты рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="138"/>
+        <source>Disable desktop wallpaper</source>
+        <translation>Отключить обои рабочего стола</translation>
+    </message>
 </context>
 <context>
     <name>DesktopPanel</name>
@@ -703,53 +713,38 @@
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="128"/>
-        <source>Desktop Sessions</source>
-        <translation>Сессии рабочего стола</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="134"/>
-        <source>Disable desktop effects when a remote user connects</source>
-        <translation>Отключить эффекты рабочего стола при подключении удаленного пользователя</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="141"/>
-        <source>Disable desktop wallpaper when when a remote user connects</source>
-        <translation>Отключить обои рабочего стола при подключении удаленного пользователя</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="165"/>
-        <location filename="../host/ui/host_config_dialog.ui" line="258"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="142"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="235"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="179"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="156"/>
         <source>Add new user</source>
         <translation>Добавить нового пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="199"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="176"/>
         <source>Edit user</source>
         <translation>Редактировать пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="219"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="196"/>
         <source>Delete user</source>
         <translation>Удалить пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="281"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="258"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="290"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="267"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.ui" line="299"/>
+        <location filename="../host/ui/host_config_dialog.ui" line="276"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -1276,62 +1271,42 @@
 <context>
     <name>aspia::ClientSessionDesktopManage</name>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="72"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="46"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="161"/>
-        <source>Session error: There are no supported video encodings.</source>
-        <translation>Ошибка сессии: Нет поддерживаемых видео-кодировок.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="168"/>
-        <source>Session error: Canceled by the user.</source>
-        <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
 </context>
 <context>
     <name>aspia::ClientSessionDesktopView</name>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="78"/>
+        <location filename="../client/client_session_desktop_view.cc" line="55"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Ошибка сессии: Неверное сообщение от хоста.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="141"/>
+        <location filename="../client/client_session_desktop_view.cc" line="124"/>
         <source>Session error: Video decoder not initialized.</source>
         <translation>Ошибка сессии: Видео-декодер не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="153"/>
+        <location filename="../client/client_session_desktop_view.cc" line="135"/>
         <source>Session error: Wrong video frame size.</source>
         <translation>Ошибка сессии: Неверный размер экрана.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="160"/>
+        <location filename="../client/client_session_desktop_view.cc" line="142"/>
         <source>Session error: Wrong video frame position.</source>
         <translation>Ошибка сессии: Неверное положение видео-кадра.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="171"/>
+        <location filename="../client/client_session_desktop_view.cc" line="152"/>
         <source>Session error: The desktop frame is not initialized.</source>
         <translation>Ошибка сессии: Рабочий стол не инициализирован.</translation>
     </message>
     <message>
-        <location filename="../client/client_session_desktop_view.cc" line="177"/>
+        <location filename="../client/client_session_desktop_view.cc" line="158"/>
         <source>Session error: The video packet could not be decoded.</source>
         <translation>Ошибка сессии: Не удалось декодировать видео-пакет.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_session_desktop_view.cc" line="202"/>
-        <source>Session error: There are no supported video encodings.</source>
-        <translation>Ошибка сессии: Нет поддерживаемых видео-декодеров.</translation>
-    </message>
-    <message>
-        <location filename="../client/client_session_desktop_view.cc" line="209"/>
-        <source>Session error: Canceled by the user.</source>
-        <translation>Ошибка сессии: Отменено пользователем.</translation>
     </message>
 </context>
 <context>
@@ -1396,7 +1371,7 @@
         <translation>Информация о системе</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="166"/>
+        <location filename="../console/computer_dialog.cc" line="164"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
@@ -1405,17 +1380,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="172"/>
+        <location filename="../console/computer_dialog.cc" line="170"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="179"/>
+        <location filename="../console/computer_dialog.cc" line="177"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Имя пользователя не может быть пустым и может содержать только буквы алфавита, цифры и символы &quot;_&quot;,&quot;-&quot;,&quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="187"/>
+        <location filename="../console/computer_dialog.cc" line="185"/>
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
@@ -1424,7 +1399,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog.cc" line="195"/>
+        <location filename="../console/computer_dialog.cc" line="193"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
@@ -1433,7 +1408,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="225"/>
+        <location filename="../console/computer_dialog.cc" line="223"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1533,32 +1508,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="68"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="69"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="63"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="70"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="64"/>
         <source>256 colors (8 bit)</source>
         <translation>256 цветов (8 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="71"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="65"/>
         <source>64 colors (6 bit)</source>
         <translation>64 цвета (6 бит)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="72"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="66"/>
         <source>8 colors (3 bit)</source>
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="137"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="139"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>
@@ -1574,16 +1549,6 @@
         <location filename="../client/ui/desktop_window.cc" line="50"/>
         <source>Aspia Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_window.cc" line="191"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_window.cc" line="192"/>
-        <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation>Текущая кодировка видео не поддерживается хостом. Пожалуйста, укажите другую кодировку.</translation>
     </message>
 </context>
 <context>
@@ -1833,109 +1798,109 @@
 <context>
     <name>aspia::HostConfigDialog</name>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="244"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="423"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="442"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="452"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="468"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="478"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="494"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="504"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="232"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="409"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="428"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="438"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="454"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="464"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="480"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="490"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="173"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="267"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="161"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="253"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="174"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="162"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="241"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="229"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="262"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="248"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
         <translation>Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="362"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="348"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="356"/>
         <source>Started</source>
         <translation>Запущена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="371"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="357"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="376"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="362"/>
         <source>Not started</source>
         <translation>Не запущена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="377"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="384"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="397"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="363"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="370"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="383"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="383"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="369"/>
         <source>Installed</source>
         <translation>Установлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="394"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="380"/>
         <source>Not installed</source>
         <translation>Не установлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="396"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="382"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="401"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="387"/>
         <source>Current state: %1</source>
         <translation>Текущее состояние: %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="424"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="410"/>
         <source>The service could not be installed.</source>
         <translation>Не удалось установить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="443"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="469"/>
-        <location filename="../host/ui/host_config_dialog.cc" line="495"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="429"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="455"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="481"/>
         <source>Could not access the service.</source>
         <translation>Не удалось получить доступ к службе.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="453"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="439"/>
         <source>The service could not be removed.</source>
         <translation>Не удалось удалить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="479"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="465"/>
         <source>The service could not be started.</source>
         <translation>Не удалось запусить службу.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_config_dialog.cc" line="505"/>
+        <location filename="../host/ui/host_config_dialog.cc" line="491"/>
         <source>The service could not be stopped.</source>
         <translation>Не удалось остановить службу.</translation>
     </message>
@@ -1943,7 +1908,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="269"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="235"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
@@ -1959,7 +1924,7 @@
 <context>
     <name>aspia::HostSessionFakeDesktop</name>
     <message>
-        <location filename="../host/host_session_fake_desktop.cc" line="156"/>
+        <location filename="../host/host_session_fake_desktop.cc" line="142"/>
         <source>The session is temporarily unavailable.</source>
         <translation>Сессия временно недоступна.</translation>
     </message>

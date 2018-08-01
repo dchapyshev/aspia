@@ -102,6 +102,12 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
         ui.checkbox_clipboard->setEnabled(false);
     }
 
+    if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+        ui.checkbox_desktop_effects->setChecked(true);
+
+    if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+        ui.checkbox_desktop_wallpaper->setChecked(true);
+
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
 
@@ -187,6 +193,12 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
             flags |= proto::desktop::ENABLE_CLIPBOARD;
+
+        if (ui.checkbox_desktop_effects->isChecked())
+            flags |= proto::desktop::DISABLE_DESKTOP_EFFECTS;
+
+        if (ui.checkbox_desktop_wallpaper->isChecked())
+            flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
 
         config_.set_flags(flags);
 

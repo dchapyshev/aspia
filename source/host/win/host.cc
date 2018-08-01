@@ -331,7 +331,7 @@ void Host::dettachSession()
 
     if (!session_process_.isNull())
     {
-        session_process_->kill();
+        session_process_->terminate();
         delete session_process_;
     }
 
