@@ -1821,10 +1821,10 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::VideoPacket* mutable_video_packet();
   void set_allocated_video_packet(::aspia::proto::desktop::VideoPacket* video_packet);
 
-  // .aspia.proto.desktop.CursorShape cursor_shape = 2;
+  // .aspia.proto.desktop.CursorShape cursor_shape = 3;
   bool has_cursor_shape() const;
   void clear_cursor_shape();
-  static const int kCursorShapeFieldNumber = 2;
+  static const int kCursorShapeFieldNumber = 3;
   private:
   const ::aspia::proto::desktop::CursorShape& _internal_cursor_shape() const;
   public:
@@ -1833,10 +1833,10 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::CursorShape* mutable_cursor_shape();
   void set_allocated_cursor_shape(::aspia::proto::desktop::CursorShape* cursor_shape);
 
-  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 4;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 3;
+  static const int kClipboardEventFieldNumber = 4;
   private:
   const ::aspia::proto::desktop::ClipboardEvent& _internal_clipboard_event() const;
   public:
@@ -1844,18 +1844,6 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ClipboardEvent* release_clipboard_event();
   ::aspia::proto::desktop::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::desktop::ClipboardEvent* clipboard_event);
-
-  // .aspia.proto.desktop.ConfigRequest config_request = 4;
-  bool has_config_request() const;
-  void clear_config_request();
-  static const int kConfigRequestFieldNumber = 4;
-  private:
-  const ::aspia::proto::desktop::ConfigRequest& _internal_config_request() const;
-  public:
-  const ::aspia::proto::desktop::ConfigRequest& config_request() const;
-  ::aspia::proto::desktop::ConfigRequest* release_config_request();
-  ::aspia::proto::desktop::ConfigRequest* mutable_config_request();
-  void set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request);
 
   // .aspia.proto.desktop.ScreenList screen_list = 5;
   bool has_screen_list() const;
@@ -1869,6 +1857,18 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ScreenList* mutable_screen_list();
   void set_allocated_screen_list(::aspia::proto::desktop::ScreenList* screen_list);
 
+  // .aspia.proto.desktop.ConfigRequest config_request = 6;
+  bool has_config_request() const;
+  void clear_config_request();
+  static const int kConfigRequestFieldNumber = 6;
+  private:
+  const ::aspia::proto::desktop::ConfigRequest& _internal_config_request() const;
+  public:
+  const ::aspia::proto::desktop::ConfigRequest& config_request() const;
+  ::aspia::proto::desktop::ConfigRequest* release_config_request();
+  ::aspia::proto::desktop::ConfigRequest* mutable_config_request();
+  void set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.HostToClient)
  private:
 
@@ -1876,8 +1876,8 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::VideoPacket* video_packet_;
   ::aspia::proto::desktop::CursorShape* cursor_shape_;
   ::aspia::proto::desktop::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::desktop::ConfigRequest* config_request_;
   ::aspia::proto::desktop::ScreenList* screen_list_;
+  ::aspia::proto::desktop::ConfigRequest* config_request_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -1992,10 +1992,10 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::KeyEvent* mutable_key_event();
   void set_allocated_key_event(::aspia::proto::desktop::KeyEvent* key_event);
 
-  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 5;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 3;
+  static const int kClipboardEventFieldNumber = 5;
   private:
   const ::aspia::proto::desktop::ClipboardEvent& _internal_clipboard_event() const;
   public:
@@ -2004,22 +2004,10 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::desktop::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.desktop.Config config = 4;
-  bool has_config() const;
-  void clear_config();
-  static const int kConfigFieldNumber = 4;
-  private:
-  const ::aspia::proto::desktop::Config& _internal_config() const;
-  public:
-  const ::aspia::proto::desktop::Config& config() const;
-  ::aspia::proto::desktop::Config* release_config();
-  ::aspia::proto::desktop::Config* mutable_config();
-  void set_allocated_config(::aspia::proto::desktop::Config* config);
-
-  // .aspia.proto.desktop.Screen screen = 5;
+  // .aspia.proto.desktop.Screen screen = 6;
   bool has_screen() const;
   void clear_screen();
-  static const int kScreenFieldNumber = 5;
+  static const int kScreenFieldNumber = 6;
   private:
   const ::aspia::proto::desktop::Screen& _internal_screen() const;
   public:
@@ -2028,6 +2016,18 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::Screen* mutable_screen();
   void set_allocated_screen(::aspia::proto::desktop::Screen* screen);
 
+  // .aspia.proto.desktop.Config config = 7;
+  bool has_config() const;
+  void clear_config();
+  static const int kConfigFieldNumber = 7;
+  private:
+  const ::aspia::proto::desktop::Config& _internal_config() const;
+  public:
+  const ::aspia::proto::desktop::Config& config() const;
+  ::aspia::proto::desktop::Config* release_config();
+  ::aspia::proto::desktop::Config* mutable_config();
+  void set_allocated_config(::aspia::proto::desktop::Config* config);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ClientToHost)
  private:
 
@@ -2035,8 +2035,8 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::PointerEvent* pointer_event_;
   ::aspia::proto::desktop::KeyEvent* key_event_;
   ::aspia::proto::desktop::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::desktop::Config* config_;
   ::aspia::proto::desktop::Screen* screen_;
+  ::aspia::proto::desktop::Config* config_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -3100,7 +3100,7 @@ inline void HostToClient::set_allocated_video_packet(::aspia::proto::desktop::Vi
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.video_packet)
 }
 
-// .aspia.proto.desktop.CursorShape cursor_shape = 2;
+// .aspia.proto.desktop.CursorShape cursor_shape = 3;
 inline bool HostToClient::has_cursor_shape() const {
   return this != internal_default_instance() && cursor_shape_ != NULL;
 }
@@ -3154,7 +3154,7 @@ inline void HostToClient::set_allocated_cursor_shape(::aspia::proto::desktop::Cu
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.cursor_shape)
 }
 
-// .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+// .aspia.proto.desktop.ClipboardEvent clipboard_event = 4;
 inline bool HostToClient::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -3206,60 +3206,6 @@ inline void HostToClient::set_allocated_clipboard_event(::aspia::proto::desktop:
   }
   clipboard_event_ = clipboard_event;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.clipboard_event)
-}
-
-// .aspia.proto.desktop.ConfigRequest config_request = 4;
-inline bool HostToClient::has_config_request() const {
-  return this != internal_default_instance() && config_request_ != NULL;
-}
-inline void HostToClient::clear_config_request() {
-  if (GetArenaNoVirtual() == NULL && config_request_ != NULL) {
-    delete config_request_;
-  }
-  config_request_ = NULL;
-}
-inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::_internal_config_request() const {
-  return *config_request_;
-}
-inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::config_request() const {
-  const ::aspia::proto::desktop::ConfigRequest* p = config_request_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::ConfigRequest*>(
-      &::aspia::proto::desktop::_ConfigRequest_default_instance_);
-}
-inline ::aspia::proto::desktop::ConfigRequest* HostToClient::release_config_request() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
-  
-  ::aspia::proto::desktop::ConfigRequest* temp = config_request_;
-  config_request_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::ConfigRequest* HostToClient::mutable_config_request() {
-  
-  if (config_request_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::ConfigRequest>(GetArenaNoVirtual());
-    config_request_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
-  return config_request_;
-}
-inline void HostToClient::set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete config_request_;
-  }
-  if (config_request) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      config_request = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, config_request, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  config_request_ = config_request;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.config_request)
 }
 
 // .aspia.proto.desktop.ScreenList screen_list = 5;
@@ -3314,6 +3260,60 @@ inline void HostToClient::set_allocated_screen_list(::aspia::proto::desktop::Scr
   }
   screen_list_ = screen_list;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.screen_list)
+}
+
+// .aspia.proto.desktop.ConfigRequest config_request = 6;
+inline bool HostToClient::has_config_request() const {
+  return this != internal_default_instance() && config_request_ != NULL;
+}
+inline void HostToClient::clear_config_request() {
+  if (GetArenaNoVirtual() == NULL && config_request_ != NULL) {
+    delete config_request_;
+  }
+  config_request_ = NULL;
+}
+inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::_internal_config_request() const {
+  return *config_request_;
+}
+inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::config_request() const {
+  const ::aspia::proto::desktop::ConfigRequest* p = config_request_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::ConfigRequest*>(
+      &::aspia::proto::desktop::_ConfigRequest_default_instance_);
+}
+inline ::aspia::proto::desktop::ConfigRequest* HostToClient::release_config_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
+  
+  ::aspia::proto::desktop::ConfigRequest* temp = config_request_;
+  config_request_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::desktop::ConfigRequest* HostToClient::mutable_config_request() {
+  
+  if (config_request_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::ConfigRequest>(GetArenaNoVirtual());
+    config_request_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
+  return config_request_;
+}
+inline void HostToClient::set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete config_request_;
+  }
+  if (config_request) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      config_request = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, config_request, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  config_request_ = config_request;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.config_request)
 }
 
 // -------------------------------------------------------------------
@@ -3428,7 +3428,7 @@ inline void ClientToHost::set_allocated_key_event(::aspia::proto::desktop::KeyEv
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.key_event)
 }
 
-// .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+// .aspia.proto.desktop.ClipboardEvent clipboard_event = 5;
 inline bool ClientToHost::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -3482,61 +3482,7 @@ inline void ClientToHost::set_allocated_clipboard_event(::aspia::proto::desktop:
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.clipboard_event)
 }
 
-// .aspia.proto.desktop.Config config = 4;
-inline bool ClientToHost::has_config() const {
-  return this != internal_default_instance() && config_ != NULL;
-}
-inline void ClientToHost::clear_config() {
-  if (GetArenaNoVirtual() == NULL && config_ != NULL) {
-    delete config_;
-  }
-  config_ = NULL;
-}
-inline const ::aspia::proto::desktop::Config& ClientToHost::_internal_config() const {
-  return *config_;
-}
-inline const ::aspia::proto::desktop::Config& ClientToHost::config() const {
-  const ::aspia::proto::desktop::Config* p = config_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Config*>(
-      &::aspia::proto::desktop::_Config_default_instance_);
-}
-inline ::aspia::proto::desktop::Config* ClientToHost::release_config() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
-  
-  ::aspia::proto::desktop::Config* temp = config_;
-  config_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::Config* ClientToHost::mutable_config() {
-  
-  if (config_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Config>(GetArenaNoVirtual());
-    config_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
-  return config_;
-}
-inline void ClientToHost::set_allocated_config(::aspia::proto::desktop::Config* config) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete config_;
-  }
-  if (config) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      config = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, config, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  config_ = config;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.config)
-}
-
-// .aspia.proto.desktop.Screen screen = 5;
+// .aspia.proto.desktop.Screen screen = 6;
 inline bool ClientToHost::has_screen() const {
   return this != internal_default_instance() && screen_ != NULL;
 }
@@ -3588,6 +3534,60 @@ inline void ClientToHost::set_allocated_screen(::aspia::proto::desktop::Screen* 
   }
   screen_ = screen;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.screen)
+}
+
+// .aspia.proto.desktop.Config config = 7;
+inline bool ClientToHost::has_config() const {
+  return this != internal_default_instance() && config_ != NULL;
+}
+inline void ClientToHost::clear_config() {
+  if (GetArenaNoVirtual() == NULL && config_ != NULL) {
+    delete config_;
+  }
+  config_ = NULL;
+}
+inline const ::aspia::proto::desktop::Config& ClientToHost::_internal_config() const {
+  return *config_;
+}
+inline const ::aspia::proto::desktop::Config& ClientToHost::config() const {
+  const ::aspia::proto::desktop::Config* p = config_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Config*>(
+      &::aspia::proto::desktop::_Config_default_instance_);
+}
+inline ::aspia::proto::desktop::Config* ClientToHost::release_config() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
+  
+  ::aspia::proto::desktop::Config* temp = config_;
+  config_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::desktop::Config* ClientToHost::mutable_config() {
+  
+  if (config_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Config>(GetArenaNoVirtual());
+    config_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
+  return config_;
+}
+inline void ClientToHost::set_allocated_config(::aspia::proto::desktop::Config* config) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete config_;
+  }
+  if (config) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      config = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, config, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  config_ = config;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.config)
 }
 
 #ifdef __GNUC__
