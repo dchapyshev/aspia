@@ -49,25 +49,25 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
 {
-    proto::desktop::HostToClient message;
+    message_.Clear();
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message.has_video_packet())
+    if (message_.has_video_packet())
     {
-        readVideoPacket(message.video_packet());
+        readVideoPacket(message_.video_packet());
     }
-    else if (message.has_config_request())
+    else if (message_.has_config_request())
     {
-        readConfigRequest(message.config_request());
+        readConfigRequest(message_.config_request());
     }
-    else if (message.has_screen_list())
+    else if (message_.has_screen_list())
     {
-        readScreenList(message.screen_list());
+        readScreenList(message_.screen_list());
     }
     else
     {

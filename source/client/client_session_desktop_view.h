@@ -55,6 +55,7 @@ protected:
     void readScreenList(const proto::desktop::ScreenList& screen_list);
 
     ConnectData* connect_data_;
+    proto::desktop::HostToClient message_;
     QPointer<DesktopWindow> desktop_window_;
 
 private:

@@ -40,33 +40,33 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 {
-    proto::desktop::HostToClient message;
+    message_.Clear();
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message.has_video_packet() || message.has_cursor_shape())
+    if (message_.has_video_packet() || message_.has_cursor_shape())
     {
-        if (message.has_video_packet())
-            readVideoPacket(message.video_packet());
+        if (message_.has_video_packet())
+            readVideoPacket(message_.video_packet());
 
-        if (message.has_cursor_shape())
-            readCursorShape(message.cursor_shape());
+        if (message_.has_cursor_shape())
+            readCursorShape(message_.cursor_shape());
     }
-    else if (message.has_clipboard_event())
+    else if (message_.has_clipboard_event())
     {
-        readClipboardEvent(message.clipboard_event());
+        readClipboardEvent(message_.clipboard_event());
     }
-    else if (message.has_config_request())
+    else if (message_.has_config_request())
     {
-        readConfigRequest(message.config_request());
+        readConfigRequest(message_.config_request());
     }
-    else if (message.has_screen_list())
+    else if (message_.has_screen_list())
     {
-        readScreenList(message.screen_list());
+        readScreenList(message_.screen_list());
     }
     else
     {
