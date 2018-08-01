@@ -72,13 +72,13 @@ protected:
 private:
     enum class Event { NO_EVENT, SELECT_SCREEN, TERMINATE };
 
-    QScopedPointer<CaptureScheduler> capture_scheduler_;
+    std::unique_ptr<CaptureScheduler> capture_scheduler_;
 
-    QScopedPointer<ScreenCapturer> screen_capturer_;
-    QScopedPointer<VideoEncoder> video_encoder_;
+    std::unique_ptr<ScreenCapturer> screen_capturer_;
+    std::unique_ptr<VideoEncoder> video_encoder_;
 
-    QScopedPointer<CursorCapturer> cursor_capturer_;
-    QScopedPointer<CursorEncoder> cursor_encoder_;
+    std::unique_ptr<CursorCapturer> cursor_capturer_;
+    std::unique_ptr<CursorEncoder> cursor_encoder_;
 
     // By default, we capture the full screen.
     ScreenCapturer::ScreenId screen_id_ = ScreenCapturer::kFullDesktopScreenId;
