@@ -41,7 +41,6 @@ public:
     virtual ~ClientSessionDesktopView();
 
     static uint32_t supportedVideoEncodings();
-    static uint32_t supportedFeatures();
 
 public slots:
     // ClientSession implementation.

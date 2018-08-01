@@ -32,12 +32,6 @@ const uint32_t kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const uint32_t kSupportedFeaturesDesktopManage =
-    proto::desktop::FEATURE_CURSOR_SHAPE |
-    proto::desktop::FEATURE_CLIPBOARD;
-
-const uint32_t kSupportedFeaturesDesktopView = 0;
-
 } // namespace
 
 HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
@@ -60,14 +54,7 @@ HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
 void HostSessionDesktop::startSession()
 {
     proto::desktop::HostToClient message;
-
     message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
-
-    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopManage);
-    else
-        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopView);
-
     emit sendMessage(serializeMessage(message));
 }
 
@@ -169,7 +156,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     delete screen_updater_;
     delete clipboard_;
 
-    if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
+    if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
     {
         if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         {

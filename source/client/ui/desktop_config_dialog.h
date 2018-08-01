@@ -20,6 +20,7 @@
 #define ASPIA_CLIENT__UI__DESKTOP_CONFIG_DIALOG_H_
 
 #include "base/macros_magic.h"
+#include "protocol/authorization.pb.h"
 #include "protocol/desktop_session.pb.h"
 #include "ui_desktop_config_dialog.h"
 
@@ -30,9 +31,9 @@ class DesktopConfigDialog : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(const proto::desktop::Config& config,
+    DesktopConfigDialog(proto::auth::SessionType session_type,
+                        const proto::desktop::Config& config,
                         uint32_t supported_video_encodings,
-                        uint32_t supported_features,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog() = default;
 
@@ -48,7 +49,6 @@ private:
 
     proto::desktop::Config config_;
     uint32_t supported_video_encodings_;
-    uint32_t supported_features_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };

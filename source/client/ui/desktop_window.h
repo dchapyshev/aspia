@@ -52,7 +52,6 @@ public:
     void setScreenList(const proto::desktop::ScreenList& screen_list);
 
     void setSupportedVideoEncodings(uint32_t video_encodings);
-    void setSupportedFeatures(uint32_t features);
     bool requireConfigChange(proto::desktop::Config* config);
 
 signals:
@@ -81,7 +80,6 @@ private:
     ConnectData* connect_data_;
 
     uint32_t supported_video_encodings_ = 0;
-    uint32_t supported_features_ = 0;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

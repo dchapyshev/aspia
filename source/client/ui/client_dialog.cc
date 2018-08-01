@@ -97,9 +97,9 @@ void ClientDialog::sessionConfigButtonPressed()
     {
         case proto::auth::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            DesktopConfigDialog dialog(computer_.session_config().desktop_manage(),
+            DesktopConfigDialog dialog(session_type,
+                                       computer_.session_config().desktop_manage(),
                                        ClientSessionDesktopManage::supportedVideoEncodings(),
-                                       ClientSessionDesktopManage::supportedFeatures(),
                                        this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
@@ -112,9 +112,9 @@ void ClientDialog::sessionConfigButtonPressed()
 
         case proto::auth::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(computer_.session_config().desktop_view(),
+            DesktopConfigDialog dialog(session_type,
+                                       computer_.session_config().desktop_view(),
                                        ClientSessionDesktopView::supportedVideoEncodings(),
-                                       ClientSessionDesktopView::supportedFeatures(),
                                        this);
             if (dialog.exec() == DesktopConfigDialog::Accepted)
             {

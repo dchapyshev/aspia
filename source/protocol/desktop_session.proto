@@ -139,13 +139,6 @@ message VideoPacket
     bytes data = 4;
 }
 
-enum Feature
-{
-    FEATURE_NONE         = 0;
-    FEATURE_CURSOR_SHAPE = 1;
-    FEATURE_CLIPBOARD    = 2;
-}
-
 message Screen
 {
     int64 id     = 1;
@@ -162,14 +155,20 @@ message ConfigRequest
 {
     // Bit field with supported video encodings.
     uint32 video_encodings = 1;
+}
 
-    // Bit field with supported features.
-    uint32 features        = 2;
+enum ConfigFlags
+{
+    NO_FLAGS                  = 0;
+    ENABLE_CURSOR_SHAPE       = 1;
+    ENABLE_CLIPBOARD          = 2;
+    DISABLE_DESKTOP_EFFECTS   = 4;
+    DISABLE_DESKTOP_WALLPAPER = 8;
 }
 
 message Config
 {
-    uint32 features              = 1;
+    uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;

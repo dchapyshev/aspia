@@ -417,11 +417,13 @@ bool VideoEncoding_IsValid(int value) {
   }
 }
 
-bool Feature_IsValid(int value) {
+bool ConfigFlags_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
+    case 4:
+    case 8:
       return true;
     default:
       return false;
@@ -3086,7 +3088,6 @@ void ConfigRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ConfigRequest::kVideoEncodingsFieldNumber;
-const int ConfigRequest::kFeaturesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ConfigRequest::ConfigRequest()
@@ -3100,16 +3101,12 @@ ConfigRequest::ConfigRequest(const ConfigRequest& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&video_encodings_, &from.video_encodings_,
-    static_cast<size_t>(reinterpret_cast<char*>(&features_) -
-    reinterpret_cast<char*>(&video_encodings_)) + sizeof(features_));
+  video_encodings_ = from.video_encodings_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.ConfigRequest)
 }
 
 void ConfigRequest::SharedCtor() {
-  ::memset(&video_encodings_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&features_) -
-      reinterpret_cast<char*>(&video_encodings_)) + sizeof(features_));
+  video_encodings_ = 0u;
 }
 
 ConfigRequest::~ConfigRequest() {
@@ -3135,9 +3132,7 @@ void ConfigRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&video_encodings_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&features_) -
-      reinterpret_cast<char*>(&video_encodings_)) + sizeof(features_));
+  video_encodings_ = 0u;
   _internal_metadata_.Clear();
 }
 
@@ -3165,20 +3160,6 @@ bool ConfigRequest::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &video_encodings_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // uint32 features = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &features_)));
         } else {
           goto handle_unusual;
         }
@@ -3216,11 +3197,6 @@ void ConfigRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->video_encodings(), output);
   }
 
-  // uint32 features = 2;
-  if (this->features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->features(), output);
-  }
-
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.desktop.ConfigRequest)
@@ -3237,13 +3213,6 @@ size_t ConfigRequest::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->video_encodings());
-  }
-
-  // uint32 features = 2;
-  if (this->features() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->features());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -3266,9 +3235,6 @@ void ConfigRequest::MergeFrom(const ConfigRequest& from) {
   if (from.video_encodings() != 0) {
     set_video_encodings(from.video_encodings());
   }
-  if (from.features() != 0) {
-    set_features(from.features());
-  }
 }
 
 void ConfigRequest::CopyFrom(const ConfigRequest& from) {
@@ -3289,7 +3255,6 @@ void ConfigRequest::Swap(ConfigRequest* other) {
 void ConfigRequest::InternalSwap(ConfigRequest* other) {
   using std::swap;
   swap(video_encodings_, other->video_encodings_);
-  swap(features_, other->features_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 
@@ -3305,7 +3270,7 @@ void Config::InitAsDefaultInstance() {
       ::aspia::proto::desktop::PixelFormat::internal_default_instance());
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Config::kFeaturesFieldNumber;
+const int Config::kFlagsFieldNumber;
 const int Config::kVideoEncodingFieldNumber;
 const int Config::kPixelFormatFieldNumber;
 const int Config::kUpdateIntervalFieldNumber;
@@ -3328,9 +3293,9 @@ Config::Config(const Config& from)
   } else {
     pixel_format_ = NULL;
   }
-  ::memcpy(&features_, &from.features_,
+  ::memcpy(&flags_, &from.flags_,
     static_cast<size_t>(reinterpret_cast<char*>(&compress_ratio_) -
-    reinterpret_cast<char*>(&features_)) + sizeof(compress_ratio_));
+    reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.Config)
 }
 
@@ -3368,9 +3333,9 @@ void Config::Clear() {
     delete pixel_format_;
   }
   pixel_format_ = NULL;
-  ::memset(&features_, 0, static_cast<size_t>(
+  ::memset(&flags_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&compress_ratio_) -
-      reinterpret_cast<char*>(&features_)) + sizeof(compress_ratio_));
+      reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
   _internal_metadata_.Clear();
 }
 
@@ -3390,14 +3355,14 @@ bool Config::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 features = 1;
+      // uint32 flags = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &features_)));
+                 input, &flags_)));
         } else {
           goto handle_unusual;
         }
@@ -3485,9 +3450,9 @@ void Config::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 features = 1;
-  if (this->features() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->features(), output);
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
   }
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3530,11 +3495,11 @@ size_t Config::ByteSizeLong() const {
         *pixel_format_);
   }
 
-  // uint32 features = 1;
-  if (this->features() != 0) {
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->features());
+        this->flags());
   }
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3577,8 +3542,8 @@ void Config::MergeFrom(const Config& from) {
   if (from.has_pixel_format()) {
     mutable_pixel_format()->::aspia::proto::desktop::PixelFormat::MergeFrom(from.pixel_format());
   }
-  if (from.features() != 0) {
-    set_features(from.features());
+  if (from.flags() != 0) {
+    set_flags(from.flags());
   }
   if (from.video_encoding() != 0) {
     set_video_encoding(from.video_encoding());
@@ -3609,7 +3574,7 @@ void Config::Swap(Config* other) {
 void Config::InternalSwap(Config* other) {
   using std::swap;
   swap(pixel_format_, other->pixel_format_);
-  swap(features_, other->features_);
+  swap(flags_, other->flags_);
   swap(video_encoding_, other->video_encoding_);
   swap(update_interval_, other->update_interval_);
   swap(compress_ratio_, other->compress_ratio_);

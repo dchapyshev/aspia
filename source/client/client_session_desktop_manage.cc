@@ -31,10 +31,6 @@ const uint32_t kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const uint32_t kSupportedFeatures =
-    proto::desktop::FEATURE_CURSOR_SHAPE |
-    proto::desktop::FEATURE_CLIPBOARD;
-
 } // namespace
 
 ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data,
@@ -55,12 +51,6 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
 uint32_t ClientSessionDesktopManage::supportedVideoEncodings()
 {
     return kSupportedVideoEncodings;
-}
-
-// static
-uint32_t ClientSessionDesktopManage::supportedFeatures()
-{
-    return kSupportedFeatures;
 }
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
@@ -102,7 +92,7 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 
 void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& config)
 {
-    if (!(config.features() & proto::desktop::FEATURE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
     proto::desktop::ClientToHost message;
@@ -135,8 +125,8 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, uint32_t 
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
@@ -151,7 +141,6 @@ void ClientSessionDesktopManage::readConfigRequest(
     proto::desktop::Config config = connect_data_->desktopConfig();
 
     desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-    desktop_window_->setSupportedFeatures(config_request.features());
 
     // If current video encoding not supported.
     if (!(config_request.video_encodings() & config.video_encoding()))
@@ -177,8 +166,8 @@ void ClientSessionDesktopManage::readConfigRequest(
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CURSOR_SHAPE))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -203,8 +192,8 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
     desktop_window_->injectClipboard(clipboard_event);

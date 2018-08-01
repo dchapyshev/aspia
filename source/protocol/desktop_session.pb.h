@@ -167,17 +167,19 @@ const VideoEncoding VideoEncoding_MIN = VIDEO_ENCODING_UNKNOWN;
 const VideoEncoding VideoEncoding_MAX = VIDEO_ENCODING_VP9;
 const int VideoEncoding_ARRAYSIZE = VideoEncoding_MAX + 1;
 
-enum Feature {
-  FEATURE_NONE = 0,
-  FEATURE_CURSOR_SHAPE = 1,
-  FEATURE_CLIPBOARD = 2,
-  Feature_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Feature_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum ConfigFlags {
+  NO_FLAGS = 0,
+  ENABLE_CURSOR_SHAPE = 1,
+  ENABLE_CLIPBOARD = 2,
+  DISABLE_DESKTOP_EFFECTS = 4,
+  DISABLE_DESKTOP_WALLPAPER = 8,
+  ConfigFlags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ConfigFlags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool Feature_IsValid(int value);
-const Feature Feature_MIN = FEATURE_NONE;
-const Feature Feature_MAX = FEATURE_CLIPBOARD;
-const int Feature_ARRAYSIZE = Feature_MAX + 1;
+bool ConfigFlags_IsValid(int value);
+const ConfigFlags ConfigFlags_MIN = NO_FLAGS;
+const ConfigFlags ConfigFlags_MAX = DISABLE_DESKTOP_WALLPAPER;
+const int ConfigFlags_ARRAYSIZE = ConfigFlags_MAX + 1;
 
 // ===================================================================
 
@@ -1572,18 +1574,11 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
   ::google::protobuf::uint32 video_encodings() const;
   void set_video_encodings(::google::protobuf::uint32 value);
 
-  // uint32 features = 2;
-  void clear_features();
-  static const int kFeaturesFieldNumber = 2;
-  ::google::protobuf::uint32 features() const;
-  void set_features(::google::protobuf::uint32 value);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ConfigRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::uint32 video_encodings_;
-  ::google::protobuf::uint32 features_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -1686,11 +1681,11 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::aspia::proto::desktop::PixelFormat* mutable_pixel_format();
   void set_allocated_pixel_format(::aspia::proto::desktop::PixelFormat* pixel_format);
 
-  // uint32 features = 1;
-  void clear_features();
-  static const int kFeaturesFieldNumber = 1;
-  ::google::protobuf::uint32 features() const;
-  void set_features(::google::protobuf::uint32 value);
+  // uint32 flags = 1;
+  void clear_flags();
+  static const int kFlagsFieldNumber = 1;
+  ::google::protobuf::uint32 flags() const;
+  void set_flags(::google::protobuf::uint32 value);
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
   void clear_video_encoding();
@@ -1715,7 +1710,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::aspia::proto::desktop::PixelFormat* pixel_format_;
-  ::google::protobuf::uint32 features_;
+  ::google::protobuf::uint32 flags_;
   int video_encoding_;
   ::google::protobuf::uint32 update_interval_;
   ::google::protobuf::uint32 compress_ratio_;
@@ -2914,36 +2909,22 @@ inline void ConfigRequest::set_video_encodings(::google::protobuf::uint32 value)
   // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.video_encodings)
 }
 
-// uint32 features = 2;
-inline void ConfigRequest::clear_features() {
-  features_ = 0u;
-}
-inline ::google::protobuf::uint32 ConfigRequest::features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.features)
-  return features_;
-}
-inline void ConfigRequest::set_features(::google::protobuf::uint32 value) {
-  
-  features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.features)
-}
-
 // -------------------------------------------------------------------
 
 // Config
 
-// uint32 features = 1;
-inline void Config::clear_features() {
-  features_ = 0u;
+// uint32 flags = 1;
+inline void Config::clear_flags() {
+  flags_ = 0u;
 }
-inline ::google::protobuf::uint32 Config::features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.features)
-  return features_;
+inline ::google::protobuf::uint32 Config::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.flags)
+  return flags_;
 }
-inline void Config::set_features(::google::protobuf::uint32 value) {
+inline void Config::set_flags(::google::protobuf::uint32 value) {
   
-  features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.features)
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.flags)
 }
 
 // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3633,7 +3614,7 @@ template <> struct is_proto_enum< ::aspia::proto::desktop::KeyEvent_Flags> : ::s
 template <> struct is_proto_enum< ::aspia::proto::desktop::PointerEvent_ButtonMask> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::CursorShape_Flags> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::VideoEncoding> : ::std::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::desktop::Feature> : ::std::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::desktop::ConfigFlags> : ::std::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

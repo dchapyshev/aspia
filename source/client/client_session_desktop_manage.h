@@ -33,7 +33,6 @@ public:
     ClientSessionDesktopManage(ConnectData* connect_data, QObject* parent);
 
     static uint32_t supportedVideoEncodings();
-    static uint32_t supportedFeatures();
 
 public slots:
     // ClientSession implementation.

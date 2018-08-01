@@ -142,7 +142,7 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
     if (!video_encoder_)
         return false;
 
-    if (config.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
+    if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
         cursor_capturer_.reset(new CursorCapturerWin());
         cursor_encoder_.reset(new CursorEncoder());

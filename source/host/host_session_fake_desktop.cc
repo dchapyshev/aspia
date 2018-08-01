@@ -35,8 +35,6 @@ const uint32_t kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const uint32_t kSupportedFeatures = 0;
-
 } // namespace
 
 HostSessionFakeDesktop::HostSessionFakeDesktop(QObject* parent)
@@ -48,10 +46,7 @@ HostSessionFakeDesktop::HostSessionFakeDesktop(QObject* parent)
 void HostSessionFakeDesktop::startSession()
 {
     proto::desktop::HostToClient message;
-
     message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
-    message.mutable_config_request()->set_features(kSupportedFeatures);
-
     emit sendMessage(serializeMessage(message));
 }
 

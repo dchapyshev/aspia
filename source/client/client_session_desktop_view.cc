@@ -31,8 +31,6 @@ const uint32_t kSupportedVideoEncodings =
     proto::desktop::VIDEO_ENCODING_VP8 |
     proto::desktop::VIDEO_ENCODING_VP9;
 
-const uint32_t kSupportedFeatures = 0;
-
 } // namespace
 
 ClientSessionDesktopView::ClientSessionDesktopView(
@@ -62,12 +60,6 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
 uint32_t ClientSessionDesktopView::supportedVideoEncodings()
 {
     return kSupportedVideoEncodings;
-}
-
-// static
-uint32_t ClientSessionDesktopView::supportedFeatures()
-{
-    return kSupportedFeatures;
 }
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
@@ -191,7 +183,6 @@ void ClientSessionDesktopView::readConfigRequest(
     proto::desktop::Config config = connect_data_->desktopConfig();
 
     desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-    desktop_window_->setSupportedFeatures(config_request.features());
 
     // If current video encoding not supported.
     if (!(config_request.video_encodings() & config.video_encoding()))

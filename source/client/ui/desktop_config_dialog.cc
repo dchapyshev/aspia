@@ -35,28 +35,33 @@ enum ColorDepth
 
 } // namespace
 
-DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
+DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
+                                         const proto::desktop::Config& config,
                                          uint32_t supported_video_encodings,
-                                         uint32_t supported_features,
                                          QWidget* parent)
     : QDialog(parent),
       supported_video_encodings_(supported_video_encodings),
-      supported_features_(supported_features),
       config_(config)
 {
     ui.setupUi(this);
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)
+    {
         ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
                                 QVariant(proto::desktop::VIDEO_ENCODING_VP9));
+    }
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP8)
+    {
         ui.combo_codec->addItem(QStringLiteral("VP8"),
                                 QVariant(proto::desktop::VIDEO_ENCODING_VP8));
+    }
 
     if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_ZLIB)
+    {
         ui.combo_codec->addItem(QStringLiteral("ZLIB"),
                                 QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
+    }
 
     int current_codec = ui.combo_codec->findData(QVariant(config.video_encoding()));
     if (current_codec == -1)
@@ -94,17 +99,19 @@ DesktopConfigDialog::DesktopConfigDialog(const proto::desktop::Config& config,
 
     ui.spin_update_interval->setValue(config.update_interval());
 
-    if (config.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
-        ui.checkbox_cursor_shape->setChecked(true);
+    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+            ui.checkbox_cursor_shape->setChecked(true);
 
-    if (!(supported_features_ & proto::desktop::FEATURE_CURSOR_SHAPE))
+        if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+            ui.checkbox_clipboard->setChecked(true);
+    }
+    else
+    {
         ui.checkbox_cursor_shape->setEnabled(false);
-
-    if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
-        ui.checkbox_clipboard->setChecked(true);
-
-    if (!(supported_features_ & proto::desktop::FEATURE_CLIPBOARD))
         ui.checkbox_clipboard->setEnabled(false);
+    }
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
@@ -184,15 +191,15 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         config_.set_update_interval(ui.spin_update_interval->value());
 
-        uint32_t features = 0;
+        uint32_t flags = 0;
 
-        if (ui.checkbox_cursor_shape->isChecked())
-            features |= proto::desktop::FEATURE_CURSOR_SHAPE;
+        if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
+            flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
 
-        if (ui.checkbox_clipboard->isChecked())
-            features |= proto::desktop::FEATURE_CLIPBOARD;
+        if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
+            flags |= proto::desktop::ENABLE_CLIPBOARD;
 
-        config_.set_features(features);
+        config_.set_flags(flags);
 
         accept();
     }
