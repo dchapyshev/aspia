@@ -3087,7 +3087,7 @@ void ScreenList::InternalSwap(ScreenList* other) {
 void ConfigRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int ConfigRequest::kVideoEncodingsFieldNumber;
+const int ConfigRequest::kDummyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ConfigRequest::ConfigRequest()
@@ -3101,12 +3101,12 @@ ConfigRequest::ConfigRequest(const ConfigRequest& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  video_encodings_ = from.video_encodings_;
+  dummy_ = from.dummy_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.ConfigRequest)
 }
 
 void ConfigRequest::SharedCtor() {
-  video_encodings_ = 0u;
+  dummy_ = 0u;
 }
 
 ConfigRequest::~ConfigRequest() {
@@ -3132,7 +3132,7 @@ void ConfigRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  video_encodings_ = 0u;
+  dummy_ = 0u;
   _internal_metadata_.Clear();
 }
 
@@ -3152,14 +3152,14 @@ bool ConfigRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 video_encodings = 1;
+      // uint32 dummy = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &video_encodings_)));
+                 input, &dummy_)));
         } else {
           goto handle_unusual;
         }
@@ -3192,9 +3192,9 @@ void ConfigRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 video_encodings = 1;
-  if (this->video_encodings() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->video_encodings(), output);
+  // uint32 dummy = 1;
+  if (this->dummy() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dummy(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -3208,11 +3208,11 @@ size_t ConfigRequest::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // uint32 video_encodings = 1;
-  if (this->video_encodings() != 0) {
+  // uint32 dummy = 1;
+  if (this->dummy() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->video_encodings());
+        this->dummy());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -3232,8 +3232,8 @@ void ConfigRequest::MergeFrom(const ConfigRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.video_encodings() != 0) {
-    set_video_encodings(from.video_encodings());
+  if (from.dummy() != 0) {
+    set_dummy(from.dummy());
   }
 }
 
@@ -3254,7 +3254,7 @@ void ConfigRequest::Swap(ConfigRequest* other) {
 }
 void ConfigRequest::InternalSwap(ConfigRequest* other) {
   using std::swap;
-  swap(video_encodings_, other->video_encodings_);
+  swap(dummy_, other->dummy_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

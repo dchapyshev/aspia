@@ -25,15 +25,6 @@
 
 namespace aspia {
 
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-} // namespace
-
 HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
                                        const QString& channel_id)
     : HostSession(channel_id),
@@ -54,7 +45,7 @@ HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
 void HostSessionDesktop::startSession()
 {
     proto::desktop::HostToClient message;
-    message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
+    message.mutable_config_request()->set_dummy(1);
     emit sendMessage(serializeMessage(message));
 }
 

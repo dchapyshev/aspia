@@ -153,8 +153,7 @@ message ScreenList
 
 message ConfigRequest
 {
-    // Bit field with supported video encodings.
-    uint32 video_encodings = 1;
+    uint32 dummy = 1;
 }
 
 enum ConfigFlags

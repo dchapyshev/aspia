@@ -135,8 +135,13 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             break;
 
         default:
-            qWarning() << "Unsupported video encoding: " << config.video_encoding();
-            break;
+        {
+            // No supported video encoding. We create the default codec. If the client can not
+            // decode it, it will display an error and the connection will be disconnected.
+            qWarning() << "Unsupported video encoding:" << config.video_encoding();
+            video_encoder_.reset(VideoEncoderZLIB::create(PixelFormat::RGB565(), 6));
+        }
+        break;
     }
 
     if (!video_encoder_)

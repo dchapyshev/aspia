@@ -99,7 +99,6 @@ void ClientDialog::sessionConfigButtonPressed()
         {
             DesktopConfigDialog dialog(session_type,
                                        computer_.session_config().desktop_manage(),
-                                       ClientSessionDesktopManage::supportedVideoEncodings(),
                                        this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
@@ -114,7 +113,6 @@ void ClientDialog::sessionConfigButtonPressed()
         {
             DesktopConfigDialog dialog(session_type,
                                        computer_.session_config().desktop_view(),
-                                       ClientSessionDesktopView::supportedVideoEncodings(),
                                        this);
             if (dialog.exec() == DesktopConfigDialog::Accepted)
             {

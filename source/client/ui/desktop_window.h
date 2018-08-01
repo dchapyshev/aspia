@@ -51,9 +51,6 @@ public:
     void injectClipboard(const proto::desktop::ClipboardEvent& event);
     void setScreenList(const proto::desktop::ScreenList& screen_list);
 
-    void setSupportedVideoEncodings(uint32_t video_encodings);
-    bool requireConfigChange(proto::desktop::Config* config);
-
 signals:
     void windowClose();
     void sendConfig(const proto::desktop::Config& config);
@@ -78,8 +75,6 @@ private slots:
 
 private:
     ConnectData* connect_data_;
-
-    uint32_t supported_video_encodings_ = 0;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

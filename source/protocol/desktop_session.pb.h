@@ -1568,17 +1568,17 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // uint32 video_encodings = 1;
-  void clear_video_encodings();
-  static const int kVideoEncodingsFieldNumber = 1;
-  ::google::protobuf::uint32 video_encodings() const;
-  void set_video_encodings(::google::protobuf::uint32 value);
+  // uint32 dummy = 1;
+  void clear_dummy();
+  static const int kDummyFieldNumber = 1;
+  ::google::protobuf::uint32 dummy() const;
+  void set_dummy(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ConfigRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::uint32 video_encodings_;
+  ::google::protobuf::uint32 dummy_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -2895,18 +2895,18 @@ ScreenList::screen() const {
 
 // ConfigRequest
 
-// uint32 video_encodings = 1;
-inline void ConfigRequest::clear_video_encodings() {
-  video_encodings_ = 0u;
+// uint32 dummy = 1;
+inline void ConfigRequest::clear_dummy() {
+  dummy_ = 0u;
 }
-inline ::google::protobuf::uint32 ConfigRequest::video_encodings() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.video_encodings)
-  return video_encodings_;
+inline ::google::protobuf::uint32 ConfigRequest::dummy() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.dummy)
+  return dummy_;
 }
-inline void ConfigRequest::set_video_encodings(::google::protobuf::uint32 value) {
+inline void ConfigRequest::set_dummy(::google::protobuf::uint32 value) {
   
-  video_encodings_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.video_encodings)
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.dummy)
 }
 
 // -------------------------------------------------------------------

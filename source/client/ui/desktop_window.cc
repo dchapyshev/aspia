@@ -152,32 +152,6 @@ void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
     panel_->setScreenList(screen_list);
 }
 
-void DesktopWindow::setSupportedVideoEncodings(uint32_t video_encodings)
-{
-    supported_video_encodings_ = video_encodings;
-}
-
-bool DesktopWindow::requireConfigChange(proto::desktop::Config* config)
-{
-    if (!(supported_video_encodings_ & config->video_encoding()))
-    {
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The current video encoding is not supported by the host. "
-                                "Please specify a different video encoding."),
-                             QMessageBox::Ok);
-    }
-
-    DesktopConfigDialog dialog(connect_data_->sessionType(), *config, supported_video_encodings_, this);
-    if (dialog.exec() == DesktopConfigDialog::Accepted)
-    {
-        config->CopyFrom(dialog.config());
-        return true;
-    }
-
-    return false;
-}
-
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 {
     if (autoscroll_enabled_)
@@ -237,7 +211,6 @@ void DesktopWindow::changeSettings()
 {
     DesktopConfigDialog dialog(connect_data_->sessionType(),
                                connect_data_->desktopConfig(),
-                               supported_video_encodings_,
                                this);
     if (dialog.exec() == DesktopConfigDialog::Accepted)
     {

@@ -37,31 +37,20 @@ enum ColorDepth
 
 DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
                                          const proto::desktop::Config& config,
-                                         uint32_t supported_video_encodings,
                                          QWidget* parent)
     : QDialog(parent),
-      supported_video_encodings_(supported_video_encodings),
       config_(config)
 {
     ui.setupUi(this);
 
-    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP9)
-    {
-        ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
-                                QVariant(proto::desktop::VIDEO_ENCODING_VP9));
-    }
+    ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
+                            QVariant(proto::desktop::VIDEO_ENCODING_VP9));
 
-    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_VP8)
-    {
-        ui.combo_codec->addItem(QStringLiteral("VP8"),
-                                QVariant(proto::desktop::VIDEO_ENCODING_VP8));
-    }
+    ui.combo_codec->addItem(QStringLiteral("VP8"),
+                            QVariant(proto::desktop::VIDEO_ENCODING_VP8));
 
-    if (supported_video_encodings_ & proto::desktop::VIDEO_ENCODING_ZLIB)
-    {
-        ui.combo_codec->addItem(QStringLiteral("ZLIB"),
-                                QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
-    }
+    ui.combo_codec->addItem(QStringLiteral("ZLIB"),
+                            QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
 
     int current_codec = ui.combo_codec->findData(QVariant(config.video_encoding()));
     if (current_codec == -1)

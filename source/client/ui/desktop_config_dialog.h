@@ -33,7 +33,6 @@ class DesktopConfigDialog : public QDialog
 public:
     DesktopConfigDialog(proto::auth::SessionType session_type,
                         const proto::desktop::Config& config,
-                        uint32_t supported_video_encodings,
                         QWidget* parent = nullptr);
     ~DesktopConfigDialog() = default;
 
@@ -48,7 +47,6 @@ private:
     Ui::DesktopConfigDialog ui;
 
     proto::desktop::Config config_;
-    uint32_t supported_video_encodings_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopConfigDialog);
 };

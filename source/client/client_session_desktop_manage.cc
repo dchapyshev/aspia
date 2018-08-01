@@ -24,15 +24,6 @@
 
 namespace aspia {
 
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-} // namespace
-
 ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data,
                                                        QObject* parent)
     : ClientSessionDesktopView(connect_data, parent)
@@ -45,12 +36,6 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
 
     connect(desktop_window_, &DesktopWindow::sendClipboardEvent,
             this, &ClientSessionDesktopManage::onSendClipboardEvent);
-}
-
-// static
-uint32_t ClientSessionDesktopManage::supportedVideoEncodings()
-{
-    return kSupportedVideoEncodings;
 }
 
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
@@ -133,35 +118,6 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
     message.mutable_clipboard_event()->CopyFrom(event);
 
     emit sendMessage(serializeMessage(message));
-}
-
-void ClientSessionDesktopManage::readConfigRequest(
-    const proto::desktop::ConfigRequest& config_request)
-{
-    proto::desktop::Config config = connect_data_->desktopConfig();
-
-    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-
-    // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config.video_encoding()))
-    {
-        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
-        {
-            emit errorOccurred(tr("Session error: There are no supported video encodings."));
-            return;
-        }
-        else
-        {
-            if (!desktop_window_->requireConfigChange(&config))
-            {
-                emit errorOccurred(tr("Session error: Canceled by the user."));
-                return;
-            }
-        }
-    }
-
-    connect_data_->setDesktopConfig(config);
-    onSendConfig(config);
 }
 
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)

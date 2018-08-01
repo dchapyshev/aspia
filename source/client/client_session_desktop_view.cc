@@ -24,15 +24,6 @@
 
 namespace aspia {
 
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-} // namespace
-
 ClientSessionDesktopView::ClientSessionDesktopView(
     ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
@@ -54,12 +45,6 @@ ClientSessionDesktopView::ClientSessionDesktopView(
 ClientSessionDesktopView::~ClientSessionDesktopView()
 {
     delete desktop_window_;
-}
-
-// static
-uint32_t ClientSessionDesktopView::supportedVideoEncodings()
-{
-    return kSupportedVideoEncodings;
 }
 
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
@@ -121,6 +106,12 @@ void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen
     emit sendMessage(serializeMessage(message));
 }
 
+void ClientSessionDesktopView::readConfigRequest(
+    const proto::desktop::ConfigRequest& /* config_request */)
+{
+    onSendConfig(connect_data_->desktopConfig());
+}
+
 void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
@@ -175,35 +166,6 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::readScreenList(const proto::desktop::ScreenList& screen_list)
 {
     desktop_window_->setScreenList(screen_list);
-}
-
-void ClientSessionDesktopView::readConfigRequest(
-    const proto::desktop::ConfigRequest& config_request)
-{
-    proto::desktop::Config config = connect_data_->desktopConfig();
-
-    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-
-    // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config.video_encoding()))
-    {
-        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
-        {
-            emit errorOccurred(tr("Session error: There are no supported video encodings."));
-            return;
-        }
-        else
-        {
-            if (!desktop_window_->requireConfigChange(&config))
-            {
-                emit errorOccurred(tr("Session error: Canceled by the user."));
-                return;
-            }
-        }
-    }
-
-    connect_data_->setDesktopConfig(config);
-    onSendConfig(config);
 }
 
 } // namespace aspia
