@@ -154,7 +154,8 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     HostProcess::ErrorCode error_code = HostProcess::NoError;
 
-    if (!WTSQueryUserToken(session_id, token_out->recieve()))
+    ScopedHandle user_token;
+    if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         DWORD system_error_code = GetLastError();
 
@@ -177,6 +178,23 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     if (error_code == HostProcess::NoError)
     {
+        TOKEN_LINKED_TOKEN linked_token_info;
+        DWORD returned_length;
+
+        // Get the unfiltered token for a silent UAC bypass.
+        if (!GetTokenInformation(user_token,
+                                 TokenLinkedToken,
+                                 &linked_token_info,
+                                 sizeof(linked_token_info),
+                                 &returned_length))
+        {
+            qWarningErrno("GetTokenInformation failed");
+            return HostProcess::OtherError;
+        }
+
+        // Attach linked token.
+        token_out->reset(linked_token_info.LinkedToken);
+
         DWORD ui_access = 1;
         if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
         {
