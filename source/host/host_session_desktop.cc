@@ -46,6 +46,20 @@ HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
     }
 }
 
+HostSessionDesktop::~HostSessionDesktop()
+{
+#if defined(Q_OS_WIN)
+    if (effects_disabler_)
+    {
+        if (effects_disabler_->isEffectsDisabled())
+            effects_disabler_->restoreEffects();
+
+        if (effects_disabler_->isWallpaperDisabled())
+            effects_disabler_->restoreWallpaper();
+    }
+#endif // defined(Q_OS_WIN)
+}
+
 void HostSessionDesktop::startSession()
 {
     proto::desktop::HostToClient message;
@@ -58,17 +72,6 @@ void HostSessionDesktop::stopSession()
     delete screen_updater_;
     delete clipboard_;
     input_injector_.reset();
-
-#if defined(Q_OS_WIN)
-    if (effects_disabler_)
-    {
-        if (effects_disabler_->isEffectsDisabled())
-            effects_disabler_->restoreEffects();
-
-        if (effects_disabler_->isWallpaperDisabled())
-            effects_disabler_->restoreWallpaper();
-    }
-#endif // defined(Q_OS_WIN)
 }
 
 void HostSessionDesktop::messageReceived(const QByteArray& buffer)

@@ -36,7 +36,7 @@ class HostSessionDesktop : public HostSession
 
 public:
     HostSessionDesktop(proto::auth::SessionType session_type, const QString& channel_id);
-    ~HostSessionDesktop() = default;
+    ~HostSessionDesktop();
 
 public slots:
     // HostSession implementation.
