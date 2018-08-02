@@ -209,14 +209,21 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
 void DesktopWindow::changeSettings()
 {
-    DesktopConfigDialog dialog(connect_data_->sessionType(),
-                               connect_data_->desktopConfig(),
-                               this);
-    if (dialog.exec() == DesktopConfigDialog::Accepted)
-    {
-        connect_data_->setDesktopConfig(dialog.config());
-        emit sendConfig(dialog.config());
-    }
+    QScopedPointer<DesktopConfigDialog> dialog(
+        new DesktopConfigDialog(connect_data_->sessionType(),
+                                connect_data_->desktopConfig(),
+                                this));
+
+    connect(dialog.get(), &DesktopConfigDialog::configChanged,
+            this, &DesktopWindow::onConfigChanged);
+
+    dialog->exec();
+}
+
+void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
+{
+    connect_data_->setDesktopConfig(config);
+    emit sendConfig(config);
 }
 
 void DesktopWindow::autosizeWindow()
@@ -278,6 +285,13 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 
 void DesktopWindow::closeEvent(QCloseEvent* event)
 {
+    for (const auto& object : children())
+    {
+        QWidget* widget = dynamic_cast<QWidget*>(object);
+        if (widget)
+            widget->close();
+    }
+
     emit windowClose();
     QWidget::closeEvent(event);
 }

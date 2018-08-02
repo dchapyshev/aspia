@@ -38,6 +38,9 @@ public:
 
     const proto::desktop::Config& config() { return config_; }
 
+signals:
+    void configChanged(const proto::desktop::Config& config);
+
 private slots:
     void onCodecChanged(int item_index);
     void onCompressionRatioChanged(int value);

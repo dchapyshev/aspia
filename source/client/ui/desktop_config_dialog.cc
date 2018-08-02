@@ -202,6 +202,7 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         config_.set_flags(flags);
 
+        emit configChanged(config_);
         accept();
     }
     else

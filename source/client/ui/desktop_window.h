@@ -71,6 +71,7 @@ protected:
 private slots:
     void onPointerEvent(const QPoint& pos, uint32_t mask);
     void changeSettings();
+    void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
 
 private:
