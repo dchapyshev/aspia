@@ -369,6 +369,7 @@ void FilePanel::addFolder()
     FileItem* item = new FileItem(QString());
 
     ui.tree->addTopLevelItem(item);
+    ui.tree->scrollToItem(item);
     ui.tree->editItem(item);
 }
 
