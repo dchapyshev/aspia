@@ -1059,48 +1059,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
-        <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="145"/>
+        <location filename="../console/address_book_dialog.cc" line="146"/>
         <source>Name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="152"/>
-        <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="181"/>
+        <location filename="../console/address_book_dialog.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="187"/>
-        <source>Password can not be shorter than 8 characters.</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="140"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="153"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="189"/>
+        <source>Password can not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="274"/>
-        <location filename="../console/address_book_dialog.cc" line="296"/>
+        <location filename="../console/address_book_dialog.cc" line="277"/>
+        <location filename="../console/address_book_dialog.cc" line="299"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="275"/>
+        <location filename="../console/address_book_dialog.cc" line="278"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="297"/>
+        <location filename="../console/address_book_dialog.cc" line="300"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="335"/>
+        <location filename="../console/address_book_dialog.cc" line="338"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>

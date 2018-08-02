@@ -1059,48 +1059,60 @@
         <translation>Двойной щелчок для изменения</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
-        <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation>Слишком длинное имя. Максимальная длинна имени 64 символа.</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="145"/>
+        <location filename="../console/address_book_dialog.cc" line="146"/>
         <source>Name can not be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="152"/>
-        <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation>Слишком длинный коментарий. Максимальная длинна коментария 2048 символов.</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="181"/>
+        <location filename="../console/address_book_dialog.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введенные пароли не совпадают.</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="187"/>
-        <source>Password can not be shorter than 8 characters.</source>
-        <translation>Пароль не может быть короче 8 символов.</translation>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="140"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="153"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="189"/>
+        <source>Password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль не может быть короче, чем %n символ.</numerusform>
+            <numerusform>Пароль не может быть короче, чем %n символа.</numerusform>
+            <numerusform>Пароль не может быть короче, чем %n символов.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="274"/>
-        <location filename="../console/address_book_dialog.cc" line="296"/>
+        <location filename="../console/address_book_dialog.cc" line="277"/>
+        <location filename="../console/address_book_dialog.cc" line="299"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="275"/>
+        <location filename="../console/address_book_dialog.cc" line="278"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
-        <translation>При изменении количества итераций хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
+        <translation>При изменении количества итераций хеширования вам придется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="297"/>
+        <location filename="../console/address_book_dialog.cc" line="300"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation>При изменении размера соли для хеширования вам прийдется ввести пароль заново. Продолжить?</translation>
+        <translation>При изменении размера соли для хеширования вам придется ввести пароль заново. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="335"/>
+        <location filename="../console/address_book_dialog.cc" line="338"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -1374,9 +1386,9 @@
         <location filename="../console/computer_dialog.cc" line="164"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символов.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
         </translation>
     </message>
     <message>
@@ -1402,9 +1414,9 @@
         <location filename="../console/computer_dialog.cc" line="193"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символа.</numerusform>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символов.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
         </translation>
     </message>
     <message>
@@ -1419,9 +1431,9 @@
         <location filename="../console/computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символ.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символа.</numerusform>
-            <numerusform>Слишком длинное имя. Максимальная длинна имени %n символов.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
         </translation>
     </message>
     <message>
@@ -1433,9 +1445,9 @@
         <location filename="../console/computer_group_dialog.cc" line="73"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символ.</numerusform>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символа.</numerusform>
-            <numerusform>Слишком длинный коментарий. Максимальная длинна коментария %n символов.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
         </translation>
     </message>
     <message>
@@ -1897,7 +1909,7 @@
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="465"/>
         <source>The service could not be started.</source>
-        <translation>Не удалось запусить службу.</translation>
+        <translation>Не удалось запустить службу.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="491"/>

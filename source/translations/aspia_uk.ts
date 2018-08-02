@@ -1060,48 +1060,60 @@
         <translation>Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
-        <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation>Занадто довге ім&apos;я. Максимальна довжина для імені - 64 символи.</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="145"/>
+        <location filename="../console/address_book_dialog.cc" line="146"/>
         <source>Name can not be empty.</source>
         <translation>Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="152"/>
-        <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation>Занадто довгий коментар. Максимальна довжина для коментарів - 2048 символів.</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="181"/>
+        <location filename="../console/address_book_dialog.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не співпадають.</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="187"/>
-        <source>Password can not be shorter than 8 characters.</source>
-        <translation>Пароль не може бути коротшим за 8 символів.</translation>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="140"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені - %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="153"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation type="unfinished">
+            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../console/address_book_dialog.cc" line="189"/>
+        <source>Password can not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform>Пароль не може бути коротшим за %n символів.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="274"/>
-        <location filename="../console/address_book_dialog.cc" line="296"/>
+        <location filename="../console/address_book_dialog.cc" line="277"/>
+        <location filename="../console/address_book_dialog.cc" line="299"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="275"/>
+        <location filename="../console/address_book_dialog.cc" line="278"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни кількості ітерацій хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="297"/>
+        <location filename="../console/address_book_dialog.cc" line="300"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
         <translation>Для зміни розміру солі хешування потрібно повторно ввести пароль. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="335"/>
+        <location filename="../console/address_book_dialog.cc" line="338"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
