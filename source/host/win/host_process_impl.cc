@@ -178,22 +178,48 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     if (error_code == HostProcess::NoError)
     {
-        TOKEN_LINKED_TOKEN linked_token_info;
+        TOKEN_ELEVATION_TYPE elevation_type;
         DWORD returned_length;
 
-        // Get the unfiltered token for a silent UAC bypass.
         if (!GetTokenInformation(user_token,
-                                 TokenLinkedToken,
-                                 &linked_token_info,
-                                 sizeof(linked_token_info),
+                                 TokenElevationType,
+                                 &elevation_type,
+                                 sizeof(elevation_type),
                                  &returned_length))
         {
             qWarningErrno("GetTokenInformation failed");
             return HostProcess::OtherError;
         }
 
-        // Attach linked token.
-        token_out->reset(linked_token_info.LinkedToken);
+        switch (elevation_type)
+        {
+            // The token is a limited token.
+            case TokenElevationTypeLimited:
+            {
+                TOKEN_LINKED_TOKEN linked_token_info;
+
+                // Get the unfiltered token for a silent UAC bypass.
+                if (!GetTokenInformation(user_token,
+                                         TokenLinkedToken,
+                                         &linked_token_info,
+                                         sizeof(linked_token_info),
+                                         &returned_length))
+                {
+                    qWarningErrno("GetTokenInformation failed");
+                    return HostProcess::OtherError;
+                }
+
+                // Attach linked token.
+                token_out->reset(linked_token_info.LinkedToken);
+            }
+            break;
+
+            case TokenElevationTypeDefault: // The token does not have a linked token.
+            case TokenElevationTypeFull:    // The token is an elevated token.
+            default:
+                token_out->reset(user_token.release());
+                break;
+        }
 
         DWORD ui_access = 1;
         if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
