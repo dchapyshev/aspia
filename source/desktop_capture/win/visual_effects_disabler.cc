@@ -35,6 +35,10 @@ struct VisualEffectsState
     uint8_t listbox_smooth_scrolling = 0;
     uint8_t ui_effects = 0;
     uint8_t client_area_animation = 0;
+    uint8_t gradient_captions = 0;
+    uint8_t hot_tracking = 0;
+    uint8_t drop_shadow = 0;
+    uint8_t overlaped_content = 0;
 };
 
 struct WallpaperState
@@ -154,6 +158,50 @@ std::unique_ptr<VisualEffectsState> currentEffectsState()
     else
     {
         qWarningErrno("SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION) failed");
+    }
+
+    BOOL gradient_captions;
+    if (SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS, 0, &gradient_captions, 0))
+    {
+        state->gradient_captions |= (gradient_captions ? STATE_ENABLED : 0);
+        state->gradient_captions |= STATE_SAVED;
+    }
+    else
+    {
+        qWarningErrno("SystemParametersInfoW(SPI_GETGRADIENTCAPTIONS) failed");
+    }
+
+    BOOL hot_tracking;
+    if (SystemParametersInfoW(SPI_GETHOTTRACKING, 0, &hot_tracking, 0))
+    {
+        state->hot_tracking |= (hot_tracking ? STATE_ENABLED : 0);
+        state->hot_tracking |= STATE_SAVED;
+    }
+    else
+    {
+        qWarningErrno("SystemParametersInfoW(SPI_GETHOTTRACKING) failed");
+    }
+
+    BOOL drop_shadow;
+    if (SystemParametersInfoW(SPI_GETDROPSHADOW, 0, &drop_shadow, 0))
+    {
+        state->drop_shadow |= (drop_shadow ? STATE_ENABLED : 0);
+        state->drop_shadow |= STATE_SAVED;
+    }
+    else
+    {
+        qWarningErrno("SystemParametersInfoW(SPI_GETDROPSHADOW) failed");
+    }
+
+    BOOL overlaped_content;
+    if (SystemParametersInfoW(SPI_GETDISABLEOVERLAPPEDCONTENT, 0, &overlaped_content, 0))
+    {
+        state->overlaped_content |= (overlaped_content ? STATE_ENABLED : 0);
+        state->overlaped_content |= STATE_SAVED;
+    }
+    else
+    {
+        qWarningErrno("SystemParametersInfoW(SPI_GETDISABLEOVERLAPPEDCONTENT) failed");
     }
 
     return state;
@@ -291,6 +339,66 @@ void changeEffectsState(VisualEffectsState* state, BOOL enable)
         else
         {
             qWarningErrno("SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION) failed");
+        }
+    }
+
+    if (state->gradient_captions & STATE_CHANGE_ALLOWED)
+    {
+        if (SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS,
+                                  0,
+                                  reinterpret_cast<void*>(enable),
+                                  SPIF_SENDCHANGE))
+        {
+            state->gradient_captions |= STATE_CHANGED;
+        }
+        else
+        {
+            qWarningErrno("SystemParametersInfoW(SPI_SETGRADIENTCAPTIONS) failed");
+        }
+    }
+
+    if (state->hot_tracking & STATE_CHANGE_ALLOWED)
+    {
+        if (SystemParametersInfoW(SPI_SETHOTTRACKING,
+                                  0,
+                                  reinterpret_cast<void*>(enable),
+                                  SPIF_SENDCHANGE))
+        {
+            state->hot_tracking |= STATE_CHANGED;
+        }
+        else
+        {
+            qWarningErrno("SystemParametersInfoW(SPI_SETHOTTRACKING) failed");
+        }
+    }
+
+    if (state->drop_shadow & STATE_CHANGE_ALLOWED)
+    {
+        if (SystemParametersInfoW(SPI_SETDROPSHADOW,
+                                  0,
+                                  reinterpret_cast<void*>(enable),
+                                  SPIF_SENDCHANGE))
+        {
+            state->drop_shadow |= STATE_CHANGED;
+        }
+        else
+        {
+            qWarningErrno("SystemParametersInfoW(SPI_SETDROPSHADOW) failed");
+        }
+    }
+
+    if (state->overlaped_content & STATE_CHANGE_ALLOWED)
+    {
+        if (SystemParametersInfoW(SPI_SETDISABLEOVERLAPPEDCONTENT,
+                                  0,
+                                  reinterpret_cast<void*>(enable),
+                                  SPIF_SENDCHANGE))
+        {
+            state->overlaped_content |= STATE_CHANGED;
+        }
+        else
+        {
+            qWarningErrno("SystemParametersInfoW(SPI_SETDISABLEOVERLAPPEDCONTENT) failed");
         }
     }
 }
