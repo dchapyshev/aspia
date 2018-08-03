@@ -354,17 +354,25 @@ void HostProcessImpl::startProcess()
 
 void HostProcessImpl::killProcess()
 {
-    if (process_handle_.isValid())
-        TerminateProcess(process_handle_, 0);
+    if (!process_handle_.isValid())
+    {
+        qWarning("Invalid process handle");
+        return;
+    }
+
+    TerminateProcess(process_handle_, 0);
 }
 
 void HostProcessImpl::terminateProcess()
 {
-    if (process_handle_.isValid())
+    if (!process_handle_.isValid())
     {
-        EnumWindows(terminateEnumProc, process_id_);
-        PostThreadMessageW(thread_id_, WM_CLOSE, 0, 0);
+        qWarning("Invalid process handle");
+        return;
     }
+
+    EnumWindows(terminateEnumProc, process_id_);
+    PostThreadMessageW(thread_id_, WM_CLOSE, 0, 0);
 }
 
 bool HostProcessImpl::startProcessWithToken(HANDLE token)
