@@ -104,6 +104,8 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
 
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, &HostNotifierWindow::updateWindowPosition);
+
+    updateWindowPosition();
 }
 
 void HostNotifierWindow::setChannelId(const QString& channel_id)
