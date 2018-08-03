@@ -23,6 +23,10 @@
 #include <QStandardPaths>
 #include <QStorageInfo>
 
+#if defined(Q_OS_WIN)
+#include "base/win/file_enumerator.h"
+#endif // defined(Q_OS_WIN)
+
 #include "host/file_platform_util.h"
 
 namespace aspia {
@@ -130,28 +134,38 @@ proto::file_transfer::Reply FileWorker::doFileListRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QDir directory(QString::fromStdString(request.path()));
-    if (!directory.exists())
+    std::filesystem::path path = std::filesystem::u8path(request.path());
+    if (!std::filesystem::exists(path))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    directory.setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot |
-                        QDir::System | QDir::Hidden);
-    directory.setSorting(QDir::Name | QDir::DirsFirst);
+#if defined(Q_OS_WIN)
+    for (FileEnumerator enumerator(path); !enumerator.isAtEnd(); enumerator.advance())
+    {
+        const FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
 
-    QFileInfoList info_list = directory.entryInfoList();
-
-    for (const auto& info : info_list)
+        proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
+        item->set_name(file_info.name().u8string());
+        item->set_size(file_info.size());
+        item->set_modification_time(file_info.lastWriteTime());
+        item->set_is_directory(file_info.isDirectory());
+    }
+#else
+    for (const auto& directory_entry : std::filesystem::directory_iterator(path))
     {
         proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
 
-        item->set_name(info.fileName().toStdString());
-        item->set_size(info.size());
-        item->set_modification_time(info.lastModified().toSecsSinceEpoch());
-        item->set_is_directory(info.isDir());
+        item->set_name(directory_entry.path().filename().u8string());
+        item->set_size(directory_entry.file_size());
+        item->set_is_directory(directory_entry.is_directory());
+
+        std::filesystem::file_time_type file_time = directory_entry.last_write_time();
+        time_t time = decltype(file_time)::clock::to_time_t(file_time);
+        item->set_modification_time(time);
     }
+#endif
 
     reply.set_status(proto::file_transfer::STATUS_SUCCESS);
     return reply;

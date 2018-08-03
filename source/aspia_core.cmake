@@ -49,6 +49,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
 
 list(APPEND SOURCE_BASE_WIN
+    ${PROJECT_SOURCE_DIR}/base/win/file_enumerator.cc
+    ${PROJECT_SOURCE_DIR}/base/win/file_enumerator.h
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc
     ${PROJECT_SOURCE_DIR}/base/win/registry.h
     ${PROJECT_SOURCE_DIR}/base/win/scoped_com_initializer.h
