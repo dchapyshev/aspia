@@ -22,31 +22,33 @@
 
 namespace aspia {
 
-FileDepacketizer::FileDepacketizer(QPointer<QFile>& file)
+FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
+    : file_stream_(std::move(file_stream))
 {
-    file_.swap(file);
+    // Nothing
 }
 
 // static
 std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
-    const QString& file_path, bool overwrite)
+    const std::filesystem::path& file_path, bool overwrite)
 {
-    QFile::OpenMode mode = QFile::WriteOnly;
+    std::ofstream::openmode mode = std::ofstream::binary;
 
     if (overwrite)
-        mode |= QFile::Truncate;
+        mode |= std::ofstream::trunc;
 
-    QPointer<QFile> file = new QFile(file_path);
+    std::ofstream file_stream;
 
-    if (!file->open(mode))
+    file_stream.open(file_path, mode);
+    if (!file_stream.is_open())
         return nullptr;
 
-    return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(file));
+    return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(std::move(file_stream)));
 }
 
 bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
 {
-    Q_ASSERT(!file_.isNull() && file_->isOpen());
+    Q_ASSERT(file_stream_.is_open());
 
     // The first packet must have the full file size.
     if (packet.flags() & proto::file_transfer::Packet::FLAG_FIRST_PACKET)
@@ -57,13 +59,9 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 
     const size_t packet_size = packet.data().size();
 
-    if (!file_->seek(file_size_ - left_size_))
-    {
-        qDebug("seek failed");
-        return false;
-    }
-
-    if (file_->write(packet.data().data(), packet_size) != packet_size)
+    file_stream_.seekp(file_size_ - left_size_);
+    file_stream_.write(packet.data().data(), packet_size);
+    if (file_stream_.fail())
     {
         qDebug("Unable to write file");
         return false;
@@ -74,7 +72,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     if (packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
     {
         file_size_ = 0;
-        file_->close();
+        file_stream_.close();
     }
 
     return true;

@@ -1639,22 +1639,22 @@
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="394"/>
+        <location filename="../client/ui/file_panel.cc" line="395"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="395"/>
+        <location filename="../client/ui/file_panel.cc" line="396"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="449"/>
+        <location filename="../client/ui/file_panel.cc" line="450"/>
         <source>Home Folder</source>
         <translation>Домашній каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="453"/>
+        <location filename="../client/ui/file_panel.cc" line="454"/>
         <source>Desktop</source>
         <translation>Робочий стіл</translation>
     </message>

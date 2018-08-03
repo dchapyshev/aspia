@@ -25,7 +25,7 @@ namespace {
 // When transferring a file is divided into parts and each part is
 // transmitted separately.
 // This parameter specifies the size of the part.
-constexpr qint64 kPacketPartSize = 16 * 1024; // 16 kB
+constexpr int64_t kPacketPartSize = 16 * 1024; // 16 kB
 
 char* GetOutputBuffer(proto::file_transfer::Packet* packet, size_t size)
 {
@@ -35,26 +35,29 @@ char* GetOutputBuffer(proto::file_transfer::Packet* packet, size_t size)
 
 } // namespace
 
-FilePacketizer::FilePacketizer(QPointer<QFile>& file)
+FilePacketizer::FilePacketizer(std::ifstream&& file_stream)
+    : file_stream_(std::move(file_stream))
 {
-    file_.swap(file);
-    file_size_ = file_->size();
+    file_stream_.seekg(0, file_stream_.end);
+    file_size_ = file_stream_.tellg();
+    file_stream_.seekg(0);
     left_size_ = file_size_;
 }
 
-std::unique_ptr<FilePacketizer> FilePacketizer::create(const QString& file_path)
+std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::path& file_path)
 {
-    QPointer<QFile> file = new QFile(file_path);
+    std::ifstream file_stream;
 
-    if (!file->open(QFile::ReadOnly))
+    file_stream.open(file_path, std::ifstream::binary);
+    if (!file_stream.is_open())
         return nullptr;
 
-    return std::unique_ptr<FilePacketizer>(new FilePacketizer(file));
+    return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
 }
 
 std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
 {
-    Q_ASSERT(!file_.isNull() && file_->isOpen());
+    Q_ASSERT(file_stream_.is_open());
 
     // Create a new file packet.
     std::unique_ptr<proto::file_transfer::Packet> packet =
@@ -63,21 +66,18 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
     // All file packets must have the flag.
     packet->set_flags(proto::file_transfer::Packet::FLAG_PACKET);
 
-    qint64 packet_buffer_size = kPacketPartSize;
+    int64_t packet_buffer_size = kPacketPartSize;
 
     if (left_size_ < kPacketPartSize)
-        packet_buffer_size = static_cast<size_t>(left_size_);
+        packet_buffer_size = left_size_;
 
     char* packet_buffer = GetOutputBuffer(packet.get(), packet_buffer_size);
 
     // Moving to a new position in file.
-    if (!file_->seek(file_size_ - left_size_))
-    {
-        qDebug("Unable to seek file");
-        return nullptr;
-    }
+    file_stream_.seekg(file_size_ - left_size_);
 
-    if (file_->read(packet_buffer, packet_buffer_size) != packet_buffer_size)
+    file_stream_.read(packet_buffer, packet_buffer_size);
+    if (file_stream_.fail())
     {
         qDebug("Unable to read file");
         return nullptr;
@@ -96,7 +96,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
     if (!left_size_)
     {
         file_size_ = 0;
-        file_->close();
+        file_stream_.close();
 
         packet->set_flags(packet->flags() | proto::file_transfer::Packet::FLAG_LAST_PACKET);
     }

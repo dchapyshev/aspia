@@ -19,8 +19,8 @@
 #ifndef ASPIA_HOST__FILE_DEPACKETIZER_H_
 #define ASPIA_HOST__FILE_DEPACKETIZER_H_
 
-#include <QFile>
-#include <QPointer>
+#include <filesystem>
+#include <fstream>
 #include <memory>
 
 #include "base/macros_magic.h"
@@ -33,18 +33,19 @@ class FileDepacketizer
 public:
     ~FileDepacketizer() = default;
 
-    static std::unique_ptr<FileDepacketizer> create(const QString& file_path, bool overwrite);
+    static std::unique_ptr<FileDepacketizer> create(const std::filesystem::path& file_path,
+                                                    bool overwrite);
 
     // Reads the packet and writes its contents to a file.
     bool writeNextPacket(const proto::file_transfer::Packet& packet);
 
 private:
-    FileDepacketizer(QPointer<QFile>& file_stream);
+    FileDepacketizer(std::ofstream&& file_stream);
 
-    QPointer<QFile> file_;
+    std::ofstream file_stream_;
 
-    qint64 file_size_ = 0;
-    qint64 left_size_ = 0;
+    std::streamoff file_size_ = 0;
+    std::streamoff left_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileDepacketizer);
 };

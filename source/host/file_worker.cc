@@ -162,17 +162,14 @@ proto::file_transfer::Reply FileWorker::doCreateDirectoryRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString directory_path = QString::fromStdString(request.path());
-
-    QFileInfo file_info(directory_path);
-    if (file_info.exists())
+    std::filesystem::path directory_path = std::filesystem::u8path(request.path());
+    if (std::filesystem::exists(directory_path))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
     }
 
-    QDir directory;
-    if (!directory.mkdir(directory_path))
+    if (!std::filesystem::create_directory(directory_path))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
         return reply;
@@ -187,8 +184,8 @@ proto::file_transfer::Reply FileWorker::doRenameRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString old_name = QString::fromStdString(request.old_name());
-    QString new_name = QString::fromStdString(request.new_name());
+    std::filesystem::path old_name = std::filesystem::u8path(request.old_name());
+    std::filesystem::path new_name = std::filesystem::u8path(request.new_name());
 
     if (old_name == new_name)
     {
@@ -196,35 +193,25 @@ proto::file_transfer::Reply FileWorker::doRenameRequest(
         return reply;
     }
 
-    QFileInfo old_file_info(old_name);
-    if (!old_file_info.exists())
+    if (!std::filesystem::exists(old_name))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    QFileInfo new_file_info(new_name);
-    if (new_file_info.exists())
+    if (std::filesystem::exists(new_name))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
     }
 
-    if (old_file_info.isDir())
+    std::error_code error_code;
+    std::filesystem::rename(old_name, new_name, error_code);
+
+    if (error_code)
     {
-        if (!QDir().rename(old_name, new_name))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
-    }
-    else
-    {
-        if (!QFile(old_name).rename(new_name))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
+        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+        return reply;
     }
 
     reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -236,32 +223,22 @@ proto::file_transfer::Reply FileWorker::doRemoveRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString path = QString::fromStdString(request.path());
-
-    QFileInfo file_info(path);
-    if (!file_info.exists())
+    std::filesystem::path path = std::filesystem::u8path(request.path());
+    if (!std::filesystem::exists(path))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    if (file_info.isDir())
+    std::filesystem::permissions(
+        path,
+        std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
+        std::filesystem::perm_options::add);
+
+    if (!std::filesystem::remove(path))
     {
-        if (!QDir().rmdir(path))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
-    }
-    else
-    {
-        QFile file(path);
-        file.setPermissions(QFile::ReadOther | QFile::WriteOther);
-        if (!file.remove(path))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
+        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+        return reply;
     }
 
     reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -273,7 +250,7 @@ proto::file_transfer::Reply FileWorker::doDownloadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
+    packetizer_ = FilePacketizer::create(std::filesystem::u8path(request.path()));
     if (!packetizer_)
         reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
     else
@@ -287,13 +264,13 @@ proto::file_transfer::Reply FileWorker::doUploadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString file_path = QString::fromStdString(request.path());
+    std::filesystem::path file_path = std::filesystem::u8path(request.path());
 
     do
     {
         if (!request.overwrite())
         {
-            if (QFile(file_path).exists())
+            if (std::filesystem::exists(file_path))
             {
                 reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
                 break;
