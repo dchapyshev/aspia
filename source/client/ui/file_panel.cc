@@ -289,28 +289,41 @@ void FilePanel::onFileNameChanged(FileItem* file_item)
     {
         if (current_name.isEmpty())
         {
+            delete file_item;
+
             QMessageBox::warning(this,
                                  tr("Warning"),
                                  tr("Folder name can not be empty."),
                                  QMessageBox::Ok);
-            delete file_item;
-            return;
         }
-
-        FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + current_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+        else
+        {
+            FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + current_name);
+            connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+            emit newRequest(request);
+        }
     }
     else // Rename item.
     {
-        if (current_name == initial_name)
-            return;
+        if (current_name.isEmpty())
+        {
+            file_item->setName(initial_name);
 
-        FileRequest* request = FileRequest::renameRequest(currentPath() + initial_name,
-                                                          currentPath() + current_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Folder name can not be empty."),
+                                 QMessageBox::Ok);
+        }
+        else if (current_name != initial_name)
+        {
+            FileRequest* request = FileRequest::renameRequest(currentPath() + initial_name,
+                                                              currentPath() + current_name);
+            connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+            emit newRequest(request);
+        }
     }
+
+    edit_item_ = false;
 }
 
 void FilePanel::onFileContextMenu(const QPoint& point)
@@ -366,6 +379,11 @@ void FilePanel::toParentFolder()
 
 void FilePanel::addFolder()
 {
+    if (edit_item_)
+        return;
+
+    edit_item_ = true;
+
     FileItem* item = new FileItem(QString());
 
     ui.tree->addTopLevelItem(item);

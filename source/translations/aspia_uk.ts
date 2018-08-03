@@ -1589,7 +1589,8 @@
         <location filename="../client/ui/file_panel.cc" line="148"/>
         <location filename="../client/ui/file_panel.cc" line="162"/>
         <location filename="../client/ui/file_panel.cc" line="175"/>
-        <location filename="../client/ui/file_panel.cc" line="293"/>
+        <location filename="../client/ui/file_panel.cc" line="295"/>
+        <location filename="../client/ui/file_panel.cc" line="313"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
@@ -1619,42 +1620,43 @@
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="294"/>
+        <location filename="../client/ui/file_panel.cc" line="296"/>
+        <location filename="../client/ui/file_panel.cc" line="314"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="326"/>
+        <location filename="../client/ui/file_panel.cc" line="339"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="328"/>
+        <location filename="../client/ui/file_panel.cc" line="341"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="336"/>
+        <location filename="../client/ui/file_panel.cc" line="349"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="395"/>
+        <location filename="../client/ui/file_panel.cc" line="413"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="396"/>
+        <location filename="../client/ui/file_panel.cc" line="414"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="450"/>
+        <location filename="../client/ui/file_panel.cc" line="468"/>
         <source>Home Folder</source>
         <translation>Домашній каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="454"/>
+        <location filename="../client/ui/file_panel.cc" line="472"/>
         <source>Desktop</source>
         <translation>Робочий стіл</translation>
     </message>

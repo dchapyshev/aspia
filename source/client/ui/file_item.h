@@ -39,6 +39,12 @@ public:
     qint64 fileSize() const { return size_; }
     time_t lastModified() const { return last_modified_; }
 
+    void setName(const QString& name)
+    {
+        setText(0, name);
+        name_ = name;
+    }
+
 protected:
     bool operator<(const QTreeWidgetItem& other) const override;
 

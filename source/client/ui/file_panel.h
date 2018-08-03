@@ -75,6 +75,7 @@ private:
 
     Ui::FilePanel ui;
     QString current_path_;
+    bool edit_item_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };
