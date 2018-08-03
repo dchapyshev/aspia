@@ -117,9 +117,11 @@ void FileEnumerator::advance()
             FindClose(find_handle_);
             find_handle_ = INVALID_HANDLE_VALUE;
         }
-
-        if (!shouldSkip(file_info_.find_data_.cFileName))
-            break;
+        else
+        {
+            if (!shouldSkip(file_info_.find_data_.cFileName))
+                break;
+        }
     }
 }
 
