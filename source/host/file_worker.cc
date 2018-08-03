@@ -169,7 +169,8 @@ proto::file_transfer::Reply FileWorker::doCreateDirectoryRequest(
         return reply;
     }
 
-    if (!std::filesystem::create_directory(directory_path))
+    std::error_code ignored_code;
+    if (!std::filesystem::create_directory(directory_path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
         return reply;
@@ -235,7 +236,8 @@ proto::file_transfer::Reply FileWorker::doRemoveRequest(
         std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
         std::filesystem::perm_options::add);
 
-    if (!std::filesystem::remove(path))
+    std::error_code ignored_code;
+    if (!std::filesystem::remove(path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
         return reply;
