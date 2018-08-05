@@ -21,6 +21,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QProxyStyle>
 #include <QMenu>
 #include <QMessageBox>
 
@@ -33,6 +34,38 @@
 namespace aspia {
 
 namespace {
+
+class TreeViewProxyStyle : public QProxyStyle
+{
+public:
+    explicit TreeViewProxyStyle(QStyle* style)
+        : QProxyStyle(style)
+    {
+        // Nothing
+    }
+
+    void drawPrimitive(PrimitiveElement element,
+                       const QStyleOption* option,
+                       QPainter* painter,
+                       const QWidget* widget) const override
+    {
+        if (element == QStyle::PE_IndicatorItemViewItemDrop && !option->rect.isNull())
+        {
+            QStyleOption option_dup(*option);
+
+            if (widget)
+            {
+                option_dup.rect.setX(0);
+                option_dup.rect.setWidth(widget->width() - 3);
+            }
+
+            QProxyStyle::drawPrimitive(element, &option_dup, painter, widget);
+            return;
+        }
+
+        QProxyStyle::drawPrimitive(element, option, painter, widget);
+    }
+};
 
 QString normalizePath(const QString& path)
 {
@@ -65,10 +98,10 @@ FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+    ui.tree_files->setStyle(new TreeViewProxyStyle(ui.tree_files->style()));
 
     file_list_ = new FileListModel(this);
     ui.tree_files->setModel(file_list_);
-    ui.tree_files->setAcceptDrops(true);
 
     connect(ui.address_bar, QOverload<int>::of(&QComboBox::activated),
             this, &FilePanel::onAddressItemChanged);

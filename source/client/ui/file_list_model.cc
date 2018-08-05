@@ -433,24 +433,26 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
     if (!index.isValid())
         return Qt::ItemIsDropEnabled;
 
+    Qt::ItemFlags default_flags =
+        Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
+
     switch (index.column())
     {
         case COLUMN_NAME:
         {
             if (isFolder(index))
             {
-                return Qt::ItemIsEnabled | Qt::ItemNeverHasChildren | Qt::ItemIsEditable |
-                    Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+                return Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
+                    default_flags;
             }
             else
             {
-                return Qt::ItemIsEnabled | Qt::ItemNeverHasChildren | Qt::ItemIsEditable |
-                    Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+                return Qt::ItemIsEditable | Qt::ItemIsDragEnabled | default_flags;
             }
         }
 
         default:
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
+            return Qt::ItemIsDropEnabled | default_flags;
     }
 }
 
