@@ -41,6 +41,9 @@ public:
     QString currentPath() const { return current_path_; }
     void setCurrentPath(const QString& path);
 
+    QByteArray saveState() const;
+    void restoreState(const QByteArray& state);
+
 signals:
     void newRequest(FileRequest* request);
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);

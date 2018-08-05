@@ -22,6 +22,7 @@
 
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
+#include "client/ui/file_manager_settings.h"
 
 namespace aspia {
 
@@ -38,14 +39,16 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 
+    FileManagerSettings settings;
+    restoreGeometry(settings.windowGeometry());
+
+    ui.splitter->restoreState(settings.splitterState());
+
     ui.local_panel->setPanelName(tr("Local Computer"));
+    ui.local_panel->restoreState(settings.localPanelState());
+
     ui.remote_panel->setPanelName(tr("Remote Computer"));
-
-    QList<int> sizes;
-    sizes.push_back(width() / 2);
-    sizes.push_back(width() / 2);
-
-    ui.splitter->setSizes(sizes);
+    ui.remote_panel->restoreState(settings.remotePanelState());
 
     connect(ui.local_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
     connect(ui.remote_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
@@ -65,6 +68,13 @@ void FileManagerWindow::refresh()
 
 void FileManagerWindow::closeEvent(QCloseEvent* event)
 {
+    FileManagerSettings settings;
+
+    settings.setWindowGeometry(saveGeometry());
+    settings.setSplitterState(ui.splitter->saveState());
+    settings.setLocalPanelState(ui.local_panel->saveState());
+    settings.setRemotePanelState(ui.remote_panel->saveState());
+
     emit windowClose();
     QWidget::closeEvent(event);
 }
@@ -93,10 +103,8 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
 
     connect(remover, &FileRemover::error, progress_dialog, &FileRemoveDialog::showError);
 
-    connect(progress_dialog, &FileRemoveDialog::finished, [progress_dialog](int /* result */)
-    {
-        progress_dialog->deleteLater();
-    });
+    connect(progress_dialog, &FileRemoveDialog::finished,
+            progress_dialog, &FileRemoveDialog::deleteLater);
 
     connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileRemoveDialog::close);
 

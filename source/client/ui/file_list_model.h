@@ -35,6 +35,7 @@ public:
     explicit FileListModel(QObject* parent = nullptr);
 
     void setFileList(const proto::file_transfer::FileList& file_list);
+    void setSortOrder(int column, Qt::SortOrder order);
     void clear();
     bool isFolder(const QModelIndex& index) const;
     QString nameAt(const QModelIndex& index) const;
@@ -66,6 +67,7 @@ signals:
     void fileListDropped(const QString& folder_name, const QList<FileTransfer::Item>& files);
 
 protected:
+    void sortItems(int column, Qt::SortOrder order);
     static QString sizeToString(int64_t size);
     static QString timeToString(time_t time);
 
@@ -92,6 +94,7 @@ private:
     const QString dir_type_;
 
     Qt::SortOrder current_order_ = Qt::AscendingOrder;
+    int current_column_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileListModel);
 };

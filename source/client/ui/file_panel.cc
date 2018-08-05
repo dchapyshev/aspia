@@ -129,6 +129,19 @@ void FilePanel::setCurrentPath(const QString& path)
     onAddressItemChanged(current_item);
 }
 
+QByteArray FilePanel::saveState() const
+{
+    return ui.tree_files->header()->saveState();
+}
+
+void FilePanel::restoreState(const QByteArray& state)
+{
+    QHeaderView* header = ui.tree_files->header();
+    header->restoreState(state);
+
+    file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
+}
+
 void FilePanel::reply(const proto::file_transfer::Request& request,
                       const proto::file_transfer::Reply& reply)
 {
@@ -375,8 +388,11 @@ void FilePanel::addFolder()
     ui.tree_files->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
 
     QModelIndex index = file_list_->createFolder();
-    ui.tree_files->scrollTo(index);
-    ui.tree_files->edit(index);
+    if (index.isValid())
+    {
+        ui.tree_files->scrollTo(index);
+        ui.tree_files->edit(index);
+    }
 }
 
 void FilePanel::removeSelected()

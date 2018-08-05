@@ -121,6 +121,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_manager_settings.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_manager_settings.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui

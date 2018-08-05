@@ -45,9 +45,9 @@ void sortByName(T& list, Qt::SortOrder order)
         const QString& f2_name = f2.name;
 
         if (order == Qt::AscendingOrder)
-            return f1_name.toLower() > f2_name.toLower();
-        else
             return f1_name.toLower() < f2_name.toLower();
+        else
+            return f1_name.toLower() > f2_name.toLower();
     });
 }
 
@@ -57,9 +57,9 @@ void sortBySize(T& list, Qt::SortOrder order)
     std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
-            return f1.size > f2.size;
-        else
             return f1.size < f2.size;
+        else
+            return f1.size > f2.size;
     });
 }
 
@@ -69,9 +69,9 @@ void sortByType(T& list, Qt::SortOrder order)
     std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
-            return f1.type > f2.type;
-        else
             return f1.type < f2.type;
+        else
+            return f1.type > f2.type;
     });
 }
 
@@ -81,9 +81,9 @@ void sortByTime(T& list, Qt::SortOrder order)
     std::sort(list.begin(), list.end(), [order](const T::value_type& f1, const T::value_type& f2)
     {
         if (order == Qt::AscendingOrder)
-            return f1.last_write > f2.last_write;
-        else
             return f1.last_write < f2.last_write;
+        else
+            return f1.last_write > f2.last_write;
     });
 }
 
@@ -133,7 +133,15 @@ void FileListModel::setFileList(const proto::file_transfer::FileList& list)
         }
     }
 
+    sortItems(current_column_, current_order_);
+
     endInsertRows();
+}
+
+void FileListModel::setSortOrder(int column, Qt::SortOrder order)
+{
+    current_column_ = column;
+    current_order_ = order;
 }
 
 void FileListModel::clear()
@@ -172,6 +180,10 @@ int64_t FileListModel::sizeAt(const QModelIndex& index) const
 
 QModelIndex FileListModel::createFolder()
 {
+    QString last_folder = folder_items_.last().name;
+    if (last_folder.isEmpty())
+        return QModelIndex();
+
     int row = folder_items_.count();
 
     beginInsertRows(QModelIndex(), row, row);
@@ -444,10 +456,14 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
 
 void FileListModel::sort(int column, Qt::SortOrder order)
 {
-    if (current_order_ == order)
-        return;
+    sortItems(column, order);
+    emit dataChanged(QModelIndex(), QModelIndex());
+}
 
+void FileListModel::sortItems(int column, Qt::SortOrder order)
+{
     current_order_ = order;
+    current_column_ = column;
 
     switch (column)
     {
@@ -472,8 +488,6 @@ void FileListModel::sort(int column, Qt::SortOrder order)
         default:
             break;
     }
-
-    emit dataChanged(QModelIndex(), QModelIndex());
 }
 
 // static
