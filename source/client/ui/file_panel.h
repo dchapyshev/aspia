@@ -81,7 +81,9 @@ private:
 
     Ui::FilePanel ui;
     FileListModel* file_list_ = nullptr;
+
     QString current_path_;
+    QString prev_path_;
 
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };

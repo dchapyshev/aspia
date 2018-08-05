@@ -200,9 +200,12 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  tr("Failed to get list of files: %1")
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
+            setCurrentPath(prev_path_);
         }
-
-        file_list_->setFileList(reply.file_list());
+        else
+        {
+            file_list_->setFileList(reply.file_list());
+        }
     }
     else if (request.has_create_directory_request())
     {
@@ -268,6 +271,7 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
 
 void FilePanel::onAddressItemChanged(int index)
 {
+    prev_path_ = current_path_;
     current_path_ = normalizePath(addressItemPath(index));
 
     // If the address is entered by the user, then the icon is missing.
