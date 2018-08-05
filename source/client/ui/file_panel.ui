@@ -214,7 +214,7 @@
     </widget>
    </item>
    <item>
-    <widget class="aspia::FileTreeWidget" name="tree">
+    <widget class="QTreeView" name="tree_files">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -230,6 +230,9 @@
      <property name="defaultDropAction">
       <enum>Qt::CopyAction</enum>
      </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
@@ -242,26 +245,6 @@
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
-     <column>
-      <property name="text">
-       <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Size</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Modified</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
@@ -276,13 +259,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>aspia::FileTreeWidget</class>
-   <extends>QTreeWidget</extends>
-   <header>client/ui/file_tree_widget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../../resources/resources.qrc"/>
  </resources>

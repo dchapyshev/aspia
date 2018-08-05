@@ -600,27 +600,7 @@
         <translation>Надіслати</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="247"/>
-        <source>Name</source>
-        <translation>Ім&apos;я</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.ui" line="252"/>
-        <source>Size</source>
-        <translation>Розмір</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.ui" line="257"/>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.ui" line="262"/>
-        <source>Modified</source>
-        <translation>Змінено</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.ui" line="270"/>
+        <location filename="../client/ui/file_panel.ui" line="253"/>
         <source>0 object(s) selected</source>
         <translation>0 об&apos;єктів обрано</translation>
     </message>
@@ -801,36 +781,6 @@
 </context>
 <context>
     <name>QCoreApplication</name>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="42"/>
-        <source>TB</source>
-        <translation>ТБ</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="47"/>
-        <source>GB</source>
-        <translation>ГБ</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="52"/>
-        <source>MB</source>
-        <translation>МБ</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="57"/>
-        <source>kB</source>
-        <translation>кБ</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="62"/>
-        <source>B</source>
-        <translation>Б</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_item.cc" line="86"/>
-        <source>Folder</source>
-        <translation>Каталог</translation>
-    </message>
     <message>
         <location filename="../client/file_status.cc" line="30"/>
         <source>Successfully completed</source>
@@ -1073,7 +1023,7 @@
         <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
-            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені - %n символів.</numerusform>
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1082,7 +1032,7 @@
         <location filename="../console/address_book_dialog.cc" line="153"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
-            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів - %n символів.</numerusform>
+            <numerusform>Занадто довгий коментар. Максимальна довжина для коментарів %n символів.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1386,8 +1336,8 @@
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="164"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
-            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені - %n символів.</numerusform>
+        <translation type="unfinished">
+            <numerusform>Занадто довге ім&apos;я. Максимальна довжина для імені %n символів.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1565,6 +1515,59 @@
     </message>
 </context>
 <context>
+    <name>aspia::FileListModel</name>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="95"/>
+        <source>Folder</source>
+        <translation>Каталог</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="337"/>
+        <source>Name</source>
+        <translation>Ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="340"/>
+        <source>Size</source>
+        <translation>Розмір</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="343"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="346"/>
+        <source>Modified</source>
+        <translation>Змінено</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="492"/>
+        <source>TB</source>
+        <translation>ТБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="497"/>
+        <source>GB</source>
+        <translation>ГБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="502"/>
+        <source>MB</source>
+        <translation>МБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="507"/>
+        <source>kB</source>
+        <translation>кБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_list_model.cc" line="512"/>
+        <source>B</source>
+        <translation>Б</translation>
+    </message>
+</context>
+<context>
     <name>aspia::FileManagerWindow</name>
     <message>
         <location filename="../client/ui/file_manager_window.cc" line="39"/>
@@ -1585,78 +1588,78 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="134"/>
-        <location filename="../client/ui/file_panel.cc" line="148"/>
-        <location filename="../client/ui/file_panel.cc" line="162"/>
-        <location filename="../client/ui/file_panel.cc" line="175"/>
-        <location filename="../client/ui/file_panel.cc" line="295"/>
-        <location filename="../client/ui/file_panel.cc" line="313"/>
+        <location filename="../client/ui/file_panel.cc" line="140"/>
+        <location filename="../client/ui/file_panel.cc" line="153"/>
+        <location filename="../client/ui/file_panel.cc" line="166"/>
+        <location filename="../client/ui/file_panel.cc" line="179"/>
+        <location filename="../client/ui/file_panel.cc" line="292"/>
+        <location filename="../client/ui/file_panel.cc" line="310"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="135"/>
+        <location filename="../client/ui/file_panel.cc" line="141"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="149"/>
+        <location filename="../client/ui/file_panel.cc" line="154"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="163"/>
+        <location filename="../client/ui/file_panel.cc" line="167"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="176"/>
+        <location filename="../client/ui/file_panel.cc" line="180"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="269"/>
+        <location filename="../client/ui/file_panel.cc" line="272"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="296"/>
-        <location filename="../client/ui/file_panel.cc" line="314"/>
+        <location filename="../client/ui/file_panel.cc" line="293"/>
+        <location filename="../client/ui/file_panel.cc" line="311"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="339"/>
+        <location filename="../client/ui/file_panel.cc" line="332"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="341"/>
+        <location filename="../client/ui/file_panel.cc" line="334"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="349"/>
+        <location filename="../client/ui/file_panel.cc" line="342"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="413"/>
+        <location filename="../client/ui/file_panel.cc" line="393"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="414"/>
+        <location filename="../client/ui/file_panel.cc" line="394"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="468"/>
+        <location filename="../client/ui/file_panel.cc" line="443"/>
         <source>Home Folder</source>
         <translation>Домашній каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="472"/>
+        <location filename="../client/ui/file_panel.cc" line="447"/>
         <source>Desktop</source>
         <translation>Робочий стіл</translation>
     </message>
@@ -1923,7 +1926,7 @@
 <context>
     <name>aspia::HostNotifierWindow</name>
     <message>
-        <location filename="../host/ui/host_notifier_window.cc" line="235"/>
+        <location filename="../host/ui/host_notifier_window.cc" line="237"/>
         <source>Disconnect</source>
         <translation>Відключитися</translation>
     </message>

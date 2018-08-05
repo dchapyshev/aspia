@@ -135,9 +135,19 @@ proto::file_transfer::Reply FileWorker::doFileListRequest(
     proto::file_transfer::Reply reply;
 
     std::filesystem::path path = std::filesystem::u8path(request.path());
-    if (!std::filesystem::exists(path))
+
+    std::error_code ignored_code;
+    std::filesystem::file_status status = std::filesystem::status(path, ignored_code);
+
+    if (!std::filesystem::exists(status))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
+        return reply;
+    }
+
+    if (!std::filesystem::is_directory(status))
+    {
+        reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
         return reply;
     }
 
@@ -177,13 +187,14 @@ proto::file_transfer::Reply FileWorker::doCreateDirectoryRequest(
     proto::file_transfer::Reply reply;
 
     std::filesystem::path directory_path = std::filesystem::u8path(request.path());
-    if (std::filesystem::exists(directory_path))
+
+    std::error_code ignored_code;
+    if (std::filesystem::exists(directory_path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
     }
 
-    std::error_code ignored_code;
     if (!std::filesystem::create_directory(directory_path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
@@ -208,13 +219,14 @@ proto::file_transfer::Reply FileWorker::doRenameRequest(
         return reply;
     }
 
-    if (!std::filesystem::exists(old_name))
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(old_name, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    if (std::filesystem::exists(new_name))
+    if (std::filesystem::exists(new_name, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
@@ -239,7 +251,9 @@ proto::file_transfer::Reply FileWorker::doRemoveRequest(
     proto::file_transfer::Reply reply;
 
     std::filesystem::path path = std::filesystem::u8path(request.path());
-    if (!std::filesystem::exists(path))
+
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
@@ -248,9 +262,9 @@ proto::file_transfer::Reply FileWorker::doRemoveRequest(
     std::filesystem::permissions(
         path,
         std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
-        std::filesystem::perm_options::add);
+        std::filesystem::perm_options::add,
+        ignored_code);
 
-    std::error_code ignored_code;
     if (!std::filesystem::remove(path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
@@ -286,7 +300,8 @@ proto::file_transfer::Reply FileWorker::doUploadRequest(
     {
         if (!request.overwrite())
         {
-            if (std::filesystem::exists(file_path))
+            std::error_code ignored_code;
+            if (std::filesystem::exists(file_path, ignored_code))
             {
                 reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
                 break;

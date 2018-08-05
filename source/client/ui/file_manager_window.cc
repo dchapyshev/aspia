@@ -123,13 +123,15 @@ void FileManagerWindow::sendItems(FilePanel* sender, const QList<FileTransfer::I
     }
 }
 
-void FileManagerWindow::receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items)
+void FileManagerWindow::receiveItems(FilePanel* sender,
+                                     const QString& target_folder,
+                                     const QList<FileTransfer::Item>& items)
 {
     if (sender == ui.local_panel)
     {
         transferItems(FileTransfer::Downloader,
                       ui.remote_panel->currentPath(),
-                      ui.local_panel->currentPath(),
+                      target_folder,
                       items);
     }
     else
@@ -138,7 +140,7 @@ void FileManagerWindow::receiveItems(FilePanel* sender, const QList<FileTransfer
 
         transferItems(FileTransfer::Uploader,
                       ui.local_panel->currentPath(),
-                      ui.remote_panel->currentPath(),
+                      target_folder,
                       items);
     }
 }
@@ -173,10 +175,8 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
     connect(transfer, &FileTransfer::localRequest, this, &FileManagerWindow::localRequest);
     connect(transfer, &FileTransfer::remoteRequest, this, &FileManagerWindow::remoteRequest);
 
-    connect(progress_dialog, &FileTransferDialog::finished, [progress_dialog](int /* result */)
-    {
-        progress_dialog->deleteLater();
-    });
+    connect(progress_dialog, &FileTransferDialog::finished,
+            progress_dialog, &FileTransferDialog::deleteLater);
 
     connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileTransferDialog::close);
 

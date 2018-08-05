@@ -18,7 +18,11 @@
 
 #include "client/ui/file_item_mime_data.h"
 
+#include "client/ui/file_list_model.h"
+
 namespace aspia {
+
+FileItemMimeData::~FileItemMimeData() = default;
 
 // static
 QString FileItemMimeData::mimeType()
@@ -30,6 +34,11 @@ void FileItemMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     file_list_ = file_list;
     setData(mimeType(), QByteArray());
+}
+
+void FileItemMimeData::setSource(const FileListModel* source)
+{
+    source_ = source;
 }
 
 } // namespace aspia

@@ -117,13 +117,10 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui
@@ -136,8 +133,6 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.ui
-    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui

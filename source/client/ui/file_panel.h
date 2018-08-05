@@ -26,6 +26,8 @@
 
 namespace aspia {
 
+class FileListModel;
+
 class FilePanel : public QWidget
 {
     Q_OBJECT
@@ -43,7 +45,9 @@ signals:
     void newRequest(FileRequest* request);
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
     void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
-    void receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
+    void receiveItems(FilePanel* sender,
+                      const QString& folder,
+                      const QList<FileTransfer::Item>& items);
 
 public slots:
     void reply(const proto::file_transfer::Request& request,
@@ -56,10 +60,11 @@ protected:
 
 private slots:
     void onAddressItemChanged(int index);
-    void onFileDoubleClicked(QTreeWidgetItem* item, int column);
+    void onFileDoubleClicked(const QModelIndex& index);
     void onFileSelectionChanged();
-    void onFileNameChanged(FileItem* file_item);
     void onFileContextMenu(const QPoint& point);
+    void onNameChangeRequest(const QString& old_name, const QString& new_name);
+    void onCreateFolderRequest(const QString& name);
 
     void toChildFolder(const QString& child_name);
     void toParentFolder();
@@ -70,12 +75,10 @@ private slots:
 private:
     QString addressItemPath(int index) const;
     void updateDrives(const proto::file_transfer::DriveList& list);
-    void updateFiles(const proto::file_transfer::FileList& list);
-    int selectedFilesCount();
 
     Ui::FilePanel ui;
+    FileListModel* file_list_ = nullptr;
     QString current_path_;
-    bool edit_item_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };

@@ -25,20 +25,24 @@
 
 namespace aspia {
 
-class FileItem;
+class FileListModel;
 
 class FileItemMimeData : public QMimeData
 {
 public:
     FileItemMimeData() = default;
-    virtual ~FileItemMimeData() = default;
+    virtual ~FileItemMimeData();
 
     static QString mimeType();
 
     void setFileList(const QList<FileTransfer::Item>& file_list);
     QList<FileTransfer::Item> fileList() const { return file_list_; }
 
+    void setSource(const FileListModel* source);
+    const FileListModel* source() const { return source_; }
+
 private:
+    const FileListModel* source_;
     QList<FileTransfer::Item> file_list_;
 
     DISALLOW_COPY_AND_ASSIGN(FileItemMimeData);
