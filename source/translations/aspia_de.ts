@@ -1511,47 +1511,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="337"/>
+        <location filename="../client/ui/file_list_model.cc" line="349"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="340"/>
+        <location filename="../client/ui/file_list_model.cc" line="352"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="343"/>
+        <location filename="../client/ui/file_list_model.cc" line="355"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="346"/>
+        <location filename="../client/ui/file_list_model.cc" line="358"/>
         <source>Modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="492"/>
+        <location filename="../client/ui/file_list_model.cc" line="506"/>
         <source>TB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="497"/>
+        <location filename="../client/ui/file_list_model.cc" line="511"/>
         <source>GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="502"/>
+        <location filename="../client/ui/file_list_model.cc" line="516"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="507"/>
+        <location filename="../client/ui/file_list_model.cc" line="521"/>
         <source>kB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="512"/>
+        <location filename="../client/ui/file_list_model.cc" line="526"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1559,17 +1559,17 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="39"/>
+        <location filename="../client/ui/file_manager_window.cc" line="40"/>
         <source>%1 - Aspia File Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="41"/>
+        <location filename="../client/ui/file_manager_window.cc" line="47"/>
         <source>Local Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="42"/>
+        <location filename="../client/ui/file_manager_window.cc" line="50"/>
         <source>Remote Computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1577,78 +1577,78 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="140"/>
         <location filename="../client/ui/file_panel.cc" line="153"/>
         <location filename="../client/ui/file_panel.cc" line="166"/>
         <location filename="../client/ui/file_panel.cc" line="179"/>
-        <location filename="../client/ui/file_panel.cc" line="292"/>
-        <location filename="../client/ui/file_panel.cc" line="310"/>
+        <location filename="../client/ui/file_panel.cc" line="192"/>
+        <location filename="../client/ui/file_panel.cc" line="305"/>
+        <location filename="../client/ui/file_panel.cc" line="323"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="141"/>
+        <location filename="../client/ui/file_panel.cc" line="154"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="154"/>
+        <location filename="../client/ui/file_panel.cc" line="167"/>
         <source>Failed to get list of files: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="167"/>
+        <location filename="../client/ui/file_panel.cc" line="180"/>
         <source>Failed to create directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="180"/>
+        <location filename="../client/ui/file_panel.cc" line="193"/>
         <source>Failed to rename item: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="272"/>
+        <location filename="../client/ui/file_panel.cc" line="285"/>
         <source>%1 object(s) selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="293"/>
-        <location filename="../client/ui/file_panel.cc" line="311"/>
+        <location filename="../client/ui/file_panel.cc" line="306"/>
+        <location filename="../client/ui/file_panel.cc" line="324"/>
         <source>Folder name can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="332"/>
+        <location filename="../client/ui/file_panel.cc" line="345"/>
         <source>&amp;Send	F11</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="334"/>
+        <location filename="../client/ui/file_panel.cc" line="347"/>
         <source>&amp;Delete	Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="342"/>
+        <location filename="../client/ui/file_panel.cc" line="355"/>
         <source>&amp;Create Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="393"/>
+        <location filename="../client/ui/file_panel.cc" line="409"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="394"/>
+        <location filename="../client/ui/file_panel.cc" line="410"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="443"/>
+        <location filename="../client/ui/file_panel.cc" line="459"/>
         <source>Home Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="447"/>
+        <location filename="../client/ui/file_panel.cc" line="463"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
