@@ -232,22 +232,22 @@
     <message>
         <location filename="../console/computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Computergruppeneigenschaften</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.ui" line="33"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.ui" line="40"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Elterngruppe:</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.ui" line="74"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
 </context>
 <context>
@@ -255,196 +255,196 @@
     <message>
         <location filename="../console/console_window.ui" line="62"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Datei</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="76"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bearbeiten</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="90"/>
         <source>&amp;Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sitzungstyp</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="99"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="107"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ansicht</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="111"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sprache</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="131"/>
         <location filename="../console/console_window.ui" line="425"/>
         <source>Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolleiste</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="176"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+N</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="188"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+O</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="200"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Speichern</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="203"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+S</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="173"/>
         <source>&amp;New address book</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Neues Adressbuch</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="185"/>
         <source>&amp;Open address book...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Adressbuch öffnen...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="211"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern &amp;unter...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="214"/>
         <source>Ctrl+Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Alt+S</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="222"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Schließen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="225"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+W</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="234"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Beenden</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="246"/>
         <source>Add Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Computergruppe hinzufügen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="258"/>
         <source>Modify Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Computergruppe bearbeiten</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="270"/>
         <source>Delete Computer Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Computergruppe löschen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="282"/>
         <source>Add Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer hinzufügen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="294"/>
         <source>Modify Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer bearbeiten</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="306"/>
         <source>Delete Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer löschen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="321"/>
         <source>Desktop &amp;Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="333"/>
         <source>Desktop &amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Desktopansicht</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="345"/>
         <source>&amp;File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="354"/>
         <source>&amp;Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Onlinehilfe...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="357"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="366"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Über das Programm</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="378"/>
         <source>Address Book Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbucheigenschaften</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="387"/>
         <location filename="../console/console_window.ui" line="390"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="399"/>
         <location filename="../console/console_window.ui" line="402"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopansicht</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="411"/>
         <location filename="../console/console_window.ui" line="414"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="436"/>
         <source>Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusleiste</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="445"/>
         <source>Fast Connect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnelle Verbindung...</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="457"/>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Systeminformationen</translation>
     </message>
     <message>
         <location filename="../console/console_window.ui" line="466"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
 </context>
 <context>
@@ -452,47 +452,47 @@
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="20"/>
         <source>Session Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungskonfiguration</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="26"/>
         <source>Codec:</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec:</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="36"/>
         <source>Color depth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbtiefe:</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="46"/>
         <source>Compression ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompressionsrate</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="55"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnell</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="84"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Beste</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="95"/>
         <source>Screen update interval (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmaktualisierungsintervall (ms):</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="117"/>
         <source>Enable cursor shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Cursorform erlauben</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="124"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischenablage erlauben</translation>
     </message>
 </context>
 <context>
