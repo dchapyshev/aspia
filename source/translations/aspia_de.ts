@@ -97,17 +97,17 @@
     <message>
         <location filename="../console/address_book_tab.ui" line="95"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.ui" line="100"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.ui" line="105"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
 </context>
 <context>
@@ -115,17 +115,17 @@
     <message>
         <location filename="../client/ui/authorization_dialog.ui" line="14"/>
         <source>Authorization</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisierung</translation>
     </message>
     <message>
         <location filename="../client/ui/authorization_dialog.ui" line="27"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../client/ui/authorization_dialog.ui" line="34"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort:</translation>
     </message>
 </context>
 <context>
@@ -133,22 +133,22 @@
     <message>
         <location filename="../system_info/category.cc" line="96"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="97"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Software</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="98"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerk</translation>
     </message>
     <message>
         <location filename="../system_info/category.cc" line="99"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
 </context>
 <context>
@@ -156,27 +156,27 @@
     <message>
         <location filename="../client/ui/client_dialog.ui" line="20"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.ui" line="31"/>
         <source>Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveradresse:</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.ui" line="45"/>
         <source>Server Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Port:</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.ui" line="65"/>
         <source>Session Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungstyp:</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.ui" line="122"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden</translation>
     </message>
 </context>
 <context>
@@ -184,47 +184,47 @@
     <message>
         <location filename="../console/computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Computereigenschaften</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="33"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="40"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Elterngruppe:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="47"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="54"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Port:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="61"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="68"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="75"/>
         <source>Session Configuration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungskonfiguration:</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.ui" line="194"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
 </context>
 <context>
