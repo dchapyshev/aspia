@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="de-de" xmlns="http://schemas.microsoft.com/wix/2006/localization">
   <String Id="Locale" Overridable="yes">de</String>
-  <String Id="HostConfigShortcutName" Overridable="yes">Aspia Host Configuration</String>
-  <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-  <String Id="CoreDescription" Overridable="yes">The core application files.</String>
-  <String Id="HostService_Title" Overridable="yes">Host Service</String>
-  <String Id="HostService_Description" Overridable="yes">Provides remote access to this computer.</String>
-  <String Id="AddressBookFile_Description" Overridable="yes">Aspia Address Book (.aab)</String>
-  <String Id="CreateDesktopShortcuts" Overridable="yes">Create desktop shortcuts</String>
-  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Create shortcuts in the Start menu</String>
+  <String Id="HostConfigShortcutName" Overridable="yes">Aspia Host Konfiguration</String>
+  <String Id="DowngradeErrorMessage" Overridable="yes">Eine neuere Version der Anwendung ist bereits installiert.</String>
+  <String Id="CoreDescription" Overridable="yes">Die wichtigsten Anwendungsdateien.</String>
+  <String Id="HostService_Title" Overridable="yes">Host-Dienst</String>
+  <String Id="HostService_Description" Overridable="yes">Stellt Fernzugriff auf diesen Computer bereit.</String>
+  <String Id="AddressBookFile_Description" Overridable="yes">Aspia Adressbuch (.aab)</String>
+  <String Id="CreateDesktopShortcuts" Overridable="yes">Desktop-Verknüpfungen erstellen</String>
+  <String Id="CreateProgramMenuShortcuts" Overridable="yes">Verknüpfungen im Startmenü erstellen</String>
 </WixLocalization>
