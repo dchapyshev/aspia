@@ -500,47 +500,47 @@
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="86"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolleiste sperren</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="112"/>
         <source>Session configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungskonfiguration</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="138"/>
         <source>Monitor selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmauswahl</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="164"/>
         <source>Automatic window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Fenstergröße</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="187"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished"></translation>
+        <translation>In den Vollbildmodus wechseln (oder zurück)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="213"/>
         <source>Enabling/disabling automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisches Scrollen aktivieren/deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="242"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Alt+Entf senden</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="265"/>
         <source>Send key sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenfolge senden</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_panel.ui" line="339"/>
         <source>Custom...</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere...</translation>
     </message>
 </context>
 <context>
@@ -548,12 +548,12 @@
     <message>
         <location filename="../system_info/ui/dmi_form.ui" line="50"/>
         <source>Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Feld</translation>
     </message>
     <message>
         <location filename="../system_info/ui/dmi_form.ui" line="55"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
 </context>
 <context>
@@ -561,57 +561,57 @@
     <message>
         <location filename="../client/ui/file_panel.ui" line="85"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum übergeordneten Ordner navigieren (Backspace)</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="108"/>
         <source>Refresh the file list (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiliste aktualisieren (F5)</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="131"/>
         <source>Create a new folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuen Ordner erstellen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="157"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte(n) Objekt(e) löschen (Entf)</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="196"/>
         <source>Send selected object(s) (F11)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte(n) Objekt(e) senden (F11)</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="202"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Senden</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="247"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="252"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="257"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="262"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Geändert</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.ui" line="270"/>
         <source>0 object(s) selected</source>
-        <translation type="unfinished"></translation>
+        <translation>0 Objekt(e) ausgewählt</translation>
     </message>
 </context>
 <context>
@@ -619,12 +619,12 @@
     <message>
         <location filename="../client/ui/file_remove_dialog.ui" line="14"/>
         <source>Deleting Items</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemente löschen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_remove_dialog.ui" line="23"/>
         <source>Creating a list of files to delete...</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste der zu löschenden Dateien erstellen...</translation>
     </message>
 </context>
 <context>
@@ -632,37 +632,37 @@
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="14"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="29"/>
         <source>Current Task: Creating a list of files to copy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Aufgabe: Liste der zu kopierenden Dateien erstellen...</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="36"/>
         <source>From: ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Von: ...</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="43"/>
         <source>To: ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu: ...</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="53"/>
         <source>Progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortschritt</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="61"/>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamt:</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.ui" line="68"/>
         <source>Item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Element:</translation>
     </message>
 </context>
 <context>
