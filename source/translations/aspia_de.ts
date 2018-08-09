@@ -6,17 +6,17 @@
     <message>
         <location filename="../console/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über das Programm</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.ui" line="82"/>
         <source>Donate!</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenden!</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.ui" line="106"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -24,72 +24,72 @@
     <message>
         <location filename="../console/address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbucheigenschaften</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="33"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemeines</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="43"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="50"/>
         <source>Encryption:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsselung:</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="57"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="64"/>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort (wiederholen):</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="111"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="124"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweitert</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="130"/>
         <source>Password hashing</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort-Hashing</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="140"/>
         <source>Size of salt for password hashing (bytes):</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe des Salzes für das Kennwort-Hashing (Bytes)</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Number of hashing iterations:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Hashing-Iterationen:</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="191"/>
         <source>Salt of data</source>
-        <translation type="unfinished"></translation>
+        <translation>Salz der Daten</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="201"/>
         <source>Size of salt before the data (bytes):</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe des Salzes vor den Daten (Bytes):</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="208"/>
         <source>Size of salt after the data (bytes):</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe des Salzes nach den Daten (Bytes):</translation>
     </message>
 </context>
 <context>
