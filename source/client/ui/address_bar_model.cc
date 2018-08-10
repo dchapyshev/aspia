@@ -71,7 +71,7 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
         Drive drive;
         drive.icon        = FilePlatformUtil::driveIcon(item.type());
         drive.path        = normalizePath(QString::fromStdString(item.path()));
-        drive.type        = typeToString(item.type());
+        drive.type        = item.type();
         drive.total_space = item.total_space();
         drive.free_space  = item.free_space();
 
@@ -86,17 +86,8 @@ void AddressBarModel::setDriveList(const proto::file_transfer::DriveList& list)
                 break;
 
             default:
-            {
                 drive.name = QString::fromStdString(item.name());
-                if (drive.name.isEmpty())
-                {
-                    drive.name = drive.path;
-                    break;
-                }
-
-                drive.name = QString("%1 (%2)").arg(drive.path).arg(drive.name);
-            }
-            break;
+                break;
         }
 
         drives_.append(drive);
@@ -296,11 +287,20 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             {
                 if (index.column() == COLUMN_NAME)
                 {
-                    return drive.name;
+                    if (drive.type == proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER ||
+                        drive.type == proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER)
+                    {
+                        return drive.name;
+                    }
+
+                    if (role == Qt::EditRole || drive.name.isEmpty())
+                        return drive.path;
+
+                    return QString("%1 (%2)").arg(drive.path).arg(drive.name);
                 }
                 else if (index.column() == COLUMN_TYPE)
                 {
-                    return drive.type;
+                    return typeToString(drive.type);
                 }
                 else if (index.column() == COLUMN_TOTAL_SPACE && drive.total_space >= 0)
                 {

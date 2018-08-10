@@ -65,9 +65,9 @@ protected:
 private:
     struct Drive
     {
+        proto::file_transfer::DriveList::Item::Type type;
         QIcon icon;
         QString name;
-        QString type;
         QString path;
         int64_t total_space;
         int64_t free_space;
