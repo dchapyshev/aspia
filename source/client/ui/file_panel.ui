@@ -198,7 +198,7 @@
     <string>Browse to parent folder (Backspace)</string>
    </property>
    <property name="shortcut">
-    <string>Backspace</string>
+    <string notr="true">Backspace</string>
    </property>
   </action>
   <action name="action_refresh">
@@ -213,7 +213,7 @@
     <string>Refresh (F5)</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string notr="true">F5</string>
    </property>
   </action>
   <action name="action_add_folder">
@@ -229,6 +229,9 @@
    </property>
    <property name="toolTip">
     <string>Create a new folder</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
    </property>
   </action>
   <action name="action_delete">
@@ -246,7 +249,7 @@
     <string>Delete selected object(s) (Delete)</string>
    </property>
    <property name="shortcut">
-    <string>Del</string>
+    <string notr="true">Del</string>
    </property>
   </action>
   <action name="action_send">
@@ -264,7 +267,7 @@
     <string>Send selected object(s) (F11)</string>
    </property>
    <property name="shortcut">
-    <string>F11</string>
+    <string notr="true">F11</string>
    </property>
   </action>
  </widget>

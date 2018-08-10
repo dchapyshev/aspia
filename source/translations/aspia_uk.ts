@@ -570,39 +570,34 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="85"/>
+        <location filename="../client/ui/file_panel.ui" line="198"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Повернутись на каталог вище (Backspace)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="108"/>
-        <source>Refresh the file list (F5)</source>
-        <translation>Оновити список файлів (F5)</translation>
+        <location filename="../client/ui/file_panel.ui" line="213"/>
+        <source>Refresh (F5)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="131"/>
+        <location filename="../client/ui/file_panel.ui" line="231"/>
         <source>Create a new folder</source>
         <translation>Створити новий каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="157"/>
+        <location filename="../client/ui/file_panel.ui" line="249"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Видалити обрані об&apos;єкти (Delete)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="196"/>
+        <location filename="../client/ui/file_panel.ui" line="267"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Надіслати обрані об&apos;єкти (F11)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="202"/>
+        <location filename="../client/ui/file_panel.ui" line="264"/>
         <source>Send</source>
         <translation>Надіслати</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.ui" line="253"/>
-        <source>0 object(s) selected</source>
-        <translation>0 об&apos;єктів обрано</translation>
     </message>
 </context>
 <context>
@@ -990,6 +985,105 @@
         <location filename="../console/about_dialog.cc" line="121"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/en/donate.html</translation>
+    </message>
+</context>
+<context>
+    <name>aspia::AddressBarModel</name>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="81"/>
+        <location filename="../client/ui/address_bar_model.cc" line="399"/>
+        <source>Home Folder</source>
+        <translation type="unfinished">Домашній каталог</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="85"/>
+        <source>Desktop</source>
+        <translation type="unfinished">Робочий стіл</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="250"/>
+        <source>Computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="344"/>
+        <source>Name</source>
+        <translation type="unfinished">Ім&apos;я</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="347"/>
+        <source>Type</source>
+        <translation type="unfinished">Тип</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="350"/>
+        <source>Total Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="353"/>
+        <source>Free Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="384"/>
+        <source>Optical Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="387"/>
+        <source>Removable Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="390"/>
+        <source>Fixed Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="393"/>
+        <source>Network Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="396"/>
+        <source>RAM Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="402"/>
+        <source>Desktop Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="405"/>
+        <source>Unknown Drive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="422"/>
+        <source>TB</source>
+        <translation type="unfinished">ТБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="427"/>
+        <source>GB</source>
+        <translation type="unfinished">ГБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="432"/>
+        <source>MB</source>
+        <translation type="unfinished">МБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="437"/>
+        <source>kB</source>
+        <translation type="unfinished">кБ</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar_model.cc" line="442"/>
+        <source>B</source>
+        <translation type="unfinished">Б</translation>
     </message>
 </context>
 <context>
@@ -1542,27 +1636,27 @@
         <translation>Змінено</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="506"/>
+        <location filename="../client/ui/file_list_model.cc" line="508"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="511"/>
+        <location filename="../client/ui/file_list_model.cc" line="513"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="516"/>
+        <location filename="../client/ui/file_list_model.cc" line="518"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="521"/>
+        <location filename="../client/ui/file_list_model.cc" line="523"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="526"/>
+        <location filename="../client/ui/file_list_model.cc" line="528"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1588,80 +1682,70 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="153"/>
-        <location filename="../client/ui/file_panel.cc" line="166"/>
-        <location filename="../client/ui/file_panel.cc" line="179"/>
-        <location filename="../client/ui/file_panel.cc" line="192"/>
-        <location filename="../client/ui/file_panel.cc" line="305"/>
-        <location filename="../client/ui/file_panel.cc" line="323"/>
+        <location filename="../client/ui/file_panel.cc" line="175"/>
+        <location filename="../client/ui/file_panel.cc" line="188"/>
+        <location filename="../client/ui/file_panel.cc" line="214"/>
+        <location filename="../client/ui/file_panel.cc" line="227"/>
+        <location filename="../client/ui/file_panel.cc" line="281"/>
+        <location filename="../client/ui/file_panel.cc" line="299"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="154"/>
+        <location filename="../client/ui/file_panel.cc" line="176"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="167"/>
+        <location filename="../client/ui/file_panel.cc" line="189"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="180"/>
+        <location filename="../client/ui/file_panel.cc" line="215"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="193"/>
+        <location filename="../client/ui/file_panel.cc" line="228"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="285"/>
+        <location filename="../client/ui/file_panel.cc" line="261"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="306"/>
-        <location filename="../client/ui/file_panel.cc" line="324"/>
+        <location filename="../client/ui/file_panel.cc" line="282"/>
+        <location filename="../client/ui/file_panel.cc" line="300"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="345"/>
+        <location filename="../client/ui/file_panel.cc" line="321"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="347"/>
+        <location filename="../client/ui/file_panel.cc" line="323"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="355"/>
+        <location filename="../client/ui/file_panel.cc" line="331"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="409"/>
+        <location filename="../client/ui/file_panel.cc" line="382"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="410"/>
+        <location filename="../client/ui/file_panel.cc" line="383"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.cc" line="459"/>
-        <source>Home Folder</source>
-        <translation>Домашній каталог</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_panel.cc" line="463"/>
-        <source>Desktop</source>
-        <translation>Робочий стіл</translation>
     </message>
 </context>
 <context>
