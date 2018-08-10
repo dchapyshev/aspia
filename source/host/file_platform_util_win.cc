@@ -45,45 +45,6 @@ const int kMinFileNameLength = 1;
 // We use FAT variant: 255 characters long.
 const int kMaxFileNameLength = (MAX_PATH - 5);
 
-bool isValidFileNameChar(QChar character)
-{
-    switch (character.unicode())
-    {
-        // Invalid characters for file name.
-        case L'/':
-        case L'\\':
-        case L':':
-        case L'*':
-        case L'?':
-        case L'"':
-        case L'<':
-        case L'>':
-        case L'|':
-            return false;
-
-        default:
-            return true;
-    }
-}
-
-bool isValidPathChar(QChar character)
-{
-    switch (character.unicode())
-    {
-        // Invalid characters for path name.
-        case L'*':
-        case L'?':
-        case L'"':
-        case L'<':
-        case L'>':
-        case L'|':
-            return false;
-
-        default:
-            return true;
-    }
-}
-
 QIcon stockIcon(SHSTOCKICONID icon_id)
 {
     SHSTOCKICONINFO icon_info;
@@ -200,6 +161,21 @@ proto::file_transfer::DriveList::Item::Type FilePlatformUtil::driveType(const QS
 }
 
 // static
+const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
+{
+    static const QList<QChar> kInvalidCharacters =
+        { '/', '\\', ':', '*', '?', '"', '<', '>', '|' };
+    return kInvalidCharacters;
+}
+
+// static
+const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
+{
+    static const QList<QChar> kInvalidCharacters = { '*', '?', '"', '<', '>', '|' };
+    return kInvalidCharacters;
+}
+
+// static
 bool FilePlatformUtil::isValidPath(const QString& path)
 {
     int length = path.length();
@@ -207,9 +183,11 @@ bool FilePlatformUtil::isValidPath(const QString& path)
     if (length < kMinPathLength || length > kMaxPathLength)
         return false;
 
+    const QList<QChar>& invalid_characters = invalidPathCharacters();
+
     for (const auto& character : path)
     {
-        if (!isValidPathChar(character))
+        if (invalid_characters.contains(character))
             return false;
     }
 
@@ -224,9 +202,11 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
     if (length < kMinFileNameLength || length > kMaxFileNameLength)
         return false;
 
+    const QList<QChar>& invalid_characters = invalidFileNameCharacters();
+
     for (const auto& character : file_name)
     {
-        if (!isValidFileNameChar(character))
+        if (invalid_characters.contains(character))
             return false;
     }
 

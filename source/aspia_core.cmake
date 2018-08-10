@@ -114,6 +114,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_name_validator.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_name_validator.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.ui
@@ -121,6 +123,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.cc

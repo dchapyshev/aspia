@@ -26,6 +26,7 @@
 #include <QMessageBox>
 
 #include "client/ui/address_bar_model.h"
+#include "client/ui/file_item_delegate.h"
 #include "client/ui/file_list_model.h"
 #include "client/file_remover.h"
 #include "client/file_status.h"
@@ -88,6 +89,7 @@ FilePanel::FilePanel(QWidget* parent)
 {
     ui.setupUi(this);
     ui.list->setStyle(new TreeViewProxyStyle(ui.list->style()));
+    ui.list->setItemDelegate(new FileItemDelegate(this));
 
     file_list_ = new FileListModel(this);
 
@@ -202,6 +204,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             ui.list->setModel(file_list_);
             ui.list->setSelectionMode(QTreeView::ExtendedSelection);
             ui.list->setSortingEnabled(true);
+            ui.list->setFocus();
 
             QHeaderView* header = ui.list->header();
             header->restoreState(file_list_state_);
@@ -293,6 +296,15 @@ void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_
     }
     else if (old_name.compare(new_name, Qt::CaseInsensitive) != 0)
     {
+        if (!FilePlatformUtil::isValidFileName(new_name))
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Name contains invalid characters."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
         FileRequest* request = FileRequest::renameRequest(currentPath() + old_name,
                                                           currentPath() + new_name);
         connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
@@ -311,6 +323,15 @@ void FilePanel::onCreateFolderRequest(const QString& name)
     }
     else
     {
+        if (!FilePlatformUtil::isValidFileName(name))
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Name contains invalid characters."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
         FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + name);
         connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
         emit newRequest(request);
