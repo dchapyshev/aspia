@@ -567,6 +567,14 @@
     </message>
 </context>
 <context>
+    <name>FileNameEditor</name>
+    <message>
+        <location filename="../client/ui/file_item_delegate.cc" line="56"/>
+        <source>The name can not contain characters %1.</source>
+        <translation>Имя не может содержать символы %1.</translation>
+    </message>
+</context>
+<context>
     <name>FilePanel</name>
     <message>
         <location filename="../client/ui/file_panel.ui" line="198"/>
@@ -987,10 +995,28 @@
     </message>
 </context>
 <context>
+    <name>aspia::AddressBar</name>
+    <message>
+        <location filename="../client/ui/address_bar.cc" line="58"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar.cc" line="59"/>
+        <source>An incorrect path to the folder was entered.</source>
+        <translation>Введен некорректный путь к папке.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/address_bar.cc" line="79"/>
+        <source>The path can not contain characters %1.</source>
+        <translation>Путь не может содержать символы %1.</translation>
+    </message>
+</context>
+<context>
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="399"/>
+        <location filename="../client/ui/address_bar_model.cc" line="414"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
@@ -1000,87 +1026,87 @@
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="250"/>
+        <location filename="../client/ui/address_bar_model.cc" line="256"/>
         <source>Computer</source>
         <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="344"/>
+        <location filename="../client/ui/address_bar_model.cc" line="359"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="347"/>
+        <location filename="../client/ui/address_bar_model.cc" line="362"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="350"/>
+        <location filename="../client/ui/address_bar_model.cc" line="365"/>
         <source>Total Space</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="353"/>
+        <location filename="../client/ui/address_bar_model.cc" line="368"/>
         <source>Free Space</source>
         <translation>Свободно</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="384"/>
+        <location filename="../client/ui/address_bar_model.cc" line="399"/>
         <source>Optical Drive</source>
         <translation>Оптический дисковод</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="387"/>
+        <location filename="../client/ui/address_bar_model.cc" line="402"/>
         <source>Removable Drive</source>
         <translation>Съемный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="390"/>
+        <location filename="../client/ui/address_bar_model.cc" line="405"/>
         <source>Fixed Drive</source>
         <translation>Локальный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="393"/>
+        <location filename="../client/ui/address_bar_model.cc" line="408"/>
         <source>Network Drive</source>
         <translation>Сетевой диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="396"/>
+        <location filename="../client/ui/address_bar_model.cc" line="411"/>
         <source>RAM Drive</source>
         <translation>Привод RAM</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="402"/>
+        <location filename="../client/ui/address_bar_model.cc" line="417"/>
         <source>Desktop Folder</source>
         <translation>Папка рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="405"/>
+        <location filename="../client/ui/address_bar_model.cc" line="420"/>
         <source>Unknown Drive</source>
         <translation>Неизвестный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="422"/>
+        <location filename="../client/ui/address_bar_model.cc" line="437"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="427"/>
+        <location filename="../client/ui/address_bar_model.cc" line="442"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="432"/>
+        <location filename="../client/ui/address_bar_model.cc" line="447"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="437"/>
+        <location filename="../client/ui/address_bar_model.cc" line="452"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="442"/>
+        <location filename="../client/ui/address_bar_model.cc" line="457"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1615,47 +1641,47 @@
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="349"/>
+        <location filename="../client/ui/file_list_model.cc" line="354"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="352"/>
+        <location filename="../client/ui/file_list_model.cc" line="357"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="355"/>
+        <location filename="../client/ui/file_list_model.cc" line="360"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="358"/>
+        <location filename="../client/ui/file_list_model.cc" line="363"/>
         <source>Modified</source>
         <translation>Изменен</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="508"/>
+        <location filename="../client/ui/file_list_model.cc" line="516"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="513"/>
+        <location filename="../client/ui/file_list_model.cc" line="521"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="518"/>
+        <location filename="../client/ui/file_list_model.cc" line="526"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="523"/>
+        <location filename="../client/ui/file_list_model.cc" line="531"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="528"/>
+        <location filename="../client/ui/file_list_model.cc" line="536"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1663,17 +1689,17 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="40"/>
+        <location filename="../client/ui/file_manager_window.cc" line="41"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="47"/>
+        <location filename="../client/ui/file_manager_window.cc" line="50"/>
         <source>Local Computer</source>
         <translation>Локальный компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="50"/>
+        <location filename="../client/ui/file_manager_window.cc" line="55"/>
         <source>Remote Computer</source>
         <translation>Удаленный компьютер</translation>
     </message>
@@ -1681,68 +1707,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="175"/>
-        <location filename="../client/ui/file_panel.cc" line="188"/>
-        <location filename="../client/ui/file_panel.cc" line="214"/>
-        <location filename="../client/ui/file_panel.cc" line="227"/>
-        <location filename="../client/ui/file_panel.cc" line="281"/>
-        <location filename="../client/ui/file_panel.cc" line="299"/>
+        <location filename="../client/ui/file_panel.cc" line="186"/>
+        <location filename="../client/ui/file_panel.cc" line="199"/>
+        <location filename="../client/ui/file_panel.cc" line="231"/>
+        <location filename="../client/ui/file_panel.cc" line="244"/>
+        <location filename="../client/ui/file_panel.cc" line="298"/>
+        <location filename="../client/ui/file_panel.cc" line="307"/>
+        <location filename="../client/ui/file_panel.cc" line="325"/>
+        <location filename="../client/ui/file_panel.cc" line="334"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="176"/>
+        <location filename="../client/ui/file_panel.cc" line="187"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="189"/>
+        <location filename="../client/ui/file_panel.cc" line="200"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="215"/>
+        <location filename="../client/ui/file_panel.cc" line="232"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="228"/>
+        <location filename="../client/ui/file_panel.cc" line="245"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="261"/>
+        <location filename="../client/ui/file_panel.cc" line="278"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="282"/>
-        <location filename="../client/ui/file_panel.cc" line="300"/>
+        <location filename="../client/ui/file_panel.cc" line="299"/>
+        <location filename="../client/ui/file_panel.cc" line="326"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="321"/>
+        <location filename="../client/ui/file_panel.cc" line="308"/>
+        <location filename="../client/ui/file_panel.cc" line="335"/>
+        <source>Name contains invalid characters.</source>
+        <translation>Имя содержит некорректные символы.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_panel.cc" line="359"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="323"/>
+        <location filename="../client/ui/file_panel.cc" line="361"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="331"/>
+        <location filename="../client/ui/file_panel.cc" line="369"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="382"/>
+        <location filename="../client/ui/file_panel.cc" line="420"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="383"/>
+        <location filename="../client/ui/file_panel.cc" line="421"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>
@@ -2033,35 +2067,34 @@
 <context>
     <name>aspia::NetworkChannel</name>
     <message>
-        <location filename="../network/network_channel.cc" line="217"/>
-        <location filename="../network/network_channel.cc" line="422"/>
-        <location filename="../network/network_channel.cc" line="433"/>
+        <location filename="../network/network_channel.cc" line="198"/>
+        <location filename="../network/network_channel.cc" line="385"/>
+        <location filename="../network/network_channel.cc" line="396"/>
         <source>Error in encryption key exchange.</source>
         <translation>Ошибка при обмене ключами шифрования.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="311"/>
+        <location filename="../network/network_channel.cc" line="274"/>
         <source>The received message has an invalid size.</source>
         <translation>Полученное сообщение имеет некорректные размер.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="390"/>
-        <location filename="../network/network_channel.cc" line="460"/>
+        <location filename="../network/network_channel.cc" line="353"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="406"/>
+        <location filename="../network/network_channel.cc" line="369"/>
         <source>Error while decrypting the message.</source>
         <translation>Ошибка при расшифровке сообщения.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="480"/>
+        <location filename="../network/network_channel.cc" line="433"/>
         <source>The message to send exceeds the size limit.</source>
         <translation>Сообщение для отправки превышает допустимый размер.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="526"/>
+        <location filename="../network/network_channel.cc" line="479"/>
         <source>Error while encrypting the message.</source>
         <translation>Ошибка при расшифровке сообщения.</translation>
     </message>

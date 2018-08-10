@@ -18,6 +18,7 @@
 
 #include "client/ui/file_item_delegate.h"
 
+#include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPixmap>
@@ -51,9 +52,11 @@ public:
                 characters += character;
             }
 
-            QToolTip::showText(mapToGlobal(QPoint(0, 0)),
-                               tr("The name can not contain characters %1.").arg(characters),
-                               this);
+            QString message =
+                QApplication::translate("FileNameEditor", "The name can not contain characters %1.")
+                .arg(characters);
+
+            QToolTip::showText(mapToGlobal(QPoint(0, 0)), message, this);
         });
 
         setValidator(validator);
