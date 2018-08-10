@@ -125,8 +125,6 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_settings.cc
@@ -134,6 +132,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_mime_data.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_mime_data.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.cc

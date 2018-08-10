@@ -95,8 +95,8 @@ FilePanel::FilePanel(QWidget* parent)
 
     connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
 
-    connect(ui.list, &QTreeView::doubleClicked, this, &FilePanel::onFileDoubleClicked);
-    connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onFileContextMenu);
+    connect(ui.list, &QTreeView::doubleClicked, this, &FilePanel::onListDoubleClicked);
+    connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onListContextMenu);
 
     connect(file_list_, &FileListModel::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
     connect(file_list_, &FileListModel::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
@@ -160,6 +160,11 @@ void FilePanel::setPanelName(const QString& name)
     ui.label_name->setText(name);
 }
 
+void FilePanel::setMimeType(const QString& mime_type)
+{
+    file_list_->setMimeType(mime_type);
+}
+
 void FilePanel::updateState()
 {
     QHeaderView* header = ui.list->header();
@@ -215,7 +220,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             QItemSelectionModel* selection_model = ui.list->selectionModel();
 
             connect(selection_model, &QItemSelectionModel::selectionChanged,
-                    this, &FilePanel::onFileSelectionChanged);
+                    this, &FilePanel::onListSelectionChanged);
         }
     }
     else if (request.has_create_directory_request())
@@ -253,7 +258,7 @@ void FilePanel::refresh()
     emit newRequest(request);
 }
 
-void FilePanel::onFileDoubleClicked(const QModelIndex& index)
+void FilePanel::onListDoubleClicked(const QModelIndex& index)
 {
     if (ui.address_bar->hasCurrentPath())
     {
@@ -266,7 +271,7 @@ void FilePanel::onFileDoubleClicked(const QModelIndex& index)
     }
 }
 
-void FilePanel::onFileSelectionChanged()
+void FilePanel::onListSelectionChanged()
 {
     QItemSelectionModel* selection_model = ui.list->selectionModel();
 
@@ -338,7 +343,7 @@ void FilePanel::onCreateFolderRequest(const QString& name)
     }
 }
 
-void FilePanel::onFileContextMenu(const QPoint& point)
+void FilePanel::onListContextMenu(const QPoint& point)
 {
     QMenu menu;
 

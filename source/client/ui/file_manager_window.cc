@@ -23,6 +23,7 @@
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
 #include "client/ui/file_manager_settings.h"
+#include "client/ui/file_mime_data.h"
 
 namespace aspia {
 
@@ -44,11 +45,15 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
 
     ui.splitter->restoreState(settings.splitterState());
 
+    QString mime_type = FileMimeData::createMimeType();
+
     ui.local_panel->setPanelName(tr("Local Computer"));
+    ui.local_panel->setMimeType(mime_type);
     ui.local_panel->setDriveListState(settings.localDriveListState());
     ui.local_panel->setFileListState(settings.localFileListState());
 
     ui.remote_panel->setPanelName(tr("Remote Computer"));
+    ui.remote_panel->setMimeType(mime_type);
     ui.remote_panel->setDriveListState(settings.remoteDriveListState());
     ui.remote_panel->setFileListState(settings.remoteFileListState());
 

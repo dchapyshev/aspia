@@ -34,6 +34,8 @@ class FileListModel : public QAbstractItemModel
 public:
     explicit FileListModel(QObject* parent = nullptr);
 
+    void setMimeType(const QString& mime_type);
+    QString mimeType() const { return mime_type_; }
     void setFileList(const proto::file_transfer::FileList& file_list);
     void setSortOrder(int column, Qt::SortOrder order);
     void clear();
@@ -95,6 +97,8 @@ private:
 
     Qt::SortOrder current_order_ = Qt::AscendingOrder;
     int current_column_ = 0;
+
+    QString mime_type_;
 
     DISALLOW_COPY_AND_ASSIGN(FileListModel);
 };

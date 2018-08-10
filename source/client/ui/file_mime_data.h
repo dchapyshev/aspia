@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
-#define ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
+#ifndef ASPIA_CLIENT__UI__FILE_MIME_DATA_H_
+#define ASPIA_CLIENT__UI__FILE_MIME_DATA_H_
 
 #include <QMimeData>
 
@@ -27,13 +27,16 @@ namespace aspia {
 
 class FileListModel;
 
-class FileItemMimeData : public QMimeData
+class FileMimeData : public QMimeData
 {
 public:
-    FileItemMimeData() = default;
-    virtual ~FileItemMimeData();
+    FileMimeData() = default;
+    virtual ~FileMimeData();
 
-    static QString mimeType();
+    static QString createMimeType();
+
+    void setMimeType(const QString& mime_type);
+    QString mimeType() const { return mime_type_; }
 
     void setFileList(const QList<FileTransfer::Item>& file_list);
     QList<FileTransfer::Item> fileList() const { return file_list_; }
@@ -43,11 +46,12 @@ public:
 
 private:
     const FileListModel* source_;
+    QString mime_type_;
     QList<FileTransfer::Item> file_list_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileItemMimeData);
+    DISALLOW_COPY_AND_ASSIGN(FileMimeData);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
+#endif // ASPIA_CLIENT__UI__FILE_MIME_DATA_H_

@@ -37,6 +37,7 @@ public:
     ~FilePanel() = default;
 
     void setPanelName(const QString& name);
+    void setMimeType(const QString& mime_type);
 
     QString currentPath() const { return ui.address_bar->currentPath(); }
 
@@ -63,9 +64,9 @@ public slots:
 
 private slots:
     void onPathChanged(const QString& path);
-    void onFileDoubleClicked(const QModelIndex& index);
-    void onFileSelectionChanged();
-    void onFileContextMenu(const QPoint& point);
+    void onListDoubleClicked(const QModelIndex& index);
+    void onListSelectionChanged();
+    void onListContextMenu(const QPoint& point);
     void onNameChangeRequest(const QString& old_name, const QString& new_name);
     void onCreateFolderRequest(const QString& name);
 

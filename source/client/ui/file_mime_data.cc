@@ -16,27 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_item_mime_data.h"
+#include "client/ui/file_mime_data.h"
 
-#include "client/ui/file_list_model.h"
+#include <QUuid>
 
 namespace aspia {
 
-FileItemMimeData::~FileItemMimeData() = default;
+FileMimeData::~FileMimeData() = default;
 
 // static
-QString FileItemMimeData::mimeType()
+QString FileMimeData::createMimeType()
 {
-    return QStringLiteral("application/file_list");
+    return QString("application/%1").arg(QUuid::createUuid().toString());
 }
 
-void FileItemMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
+void FileMimeData::setMimeType(const QString& mime_type)
+{
+    mime_type_ = mime_type;
+}
+
+void FileMimeData::setFileList(const QList<FileTransfer::Item>& file_list)
 {
     file_list_ = file_list;
     setData(mimeType(), QByteArray());
 }
 
-void FileItemMimeData::setSource(const FileListModel* source)
+void FileMimeData::setSource(const FileListModel* source)
 {
     source_ = source;
 }

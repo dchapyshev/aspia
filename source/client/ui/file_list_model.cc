@@ -21,7 +21,7 @@
 #include <QDateTime>
 
 #include "host/file_platform_util.h"
-#include "client/ui/file_item_mime_data.h"
+#include "client/ui/file_mime_data.h"
 
 namespace aspia {
 
@@ -95,6 +95,11 @@ FileListModel::FileListModel(QObject* parent)
       dir_type_(tr("Folder"))
 {
     // Nothing
+}
+
+void FileListModel::setMimeType(const QString& mime_type)
+{
+    mime_type_ = mime_type;
 }
 
 void FileListModel::setFileList(const proto::file_transfer::FileList& list)
@@ -364,7 +369,7 @@ QVariant FileListModel::headerData(int section, Qt::Orientation orientation, int
 
 QStringList FileListModel::mimeTypes() const
 {
-    return QStringList() << FileItemMimeData::mimeType();
+    return QStringList() << mime_type_;
 }
 
 QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
@@ -377,7 +382,8 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
     if (file_list.isEmpty())
         return nullptr;
 
-    FileItemMimeData* mime_data = new FileItemMimeData();
+    FileMimeData* mime_data = new FileMimeData();
+    mime_data->setMimeType(mime_type_);
     mime_data->setFileList(file_list);
     mime_data->setSource(this);
 
@@ -387,14 +393,16 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
 bool FileListModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
                                     int row, int column, const QModelIndex& parent) const
 {
-    if (!data->hasFormat(FileItemMimeData::mimeType()))
+    if (!data->hasFormat(mime_type_))
         return false;
 
-    const FileItemMimeData* mime_data = dynamic_cast<const FileItemMimeData*>(data);
+    const FileMimeData* mime_data = dynamic_cast<const FileMimeData*>(data);
     if (!mime_data)
         return false;
 
-    if (mime_data->source() == this)
+    const FileListModel* source = mime_data->source();
+
+    if (!source || source == this || source->mimeType() != mimeType())
         return false;
 
     return true;
@@ -406,7 +414,7 @@ bool FileListModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
     if (!canDropMimeData(data, action, row, column, parent))
         return false;
 
-    const FileItemMimeData* mime_data = dynamic_cast<const FileItemMimeData*>(data);
+    const FileMimeData* mime_data = dynamic_cast<const FileMimeData*>(data);
     if (!mime_data)
         return false;
 
