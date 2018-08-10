@@ -41,6 +41,9 @@ public:
     static QIcon driveIcon(proto::file_transfer::DriveList::Item::Type type);
     static proto::file_transfer::DriveList::Item::Type driveType(const QString& drive_path);
 
+    static bool isValidPath(const QString& path);
+    static bool isValidFileName(const QString& file_name);
+
 private:
     DISALLOW_COPY_AND_ASSIGN(FilePlatformUtil);
 };
