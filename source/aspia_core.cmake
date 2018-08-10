@@ -134,6 +134,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.ui

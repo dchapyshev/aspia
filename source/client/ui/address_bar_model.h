@@ -57,6 +57,7 @@ public:
 
 signals:
     void pathIndexChanged(const QModelIndex& index);
+    void invalidPathEntered();
 
 protected:
     static QString typeToString(proto::file_transfer::DriveList::Item::Type type);
@@ -74,6 +75,7 @@ private:
     };
 
     QString current_path_;
+    QString previous_path_;
     QList<Drive> drives_;
 
     DISALLOW_COPY_AND_ASSIGN(AddressBarModel);

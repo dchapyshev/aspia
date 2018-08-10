@@ -77,7 +77,7 @@ QString parentPath(const QString& path)
 
     int last_slash = path.lastIndexOf(QLatin1Char('/'), from);
     if (last_slash == -1)
-        return QString();
+        return AddressBarModel::computerPath();
 
     return path.left(last_slash);
 }

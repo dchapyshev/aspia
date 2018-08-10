@@ -20,15 +20,20 @@
 
 #include <QDebug>
 #include <QHeaderView>
+#include <QLineEdit>
+#include <QMessageBox>
 #include <QTreeView>
+#include <QToolTip>
 
 #include "client/ui/address_bar_model.h"
+#include "client/ui/file_path_validator.h"
 
 namespace aspia {
 
 AddressBar::AddressBar(QWidget* parent)
     : QComboBox(parent)
 {
+    edit_ = new QLineEdit(this);
     view_ = new QTreeView(this);
     model_ = new AddressBarModel(this);
 
@@ -39,12 +44,41 @@ AddressBar::AddressBar(QWidget* parent)
     view_->setSelectionBehavior(QTreeView::SelectRows);
     view_->setFrameShape(QFrame::NoFrame);
 
+    setLineEdit(edit_);
     setView(view_);
     setModel(model_);
 
     connect(model_, &AddressBarModel::pathIndexChanged,
             this, &AddressBar::onPathIndexChanged,
             Qt::QueuedConnection);
+
+    connect(model_, &AddressBarModel::invalidPathEntered, [this]()
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("An incorrect path to the folder was entered."),
+                             QMessageBox::Ok);
+    });
+
+    FilePathValidator* validator = new FilePathValidator(this);
+    edit_->setValidator(validator);
+
+    connect(validator, &FilePathValidator::invalidPathEntered, [this]()
+    {
+        QString characters;
+
+        for (const auto& character : FilePlatformUtil::invalidPathCharacters())
+        {
+            if (!characters.isEmpty())
+                characters += QLatin1String(", ");
+
+            characters += character;
+        }
+
+        QToolTip::showText(mapToGlobal(QPoint(0, 0)),
+                           tr("The path can not contain characters %1.").arg(characters),
+                           this);
+    });
 
     connect(this, QOverload<int>::of(&AddressBar::activated), [this](int /* index */)
     {

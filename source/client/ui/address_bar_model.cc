@@ -104,27 +104,42 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 
     if (path == computerPath())
     {
+        previous_path_ = path;
         index = computerIndex();
     }
     else
     {
         QString normalized_path = normalizePath(path);
 
-        for (int i = 0; i < drives_.count(); ++i)
+        if (!FilePlatformUtil::isValidPath(normalized_path))
         {
-            const QString& drive_path = drives_.at(i).path;
+            if (previous_path_.isEmpty())
+                index = setCurrentPath(computerPath());
+            else
+                index = setCurrentPath(previous_path_);
 
-            if (drive_path.compare(normalized_path, Qt::CaseInsensitive) == 0)
-            {
-                index = createIndex(i, 0, kDriveItem);
-                break;
-            }
+            emit invalidPathEntered();
         }
-
-        if (!index.isValid())
+        else
         {
-            current_path_ = normalized_path;
-            index = currentFolderIndex();
+            for (int i = 0; i < drives_.count(); ++i)
+            {
+                const QString& drive_path = drives_.at(i).path;
+
+                if (drive_path.compare(normalized_path, Qt::CaseInsensitive) == 0)
+                {
+                    index = createIndex(i, 0, kDriveItem);
+                    break;
+                }
+            }
+
+            if (!index.isValid())
+            {
+                current_path_ = normalized_path;
+                index = currentFolderIndex();
+            }
+
+            previous_path_ = normalized_path;
         }
     }
 

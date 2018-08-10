@@ -24,6 +24,7 @@
 #include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
+class QLineEdit;
 class QTreeView;
 
 namespace aspia {
@@ -54,6 +55,7 @@ private slots:
     void onPathIndexChanged(const QModelIndex& index);
 
 private:
+    QLineEdit* edit_;
     QTreeView* view_;
     AddressBarModel* model_;
 
