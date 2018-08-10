@@ -345,6 +345,9 @@ void FilePanel::onCreateFolderRequest(const QString& name)
 
 void FilePanel::onListContextMenu(const QPoint& point)
 {
+    if (!ui.address_bar->hasCurrentPath())
+        return;
+
     QMenu menu;
 
     QScopedPointer<QAction> copy_action;
