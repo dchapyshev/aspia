@@ -1,0 +1,65 @@
+//
+// Aspia Project
+// Copyright (C) 2018 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+#define ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+
+#include <QComboBox>
+
+#include "base/macros_magic.h"
+#include "protocol/file_transfer_session.pb.h"
+
+class QTreeView;
+
+namespace aspia {
+
+class AddressBarModel;
+
+class AddressBar : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    explicit AddressBar(QWidget* parent = nullptr);
+
+    void setDriveList(const proto::file_transfer::DriveList& list);
+    void setCurrentPath(const QString& path);
+    QString currentPath() const;
+    QString pathAt(const QModelIndex& index) const;
+    bool hasCurrentPath() const;
+
+signals:
+    void pathChanged(const QString& path);
+
+protected:
+    // QComboBox implementation.
+    void showPopup() override;
+
+private slots:
+    void onPathIndexChanged(const QModelIndex& index);
+
+private:
+    QTreeView* view_;
+    AddressBarModel* model_;
+
+    DISALLOW_COPY_AND_ASSIGN(AddressBar);
+};
+
+} // namespace aspia
+
+#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H_

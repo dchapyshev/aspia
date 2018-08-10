@@ -25,6 +25,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
+#include "client/ui/address_bar_model.h"
 #include "client/ui/file_list_model.h"
 #include "client/file_remover.h"
 #include "client/file_status.h"
@@ -67,18 +68,6 @@ public:
     }
 };
 
-QString normalizePath(const QString& path)
-{
-    QString normalized_path = path;
-
-    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
-
-    if (!normalized_path.endsWith(QLatin1Char('/')))
-        normalized_path += QLatin1Char('/');
-
-    return normalized_path;
-}
-
 QString parentPath(const QString& path)
 {
     int from = -1;
@@ -98,29 +87,23 @@ FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-    ui.tree_files->setStyle(new TreeViewProxyStyle(ui.tree_files->style()));
+    ui.list->setStyle(new TreeViewProxyStyle(ui.list->style()));
 
     file_list_ = new FileListModel(this);
-    ui.tree_files->setModel(file_list_);
 
-    connect(ui.address_bar, QOverload<int>::of(&QComboBox::activated),
-            this, &FilePanel::onAddressItemChanged);
+    connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
 
-    connect(ui.tree_files, &QTreeView::doubleClicked, this, &FilePanel::onFileDoubleClicked);
-    connect(ui.tree_files, &QTreeView::customContextMenuRequested, this, &FilePanel::onFileContextMenu);
+    connect(ui.list, &QTreeView::doubleClicked, this, &FilePanel::onFileDoubleClicked);
+    connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onFileContextMenu);
 
     connect(file_list_, &FileListModel::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
     connect(file_list_, &FileListModel::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
 
-    QItemSelectionModel* selection_model = ui.tree_files->selectionModel();
-    connect(selection_model, &QItemSelectionModel::selectionChanged,
-            this, &FilePanel::onFileSelectionChanged);
-
-    connect(ui.button_up, &QPushButton::pressed, this, &FilePanel::toParentFolder);
-    connect(ui.button_refresh, &QPushButton::pressed, this, &FilePanel::refresh);
-    connect(ui.button_add, &QPushButton::pressed, this, &FilePanel::addFolder);
-    connect(ui.button_delete, &QPushButton::pressed, this, &FilePanel::removeSelected);
-    connect(ui.button_send, &QPushButton::pressed, this, &FilePanel::sendSelected);
+    connect(ui.action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
+    connect(ui.action_refresh, &QAction::triggered, this, &FilePanel::refresh);
+    connect(ui.action_add_folder, &QAction::triggered, this, &FilePanel::addFolder);
+    connect(ui.action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
+    connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
     connect(file_list_, &FileListModel::fileListDropped,
             [this](const QString& folder_name, const QList<FileTransfer::Item>& items)
@@ -129,8 +112,38 @@ FilePanel::FilePanel(QWidget* parent)
         if (!folder_name.isEmpty())
             target_folder += folder_name;
 
-        emit receiveItems(this, normalizePath(target_folder), items);
+        emit receiveItems(this, target_folder, items);
     });
+
+    ui.list->setFocus();
+}
+
+void FilePanel::onPathChanged(const QString& path)
+{
+    file_list_->clear();
+
+    AddressBarModel* model = dynamic_cast<AddressBarModel*>(ui.address_bar->model());
+    if (!model)
+        return;
+
+    if (path == model->computerPath())
+    {
+        ui.list->setModel(model);
+        ui.list->setRootIndex(model->computerIndex());
+        ui.list->setSelectionMode(QTreeView::SingleSelection);
+
+        ui.action_up->setEnabled(false);
+        ui.action_add_folder->setEnabled(false);
+        ui.action_delete->setEnabled(false);
+
+        ui.label_status->clear();
+    }
+    else
+    {
+        FileRequest* request = FileRequest::fileListRequest(path);
+        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        emit newRequest(request);
+    }
 }
 
 void FilePanel::setPanelName(const QString& name)
@@ -138,38 +151,14 @@ void FilePanel::setPanelName(const QString& name)
     ui.label_name->setText(name);
 }
 
-void FilePanel::setCurrentPath(const QString& path)
-{
-    current_path_ = normalizePath(path);
-
-    for (int i = 0; i < ui.address_bar->count(); ++i)
-    {
-        if (addressItemPath(i) == current_path_)
-        {
-            ui.address_bar->setCurrentIndex(i);
-            onAddressItemChanged(i);
-            return;
-        }
-    }
-
-    file_list_->clear();
-
-    int current_item = ui.address_bar->count();
-
-    ui.address_bar->addItem(FilePlatformUtil::directoryIcon(), current_path_);
-    ui.address_bar->setCurrentIndex(current_item);
-
-    onAddressItemChanged(current_item);
-}
-
 QByteArray FilePanel::saveState() const
 {
-    return ui.tree_files->header()->saveState();
+    return ui.list->header()->saveState();
 }
 
 void FilePanel::restoreState(const QByteArray& state)
 {
-    QHeaderView* header = ui.tree_files->header();
+    QHeaderView* header = ui.list->header();
     header->restoreState(state);
 
     file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
@@ -189,7 +178,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  QMessageBox::Ok);
         }
 
-        updateDrives(reply.drive_list());
+        ui.address_bar->setDriveList(reply.drive_list());
     }
     else if (request.has_file_list_request())
     {
@@ -200,11 +189,21 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  tr("Failed to get list of files: %1")
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
-            setCurrentPath(prev_path_);
         }
         else
         {
+            ui.action_up->setEnabled(true);
+            ui.action_add_folder->setEnabled(true);
+
+            ui.list->setModel(file_list_);
+            ui.list->setSelectionMode(QTreeView::ExtendedSelection);
+
             file_list_->setFileList(reply.file_list());
+
+            QItemSelectionModel* selection_model = ui.list->selectionModel();
+
+            connect(selection_model, &QItemSelectionModel::selectionChanged,
+                    this, &FilePanel::onFileSelectionChanged);
         }
     }
     else if (request.has_create_directory_request())
@@ -242,95 +241,35 @@ void FilePanel::refresh()
     emit newRequest(request);
 }
 
-void FilePanel::keyPressEvent(QKeyEvent* event)
-{
-    switch (event->key())
-    {
-        case Qt::Key_Backspace:
-            toParentFolder();
-            break;
-
-        case Qt::Key_F5:
-            refresh();
-            break;
-
-        case Qt::Key_Delete:
-            removeSelected();
-            break;
-
-        case Qt::Key_F11:
-            sendSelected();
-            break;
-
-        default:
-            break;
-    }
-
-    QWidget::keyPressEvent(event);
-}
-
-void FilePanel::onAddressItemChanged(int index)
-{
-    prev_path_ = current_path_;
-    current_path_ = normalizePath(addressItemPath(index));
-
-    // If the address is entered by the user, then the icon is missing.
-    if (ui.address_bar->itemIcon(index).isNull())
-    {
-        int equal_item = ui.address_bar->findData(current_path_);
-        if (equal_item == -1)
-        {
-            // We set the directory icon and update the path after normalization.
-            ui.address_bar->setItemIcon(index, FilePlatformUtil::directoryIcon());
-            ui.address_bar->setItemText(index, current_path_);
-        }
-        else
-        {
-            ui.address_bar->setCurrentIndex(equal_item);
-            ui.address_bar->removeItem(index);
-        }
-    }
-
-    int count = ui.address_bar->count();
-    for (int i = 0; i < count; ++i)
-    {
-        if (ui.address_bar->itemData(i).toString().isEmpty() &&
-            ui.address_bar->itemText(i) != ui.address_bar->itemText(index))
-        {
-            ui.address_bar->removeItem(i);
-            break;
-        }
-    }
-
-    file_list_->clear();
-
-    FileRequest* request = FileRequest::fileListRequest(current_path_);
-    connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-    emit newRequest(request);
-}
-
 void FilePanel::onFileDoubleClicked(const QModelIndex& index)
 {
-    if (file_list_->isFolder(index))
-        toChildFolder(file_list_->nameAt(index));
+    if (ui.address_bar->hasCurrentPath())
+    {
+        if (file_list_->isFolder(index))
+            toChildFolder(file_list_->nameAt(index));
+    }
+    else
+    {
+        ui.address_bar->setCurrentPath(ui.address_bar->pathAt(index));
+    }
 }
 
 void FilePanel::onFileSelectionChanged()
 {
-    QItemSelectionModel* selection_model = ui.tree_files->selectionModel();
+    QItemSelectionModel* selection_model = ui.list->selectionModel();
 
     ui.label_status->setText(tr("%1 object(s) selected")
                              .arg(selection_model->selectedRows().count()));
 
     if (selection_model->hasSelection())
     {
-        ui.button_delete->setEnabled(true);
-        ui.button_send->setEnabled(true);
+        ui.action_delete->setEnabled(true);
+        ui.action_send->setEnabled(true);
     }
     else
     {
-        ui.button_delete->setEnabled(false);
-        ui.button_send->setEnabled(false);
+        ui.action_delete->setEnabled(false);
+        ui.action_send->setEnabled(false);
     }
 }
 
@@ -376,7 +315,7 @@ void FilePanel::onFileContextMenu(const QPoint& point)
     QScopedPointer<QAction> copy_action;
     QScopedPointer<QAction> delete_action;
 
-    if (ui.tree_files->selectionModel()->hasSelection())
+    if (ui.list->selectionModel()->hasSelection())
     {
         copy_action.reset(new QAction(
             QIcon(QStringLiteral(":/icon/arrow-045.png")), tr("&Send\tF11")));
@@ -393,7 +332,7 @@ void FilePanel::onFileContextMenu(const QPoint& point)
 
     menu.addAction(add_folder_action.data());
 
-    QAction* selected_action = menu.exec(ui.tree_files->mapToGlobal(point));
+    QAction* selected_action = menu.exec(ui.list->mapToGlobal(point));
     if (!selected_action)
         return;
 
@@ -407,28 +346,25 @@ void FilePanel::onFileContextMenu(const QPoint& point)
 
 void FilePanel::toChildFolder(const QString& child_name)
 {
-    setCurrentPath(current_path_ + child_name);
-    ui.button_up->setEnabled(true);
+    ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
+    ui.action_up->setEnabled(true);
 }
 
 void FilePanel::toParentFolder()
 {
-    QString parent_path = parentPath(current_path_);
-    if (!parent_path.isEmpty())
-        setCurrentPath(parent_path);
-
-    ui.button_up->setEnabled(!parentPath(parent_path).isEmpty());
+    QString parent_path = parentPath(ui.address_bar->currentPath());
+    ui.address_bar->setCurrentPath(parent_path);
 }
 
 void FilePanel::addFolder()
 {
-    ui.tree_files->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
+    ui.list->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
 
     QModelIndex index = file_list_->createFolder();
     if (index.isValid())
     {
-        ui.tree_files->scrollTo(index);
-        ui.tree_files->edit(index);
+        ui.list->scrollTo(index);
+        ui.list->edit(index);
     }
 }
 
@@ -436,7 +372,7 @@ void FilePanel::removeSelected()
 {
     QList<FileRemover::Item> items;
 
-    for (const auto& index : ui.tree_files->selectionModel()->selectedRows())
+    for (const auto& index : ui.list->selectionModel()->selectedRows())
         items.append(FileRemover::Item(file_list_->nameAt(index), file_list_->isFolder(index)));
 
     if (items.isEmpty())
@@ -457,7 +393,7 @@ void FilePanel::sendSelected()
 {
     QList<FileTransfer::Item> items;
 
-    for (const auto& index : ui.tree_files->selectionModel()->selectedRows())
+    for (const auto& index : ui.list->selectionModel()->selectedRows())
     {
         items.append(FileTransfer::Item(file_list_->nameAt(index),
                                         file_list_->sizeAt(index),
@@ -468,48 +404,6 @@ void FilePanel::sendSelected()
         return;
 
     emit sendItems(this, items);
-}
-
-QString FilePanel::addressItemPath(int index) const
-{
-    QString path = ui.address_bar->itemData(index).toString();
-    if (path.isEmpty())
-        path = ui.address_bar->itemText(index);
-
-    return path;
-}
-
-void FilePanel::updateDrives(const proto::file_transfer::DriveList& list)
-{
-    ui.address_bar->clear();
-
-    for (int i = 0; i < list.item_size(); ++i)
-    {
-        const proto::file_transfer::DriveList::Item& item = list.item(i);
-
-        QString path = normalizePath(QString::fromStdString(item.path()));
-        QIcon icon = FilePlatformUtil::driveIcon(item.type());
-
-        switch (item.type())
-        {
-            case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
-                ui.address_bar->insertItem(i, icon, tr("Home Folder"), path);
-                break;
-
-            case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
-                ui.address_bar->insertItem(i, icon, tr("Desktop"), path);
-                break;
-
-            default:
-                ui.address_bar->insertItem(i, icon, path, path);
-                break;
-        }
-    }
-
-    if (current_path_.isEmpty())
-        setCurrentPath(addressItemPath(0));
-    else
-        setCurrentPath(current_path_);
 }
 
 } // namespace aspia

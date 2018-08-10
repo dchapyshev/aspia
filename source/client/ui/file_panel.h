@@ -38,8 +38,7 @@ public:
 
     void setPanelName(const QString& name);
 
-    QString currentPath() const { return current_path_; }
-    void setCurrentPath(const QString& path);
+    QString currentPath() const { return ui.address_bar->currentPath(); }
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -57,12 +56,8 @@ public slots:
                const proto::file_transfer::Reply& reply);
     void refresh();
 
-protected:
-    // QWidget implementation.
-    void keyPressEvent(QKeyEvent* event) override;
-
 private slots:
-    void onAddressItemChanged(int index);
+    void onPathChanged(const QString& path);
     void onFileDoubleClicked(const QModelIndex& index);
     void onFileSelectionChanged();
     void onFileContextMenu(const QPoint& point);
@@ -76,14 +71,9 @@ private slots:
     void sendSelected();
 
 private:
-    QString addressItemPath(int index) const;
-    void updateDrives(const proto::file_transfer::DriveList& list);
-
     Ui::FilePanel ui;
-    FileListModel* file_list_ = nullptr;
 
-    QString current_path_;
-    QString prev_path_;
+    FileListModel* file_list_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };

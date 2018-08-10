@@ -299,6 +299,32 @@ class DriveList_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
+  // string name = 3;
+  void clear_name();
+  static const int kNameFieldNumber = 3;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // int64 total_space = 4;
+  void clear_total_space();
+  static const int kTotalSpaceFieldNumber = 4;
+  ::google::protobuf::int64 total_space() const;
+  void set_total_space(::google::protobuf::int64 value);
+
+  // int64 free_space = 5;
+  void clear_free_space();
+  static const int kFreeSpaceFieldNumber = 5;
+  ::google::protobuf::int64 free_space() const;
+  void set_free_space(::google::protobuf::int64 value);
+
   // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
@@ -310,6 +336,9 @@ class DriveList_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::int64 total_space_;
+  ::google::protobuf::int64 free_space_;
   int type_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
@@ -2109,6 +2138,87 @@ inline void DriveList_Item::set_allocated_path(::std::string* path) {
   }
   path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.DriveList.Item.path)
+}
+
+// string name = 3;
+inline void DriveList_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DriveList_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.name)
+  return name_.GetNoArena();
+}
+inline void DriveList_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.name)
+}
+#if LANG_CXX11
+inline void DriveList_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.file_transfer.DriveList.Item.name)
+}
+#endif
+inline void DriveList_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.file_transfer.DriveList.Item.name)
+}
+inline void DriveList_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.file_transfer.DriveList.Item.name)
+}
+inline ::std::string* DriveList_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.DriveList.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DriveList_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.DriveList.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DriveList_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.DriveList.Item.name)
+}
+
+// int64 total_space = 4;
+inline void DriveList_Item::clear_total_space() {
+  total_space_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 DriveList_Item::total_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.total_space)
+  return total_space_;
+}
+inline void DriveList_Item::set_total_space(::google::protobuf::int64 value) {
+  
+  total_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.total_space)
+}
+
+// int64 free_space = 5;
+inline void DriveList_Item::clear_free_space() {
+  free_space_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 DriveList_Item::free_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.free_space)
+  return free_space_;
+}
+inline void DriveList_Item::set_free_space(::google::protobuf::int64 value) {
+  
+  free_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.free_space)
 }
 
 // -------------------------------------------------------------------

@@ -97,6 +97,10 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h)
 
 list(APPEND SOURCE_CLIENT_UI
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar.h
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar_model.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar_model.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.ui

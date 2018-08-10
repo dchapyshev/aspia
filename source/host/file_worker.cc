@@ -96,11 +96,18 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
     for (const auto& volume : QStorageInfo::mountedVolumes())
     {
         QString root_path = volume.rootPath();
+        QString name = volume.displayName();
 
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(FilePlatformUtil::driveType(root_path));
         item->set_path(root_path.toStdString());
+
+        if (name != root_path)
+            item->set_name(name.toStdString());
+
+        item->set_total_space(volume.bytesTotal());
+        item->set_free_space(volume.bytesFree());
     }
 
     QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
@@ -110,6 +117,8 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
         item->set_path(desktop_path.toStdString());
+        item->set_total_space(-1);
+        item->set_free_space(-1);
     }
 
     QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -119,6 +128,8 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
         item->set_path(home_path.toStdString());
+        item->set_total_space(-1);
+        item->set_free_space(-1);
     }
 
     if (reply.drive_list().item_size() == 0)
