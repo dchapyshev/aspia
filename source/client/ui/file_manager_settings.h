@@ -37,11 +37,17 @@ public:
     QByteArray splitterState() const;
     void setSplitterState(const QByteArray& state);
 
-    QByteArray localPanelState() const;
-    void setLocalPanelState(const QByteArray& state);
+    QByteArray localDriveListState() const;
+    void setLocalDriveListState(const QByteArray& state);
 
-    QByteArray remotePanelState() const;
-    void setRemotePanelState(const QByteArray& state);
+    QByteArray localFileListState() const;
+    void setLocalFileListState(const QByteArray& state);
+
+    QByteArray remoteDriveListState() const;
+    void setRemoteDriveListState(const QByteArray& state);
+
+    QByteArray remoteFileListState() const;
+    void setRemoteFileListState(const QByteArray& state);
 
 private:
     QSettings settings_;

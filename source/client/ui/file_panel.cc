@@ -126,11 +126,18 @@ void FilePanel::onPathChanged(const QString& path)
     if (!model)
         return;
 
+    if (ui.list->model() == model)
+        drive_list_state_ = ui.list->header()->saveState();
+    else if (ui.list->model() == file_list_)
+        file_list_state_ = ui.list->header()->saveState();
+
     if (path == model->computerPath())
     {
         ui.list->setModel(model);
         ui.list->setRootIndex(model->computerIndex());
         ui.list->setSelectionMode(QTreeView::SingleSelection);
+        ui.list->setSortingEnabled(false);
+        ui.list->header()->restoreState(drive_list_state_);
 
         ui.action_up->setEnabled(false);
         ui.action_add_folder->setEnabled(false);
@@ -151,17 +158,14 @@ void FilePanel::setPanelName(const QString& name)
     ui.label_name->setText(name);
 }
 
-QByteArray FilePanel::saveState() const
-{
-    return ui.list->header()->saveState();
-}
-
-void FilePanel::restoreState(const QByteArray& state)
+void FilePanel::updateState()
 {
     QHeaderView* header = ui.list->header();
-    header->restoreState(state);
 
-    file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
+    if (ui.list->model() == file_list_)
+        file_list_state_ = header->saveState();
+    else
+        drive_list_state_ = header->saveState();
 }
 
 void FilePanel::reply(const proto::file_transfer::Request& request,
@@ -197,7 +201,12 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
 
             ui.list->setModel(file_list_);
             ui.list->setSelectionMode(QTreeView::ExtendedSelection);
+            ui.list->setSortingEnabled(true);
 
+            QHeaderView* header = ui.list->header();
+            header->restoreState(file_list_state_);
+
+            file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
             file_list_->setFileList(reply.file_list());
 
             QItemSelectionModel* selection_model = ui.list->selectionModel();

@@ -45,10 +45,12 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     ui.splitter->restoreState(settings.splitterState());
 
     ui.local_panel->setPanelName(tr("Local Computer"));
-    ui.local_panel->restoreState(settings.localPanelState());
+    ui.local_panel->setDriveListState(settings.localDriveListState());
+    ui.local_panel->setFileListState(settings.localFileListState());
 
     ui.remote_panel->setPanelName(tr("Remote Computer"));
-    ui.remote_panel->restoreState(settings.remotePanelState());
+    ui.remote_panel->setDriveListState(settings.remoteDriveListState());
+    ui.remote_panel->setFileListState(settings.remoteFileListState());
 
     connect(ui.local_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
     connect(ui.remote_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
@@ -72,8 +74,14 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
 
     settings.setWindowGeometry(saveGeometry());
     settings.setSplitterState(ui.splitter->saveState());
-    settings.setLocalPanelState(ui.local_panel->saveState());
-    settings.setRemotePanelState(ui.remote_panel->saveState());
+
+    ui.local_panel->updateState();
+    settings.setLocalDriveListState(ui.local_panel->driveListState());
+    settings.setLocalFileListState(ui.local_panel->fileListState());
+
+    ui.remote_panel->updateState();
+    settings.setRemoteDriveListState(ui.remote_panel->driveListState());
+    settings.setRemoteFileListState(ui.remote_panel->fileListState());
 
     emit windowClose();
     QWidget::closeEvent(event);

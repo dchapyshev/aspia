@@ -46,24 +46,44 @@ void FileManagerSettings::setSplitterState(const QByteArray& state)
     settings_.setValue(QStringLiteral("FileManager/SplitterState"), state);
 }
 
-QByteArray FileManagerSettings::localPanelState() const
+QByteArray FileManagerSettings::localDriveListState() const
 {
-    return settings_.value(QStringLiteral("FileManager/LocalPanelState")).toByteArray();
+    return settings_.value(QStringLiteral("FileManager/LocalDriveListState")).toByteArray();
 }
 
-void FileManagerSettings::setLocalPanelState(const QByteArray& state)
+void FileManagerSettings::setLocalDriveListState(const QByteArray& state)
 {
-    settings_.setValue(QStringLiteral("FileManager/LocalPanelState"), state);
+    settings_.setValue(QStringLiteral("FileManager/LocalDriveListState"), state);
 }
 
-QByteArray FileManagerSettings::remotePanelState() const
+QByteArray FileManagerSettings::localFileListState() const
 {
-    return settings_.value(QStringLiteral("FileManager/RemotePanelState")).toByteArray();
+    return settings_.value(QStringLiteral("FileManager/LocalFileListState")).toByteArray();
 }
 
-void FileManagerSettings::setRemotePanelState(const QByteArray& state)
+void FileManagerSettings::setLocalFileListState(const QByteArray& state)
 {
-    settings_.setValue(QStringLiteral("FileManager/RemotePanelState"), state);
+    settings_.setValue(QStringLiteral("FileManager/LocalFileListState"), state);
+}
+
+QByteArray FileManagerSettings::remoteDriveListState() const
+{
+    return settings_.value(QStringLiteral("FileManager/RemoteDriveListState")).toByteArray();
+}
+
+void FileManagerSettings::setRemoteDriveListState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("FileManager/RemoteDriveListState"), state);
+}
+
+QByteArray FileManagerSettings::remoteFileListState() const
+{
+    return settings_.value(QStringLiteral("FileManager/RemoteFileListState")).toByteArray();
+}
+
+void FileManagerSettings::setRemoteFileListState(const QByteArray& state)
+{
+    settings_.setValue(QStringLiteral("FileManager/RemoteFileListState"), state);
 }
 
 } // namespace aspia

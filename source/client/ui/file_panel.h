@@ -40,8 +40,13 @@ public:
 
     QString currentPath() const { return ui.address_bar->currentPath(); }
 
-    QByteArray saveState() const;
-    void restoreState(const QByteArray& state);
+    void updateState();
+
+    QByteArray driveListState() const { return drive_list_state_; }
+    void setDriveListState(const QByteArray& state) { drive_list_state_ = state; }
+
+    QByteArray fileListState() const { return file_list_state_; }
+    void setFileListState(const QByteArray& state) { file_list_state_ = state; }
 
 signals:
     void newRequest(FileRequest* request);
@@ -72,6 +77,9 @@ private slots:
 
 private:
     Ui::FilePanel ui;
+
+    QByteArray drive_list_state_;
+    QByteArray file_list_state_;
 
     FileListModel* file_list_ = nullptr;
 
