@@ -20,7 +20,6 @@
 
 #include <QHostAddress>
 #include <QNetworkProxy>
-#include <QTimerEvent>
 
 #include "crypto/encryptor.h"
 
@@ -30,7 +29,6 @@ namespace {
 
 constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16 MB
 constexpr int64_t kMaxWriteSize = 1200; // 1200 bytes
-constexpr int kPingerInterval = 30; // 30 seconds
 
 QByteArray createWriteBuffer(const QByteArray& message_buffer)
 {
@@ -86,8 +84,7 @@ NetworkChannel::NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* p
     connect(socket_, &QTcpSocket::bytesWritten, this, &NetworkChannel::onBytesWritten);
     connect(socket_, &QTcpSocket::readyRead, this, &NetworkChannel::onReadyRead);
 
-    connect(socket_, &QTcpSocket::disconnected,
-            this, &NetworkChannel::onDisconnected,
+    connect(socket_, &QTcpSocket::disconnected, this, &NetworkChannel::disconnected,
             Qt::QueuedConnection);
 
     connect(socket_, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error),
@@ -176,22 +173,6 @@ void NetworkChannel::send(const QByteArray& buffer)
     }
 }
 
-void NetworkChannel::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == pinger_timer_id_)
-    {
-        // If at the moment the message is sent, then skip ping.
-        if (!write_.buffer.isEmpty())
-            return;
-
-        // Pinger sends 1 byte equal to zero.
-        write_.buffer.resize(1);
-        write_.buffer[0] = 0;
-
-        socket_->write(write_.buffer);
-    }
-}
-
 void NetworkChannel::onConnected()
 {
     state_ = State::CONNECTED;
@@ -222,17 +203,6 @@ void NetworkChannel::onConnected()
         // Write hello message to server.
         socket_->write(write_.buffer);
     }
-}
-
-void NetworkChannel::onDisconnected()
-{
-    if (pinger_timer_id_)
-    {
-        killTimer(pinger_timer_id_);
-        pinger_timer_id_ = 0;
-    }
-
-    emit disconnected();
 }
 
 void NetworkChannel::onError(QAbstractSocket::SocketError /* error */)
@@ -279,15 +249,8 @@ void NetworkChannel::onReadyRead()
                 switch (read_.bytes_transferred)
                 {
                     case 0:
-                    {
-                        // If the first byte is zero, then message ping is received.
-                        // This message is ignored.
-                        if (!byte)
-                            continue;
-
                         read_.buffer_size += byte & 0x7F;
-                    }
-                    break;
+                        break;
 
                     case 1:
                         read_.buffer_size += (byte & 0x7F) << 7;
@@ -452,16 +415,6 @@ void NetworkChannel::onMessageReceived()
 
 void NetworkChannel::keyExchangeComplete()
 {
-    Q_ASSERT(!pinger_timer_id_);
-
-    pinger_timer_id_ = startTimer(std::chrono::seconds(kPingerInterval));
-    if (!pinger_timer_id_)
-    {
-        emit errorOccurred(tr("Unknown internal error."));
-        stop();
-        return;
-    }
-
     // After the successful completion of the key exchange, we pause the channel.
     // To continue receiving messages, slot |start| must be called.
     read_.paused = true;
