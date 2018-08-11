@@ -18,6 +18,7 @@
 
 #include "client/ui/file_transfer_dialog.h"
 
+#include <QCloseEvent>
 #include <QPushButton>
 #include <QMessageBox>
 
@@ -129,6 +130,33 @@ void FileTransferDialog::showError(FileTransfer* transfer,
     });
 
     dialog->exec();
+}
+
+void FileTransferDialog::onTransferFinished()
+{
+    finished_ = true;
+    close();
+}
+
+void FileTransferDialog::closeEvent(QCloseEvent* event)
+{
+    if (finished_)
+    {
+        QDialog::closeEvent(event);
+        return;
+    }
+
+    event->ignore();
+
+    if (closing_)
+        return;
+
+    closing_ = true;
+
+    ui.label_task->setText("Current Task: Cancel transfer of files.");
+    ui.button_box->setDisabled(true);
+
+    emit transferCanceled();
 }
 
 } // namespace aspia

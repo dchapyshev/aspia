@@ -22,8 +22,10 @@
 
 namespace aspia {
 
-FileDepacketizer::FileDepacketizer(std::ofstream&& file_stream)
-    : file_stream_(std::move(file_stream))
+FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
+                                   std::ofstream&& file_stream)
+    : file_path_(file_path),
+      file_stream_(std::move(file_stream))
 {
     // Nothing
 }
@@ -43,21 +45,37 @@ std::unique_ptr<FileDepacketizer> FileDepacketizer::create(
     if (!file_stream.is_open())
         return nullptr;
 
-    return std::unique_ptr<FileDepacketizer>(new FileDepacketizer(std::move(file_stream)));
+    return std::unique_ptr<FileDepacketizer>(
+        new FileDepacketizer(file_path, std::move(file_stream)));
 }
 
 bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packet)
 {
     Q_ASSERT(file_stream_.is_open());
 
+    const size_t packet_size = packet.data().size();
+    if (!packet_size)
+    {
+        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
+        {
+            file_stream_.close();
+
+            // The transfer of files was canceled. Delete the file.
+            std::error_code ignored_error;
+            std::filesystem::remove(file_path_, ignored_error);
+            return true;
+        }
+
+        qWarning("Wrong packet size");
+        return false;
+    }
+
     // The first packet must have the full file size.
-    if (packet.flags() & proto::file_transfer::Packet::FLAG_FIRST_PACKET)
+    if (packet.flags() & proto::file_transfer::Packet::FIRST_PACKET)
     {
         file_size_ = packet.file_size();
         left_size_ = file_size_;
     }
-
-    const size_t packet_size = packet.data().size();
 
     file_stream_.seekp(file_size_ - left_size_);
     file_stream_.write(packet.data().data(), packet_size);
@@ -69,7 +87,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 
     left_size_ -= packet_size;
 
-    if (packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+    if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
     {
         file_size_ = 0;
         file_stream_.close();

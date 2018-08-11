@@ -55,7 +55,8 @@ std::unique_ptr<FilePacketizer> FilePacketizer::create(const std::filesystem::pa
     return std::unique_ptr<FilePacketizer>(new FilePacketizer(std::move(file_stream)));
 }
 
-std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
+std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
+    const proto::file_transfer::PacketRequest& request)
 {
     Q_ASSERT(file_stream_.is_open());
 
@@ -63,8 +64,14 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
     std::unique_ptr<proto::file_transfer::Packet> packet =
         std::make_unique<proto::file_transfer::Packet>();
 
+    if (request.flags() & proto::file_transfer::PacketRequest::CANCEL)
+    {
+        packet->set_flags(proto::file_transfer::Packet::LAST_PACKET);
+        return packet;
+    }
+
     // All file packets must have the flag.
-    packet->set_flags(proto::file_transfer::Packet::FLAG_PACKET);
+    packet->set_flags(proto::file_transfer::Packet::PACKET);
 
     int64_t packet_buffer_size = kPacketPartSize;
 
@@ -85,7 +92,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
 
     if (left_size_ == file_size_)
     {
-        packet->set_flags(packet->flags() | proto::file_transfer::Packet::FLAG_FIRST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::Packet::FIRST_PACKET);
 
         // Set file path and size in first packet.
         packet->set_file_size(file_size_);
@@ -98,7 +105,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket()
         file_size_ = 0;
         file_stream_.close();
 
-        packet->set_flags(packet->flags() | proto::file_transfer::Packet::FLAG_LAST_PACKET);
+        packet->set_flags(packet->flags() | proto::file_transfer::Packet::LAST_PACKET);
     }
 
     return packet;

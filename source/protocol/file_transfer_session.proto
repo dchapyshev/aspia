@@ -103,17 +103,23 @@ message DownloadRequest
 
 message PacketRequest
 {
-    uint32 dummy = 1;
+    enum Flags
+    {
+        NO_FLAGS = 0;
+        CANCEL   = 1;
+    }
+
+    uint32 flags = 1;
 }
 
 message Packet
 {
     enum Flags
     {
-        FLAG_ERROR        = 0;
-        FLAG_PACKET       = 1;
-        FLAG_FIRST_PACKET = 2;
-        FLAG_LAST_PACKET  = 4;
+        WRONG_FLAGS  = 0;
+        PACKET       = 1;
+        FIRST_PACKET = 2;
+        LAST_PACKET  = 4;
     }
 
     uint32 flags = 1;

@@ -40,8 +40,9 @@ public:
     bool writeNextPacket(const proto::file_transfer::Packet& packet);
 
 private:
-    FileDepacketizer(std::ofstream&& file_stream);
+    FileDepacketizer(const std::filesystem::path& file_path, std::ofstream&& file_stream);
 
+    std::filesystem::path file_path_;
     std::ofstream file_stream_;
 
     std::streamoff file_size_ = 0;

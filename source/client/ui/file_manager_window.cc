@@ -171,8 +171,8 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
                                       const QString& target_path,
                                       const QList<FileTransfer::Item>& items)
 {
-    FileTransferDialog* progress_dialog = new FileTransferDialog(this);
-    FileTransfer* transfer = new FileTransfer(type, progress_dialog);
+    FileTransferDialog* dialog = new FileTransferDialog(this);
+    FileTransfer* transfer = new FileTransfer(type, dialog);
 
     if (type == FileTransfer::Uploader)
     {
@@ -184,22 +184,20 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
         connect(transfer, &FileTransfer::finished, ui.local_panel, &FilePanel::refresh);
     }
 
-    connect(transfer, &FileTransfer::started, progress_dialog, &FileTransferDialog::open);
-    connect(transfer, &FileTransfer::finished, progress_dialog, &FileTransferDialog::close);
+    connect(transfer, &FileTransfer::started, dialog, &FileTransferDialog::open);
+    connect(transfer, &FileTransfer::finished, dialog, &FileTransferDialog::onTransferFinished);
 
-    connect(transfer, &FileTransfer::currentItemChanged,
-            progress_dialog, &FileTransferDialog::setCurrentItem);
-    connect(transfer, &FileTransfer::progressChanged,
-            progress_dialog, &FileTransferDialog::setProgress);
+    connect(transfer, &FileTransfer::currentItemChanged, dialog, &FileTransferDialog::setCurrentItem);
+    connect(transfer, &FileTransfer::progressChanged, dialog, &FileTransferDialog::setProgress);
 
-    connect(transfer, &FileTransfer::error, progress_dialog, &FileTransferDialog::showError);
+    connect(transfer, &FileTransfer::error, dialog, &FileTransferDialog::showError);
     connect(transfer, &FileTransfer::localRequest, this, &FileManagerWindow::localRequest);
     connect(transfer, &FileTransfer::remoteRequest, this, &FileManagerWindow::remoteRequest);
 
-    connect(progress_dialog, &FileTransferDialog::finished,
-            progress_dialog, &FileTransferDialog::deleteLater);
+    connect(dialog, &FileTransferDialog::transferCanceled, transfer, &FileTransfer::stop);
+    connect(dialog, &FileTransferDialog::finished, dialog, &FileTransferDialog::deleteLater);
 
-    connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileTransferDialog::close);
+    connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::close);
 
     transfer->start(source_path, target_path, items);
 }

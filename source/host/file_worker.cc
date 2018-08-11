@@ -69,7 +69,7 @@ proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Re
     }
     else if (request.has_packet_request())
     {
-        return doPacketRequest();
+        return doPacketRequest(request.packet_request());
     }
     else if (request.has_packet())
     {
@@ -305,7 +305,8 @@ proto::file_transfer::Reply FileWorker::doUploadRequest(
     return reply;
 }
 
-proto::file_transfer::Reply FileWorker::doPacketRequest()
+proto::file_transfer::Reply FileWorker::doPacketRequest(
+    const proto::file_transfer::PacketRequest& request)
 {
     proto::file_transfer::Reply reply;
 
@@ -318,14 +319,14 @@ proto::file_transfer::Reply FileWorker::doPacketRequest()
     else
     {
         std::unique_ptr<proto::file_transfer::Packet> packet =
-            packetizer_->readNextPacket();
+            packetizer_->readNextPacket(request);
         if (!packet)
         {
             reply.set_status(proto::file_transfer::STATUS_FILE_READ_ERROR);
         }
         else
         {
-            if (packet->flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+            if (packet->flags() & proto::file_transfer::Packet::LAST_PACKET)
                 packetizer_.reset();
 
             reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -353,7 +354,7 @@ proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Pac
         else
             reply.set_status(proto::file_transfer::STATUS_SUCCESS);
 
-        if (packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
             depacketizer_.reset();
     }
 

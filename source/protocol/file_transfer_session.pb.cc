@@ -388,6 +388,23 @@ const DriveList_Item_Type DriveList_Item::Type_MIN;
 const DriveList_Item_Type DriveList_Item::Type_MAX;
 const int DriveList_Item::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool PacketRequest_Flags_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PacketRequest_Flags PacketRequest::NO_FLAGS;
+const PacketRequest_Flags PacketRequest::CANCEL;
+const PacketRequest_Flags PacketRequest::Flags_MIN;
+const PacketRequest_Flags PacketRequest::Flags_MAX;
+const int PacketRequest::Flags_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool Packet_Flags_IsValid(int value) {
   switch (value) {
     case 0:
@@ -401,10 +418,10 @@ bool Packet_Flags_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const Packet_Flags Packet::FLAG_ERROR;
-const Packet_Flags Packet::FLAG_PACKET;
-const Packet_Flags Packet::FLAG_FIRST_PACKET;
-const Packet_Flags Packet::FLAG_LAST_PACKET;
+const Packet_Flags Packet::WRONG_FLAGS;
+const Packet_Flags Packet::PACKET;
+const Packet_Flags Packet::FIRST_PACKET;
+const Packet_Flags Packet::LAST_PACKET;
 const Packet_Flags Packet::Flags_MIN;
 const Packet_Flags Packet::Flags_MAX;
 const int Packet::Flags_ARRAYSIZE;
@@ -2239,7 +2256,7 @@ void DownloadRequest::InternalSwap(DownloadRequest* other) {
 void PacketRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int PacketRequest::kDummyFieldNumber;
+const int PacketRequest::kFlagsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 PacketRequest::PacketRequest()
@@ -2253,12 +2270,12 @@ PacketRequest::PacketRequest(const PacketRequest& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  dummy_ = from.dummy_;
+  flags_ = from.flags_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.PacketRequest)
 }
 
 void PacketRequest::SharedCtor() {
-  dummy_ = 0u;
+  flags_ = 0u;
 }
 
 PacketRequest::~PacketRequest() {
@@ -2284,7 +2301,7 @@ void PacketRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  dummy_ = 0u;
+  flags_ = 0u;
   _internal_metadata_.Clear();
 }
 
@@ -2304,14 +2321,14 @@ bool PacketRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 dummy = 1;
+      // uint32 flags = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dummy_)));
+                 input, &flags_)));
         } else {
           goto handle_unusual;
         }
@@ -2344,9 +2361,9 @@ void PacketRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 dummy = 1;
-  if (this->dummy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dummy(), output);
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -2360,11 +2377,11 @@ size_t PacketRequest::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // uint32 dummy = 1;
-  if (this->dummy() != 0) {
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->dummy());
+        this->flags());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2384,8 +2401,8 @@ void PacketRequest::MergeFrom(const PacketRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.dummy() != 0) {
-    set_dummy(from.dummy());
+  if (from.flags() != 0) {
+    set_flags(from.flags());
   }
 }
 
@@ -2406,7 +2423,7 @@ void PacketRequest::Swap(PacketRequest* other) {
 }
 void PacketRequest::InternalSwap(PacketRequest* other) {
   using std::swap;
-  swap(dummy_, other->dummy_);
+  swap(flags_, other->flags_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

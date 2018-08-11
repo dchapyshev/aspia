@@ -36,11 +36,20 @@ public slots:
     void setCurrentItem(const QString& source_path, const QString& target_path);
     void setProgress(int total, int current);
     void showError(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
+    void onTransferFinished();
+
+signals:
+    void transferCanceled();
+
+protected:
+    void closeEvent(QCloseEvent* event);
 
 private:
     Ui::FileTransferDialog ui;
 
     bool task_queue_building_ = true;
+    bool closing_ = false;
+    bool finished_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransferDialog);
 };

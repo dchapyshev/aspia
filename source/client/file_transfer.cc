@@ -68,6 +68,11 @@ void FileTransfer::start(const QString& source_path,
     builder_->start(source_path, target_path, items);
 }
 
+void FileTransfer::stop()
+{
+    is_canceled_ = true;
+}
+
 FileTransfer::Actions FileTransfer::availableActions(Error error_type) const
 {
     return actions_[error_type].first;
@@ -121,7 +126,8 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             return;
         }
 
-        FileRequest* request = FileRequest::packetRequest();
+        FileRequest* request =
+            FileRequest::packetRequest(proto::file_transfer::PacketRequest::NO_FLAGS);
         connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
         sourceRequest(request);
     }
@@ -138,7 +144,7 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
 
         if (currentTask().size() && total_size_)
         {
-            qint64 packet_size = request.packet().data().size();
+            int64_t packet_size = request.packet().data().size();
 
             task_transfered_size_ += packet_size;
             total_transfered_size_ += packet_size;
@@ -155,13 +161,17 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
             }
         }
 
-        if (request.packet().flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+        if (request.packet().flags() & proto::file_transfer::Packet::LAST_PACKET)
         {
             processNextTask();
             return;
         }
 
-        FileRequest* request = FileRequest::packetRequest();
+        uint32_t flags = proto::file_transfer::PacketRequest::NO_FLAGS;
+        if (is_canceled_)
+            flags = proto::file_transfer::PacketRequest::CANCEL;
+
+        FileRequest* request = FileRequest::packetRequest(flags);
         connect(request, &FileRequest::replyReady, this, &FileTransfer::sourceReply);
         sourceRequest(request);
     }
@@ -289,6 +299,9 @@ void FileTransfer::processTask(bool overwrite)
 
 void FileTransfer::processNextTask()
 {
+    if (is_canceled_)
+        tasks_.clear();
+
     if (!tasks_.isEmpty())
     {
         // Delete the task only after confirmation of its successful execution.

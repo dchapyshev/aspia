@@ -43,7 +43,7 @@ public:
     static FileRequest* removeRequest(const QString& path);
     static FileRequest* downloadRequest(const QString& file_path);
     static FileRequest* uploadRequest(const QString& file_path, bool overwrite);
-    static FileRequest* packetRequest();
+    static FileRequest* packetRequest(uint32_t flags);
     static FileRequest* packet(const proto::file_transfer::Packet& packet);
 
 signals:

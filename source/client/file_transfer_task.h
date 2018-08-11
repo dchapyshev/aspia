@@ -29,7 +29,7 @@ public:
     FileTransferTask(const QString& source_path,
                      const QString& target_path,
                      bool is_directory,
-                     qint64 size);
+                     int64_t size);
 
     FileTransferTask(const FileTransferTask& other) = default;
     FileTransferTask& operator=(const FileTransferTask& other) = default;
@@ -43,7 +43,7 @@ public:
     const QString& sourcePath() const { return source_path_; }
     const QString& targetPath() const { return target_path_; }
     bool isDirectory() const { return is_directory_; }
-    qint64 size() const { return size_; }
+    int64_t size() const { return size_; }
 
     bool overwrite() const { return overwrite_; }
     void setOverwrite(bool value) { overwrite_ = value; }
@@ -53,7 +53,7 @@ private:
     QString target_path_;
     bool is_directory_;
     bool overwrite_ = false;
-    qint64 size_;
+    int64_t size_;
 };
 
 } // namespace aspia

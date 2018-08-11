@@ -67,7 +67,7 @@ public:
 
     struct Item
     {
-        Item(const QString& name, qint64 size, bool is_directory)
+        Item(const QString& name, int64_t size, bool is_directory)
             : name(name),
               size(size),
               is_directory(is_directory)
@@ -77,7 +77,7 @@ public:
 
         QString name;
         bool is_directory;
-        qint64 size;
+        int64_t size;
     };
 
     FileTransfer(Type type, QObject* parent);
@@ -86,6 +86,7 @@ public:
     void start(const QString& source_path,
                const QString& target_path,
                const QList<Item>& items);
+    void stop();
 
     Actions availableActions(Error error_type) const;
     Action defaultAction(Error error_type) const;
@@ -124,12 +125,14 @@ private:
     QQueue<FileTransferTask> tasks_;
     const Type type_;
 
-    qint64 total_size_ = 0;
-    qint64 total_transfered_size_ = 0;
-    qint64 task_transfered_size_ = 0;
+    int64_t total_size_ = 0;
+    int64_t total_transfered_size_ = 0;
+    int64_t task_transfered_size_ = 0;
 
     int total_percentage_ = 0;
     int task_percentage_ = 0;
+
+    bool is_canceled_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };
