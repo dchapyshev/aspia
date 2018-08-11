@@ -163,12 +163,13 @@ enum Status {
   STATUS_FILE_CREATE_ERROR = 11,
   STATUS_FILE_WRITE_ERROR = 12,
   STATUS_FILE_READ_ERROR = 13,
+  STATUS_DISK_NOT_READY = 14,
   Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Status_IsValid(int value);
 const Status Status_MIN = STATUS_UNKNOWN;
-const Status Status_MAX = STATUS_FILE_READ_ERROR;
+const Status Status_MAX = STATUS_DISK_NOT_READY;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================

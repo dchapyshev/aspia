@@ -102,6 +102,11 @@ QString AddressBar::currentPath() const
     return currentData().toString();
 }
 
+QString AddressBar::previousPath() const
+{
+    return model_->previousPath();
+}
+
 QString AddressBar::pathAt(const QModelIndex& index) const
 {
     return model_->pathAt(index);

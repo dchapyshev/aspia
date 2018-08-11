@@ -133,6 +133,11 @@ void FilePanel::onPathChanged(const QString& path)
     else if (ui.list->model() == file_list_)
         file_list_state_ = ui.list->header()->saveState();
 
+    ui.action_up->setEnabled(false);
+    ui.action_add_folder->setEnabled(false);
+    ui.action_delete->setEnabled(false);
+    ui.action_send->setEnabled(false);
+
     if (path == model->computerPath())
     {
         ui.list->setModel(model);
@@ -140,10 +145,6 @@ void FilePanel::onPathChanged(const QString& path)
         ui.list->setSelectionMode(QTreeView::SingleSelection);
         ui.list->setSortingEnabled(false);
         ui.list->header()->restoreState(drive_list_state_);
-
-        ui.action_up->setEnabled(false);
-        ui.action_add_folder->setEnabled(false);
-        ui.action_delete->setEnabled(false);
 
         ui.label_status->clear();
     }
@@ -200,6 +201,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  tr("Failed to get list of files: %1")
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
+            ui.address_bar->setCurrentPath(ui.address_bar->previousPath());
         }
         else
         {

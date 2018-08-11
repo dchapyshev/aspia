@@ -38,6 +38,7 @@ enum Status
     STATUS_FILE_CREATE_ERROR   = 11;
     STATUS_FILE_WRITE_ERROR    = 12;
     STATUS_FILE_READ_ERROR     = 13;
+    STATUS_DISK_NOT_READY      = 14;
 }
 
 message DriveList

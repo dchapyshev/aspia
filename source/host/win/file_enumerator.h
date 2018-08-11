@@ -16,13 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_BASE__WIN__FILE_ENUMERATOR_H_
-#define ASPIA_BASE__WIN__FILE_ENUMERATOR_H_
+#ifndef ASPIA_HOST__WIN__FILE_ENUMERATOR_H_
+#define ASPIA_HOST__WIN__FILE_ENUMERATOR_H_
 
 #include <qt_windows.h>
 #include <filesystem>
 
 #include "base/macros_magic.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
 
@@ -52,7 +53,10 @@ public:
     bool isAtEnd() const;
     void advance();
 
+    proto::file_transfer::Status status() const { return status_; }
+
 private:
+    proto::file_transfer::Status status_ = proto::file_transfer::STATUS_SUCCESS;
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
     FileInfo file_info_;
 
@@ -61,4 +65,4 @@ private:
 
 }  // namespace aspia
 
-#endif // ASPIA_BASE__WIN__FILE_ENUMERATOR_H_
+#endif // ASPIA_HOST__WIN__FILE_ENUMERATOR_H_

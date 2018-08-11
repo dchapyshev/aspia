@@ -100,33 +100,32 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
 {
     QModelIndex index;
 
-    current_path_.clear();
+    previous_path_ = current_path_;
 
     if (path == computerPath())
     {
-        previous_path_ = path;
+        current_path_ = computerPath();
         index = computerIndex();
     }
     else
     {
         QString normalized_path = normalizePath(path);
 
-        if (!FilePlatformUtil::isValidPath(normalized_path))
+        if (!FilePlatformUtil::isValidPath(normalized_path) ||
+            normalized_path.contains(QLatin1String("//")))
         {
-            if (previous_path_.isEmpty())
-                index = setCurrentPath(computerPath());
-            else
-                index = setCurrentPath(previous_path_);
-
             emit invalidPathEntered();
+            return QModelIndex();
         }
         else
         {
+            current_path_ = normalized_path;
+
             for (int i = 0; i < drives_.count(); ++i)
             {
                 const QString& drive_path = drives_.at(i).path;
 
-                if (drive_path.compare(normalized_path, Qt::CaseInsensitive) == 0)
+                if (drive_path.compare(current_path_, Qt::CaseInsensitive) == 0)
                 {
                     index = createIndex(i, 0, kDriveItem);
                     break;
@@ -134,12 +133,7 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
             }
 
             if (!index.isValid())
-            {
-                current_path_ = normalized_path;
                 index = currentFolderIndex();
-            }
-
-            previous_path_ = normalized_path;
         }
     }
 
@@ -152,9 +146,27 @@ QString AddressBarModel::pathAt(const QModelIndex& index) const
     return data(index, Qt::UserRole).toString();
 }
 
+bool AddressBarModel::isComputerPath(const QString& path) const
+{
+    return path == computerPath();
+}
+
+bool AddressBarModel::isDrivePath(const QString& path) const
+{
+    QString normalized_path = normalizePath(path);
+
+    for (const auto& drive : drives_)
+    {
+        if (normalized_path.compare(drive.path, Qt::CaseInsensitive) == 0)
+            return true;
+    }
+
+    return false;
+}
+
 QModelIndex AddressBarModel::computerIndex() const
 {
-    if (current_path_.isEmpty())
+    if (isDrivePath(current_path_) || isComputerPath(current_path_))
         return createIndex(0, 0, kComputerItem);
     else
         return createIndex(1, 0, kComputerItem);
@@ -162,7 +174,7 @@ QModelIndex AddressBarModel::computerIndex() const
 
 QModelIndex AddressBarModel::currentFolderIndex() const
 {
-    if (current_path_.isEmpty())
+    if (isDrivePath(current_path_) || isComputerPath(current_path_))
         return QModelIndex();
 
     return createIndex(0, 0, kCurrentFolderItem);
@@ -179,14 +191,20 @@ QModelIndex AddressBarModel::index(int row, int column, const QModelIndex& paren
 {
     if (!parent.isValid())
     {
-        if (current_path_.isEmpty())
-            return computerIndex();
-        else if (row == 0)
-            return currentFolderIndex();
-        else if (row == 1)
-            return computerIndex();
+        if (isDrivePath(current_path_) || isComputerPath(current_path_))
+        {
+            if (row == 0)
+                return computerIndex();
+        }
         else
-            return QModelIndex();
+        {
+            if (row == 0)
+                return currentFolderIndex();
+            else if (row == 1)
+                return computerIndex();
+        }
+
+        return QModelIndex();
     }
 
     if (!hasIndex(row, column, parent))
@@ -213,7 +231,7 @@ int AddressBarModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
     {
-        if (current_path_.isEmpty())
+        if (isDrivePath(current_path_))
             return 1;
 
         return 2;
@@ -341,7 +359,11 @@ bool AddressBarModel::setData(const QModelIndex& index, const QVariant& value, i
     if (role != Qt::EditRole)
         return false;
 
-    emit pathIndexChanged(setCurrentPath(value.toString()));
+    QModelIndex current = setCurrentPath(value.toString());
+    if (!current.isValid())
+        current = setCurrentPath(previous_path_);
+
+    emit pathIndexChanged(current);
     return true;
 }
 

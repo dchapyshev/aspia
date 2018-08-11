@@ -37,7 +37,11 @@ public:
 
     void setDriveList(const proto::file_transfer::DriveList& list);
     QModelIndex setCurrentPath(const QString& path);
+    QString previousPath() const { return previous_path_; }
     QString pathAt(const QModelIndex& index) const;
+
+    bool isComputerPath(const QString& path) const;
+    bool isDrivePath(const QString& path) const;
 
     QModelIndex computerIndex() const;
     QModelIndex currentFolderIndex() const;
@@ -74,7 +78,7 @@ private:
         int64_t free_space;
     };
 
-    QString current_path_;
+    QString current_path_ = computerPath();
     QString previous_path_;
     QList<Drive> drives_;
 

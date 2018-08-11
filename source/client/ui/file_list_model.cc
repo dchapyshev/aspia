@@ -185,11 +185,14 @@ int64_t FileListModel::sizeAt(const QModelIndex& index) const
 
 QModelIndex FileListModel::createFolder()
 {
-    QString last_folder = folder_items_.last().name;
-    if (last_folder.isEmpty())
-        return QModelIndex();
-
     int row = folder_items_.count();
+
+    if (row > 0)
+    {
+        QString last_folder = folder_items_.last().name;
+        if (last_folder.isEmpty())
+            return QModelIndex();
+    }
 
     beginInsertRows(QModelIndex(), row, row);
     folder_items_.append(Folder());

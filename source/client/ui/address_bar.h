@@ -41,6 +41,7 @@ public:
     void setDriveList(const proto::file_transfer::DriveList& list);
     void setCurrentPath(const QString& path);
     QString currentPath() const;
+    QString previousPath() const;
     QString pathAt(const QModelIndex& index) const;
     bool hasCurrentPath() const;
 

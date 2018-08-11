@@ -30,10 +30,7 @@ FileNameValidator::FileNameValidator(QObject* parent)
 
 FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) const
 {
-    if (input.isEmpty())
-        return Intermediate;
-
-    if (FilePlatformUtil::isValidFileName(input))
+    if (input.isEmpty() || FilePlatformUtil::isValidFileName(input))
         return Acceptable;
 
     emit invalidNameEntered();

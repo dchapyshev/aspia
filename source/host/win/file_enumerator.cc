@@ -16,7 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/file_enumerator.h"
+#include "host/win/file_enumerator.h"
+
+#include <QDebug>
+
+#include "base/errno_logging.h"
 
 namespace aspia {
 
@@ -83,6 +87,26 @@ FileEnumerator::FileEnumerator(const std::filesystem::path& root_path)
                                     FindExSearchNameMatch,
                                     nullptr,
                                     FIND_FIRST_EX_LARGE_FETCH);
+    if (find_handle_ == INVALID_HANDLE_VALUE)
+    {
+        DWORD error_code = GetLastError();
+
+        switch (error_code)
+        {
+            case ERROR_ACCESS_DENIED:
+                status_ = proto::file_transfer::STATUS_ACCESS_DENIED;
+                break;
+
+            case ERROR_NOT_READY:
+                status_ = proto::file_transfer::STATUS_DISK_NOT_READY;
+                break;
+
+            default:
+                qWarning() << "Unhandled error code" << errnoToString(error_code);
+                break;
+        }
+    }
+
     while (find_handle_ != INVALID_HANDLE_VALUE)
     {
         if (!shouldSkip(file_info_.find_data_.cFileName))
