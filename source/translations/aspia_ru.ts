@@ -1695,17 +1695,17 @@
 <context>
     <name>aspia::FileManagerWindow</name>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="41"/>
+        <location filename="../client/ui/file_manager_window.cc" line="42"/>
         <source>%1 - Aspia File Transfer</source>
         <translation>%1 - Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="50"/>
+        <location filename="../client/ui/file_manager_window.cc" line="51"/>
         <source>Local Computer</source>
         <translation>Локальный компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_manager_window.cc" line="55"/>
+        <location filename="../client/ui/file_manager_window.cc" line="56"/>
         <source>Remote Computer</source>
         <translation>Удаленный компьютер</translation>
     </message>
@@ -1713,76 +1713,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="187"/>
-        <location filename="../client/ui/file_panel.cc" line="200"/>
-        <location filename="../client/ui/file_panel.cc" line="233"/>
-        <location filename="../client/ui/file_panel.cc" line="246"/>
-        <location filename="../client/ui/file_panel.cc" line="300"/>
-        <location filename="../client/ui/file_panel.cc" line="309"/>
-        <location filename="../client/ui/file_panel.cc" line="327"/>
-        <location filename="../client/ui/file_panel.cc" line="336"/>
+        <location filename="../client/ui/file_panel.cc" line="202"/>
+        <location filename="../client/ui/file_panel.cc" line="215"/>
+        <location filename="../client/ui/file_panel.cc" line="248"/>
+        <location filename="../client/ui/file_panel.cc" line="261"/>
+        <location filename="../client/ui/file_panel.cc" line="315"/>
+        <location filename="../client/ui/file_panel.cc" line="324"/>
+        <location filename="../client/ui/file_panel.cc" line="342"/>
+        <location filename="../client/ui/file_panel.cc" line="351"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="188"/>
+        <location filename="../client/ui/file_panel.cc" line="203"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не удалось получить список дисков: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="201"/>
+        <location filename="../client/ui/file_panel.cc" line="216"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не удалось получить список файлов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="234"/>
+        <location filename="../client/ui/file_panel.cc" line="249"/>
         <source>Failed to create directory: %1</source>
         <translation>Не удалось создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="247"/>
+        <location filename="../client/ui/file_panel.cc" line="262"/>
         <source>Failed to rename item: %1</source>
         <translation>Не удалось переименовать элемент: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="280"/>
+        <location filename="../client/ui/file_panel.cc" line="295"/>
         <source>%1 object(s) selected</source>
         <translation>Выбрано объектов: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="301"/>
-        <location filename="../client/ui/file_panel.cc" line="328"/>
+        <location filename="../client/ui/file_panel.cc" line="316"/>
+        <location filename="../client/ui/file_panel.cc" line="343"/>
         <source>Folder name can not be empty.</source>
         <translation>Имя папки не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="310"/>
-        <location filename="../client/ui/file_panel.cc" line="337"/>
+        <location filename="../client/ui/file_panel.cc" line="325"/>
+        <location filename="../client/ui/file_panel.cc" line="352"/>
         <source>Name contains invalid characters.</source>
         <translation>Имя содержит некорректные символы.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="361"/>
+        <location filename="../client/ui/file_panel.cc" line="376"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Отправить	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="363"/>
+        <location filename="../client/ui/file_panel.cc" line="378"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="371"/>
+        <location filename="../client/ui/file_panel.cc" line="386"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="422"/>
+        <location filename="../client/ui/file_panel.cc" line="437"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="423"/>
+        <location filename="../client/ui/file_panel.cc" line="438"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>

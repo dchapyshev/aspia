@@ -38,6 +38,8 @@ public:
 
     void setPanelName(const QString& name);
     void setMimeType(const QString& mime_type);
+    void setTransferAllowed(bool allowed);
+    void setTransferEnabled(bool enabled);
 
     QString currentPath() const { return ui.address_bar->currentPath(); }
 
@@ -56,6 +58,7 @@ signals:
     void receiveItems(FilePanel* sender,
                       const QString& folder,
                       const QList<FileTransfer::Item>& items);
+    void pathChanged(FilePanel* sender, const QString& path);
 
 public slots:
     void reply(const proto::file_transfer::Request& request,
@@ -83,6 +86,8 @@ private:
     QByteArray file_list_state_;
 
     FileListModel* file_list_ = nullptr;
+    bool transfer_allowed_ = false;
+    bool transfer_enabled_ = false;
 
     DISALLOW_COPY_AND_ASSIGN(FilePanel);
 };

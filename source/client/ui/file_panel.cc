@@ -122,6 +122,8 @@ FilePanel::FilePanel(QWidget* parent)
 
 void FilePanel::onPathChanged(const QString& path)
 {
+    emit pathChanged(this, ui.address_bar->currentPath());
+
     file_list_->clear();
 
     AddressBarModel* model = dynamic_cast<AddressBarModel*>(ui.address_bar->model());
@@ -136,7 +138,8 @@ void FilePanel::onPathChanged(const QString& path)
     ui.action_up->setEnabled(false);
     ui.action_add_folder->setEnabled(false);
     ui.action_delete->setEnabled(false);
-    ui.action_send->setEnabled(false);
+
+    setTransferEnabled(false);
 
     if (path == model->computerPath())
     {
@@ -164,6 +167,18 @@ void FilePanel::setPanelName(const QString& name)
 void FilePanel::setMimeType(const QString& mime_type)
 {
     file_list_->setMimeType(mime_type);
+}
+
+void FilePanel::setTransferAllowed(bool allowed)
+{
+    transfer_allowed_ = allowed;
+    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
+}
+
+void FilePanel::setTransferEnabled(bool enabled)
+{
+    transfer_enabled_ = enabled;
+    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
 void FilePanel::updateState()
@@ -283,12 +298,12 @@ void FilePanel::onListSelectionChanged()
     if (selection_model->hasSelection())
     {
         ui.action_delete->setEnabled(true);
-        ui.action_send->setEnabled(true);
+        setTransferEnabled(true);
     }
     else
     {
         ui.action_delete->setEnabled(false);
-        ui.action_send->setEnabled(false);
+        setTransferEnabled(false);
     }
 }
 

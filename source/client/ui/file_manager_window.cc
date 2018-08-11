@@ -20,6 +20,7 @@
 
 #include <QDebug>
 
+#include "client/ui/address_bar_model.h"
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
 #include "client/ui/file_manager_settings.h"
@@ -65,6 +66,8 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
     connect(ui.local_panel, &FilePanel::newRequest, this, &FileManagerWindow::localRequest);
     connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
+    connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
+    connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
 }
 
 void FileManagerWindow::refresh()
@@ -200,6 +203,22 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
     connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::close);
 
     transfer->start(source_path, target_path, items);
+}
+
+void FileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
+{
+    bool allow = path != AddressBarModel::computerPath();
+
+    if (sender == ui.local_panel)
+    {
+        ui.remote_panel->setTransferAllowed(allow);
+    }
+    else
+    {
+        Q_ASSERT(sender == ui.remote_panel);
+        ui.local_panel->setTransferAllowed(allow);
+
+    }
 }
 
 } // namespace aspia
