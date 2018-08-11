@@ -857,6 +857,12 @@
     </message>
     <message>
         <location filename="../client/file_status.cc" line="66"/>
+        <source>Drive not ready</source>
+        <comment>FileStatus</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/file_status.cc" line="69"/>
         <source>Unknown status code</source>
         <comment>FileStatus</comment>
         <translation>Onbekende status code</translation>
@@ -1016,7 +1022,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="414"/>
+        <location filename="../client/ui/address_bar_model.cc" line="436"/>
         <source>Home Folder</source>
         <translation type="unfinished">Thuismap</translation>
     </message>
@@ -1026,87 +1032,87 @@
         <translation type="unfinished">Bureablad</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="256"/>
+        <location filename="../client/ui/address_bar_model.cc" line="274"/>
         <source>Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="359"/>
+        <location filename="../client/ui/address_bar_model.cc" line="381"/>
         <source>Name</source>
         <translation type="unfinished">Naam</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="362"/>
+        <location filename="../client/ui/address_bar_model.cc" line="384"/>
         <source>Type</source>
         <translation type="unfinished">Type</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="365"/>
+        <location filename="../client/ui/address_bar_model.cc" line="387"/>
         <source>Total Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="368"/>
+        <location filename="../client/ui/address_bar_model.cc" line="390"/>
         <source>Free Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="399"/>
+        <location filename="../client/ui/address_bar_model.cc" line="421"/>
         <source>Optical Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="402"/>
+        <location filename="../client/ui/address_bar_model.cc" line="424"/>
         <source>Removable Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="405"/>
+        <location filename="../client/ui/address_bar_model.cc" line="427"/>
         <source>Fixed Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="408"/>
+        <location filename="../client/ui/address_bar_model.cc" line="430"/>
         <source>Network Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="411"/>
+        <location filename="../client/ui/address_bar_model.cc" line="433"/>
         <source>RAM Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="417"/>
+        <location filename="../client/ui/address_bar_model.cc" line="439"/>
         <source>Desktop Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="420"/>
+        <location filename="../client/ui/address_bar_model.cc" line="442"/>
         <source>Unknown Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="437"/>
+        <location filename="../client/ui/address_bar_model.cc" line="459"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="442"/>
+        <location filename="../client/ui/address_bar_model.cc" line="464"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="447"/>
+        <location filename="../client/ui/address_bar_model.cc" line="469"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="452"/>
+        <location filename="../client/ui/address_bar_model.cc" line="474"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="457"/>
+        <location filename="../client/ui/address_bar_model.cc" line="479"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
@@ -1631,47 +1637,47 @@
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="354"/>
+        <location filename="../client/ui/file_list_model.cc" line="357"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="357"/>
+        <location filename="../client/ui/file_list_model.cc" line="360"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="360"/>
+        <location filename="../client/ui/file_list_model.cc" line="363"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="363"/>
+        <location filename="../client/ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
         <translation>Aangepast</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="516"/>
+        <location filename="../client/ui/file_list_model.cc" line="519"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="521"/>
+        <location filename="../client/ui/file_list_model.cc" line="524"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="526"/>
+        <location filename="../client/ui/file_list_model.cc" line="529"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="531"/>
+        <location filename="../client/ui/file_list_model.cc" line="534"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="536"/>
+        <location filename="../client/ui/file_list_model.cc" line="539"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -1697,76 +1703,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="186"/>
-        <location filename="../client/ui/file_panel.cc" line="199"/>
-        <location filename="../client/ui/file_panel.cc" line="231"/>
-        <location filename="../client/ui/file_panel.cc" line="244"/>
-        <location filename="../client/ui/file_panel.cc" line="298"/>
-        <location filename="../client/ui/file_panel.cc" line="307"/>
-        <location filename="../client/ui/file_panel.cc" line="325"/>
-        <location filename="../client/ui/file_panel.cc" line="334"/>
+        <location filename="../client/ui/file_panel.cc" line="187"/>
+        <location filename="../client/ui/file_panel.cc" line="200"/>
+        <location filename="../client/ui/file_panel.cc" line="233"/>
+        <location filename="../client/ui/file_panel.cc" line="246"/>
+        <location filename="../client/ui/file_panel.cc" line="300"/>
+        <location filename="../client/ui/file_panel.cc" line="309"/>
+        <location filename="../client/ui/file_panel.cc" line="327"/>
+        <location filename="../client/ui/file_panel.cc" line="336"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="187"/>
+        <location filename="../client/ui/file_panel.cc" line="188"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Kon lijst van schijven niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="200"/>
+        <location filename="../client/ui/file_panel.cc" line="201"/>
         <source>Failed to get list of files: %1</source>
         <translation>Kon lijst van bestanden niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="232"/>
+        <location filename="../client/ui/file_panel.cc" line="234"/>
         <source>Failed to create directory: %1</source>
         <translation>Kon lijst van mappen niet maken: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="245"/>
+        <location filename="../client/ui/file_panel.cc" line="247"/>
         <source>Failed to rename item: %1</source>
         <translation>Kon object niet hernoemen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="278"/>
+        <location filename="../client/ui/file_panel.cc" line="280"/>
         <source>%1 object(s) selected</source>
         <translation>%1 object(en) geselecteerd</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="299"/>
-        <location filename="../client/ui/file_panel.cc" line="326"/>
+        <location filename="../client/ui/file_panel.cc" line="301"/>
+        <location filename="../client/ui/file_panel.cc" line="328"/>
         <source>Folder name can not be empty.</source>
         <translation>Map naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="308"/>
-        <location filename="../client/ui/file_panel.cc" line="335"/>
+        <location filename="../client/ui/file_panel.cc" line="310"/>
+        <location filename="../client/ui/file_panel.cc" line="337"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="359"/>
+        <location filename="../client/ui/file_panel.cc" line="361"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Stuur	F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="361"/>
+        <location filename="../client/ui/file_panel.cc" line="363"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Delete	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="369"/>
+        <location filename="../client/ui/file_panel.cc" line="371"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Map maken</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="420"/>
+        <location filename="../client/ui/file_panel.cc" line="422"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="421"/>
+        <location filename="../client/ui/file_panel.cc" line="423"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Weet U zeker dat U de geselecteerde objecten wilt verwijderen?</translation>
     </message>
@@ -1828,33 +1834,33 @@
 <context>
     <name>aspia::FileTransfer</name>
     <message>
-        <location filename="../client/file_transfer.cc" line="104"/>
+        <location filename="../client/file_transfer.cc" line="109"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>Kon de map &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="118"/>
+        <location filename="../client/file_transfer.cc" line="123"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet maken: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="133"/>
+        <location filename="../client/file_transfer.cc" line="139"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet schrijven: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="170"/>
-        <location filename="../client/file_transfer.cc" line="210"/>
+        <location filename="../client/file_transfer.cc" line="180"/>
+        <location filename="../client/file_transfer.cc" line="220"/>
         <source>An unexpected response to the request was received</source>
         <translation>Er is een onverwachte reactie op het verzoek ontvangen</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="182"/>
+        <location filename="../client/file_transfer.cc" line="192"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet openen: %2</translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="198"/>
+        <location filename="../client/file_transfer.cc" line="208"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>Kon het bestand &quot;%1&quot; niet lezen: %2</translation>
     </message>
@@ -1862,47 +1868,47 @@
 <context>
     <name>aspia::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="43"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="44"/>
         <source>Current Task: Copying items.</source>
         <translation>Huidige taak: Items kopieren.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="50"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="51"/>
         <source>From: %1</source>
         <translation>Van: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="55"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="56"/>
         <source>To: %1</source>
         <translation>Naar: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="75"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="76"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="89"/>
         <source>Skip</source>
         <translation>Overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="92"/>
         <source>Skip All</source>
         <translation>Alles overslaan</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="94"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="95"/>
         <source>Replace</source>
         <translation>Vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="97"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="98"/>
         <source>Replace All</source>
         <translation>Alles vervangen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer_dialog.cc" line="100"/>
+        <location filename="../client/ui/file_transfer_dialog.cc" line="101"/>
         <source>Abort</source>
         <translation>Afbreken</translation>
     </message>
