@@ -200,7 +200,7 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
     connect(dialog, &FileTransferDialog::transferCanceled, transfer, &FileTransfer::stop);
     connect(dialog, &FileTransferDialog::finished, dialog, &FileTransferDialog::deleteLater);
 
-    connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::close);
+    connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::onTransferFinished);
 
     transfer->start(source_path, target_path, items);
 }
