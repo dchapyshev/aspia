@@ -60,8 +60,8 @@ public:
         Abort      = 1,
         Skip       = 2,
         SkipAll    = 4,
-        Replace    = 5,
-        ReplaceAll = 6
+        Replace    = 8,
+        ReplaceAll = 16
     };
     Q_DECLARE_FLAGS(Actions, Action)
 
