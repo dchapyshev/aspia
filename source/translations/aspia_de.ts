@@ -1834,33 +1834,33 @@
 <context>
     <name>aspia::FileTransfer</name>
     <message>
-        <location filename="../client/file_transfer.cc" line="109"/>
+        <location filename="../client/file_transfer.cc" line="115"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="123"/>
+        <location filename="../client/file_transfer.cc" line="129"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="139"/>
+        <location filename="../client/file_transfer.cc" line="145"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="180"/>
-        <location filename="../client/file_transfer.cc" line="220"/>
+        <location filename="../client/file_transfer.cc" line="186"/>
+        <location filename="../client/file_transfer.cc" line="229"/>
         <source>An unexpected response to the request was received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="192"/>
+        <location filename="../client/file_transfer.cc" line="201"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/file_transfer.cc" line="208"/>
+        <location filename="../client/file_transfer.cc" line="217"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
