@@ -31,7 +31,7 @@ namespace aspia {
 class FileDepacketizer
 {
 public:
-    ~FileDepacketizer() = default;
+    ~FileDepacketizer();
 
     static std::unique_ptr<FileDepacketizer> create(const std::filesystem::path& file_path,
                                                     bool overwrite);

@@ -18,8 +18,6 @@
 
 #include "host/file_depacketizer.h"
 
-#include <QDebug>
-
 namespace aspia {
 
 FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
@@ -28,6 +26,19 @@ FileDepacketizer::FileDepacketizer(const std::filesystem::path& file_path,
       file_stream_(std::move(file_stream))
 {
     // Nothing
+}
+
+FileDepacketizer::~FileDepacketizer()
+{
+    // If the file is opened, it was not completely written.
+    if (file_stream_.is_open())
+    {
+        file_stream_.close();
+
+        // The transfer of files was canceled. Delete the file.
+        std::error_code ignored_error;
+        std::filesystem::remove(file_path_, ignored_error);
+    }
 }
 
 // static
@@ -56,15 +67,10 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
     const size_t packet_size = packet.data().size();
     if (!packet_size)
     {
+        // If an empty data packet with the last packet flag set is received, the transfer
+        // is canceled.
         if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
-        {
-            file_stream_.close();
-
-            // The transfer of files was canceled. Delete the file.
-            std::error_code ignored_error;
-            std::filesystem::remove(file_path_, ignored_error);
             return true;
-        }
 
         qWarning("Wrong packet size");
         return false;
