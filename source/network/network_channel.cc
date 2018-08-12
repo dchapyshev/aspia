@@ -21,6 +21,12 @@
 #include <QHostAddress>
 #include <QNetworkProxy>
 
+#if defined(Q_OS_WIN)
+#include <winsock2.h>
+#include <mstcpip.h>
+#endif
+
+#include "base/errno_logging.h"
 #include "crypto/encryptor.h"
 
 namespace aspia {
@@ -77,6 +83,7 @@ NetworkChannel::NetworkChannel(Type channel_type, QTcpSocket* socket, QObject* p
     Q_ASSERT(!socket_.isNull());
 
     socket_->setParent(this);
+    socket_->setSocketOption(QTcpSocket::KeepAliveOption, 1);
 
     if (type_ == Type::CLIENT_CHANNEL)
         connect(socket_, &QTcpSocket::connected, this, &NetworkChannel::onConnected);
@@ -179,6 +186,24 @@ void NetworkChannel::onConnected()
 
     // Disable the Nagle algorithm for the socket.
     socket_->setSocketOption(QTcpSocket::LowDelayOption, 1);
+
+#if defined(Q_OS_WIN)
+    struct tcp_keepalive alive;
+
+    alive.onoff = 1; // On.
+    alive.keepalivetime = 30000; // 30 seconds.
+    alive.keepaliveinterval = 5000; // 5 seconds.
+
+    DWORD bytes_returned;
+
+    if (WSAIoctl(socket_->socketDescriptor(), SIO_KEEPALIVE_VALS,
+                 &alive, sizeof(alive), nullptr, 0, &bytes_returned,
+                 nullptr, nullptr) == SOCKET_ERROR)
+    {
+        qWarningErrno("WSAIoctl failed");
+    }
+
+#endif
 
     if (type_ == Type::SERVER_CHANNEL)
     {
