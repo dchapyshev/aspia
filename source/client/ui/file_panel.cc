@@ -89,7 +89,11 @@ FilePanel::FilePanel(QWidget* parent)
 {
     ui.setupUi(this);
     ui.list->setStyle(new TreeViewProxyStyle(ui.list->style()));
-    ui.list->setItemDelegate(new FileItemDelegate(this));
+
+    FileItemDelegate* item_delegate = new FileItemDelegate(this);
+    ui.list->setItemDelegate(item_delegate);
+
+    connect(item_delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
 
     file_list_ = new FileListModel(this);
 
@@ -250,8 +254,6 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
-
-        refresh();
     }
     else if (request.has_rename_request())
     {
@@ -263,8 +265,6 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
-
-        refresh();
     }
 }
 

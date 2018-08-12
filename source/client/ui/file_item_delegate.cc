@@ -94,7 +94,7 @@ private:
 FileItemDelegate::FileItemDelegate(QObject* parent)
     : QStyledItemDelegate(parent)
 {
-    // Nothing
+    connect(this, &FileItemDelegate::closeEditor, this, &FileItemDelegate::editFinished);
 }
 
 QWidget* FileItemDelegate::createEditor(QWidget* parent,

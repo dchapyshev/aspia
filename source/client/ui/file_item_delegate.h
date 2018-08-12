@@ -27,6 +27,8 @@ namespace aspia {
 
 class FileItemDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
     explicit FileItemDelegate(QObject* parent);
 
@@ -41,6 +43,9 @@ public:
     void updateEditorGeometry(QWidget* editor,
                               const QStyleOptionViewItem& option,
                               const QModelIndex& index) const override;
+
+signals:
+    void editFinished();
 
 private:
     DISALLOW_COPY_AND_ASSIGN(FileItemDelegate);
