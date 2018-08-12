@@ -44,6 +44,7 @@ signals:
 protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
+    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
@@ -60,6 +61,8 @@ private:
                        const QList<FileTransfer::Item>& items);
 
     Ui::FileManagerWindow ui;
+
+    int refresh_timer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileManagerWindow);
 };

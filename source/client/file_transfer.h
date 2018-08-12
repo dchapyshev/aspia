@@ -104,6 +104,9 @@ signals:
     void localRequest(FileRequest* request);
     void remoteRequest(FileRequest* request);
 
+protected:
+    void timerEvent(QTimerEvent* event) override;
+
 private slots:
     void targetReply(const proto::file_transfer::Request& request,
                      const proto::file_transfer::Reply& reply);
@@ -133,6 +136,7 @@ private:
     int task_percentage_ = 0;
 
     bool is_canceled_ = false;
+    int cancel_timer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };

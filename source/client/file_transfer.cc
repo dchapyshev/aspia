@@ -18,6 +18,8 @@
 
 #include "client/file_transfer.h"
 
+#include <QTimerEvent>
+
 #include "client/file_status.h"
 #include "client/file_transfer_queue_builder.h"
 
@@ -70,6 +72,7 @@ void FileTransfer::start(const QString& source_path,
 
 void FileTransfer::stop()
 {
+    cancel_timer_id_ = startTimer(std::chrono::seconds(15));
     is_canceled_ = true;
 }
 
@@ -96,6 +99,9 @@ FileTransferTask& FileTransfer::currentTask()
 void FileTransfer::targetReply(const proto::file_transfer::Request& request,
                                const proto::file_transfer::Reply& reply)
 {
+    if (tasks_.isEmpty())
+        return;
+
     if (request.has_create_directory_request())
     {
         if (reply.status() == proto::file_transfer::STATUS_SUCCESS ||
@@ -184,6 +190,9 @@ void FileTransfer::targetReply(const proto::file_transfer::Request& request,
 void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
                                const proto::file_transfer::Reply& reply)
 {
+    if (tasks_.isEmpty())
+        return;
+
     if (request.has_download_request())
     {
         if (reply.status() != proto::file_transfer::STATUS_SUCCESS)
@@ -218,6 +227,21 @@ void FileTransfer::sourceReply(const proto::file_transfer::Request& request,
     else
     {
         emit error(this, OtherError, tr("An unexpected response to the request was received"));
+    }
+}
+
+void FileTransfer::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == cancel_timer_id_)
+    {
+        Q_ASSERT(is_canceled_);
+
+        killTimer(cancel_timer_id_);
+        cancel_timer_id_ = 0;
+
+        tasks_.clear();
+
+        emit finished();
     }
 }
 
@@ -310,6 +334,9 @@ void FileTransfer::processNextTask()
 
     if (tasks_.isEmpty())
     {
+        if (cancel_timer_id_)
+            killTimer(cancel_timer_id_);
+
         emit finished();
         return;
     }

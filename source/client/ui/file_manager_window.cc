@@ -68,6 +68,8 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
     connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
     connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
+
+    refresh_timer_id_ = startTimer(std::chrono::seconds(60));
 }
 
 void FileManagerWindow::refresh()
@@ -95,10 +97,16 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     QWidget::closeEvent(event);
 }
 
+void FileManagerWindow::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == refresh_timer_id_)
+        refresh();
+}
+
 void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
 {
-    FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
-    FileRemover* remover = new FileRemover(progress_dialog);
+    FileRemoveDialog* dialog = new FileRemoveDialog(this);
+    FileRemover* remover = new FileRemover(dialog);
 
     if (sender == ui.local_panel)
     {
@@ -110,19 +118,15 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
         connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::remoteRequest);
     }
 
-    connect(remover, &FileRemover::started, progress_dialog, &FileRemoveDialog::open);
-    connect(remover, &FileRemover::finished, progress_dialog, &FileRemoveDialog::close);
+    connect(remover, &FileRemover::started, dialog, &FileRemoveDialog::open);
+    connect(remover, &FileRemover::finished, dialog, &FileRemoveDialog::close);
     connect(remover, &FileRemover::finished, sender, &FilePanel::refresh);
+    connect(remover, &FileRemover::progressChanged, dialog, &FileRemoveDialog::setProgress);
+    connect(remover, &FileRemover::error, dialog, &FileRemoveDialog::showError);
 
-    connect(remover, &FileRemover::progressChanged,
-            progress_dialog, &FileRemoveDialog::setProgress);
+    connect(dialog, &FileRemoveDialog::finished, dialog, &FileRemoveDialog::deleteLater);
 
-    connect(remover, &FileRemover::error, progress_dialog, &FileRemoveDialog::showError);
-
-    connect(progress_dialog, &FileRemoveDialog::finished,
-            progress_dialog, &FileRemoveDialog::deleteLater);
-
-    connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileRemoveDialog::close);
+    connect(this, &FileManagerWindow::windowClose, dialog, &FileRemoveDialog::close);
 
     remover->start(sender->currentPath(), items);
 }
