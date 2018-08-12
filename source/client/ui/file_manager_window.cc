@@ -68,8 +68,6 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
     connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
     connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
-
-    refresh_timer_id_ = startTimer(std::chrono::seconds(60));
 }
 
 void FileManagerWindow::refresh()
@@ -95,12 +93,6 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
 
     emit windowClose();
     QWidget::closeEvent(event);
-}
-
-void FileManagerWindow::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == refresh_timer_id_)
-        refresh();
 }
 
 void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
