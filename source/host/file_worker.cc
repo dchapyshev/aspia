@@ -145,7 +145,24 @@ proto::file_transfer::Reply FileWorker::doFileListRequest(
 {
     proto::file_transfer::Reply reply;
 
-    FileEnumerator enumerator(std::filesystem::u8path(request.path()));
+    std::filesystem::path path = std::filesystem::u8path(request.path());
+
+    std::error_code ignored_code;
+    std::filesystem::file_status status = std::filesystem::status(path, ignored_code);
+
+    if (!std::filesystem::exists(status))
+    {
+        reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
+        return reply;
+    }
+
+    if (!std::filesystem::is_directory(status))
+    {
+        reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
+        return reply;
+    }
+
+    FileEnumerator enumerator(path);
 
     while (!enumerator.isAtEnd())
     {
