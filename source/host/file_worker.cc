@@ -39,6 +39,12 @@ FileWorker::FileWorker(QObject* parent)
 
 proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Request& request)
 {
+#if defined(Q_OS_WIN)
+    // We send a notification to the system that it is used to prevent the screen saver, going into
+    // hibernation mode, etc.
+    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+#endif
+
     if (request.has_drive_list_request())
     {
         return doDriveListRequest();
