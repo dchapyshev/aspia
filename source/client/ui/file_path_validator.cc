@@ -30,19 +30,26 @@ FilePathValidator::FilePathValidator(QObject* parent)
 
 FilePathValidator::State FilePathValidator::validate(QString& input, int& pos) const
 {
-    if (input.isEmpty())
-        return Intermediate;
+    if (!input.isEmpty())
+    {
+        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidPathCharacters();
 
-    if (FilePlatformUtil::isValidPath(input))
-        return Acceptable;
+        for (const auto& character : input)
+        {
+            if (invalid_characters.contains(character))
+            {
+                emit invalidPathEntered();
+                return Invalid;
+            }
+        }
+    }
 
-    emit invalidPathEntered();
-    return Invalid;
+    return Acceptable;
 }
 
 void FilePathValidator::fixup(QString& input) const
 {
-    const QList<QChar> invalid_characters =
+    const QList<QChar>& invalid_characters =
         FilePlatformUtil::invalidPathCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)

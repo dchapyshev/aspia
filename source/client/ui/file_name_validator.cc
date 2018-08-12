@@ -39,7 +39,7 @@ FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) c
 
 void FileNameValidator::fixup(QString& input) const
 {
-    const QList<QChar> invalid_characters =
+    const QList<QChar>& invalid_characters =
         FilePlatformUtil::invalidFileNameCharacters();
 
     for (auto it = input.begin(); it != input.end(); ++it)
