@@ -1703,10 +1703,10 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="202"/>
-        <location filename="../client/ui/file_panel.cc" line="215"/>
-        <location filename="../client/ui/file_panel.cc" line="248"/>
-        <location filename="../client/ui/file_panel.cc" line="261"/>
+        <location filename="../client/ui/file_panel.cc" line="206"/>
+        <location filename="../client/ui/file_panel.cc" line="219"/>
+        <location filename="../client/ui/file_panel.cc" line="252"/>
+        <location filename="../client/ui/file_panel.cc" line="263"/>
         <location filename="../client/ui/file_panel.cc" line="315"/>
         <location filename="../client/ui/file_panel.cc" line="324"/>
         <location filename="../client/ui/file_panel.cc" line="342"/>
@@ -1715,22 +1715,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="203"/>
+        <location filename="../client/ui/file_panel.cc" line="207"/>
         <source>Failed to get list of drives: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="216"/>
+        <location filename="../client/ui/file_panel.cc" line="220"/>
         <source>Failed to get list of files: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="249"/>
+        <location filename="../client/ui/file_panel.cc" line="253"/>
         <source>Failed to create directory: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="262"/>
+        <location filename="../client/ui/file_panel.cc" line="264"/>
         <source>Failed to rename item: %1</source>
         <translation type="unfinished"></translation>
     </message>
