@@ -1147,17 +1147,23 @@
     <message numerus="yes">
         <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/address_book_dialog.cc" line="153"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/address_book_dialog.cc" line="189"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation>Das Kennwort darf nicht kürzer als 8 Zeichen sein.</translation>
+        <translation>
+            <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="277"/>
@@ -1449,7 +1455,9 @@
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="164"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="170"/>
@@ -1464,12 +1472,16 @@
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="185"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation>Das Kennwort darf nicht kürzer als %n Zeichen sein.</translation>
+        <translation>
+            <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="193"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="223"/>
@@ -1482,7 +1494,9 @@
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.cc" line="66"/>
@@ -1492,7 +1506,9 @@
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="73"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</translation>
+        <translation>
+            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.cc" line="99"/>
@@ -1505,12 +1521,16 @@
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation>%n Kindgruppe(n)</translation>
+        <translation>
+            <numerusform>%n Kindgruppe(n)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation>%n Kindcomputer</translation>
+        <translation>
+            <numerusform>%n Kindcomputer</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -2147,7 +2167,9 @@
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="190"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation>Kennwort darf nicht kürzer als %n Zeichen sein.</translation>
+        <translation>
+            <numerusform>Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+        </translation>
     </message>
 </context>
 </TS>
