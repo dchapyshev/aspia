@@ -21,7 +21,6 @@
 #include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
-#include <QProxyStyle>
 #include <QMenu>
 #include <QMessageBox>
 
@@ -36,38 +35,6 @@
 namespace aspia {
 
 namespace {
-
-class TreeViewProxyStyle : public QProxyStyle
-{
-public:
-    explicit TreeViewProxyStyle(QStyle* style)
-        : QProxyStyle(style)
-    {
-        // Nothing
-    }
-
-    void drawPrimitive(PrimitiveElement element,
-                       const QStyleOption* option,
-                       QPainter* painter,
-                       const QWidget* widget) const override
-    {
-        if (element == QStyle::PE_IndicatorItemViewItemDrop && !option->rect.isNull())
-        {
-            QStyleOption option_dup(*option);
-
-            if (widget)
-            {
-                option_dup.rect.setX(0);
-                option_dup.rect.setWidth(widget->width() - 3);
-            }
-
-            QProxyStyle::drawPrimitive(element, &option_dup, painter, widget);
-            return;
-        }
-
-        QProxyStyle::drawPrimitive(element, option, painter, widget);
-    }
-};
 
 QString parentPath(const QString& path)
 {
@@ -88,12 +55,9 @@ FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-    ui.list->setStyle(new TreeViewProxyStyle(ui.list->style()));
 
-    FileItemDelegate* item_delegate = new FileItemDelegate(this);
-    ui.list->setItemDelegate(item_delegate);
-
-    connect(item_delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
+    FileItemDelegate* delegate = dynamic_cast<FileItemDelegate*>(ui.list->itemDelegate());
+    connect(delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
 
     file_list_ = new FileListModel(this);
 

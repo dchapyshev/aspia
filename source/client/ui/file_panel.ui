@@ -133,7 +133,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTreeView" name="list">
+    <widget class="aspia::FileList" name="list">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -276,6 +276,11 @@
    <class>aspia::AddressBar</class>
    <extends>QComboBox</extends>
    <header>client/ui/address_bar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>aspia::FileList</class>
+   <extends>QTreeView</extends>
+   <header>client/ui/file_list.h</header>
   </customwidget>
  </customwidgets>
  <resources>
