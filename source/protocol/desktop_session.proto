@@ -172,6 +172,7 @@ message Config
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;
     uint32 compress_ratio        = 5;
+    uint32 scale_factor          = 6;
 }
 
 message HostToClient

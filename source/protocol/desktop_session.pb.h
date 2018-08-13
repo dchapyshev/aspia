@@ -1705,6 +1705,12 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::google::protobuf::uint32 compress_ratio() const;
   void set_compress_ratio(::google::protobuf::uint32 value);
 
+  // uint32 scale_factor = 6;
+  void clear_scale_factor();
+  static const int kScaleFactorFieldNumber = 6;
+  ::google::protobuf::uint32 scale_factor() const;
+  void set_scale_factor(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.Config)
  private:
 
@@ -1714,6 +1720,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   int video_encoding_;
   ::google::protobuf::uint32 update_interval_;
   ::google::protobuf::uint32 compress_ratio_;
+  ::google::protobuf::uint32 scale_factor_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -3021,6 +3028,20 @@ inline void Config::set_compress_ratio(::google::protobuf::uint32 value) {
   
   compress_ratio_ = value;
   // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.compress_ratio)
+}
+
+// uint32 scale_factor = 6;
+inline void Config::clear_scale_factor() {
+  scale_factor_ = 0u;
+}
+inline ::google::protobuf::uint32 Config::scale_factor() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.scale_factor)
+  return scale_factor_;
+}
+inline void Config::set_scale_factor(::google::protobuf::uint32 value) {
+  
+  scale_factor_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.scale_factor)
 }
 
 // -------------------------------------------------------------------

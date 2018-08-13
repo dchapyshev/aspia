@@ -3275,6 +3275,7 @@ const int Config::kVideoEncodingFieldNumber;
 const int Config::kPixelFormatFieldNumber;
 const int Config::kUpdateIntervalFieldNumber;
 const int Config::kCompressRatioFieldNumber;
+const int Config::kScaleFactorFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Config::Config()
@@ -3294,15 +3295,15 @@ Config::Config(const Config& from)
     pixel_format_ = NULL;
   }
   ::memcpy(&flags_, &from.flags_,
-    static_cast<size_t>(reinterpret_cast<char*>(&compress_ratio_) -
-    reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
+    static_cast<size_t>(reinterpret_cast<char*>(&scale_factor_) -
+    reinterpret_cast<char*>(&flags_)) + sizeof(scale_factor_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.desktop.Config)
 }
 
 void Config::SharedCtor() {
   ::memset(&pixel_format_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&compress_ratio_) -
-      reinterpret_cast<char*>(&pixel_format_)) + sizeof(compress_ratio_));
+      reinterpret_cast<char*>(&scale_factor_) -
+      reinterpret_cast<char*>(&pixel_format_)) + sizeof(scale_factor_));
 }
 
 Config::~Config() {
@@ -3334,8 +3335,8 @@ void Config::Clear() {
   }
   pixel_format_ = NULL;
   ::memset(&flags_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&compress_ratio_) -
-      reinterpret_cast<char*>(&flags_)) + sizeof(compress_ratio_));
+      reinterpret_cast<char*>(&scale_factor_) -
+      reinterpret_cast<char*>(&flags_)) + sizeof(scale_factor_));
   _internal_metadata_.Clear();
 }
 
@@ -3424,6 +3425,20 @@ bool Config::MergePartialFromCodedStream(
         break;
       }
 
+      // uint32 scale_factor = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &scale_factor_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -3477,6 +3492,11 @@ void Config::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->compress_ratio(), output);
   }
 
+  // uint32 scale_factor = 6;
+  if (this->scale_factor() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->scale_factor(), output);
+  }
+
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.desktop.Config)
@@ -3522,6 +3542,13 @@ size_t Config::ByteSizeLong() const {
         this->compress_ratio());
   }
 
+  // uint32 scale_factor = 6;
+  if (this->scale_factor() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->scale_factor());
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -3554,6 +3581,9 @@ void Config::MergeFrom(const Config& from) {
   if (from.compress_ratio() != 0) {
     set_compress_ratio(from.compress_ratio());
   }
+  if (from.scale_factor() != 0) {
+    set_scale_factor(from.scale_factor());
+  }
 }
 
 void Config::CopyFrom(const Config& from) {
@@ -3578,6 +3608,7 @@ void Config::InternalSwap(Config* other) {
   swap(video_encoding_, other->video_encoding_);
   swap(update_interval_, other->update_interval_);
   swap(compress_ratio_, other->compress_ratio_);
+  swap(scale_factor_, other->scale_factor_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 
