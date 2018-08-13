@@ -946,57 +946,57 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="80"/>
+        <location filename="../console/about_dialog.cc" line="81"/>
         <source>Version: %1</source>
         <translation>Версія: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="86"/>
         <source>You can get a copy of license here:</source>
         <translation>Переглянути ліцензію:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="90"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Переглянути переклад ліцензії GNU GPL:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="95"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>Links:</source>
         <translation>Посилання:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="96"/>
+        <location filename="../console/about_dialog.cc" line="97"/>
         <source>Home page:</source>
         <translation>Домашня сторінка:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="97"/>
+        <location filename="../console/about_dialog.cc" line="98"/>
         <source>GitHub page:</source>
         <translation>Сторінка GitHub:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="100"/>
+        <location filename="../console/about_dialog.cc" line="101"/>
         <source>Developers:</source>
         <translation>Розробники:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="102"/>
+        <location filename="../console/about_dialog.cc" line="103"/>
         <source>Translators:</source>
         <translation>Перекладачі:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="104"/>
+        <location filename="../console/about_dialog.cc" line="105"/>
         <source>Third-party components:</source>
         <translation>Сторонні компоненти:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="121"/>
+        <location filename="../console/about_dialog.cc" line="122"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/en/donate.html</translation>
     </message>
@@ -1714,76 +1714,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="206"/>
-        <location filename="../client/ui/file_panel.cc" line="219"/>
-        <location filename="../client/ui/file_panel.cc" line="252"/>
-        <location filename="../client/ui/file_panel.cc" line="263"/>
+        <location filename="../client/ui/file_panel.cc" line="170"/>
+        <location filename="../client/ui/file_panel.cc" line="183"/>
+        <location filename="../client/ui/file_panel.cc" line="216"/>
+        <location filename="../client/ui/file_panel.cc" line="227"/>
+        <location filename="../client/ui/file_panel.cc" line="279"/>
+        <location filename="../client/ui/file_panel.cc" line="288"/>
+        <location filename="../client/ui/file_panel.cc" line="306"/>
         <location filename="../client/ui/file_panel.cc" line="315"/>
-        <location filename="../client/ui/file_panel.cc" line="324"/>
-        <location filename="../client/ui/file_panel.cc" line="342"/>
-        <location filename="../client/ui/file_panel.cc" line="351"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="207"/>
+        <location filename="../client/ui/file_panel.cc" line="171"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="220"/>
+        <location filename="../client/ui/file_panel.cc" line="184"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="253"/>
+        <location filename="../client/ui/file_panel.cc" line="217"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="264"/>
+        <location filename="../client/ui/file_panel.cc" line="228"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="295"/>
+        <location filename="../client/ui/file_panel.cc" line="259"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="316"/>
-        <location filename="../client/ui/file_panel.cc" line="343"/>
+        <location filename="../client/ui/file_panel.cc" line="280"/>
+        <location filename="../client/ui/file_panel.cc" line="307"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="325"/>
-        <location filename="../client/ui/file_panel.cc" line="352"/>
+        <location filename="../client/ui/file_panel.cc" line="289"/>
+        <location filename="../client/ui/file_panel.cc" line="316"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="376"/>
+        <location filename="../client/ui/file_panel.cc" line="340"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="378"/>
+        <location filename="../client/ui/file_panel.cc" line="342"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="386"/>
+        <location filename="../client/ui/file_panel.cc" line="350"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="437"/>
+        <location filename="../client/ui/file_panel.cc" line="401"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="438"/>
+        <location filename="../client/ui/file_panel.cc" line="402"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>
@@ -2074,34 +2074,34 @@
 <context>
     <name>aspia::NetworkChannel</name>
     <message>
-        <location filename="../network/network_channel.cc" line="198"/>
-        <location filename="../network/network_channel.cc" line="385"/>
-        <location filename="../network/network_channel.cc" line="396"/>
+        <location filename="../network/network_channel.cc" line="223"/>
+        <location filename="../network/network_channel.cc" line="410"/>
+        <location filename="../network/network_channel.cc" line="421"/>
         <source>Error in encryption key exchange.</source>
         <translation>Помилка під час обміну ключами шифрування.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="274"/>
+        <location filename="../network/network_channel.cc" line="299"/>
         <source>The received message has an invalid size.</source>
         <translation>Невірний розмір отриманого повідомлення.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="353"/>
+        <location filename="../network/network_channel.cc" line="378"/>
         <source>Unknown internal error.</source>
         <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="369"/>
+        <location filename="../network/network_channel.cc" line="394"/>
         <source>Error while decrypting the message.</source>
         <translation>Помилка під час розшифрування повідомлення.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="433"/>
+        <location filename="../network/network_channel.cc" line="458"/>
         <source>The message to send exceeds the size limit.</source>
         <translation>Повідомлення для відправки перевищує дозволений розмір.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="479"/>
+        <location filename="../network/network_channel.cc" line="504"/>
         <source>Error while encrypting the message.</source>
         <translation>Помилка під час шифрування повідомлення.</translation>
     </message>

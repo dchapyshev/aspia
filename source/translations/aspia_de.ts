@@ -69,7 +69,7 @@
     <message>
         <location filename="../console/address_book_dialog.ui" line="140"/>
         <source>Size of salt for password hashing (bytes):</source>
-        <translation>Größe des Salzes für das Kennwort-Hashing (Bytes)</translation>
+        <translation>Größe des Salzes für das Kennwort-Hashing (Bytes):</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="147"/>
@@ -467,7 +467,7 @@
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="46"/>
         <source>Compression ratio:</source>
-        <translation>Kompressionsrate</translation>
+        <translation>Kompressionsrate:</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="55"/>
@@ -741,8 +741,8 @@
     </message>
     <message>
         <location filename="../host/ui/host_notifier_window.ui" line="317"/>
-        <source>Alle trennen</source>
-        <translation></translation>
+        <source>Disconnect All</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -945,57 +945,57 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="80"/>
+        <location filename="../console/about_dialog.cc" line="81"/>
         <source>Version: %1</source>
         <translation>Version: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="84"/>
+        <location filename="../console/about_dialog.cc" line="85"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="86"/>
         <source>You can get a copy of license here:</source>
         <translation>Sie können eine Kopie der Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="90"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="95"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="96"/>
+        <location filename="../console/about_dialog.cc" line="97"/>
         <source>Home page:</source>
         <translation>Webseite:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="97"/>
+        <location filename="../console/about_dialog.cc" line="98"/>
         <source>GitHub page:</source>
         <translation>GitHub-Seite:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="100"/>
+        <location filename="../console/about_dialog.cc" line="101"/>
         <source>Developers:</source>
         <translation>Entwickler:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="102"/>
+        <location filename="../console/about_dialog.cc" line="103"/>
         <source>Translators:</source>
         <translation>Übersetzer:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="104"/>
+        <location filename="../console/about_dialog.cc" line="105"/>
         <source>Third-party components:</source>
         <translation>Komponenten von Drittanbietern:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="121"/>
+        <location filename="../console/about_dialog.cc" line="122"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/en/donate.html</translation>
     </message>
@@ -1149,6 +1149,7 @@
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1156,6 +1157,7 @@
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1163,6 +1165,7 @@
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1383,7 +1386,7 @@
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="152"/>
         <source>Session error: The desktop frame is not initialized.</source>
-        <translation>Sitzungsfehler: Desktop ist nicht initialisiert.></translation>
+        <translation>Sitzungsfehler: Desktop ist nicht initialisiert.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="158"/>
@@ -1457,6 +1460,7 @@
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1474,6 +1478,7 @@
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1481,6 +1486,7 @@
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1496,6 +1502,7 @@
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1508,6 +1515,7 @@
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -1523,6 +1531,7 @@
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n Kindgruppe(n)</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1530,6 +1539,7 @@
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n Kindcomputer</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -1693,76 +1703,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="206"/>
-        <location filename="../client/ui/file_panel.cc" line="219"/>
-        <location filename="../client/ui/file_panel.cc" line="252"/>
-        <location filename="../client/ui/file_panel.cc" line="263"/>
+        <location filename="../client/ui/file_panel.cc" line="170"/>
+        <location filename="../client/ui/file_panel.cc" line="183"/>
+        <location filename="../client/ui/file_panel.cc" line="216"/>
+        <location filename="../client/ui/file_panel.cc" line="227"/>
+        <location filename="../client/ui/file_panel.cc" line="279"/>
+        <location filename="../client/ui/file_panel.cc" line="288"/>
+        <location filename="../client/ui/file_panel.cc" line="306"/>
         <location filename="../client/ui/file_panel.cc" line="315"/>
-        <location filename="../client/ui/file_panel.cc" line="324"/>
-        <location filename="../client/ui/file_panel.cc" line="342"/>
-        <location filename="../client/ui/file_panel.cc" line="351"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="207"/>
+        <location filename="../client/ui/file_panel.cc" line="171"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="220"/>
+        <location filename="../client/ui/file_panel.cc" line="184"/>
         <source>Failed to get list of files: %1</source>
         <translation>Fehler beim Abrufen der Dateiliste: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="253"/>
+        <location filename="../client/ui/file_panel.cc" line="217"/>
         <source>Failed to create directory: %1</source>
         <translation>Fehler beim Erstellen des Verzeichnisses: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="264"/>
+        <location filename="../client/ui/file_panel.cc" line="228"/>
         <source>Failed to rename item: %1</source>
         <translation>Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="295"/>
+        <location filename="../client/ui/file_panel.cc" line="259"/>
         <source>%1 object(s) selected</source>
         <translation>%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="316"/>
-        <location filename="../client/ui/file_panel.cc" line="343"/>
+        <location filename="../client/ui/file_panel.cc" line="280"/>
+        <location filename="../client/ui/file_panel.cc" line="307"/>
         <source>Folder name can not be empty.</source>
         <translation>Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="325"/>
-        <location filename="../client/ui/file_panel.cc" line="352"/>
+        <location filename="../client/ui/file_panel.cc" line="289"/>
+        <location filename="../client/ui/file_panel.cc" line="316"/>
         <source>Name contains invalid characters.</source>
-        <translation>Name beinhaltet ungültige Zeichen</translation>
+        <translation>Name beinhaltet ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="376"/>
+        <location filename="../client/ui/file_panel.cc" line="340"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Senden F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="378"/>
+        <location filename="../client/ui/file_panel.cc" line="342"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="386"/>
+        <location filename="../client/ui/file_panel.cc" line="350"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="437"/>
+        <location filename="../client/ui/file_panel.cc" line="401"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="438"/>
+        <location filename="../client/ui/file_panel.cc" line="402"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
@@ -2053,34 +2063,34 @@
 <context>
     <name>aspia::NetworkChannel</name>
     <message>
-        <location filename="../network/network_channel.cc" line="198"/>
-        <location filename="../network/network_channel.cc" line="385"/>
-        <location filename="../network/network_channel.cc" line="396"/>
+        <location filename="../network/network_channel.cc" line="223"/>
+        <location filename="../network/network_channel.cc" line="410"/>
+        <location filename="../network/network_channel.cc" line="421"/>
         <source>Error in encryption key exchange.</source>
         <translation>Fehler beim Austausch des Verschlüsselungsschlüssels.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="274"/>
+        <location filename="../network/network_channel.cc" line="299"/>
         <source>The received message has an invalid size.</source>
         <translation>Die empfangene Nachricht hat eine ungültige Größe.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="353"/>
+        <location filename="../network/network_channel.cc" line="378"/>
         <source>Unknown internal error.</source>
         <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="369"/>
+        <location filename="../network/network_channel.cc" line="394"/>
         <source>Error while decrypting the message.</source>
         <translation>Fehler beim Entschlüsseln der Nachricht.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="433"/>
+        <location filename="../network/network_channel.cc" line="458"/>
         <source>The message to send exceeds the size limit.</source>
         <translation>Die zu sendende Nachricht überschreitet die Größenbeschränkung.</translation>
     </message>
     <message>
-        <location filename="../network/network_channel.cc" line="479"/>
+        <location filename="../network/network_channel.cc" line="504"/>
         <source>Error while encrypting the message.</source>
         <translation>Fehler beim Verschlüsseln der Nachricht.</translation>
     </message>
@@ -2169,6 +2179,7 @@
         <source>Password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
