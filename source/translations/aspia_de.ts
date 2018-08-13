@@ -1467,39 +1467,39 @@
     <message>
         <location filename="../console/console_window.cc" line="178"/>
         <source>Open Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch öffnen</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="180"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="198"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="199"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch &quot;%1&quot; ist bereits geöffnet.</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="281"/>
         <source>https://aspia.org/en/help.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="398"/>
         <location filename="../console/console_window.cc" line="589"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../console/console_window.cc" line="399"/>
         <location filename="../console/console_window.cc" line="590"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch &quot;%1&quot; wurde geändert. Änderungen speichern?</translation>
     </message>
 </context>
 <context>
@@ -1507,32 +1507,32 @@
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="68"/>
         <source>True color (32 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>True color (32 Bit)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="69"/>
         <source>High color (16 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>High color (16 Bit)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="70"/>
         <source>256 colors (8 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>256 Farben (8 Bit)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="71"/>
         <source>64 colors (6 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>64 Farben (6 Bit)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="72"/>
         <source>8 colors (3 bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>8 Farben (3 Bit)</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.cc" line="137"/>
         <source>Compression ratio: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompressionsrate: %1</translation>
     </message>
 </context>
 <context>
@@ -1540,22 +1540,22 @@
     <message>
         <location filename="../client/ui/desktop_window.cc" line="45"/>
         <source>Aspia Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_window.cc" line="50"/>
         <source>Aspia Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Desktopansicht</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_window.cc" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_window.cc" line="192"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die aktuelle Videokodierung wird vom Host nicht unterstützt. Bitte geben Sie eine andere Videokodierung an.</translation>
     </message>
 </context>
 <context>
@@ -1563,17 +1563,17 @@
     <message>
         <location filename="../client/ui/file_manager_window.cc" line="39"/>
         <source>%1 - Aspia File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Aspia Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_manager_window.cc" line="41"/>
         <source>Local Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Computer</translation>
     </message>
     <message>
         <location filename="../client/ui/file_manager_window.cc" line="42"/>
         <source>Remote Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Remote Computer</translation>
     </message>
 </context>
 <context>
@@ -1585,72 +1585,72 @@
         <location filename="../client/ui/file_panel.cc" line="175"/>
         <location filename="../client/ui/file_panel.cc" line="293"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="135"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Abrufen der Laufwerksliste: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="149"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Abrufen der Dateiliste: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="163"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Erstellen des Verzeichnisses: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="176"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Umbenennen des Elements: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="269"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="294"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="326"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Senden F11</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="328"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Löschen Entf</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="336"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ordner erstellen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="394"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="395"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="449"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Home-Ordner</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="453"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop</translation>
     </message>
 </context>
 <context>
@@ -1658,27 +1658,27 @@
     <message>
         <location filename="../client/ui/file_remove_dialog.cc" line="42"/>
         <source>Deleting: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_remove_dialog.cc" line="56"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_remove_dialog.cc" line="65"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Überspringen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_remove_dialog.cc" line="68"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>All überspringen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_remove_dialog.cc" line="71"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -1686,12 +1686,12 @@
     <message>
         <location filename="../client/file_remove_queue_builder.cc" line="54"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../client/file_remove_queue_builder.cc" line="60"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
@@ -1699,12 +1699,12 @@
     <message>
         <location filename="../client/file_remover.cc" line="82"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../client/file_remover.cc" line="110"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Löschen &quot;%1&quot;: %2.</translation>
     </message>
 </context>
 <context>
@@ -1712,33 +1712,33 @@
     <message>
         <location filename="../client/file_transfer.cc" line="104"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="118"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="133"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="170"/>
         <location filename="../client/file_transfer.cc" line="210"/>
         <source>An unexpected response to the request was received</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine unerwartete Antwort auf die Anfrage wurde empfangen</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="182"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/file_transfer.cc" line="198"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
 </context>
 <context>
@@ -1746,47 +1746,47 @@
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="43"/>
         <source>Current Task: Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Aufgabe: Elemente kopieren.</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="50"/>
         <source>From: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Von: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="55"/>
         <source>To: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu: %1</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="75"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="88"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Überspringen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="91"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle überspringen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="94"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersetzen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="97"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle ersetzen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer_dialog.cc" line="100"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -1794,12 +1794,12 @@
     <message>
         <location filename="../client/file_transfer_queue_builder.cc" line="73"/>
         <source>An unexpected answer was received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine unerwartete Antwort wurde erhalten.</translation>
     </message>
     <message>
         <location filename="../client/file_transfer_queue_builder.cc" line="79"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
@@ -1808,17 +1808,17 @@
         <location filename="../host/ui/host_config_dialog.cc" line="173"/>
         <location filename="../host/ui/host_config_dialog.cc" line="267"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="174"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="241"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="244"/>
@@ -1830,86 +1830,86 @@
         <location filename="../host/ui/host_config_dialog.cc" line="494"/>
         <location filename="../host/ui/host_config_dialog.cc" line="504"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="262"/>
         <source>Service configuration changed. For the changes to take effect, you must restart the service. Restart the service now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="362"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="370"/>
         <source>Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestartet</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="371"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="376"/>
         <source>Not started</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht gestartet</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="377"/>
         <location filename="../host/ui/host_config_dialog.cc" line="384"/>
         <location filename="../host/ui/host_config_dialog.cc" line="397"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="383"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="394"/>
         <source>Not installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht installiert</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="396"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="401"/>
         <source>Current state: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktueller Zustand: %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="424"/>
         <source>The service could not be installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienst konnte nicht installiert werden.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="443"/>
         <location filename="../host/ui/host_config_dialog.cc" line="469"/>
         <location filename="../host/ui/host_config_dialog.cc" line="495"/>
         <source>Could not access the service.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann nicht auf den Dienst zugreifen.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="453"/>
         <source>The service could not be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienst konnte nicht gelöscht werden.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="479"/>
         <source>The service could not be started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienst konnte nicht gestartet werden.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.cc" line="505"/>
         <source>The service could not be stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienst konnte nicht angehalten werden.</translation>
     </message>
 </context>
 <context>
@@ -1917,7 +1917,7 @@
     <message>
         <location filename="../host/ui/host_notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Trennen</translation>
     </message>
 </context>
 <context>
@@ -1925,7 +1925,7 @@
     <message>
         <location filename="../host/host_server.cc" line="112"/>
         <source>Allow incoming TCP connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingehende TCP-Verbindungen erlauben</translation>
     </message>
 </context>
 <context>
@@ -1933,7 +1933,7 @@
     <message>
         <location filename="../host/host_session_fake_desktop.cc" line="156"/>
         <source>The session is temporarily unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzung ist vorübergehend nicht verfügbar.</translation>
     </message>
 </context>
 <context>
@@ -1943,33 +1943,33 @@
         <location filename="../network/network_channel.cc" line="422"/>
         <location filename="../network/network_channel.cc" line="433"/>
         <source>Error in encryption key exchange.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Austausch des Verschlüsselungsschlüssels.</translation>
     </message>
     <message>
         <location filename="../network/network_channel.cc" line="311"/>
         <source>The received message has an invalid size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die empfangene Nachricht hat eine ungültige Größe.</translation>
     </message>
     <message>
         <location filename="../network/network_channel.cc" line="390"/>
         <location filename="../network/network_channel.cc" line="460"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../network/network_channel.cc" line="406"/>
         <source>Error while decrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Entschlüsseln der Nachricht.</translation>
     </message>
     <message>
         <location filename="../network/network_channel.cc" line="480"/>
         <source>The message to send exceeds the size limit.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die zu sendende Nachricht überschreitet die Größenbeschränkung.</translation>
     </message>
     <message>
         <location filename="../network/network_channel.cc" line="526"/>
         <source>Error while encrypting the message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Verschlüsseln der Nachricht.</translation>
     </message>
 </context>
 <context>
@@ -1977,12 +1977,12 @@
     <message>
         <location filename="../console/open_address_book_dialog.cc" line="39"/>
         <source>Without Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohne Verschlüsselung</translation>
     </message>
     <message>
         <location filename="../console/open_address_book_dialog.cc" line="43"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
+        <translation>XChaCha20 + Poly1305 (256-Bit-Schlüssel)</translation>
     </message>
 </context>
 <context>
@@ -1990,7 +1990,7 @@
     <message>
         <location filename="../client/ui/select_screen_action.h" line="37"/>
         <source>Full Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollen Desktop</translation>
     </message>
 </context>
 <context>
@@ -1998,7 +1998,7 @@
     <message>
         <location filename="../client/ui/system_info_window.cc" line="42"/>
         <source>%1 - Aspia System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Aspia Systeminformation</translation>
     </message>
 </context>
 <context>
@@ -2006,27 +2006,27 @@
     <message>
         <location filename="../host/ui/user_dialog.cc" line="39"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppelklicken, um zu ändern</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="81"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="85"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopansicht</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="89"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="93"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="149"/>
@@ -2034,30 +2034,27 @@
         <location filename="../host/ui/user_dialog.cc" line="179"/>
         <location filename="../host/ui/user_dialog.cc" line="189"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="150"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="164"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="180"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="190"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Kennwort darf nicht kürzer als %n Zeichen sein.</translation>
     </message>
 </context>
 </TS>
