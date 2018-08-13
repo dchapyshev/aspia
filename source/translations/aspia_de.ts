@@ -1197,57 +1197,57 @@
     <message>
         <location filename="../client/client.cc" line="64"/>
         <source>Attempt to connect to %1:%2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Versuch, eine Verbindung mit %1:%2 herzustellen.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="70"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="101"/>
         <source>Authorization started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Autorisierung wurde gestartet.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="107"/>
         <source>Disconnected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Getrennt.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="112"/>
         <source>Network error: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkfehler: %1.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="122"/>
         <source>Successful authorization.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erfolgreiche Autorisierung.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="126"/>
         <source>Authorization error: Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisierungsfehler: Zugriff verweigert.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="130"/>
         <source>Authorization has been canceled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Autorisierung wurde abgebrochen.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="134"/>
         <source>Authorization error: Unknown status code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisierungsfehler: Unbekannter Statuscode.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="157"/>
         <source>Unsupported session type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstützter Sitzungstyp.</translation>
     </message>
     <message>
         <location filename="../client/client.cc" line="175"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzung wurde gestartet.</translation>
     </message>
 </context>
 <context>
@@ -1255,22 +1255,22 @@
     <message>
         <location filename="../client/ui/client_dialog.cc" line="39"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.cc" line="43"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopansicht</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.cc" line="47"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/ui/client_dialog.cc" line="51"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
 </context>
 <context>
@@ -1278,17 +1278,17 @@
     <message>
         <location filename="../client/client_session_desktop_manage.cc" line="72"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_manage.cc" line="161"/>
         <source>Session error: There are no supported video encodings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Es gibt keine unterstützten Videocodierungen.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_manage.cc" line="168"/>
         <source>Session error: Canceled by the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Vom Benutzer abgebrochen.</translation>
     </message>
 </context>
 <context>
@@ -1296,42 +1296,42 @@
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="78"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="141"/>
         <source>Session error: Video decoder not initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Videodecoder nicht initialisiert.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="153"/>
         <source>Session error: Wrong video frame size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Falsche Videoframegröße.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="160"/>
         <source>Session error: Wrong video frame position.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Falsche Position des Videoframes.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="171"/>
         <source>Session error: The desktop frame is not initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Desktop ist nicht initialisiert.></translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="177"/>
         <source>Session error: The video packet could not be decoded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Das Videopaket konnte nicht decodiert werden.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="202"/>
         <source>Session error: There are no supported video encodings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Es gibt keine unterstützten Videocodierungen.</translation>
     </message>
     <message>
         <location filename="../client/client_session_desktop_view.cc" line="209"/>
         <source>Session error: Canceled by the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Vom Benutzer abgebrochen.</translation>
     </message>
 </context>
 <context>
@@ -1339,12 +1339,12 @@
     <message>
         <location filename="../client/client_session_file_transfer.cc" line="62"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
     <message>
         <location filename="../client/client_session_file_transfer.cc" line="69"/>
         <source>Session error: There are no logged in users. File transfer is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Es sind keine Benutzer angemeldet. Die Dateiübertragung ist nicht verfügbar.</translation>
     </message>
 </context>
 <context>
@@ -1352,7 +1352,7 @@
     <message>
         <location filename="../client/client_session_system_info.cc" line="40"/>
         <source>Session error: Invalid message from host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: Ungültige Nachricht vom Host.</translation>
     </message>
 </context>
 <context>
@@ -1360,17 +1360,17 @@
     <message>
         <location filename="../client/client_user_authorizer.cc" line="155"/>
         <source>Protocol error: Unknown message from host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokollfehler: Unbekannte Nachricht vom Host.</translation>
     </message>
     <message>
         <location filename="../client/client_user_authorizer.cc" line="174"/>
         <source>Authorization error: Empty nonce is not allowed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorisierungsfehler: Leeres Feld nonce ist nicht erlaubt.</translation>
     </message>
     <message>
         <location filename="../client/client_user_authorizer.cc" line="188"/>
         <source>Authorization is canceled by the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Autorisierung wurde vom Benutzer abgebrochen.</translation>
     </message>
 </context>
 <context>
@@ -1378,61 +1378,52 @@
     <message>
         <location filename="../console/computer_dialog.cc" line="50"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopverwaltung</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="54"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopansicht</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="58"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="62"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="166"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="172"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Name darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="179"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="187"/>
         <source>Password can not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Das Kennwort darf nicht kürzer als %n Zeichen sein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_dialog.cc" line="195"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog.cc" line="225"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
 </context>
 <context>
@@ -1440,28 +1431,22 @@
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="60"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.cc" line="66"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Name darf nicht leer sein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="73"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog.cc" line="99"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
 </context>
 <context>
@@ -1469,18 +1454,12 @@
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="37"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>%n Kindgruppe(n)</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/console_statusbar.cc" line="38"/>
         <source>%n child computer(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation>%n Kindcomputer</translation>
     </message>
 </context>
 <context>
