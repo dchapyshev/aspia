@@ -294,6 +294,14 @@ void HostServer::onIpcNewConnection(IpcChannel* channel)
     qInfo("Notifier is started");
     notifier_state_ = NotifierState::STARTED;
 
+    // Clients can disconnect while the notifier is started.
+    if (session_list_.isEmpty())
+    {
+        QScopedPointer<IpcChannel> channel_deleter(channel);
+        stopNotifier();
+        return;
+    }
+
     ipc_channel_ = channel;
     ipc_channel_->setParent(this);
 

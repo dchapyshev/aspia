@@ -20,8 +20,11 @@
 
 #include <QDebug>
 
+#include "client/ui/address_bar_model.h"
 #include "client/ui/file_remove_dialog.h"
 #include "client/ui/file_transfer_dialog.h"
+#include "client/ui/file_manager_settings.h"
+#include "client/ui/file_mime_data.h"
 
 namespace aspia {
 
@@ -38,14 +41,22 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
 
     setWindowTitle(tr("%1 - Aspia File Transfer").arg(computer_name));
 
+    FileManagerSettings settings;
+    restoreGeometry(settings.windowGeometry());
+
+    ui.splitter->restoreState(settings.splitterState());
+
+    QString mime_type = FileMimeData::createMimeType();
+
     ui.local_panel->setPanelName(tr("Local Computer"));
+    ui.local_panel->setMimeType(mime_type);
+    ui.local_panel->setDriveListState(settings.localDriveListState());
+    ui.local_panel->setFileListState(settings.localFileListState());
+
     ui.remote_panel->setPanelName(tr("Remote Computer"));
-
-    QList<int> sizes;
-    sizes.push_back(width() / 2);
-    sizes.push_back(width() / 2);
-
-    ui.splitter->setSizes(sizes);
+    ui.remote_panel->setMimeType(mime_type);
+    ui.remote_panel->setDriveListState(settings.remoteDriveListState());
+    ui.remote_panel->setFileListState(settings.remoteFileListState());
 
     connect(ui.local_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
     connect(ui.remote_panel, &FilePanel::removeItems, this, &FileManagerWindow::removeItems);
@@ -55,6 +66,8 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::receiveItems, this, &FileManagerWindow::receiveItems);
     connect(ui.local_panel, &FilePanel::newRequest, this, &FileManagerWindow::localRequest);
     connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
+    connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
+    connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
 }
 
 void FileManagerWindow::refresh()
@@ -65,14 +78,27 @@ void FileManagerWindow::refresh()
 
 void FileManagerWindow::closeEvent(QCloseEvent* event)
 {
+    FileManagerSettings settings;
+
+    settings.setWindowGeometry(saveGeometry());
+    settings.setSplitterState(ui.splitter->saveState());
+
+    ui.local_panel->updateState();
+    settings.setLocalDriveListState(ui.local_panel->driveListState());
+    settings.setLocalFileListState(ui.local_panel->fileListState());
+
+    ui.remote_panel->updateState();
+    settings.setRemoteDriveListState(ui.remote_panel->driveListState());
+    settings.setRemoteFileListState(ui.remote_panel->fileListState());
+
     emit windowClose();
     QWidget::closeEvent(event);
 }
 
 void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::Item>& items)
 {
-    FileRemoveDialog* progress_dialog = new FileRemoveDialog(this);
-    FileRemover* remover = new FileRemover(progress_dialog);
+    FileRemoveDialog* dialog = new FileRemoveDialog(this);
+    FileRemover* remover = new FileRemover(dialog);
 
     if (sender == ui.local_panel)
     {
@@ -84,21 +110,15 @@ void FileManagerWindow::removeItems(FilePanel* sender, const QList<FileRemover::
         connect(remover, &FileRemover::newRequest, this, &FileManagerWindow::remoteRequest);
     }
 
-    connect(remover, &FileRemover::started, progress_dialog, &FileRemoveDialog::open);
-    connect(remover, &FileRemover::finished, progress_dialog, &FileRemoveDialog::close);
+    connect(remover, &FileRemover::started, dialog, &FileRemoveDialog::open);
+    connect(remover, &FileRemover::finished, dialog, &FileRemoveDialog::close);
     connect(remover, &FileRemover::finished, sender, &FilePanel::refresh);
+    connect(remover, &FileRemover::progressChanged, dialog, &FileRemoveDialog::setProgress);
+    connect(remover, &FileRemover::error, dialog, &FileRemoveDialog::showError);
 
-    connect(remover, &FileRemover::progressChanged,
-            progress_dialog, &FileRemoveDialog::setProgress);
+    connect(dialog, &FileRemoveDialog::finished, dialog, &FileRemoveDialog::deleteLater);
 
-    connect(remover, &FileRemover::error, progress_dialog, &FileRemoveDialog::showError);
-
-    connect(progress_dialog, &FileRemoveDialog::finished, [progress_dialog](int /* result */)
-    {
-        progress_dialog->deleteLater();
-    });
-
-    connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileRemoveDialog::close);
+    connect(this, &FileManagerWindow::windowClose, dialog, &FileRemoveDialog::close);
 
     remover->start(sender->currentPath(), items);
 }
@@ -123,13 +143,15 @@ void FileManagerWindow::sendItems(FilePanel* sender, const QList<FileTransfer::I
     }
 }
 
-void FileManagerWindow::receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items)
+void FileManagerWindow::receiveItems(FilePanel* sender,
+                                     const QString& target_folder,
+                                     const QList<FileTransfer::Item>& items)
 {
     if (sender == ui.local_panel)
     {
         transferItems(FileTransfer::Downloader,
                       ui.remote_panel->currentPath(),
-                      ui.local_panel->currentPath(),
+                      target_folder,
                       items);
     }
     else
@@ -138,7 +160,7 @@ void FileManagerWindow::receiveItems(FilePanel* sender, const QList<FileTransfer
 
         transferItems(FileTransfer::Uploader,
                       ui.local_panel->currentPath(),
-                      ui.remote_panel->currentPath(),
+                      target_folder,
                       items);
     }
 }
@@ -148,8 +170,8 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
                                       const QString& target_path,
                                       const QList<FileTransfer::Item>& items)
 {
-    FileTransferDialog* progress_dialog = new FileTransferDialog(this);
-    FileTransfer* transfer = new FileTransfer(type, progress_dialog);
+    FileTransferDialog* dialog = new FileTransferDialog(this);
+    FileTransfer* transfer = new FileTransfer(type, dialog);
 
     if (type == FileTransfer::Uploader)
     {
@@ -161,26 +183,38 @@ void FileManagerWindow::transferItems(FileTransfer::Type type,
         connect(transfer, &FileTransfer::finished, ui.local_panel, &FilePanel::refresh);
     }
 
-    connect(transfer, &FileTransfer::started, progress_dialog, &FileTransferDialog::open);
-    connect(transfer, &FileTransfer::finished, progress_dialog, &FileTransferDialog::close);
+    connect(transfer, &FileTransfer::started, dialog, &FileTransferDialog::open);
+    connect(transfer, &FileTransfer::finished, dialog, &FileTransferDialog::onTransferFinished);
 
-    connect(transfer, &FileTransfer::currentItemChanged,
-            progress_dialog, &FileTransferDialog::setCurrentItem);
-    connect(transfer, &FileTransfer::progressChanged,
-            progress_dialog, &FileTransferDialog::setProgress);
+    connect(transfer, &FileTransfer::currentItemChanged, dialog, &FileTransferDialog::setCurrentItem);
+    connect(transfer, &FileTransfer::progressChanged, dialog, &FileTransferDialog::setProgress);
 
-    connect(transfer, &FileTransfer::error, progress_dialog, &FileTransferDialog::showError);
+    connect(transfer, &FileTransfer::error, dialog, &FileTransferDialog::showError);
     connect(transfer, &FileTransfer::localRequest, this, &FileManagerWindow::localRequest);
     connect(transfer, &FileTransfer::remoteRequest, this, &FileManagerWindow::remoteRequest);
 
-    connect(progress_dialog, &FileTransferDialog::finished, [progress_dialog](int /* result */)
-    {
-        progress_dialog->deleteLater();
-    });
+    connect(dialog, &FileTransferDialog::transferCanceled, transfer, &FileTransfer::stop);
+    connect(dialog, &FileTransferDialog::finished, dialog, &FileTransferDialog::deleteLater);
 
-    connect(this, &FileManagerWindow::windowClose, progress_dialog, &FileTransferDialog::close);
+    connect(this, &FileManagerWindow::windowClose, dialog, &FileTransferDialog::onTransferFinished);
 
     transfer->start(source_path, target_path, items);
+}
+
+void FileManagerWindow::onPathChanged(FilePanel* sender, const QString& path)
+{
+    bool allow = path != AddressBarModel::computerPath();
+
+    if (sender == ui.local_panel)
+    {
+        ui.remote_panel->setTransferAllowed(allow);
+    }
+    else
+    {
+        Q_ASSERT(sender == ui.remote_panel);
+        ui.local_panel->setTransferAllowed(allow);
+
+    }
 }
 
 } // namespace aspia

@@ -90,10 +90,10 @@ FileRequest* FileRequest::uploadRequest(const QString& file_path, bool overwrite
 }
 
 // static
-FileRequest* FileRequest::packetRequest()
+FileRequest* FileRequest::packetRequest(uint32_t flags)
 {
     proto::file_transfer::Request request;
-    request.mutable_packet_request()->set_dummy(1);
+    request.mutable_packet_request()->set_flags(flags);
     return new FileRequest(std::move(request));
 }
 

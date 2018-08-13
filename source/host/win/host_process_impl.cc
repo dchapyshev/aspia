@@ -154,7 +154,8 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     HostProcess::ErrorCode error_code = HostProcess::NoError;
 
-    if (!WTSQueryUserToken(session_id, token_out->recieve()))
+    ScopedHandle user_token;
+    if (!WTSQueryUserToken(session_id, user_token.recieve()))
     {
         DWORD system_error_code = GetLastError();
 
@@ -177,6 +178,49 @@ HostProcess::ErrorCode createLoggedOnUserToken(DWORD session_id, ScopedHandle* t
 
     if (error_code == HostProcess::NoError)
     {
+        TOKEN_ELEVATION_TYPE elevation_type;
+        DWORD returned_length;
+
+        if (!GetTokenInformation(user_token,
+                                 TokenElevationType,
+                                 &elevation_type,
+                                 sizeof(elevation_type),
+                                 &returned_length))
+        {
+            qWarningErrno("GetTokenInformation failed");
+            return HostProcess::OtherError;
+        }
+
+        switch (elevation_type)
+        {
+            // The token is a limited token.
+            case TokenElevationTypeLimited:
+            {
+                TOKEN_LINKED_TOKEN linked_token_info;
+
+                // Get the unfiltered token for a silent UAC bypass.
+                if (!GetTokenInformation(user_token,
+                                         TokenLinkedToken,
+                                         &linked_token_info,
+                                         sizeof(linked_token_info),
+                                         &returned_length))
+                {
+                    qWarningErrno("GetTokenInformation failed");
+                    return HostProcess::OtherError;
+                }
+
+                // Attach linked token.
+                token_out->reset(linked_token_info.LinkedToken);
+            }
+            break;
+
+            case TokenElevationTypeDefault: // The token does not have a linked token.
+            case TokenElevationTypeFull:    // The token is an elevated token.
+            default:
+                token_out->reset(user_token.release());
+                break;
+        }
+
         DWORD ui_access = 1;
         if (!SetTokenInformation(token_out->get(), TokenUIAccess, &ui_access, sizeof(ui_access)))
         {
@@ -310,17 +354,25 @@ void HostProcessImpl::startProcess()
 
 void HostProcessImpl::killProcess()
 {
-    if (process_handle_.isValid())
-        TerminateProcess(process_handle_, 0);
+    if (!process_handle_.isValid())
+    {
+        qWarning("Invalid process handle");
+        return;
+    }
+
+    TerminateProcess(process_handle_, 0);
 }
 
 void HostProcessImpl::terminateProcess()
 {
-    if (process_handle_.isValid())
+    if (!process_handle_.isValid())
     {
-        EnumWindows(terminateEnumProc, process_id_);
-        PostThreadMessageW(thread_id_, WM_CLOSE, 0, 0);
+        qWarning("Invalid process handle");
+        return;
     }
+
+    EnumWindows(terminateEnumProc, process_id_);
+    PostThreadMessageW(thread_id_, WM_CLOSE, 0, 0);
 }
 
 bool HostProcessImpl::startProcessWithToken(HANDLE token)

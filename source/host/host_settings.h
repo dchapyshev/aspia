@@ -44,12 +44,6 @@ public:
     QList<User> userList() const;
     bool setUserList(const QList<User>& user_list);
 
-    bool disableVisualEffects();
-    bool setDisableVisualEffects(bool disable);
-
-    bool disableWallpaper();
-    bool setDisableWallpaper(bool disable);
-
 private:
     mutable QSettings settings_;
 

@@ -16,41 +16,53 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_ITEM_H_
-#define ASPIA_CLIENT__UI__FILE_ITEM_H_
+#ifndef ASPIA_CLIENT__UI__ADDRESS_BAR_H_
+#define ASPIA_CLIENT__UI__ADDRESS_BAR_H_
 
-#include <QTreeWidget>
+#include <QComboBox>
 
 #include "base/macros_magic.h"
 #include "protocol/file_transfer_session.pb.h"
 
+class QLineEdit;
+class QTreeView;
+
 namespace aspia {
 
-class FileItem : public QTreeWidgetItem
-{
-public:
-    explicit FileItem(const proto::file_transfer::FileList::Item& item);
-    explicit FileItem(const QString& directory_name);
-    ~FileItem() = default;
+class AddressBarModel;
 
-    QString initialName() const { return name_; }
-    QString currentName() const;
-    bool isDirectory() const { return is_directory_; }
-    qint64 fileSize() const { return size_; }
-    time_t lastModified() const { return last_modified_; }
+class AddressBar : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    explicit AddressBar(QWidget* parent = nullptr);
+
+    void setDriveList(const proto::file_transfer::DriveList& list);
+    void setCurrentPath(const QString& path);
+    QString currentPath() const;
+    QString previousPath() const;
+    QString pathAt(const QModelIndex& index) const;
+    bool hasCurrentPath() const;
+
+signals:
+    void pathChanged(const QString& path);
 
 protected:
-    bool operator<(const QTreeWidgetItem& other) const override;
+    // QComboBox implementation.
+    void showPopup() override;
+
+private slots:
+    void onPathIndexChanged(const QModelIndex& index);
 
 private:
-    QString name_;
-    bool is_directory_;
-    qint64 size_ = 0;
-    time_t last_modified_ = 0;
+    QLineEdit* edit_;
+    QTreeView* view_;
+    AddressBarModel* model_;
 
-    DISALLOW_COPY_AND_ASSIGN(FileItem);
+    DISALLOW_COPY_AND_ASSIGN(AddressBar);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__FILE_ITEM_H_
+#endif // ASPIA_CLIENT__UI__ADDRESS_BAR_H_

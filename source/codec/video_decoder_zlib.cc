@@ -37,9 +37,11 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
 {
     if (packet.has_format())
     {
+        const proto::desktop::VideoPacketFormat& format = packet.format();
+
         source_frame_ = DesktopFrameAligned::create(
-            VideoUtil::fromVideoSize(packet.format().screen_size()),
-            VideoUtil::fromVideoPixelFormat(packet.format().pixel_format()));
+            QSize(format.screen_rect().width(), format.screen_rect().height()),
+            VideoUtil::fromVideoPixelFormat(format.pixel_format()));
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }

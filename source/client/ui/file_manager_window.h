@@ -48,7 +48,10 @@ protected:
 private slots:
     void removeItems(FilePanel* sender, const QList<FileRemover::Item>& items);
     void sendItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
-    void receiveItems(FilePanel* sender, const QList<FileTransfer::Item>& items);
+    void receiveItems(FilePanel* sender,
+                      const QString& target_folder,
+                      const QList<FileTransfer::Item>& items);
+    void onPathChanged(FilePanel* sender, const QString& path);
 
 private:
     void transferItems(FileTransfer::Type type,

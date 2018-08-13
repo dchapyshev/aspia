@@ -23,22 +23,11 @@
 #include "host/input_injector.h"
 #include "host/screen_updater.h"
 
+#if defined(Q_OS_WIN)
+#include "desktop_capture/win/visual_effects_disabler.h"
+#endif // defined(Q_OS_WIN)
+
 namespace aspia {
-
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-const uint32_t kSupportedFeaturesDesktopManage =
-    proto::desktop::FEATURE_CURSOR_SHAPE |
-    proto::desktop::FEATURE_CLIPBOARD;
-
-const uint32_t kSupportedFeaturesDesktopView = 0;
-
-} // namespace
 
 HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
                                        const QString& channel_id)
@@ -57,17 +46,24 @@ HostSessionDesktop::HostSessionDesktop(proto::auth::SessionType session_type,
     }
 }
 
+HostSessionDesktop::~HostSessionDesktop()
+{
+#if defined(Q_OS_WIN)
+    if (effects_disabler_)
+    {
+        if (effects_disabler_->isEffectsDisabled())
+            effects_disabler_->restoreEffects();
+
+        if (effects_disabler_->isWallpaperDisabled())
+            effects_disabler_->restoreWallpaper();
+    }
+#endif // defined(Q_OS_WIN)
+}
+
 void HostSessionDesktop::startSession()
 {
     proto::desktop::HostToClient message;
-
-    message.mutable_config_request()->set_video_encodings(kSupportedVideoEncodings);
-
-    if (session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopManage);
-    else
-        message.mutable_config_request()->set_features(kSupportedFeaturesDesktopView);
-
+    message.mutable_config_request()->set_dummy(1);
     emit sendMessage(serializeMessage(message));
 }
 
@@ -169,7 +165,7 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
     delete screen_updater_;
     delete clipboard_;
 
-    if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
+    if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
     {
         if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         {
@@ -179,20 +175,40 @@ void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
         }
 
         clipboard_ = new Clipboard(this);
-
-        connect(clipboard_, &Clipboard::clipboardEvent,
-                this, &HostSessionDesktop::clipboardEvent);
+        connect(clipboard_, &Clipboard::clipboardEvent, this, &HostSessionDesktop::clipboardEvent);
     }
+
+#if defined(Q_OS_WIN)
+    bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
+    bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+
+    if (effects_disabler_)
+    {
+        if (effects_disabler_->isEffectsDisabled())
+            effects_disabler_->restoreEffects();
+
+        if (effects_disabler_->isWallpaperDisabled())
+            effects_disabler_->restoreWallpaper();
+    }
+
+    if (disable_wallpaper || disable_effects)
+    {
+        effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
+
+        if (disable_effects)
+            effects_disabler_->disableEffects();
+
+        if (disable_wallpaper)
+            effects_disabler_->disableWallpaper();
+    }
+#endif // defined(Q_OS_WIN)
 
     screen_updater_ = new ScreenUpdater(this);
 
     connect(screen_updater_, &ScreenUpdater::sendMessage, this, &HostSessionDesktop::sendMessage);
 
     if (!screen_updater_->start(config))
-    {
         emit errorOccurred();
-        return;
-    }
 }
 
 void HostSessionDesktop::readScreen(const proto::desktop::Screen& screen)

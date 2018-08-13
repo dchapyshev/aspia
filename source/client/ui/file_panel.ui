@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>312</height>
+    <width>403</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="address_bar">
+    <widget class="aspia::AddressBar" name="address_bar">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -49,7 +49,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -71,152 +71,74 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="button_up">
-        <property name="enabled">
+       <widget class="QToolBar" name="toolbar">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="movable">
          <bool>false</bool>
         </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Browse to parent folder (Backspace)</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/folder-up.png</normaloff>:/icon/folder-up.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_refresh">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Refresh the file list (F5)</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/arrow-circle-double.png</normaloff>:/icon/arrow-circle-double.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_add">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Create a new folder</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_delete">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Delete selected object(s) (Delete)</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/cross-script.png</normaloff>:/icon/cross-script.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontal_spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="iconSize">
          <size>
-          <width>300</width>
-          <height>20</height>
+          <width>18</width>
+          <height>18</height>
          </size>
         </property>
-       </spacer>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonIconOnly</enum>
+        </property>
+        <addaction name="action_up"/>
+        <addaction name="action_refresh"/>
+        <addaction name="action_add_folder"/>
+        <addaction name="action_delete"/>
+       </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button_send">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+       <widget class="QWidget" name="widget" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip">
-         <string>Send selected object(s) (F11)</string>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolBar" name="toolbar_send">
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
+        <property name="movable">
+         <bool>false</bool>
         </property>
-        <property name="text">
-         <string>Send</string>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/arrow-045.png</normaloff>:/icon/arrow-045.png</iconset>
+        <property name="iconSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
         </property>
-        <property name="flat">
-         <bool>true</bool>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
+        <addaction name="action_send"/>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="aspia::FileTreeWidget" name="tree">
+    <widget class="QTreeView" name="list">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
      </property>
      <property name="editTriggers">
       <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
@@ -230,6 +152,9 @@
      <property name="defaultDropAction">
       <enum>Qt::CopyAction</enum>
      </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
@@ -242,32 +167,15 @@
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
-     <column>
-      <property name="text">
-       <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Size</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Modified</string>
-      </property>
-     </column>
+     <property name="allColumnsShowFocus">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_status">
      <property name="text">
-      <string>0 object(s) selected</string>
+      <string notr="true"/>
      </property>
      <property name="margin">
       <number>2</number>
@@ -275,12 +183,99 @@
     </widget>
    </item>
   </layout>
+  <action name="action_up">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/folder-up.png</normaloff>:/icon/folder-up.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Browse to parent folder (Backspace)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Backspace</string>
+   </property>
+  </action>
+  <action name="action_refresh">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/arrow-circle-double.png</normaloff>:/icon/arrow-circle-double.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Refresh (F5)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">F5</string>
+   </property>
+  </action>
+  <action name="action_add_folder">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/folder-plus.png</normaloff>:/icon/folder-plus.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Create a new folder</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true"/>
+   </property>
+  </action>
+  <action name="action_delete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/cross-script.png</normaloff>:/icon/cross-script.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected object(s) (Delete)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Del</string>
+   </property>
+  </action>
+  <action name="action_send">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/arrow-045.png</normaloff>:/icon/arrow-045.png</iconset>
+   </property>
+   <property name="text">
+    <string>Send</string>
+   </property>
+   <property name="toolTip">
+    <string>Send selected object(s) (F11)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">F11</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>aspia::FileTreeWidget</class>
-   <extends>QTreeWidget</extends>
-   <header>client/ui/file_tree_widget.h</header>
+   <class>aspia::AddressBar</class>
+   <extends>QComboBox</extends>
+   <header>client/ui/address_bar.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -20,7 +20,6 @@
 #define ASPIA_CODEC__VIDEO_ENCODER_H_
 
 #include <QRect>
-#include <QSize>
 
 #include <memory>
 
@@ -43,8 +42,7 @@ protected:
                         proto::desktop::VideoPacket* packet);
 
 private:
-    QSize screen_size_;
-    QPoint top_left_;
+    QRect screen_rect_;
 };
 
 } // namespace aspia

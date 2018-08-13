@@ -32,9 +32,6 @@ class ClientSessionDesktopManage : public ClientSessionDesktopView
 public:
     ClientSessionDesktopManage(ConnectData* connect_data, QObject* parent);
 
-    static uint32_t supportedVideoEncodings();
-    static uint32_t supportedFeatures();
-
 public slots:
     // ClientSession implementation.
     void messageReceived(const QByteArray& buffer) override;
@@ -47,7 +44,6 @@ public slots:
     void onSendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
-    void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
 

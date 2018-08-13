@@ -23,6 +23,10 @@
 #include <QStandardPaths>
 #include <QStorageInfo>
 
+#if defined(Q_OS_WIN)
+#include "host/win/file_enumerator.h"
+#endif // defined(Q_OS_WIN)
+
 #include "host/file_platform_util.h"
 
 namespace aspia {
@@ -35,6 +39,12 @@ FileWorker::FileWorker(QObject* parent)
 
 proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Request& request)
 {
+#if defined(Q_OS_WIN)
+    // We send a notification to the system that it is used to prevent the screen saver, going into
+    // hibernation mode, etc.
+    SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+#endif
+
     if (request.has_drive_list_request())
     {
         return doDriveListRequest();
@@ -65,7 +75,7 @@ proto::file_transfer::Reply FileWorker::doRequest(const proto::file_transfer::Re
     }
     else if (request.has_packet_request())
     {
-        return doPacketRequest();
+        return doPacketRequest(request.packet_request());
     }
     else if (request.has_packet())
     {
@@ -92,11 +102,18 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
     for (const auto& volume : QStorageInfo::mountedVolumes())
     {
         QString root_path = volume.rootPath();
+        QString name = volume.displayName();
 
         proto::file_transfer::DriveList::Item* item = reply.mutable_drive_list()->add_item();
 
         item->set_type(FilePlatformUtil::driveType(root_path));
         item->set_path(root_path.toStdString());
+
+        if (name != root_path)
+            item->set_name(name.toStdString());
+
+        item->set_total_space(volume.bytesTotal());
+        item->set_free_space(volume.bytesFree());
     }
 
     QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
@@ -106,6 +123,8 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER);
         item->set_path(desktop_path.toStdString());
+        item->set_total_space(-1);
+        item->set_free_space(-1);
     }
 
     QString home_path = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -115,6 +134,8 @@ proto::file_transfer::Reply FileWorker::doDriveListRequest()
 
         item->set_type(proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER);
         item->set_path(home_path.toStdString());
+        item->set_total_space(-1);
+        item->set_free_space(-1);
     }
 
     if (reply.drive_list().item_size() == 0)
@@ -130,30 +151,39 @@ proto::file_transfer::Reply FileWorker::doFileListRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QDir directory(QString::fromStdString(request.path()));
-    if (!directory.exists())
+    std::filesystem::path path = std::filesystem::u8path(request.path());
+
+    std::error_code ignored_code;
+    std::filesystem::file_status status = std::filesystem::status(path, ignored_code);
+
+    if (!std::filesystem::exists(status))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    directory.setFilter(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot |
-                        QDir::System | QDir::Hidden);
-    directory.setSorting(QDir::Name | QDir::DirsFirst);
-
-    QFileInfoList info_list = directory.entryInfoList();
-
-    for (const auto& info : info_list)
+    if (!std::filesystem::is_directory(status))
     {
-        proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
-
-        item->set_name(info.fileName().toStdString());
-        item->set_size(info.size());
-        item->set_modification_time(info.lastModified().toSecsSinceEpoch());
-        item->set_is_directory(info.isDir());
+        reply.set_status(proto::file_transfer::STATUS_INVALID_PATH_NAME);
+        return reply;
     }
 
-    reply.set_status(proto::file_transfer::STATUS_SUCCESS);
+    FileEnumerator enumerator(path);
+
+    while (!enumerator.isAtEnd())
+    {
+        const FileEnumerator::FileInfo& file_info = enumerator.fileInfo();
+
+        proto::file_transfer::FileList::Item* item = reply.mutable_file_list()->add_item();
+        item->set_name(file_info.name().u8string());
+        item->set_size(file_info.size());
+        item->set_modification_time(file_info.lastWriteTime());
+        item->set_is_directory(file_info.isDirectory());
+
+        enumerator.advance();
+    }
+
+    reply.set_status(enumerator.status());
     return reply;
 }
 
@@ -162,17 +192,16 @@ proto::file_transfer::Reply FileWorker::doCreateDirectoryRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString directory_path = QString::fromStdString(request.path());
+    std::filesystem::path directory_path = std::filesystem::u8path(request.path());
 
-    QFileInfo file_info(directory_path);
-    if (file_info.exists())
+    std::error_code ignored_code;
+    if (std::filesystem::exists(directory_path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
     }
 
-    QDir directory;
-    if (!directory.mkdir(directory_path))
+    if (!std::filesystem::create_directory(directory_path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
         return reply;
@@ -187,8 +216,8 @@ proto::file_transfer::Reply FileWorker::doRenameRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString old_name = QString::fromStdString(request.old_name());
-    QString new_name = QString::fromStdString(request.new_name());
+    std::filesystem::path old_name = std::filesystem::u8path(request.old_name());
+    std::filesystem::path new_name = std::filesystem::u8path(request.new_name());
 
     if (old_name == new_name)
     {
@@ -196,35 +225,26 @@ proto::file_transfer::Reply FileWorker::doRenameRequest(
         return reply;
     }
 
-    QFileInfo old_file_info(old_name);
-    if (!old_file_info.exists())
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(old_name, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    QFileInfo new_file_info(new_name);
-    if (new_file_info.exists())
+    if (std::filesystem::exists(new_name, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
         return reply;
     }
 
-    if (old_file_info.isDir())
+    std::error_code error_code;
+    std::filesystem::rename(old_name, new_name, error_code);
+
+    if (error_code)
     {
-        if (!QDir().rename(old_name, new_name))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
-    }
-    else
-    {
-        if (!QFile(old_name).rename(new_name))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
+        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+        return reply;
     }
 
     reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -236,32 +256,25 @@ proto::file_transfer::Reply FileWorker::doRemoveRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString path = QString::fromStdString(request.path());
+    std::filesystem::path path = std::filesystem::u8path(request.path());
 
-    QFileInfo file_info(path);
-    if (!file_info.exists())
+    std::error_code ignored_code;
+    if (!std::filesystem::exists(path, ignored_code))
     {
         reply.set_status(proto::file_transfer::STATUS_PATH_NOT_FOUND);
         return reply;
     }
 
-    if (file_info.isDir())
+    std::filesystem::permissions(
+        path,
+        std::filesystem::perms::owner_all | std::filesystem::perms::group_all,
+        std::filesystem::perm_options::add,
+        ignored_code);
+
+    if (!std::filesystem::remove(path, ignored_code))
     {
-        if (!QDir().rmdir(path))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
-    }
-    else
-    {
-        QFile file(path);
-        file.setPermissions(QFile::ReadOther | QFile::WriteOther);
-        if (!file.remove(path))
-        {
-            reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
-            return reply;
-        }
+        reply.set_status(proto::file_transfer::STATUS_ACCESS_DENIED);
+        return reply;
     }
 
     reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -273,7 +286,7 @@ proto::file_transfer::Reply FileWorker::doDownloadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    packetizer_ = FilePacketizer::create(QString::fromStdString(request.path()));
+    packetizer_ = FilePacketizer::create(std::filesystem::u8path(request.path()));
     if (!packetizer_)
         reply.set_status(proto::file_transfer::STATUS_FILE_OPEN_ERROR);
     else
@@ -287,13 +300,14 @@ proto::file_transfer::Reply FileWorker::doUploadRequest(
 {
     proto::file_transfer::Reply reply;
 
-    QString file_path = QString::fromStdString(request.path());
+    std::filesystem::path file_path = std::filesystem::u8path(request.path());
 
     do
     {
         if (!request.overwrite())
         {
-            if (QFile(file_path).exists())
+            std::error_code ignored_code;
+            if (std::filesystem::exists(file_path, ignored_code))
             {
                 reply.set_status(proto::file_transfer::STATUS_PATH_ALREADY_EXISTS);
                 break;
@@ -314,7 +328,8 @@ proto::file_transfer::Reply FileWorker::doUploadRequest(
     return reply;
 }
 
-proto::file_transfer::Reply FileWorker::doPacketRequest()
+proto::file_transfer::Reply FileWorker::doPacketRequest(
+    const proto::file_transfer::PacketRequest& request)
 {
     proto::file_transfer::Reply reply;
 
@@ -327,14 +342,14 @@ proto::file_transfer::Reply FileWorker::doPacketRequest()
     else
     {
         std::unique_ptr<proto::file_transfer::Packet> packet =
-            packetizer_->readNextPacket();
+            packetizer_->readNextPacket(request);
         if (!packet)
         {
             reply.set_status(proto::file_transfer::STATUS_FILE_READ_ERROR);
         }
         else
         {
-            if (packet->flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+            if (packet->flags() & proto::file_transfer::Packet::LAST_PACKET)
                 packetizer_.reset();
 
             reply.set_status(proto::file_transfer::STATUS_SUCCESS);
@@ -362,7 +377,7 @@ proto::file_transfer::Reply FileWorker::doPacket(const proto::file_transfer::Pac
         else
             reply.set_status(proto::file_transfer::STATUS_SUCCESS);
 
-        if (packet.flags() & proto::file_transfer::Packet::FLAG_LAST_PACKET)
+        if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
             depacketizer_.reset();
     }
 

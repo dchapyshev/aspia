@@ -62,6 +62,9 @@ QString fileStatusToString(proto::file_transfer::Status status)
         case proto::file_transfer::STATUS_FILE_READ_ERROR:
             return QCoreApplication::tr("Could not read file", "FileStatus");
 
+        case proto::file_transfer::STATUS_DISK_NOT_READY:
+            return QCoreApplication::tr("Drive not ready", "FileStatus");
+
         default:
             return QCoreApplication::tr("Unknown status code", "FileStatus");
     }

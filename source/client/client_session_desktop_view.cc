@@ -20,22 +20,11 @@
 
 #include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
+#include "codec/video_util.h"
 
 namespace aspia {
 
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-const uint32_t kSupportedFeatures = 0;
-
-} // namespace
-
-ClientSessionDesktopView::ClientSessionDesktopView(
-    ConnectData* connect_data, QObject* parent)
+ClientSessionDesktopView::ClientSessionDesktopView(ConnectData* connect_data, QObject* parent)
     : ClientSession(parent),
       connect_data_(connect_data)
 {
@@ -57,39 +46,27 @@ ClientSessionDesktopView::~ClientSessionDesktopView()
     delete desktop_window_;
 }
 
-// static
-uint32_t ClientSessionDesktopView::supportedVideoEncodings()
-{
-    return kSupportedVideoEncodings;
-}
-
-// static
-uint32_t ClientSessionDesktopView::supportedFeatures()
-{
-    return kSupportedFeatures;
-}
-
 void ClientSessionDesktopView::messageReceived(const QByteArray& buffer)
 {
-    proto::desktop::HostToClient message;
+    message_.Clear();
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message.has_video_packet())
+    if (message_.has_video_packet())
     {
-        readVideoPacket(message.video_packet());
+        readVideoPacket(message_.video_packet());
     }
-    else if (message.has_config_request())
+    else if (message_.has_config_request())
     {
-        readConfigRequest(message.config_request());
+        readConfigRequest(message_.config_request());
     }
-    else if (message.has_screen_list())
+    else if (message_.has_screen_list())
     {
-        readScreenList(message.screen_list());
+        readScreenList(message_.screen_list());
     }
     else
     {
@@ -128,6 +105,12 @@ void ClientSessionDesktopView::onSendScreen(const proto::desktop::Screen& screen
     emit sendMessage(serializeMessage(message));
 }
 
+void ClientSessionDesktopView::readConfigRequest(
+    const proto::desktop::ConfigRequest& /* config_request */)
+{
+    onSendConfig(connect_data_->desktopConfig());
+}
+
 void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket& packet)
 {
     if (video_encoding_ != packet.encoding())
@@ -144,25 +127,23 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 
     if (packet.has_format())
     {
-        const proto::desktop::Size& size = packet.format().screen_size();
-        const proto::desktop::Point& top_left = packet.format().top_left();
+        QRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
 
-        if (size.width()  <= 0 || size.width()  >= 65535 ||
-            size.height() <= 0 || size.height() >= 65535)
+        if (screen_rect.width()  <= 0 || screen_rect.width()  >= 65535 ||
+            screen_rect.height() <= 0 || screen_rect.height() >= 65535)
         {
             emit errorOccurred(tr("Session error: Wrong video frame size."));
             return;
         }
 
-        if (top_left.x() < 0 || top_left.x() >= 65535 ||
-            top_left.y() < 0 || top_left.y() >= 65535)
+        if (screen_rect.x() < 0 || screen_rect.x() >= 65535 ||
+            screen_rect.y() < 0 || screen_rect.y() >= 65535)
         {
             emit errorOccurred(tr("Session error: Wrong video frame position."));
             return;
         }
 
-        desktop_window_->resizeDesktopFrame(QPoint(top_left.x(), top_left.y()),
-                                            QSize(size.width(), size.height()));
+        desktop_window_->resizeDesktopFrame(screen_rect);
     }
 
     DesktopFrame* frame = desktop_window_->desktopFrame();
@@ -184,36 +165,6 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 void ClientSessionDesktopView::readScreenList(const proto::desktop::ScreenList& screen_list)
 {
     desktop_window_->setScreenList(screen_list);
-}
-
-void ClientSessionDesktopView::readConfigRequest(
-    const proto::desktop::ConfigRequest& config_request)
-{
-    proto::desktop::Config config = connect_data_->desktopConfig();
-
-    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-    desktop_window_->setSupportedFeatures(config_request.features());
-
-    // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config.video_encoding()))
-    {
-        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
-        {
-            emit errorOccurred(tr("Session error: There are no supported video encodings."));
-            return;
-        }
-        else
-        {
-            if (!desktop_window_->requireConfigChange(&config))
-            {
-                emit errorOccurred(tr("Session error: Canceled by the user."));
-                return;
-            }
-        }
-    }
-
-    connect_data_->setDesktopConfig(config);
-    onSendConfig(config);
 }
 
 } // namespace aspia

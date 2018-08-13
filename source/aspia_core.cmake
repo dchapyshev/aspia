@@ -95,6 +95,10 @@ list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/file_transfer_task.h)
 
 list(APPEND SOURCE_CLIENT_UI
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar.h
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar_model.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/address_bar_model.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/authorization_dialog.ui
@@ -108,6 +112,8 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_config_dialog.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_name_validator.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_name_validator.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_panel.ui
@@ -115,16 +121,19 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/desktop_window.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_item_delegate.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_drag.h
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_item_mime_data.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_list_model.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_manager_settings.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_manager_settings.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_manager_window.ui
+    ${PROJECT_SOURCE_DIR}/client/ui/file_mime_data.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_mime_data.h
+    ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.cc
+    ${PROJECT_SOURCE_DIR}/client/ui/file_path_validator.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_panel.ui
@@ -134,8 +143,6 @@ list(APPEND SOURCE_CLIENT_UI
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/file_transfer_dialog.ui
-    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.cc
-    ${PROJECT_SOURCE_DIR}/client/ui/file_tree_widget.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.cc
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.h
     ${PROJECT_SOURCE_DIR}/client/ui/key_sequence_dialog.ui
@@ -333,6 +340,8 @@ list(APPEND SOURCE_HOST_UI
     ${PROJECT_SOURCE_DIR}/host/ui/user_tree_item.h)
 
 list(APPEND SOURCE_HOST_WIN
+    ${PROJECT_SOURCE_DIR}/host/win/file_enumerator.cc
+    ${PROJECT_SOURCE_DIR}/host/win/file_enumerator.h
     ${PROJECT_SOURCE_DIR}/host/win/host.cc
     ${PROJECT_SOURCE_DIR}/host/win/host.h
     ${PROJECT_SOURCE_DIR}/host/win/host_main.cc

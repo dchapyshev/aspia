@@ -21,10 +21,13 @@
 #include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QProxyStyle>
 #include <QMenu>
 #include <QMessageBox>
 
-#include "client/ui/file_item.h"
+#include "client/ui/address_bar_model.h"
+#include "client/ui/file_item_delegate.h"
+#include "client/ui/file_list_model.h"
 #include "client/file_remover.h"
 #include "client/file_status.h"
 #include "host/file_platform_util.h"
@@ -34,17 +37,37 @@ namespace aspia {
 
 namespace {
 
-QString normalizePath(const QString& path)
+class TreeViewProxyStyle : public QProxyStyle
 {
-    QString normalized_path = path;
+public:
+    explicit TreeViewProxyStyle(QStyle* style)
+        : QProxyStyle(style)
+    {
+        // Nothing
+    }
 
-    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    void drawPrimitive(PrimitiveElement element,
+                       const QStyleOption* option,
+                       QPainter* painter,
+                       const QWidget* widget) const override
+    {
+        if (element == QStyle::PE_IndicatorItemViewItemDrop && !option->rect.isNull())
+        {
+            QStyleOption option_dup(*option);
 
-    if (!normalized_path.endsWith(QLatin1Char('/')))
-        normalized_path += QLatin1Char('/');
+            if (widget)
+            {
+                option_dup.rect.setX(0);
+                option_dup.rect.setWidth(widget->width() - 3);
+            }
 
-    return normalized_path;
-}
+            QProxyStyle::drawPrimitive(element, &option_dup, painter, widget);
+            return;
+        }
+
+        QProxyStyle::drawPrimitive(element, option, painter, widget);
+    }
+};
 
 QString parentPath(const QString& path)
 {
@@ -54,7 +77,7 @@ QString parentPath(const QString& path)
 
     int last_slash = path.lastIndexOf(QLatin1Char('/'), from);
     if (last_slash == -1)
-        return QString();
+        return AddressBarModel::computerPath();
 
     return path.left(last_slash);
 }
@@ -65,29 +88,79 @@ FilePanel::FilePanel(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
+    ui.list->setStyle(new TreeViewProxyStyle(ui.list->style()));
 
-    connect(ui.address_bar, QOverload<int>::of(&QComboBox::activated),
-            this, &FilePanel::onAddressItemChanged);
+    FileItemDelegate* item_delegate = new FileItemDelegate(this);
+    ui.list->setItemDelegate(item_delegate);
 
-    connect(ui.tree, &FileTreeWidget::itemDoubleClicked,
-            this, &FilePanel::onFileDoubleClicked);
-    connect(ui.tree, &FileTreeWidget::itemSelectionChanged,
-            this, &FilePanel::onFileSelectionChanged);
-    connect(ui.tree, &FileTreeWidget::fileNameChanged,
-            this, &FilePanel::onFileNameChanged);
-    connect(ui.tree, &FileTreeWidget::customContextMenuRequested,
-            this, &FilePanel::onFileContextMenu);
+    connect(item_delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
 
-    connect(ui.button_up, &QPushButton::pressed, this, &FilePanel::toParentFolder);
-    connect(ui.button_refresh, &QPushButton::pressed, this, &FilePanel::refresh);
-    connect(ui.button_add, &QPushButton::pressed, this, &FilePanel::addFolder);
-    connect(ui.button_delete, &QPushButton::pressed, this, &FilePanel::removeSelected);
-    connect(ui.button_send, &QPushButton::pressed, this, &FilePanel::sendSelected);
+    file_list_ = new FileListModel(this);
 
-    connect(ui.tree, &FileTreeWidget::fileListDroped, [this](const QList<FileTransfer::Item>& items)
+    connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
+
+    connect(ui.list, &QTreeView::doubleClicked, this, &FilePanel::onListDoubleClicked);
+    connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onListContextMenu);
+
+    connect(file_list_, &FileListModel::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
+    connect(file_list_, &FileListModel::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
+
+    connect(ui.action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
+    connect(ui.action_refresh, &QAction::triggered, this, &FilePanel::refresh);
+    connect(ui.action_add_folder, &QAction::triggered, this, &FilePanel::addFolder);
+    connect(ui.action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
+    connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
+
+    connect(file_list_, &FileListModel::fileListDropped,
+            [this](const QString& folder_name, const QList<FileTransfer::Item>& items)
     {
-        emit receiveItems(this, items);
+        QString target_folder = currentPath();
+        if (!folder_name.isEmpty())
+            target_folder += folder_name;
+
+        emit receiveItems(this, target_folder, items);
     });
+
+    ui.list->setFocus();
+}
+
+void FilePanel::onPathChanged(const QString& path)
+{
+    emit pathChanged(this, ui.address_bar->currentPath());
+
+    file_list_->clear();
+
+    AddressBarModel* model = dynamic_cast<AddressBarModel*>(ui.address_bar->model());
+    if (!model)
+        return;
+
+    if (ui.list->model() == model)
+        drive_list_state_ = ui.list->header()->saveState();
+    else if (ui.list->model() == file_list_)
+        file_list_state_ = ui.list->header()->saveState();
+
+    ui.action_up->setEnabled(false);
+    ui.action_add_folder->setEnabled(false);
+    ui.action_delete->setEnabled(false);
+
+    setTransferEnabled(false);
+
+    if (path == model->computerPath())
+    {
+        ui.list->setModel(model);
+        ui.list->setRootIndex(model->computerIndex());
+        ui.list->setSelectionMode(QTreeView::SingleSelection);
+        ui.list->setSortingEnabled(false);
+        ui.list->header()->restoreState(drive_list_state_);
+
+        ui.label_status->clear();
+    }
+    else
+    {
+        FileRequest* request = FileRequest::fileListRequest(path);
+        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        emit newRequest(request);
+    }
 }
 
 void FilePanel::setPanelName(const QString& name)
@@ -95,32 +168,31 @@ void FilePanel::setPanelName(const QString& name)
     ui.label_name->setText(name);
 }
 
-void FilePanel::setCurrentPath(const QString& path)
+void FilePanel::setMimeType(const QString& mime_type)
 {
-    current_path_ = normalizePath(path);
+    file_list_->setMimeType(mime_type);
+}
 
-    for (int i = 0; i < ui.address_bar->count(); ++i)
-    {
-        if (addressItemPath(i) == current_path_)
-        {
-            ui.address_bar->setCurrentIndex(i);
-            onAddressItemChanged(i);
-            return;
-        }
-    }
+void FilePanel::setTransferAllowed(bool allowed)
+{
+    transfer_allowed_ = allowed;
+    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
+}
 
-    for (int i = ui.tree->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        QTreeWidgetItem* item = ui.tree->takeTopLevelItem(i);
-        delete item;
-    }
+void FilePanel::setTransferEnabled(bool enabled)
+{
+    transfer_enabled_ = enabled;
+    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
+}
 
-    int current_item = ui.address_bar->count();
+void FilePanel::updateState()
+{
+    QHeaderView* header = ui.list->header();
 
-    ui.address_bar->addItem(FilePlatformUtil::directoryIcon(), current_path_);
-    ui.address_bar->setCurrentIndex(current_item);
-
-    onAddressItemChanged(current_item);
+    if (ui.list->model() == file_list_)
+        file_list_state_ = header->saveState();
+    else
+        drive_list_state_ = header->saveState();
 }
 
 void FilePanel::reply(const proto::file_transfer::Request& request,
@@ -135,10 +207,9 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  tr("Failed to get list of drives: %1")
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
-            return;
         }
 
-        updateDrives(reply.drive_list());
+        ui.address_bar->setDriveList(reply.drive_list());
     }
     else if (request.has_file_list_request())
     {
@@ -149,10 +220,29 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                  tr("Failed to get list of files: %1")
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
-            return;
+            ui.address_bar->setCurrentPath(ui.address_bar->previousPath());
         }
+        else
+        {
+            ui.action_up->setEnabled(true);
+            ui.action_add_folder->setEnabled(true);
 
-        updateFiles(reply.file_list());
+            ui.list->setModel(file_list_);
+            ui.list->setSelectionMode(QTreeView::ExtendedSelection);
+            ui.list->setSortingEnabled(true);
+            ui.list->setFocus();
+
+            QHeaderView* header = ui.list->header();
+            header->restoreState(file_list_state_);
+
+            file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
+            file_list_->setFileList(reply.file_list());
+
+            QItemSelectionModel* selection_model = ui.list->selectionModel();
+
+            connect(selection_model, &QItemSelectionModel::selectionChanged,
+                    this, &FilePanel::onListSelectionChanged);
+        }
     }
     else if (request.has_create_directory_request())
     {
@@ -164,8 +254,6 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
-
-        refresh();
     }
     else if (request.has_rename_request())
     {
@@ -177,8 +265,6 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
                                      .arg(fileStatusToString(reply.status())),
                                  QMessageBox::Ok);
         }
-
-        refresh();
     }
 }
 
@@ -189,138 +275,102 @@ void FilePanel::refresh()
     emit newRequest(request);
 }
 
-void FilePanel::keyPressEvent(QKeyEvent* event)
+void FilePanel::onListDoubleClicked(const QModelIndex& index)
 {
-    switch (event->key())
+    if (ui.address_bar->hasCurrentPath())
     {
-        case Qt::Key_Backspace:
-            toParentFolder();
-            break;
-
-        case Qt::Key_F5:
-            refresh();
-            break;
-
-        case Qt::Key_Delete:
-            removeSelected();
-            break;
-
-        case Qt::Key_F11:
-            sendSelected();
-            break;
-
-        default:
-            break;
-    }
-
-    QWidget::keyPressEvent(event);
-}
-
-void FilePanel::onAddressItemChanged(int index)
-{
-    current_path_ = normalizePath(addressItemPath(index));
-
-    // If the address is entered by the user, then the icon is missing.
-    if (ui.address_bar->itemIcon(index).isNull())
-    {
-        int equal_item = ui.address_bar->findData(current_path_);
-        if (equal_item == -1)
-        {
-            // We set the directory icon and update the path after normalization.
-            ui.address_bar->setItemIcon(index, FilePlatformUtil::directoryIcon());
-            ui.address_bar->setItemText(index, current_path_);
-        }
-        else
-        {
-            ui.address_bar->setCurrentIndex(equal_item);
-            ui.address_bar->removeItem(index);
-        }
-    }
-
-    int count = ui.address_bar->count();
-    for (int i = 0; i < count; ++i)
-    {
-        if (ui.address_bar->itemData(i).toString().isEmpty() &&
-            ui.address_bar->itemText(i) != ui.address_bar->itemText(index))
-        {
-            ui.address_bar->removeItem(i);
-            break;
-        }
-    }
-
-    FileRequest* request = FileRequest::fileListRequest(current_path_);
-    connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-    emit newRequest(request);
-}
-
-void FilePanel::onFileDoubleClicked(QTreeWidgetItem* item, int column)
-{
-    FileItem* file_item = dynamic_cast<FileItem*>(item);
-    if (!file_item || !file_item->isDirectory())
-        return;
-
-    toChildFolder(file_item->text(0));
-}
-
-void FilePanel::onFileSelectionChanged()
-{
-    int selected_count = selectedFilesCount();
-
-    ui.label_status->setText(tr("%1 object(s) selected").arg(selected_count));
-
-    if (selected_count > 0)
-    {
-        ui.button_delete->setEnabled(true);
-        ui.button_send->setEnabled(true);
+        if (file_list_->isFolder(index))
+            toChildFolder(file_list_->nameAt(index));
     }
     else
     {
-        ui.button_delete->setEnabled(false);
-        ui.button_send->setEnabled(false);
+        ui.address_bar->setCurrentPath(ui.address_bar->pathAt(index));
     }
 }
 
-void FilePanel::onFileNameChanged(FileItem* file_item)
+void FilePanel::onListSelectionChanged()
 {
-    QString initial_name = file_item->initialName();
-    QString current_name = file_item->currentName();
+    QItemSelectionModel* selection_model = ui.list->selectionModel();
 
-    if (initial_name.isEmpty()) // New item.
+    ui.label_status->setText(tr("%1 object(s) selected")
+                             .arg(selection_model->selectedRows().count()));
+
+    if (selection_model->hasSelection())
     {
-        if (current_name.isEmpty())
+        ui.action_delete->setEnabled(true);
+        setTransferEnabled(true);
+    }
+    else
+    {
+        ui.action_delete->setEnabled(false);
+        setTransferEnabled(false);
+    }
+}
+
+void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_name)
+{
+    if (new_name.isEmpty())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Folder name can not be empty."),
+                             QMessageBox::Ok);
+    }
+    else if (old_name.compare(new_name, Qt::CaseInsensitive) != 0)
+    {
+        if (!FilePlatformUtil::isValidFileName(new_name))
         {
             QMessageBox::warning(this,
                                  tr("Warning"),
-                                 tr("Folder name can not be empty."),
+                                 tr("Name contains invalid characters."),
                                  QMessageBox::Ok);
-            delete file_item;
             return;
         }
 
-        FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + current_name);
-        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
-        emit newRequest(request);
-    }
-    else // Rename item.
-    {
-        if (current_name == initial_name)
-            return;
-
-        FileRequest* request = FileRequest::renameRequest(currentPath() + initial_name,
-                                                          currentPath() + current_name);
+        FileRequest* request = FileRequest::renameRequest(currentPath() + old_name,
+                                                          currentPath() + new_name);
         connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
         emit newRequest(request);
     }
 }
 
-void FilePanel::onFileContextMenu(const QPoint& point)
+void FilePanel::onCreateFolderRequest(const QString& name)
 {
+    if (name.isEmpty())
+    {
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("Folder name can not be empty."),
+                             QMessageBox::Ok);
+    }
+    else
+    {
+        if (!FilePlatformUtil::isValidFileName(name))
+        {
+            QMessageBox::warning(this,
+                                 tr("Warning"),
+                                 tr("Name contains invalid characters."),
+                                 QMessageBox::Ok);
+            return;
+        }
+
+        FileRequest* request = FileRequest::createDirectoryRequest(currentPath() + name);
+        connect(request, &FileRequest::replyReady, this, &FilePanel::reply);
+        emit newRequest(request);
+    }
+}
+
+void FilePanel::onListContextMenu(const QPoint& point)
+{
+    if (!ui.address_bar->hasCurrentPath())
+        return;
+
     QMenu menu;
 
     QScopedPointer<QAction> copy_action;
     QScopedPointer<QAction> delete_action;
 
-    if (selectedFilesCount() > 0)
+    if (ui.list->selectionModel()->hasSelection())
     {
         copy_action.reset(new QAction(
             QIcon(QStringLiteral(":/icon/arrow-045.png")), tr("&Send\tF11")));
@@ -337,7 +387,7 @@ void FilePanel::onFileContextMenu(const QPoint& point)
 
     menu.addAction(add_folder_action.data());
 
-    QAction* selected_action = menu.exec(ui.tree->mapToGlobal(point));
+    QAction* selected_action = menu.exec(ui.list->mapToGlobal(point));
     if (!selected_action)
         return;
 
@@ -351,41 +401,34 @@ void FilePanel::onFileContextMenu(const QPoint& point)
 
 void FilePanel::toChildFolder(const QString& child_name)
 {
-    setCurrentPath(current_path_ + child_name);
-    ui.button_up->setEnabled(true);
+    ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
+    ui.action_up->setEnabled(true);
 }
 
 void FilePanel::toParentFolder()
 {
-    QString parent_path = parentPath(current_path_);
-    if (!parent_path.isEmpty())
-        setCurrentPath(parent_path);
-
-    ui.button_up->setEnabled(!parentPath(parent_path).isEmpty());
+    QString parent_path = parentPath(ui.address_bar->currentPath());
+    ui.address_bar->setCurrentPath(parent_path);
 }
 
 void FilePanel::addFolder()
 {
-    FileItem* item = new FileItem(QString());
+    ui.list->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
 
-    ui.tree->addTopLevelItem(item);
-    ui.tree->editItem(item);
+    QModelIndex index = file_list_->createFolder();
+    if (index.isValid())
+    {
+        ui.list->scrollTo(index);
+        ui.list->edit(index);
+    }
 }
 
 void FilePanel::removeSelected()
 {
     QList<FileRemover::Item> items;
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-    {
-        FileItem* file_item = dynamic_cast<FileItem*>(ui.tree->topLevelItem(i));
-
-        if (file_item && ui.tree->isItemSelected(file_item))
-        {
-            items.push_back(FileRemover::Item(file_item->currentName(),
-                                              file_item->isDirectory()));
-        }
-    }
+    for (const auto& index : ui.list->selectionModel()->selectedRows())
+        items.append(FileRemover::Item(file_list_->nameAt(index), file_list_->isFolder(index)));
 
     if (items.isEmpty())
         return;
@@ -405,90 +448,17 @@ void FilePanel::sendSelected()
 {
     QList<FileTransfer::Item> items;
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    for (const auto& index : ui.list->selectionModel()->selectedRows())
     {
-        FileItem* file_item = dynamic_cast<FileItem*>(ui.tree->topLevelItem(i));
-
-        if (file_item && ui.tree->isItemSelected(file_item))
-        {
-            items.push_back(FileTransfer::Item(file_item->currentName(),
-                                               file_item->fileSize(),
-                                               file_item->isDirectory()));
-        }
+        items.append(FileTransfer::Item(file_list_->nameAt(index),
+                                        file_list_->sizeAt(index),
+                                        file_list_->isFolder(index)));
     }
 
     if (items.isEmpty())
         return;
 
     emit sendItems(this, items);
-}
-
-QString FilePanel::addressItemPath(int index) const
-{
-    QString path = ui.address_bar->itemData(index).toString();
-    if (path.isEmpty())
-        path = ui.address_bar->itemText(index);
-
-    return path;
-}
-
-void FilePanel::updateDrives(const proto::file_transfer::DriveList& list)
-{
-    ui.address_bar->clear();
-
-    for (int i = 0; i < list.item_size(); ++i)
-    {
-        const proto::file_transfer::DriveList::Item& item = list.item(i);
-
-        QString path = normalizePath(QString::fromStdString(item.path()));
-        QIcon icon = FilePlatformUtil::driveIcon(item.type());
-
-        switch (item.type())
-        {
-            case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
-                ui.address_bar->insertItem(i, icon, tr("Home Folder"), path);
-                break;
-
-            case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
-                ui.address_bar->insertItem(i, icon, tr("Desktop"), path);
-                break;
-
-            default:
-                ui.address_bar->insertItem(i, icon, path, path);
-                break;
-        }
-    }
-
-    if (current_path_.isEmpty())
-        setCurrentPath(addressItemPath(0));
-    else
-        setCurrentPath(current_path_);
-}
-
-void FilePanel::updateFiles(const proto::file_transfer::FileList& list)
-{
-    for (int i = ui.tree->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        QTreeWidgetItem* item = ui.tree->takeTopLevelItem(i);
-        delete item;
-    }
-
-    for (int i = 0; i < list.item_size(); ++i)
-        ui.tree->addTopLevelItem(new FileItem(list.item(i)));
-}
-
-int FilePanel::selectedFilesCount()
-{
-    int selected_count = 0;
-
-    int total_count = ui.tree->topLevelItemCount();
-    for (int i = 0; i < total_count; ++i)
-    {
-        if (ui.tree->isItemSelected(ui.tree->topLevelItem(i)))
-            ++selected_count;
-    }
-
-    return selected_count;
 }
 
 } // namespace aspia

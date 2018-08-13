@@ -44,16 +44,12 @@ public:
     DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
-    void resizeDesktopFrame(const QPoint& top_left, const QSize& screen_size);
+    void resizeDesktopFrame(const QRect& screen_rect);
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
     void injectClipboard(const proto::desktop::ClipboardEvent& event);
     void setScreenList(const proto::desktop::ScreenList& screen_list);
-
-    void setSupportedVideoEncodings(uint32_t video_encodings);
-    void setSupportedFeatures(uint32_t features);
-    bool requireConfigChange(proto::desktop::Config* config);
 
 signals:
     void windowClose();
@@ -75,13 +71,11 @@ protected:
 private slots:
     void onPointerEvent(const QPoint& pos, uint32_t mask);
     void changeSettings();
+    void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
 
 private:
     ConnectData* connect_data_;
-
-    uint32_t supported_video_encodings_ = 0;
-    uint32_t supported_features_ = 0;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

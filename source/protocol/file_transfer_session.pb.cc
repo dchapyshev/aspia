@@ -388,6 +388,23 @@ const DriveList_Item_Type DriveList_Item::Type_MIN;
 const DriveList_Item_Type DriveList_Item::Type_MAX;
 const int DriveList_Item::Type_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool PacketRequest_Flags_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PacketRequest_Flags PacketRequest::NO_FLAGS;
+const PacketRequest_Flags PacketRequest::CANCEL;
+const PacketRequest_Flags PacketRequest::Flags_MIN;
+const PacketRequest_Flags PacketRequest::Flags_MAX;
+const int PacketRequest::Flags_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool Packet_Flags_IsValid(int value) {
   switch (value) {
     case 0:
@@ -401,10 +418,10 @@ bool Packet_Flags_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const Packet_Flags Packet::FLAG_ERROR;
-const Packet_Flags Packet::FLAG_PACKET;
-const Packet_Flags Packet::FLAG_FIRST_PACKET;
-const Packet_Flags Packet::FLAG_LAST_PACKET;
+const Packet_Flags Packet::WRONG_FLAGS;
+const Packet_Flags Packet::PACKET;
+const Packet_Flags Packet::FIRST_PACKET;
+const Packet_Flags Packet::LAST_PACKET;
 const Packet_Flags Packet::Flags_MIN;
 const Packet_Flags Packet::Flags_MAX;
 const int Packet::Flags_ARRAYSIZE;
@@ -425,6 +442,7 @@ bool Status_IsValid(int value) {
     case 11:
     case 12:
     case 13:
+    case 14:
       return true;
     default:
       return false;
@@ -439,6 +457,9 @@ void DriveList_Item::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DriveList_Item::kTypeFieldNumber;
 const int DriveList_Item::kPathFieldNumber;
+const int DriveList_Item::kNameFieldNumber;
+const int DriveList_Item::kTotalSpaceFieldNumber;
+const int DriveList_Item::kFreeSpaceFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 DriveList_Item::DriveList_Item()
@@ -456,13 +477,22 @@ DriveList_Item::DriveList_Item(const DriveList_Item& from)
   if (from.path().size() > 0) {
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
-  type_ = from.type_;
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.name().size() > 0) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  ::memcpy(&total_space_, &from.total_space_,
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&total_space_)) + sizeof(type_));
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.DriveList.Item)
 }
 
 void DriveList_Item::SharedCtor() {
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&total_space_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&total_space_)) + sizeof(type_));
 }
 
 DriveList_Item::~DriveList_Item() {
@@ -472,6 +502,7 @@ DriveList_Item::~DriveList_Item() {
 
 void DriveList_Item::SharedDtor() {
   path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void DriveList_Item::SetCachedSize(int size) const {
@@ -490,7 +521,10 @@ void DriveList_Item::Clear() {
   (void) cached_has_bits;
 
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  type_ = 0;
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&total_space_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&total_space_)) + sizeof(type_));
   _internal_metadata_.Clear();
 }
 
@@ -541,6 +575,50 @@ bool DriveList_Item::MergePartialFromCodedStream(
         break;
       }
 
+      // string name = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), static_cast<int>(this->name().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "aspia.proto.file_transfer.DriveList.Item.name"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 total_space = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &total_space_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 free_space = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &free_space_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -583,6 +661,26 @@ void DriveList_Item::SerializeWithCachedSizes(
       2, this->path(), output);
   }
 
+  // string name = 3;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), static_cast<int>(this->name().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "aspia.proto.file_transfer.DriveList.Item.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->name(), output);
+  }
+
+  // int64 total_space = 4;
+  if (this->total_space() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(4, this->total_space(), output);
+  }
+
+  // int64 free_space = 5;
+  if (this->free_space() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(5, this->free_space(), output);
+  }
+
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
                    static_cast<int>((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size()));
   // @@protoc_insertion_point(serialize_end:aspia.proto.file_transfer.DriveList.Item)
@@ -599,6 +697,27 @@ size_t DriveList_Item::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->path());
+  }
+
+  // string name = 3;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // int64 total_space = 4;
+  if (this->total_space() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->total_space());
+  }
+
+  // int64 free_space = 5;
+  if (this->free_space() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->free_space());
   }
 
   // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
@@ -628,6 +747,16 @@ void DriveList_Item::MergeFrom(const DriveList_Item& from) {
 
     path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
   }
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  if (from.total_space() != 0) {
+    set_total_space(from.total_space());
+  }
+  if (from.free_space() != 0) {
+    set_free_space(from.free_space());
+  }
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -652,6 +781,10 @@ void DriveList_Item::InternalSwap(DriveList_Item* other) {
   using std::swap;
   path_.Swap(&other->path_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  name_.Swap(&other->name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(total_space_, other->total_space_);
+  swap(free_space_, other->free_space_);
   swap(type_, other->type_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
@@ -2123,7 +2256,7 @@ void DownloadRequest::InternalSwap(DownloadRequest* other) {
 void PacketRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int PacketRequest::kDummyFieldNumber;
+const int PacketRequest::kFlagsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 PacketRequest::PacketRequest()
@@ -2137,12 +2270,12 @@ PacketRequest::PacketRequest(const PacketRequest& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  dummy_ = from.dummy_;
+  flags_ = from.flags_;
   // @@protoc_insertion_point(copy_constructor:aspia.proto.file_transfer.PacketRequest)
 }
 
 void PacketRequest::SharedCtor() {
-  dummy_ = 0u;
+  flags_ = 0u;
 }
 
 PacketRequest::~PacketRequest() {
@@ -2168,7 +2301,7 @@ void PacketRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  dummy_ = 0u;
+  flags_ = 0u;
   _internal_metadata_.Clear();
 }
 
@@ -2188,14 +2321,14 @@ bool PacketRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint32 dummy = 1;
+      // uint32 flags = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dummy_)));
+                 input, &flags_)));
         } else {
           goto handle_unusual;
         }
@@ -2228,9 +2361,9 @@ void PacketRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 dummy = 1;
-  if (this->dummy() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dummy(), output);
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->flags(), output);
   }
 
   output->WriteRaw((::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).data(),
@@ -2244,11 +2377,11 @@ size_t PacketRequest::ByteSizeLong() const {
 
   total_size += (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()).size();
 
-  // uint32 dummy = 1;
-  if (this->dummy() != 0) {
+  // uint32 flags = 1;
+  if (this->flags() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->dummy());
+        this->flags());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -2268,8 +2401,8 @@ void PacketRequest::MergeFrom(const PacketRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.dummy() != 0) {
-    set_dummy(from.dummy());
+  if (from.flags() != 0) {
+    set_flags(from.flags());
   }
 }
 
@@ -2290,7 +2423,7 @@ void PacketRequest::Swap(PacketRequest* other) {
 }
 void PacketRequest::InternalSwap(PacketRequest* other) {
   using std::swap;
-  swap(dummy_, other->dummy_);
+  swap(flags_, other->flags_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

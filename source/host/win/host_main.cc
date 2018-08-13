@@ -24,7 +24,6 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QFileInfo>
-#include <QScreen>
 
 #include "base/file_logger.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
@@ -55,12 +54,6 @@ int runHostNotifier(const QString& channel_id)
     HostNotifierWindow window;
     window.setChannelId(channel_id);
     window.show();
-
-    QSize screen_size = QApplication::primaryScreen()->availableSize();
-    QSize window_size = window.frameSize();
-
-    window.move(screen_size.width() - window_size.width(),
-                screen_size.height() - window_size.height());
 
     DWORD active_thread_id = GetWindowThreadProcessId(GetForegroundWindow(), nullptr);
     DWORD current_thread_id = GetCurrentThreadId();

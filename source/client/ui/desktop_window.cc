@@ -108,18 +108,21 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
 
     desktop_->installEventFilter(this);
     scroll_area_->viewport()->installEventFilter(this);
+
+    clipboard_ = new Clipboard(this);
+    connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
 }
 
-void DesktopWindow::resizeDesktopFrame(const QPoint& top_left, const QSize& screen_size)
+void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
 {
     QSize prev_size = desktop_->size();
 
-    desktop_->resizeDesktopFrame(screen_size);
+    desktop_->resizeDesktopFrame(screen_rect.size());
 
-    if (screen_size != prev_size && !isMaximized() && !isFullScreen())
+    if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
         autosizeWindow();
 
-    screen_top_left_ = top_left;
+    screen_top_left_ = screen_rect.topLeft();
 }
 
 void DesktopWindow::drawDesktopFrame()
@@ -147,62 +150,6 @@ void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
     panel_->setScreenList(screen_list);
-}
-
-void DesktopWindow::setSupportedVideoEncodings(uint32_t video_encodings)
-{
-    supported_video_encodings_ = video_encodings;
-}
-
-void DesktopWindow::setSupportedFeatures(uint32_t features)
-{
-    supported_features_ = features;
-
-    if (connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        delete clipboard_;
-
-        // If the clipboard is supported by the host.
-        if (supported_features_ & proto::desktop::FEATURE_CLIPBOARD)
-        {
-            const proto::desktop::Config& config = connect_data_->desktopConfig();
-
-            // If the clipboard is enabled in the config.
-            if (config.features() & proto::desktop::FEATURE_CLIPBOARD)
-            {
-                clipboard_ = new Clipboard(this);
-
-                connect(clipboard_, &Clipboard::clipboardEvent,
-                        this, &DesktopWindow::sendClipboardEvent);
-            }
-        }
-    }
-    else
-    {
-        Q_ASSERT(connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
-    }
-}
-
-bool DesktopWindow::requireConfigChange(proto::desktop::Config* config)
-{
-    if (!(supported_video_encodings_ & config->video_encoding()))
-    {
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The current video encoding is not supported by the host. "
-                                "Please specify a different video encoding."),
-                             QMessageBox::Ok);
-    }
-
-    DesktopConfigDialog dialog(*config, supported_video_encodings_, supported_features_, this);
-    if (dialog.exec() == DesktopConfigDialog::Accepted)
-    {
-        config->CopyFrom(dialog.config());
-        setSupportedFeatures(supported_features_);
-        return true;
-    }
-
-    return false;
 }
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
@@ -262,16 +209,21 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 
 void DesktopWindow::changeSettings()
 {
-    DesktopConfigDialog dialog(connect_data_->desktopConfig(),
-                               supported_video_encodings_,
-                               supported_features_,
-                               this);
-    if (dialog.exec() == DesktopConfigDialog::Accepted)
-    {
-        connect_data_->setDesktopConfig(dialog.config());
-        setSupportedFeatures(supported_features_);
-        emit sendConfig(dialog.config());
-    }
+    QScopedPointer<DesktopConfigDialog> dialog(
+        new DesktopConfigDialog(connect_data_->sessionType(),
+                                connect_data_->desktopConfig(),
+                                this));
+
+    connect(dialog.get(), &DesktopConfigDialog::configChanged,
+            this, &DesktopWindow::onConfigChanged);
+
+    dialog->exec();
+}
+
+void DesktopWindow::onConfigChanged(const proto::desktop::Config& config)
+{
+    connect_data_->setDesktopConfig(config);
+    emit sendConfig(config);
 }
 
 void DesktopWindow::autosizeWindow()
@@ -333,6 +285,13 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 
 void DesktopWindow::closeEvent(QCloseEvent* event)
 {
+    for (const auto& object : children())
+    {
+        QWidget* widget = dynamic_cast<QWidget*>(object);
+        if (widget)
+            widget->close();
+    }
+
     emit windowClose();
     QWidget::closeEvent(event);
 }

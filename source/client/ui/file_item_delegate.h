@@ -25,52 +25,30 @@
 
 namespace aspia {
 
-class FileReadOnlyColumnDelegate : public QStyledItemDelegate
-{
-public:
-    explicit FileReadOnlyColumnDelegate(QWidget* parent = nullptr)
-        : QStyledItemDelegate(parent)
-    {
-        // Nothing
-    }
-
-    QWidget* createEditor(QWidget* /* parent */,
-                          const QStyleOptionViewItem& /* option */,
-                          const QModelIndex& /* index */) const override
-    {
-        return nullptr;
-    }
-
-private:
-    DISALLOW_COPY_AND_ASSIGN(FileReadOnlyColumnDelegate);
-};
-
-class FileColumnDelegate : public QStyledItemDelegate
+class FileItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit FileColumnDelegate(QWidget* parent = nullptr)
-        : QStyledItemDelegate(parent)
-    {
-        // Nothing
-    }
+    explicit FileItemDelegate(QObject* parent);
 
+    // QStyledItemDelegate implementation.
+    QWidget* createEditor(QWidget* parent,
+                          const QStyleOptionViewItem& option,
+                          const QModelIndex& index) const override;
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override;
     void setModelData(QWidget* editor,
                       QAbstractItemModel* model,
-                      const QModelIndex& index) const override
-    {
-        QStyledItemDelegate::setModelData(editor, model, index);
-
-        if (index.column() == 0)
-            emit editingFinished(index);
-    }
+                      const QModelIndex& index) const override;
+    void updateEditorGeometry(QWidget* editor,
+                              const QStyleOptionViewItem& option,
+                              const QModelIndex& index) const override;
 
 signals:
-    void editingFinished(const QModelIndex& index) const;
+    void editFinished();
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(FileColumnDelegate);
+    DISALLOW_COPY_AND_ASSIGN(FileItemDelegate);
 };
 
 } // namespace aspia

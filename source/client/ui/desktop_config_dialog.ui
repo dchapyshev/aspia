@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>308</width>
-    <height>259</height>
+    <width>236</width>
+    <height>305</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -122,6 +122,20 @@
     <widget class="QCheckBox" name="checkbox_clipboard">
      <property name="text">
       <string>Enable clipboard</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkbox_desktop_effects">
+     <property name="text">
+      <string>Disable desktop effects</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkbox_desktop_wallpaper">
+     <property name="text">
+      <string>Disable desktop wallpaper</string>
      </property>
     </widget>
    </item>

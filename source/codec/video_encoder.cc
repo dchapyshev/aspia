@@ -18,7 +18,6 @@
 
 #include "codec/video_encoder.h"
 
-#include "codec/video_util.h"
 #include "desktop_capture/desktop_frame.h"
 
 namespace aspia {
@@ -29,15 +28,18 @@ void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
 {
     packet->set_encoding(encoding);
 
-    if (screen_size_ != frame->size() || top_left_ != frame->topLeft())
+    QRect rect(frame->topLeft(), frame->size());
+
+    if (screen_rect_ != rect)
     {
-        screen_size_ = frame->size();
-        top_left_ = frame->topLeft();
+        screen_rect_ = rect;
 
-        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
+        proto::desktop::Rect* rect = packet->mutable_format()->mutable_screen_rect();
 
-        VideoUtil::toVideoSize(screen_size_, format->mutable_screen_size());
-        VideoUtil::toVideoPoint(top_left_, format->mutable_top_left());
+        rect->set_x(screen_rect_.x());
+        rect->set_y(screen_rect_.y());
+        rect->set_width(screen_rect_.width());
+        rect->set_height(screen_rect_.height());
     }
 }
 

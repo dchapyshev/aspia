@@ -53,7 +53,8 @@ private:
         const proto::file_transfer::DownloadRequest& request);
     proto::file_transfer::Reply doUploadRequest(
         const proto::file_transfer::UploadRequest& request);
-    proto::file_transfer::Reply doPacketRequest();
+    proto::file_transfer::Reply doPacketRequest(
+        const proto::file_transfer::PacketRequest& request);
     proto::file_transfer::Reply doPacket(const proto::file_transfer::Packet& packet);
 
     std::unique_ptr<FileDepacketizer> depacketizer_;

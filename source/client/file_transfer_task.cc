@@ -23,7 +23,7 @@ namespace aspia {
 FileTransferTask::FileTransferTask(const QString& source_path,
                                    const QString& target_path,
                                    bool is_directory,
-                                   qint64 size)
+                                   int64_t size)
     : source_path_(source_path),
       target_path_(target_path),
       is_directory_(is_directory),

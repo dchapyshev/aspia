@@ -38,6 +38,7 @@ enum Status
     STATUS_FILE_CREATE_ERROR   = 11;
     STATUS_FILE_WRITE_ERROR    = 12;
     STATUS_FILE_READ_ERROR     = 13;
+    STATUS_DISK_NOT_READY      = 14;
 }
 
 message DriveList
@@ -56,8 +57,11 @@ message DriveList
             TYPE_DESKTOP_FOLDER = 7;
         }
 
-        Type type   = 1;
-        string path = 2;
+        Type type         = 1;
+        string path       = 2;
+        string name       = 3;
+        int64 total_space = 4;
+        int64 free_space  = 5;
     }
 
     repeated Item item = 1;
@@ -99,17 +103,23 @@ message DownloadRequest
 
 message PacketRequest
 {
-    uint32 dummy = 1;
+    enum Flags
+    {
+        NO_FLAGS = 0;
+        CANCEL   = 1;
+    }
+
+    uint32 flags = 1;
 }
 
 message Packet
 {
     enum Flags
     {
-        FLAG_ERROR        = 0;
-        FLAG_PACKET       = 1;
-        FLAG_FIRST_PACKET = 2;
-        FLAG_LAST_PACKET  = 4;
+        WRONG_FLAGS  = 0;
+        PACKET       = 1;
+        FIRST_PACKET = 2;
+        LAST_PACKET  = 4;
     }
 
     uint32 flags = 1;

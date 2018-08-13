@@ -16,23 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/file_item_drag.h"
+#ifndef ASPIA_CLIENT__UI__FILE_NAME_VALIDATOR_H_
+#define ASPIA_CLIENT__UI__FILE_NAME_VALIDATOR_H_
 
-#include "client/ui/file_item_mime_data.h"
+#include <QValidator>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
-FileItemDrag::FileItemDrag(QObject* drag_source)
-    : QDrag(drag_source)
+class FileNameValidator : public QValidator
 {
-    // Nothing
-}
+    Q_OBJECT
 
-void FileItemDrag::setFileList(const QList<FileTransfer::Item>& file_list)
-{
-    FileItemMimeData* mime_data = new FileItemMimeData();
-    mime_data->setFileList(file_list);
-    setMimeData(mime_data);
-}
+public:
+    explicit FileNameValidator(QObject* parent);
+
+    // QValidator implementation.
+    State validate(QString& input, int& pos) const override;
+    void fixup(QString& input) const override;
+
+signals:
+    void invalidNameEntered() const;
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(FileNameValidator);
+};
 
 } // namespace aspia
+
+#endif // ASPIA_CLIENT__UI__FILE_NAME_VALIDATOR_H_

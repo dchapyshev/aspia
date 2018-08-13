@@ -40,9 +40,6 @@ public:
     ClientSessionDesktopView(ConnectData* connect_data, QObject* parent);
     virtual ~ClientSessionDesktopView();
 
-    static uint32_t supportedVideoEncodings();
-    static uint32_t supportedFeatures();
-
 public slots:
     // ClientSession implementation.
     void messageReceived(const QByteArray& buffer) override;
@@ -53,15 +50,15 @@ public slots:
     virtual void onSendScreen(const proto::desktop::Screen& screen);
 
 protected:
+    void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
     void readScreenList(const proto::desktop::ScreenList& screen_list);
 
     ConnectData* connect_data_;
+    proto::desktop::HostToClient message_;
     QPointer<DesktopWindow> desktop_window_;
 
 private:
-    void readConfigRequest(const proto::desktop::ConfigRequest& config_request);
-
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     std::unique_ptr<VideoDecoder> video_decoder_;
 

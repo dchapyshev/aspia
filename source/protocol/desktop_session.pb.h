@@ -38,7 +38,7 @@ namespace protobuf_desktop_5fsession_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[16];
+  static const ::google::protobuf::internal::ParseTable schema[14];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -71,9 +71,6 @@ extern KeyEventDefaultTypeInternal _KeyEvent_default_instance_;
 class PixelFormat;
 class PixelFormatDefaultTypeInternal;
 extern PixelFormatDefaultTypeInternal _PixelFormat_default_instance_;
-class Point;
-class PointDefaultTypeInternal;
-extern PointDefaultTypeInternal _Point_default_instance_;
 class PointerEvent;
 class PointerEventDefaultTypeInternal;
 extern PointerEventDefaultTypeInternal _PointerEvent_default_instance_;
@@ -86,9 +83,6 @@ extern ScreenDefaultTypeInternal _Screen_default_instance_;
 class ScreenList;
 class ScreenListDefaultTypeInternal;
 extern ScreenListDefaultTypeInternal _ScreenList_default_instance_;
-class Size;
-class SizeDefaultTypeInternal;
-extern SizeDefaultTypeInternal _Size_default_instance_;
 class VideoPacket;
 class VideoPacketDefaultTypeInternal;
 extern VideoPacketDefaultTypeInternal _VideoPacket_default_instance_;
@@ -108,12 +102,10 @@ template<> ::aspia::proto::desktop::CursorShape* Arena::CreateMaybeMessage<::asp
 template<> ::aspia::proto::desktop::HostToClient* Arena::CreateMaybeMessage<::aspia::proto::desktop::HostToClient>(Arena*);
 template<> ::aspia::proto::desktop::KeyEvent* Arena::CreateMaybeMessage<::aspia::proto::desktop::KeyEvent>(Arena*);
 template<> ::aspia::proto::desktop::PixelFormat* Arena::CreateMaybeMessage<::aspia::proto::desktop::PixelFormat>(Arena*);
-template<> ::aspia::proto::desktop::Point* Arena::CreateMaybeMessage<::aspia::proto::desktop::Point>(Arena*);
 template<> ::aspia::proto::desktop::PointerEvent* Arena::CreateMaybeMessage<::aspia::proto::desktop::PointerEvent>(Arena*);
 template<> ::aspia::proto::desktop::Rect* Arena::CreateMaybeMessage<::aspia::proto::desktop::Rect>(Arena*);
 template<> ::aspia::proto::desktop::Screen* Arena::CreateMaybeMessage<::aspia::proto::desktop::Screen>(Arena*);
 template<> ::aspia::proto::desktop::ScreenList* Arena::CreateMaybeMessage<::aspia::proto::desktop::ScreenList>(Arena*);
-template<> ::aspia::proto::desktop::Size* Arena::CreateMaybeMessage<::aspia::proto::desktop::Size>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacket* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacket>(Arena*);
 template<> ::aspia::proto::desktop::VideoPacketFormat* Arena::CreateMaybeMessage<::aspia::proto::desktop::VideoPacketFormat>(Arena*);
 }  // namespace protobuf
@@ -175,17 +167,19 @@ const VideoEncoding VideoEncoding_MIN = VIDEO_ENCODING_UNKNOWN;
 const VideoEncoding VideoEncoding_MAX = VIDEO_ENCODING_VP9;
 const int VideoEncoding_ARRAYSIZE = VideoEncoding_MAX + 1;
 
-enum Feature {
-  FEATURE_NONE = 0,
-  FEATURE_CURSOR_SHAPE = 1,
-  FEATURE_CLIPBOARD = 2,
-  Feature_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Feature_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum ConfigFlags {
+  NO_FLAGS = 0,
+  ENABLE_CURSOR_SHAPE = 1,
+  ENABLE_CLIPBOARD = 2,
+  DISABLE_DESKTOP_EFFECTS = 4,
+  DISABLE_DESKTOP_WALLPAPER = 8,
+  ConfigFlags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ConfigFlags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool Feature_IsValid(int value);
-const Feature Feature_MIN = FEATURE_NONE;
-const Feature Feature_MAX = FEATURE_CLIPBOARD;
-const int Feature_ARRAYSIZE = Feature_MAX + 1;
+bool ConfigFlags_IsValid(int value);
+const ConfigFlags ConfigFlags_MIN = NO_FLAGS;
+const ConfigFlags ConfigFlags_MAX = DISABLE_DESKTOP_WALLPAPER;
+const int ConfigFlags_ARRAYSIZE = ConfigFlags_MAX + 1;
 
 // ===================================================================
 
@@ -861,222 +855,6 @@ class Rect : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(
 };
 // -------------------------------------------------------------------
 
-class Size : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.Size) */ {
- public:
-  Size();
-  virtual ~Size();
-
-  Size(const Size& from);
-
-  inline Size& operator=(const Size& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Size(Size&& from) noexcept
-    : Size() {
-    *this = ::std::move(from);
-  }
-
-  inline Size& operator=(Size&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Size& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Size* internal_default_instance() {
-    return reinterpret_cast<const Size*>(
-               &_Size_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    5;
-
-  void Swap(Size* other);
-  friend void swap(Size& a, Size& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Size* New() const final {
-    return CreateMaybeMessage<Size>(NULL);
-  }
-
-  Size* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<Size>(arena);
-  }
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    final;
-  void CopyFrom(const Size& from);
-  void MergeFrom(const Size& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  void DiscardUnknownFields();
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Size* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // int32 width = 1;
-  void clear_width();
-  static const int kWidthFieldNumber = 1;
-  ::google::protobuf::int32 width() const;
-  void set_width(::google::protobuf::int32 value);
-
-  // int32 height = 2;
-  void clear_height();
-  static const int kHeightFieldNumber = 2;
-  ::google::protobuf::int32 height() const;
-  void set_height(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.desktop.Size)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::int32 width_;
-  ::google::protobuf::int32 height_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
-class Point : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.Point) */ {
- public:
-  Point();
-  virtual ~Point();
-
-  Point(const Point& from);
-
-  inline Point& operator=(const Point& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Point(Point&& from) noexcept
-    : Point() {
-    *this = ::std::move(from);
-  }
-
-  inline Point& operator=(Point&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const Point& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Point* internal_default_instance() {
-    return reinterpret_cast<const Point*>(
-               &_Point_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    6;
-
-  void Swap(Point* other);
-  friend void swap(Point& a, Point& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Point* New() const final {
-    return CreateMaybeMessage<Point>(NULL);
-  }
-
-  Point* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<Point>(arena);
-  }
-  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
-    final;
-  void CopyFrom(const Point& from);
-  void MergeFrom(const Point& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  void DiscardUnknownFields();
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Point* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::std::string GetTypeName() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // int32 x = 1;
-  void clear_x();
-  static const int kXFieldNumber = 1;
-  ::google::protobuf::int32 x() const;
-  void set_x(::google::protobuf::int32 value);
-
-  // int32 y = 2;
-  void clear_y();
-  static const int kYFieldNumber = 2;
-  ::google::protobuf::int32 y() const;
-  void set_y(::google::protobuf::int32 value);
-
-  // @@protoc_insertion_point(class_scope:aspia.proto.desktop.Point)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::int32 x_;
-  ::google::protobuf::int32 y_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class PixelFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:aspia.proto.desktop.PixelFormat) */ {
  public:
   PixelFormat();
@@ -1111,7 +889,7 @@ class PixelFormat : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_PixelFormat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    5;
 
   void Swap(PixelFormat* other);
   friend void swap(PixelFormat& a, PixelFormat& b) {
@@ -1254,7 +1032,7 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_VideoPacketFormat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    6;
 
   void Swap(VideoPacketFormat* other);
   friend void swap(VideoPacketFormat& a, VideoPacketFormat& b) {
@@ -1305,17 +1083,17 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // .aspia.proto.desktop.Size screen_size = 1;
-  bool has_screen_size() const;
-  void clear_screen_size();
-  static const int kScreenSizeFieldNumber = 1;
+  // .aspia.proto.desktop.Rect screen_rect = 1;
+  bool has_screen_rect() const;
+  void clear_screen_rect();
+  static const int kScreenRectFieldNumber = 1;
   private:
-  const ::aspia::proto::desktop::Size& _internal_screen_size() const;
+  const ::aspia::proto::desktop::Rect& _internal_screen_rect() const;
   public:
-  const ::aspia::proto::desktop::Size& screen_size() const;
-  ::aspia::proto::desktop::Size* release_screen_size();
-  ::aspia::proto::desktop::Size* mutable_screen_size();
-  void set_allocated_screen_size(::aspia::proto::desktop::Size* screen_size);
+  const ::aspia::proto::desktop::Rect& screen_rect() const;
+  ::aspia::proto::desktop::Rect* release_screen_rect();
+  ::aspia::proto::desktop::Rect* mutable_screen_rect();
+  void set_allocated_screen_rect(::aspia::proto::desktop::Rect* screen_rect);
 
   // .aspia.proto.desktop.PixelFormat pixel_format = 2;
   bool has_pixel_format() const;
@@ -1329,25 +1107,12 @@ class VideoPacketFormat : public ::google::protobuf::MessageLite /* @@protoc_ins
   ::aspia::proto::desktop::PixelFormat* mutable_pixel_format();
   void set_allocated_pixel_format(::aspia::proto::desktop::PixelFormat* pixel_format);
 
-  // .aspia.proto.desktop.Point top_left = 3;
-  bool has_top_left() const;
-  void clear_top_left();
-  static const int kTopLeftFieldNumber = 3;
-  private:
-  const ::aspia::proto::desktop::Point& _internal_top_left() const;
-  public:
-  const ::aspia::proto::desktop::Point& top_left() const;
-  ::aspia::proto::desktop::Point* release_top_left();
-  ::aspia::proto::desktop::Point* mutable_top_left();
-  void set_allocated_top_left(::aspia::proto::desktop::Point* top_left);
-
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.VideoPacketFormat)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::aspia::proto::desktop::Size* screen_size_;
+  ::aspia::proto::desktop::Rect* screen_rect_;
   ::aspia::proto::desktop::PixelFormat* pixel_format_;
-  ::aspia::proto::desktop::Point* top_left_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -1387,7 +1152,7 @@ class VideoPacket : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_VideoPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    7;
 
   void Swap(VideoPacket* other);
   friend void swap(VideoPacket& a, VideoPacket& b) {
@@ -1529,7 +1294,7 @@ class Screen : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Screen_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    8;
 
   void Swap(Screen* other);
   friend void swap(Screen& a, Screen& b) {
@@ -1645,7 +1410,7 @@ class ScreenList : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_ScreenList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    9;
 
   void Swap(ScreenList* other);
   friend void swap(ScreenList& a, ScreenList& b) {
@@ -1752,7 +1517,7 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_ConfigRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    10;
 
   void Swap(ConfigRequest* other);
   friend void swap(ConfigRequest& a, ConfigRequest& b) {
@@ -1803,24 +1568,17 @@ class ConfigRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // accessors -------------------------------------------------------
 
-  // uint32 video_encodings = 1;
-  void clear_video_encodings();
-  static const int kVideoEncodingsFieldNumber = 1;
-  ::google::protobuf::uint32 video_encodings() const;
-  void set_video_encodings(::google::protobuf::uint32 value);
-
-  // uint32 features = 2;
-  void clear_features();
-  static const int kFeaturesFieldNumber = 2;
-  ::google::protobuf::uint32 features() const;
-  void set_features(::google::protobuf::uint32 value);
+  // uint32 dummy = 1;
+  void clear_dummy();
+  static const int kDummyFieldNumber = 1;
+  ::google::protobuf::uint32 dummy() const;
+  void set_dummy(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ConfigRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::uint32 video_encodings_;
-  ::google::protobuf::uint32 features_;
+  ::google::protobuf::uint32 dummy_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -1860,7 +1618,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
                &_Config_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    11;
 
   void Swap(Config* other);
   friend void swap(Config& a, Config& b) {
@@ -1923,11 +1681,11 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   ::aspia::proto::desktop::PixelFormat* mutable_pixel_format();
   void set_allocated_pixel_format(::aspia::proto::desktop::PixelFormat* pixel_format);
 
-  // uint32 features = 1;
-  void clear_features();
-  static const int kFeaturesFieldNumber = 1;
-  ::google::protobuf::uint32 features() const;
-  void set_features(::google::protobuf::uint32 value);
+  // uint32 flags = 1;
+  void clear_flags();
+  static const int kFlagsFieldNumber = 1;
+  ::google::protobuf::uint32 flags() const;
+  void set_flags(::google::protobuf::uint32 value);
 
   // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
   void clear_video_encoding();
@@ -1952,7 +1710,7 @@ class Config : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::aspia::proto::desktop::PixelFormat* pixel_format_;
-  ::google::protobuf::uint32 features_;
+  ::google::protobuf::uint32 flags_;
   int video_encoding_;
   ::google::protobuf::uint32 update_interval_;
   ::google::protobuf::uint32 compress_ratio_;
@@ -1995,7 +1753,7 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_HostToClient_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    12;
 
   void Swap(HostToClient* other);
   friend void swap(HostToClient& a, HostToClient& b) {
@@ -2058,10 +1816,10 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::VideoPacket* mutable_video_packet();
   void set_allocated_video_packet(::aspia::proto::desktop::VideoPacket* video_packet);
 
-  // .aspia.proto.desktop.CursorShape cursor_shape = 2;
+  // .aspia.proto.desktop.CursorShape cursor_shape = 3;
   bool has_cursor_shape() const;
   void clear_cursor_shape();
-  static const int kCursorShapeFieldNumber = 2;
+  static const int kCursorShapeFieldNumber = 3;
   private:
   const ::aspia::proto::desktop::CursorShape& _internal_cursor_shape() const;
   public:
@@ -2070,10 +1828,10 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::CursorShape* mutable_cursor_shape();
   void set_allocated_cursor_shape(::aspia::proto::desktop::CursorShape* cursor_shape);
 
-  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 4;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 3;
+  static const int kClipboardEventFieldNumber = 4;
   private:
   const ::aspia::proto::desktop::ClipboardEvent& _internal_clipboard_event() const;
   public:
@@ -2081,18 +1839,6 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ClipboardEvent* release_clipboard_event();
   ::aspia::proto::desktop::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::desktop::ClipboardEvent* clipboard_event);
-
-  // .aspia.proto.desktop.ConfigRequest config_request = 4;
-  bool has_config_request() const;
-  void clear_config_request();
-  static const int kConfigRequestFieldNumber = 4;
-  private:
-  const ::aspia::proto::desktop::ConfigRequest& _internal_config_request() const;
-  public:
-  const ::aspia::proto::desktop::ConfigRequest& config_request() const;
-  ::aspia::proto::desktop::ConfigRequest* release_config_request();
-  ::aspia::proto::desktop::ConfigRequest* mutable_config_request();
-  void set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request);
 
   // .aspia.proto.desktop.ScreenList screen_list = 5;
   bool has_screen_list() const;
@@ -2106,6 +1852,18 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ScreenList* mutable_screen_list();
   void set_allocated_screen_list(::aspia::proto::desktop::ScreenList* screen_list);
 
+  // .aspia.proto.desktop.ConfigRequest config_request = 6;
+  bool has_config_request() const;
+  void clear_config_request();
+  static const int kConfigRequestFieldNumber = 6;
+  private:
+  const ::aspia::proto::desktop::ConfigRequest& _internal_config_request() const;
+  public:
+  const ::aspia::proto::desktop::ConfigRequest& config_request() const;
+  ::aspia::proto::desktop::ConfigRequest* release_config_request();
+  ::aspia::proto::desktop::ConfigRequest* mutable_config_request();
+  void set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.HostToClient)
  private:
 
@@ -2113,8 +1871,8 @@ class HostToClient : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::VideoPacket* video_packet_;
   ::aspia::proto::desktop::CursorShape* cursor_shape_;
   ::aspia::proto::desktop::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::desktop::ConfigRequest* config_request_;
   ::aspia::proto::desktop::ScreenList* screen_list_;
+  ::aspia::proto::desktop::ConfigRequest* config_request_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -2154,7 +1912,7 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_ClientToHost_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    13;
 
   void Swap(ClientToHost* other);
   friend void swap(ClientToHost& a, ClientToHost& b) {
@@ -2229,10 +1987,10 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::KeyEvent* mutable_key_event();
   void set_allocated_key_event(::aspia::proto::desktop::KeyEvent* key_event);
 
-  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+  // .aspia.proto.desktop.ClipboardEvent clipboard_event = 5;
   bool has_clipboard_event() const;
   void clear_clipboard_event();
-  static const int kClipboardEventFieldNumber = 3;
+  static const int kClipboardEventFieldNumber = 5;
   private:
   const ::aspia::proto::desktop::ClipboardEvent& _internal_clipboard_event() const;
   public:
@@ -2241,22 +1999,10 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::ClipboardEvent* mutable_clipboard_event();
   void set_allocated_clipboard_event(::aspia::proto::desktop::ClipboardEvent* clipboard_event);
 
-  // .aspia.proto.desktop.Config config = 4;
-  bool has_config() const;
-  void clear_config();
-  static const int kConfigFieldNumber = 4;
-  private:
-  const ::aspia::proto::desktop::Config& _internal_config() const;
-  public:
-  const ::aspia::proto::desktop::Config& config() const;
-  ::aspia::proto::desktop::Config* release_config();
-  ::aspia::proto::desktop::Config* mutable_config();
-  void set_allocated_config(::aspia::proto::desktop::Config* config);
-
-  // .aspia.proto.desktop.Screen screen = 5;
+  // .aspia.proto.desktop.Screen screen = 6;
   bool has_screen() const;
   void clear_screen();
-  static const int kScreenFieldNumber = 5;
+  static const int kScreenFieldNumber = 6;
   private:
   const ::aspia::proto::desktop::Screen& _internal_screen() const;
   public:
@@ -2265,6 +2011,18 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::Screen* mutable_screen();
   void set_allocated_screen(::aspia::proto::desktop::Screen* screen);
 
+  // .aspia.proto.desktop.Config config = 7;
+  bool has_config() const;
+  void clear_config();
+  static const int kConfigFieldNumber = 7;
+  private:
+  const ::aspia::proto::desktop::Config& _internal_config() const;
+  public:
+  const ::aspia::proto::desktop::Config& config() const;
+  ::aspia::proto::desktop::Config* release_config();
+  ::aspia::proto::desktop::Config* mutable_config();
+  void set_allocated_config(::aspia::proto::desktop::Config* config);
+
   // @@protoc_insertion_point(class_scope:aspia.proto.desktop.ClientToHost)
  private:
 
@@ -2272,8 +2030,8 @@ class ClientToHost : public ::google::protobuf::MessageLite /* @@protoc_insertio
   ::aspia::proto::desktop::PointerEvent* pointer_event_;
   ::aspia::proto::desktop::KeyEvent* key_event_;
   ::aspia::proto::desktop::ClipboardEvent* clipboard_event_;
-  ::aspia::proto::desktop::Config* config_;
   ::aspia::proto::desktop::Screen* screen_;
+  ::aspia::proto::desktop::Config* config_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_desktop_5fsession_2eproto::TableStruct;
 };
@@ -2661,70 +2419,6 @@ inline void Rect::set_height(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
-// Size
-
-// int32 width = 1;
-inline void Size::clear_width() {
-  width_ = 0;
-}
-inline ::google::protobuf::int32 Size::width() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Size.width)
-  return width_;
-}
-inline void Size::set_width(::google::protobuf::int32 value) {
-  
-  width_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Size.width)
-}
-
-// int32 height = 2;
-inline void Size::clear_height() {
-  height_ = 0;
-}
-inline ::google::protobuf::int32 Size::height() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Size.height)
-  return height_;
-}
-inline void Size::set_height(::google::protobuf::int32 value) {
-  
-  height_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Size.height)
-}
-
-// -------------------------------------------------------------------
-
-// Point
-
-// int32 x = 1;
-inline void Point::clear_x() {
-  x_ = 0;
-}
-inline ::google::protobuf::int32 Point::x() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Point.x)
-  return x_;
-}
-inline void Point::set_x(::google::protobuf::int32 value) {
-  
-  x_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Point.x)
-}
-
-// int32 y = 2;
-inline void Point::clear_y() {
-  y_ = 0;
-}
-inline ::google::protobuf::int32 Point::y() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Point.y)
-  return y_;
-}
-inline void Point::set_y(::google::protobuf::int32 value) {
-  
-  y_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Point.y)
-}
-
-// -------------------------------------------------------------------
-
 // PixelFormat
 
 // uint32 bits_per_pixel = 1;
@@ -2829,58 +2523,58 @@ inline void PixelFormat::set_blue_shift(::google::protobuf::uint32 value) {
 
 // VideoPacketFormat
 
-// .aspia.proto.desktop.Size screen_size = 1;
-inline bool VideoPacketFormat::has_screen_size() const {
-  return this != internal_default_instance() && screen_size_ != NULL;
+// .aspia.proto.desktop.Rect screen_rect = 1;
+inline bool VideoPacketFormat::has_screen_rect() const {
+  return this != internal_default_instance() && screen_rect_ != NULL;
 }
-inline void VideoPacketFormat::clear_screen_size() {
-  if (GetArenaNoVirtual() == NULL && screen_size_ != NULL) {
-    delete screen_size_;
+inline void VideoPacketFormat::clear_screen_rect() {
+  if (GetArenaNoVirtual() == NULL && screen_rect_ != NULL) {
+    delete screen_rect_;
   }
-  screen_size_ = NULL;
+  screen_rect_ = NULL;
 }
-inline const ::aspia::proto::desktop::Size& VideoPacketFormat::_internal_screen_size() const {
-  return *screen_size_;
+inline const ::aspia::proto::desktop::Rect& VideoPacketFormat::_internal_screen_rect() const {
+  return *screen_rect_;
 }
-inline const ::aspia::proto::desktop::Size& VideoPacketFormat::screen_size() const {
-  const ::aspia::proto::desktop::Size* p = screen_size_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.screen_size)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Size*>(
-      &::aspia::proto::desktop::_Size_default_instance_);
+inline const ::aspia::proto::desktop::Rect& VideoPacketFormat::screen_rect() const {
+  const ::aspia::proto::desktop::Rect* p = screen_rect_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.screen_rect)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Rect*>(
+      &::aspia::proto::desktop::_Rect_default_instance_);
 }
-inline ::aspia::proto::desktop::Size* VideoPacketFormat::release_screen_size() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.screen_size)
+inline ::aspia::proto::desktop::Rect* VideoPacketFormat::release_screen_rect() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.screen_rect)
   
-  ::aspia::proto::desktop::Size* temp = screen_size_;
-  screen_size_ = NULL;
+  ::aspia::proto::desktop::Rect* temp = screen_rect_;
+  screen_rect_ = NULL;
   return temp;
 }
-inline ::aspia::proto::desktop::Size* VideoPacketFormat::mutable_screen_size() {
+inline ::aspia::proto::desktop::Rect* VideoPacketFormat::mutable_screen_rect() {
   
-  if (screen_size_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Size>(GetArenaNoVirtual());
-    screen_size_ = p;
+  if (screen_rect_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Rect>(GetArenaNoVirtual());
+    screen_rect_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.screen_size)
-  return screen_size_;
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.screen_rect)
+  return screen_rect_;
 }
-inline void VideoPacketFormat::set_allocated_screen_size(::aspia::proto::desktop::Size* screen_size) {
+inline void VideoPacketFormat::set_allocated_screen_rect(::aspia::proto::desktop::Rect* screen_rect) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == NULL) {
-    delete screen_size_;
+    delete screen_rect_;
   }
-  if (screen_size) {
+  if (screen_rect) {
     ::google::protobuf::Arena* submessage_arena = NULL;
     if (message_arena != submessage_arena) {
-      screen_size = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, screen_size, submessage_arena);
+      screen_rect = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, screen_rect, submessage_arena);
     }
     
   } else {
     
   }
-  screen_size_ = screen_size;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.screen_size)
+  screen_rect_ = screen_rect;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.screen_rect)
 }
 
 // .aspia.proto.desktop.PixelFormat pixel_format = 2;
@@ -2935,60 +2629,6 @@ inline void VideoPacketFormat::set_allocated_pixel_format(::aspia::proto::deskto
   }
   pixel_format_ = pixel_format;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.pixel_format)
-}
-
-// .aspia.proto.desktop.Point top_left = 3;
-inline bool VideoPacketFormat::has_top_left() const {
-  return this != internal_default_instance() && top_left_ != NULL;
-}
-inline void VideoPacketFormat::clear_top_left() {
-  if (GetArenaNoVirtual() == NULL && top_left_ != NULL) {
-    delete top_left_;
-  }
-  top_left_ = NULL;
-}
-inline const ::aspia::proto::desktop::Point& VideoPacketFormat::_internal_top_left() const {
-  return *top_left_;
-}
-inline const ::aspia::proto::desktop::Point& VideoPacketFormat::top_left() const {
-  const ::aspia::proto::desktop::Point* p = top_left_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.VideoPacketFormat.top_left)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Point*>(
-      &::aspia::proto::desktop::_Point_default_instance_);
-}
-inline ::aspia::proto::desktop::Point* VideoPacketFormat::release_top_left() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.VideoPacketFormat.top_left)
-  
-  ::aspia::proto::desktop::Point* temp = top_left_;
-  top_left_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::Point* VideoPacketFormat::mutable_top_left() {
-  
-  if (top_left_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Point>(GetArenaNoVirtual());
-    top_left_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.VideoPacketFormat.top_left)
-  return top_left_;
-}
-inline void VideoPacketFormat::set_allocated_top_left(::aspia::proto::desktop::Point* top_left) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete top_left_;
-  }
-  if (top_left) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      top_left = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, top_left, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  top_left_ = top_left;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.VideoPacketFormat.top_left)
 }
 
 // -------------------------------------------------------------------
@@ -3255,50 +2895,36 @@ ScreenList::screen() const {
 
 // ConfigRequest
 
-// uint32 video_encodings = 1;
-inline void ConfigRequest::clear_video_encodings() {
-  video_encodings_ = 0u;
+// uint32 dummy = 1;
+inline void ConfigRequest::clear_dummy() {
+  dummy_ = 0u;
 }
-inline ::google::protobuf::uint32 ConfigRequest::video_encodings() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.video_encodings)
-  return video_encodings_;
+inline ::google::protobuf::uint32 ConfigRequest::dummy() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.dummy)
+  return dummy_;
 }
-inline void ConfigRequest::set_video_encodings(::google::protobuf::uint32 value) {
+inline void ConfigRequest::set_dummy(::google::protobuf::uint32 value) {
   
-  video_encodings_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.video_encodings)
-}
-
-// uint32 features = 2;
-inline void ConfigRequest::clear_features() {
-  features_ = 0u;
-}
-inline ::google::protobuf::uint32 ConfigRequest::features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ConfigRequest.features)
-  return features_;
-}
-inline void ConfigRequest::set_features(::google::protobuf::uint32 value) {
-  
-  features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.features)
+  dummy_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.ConfigRequest.dummy)
 }
 
 // -------------------------------------------------------------------
 
 // Config
 
-// uint32 features = 1;
-inline void Config::clear_features() {
-  features_ = 0u;
+// uint32 flags = 1;
+inline void Config::clear_flags() {
+  flags_ = 0u;
 }
-inline ::google::protobuf::uint32 Config::features() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.features)
-  return features_;
+inline ::google::protobuf::uint32 Config::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.Config.flags)
+  return flags_;
 }
-inline void Config::set_features(::google::protobuf::uint32 value) {
+inline void Config::set_flags(::google::protobuf::uint32 value) {
   
-  features_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.features)
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.desktop.Config.flags)
 }
 
 // .aspia.proto.desktop.VideoEncoding video_encoding = 2;
@@ -3455,7 +3081,7 @@ inline void HostToClient::set_allocated_video_packet(::aspia::proto::desktop::Vi
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.video_packet)
 }
 
-// .aspia.proto.desktop.CursorShape cursor_shape = 2;
+// .aspia.proto.desktop.CursorShape cursor_shape = 3;
 inline bool HostToClient::has_cursor_shape() const {
   return this != internal_default_instance() && cursor_shape_ != NULL;
 }
@@ -3509,7 +3135,7 @@ inline void HostToClient::set_allocated_cursor_shape(::aspia::proto::desktop::Cu
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.cursor_shape)
 }
 
-// .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+// .aspia.proto.desktop.ClipboardEvent clipboard_event = 4;
 inline bool HostToClient::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -3561,60 +3187,6 @@ inline void HostToClient::set_allocated_clipboard_event(::aspia::proto::desktop:
   }
   clipboard_event_ = clipboard_event;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.clipboard_event)
-}
-
-// .aspia.proto.desktop.ConfigRequest config_request = 4;
-inline bool HostToClient::has_config_request() const {
-  return this != internal_default_instance() && config_request_ != NULL;
-}
-inline void HostToClient::clear_config_request() {
-  if (GetArenaNoVirtual() == NULL && config_request_ != NULL) {
-    delete config_request_;
-  }
-  config_request_ = NULL;
-}
-inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::_internal_config_request() const {
-  return *config_request_;
-}
-inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::config_request() const {
-  const ::aspia::proto::desktop::ConfigRequest* p = config_request_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::ConfigRequest*>(
-      &::aspia::proto::desktop::_ConfigRequest_default_instance_);
-}
-inline ::aspia::proto::desktop::ConfigRequest* HostToClient::release_config_request() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
-  
-  ::aspia::proto::desktop::ConfigRequest* temp = config_request_;
-  config_request_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::ConfigRequest* HostToClient::mutable_config_request() {
-  
-  if (config_request_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::ConfigRequest>(GetArenaNoVirtual());
-    config_request_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
-  return config_request_;
-}
-inline void HostToClient::set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete config_request_;
-  }
-  if (config_request) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      config_request = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, config_request, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  config_request_ = config_request;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.config_request)
 }
 
 // .aspia.proto.desktop.ScreenList screen_list = 5;
@@ -3669,6 +3241,60 @@ inline void HostToClient::set_allocated_screen_list(::aspia::proto::desktop::Scr
   }
   screen_list_ = screen_list;
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.screen_list)
+}
+
+// .aspia.proto.desktop.ConfigRequest config_request = 6;
+inline bool HostToClient::has_config_request() const {
+  return this != internal_default_instance() && config_request_ != NULL;
+}
+inline void HostToClient::clear_config_request() {
+  if (GetArenaNoVirtual() == NULL && config_request_ != NULL) {
+    delete config_request_;
+  }
+  config_request_ = NULL;
+}
+inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::_internal_config_request() const {
+  return *config_request_;
+}
+inline const ::aspia::proto::desktop::ConfigRequest& HostToClient::config_request() const {
+  const ::aspia::proto::desktop::ConfigRequest* p = config_request_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.HostToClient.config_request)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::ConfigRequest*>(
+      &::aspia::proto::desktop::_ConfigRequest_default_instance_);
+}
+inline ::aspia::proto::desktop::ConfigRequest* HostToClient::release_config_request() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.HostToClient.config_request)
+  
+  ::aspia::proto::desktop::ConfigRequest* temp = config_request_;
+  config_request_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::desktop::ConfigRequest* HostToClient::mutable_config_request() {
+  
+  if (config_request_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::ConfigRequest>(GetArenaNoVirtual());
+    config_request_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.HostToClient.config_request)
+  return config_request_;
+}
+inline void HostToClient::set_allocated_config_request(::aspia::proto::desktop::ConfigRequest* config_request) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete config_request_;
+  }
+  if (config_request) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      config_request = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, config_request, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  config_request_ = config_request;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.HostToClient.config_request)
 }
 
 // -------------------------------------------------------------------
@@ -3783,7 +3409,7 @@ inline void ClientToHost::set_allocated_key_event(::aspia::proto::desktop::KeyEv
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.key_event)
 }
 
-// .aspia.proto.desktop.ClipboardEvent clipboard_event = 3;
+// .aspia.proto.desktop.ClipboardEvent clipboard_event = 5;
 inline bool ClientToHost::has_clipboard_event() const {
   return this != internal_default_instance() && clipboard_event_ != NULL;
 }
@@ -3837,61 +3463,7 @@ inline void ClientToHost::set_allocated_clipboard_event(::aspia::proto::desktop:
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.clipboard_event)
 }
 
-// .aspia.proto.desktop.Config config = 4;
-inline bool ClientToHost::has_config() const {
-  return this != internal_default_instance() && config_ != NULL;
-}
-inline void ClientToHost::clear_config() {
-  if (GetArenaNoVirtual() == NULL && config_ != NULL) {
-    delete config_;
-  }
-  config_ = NULL;
-}
-inline const ::aspia::proto::desktop::Config& ClientToHost::_internal_config() const {
-  return *config_;
-}
-inline const ::aspia::proto::desktop::Config& ClientToHost::config() const {
-  const ::aspia::proto::desktop::Config* p = config_;
-  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
-  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Config*>(
-      &::aspia::proto::desktop::_Config_default_instance_);
-}
-inline ::aspia::proto::desktop::Config* ClientToHost::release_config() {
-  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
-  
-  ::aspia::proto::desktop::Config* temp = config_;
-  config_ = NULL;
-  return temp;
-}
-inline ::aspia::proto::desktop::Config* ClientToHost::mutable_config() {
-  
-  if (config_ == NULL) {
-    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Config>(GetArenaNoVirtual());
-    config_ = p;
-  }
-  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
-  return config_;
-}
-inline void ClientToHost::set_allocated_config(::aspia::proto::desktop::Config* config) {
-  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == NULL) {
-    delete config_;
-  }
-  if (config) {
-    ::google::protobuf::Arena* submessage_arena = NULL;
-    if (message_arena != submessage_arena) {
-      config = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, config, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  config_ = config;
-  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.config)
-}
-
-// .aspia.proto.desktop.Screen screen = 5;
+// .aspia.proto.desktop.Screen screen = 6;
 inline bool ClientToHost::has_screen() const {
   return this != internal_default_instance() && screen_ != NULL;
 }
@@ -3945,13 +3517,63 @@ inline void ClientToHost::set_allocated_screen(::aspia::proto::desktop::Screen* 
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.screen)
 }
 
+// .aspia.proto.desktop.Config config = 7;
+inline bool ClientToHost::has_config() const {
+  return this != internal_default_instance() && config_ != NULL;
+}
+inline void ClientToHost::clear_config() {
+  if (GetArenaNoVirtual() == NULL && config_ != NULL) {
+    delete config_;
+  }
+  config_ = NULL;
+}
+inline const ::aspia::proto::desktop::Config& ClientToHost::_internal_config() const {
+  return *config_;
+}
+inline const ::aspia::proto::desktop::Config& ClientToHost::config() const {
+  const ::aspia::proto::desktop::Config* p = config_;
+  // @@protoc_insertion_point(field_get:aspia.proto.desktop.ClientToHost.config)
+  return p != NULL ? *p : *reinterpret_cast<const ::aspia::proto::desktop::Config*>(
+      &::aspia::proto::desktop::_Config_default_instance_);
+}
+inline ::aspia::proto::desktop::Config* ClientToHost::release_config() {
+  // @@protoc_insertion_point(field_release:aspia.proto.desktop.ClientToHost.config)
+  
+  ::aspia::proto::desktop::Config* temp = config_;
+  config_ = NULL;
+  return temp;
+}
+inline ::aspia::proto::desktop::Config* ClientToHost::mutable_config() {
+  
+  if (config_ == NULL) {
+    auto* p = CreateMaybeMessage<::aspia::proto::desktop::Config>(GetArenaNoVirtual());
+    config_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:aspia.proto.desktop.ClientToHost.config)
+  return config_;
+}
+inline void ClientToHost::set_allocated_config(::aspia::proto::desktop::Config* config) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete config_;
+  }
+  if (config) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      config = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, config, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  config_ = config;
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.desktop.ClientToHost.config)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -3992,7 +3614,7 @@ template <> struct is_proto_enum< ::aspia::proto::desktop::KeyEvent_Flags> : ::s
 template <> struct is_proto_enum< ::aspia::proto::desktop::PointerEvent_ButtonMask> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::CursorShape_Flags> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::desktop::VideoEncoding> : ::std::true_type {};
-template <> struct is_proto_enum< ::aspia::proto::desktop::Feature> : ::std::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::desktop::ConfigFlags> : ::std::true_type {};
 
 }  // namespace protobuf
 }  // namespace google

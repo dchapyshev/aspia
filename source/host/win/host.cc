@@ -215,6 +215,8 @@ void Host::ipcServerStarted(const QString& channel_id)
     Q_ASSERT(state_ == State::STARTING);
     Q_ASSERT(session_process_.isNull());
 
+    qInfo() << "IPC server is running with channel id:" << channel_id;
+
     session_process_ = new HostProcess(this);
 
     session_process_->setSessionId(session_id_);
@@ -271,6 +273,7 @@ void Host::ipcServerStarted(const QString& channel_id)
 
     connect(session_process_, &HostProcess::finished, this, &Host::dettachSession);
 
+    qInfo("Starting the session process");
     session_process_->start();
 }
 
@@ -278,6 +281,8 @@ void Host::ipcNewConnection(IpcChannel* channel)
 {
     Q_ASSERT(channel);
     Q_ASSERT(attach_timer_id_);
+
+    qInfo("IPC channel connected");
 
     killTimer(attach_timer_id_);
     attach_timer_id_ = 0;
@@ -315,6 +320,7 @@ void Host::attachSession(uint32_t session_id)
     connect(ipc_server, &IpcServer::newConnection, this, &Host::ipcNewConnection);
     connect(ipc_server, &IpcServer::errorOccurred, this, &Host::stop);
 
+    qInfo("Starting the IPC server");
     ipc_server->start();
 }
 
@@ -326,12 +332,16 @@ void Host::dettachSession()
     if (state_ != State::STOPPING)
         state_ = State::DETACHED;
 
-    if (!ipc_channel_.isNull())
-        ipc_channel_->stop();
-
-    if (!session_process_.isNull())
+    if (ipc_channel_)
     {
-        session_process_->kill();
+        qInfo("There is a valid IPC channel. Stopping");
+        ipc_channel_->stop();
+    }
+
+    if (session_process_)
+    {
+        qInfo("There is a valid session process. Stoping");
+        session_process_->terminate();
         delete session_process_;
     }
 

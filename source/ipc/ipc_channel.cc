@@ -22,6 +22,8 @@
 
 namespace aspia {
 
+Q_DECLARE_METATYPE(QLocalSocket::LocalSocketError);
+
 namespace {
 
 constexpr uint32_t kMaxMessageSize = 16 * 1024 * 1024; // 16MB
@@ -33,6 +35,8 @@ IpcChannel::IpcChannel(QLocalSocket* socket, QObject* parent)
       socket_(socket)
 {
     Q_ASSERT(socket_);
+
+    qRegisterMetaType<QLocalSocket::LocalSocketError>();
 
     socket_->setParent(this);
 

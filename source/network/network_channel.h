@@ -85,12 +85,8 @@ public slots:
     // Sends a message.
     void send(const QByteArray& buffer);
 
-protected:
-    void timerEvent(QTimerEvent* event) override;
-
 private slots:
     void onConnected();
-    void onDisconnected();
     void onError(QAbstractSocket::SocketError error);
     void onBytesWritten(int64_t bytes);
     void onReadyRead();
@@ -145,8 +141,6 @@ private:
 
     ReadContext read_;
     WriteContext write_;
-
-    int pinger_timer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(NetworkChannel);
 };

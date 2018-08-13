@@ -97,18 +97,6 @@ message Rect
     int32 height = 4;
 }
 
-message Size
-{
-    int32 width  = 1;
-    int32 height = 2;
-}
-
-message Point
-{
-    int32 x = 1;
-    int32 y = 2;
-}
-
 message PixelFormat
 {
     uint32 bits_per_pixel = 1;
@@ -133,9 +121,8 @@ enum VideoEncoding
 
 message VideoPacketFormat
 {
-    Size screen_size         = 1;
+    Rect screen_rect = 1;
     PixelFormat pixel_format = 2;
-    Point top_left           = 3;
 }
 
 message VideoPacket
@@ -152,13 +139,6 @@ message VideoPacket
     bytes data = 4;
 }
 
-enum Feature
-{
-    FEATURE_NONE         = 0;
-    FEATURE_CURSOR_SHAPE = 1;
-    FEATURE_CLIPBOARD    = 2;
-}
-
 message Screen
 {
     int64 id     = 1;
@@ -173,16 +153,21 @@ message ScreenList
 
 message ConfigRequest
 {
-    // Bit field with supported video encodings.
-    uint32 video_encodings = 1;
+    uint32 dummy = 1;
+}
 
-    // Bit field with supported features.
-    uint32 features        = 2;
+enum ConfigFlags
+{
+    NO_FLAGS                  = 0;
+    ENABLE_CURSOR_SHAPE       = 1;
+    ENABLE_CLIPBOARD          = 2;
+    DISABLE_DESKTOP_EFFECTS   = 4;
+    DISABLE_DESKTOP_WALLPAPER = 8;
 }
 
 message Config
 {
-    uint32 features              = 1;
+    uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
     PixelFormat pixel_format     = 3;
     uint32 update_interval       = 4;
@@ -192,17 +177,20 @@ message Config
 message HostToClient
 {
     VideoPacket video_packet       = 1;
-    CursorShape cursor_shape       = 2;
-    ClipboardEvent clipboard_event = 3;
-    ConfigRequest config_request   = 4;
+    // Field 2 reserved for AudioPacket.
+    CursorShape cursor_shape       = 3;
+    ClipboardEvent clipboard_event = 4;
     ScreenList screen_list         = 5;
+    ConfigRequest config_request   = 6;
 }
 
 message ClientToHost
 {
     PointerEvent pointer_event     = 1;
     KeyEvent key_event             = 2;
-    ClipboardEvent clipboard_event = 3;
-    Config config                  = 4;
-    Screen screen                  = 5;
+    // Field 3 reserved for TouchEvent.
+    // Field 4 reserved for TextEvent.
+    ClipboardEvent clipboard_event = 5;
+    Screen screen                  = 6;
+    Config config                  = 7;
 }

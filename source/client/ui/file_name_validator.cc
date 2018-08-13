@@ -16,30 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_
-#define ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_
+#include "client/ui/file_name_validator.h"
 
-#include <QDrag>
-
-#include "client/file_transfer.h"
+#include "host/file_platform_util.h"
 
 namespace aspia {
 
-class FileItem;
-class FileItemMimeData;
-
-class FileItemDrag : public QDrag
+FileNameValidator::FileNameValidator(QObject* parent)
+    : QValidator(parent)
 {
-public:
-    explicit FileItemDrag(QObject* drag_source = nullptr);
-    virtual ~FileItemDrag() = default;
+    // Nothing
+}
 
-    void setFileList(const QList<FileTransfer::Item>& file_list);
+FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) const
+{
+    if (input.isEmpty() || FilePlatformUtil::isValidFileName(input))
+        return Acceptable;
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(FileItemDrag);
-};
+    emit invalidNameEntered();
+    return Invalid;
+}
+
+void FileNameValidator::fixup(QString& input) const
+{
+    const QList<QChar>& invalid_characters =
+        FilePlatformUtil::invalidFileNameCharacters();
+
+    for (auto it = input.begin(); it != input.end(); ++it)
+    {
+        if (invalid_characters.contains(*it))
+            input.remove(*it);
+    }
+}
 
 } // namespace aspia
-
-#endif // ASPIA_CLIENT__UI__FILE_ITEM_DRAG_H_

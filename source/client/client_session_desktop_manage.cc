@@ -24,21 +24,7 @@
 
 namespace aspia {
 
-namespace {
-
-const uint32_t kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_ZLIB |
-    proto::desktop::VIDEO_ENCODING_VP8 |
-    proto::desktop::VIDEO_ENCODING_VP9;
-
-const uint32_t kSupportedFeatures =
-    proto::desktop::FEATURE_CURSOR_SHAPE |
-    proto::desktop::FEATURE_CLIPBOARD;
-
-} // namespace
-
-ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data,
-                                                       QObject* parent)
+ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data, QObject* parent)
     : ClientSessionDesktopView(connect_data, parent)
 {
     connect(desktop_window_, &DesktopWindow::sendKeyEvent,
@@ -51,47 +37,35 @@ ClientSessionDesktopManage::ClientSessionDesktopManage(ConnectData* connect_data
             this, &ClientSessionDesktopManage::onSendClipboardEvent);
 }
 
-// static
-uint32_t ClientSessionDesktopManage::supportedVideoEncodings()
-{
-    return kSupportedVideoEncodings;
-}
-
-// static
-uint32_t ClientSessionDesktopManage::supportedFeatures()
-{
-    return kSupportedFeatures;
-}
-
 void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 {
-    proto::desktop::HostToClient message;
+    message_.Clear();
 
-    if (!parseMessage(buffer, message))
+    if (!parseMessage(buffer, message_))
     {
         emit errorOccurred(tr("Session error: Invalid message from host."));
         return;
     }
 
-    if (message.has_video_packet() || message.has_cursor_shape())
+    if (message_.has_video_packet() || message_.has_cursor_shape())
     {
-        if (message.has_video_packet())
-            readVideoPacket(message.video_packet());
+        if (message_.has_video_packet())
+            readVideoPacket(message_.video_packet());
 
-        if (message.has_cursor_shape())
-            readCursorShape(message.cursor_shape());
+        if (message_.has_cursor_shape())
+            readCursorShape(message_.cursor_shape());
     }
-    else if (message.has_clipboard_event())
+    else if (message_.has_clipboard_event())
     {
-        readClipboardEvent(message.clipboard_event());
+        readClipboardEvent(message_.clipboard_event());
     }
-    else if (message.has_config_request())
+    else if (message_.has_config_request())
     {
-        readConfigRequest(message.config_request());
+        readConfigRequest(message_.config_request());
     }
-    else if (message.has_screen_list())
+    else if (message_.has_screen_list())
     {
-        readScreenList(message.screen_list());
+        readScreenList(message_.screen_list());
     }
     else
     {
@@ -102,7 +76,7 @@ void ClientSessionDesktopManage::messageReceived(const QByteArray& buffer)
 
 void ClientSessionDesktopManage::onSendConfig(const proto::desktop::Config& config)
 {
-    if (!(config.features() & proto::desktop::FEATURE_CURSOR_SHAPE))
+    if (!(config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         cursor_decoder_.reset();
 
     proto::desktop::ClientToHost message;
@@ -135,8 +109,8 @@ void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, uint32_t 
 
 void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
     proto::desktop::ClientToHost message;
@@ -145,40 +119,10 @@ void ClientSessionDesktopManage::onSendClipboardEvent(const proto::desktop::Clip
     emit sendMessage(serializeMessage(message));
 }
 
-void ClientSessionDesktopManage::readConfigRequest(
-    const proto::desktop::ConfigRequest& config_request)
-{
-    proto::desktop::Config config = connect_data_->desktopConfig();
-
-    desktop_window_->setSupportedVideoEncodings(config_request.video_encodings());
-    desktop_window_->setSupportedFeatures(config_request.features());
-
-    // If current video encoding not supported.
-    if (!(config_request.video_encodings() & config.video_encoding()))
-    {
-        if (!(config_request.video_encodings() & kSupportedVideoEncodings))
-        {
-            emit errorOccurred(tr("Session error: There are no supported video encodings."));
-            return;
-        }
-        else
-        {
-            if (!desktop_window_->requireConfigChange(&config))
-            {
-                emit errorOccurred(tr("Session error: Canceled by the user."));
-                return;
-            }
-        }
-    }
-
-    connect_data_->setDesktopConfig(config);
-    onSendConfig(config);
-}
-
 void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CURSOR_SHAPE))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CURSOR_SHAPE))
         return;
 
     if (!cursor_decoder_)
@@ -203,8 +147,8 @@ void ClientSessionDesktopManage::readCursorShape(const proto::desktop::CursorSha
 void ClientSessionDesktopManage::readClipboardEvent(
     const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    uint32_t features = connect_data_->desktopConfig().features();
-    if (!(features & proto::desktop::FEATURE_CLIPBOARD))
+    uint32_t flags = connect_data_->desktopConfig().flags();
+    if (!(flags & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
     desktop_window_->injectClipboard(clipboard_event);

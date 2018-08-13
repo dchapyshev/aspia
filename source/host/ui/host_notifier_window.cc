@@ -23,10 +23,6 @@
 #include <QScreen>
 #include <QTranslator>
 
-#if defined(Q_OS_WIN)
-#include "desktop_capture/win/visual_effects_disabler.h"
-#endif // defined(Q_OS_WIN)
-
 #include "host/host_settings.h"
 
 namespace aspia {
@@ -109,35 +105,7 @@ HostNotifierWindow::HostNotifierWindow(QWidget* parent)
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, &HostNotifierWindow::updateWindowPosition);
 
-#if defined(Q_OS_WIN)
-    bool disable_effects = settings.disableVisualEffects();
-    bool disable_wallpaper = settings.disableWallpaper();
-
-    if (disable_wallpaper || disable_effects)
-    {
-        effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
-
-        if (disable_effects)
-            effects_disabler_->disableEffects();
-
-        if (disable_wallpaper)
-            effects_disabler_->disableWallpaper();
-    }
-#endif // defined(Q_OS_WIN)
-}
-
-HostNotifierWindow::~HostNotifierWindow()
-{
-#if defined(Q_OS_WIN)
-    if (effects_disabler_)
-    {
-        if (effects_disabler_->isEffectsDisabled())
-            effects_disabler_->restoreEffects();
-
-        if (effects_disabler_->isWallpaperDisabled())
-            effects_disabler_->restoreWallpaper();
-    }
-#endif // defined(Q_OS_WIN)
+    updateWindowPosition();
 }
 
 void HostNotifierWindow::setChannelId(const QString& channel_id)

@@ -135,17 +135,28 @@ const DriveList_Item_Type DriveList_Item_Type_Type_MIN = DriveList_Item_Type_TYP
 const DriveList_Item_Type DriveList_Item_Type_Type_MAX = DriveList_Item_Type_TYPE_DESKTOP_FOLDER;
 const int DriveList_Item_Type_Type_ARRAYSIZE = DriveList_Item_Type_Type_MAX + 1;
 
+enum PacketRequest_Flags {
+  PacketRequest_Flags_NO_FLAGS = 0,
+  PacketRequest_Flags_CANCEL = 1,
+  PacketRequest_Flags_PacketRequest_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PacketRequest_Flags_PacketRequest_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PacketRequest_Flags_IsValid(int value);
+const PacketRequest_Flags PacketRequest_Flags_Flags_MIN = PacketRequest_Flags_NO_FLAGS;
+const PacketRequest_Flags PacketRequest_Flags_Flags_MAX = PacketRequest_Flags_CANCEL;
+const int PacketRequest_Flags_Flags_ARRAYSIZE = PacketRequest_Flags_Flags_MAX + 1;
+
 enum Packet_Flags {
-  Packet_Flags_FLAG_ERROR = 0,
-  Packet_Flags_FLAG_PACKET = 1,
-  Packet_Flags_FLAG_FIRST_PACKET = 2,
-  Packet_Flags_FLAG_LAST_PACKET = 4,
+  Packet_Flags_WRONG_FLAGS = 0,
+  Packet_Flags_PACKET = 1,
+  Packet_Flags_FIRST_PACKET = 2,
+  Packet_Flags_LAST_PACKET = 4,
   Packet_Flags_Packet_Flags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Packet_Flags_Packet_Flags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Packet_Flags_IsValid(int value);
-const Packet_Flags Packet_Flags_Flags_MIN = Packet_Flags_FLAG_ERROR;
-const Packet_Flags Packet_Flags_Flags_MAX = Packet_Flags_FLAG_LAST_PACKET;
+const Packet_Flags Packet_Flags_Flags_MIN = Packet_Flags_WRONG_FLAGS;
+const Packet_Flags Packet_Flags_Flags_MAX = Packet_Flags_LAST_PACKET;
 const int Packet_Flags_Flags_ARRAYSIZE = Packet_Flags_Flags_MAX + 1;
 
 enum Status {
@@ -163,12 +174,13 @@ enum Status {
   STATUS_FILE_CREATE_ERROR = 11,
   STATUS_FILE_WRITE_ERROR = 12,
   STATUS_FILE_READ_ERROR = 13,
+  STATUS_DISK_NOT_READY = 14,
   Status_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Status_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool Status_IsValid(int value);
 const Status Status_MIN = STATUS_UNKNOWN;
-const Status Status_MAX = STATUS_FILE_READ_ERROR;
+const Status Status_MAX = STATUS_DISK_NOT_READY;
 const int Status_ARRAYSIZE = Status_MAX + 1;
 
 // ===================================================================
@@ -299,6 +311,32 @@ class DriveList_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
+  // string name = 3;
+  void clear_name();
+  static const int kNameFieldNumber = 3;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // int64 total_space = 4;
+  void clear_total_space();
+  static const int kTotalSpaceFieldNumber = 4;
+  ::google::protobuf::int64 total_space() const;
+  void set_total_space(::google::protobuf::int64 value);
+
+  // int64 free_space = 5;
+  void clear_free_space();
+  static const int kFreeSpaceFieldNumber = 5;
+  ::google::protobuf::int64 free_space() const;
+  void set_free_space(::google::protobuf::int64 value);
+
   // .aspia.proto.file_transfer.DriveList.Item.Type type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
@@ -310,6 +348,9 @@ class DriveList_Item : public ::google::protobuf::MessageLite /* @@protoc_insert
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::int64 total_space_;
+  ::google::protobuf::int64 free_space_;
   int type_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
@@ -1182,19 +1223,34 @@ class PacketRequest : public ::google::protobuf::MessageLite /* @@protoc_inserti
 
   // nested types ----------------------------------------------------
 
+  typedef PacketRequest_Flags Flags;
+  static const Flags NO_FLAGS =
+    PacketRequest_Flags_NO_FLAGS;
+  static const Flags CANCEL =
+    PacketRequest_Flags_CANCEL;
+  static inline bool Flags_IsValid(int value) {
+    return PacketRequest_Flags_IsValid(value);
+  }
+  static const Flags Flags_MIN =
+    PacketRequest_Flags_Flags_MIN;
+  static const Flags Flags_MAX =
+    PacketRequest_Flags_Flags_MAX;
+  static const int Flags_ARRAYSIZE =
+    PacketRequest_Flags_Flags_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // uint32 dummy = 1;
-  void clear_dummy();
-  static const int kDummyFieldNumber = 1;
-  ::google::protobuf::uint32 dummy() const;
-  void set_dummy(::google::protobuf::uint32 value);
+  // uint32 flags = 1;
+  void clear_flags();
+  static const int kFlagsFieldNumber = 1;
+  ::google::protobuf::uint32 flags() const;
+  void set_flags(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:aspia.proto.file_transfer.PacketRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  ::google::protobuf::uint32 dummy_;
+  ::google::protobuf::uint32 flags_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_file_5ftransfer_5fsession_2eproto::TableStruct;
 };
@@ -1284,14 +1340,14 @@ class Packet : public ::google::protobuf::MessageLite /* @@protoc_insertion_poin
   // nested types ----------------------------------------------------
 
   typedef Packet_Flags Flags;
-  static const Flags FLAG_ERROR =
-    Packet_Flags_FLAG_ERROR;
-  static const Flags FLAG_PACKET =
-    Packet_Flags_FLAG_PACKET;
-  static const Flags FLAG_FIRST_PACKET =
-    Packet_Flags_FLAG_FIRST_PACKET;
-  static const Flags FLAG_LAST_PACKET =
-    Packet_Flags_FLAG_LAST_PACKET;
+  static const Flags WRONG_FLAGS =
+    Packet_Flags_WRONG_FLAGS;
+  static const Flags PACKET =
+    Packet_Flags_PACKET;
+  static const Flags FIRST_PACKET =
+    Packet_Flags_FIRST_PACKET;
+  static const Flags LAST_PACKET =
+    Packet_Flags_LAST_PACKET;
   static inline bool Flags_IsValid(int value) {
     return Packet_Flags_IsValid(value);
   }
@@ -2111,6 +2167,87 @@ inline void DriveList_Item::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.DriveList.Item.path)
 }
 
+// string name = 3;
+inline void DriveList_Item::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& DriveList_Item::name() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.name)
+  return name_.GetNoArena();
+}
+inline void DriveList_Item::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.name)
+}
+#if LANG_CXX11
+inline void DriveList_Item::set_name(::std::string&& value) {
+  
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:aspia.proto.file_transfer.DriveList.Item.name)
+}
+#endif
+inline void DriveList_Item::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:aspia.proto.file_transfer.DriveList.Item.name)
+}
+inline void DriveList_Item::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:aspia.proto.file_transfer.DriveList.Item.name)
+}
+inline ::std::string* DriveList_Item::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:aspia.proto.file_transfer.DriveList.Item.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* DriveList_Item::release_name() {
+  // @@protoc_insertion_point(field_release:aspia.proto.file_transfer.DriveList.Item.name)
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void DriveList_Item::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:aspia.proto.file_transfer.DriveList.Item.name)
+}
+
+// int64 total_space = 4;
+inline void DriveList_Item::clear_total_space() {
+  total_space_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 DriveList_Item::total_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.total_space)
+  return total_space_;
+}
+inline void DriveList_Item::set_total_space(::google::protobuf::int64 value) {
+  
+  total_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.total_space)
+}
+
+// int64 free_space = 5;
+inline void DriveList_Item::clear_free_space() {
+  free_space_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 DriveList_Item::free_space() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.DriveList.Item.free_space)
+  return free_space_;
+}
+inline void DriveList_Item::set_free_space(::google::protobuf::int64 value) {
+  
+  free_space_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.DriveList.Item.free_space)
+}
+
 // -------------------------------------------------------------------
 
 // DriveList
@@ -2485,18 +2622,18 @@ inline void DownloadRequest::set_allocated_path(::std::string* path) {
 
 // PacketRequest
 
-// uint32 dummy = 1;
-inline void PacketRequest::clear_dummy() {
-  dummy_ = 0u;
+// uint32 flags = 1;
+inline void PacketRequest::clear_flags() {
+  flags_ = 0u;
 }
-inline ::google::protobuf::uint32 PacketRequest::dummy() const {
-  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.PacketRequest.dummy)
-  return dummy_;
+inline ::google::protobuf::uint32 PacketRequest::flags() const {
+  // @@protoc_insertion_point(field_get:aspia.proto.file_transfer.PacketRequest.flags)
+  return flags_;
 }
-inline void PacketRequest::set_dummy(::google::protobuf::uint32 value) {
+inline void PacketRequest::set_flags(::google::protobuf::uint32 value) {
   
-  dummy_ = value;
-  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.PacketRequest.dummy)
+  flags_ = value;
+  // @@protoc_insertion_point(field_set:aspia.proto.file_transfer.PacketRequest.flags)
 }
 
 // -------------------------------------------------------------------
@@ -3520,6 +3657,7 @@ namespace google {
 namespace protobuf {
 
 template <> struct is_proto_enum< ::aspia::proto::file_transfer::DriveList_Item_Type> : ::std::true_type {};
+template <> struct is_proto_enum< ::aspia::proto::file_transfer::PacketRequest_Flags> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::file_transfer::Packet_Flags> : ::std::true_type {};
 template <> struct is_proto_enum< ::aspia::proto::file_transfer::Status> : ::std::true_type {};
 

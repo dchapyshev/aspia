@@ -19,8 +19,8 @@
 #ifndef ASPIA_HOST__FILE_PACKETIZER_H_
 #define ASPIA_HOST__FILE_PACKETIZER_H_
 
-#include <QFile>
-#include <QPointer>
+#include <filesystem>
+#include <fstream>
 #include <memory>
 
 #include "base/macros_magic.h"
@@ -36,18 +36,19 @@ public:
     // Creates an instance of the class.
     // Parameter |file_path| contains the full path to the file.
     // If the specified file can not be opened for reading, then returns nullptr.
-    static std::unique_ptr<FilePacketizer> create(const QString& file_path);
+    static std::unique_ptr<FilePacketizer> create(const std::filesystem::path& file_path);
 
     // Creates a packet for transferring.
-    std::unique_ptr<proto::file_transfer::Packet> readNextPacket();
+    std::unique_ptr<proto::file_transfer::Packet> readNextPacket(
+        const proto::file_transfer::PacketRequest& request);
 
 private:
-    FilePacketizer(QPointer<QFile>& file);
+    FilePacketizer(std::ifstream&& file_stream);
 
-    QPointer<QFile> file_;
+    std::ifstream file_stream_;
 
-    qint64 file_size_ = 0;
-    qint64 left_size_ = 0;
+    std::streamoff file_size_ = 0;
+    std::streamoff left_size_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FilePacketizer);
 };

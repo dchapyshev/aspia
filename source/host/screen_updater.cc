@@ -21,9 +21,10 @@
 #include <QApplication>
 #include <QDebug>
 #include <QEvent>
-#include <QMutex>
-#include <QWaitCondition>
 #include <QThread>
+
+#include <condition_variable>
+#include <mutex>
 
 #include "base/message_serialization.h"
 #include "codec/cursor_encoder.h"
@@ -71,21 +72,21 @@ protected:
 private:
     enum class Event { NO_EVENT, SELECT_SCREEN, TERMINATE };
 
-    QScopedPointer<CaptureScheduler> capture_scheduler_;
+    std::unique_ptr<CaptureScheduler> capture_scheduler_;
 
-    QScopedPointer<ScreenCapturer> screen_capturer_;
-    QScopedPointer<VideoEncoder> video_encoder_;
+    std::unique_ptr<ScreenCapturer> screen_capturer_;
+    std::unique_ptr<VideoEncoder> video_encoder_;
 
-    QScopedPointer<CursorCapturer> cursor_capturer_;
-    QScopedPointer<CursorEncoder> cursor_encoder_;
+    std::unique_ptr<CursorCapturer> cursor_capturer_;
+    std::unique_ptr<CursorEncoder> cursor_encoder_;
 
     // By default, we capture the full screen.
     ScreenCapturer::ScreenId screen_id_ = ScreenCapturer::kFullDesktopScreenId;
     int screen_count_ = 0;
 
     Event event_ = Event::NO_EVENT;
-    QWaitCondition event_condition_;
-    QMutex event_lock_;
+    std::condition_variable event_condition_;
+    std::mutex event_lock_;
 
     proto::desktop::HostToClient message_;
 
@@ -110,7 +111,7 @@ ScreenUpdaterImpl::~ScreenUpdaterImpl()
     event_lock_.unlock();
 
     // Notify the thread about the event.
-    event_condition_.wakeAll();
+    event_condition_.notify_all();
 
     // Waiting for the completion of the thread.
     wait();
@@ -135,14 +136,19 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
             break;
 
         default:
-            qWarning() << "Unsupported video encoding: " << config.video_encoding();
-            break;
+        {
+            // No supported video encoding. We create the default codec. If the client can not
+            // decode it, it will display an error and the connection will be disconnected.
+            qWarning() << "Unsupported video encoding:" << config.video_encoding();
+            video_encoder_.reset(VideoEncoderZLIB::create(PixelFormat::RGB565(), 6));
+        }
+        break;
     }
 
     if (!video_encoder_)
         return false;
 
-    if (config.features() & proto::desktop::FEATURE_CURSOR_SHAPE)
+    if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
     {
         cursor_capturer_.reset(new CursorCapturerWin());
         cursor_encoder_.reset(new CursorEncoder());
@@ -158,12 +164,12 @@ bool ScreenUpdaterImpl::startUpdater(const proto::desktop::Config& config)
 void ScreenUpdaterImpl::selectScreen(ScreenCapturer::ScreenId screen_id)
 {
     // Set the event.
-    QMutexLocker locker(&event_lock_);
+    std::scoped_lock lock(event_lock_);
     event_ = Event::SELECT_SCREEN;
     screen_id_ = screen_id;
 
     // Notify the thread about the event.
-    event_condition_.wakeAll();
+    event_condition_.notify_all();
 }
 
 void ScreenUpdaterImpl::run()
@@ -175,7 +181,7 @@ void ScreenUpdaterImpl::run()
         int count = screen_capturer_->screenCount();
         if (screen_count_ != count)
         {
-            QMutexLocker locker(&event_lock_);
+            std::scoped_lock lock(event_lock_);
 
             screen_count_ = count;
 
@@ -228,10 +234,8 @@ void ScreenUpdaterImpl::run()
 
         capture_scheduler_->endCapture();
 
-        std::chrono::milliseconds delay = capture_scheduler_->nextCaptureDelay();
-
-        event_lock_.lock();
-        event_condition_.wait(&event_lock_, delay.count());
+        std::unique_lock lock(event_lock_);
+        event_condition_.wait_for(lock, capture_scheduler_->nextCaptureDelay());
 
         switch (event_)
         {
@@ -239,7 +243,6 @@ void ScreenUpdaterImpl::run()
                 break;
 
             case Event::TERMINATE:
-                event_lock_.unlock();
                 return;
 
             case Event::SELECT_SCREEN:
@@ -248,7 +251,6 @@ void ScreenUpdaterImpl::run()
         }
 
         event_ = Event::NO_EVENT;
-        event_lock_.unlock();
     }
 }
 

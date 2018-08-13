@@ -60,14 +60,14 @@ public:
         Abort      = 1,
         Skip       = 2,
         SkipAll    = 4,
-        Replace    = 5,
-        ReplaceAll = 6
+        Replace    = 8,
+        ReplaceAll = 16
     };
     Q_DECLARE_FLAGS(Actions, Action)
 
     struct Item
     {
-        Item(const QString& name, qint64 size, bool is_directory)
+        Item(const QString& name, int64_t size, bool is_directory)
             : name(name),
               size(size),
               is_directory(is_directory)
@@ -77,7 +77,7 @@ public:
 
         QString name;
         bool is_directory;
-        qint64 size;
+        int64_t size;
     };
 
     FileTransfer(Type type, QObject* parent);
@@ -86,6 +86,7 @@ public:
     void start(const QString& source_path,
                const QString& target_path,
                const QList<Item>& items);
+    void stop();
 
     Actions availableActions(Error error_type) const;
     Action defaultAction(Error error_type) const;
@@ -102,6 +103,9 @@ signals:
     void error(FileTransfer* transfer, FileTransfer::Error error_type, const QString& message);
     void localRequest(FileRequest* request);
     void remoteRequest(FileRequest* request);
+
+protected:
+    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void targetReply(const proto::file_transfer::Request& request,
@@ -124,12 +128,15 @@ private:
     QQueue<FileTransferTask> tasks_;
     const Type type_;
 
-    qint64 total_size_ = 0;
-    qint64 total_transfered_size_ = 0;
-    qint64 task_transfered_size_ = 0;
+    int64_t total_size_ = 0;
+    int64_t total_transfered_size_ = 0;
+    int64_t task_transfered_size_ = 0;
 
     int total_percentage_ = 0;
     int task_percentage_ = 0;
+
+    bool is_canceled_ = false;
+    int cancel_timer_id_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(FileTransfer);
 };

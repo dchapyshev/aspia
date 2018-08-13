@@ -16,34 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
-#define ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
+#ifndef ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
+#define ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_
 
-#include <QMimeData>
+#include <QValidator>
 
-#include "client/file_transfer.h"
+#include "base/macros_magic.h"
 
 namespace aspia {
 
-class FileItem;
-
-class FileItemMimeData : public QMimeData
+class FilePathValidator : public QValidator
 {
+    Q_OBJECT
+
 public:
-    FileItemMimeData() = default;
-    virtual ~FileItemMimeData() = default;
+    explicit FilePathValidator(QObject* parent);
 
-    static QString mimeType();
+    // QValidator implementation.
+    State validate(QString& input, int& pos) const override;
+    void fixup(QString& input) const override;
 
-    void setFileList(const QList<FileTransfer::Item>& file_list);
-    QList<FileTransfer::Item> fileList() const { return file_list_; }
+signals:
+    void invalidPathEntered() const;
 
 private:
-    QList<FileTransfer::Item> file_list_;
-
-    DISALLOW_COPY_AND_ASSIGN(FileItemMimeData);
+    DISALLOW_COPY_AND_ASSIGN(FilePathValidator);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__UI__FILE_ITEM_MIME_DATA_H_
+#endif // ASPIA_CLIENT__UI__FILE_PATH_VALIDATOR_H_

@@ -31,6 +31,20 @@ namespace aspia {
 
 namespace {
 
+// Minimal path name is 2 characters (for example: "C:").
+const int kMinPathLength = 2;
+
+// Under Window the length of a full path is 260 characters.
+const int kMaxPathLength = MAX_PATH;
+
+// The file name can not be shorter than 1 character.
+const int kMinFileNameLength = 1;
+
+// For FAT: file and folder names may be up to 255 characters long.
+// For NTFS: file and folder names may be up to 256 characters long.
+// We use FAT variant: 255 characters long.
+const int kMaxFileNameLength = (MAX_PATH - 5);
+
 QIcon stockIcon(SHSTOCKICONID icon_id)
 {
     SHSTOCKICONINFO icon_info;
@@ -43,8 +57,6 @@ QIcon stockIcon(SHSTOCKICONID icon_id)
         ScopedHICON icon(icon_info.hIcon);
         if (icon.isValid())
             return QtWin::fromHICON(icon);
-
-        return QtWin::fromHICON(icon);
     }
 
     return QIcon(QStringLiteral(":/icon/document.png"));
@@ -146,6 +158,59 @@ proto::file_transfer::DriveList::Item::Type FilePlatformUtil::driveType(const QS
         default:
             return proto::file_transfer::DriveList::Item::TYPE_UNKNOWN;
     }
+}
+
+// static
+const QList<QChar>& FilePlatformUtil::invalidFileNameCharacters()
+{
+    static const QList<QChar> kInvalidCharacters =
+        { '/', '\\', ':', '*', '?', '"', '<', '>', '|' };
+    return kInvalidCharacters;
+}
+
+// static
+const QList<QChar>& FilePlatformUtil::invalidPathCharacters()
+{
+    static const QList<QChar> kInvalidCharacters = { '*', '?', '"', '<', '>', '|' };
+    return kInvalidCharacters;
+}
+
+// static
+bool FilePlatformUtil::isValidPath(const QString& path)
+{
+    int length = path.length();
+
+    if (length < kMinPathLength || length > kMaxPathLength)
+        return false;
+
+    const QList<QChar>& invalid_characters = invalidPathCharacters();
+
+    for (const auto& character : path)
+    {
+        if (invalid_characters.contains(character))
+            return false;
+    }
+
+    return true;
+}
+
+// static
+bool FilePlatformUtil::isValidFileName(const QString& file_name)
+{
+    int length = file_name.length();
+
+    if (length < kMinFileNameLength || length > kMaxFileNameLength)
+        return false;
+
+    const QList<QChar>& invalid_characters = invalidFileNameCharacters();
+
+    for (const auto& character : file_name)
+    {
+        if (invalid_characters.contains(character))
+            return false;
+    }
+
+    return true;
 }
 
 } // namespace aspia
