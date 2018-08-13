@@ -33,6 +33,10 @@ public:
     explicit FileList(QWidget* parent = nullptr);
     ~FileList() = default;
 
+protected:
+    // QTreeView implemenation.
+    void keyPressEvent(QKeyEvent* event) override;
+
 private:
     DISALLOW_COPY_AND_ASSIGN(FileList);
 };

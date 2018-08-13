@@ -18,6 +18,7 @@
 
 #include "client/ui/file_list.h"
 
+#include <QKeyEvent>
 #include <QProxyStyle>
 
 #include "client/ui/file_item_delegate.h"
@@ -65,6 +66,21 @@ FileList::FileList(QWidget* parent)
 {
     setStyle(new TreeViewProxyStyle(style()));
     setItemDelegate(new FileItemDelegate(this));
+}
+
+void FileList::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_F2)
+    {
+        QModelIndexList list = selectionModel()->selectedRows();
+        if (list.count() == 1)
+        {
+            edit(list.constFirst());
+            event->ignore();
+        }
+    }
+
+    QTreeView::keyPressEvent(event);
 }
 
 } // namespace aspia

@@ -463,7 +463,7 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex& index) const
         }
 
         default:
-            return Qt::ItemIsDropEnabled | default_flags;
+            return Qt::ItemIsDropEnabled | Qt::ItemIsDragEnabled | default_flags;
     }
 }
 

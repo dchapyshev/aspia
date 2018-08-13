@@ -72,7 +72,7 @@ void FileTransfer::start(const QString& source_path,
 
 void FileTransfer::stop()
 {
-    cancel_timer_id_ = startTimer(std::chrono::seconds(15));
+    cancel_timer_id_ = startTimer(std::chrono::seconds(5));
     is_canceled_ = true;
 }
 
