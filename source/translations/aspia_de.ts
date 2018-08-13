@@ -960,32 +960,32 @@
     <message>
         <location filename="../host/ui/user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzereigenschaften</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="27"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="34"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="41"/>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort (wiederholen):</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="73"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerkonto deaktivieren</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="80"/>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlaubte Sitzungsarten:</translation>
     </message>
 </context>
 <context>
@@ -993,57 +993,57 @@
     <message>
         <location filename="../console/about_dialog.cc" line="80"/>
         <source>Version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="84"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="85"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie können eine Kopie der Lizenz hier erhalten:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="90"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="95"/>
         <source>Links:</source>
-        <translation type="unfinished"></translation>
+        <translation>Links:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="96"/>
         <source>Home page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Webseite:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="97"/>
         <source>GitHub page:</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub-Seite:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="100"/>
         <source>Developers:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entwickler:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="102"/>
         <source>Translators:</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="104"/>
         <source>Third-party components:</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenten von Drittanbietern:</translation>
     </message>
     <message>
         <location filename="../console/about_dialog.cc" line="121"/>
         <source>https://aspia.org/en/donate.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://aspia.org/en/donate.html</translation>
     </message>
 </context>
 <context>
@@ -1051,63 +1051,63 @@
     <message>
         <location filename="../console/address_book_dialog.cc" line="49"/>
         <source>Without Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohne Verschlüsselung</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="51"/>
         <source>XChaCha20 + Poly1305 (256-bit key)</source>
-        <translation type="unfinished"></translation>
+        <translation>XChaCha20 + Poly1305 (256-Bit-Schlüssel)</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="65"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppelklicken, um zu ändern</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Too long name. The maximum length of the name is 64 characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu langer Name. Die maximale Länge des Namens beträgt 64 Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="145"/>
         <source>Name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Name kann nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="152"/>
         <source>Too long comment. The maximum length of the comment is 2048 characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt 2048 Zeichen.</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="181"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="187"/>
         <source>Password can not be shorter than 8 characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht kürzer als 8 Zeichen sein.</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="274"/>
         <location filename="../console/address_book_dialog.cc" line="296"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="275"/>
         <source>At change the number of hashing iterations, you will need to re-enter the password. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Anzahl der Hash-Iterationen zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="297"/>
         <source>At change the size of hashing salt, you will need to re-enter the password. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Größe des Hashing-Salzes zu ändern, müssen Sie das Kennwort erneut eingeben. Fortsetzen?</translation>
     </message>
     <message>
         <location filename="../console/address_book_dialog.cc" line="335"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
 </context>
 <context>
@@ -1115,81 +1115,81 @@
     <message>
         <location filename="../console/address_book_tab.cc" line="202"/>
         <source>Unable to open address book file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei konnte nicht geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="209"/>
         <source>Unable to read address book file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei konnte nicht gelesen werden.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="217"/>
         <location filename="../console/address_book_tab.cc" line="232"/>
         <location filename="../console/address_book_tab.cc" line="262"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="256"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="272"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="439"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Computergruppe &quot;%1&quot; und alle Kindelemente wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="443"/>
         <location filename="../console/address_book_tab.cc" line="465"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="461"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Computer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="649"/>
         <source>Save Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch speichern</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="651"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Adressbuch (*.aab)</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="661"/>
         <source>Unable to create or open address book file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei konnte nicht erstellt oder geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="673"/>
         <source>Unable to write address book file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuchdatei konnte nicht geschrieben werden.</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="689"/>
         <location filename="../console/address_book_tab.cc" line="703"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="691"/>
         <source>Could not open address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="705"/>
         <source>Failed to save address book</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern des Adressbuchs fehlgeschlagen</translation>
     </message>
 </context>
 <context>
