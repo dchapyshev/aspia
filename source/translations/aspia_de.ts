@@ -497,12 +497,12 @@
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="131"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop-Effekte deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop_config_dialog.ui" line="138"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop-Hintergrundbild deaktivieren</translation>
     </message>
 </context>
 <context>
@@ -571,7 +571,7 @@
     <message>
         <location filename="../client/ui/file_item_delegate.cc" line="56"/>
         <source>The name can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
     </message>
 </context>
 <context>
@@ -859,7 +859,7 @@
         <location filename="../client/file_status.cc" line="66"/>
         <source>Drive not ready</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Laufwerk nicht bereit</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="69"/>
@@ -1005,17 +1005,17 @@
     <message>
         <location filename="../client/ui/address_bar.cc" line="58"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar.cc" line="59"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar.cc" line="79"/>
         <source>The path can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Pfad darf die Zeichen &quot;%1&quot; nicht beinhalten.</translation>
     </message>
 </context>
 <context>
@@ -1024,97 +1024,97 @@
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
         <location filename="../client/ui/address_bar_model.cc" line="436"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Home-Ordner</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="85"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="274"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="381"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="384"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="387"/>
         <source>Total Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamter Speicherplatz</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="390"/>
         <source>Free Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Freier Speicherplatz</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="421"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Optisches Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="424"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Wechsellaufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="427"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Festes Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="430"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzlaufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="433"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM-Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="439"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopordner</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="442"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekanntes Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="459"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="464"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="469"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="474"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="479"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -1604,52 +1604,52 @@
     <message>
         <location filename="../client/ui/file_list_model.cc" line="95"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordner</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="357"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="360"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="363"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="366"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Geändert</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="519"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="524"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="529"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="534"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_list_model.cc" line="539"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -1719,7 +1719,7 @@
         <location filename="../client/ui/file_panel.cc" line="325"/>
         <location filename="../client/ui/file_panel.cc" line="352"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Name beinhaltet ungültige Zeichen</translation>
     </message>
     <message>
         <location filename="../client/ui/file_panel.cc" line="376"/>
