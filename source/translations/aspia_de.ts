@@ -670,88 +670,88 @@
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="14"/>
         <source>Host Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostkonfiguration</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="33"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzeroberfläche</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="39"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="52"/>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienst</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="99"/>
         <source>Incoming Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingehende Verbindugen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="105"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Port:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="128"/>
         <source>Desktop Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktopsitzungen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="134"/>
         <source>Disable desktop effects when a remote user connects</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop-Effekte deaktivieren, wenn ein Remote-Benutzer eine Verbindung herstellt</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="141"/>
         <source>Disable desktop wallpaper when when a remote user connects</source>
-        <translation type="unfinished"></translation>
+        <translation>Desktop-Hintergrundbild deaktivieren, wenn ein Remote-Benutzer eine Verbindung herstellt</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="165"/>
         <location filename="../host/ui/host_config_dialog.ui" line="258"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="179"/>
         <source>Add new user</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuen Benutzer hinzufügen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="199"/>
         <source>Edit user</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer bearbeiten</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="219"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="281"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="290"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern</translation>
     </message>
     <message>
         <location filename="../host/ui/host_config_dialog.ui" line="299"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -759,12 +759,12 @@
     <message>
         <location filename="../host/ui/host_notifier_window.ui" line="180"/>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_notifier_window.ui" line="317"/>
-        <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <source>Alle trennen</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -772,12 +772,12 @@
     <message>
         <location filename="../client/ui/key_sequence_dialog.ui" line="17"/>
         <source>Key Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenfolge</translation>
     </message>
     <message>
         <location filename="../client/ui/key_sequence_dialog.ui" line="29"/>
         <source>Key sequence to send:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenfolge zum Senden:</translation>
     </message>
 </context>
 <context>
@@ -785,22 +785,22 @@
     <message>
         <location filename="../console/open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch öffnen</translation>
     </message>
     <message>
         <location filename="../console/open_address_book_dialog.ui" line="59"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch ist verschlüsselt. Um zu öffnen, müssen Sie das Kennwort eingeben.</translation>
     </message>
     <message>
         <location filename="../console/open_address_book_dialog.ui" line="72"/>
         <source>Encryption Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsselungstyp:</translation>
     </message>
     <message>
         <location filename="../console/open_address_book_dialog.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort:</translation>
     </message>
 </context>
 <context>
@@ -808,110 +808,110 @@
     <message>
         <location filename="../client/ui/file_item.cc" line="42"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="47"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="52"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="57"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="62"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../client/ui/file_item.cc" line="86"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordner</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="30"/>
         <source>Successfully completed</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Erfolgreich abgeschlossen</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="33"/>
         <source>Invalid request</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Anfrage</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="36"/>
         <source>Invalid directory or file name</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger Verzeichnis- oder Dateiname</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="39"/>
         <source>Path not found</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pfad nicht gefunden</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="42"/>
         <source>Path already exists</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pfad existiert bereits</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="45"/>
         <source>No drives found</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Keine Laufwerke gefunden</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="48"/>
         <source>Disk full</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Festplatte voll</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="51"/>
         <source>Access denied</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff verweigert</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="54"/>
         <source>Could not open file for reading</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht zum Lesen geöffnet werden</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="57"/>
         <source>Could not create or replace file</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht erstellt oder ersetzt werden</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="60"/>
         <source>Could not write to file</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konnte nicht in die Datei schreiben</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="63"/>
         <source>Could not read file</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht gelesen werden</translation>
     </message>
     <message>
         <location filename="../client/file_status.cc" line="66"/>
         <source>Unknown status code</source>
         <comment>FileStatus</comment>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Statuscode</translation>
     </message>
 </context>
 <context>
@@ -919,12 +919,12 @@
     <message>
         <location filename="../client/ui/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsstatus</translation>
     </message>
     <message>
         <location filename="../client/ui/status_dialog.ui" line="45"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -932,27 +932,27 @@
     <message>
         <location filename="../client/ui/system_info_window.ui" line="91"/>
         <source>Save Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Bericht speichern</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="100"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="105"/>
         <source>Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="110"/>
         <source>Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählt</translation>
     </message>
     <message>
         <location filename="../client/ui/system_info_window.ui" line="115"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle</translation>
     </message>
 </context>
 <context>
