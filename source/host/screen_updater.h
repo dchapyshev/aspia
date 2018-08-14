@@ -24,8 +24,6 @@
 #include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
-class QScreen;
-
 namespace aspia {
 
 class ScreenUpdaterImpl;
@@ -50,7 +48,7 @@ protected:
     void customEvent(QEvent* event) override;
 
 private:
-    ScreenUpdaterImpl* impl_;
+    ScreenUpdaterImpl* impl_ = nullptr;
 
     DISALLOW_COPY_AND_ASSIGN(ScreenUpdater);
 };

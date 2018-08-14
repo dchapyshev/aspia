@@ -76,11 +76,11 @@ protected:
 private:
     struct File
     {
+        int64_t size = 0;
+        time_t last_write = 0;
         QIcon icon;
         QString name;
         QString type;
-        int64_t size = 0;
-        time_t last_write = 0;
     };
 
     struct Folder

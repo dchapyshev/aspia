@@ -107,8 +107,7 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
 
 void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
 {
-    if (screens_group_)
-        delete screens_group_;
+    delete screens_group_;
 
     screens_group_ = new QActionGroup(this);
 
