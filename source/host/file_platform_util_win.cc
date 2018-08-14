@@ -24,6 +24,7 @@
 
 #include <QtWin>
 #include <shellapi.h>
+#include <shlwapi.h>
 
 #include "base/win/scoped_user_object.h"
 
@@ -211,6 +212,12 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
     }
 
     return true;
+}
+
+// static
+bool FilePlatformUtil::isRelativePath(const QString& path)
+{
+    return !!PathIsRelativeW(qUtf16Printable(path));
 }
 
 } // namespace aspia

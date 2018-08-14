@@ -380,7 +380,10 @@ QMimeData* FileListModel::mimeData(const QModelIndexList& indexes) const
     QList<FileTransfer::Item> file_list;
 
     for (const auto& index : indexes)
-        file_list.append(FileTransfer::Item(nameAt(index), sizeAt(index), isFolder(index)));
+    {
+        if (index.column() == COLUMN_NAME)
+            file_list.append(FileTransfer::Item(nameAt(index), sizeAt(index), isFolder(index)));
+    }
 
     if (file_list.isEmpty())
         return nullptr;

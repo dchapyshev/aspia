@@ -67,7 +67,7 @@ public slots:
 
 private slots:
     void onPathChanged(const QString& path);
-    void onListDoubleClicked(const QModelIndex& index);
+    void onListItemActivated(const QModelIndex& index);
     void onListSelectionChanged();
     void onListContextMenu(const QPoint& point);
     void onNameChangeRequest(const QString& old_name, const QString& new_name);

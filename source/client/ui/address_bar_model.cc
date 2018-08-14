@@ -112,6 +112,7 @@ QModelIndex AddressBarModel::setCurrentPath(const QString& path)
         QString normalized_path = normalizePath(path);
 
         if (!FilePlatformUtil::isValidPath(normalized_path) ||
+            FilePlatformUtil::isRelativePath(normalized_path) ||
             normalized_path.contains(QLatin1String("//")))
         {
             emit invalidPathEntered();

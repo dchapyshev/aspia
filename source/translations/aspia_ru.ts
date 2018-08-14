@@ -1022,7 +1022,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="436"/>
+        <location filename="../client/ui/address_bar_model.cc" line="437"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
@@ -1032,87 +1032,87 @@
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="274"/>
+        <location filename="../client/ui/address_bar_model.cc" line="275"/>
         <source>Computer</source>
         <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="381"/>
+        <location filename="../client/ui/address_bar_model.cc" line="382"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="384"/>
+        <location filename="../client/ui/address_bar_model.cc" line="385"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="387"/>
+        <location filename="../client/ui/address_bar_model.cc" line="388"/>
         <source>Total Space</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="390"/>
+        <location filename="../client/ui/address_bar_model.cc" line="391"/>
         <source>Free Space</source>
         <translation>Свободно</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="421"/>
+        <location filename="../client/ui/address_bar_model.cc" line="422"/>
         <source>Optical Drive</source>
         <translation>Оптический дисковод</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="424"/>
+        <location filename="../client/ui/address_bar_model.cc" line="425"/>
         <source>Removable Drive</source>
         <translation>Съемный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="427"/>
+        <location filename="../client/ui/address_bar_model.cc" line="428"/>
         <source>Fixed Drive</source>
         <translation>Локальный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="430"/>
+        <location filename="../client/ui/address_bar_model.cc" line="431"/>
         <source>Network Drive</source>
         <translation>Сетевой диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="433"/>
+        <location filename="../client/ui/address_bar_model.cc" line="434"/>
         <source>RAM Drive</source>
         <translation>Привод RAM</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="439"/>
+        <location filename="../client/ui/address_bar_model.cc" line="440"/>
         <source>Desktop Folder</source>
         <translation>Папка рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="442"/>
+        <location filename="../client/ui/address_bar_model.cc" line="443"/>
         <source>Unknown Drive</source>
         <translation>Неизвестный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="459"/>
+        <location filename="../client/ui/address_bar_model.cc" line="460"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="464"/>
+        <location filename="../client/ui/address_bar_model.cc" line="465"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="469"/>
+        <location filename="../client/ui/address_bar_model.cc" line="470"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="474"/>
+        <location filename="../client/ui/address_bar_model.cc" line="475"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="479"/>
+        <location filename="../client/ui/address_bar_model.cc" line="480"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1667,27 +1667,27 @@
         <translation>Изменен</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="519"/>
+        <location filename="../client/ui/file_list_model.cc" line="522"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="524"/>
+        <location filename="../client/ui/file_list_model.cc" line="527"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="529"/>
+        <location filename="../client/ui/file_list_model.cc" line="532"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="534"/>
+        <location filename="../client/ui/file_list_model.cc" line="537"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="539"/>
+        <location filename="../client/ui/file_list_model.cc" line="542"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1772,17 +1772,17 @@
         <translation>&amp;Удалить	Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="350"/>
+        <location filename="../client/ui/file_panel.cc" line="352"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Создать папку</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="401"/>
+        <location filename="../client/ui/file_panel.cc" line="403"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="402"/>
+        <location filename="../client/ui/file_panel.cc" line="404"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Вы действительно хотите удалить выбранные элементы?</translation>
     </message>

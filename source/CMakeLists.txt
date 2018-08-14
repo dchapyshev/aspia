@@ -133,6 +133,7 @@ target_link_libraries(aspia_core
     mpr
     netapi32
     sas
+    shlwapi
     userenv
     uxtheme
     version

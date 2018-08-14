@@ -63,7 +63,7 @@ FilePanel::FilePanel(QWidget* parent)
 
     connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
 
-    connect(ui.list, &QTreeView::doubleClicked, this, &FilePanel::onListDoubleClicked);
+    connect(ui.list, &QTreeView::activated, this, &FilePanel::onListItemActivated);
     connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onListContextMenu);
 
     connect(file_list_, &FileListModel::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
@@ -239,7 +239,7 @@ void FilePanel::refresh()
     emit newRequest(request);
 }
 
-void FilePanel::onListDoubleClicked(const QModelIndex& index)
+void FilePanel::onListItemActivated(const QModelIndex& index)
 {
     if (ui.address_bar->hasCurrentPath())
     {
@@ -340,6 +340,8 @@ void FilePanel::onListContextMenu(const QPoint& point)
             QIcon(QStringLiteral(":/icon/arrow-045.png")), tr("&Send\tF11")));
         delete_action.reset(new QAction(
             QIcon(QStringLiteral(":/icon/cross-script.png")), tr("&Delete\tDelete")));
+
+        copy_action->setEnabled(transfer_allowed_ && transfer_enabled_);
 
         menu.addAction(copy_action.data());
         menu.addAction(delete_action.data());

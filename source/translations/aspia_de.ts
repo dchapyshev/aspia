@@ -1022,7 +1022,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="436"/>
+        <location filename="../client/ui/address_bar_model.cc" line="437"/>
         <source>Home Folder</source>
         <translation>Home-Ordner</translation>
     </message>
@@ -1032,87 +1032,87 @@
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="274"/>
+        <location filename="../client/ui/address_bar_model.cc" line="275"/>
         <source>Computer</source>
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="381"/>
+        <location filename="../client/ui/address_bar_model.cc" line="382"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="384"/>
+        <location filename="../client/ui/address_bar_model.cc" line="385"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="387"/>
+        <location filename="../client/ui/address_bar_model.cc" line="388"/>
         <source>Total Space</source>
         <translation>Gesamter Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="390"/>
+        <location filename="../client/ui/address_bar_model.cc" line="391"/>
         <source>Free Space</source>
         <translation>Freier Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="421"/>
+        <location filename="../client/ui/address_bar_model.cc" line="422"/>
         <source>Optical Drive</source>
         <translation>Optisches Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="424"/>
+        <location filename="../client/ui/address_bar_model.cc" line="425"/>
         <source>Removable Drive</source>
         <translation>Wechsellaufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="427"/>
+        <location filename="../client/ui/address_bar_model.cc" line="428"/>
         <source>Fixed Drive</source>
         <translation>Festes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="430"/>
+        <location filename="../client/ui/address_bar_model.cc" line="431"/>
         <source>Network Drive</source>
         <translation>Netzlaufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="433"/>
+        <location filename="../client/ui/address_bar_model.cc" line="434"/>
         <source>RAM Drive</source>
         <translation>RAM-Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="439"/>
+        <location filename="../client/ui/address_bar_model.cc" line="440"/>
         <source>Desktop Folder</source>
         <translation>Desktopordner</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="442"/>
+        <location filename="../client/ui/address_bar_model.cc" line="443"/>
         <source>Unknown Drive</source>
         <translation>Unbekanntes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="459"/>
+        <location filename="../client/ui/address_bar_model.cc" line="460"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="464"/>
+        <location filename="../client/ui/address_bar_model.cc" line="465"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="469"/>
+        <location filename="../client/ui/address_bar_model.cc" line="470"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="474"/>
+        <location filename="../client/ui/address_bar_model.cc" line="475"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="479"/>
+        <location filename="../client/ui/address_bar_model.cc" line="480"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -1657,27 +1657,27 @@
         <translation>Geändert</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="519"/>
+        <location filename="../client/ui/file_list_model.cc" line="522"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="524"/>
+        <location filename="../client/ui/file_list_model.cc" line="527"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="529"/>
+        <location filename="../client/ui/file_list_model.cc" line="532"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="534"/>
+        <location filename="../client/ui/file_list_model.cc" line="537"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_list_model.cc" line="539"/>
+        <location filename="../client/ui/file_list_model.cc" line="542"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -1762,17 +1762,17 @@
         <translation>&amp;Löschen Entf</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="350"/>
+        <location filename="../client/ui/file_panel.cc" line="352"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Ordner erstellen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="401"/>
+        <location filename="../client/ui/file_panel.cc" line="403"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="402"/>
+        <location filename="../client/ui/file_panel.cc" line="404"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
