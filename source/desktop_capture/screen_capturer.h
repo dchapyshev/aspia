@@ -19,6 +19,8 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_H_
 #define ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_H_
 
+#include <QString>
+
 #include "desktop_capture/desktop_frame.h"
 
 namespace aspia {

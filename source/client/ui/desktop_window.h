@@ -24,6 +24,7 @@
 
 #include "base/macros_magic.h"
 #include "client/connect_data.h"
+#include "desktop_capture/desktop_geometry.h"
 #include "protocol/desktop_session.pb.h"
 
 class QHBoxLayout;
@@ -44,7 +45,7 @@ public:
     DesktopWindow(ConnectData* connect_data, QWidget* parent = nullptr);
     ~DesktopWindow() = default;
 
-    void resizeDesktopFrame(const QRect& screen_rect);
+    void resizeDesktopFrame(const DesktopRect& screen_rect);
     void drawDesktopFrame();
     DesktopFrame* desktopFrame();
     void injectCursor(const QCursor& cursor);
@@ -55,7 +56,7 @@ signals:
     void windowClose();
     void sendConfig(const proto::desktop::Config& config);
     void sendKeyEvent(uint32_t usb_keycode, uint32_t flags);
-    void sendPointerEvent(const QPoint& pos, uint32_t mask);
+    void sendPointerEvent(const DesktopPoint& pos, uint32_t mask);
     void sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void sendScreen(const proto::desktop::Screen& screen);
 
@@ -89,7 +90,7 @@ private:
     bool is_maximized_ = false;
     bool autoscroll_enabled_ = true;
 
-    QPoint screen_top_left_;
+    DesktopPoint screen_top_left_;
 
     DISALLOW_COPY_AND_ASSIGN(DesktopWindow);
 };

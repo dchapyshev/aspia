@@ -29,18 +29,18 @@ namespace {
 const int kMinScaleFactor = 50;
 const int kMaxScaleFactor = 100;
 
-QSize scaleSize(const QSize& source_size, int scale_factor)
+DesktopSize scaleSize(const DesktopSize& source_size, int scale_factor)
 {
-    return QSize(((source_size.width() * scale_factor) / 100),
-                 ((source_size.height() * scale_factor) / 100));
+    return DesktopSize(((source_size.width() * scale_factor) / 100),
+                       ((source_size.height() * scale_factor) / 100));
 }
 
-QRect scaleRect(const QRect& source_rect, int scale_factor)
+DesktopRect scaleRect(const DesktopRect& source_rect, int scale_factor)
 {
-    return QRect(((source_rect.x() * scale_factor) / 100),
-                 ((source_rect.y() * scale_factor) / 100),
-                 ((source_rect.width() * scale_factor) / 100),
-                 ((source_rect.height() * scale_factor) / 100));
+    return DesktopRect::makeXYWH(((source_rect.x() * scale_factor) / 100),
+                                 ((source_rect.y() * scale_factor) / 100),
+                                 ((source_rect.width() * scale_factor) / 100),
+                                 ((source_rect.height() * scale_factor) / 100));
 }
 
 } // namespace
@@ -71,31 +71,33 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
 
     if (!scaled_frame_)
     {
-        QSize scaled_size = scaleSize(source_frame->size(), scale_factor_);
+        DesktopSize scaled_size = scaleSize(source_frame->size(), scale_factor_);
 
         scaled_frame_ = DesktopFrameAligned::create(scaled_size, source_frame->format());
         if (!scaled_frame_)
             return nullptr;
     }
 
-    *scaled_frame_->updatedRegion() = QRegion();
+    scaled_frame_->updatedRegion()->clear();
 
-    for (const auto& source_rect : source_frame->constUpdatedRegion())
+    for (DesktopRegion::Iterator it(scaled_frame_->constUpdatedRegion());
+         !it.isAtEnd(); it.advance())
     {
-        QRect scaled_rect = scaleRect(source_rect, scale_factor_);
+        const DesktopRect& source_rect = it.rect();
+        DesktopRect scaled_rect = scaleRect(source_rect, scale_factor_);
 
-        libyuv::ARGBScale(source_frame->frameDataAtPos(source_rect.topLeft()),
+        libyuv::ARGBScale(source_frame->frameDataAtPos(source_rect.leftTop()),
                           source_frame->stride(),
                           source_rect.width(),
                           source_rect.height(),
-                          scaled_frame_->frameDataAtPos(scaled_rect.topLeft()),
+                          scaled_frame_->frameDataAtPos(scaled_rect.leftTop()),
                           scaled_frame_->stride(),
                           scaled_rect.width(),
                           scaled_rect.height(),
                           libyuv::kFilterBox);
 
-        *scaled_frame_->updatedRegion() +=
-            scaled_rect.intersected(QRect(QPoint(0, 0), scaled_frame_->size()));
+        scaled_rect.intersectWith(DesktopRect::makeSize(scaled_frame_->size()));
+        scaled_frame_->updatedRegion()->addRect(scaled_rect);
     }
 
     return scaled_frame_.get();

@@ -20,12 +20,12 @@
 
 namespace aspia {
 
-QRect VideoUtil::fromVideoRect(const proto::desktop::Rect& rect)
+DesktopRect VideoUtil::fromVideoRect(const proto::desktop::Rect& rect)
 {
-    return QRect(rect.x(), rect.y(), rect.width(), rect.height());
+    return DesktopRect::makeXYWH(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-void VideoUtil::toVideoRect(const QRect& from, proto::desktop::Rect* to)
+void VideoUtil::toVideoRect(const DesktopRect& from, proto::desktop::Rect* to)
 {
     to->set_x(from.x());
     to->set_y(from.y());

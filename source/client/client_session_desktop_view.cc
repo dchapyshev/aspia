@@ -127,7 +127,7 @@ void ClientSessionDesktopView::readVideoPacket(const proto::desktop::VideoPacket
 
     if (packet.has_format())
     {
-        QRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
+        DesktopRect screen_rect = VideoUtil::fromVideoRect(packet.format().screen_rect());
 
         if (screen_rect.width()  <= 0 || screen_rect.width()  >= 65535 ||
             screen_rect.height() <= 0 || screen_rect.height() >= 65535)

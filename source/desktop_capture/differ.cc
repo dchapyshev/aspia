@@ -75,8 +75,8 @@ uint8_t diffPartialBlock(const uint8_t* prev_image,
 
 } // namespace
 
-Differ::Differ(const QSize& size)
-    : screen_rect_(QPoint(), size),
+Differ::Differ(const DesktopSize& size)
+    : screen_rect_(DesktopRect::makeSize(size)),
       bytes_per_row_(size.width() * kBytesPerPixel),
       diff_width_(((size.width() + kBlockWidth - 1) / kBlockWidth) + 1),
       diff_height_(((size.height() + kBlockHeight - 1) / kBlockHeight) + 1),
@@ -225,7 +225,7 @@ void Differ::markDirtyBlocks(const uint8_t* prev_image, const uint8_t* curr_imag
 // blocks into a region.
 // The goal is to minimize the region that covers the dirty blocks.
 //
-void Differ::mergeBlocks(QRegion* dirty_region)
+void Differ::mergeBlocks(DesktopRegion* dirty_region)
 {
     uint8_t* is_diff_row_start = diff_info_.get();
     const int diff_stride = diff_width_;
@@ -291,11 +291,16 @@ void Differ::mergeBlocks(QRegion* dirty_region)
                     }
                 } while (found_new_row);
 
-                QRect dirty_rect(x * kBlockWidth, y * kBlockHeight,
-                                 width * kBlockWidth, height * kBlockHeight);
+                DesktopRect dirty_rect =
+                    DesktopRect::makeXYWH(x * kBlockWidth,
+                                          y * kBlockHeight,
+                                          width * kBlockWidth,
+                                          height * kBlockHeight);
+
+                dirty_rect.intersectWith(screen_rect_);
 
                 // Add rect to region.
-                *dirty_region += dirty_rect.intersected(screen_rect_);
+                dirty_region->addRect(dirty_rect);
             }
 
             // Increment to next block in this row.
@@ -309,9 +314,9 @@ void Differ::mergeBlocks(QRegion* dirty_region)
 
 void Differ::calcDirtyRegion(const uint8_t* prev_image,
                              const uint8_t* curr_image,
-                             QRegion* dirty_region)
+                             DesktopRegion* dirty_region)
 {
-    *dirty_region = QRegion();
+    dirty_region->clear();
 
     // Identify all the blocks that contain changed pixels.
     markDirtyBlocks(prev_image, curr_image);

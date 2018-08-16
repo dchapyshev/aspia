@@ -19,10 +19,9 @@
 #ifndef ASPIA_CODEC__VIDEO_ENCODER_H_
 #define ASPIA_CODEC__VIDEO_ENCODER_H_
 
-#include <QRect>
-
 #include <memory>
 
+#include "desktop_capture/desktop_geometry.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
@@ -42,7 +41,7 @@ protected:
                         proto::desktop::VideoPacket* packet);
 
 private:
-    QRect screen_rect_;
+    DesktopRect screen_rect_;
 };
 
 } // namespace aspia

@@ -95,7 +95,7 @@ void ClientSessionDesktopManage::onSendKeyEvent(uint32_t usb_keycode, uint32_t f
     emit sendMessage(serializeMessage(message));
 }
 
-void ClientSessionDesktopManage::onSendPointerEvent(const QPoint& pos, uint32_t mask)
+void ClientSessionDesktopManage::onSendPointerEvent(const DesktopPoint& pos, uint32_t mask)
 {
     proto::desktop::ClientToHost message;
 

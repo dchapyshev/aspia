@@ -48,7 +48,7 @@ private:
     QString current_device_key_;
 
     ScopedThreadDesktop desktop_;
-    QRect desktop_dc_rect_;
+    DesktopRect desktop_dc_rect_;
 
     std::unique_ptr<Differ> differ_;
     std::unique_ptr<ScopedGetDC> desktop_dc_;

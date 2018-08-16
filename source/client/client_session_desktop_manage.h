@@ -40,7 +40,7 @@ public slots:
     void onSendConfig(const proto::desktop::Config& config) override;
 
     void onSendKeyEvent(uint32_t usb_keycode, uint32_t flags);
-    void onSendPointerEvent(const QPoint& pos, uint32_t mask);
+    void onSendPointerEvent(const DesktopPoint& pos, uint32_t mask);
     void onSendClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:

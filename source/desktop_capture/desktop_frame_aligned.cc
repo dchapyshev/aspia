@@ -20,7 +20,7 @@
 
 namespace aspia {
 
-DesktopFrameAligned::DesktopFrameAligned(const QSize& size,
+DesktopFrameAligned::DesktopFrameAligned(const DesktopSize& size,
                                          const PixelFormat& format,
                                          int stride,
                                          uint8_t* data)
@@ -36,7 +36,7 @@ DesktopFrameAligned::~DesktopFrameAligned()
 
 // static
 std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
-    const QSize& size, const PixelFormat& format)
+    const DesktopSize& size, const PixelFormat& format)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 

@@ -102,7 +102,7 @@ VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config
 
 std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
 {
-    const QRect frame_rect(0, 0, 800, 600);
+    const DesktopRect frame_rect = DesktopRect::makeSize(800, 600);
     const QRect table_rect(200, 250, 400, 100);
     const int border_size = 1;
     const int title_height = 30;
@@ -141,7 +141,7 @@ std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
                      Qt::AlignCenter,
                      tr("The session is temporarily unavailable."));
 
-    *frame->updatedRegion() += frame_rect;
+    frame->updatedRegion()->addRect(frame_rect);
     return frame;
 }
 

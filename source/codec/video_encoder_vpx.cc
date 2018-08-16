@@ -39,7 +39,7 @@ constexpr int kVp9I444ProfileNumber = 1;
 // Magic encoder constants for adaptive quantization strategy.
 constexpr int kVp9AqModeNone = 0;
 
-void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
+void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const DesktopSize& size)
 {
     // Use millisecond granularity time base.
     config->g_timebase.num = 1;
@@ -66,7 +66,7 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
 }
 
 void createImage(proto::desktop::VideoEncoding encoding,
-                 const QSize& size,
+                 const DesktopSize& size,
                  std::unique_ptr<vpx_image_t>* out_image,
                  std::unique_ptr<uint8_t[]>* out_image_buffer)
 {
@@ -148,7 +148,7 @@ VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
     memset(&image_, 0, sizeof(image_));
 }
 
-void VideoEncoderVPX::createActiveMap(const QSize& size)
+void VideoEncoderVPX::createActiveMap(const DesktopSize& size)
 {
     active_map_.cols = (size.width() + kMacroBlockSize - 1) / kMacroBlockSize;
     active_map_.rows = (size.height() + kMacroBlockSize - 1) / kMacroBlockSize;
@@ -159,7 +159,7 @@ void VideoEncoderVPX::createActiveMap(const QSize& size)
     active_map_.active_map = active_map_buffer_.get();
 }
 
-void VideoEncoderVPX::createVp8Codec(const QSize& size)
+void VideoEncoderVPX::createVp8Codec(const DesktopSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -201,7 +201,7 @@ void VideoEncoderVPX::createVp8Codec(const QSize& size)
     Q_ASSERT(VPX_CODEC_OK == ret);
 }
 
-void VideoEncoderVPX::createVp9Codec(const QSize& size)
+void VideoEncoderVPX::createVp9Codec(const DesktopSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -246,7 +246,7 @@ void VideoEncoderVPX::createVp9Codec(const QSize& size)
     Q_ASSERT(VPX_CODEC_OK == ret);
 }
 
-void VideoEncoderVPX::setActiveMap(const QRect& rect)
+void VideoEncoderVPX::setActiveMap(const DesktopRect& rect)
 {
     int left   = rect.left() / kMacroBlockSize;
     int top    = rect.top() / kMacroBlockSize;
@@ -281,12 +281,15 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
     {
         case VPX_IMG_FMT_YV12:
         {
-            for (const auto& rect : frame->constUpdatedRegion())
+            for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
+                 !it.isAtEnd(); it.advance())
             {
+                const DesktopRect& rect = it.rect();
+
                 int y_offset = y_stride * rect.y() + rect.x();
                 int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-                libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
+                libyuv::ARGBToI420(frame->frameDataAtPos(rect.leftTop()),
                                    frame->stride(),
                                    y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
@@ -302,11 +305,14 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
 
         case VPX_IMG_FMT_I444:
         {
-            for (const auto& rect : frame->constUpdatedRegion())
+            for (DesktopRegion::Iterator it(frame->constUpdatedRegion());
+                 !it.isAtEnd(); it.advance())
             {
+                const DesktopRect& rect = it.rect();
+
                 int yuv_offset = uv_stride * rect.y() + rect.x();
 
-                libyuv::ARGBToI444(frame->frameDataAtPos(rect.topLeft()),
+                libyuv::ARGBToI444(frame->frameDataAtPos(rect.leftTop()),
                                    frame->stride(),
                                    y_data + yuv_offset, y_stride,
                                    u_data + yuv_offset, uv_stride,
@@ -332,7 +338,7 @@ void VideoEncoderVPX::encode(const DesktopFrame* frame, proto::desktop::VideoPac
 
     if (packet->has_format())
     {
-        const QSize& screen_size = frame->size();
+        const DesktopSize& screen_size = frame->size();
 
         createImage(encoding_, screen_size, &image_, &image_buffer_);
         createActiveMap(screen_size);

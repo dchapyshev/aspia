@@ -40,7 +40,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
         const proto::desktop::VideoPacketFormat& format = packet.format();
 
         source_frame_ = DesktopFrameAligned::create(
-            QSize(format.screen_rect().width(), format.screen_rect().height()),
+            DesktopSize(format.screen_rect().width(), format.screen_rect().height()),
             VideoUtil::fromVideoPixelFormat(format.pixel_format()));
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
@@ -58,13 +58,13 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
     const size_t src_size = packet.data().size();
     size_t used = 0;
 
-    QRect frame_rect = QRect(QPoint(), source_frame_->size());
+    DesktopRect frame_rect = DesktopRect::makeSize(source_frame_->size());
 
     for (int i = 0; i < packet.dirty_rect_size(); ++i)
     {
-        QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+        DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
-        if (!frame_rect.contains(rect))
+        if (!frame_rect.containsRect(rect))
         {
             qWarning("The rectangle is outside the screen area");
             return false;
@@ -107,9 +107,9 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
             }
         }
 
-        translator_->translate(source_frame_->frameDataAtPos(rect.topLeft()),
+        translator_->translate(source_frame_->frameDataAtPos(rect.leftTop()),
                                source_frame_->stride(),
-                               target_frame->frameDataAtPos(rect.topLeft()),
+                               target_frame->frameDataAtPos(rect.leftTop()),
                                target_frame->stride(),
                                rect.width(),
                                rect.height());

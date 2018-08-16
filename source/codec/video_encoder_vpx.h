@@ -46,11 +46,11 @@ public:
 private:
     VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
 
-    void createActiveMap(const QSize& size);
-    void createVp8Codec(const QSize& size);
-    void createVp9Codec(const QSize& size);
+    void createActiveMap(const DesktopSize& size);
+    void createVp8Codec(const DesktopSize& size);
+    void createVp9Codec(const DesktopSize& size);
     void prepareImageAndActiveMap(const DesktopFrame* frame, proto::desktop::VideoPacket* packet);
-    void setActiveMap(const QRect& rect);
+    void setActiveMap(const DesktopRect& rect);
 
     const proto::desktop::VideoEncoding encoding_;
 

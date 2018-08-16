@@ -28,7 +28,7 @@ void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
 {
     packet->set_encoding(encoding);
 
-    QRect rect(frame->topLeft(), frame->size());
+    DesktopRect rect = DesktopRect::makeXYWH(frame->topLeft(), frame->size());
 
     if (screen_rect_ != rect)
     {

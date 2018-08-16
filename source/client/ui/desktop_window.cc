@@ -113,16 +113,16 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
 }
 
-void DesktopWindow::resizeDesktopFrame(const QRect& screen_rect)
+void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)
 {
-    QSize prev_size = desktop_->size();
+    DesktopSize prev_size = DesktopSize::fromQSize(desktop_->size());
 
     desktop_->resizeDesktopFrame(screen_rect.size());
 
     if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
         autosizeWindow();
 
-    screen_top_left_ = screen_rect.topLeft();
+    screen_top_left_ = screen_rect.leftTop();
 }
 
 void DesktopWindow::drawDesktopFrame()
@@ -204,7 +204,7 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    emit sendPointerEvent(pos + screen_top_left_, mask);
+    emit sendPointerEvent(DesktopPoint::fromQPoint(pos).translated(screen_top_left_), mask);
 }
 
 void DesktopWindow::changeSettings()

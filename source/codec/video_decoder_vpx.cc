@@ -33,7 +33,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
                   vpx_image_t* image,
                   DesktopFrame* frame)
 {
-    QRect frame_rect = QRect(QPoint(), frame->size());
+    DesktopRect frame_rect = DesktopRect::makeSize(frame->size());
 
     uint8_t* y_data = image->planes[0];
     uint8_t* u_data = image->planes[1];
@@ -49,9 +49,9 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+                DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
-                if (!frame_rect.contains(rect))
+                if (!frame_rect.containsRect(rect))
                 {
                     qWarning("The rectangle is outside the screen area");
                     return false;
@@ -63,7 +63,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I420ToARGB(y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
                                    v_data + uv_offset, uv_stride,
-                                   frame->frameDataAtPos(rect.topLeft()),
+                                   frame->frameDataAtPos(rect.leftTop()),
                                    frame->stride(),
                                    rect.width(),
                                    rect.height());
@@ -78,9 +78,9 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
 
             for (int i = 0; i < packet.dirty_rect_size(); ++i)
             {
-                QRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
+                DesktopRect rect = VideoUtil::fromVideoRect(packet.dirty_rect(i));
 
-                if (!frame_rect.contains(rect))
+                if (!frame_rect.containsRect(rect))
                 {
                     qWarning("The rectangle is outside the screen area");
                     return false;
@@ -93,7 +93,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet,
                 libyuv::I444ToARGB(y_data + y_offset, y_stride,
                                    u_data + u_offset, u_stride,
                                    v_data + v_offset, v_stride,
-                                   frame->frameDataAtPos(rect.topLeft()),
+                                   frame->frameDataAtPos(rect.leftTop()),
                                    frame->stride(),
                                    rect.width(),
                                    rect.height());
@@ -187,7 +187,7 @@ bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, DesktopF
         return false;
     }
 
-    if (QSize(image->d_w, image->d_h) != frame->size())
+    if (DesktopSize(image->d_w, image->d_h) != frame->size())
     {
         qWarning("Size of the encoded frame doesn't match size in the header");
         return false;
