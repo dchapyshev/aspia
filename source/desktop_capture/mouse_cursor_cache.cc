@@ -71,7 +71,7 @@ size_t MouseCursorCache::add(std::unique_ptr<MouseCursor> mouse_cursor)
     return cache_.size() - 1;
 }
 
-std::shared_ptr<MouseCursor> MouseCursorCache::Get(size_t index)
+std::shared_ptr<MouseCursor> MouseCursorCache::get(size_t index)
 {
     if (index > kMaxCacheSize)
     {

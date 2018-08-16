@@ -20,7 +20,18 @@
 
 #include <QDebug>
 
+#include "codec/decompressor_zlib.h"
+#include "desktop_capture/mouse_cursor_cache.h"
+
 namespace aspia {
+
+CursorDecoder::CursorDecoder()
+    : decompressor_(std::make_unique<DecompressorZLIB>())
+{
+    // Nothing
+}
+
+CursorDecoder::~CursorDecoder() = default;
 
 bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape,
                                      uint8_t* image)
@@ -47,12 +58,12 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
         size_t written = 0;
         size_t consumed = 0;
 
-        decompress_again = decompressor_.process(src + used,
-                                                 src_size - used,
-                                                 image + row_pos,
-                                                 row_size - row_pos,
-                                                 &consumed,
-                                                 &written);
+        decompress_again = decompressor_->process(src + used,
+                                                  src_size - used,
+                                                  image + row_pos,
+                                                  row_size - row_pos,
+                                                  &consumed,
+                                                  &written);
         used += consumed;
         row_pos += written;
 
@@ -64,7 +75,7 @@ bool CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_s
         }
     }
 
-    decompressor_.reset();
+    decompressor_->reset();
     return true;
 }
 
@@ -79,7 +90,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
     }
     else
     {
-        QSize size(cursor_shape.width(), cursor_shape.height());
+        DesktopSize size(cursor_shape.width(), cursor_shape.height());
 
         if (size.width()  <= 0 || size.width()  > (std::numeric_limits<int16_t>::max() / 2) ||
             size.height() <= 0 || size.height() > (std::numeric_limits<int16_t>::max() / 2))
@@ -96,7 +107,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
             return nullptr;
 
         std::unique_ptr<MouseCursor> mouse_cursor = std::make_unique<MouseCursor>(
-            std::move(image), size, QPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
+            std::move(image), size, DesktopPoint(cursor_shape.hotspot_x(), cursor_shape.hotspot_y()));
 
         if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
         {
@@ -117,7 +128,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         cache_index = cache_->add(std::move(mouse_cursor));
     }
 
-    return cache_->Get(cache_index);
+    return cache_->get(cache_index);
 }
 
 } // namespace aspia

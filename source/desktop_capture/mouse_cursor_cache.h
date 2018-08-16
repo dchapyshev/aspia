@@ -43,7 +43,7 @@ public:
     size_t add(std::unique_ptr<MouseCursor> mouse_cursor);
 
     // Returns the pointer to the cached cursor by its index in the cache.
-    std::shared_ptr<MouseCursor> Get(size_t index);
+    std::shared_ptr<MouseCursor> get(size_t index);
 
     // Checks an empty cache or not.
     bool isEmpty() const;

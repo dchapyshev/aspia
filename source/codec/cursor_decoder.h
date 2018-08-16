@@ -19,17 +19,22 @@
 #ifndef ASPIA_CODEC__CURSOR_DECODER_H_
 #define ASPIA_CODEC__CURSOR_DECODER_H_
 
-#include "codec/decompressor_zlib.h"
-#include "desktop_capture/mouse_cursor_cache.h"
+#include <memory>
+
+#include "base/macros_magic.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
+class Decompressor;
+class MouseCursor;
+class MouseCursorCache;
+
 class CursorDecoder
 {
 public:
-    CursorDecoder() = default;
-    ~CursorDecoder() = default;
+    CursorDecoder();
+    ~CursorDecoder();
 
     std::shared_ptr<MouseCursor> decode(const proto::desktop::CursorShape& cursor_shape);
 
@@ -37,7 +42,7 @@ private:
     bool decompressCursor(const proto::desktop::CursorShape& cursor_shape, uint8_t* image);
 
     std::unique_ptr<MouseCursorCache> cache_;
-    DecompressorZLIB decompressor_;
+    std::unique_ptr<Decompressor> decompressor_;
 
     DISALLOW_COPY_AND_ASSIGN(CursorDecoder);
 };

@@ -21,6 +21,7 @@
 #include "base/message_serialization.h"
 #include "client/ui/desktop_window.h"
 #include "codec/cursor_decoder.h"
+#include "desktop_capture/mouse_cursor.h"
 
 namespace aspia {
 

@@ -95,6 +95,9 @@ public:
         return *this;
     }
 
+    bool operator!=(const DesktopPoint& other) const { return !isEqual(other); }
+    bool operator==(const DesktopPoint& other) const { return isEqual(other); }
+
 private:
     int32_t x_ = 0;
     int32_t y_ = 0;

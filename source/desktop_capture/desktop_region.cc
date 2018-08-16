@@ -621,7 +621,7 @@ bool DesktopRegion::Iterator::isAtEnd() const
 
 void DesktopRegion::Iterator::advance()
 {
-    assert(!IsAtEnd());
+    assert(!isAtEnd());
 
     for (;;)
     {
@@ -653,7 +653,7 @@ void DesktopRegion::Iterator::advance()
         break;
     }
 
-    assert(!IsAtEnd());
+    assert(!isAtEnd());
     updateCurrentRect();
 }
 

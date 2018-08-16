@@ -21,8 +21,8 @@
 namespace aspia {
 
 MouseCursor::MouseCursor(std::unique_ptr<uint8_t[]> data,
-                         const QSize& size,
-                         const QPoint& hotspot)
+                         const DesktopSize& size,
+                         const DesktopPoint& hotspot)
     : data_(std::move(data)),
       size_(size),
       hotspot_(hotspot)

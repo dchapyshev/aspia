@@ -110,7 +110,7 @@ bool CursorEncoder::encode(std::unique_ptr<MouseCursor> mouse_cursor,
     if (!mouse_cursor)
         return false;
 
-    const QSize& size = mouse_cursor->size();
+    const DesktopSize& size = mouse_cursor->size();
     const int kMaxSize = std::numeric_limits<int16_t>::max() / 2;
 
     if (size.width() <= 0 || size.width() > kMaxSize ||
