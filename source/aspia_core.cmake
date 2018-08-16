@@ -167,6 +167,8 @@ list(APPEND SOURCE_CODEC
     ${PROJECT_SOURCE_DIR}/codec/decompressor_zlib.h
     ${PROJECT_SOURCE_DIR}/codec/pixel_translator.cc
     ${PROJECT_SOURCE_DIR}/codec/pixel_translator.h
+    ${PROJECT_SOURCE_DIR}/codec/scale_reducer.cc
+    ${PROJECT_SOURCE_DIR}/codec/scale_reducer.h
     ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.cc
     ${PROJECT_SOURCE_DIR}/codec/scoped_vpx_codec.h
     ${PROJECT_SOURCE_DIR}/codec/video_decoder.cc

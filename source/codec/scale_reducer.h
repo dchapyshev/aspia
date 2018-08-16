@@ -16,26 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/connect_data.h"
+#ifndef ASPIA_CODEC__SCALE_REDUCER_H_
+#define ASPIA_CODEC__SCALE_REDUCER_H_
 
-#include "crypto/secure_memory.h"
+#include <memory>
+
+#include "base/macros_magic.h"
 
 namespace aspia {
 
-ConnectData::~ConnectData()
-{
-    secureMemZero(&computer_name_);
-    secureMemZero(&address_);
-    secureMemZero(&user_name_);
-    secureMemZero(&password_);
-}
+class DesktopFrame;
 
-void ConnectData::setDesktopConfig(const proto::desktop::Config& config)
+class ScaleReducer
 {
-    desktop_config_ = config;
+public:
+    ~ScaleReducer() = default;
 
-    if (desktop_config_.scale_factor() < 50 || desktop_config_.scale_factor() > 100)
-        desktop_config_.set_scale_factor(100);
-}
+    static ScaleReducer* create(int scale_factor);
+
+    const DesktopFrame* scaleFrame(const DesktopFrame* source_frame);
+
+protected:
+    ScaleReducer(int scale_factor);
+
+private:
+    const int scale_factor_;
+    std::unique_ptr<DesktopFrame> scaled_frame_;
+
+    DISALLOW_COPY_AND_ASSIGN(ScaleReducer);
+};
 
 } // namespace aspia
+
+#endif // ASPIA_CODEC__SCALE_REDUCER_H_

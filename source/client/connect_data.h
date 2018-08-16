@@ -51,7 +51,7 @@ public:
     void setSessionType(proto::auth::SessionType session_type) { session_type_ = session_type; }
 
     proto::desktop::Config desktopConfig() const { return desktop_config_; }
-    void setDesktopConfig(const proto::desktop::Config& config) { desktop_config_ = config; }
+    void setDesktopConfig(const proto::desktop::Config& config);
 
 private:
     QString computer_name_;

@@ -63,8 +63,9 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    config->set_update_interval(30);
     config->set_compress_ratio(6);
+    config->set_scale_factor(100);
+    config->set_update_interval(30);
 
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
@@ -79,8 +80,9 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    config->set_update_interval(30);
     config->set_compress_ratio(6);
+    config->set_scale_factor(100);
+    config->set_update_interval(30);
 
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
