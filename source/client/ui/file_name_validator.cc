@@ -30,11 +30,21 @@ FileNameValidator::FileNameValidator(QObject* parent)
 
 FileNameValidator::State FileNameValidator::validate(QString& input, int& pos) const
 {
-    if (input.isEmpty() || FilePlatformUtil::isValidFileName(input))
-        return Acceptable;
+    if (!input.isEmpty())
+    {
+        const QList<QChar>& invalid_characters = FilePlatformUtil::invalidFileNameCharacters();
 
-    emit invalidNameEntered();
-    return Invalid;
+        for (const auto& character : input)
+        {
+            if (invalid_characters.contains(character))
+            {
+                emit invalidNameEntered();
+                return Invalid;
+            }
+        }
+    }
+
+    return Acceptable;
 }
 
 void FileNameValidator::fixup(QString& input) const

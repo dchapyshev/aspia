@@ -211,6 +211,9 @@ bool FilePlatformUtil::isValidFileName(const QString& file_name)
             return false;
     }
 
+    if (file_name == QLatin1String("..") || file_name == QLatin1String("."))
+        return false;
+
     return true;
 }
 
