@@ -9,12 +9,22 @@
         <translation>Über das Programm</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="82"/>
+        <location filename="../console/about_dialog.ui" line="64"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.ui" line="91"/>
+        <source>Service Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.ui" line="106"/>
         <source>Donate!</source>
         <translation>Spenden!</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="106"/>
+        <location filename="../console/about_dialog.ui" line="130"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -480,27 +490,37 @@
         <translation>Beste</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="95"/>
-        <source>Screen update interval (ms):</source>
-        <translation>Bildschirmaktualisierungsintervall (ms):</translation>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="97"/>
+        <source>Scale factor:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="117"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="104"/>
+        <source>Screen update interval:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="134"/>
+        <source>ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="154"/>
         <source>Enable cursor shape</source>
         <translation>Cursorform erlauben</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="124"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="161"/>
         <source>Enable clipboard</source>
         <translation>Zwischenablage erlauben</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="131"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="168"/>
         <source>Disable desktop effects</source>
         <translation>Desktop-Effekte deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="138"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="175"/>
         <source>Disable desktop wallpaper</source>
         <translation>Desktop-Hintergrundbild deaktivieren</translation>
     </message>
@@ -945,57 +965,77 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="81"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>Version: %1</source>
         <translation>Version: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="95"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>You can get a copy of license here:</source>
         <translation>Sie können eine Kopie der Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="91"/>
+        <location filename="../console/about_dialog.cc" line="101"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="96"/>
+        <location filename="../console/about_dialog.cc" line="106"/>
         <source>Links:</source>
         <translation>Links:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="97"/>
+        <location filename="../console/about_dialog.cc" line="107"/>
         <source>Home page:</source>
         <translation>Webseite:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="98"/>
+        <location filename="../console/about_dialog.cc" line="108"/>
         <source>GitHub page:</source>
         <translation>GitHub-Seite:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="101"/>
+        <location filename="../console/about_dialog.cc" line="111"/>
         <source>Developers:</source>
         <translation>Entwickler:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="103"/>
+        <location filename="../console/about_dialog.cc" line="113"/>
         <source>Translators:</source>
         <translation>Übersetzer:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="105"/>
+        <location filename="../console/about_dialog.cc" line="115"/>
         <source>Third-party components:</source>
         <translation>Komponenten von Drittanbietern:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="122"/>
+        <location filename="../console/about_dialog.cc" line="130"/>
+        <source>Path: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="131"/>
+        <source>Compilation date: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="132"/>
+        <source>Compilation time: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="136"/>
+        <source>%1 version: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="152"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/en/donate.html</translation>
     </message>
@@ -1022,7 +1062,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="437"/>
+        <location filename="../client/ui/address_bar_model.cc" line="439"/>
         <source>Home Folder</source>
         <translation>Home-Ordner</translation>
     </message>
@@ -1032,87 +1072,87 @@
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="275"/>
+        <location filename="../client/ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
         <translation>Computer</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="382"/>
+        <location filename="../client/ui/address_bar_model.cc" line="384"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="385"/>
+        <location filename="../client/ui/address_bar_model.cc" line="387"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="388"/>
+        <location filename="../client/ui/address_bar_model.cc" line="390"/>
         <source>Total Space</source>
         <translation>Gesamter Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="391"/>
+        <location filename="../client/ui/address_bar_model.cc" line="393"/>
         <source>Free Space</source>
         <translation>Freier Speicherplatz</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="422"/>
+        <location filename="../client/ui/address_bar_model.cc" line="424"/>
         <source>Optical Drive</source>
         <translation>Optisches Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="425"/>
+        <location filename="../client/ui/address_bar_model.cc" line="427"/>
         <source>Removable Drive</source>
         <translation>Wechsellaufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="428"/>
+        <location filename="../client/ui/address_bar_model.cc" line="430"/>
         <source>Fixed Drive</source>
         <translation>Festes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="431"/>
+        <location filename="../client/ui/address_bar_model.cc" line="433"/>
         <source>Network Drive</source>
         <translation>Netzlaufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="434"/>
+        <location filename="../client/ui/address_bar_model.cc" line="436"/>
         <source>RAM Drive</source>
         <translation>RAM-Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="440"/>
+        <location filename="../client/ui/address_bar_model.cc" line="442"/>
         <source>Desktop Folder</source>
         <translation>Desktopordner</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="443"/>
+        <location filename="../client/ui/address_bar_model.cc" line="445"/>
         <source>Unknown Drive</source>
         <translation>Unbekanntes Laufwerk</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="460"/>
+        <location filename="../client/ui/address_bar_model.cc" line="462"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="465"/>
+        <location filename="../client/ui/address_bar_model.cc" line="467"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="470"/>
+        <location filename="../client/ui/address_bar_model.cc" line="472"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="475"/>
+        <location filename="../client/ui/address_bar_model.cc" line="477"/>
         <source>kB</source>
         <translation>kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="480"/>
+        <location filename="../client/ui/address_bar_model.cc" line="482"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -1611,7 +1651,7 @@
         <translation>8 Farben (3 Bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="139"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="140"/>
         <source>Compression ratio: %1</source>
         <translation>Kompressionsrate: %1</translation>
     </message>

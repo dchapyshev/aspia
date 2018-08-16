@@ -9,12 +9,22 @@
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="82"/>
+        <location filename="../console/about_dialog.ui" line="64"/>
+        <source>General</source>
+        <translation>Основное</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.ui" line="91"/>
+        <source>Service Information</source>
+        <translation>Сервисная информация</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.ui" line="106"/>
         <source>Donate!</source>
         <translation>Поддержать!</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.ui" line="106"/>
+        <location filename="../console/about_dialog.ui" line="130"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -480,27 +490,37 @@
         <translation>Сильнее</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="95"/>
-        <source>Screen update interval (ms):</source>
-        <translation>Интервал обновления экрана (мс):</translation>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="97"/>
+        <source>Scale factor:</source>
+        <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="117"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="104"/>
+        <source>Screen update interval:</source>
+        <translation>Интервал обновления экрана:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="134"/>
+        <source>ms</source>
+        <translation>мс</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="154"/>
         <source>Enable cursor shape</source>
         <translation>Включить изображение курсора</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="124"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="161"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="131"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="168"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="138"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="175"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
@@ -945,57 +965,77 @@
 <context>
     <name>aspia::AboutDialog</name>
     <message>
-        <location filename="../console/about_dialog.cc" line="81"/>
+        <location filename="../console/about_dialog.cc" line="91"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="85"/>
+        <location filename="../console/about_dialog.cc" line="95"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia - свободное программное обеспечение, распространяющееся по лицензии GNU General Public License 3.</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="86"/>
+        <location filename="../console/about_dialog.cc" line="96"/>
         <source>You can get a copy of license here:</source>
         <translation>Вы можете получить копию лицензии по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="91"/>
+        <location filename="../console/about_dialog.cc" line="101"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation>Ознакомиться с переводом лицензии на ваш язык можно по адресу:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="96"/>
+        <location filename="../console/about_dialog.cc" line="106"/>
         <source>Links:</source>
         <translation>Ссылки:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="97"/>
+        <location filename="../console/about_dialog.cc" line="107"/>
         <source>Home page:</source>
         <translation>Домашняя страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="98"/>
+        <location filename="../console/about_dialog.cc" line="108"/>
         <source>GitHub page:</source>
         <translation>GitHub страница:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="101"/>
+        <location filename="../console/about_dialog.cc" line="111"/>
         <source>Developers:</source>
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="103"/>
+        <location filename="../console/about_dialog.cc" line="113"/>
         <source>Translators:</source>
         <translation>Переводчики:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="105"/>
+        <location filename="../console/about_dialog.cc" line="115"/>
         <source>Third-party components:</source>
         <translation>Сторонние компоненты:</translation>
     </message>
     <message>
-        <location filename="../console/about_dialog.cc" line="122"/>
+        <location filename="../console/about_dialog.cc" line="130"/>
+        <source>Path: %1</source>
+        <translation>Путь: %1</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="131"/>
+        <source>Compilation date: %1</source>
+        <translation>Дата компиляции: %1</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="132"/>
+        <source>Compilation time: %1</source>
+        <translation>Время компиляции: %1</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="136"/>
+        <source>%1 version: %2</source>
+        <translation>Версия %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../console/about_dialog.cc" line="152"/>
         <source>https://aspia.org/en/donate.html</source>
         <translation>https://aspia.org/ru/donate.html</translation>
     </message>
@@ -1022,7 +1062,7 @@
     <name>aspia::AddressBarModel</name>
     <message>
         <location filename="../client/ui/address_bar_model.cc" line="81"/>
-        <location filename="../client/ui/address_bar_model.cc" line="437"/>
+        <location filename="../client/ui/address_bar_model.cc" line="439"/>
         <source>Home Folder</source>
         <translation>Домашняя папка</translation>
     </message>
@@ -1032,87 +1072,87 @@
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="275"/>
+        <location filename="../client/ui/address_bar_model.cc" line="277"/>
         <source>Computer</source>
         <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="382"/>
+        <location filename="../client/ui/address_bar_model.cc" line="384"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="385"/>
+        <location filename="../client/ui/address_bar_model.cc" line="387"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="388"/>
+        <location filename="../client/ui/address_bar_model.cc" line="390"/>
         <source>Total Space</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="391"/>
+        <location filename="../client/ui/address_bar_model.cc" line="393"/>
         <source>Free Space</source>
         <translation>Свободно</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="422"/>
+        <location filename="../client/ui/address_bar_model.cc" line="424"/>
         <source>Optical Drive</source>
         <translation>Оптический дисковод</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="425"/>
+        <location filename="../client/ui/address_bar_model.cc" line="427"/>
         <source>Removable Drive</source>
         <translation>Съемный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="428"/>
+        <location filename="../client/ui/address_bar_model.cc" line="430"/>
         <source>Fixed Drive</source>
         <translation>Локальный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="431"/>
+        <location filename="../client/ui/address_bar_model.cc" line="433"/>
         <source>Network Drive</source>
         <translation>Сетевой диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="434"/>
+        <location filename="../client/ui/address_bar_model.cc" line="436"/>
         <source>RAM Drive</source>
         <translation>Привод RAM</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="440"/>
+        <location filename="../client/ui/address_bar_model.cc" line="442"/>
         <source>Desktop Folder</source>
         <translation>Папка рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="443"/>
+        <location filename="../client/ui/address_bar_model.cc" line="445"/>
         <source>Unknown Drive</source>
         <translation>Неизвестный диск</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="460"/>
+        <location filename="../client/ui/address_bar_model.cc" line="462"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="465"/>
+        <location filename="../client/ui/address_bar_model.cc" line="467"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="470"/>
+        <location filename="../client/ui/address_bar_model.cc" line="472"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="475"/>
+        <location filename="../client/ui/address_bar_model.cc" line="477"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/address_bar_model.cc" line="480"/>
+        <location filename="../client/ui/address_bar_model.cc" line="482"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
@@ -1621,7 +1661,7 @@
         <translation>8 цветов (3 бита)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="139"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="140"/>
         <source>Compression ratio: %1</source>
         <translation>Уровень сжатия: %1</translation>
     </message>

@@ -21,6 +21,16 @@
 #include <QAbstractButton>
 #include <QDesktopServices>
 
+extern "C" {
+#define SODIUM_STATIC
+#include <sodium.h>
+} // extern "C"
+
+#include <libyuv.h>
+#include <google/protobuf/stubs/common.h>
+#include <vpx/vpx_codec.h>
+#include <zlib-ng.h>
+
 #include "version.h"
 
 namespace aspia {
@@ -78,7 +88,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 {
     ui.setupUi(this);
 
-    ui.label_version->setText(tr("Version: %1").arg(QLatin1String(ASPIA_VERSION_STRING)));
+    ui.label_version->setText(tr("Version: %1").arg(ASPIA_VERSION_STRING));
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
@@ -116,6 +126,26 @@ AboutDialog::AboutDialog(QWidget* parent)
     html += "</body><html>";
 
     ui.text_edit->setHtml(html);
+
+    ui.list_service->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
+    ui.list_service->addItem(tr("Compilation date: %1").arg(__DATE__));
+    ui.list_service->addItem(tr("Compilation time: %1").arg(__TIME__));
+
+    auto add_version = [this](const char* name, const QString& version)
+    {
+        ui.list_service->addItem(tr("%1 version: %2").arg(name).arg(version));
+    };
+
+    add_version("Qt", qVersion());
+    add_version("libyuv", QString::number(LIBYUV_VERSION));
+    add_version("libsodium", sodium_version_string());
+    add_version("libvpx", vpx_codec_version_str());
+
+    QString protobuf_version =
+        QString::fromStdString(google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION));
+    add_version("protobuf", protobuf_version);
+
+    add_version("zlib-ng", zlibng_version());
 
     connect(ui.push_button_donate, &QPushButton::pressed, [this]()
     {
