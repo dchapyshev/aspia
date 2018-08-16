@@ -253,6 +253,10 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_dib.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_qimage.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_frame_qimage.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_geometry.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/desktop_region.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_avx2.cc
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_avx2.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/diff_block_sse2.cc
