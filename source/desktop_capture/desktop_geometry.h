@@ -19,6 +19,10 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__DESKTOP_GEOMETRY_H_
 #define ASPIA_DESKTOP_CAPTURE__DESKTOP_GEOMETRY_H_
 
+#include <QRect>
+#include <QPoint>
+#include <QSize>
+
 #include <cstdint>
 
 namespace aspia {
@@ -44,6 +48,13 @@ public:
 
     ~DesktopPoint() = default;
 
+    static DesktopPoint fromQPoint(const QPoint& point)
+    {
+        return DesktopPoint(point.x(), point.y());
+    }
+
+    QPoint toQPoint() const { return QPoint(x_, y_); }
+
     int32_t x() const { return x_; }
     int32_t y() const { return y_; }
 
@@ -62,6 +73,20 @@ public:
     {
         x_ += x_offset;
         y_ += y_offset;
+    }
+
+    void translate(const DesktopPoint& offset) { translate(offset.x(), offset.y()); }
+
+    DesktopPoint translated(int32_t x_offset, int32_t y_offset) const
+    {
+        DesktopPoint point(*this);
+        point.translate(x_offset, y_offset);
+        return point;
+    }
+
+    DesktopPoint translated(const DesktopPoint& offset) const
+    {
+        return translated(offset.x(), offset.y());
     }
 
     DesktopPoint& operator=(const DesktopPoint& other)
@@ -96,6 +121,13 @@ public:
 
     ~DesktopSize() = default;
 
+    static DesktopSize fromQSize(const QSize& size)
+    {
+        return DesktopSize(size.width(), size.height());
+    }
+
+    QSize toQSize() const { return QSize(width_, height_); }
+
     int32_t width() const { return width_; }
     int32_t height() const { return height_; }
 
@@ -127,6 +159,9 @@ public:
         return *this;
     }
 
+    bool operator!=(const DesktopSize& other) const { return !isEqual(other); }
+    bool operator==(const DesktopSize& other) const { return isEqual(other); }
+
 private:
     int32_t width_ = 0;
     int32_t height_ = 0;
@@ -145,6 +180,11 @@ public:
         return DesktopRect(x, y, x + width, y + height);
     }
 
+    static DesktopRect makeXYWH(const DesktopPoint& left_top, const DesktopSize& size)
+    {
+        return DesktopRect::makeXYWH(left_top.x(), left_top.y(), size.width(), size.height());
+    }
+
     static DesktopRect makeWH(int32_t width, int32_t height)
     {
         return DesktopRect(0, 0, width, height);
@@ -155,9 +195,24 @@ public:
         return DesktopRect(left, top, right, bottom);
     }
 
+    static DesktopRect makeSize(int32_t width, int32_t height)
+    {
+        return DesktopRect(0, 0, width, height);
+    }
+
     static DesktopRect makeSize(const DesktopSize& size)
     {
         return DesktopRect(0, 0, size.width(), size.height());
+    }
+
+    static DesktopRect fromQRect(const QRect& rect)
+    {
+        return DesktopRect::makeLTRB(rect.left(), rect.top(), rect.right(), rect.bottom());
+    }
+
+    QRect toQRect() const
+    {
+        return QRect(left(), top(), width(), height());
     }
 
     int32_t left() const { return left_; }
@@ -200,6 +255,9 @@ public:
                 int32_t right_offset, int32_t bottom_offset);
 
     DesktopRect& operator=(const DesktopRect& other);
+
+    bool operator!=(const DesktopRect& other) const { return !isEqual(other); }
+    bool operator==(const DesktopRect& other) const { return isEqual(other); }
 
 private:
     DesktopRect(int32_t left, int32_t top, int32_t right, int32_t bottom)
