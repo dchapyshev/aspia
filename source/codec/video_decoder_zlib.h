@@ -19,11 +19,11 @@
 #ifndef ASPIA_CODEC__VIDEO_DECODER_ZLIB_H_
 #define ASPIA_CODEC__VIDEO_DECODER_ZLIB_H_
 
-#include "codec/decompressor_zlib.h"
 #include "codec/video_decoder.h"
 
 namespace aspia {
 
+class Decompressor;
 class DesktopFrame;
 class PixelTranslator;
 
@@ -37,9 +37,9 @@ public:
     bool decode(const proto::desktop::VideoPacket& packet, DesktopFrame* target_frame) override;
 
 private:
-    VideoDecoderZLIB() = default;
+    VideoDecoderZLIB();
 
-    DecompressorZLIB decompressor_;
+    std::unique_ptr<Decompressor> decompressor_;
     std::unique_ptr<PixelTranslator> translator_;
     std::unique_ptr<DesktopFrame> source_frame_;
 

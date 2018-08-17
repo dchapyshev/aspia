@@ -20,11 +20,18 @@
 
 #include <QDebug>
 
+#include "codec/decompressor_zlib.h"
 #include "codec/pixel_translator.h"
 #include "codec/video_util.h"
 #include "desktop_capture/desktop_frame_aligned.h"
 
 namespace aspia {
+
+VideoDecoderZLIB::VideoDecoderZLIB()
+    : decompressor_(std::make_unique<DecompressorZLIB>())
+{
+    // Nothing
+}
 
 // static
 std::unique_ptr<VideoDecoderZLIB> VideoDecoderZLIB::create()
@@ -89,12 +96,12 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
             size_t written = 0;
             size_t consumed = 0;
 
-            decompress_again = decompressor_.process(src + used,
-                                                     src_size - used,
-                                                     dst + row_pos,
-                                                     row_size - row_pos,
-                                                     &consumed,
-                                                     &written);
+            decompress_again = decompressor_->process(src + used,
+                                                      src_size - used,
+                                                      dst + row_pos,
+                                                      row_size - row_pos,
+                                                      &consumed,
+                                                      &written);
             used += consumed;
             row_pos += written;
 
@@ -115,7 +122,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
                                rect.height());
     }
 
-    decompressor_.reset();
+    decompressor_->reset();
     return true;
 }
 
