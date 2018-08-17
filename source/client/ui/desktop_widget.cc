@@ -274,7 +274,7 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 #endif // defined(Q_OS_WIN)
 
     // Release all pressed keys of the keyboard.
-    if (!pressed_keys_.isEmpty())
+    if (!pressed_keys_.empty())
     {
         uint32_t flags = 0;
 
@@ -293,7 +293,7 @@ void DesktopWidget::executeKeyEvent(uint32_t usb_keycode, uint32_t flags)
     if (flags & proto::desktop::KeyEvent::PRESSED)
         pressed_keys_.insert(usb_keycode);
     else
-        pressed_keys_.remove(usb_keycode);
+        pressed_keys_.erase(usb_keycode);
 
     emit sendKeyEvent(usb_keycode, flags);
 }
