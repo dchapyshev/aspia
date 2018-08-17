@@ -18,6 +18,7 @@
 
 #include "codec/scale_reducer.h"
 
+#include <libyuv/scale_row.h>
 #include <libyuv/scale_argb.h>
 
 #include "desktop_capture/desktop_frame_aligned.h"
@@ -27,20 +28,31 @@ namespace aspia {
 namespace {
 
 const int kMinScaleFactor = 50;
-const int kMaxScaleFactor = 100;
+const int kMaxScaleFactor = 150;
+const int kDefScaleFactor = 100;
 
-DesktopSize scaleSize(const DesktopSize& source_size, int scale_factor)
+int div(int num, int div)
 {
-    return DesktopSize(((source_size.width() * scale_factor) / 100),
-                       ((source_size.height() * scale_factor) / 100));
+    return (num + div - 1) / div;
 }
 
-DesktopRect scaleRect(const DesktopRect& source_rect, int scale_factor)
+DesktopSize scaledSize(const DesktopSize& source_size, int scale_factor)
 {
-    return DesktopRect::makeXYWH(((source_rect.x() * scale_factor) / 100),
-                                 ((source_rect.y() * scale_factor) / 100),
-                                 ((source_rect.width() * scale_factor) / 100),
-                                 ((source_rect.height() * scale_factor) / 100));
+    return DesktopSize(div(source_size.width() * scale_factor, kDefScaleFactor),
+                       div(source_size.height() * scale_factor, kDefScaleFactor));
+}
+
+DesktopRect scaledRect(const DesktopRect& source_rect, int scale_factor)
+{
+    int left = (source_rect.left() * scale_factor) / kDefScaleFactor;
+    int top = (source_rect.top() * scale_factor) / kDefScaleFactor;
+    int right = div(source_rect.right() * scale_factor, kDefScaleFactor);
+    int bottom = div(source_rect.bottom() * scale_factor, kDefScaleFactor);
+
+    static const int kPadding = 1;
+
+    return DesktopRect::makeLTRB(left - kPadding, top - kPadding,
+                                 right + kPadding, bottom + kPadding);
 }
 
 } // namespace
@@ -66,38 +78,59 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
     Q_ASSERT(!source_frame->constUpdatedRegion().isEmpty());
     Q_ASSERT(source_frame->format() == PixelFormat::ARGB());
 
-    if (scale_factor_ == kMaxScaleFactor)
+    if (scale_factor_ == kDefScaleFactor)
         return source_frame;
 
     if (!scaled_frame_)
     {
-        DesktopSize scaled_size = scaleSize(source_frame->size(), scale_factor_);
+        DesktopSize size = scaledSize(source_frame->size(), scale_factor_);
 
-        scaled_frame_ = DesktopFrameAligned::create(scaled_size, source_frame->format());
+        scaled_frame_ = DesktopFrameAligned::create(size, source_frame->format(), 32);
         if (!scaled_frame_)
             return nullptr;
     }
 
-    scaled_frame_->updatedRegion()->clear();
+    const DesktopSize& source_size = source_frame->size();
+    const DesktopSize& scaled_size = scaled_frame_->size();
 
-    for (DesktopRegion::Iterator it(scaled_frame_->constUpdatedRegion());
-         !it.isAtEnd(); it.advance())
+    DesktopRect scaled_frame_rect = DesktopRect::makeSize(scaled_size);
+    DesktopRegion* updated_region = scaled_frame_->updatedRegion();
+
+    updated_region->clear();
+
+    for (DesktopRegion::Iterator it(source_frame->constUpdatedRegion()); !it.isAtEnd(); it.advance())
     {
-        const DesktopRect& source_rect = it.rect();
-        DesktopRect scaled_rect = scaleRect(source_rect, scale_factor_);
+        DesktopRect scaled_rect = scaledRect(it.rect(), scale_factor_);
 
-        libyuv::ARGBScale(source_frame->frameDataAtPos(source_rect.leftTop()),
-                          source_frame->stride(),
-                          source_rect.width(),
-                          source_rect.height(),
-                          scaled_frame_->frameDataAtPos(scaled_rect.leftTop()),
-                          scaled_frame_->stride(),
-                          scaled_rect.width(),
-                          scaled_rect.height(),
-                          libyuv::kFilterBox);
+        scaled_rect.intersectWith(scaled_frame_rect);
 
-        scaled_rect.intersectWith(DesktopRect::makeSize(scaled_frame_->size()));
-        scaled_frame_->updatedRegion()->addRect(scaled_rect);
+#if 1
+        int height = scaled_rect.height();
+
+        // FIXME: A bug in libyuv? If the coordinate |bottom| of rectangle is equal to coordinate
+        // |bottom| in the frame, then a crash occurs.
+        if (scaled_rect.bottom() == scaled_frame_rect.bottom())
+            height -= 1;
+#endif
+
+        if (libyuv::ARGBScaleClip(source_frame->frameData(),
+                                  source_frame->stride(),
+                                  source_size.width(),
+                                  source_size.height(),
+                                  scaled_frame_->frameData(),
+                                  scaled_frame_->stride(),
+                                  scaled_size.width(),
+                                  scaled_size.height(),
+                                  scaled_rect.x(),
+                                  scaled_rect.y(),
+                                  scaled_rect.width(),
+                                  height,
+                                  libyuv::kFilterBox) == -1)
+        {
+            qWarning("libyuv::ARGBScaleClip failed");
+        }
+
+        updated_region->addRect(scaled_rect);
     }
 
     return scaled_frame_.get();

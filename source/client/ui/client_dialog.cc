@@ -21,13 +21,13 @@
 #include "client/ui/desktop_config_dialog.h"
 #include "client/client_session_desktop_manage.h"
 #include "client/client_session_desktop_view.h"
-#include "client/computer_factory.h"
+#include "client/config_factory.h"
 
 namespace aspia {
 
 ClientDialog::ClientDialog(QWidget* parent)
     : QDialog(parent),
-      computer_(ComputerFactory::defaultComputer())
+      computer_(ConfigFactory::defaultComputer())
 {
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());

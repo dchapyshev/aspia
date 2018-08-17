@@ -198,11 +198,6 @@ public:
         return DesktopRect(left, top, right, bottom);
     }
 
-    static DesktopRect makeSize(int32_t width, int32_t height)
-    {
-        return DesktopRect(0, 0, width, height);
-    }
-
     static DesktopRect makeSize(const DesktopSize& size)
     {
         return DesktopRect(0, 0, size.width(), size.height());

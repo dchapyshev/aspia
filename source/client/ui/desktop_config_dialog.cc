@@ -18,6 +18,7 @@
 
 #include "client/ui/desktop_config_dialog.h"
 
+#include "client/config_factory.h"
 #include "codec/video_util.h"
 
 namespace aspia {
@@ -43,6 +44,8 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
 {
     ui.setupUi(this);
 
+    ConfigFactory::fixupDesktopConfig(&config_);
+
     ui.combo_codec->addItem(QStringLiteral("VP9 (LossLess)"),
                             QVariant(proto::desktop::VIDEO_ENCODING_VP9));
 
@@ -52,7 +55,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     ui.combo_codec->addItem(QStringLiteral("ZLIB"),
                             QVariant(proto::desktop::VIDEO_ENCODING_ZLIB));
 
-    int current_codec = ui.combo_codec->findData(QVariant(config.video_encoding()));
+    int current_codec = ui.combo_codec->findData(QVariant(config_.video_encoding()));
     if (current_codec == -1)
         current_codec = 0;
 
@@ -65,7 +68,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     ui.combo_color_depth->addItem(tr("64 colors (6 bit)"), QVariant(COLOR_DEPTH_RGB222));
     ui.combo_color_depth->addItem(tr("8 colors (3 bit)"), QVariant(COLOR_DEPTH_RGB111));
 
-    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config.pixel_format());
+    PixelFormat pixel_format = VideoUtil::fromVideoPixelFormat(config_.pixel_format());
     ColorDepth color_depth = COLOR_DEPTH_ARGB;
 
     if (pixel_format.isEqual(PixelFormat::ARGB()))
@@ -83,18 +86,18 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     if (current_color_depth != -1)
         ui.combo_color_depth->setCurrentIndex(current_color_depth);
 
-    ui.slider_compression_ratio->setValue(config.compress_ratio());
-    onCompressionRatioChanged(config.compress_ratio());
+    ui.slider_compression_ratio->setValue(config_.compress_ratio());
+    onCompressionRatioChanged(config_.compress_ratio());
 
-    ui.spin_scale_factor->setValue(config.scale_factor());
-    ui.spin_update_interval->setValue(config.update_interval());
+    ui.spin_scale_factor->setValue(config_.scale_factor());
+    ui.spin_update_interval->setValue(config_.update_interval());
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+        if (config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (config_.flags() & proto::desktop::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
     }
     else
@@ -103,10 +106,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
         ui.checkbox_clipboard->setEnabled(false);
     }
 
-    if (config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
+    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
+    if (config_.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 
     connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),

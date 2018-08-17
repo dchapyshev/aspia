@@ -18,6 +18,7 @@
 
 #include "client/connect_data.h"
 
+#include "client/config_factory.h"
 #include "crypto/secure_memory.h"
 
 namespace aspia {
@@ -33,9 +34,7 @@ ConnectData::~ConnectData()
 void ConnectData::setDesktopConfig(const proto::desktop::Config& config)
 {
     desktop_config_ = config;
-
-    if (desktop_config_.scale_factor() < 50 || desktop_config_.scale_factor() > 100)
-        desktop_config_.set_scale_factor(100);
+    ConfigFactory::fixupDesktopConfig(&desktop_config_);
 }
 
 } // namespace aspia

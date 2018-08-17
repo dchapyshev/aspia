@@ -37,7 +37,7 @@ public:
     const DesktopFrame* scaleFrame(const DesktopFrame* source_frame);
 
 protected:
-    ScaleReducer(int scale_factor);
+    explicit ScaleReducer(int scale_factor);
 
 private:
     const int scale_factor_;

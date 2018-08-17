@@ -41,7 +41,7 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
 
         source_frame_ = DesktopFrameAligned::create(
             DesktopSize(format.screen_rect().width(), format.screen_rect().height()),
-            VideoUtil::fromVideoPixelFormat(format.pixel_format()));
+            VideoUtil::fromVideoPixelFormat(format.pixel_format()), 32);
 
         translator_ = PixelTranslator::create(source_frame_->format(), target_frame->format());
     }

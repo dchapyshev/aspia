@@ -57,7 +57,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
         computer_name = connect_data_->address();
 
     setWindowTitle(QString("%1 - %2").arg(computer_name).arg(session_name));
-    setMinimumSize(800, 600);
+    setMinimumSize(400, 300);
 
     desktop_ = new DesktopWidget(this);
 
@@ -204,7 +204,14 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    emit sendPointerEvent(DesktopPoint::fromQPoint(pos).translated(screen_top_left_), mask);
+    int scale_factor = connect_data_->desktopConfig().scale_factor();
+    if (scale_factor)
+    {
+        int x = ((pos.x() * 100) / scale_factor) + screen_top_left_.x();
+        int y = ((pos.y() * 100) / scale_factor) + screen_top_left_.y();
+
+        emit sendPointerEvent(DesktopPoint(x, y), mask);
+    }
 }
 
 void DesktopWindow::changeSettings()

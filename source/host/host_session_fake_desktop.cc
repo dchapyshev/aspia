@@ -102,7 +102,7 @@ VideoEncoder* HostSessionFakeDesktop::createEncoder(const proto::desktop::Config
 
 std::unique_ptr<DesktopFrame> HostSessionFakeDesktop::createFrame()
 {
-    const DesktopRect frame_rect = DesktopRect::makeSize(800, 600);
+    const DesktopRect frame_rect = DesktopRect::makeWH(800, 600);
     const QRect table_rect(200, 250, 400, 100);
     const int border_size = 1;
     const int title_height = 30;

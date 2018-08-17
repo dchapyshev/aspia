@@ -1399,7 +1399,7 @@
 <context>
     <name>aspia::ClientSessionDesktopManage</name>
     <message>
-        <location filename="../client/client_session_desktop_manage.cc" line="46"/>
+        <location filename="../client/client_session_desktop_manage.cc" line="47"/>
         <source>Session error: Invalid message from host.</source>
         <translation>Збій сесії: Невірне повідомлення від хоста.</translation>
     </message>
@@ -1636,32 +1636,32 @@
 <context>
     <name>aspia::DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="62"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="65"/>
         <source>True color (32 bit)</source>
         <translation>True color (32 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="63"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="66"/>
         <source>High color (16 bit)</source>
         <translation>High color (16 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="64"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="67"/>
         <source>256 colors (8 bit)</source>
         <translation>256 colors (8 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="65"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="68"/>
         <source>64 colors (6 bit)</source>
         <translation>64 colors (6 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="66"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="69"/>
         <source>8 colors (3 bit)</source>
         <translation>8 colors (3 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="140"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="143"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>

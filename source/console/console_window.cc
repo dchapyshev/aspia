@@ -27,7 +27,7 @@
 
 #include "client/ui/client_dialog.h"
 #include "client/client.h"
-#include "client/computer_factory.h"
+#include "client/config_factory.h"
 #include "console/about_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/console_settings.h"
@@ -700,7 +700,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             if (computer.session_config().has_desktop_manage())
                 connect_data.setDesktopConfig(computer.session_config().desktop_manage());
             else
-                connect_data.setDesktopConfig(ComputerFactory::defaultDesktopManageConfig());
+                connect_data.setDesktopConfig(ConfigFactory::defaultDesktopManageConfig());
         }
         break;
 
@@ -709,7 +709,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             if (computer.session_config().has_desktop_view())
                 connect_data.setDesktopConfig(computer.session_config().desktop_view());
             else
-                connect_data.setDesktopConfig(ComputerFactory::defaultDesktopViewConfig());
+                connect_data.setDesktopConfig(ConfigFactory::defaultDesktopViewConfig());
         }
         break;
 

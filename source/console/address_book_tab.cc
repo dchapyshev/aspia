@@ -23,7 +23,7 @@
 #include <QMessageBox>
 
 #include "base/message_serialization.h"
-#include "client/computer_factory.h"
+#include "client/config_factory.h"
 #include "codec/video_util.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
@@ -347,7 +347,7 @@ void AddressBookTab::addComputer()
         return;
 
     std::unique_ptr<proto::address_book::Computer> computer =
-        std::make_unique<proto::address_book::Computer>(ComputerFactory::defaultComputer());
+        std::make_unique<proto::address_book::Computer>(ConfigFactory::defaultComputer());
 
     ComputerDialog dialog(this,
                           ComputerDialog::CreateComputer,

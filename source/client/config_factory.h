@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CLIENT__COMPUTER_FACTORY_H_
-#define ASPIA_CLIENT__COMPUTER_FACTORY_H_
+#ifndef ASPIA_CLIENT__CONFIG_FACTORY_H_
+#define ASPIA_CLIENT__CONFIG_FACTORY_H_
 
 #include "base/macros_magic.h"
 #include "protocol/address_book.pb.h"
 
 namespace aspia {
 
-class ComputerFactory
+class ConfigFactory
 {
 public:
     static proto::address_book::Computer defaultComputer();
@@ -35,10 +35,13 @@ public:
     static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
     static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
 
+    // Corrects invalid values in the configuration if they are.
+    static void fixupDesktopConfig(proto::desktop::Config* config);
+
 private:
-    DISALLOW_COPY_AND_ASSIGN(ComputerFactory);
+    DISALLOW_COPY_AND_ASSIGN(ConfigFactory);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CLIENT__COMPUTER_FACTORY_H_
+#endif // ASPIA_CLIENT__CONFIG_FACTORY_H_

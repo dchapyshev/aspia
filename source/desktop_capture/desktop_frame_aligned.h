@@ -31,7 +31,8 @@ public:
     ~DesktopFrameAligned();
 
     static std::unique_ptr<DesktopFrameAligned> create(const DesktopSize& size,
-                                                       const PixelFormat& format);
+                                                       const PixelFormat& format,
+                                                       size_t aligment);
 
 private:
     DesktopFrameAligned(const DesktopSize& size,

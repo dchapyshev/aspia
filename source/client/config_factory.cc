@@ -16,14 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/computer_factory.h"
+#include "client/config_factory.h"
 
 #include "codec/video_util.h"
 
 namespace aspia {
 
+namespace {
+
+const int kDefUpdateInterval = 30;
+const int kMinUpdateInterval = 15;
+const int kMaxUpdateInterval = 100;
+
+const int kDefScaleFactor = 100;
+const int kMinScaleFactor = 50;
+const int kMaxScaleFactor = 150;
+
+const int kDefCompressRatio = 6;
+const int kMinCompressRatio = 1;
+const int kMaxCompressRatio = 9;
+
+} // namespace
+
 // static
-proto::address_book::Computer ComputerFactory::defaultComputer()
+proto::address_book::Computer ConfigFactory::defaultComputer()
 {
     proto::address_book::Computer computer;
 
@@ -37,7 +53,7 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
 }
 
 // static
-proto::desktop::Config ComputerFactory::defaultDesktopManageConfig()
+proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
 {
     proto::desktop::Config config;
     setDefaultDesktopManageConfig(&config);
@@ -45,7 +61,7 @@ proto::desktop::Config ComputerFactory::defaultDesktopManageConfig()
 }
 
 // static
-proto::desktop::Config ComputerFactory::defaultDesktopViewConfig()
+proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
 {
     proto::desktop::Config config;
     setDefaultDesktopViewConfig(&config);
@@ -53,7 +69,7 @@ proto::desktop::Config ComputerFactory::defaultDesktopViewConfig()
 }
 
 // static
-void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
     Q_ASSERT(config);
 
@@ -63,15 +79,15 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    config->set_compress_ratio(6);
-    config->set_scale_factor(100);
-    config->set_update_interval(30);
+    config->set_compress_ratio(kDefCompressRatio);
+    config->set_scale_factor(kDefScaleFactor);
+    config->set_update_interval(kDefUpdateInterval);
 
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
 }
 
 // static
-void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 {
     Q_ASSERT(config);
 
@@ -80,11 +96,24 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VideoEncoding::VIDEO_ENCODING_ZLIB);
-    config->set_compress_ratio(6);
-    config->set_scale_factor(100);
-    config->set_update_interval(30);
+    config->set_compress_ratio(kDefCompressRatio);
+    config->set_scale_factor(kDefScaleFactor);
+    config->set_update_interval(kDefUpdateInterval);
 
     VideoUtil::toVideoPixelFormat(PixelFormat::RGB565(), config->mutable_pixel_format());
+}
+
+// static
+void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
+{
+    if (config->scale_factor() < kMinScaleFactor || config->scale_factor() > kMaxScaleFactor)
+        config->set_scale_factor(kDefScaleFactor);
+
+    if (config->update_interval() < kMinUpdateInterval || config->update_interval() > kMaxUpdateInterval)
+        config->set_update_interval(kDefUpdateInterval);
+
+    if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
+        config->set_compress_ratio(kDefCompressRatio);
 }
 
 } // namespace aspia
