@@ -173,12 +173,14 @@ enum ConfigFlags {
   ENABLE_CLIPBOARD = 2,
   DISABLE_DESKTOP_EFFECTS = 4,
   DISABLE_DESKTOP_WALLPAPER = 8,
+  DISABLE_FONT_SMOOTHING = 16,
+  BLOCK_REMOTE_INPUT = 32,
   ConfigFlags_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   ConfigFlags_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool ConfigFlags_IsValid(int value);
 const ConfigFlags ConfigFlags_MIN = NO_FLAGS;
-const ConfigFlags ConfigFlags_MAX = DISABLE_DESKTOP_WALLPAPER;
+const ConfigFlags ConfigFlags_MAX = BLOCK_REMOTE_INPUT;
 const int ConfigFlags_ARRAYSIZE = ConfigFlags_MAX + 1;
 
 // ===================================================================

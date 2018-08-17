@@ -163,6 +163,8 @@ enum ConfigFlags
     ENABLE_CLIPBOARD          = 2;
     DISABLE_DESKTOP_EFFECTS   = 4;
     DISABLE_DESKTOP_WALLPAPER = 8;
+    DISABLE_FONT_SMOOTHING    = 16;
+    BLOCK_REMOTE_INPUT        = 32;
 }
 
 message Config
