@@ -18,26 +18,26 @@
 
 #include "host/input_injector.h"
 
-#include <QRect>
-#include <QSettings>
+#include <QDebug>
 
 #include <set>
-
 #include <qt_windows.h>
 #include <sas.h>
 
+#include "base/win/registry.h"
 #include "base/errno_logging.h"
 #include "base/keycode_converter.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
+#include "desktop_capture/desktop_geometry.h"
 
 namespace aspia {
 
 namespace {
 
-const char kSoftwareSASGenerationPath[] =
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+const wchar_t kSoftwareSASGenerationPath[] =
+    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
 
-const char kSoftwareSASGeneration[] = "SoftwareSASGeneration";
+const wchar_t kSoftwareSASGeneration[] = L"SoftwareSASGeneration";
 
 const uint32_t kUsbCodeDelete = 0x07004c;
 const uint32_t kUsbCodeLeftCtrl = 0x0700e0;
@@ -93,11 +93,12 @@ public:
 
 private:
     void switchToInputDesktop();
+    void injectSAS();
     bool isCtrlAndAltPressed();
 
     ScopedThreadDesktop desktop_;
     std::set<uint32_t> pressed_keys_;
-    QPoint prev_mouse_pos_;
+    DesktopPoint prev_mouse_pos_;
     uint32_t prev_mouse_button_mask_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjectorImpl);
@@ -120,15 +121,17 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 {
     switchToInputDesktop();
 
-    QSize screen_size(GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
+    DesktopSize screen_size(GetSystemMetrics(SM_CXVIRTUALSCREEN),
+                            GetSystemMetrics(SM_CYVIRTUALSCREEN));
     if (screen_size.isEmpty())
         return;
 
-    int x = qMax(0, qMin(screen_size.width(), event.x()));
-    int y = qMax(0, qMin(screen_size.height(), event.y()));
+    int x = std::max(0, std::min(screen_size.width(), event.x()));
+    int y = std::max(0, std::min(screen_size.height(), event.y()));
 
     // Translate the coordinates of the cursor into the coordinates of the virtual screen.
-    QPoint pos((x * 65535) / (screen_size.width() - 1), (y * 65535) / (screen_size.height() - 1));
+    DesktopPoint pos((x * 65535) / (screen_size.width() - 1),
+                     (y * 65535) / (screen_size.height() - 1));
 
     DWORD flags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
     DWORD wheel_movement = 0;
@@ -200,17 +203,7 @@ void InputInjectorImpl::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
         if (event.usb_keycode() == kUsbCodeDelete && isCtrlAndAltPressed())
         {
-            QSettings settings(kSoftwareSASGenerationPath, QSettings::Registry64Format);
-
-            static const int kNone = 0;
-            static const int kApplications = 2;
-
-            int old_state = settings.value(kSoftwareSASGeneration, kNone).toInt();
-            if (old_state < kApplications)
-                settings.setValue(kSoftwareSASGeneration, kApplications);
-
-            SendSAS(FALSE);
-            settings.setValue(kSoftwareSASGeneration, old_state);
+            injectSAS();
             return;
         }
     }
@@ -263,6 +256,52 @@ void InputInjectorImpl::switchToInputDesktop()
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.
     SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+}
+
+void InputInjectorImpl::injectSAS()
+{
+    static const DWORD kNone = 0;
+    static const DWORD kApplications = 2;
+
+    RegistryKey key;
+    DWORD old_state = kNone;
+
+    LONG status = key.create(HKEY_LOCAL_MACHINE, kSoftwareSASGenerationPath, KEY_READ | KEY_WRITE);
+    if (status != ERROR_SUCCESS)
+    {
+        qWarning() << "key.create failed" << errnoToString(status);
+    }
+    else
+    {
+        status = key.readValueDW(kSoftwareSASGeneration, &old_state);
+        if (status != ERROR_SUCCESS)
+        {
+            // The previous state is not defined.
+            // Consider that the software generation of SAS has been disabled.
+            old_state = kNone;
+        }
+
+        if (old_state < kApplications)
+        {
+            status = key.writeValue(kSoftwareSASGeneration, kApplications);
+            if (status != ERROR_SUCCESS)
+            {
+                qWarning() << "key.writeValue failed" << errnoToString(status);
+                key.close();
+            }
+        }
+    }
+
+    SendSAS(FALSE);
+
+    if (key.isValid())
+    {
+        LONG status = key.writeValue(kSoftwareSASGeneration, old_state);
+        if (status != ERROR_SUCCESS)
+        {
+            qWarning() << "key.writeValue failed" << errnoToString(status);
+        }
+    }
 }
 
 bool InputInjectorImpl::isCtrlAndAltPressed()
