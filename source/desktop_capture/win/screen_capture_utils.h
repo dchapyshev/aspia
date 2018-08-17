@@ -19,9 +19,6 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__WIN__SCREEN_CAPTURE_UTILS_H_
 #define ASPIA_DESKTOP_CAPTURE__WIN__SCREEN_CAPTURE_UTILS_H_
 
-#include <QString>
-#include <QVector>
-
 #include "base/macros_magic.h"
 #include "desktop_capture/screen_capturer.h"
 

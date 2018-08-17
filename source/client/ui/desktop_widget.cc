@@ -167,7 +167,7 @@ void DesktopWidget::executeKeySequense(int key_sequence)
     const uint32_t kUsbCodeLeftShift = 0x0700e1;
     const uint32_t kUsbCodeLeftMeta = 0x0700e3;
 
-    QVector<int> keys;
+    std::vector<int> keys;
 
     if (key_sequence & Qt::AltModifier)
         keys.push_back(kUsbCodeLeftAlt);

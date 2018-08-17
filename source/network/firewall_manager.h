@@ -24,6 +24,8 @@
 #include <wrl/client.h>
 #include <netfw.h>
 
+#include <vector>
+
 #include "base/macros_magic.h"
 
 namespace aspia {
@@ -57,7 +59,7 @@ public:
 
 private:
     // Returns the list of rules applying to the application.
-    void allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
+    void allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules);
 
     // Deletes rules. Needs elevation.
     void deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule);

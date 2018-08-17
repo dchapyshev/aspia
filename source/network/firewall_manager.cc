@@ -93,10 +93,10 @@ bool FirewallManager::isFirewallEnabled() const
 
 bool FirewallManager::hasAnyRule()
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
-    return !rules.isEmpty();
+    return !rules.empty();
 }
 
 bool FirewallManager::addTcpRule(const QString& rule_name,
@@ -139,7 +139,7 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
 
 void FirewallManager::deleteRuleByName(const QString& rule_name)
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
@@ -166,14 +166,14 @@ void FirewallManager::deleteRuleByName(const QString& rule_name)
 
 void FirewallManager::deleteAllRules()
 {
-    QVector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
+    std::vector<Microsoft::WRL::ComPtr<INetFwRule>> rules;
     allRules(&rules);
 
     for (const auto& rule : rules)
         deleteRule(rule);
 }
 
-void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
+void FirewallManager::allRules(std::vector<Microsoft::WRL::ComPtr<INetFwRule>>* rules)
 {
     Microsoft::WRL::ComPtr<IUnknown> rules_enum_unknown;
 
