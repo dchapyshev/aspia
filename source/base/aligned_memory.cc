@@ -18,6 +18,10 @@
 
 #include "base/aligned_memory.h"
 
+#if defined(Q_OS_ANDROID)
+#include <malloc.h>
+#endif
+
 namespace aspia {
 
 void* alignedAlloc(size_t size, size_t alignment)
@@ -26,12 +30,19 @@ void* alignedAlloc(size_t size, size_t alignment)
     Q_ASSERT((alignment & (alignment - 1)) == 0U);
     Q_ASSERT((alignment % sizeof(void*)) == 0U);
 
-    void* ptr =  qMallocAligned(size, alignment);
+#if defined(Q_OS_WIN)
+    void* ptr =  _aligned_malloc(size, alignment);
+#elif defined(Q_OS_ANDROID)
+    ptr = memalign(alignment, size);
+#else
+    if (posix_memalign(&ptr, alignment, size))
+        ptr = nullptr;
+#endif
+
     Q_CHECK_PTR(ptr);
 
     // Sanity check alignment just to be safe.
     Q_ASSERT((reinterpret_cast<uintptr_t>(ptr) & (alignment - 1)) == 0U);
-
     return ptr;
 }
 

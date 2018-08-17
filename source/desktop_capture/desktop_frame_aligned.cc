@@ -18,6 +18,8 @@
 
 #include "desktop_capture/desktop_frame_aligned.h"
 
+#include "base/aligned_memory.h"
+
 namespace aspia {
 
 DesktopFrameAligned::DesktopFrameAligned(const DesktopSize& size,
@@ -31,17 +33,17 @@ DesktopFrameAligned::DesktopFrameAligned(const DesktopSize& size,
 
 DesktopFrameAligned::~DesktopFrameAligned()
 {
-    qFreeAligned(data_);
+    alignedFree(data_);
 }
 
 // static
 std::unique_ptr<DesktopFrameAligned> DesktopFrameAligned::create(
-    const DesktopSize& size, const PixelFormat& format, size_t aligment)
+    const DesktopSize& size, const PixelFormat& format, size_t alignment)
 {
     int bytes_per_row = size.width() * format.bytesPerPixel();
 
-    uint8_t* data = reinterpret_cast<uint8_t*>(
-        qMallocAligned(bytes_per_row * size.height(), aligment));
+    uint8_t* data =
+        reinterpret_cast<uint8_t*>(alignedAlloc(bytes_per_row * size.height(), alignment));
     if (!data)
         return nullptr;
 

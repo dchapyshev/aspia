@@ -35,18 +35,27 @@
 //
 // Alternatively, a runtime sized aligned allocation can be created:
 //
-//   float* my_array = static_cast<float*>(AlignedAlloc(size, alignment));
+//   float* my_array = static_cast<float*>(alignedAlloc(size, alignment));
 //
 //   // ... later, to release the memory:
-//   AlignedFree(my_array);
+//   alignedFree(my_array);
 //
 // Or using unique_ptr:
 //
 //   std::unique_ptr<float, AlignedFreeDeleter> my_array(
-//       static_cast<float*>(AlignedAlloc(size, alignment)));
+//       static_cast<float*>(alignedAlloc(size, alignment)));
 
 #ifndef ASPIA_BASE__ALIGNED_MEMORY_H_
 #define ASPIA_BASE__ALIGNED_MEMORY_H_
+
+#include <cstddef>
+#include <cstdint>
+
+#if defined(Q_OS_WIN)
+#include <malloc.h>
+#else
+#include <cstdlib>
+#endif
 
 namespace aspia {
 
@@ -54,11 +63,14 @@ void* alignedAlloc(size_t size, size_t alignment);
 
 inline void alignedFree(void* ptr)
 {
-    qFreeAligned(ptr);
+#if defined(Q_OS_WIN)
+    _aligned_free(ptr);
+#else
+    free(ptr);
+#endif
 }
 
-// Deleter for use with unique_ptr. E.g., use as
-//   std::unique_ptr<Foo, base::AlignedFreeDeleter> foo;
+// Deleter for use with unique_ptr. E.g., use as std::unique_ptr<Foo, AlignedFreeDeleter> foo;
 struct AlignedFreeDeleter
 {
     void operator()(void* ptr) const

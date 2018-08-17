@@ -32,7 +32,7 @@ public:
 
     static std::unique_ptr<DesktopFrameAligned> create(const DesktopSize& size,
                                                        const PixelFormat& format,
-                                                       size_t aligment);
+                                                       size_t alignment);
 
 private:
     DesktopFrameAligned(const DesktopSize& size,
