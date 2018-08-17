@@ -528,47 +528,47 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="86"/>
+        <location filename="../client/ui/desktop_panel.ui" line="140"/>
         <source>Lock toolbar</source>
         <translation>Symbolleiste sperren</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="112"/>
+        <location filename="../client/ui/desktop_panel.ui" line="152"/>
         <source>Session configuration</source>
         <translation>Sitzungskonfiguration</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="138"/>
+        <location filename="../client/ui/desktop_panel.ui" line="164"/>
         <source>Monitor selection</source>
         <translation>Bildschirmauswahl</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="164"/>
+        <location filename="../client/ui/desktop_panel.ui" line="176"/>
         <source>Automatic window size</source>
         <translation>Automatische Fenstergröße</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="187"/>
+        <location filename="../client/ui/desktop_panel.ui" line="191"/>
         <source>Switch to full screen mode or back</source>
         <translation>In den Vollbildmodus wechseln (oder zurück)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="213"/>
+        <location filename="../client/ui/desktop_panel.ui" line="209"/>
         <source>Enabling/disabling automatic scrolling</source>
         <translation>Automatisches Scrollen aktivieren/deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="242"/>
+        <location filename="../client/ui/desktop_panel.ui" line="221"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Strg+Alt+Entf senden</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="265"/>
+        <location filename="../client/ui/desktop_panel.ui" line="233"/>
         <source>Send key sequence</source>
         <translation>Tastenfolge senden</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="339"/>
+        <location filename="../client/ui/desktop_panel.ui" line="125"/>
         <source>Custom...</source>
         <translation>Andere...</translation>
     </message>

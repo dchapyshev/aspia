@@ -19,6 +19,7 @@
 #include "client/ui/desktop_panel.h"
 
 #include <QMenu>
+#include <QToolButton>
 
 #include "client/ui/key_sequence_dialog.h"
 #include "client/ui/select_screen_action.h"
@@ -30,10 +31,10 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
 {
     ui.setupUi(this);
 
-    connect(ui.button_settings, &QPushButton::pressed, this, &DesktopPanel::settingsButton);
-    connect(ui.button_autosize, &QPushButton::pressed, this, &DesktopPanel::onAutosizeButton);
-    connect(ui.button_full_screen, &QPushButton::clicked, this, &DesktopPanel::onFullscreenButton);
-    connect(ui.button_autoscroll, &QPushButton::clicked, this, &DesktopPanel::autoScrollChanged);
+    connect(ui.action_settings, &QAction::triggered, this, &DesktopPanel::settingsButton);
+    connect(ui.action_autosize, &QAction::triggered, this, &DesktopPanel::onAutosizeButton);
+    connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopPanel::onFullscreenButton);
+    connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
 
     screens_menu_ = new QMenu(this);
     screens_group_ = new QActionGroup(this);
@@ -42,7 +43,11 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     screens_group_->addAction(full_screen_action);
     screens_menu_->addAction(full_screen_action);
 
-    ui.button_monitors->setMenu(screens_menu_);
+    ui.action_monitors->setMenu(screens_menu_);
+
+    QToolButton* button_monitors =
+        qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_monitors));
+    button_monitors->setPopupMode(QToolButton::InstantPopup);
 
     connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
     connect(screens_menu_, &QMenu::aboutToHide, [this]()
@@ -71,7 +76,7 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
                 delayedHide();
         });
 
-        connect(ui.button_ctrl_alt_del, &QPushButton::pressed,
+        connect(ui.action_cad, &QAction::triggered,
                 this, &DesktopPanel::onCtrlAltDelButton);
 
         connect(ui.action_alt_tab, &QAction::triggered,
@@ -89,14 +94,18 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
         connect(ui.action_custom, &QAction::triggered,
                 this, &DesktopPanel::onCustomAction);
 
-        ui.button_send_keys->setMenu(keys_menu_);
+        ui.action_send_keys->setMenu(keys_menu_);
+
+        QToolButton* button_send_keys =
+            qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_send_keys));
+        button_send_keys->setPopupMode(QToolButton::InstantPopup);
     }
     else
     {
         Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
 
-        ui.button_send_keys->hide();
-        ui.button_ctrl_alt_del->hide();
+        ui.action_send_keys->setVisible(false);
+        ui.action_cad->setVisible(false);
     }
 
     ui.frame->hide();
@@ -133,7 +142,7 @@ void DesktopPanel::setScreenList(const proto::desktop::ScreenList& screen_list)
         screens_menu_->addAction(action);
     }
 
-    ui.button_monitors->setEnabled(true);
+    ui.action_monitors->setEnabled(true);
 }
 
 void DesktopPanel::timerEvent(QTimerEvent* event)
@@ -143,9 +152,9 @@ void DesktopPanel::timerEvent(QTimerEvent* event)
         killTimer(hide_timer_id_);
         hide_timer_id_ = 0;
 
-        ui.frame->setFixedWidth(ui.frame_buttons->width());
+        ui.frame->setFixedWidth(ui.toolbar->width());
 
-        ui.frame_buttons->hide();
+        ui.toolbar->hide();
         ui.frame->show();
 
         adjustSize();
@@ -167,7 +176,7 @@ void DesktopPanel::enterEvent(QEvent* event)
             hide_timer_id_ = 0;
         }
 
-        ui.frame_buttons->show();
+        ui.toolbar->show();
         ui.frame->hide();
 
         adjustSize();
@@ -190,12 +199,12 @@ void DesktopPanel::onFullscreenButton(bool checked)
 {
     if (checked)
     {
-        ui.button_full_screen->setIcon(
+        ui.action_fullscreen->setIcon(
             QIcon(QStringLiteral(":/icon/application-resize-actual.png")));
     }
     else
     {
-        ui.button_full_screen->setIcon(
+        ui.action_fullscreen->setIcon(
             QIcon(QStringLiteral(":/icon/application-resize-full.png")));
     }
 
@@ -204,11 +213,11 @@ void DesktopPanel::onFullscreenButton(bool checked)
 
 void DesktopPanel::onAutosizeButton()
 {
-    if (ui.button_full_screen->isChecked())
+    if (ui.action_fullscreen->isChecked())
     {
-        ui.button_full_screen->setIcon(
+        ui.action_fullscreen->setIcon(
             QIcon(QStringLiteral(":/icon/application-resize-full.png")));
-        ui.button_full_screen->setChecked(false);
+        ui.action_fullscreen->setChecked(false);
     }
 
     emit switchToAutosize();
@@ -249,7 +258,7 @@ void DesktopPanel::onCustomAction()
 
 void DesktopPanel::delayedHide()
 {
-    if (!ui.button_pin->isChecked() && !hide_timer_id_)
+    if (!ui.action_pin->isChecked() && !hide_timer_id_)
         hide_timer_id_ = startTimer(std::chrono::seconds(1));
 }
 

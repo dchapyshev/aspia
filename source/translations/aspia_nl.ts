@@ -528,47 +528,47 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="86"/>
+        <location filename="../client/ui/desktop_panel.ui" line="140"/>
         <source>Lock toolbar</source>
         <translation>Werkbalk vergrendelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="112"/>
+        <location filename="../client/ui/desktop_panel.ui" line="152"/>
         <source>Session configuration</source>
         <translation>Sessie configuratie</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="138"/>
+        <location filename="../client/ui/desktop_panel.ui" line="164"/>
         <source>Monitor selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="164"/>
+        <location filename="../client/ui/desktop_panel.ui" line="176"/>
         <source>Automatic window size</source>
         <translation>Automatische scherm grootte</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="187"/>
+        <location filename="../client/ui/desktop_panel.ui" line="191"/>
         <source>Switch to full screen mode or back</source>
         <translation>Tussen volledig scherm schakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="213"/>
+        <location filename="../client/ui/desktop_panel.ui" line="209"/>
         <source>Enabling/disabling automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="242"/>
+        <location filename="../client/ui/desktop_panel.ui" line="221"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Stuur Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="265"/>
+        <location filename="../client/ui/desktop_panel.ui" line="233"/>
         <source>Send key sequence</source>
         <translation>Stuur toetsencombinatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="339"/>
+        <location filename="../client/ui/desktop_panel.ui" line="125"/>
         <source>Custom...</source>
         <translation>Aangepast...</translation>
     </message>

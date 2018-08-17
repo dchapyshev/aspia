@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>36</height>
+    <width>206</width>
+    <height>40</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,241 +45,27 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame_buttons">
+    <widget class="QToolBar" name="toolbar">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+     <property name="iconSize">
+      <size>
+       <width>18</width>
+       <height>18</height>
+      </size>
      </property>
-     <property name="lineWidth">
-      <number>0</number>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="button_pin">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Lock toolbar</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/pin.png</normaloff>:/icon/pin.png</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_settings">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Session configuration</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_monitors">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Monitor selection</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">text-align:left;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_autosize">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Automatic window size</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_full_screen">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Switch to full screen mode or back</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_autoscroll">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Enabling/disabling automatic scrolling</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/auto-scroll.png</normaloff>:/icon/auto-scroll.png</iconset>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_ctrl_alt_del">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Send Ctrl+Alt+Delete</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_send_keys">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Send key sequence</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">text-align:left;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
-          <normaloff>:/icon/keyboard.png</normaloff>:/icon/keyboard.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <addaction name="action_pin"/>
+     <addaction name="action_settings"/>
+     <addaction name="action_monitors"/>
+     <addaction name="action_autosize"/>
+     <addaction name="action_fullscreen"/>
+     <addaction name="action_autoscroll"/>
+     <addaction name="action_cad"/>
+     <addaction name="action_send_keys"/>
     </widget>
    </item>
    <item>
@@ -337,6 +123,114 @@
   <action name="action_custom">
    <property name="text">
     <string>Custom...</string>
+   </property>
+  </action>
+  <action name="action_pin">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/pin.png</normaloff>:/icon/pin.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Lock toolbar</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/settings.png</normaloff>:/icon/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Session configuration</string>
+   </property>
+  </action>
+  <action name="action_monitors">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/monitors.png</normaloff>:/icon/monitors.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Monitor selection</string>
+   </property>
+  </action>
+  <action name="action_autosize">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/arrow-in-out.png</normaloff>:/icon/arrow-in-out.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Automatic window size</string>
+   </property>
+  </action>
+  <action name="action_fullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/application-resize-full.png</normaloff>:/icon/application-resize-full.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Switch to full screen mode or back</string>
+   </property>
+  </action>
+  <action name="action_autoscroll">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/auto-scroll.png</normaloff>:/icon/auto-scroll.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Enabling/disabling automatic scrolling</string>
+   </property>
+  </action>
+  <action name="action_cad">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/ctrl-alt-del.png</normaloff>:/icon/ctrl-alt-del.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Send Ctrl+Alt+Delete</string>
+   </property>
+  </action>
+  <action name="action_send_keys">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/keyboard.png</normaloff>:/icon/keyboard.png</iconset>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="toolTip">
+    <string>Send key sequence</string>
    </property>
   </action>
  </widget>
