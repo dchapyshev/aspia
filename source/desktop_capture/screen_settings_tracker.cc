@@ -16,28 +16,41 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "codec/video_encoder.h"
-
-#include "desktop_capture/desktop_frame.h"
+#include "desktop_capture/screen_settings_tracker.h"
 
 namespace aspia {
 
-void VideoEncoder::fillPacketInfo(proto::desktop::VideoEncoding encoding,
-                                  const DesktopFrame* frame,
-                                  proto::desktop::VideoPacket* packet)
+bool ScreenSettingsTracker::isRectChanged(const DesktopRect& screen_rect)
 {
-    packet->set_encoding(encoding);
-
-    if (screen_settings_tracker_.isRectChanged(
-        DesktopRect::makeXYWH(frame->topLeft(), frame->size())))
+    if (screen_rect != screen_rect_)
     {
-        proto::desktop::Rect* rect = packet->mutable_format()->mutable_screen_rect();
-
-        rect->set_x(frame->topLeft().x());
-        rect->set_y(frame->topLeft().y());
-        rect->set_width(frame->size().width());
-        rect->set_height(frame->size().height());
+        screen_rect_ = screen_rect;
+        return true;
     }
+
+    return false;
+}
+
+bool ScreenSettingsTracker::isSizeChanged(const DesktopSize& screen_size)
+{
+    if (screen_size != screen_rect_.size())
+    {
+        screen_rect_.setSize(screen_size);
+        return true;
+    }
+
+    return false;
+}
+
+bool ScreenSettingsTracker::isFormatChanged(const PixelFormat& pixel_format)
+{
+    if (pixel_format != pixel_format_)
+    {
+        pixel_format_ = pixel_format;
+        return true;
+    }
+
+    return false;
 }
 
 } // namespace aspia

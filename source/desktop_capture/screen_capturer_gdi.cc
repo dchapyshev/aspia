@@ -95,7 +95,7 @@ const DesktopFrame* ScreenCapturerGDI::captureFrame()
         SelectObject(memory_dc_, old_bitmap);
     }
 
-    current->setTopLeft(screen_rect.leftTop());
+    current->setTopLeft(screen_rect.topLeft());
 
     if (!previous || previous->size() != current->size())
     {

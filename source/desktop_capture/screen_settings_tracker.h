@@ -16,38 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CODEC__SCALE_REDUCER_H_
-#define ASPIA_CODEC__SCALE_REDUCER_H_
-
-#include <memory>
+#ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H_
+#define ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H_
 
 #include "base/macros_magic.h"
-#include "desktop_capture/screen_settings_tracker.h"
+#include "desktop_capture/desktop_geometry.h"
+#include "desktop_capture/pixel_format.h"
 
 namespace aspia {
 
-class DesktopFrame;
-
-class ScaleReducer
+class ScreenSettingsTracker
 {
 public:
-    ~ScaleReducer() = default;
+    ScreenSettingsTracker() = default;
 
-    static ScaleReducer* create(int scale_factor);
+    bool isRectChanged(const DesktopRect& screen_rect);
+    bool isSizeChanged(const DesktopSize& screen_size);
+    bool isFormatChanged(const PixelFormat& pixel_format);
 
-    const DesktopFrame* scaleFrame(const DesktopFrame* source_frame);
-
-protected:
-    explicit ScaleReducer(int scale_factor);
+    const DesktopRect& screenRect() const { return screen_rect_; }
+    const DesktopSize& screenSize() const { return screen_rect_.size(); }
+    const PixelFormat& format() const { return pixel_format_; }
 
 private:
-    const int scale_factor_;
-    std::unique_ptr<DesktopFrame> scaled_frame_;
-    ScreenSettingsTracker screen_settings_tracker_;
+    DesktopRect screen_rect_;
+    PixelFormat pixel_format_;
 
-    DISALLOW_COPY_AND_ASSIGN(ScaleReducer);
+    DISALLOW_COPY_AND_ASSIGN(ScreenSettingsTracker);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CODEC__SCALE_REDUCER_H_
+#endif // ASPIA_DESKTOP_CAPTURE__SCREEN_SETTINGS_TRACKER_H_

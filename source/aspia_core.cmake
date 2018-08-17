@@ -274,7 +274,9 @@ list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capture_frame_queue.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer.h
     ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.cc
-    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.h)
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_capturer_gdi.h
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_settings_tracker.cc
+    ${PROJECT_SOURCE_DIR}/desktop_capture/screen_settings_tracker.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/cursor.cc

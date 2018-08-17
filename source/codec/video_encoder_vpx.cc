@@ -289,7 +289,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
                 int y_offset = y_stride * rect.y() + rect.x();
                 int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
 
-                libyuv::ARGBToI420(frame->frameDataAtPos(rect.leftTop()),
+                libyuv::ARGBToI420(frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    y_data + y_offset, y_stride,
                                    u_data + uv_offset, uv_stride,
@@ -312,7 +312,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(const DesktopFrame* frame,
 
                 int yuv_offset = uv_stride * rect.y() + rect.x();
 
-                libyuv::ARGBToI444(frame->frameDataAtPos(rect.leftTop()),
+                libyuv::ARGBToI444(frame->frameDataAtPos(rect.topLeft()),
                                    frame->stride(),
                                    y_data + yuv_offset, y_stride,
                                    u_data + yuv_offset, uv_stride,

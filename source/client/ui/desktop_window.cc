@@ -122,7 +122,7 @@ void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)
     if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
         autosizeWindow();
 
-    screen_top_left_ = screen_rect.leftTop();
+    screen_top_left_ = screen_rect.topLeft();
 }
 
 void DesktopWindow::drawDesktopFrame()

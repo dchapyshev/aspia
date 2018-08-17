@@ -140,7 +140,7 @@ void VideoEncoderZLIB::encode(const DesktopFrame* frame, proto::desktop::VideoPa
         const DesktopRect& rect = it.rect();
         const int stride = rect.width() * target_format_.bytesPerPixel();
 
-        translator_->translate(frame->frameDataAtPos(rect.leftTop()),
+        translator_->translate(frame->frameDataAtPos(rect.topLeft()),
                                frame->stride(),
                                translate_pos,
                                stride,

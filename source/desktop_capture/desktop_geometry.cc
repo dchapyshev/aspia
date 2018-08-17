@@ -31,6 +31,18 @@ DesktopRect::DesktopRect(const DesktopRect& other)
     // Nothing
 }
 
+void DesktopRect::setTopLeft(const DesktopPoint& top_left)
+{
+    left_ = top_left.x();
+    top_ = top_left.y();
+}
+
+void DesktopRect::setSize(const DesktopSize& size)
+{
+    right_ = left_ + size.width();
+    bottom_ = top_ + size.height();
+}
+
 bool DesktopRect::contains(int32_t x, int32_t y) const
 {
     return (x >= left_ && x < right_ && y >= top_ && y < bottom_);

@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "desktop_capture/desktop_geometry.h"
+#include "desktop_capture/screen_settings_tracker.h"
 #include "protocol/desktop_session.pb.h"
 
 namespace aspia {
@@ -41,7 +41,7 @@ protected:
                         proto::desktop::VideoPacket* packet);
 
 private:
-    DesktopRect screen_rect_;
+    ScreenSettingsTracker screen_settings_tracker_;
 };
 
 } // namespace aspia

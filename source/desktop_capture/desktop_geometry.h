@@ -77,18 +77,6 @@ public:
 
     void translate(const DesktopPoint& offset) { translate(offset.x(), offset.y()); }
 
-    DesktopPoint translated(int32_t x_offset, int32_t y_offset) const
-    {
-        DesktopPoint point(*this);
-        point.translate(x_offset, y_offset);
-        return point;
-    }
-
-    DesktopPoint translated(const DesktopPoint& offset) const
-    {
-        return translated(offset.x(), offset.y());
-    }
-
     DesktopPoint& operator=(const DesktopPoint& other)
     {
         set(other.x_, other.y_);
@@ -177,8 +165,7 @@ public:
     DesktopRect(const DesktopRect& other);
     ~DesktopRect() = default;
 
-    static DesktopRect makeXYWH(int32_t x, int32_t y,
-                                int32_t width, int32_t height)
+    static DesktopRect makeXYWH(int32_t x, int32_t y, int32_t width, int32_t height)
     {
         return DesktopRect(x, y, x + width, y + height);
     }
@@ -223,8 +210,11 @@ public:
     int32_t width() const { return right_ - left_; }
     int32_t height() const { return bottom_ - top_; }
 
-    DesktopPoint leftTop() const { return DesktopPoint(left(), top()); }
+    DesktopPoint topLeft() const { return DesktopPoint(left(), top()); }
+    void setTopLeft(const DesktopPoint& top_left);
+
     DesktopSize size() const { return DesktopSize(width(), height()); }
+    void setSize(const DesktopSize& size);
 
     bool isEmpty() const { return left_ >= right_ || top_ >= bottom_; }
 

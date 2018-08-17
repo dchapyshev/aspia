@@ -107,9 +107,9 @@ bool VideoDecoderZLIB::decode(const proto::desktop::VideoPacket& packet,
             }
         }
 
-        translator_->translate(source_frame_->frameDataAtPos(rect.leftTop()),
+        translator_->translate(source_frame_->frameDataAtPos(rect.topLeft()),
                                source_frame_->stride(),
-                               target_frame->frameDataAtPos(rect.leftTop()),
+                               target_frame->frameDataAtPos(rect.topLeft()),
                                target_frame->stride(),
                                rect.width(),
                                rect.height());

@@ -81,6 +81,9 @@ const DesktopFrame* ScaleReducer::scaleFrame(const DesktopFrame* source_frame)
     if (scale_factor_ == kDefScaleFactor)
         return source_frame;
 
+    if (screen_settings_tracker_.isSizeChanged(source_frame->size()))
+        scaled_frame_.reset();
+
     if (!scaled_frame_)
     {
         DesktopSize size = scaledSize(source_frame->size(), scale_factor_);
