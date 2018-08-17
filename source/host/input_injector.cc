@@ -293,7 +293,7 @@ InputInjector::InputInjector(QObject* parent)
 InputInjector::~InputInjector()
 {
     {
-        std::scoped_lock<std::mutex> lock(input_queue_lock_);
+        std::scoped_lock lock(input_queue_lock_);
         terminate_ = true;
         input_event_.notify_one();
     }
@@ -303,14 +303,14 @@ InputInjector::~InputInjector()
 
 void InputInjector::injectPointerEvent(const proto::desktop::PointerEvent& event)
 {
-    std::scoped_lock<std::mutex> lock(input_queue_lock_);
+    std::scoped_lock lock(input_queue_lock_);
     incoming_input_queue_.emplace(event);
     input_event_.notify_one();
 }
 
 void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
-    std::scoped_lock<std::mutex> lock(input_queue_lock_);
+    std::scoped_lock lock(input_queue_lock_);
     incoming_input_queue_.emplace(event);
     input_event_.notify_one();
 }
@@ -324,7 +324,7 @@ void InputInjector::run()
         std::queue<InputEvent> work_input_queue;
 
         {
-            std::unique_lock<std::mutex> lock(input_queue_lock_);
+            std::unique_lock lock(input_queue_lock_);
 
             while (incoming_input_queue_.empty() && !terminate_)
                 input_event_.wait(lock);

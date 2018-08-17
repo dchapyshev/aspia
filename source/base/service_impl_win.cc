@@ -184,7 +184,7 @@ void ServiceHandler::run()
 
     if (!StartServiceCtrlDispatcherW(service_table))
     {
-        std::scoped_lock<std::mutex> lock(instance->startup_lock);
+        std::scoped_lock lock(instance->startup_lock);
 
         DWORD error_code = GetLastError();
         if (error_code == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
@@ -210,14 +210,14 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     // Start creating the QCoreApplication instance.
     {
-        std::scoped_lock<std::mutex> lock(instance->startup_lock);
+        std::scoped_lock lock(instance->startup_lock);
         instance->startup_state = ServiceMainCalled;
         instance->startup_condition.notify_all();
     }
 
     // Waiting for the completion of the creation.
     {
-        std::unique_lock<std::mutex> lock(instance->startup_lock);
+        std::unique_lock lock(instance->startup_lock);
 
         while (instance->startup_state != ApplicationCreated)
             instance->startup_condition.wait(lock);
@@ -238,7 +238,7 @@ void WINAPI ServiceHandler::serviceMain(DWORD /* argc */, LPWSTR* /* argv */)
 
     instance->setStatus(SERVICE_START_PENDING);
 
-    std::unique_lock<std::mutex> lock(instance->event_lock);
+    std::unique_lock lock(instance->event_lock);
     instance->event_processed = false;
 
     ServiceEventHandler::postStartEvent();
@@ -264,7 +264,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
             if (!instance)
                 return NO_ERROR;
 
-            std::unique_lock<std::mutex> lock(instance->event_lock);
+            std::unique_lock lock(instance->event_lock);
             instance->event_processed = false;
 
             // Post event to application.
@@ -286,7 +286,7 @@ DWORD WINAPI ServiceHandler::serviceControlHandler(
             if (control_code == SERVICE_CONTROL_STOP)
                 instance->setStatus(SERVICE_STOP_PENDING);
 
-            std::unique_lock<std::mutex> lock(instance->event_lock);
+            std::unique_lock lock(instance->event_lock);
             instance->event_processed = false;
 
             // Post event to application.
@@ -370,7 +370,7 @@ void ServiceEventHandler::customEvent(QEvent* event)
             return;
     }
 
-    std::scoped_lock<std::mutex> lock(ServiceHandler::instance->event_lock);
+    std::scoped_lock lock(ServiceHandler::instance->event_lock);
 
     // Set the event flag is processed.
     ServiceHandler::instance->event_processed = true;
@@ -401,7 +401,7 @@ int ServiceImpl::exec(int argc, char* argv[])
 
     // Waiting for the launch ServiceHandler::serviceMain.
     {
-        std::unique_lock<std::mutex> lock(handler->startup_lock);
+        std::unique_lock lock(handler->startup_lock);
         handler->startup_state = ServiceHandler::NotStarted;
 
         // Starts handler thread.
@@ -486,7 +486,7 @@ int ServiceImpl::exec(int argc, char* argv[])
 
     // Now we can complete the registration of the service.
     {
-        std::scoped_lock<std::mutex> lock(handler->startup_lock);
+        std::scoped_lock lock(handler->startup_lock);
         handler->startup_state = ServiceHandler::ApplicationCreated;
         handler->startup_condition.notify_all();
     }
