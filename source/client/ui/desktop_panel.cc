@@ -36,75 +36,16 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
     connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopPanel::onFullscreenButton);
     connect(ui.action_autoscroll, &QAction::triggered, this, &DesktopPanel::autoScrollChanged);
 
-    screens_menu_ = new QMenu(this);
-    screens_group_ = new QActionGroup(this);
-
-    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
-    screens_group_->addAction(full_screen_action);
-    screens_menu_->addAction(full_screen_action);
-
-    ui.action_monitors->setMenu(screens_menu_);
-
-    QToolButton* button_monitors =
-        qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_monitors));
-    button_monitors->setPopupMode(QToolButton::InstantPopup);
-
-    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-    connect(screens_menu_, &QMenu::aboutToHide, [this]()
-    {
-        allow_hide_ = true;
-
-        if (leaved_)
-            delayedHide();
-    });
+    createScreensMenu();
+    createAdditionalMenu(session_type);
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        keys_menu_ = new QMenu(this);
-        keys_menu_->addAction(ui.action_alt_tab);
-        keys_menu_->addAction(ui.action_alt_shift_tab);
-        keys_menu_->addAction(ui.action_printscreen);
-        keys_menu_->addAction(ui.action_alt_printscreen);
-        keys_menu_->addAction(ui.action_custom);
-
-        connect(keys_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
-        connect(keys_menu_, &QMenu::aboutToHide, [this]()
-        {
-            allow_hide_ = true;
-
-            if (leaved_)
-                delayedHide();
-        });
-
-        connect(ui.action_cad, &QAction::triggered,
-                this, &DesktopPanel::onCtrlAltDelButton);
-
-        connect(ui.action_alt_tab, &QAction::triggered,
-                this, &DesktopPanel::onAltTabAction);
-
-        connect(ui.action_alt_shift_tab, &QAction::triggered,
-                this, &DesktopPanel::onAltShiftTabAction);
-
-        connect(ui.action_printscreen, &QAction::triggered,
-                this, &DesktopPanel::onPrintScreenAction);
-
-        connect(ui.action_alt_printscreen, &QAction::triggered,
-                this, &DesktopPanel::onAltPrintScreenAction);
-
-        connect(ui.action_custom, &QAction::triggered,
-                this, &DesktopPanel::onCustomAction);
-
-        ui.action_send_keys->setMenu(keys_menu_);
-
-        QToolButton* button_send_keys =
-            qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_send_keys));
-        button_send_keys->setPopupMode(QToolButton::InstantPopup);
+        connect(ui.action_cad, &QAction::triggered, this, &DesktopPanel::onCtrlAltDel);
     }
     else
     {
         Q_ASSERT(session_type == proto::auth::SESSION_TYPE_DESKTOP_VIEW);
-
-        ui.action_send_keys->setVisible(false);
         ui.action_cad->setVisible(false);
     }
 
@@ -223,37 +164,73 @@ void DesktopPanel::onAutosizeButton()
     emit switchToAutosize();
 }
 
-void DesktopPanel::onCtrlAltDelButton()
+void DesktopPanel::onCtrlAltDel()
 {
     emit keySequence(Qt::ControlModifier | Qt::AltModifier | Qt::Key_Delete);
 }
 
-void DesktopPanel::onAltTabAction()
-{
-    emit keySequence(Qt::AltModifier | Qt::Key_Tab);
-}
-
-void DesktopPanel::onAltShiftTabAction()
-{
-    emit keySequence(Qt::AltModifier | Qt::ShiftModifier | Qt::Key_Tab);
-}
-
-void DesktopPanel::onPrintScreenAction()
-{
-    emit keySequence(Qt::Key_Print);
-}
-
-void DesktopPanel::onAltPrintScreenAction()
-{
-    emit keySequence(Qt::AltModifier | Qt::Key_Print);
-}
-
-void DesktopPanel::onCustomAction()
+void DesktopPanel::onKeySequence()
 {
     QKeySequence key_sequence = KeySequenceDialog::keySequence(this);
 
     for (int i = 0; i < key_sequence.count(); ++i)
         emit keySequence(key_sequence[i]);
+}
+
+void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
+{
+    // Create a menu and add actions to it.
+    additional_menu_ = new QMenu(this);
+    additional_menu_->addAction(ui.action_autoscroll);
+
+    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        additional_menu_->addAction(ui.action_key_sequence);
+
+    additional_menu_->addAction(ui.action_screenshot);
+
+    // Set the menu for the button on the toolbar.
+    ui.action_menu->setMenu(additional_menu_);
+
+    QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_menu));
+    button->setPopupMode(QToolButton::InstantPopup);
+
+    // Now we connect all the necessary signals and slots.
+    if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        connect(ui.action_key_sequence, &QAction::triggered, this, &DesktopPanel::onKeySequence);
+
+    connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
+    connect(additional_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(additional_menu_, &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
+
+        if (leaved_)
+            delayedHide();
+    });
+}
+
+void DesktopPanel::createScreensMenu()
+{
+    screens_menu_ = new QMenu(this);
+    screens_group_ = new QActionGroup(this);
+
+    SelectScreenAction* full_screen_action = new SelectScreenAction(screens_group_);
+    screens_group_->addAction(full_screen_action);
+    screens_menu_->addAction(full_screen_action);
+
+    ui.action_monitors->setMenu(screens_menu_);
+
+    QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_monitors));
+    button->setPopupMode(QToolButton::InstantPopup);
+
+    connect(screens_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });
+    connect(screens_menu_, &QMenu::aboutToHide, [this]()
+    {
+        allow_hide_ = true;
+
+        if (leaved_)
+            delayedHide();
+    });
 }
 
 void DesktopPanel::delayedHide()

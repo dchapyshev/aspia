@@ -293,6 +293,8 @@ list(APPEND SOURCE_DESKTOP_CAPTURE_WIN
     ${PROJECT_SOURCE_DIR}/desktop_capture/win/visual_effects_disabler.h)
 
 list(APPEND SOURCE_HOST
+    ${PROJECT_SOURCE_DIR}/host/desktop_config_tracker.cc
+    ${PROJECT_SOURCE_DIR}/host/desktop_config_tracker.h
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.cc
     ${PROJECT_SOURCE_DIR}/host/file_depacketizer.h
     ${PROJECT_SOURCE_DIR}/host/file_packetizer.cc

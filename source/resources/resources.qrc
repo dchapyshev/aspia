@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>menu.png</file>
     <file>auto-scroll.png</file>
     <file>monitors.png</file>
     <file>hardware.png</file>

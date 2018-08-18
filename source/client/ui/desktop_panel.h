@@ -45,6 +45,7 @@ signals:
     void settingsButton();
     void screenSelected(const proto::desktop::Screen& screen);
     void autoScrollChanged(bool enabled);
+    void takeScreenshot();
 
 protected:
     // QFrame implementation.
@@ -55,19 +56,17 @@ protected:
 private slots:
     void onFullscreenButton(bool checked);
     void onAutosizeButton();
-    void onCtrlAltDelButton();
-    void onAltTabAction();
-    void onAltShiftTabAction();
-    void onPrintScreenAction();
-    void onAltPrintScreenAction();
-    void onCustomAction();
+    void onCtrlAltDel();
+    void onKeySequence();
 
 private:
+    void createAdditionalMenu(proto::auth::SessionType session_type);
+    void createScreensMenu();
     void delayedHide();
 
     Ui::DesktopPanel ui;
 
-    QMenu* keys_menu_;
+    QMenu* additional_menu_;
     QMenu* screens_menu_;
     QActionGroup* screens_group_;
 

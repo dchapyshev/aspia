@@ -36,7 +36,7 @@ class InputInjector : public QThread
     Q_OBJECT
 
 public:
-    InputInjector(QObject* parent);
+    InputInjector(QObject* parent, bool block_input);
     ~InputInjector();
 
     void injectPointerEvent(const proto::desktop::PointerEvent& event);
@@ -53,6 +53,7 @@ private:
     std::mutex input_queue_lock_;
     std::queue<InputEvent> incoming_input_queue_;
     bool terminate_ = false;
+    const bool block_input_;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjector);
 };

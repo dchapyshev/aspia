@@ -85,7 +85,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 class InputInjectorImpl
 {
 public:
-    InputInjectorImpl() = default;
+    InputInjectorImpl(bool block_input);
     ~InputInjectorImpl();
 
     void injectPointerEvent(const proto::desktop::PointerEvent& event);
@@ -97,12 +97,25 @@ private:
     bool isCtrlAndAltPressed();
 
     ScopedThreadDesktop desktop_;
+
+    const bool block_input_;
+
     std::set<uint32_t> pressed_keys_;
     DesktopPoint prev_mouse_pos_;
+
     uint32_t prev_mouse_button_mask_ = 0;
 
     DISALLOW_COPY_AND_ASSIGN(InputInjectorImpl);
 };
+
+InputInjectorImpl::InputInjectorImpl(bool block_input)
+    : block_input_(block_input)
+{
+    switchToInputDesktop();
+
+    if (block_input_)
+        BlockInput(TRUE);
+}
 
 InputInjectorImpl::~InputInjectorImpl()
 {
@@ -249,9 +262,10 @@ void InputInjectorImpl::switchToInputDesktop()
     Desktop input_desktop(Desktop::inputDesktop());
 
     if (input_desktop.isValid() && !desktop_.isSame(input_desktop))
-    {
         desktop_.setThreadDesktop(std::move(input_desktop));
-    }
+
+    if (block_input_)
+        BlockInput(TRUE);
 
     // We send a notification to the system that it is used to prevent
     // the screen saver, going into hibernation mode, etc.
@@ -323,8 +337,9 @@ bool InputInjectorImpl::isCtrlAndAltPressed()
 
 } // namespace
 
-InputInjector::InputInjector(QObject* parent)
-    : QThread(parent)
+InputInjector::InputInjector(QObject* parent, bool block_input)
+    : QThread(parent),
+      block_input_(block_input)
 {
     start(QThread::HighPriority);
 }
@@ -356,7 +371,7 @@ void InputInjector::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
 void InputInjector::run()
 {
-    InputInjectorImpl impl;
+    InputInjectorImpl impl(block_input_);
 
     while (true)
     {

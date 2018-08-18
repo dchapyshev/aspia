@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>206</width>
+    <width>181</width>
     <height>40</height>
    </rect>
   </property>
@@ -63,9 +63,8 @@
      <addaction name="action_monitors"/>
      <addaction name="action_autosize"/>
      <addaction name="action_fullscreen"/>
-     <addaction name="action_autoscroll"/>
      <addaction name="action_cad"/>
-     <addaction name="action_send_keys"/>
+     <addaction name="action_menu"/>
     </widget>
    </item>
    <item>
@@ -100,31 +99,6 @@
     </widget>
    </item>
   </layout>
-  <action name="action_alt_tab">
-   <property name="text">
-    <string notr="true">Alt+Tab</string>
-   </property>
-  </action>
-  <action name="action_alt_shift_tab">
-   <property name="text">
-    <string notr="true">Alt+Shift+Tab</string>
-   </property>
-  </action>
-  <action name="action_printscreen">
-   <property name="text">
-    <string notr="true">PrintScreen</string>
-   </property>
-  </action>
-  <action name="action_alt_printscreen">
-   <property name="text">
-    <string notr="true">Alt+PrintScreen</string>
-   </property>
-  </action>
-  <action name="action_custom">
-   <property name="text">
-    <string>Custom...</string>
-   </property>
-  </action>
   <action name="action_pin">
    <property name="checkable">
     <bool>true</bool>
@@ -198,15 +172,8 @@
    <property name="checked">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/icon/auto-scroll.png</normaloff>:/icon/auto-scroll.png</iconset>
-   </property>
    <property name="text">
-    <string notr="true"/>
-   </property>
-   <property name="toolTip">
-    <string>Enabling/disabling automatic scrolling</string>
+    <string>Automatic scrolling</string>
    </property>
   </action>
   <action name="action_cad">
@@ -221,16 +188,26 @@
     <string>Send Ctrl+Alt+Delete</string>
    </property>
   </action>
-  <action name="action_send_keys">
+  <action name="action_menu">
    <property name="icon">
     <iconset resource="../../resources/resources.qrc">
-     <normaloff>:/icon/keyboard.png</normaloff>:/icon/keyboard.png</iconset>
+     <normaloff>:/icon/menu.png</normaloff>:/icon/menu.png</iconset>
    </property>
    <property name="text">
     <string notr="true"/>
    </property>
    <property name="toolTip">
-    <string>Send key sequence</string>
+    <string>Advanced menu</string>
+   </property>
+  </action>
+  <action name="action_key_sequence">
+   <property name="text">
+    <string>Send keys sequence</string>
+   </property>
+  </action>
+  <action name="action_screenshot">
+   <property name="text">
+    <string>Take screenshot</string>
    </property>
   </action>
  </widget>

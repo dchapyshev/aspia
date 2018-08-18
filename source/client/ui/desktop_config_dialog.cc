@@ -94,6 +94,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
+        if (config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
+            ui.checkbox_block_remote_input->setChecked(true);
+
         if (config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
@@ -102,6 +105,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
     }
     else
     {
+        ui.checkbox_block_remote_input->setEnabled(false);
         ui.checkbox_cursor_shape->setEnabled(false);
         ui.checkbox_clipboard->setEnabled(false);
     }
@@ -122,7 +126,12 @@ DesktopConfigDialog::DesktopConfigDialog(proto::auth::SessionType session_type,
             this, &DesktopConfigDialog::onButtonBoxClicked);
 
     setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-    setFixedSize(sizeHint());
+
+    QSize size_min = minimumSize();
+    QSize size_hint = sizeHint();
+
+    setFixedSize(QSize(std::max(size_min.width(), size_hint.width()),
+                       std::max(size_min.height(), size_hint.height())));
 }
 
 void DesktopConfigDialog::onCodecChanged(int item_index)
@@ -204,6 +213,9 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (ui.checkbox_desktop_wallpaper->isChecked())
             flags |= proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+
+        if (ui.checkbox_block_remote_input->isChecked())
+            flags |= proto::desktop::BLOCK_REMOTE_INPUT;
 
         config_.set_flags(flags);
 

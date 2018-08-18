@@ -120,10 +120,8 @@ void HostSessionDesktop::readPointerEvent(const proto::desktop::PointerEvent& ev
         return;
     }
 
-    if (input_injector_.isNull())
-        input_injector_.reset(new InputInjector(this));
-
-    input_injector_->injectPointerEvent(event);
+    if (input_injector_)
+        input_injector_->injectPointerEvent(event);
 }
 
 void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
@@ -135,10 +133,8 @@ void HostSessionDesktop::readKeyEvent(const proto::desktop::KeyEvent& event)
         return;
     }
 
-    if (input_injector_.isNull())
-        input_injector_.reset(new InputInjector(this));
-
-    input_injector_->injectKeyEvent(event);
+    if (input_injector_)
+        input_injector_->injectKeyEvent(event);
 }
 
 void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
@@ -162,53 +158,67 @@ void HostSessionDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent
 
 void HostSessionDesktop::readConfig(const proto::desktop::Config& config)
 {
-    delete screen_updater_;
-    delete clipboard_;
+    uint32_t change_flags = config_tracker_.changeFlags(config);
 
-    if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+    if (change_flags & DesktopConfigTracker::CLIPBOARD_CHANGES &&
+        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (session_type_ != proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+        delete clipboard_;
+
+        if (config.flags() & proto::desktop::ENABLE_CLIPBOARD)
         {
-            qWarning("Attempt to enable clipboard in desktop view session");
-            emit errorOccurred();
-            return;
+            clipboard_ = new Clipboard(this);
+            connect(clipboard_, &Clipboard::clipboardEvent,
+                    this, &HostSessionDesktop::clipboardEvent);
+        }
+    }
+
+    if (change_flags & DesktopConfigTracker::INPUT_CHANGES &&
+        session_type_ == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        bool block_input = config.flags() & proto::desktop::BLOCK_REMOTE_INPUT;
+        input_injector_.reset(new InputInjector(this, block_input));
+    }
+
+    if (change_flags & DesktopConfigTracker::EFFECTS_CHANGES)
+    {
+#if defined(Q_OS_WIN)
+        bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
+        bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+
+        if (effects_disabler_)
+        {
+            if (effects_disabler_->isEffectsDisabled())
+                effects_disabler_->restoreEffects();
+
+            if (effects_disabler_->isWallpaperDisabled())
+                effects_disabler_->restoreWallpaper();
         }
 
-        clipboard_ = new Clipboard(this);
-        connect(clipboard_, &Clipboard::clipboardEvent, this, &HostSessionDesktop::clipboardEvent);
-    }
+        if (disable_wallpaper || disable_effects)
+        {
+            effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
 
-#if defined(Q_OS_WIN)
-    bool disable_effects = config.flags() & proto::desktop::DISABLE_DESKTOP_EFFECTS;
-    bool disable_wallpaper = config.flags() & proto::desktop::DISABLE_DESKTOP_WALLPAPER;
+            if (disable_effects)
+                effects_disabler_->disableEffects();
 
-    if (effects_disabler_)
-    {
-        if (effects_disabler_->isEffectsDisabled())
-            effects_disabler_->restoreEffects();
-
-        if (effects_disabler_->isWallpaperDisabled())
-            effects_disabler_->restoreWallpaper();
-    }
-
-    if (disable_wallpaper || disable_effects)
-    {
-        effects_disabler_ = std::make_unique<VisualEffectsDisabler>();
-
-        if (disable_effects)
-            effects_disabler_->disableEffects();
-
-        if (disable_wallpaper)
-            effects_disabler_->disableWallpaper();
-    }
+            if (disable_wallpaper)
+                effects_disabler_->disableWallpaper();
+        }
 #endif // defined(Q_OS_WIN)
+    }
 
-    screen_updater_ = new ScreenUpdater(this);
+    if (change_flags & DesktopConfigTracker::VIDEO_CHANGES)
+    {
+        delete screen_updater_;
+        screen_updater_ = new ScreenUpdater(this);
 
-    connect(screen_updater_, &ScreenUpdater::sendMessage, this, &HostSessionDesktop::sendMessage);
+        connect(screen_updater_, &ScreenUpdater::sendMessage,
+                this, &HostSessionDesktop::sendMessage);
 
-    if (!screen_updater_->start(config))
-        emit errorOccurred();
+        if (!screen_updater_->start(config))
+            emit errorOccurred();
+    }
 }
 
 void HostSessionDesktop::readScreen(const proto::desktop::Screen& screen)

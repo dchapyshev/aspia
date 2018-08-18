@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QBrush>
 #include <QDesktopWidget>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
@@ -81,6 +82,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::settingsButton, this, &DesktopWindow::changeSettings);
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
+    connect(panel_, &DesktopPanel::takeScreenshot, this, &DesktopWindow::takeScreenshot);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -250,6 +252,35 @@ void DesktopWindow::autosizeWindow()
     {
         showMaximized();
     }
+}
+
+void DesktopWindow::takeScreenshot()
+{
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(this,
+                                                     tr("Save File"),
+                                                     QString(),
+                                                     tr("PNG Image (*.png);;BMP Image (*.bmp)"),
+                                                     &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+        return;
+
+    DesktopFrameQImage* frame = dynamic_cast<DesktopFrameQImage*>(desktop_->desktopFrame());
+    if (!frame)
+        return;
+
+    const char* format = nullptr;
+
+    if (selected_filter.contains(QLatin1String("*.png")))
+        format = "PNG";
+    else if (selected_filter.contains(QLatin1String("*.bmp")))
+        format = "BMP";
+
+    if (!format)
+        return;
+
+    if (!frame->constImage().save(file_path, format))
+        QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
 }
 
 void DesktopWindow::timerEvent(QTimerEvent* event)

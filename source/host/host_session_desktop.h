@@ -19,9 +19,9 @@
 #ifndef ASPIA_HOST__HOST_SESSION_DESKTOP_H_
 #define ASPIA_HOST__HOST_SESSION_DESKTOP_H_
 
+#include "host/desktop_config_tracker.h"
 #include "host/host_session.h"
 #include "protocol/authorization.pb.h"
-#include "protocol/desktop_session.pb.h"
 
 namespace aspia {
 
@@ -58,6 +58,8 @@ private:
     void readScreen(const proto::desktop::Screen& screen);
 
     const proto::auth::SessionType session_type_;
+
+    DesktopConfigTracker config_tracker_;
 
     QPointer<ScreenUpdater> screen_updater_;
     QPointer<Clipboard> clipboard_;

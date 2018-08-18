@@ -74,6 +74,7 @@ private slots:
     void changeSettings();
     void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
+    void takeScreenshot();
 
 private:
     ConnectData* connect_data_;

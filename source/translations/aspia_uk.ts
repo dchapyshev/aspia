@@ -460,67 +460,82 @@
 <context>
     <name>DesktopConfigDialog</name>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="20"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="26"/>
         <source>Session Configuration</source>
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="26"/>
-        <source>Codec:</source>
-        <translation>Кодек:</translation>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="32"/>
+        <source>Codec</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="36"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="41"/>
         <source>Color depth:</source>
         <translation>Глибина кольору:</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="46"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="51"/>
         <source>Compression ratio:</source>
         <translation>Стиснення:</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="55"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="60"/>
         <source>Fast</source>
         <translation>Швидко</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="84"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="89"/>
         <source>Best</source>
         <translation>Якісно</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="97"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="101"/>
+        <source>Remote Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="109"/>
         <source>Scale factor:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="104"/>
-        <source>Screen update interval:</source>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="116"/>
+        <source>Update interval:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="134"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="146"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="154"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="167"/>
+        <source>Additional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="173"/>
+        <source>Block remote input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="180"/>
         <source>Enable cursor shape</source>
         <translation>Показати курсор</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="161"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="187"/>
         <source>Enable clipboard</source>
         <translation>Буфер обміну</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="168"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="194"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.ui" line="175"/>
+        <location filename="../client/ui/desktop_config_dialog.ui" line="201"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
@@ -528,49 +543,54 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="140"/>
+        <location filename="../client/ui/desktop_panel.ui" line="114"/>
         <source>Lock toolbar</source>
         <translation>Закріпити панель інструментів</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="152"/>
+        <location filename="../client/ui/desktop_panel.ui" line="126"/>
         <source>Session configuration</source>
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="164"/>
+        <location filename="../client/ui/desktop_panel.ui" line="138"/>
         <source>Monitor selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="176"/>
+        <location filename="../client/ui/desktop_panel.ui" line="150"/>
         <source>Automatic window size</source>
         <translation>Автоматичний розмір вікна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="191"/>
+        <location filename="../client/ui/desktop_panel.ui" line="165"/>
         <source>Switch to full screen mode or back</source>
         <translation>Повноекранний режим</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="209"/>
-        <source>Enabling/disabling automatic scrolling</source>
+        <location filename="../client/ui/desktop_panel.ui" line="176"/>
+        <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="221"/>
+        <location filename="../client/ui/desktop_panel.ui" line="200"/>
+        <source>Advanced menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="205"/>
+        <source>Send keys sequence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="210"/>
+        <source>Take screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="188"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Передати Ctrl+Alt+Del</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="233"/>
-        <source>Send key sequence</source>
-        <translation>Передати послідовність клавіш</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop_panel.ui" line="125"/>
-        <source>Custom...</source>
-        <translation>Додатково...</translation>
     </message>
 </context>
 <context>
@@ -1661,7 +1681,7 @@
         <translation>8 colors (3 bit)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_config_dialog.cc" line="143"/>
+        <location filename="../client/ui/desktop_config_dialog.cc" line="152"/>
         <source>Compression ratio: %1</source>
         <translation>Стиснення: %1</translation>
     </message>
@@ -1669,14 +1689,34 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="45"/>
+        <location filename="../client/ui/desktop_window.cc" line="46"/>
         <source>Aspia Desktop Manage</source>
         <translation>Керування робочим столом Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="50"/>
+        <location filename="../client/ui/desktop_window.cc" line="51"/>
         <source>Aspia Desktop View</source>
         <translation>Перегляд робочого столу Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_window.cc" line="261"/>
+        <source>Save File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_window.cc" line="263"/>
+        <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_window.cc" line="283"/>
+        <source>Warning</source>
+        <translation type="unfinished">Попередження</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_window.cc" line="283"/>
+        <source>Could not save image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
