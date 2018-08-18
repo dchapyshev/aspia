@@ -157,17 +157,21 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 
     uint32_t mask = event.mask();
 
+    // If the host is configured to swap left & right buttons.
+    bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
+
     bool prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
     bool curr = (mask & proto::desktop::PointerEvent::LEFT_BUTTON) != 0;
-
     if (curr != prev)
     {
-        flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
+        if (!swap_buttons)
+            flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
+        else
+            flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
     }
 
     prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::MIDDLE_BUTTON) != 0;
     curr = (mask & proto::desktop::PointerEvent::MIDDLE_BUTTON) != 0;
-
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP);
@@ -175,10 +179,12 @@ void InputInjectorImpl::injectPointerEvent(const proto::desktop::PointerEvent& e
 
     prev = (prev_mouse_button_mask_ & proto::desktop::PointerEvent::RIGHT_BUTTON) != 0;
     curr = (mask & proto::desktop::PointerEvent::RIGHT_BUTTON) != 0;
-
     if (curr != prev)
     {
-        flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
+        if (!swap_buttons)
+            flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
+        else
+            flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
     if (mask & proto::desktop::PointerEvent::WHEEL_UP)
