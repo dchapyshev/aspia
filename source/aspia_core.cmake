@@ -44,7 +44,9 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_controller.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
-    ${PROJECT_SOURCE_DIR}/base/typed_buffer.h)
+    ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
+    ${PROJECT_SOURCE_DIR}/base/unicode.cc
+    ${PROJECT_SOURCE_DIR}/base/unicode.h)
 
 list(APPEND SOURCE_BASE_WIN
     ${PROJECT_SOURCE_DIR}/base/win/registry.cc
