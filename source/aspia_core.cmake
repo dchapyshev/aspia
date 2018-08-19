@@ -64,6 +64,8 @@ list(APPEND SOURCE_BASE_WIN
 list(APPEND SOURCE_CLIENT
     ${PROJECT_SOURCE_DIR}/client/client.cc
     ${PROJECT_SOURCE_DIR}/client/client.h
+    ${PROJECT_SOURCE_DIR}/client/client_connections.cc
+    ${PROJECT_SOURCE_DIR}/client/client_connections.h
     ${PROJECT_SOURCE_DIR}/client/client_session.h
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_manage.cc
     ${PROJECT_SOURCE_DIR}/client/client_session_desktop_manage.h

@@ -46,6 +46,7 @@ signals:
     void screenSelected(const proto::desktop::Screen& screen);
     void autoScrollChanged(bool enabled);
     void takeScreenshot();
+    void startSession(proto::auth::SessionType session_type);
 
 protected:
     // QFrame implementation.

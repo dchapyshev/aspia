@@ -49,6 +49,16 @@ DesktopPanel::DesktopPanel(proto::auth::SessionType session_type, QWidget* paren
         ui.action_cad->setVisible(false);
     }
 
+    connect(ui.action_file_transfer, &QAction::triggered, [this]()
+    {
+        emit startSession(proto::auth::SESSION_TYPE_FILE_TRANSFER);
+    });
+
+    connect(ui.action_system_info, &QAction::triggered, [this]()
+    {
+        emit startSession(proto::auth::SESSION_TYPE_SYSTEM_INFO);
+    });
+
     ui.frame->hide();
     adjustSize();
 

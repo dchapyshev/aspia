@@ -22,8 +22,7 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "base/macros_magic.h"
-#include "client/connect_data.h"
+#include "client/client_connections.h"
 #include "desktop_capture/desktop_geometry.h"
 #include "protocol/desktop_session.pb.h"
 
@@ -78,6 +77,7 @@ private slots:
 
 private:
     ConnectData* connect_data_;
+    ClientConnections connections_;
 
     QPointer<QHBoxLayout> layout_;
     QPointer<QScrollArea> scroll_area_;

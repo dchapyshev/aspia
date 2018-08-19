@@ -20,6 +20,7 @@
 #define ASPIA_CONSOLE__CONSOLE_WINDOW_H_
 
 #include "base/locale_loader.h"
+#include "client/client_connections.h"
 #include "protocol/address_book.pb.h"
 #include "ui_console_window.h"
 
@@ -73,9 +74,6 @@ protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) override;
 
-private slots:
-    void onClientTerminated(Client* client);
-
 private:
     void createLanguageMenu(const QString& current_locale);
     void addAddressBookTab(AddressBookTab* tab);
@@ -84,7 +82,7 @@ private:
 
     Ui::ConsoleWindow ui;
     LocaleLoader locale_loader_;
-    QList<Client*> client_list_;
+    ClientConnections connections_;
 
     DISALLOW_COPY_AND_ASSIGN(ConsoleWindow);
 };

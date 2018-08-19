@@ -58,7 +58,8 @@ private:
 } // namespace
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      connections_(this)
 {
     ConsoleSettings settings;
 
@@ -717,23 +718,7 @@ void ConsoleWindow::connectToComputer(const proto::address_book::Computer& compu
             break;
     }
 
-    Client* client = new Client(connect_data, this);
-    connect(client, &Client::clientTerminated, this, &ConsoleWindow::onClientTerminated);
-    client_list_.push_back(client);
-}
-
-void ConsoleWindow::onClientTerminated(Client* client)
-{
-    for (auto it = client_list_.begin(); it != client_list_.end(); ++it)
-    {
-        if (client == *it)
-        {
-            client_list_.erase(it);
-            break;
-        }
-    }
-
-    delete client;
+    connections_.connectWith(connect_data);
 }
 
 } // namespace aspia

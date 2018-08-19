@@ -38,7 +38,8 @@ namespace aspia {
 
 DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     : QWidget(parent),
-      connect_data_(connect_data)
+      connect_data_(connect_data),
+      connections_(this)
 {
     QString session_name;
     if (connect_data_->sessionType() == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
@@ -113,6 +114,13 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
 
     clipboard_ = new Clipboard(this);
     connect(clipboard_, &Clipboard::clipboardEvent, this, &DesktopWindow::sendClipboardEvent);
+
+    connect(panel_, &DesktopPanel::startSession, [this](proto::auth::SessionType session_type)
+    {
+        ConnectData connect_data(*connect_data_);
+        connect_data.setSessionType(session_type);
+        connections_.connectWith(connect_data);
+    });
 }
 
 void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)

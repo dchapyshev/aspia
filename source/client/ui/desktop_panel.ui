@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>181</width>
+    <width>255</width>
     <height>40</height>
    </rect>
   </property>
@@ -59,11 +59,17 @@
       </size>
      </property>
      <addaction name="action_pin"/>
+     <addaction name="separator"/>
      <addaction name="action_settings"/>
      <addaction name="action_monitors"/>
+     <addaction name="action_cad"/>
+     <addaction name="separator"/>
      <addaction name="action_autosize"/>
      <addaction name="action_fullscreen"/>
-     <addaction name="action_cad"/>
+     <addaction name="separator"/>
+     <addaction name="action_file_transfer"/>
+     <addaction name="action_system_info"/>
+     <addaction name="separator"/>
      <addaction name="action_menu"/>
     </widget>
    </item>
@@ -208,6 +214,30 @@
   <action name="action_screenshot">
    <property name="text">
     <string>Take screenshot</string>
+   </property>
+  </action>
+  <action name="action_file_transfer">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
+   </property>
+   <property name="text">
+    <string>FileTransfer</string>
+   </property>
+   <property name="toolTip">
+    <string>Start file transfer</string>
+   </property>
+  </action>
+  <action name="action_system_info">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>SystemInfo</string>
+   </property>
+   <property name="toolTip">
+    <string>Start system information</string>
    </property>
   </action>
  </widget>
