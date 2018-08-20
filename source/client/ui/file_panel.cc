@@ -380,7 +380,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
     menu.addAction(add_folder_action.data());
 
-    QAction* selected_action = menu.exec(ui.list->mapToGlobal(point));
+    QAction* selected_action = menu.exec(ui.list->viewport()->mapToGlobal(point));
     if (!selected_action)
         return;
 
