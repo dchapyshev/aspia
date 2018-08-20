@@ -239,6 +239,33 @@ void FilePanel::refresh()
     emit newRequest(request);
 }
 
+void FilePanel::keyPressEvent(QKeyEvent* event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_Backspace:
+            toParentFolder();
+            break;
+
+        case Qt::Key_F5:
+            refresh();
+            break;
+
+        case Qt::Key_Delete:
+            removeSelected();
+            break;
+
+        case Qt::Key_F11:
+            sendSelected();
+            break;
+
+        default:
+            break;
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
 void FilePanel::onListItemActivated(const QModelIndex& index)
 {
     if (ui.address_bar->hasCurrentPath())
@@ -373,24 +400,33 @@ void FilePanel::toChildFolder(const QString& child_name)
 
 void FilePanel::toParentFolder()
 {
-    QString parent_path = parentPath(ui.address_bar->currentPath());
-    ui.address_bar->setCurrentPath(parent_path);
+    if (ui.action_up->isEnabled())
+    {
+        QString parent_path = parentPath(ui.address_bar->currentPath());
+        ui.address_bar->setCurrentPath(parent_path);
+    }
 }
 
 void FilePanel::addFolder()
 {
-    ui.list->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
-
-    QModelIndex index = file_list_->createFolder();
-    if (index.isValid())
+    if (ui.action_add_folder->isEnabled())
     {
-        ui.list->scrollTo(index);
-        ui.list->edit(index);
+        ui.list->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
+
+        QModelIndex index = file_list_->createFolder();
+        if (index.isValid())
+        {
+            ui.list->scrollTo(index);
+            ui.list->edit(index);
+        }
     }
 }
 
 void FilePanel::removeSelected()
 {
+    if (!ui.action_delete->isEnabled())
+        return;
+
     QList<FileRemover::Item> items;
 
     for (const auto& index : ui.list->selectionModel()->selectedRows())
@@ -412,6 +448,9 @@ void FilePanel::removeSelected()
 
 void FilePanel::sendSelected()
 {
+    if (!ui.action_send->isEnabled())
+        return;
+
     QList<FileTransfer::Item> items;
 
     for (const auto& index : ui.list->selectionModel()->selectedRows())

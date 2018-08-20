@@ -65,6 +65,10 @@ public slots:
                const proto::file_transfer::Reply& reply);
     void refresh();
 
+protected:
+    // QWidget implementation.
+    void keyPressEvent(QKeyEvent* event) override;
+
 private slots:
     void onPathChanged(const QString& path);
     void onListItemActivated(const QModelIndex& index);

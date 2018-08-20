@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>403</width>
-    <height>375</height>
+    <width>492</width>
+    <height>553</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,93 +47,55 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QToolBar" name="toolbar">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="movable">
-         <bool>false</bool>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>18</width>
-          <height>18</height>
-         </size>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonIconOnly</enum>
-        </property>
-        <addaction name="action_up"/>
-        <addaction name="action_refresh"/>
-        <addaction name="action_add_folder"/>
-        <addaction name="action_delete"/>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="widget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolBar" name="toolbar_send">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="movable">
-         <bool>false</bool>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>18</width>
-          <height>18</height>
-         </size>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-        <addaction name="action_send"/>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+     <item>
+      <widget class="QToolBar" name="toolbar">
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <addaction name="action_up"/>
+       <addaction name="action_refresh"/>
+       <addaction name="action_add_folder"/>
+       <addaction name="action_delete"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="spacer_widget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolBar" name="toolbar2">
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <addaction name="action_send"/>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="aspia::FileList" name="list">
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -197,9 +159,6 @@
    <property name="toolTip">
     <string>Browse to parent folder (Backspace)</string>
    </property>
-   <property name="shortcut">
-    <string notr="true">Backspace</string>
-   </property>
   </action>
   <action name="action_refresh">
    <property name="icon">
@@ -211,9 +170,6 @@
    </property>
    <property name="toolTip">
     <string>Refresh (F5)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">F5</string>
    </property>
   </action>
   <action name="action_add_folder">
@@ -230,9 +186,6 @@
    <property name="toolTip">
     <string>Create a new folder</string>
    </property>
-   <property name="shortcut">
-    <string notr="true"/>
-   </property>
   </action>
   <action name="action_delete">
    <property name="enabled">
@@ -248,9 +201,6 @@
    <property name="toolTip">
     <string>Delete selected object(s) (Delete)</string>
    </property>
-   <property name="shortcut">
-    <string notr="true">Del</string>
-   </property>
   </action>
   <action name="action_send">
    <property name="enabled">
@@ -265,9 +215,6 @@
    </property>
    <property name="toolTip">
     <string>Send selected object(s) (F11)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">F11</string>
    </property>
   </action>
  </widget>
