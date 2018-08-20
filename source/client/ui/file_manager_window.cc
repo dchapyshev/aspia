@@ -83,11 +83,9 @@ void FileManagerWindow::closeEvent(QCloseEvent* event)
     settings.setWindowGeometry(saveGeometry());
     settings.setSplitterState(ui.splitter->saveState());
 
-    ui.local_panel->updateState();
     settings.setLocalDriveListState(ui.local_panel->driveListState());
     settings.setLocalFileListState(ui.local_panel->fileListState());
 
-    ui.remote_panel->updateState();
     settings.setRemoteDriveListState(ui.remote_panel->driveListState());
     settings.setRemoteFileListState(ui.remote_panel->fileListState());
 

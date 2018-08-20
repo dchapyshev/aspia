@@ -59,15 +59,12 @@ FilePanel::FilePanel(QWidget* parent)
     FileItemDelegate* delegate = dynamic_cast<FileItemDelegate*>(ui.list->itemDelegate());
     connect(delegate, &FileItemDelegate::editFinished, this, &FilePanel::refresh);
 
-    file_list_ = new FileListModel(this);
-
     connect(ui.address_bar, &AddressBar::pathChanged, this, &FilePanel::onPathChanged);
 
-    connect(ui.list, &QTreeView::activated, this, &FilePanel::onListItemActivated);
-    connect(ui.list, &QTreeView::customContextMenuRequested, this, &FilePanel::onListContextMenu);
-
-    connect(file_list_, &FileListModel::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
-    connect(file_list_, &FileListModel::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
+    connect(ui.list, &FileList::activated, this, &FilePanel::onListItemActivated);
+    connect(ui.list, &FileList::customContextMenuRequested, this, &FilePanel::onListContextMenu);
+    connect(ui.list, &FileList::nameChangeRequest, this, &FilePanel::onNameChangeRequest);
+    connect(ui.list, &FileList::createFolderRequest, this, &FilePanel::onCreateFolderRequest);
 
     connect(ui.action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
     connect(ui.action_refresh, &QAction::triggered, this, &FilePanel::refresh);
@@ -75,7 +72,7 @@ FilePanel::FilePanel(QWidget* parent)
     connect(ui.action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
     connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
-    connect(file_list_, &FileListModel::fileListDropped,
+    connect(ui.list, &FileList::fileListDropped,
             [this](const QString& folder_name, const QList<FileTransfer::Item>& items)
     {
         QString target_folder = currentPath();
@@ -92,16 +89,9 @@ void FilePanel::onPathChanged(const QString& path)
 {
     emit pathChanged(this, ui.address_bar->currentPath());
 
-    file_list_->clear();
-
     AddressBarModel* model = dynamic_cast<AddressBarModel*>(ui.address_bar->model());
     if (!model)
         return;
-
-    if (ui.list->model() == model)
-        drive_list_state_ = ui.list->header()->saveState();
-    else if (ui.list->model() == file_list_)
-        file_list_state_ = ui.list->header()->saveState();
 
     ui.action_up->setEnabled(false);
     ui.action_add_folder->setEnabled(false);
@@ -111,12 +101,7 @@ void FilePanel::onPathChanged(const QString& path)
 
     if (path == model->computerPath())
     {
-        ui.list->setModel(model);
-        ui.list->setRootIndex(model->computerIndex());
-        ui.list->setSelectionMode(QTreeView::SingleSelection);
-        ui.list->setSortingEnabled(false);
-        ui.list->header()->restoreState(drive_list_state_);
-
+        ui.list->showDriveList(model);
         ui.label_status->clear();
     }
     else
@@ -134,7 +119,7 @@ void FilePanel::setPanelName(const QString& name)
 
 void FilePanel::setMimeType(const QString& mime_type)
 {
-    file_list_->setMimeType(mime_type);
+    ui.list->setMimeType(mime_type);
 }
 
 void FilePanel::setTransferAllowed(bool allowed)
@@ -147,16 +132,6 @@ void FilePanel::setTransferEnabled(bool enabled)
 {
     transfer_enabled_ = enabled;
     ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
-}
-
-void FilePanel::updateState()
-{
-    QHeaderView* header = ui.list->header();
-
-    if (ui.list->model() == file_list_)
-        file_list_state_ = header->saveState();
-    else
-        drive_list_state_ = header->saveState();
 }
 
 void FilePanel::reply(const proto::file_transfer::Request& request,
@@ -191,16 +166,7 @@ void FilePanel::reply(const proto::file_transfer::Request& request,
             ui.action_up->setEnabled(true);
             ui.action_add_folder->setEnabled(true);
 
-            ui.list->setModel(file_list_);
-            ui.list->setSelectionMode(QTreeView::ExtendedSelection);
-            ui.list->setSortingEnabled(true);
-            ui.list->setFocus();
-
-            QHeaderView* header = ui.list->header();
-            header->restoreState(file_list_state_);
-
-            file_list_->setSortOrder(header->sortIndicatorSection(), header->sortIndicatorOrder());
-            file_list_->setFileList(reply.file_list());
+            ui.list->showFileList(reply.file_list());
 
             QItemSelectionModel* selection_model = ui.list->selectionModel();
 
@@ -268,10 +234,11 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
 
 void FilePanel::onListItemActivated(const QModelIndex& index)
 {
-    if (ui.address_bar->hasCurrentPath())
+    if (ui.list->isFileListShown())
     {
-        if (file_list_->isFolder(index))
-            toChildFolder(file_list_->nameAt(index));
+        FileListModel* model = dynamic_cast<FileListModel*>(ui.list->model());
+        if (model && model->isFolder(index))
+            toChildFolder(model->nameAt(index));
     }
     else
     {
@@ -410,16 +377,7 @@ void FilePanel::toParentFolder()
 void FilePanel::addFolder()
 {
     if (ui.action_add_folder->isEnabled())
-    {
-        ui.list->selectionModel()->select(QModelIndex(), QItemSelectionModel::Clear);
-
-        QModelIndex index = file_list_->createFolder();
-        if (index.isValid())
-        {
-            ui.list->scrollTo(index);
-            ui.list->edit(index);
-        }
-    }
+        ui.list->createFolder();
 }
 
 void FilePanel::removeSelected()
@@ -427,10 +385,14 @@ void FilePanel::removeSelected()
     if (!ui.action_delete->isEnabled())
         return;
 
+    FileListModel* model = dynamic_cast<FileListModel*>(ui.list->model());
+    if (!model)
+        return;
+
     QList<FileRemover::Item> items;
 
     for (const auto& index : ui.list->selectionModel()->selectedRows())
-        items.append(FileRemover::Item(file_list_->nameAt(index), file_list_->isFolder(index)));
+        items.append(FileRemover::Item(model->nameAt(index), model->isFolder(index)));
 
     if (items.isEmpty())
         return;
@@ -451,13 +413,17 @@ void FilePanel::sendSelected()
     if (!ui.action_send->isEnabled())
         return;
 
+    FileListModel* model = dynamic_cast<FileListModel*>(ui.list->model());
+    if (!model)
+        return;
+
     QList<FileTransfer::Item> items;
 
     for (const auto& index : ui.list->selectionModel()->selectedRows())
     {
-        items.append(FileTransfer::Item(file_list_->nameAt(index),
-                                        file_list_->sizeAt(index),
-                                        file_list_->isFolder(index)));
+        items.append(FileTransfer::Item(model->nameAt(index),
+                                        model->sizeAt(index),
+                                        model->isFolder(index)));
     }
 
     if (items.isEmpty())

@@ -21,9 +21,13 @@
 
 #include <QTreeView>
 
-#include "base/macros_magic.h"
+#include "client/file_transfer.h"
+#include "protocol/file_transfer_session.pb.h"
 
 namespace aspia {
+
+class AddressBarModel;
+class FileListModel;
 
 class FileList : public QTreeView
 {
@@ -33,11 +37,37 @@ public:
     explicit FileList(QWidget* parent = nullptr);
     ~FileList() = default;
 
+    void showDriveList(AddressBarModel* model);
+    void showFileList(const proto::file_transfer::FileList& file_list);
+    void setMimeType(const QString& mime_type);
+    bool isDriveListShown() const;
+    bool isFileListShown() const;
+    void createFolder();
+
+    void setDriveListState(const QByteArray& state);
+    QByteArray driveListState() const;
+
+    void setFileListState(const QByteArray& state);
+    QByteArray fileListState() const;
+
+signals:
+    void nameChangeRequest(const QString& old_name, const QString& new_name);
+    void createFolderRequest(const QString& name);
+    void fileListDropped(const QString& folder_name, const QList<FileTransfer::Item>& files);
+
 protected:
     // QTreeView implemenation.
     void keyPressEvent(QKeyEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
+    void saveColumnsState();
+
+    FileListModel* model_;
+
+    QByteArray drive_list_state_;
+    QByteArray file_list_state_;
+
     DISALLOW_COPY_AND_ASSIGN(FileList);
 };
 
