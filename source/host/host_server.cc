@@ -34,7 +34,8 @@ namespace aspia {
 
 namespace {
 
-const char kFirewallRuleName[] = "Aspia Host Service";
+const wchar_t kFirewallRuleName[] = L"Aspia Host Service";
+const wchar_t kFirewallRuleDecription[] = L"Allow incoming TCP connections";
 const char kNotifierFileName[] = "aspia_host.exe";
 
 const char* sessionTypeToString(proto::auth::SessionType session_type)
@@ -105,11 +106,11 @@ bool HostServer::start(int port, const QList<User>& user_list)
         qWarning("Empty user list");
     }
 
-    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
     if (firewall.isValid())
     {
         if (firewall.addTcpRule(kFirewallRuleName,
-                                tr("Allow incoming TCP connections"),
+                                kFirewallRuleDecription,
                                 port))
         {
             qInfo("Rule is added to the firewall");
@@ -145,7 +146,7 @@ void HostServer::stop()
 
     user_list_.clear();
 
-    FirewallManager firewall(QCoreApplication::applicationFilePath());
+    FirewallManager firewall(qUtf16Printable(QCoreApplication::applicationFilePath()));
     if (firewall.isValid())
         firewall.deleteRuleByName(kFirewallRuleName);
 

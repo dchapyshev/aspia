@@ -19,11 +19,10 @@
 #ifndef ASPIA_NETWORK__FIREWALL_MANAGER_H_
 #define ASPIA_NETWORK__FIREWALL_MANAGER_H_
 
-#include <QString>
-
 #include <wrl/client.h>
 #include <netfw.h>
 
+#include <string>
 #include <vector>
 
 #include "base/macros_magic.h"
@@ -33,7 +32,7 @@ namespace aspia {
 class FirewallManager
 {
 public:
-    explicit FirewallManager(const QString& application_path);
+    explicit FirewallManager(std::wstring_view application_path);
     ~FirewallManager() = default;
 
     // Returns true if firewall manager is valid.
@@ -47,12 +46,12 @@ public:
 
     // Adds a firewall rule allowing inbound connections to the application on
     // TCP port |port|. Replaces the rule if it already exists. Needs elevation.
-    bool addTcpRule(const QString& rule_name,
-                    const QString& description,
+    bool addTcpRule(std::wstring_view rule_name,
+                    std::wstring_view description,
                     int port);
 
     // Deletes all rules with specified name. Needs elevation.
-    void deleteRuleByName(const QString& rule_name);
+    void deleteRuleByName(std::wstring_view rule_name);
 
     // Deletes all rules for current app. Needs elevation.
     void deleteAllRules();
@@ -67,7 +66,7 @@ private:
     Microsoft::WRL::ComPtr<INetFwPolicy2> firewall_policy_;
     Microsoft::WRL::ComPtr<INetFwRules> firewall_rules_;
 
-    QString application_path_;
+    std::wstring application_path_;
 
     DISALLOW_COPY_AND_ASSIGN(FirewallManager);
 };
