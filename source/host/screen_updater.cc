@@ -205,7 +205,7 @@ void ScreenUpdaterImpl::run()
                     proto::desktop::Screen* item = message_.mutable_screen_list()->add_screen();
 
                     item->set_id(screen.id);
-                    item->set_title(screen.title.toStdString());
+                    item->set_title(screen.title);
                 }
 
                 QApplication::postEvent(parent(), new MessageEvent(serializeMessage(message_)));

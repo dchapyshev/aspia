@@ -19,7 +19,7 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_H_
 #define ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_H_
 
-#include <QString>
+#include <string>
 #include <vector>
 
 #include "desktop_capture/desktop_frame.h"
@@ -36,7 +36,7 @@ public:
     struct Screen
     {
         ScreenId id;
-        QString title;
+        std::string title;
     };
 
     using ScreenList = std::vector<Screen>;

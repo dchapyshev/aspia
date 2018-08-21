@@ -18,8 +18,10 @@
 
 #include "desktop_capture/win/screen_capture_utils.h"
 
-#include <QDebug>
-#include <qt_windows.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#include "base/unicode.h"
 
 namespace aspia {
 
@@ -30,7 +32,7 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
 
     for (int device_index = 0;; ++device_index)
     {
-        DISPLAY_DEVICE device;
+        DISPLAY_DEVICEW device;
         device.cb = sizeof(device);
 
         // |enum_result| is 0 if we have enumerated all devices.
@@ -41,15 +43,14 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screens)
         if (!(device.StateFlags & DISPLAY_DEVICE_ACTIVE))
             continue;
 
-        screens->push_back({device_index, QString::fromUtf16(
-            reinterpret_cast<const ushort*>(device.DeviceName))});
+        screens->push_back({device_index, UTF8fromUTF16(device.DeviceName)});
     }
 
     return true;
 }
 
 // static
-bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString* device_key)
+bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, std::wstring* device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
     {
@@ -57,13 +58,13 @@ bool ScreenCaptureUtils::isScreenValid(ScreenCapturer::ScreenId screen, QString*
         return true;
     }
 
-    DISPLAY_DEVICE device;
+    DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
 
     if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
         return false;
 
-    *device_key = QString::fromUtf16(reinterpret_cast<const ushort*>(device.DeviceKey));
+    *device_key = device.DeviceKey;
     return true;
 }
 
@@ -78,12 +79,12 @@ DesktopRect ScreenCaptureUtils::fullScreenRect()
 
 // static
 DesktopRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
-                                           const QString& device_key)
+                                           const std::wstring& device_key)
 {
     if (screen == ScreenCapturer::kFullDesktopScreenId)
         return fullScreenRect();
 
-    DISPLAY_DEVICE device;
+    DISPLAY_DEVICEW device;
     device.cb = sizeof(device);
     if (!EnumDisplayDevicesW(nullptr, screen, &device, 0))
         return DesktopRect();
@@ -92,10 +93,10 @@ DesktopRect ScreenCaptureUtils::screenRect(ScreenCapturer::ScreenId screen,
     // capturing the same device when devices are added or removed. DeviceKey is documented as
     // reserved, but it actually contains the registry key for the device and is unique for each
     // monitor, while DeviceID is not.
-    if (wcscmp(device.DeviceKey, reinterpret_cast<const wchar_t*>(device_key.utf16())) != 0)
+    if (device_key != device.DeviceKey)
         return DesktopRect();
 
-    DEVMODE device_mode;
+    DEVMODEW device_mode;
     device_mode.dmSize = sizeof(device_mode);
     device_mode.dmDriverExtra = 0;
 
