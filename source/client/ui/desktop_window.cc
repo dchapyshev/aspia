@@ -84,6 +84,7 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
     connect(panel_, &DesktopPanel::switchToAutosize, this, &DesktopWindow::autosizeWindow);
     connect(panel_, &DesktopPanel::screenSelected, this, &DesktopWindow::sendScreen);
     connect(panel_, &DesktopPanel::takeScreenshot, this, &DesktopWindow::takeScreenshot);
+    connect(panel_, &DesktopPanel::scalingChanged, this, &DesktopWindow::onScalingChanged);
 
     connect(panel_, &DesktopPanel::switchToFullscreen, [this](bool fullscreen)
     {
@@ -125,12 +126,25 @@ DesktopWindow::DesktopWindow(ConnectData* connect_data, QWidget* parent)
 
 void DesktopWindow::resizeDesktopFrame(const DesktopRect& screen_rect)
 {
-    DesktopSize prev_size = DesktopSize::fromQSize(desktop_->size());
+    DesktopSize prev_size;
+
+    DesktopFrame* frame = desktop_->desktopFrame();
+    if (frame)
+        prev_size = desktop_->desktopFrame()->size();
 
     desktop_->resizeDesktopFrame(screen_rect.size());
 
-    if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
-        autosizeWindow();
+    if (!scaling_enabled_)
+    {
+        desktop_->resize(screen_rect.width(), screen_rect.height());
+
+        if (screen_rect.size() != prev_size && !isMaximized() && !isFullScreen())
+            autosizeWindow();
+    }
+    else
+    {
+        onScalingChanged();
+    }
 
     screen_top_left_ = screen_rect.topLeft();
 }
@@ -153,8 +167,7 @@ void DesktopWindow::injectCursor(const QCursor& cursor)
 
 void DesktopWindow::injectClipboard(const proto::desktop::ClipboardEvent& event)
 {
-    if (!clipboard_.isNull())
-        clipboard_->injectClipboardEvent(event);
+    clipboard_->injectClipboardEvent(event);
 }
 
 void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
@@ -164,7 +177,7 @@ void DesktopWindow::setScreenList(const proto::desktop::ScreenList& screen_list)
 
 void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
 {
-    if (autoscroll_enabled_)
+    if (autoscroll_enabled_ && !scaling_enabled_)
     {
         QPoint cursor = desktop_->mapTo(scroll_area_, pos);
         QRect client_area = scroll_area_->rect();
@@ -214,11 +227,20 @@ void DesktopWindow::onPointerEvent(const QPoint& pos, uint32_t mask)
         scroll_timer_id_ = 0;
     }
 
-    int scale_factor = connect_data_->desktopConfig().scale_factor();
-    if (scale_factor)
+    int remote_scale_factor = connect_data_->desktopConfig().scale_factor();
+    if (remote_scale_factor)
     {
-        int x = ((pos.x() * 100) / scale_factor) + screen_top_left_.x();
-        int y = ((pos.y() * 100) / scale_factor) + screen_top_left_.y();
+        const DesktopSize& source_size = desktopFrame()->size();
+        QSize scaled_size = desktop_->size();
+
+        double scale_x = (scaled_size.width() * 100) / double(source_size.width());
+        double scale_y = (scaled_size.height() * 100) / double(source_size.height());
+        double scale = std::min(scale_x, scale_y);
+
+        double x = ((pos.x() * 10000) / (remote_scale_factor * scale))
+            + screen_top_left_.x();
+        double y = ((pos.y() * 10000) / (remote_scale_factor * scale))
+            + screen_top_left_.y();
 
         emit sendPointerEvent(DesktopPoint(x, y), mask);
     }
@@ -291,6 +313,19 @@ void DesktopWindow::takeScreenshot()
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
 }
 
+void DesktopWindow::onScalingChanged(bool enabled)
+{
+    scaling_enabled_ = enabled;
+
+    QSize source_size = desktopFrame()->size().toQSize();
+    QSize scaled_size = source_size;
+
+    if (enabled)
+        scaled_size.scale(size(), Qt::KeepAspectRatio);
+
+    desktop_->resize(scaled_size);
+}
+
 void DesktopWindow::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == scroll_timer_id_)
@@ -301,8 +336,8 @@ void DesktopWindow::timerEvent(QTimerEvent* event)
 
             int pos = scrollbar->sliderPosition() + scroll_delta_.x();
 
-            pos = qMax(pos, scrollbar->minimum());
-            pos = qMin(pos, scrollbar->maximum());
+            pos = std::max(pos, scrollbar->minimum());
+            pos = std::min(pos, scrollbar->maximum());
 
             scrollbar->setSliderPosition(pos);
         }
@@ -313,8 +348,8 @@ void DesktopWindow::timerEvent(QTimerEvent* event)
 
             int pos = scrollbar->sliderPosition() + scroll_delta_.y();
 
-            pos = qMax(pos, scrollbar->minimum());
-            pos = qMin(pos, scrollbar->maximum());
+            pos = std::max(pos, scrollbar->minimum());
+            pos = std::min(pos, scrollbar->maximum());
 
             scrollbar->setSliderPosition(pos);
         }
@@ -326,6 +361,10 @@ void DesktopWindow::timerEvent(QTimerEvent* event)
 void DesktopWindow::resizeEvent(QResizeEvent* event)
 {
     panel_->move(QPoint(width() / 2 - panel_->width() / 2, 0));
+
+    if (scaling_enabled_)
+        onScalingChanged();
+
     QWidget::resizeEvent(event);
 }
 

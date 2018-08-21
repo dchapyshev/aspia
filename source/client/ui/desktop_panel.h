@@ -19,8 +19,6 @@
 #ifndef ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
 #define ASPIA_CLIENT__UI__DESKTOP_PANEL_H_
 
-#include <QPointer>
-
 #include "base/macros_magic.h"
 #include "protocol/authorization.pb.h"
 #include "protocol/desktop_session.pb.h"
@@ -44,6 +42,7 @@ signals:
     void switchToAutosize();
     void settingsButton();
     void screenSelected(const proto::desktop::Screen& screen);
+    void scalingChanged(bool enabled);
     void autoScrollChanged(bool enabled);
     void takeScreenshot();
     void startSession(proto::auth::SessionType session_type);

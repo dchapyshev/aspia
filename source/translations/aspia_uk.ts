@@ -543,52 +543,69 @@
 <context>
     <name>DesktopPanel</name>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="114"/>
+        <location filename="../client/ui/desktop_panel.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation>Закріпити панель інструментів</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="126"/>
+        <location filename="../client/ui/desktop_panel.ui" line="132"/>
         <source>Session configuration</source>
         <translation>Налаштування сесії</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="138"/>
+        <location filename="../client/ui/desktop_panel.ui" line="144"/>
         <source>Monitor selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="150"/>
+        <location filename="../client/ui/desktop_panel.ui" line="156"/>
         <source>Automatic window size</source>
         <translation>Автоматичний розмір вікна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="165"/>
+        <location filename="../client/ui/desktop_panel.ui" line="171"/>
         <source>Switch to full screen mode or back</source>
         <translation>Повноекранний режим</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="176"/>
+        <location filename="../client/ui/desktop_panel.ui" line="182"/>
         <source>Automatic scrolling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="200"/>
+        <location filename="../client/ui/desktop_panel.ui" line="206"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="205"/>
-        <source>Send keys sequence</source>
+        <location filename="../client/ui/desktop_panel.ui" line="211"/>
+        <source>Send keys sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="210"/>
-        <source>Take screenshot</source>
+        <location filename="../client/ui/desktop_panel.ui" line="216"/>
+        <location filename="../client/ui/desktop_panel.ui" line="219"/>
+        <location filename="../client/ui/desktop_panel.ui" line="222"/>
+        <source>Save screenshot...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_panel.ui" line="188"/>
+        <location filename="../client/ui/desktop_panel.ui" line="234"/>
+        <source>File transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="246"/>
+        <source>System information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="254"/>
+        <source>Scaling an image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop_panel.ui" line="194"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Передати Ctrl+Alt+Del</translation>
     </message>
@@ -617,32 +634,32 @@
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="198"/>
+        <location filename="../client/ui/file_panel.ui" line="160"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Повернутись на каталог вище (Backspace)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="213"/>
+        <location filename="../client/ui/file_panel.ui" line="172"/>
         <source>Refresh (F5)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="231"/>
+        <location filename="../client/ui/file_panel.ui" line="187"/>
         <source>Create a new folder</source>
         <translation>Створити новий каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="249"/>
+        <location filename="../client/ui/file_panel.ui" line="202"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Видалити обрані об&apos;єкти (Delete)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="267"/>
+        <location filename="../client/ui/file_panel.ui" line="217"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Надіслати обрані об&apos;єкти (F11)</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.ui" line="264"/>
+        <location filename="../client/ui/file_panel.ui" line="214"/>
         <source>Send</source>
         <translation>Надіслати</translation>
     </message>
@@ -1616,39 +1633,39 @@
 <context>
     <name>aspia::ConsoleWindow</name>
     <message>
-        <location filename="../console/console_window.cc" line="178"/>
+        <location filename="../console/console_window.cc" line="179"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="180"/>
+        <location filename="../console/console_window.cc" line="181"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia Address Book (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="198"/>
+        <location filename="../console/console_window.cc" line="199"/>
         <source>Information</source>
         <translation>Інформація</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="199"/>
+        <location filename="../console/console_window.cc" line="200"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="281"/>
+        <location filename="../console/console_window.cc" line="282"/>
         <source>https://aspia.org/en/help.html</source>
         <translation>https://aspia.org/en/help.html</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="398"/>
-        <location filename="../console/console_window.cc" line="589"/>
+        <location filename="../console/console_window.cc" line="399"/>
+        <location filename="../console/console_window.cc" line="590"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/console_window.cc" line="399"/>
-        <location filename="../console/console_window.cc" line="590"/>
+        <location filename="../console/console_window.cc" line="400"/>
+        <location filename="../console/console_window.cc" line="591"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
@@ -1689,32 +1706,32 @@
 <context>
     <name>aspia::DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="46"/>
+        <location filename="../client/ui/desktop_window.cc" line="47"/>
         <source>Aspia Desktop Manage</source>
         <translation>Керування робочим столом Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="51"/>
+        <location filename="../client/ui/desktop_window.cc" line="52"/>
         <source>Aspia Desktop View</source>
         <translation>Перегляд робочого столу Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="261"/>
+        <location filename="../client/ui/desktop_window.cc" line="291"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="263"/>
+        <location filename="../client/ui/desktop_window.cc" line="293"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="283"/>
+        <location filename="../client/ui/desktop_window.cc" line="313"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop_window.cc" line="283"/>
+        <location filename="../client/ui/desktop_window.cc" line="313"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1793,76 +1810,76 @@
 <context>
     <name>aspia::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="170"/>
-        <location filename="../client/ui/file_panel.cc" line="183"/>
-        <location filename="../client/ui/file_panel.cc" line="216"/>
-        <location filename="../client/ui/file_panel.cc" line="227"/>
-        <location filename="../client/ui/file_panel.cc" line="279"/>
-        <location filename="../client/ui/file_panel.cc" line="288"/>
-        <location filename="../client/ui/file_panel.cc" line="306"/>
-        <location filename="../client/ui/file_panel.cc" line="315"/>
+        <location filename="../client/ui/file_panel.cc" line="145"/>
+        <location filename="../client/ui/file_panel.cc" line="158"/>
+        <location filename="../client/ui/file_panel.cc" line="182"/>
+        <location filename="../client/ui/file_panel.cc" line="193"/>
+        <location filename="../client/ui/file_panel.cc" line="273"/>
+        <location filename="../client/ui/file_panel.cc" line="282"/>
+        <location filename="../client/ui/file_panel.cc" line="300"/>
+        <location filename="../client/ui/file_panel.cc" line="309"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="171"/>
+        <location filename="../client/ui/file_panel.cc" line="146"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="184"/>
+        <location filename="../client/ui/file_panel.cc" line="159"/>
         <source>Failed to get list of files: %1</source>
         <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="217"/>
+        <location filename="../client/ui/file_panel.cc" line="183"/>
         <source>Failed to create directory: %1</source>
         <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="228"/>
+        <location filename="../client/ui/file_panel.cc" line="194"/>
         <source>Failed to rename item: %1</source>
         <translation>Не давлося переіменувати об&apos;єкт: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="259"/>
+        <location filename="../client/ui/file_panel.cc" line="253"/>
         <source>%1 object(s) selected</source>
         <translation>%1 об&apos;єктів обрано</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="280"/>
-        <location filename="../client/ui/file_panel.cc" line="307"/>
+        <location filename="../client/ui/file_panel.cc" line="274"/>
+        <location filename="../client/ui/file_panel.cc" line="301"/>
         <source>Folder name can not be empty.</source>
         <translation>Ім&apos;я каталогу не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="289"/>
-        <location filename="../client/ui/file_panel.cc" line="316"/>
+        <location filename="../client/ui/file_panel.cc" line="283"/>
+        <location filename="../client/ui/file_panel.cc" line="310"/>
         <source>Name contains invalid characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="340"/>
+        <location filename="../client/ui/file_panel.cc" line="334"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Надіслати F11</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="342"/>
+        <location filename="../client/ui/file_panel.cc" line="336"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Видалити Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="352"/>
+        <location filename="../client/ui/file_panel.cc" line="346"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Створити каталог</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="403"/>
+        <location filename="../client/ui/file_panel.cc" line="401"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_panel.cc" line="404"/>
+        <location filename="../client/ui/file_panel.cc" line="402"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
     </message>

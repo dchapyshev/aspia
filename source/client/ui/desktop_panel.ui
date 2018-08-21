@@ -208,12 +208,18 @@
   </action>
   <action name="action_key_sequence">
    <property name="text">
-    <string>Send keys sequence</string>
+    <string>Send keys sequence...</string>
    </property>
   </action>
   <action name="action_screenshot">
    <property name="text">
-    <string>Take screenshot</string>
+    <string>Save screenshot...</string>
+   </property>
+   <property name="iconText">
+    <string>Save screenshot...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save screenshot...</string>
    </property>
   </action>
   <action name="action_file_transfer">
@@ -222,10 +228,10 @@
      <normaloff>:/icon/folder-stand.png</normaloff>:/icon/folder-stand.png</iconset>
    </property>
    <property name="text">
-    <string>FileTransfer</string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string>Start file transfer</string>
+    <string>File transfer</string>
    </property>
   </action>
   <action name="action_system_info">
@@ -234,10 +240,18 @@
      <normaloff>:/icon/system-monitor.png</normaloff>:/icon/system-monitor.png</iconset>
    </property>
    <property name="text">
-    <string>SystemInfo</string>
+    <string/>
    </property>
    <property name="toolTip">
-    <string>Start system information</string>
+    <string>System information</string>
+   </property>
+  </action>
+  <action name="action_scaling">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scaling an image</string>
    </property>
   </action>
  </widget>

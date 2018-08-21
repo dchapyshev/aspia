@@ -191,7 +191,9 @@ void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
 {
     // Create a menu and add actions to it.
     additional_menu_ = new QMenu(this);
+    additional_menu_->addAction(ui.action_scaling);
     additional_menu_->addAction(ui.action_autoscroll);
+    additional_menu_->addSeparator();
 
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         additional_menu_->addAction(ui.action_key_sequence);
@@ -207,6 +209,12 @@ void DesktopPanel::createAdditionalMenu(proto::auth::SessionType session_type)
     // Now we connect all the necessary signals and slots.
     if (session_type == proto::auth::SESSION_TYPE_DESKTOP_MANAGE)
         connect(ui.action_key_sequence, &QAction::triggered, this, &DesktopPanel::onKeySequence);
+
+    connect(ui.action_scaling, &QAction::toggled, [this](bool checked)
+    {
+        ui.action_autoscroll->setEnabled(!checked);
+        emit scalingChanged(checked);
+    });
 
     connect(ui.action_screenshot, &QAction::triggered, this, &DesktopPanel::takeScreenshot);
     connect(additional_menu_, &QMenu::aboutToShow, [this]() { allow_hide_ = false; });

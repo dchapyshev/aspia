@@ -65,7 +65,6 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
     void leaveEvent(QEvent* event) override;
-
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
@@ -74,22 +73,24 @@ private slots:
     void onConfigChanged(const proto::desktop::Config& config);
     void autosizeWindow();
     void takeScreenshot();
+    void onScalingChanged(bool enabled = true);
 
 private:
     ConnectData* connect_data_;
     ClientConnections connections_;
 
-    QPointer<QHBoxLayout> layout_;
-    QPointer<QScrollArea> scroll_area_;
-    QPointer<DesktopPanel> panel_;
-    QPointer<DesktopWidget> desktop_;
-    QPointer<Clipboard> clipboard_;
+    QHBoxLayout* layout_;
+    QScrollArea* scroll_area_;
+    DesktopPanel* panel_;
+    DesktopWidget* desktop_;
+    Clipboard* clipboard_;
 
     int scroll_timer_id_ = 0;
     QPoint scroll_delta_;
 
     bool is_maximized_ = false;
     bool autoscroll_enabled_ = true;
+    bool scaling_enabled_ = false;
 
     DesktopPoint screen_top_left_;
 

@@ -67,7 +67,6 @@ DesktopWidget::DesktopWidget(QWidget* parent)
 void DesktopWidget::resizeDesktopFrame(const DesktopSize& screen_size)
 {
     frame_ = DesktopFrameQImage::create(screen_size);
-    resize(screen_size.width(), screen_size.height());
 }
 
 DesktopFrame* DesktopWidget::desktopFrame()
@@ -80,7 +79,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
                                  const QPoint& pos,
                                  const QPoint& delta)
 {
-    if (!frame_ || !frame_->contains(pos.x(), pos.y()))
+    if (!frame_)
         return;
 
     uint32_t mask;
@@ -207,6 +206,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     if (frame_)
     {
         QPainter painter(this);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
         painter.drawImage(rect(), frame_->constImage());
     }
 }
