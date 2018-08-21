@@ -29,13 +29,18 @@ extern "C" {
 namespace aspia {
 
 // static
+void Random::fillBuffer(void* buffer, size_t size)
+{
+    randombytes_buf(buffer, size);
+}
+
+// static
 QByteArray Random::generateBuffer(int size)
 {
     QByteArray random_buffer;
     random_buffer.resize(size);
 
-    randombytes_buf(random_buffer.data(), random_buffer.size());
-
+    fillBuffer(random_buffer.data(), random_buffer.size());
     return random_buffer;
 }
 

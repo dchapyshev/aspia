@@ -16,27 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__RANDOM_H_
-#define ASPIA_CRYPTO__RANDOM_H_
+#ifndef ASPIA_BASE__STRING_PRINTF_H_
+#define ASPIA_BASE__STRING_PRINTF_H_
 
-#include <QByteArray>
-
-#include "base/macros_magic.h"
+#include <string>
 
 namespace aspia {
 
-class Random
-{
-public:
-    static void fillBuffer(void* buffer, size_t size);
+// Return a C++ string given vprintf-like input.
+std::string StringPrintfV(const char* format, va_list args);
+std::wstring StringPrintfV(const wchar_t* format, va_list args);
 
-    static QByteArray generateBuffer(int size);
-    static uint32_t generateNumber();
+// Return a C++ string given printf-like input.
+std::string StringPrintf(const char* format, ...);
+std::wstring StringPrintf(const wchar_t* format, ...);
 
-private:
-    DISALLOW_COPY_AND_ASSIGN(Random);
-};
+// Store result into a supplied string and return it.
+const std::string& SStringPrintf(std::string& dst, const char* format, ...);
+const std::wstring& SStringPrintf(std::wstring& dst, const wchar_t* format, ...);
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__RANDOM_H_
+#endif // ASPIA_BASE__STRING_PRINTF_H_

@@ -33,6 +33,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/errno_logging.h
     ${PROJECT_SOURCE_DIR}/base/file_logger.cc
     ${PROJECT_SOURCE_DIR}/base/file_logger.h
+    ${PROJECT_SOURCE_DIR}/base/guid.cc
+    ${PROJECT_SOURCE_DIR}/base/guid.h
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.cc
     ${PROJECT_SOURCE_DIR}/base/keycode_converter.h
     ${PROJECT_SOURCE_DIR}/base/locale_loader.cc
@@ -44,6 +46,8 @@ list(APPEND SOURCE_BASE
     ${PROJECT_SOURCE_DIR}/base/service_controller.h
     ${PROJECT_SOURCE_DIR}/base/service_impl.h
     ${PROJECT_SOURCE_DIR}/base/service_impl_win.cc
+    ${PROJECT_SOURCE_DIR}/base/string_printf.cc
+    ${PROJECT_SOURCE_DIR}/base/string_printf.h
     ${PROJECT_SOURCE_DIR}/base/typed_buffer.h
     ${PROJECT_SOURCE_DIR}/base/unicode.cc
     ${PROJECT_SOURCE_DIR}/base/unicode.h)
