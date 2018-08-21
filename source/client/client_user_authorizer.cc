@@ -32,12 +32,7 @@ const int kPasswordHashingRounds = 100000;
 
 std::string createPasswordHash(const std::string& password)
 {
-    std::string data = password;
-
-    for (int i = 0; i < kPasswordHashingRounds; ++i)
-        data = Sha512::hash(data);
-
-    return data;
+    return Sha512::hash(password, kPasswordHashingRounds);
 }
 
 std::string createSessionKey(const std::string& password_hash, const std::string& nonce)

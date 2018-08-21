@@ -54,13 +54,7 @@ bool isValidPasswordHash(const std::string& password_hash)
 std::string createPasswordHash(const std::string& password)
 {
     static const int kIterCount = 100000;
-
-    std::string data = password;
-
-    for (int i = 0; i < kIterCount; ++i)
-        data = Sha512::hash(data);
-
-    return data;
+    return Sha512::hash(password, kIterCount);
 }
 
 } // namespace

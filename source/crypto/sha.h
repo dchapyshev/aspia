@@ -23,9 +23,6 @@
 
 #include "base/macros_magic.h"
 
-struct crypto_hash_sha256_state;
-struct crypto_hash_sha512_state;
-
 namespace aspia {
 
 class Sha256
@@ -35,6 +32,7 @@ public:
     ~Sha256();
 
     static std::string hash(const std::string& data);
+    static std::string hash(const std::string& data, size_t rounds);
 
     void addData(const void* data, size_t length);
     void addData(const std::string& data);
@@ -42,7 +40,7 @@ public:
     std::string result() const;
 
 private:
-    std::unique_ptr<crypto_hash_sha256_state> state_;
+    mutable uint8_t state_[104];
     DISALLOW_COPY_AND_ASSIGN(Sha256);
 };
 
@@ -53,6 +51,7 @@ public:
     ~Sha512();
 
     static std::string hash(const std::string& data);
+    static std::string hash(const std::string& data, size_t rounds);
 
     void addData(const void* data, size_t length);
     void addData(const std::string& data);
@@ -60,7 +59,7 @@ public:
     std::string result() const;
 
 private:
-    std::unique_ptr<crypto_hash_sha512_state> state_;
+    mutable uint8_t state_[208];
     DISALLOW_COPY_AND_ASSIGN(Sha512);
 };
 
