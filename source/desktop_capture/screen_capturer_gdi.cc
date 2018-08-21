@@ -22,8 +22,13 @@
 #include <dwmapi.h>
 
 #include "desktop_capture/win/screen_capture_utils.h"
+#include "desktop_capture/desktop_frame_dib.h"
+#include "desktop_capture/differ.h"
 
 namespace aspia {
+
+ScreenCapturerGDI::ScreenCapturerGDI() = default;
+ScreenCapturerGDI::~ScreenCapturerGDI() = default;
 
 int ScreenCapturerGDI::screenCount()
 {

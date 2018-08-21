@@ -19,21 +19,20 @@
 #ifndef ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H_
 #define ASPIA_DESKTOP_CAPTURE__SCREEN_CAPTURER_GDI_H_
 
-#include "desktop_capture/screen_capturer.h"
-
 #include "base/win/scoped_hdc.h"
 #include "desktop_capture/win/scoped_thread_desktop.h"
-#include "desktop_capture/desktop_frame_dib.h"
-#include "desktop_capture/differ.h"
+#include "desktop_capture/screen_capturer.h"
 #include "desktop_capture/screen_capture_frame_queue.h"
 
 namespace aspia {
 
+class Differ;
+
 class ScreenCapturerGDI : public ScreenCapturer
 {
 public:
-    ScreenCapturerGDI() = default;
-    ~ScreenCapturerGDI() = default;
+    ScreenCapturerGDI();
+    ~ScreenCapturerGDI();
 
     int screenCount() override;
     bool screenList(ScreenList* screens) override;
