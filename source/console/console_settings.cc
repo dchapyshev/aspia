@@ -94,6 +94,26 @@ void ConsoleSettings::setStatusBarEnabled(bool enable)
     settings_.setValue(QStringLiteral("StatusBar"), enable);
 }
 
+bool ConsoleSettings::minimizeToTray() const
+{
+    return settings_.value(QStringLiteral("MinimizeToTray"), false).toBool();
+}
+
+void ConsoleSettings::setMinimizeToTray(bool enable)
+{
+    settings_.setValue(QStringLiteral("MinimizeToTray"), enable);
+}
+
+bool ConsoleSettings::alwaysShowTrayIcon() const
+{
+    return settings_.value(QStringLiteral("AlwaysShowTrayIcon"), false).toBool();
+}
+
+void ConsoleSettings::setAlwaysShowTrayIcon(bool enable)
+{
+    settings_.setValue(QStringLiteral("AlwaysShowTrayIcon"), enable);
+}
+
 proto::auth::SessionType ConsoleSettings::sessionType()
 {
     return static_cast<proto::auth::SessionType>(

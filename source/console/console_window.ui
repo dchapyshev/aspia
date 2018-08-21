@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string notr="true">Aspia Console</string>
+   <string>Aspia Console</string>
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -118,6 +118,9 @@
     <addaction name="menu_language"/>
     <addaction name="action_toolbar"/>
     <addaction name="action_statusbar"/>
+    <addaction name="separator"/>
+    <addaction name="action_show_tray_icon"/>
+    <addaction name="action_minimize_to_tray"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_edit"/>
@@ -464,6 +467,27 @@
    </property>
    <property name="text">
     <string>System Information</string>
+   </property>
+  </action>
+  <action name="action_show_tray_icon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show tray icon</string>
+   </property>
+  </action>
+  <action name="action_minimize_to_tray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Minimize to tray</string>
+   </property>
+  </action>
+  <action name="action_show_hide">
+   <property name="text">
+    <string>Hide</string>
    </property>
   </action>
  </widget>

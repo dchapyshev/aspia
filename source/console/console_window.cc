@@ -59,7 +59,9 @@ private:
 
 ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     : QMainWindow(parent),
-      connections_(this)
+      connections_(this),
+      tray_icon_(this),
+      tray_menu_(this)
 {
     ConsoleSettings settings;
 
@@ -78,11 +80,27 @@ ConsoleWindow::ConsoleWindow(const QString& file_path, QWidget* parent)
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
+    tray_menu_.addAction(ui.action_show_hide);
+    tray_menu_.addAction(ui.action_exit);
+    tray_icon_.setIcon(QIcon(QStringLiteral(":/icon/main.png")));
+    tray_icon_.setToolTip(tr("Aspia Console"));
+    tray_icon_.setContextMenu(&tray_menu_);
+
     ui.action_toolbar->setChecked(settings.isToolBarEnabled());
 
     bool show_status_bar = settings.isStatusBarEnabled();
     ui.action_statusbar->setChecked(show_status_bar);
     ui.status_bar->setVisible(show_status_bar);
+
+    ui.action_show_tray_icon->setChecked(settings.alwaysShowTrayIcon());
+    ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
+
+    if (ui.action_show_tray_icon->isChecked())
+        tray_icon_.show();
+
+    connect(&tray_icon_, &QSystemTrayIcon::activated, this, &ConsoleWindow::onTrayIconActivated);
+    connect(ui.action_show_hide, &QAction::triggered, this, &ConsoleWindow::onShowHideToTray);
+    connect(ui.action_show_tray_icon, &QAction::toggled, &tray_icon_, &QSystemTrayIcon::setVisible);
 
     connect(ui.action_new, &QAction::triggered, this, &ConsoleWindow::onNewAddressBook);
     connect(ui.action_open, &QAction::triggered, this, &ConsoleWindow::onOpenAddressBook);
@@ -579,6 +597,53 @@ void ConsoleWindow::onLanguageChanged(QAction* action)
     }
 }
 
+void ConsoleWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if (reason == QSystemTrayIcon::Context)
+        return;
+
+    onShowHideToTray();
+}
+
+void ConsoleWindow::onShowHideToTray()
+{
+    if (isHidden())
+    {
+        ui.action_show_hide->setText(tr("Hide"));
+
+        if (!ui.action_show_tray_icon->isChecked())
+            tray_icon_.hide();
+
+        if (windowState() & Qt::WindowMaximized)
+            showMaximized();
+        else
+            showNormal();
+
+        activateWindow();
+        setFocus();
+    }
+    else
+    {
+        ui.action_show_hide->setText(tr("Show"));
+
+        if (!ui.action_show_tray_icon->isChecked())
+            tray_icon_.show();
+
+        hide();
+    }
+}
+
+void ConsoleWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::WindowStateChange && ui.action_minimize_to_tray->isChecked())
+    {
+        if (windowState() & Qt::WindowMinimized)
+            onShowHideToTray();
+    }
+
+    QMainWindow::changeEvent(event);
+}
+
 void ConsoleWindow::closeEvent(QCloseEvent* event)
 {
     for (int i = 0; i < ui.tab_widget->count(); ++i)
@@ -611,6 +676,8 @@ void ConsoleWindow::closeEvent(QCloseEvent* event)
     ConsoleSettings settings;
     settings.setToolBarEnabled(ui.action_toolbar->isChecked());
     settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
+    settings.setAlwaysShowTrayIcon(ui.action_show_tray_icon->isChecked());
+    settings.setMinimizeToTray(ui.action_minimize_to_tray->isChecked());
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
 

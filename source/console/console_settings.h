@@ -51,6 +51,12 @@ public:
     bool isStatusBarEnabled() const;
     void setStatusBarEnabled(bool enable);
 
+    bool minimizeToTray() const;
+    void setMinimizeToTray(bool enable);
+
+    bool alwaysShowTrayIcon() const;
+    void setAlwaysShowTrayIcon(bool enable);
+
     proto::auth::SessionType sessionType();
     void setSessionType(proto::auth::SessionType session_type);
 
