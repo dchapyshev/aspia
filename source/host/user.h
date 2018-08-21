@@ -42,8 +42,8 @@ public:
     const QString& name() const { return name_; }
 
     bool setPassword(const QString& value);
-    bool setPasswordHash(const QByteArray& value);
-    const QByteArray& passwordHash() const { return password_hash_; }
+    bool setPasswordHash(const std::string& value);
+    const std::string& passwordHash() const { return password_hash_; }
 
     void setFlags(uint32_t value);
     uint32_t flags() const { return flags_; }
@@ -53,7 +53,7 @@ public:
 
 private:
     QString name_;
-    QByteArray password_hash_;
+    std::string password_hash_;
     uint32_t flags_ = 0;
     uint32_t sessions_ = 0;
 };

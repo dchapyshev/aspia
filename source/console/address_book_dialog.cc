@@ -36,7 +36,7 @@ constexpr int kMaxCommentLength = 2048;
 } // namespace
 
 AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File* file,
-                                     proto::address_book::Data* data, QByteArray* key)
+                                     proto::address_book::Data* data, std::string* key)
     : QDialog(parent), file_(file), data_(data), key_(key)
 {
     ui.setupUi(this);
@@ -60,7 +60,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent, proto::address_book::File*
 
     if (file->encryption_type() == proto::address_book::ENCRYPTION_TYPE_XCHACHA20_POLY1305)
     {
-        if (!key_->isEmpty())
+        if (!key_->empty())
         {
             QString text = tr("Double-click to change");
 
@@ -191,17 +191,16 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
                     return;
                 }
 
-                // Generate salt, which is added after each iteration of the hashing.
-                // New salt is generated each time the password is changed.
-                QByteArray hashing_salt =
-                    Random::generateBuffer(ui.spinbox_password_salt->value());
-
                 // Save the salt and the number of hashing iterations.
                 file_->set_hashing_rounds(ui.spinbox_hashing_rounds->value());
-                *file_->mutable_hashing_salt() = hashing_salt.toStdString();
+
+                // Generate salt, which is added after each iteration of the hashing.
+                // New salt is generated each time the password is changed.
+                file_->set_hashing_salt(Random::generateBuffer(ui.spinbox_password_salt->value()));
 
                 // Now generate a key for encryption/decryption.
-                *key_ = DataEncryptor::createKey(password.toUtf8(), hashing_salt,
+                *key_ = DataEncryptor::createKey(password.toStdString(),
+                                                 file_->hashing_salt(),
                                                  file_->hashing_rounds());
             }
 
@@ -209,10 +208,10 @@ void AddressBookDialog::buttonBoxClicked(QAbstractButton* button)
             int salt_after_size = ui.spinbox_salt_after->value();
 
             if (salt_before_size != data_->salt1().size())
-                *data_->mutable_salt1() = Random::generateBuffer(salt_before_size).toStdString();
+                data_->set_salt1(Random::generateBuffer(salt_before_size));
 
             if (salt_after_size != data_->salt2().size())
-                *data_->mutable_salt2() = Random::generateBuffer(salt_after_size).toStdString();
+                data_->set_salt2(Random::generateBuffer(salt_after_size));
         }
         break;
 

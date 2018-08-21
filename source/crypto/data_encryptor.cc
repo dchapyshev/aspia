@@ -18,8 +18,6 @@
 
 #include "crypto/data_encryptor.h"
 
-#include <QCryptographicHash>
-
 extern "C" {
 #define SODIUM_STATIC
 
@@ -27,6 +25,8 @@ extern "C" {
 #include <sodium.h>
 #pragma warning(pop)
 } // extern "C"
+
+#include "crypto/sha.h"
 
 namespace aspia {
 
@@ -37,31 +37,31 @@ const size_t kChunkSize = 4096;
 } // namespace
 
 // static
-QByteArray DataEncryptor::createKey(const QByteArray& password,
-                                    const QByteArray& salt,
-                                    int rounds)
+std::string DataEncryptor::createKey(const std::string& password,
+                                     const std::string& salt,
+                                     int rounds)
 {
-    QByteArray data = password;
+    std::string data = password;
 
     for (int i = 0; i < rounds; ++i)
     {
-        QCryptographicHash key_hash(QCryptographicHash::Sha256);
+        Sha256 hash;
 
-        key_hash.addData(data);
-        key_hash.addData(salt);
+        hash.addData(data);
+        hash.addData(salt);
 
-        data = key_hash.result();
+        data = hash.result();
     }
 
     return data;
 }
 
 // static
-QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArray& key)
+std::string DataEncryptor::encrypt(const std::string& source_data, const std::string& key)
 {
     Q_ASSERT(key.size() == crypto_secretstream_xchacha20poly1305_KEYBYTES);
 
-    QByteArray encrypted_data;
+    std::string encrypted_data;
     encrypted_data.resize(crypto_secretstream_xchacha20poly1305_HEADERBYTES);
 
     crypto_secretstream_xchacha20poly1305_state state;
@@ -69,9 +69,9 @@ QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArra
     crypto_secretstream_xchacha20poly1305_init_push(
         &state,
         reinterpret_cast<uint8_t*>(encrypted_data.data()),
-        reinterpret_cast<const uint8_t*>(key.constData()));
+        reinterpret_cast<const uint8_t*>(key.c_str()));
 
-    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(source_data.constData());
+    const uint8_t* input_buffer = reinterpret_cast<const uint8_t*>(source_data.c_str());
     size_t input_pos = 0;
 
     bool end_of_buffer = false;
@@ -109,16 +109,16 @@ QByteArray DataEncryptor::encrypt(const QByteArray& source_data, const QByteArra
 }
 
 // static
-bool DataEncryptor::decrypt(const QByteArray& source_data,
-                            const QByteArray& key,
-                            QByteArray* decrypted_data)
+bool DataEncryptor::decrypt(const std::string& source_data,
+                            const std::string& key,
+                            std::string* decrypted_data)
 {
-    return decrypt(source_data.constData(), source_data.size(), key, decrypted_data);
+    return decrypt(source_data.c_str(), source_data.size(), key, decrypted_data);
 }
 
 // static
-bool DataEncryptor::decrypt(const char* source_data, int source_size, const QByteArray& key,
-                            QByteArray* decrypted_data)
+bool DataEncryptor::decrypt(const char* source_data, int source_size, const std::string& key,
+                            std::string* decrypted_data)
 {
     if (!source_data || source_size < crypto_secretstream_xchacha20poly1305_HEADERBYTES ||
         !decrypted_data)
@@ -139,7 +139,7 @@ bool DataEncryptor::decrypt(const char* source_data, int source_size, const QByt
 
     if (crypto_secretstream_xchacha20poly1305_init_pull(
             &state, reinterpret_cast<const uint8_t*>(source_data),
-            reinterpret_cast<const uint8_t*>(key.constData())) != 0)
+            reinterpret_cast<const uint8_t*>(key.c_str())) != 0)
     {
         qWarning("crypto_secretstream_xchacha20poly1305_init_pull failed");
         return false;

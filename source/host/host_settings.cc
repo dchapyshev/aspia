@@ -77,15 +77,14 @@ QList<User> HostSettings::userList() const
         QString user_name = settings_.value(QStringLiteral("UserName")).toString();
         if (!user.setName(user_name))
         {
-            qDebug() << "Invalid user name: " << user_name << ". The list of users is corrupted";
+            qDebug() << "Invalid user name. The list of users is corrupted";
             return QList<User>();
         }
 
-        QByteArray password_hash = settings_.value(QStringLiteral("PasswordHash")).toByteArray();
+        std::string password_hash = settings_.value(QStringLiteral("PasswordHash")).toByteArray();
         if (!user.setPasswordHash(password_hash))
         {
-            qDebug() << "Invalid password hash: " << password_hash
-                     << ". The list of users is corrupted";
+            qDebug() << "Invalid password hash. The list of users is corrupted";
             return QList<User>();
         }
 
@@ -114,7 +113,7 @@ bool HostSettings::setUserList(const QList<User>& user_list)
         const User& user = user_list.at(i);
 
         settings_.setValue(QStringLiteral("UserName"), user.name());
-        settings_.setValue(QStringLiteral("PasswordHash"), user.passwordHash());
+        settings_.setValue(QStringLiteral("PasswordHash"), QByteArray::fromStdString(user.passwordHash()));
         settings_.setValue(QStringLiteral("Flags"), user.flags());
         settings_.setValue(QStringLiteral("Sessions"), user.sessions());
     }

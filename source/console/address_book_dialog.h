@@ -33,7 +33,7 @@ public:
     AddressBookDialog(QWidget* parent,
                       proto::address_book::File* file,
                       proto::address_book::Data* data,
-                      QByteArray* key);
+                      std::string* key);
     ~AddressBookDialog() = default;
 
 protected:
@@ -54,7 +54,7 @@ private:
 
     proto::address_book::File* file_;
     proto::address_book::Data* data_;
-    QByteArray* key_;
+    std::string* key_;
 
     bool password_changed_ = true;
     bool value_reverting_ = false;

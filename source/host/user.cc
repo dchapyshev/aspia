@@ -18,9 +18,8 @@
 
 #include "host/user.h"
 
-#include <QCryptographicHash>
-
 #include "crypto/secure_memory.h"
+#include "crypto/sha.h"
 
 namespace aspia {
 
@@ -44,7 +43,7 @@ bool isValidUserNameChar(const QChar& username_char)
     return false;
 }
 
-bool isValidPasswordHash(const QByteArray& password_hash)
+bool isValidPasswordHash(const std::string& password_hash)
 {
     if (password_hash.size() != User::kPasswordHashLength)
         return false;
@@ -52,16 +51,14 @@ bool isValidPasswordHash(const QByteArray& password_hash)
     return true;
 }
 
-QByteArray createPasswordHash(const QString& password)
+std::string createPasswordHash(const std::string& password)
 {
     static const int kIterCount = 100000;
 
-    QByteArray data = password.toUtf8();
+    std::string data = password;
 
     for (int i = 0; i < kIterCount; ++i)
-    {
-        data = QCryptographicHash::hash(data, QCryptographicHash::Sha512);
-    }
+        data = Sha512::hash(data);
 
     return data;
 }
@@ -116,11 +113,11 @@ bool User::setPassword(const QString& value)
     if (!isValidPassword(value))
         return false;
 
-    password_hash_ = createPasswordHash(value);
+    password_hash_ = createPasswordHash(value.toStdString());
     return true;
 }
 
-bool User::setPasswordHash(const QByteArray& value)
+bool User::setPasswordHash(const std::string& value)
 {
     if (!isValidPasswordHash(value))
         return false;

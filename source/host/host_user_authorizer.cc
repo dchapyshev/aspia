@@ -18,12 +18,12 @@
 
 #include "host/host_user_authorizer.h"
 
-#include <QCryptographicHash>
 #include <QTimerEvent>
 
 #include "base/message_serialization.h"
 #include "crypto/random.h"
 #include "crypto/secure_memory.h"
+#include "crypto/sha.h"
 #include "network/network_channel.h"
 
 namespace aspia {
@@ -32,20 +32,20 @@ namespace {
 
 const int kMaxAttemptCount = 3;
 const int kKeyHashingRounds = 100000;
-const int kNonceSize = 16;
+const size_t kNonceSize = 16;
 
-QByteArray generateNonce()
+std::string generateNonce()
 {
     return Random::generateBuffer(kNonceSize);
 }
 
-QByteArray createSessionKey(const QByteArray& password_hash, const QByteArray& nonce)
+std::string createSessionKey(const std::string& password_hash, const std::string& nonce)
 {
-    QByteArray data = password_hash;
+    std::string data = password_hash;
 
     for (int i = 0; i < kKeyHashingRounds; ++i)
     {
-        QCryptographicHash hash(QCryptographicHash::Sha512);
+        Sha512 hash;
 
         hash.addData(data);
         hash.addData(nonce);
@@ -192,7 +192,7 @@ void HostUserAuthorizer::readLogonRequest(const proto::auth::LogonRequest& logon
     method_ = logon_request.method();
 
     nonce_ = generateNonce();
-    if (nonce_.isEmpty())
+    if (nonce_.empty())
     {
         qDebug("Empty nonce generated");
         stop();
@@ -204,29 +204,27 @@ void HostUserAuthorizer::readLogonRequest(const proto::auth::LogonRequest& logon
 
 void HostUserAuthorizer::readClientChallenge(const proto::auth::ClientChallenge& client_challenge)
 {
-    if (nonce_.isEmpty())
+    if (nonce_.empty())
     {
         qWarning("Unexpected client challenge. Nonce not generated yet");
         stop();
         return;
     }
 
-    QByteArray session_key = QByteArray::fromStdString(client_challenge.session_key());
     user_name_ = QString::fromStdString(client_challenge.username());
     session_type_ = client_challenge.session_type();
 
-    status_ = doBasicAuthorization(user_name_, session_key, session_type_);
+    status_ = doBasicAuthorization(user_name_, client_challenge.session_key(), session_type_);
 
-    secureMemZero(&session_key);
     writeLogonResult(status_);
 }
 
-void HostUserAuthorizer::writeServerChallenge(const QByteArray& nonce)
+void HostUserAuthorizer::writeServerChallenge(const std::string& nonce)
 {
     if (network_channel_)
     {
         proto::auth::HostToClient message;
-        message.mutable_server_challenge()->set_nonce(nonce.toStdString());
+        message.mutable_server_challenge()->set_nonce(nonce);
         network_channel_->send(serializeMessage(message));
     }
 }
@@ -268,7 +266,7 @@ void HostUserAuthorizer::writeLogonResult(proto::auth::Status status)
 }
 
 proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
-    const QString& user_name, const QByteArray& session_key, proto::auth::SessionType session_type)
+    const QString& user_name, const std::string& session_key, proto::auth::SessionType session_type)
 {
     if (!User::isValidName(user_name))
     {
@@ -276,7 +274,7 @@ proto::auth::Status HostUserAuthorizer::doBasicAuthorization(
         return proto::auth::STATUS_ACCESS_DENIED;
     }
 
-    if (session_key.isEmpty())
+    if (session_key.empty())
     {
         qWarning("Empty session key");
         return proto::auth::STATUS_ACCESS_DENIED;

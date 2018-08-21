@@ -64,11 +64,11 @@ private slots:
 private:
     void readLogonRequest(const proto::auth::LogonRequest& logon_request);
     void readClientChallenge(const proto::auth::ClientChallenge& client_challenge);
-    void writeServerChallenge(const QByteArray& nonce);
+    void writeServerChallenge(const std::string& nonce);
     void writeLogonResult(proto::auth::Status status);
 
     proto::auth::Status doBasicAuthorization(const QString& user_name,
-                                             const QByteArray& session_key,
+                                             const std::string& session_key,
                                              proto::auth::SessionType session_type);
 
     State state_ = State::NOT_STARTED;
@@ -77,7 +77,7 @@ private:
     QPointer<NetworkChannel> network_channel_;
 
     QString user_name_;
-    QByteArray nonce_;
+    std::string nonce_;
     int timer_id_ = 0;
     int attempt_count_ = 0;
 

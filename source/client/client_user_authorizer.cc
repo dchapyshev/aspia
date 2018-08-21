@@ -18,11 +18,10 @@
 
 #include "client/client_user_authorizer.h"
 
-#include <QCryptographicHash>
-
 #include "base/message_serialization.h"
 #include "client/ui/authorization_dialog.h"
 #include "crypto/secure_memory.h"
+#include "crypto/sha.h"
 
 namespace aspia {
 
@@ -31,25 +30,23 @@ namespace {
 const int kKeyHashingRounds = 100000;
 const int kPasswordHashingRounds = 100000;
 
-QByteArray createPasswordHash(const QString& password)
+std::string createPasswordHash(const std::string& password)
 {
-    QByteArray data = password.toUtf8();
+    std::string data = password;
 
     for (int i = 0; i < kPasswordHashingRounds; ++i)
-    {
-        data = QCryptographicHash::hash(data, QCryptographicHash::Sha512);
-    }
+        data = Sha512::hash(data);
 
     return data;
 }
 
-QByteArray createSessionKey(const QByteArray& password_hash, const QByteArray& nonce)
+std::string createSessionKey(const std::string& password_hash, const std::string& nonce)
 {
-    QByteArray data = password_hash;
+    std::string data = password_hash;
 
     for (int i = 0; i < kKeyHashingRounds; ++i)
     {
-        QCryptographicHash hash(QCryptographicHash::Sha512);
+        Sha512 hash;
 
         hash.addData(data);
         hash.addData(nonce);
@@ -168,8 +165,8 @@ void ClientUserAuthorizer::writeLogonRequest()
 void ClientUserAuthorizer::readServerChallenge(
     const proto::auth::ServerChallenge& server_challenge)
 {
-    QByteArray nonce = QByteArray::fromStdString(server_challenge.nonce());
-    if (nonce.isEmpty())
+    const std::string& nonce = server_challenge.nonce();
+    if (nonce.empty())
     {
         emit errorOccurred(tr("Authorization error: Empty nonce is not allowed."));
         cancel();
@@ -194,18 +191,16 @@ void ClientUserAuthorizer::readServerChallenge(
         password_ = dialog.password();
     }
 
-    QByteArray password_hash = createPasswordHash(password_);
-    QByteArray session_key = createSessionKey(password_hash, nonce);
+    std::string password_hash = createPasswordHash(password_.toStdString());
 
     proto::auth::ClientToHost message;
 
     proto::auth::ClientChallenge* client_challenge = message.mutable_client_challenge();
     client_challenge->set_session_type(session_type_);
     client_challenge->set_username(username_.toStdString());
-    client_challenge->set_session_key(session_key.toStdString());
+    client_challenge->set_session_key(createSessionKey(password_hash, nonce));
 
     secureMemZero(&password_hash);
-    secureMemZero(&session_key);
 
     QByteArray serialized_message = serializeMessage(message);
 
@@ -215,7 +210,6 @@ void ClientUserAuthorizer::readServerChallenge(
     emit sendMessage(serialized_message);
 
     secureMemZero(&serialized_message);
-    secureMemZero(&nonce);
 }
 
 void ClientUserAuthorizer::readLogonResult(const proto::auth::LogonResult& logon_result)

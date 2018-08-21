@@ -16,27 +16,54 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ASPIA_CRYPTO__RANDOM_H_
-#define ASPIA_CRYPTO__RANDOM_H_
+#ifndef ASPIA_CRYPTO__SHA_H_
+#define ASPIA_CRYPTO__SHA_H_
 
 #include <string>
 
 #include "base/macros_magic.h"
 
+struct crypto_hash_sha256_state;
+struct crypto_hash_sha512_state;
+
 namespace aspia {
 
-class Random
+class Sha256
 {
 public:
-    static void fillBuffer(void* buffer, size_t size);
+    Sha256();
+    ~Sha256();
 
-    static std::string generateBuffer(size_t size);
-    static uint32_t generateNumber();
+    static std::string hash(const std::string& data);
+
+    void addData(const void* data, size_t length);
+    void addData(const std::string& data);
+
+    std::string result() const;
 
 private:
-    DISALLOW_COPY_AND_ASSIGN(Random);
+    std::unique_ptr<crypto_hash_sha256_state> state_;
+    DISALLOW_COPY_AND_ASSIGN(Sha256);
+};
+
+class Sha512
+{
+public:
+    Sha512();
+    ~Sha512();
+
+    static std::string hash(const std::string& data);
+
+    void addData(const void* data, size_t length);
+    void addData(const std::string& data);
+
+    std::string result() const;
+
+private:
+    std::unique_ptr<crypto_hash_sha512_state> state_;
+    DISALLOW_COPY_AND_ASSIGN(Sha512);
 };
 
 } // namespace aspia
 
-#endif // ASPIA_CRYPTO__RANDOM_H_
+#endif // ASPIA_CRYPTO__SHA_H_

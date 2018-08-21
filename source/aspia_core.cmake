@@ -245,7 +245,9 @@ list(APPEND SOURCE_CRYPTO
     ${PROJECT_SOURCE_DIR}/crypto/random.cc
     ${PROJECT_SOURCE_DIR}/crypto/random.h
     ${PROJECT_SOURCE_DIR}/crypto/secure_memory.cc
-    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h)
+    ${PROJECT_SOURCE_DIR}/crypto/secure_memory.h
+    ${PROJECT_SOURCE_DIR}/crypto/sha.cc
+    ${PROJECT_SOURCE_DIR}/crypto/sha.h)
 
 list(APPEND SOURCE_DESKTOP_CAPTURE
     ${PROJECT_SOURCE_DIR}/desktop_capture/capture_scheduler.cc

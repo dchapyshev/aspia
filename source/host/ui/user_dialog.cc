@@ -34,7 +34,7 @@ UserDialog::UserDialog(QList<User>* user_list, User* user, QWidget* parent)
 
     ui.edit_username->setText(user_->name());
 
-    if (!user->passwordHash().isEmpty())
+    if (!user->passwordHash().empty())
     {
         QString text = tr("Double-click to change");
 
