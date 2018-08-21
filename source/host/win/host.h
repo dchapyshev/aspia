@@ -49,8 +49,8 @@ public:
     QString userName() const { return user_name_; }
     void setUserName(const QString& user_name);
 
-    QString uuid() const { return uuid_; }
-    void setUuid(const QString& uuid);
+    const std::string& uuid() const { return uuid_; }
+    void setUuid(std::string&& uuid);
 
     QString remoteAddress() const;
 
@@ -81,7 +81,7 @@ private:
 
     proto::auth::SessionType session_type_ = proto::auth::SESSION_TYPE_UNKNOWN;
     QString user_name_;
-    QString uuid_;
+    std::string uuid_;
 
     uint32_t session_id_ = kInvalidSessionId;
     int attach_timer_id_ = 0;

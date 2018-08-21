@@ -19,12 +19,13 @@
 #include "network/firewall_manager.h"
 
 #include <QDebug>
-#include <QUuid>
 
 #include <comutil.h>
 #include <unknwn.h>
 
 #include "base/errno_logging.h"
+#include "base/guid.h"
+#include "base/unicode.h"
 
 namespace aspia {
 
@@ -235,7 +236,7 @@ void FirewallManager::deleteRule(Microsoft::WRL::ComPtr<INetFwRule> rule)
 {
     // Rename rule to unique name and delete by unique name. We can't just delete rule by name.
     // Multiple rules with the same name and different app are possible.
-    _bstr_t unique_name(qUtf16Printable(QUuid::createUuid().toString()));
+    _bstr_t unique_name(UTF16fromUTF8(Guid::create()).c_str());
 
     rule->put_Name(unique_name);
     firewall_rules_->Remove(unique_name);

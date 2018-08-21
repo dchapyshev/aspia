@@ -18,15 +18,14 @@
 
 #include "host/system_info_request.h"
 
-#include <QUuid>
+#include "base/guid.h"
 
 namespace aspia {
 
 SystemInfoRequest::SystemInfoRequest(proto::system_info::Request&& request)
     : request_(std::move(request))
 {
-    QString request_uuid = QUuid::createUuid().toString();
-    request_.set_request_uuid(request_uuid.toStdString());
+    request_.set_request_uuid(Guid::create());
 }
 
 // static

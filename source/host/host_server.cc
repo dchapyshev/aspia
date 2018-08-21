@@ -20,8 +20,8 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QUuid>
 
+#include "base/guid.h"
 #include "base/message_serialization.h"
 #include "host/win/host.h"
 #include "host/host_user_authorizer.h"
@@ -227,7 +227,7 @@ void HostServer::onAuthorizationFinished(HostUserAuthorizer* authorizer)
     host->setNetworkChannel(authorizer->networkChannel());
     host->setSessionType(authorizer->sessionType());
     host->setUserName(authorizer->userName());
-    host->setUuid(QUuid::createUuid().toString());
+    host->setUuid(Guid::create());
 
     connect(this, &HostServer::sessionChanged, host.data(), &Host::sessionChanged);
     connect(host.data(), &Host::finished, this, &HostServer::onHostFinished, Qt::QueuedConnection);
@@ -361,7 +361,7 @@ void HostServer::onIpcMessageReceived(const QByteArray& buffer)
     {
         qInfo("Command to terminate the session from the notifier is received");
 
-        QString uuid = QString::fromStdString(message.kill_session().uuid());
+        const std::string& uuid = message.kill_session().uuid();
 
         for (const auto& session : session_list_)
         {
@@ -425,7 +425,7 @@ void HostServer::sessionToNotifier(const Host& host)
     proto::notifier::ServiceToNotifier message;
 
     proto::notifier::Session* session = message.mutable_session();
-    session->set_uuid(host.uuid().toStdString());
+    session->set_uuid(host.uuid());
     session->set_remote_address(host.remoteAddress().toStdString());
     session->set_username(host.userName().toStdString());
     session->set_session_type(host.sessionType());
@@ -439,7 +439,7 @@ void HostServer::sessionCloseToNotifier(const Host& host)
         return;
 
     proto::notifier::ServiceToNotifier message;
-    message.mutable_session_close()->set_uuid(host.uuid().toStdString());
+    message.mutable_session_close()->set_uuid(host.uuid());
     ipc_channel_->send(serializeMessage(message));
 }
 

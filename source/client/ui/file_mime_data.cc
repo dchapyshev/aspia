@@ -18,7 +18,7 @@
 
 #include "client/ui/file_mime_data.h"
 
-#include <QUuid>
+#include "base/guid.h"
 
 namespace aspia {
 
@@ -27,7 +27,7 @@ FileMimeData::~FileMimeData() = default;
 // static
 QString FileMimeData::createMimeType()
 {
-    return QString("application/%1").arg(QUuid::createUuid().toString());
+    return QString("application/%1").arg(QString::fromStdString(Guid::create()));
 }
 
 void FileMimeData::setMimeType(const QString& mime_type)

@@ -81,7 +81,7 @@ void Host::setUserName(const QString& user_name)
     user_name_ = user_name;
 }
 
-void Host::setUuid(const QString& uuid)
+void Host::setUuid(std::string&& uuid)
 {
     if (state_ != State::STOPPED)
     {
@@ -89,7 +89,7 @@ void Host::setUuid(const QString& uuid)
         return;
     }
 
-    uuid_ = uuid;
+    uuid_ = std::move(uuid);
 }
 
 QString Host::remoteAddress() const
@@ -126,7 +126,7 @@ bool Host::start()
         return false;
     }
 
-    if (uuid_.isEmpty())
+    if (uuid_.empty())
     {
         qDebug("Invalid session UUID");
         return false;
