@@ -68,6 +68,8 @@ FileManagerWindow::FileManagerWindow(ConnectData* connect_data, QWidget* parent)
     connect(ui.remote_panel, &FilePanel::newRequest, this, &FileManagerWindow::remoteRequest);
     connect(ui.local_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
     connect(ui.remote_panel, &FilePanel::pathChanged, this, &FileManagerWindow::onPathChanged);
+
+    ui.local_panel->setFocus();
 }
 
 void FileManagerWindow::refresh()
