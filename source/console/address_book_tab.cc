@@ -498,7 +498,7 @@ void AddressBookTab::onGroupContextMenu(const QPoint& point)
     onGroupItemClicked(current_item, 0);
 
     bool is_root = !current_item->parent();
-    emit computerGroupContextMenu(ui.tree_group->mapToGlobal(point), is_root);
+    emit computerGroupContextMenu(ui.tree_group->viewport()->mapToGlobal(point), is_root);
 }
 
 void AddressBookTab::onGroupItemCollapsed(QTreeWidgetItem* item)
@@ -550,7 +550,7 @@ void AddressBookTab::onComputerContextMenu(const QPoint& point)
         onComputerItemClicked(current_item, 0);
     }
 
-    emit computerContextMenu(current_item, ui.tree_computer->mapToGlobal(point));
+    emit computerContextMenu(current_item, ui.tree_computer->viewport()->mapToGlobal(point));
 }
 
 void AddressBookTab::onComputerItemDoubleClicked(QTreeWidgetItem* item, int column)

@@ -239,7 +239,7 @@ void HostNotifierWindow::onContextMenu(const QPoint& point)
     QMenu menu;
     menu.addAction(&disconnect_action);
 
-    if (menu.exec(ui.tree->mapToGlobal(point)) == &disconnect_action)
+    if (menu.exec(ui.tree->viewport()->mapToGlobal(point)) == &disconnect_action)
         emit killSession(item->session().uuid());
 }
 

@@ -112,7 +112,7 @@ void HostConfigDialog::onUserContextMenu(const QPoint& point)
     }
 
     menu.addAction(ui.action_add);
-    menu.exec(ui.tree_users->mapToGlobal(point));
+    menu.exec(ui.tree_users->viewport()->mapToGlobal(point));
 }
 
 void HostConfigDialog::onCurrentUserChanged(
